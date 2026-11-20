@@ -13,9 +13,9 @@ Open, in this order:
    thing's Settings or Publish has one. Move it into the pattern's Settings window, as the song's and progression's.
 2. ~~A progression's Settings head draws a Lucide glyph~~ done: the library tile at 64.
 3. ~~Progressions' sheet: a Key filter~~ done (the board's Key, counts on every filter choice). It asked for a Key filter (Major key · n, Minor key · n); Recently played sort where the spec asks.
-4. Accompaniment rows: Listen, and the hands line on a phone in place of the description (ruling 551).
+4. ~~Accompaniment rows: Listen, and the hands line on a phone~~ stale: the Accompaniment board (r41_practice) draws each row's idea under its name, its level and heart, no Listen, and the app matches it at 402 (2026-11-20); the older spec line was superseded by the board.
 5. ~~CLAUDE.md's map~~ done: the Player's Pace lists Interpret (gone); Practice says Exercises by book (two shelves now).
-6. Arbitrary values to tokens: `PracticePage.tsx:103`, `LibraryTable.tsx:32,40,251`, `PatternPage.tsx:198,214`,
+6. (Part done 2026-11-20: every arbitrary corner equal to a scale step is now its token across the app, 14 card, 12 control, 8 tile, 16 menu; the picture tiles' 9, 10, 11 and 18 and the small 2 to 6 wait for their own tokens.) Arbitrary values to tokens: `PracticePage.tsx:103`, `LibraryTable.tsx:32,40,251`, `PatternPage.tsx:198,214`,
    `LibraryTile` radii; `ChordPlayerSettings.tsx` (340 lines) and `ArrangeList.tsx` (445) split; Chord player's
    gear onto `SettingsGear`; progression strings out of the `learn` namespace.
 7. Smells: `ArrangeList` handle and style built three times; `FoldHeadRow` vs `FoldSection`; folds in `useState`

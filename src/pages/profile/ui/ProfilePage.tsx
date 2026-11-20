@@ -167,7 +167,7 @@ function Hero() {
             <p role="status" className="sr-only">
               {t('profile.loading')}
             </p>
-            <span aria-hidden className="h-6 rounded-[8px] bg-muted motion-safe:animate-pulse" />
+            <span aria-hidden className="h-6 rounded-tile bg-muted motion-safe:animate-pulse" />
             <span
               aria-hidden
               className="h-3.5 w-1/2 rounded-[7px] bg-muted motion-safe:animate-pulse"

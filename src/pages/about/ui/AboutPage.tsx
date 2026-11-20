@@ -60,7 +60,7 @@ export function AboutPage() {
           alt=""
           width={56}
           height={56}
-          className="size-14 shrink-0 rounded-[14px]"
+          className="size-14 shrink-0 rounded-card"
         />
         <div className="flex min-w-0 flex-col gap-0.5">
           <p className="text-xl font-bold">Piano Trainer</p>

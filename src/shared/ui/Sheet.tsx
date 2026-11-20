@@ -39,7 +39,7 @@ const LAPTOP_CARD = [
   'data-[swipe-axis=x]:data-[swipe-direction=right]:w-95',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:max-w-[calc(100vw-5rem)]',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:max-h-[calc(var(--app-height,100dvh)-6.25rem)]',
-  'data-[swipe-axis=x]:data-[swipe-direction=right]:rounded-[16px]',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:rounded-menu',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:border-0',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:pb-0',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:shadow-[0_0_0_1px_var(--color-hairline),var(--elevation-2)]',

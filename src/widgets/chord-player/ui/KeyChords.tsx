@@ -23,7 +23,7 @@ function KeyTile({ chord, at, onAdd }: { chord: Chord; at: number; onAdd(): void
         aria-label={t('chordPlayer.keyChord', { chord: name })}
         title={t('chordPlayer.keyChordTip')}
         className={cn(
-          'h-14 flex-1 cursor-grab touch-none rounded-[12px] bg-card text-xl font-semibold shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out hover:bg-muted active:cursor-grabbing',
+          'h-14 flex-1 cursor-grab touch-none rounded-control bg-card text-xl font-semibold shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out hover:bg-muted active:cursor-grabbing',
           isDragging && 'opacity-40',
         )}
         {...attributes}

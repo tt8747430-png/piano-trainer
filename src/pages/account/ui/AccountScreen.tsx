@@ -16,7 +16,7 @@ export function AccountScreen({ title, children }: { title: string; children: Re
       <div className="mx-auto flex w-full max-w-110 flex-col gap-4 pt-2 pb-12">
         <span
           aria-hidden
-          className="grid size-16 place-items-center self-center rounded-[16px] bg-(--p-ink) font-display text-4xl text-(--p-honey) max-lg:hidden"
+          className="grid size-16 place-items-center self-center rounded-menu bg-(--p-ink) font-display text-4xl text-(--p-honey) max-lg:hidden"
         >
           𝄞
         </span>

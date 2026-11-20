@@ -45,7 +45,7 @@ export function RootGrid({
       className="flex flex-col gap-2"
     >
       {TRACKS.map((track, index) => (
-        <div key={index} className="grid grid-cols-6 gap-0.5 rounded-[14px] bg-muted p-0.75">
+        <div key={index} className="grid grid-cols-6 gap-0.5 rounded-card bg-muted p-0.75">
           {track.map((root) => (
             <Radio.Root
               key={printedNote(root)}

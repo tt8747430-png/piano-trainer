@@ -146,7 +146,7 @@ export function PlayedThrough({
                   }
                   onClick={close(() => onLoopBars({ first: group.first, last: group.last }))}
                   className={cn(
-                    'flex min-h-18 min-w-0 flex-col items-stretch gap-1 rounded-[12px] p-2 text-left transition-colors duration-150 ease-out',
+                    'flex min-h-18 min-w-0 flex-col items-stretch gap-1 rounded-control p-2 text-left transition-colors duration-150 ease-out',
                     ringed
                       ? 'bg-honey-wash ring-2 ring-honey-ring'
                       : 'bg-card ring-1 ring-hairline hover:bg-muted',

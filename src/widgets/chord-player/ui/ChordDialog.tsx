@@ -120,7 +120,7 @@ export function ChordDialog({
             />
           ) : null}
           {/* Musicca's rows (canvas 173): Chord root ⌄ quality ⌄, Bass note ⌄, Duration − n beats +. */}
-          <div className="flex flex-col overflow-hidden rounded-[12px] bg-muted">
+          <div className="flex flex-col overflow-hidden rounded-control bg-muted">
             <DialogRow label={t('chordPlayer.chord.quality')}>
               <NotePicker
                 label={t('chordPlayer.chord.root')}

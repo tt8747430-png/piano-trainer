@@ -244,7 +244,7 @@ export function FloatingBarValue({
       onClick={onClick}
       aria-label={`${label}: ${spoken ?? value}`}
       title={label}
-      className="flex h-13 min-w-14 flex-1 flex-col items-center justify-center rounded-[14px] transition-colors duration-150 ease-out hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
+      className="flex h-13 min-w-14 flex-1 flex-col items-center justify-center rounded-card transition-colors duration-150 ease-out hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
     >
       <span className="text-xs leading-tight text-muted-foreground">{label}</span>
       <span className="max-w-full truncate text-base leading-tight font-bold whitespace-nowrap tabular-nums">

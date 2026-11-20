@@ -94,7 +94,7 @@ export function ExploreFeedCard({ entry, table = false }: { entry: PublicEntry; 
           {type ? (
             <span
               className={cn(
-                'inline-flex h-7 items-center rounded-[8px] px-2.5 text-[0.8125rem] font-semibold',
+                'inline-flex h-7 items-center rounded-tile px-2.5 text-[0.8125rem] font-semibold',
                 TYPE_BADGE[type],
               )}
             >

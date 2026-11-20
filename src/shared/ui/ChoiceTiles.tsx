@@ -8,7 +8,7 @@ import { cn } from '@/shared/lib'
  * is not the one chosen; faded where it cannot be chosen.
  */
 const TILE =
-  'min-w-0 cursor-default rounded-[12px] bg-card text-foreground ring-1 ring-border transition-colors duration-150 select-none hover:not-aria-checked:bg-muted aria-checked:bg-foreground aria-checked:text-background data-disabled:opacity-50'
+  'min-w-0 cursor-default rounded-control bg-card text-foreground ring-1 ring-border transition-colors duration-150 select-none hover:not-aria-checked:bg-muted aria-checked:bg-foreground aria-checked:text-background data-disabled:opacity-50'
 
 /**
  * One choice of a few, drawn as tiles side by side (a new song's staves, key and time signature; a

@@ -161,7 +161,7 @@ export function NewSongSheet({
             placeholder={t('making.namePlaceholder')}
             enterKeyHint="done"
             onChange={(event) => setTitle(event.target.value)}
-            className="h-13 rounded-[14px] bg-card px-4 text-base text-foreground ring-1 ring-border outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-13 rounded-card bg-card px-4 text-base text-foreground ring-1 ring-border outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
           />
         </label>
         <Part label={t('making.staves')}>

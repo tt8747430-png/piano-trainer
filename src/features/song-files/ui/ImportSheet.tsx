@@ -87,7 +87,7 @@ export function ImportSheet({
               {t('import.whole')}
             </p>
           ) : (
-            <div className="flex flex-col gap-2 rounded-[14px] bg-paint-yellow px-4 py-3 text-[0.9375rem]/[1.45]">
+            <div className="flex flex-col gap-2 rounded-card bg-paint-yellow px-4 py-3 text-[0.9375rem]/[1.45]">
               <p className="font-bold">{t('import.leftOut')}</p>
               <ul className="flex flex-col gap-1">
                 {left.map((kind) => (

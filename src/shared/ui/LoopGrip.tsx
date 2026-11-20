@@ -120,7 +120,7 @@ export function LoopGrip({
       <span aria-hidden className="h-full w-0.75 bg-honey-ring" />
       <span
         aria-hidden
-        className="absolute top-1/2 left-1/2 flex h-13 max-h-full w-6.5 -translate-1/2 items-center justify-center rounded-[8px] bg-card text-honey-ring shadow-[0_1px_3px_rgb(26_22_18/0.28),0_0_0_1px_rgb(26_22_18/0.08)] transition-transform duration-200 ease-out group-hover:scale-110"
+        className="absolute top-1/2 left-1/2 flex h-13 max-h-full w-6.5 -translate-1/2 items-center justify-center rounded-tile bg-card text-honey-ring shadow-[0_1px_3px_rgb(26_22_18/0.28),0_0_0_1px_rgb(26_22_18/0.08)] transition-transform duration-200 ease-out group-hover:scale-110"
       >
         <Chevron className="size-4" strokeWidth={3} />
       </span>

@@ -47,7 +47,7 @@ export function LayoutZones() {
           })}
           onClick={() => edit.put(moving, place)}
           className={cn(
-            'pointer-events-auto absolute rounded-[14px] border-2 border-dashed border-layout-edge bg-layout-zone text-[15px] font-bold text-foreground transition-colors duration-150 ease-out hover:bg-chosen-honey',
+            'pointer-events-auto absolute rounded-card border-2 border-dashed border-layout-edge bg-layout-zone text-[15px] font-bold text-foreground transition-colors duration-150 ease-out hover:bg-chosen-honey',
             edit.drag?.over === place && 'bg-chosen-honey',
             zones[place],
           )}

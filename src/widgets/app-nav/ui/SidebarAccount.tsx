@@ -18,7 +18,7 @@ import { Tipped } from './Tipped'
  * A row of the account menu (lapwin.py's _MI): 40 tall, 12 in, the board's 15px ink, led by its
  * Lucide picture (16, ink) 12 before its word, as Claude's account menu.
  */
-const ITEM = 'min-h-10 pointer-coarse:min-h-11 gap-3 rounded-[8px] px-3 text-[0.9375rem]'
+const ITEM = 'min-h-10 pointer-coarse:min-h-11 gap-3 rounded-tile px-3 text-[0.9375rem]'
 const ICON = 'size-4 text-foreground'
 
 /**
