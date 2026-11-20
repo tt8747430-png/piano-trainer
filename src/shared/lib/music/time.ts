@@ -48,11 +48,18 @@ export const isMeter = (value: unknown): value is Meter => {
   return match !== null && Number(match[1]) <= 16
 }
 
+/** A meter's two figures, read once per meter: the notation asks for them at every note. */
+const PARTS = new Map<Meter, { readonly count: number; readonly unit: MeterUnit }>()
+
 /** A meter's two figures. */
 export function meterParts(meter: Meter): { readonly count: number; readonly unit: MeterUnit } {
+  const kept = PARTS.get(meter)
+  if (kept) return kept
   const [count, unit] = meter.split('/').map(Number)
   const known = METER_UNITS.find((each) => each === unit)
-  return { count: count ?? 4, unit: known ?? 4 }
+  const parts = { count: count ?? 4, unit: known ?? 4 }
+  PARTS.set(meter, parts)
+  return parts
 }
 
 /** The meter of two figures, where they make one. */
