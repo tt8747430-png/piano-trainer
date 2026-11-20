@@ -257,7 +257,9 @@ function drumsOf(
   const steps = barSteps(meter)
   const hits: DrumHit[] = []
   if (crash) hits.push({ voice: 'crash', tick: bar.startTick, velocity: 0.9 })
-  for (const voice of Object.keys(grid) as DrumVoice[]) {
+  for (const key of Object.keys(grid)) {
+    const voice = DRUM_VOICES.find((each) => each === key)
+    if (!voice) continue
     const velocities = grid[voice] ?? []
     for (let k = 0; k < steps; k++) {
       const velocity = gridAt(velocities, k) ?? 0

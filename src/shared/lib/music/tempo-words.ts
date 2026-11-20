@@ -31,10 +31,13 @@ export interface TempoTerm {
   readonly ladder?: true
 }
 
+/** Grave, the slowest word on the ladder: the range a tempo below all others is named by. */
+const GRAVE: TempoTerm = { word: 'grave', from: 25, to: 45, ladder: true }
+
 /** Each tempo word's range, as the common metronome markings give them. */
 export const TEMPO_TERMS: readonly TempoTerm[] = [
   { word: 'larghissimo', from: 20, to: 24 },
-  { word: 'grave', from: 25, to: 45, ladder: true },
+  GRAVE,
   { word: 'largo', from: 40, to: 60, ladder: true },
   { word: 'lento', from: 45, to: 60 },
   { word: 'larghetto', from: 60, to: 66, ladder: true },
@@ -55,8 +58,8 @@ export const TEMPO_LADDER: readonly TempoTerm[] = TEMPO_TERMS.filter((term) => t
 
 /** A tempo word's range. */
 export const tempoTerm = (word: TempoWord): TempoTerm =>
-  TEMPO_TERMS.find((term) => term.word === word) ?? (TEMPO_LADDER[0] as TempoTerm)
+  TEMPO_TERMS.find((term) => term.word === word) ?? GRAVE
 
 /** The word a tempo is named by: the last on the ladder it has reached, Grave below all. */
 export const tempoWord = (bpm: number): TempoWord =>
-  (TEMPO_LADDER.findLast((term) => term.from <= bpm) ?? (TEMPO_LADDER[0] as TempoTerm)).word
+  (TEMPO_LADDER.findLast((term) => term.from <= bpm) ?? GRAVE).word

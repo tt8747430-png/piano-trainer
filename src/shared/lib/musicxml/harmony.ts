@@ -12,7 +12,7 @@ import {
   type Accidental,
   type Chord,
   type ChordKind,
-  type Letter,
+  LETTERS,
   type SpelledNote,
   readChordSymbol,
 } from '@/shared/lib/music'
@@ -307,13 +307,12 @@ export function harmonyXml(chord: Chord, offset = 0): string {
   )
 }
 
-const LETTERS = new Set<string>(['C', 'D', 'E', 'F', 'G', 'A', 'B'])
-
 function spelledAt(element: XmlElement, prefix: 'root' | 'bass'): SpelledNote | undefined {
   const step = textAt(element, `${prefix}-step`)?.toUpperCase()
-  if (!step || !LETTERS.has(step)) return undefined
+  const letter = LETTERS.find((each) => each === step)
+  if (!letter) return undefined
   const accidental = ALTER[Math.round(numberAt(element, `${prefix}-alter`) ?? 0)]
-  return accidental === undefined ? undefined : { letter: step as Letter, accidental }
+  return accidental === undefined ? undefined : { letter, accidental }
 }
 
 /**

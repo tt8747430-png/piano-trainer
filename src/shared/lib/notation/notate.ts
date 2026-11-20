@@ -141,9 +141,9 @@ function pieceMarks(notes: readonly BarNote[], first: boolean, last: boolean): N
     const { slurEnd, octave, articulations, ...rest } = n.marks
     if (octave) marks.octave ??= octave
     if (first && !n.tiedFrom) {
+      const had = new Map(Object.entries(marks))
       for (const [key, value] of Object.entries(rest)) {
-        const field = key as keyof typeof rest
-        if (marks[field] === undefined) Object.assign(marks, { [field]: value })
+        if (had.get(key) === undefined) Object.assign(marks, { [key]: value })
       }
       if (articulations)
         marks.articulations = [...new Set([...(marks.articulations ?? []), ...articulations])]

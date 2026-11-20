@@ -37,7 +37,7 @@ export function createFakeGroups({
   names?: Readonly<Record<string, string>>
   online?: () => boolean
 } = {}): GroupsPort & { readonly store: { groups: Stored[]; shares: StoredShare[] } } {
-  const store = { groups: [] as Stored[], shares: [] as StoredShare[] }
+  const store: { groups: Stored[]; shares: StoredShare[] } = { groups: [], shares: [] }
   let next = 1
   const ask = <T>(run: (me: string) => T) =>
     netResult(

@@ -46,10 +46,12 @@ export function createRecordedSounds(load: LoadSound = fetchSound): RecordedSoun
     if (held) return held
     const buffers = new Map<RecordedSound, AudioBuffer>()
     const loaded = Promise.all(
-      (Object.entries(RECORDED_SOUNDS) as [RecordedSound, string][]).map(async ([sound, url]) => {
-        const buffer = await load(context, url)
-        if (buffer) buffers.set(sound, buffer)
-      }),
+      Object.keys(RECORDED_SOUNDS)
+        .filter(isRecordedSound)
+        .map(async (sound) => {
+          const buffer = await load(context, RECORDED_SOUNDS[sound])
+          if (buffer) buffers.set(sound, buffer)
+        }),
     ).then(() => undefined)
     const made = { buffers, loaded }
     kept.set(context, made)

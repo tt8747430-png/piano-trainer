@@ -69,16 +69,32 @@ const MARK_KEYS = [
 
 /** A bar's marks alone, those it has: what each step from the text to the score carries on. */
 export function barMarksOf(bar: BarMarks): BarMarks {
-  return Object.fromEntries(
-    MARK_KEYS.flatMap((key) => (bar[key] === undefined ? [] : [[key, bar[key]]])),
-  ) as BarMarks
+  const marks: { -readonly [K in keyof BarMarks]: BarMarks[K] } = {}
+  const keep = <K extends keyof BarMarks>(key: K) => {
+    if (bar[key] !== undefined) marks[key] = bar[key]
+  }
+  MARK_KEYS.forEach(keep)
+  return marks
 }
 
 /** A bar's marks left out, as a played order leaves them once taken. */
 export function withoutBarMarks<B extends BarMarks>(bar: B): Omit<B, keyof BarMarks> {
-  const plain: Partial<B> = { ...bar }
-  for (const key of MARK_KEYS) delete plain[key]
-  return plain as Omit<B, keyof BarMarks>
+  const {
+    repeatStart: _repeatStart,
+    barline: _barline,
+    times: _times,
+    ending: _ending,
+    segno: _segno,
+    coda: _coda,
+    jump: _jump,
+    fine: _fine,
+    toCoda: _toCoda,
+    pageBreak: _pageBreak,
+    barRepeat: _barRepeat,
+    multiRest: _multiRest,
+    ...plain
+  } = bar
+  return plain
 }
 
 /** The endings' run a bar belongs to: the bars with an ending around it, their highest ending. */

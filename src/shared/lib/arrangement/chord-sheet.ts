@@ -29,13 +29,13 @@ export const SECTION_KINDS = [
 ] as const
 export type SectionKind = (typeof SECTION_KINDS)[number]
 export const isSectionKind = (value: unknown): value is SectionKind =>
-  typeof value === 'string' && (SECTION_KINDS as readonly string[]).includes(value)
+  SECTION_KINDS.some((kind) => kind === value)
 
 /** A style's variations: a section plays one of them. */
 export const VARIATIONS = [1, 2, 3, 4] as const
 export type Variation = (typeof VARIATIONS)[number]
 export const isVariation = (value: unknown): value is Variation =>
-  typeof value === 'number' && (VARIATIONS as readonly number[]).includes(value)
+  VARIATIONS.some((variation) => variation === value)
 
 /** A chord lasts 1 to 8 beats; a section repeats 1 to 8 times; a sheet holds 1 to 12 sections. */
 export const CHORD_BEATS = { min: 1, max: 8 } as const
@@ -46,7 +46,7 @@ export const MOST_SECTIONS = 12
 export const SHEET_METERS = ['2/4', '3/4', '4/4', '6/8', '12/8'] as const satisfies readonly Meter[]
 export type SheetMeter = (typeof SHEET_METERS)[number]
 export const isSheetMeter = (value: unknown): value is SheetMeter =>
-  typeof value === 'string' && (SHEET_METERS as readonly string[]).includes(value)
+  SHEET_METERS.some((meter) => meter === value)
 
 export interface SheetChord {
   readonly chord: Chord

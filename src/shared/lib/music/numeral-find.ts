@@ -66,9 +66,10 @@ export function numeralReadings(chords: readonly Chord[], key: Key): Numeral[][]
 
 /** A line of numerals with each chord held over several written once: `I v v ii` is I–v–ii. */
 const heldOnce = (numerals: readonly Numeral[]): Numeral[] =>
-  numerals.filter(
-    (numeral, i) => i === 0 || numeralText(numeral) !== numeralText(numerals[i - 1] as Numeral),
-  )
+  numerals.filter((numeral, i) => {
+    const previous = numerals[i - 1]
+    return previous === undefined || numeralText(numeral) !== numeralText(previous)
+  })
 
 /**
  * Every place a line of numerals is heard in a line of chords, in order: each numeral by one chord or

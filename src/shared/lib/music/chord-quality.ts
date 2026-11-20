@@ -248,7 +248,9 @@ const QUALITIES = {
 export type ChordQuality = keyof typeof QUALITIES
 
 /** All 46, in table order: family by family. */
-export const CHORD_QUALITIES = Object.keys(QUALITIES) as readonly ChordQuality[]
+export const CHORD_QUALITIES: readonly ChordQuality[] = Object.keys(QUALITIES).filter(
+  (key): key is ChordQuality => key in QUALITIES,
+)
 
 const entry = (quality: ChordQuality): QualityEntry => QUALITIES[quality]
 

@@ -1,5 +1,12 @@
 import type { Dynamic, NoteMarks } from '@/shared/lib/music'
-import type { Measure, NotesEvent, Score, ScoreEvent, StaffId } from './types'
+import {
+  isStaffId,
+  type Measure,
+  type NotesEvent,
+  type Score,
+  type ScoreEvent,
+  type StaffId,
+} from './types'
 
 /** A mark typed onto a score (R29 B8): the learner's, written as the engraving's own marks. */
 export type ScoreAnnotation = {
@@ -53,7 +60,8 @@ export function annotate(score: Score, marks: readonly ScoreAnnotation[]): Score
     const here = marks.filter((mark) => mark.at >= measure.startTick && mark.at < end)
     if (here.length === 0) return measure
     const staves = { ...measure.staves }
-    for (const staff of Object.keys(staves) as StaffId[]) {
+    for (const staff of Object.keys(staves)) {
+      if (!isStaffId(staff)) continue
       const voices = staves[staff]
       const own = here.filter((mark) => mark.staff === staff)
       if (!voices || own.length === 0) continue

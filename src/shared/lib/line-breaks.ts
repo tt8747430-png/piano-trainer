@@ -29,12 +29,15 @@ export function breakLine(
     at = to
   }
   // Of those cuts, the one whose widest line is narrowest: best[j][i] for the first i bars on j lines.
-  const best = Array.from({ length: count + 1 }, () => new Array<number>(n + 1).fill(Infinity))
+  const best = Array.from({ length: count + 1 }, (_, j) =>
+    Array.from({ length: n + 1 }, (_, i) => (j === 0 && i === 0 ? 0 : Infinity)),
+  )
   const cut = Array.from({ length: count + 1 }, () => new Array<number>(n + 1).fill(0))
-  ;(best[0] as number[])[0] = 0
   for (let j = 1; j <= count; j++) {
-    const row = best[j] as number[]
-    const before = best[j - 1] as number[]
+    const row = best[j]
+    const before = best[j - 1]
+    const cuts = cut[j]
+    if (!row || !before || !cuts) continue
     for (let i = 1; i <= n; i++) {
       // The last line's start latest first, so a tie leaves the earlier lines fuller.
       for (let from = i - 1; from >= j - 1; from--) {
@@ -42,14 +45,14 @@ export function breakLine(
         const worst = Math.max(before[from] ?? Infinity, sum(from, i))
         if (worst < (row[i] ?? Infinity)) {
           row[i] = worst
-          ;(cut[j] as number[])[i] = from
+          cuts[i] = from
         }
       }
     }
   }
   const sizes: number[] = []
   for (let j = count, i = n; j > 0; j--) {
-    const from = (cut[j] as number[])[i] ?? 0
+    const from = cut[j]?.[i] ?? 0
     sizes.unshift(i - from)
     i = from
   }

@@ -54,7 +54,11 @@ export const note = (letter: Letter, accidental: Accidental = 0): SpelledNote =>
 
 export const letterIndex = (letter: Letter): number => LETTERS.indexOf(letter)
 
-export const letterAt = (index: number): Letter => LETTERS[((index % 7) + 7) % 7] as Letter
+export function letterAt(index: number): Letter {
+  const letter = LETTERS[((index % 7) + 7) % 7]
+  if (letter === undefined) throw new RangeError(`A letter is at a whole number, not ${index}`)
+  return letter
+}
 
 export const naturalPitch = (letter: Letter): number => NATURAL_PITCHES[letter]
 
@@ -97,7 +101,7 @@ export const noteName = (spelled: SpelledNote): string =>
 export const writtenName = (key: Midi, spelled: SpelledNote): string =>
   `${noteName(spelled)}${writtenOctave(key, spelled)}`
 
-const isLetter = (value: string): value is Letter => (LETTERS as readonly string[]).includes(value)
+const isLetter = (value: string): value is Letter => LETTERS.some((letter) => letter === value)
 
 /** 'Eb', 'E♭', 'F##', 'F𝄪', 'Bbb': a capital letter and what is written after it, or null. */
 export function parseNoteName(text: string): SpelledNote | null {
@@ -189,11 +193,16 @@ export const sameNote = (a: SpelledNote, b: SpelledNote): boolean =>
 /** A note as a URL writes it, ASCII `b` and `#` (`Bb`, `F#`): only noteParam makes one. */
 export type NoteParam = string & { readonly __brand: 'NoteParam' }
 
-export const noteParam = (spelled: SpelledNote): NoteParam =>
-  (spelled.letter +
-    (spelled.accidental < 0
-      ? 'b'.repeat(-spelled.accidental)
-      : '#'.repeat(spelled.accidental))) as NoteParam
+/** Whether text is a note as noteParam writes it: a letter, then up to two `b`s or `#`s. */
+export const isNoteParam = (text: string): text is NoteParam => /^[A-G](b{0,2}|#{0,2})$/.test(text)
+
+export function noteParam(spelled: SpelledNote): NoteParam {
+  const param =
+    spelled.letter +
+    (spelled.accidental < 0 ? 'b'.repeat(-spelled.accidental) : '#'.repeat(spelled.accidental))
+  if (!isNoteParam(param)) throw new RangeError(`${param} is not a note`)
+  return param
+}
 
 /** The note noteParam wrote. */
 export function noteFromParam(param: NoteParam): SpelledNote {

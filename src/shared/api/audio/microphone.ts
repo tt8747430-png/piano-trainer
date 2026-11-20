@@ -5,7 +5,7 @@
 export interface Microphone {
   readonly sampleRate: number
   /** Fills `into` with the latest samples heard. */
-  read(into: Float32Array): void
+  read(into: Float32Array<ArrayBuffer>): void
   close(): void
 }
 
@@ -24,7 +24,7 @@ export const openBrowserMicrophone: OpenMicrophone = async () => {
   source.connect(analyser)
   return {
     sampleRate: context.sampleRate,
-    read: (into) => analyser.getFloatTimeDomainData(into as Float32Array<ArrayBuffer>),
+    read: (into) => analyser.getFloatTimeDomainData(into),
     close: () => {
       source.disconnect()
       for (const track of stream.getTracks()) track.stop()

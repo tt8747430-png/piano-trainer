@@ -79,8 +79,8 @@ export function createWebArranger(
     current = status
     statuses.emit(status)
   }
-  const hear = (event: Event) => {
-    const data = (event as MIDIMessageEvent).data
+  const hear = (event: MIDIMessageEvent) => {
+    const data = event.data
     if (!data) return
     const kind = data.length === 1 ? REALTIME[data[0] ?? 0] : undefined
     if (kind) transport.emit({ kind, time: event.timeStamp })

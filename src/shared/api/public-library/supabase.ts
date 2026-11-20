@@ -1,6 +1,6 @@
 import { WORD_BREAK } from '@/shared/lib'
 import { netResult, type NetOptions } from '../network'
-import type { Json, Backend, PianoClient } from '../supabase'
+import { toJson, type Json, type Backend, type PianoClient } from '../supabase'
 import {
   DESCRIPTION_MAX,
   isPublicLicence,
@@ -215,8 +215,8 @@ export function createSupabasePublicLibrary(
         const fields = {
           title,
           author_name: authorName,
-          meta: meta as Json,
-          body: body as Json,
+          meta: toJson(meta),
+          body: toJson(body),
           version,
         }
         const {

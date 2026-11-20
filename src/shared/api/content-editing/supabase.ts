@@ -1,7 +1,7 @@
 import { contentHash } from '@/shared/lib'
 import { isContentKind } from '../content'
 import { netResult, type NetOptions } from '../network'
-import type { Json, Backend, PianoClient } from '../supabase'
+import { toJson, type Backend, type PianoClient } from '../supabase'
 import type { ContentEditingPort } from './types'
 
 // `publish_content`'s own refusals come back as 4xx: editors only a 403, nothing to publish a 404.
@@ -31,7 +31,7 @@ export function createSupabaseContentEditing(
           .eq('id', id)
           .single()
         if (error) throw thrown(error, status)
-        return data.body as unknown
+        return data.body
       }),
     create: (kind, id, { body, meta }) =>
       ask(async (client) => {
@@ -42,16 +42,16 @@ export function createSupabaseContentEditing(
             id,
             version: 'draft',
             status: 'draft',
-            body: body as Json,
-            meta: meta as Json,
+            body: toJson(body),
+            meta: toJson(meta),
           }),
         )
         check(
           await client.from('content_drafts').insert({
             kind,
             id,
-            body: body as Json,
-            meta: meta as Json,
+            body: toJson(body),
+            meta: toJson(meta),
           }),
         )
       }),
@@ -87,7 +87,7 @@ export function createSupabaseContentEditing(
         if (error) throw thrown(error, status)
         return data
           ? {
-              body: data.body as unknown,
+              body: data.body,
               meta: isRecord(data.meta) ? data.meta : {},
               updatedAt: data.updated_at,
             }
@@ -99,8 +99,8 @@ export function createSupabaseContentEditing(
           client.from('content_drafts').upsert({
             kind,
             id,
-            body: body as Json,
-            meta: meta as Json,
+            body: toJson(body),
+            meta: toJson(meta),
             updated_at: new Date().toISOString(),
           })
         const kept = await keep()
@@ -114,8 +114,8 @@ export function createSupabaseContentEditing(
               id,
               version: 'draft',
               status: 'draft',
-              body: body as Json,
-              meta: meta as Json,
+              body: toJson(body),
+              meta: toJson(meta),
             },
             { onConflict: 'kind,id', ignoreDuplicates: true },
           ),

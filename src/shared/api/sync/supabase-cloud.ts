@@ -1,6 +1,14 @@
+import { isRecord } from '@/shared/lib'
 import type { SyncDocument } from '@/shared/lib/sync'
 import { netResult, type NetOptions } from '../network'
-import type { DocumentTableName, Json, Backend, PianoClient } from '../supabase'
+import {
+  isJson,
+  toJson,
+  type Backend,
+  type DocumentTableName,
+  type Json,
+  type PianoClient,
+} from '../supabase'
 import { STATE_ID, type CloudSync } from './types'
 
 interface Row {
@@ -21,11 +29,14 @@ function documentOf({ id, data, deleted }: Row): SyncDocument {
  * in with a file, a MIDI track name padded with them; it is never something the learner typed.
  */
 const storable = (data: unknown): Json =>
-  JSON.parse(
-    JSON.stringify(data, (_, value: unknown) =>
-      typeof value === 'string' ? value.replaceAll('\u0000', '') : value,
-    ),
-  ) as Json
+  toJson(data, (_, value) => (typeof value === 'string' ? value.replaceAll('\u0000', '') : value))
+
+/** Whether a value the server answered with is a document's row. */
+const isRow = (value: unknown): value is Row =>
+  isRecord(value) &&
+  typeof value.id === 'string' &&
+  isJson(value.data) &&
+  typeof value.deleted === 'boolean'
 
 const rowOf = (document: SyncDocument) => ({
   id: document.id,
@@ -60,9 +71,7 @@ export function createSupabaseCloud(backend: Backend, { online }: NetOptions = {
         })
         if (error) throw Object.assign(new Error(error.message), { status })
         const [refused] = Array.isArray(data) ? data : []
-        return refused && typeof refused === 'object' && !Array.isArray(refused)
-          ? documentOf(refused as unknown as Row)
-          : null
+        return isRow(refused) ? documentOf(refused) : null
       }),
   }
 }

@@ -1,3 +1,5 @@
+import { isRecord } from '../saved'
+
 /**
  * A learner's document as the sync carries it (ADR 0116): its data, the device's clock of its last
  * change, and whether it was deleted. The server keeps the same in its mirror tables.
@@ -25,13 +27,10 @@ function sameValue(a: unknown, b: unknown): boolean {
   if (Object.is(a, b)) return true
   if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false
   if (Array.isArray(a) !== Array.isArray(b)) return false
-  const keys = Object.keys(a)
-  if (keys.length !== Object.keys(b).length) return false
-  return keys.every(
-    (key) =>
-      Object.hasOwn(b, key) &&
-      sameValue((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key]),
-  )
+  const entries = Object.entries(a)
+  const theirs = new Map(Object.entries(b))
+  if (entries.length !== theirs.size) return false
+  return entries.every(([key, value]) => Object.hasOwn(b, key) && sameValue(value, theirs.get(key)))
 }
 
 /**
@@ -75,9 +74,7 @@ export function mergeDocuments(
 }
 
 const recordOf = (value: unknown): Readonly<Record<string, unknown>> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value)
-    ? (value as Record<string, unknown>)
-    : {}
+  isRecord(value) ? value : {}
 
 /**
  * A rule for a field that is a record of items by key (versions by song, records by trainer): each
@@ -114,13 +111,10 @@ export function byId(mine: unknown, theirs: unknown, base: unknown): unknown[] {
   return [...new Set(order)].flatMap((id) => (Object.hasOwn(merged, id) ? [merged[id]] : []))
 }
 
-const isRecord = (value: unknown): boolean =>
-  typeof value === 'object' && value !== null && !Array.isArray(value)
-
 const hasIds = (value: unknown): boolean =>
   Array.isArray(value) &&
   value.length > 0 &&
-  value.every((item) => isRecord(item) && typeof (item as Record<string, unknown>).id === 'string')
+  value.every((item) => isRecord(item) && typeof item.id === 'string')
 
 /**
  * The rule a field both sides changed takes where none is given: a record merges key by key, a list

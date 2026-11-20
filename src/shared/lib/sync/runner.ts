@@ -1,6 +1,7 @@
 import type { NetFailure } from '@/shared/api/network'
 import type { DocumentTableName } from '@/shared/api/supabase'
 import { STATE_ID, type CloudSync } from '@/shared/api/sync'
+import { isRecord } from '../saved'
 import { mergeDocuments, type SyncDocument } from './merge'
 
 /** A saved store that syncs: its table in the cloud and its key on the device. */
@@ -50,11 +51,9 @@ function saveOf(json: string | null): Save | null {
   if (json === null) return null
   try {
     const saved: unknown = JSON.parse(json)
-    if (typeof saved !== 'object' || saved === null) return null
-    const { state, version } = saved as Record<string, unknown>
-    return typeof state === 'object' && state !== null && typeof version === 'number'
-      ? { state: state as Record<string, unknown>, version }
-      : null
+    if (!isRecord(saved)) return null
+    const { state, version } = saved
+    return isRecord(state) && typeof version === 'number' ? { state, version } : null
   } catch {
     return null
   }

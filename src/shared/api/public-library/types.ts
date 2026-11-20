@@ -10,7 +10,7 @@ export type PublicSort = 'new' | 'saved' | 'rated'
 export const PUBLIC_TYPES = ['original', 'arrangement', 'other'] as const
 export type PublicType = (typeof PUBLIC_TYPES)[number]
 export const isPublicType = (value: unknown): value is PublicType =>
-  typeof value === 'string' && (PUBLIC_TYPES as readonly string[]).includes(value)
+  PUBLIC_TYPES.some((each) => each === value)
 
 /** The licences a song is published under (R72's Licence sheet). */
 export const PUBLIC_LICENCES = [
@@ -21,7 +21,7 @@ export const PUBLIC_LICENCES = [
 ] as const
 export type PublicLicence = (typeof PUBLIC_LICENCES)[number]
 export const isPublicLicence = (value: unknown): value is PublicLicence =>
-  typeof value === 'string' && (PUBLIC_LICENCES as readonly string[]).includes(value)
+  PUBLIC_LICENCES.some((each) => each === value)
 
 /** The most tags a published item carries, and the longest tag. */
 export const TAGS_MAX = 8

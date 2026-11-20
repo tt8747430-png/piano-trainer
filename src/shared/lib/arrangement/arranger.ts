@@ -1,5 +1,5 @@
 import { beatsToTicks, TICKS_PER_BEAT } from '@/shared/lib/music'
-import { playOrder, type ChordSheet, type Main, type PlayedBar } from './chord-sheet'
+import { MAINS, playOrder, type ChordSheet, type Main, type PlayedBar } from './chord-sheet'
 
 /**
  * Yamaha's Section Control numbers (`ss` in F0 43 7E 00 ss dd F7, the Genos Data List's MIDI Data
@@ -19,9 +19,7 @@ export const sectionControl = (ss: number): number[] => [0xf0, 0x43, 0x7e, 0x00,
 export const RHYTHM_START: readonly number[] = [0xf0, 0x43, 0x60, 0x7a, 0xf7]
 export const RHYTHM_STOP: readonly number[] = [0xf0, 0x43, 0x60, 0x7d, 0xf7]
 
-const MAIN_OF = new Map<number, Main>(
-  Object.entries(SECTION.main).map(([main, ss]) => [ss, main as Main]),
-)
+const MAIN_OF = new Map<number, Main>(MAINS.map((main) => [SECTION.main[main], main]))
 /** The Main a Section Control switches to, its Fill-in's too; null for any other section. */
 export const mainOf = (ss: number): Main | null => MAIN_OF.get(ss) ?? MAIN_OF.get(ss - 8) ?? null
 export const isIntro = (ss: number): boolean =>

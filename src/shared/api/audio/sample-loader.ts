@@ -61,7 +61,8 @@ export function createSampleLoader({
   budget = DECODED_BUDGET,
   base = SAMPLES_BASE,
 }: {
-  context: BaseAudioContext
+  /** Where the files decode: only its decoder is used. */
+  context: Pick<BaseAudioContext, 'decodeAudioData'>
   fetchBytes?: FetchBytes
   fetchJson?: FetchJson
   budget?: number

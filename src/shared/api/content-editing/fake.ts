@@ -1,5 +1,5 @@
 import { contentHash } from '@/shared/lib'
-import type { ContentKind } from '../content'
+import { isContentKind, type ContentKind } from '../content'
 import { netResult } from '../network'
 import type { ContentDraft, ContentEditingPort, KeptVersion } from './types'
 
@@ -75,15 +75,18 @@ export function createFakeContentEditing({
       read(
         async () =>
           [...drafts]
-            .map(([key, draft]) => {
-              const [kind, id] = key.split(' ') as [ContentKind, string]
-              return {
-                kind,
-                id,
-                title: draft.meta.title,
-                updatedAt: draft.updatedAt,
-                published: !unpublished.has(key),
-              }
+            .flatMap(([key, draft]) => {
+              const [kind = '', id] = key.split(' ')
+              if (!isContentKind(kind) || id === undefined) return []
+              return [
+                {
+                  kind,
+                  id,
+                  title: draft.meta.title,
+                  updatedAt: draft.updatedAt,
+                  published: !unpublished.has(key),
+                },
+              ]
             })
             .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)),
         [],

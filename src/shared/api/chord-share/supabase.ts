@@ -79,7 +79,7 @@ export function createSupabaseChordShare(
     open(id, { onChanged, onPlaying }): SheetLine {
       let closed = false
       let send: (place: LivePlace | null) => void = () => undefined
-      let leave = () => undefined as void
+      let leave: () => void = () => undefined
       void backend().then((client) => {
         if (closed) return
         const channel = client

@@ -1,4 +1,4 @@
-export { midi, PITCH_CLASSES, pitchClass, type Midi, type PitchClass } from './pitch'
+export { isMidi, midi, PITCH_CLASSES, pitchClass, type Midi, type PitchClass } from './pitch'
 export {
   barTicks,
   beatGrouping,
@@ -55,6 +55,7 @@ export {
 } from './keyboard'
 export {
   accidentalSign,
+  isAccidental,
   LETTERS,
   midiOf,
   note,

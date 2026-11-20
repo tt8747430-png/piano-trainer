@@ -1,4 +1,5 @@
-import type { ContentKind } from './port'
+import { isRecord } from '@/shared/lib'
+import { isContentKind, type ContentKind } from './port'
 
 /** A content item as the database publishes it, kept on the device (ADR 0116). */
 export interface ContentItem {
@@ -18,6 +19,14 @@ export interface ContentCache {
   put(items: readonly ContentItem[]): Promise<void>
   remove(keys: readonly (readonly [ContentKind, string])[]): Promise<void>
 }
+
+/** Whether a kept value is a content item: what the device kept is read, never trusted. */
+const isContentItem = (value: unknown): value is ContentItem =>
+  isRecord(value) &&
+  typeof value.kind === 'string' &&
+  isContentKind(value.kind) &&
+  typeof value.id === 'string' &&
+  typeof value.version === 'string'
 
 const DATABASE = 'pt-content'
 const STORE = 'items'
@@ -75,7 +84,8 @@ export function createBrowserContentCache(
     all: () =>
       settle(async () => {
         const store = (await database()).transaction(STORE).objectStore(STORE)
-        return (await answered(store.getAll())) as ContentItem[]
+        const kept: unknown[] = await answered(store.getAll())
+        return kept.filter(isContentItem)
       }, []),
     put: (items) =>
       settle(async () => {

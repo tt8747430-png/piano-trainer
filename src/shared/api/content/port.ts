@@ -4,11 +4,18 @@ import { netResult, type NetResult } from '../network'
  * The kinds of content the database holds for this app: a piece's music, a lesson's sections, a
  * course's title and summary, a level's chapters, the catalog's own order (`catalog`).
  */
-export const CONTENT_KINDS = ['piece', 'lesson', 'course', 'journey', 'catalog', 'progression'] as const
+export const CONTENT_KINDS = [
+  'piece',
+  'lesson',
+  'course',
+  'journey',
+  'catalog',
+  'progression',
+] as const
 export type ContentKind = (typeof CONTENT_KINDS)[number]
 
 export const isContentKind = (value: string): value is ContentKind =>
-  (CONTENT_KINDS as readonly string[]).includes(value)
+  CONTENT_KINDS.some((kind) => kind === value)
 
 /**
  * Where content's bodies come from (ADR 0116). The catalog's index is always on the device; a body is

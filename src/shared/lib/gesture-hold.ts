@@ -16,7 +16,7 @@ let listening = false
 function onPointerDownCapture(event: PointerEvent) {
   const current = holder
   if (!current?.node) return
-  const target = event.target as Element | null
+  const target = event.target instanceof Element ? event.target : null
   if (target && current.node.contains(target)) return
   releaseHolder(current, target?.closest(`[${SWIPE_SURFACE_ATTR}]`) ? 'claimed' : 'outside')
 }

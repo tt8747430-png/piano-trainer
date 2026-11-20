@@ -266,12 +266,16 @@ export const tempoMark = (tempo: number, unit: TempoUnit, meter: Meter): number 
 export const tempoOfMark = (mark: number, unit: TempoUnit, meter: Meter): number =>
   (mark * unitTicks(unit, meter)) / TICKS_PER_BEAT
 
+const UNIT_NOTES = new Map([
+  ['2', '\u{1D15E}'],
+  ['4', '\u{1D15F}'],
+  ['8', '\u{1D160}'],
+  ['16', '\u{1D161}'],
+])
+
 /** A tempo unit as music text: 𝅗𝅥, ♩, ♪ or 𝅘𝅥𝅯 (SMuFL's text notes), a dot after it where dotted. */
 export function unitNote(unit: TempoUnit): string {
-  const note =
-    { '2': '\u{1D15E}', '4': '\u{1D15F}', '8': '\u{1D160}', '16': '\u{1D161}' }[
-      unit.replace('.', '') as '2' | '4' | '8' | '16'
-    ] ?? '\u{1D15F}'
+  const note = UNIT_NOTES.get(unit.replace('.', '')) ?? '\u{1D15F}'
   return unit.endsWith('.') ? `${note}\u{1D16D}` : note
 }
 
