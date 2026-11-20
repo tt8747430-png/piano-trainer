@@ -425,6 +425,19 @@ export function PlayerLayout({
                 onPlay={player.listenAt}
                 onTempo={player.setTempo}
                 onClick={player.setClick}
+                loop={
+                  player.loop
+                    ? {
+                        bars: { first: player.loop.first + 1, last: player.loop.last + 1 },
+                        repeats: player.repeats,
+                        between: player.between,
+                        speedUp: player.speedTraining,
+                        onRepeats: player.setRepeats,
+                        onBetween: player.setBetween,
+                        onSpeedUp: player.setSpeedTraining,
+                      }
+                    : null
+                }
               />
             }
             hands={

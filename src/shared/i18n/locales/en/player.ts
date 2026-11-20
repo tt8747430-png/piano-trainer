@@ -386,6 +386,16 @@ export const player = {
     metronomeOff: 'Off',
     metronomeCountIn: 'Count-in',
     metronomeOn: 'On',
+    // The loop's own rows, under its bars, once bars are looped (PlayerApp's Practice sheet).
+    loopBar: 'Loop bar {{first}}',
+    loopBars: 'Loop bars {{first}}–{{last}}',
+    repeats: 'Repeats',
+    endless: 'Endless',
+    between: 'Between repeats',
+    betweenNone: 'None',
+    betweenCountIn: 'Count-in',
+    betweenRest: 'Rest',
+    speedUp: 'Speed up each pass',
   },
   pace: {
     title: 'Pace',

@@ -55,6 +55,10 @@ export interface PracticeSetup {
   readonly speedStep?: number
   /** Beats of rest, each a click, before each repeat of the passage. */
   readonly rest: number
+  /** The rest's beats silent: a bar to breathe in (Between repeats: Rest). */
+  readonly restSilent?: boolean
+  /** How many times Listen plays the passage, then stops; endless without. */
+  readonly repeats?: number
   /** The piece's recording, played along in Listen in the key played; null plays none. */
   readonly recording: RecordingAlong | null
   /** How loud each part plays (ADR 0105): each staff, the recording and the click. */
@@ -143,6 +147,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
 
   const { tempo, ownTempo, speedTraining, swing, metronome, countIn, mix } = setup
   const restBeats = setup.rest
+  const { restSilent, repeats } = setup
   // How loud each part plays, read as each sound comes to sound (ADR 0105): a change is heard from
   // then on, and starts nothing again. Only a part turned right down, or up from nothing, does: it
   // is then left out of the music, or brought into it, from the beat group playing.
@@ -206,6 +211,8 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
         clicks,
         swing,
         rest: restBeats,
+        ...(restSilent ? { restSilent } : {}),
+        ...(repeats === undefined ? {} : { passes: repeats }),
       },
       {
         reach: (beatGroup) => dispatch({ type: 'reach', beatGroup }),
@@ -214,6 +221,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
           setPassTempo(sounding)
         },
         count: setCounting,
+        end: () => dispatch({ type: 'stop' }),
       },
       { recording, mix: () => mixed.current },
     )
@@ -241,6 +249,8 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     metronome,
     clicks,
     restBeats,
+    restSilent,
+    repeats,
     recording,
     passRequest,
   ])

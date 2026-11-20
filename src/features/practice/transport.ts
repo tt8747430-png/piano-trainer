@@ -3,6 +3,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 import {
   advanceLoop,
+  loopOver,
   beatGroupAt,
   countAt,
   recordingPlay,
@@ -36,6 +37,8 @@ interface TransportEvents {
   readonly tempo: (tempo: number) => void
   /** The count-in's beats left as each sounds, its bar counted down; null once the music starts. */
   readonly count: (left: number | null) => void
+  /** Its passes all played, where it plays so many. */
+  readonly end: () => void
 }
 
 /** What plays along with the music, and how loud. */
@@ -86,6 +89,11 @@ export function startTransport(
     if (sounding !== null && sounding !== tempo) {
       tempo = sounding
       on.tempo(sounding)
+    }
+    if (loopOver(loop)) {
+      clearInterval(timer)
+      on.end()
+      return
     }
     const left = countAt(loop, now)
     if (left !== counted) {

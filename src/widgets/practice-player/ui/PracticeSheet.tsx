@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectPlayback, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useTapTempo } from '@/features/metronome'
-import { useBeat, type Practice, type PracticeMode } from '@/features/practice'
+import { useBeat, type BarRange, type Practice, type PracticeMode } from '@/features/practice'
 import { setPlayback } from '@/features/set-preference'
 import {
   FloatingBarButton,
@@ -15,10 +15,12 @@ import {
   SettingsGroup,
   Sheet,
   SheetContent,
+  SwitchRow,
 } from '@/shared/ui'
 import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { beatsPerBar, tempoWord } from '@/shared/lib/music'
+import { BETWEENS, type Between } from '../model/practice-view'
 import { PlayAlongIcon } from './PlayAlongIcon'
 import { DOCK_CAPTIONED } from './dock-sizes'
 
@@ -31,6 +33,25 @@ const wayOf = (mode: PracticeMode): Way => (mode === 'listen' ? 'play' : 'wait')
 /** The metronome with the music (Flat's three): silent, one bar counted in, or counting in and clicking on. */
 type Click = 'off' | 'countIn' | 'on'
 const CLICKS: readonly Click[] = ['off', 'countIn', 'on']
+
+/** A loop's repeats (its board's Repeats): endless, then a few. */
+const REPEATS: readonly (number | null)[] = [null, 3, 5, 10]
+const BETWEEN_WORD: Readonly<Record<Between, string>> = {
+  none: 'betweenNone',
+  countIn: 'betweenCountIn',
+  rest: 'betweenRest',
+}
+
+/** What a loop plays as, once bars are looped: its bars as printed, from 1, and its three rows. */
+export interface LoopRows {
+  readonly bars: BarRange
+  readonly repeats: number | null
+  readonly between: Between
+  readonly speedUp: boolean
+  onRepeats: (times: number | null) => void
+  onBetween: (between: Between) => void
+  onSpeedUp: (on: boolean) => void
+}
 
 /** A filled pill of the tempo's, its colour alone changing on a press (`DESIGN.md`). */
 const PILL =
@@ -93,7 +114,10 @@ export function PracticeSheet({
   onPlay,
   onTempo,
   onClick,
+  loop,
 }: {
+  /** The loop's rows, while bars are looped; none without. */
+  loop: LoopRows | null
   performance: Performance
   /** Where the music is, for the beat sounding. */
   practice: Pick<Practice, 'state' | 'clock'>
@@ -231,6 +255,52 @@ export function PracticeSheet({
               </GroupRow>
             </GroupRows>
           </SettingsGroup>
+          {loop ? (
+            <SettingsGroup
+              bare
+              title={
+                loop.bars.first === loop.bars.last
+                  ? t('practiceSheet.loopBar', { first: loop.bars.first })
+                  : t('practiceSheet.loopBars', loop.bars)
+              }
+            >
+              <GroupRows surface="sheet" label={t('loop')}>
+                <GroupRow label={t('practiceSheet.repeats')}>
+                  <span className="w-47 shrink-0">
+                    <Segmented
+                      label={t('practiceSheet.repeats')}
+                      value={loop.repeats ?? 0}
+                      options={REPEATS.map((times) =>
+                        times === null
+                          ? { value: 0, label: '∞', title: t('practiceSheet.endless') }
+                          : { value: times, label: String(times) },
+                      )}
+                      onChange={(times) => loop.onRepeats(times === 0 ? null : times)}
+                    />
+                  </span>
+                </GroupRow>
+                <GroupRow label={t('practiceSheet.between')}>
+                  <span className="w-44 shrink-0">
+                    <Segmented
+                      label={t('practiceSheet.between')}
+                      value={loop.between}
+                      options={BETWEENS.map((each) => ({
+                        value: each,
+                        label: t(`practiceSheet.${BETWEEN_WORD[each]}`),
+                      }))}
+                      onChange={loop.onBetween}
+                    />
+                  </span>
+                </GroupRow>
+                <SwitchRow
+                  label={t('practiceSheet.speedUp')}
+                  checked={loop.speedUp}
+                  onCheckedChange={loop.onSpeedUp}
+                  className="min-h-12 border-b-0 ps-4 pe-3"
+                />
+              </GroupRows>
+            </SettingsGroup>
+          ) : null}
         </div>
       </SheetContent>
     </Sheet>
