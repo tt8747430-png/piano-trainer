@@ -6,7 +6,7 @@ import { writeFileSync } from 'node:fs'
 const [width = '1710', out = 'player/score/desk.json'] = process.argv.slice(2)
 const VIEWS = { both: '', r: '?staves=l1s0', l: '?staves=u1s0' }
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' })
-const page = await (await browser.newContext({ viewport: { width: +width, height: 984 } })).newPage()
+const page = await (await browser.newContext({ viewport: { width: +width, height: +width < 900 ? 874 : 984 }, hasTouch: +width < 900 })).newPage()
 const result = {}
 for (const [view, query] of Object.entries(VIEWS)) {
   await page.goto(`http://localhost:5191/play/amazing${query}`, { waitUntil: 'networkidle' })

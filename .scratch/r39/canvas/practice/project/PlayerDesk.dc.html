@@ -15292,7 +15292,6 @@ return { whites, blacks, width: wi * w + 4, height: h, frame: w > 12 ? 2 : 1.5, 
 };
 const LYRICS = [
 ['Verse', [[['', 'A-'], [1, 'mazing '], [2, 'grace! How '], [3, 'sweet the '], [4, 'sound']], [['', 'That '], [5, 'saved a '], [6, 'wretch like '], [7, 'me! '], [8, '']], [['', 'I '], [9, 'once was '], [10, 'lost, but '], [11, 'now am '], [12, 'found']], [['', 'Was '], [13, 'blind, but '], [14, 'now I '], [15, 'see. '], [16, '']]]],
-['Verse 2', [[['', '’Twas '], [1, 'grace that '], [2, 'taught my '], [3, 'heart to '], [4, 'fear']], [['', 'And '], [5, 'grace my '], [6, 'fears re-'], [7, 'lieved; '], [8, '']], [['', 'How '], [9, 'precious '], [10, 'did that '], [11, 'grace ap-'], [12, 'pear']], [['', 'The '], [13, 'hour I '], [14, 'first be-'], [15, 'lieved. '], [16, '']]]],
 ];
 const lineOf = Math.floor((bar - 1) / 4);
 const lineText = (segs) => segs.map(([, t]) => t).join('').trim();
@@ -15342,7 +15341,7 @@ diagGap: keys ? DEV.gapKeys : DEV.gap, capGap: keys ? 8 : 12, nameSize: keys ? D
 stripH: keys ? DEV.stripHKeys : DEV.stripH, stripFs: keys ? DEV.stripFsKeys : DEV.stripFs, stripPad: DEV.stripPad,
 lineFs: keys ? DEV.lineFsKeys : DEV.lineFs, progW: DEV.progW,
 progFill: atStart ? 0 : Math.round((((bar - 1) % 4) * 3 + beat - 1) / 12 * 100),
-lineNow: lineText(LYRICS[0][1][lineOf]), lineNext: lineText(LYRICS[lineOf === 3 ? 1 : 0][1][(lineOf + 1) % 4]),
+lineNow: lineText(LYRICS[0][1][lineOf]), lineNext: lineOf === 3 ? '' : lineText(LYRICS[0][1][lineOf + 1]),
 chordRow: EVENTS.map((ev, i) => ({ ...(ev.c ? split(ev.c) : { root: 'N.C.', ext: '' }), aria: ev.c ? 'Chord ' + ev.c + ', bar ' + ev.bar : 'No chord', current: i === chordIndex ? 'true' : 'false', opacity: i === chordIndex ? 1 : 0.38, kb: piano(ev.c, keys ? DEV.kbWKeys : DEV.kbW, keys ? DEV.kbHKeys : DEV.kbH), pick: pick(ev.seek) })),
 slotW: DEV.slotW, cellW: keys ? DEV.cellWKeys : DEV.cellW, tailW: DEV.slotW + DEV.padX,
 strip: [pickupCell].concat(Array.from({ length: 48 }, (_, i) => beatCell(1 + Math.floor(i / 3), (i % 3) + 1, i))),
@@ -15556,15 +15555,15 @@ const sheetMode = sheetHide.rh && !sheetHide.lh ? 'l' : sheetHide.lh && !sheetHi
 const SHEET_GEOM = {"both": {"pv": 314, "ph": 332, "pr": 372, "pct": 22, "ch": 306}, "r": {"pv": 188, "ph": 206, "pr": 246, "pct": 22, "ch": 180}, "l": {"pv": 220, "ph": 238, "pr": 278, "pct": 22, "ch": 212}};
 const BEATX = {"both": [[364, 466, 567, 726, 823, 929, 1056, 1158, 1259, 1387, 1488, 1590], [146, 264, 382, 567, 685, 803, 952, 1070, 1188, 1337, 1455, 1573], [144, 255, 399, 572, 678, 793, 932, 1043, 1187, 1360, 1470, 1581], [148, 274, 399, 596, 721, 847, 1005, 1131, 1256, 1440, 1522, 1604]], "r": [[353, 456, 558, 718, 816, 922, 1051, 1154, 1256, 1384, 1487, 1589], [146, 264, 382, 567, 685, 803, 952, 1070, 1188, 1337, 1455, 1573], [144, 254, 398, 571, 678, 792, 932, 1043, 1186, 1359, 1470, 1581], [148, 273, 399, 595, 721, 846, 1005, 1131, 1256, 1440, 1522, 1604]], "l": [[354, 465, 575, 719, 819, 920, 1052, 1152, 1253, 1385, 1485, 1586], [148, 281, 414, 584, 705, 825, 984, 1085, 1186, 1324, 1445, 1565], [145, 276, 407, 572, 681, 789, 933, 1064, 1194, 1360, 1469, 1577], [150, 292, 434, 615, 744, 873, 1041, 1149, 1257, 1430, 1515, 1601]]}; const PICK = {"both": 236, "r": 224, "l": 225};
 const PANOX = {"both": [[380, 482, 583, 742, 839, 945, 1072, 1174, 1275, 1403, 1504, 1606], [1739, 1857, 1975, 2160, 2278, 2396, 2545, 2663, 2781, 2930, 3048, 3166], [3313, 3424, 3568, 3741, 3847, 3962, 4101, 4212, 4356, 4529, 4639, 4750], [4893, 5019, 5144, 5341, 5466, 5592, 5750, 5876, 6001, 6185, 6310]], "r": [[369, 472, 574, 734, 832, 938, 1067, 1170, 1272, 1400, 1503, 1605], [1738, 1856, 1974, 2159, 2277, 2395, 2544, 2662, 2780, 2929, 3047, 3165], [3312, 3422, 3566, 3739, 3846, 3960, 4100, 4211, 4354, 4527, 4638, 4749], [4892, 5017, 5143, 5339, 5465, 5590, 5749, 5875, 6000, 6184, 6310]], "l": [[370, 472, 735, 836, 1068, 1170, 1401, 1503], [1739, 1861, 2175, 2297, 2575, 2696, 2915, 3037], [3311, 3421, 3738, 3848, 4099, 4209, 4526, 4636], [4891, 5021, 5356, 5487, 5782, 5912, 6171, 6301]]}; const PPICK = {"both": 252, "r": 240, "l": 241};
-const SYS = ({"both": [{"y": 141, "h": 314, "x": [333, 694, 1025, 1356, 1687]}, {"y": 515, "h": 295, "x": [55, 531, 916, 1301, 1686]}, {"y": 870, "h": 314, "x": [55, 538, 898, 1326, 1686]}, {"y": 1244, "h": 314, "x": [55, 558, 967, 1377, 1686]}], "r": [{"y": 141, "h": 188, "x": [322, 686, 1019, 1353, 1686]}, {"y": 389, "h": 192, "x": [55, 531, 916, 1301, 1686]}, {"y": 641, "h": 188, "x": [55, 537, 898, 1326, 1686]}, {"y": 889, "h": 192, "x": [55, 557, 967, 1376, 1686]}], "l": [{"y": 141, "h": 220, "x": [322, 687, 1020, 1353, 1686]}, {"y": 421, "h": 202, "x": [55, 547, 946, 1287, 1686]}, {"y": 683, "h": 220, "x": [55, 538, 898, 1326, 1686]}, {"y": 963, "h": 220, "x": [55, 576, 1002, 1365, 1686]}]})[sheetMode];
+const SYS = ({"both": [{"y": 141, "h": 314, "x": [333, 694, 1025, 1356, 1687]}, {"y": 515, "h": 295, "x": [55, 531, 916, 1301, 1686]}, {"y": 870, "h": 314, "x": [55, 538, 898, 1326, 1686]}, {"y": 1244, "h": 314, "x": [55, 558, 967, 1377, 1686]}], "r": [{"y": 141, "h": 188, "x": [322, 686, 1019, 1353, 1686]}, {"y": 389, "h": 192, "x": [55, 531, 916, 1301, 1686]}, {"y": 641, "h": 188, "x": [55, 537, 898, 1326, 1686]}, {"y": 889, "h": 192, "x": [55, 557, 967, 1376, 1686]}], "l": [{"y": 141, "h": 220, "x": [322, 687, 1020, 1353, 1686]}, {"y": 421, "h": 202, "x": [55, 547, 946, 1287, 1686]}, {"y": 683, "h": 220, "x": [55, 538, 898, 1326, 1686]}, {"y": 963, "h": 220, "x": [55, 576, 1002, 1365, 1686]}]})[sheetMode]; const SYSBARS = [[1, 4], [5, 8], [9, 12], [13, 16]]; const BARSYS = [[0, 0], [0, 1], [0, 2], [0, 3], [1, 0], [1, 1], [1, 2], [1, 3], [2, 0], [2, 1], [2, 2], [2, 3], [3, 0], [3, 1], [3, 2], [3, 3]];
 const sheetTopNow = 0;
 const bandsOf = (a, b) => SYS.flatMap((sy, si) => {
-const f = si * 4 + 1, l = f + 3;
+const [f, l] = SYSBARS[si];
 if (b < f || a > l) return [];
 const i0 = Math.max(a, f) - f, i1 = Math.min(b, l) - f + 1;
 return [{ x: sy.x[i0], y: sheetTopNow + sy.y, w: sy.x[i1] - sy.x[i0], h: sy.h, l: a >= f ? '3px solid #B07A2A' : '0', r: b <= l ? '3px solid #B07A2A' : '0' }];
 });
-const gripAt = (n, after) => { const sy = SYS[Math.floor((n - 1) / 4)]; const i = (n - 1) % 4 + (after ? 1 : 0); return { x: sy.x[i], y: sheetTopNow + sy.y + sy.h / 2 }; };
+const gripAt = (n, after) => { const [si, bi] = BARSYS[n - 1]; const sy = SYS[si]; const i = bi + (after ? 1 : 0); return { x: sy.x[i], y: sheetTopNow + sy.y + sy.h / 2 }; };
 const cellStep = (keys ? DEV.cellWKeys : DEV.cellW) + 3;
 const SPEEDS = [40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120];
 const lopt = (key, cur, list) => list.map(([id, name]) => ({ name, on: id === cur ? 'true' : 'false', ...chip(id === cur), pick: pick({ [key]: id }) }));
@@ -15630,9 +15629,9 @@ setBg: open === 'settings' ? '#EEE9E2' : 'rgba(254,253,251,.86)',
 const viewPress = (id) => ({
 pick: () => this.setState({ view: id, open: 'none' }),
 });
-const verseNow = 0;
-const sysNow = verseNow * 4 + Math.floor(((atHome ? 1 : bar) - 1) / 4);
-const beatNow = ((atHome ? 1 : bar) - 1) % 4 * 3 + ((atHome ? 1 : beat) - 1);
+
+const sysNow = BARSYS[(atHome ? 1 : bar) - 1][0];
+const beatNow = BARSYS[(atHome ? 1 : bar) - 1][1] * 3 + ((atHome ? 1 : beat) - 1);
 const k3Names = (g) => { if (!kbNames) return []; const cv = { both: 'b', rh: 'r', lh: 'l', none: 'x' }[handsSeen(false)]; return g.keys.filter((k) => !k.b && k.lx !== undefined).map((k) => { const pl = PLAYED[k.m]; const mine = pl && showOf[pl[0]] !== 'hide'; const c = k.m % 12 === 0; if ((!mine && !c) || k.cov.includes(cv) || (!mine && k.lw < 28)) return null; return { x: k.lx, y: k.ly, t: mine ? labelOf(k.m) : 'C' + (Math.floor(k.m / 12) - 1), fs: Math.round(mine ? Math.max(16, Math.min(30, k.lw * 0.42)) : Math.max(14, Math.min(26, k.lw * 0.32))), fw: mine ? 700 : 500, fg: mine ? '#332921' : '#8A8076' }; }).filter(Boolean); };
 const k3Of = (view) => { const g = K3G(view); return { W: g.W, H: g.H, names: k3Names(g), keys: g.keys.map((k) => ({ pts: k.p, down: press(k.m) })), lit: g.keys.filter((k) => LIT.has(k.m)).map((k) => { const h = LIT.get(k.m); const dim = h.length > 1; return { pts: k.p, fill: h[0] === 'r' ? '#E8826A' : '#9C86D0', blend: k.b ? 'normal' : 'multiply', op: (k.b ? 0.8 : 0.95) * (dim ? 0.4 : 1) }; }) }; };
 const KEY_VALS = {
