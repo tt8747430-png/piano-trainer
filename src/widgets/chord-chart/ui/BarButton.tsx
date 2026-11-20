@@ -38,6 +38,7 @@ const beatTapped = (target: EventTarget): number => {
  */
 export function BarButton({
   tap,
+  bar,
   number,
   symbols,
   cells,
@@ -50,7 +51,10 @@ export function BarButton({
   style,
 }: {
   tap: BarTap
-  number: number
+  /** Its bar as written, from 0. */
+  bar: number
+  /** Its number as printed (`printedBar`): none for a pickup. */
+  number: number | null
   /** Its chords, for its name. */
   symbols: readonly string[]
   /** Each beat's chords, those starting in it. */
@@ -78,7 +82,7 @@ export function BarButton({
       {...(tap === 'play'
         ? { 'aria-pressed': marked }
         : { 'aria-current': marked ? ('step' as const) : undefined, tabIndex: -1 })}
-      data-bar={number - 1}
+      data-bar={bar}
       onClick={(event) => onTap(beatTapped(event.target))}
       className={cn(
         tap === 'go' ? 'relative grid min-w-0 auto-rows-min gap-px' : BAR,

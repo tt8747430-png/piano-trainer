@@ -15,7 +15,7 @@ import {
 import { KeysPlace, LiveKeyboard } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
-import { TICKS_PER_BEAT } from '@/shared/lib/music'
+import { barNumber, opensOnPickup, TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
 import type { MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
@@ -171,6 +171,7 @@ export function PlayerLayout({
   const names = useStaffNames(staves)
   // The view saved, where the music can show it, else the one it falls back to (ADR 0108).
   const needs = useMemo(() => viewNeeds(performance), [performance])
+  const pickup = opensOnPickup(performance.bars, performance.meter)
   const shown = shownView(scoreView.music, needs)
   // The hands button where the music has both hands: none for a one-hand line (R29).
   const twoHands = useMemo(() => {
@@ -415,7 +416,12 @@ export function PlayerLayout({
             loop={
               <LoopButton
                 bars={
-                  player.loop ? { first: player.loop.first + 1, last: player.loop.last + 1 } : null
+                  player.loop
+                    ? {
+                        first: barNumber(player.loop.first, pickup),
+                        last: barNumber(player.loop.last, pickup),
+                      }
+                    : null
                 }
                 onToggle={player.toggleLoop}
               />
@@ -437,7 +443,10 @@ export function PlayerLayout({
                 loop={
                   player.loop
                     ? {
-                        bars: { first: player.loop.first + 1, last: player.loop.last + 1 },
+                        bars: {
+                          first: barNumber(player.loop.first, pickup),
+                          last: barNumber(player.loop.last, pickup),
+                        },
                         repeats: player.repeats,
                         between: player.between,
                         speedUp: player.speedTraining,
@@ -479,6 +488,7 @@ export function PlayerLayout({
           open={doneOpen}
           onOpenChange={setDoneOpen}
           pass={finished}
+          pickup={pickup}
           hands={t(`common:hands.${view.hands}`)}
           bestBefore={bestBefore}
           tempo={player.tempo}

@@ -1,6 +1,7 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Piece } from '@/entities/piece'
+import { barNumber } from '@/shared/lib/music'
 import { GROUPED_LIST, HEADED_SECTION, OpensMark, ROW_CLASS, SectionHead } from '@/shared/ui'
 import type { SectionLessons } from '../model/section-lessons'
 import { SectionLink } from './SectionLink'
@@ -13,10 +14,13 @@ export function SectionRows({
   piece,
   headings,
   sections,
+  pickup,
 }: {
   piece: Pick<Piece, 'id' | 'kind'>
   headings: readonly string[]
   sections: readonly (SectionLessons | null)[]
+  /** Whether the song opens on a pickup: its bars numbered from the first full one. */
+  pickup: boolean
 }) {
   const { t } = useTranslation('piece')
   const id = useId()
@@ -29,7 +33,10 @@ export function SectionRows({
           const said = each
             ? [
                 ...(each.rounds > 1 ? [t('learnSection.rounds', { n: each.rounds })] : []),
-                t('barsFromTo', { first: each.bars.first + 1, last: each.bars.last + 1 }),
+                t('barsFromTo', {
+                  first: barNumber(each.bars.first, pickup),
+                  last: barNumber(each.bars.last, pickup),
+                }),
               ].join(' · ')
             : null
           return (

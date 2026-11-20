@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTakesStoreApi, type Take } from '@/entities/take'
 import { keepTakeBars } from '@/features/manage-takes'
+import { barNumber } from '@/shared/lib/music'
 import { ActionRow, SettingsGroup, Stepper } from '@/shared/ui'
 import {
   AlertDialog,
@@ -23,17 +24,22 @@ import { wholeTake, type KeptBars } from '../model/kept-bars'
 export function KeepBars({
   take,
   kept,
+  pickup,
   onChange,
 }: {
   take: Take
   kept: KeptBars
+  /** Whether the song opens on a pickup: its bars numbered from the first full one. */
+  pickup: boolean
   onChange: (kept: KeptBars) => void
 }) {
   const { t } = useTranslation('editor')
   const store = useTakesStoreApi()
   const [asking, setAsking] = useState(false)
   const whole = wholeTake(take)
-  const numbered = { first: take.fromBar + kept.first, last: take.fromBar + kept.last }
+  // The take's bar `k` as the score numbers it: `fromBar` counts the written bars from 1.
+  const said = (k: number) => barNumber(take.fromBar - 1 + k, pickup)
+  const numbered = { first: said(kept.first), last: said(kept.last) }
   const keep = () => {
     keepTakeBars(store, take.id, kept.first, kept.last)
     onChange({ first: 0, last: kept.last - kept.first })
@@ -67,6 +73,7 @@ export function KeepBars({
             min={take.fromBar + whole.first}
             max={take.fromBar + whole.last}
             onChange={(bar) => row.set(bar - take.fromBar)}
+            format={(bar) => String(barNumber(bar - 1, pickup))}
             decrease={`${row.label} −`}
             increase={`${row.label} +`}
           />

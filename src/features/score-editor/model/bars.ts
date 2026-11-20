@@ -155,6 +155,12 @@ const firstBar = (draft: Draft): Tick => beatsPerBar(sectionMeter(draft, 0)) * T
 const isPickup = (draft: Draft, index: number, ticks: Tick): boolean =>
   index === 0 && ticks < firstBar(draft)
 
+/** Whether the draft opens on a pickup: its bars numbered from the first full one (`barNumber`). */
+export const draftPickup = (draft: Draft): boolean => {
+  const first = draft.sections[0]?.lines[0]?.[0]
+  return first !== undefined && isPickup(draft, 0, first.ticks)
+}
+
 /**
  * A pickup made `ticks` long from its start, as it leads into the downbeat: shorter, its first beats
  * and the notes in them taken, the chord sounding where it now starts kept; longer, room before it,

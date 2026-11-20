@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { Download, Play, Square } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { factsOf, useRepertoire } from '@/entities/piece'
 import { isTakeId, selectTake, useTakes, useTakesStoreApi, type Take } from '@/entities/take'
 import { deleteTake } from '@/features/manage-takes'
 import {
@@ -37,6 +38,8 @@ function TakeView({ take }: { take: Take }) {
   const { t } = useTranslation(['editor', 'music', 'common'])
   const locale = useLocale()
   const song = useSongTitle(take.pieceId)
+  const played = useRepertoire().piece(take.pieceId)
+  const pickup = played ? factsOf(played).pickup : false
   const play = useTakePlay(take)
   const download = useTakeDownload(take)
   const store = useTakesStoreApi()
@@ -94,13 +97,14 @@ function TakeView({ take }: { take: Take }) {
         <TakeRoll
           take={take}
           kept={kept}
+          pickup={pickup}
           playing={play.playing}
           onPlayFrom={play.playFrom}
           bars
           className="h-30 lg:h-55"
         />
         <div className="flex w-full flex-col lg:max-w-140">
-          <KeepBars take={take} kept={kept} onChange={setKept} />
+          <KeepBars take={take} kept={kept} pickup={pickup} onChange={setKept} />
           <DangerGroup>
             <DangerRow title={t('recorder.delete')} onClick={remove} />
           </DangerGroup>

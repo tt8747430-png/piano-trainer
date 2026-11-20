@@ -13,13 +13,15 @@ interface Stretch {
  * Keeps a song's place as the Player plays it (canvas 125): each start counted, each bar the
  * transport moves on from played through, and where it stops the bar Continue opens on; a stop on
  * its last bar plays that through too and opens it from the start next time. Written when it stops
- * and when the screen closes. `bar` is the bar sounding, as written, from 0.
+ * and when the screen closes. `bar` is the bar sounding, as written, from 0; `pickup` whether the
+ * song opens on one.
  */
 export function useSongPlayRecord(
   pieceId: PieceId,
   playing: boolean,
   bar: number,
   lastBar: number,
+  pickup: boolean,
 ): void {
   const store = useProgressStoreApi()
   const stretch = useRef<Stretch | null>(null)
@@ -37,11 +39,12 @@ export function useSongPlayRecord(
         started: true,
         seconds: (Date.now() - now.since) / 1000,
         bars: lastBar + 1,
+        pickup,
         ended: new Date().toISOString(),
       })
       if (songs !== state.songs) store.setState({ songs })
     },
-    [store, pieceId, lastBar],
+    [store, pieceId, lastBar, pickup],
   )
   useEffect(() => {
     const now = stretch.current

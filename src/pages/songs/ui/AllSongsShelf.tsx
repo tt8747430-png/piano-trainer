@@ -4,6 +4,7 @@ import { entryTitles, PieceLink, type Entry } from '@/entities/piece'
 import { useProgress, isLearned } from '@/entities/progress'
 import { pieceStepId } from '@/entities/step'
 import { useLocale } from '@/shared/i18n'
+import { barNumber, barsCounted } from '@/shared/lib/music'
 import { SectionHead, SeeAll } from '@/shared/ui'
 import { PieceShelfCover } from '@/widgets/piece-cover'
 
@@ -54,7 +55,10 @@ export function AllSongsShelf({ songs }: { songs: readonly Entry[] }) {
                   {done
                     ? t('all.learned')
                     : partway
-                      ? t('continue.bar', { bar: play.at + 1, total: play.bars })
+                      ? t('continue.bar', {
+                          bar: barNumber(play.at, play.pickup),
+                          total: barsCounted(play.bars, play.pickup),
+                        })
                       : t('row.notStarted')}
                 </span>
               </PieceLink>

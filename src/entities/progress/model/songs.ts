@@ -14,6 +14,8 @@ export interface SongPlay {
   readonly seconds: number
   /** How many bars the song has as written, when it was last played. */
   readonly bars: number
+  /** Whether it opens on a pickup: its bars numbered from the first full one (`barNumber`). */
+  readonly pickup: boolean
   /** When it was last played, ISO: what Continue orders by (the research's Songs item 2). */
   readonly last: string
   /** The best Wait-mode pass, per cent, by the hands it was played with (research item 4). */
@@ -39,12 +41,13 @@ function bestOf(value: unknown): SongPlay['best'] {
 /** A saved song's play as it can be read; nothing where it cannot. */
 export function songPlay(value: unknown): SongPlay | undefined {
   if (!isRecord(value)) return undefined
-  const { played, at, times, seconds, bars, last, best } = value
+  const { played, at, times, seconds, bars, pickup, last, best } = value
   if (!Array.isArray(played) || !isCount(at) || !isCount(times) || !isCount(bars)) return undefined
+  if (typeof pickup !== 'boolean') return undefined
   if (typeof seconds !== 'number' || !Number.isFinite(seconds) || seconds < 0) return undefined
   if (typeof last !== 'string' || Number.isNaN(Date.parse(last))) return undefined
   const sorted = [...new Set(played.filter(isCount))].sort((a, b) => a - b)
-  return { played: sorted, at, times, seconds, bars, last, best: bestOf(best) }
+  return { played: sorted, at, times, seconds, bars, pickup, last, best: bestOf(best) }
 }
 
 /** What a stretch in the Player adds to a song's play. */
@@ -58,6 +61,8 @@ export interface SongStretch {
   readonly seconds: number
   /** How many bars the song has as written. */
   readonly bars: number
+  /** Whether it opens on a pickup. */
+  readonly pickup: boolean
   /** When it stopped, ISO. */
   readonly ended: string
 }
@@ -80,6 +85,7 @@ export function withSongStretch(
     times: (was?.times ?? 0) + (stretch.started ? 1 : 0),
     seconds: (was?.seconds ?? 0) + Math.max(0, stretch.seconds),
     bars: stretch.bars,
+    pickup: stretch.pickup,
     last: stretch.ended,
     best: was?.best ?? {},
   }
@@ -108,6 +114,7 @@ export function withWaitScore(
   hands: Hands,
   score: number,
   bars: number,
+  pickup: boolean,
   now: Date,
 ): Readonly<Partial<Record<PieceId, SongPlay>>> {
   const was = songs[pieceId]
@@ -118,6 +125,7 @@ export function withWaitScore(
     times: 0,
     seconds: 0,
     bars,
+    pickup,
     last: now.toISOString(),
     best: {},
   }

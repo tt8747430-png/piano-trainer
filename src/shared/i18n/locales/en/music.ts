@@ -262,6 +262,8 @@ export const music = {
     error: 'The music can’t be shown.',
     bar: 'Bar {{n}}',
     barChords: 'Bar {{n}}: {{chords}}',
+    pickup: 'Pickup',
+    pickupChords: 'Pickup: {{chords}}',
     loopStart: 'Loop start',
     loopEnd: 'Loop end',
     // The piano's name at a score's first line's head (ADR 0114), as a printed score names it; a

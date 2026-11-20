@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import type { BarRange, CellBar, PlayedBeat } from '@/features/practice'
 import { barUnder, cn, REDUCED_MOTION, useElementSize, useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
-import { printedSymbol, type Tick } from '@/shared/lib/music'
+import { opensOnPickup, printedSymbol, type Tick } from '@/shared/lib/music'
 import { LeadSymbol, LoopGrip } from '@/shared/ui'
 import { firstBeats } from '../model/strip-place'
 import { stripNames } from '../model/strip-names'
@@ -130,6 +130,7 @@ export function BeatStrip({
                   pointerOnly
                   end="start"
                   bar={loop.first}
+                  pickup={opensOnPickup(performance.bars, performance.meter)}
                   min={0}
                   max={loop.last}
                   barAt={barUnder}
@@ -142,6 +143,7 @@ export function BeatStrip({
                   pointerOnly
                   end="end"
                   bar={loop.last}
+                  pickup={opensOnPickup(performance.bars, performance.meter)}
                   min={loop.first}
                   max={performance.bars.length - 1}
                   barAt={barUnder}

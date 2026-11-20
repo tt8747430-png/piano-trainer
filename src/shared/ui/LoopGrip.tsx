@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useEffect, useRef, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
+import { barNumber } from '@/shared/lib/music'
 
 const STEPS: Readonly<Record<string, number>> = {
   ArrowLeft: -1,
@@ -21,6 +22,7 @@ const STEPS: Readonly<Record<string, number>> = {
 export function LoopGrip({
   end,
   bar,
+  pickup,
   min,
   max,
   barAt,
@@ -32,6 +34,8 @@ export function LoopGrip({
   end: 'start' | 'end'
   /** The loop's bar at this end, from 0. */
   bar: number
+  /** Whether the piece opens on a pickup: the bar said as a musician numbers it (`barNumber`). */
+  pickup: boolean
   min: number
   max: number
   /** The bar under a point on the screen, or none; `grip` is this grip, placed in the view. */
@@ -65,7 +69,7 @@ export function LoopGrip({
       aria-valuemin={pointerOnly ? undefined : min + 1}
       aria-valuemax={pointerOnly ? undefined : max + 1}
       aria-valuenow={pointerOnly ? undefined : bar + 1}
-      aria-valuetext={pointerOnly ? undefined : t('sheet.bar', { n: bar + 1 })}
+      aria-valuetext={pointerOnly ? undefined : t('sheet.bar', { n: barNumber(bar, pickup) })}
       data-grip={end}
       onKeyDown={(event) => {
         const step = STEPS[event.key]

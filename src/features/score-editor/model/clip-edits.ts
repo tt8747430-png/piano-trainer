@@ -1,4 +1,5 @@
-import { copyBars, deleteBars, pasteBars } from './bars'
+import { barNumber } from '@/shared/lib/music'
+import { copyBars, deleteBars, draftPickup, pasteBars } from './bars'
 import { selectionSpan, startOf } from './caret-moves'
 import { chosenSpan, spellSpan, takenAway } from './chosen'
 import { clipFits, copyNotes, pasteNotes, type NotesClip } from './clip'
@@ -31,7 +32,7 @@ function copied(state: EditorState, layer: NoteLayer): NotesClip | null {
   }
 }
 
-/** What Copy would take (ADR 0114): the bars chosen (as printed, from 1), the notes chosen, or nothing. */
+/** What Copy would take (ADR 0114): the bars chosen (numbered as printed, `barNumber`), the notes chosen, or nothing. */
 export function copyTarget(
   state: EditorState,
 ):
@@ -40,7 +41,8 @@ export function copyTarget(
   | null {
   if (state.layer === 'chords') {
     const { from, to } = chosenBars(state)
-    return { kind: 'bars', from: from + 1, to: to + 1 }
+    const pickup = draftPickup(state.draft)
+    return { kind: 'bars', from: barNumber(from, pickup), to: barNumber(to, pickup) }
   }
   const taken = copied(state, state.layer)
   return taken && { kind: 'notes', count: taken.notes.length }

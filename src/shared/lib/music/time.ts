@@ -221,6 +221,27 @@ export function beatsBefore(
     : 0
 }
 
+/** Whether bars open on a pickup (`beatsBefore`): a first bar shorter than its meter's. */
+export const opensOnPickup = (
+  bars: readonly { readonly beats: number; readonly meter?: Meter | undefined }[],
+  meter: Meter,
+): boolean => beatsBefore(bars, 0, meter) > 0
+
+/**
+ * Bar `index` (from 0) as a musician numbers it (Dorico, MuseScore, Sibelius): from the first full
+ * bar, a pickup counted with the bar it leads into.
+ */
+export const barNumber = (index: number, pickup: boolean): number =>
+  pickup ? Math.max(index, 1) : index + 1
+
+/** Bar `index` as it is printed and named: its number (`barNumber`), or `null` for a pickup. */
+export const printedBar = (index: number, pickup: boolean): number | null =>
+  pickup && index === 0 ? null : barNumber(index, pickup)
+
+/** How many bars a musician counts in `count` written: a pickup is not one. */
+export const barsCounted = (count: number, pickup: boolean): number =>
+  pickup ? Math.max(count - 1, 1) : count
+
 /** The notes a tempo mark may count (ADR 0114): a value, a dot after it where dotted. */
 export const TEMPO_UNITS = ['2', '2.', '4', '4.', '8', '8.', '16'] as const
 export type TempoUnit = (typeof TEMPO_UNITS)[number]

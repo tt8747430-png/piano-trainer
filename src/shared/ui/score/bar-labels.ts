@@ -1,3 +1,5 @@
+import { barNumber } from '@/shared/lib/music'
+
 /** A bar as its labels read it: the section it is in, and the tempo marked over it. */
 export interface LabelledBar {
   readonly section: number
@@ -20,15 +22,20 @@ export interface BarLabel {
 
 /**
  * The labels of a line's bars: the piece's bars `from` up to `to`, of `bars` (the piece's, as they
- * are played). A section starts where a bar's section is not the bar before's, so where the repeats
+ * are played), numbered from the first full bar where the piece opens on a `pickup` (`barNumber`). A section starts where a bar's section is not the bar before's, so where the repeats
  * play a section again its name is printed again.
  */
-export function barLabels(bars: readonly LabelledBar[], from: number, to: number): BarLabel[] {
+export function barLabels(
+  bars: readonly LabelledBar[],
+  from: number,
+  to: number,
+  pickup: boolean,
+): BarLabel[] {
   return bars.slice(from, to).map((bar, index) => {
     const at = from + index
     const starts = at === 0 || bars[at - 1]?.section !== bar.section
     return {
-      ...(index === 0 ? { number: at + 1 } : {}),
+      ...(index === 0 ? { number: barNumber(at, pickup) } : {}),
       ...(starts ? { section: bar.section } : {}),
       ...(bar.tempo === undefined ? {} : { tempo: bar.tempo }),
     }

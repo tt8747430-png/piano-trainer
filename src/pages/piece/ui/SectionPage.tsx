@@ -5,6 +5,7 @@ import { useRepertoire, type Piece } from '@/entities/piece'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { loopParam } from '@/features/practice'
 import { OPEN_PLAINLY } from '@/shared/lib'
+import { opensOnPickup } from '@/shared/lib/music'
 import {
   BackButton,
   ButtonLink,
@@ -42,7 +43,11 @@ function SectionView({ piece, section }: { piece: Piece; section: number }) {
           Section board's two, the chords and in time at the left, the changes and patterns at the
           right, every row 56 and, there, its state beside its words with no chevron far from them. */}
       <div className="page-column flex flex-col gap-4 lg:mx-0 lg:max-w-none lg:gap-5 lg:px-[calc(3.5rem-var(--gutter))] [&_.group\/row]:min-h-14 lg:[&_.group\/row>span:has([data-slot=row-title])]:flex-none lg:[&_[data-slot=row-chevron]]:hidden">
-        <SectionCard heading={heading} lessons={lessons} />
+        <SectionCard
+          heading={heading}
+          lessons={lessons}
+          pickup={opensOnPickup(performance.bars, performance.meter)}
+        />
         <SectionLessonGroups piece={piece} performance={performance} lessons={lessons} />
       </div>
       {/* The whole section looped in the Player, the screen's floating action. */}

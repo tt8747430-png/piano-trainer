@@ -36,6 +36,7 @@ import {
   usePracticeClock,
   useSongPlayRecord,
 } from '@/features/record-practised'
+import { opensOnPickup } from '@/shared/lib/music'
 import type { SetupChange } from '@/widgets/player-setup'
 import {
   controlsFor,
@@ -161,11 +162,13 @@ export function usePlayer(
   }, [atTheKeys, progress, piece.id])
   // The song's place (canvas 125): the bars played through and where Continue opens next.
   const lastBar = writtenBarOf(performance, performance.bars.length - 1)
+  const pickup = opensOnPickup(performance.bars, performance.meter)
   useSongPlayRecord(
     piece.id,
     atTheKeys,
     writtenBarAt(performance, player.practice.state.beatGroup),
     lastBar,
+    pickup,
   )
   // A pass's score (research items 2, 4): a lesson is done from a good one, 80 % as the takes'
   // weak bar (ADR 0111, research item 15); a whole pass's kept as the song's best with these hands,
@@ -187,7 +190,7 @@ export function usePlayer(
     if (score >= GOOD_PASS) recordPass(progress, piece.id, player.loop ?? whole, new Date())
     if (loop) return
     const { songs } = progress.getState()
-    const next = withWaitScore(songs, piece.id, hands, score, lastBar + 1, new Date())
+    const next = withWaitScore(songs, piece.id, hands, score, lastBar + 1, pickup, new Date())
     if (next !== songs) progress.setState({ songs: next })
   })
   useEffect(() => {

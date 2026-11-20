@@ -37,7 +37,7 @@ function setUp(extra: { kept?: { first: number; last: number } } = {}) {
     </ServicesProvider>
   )
   renderWithSettings(
-    wrap(<TakeRoll take={TAKE} playing={null} onPlayFrom={onPlayFrom} {...extra} />),
+    wrap(<TakeRoll take={TAKE} pickup={false} playing={null} onPlayFrom={onPlayFrom} {...extra} />),
   )
   return { onPlayFrom }
 }

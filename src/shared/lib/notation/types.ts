@@ -242,4 +242,6 @@ export interface Score {
   /** The staves it writes, top down. */
   readonly staves: readonly StaffId[]
   readonly measures: readonly Measure[]
+  /** It opens on a pickup: its bars numbered from the first full one (`barNumber`). */
+  readonly pickup?: true
 }

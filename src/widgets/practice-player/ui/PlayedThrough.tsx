@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
 import type { BarRange } from '@/features/practice'
 import { cn } from '@/shared/lib'
-import { tempoWord } from '@/shared/lib/music'
+import { barNumber, tempoWord } from '@/shared/lib/music'
 import { Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
@@ -45,9 +45,12 @@ export function PlayedThrough({
   onLoopBars,
   onAgain,
   onTryPlay,
+  pickup,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  /** Whether the song opens on a pickup: its bars numbered from the first full one, its fours from there. */
+  pickup: boolean
   pass: PassDone
   /** The hands practised, as named. */
   hands: string
@@ -64,9 +67,11 @@ export function PlayedThrough({
 }) {
   const { t } = useTranslation('player')
   const { t: tMusic } = useTranslation('music')
-  const groups = Array.from({ length: Math.ceil(pass.bars / GROUP) }, (_, i) => {
-    const first = i * GROUP
-    const last = Math.min(pass.bars, first + GROUP) - 1
+  // Fours as the bars are numbered: a pickup goes with the first.
+  const lead = pickup ? 1 : 0
+  const groups = Array.from({ length: Math.ceil((pass.bars - lead) / GROUP) }, (_, i) => {
+    const first = i === 0 ? 0 : i * GROUP + lead
+    const last = Math.min(pass.bars, (i + 1) * GROUP + lead) - 1
     const slips = Array.from({ length: last - first + 1 }, (_, k) => pass.slips[first + k] ?? 0)
     let pauses = 0
     for (let bar = first; bar <= last; bar++) pauses += pass.pauses[bar] ?? 0
@@ -85,8 +90,11 @@ export function PlayedThrough({
   }
   const range = (bars: BarRange) =>
     bars.first === bars.last
-      ? t('done.practiseBar', { first: bars.first + 1 })
-      : t('done.practiseBars', { first: bars.first + 1, last: bars.last + 1 })
+      ? t('done.practiseBar', { first: barNumber(bars.first, pickup) })
+      : t('done.practiseBars', {
+          first: barNumber(bars.first, pickup),
+          last: barNumber(bars.last, pickup),
+        })
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('done.title')} description={t('done.of', { hands })} floating>
@@ -121,7 +129,10 @@ export function PlayedThrough({
           <div role="group" aria-label={t('done.barsLabel')} className="grid grid-cols-4 gap-3">
             {groups.map((group) => {
               const ringed = weak !== null && weak.first >= group.first && weak.first <= group.last
-              const label = t('done.group', { first: group.first + 1, last: group.last + 1 })
+              const label = t('done.group', {
+                first: barNumber(group.first, pickup),
+                last: barNumber(group.last, pickup),
+              })
               const slips = t('done.slips', { count: group.total })
               const pauses = group.pauses > 0 ? t('done.pauses', { count: group.pauses }) : null
               return (

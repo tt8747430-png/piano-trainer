@@ -5,7 +5,7 @@ import { PIECES, useRepertoire, type Piece } from '@/entities/piece'
 import { heardLine, songsWith, type SongPlace } from '@/entities/progression-library'
 import { loopParam } from '@/features/practice'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { numeralText, parseNumerals } from '@/shared/lib/music'
+import { barNumber, numeralText, parseNumerals } from '@/shared/lib/music'
 import { GroupLink, GroupRows } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEntryFace } from '@/widgets/piece-list'
@@ -72,8 +72,11 @@ function SongRow({ piece, place }: { piece: Piece; place: SongPlace }) {
       label={face.title}
       value={
         first === last
-          ? t('barOne', { n: first + 1 })
-          : t('barsFromTo', { first: first + 1, last: last + 1 })
+          ? t('barOne', { n: barNumber(first, place.pickup) })
+          : t('barsFromTo', {
+              first: barNumber(first, place.pickup),
+              last: barNumber(last, place.pickup),
+            })
       }
       render={
         <Link

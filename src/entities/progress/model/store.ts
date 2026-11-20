@@ -39,7 +39,7 @@ import {
 import { songPlay, SONGS_KEPT } from './songs'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 12
+export const PROGRESS_VERSION = 13
 
 export type ProgressStore = StoreApi<ProgressState>
 

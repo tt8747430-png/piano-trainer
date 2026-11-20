@@ -4,6 +4,7 @@ import { selectIsLearned, selectPractised, selectSongPlay, useProgress } from '@
 import { pieceStepId } from '@/entities/step'
 import { useLocale } from '@/shared/i18n'
 import { daySaid, useNow } from '@/shared/lib'
+import { barNumber, barsCounted } from '@/shared/lib/music'
 
 /**
  * Where a song stands, in two parts (the R72 board's "Bar 9 of 16" and "Today"): Learned, the bar it
@@ -22,7 +23,10 @@ export function useSongStanding(entry: Entry): { status: string; when: string | 
   const status = learned
     ? t('common:learned.done')
     : stopped
-      ? t('continue.bar', { bar: stopped.at + 1, total: stopped.bars })
+      ? t('continue.bar', {
+          bar: barNumber(stopped.at, stopped.pickup),
+          total: barsCounted(stopped.bars, stopped.pickup),
+        })
       : at
         ? t('row.learning')
         : t('row.notStarted')

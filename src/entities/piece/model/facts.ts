@@ -3,6 +3,7 @@ import type { ChartBar } from '@/shared/lib/arrangement'
 import {
   noteName,
   numeralReadings,
+  opensOnPickup,
   playOrder,
   qualitySuffix,
   sameKey,
@@ -39,6 +40,8 @@ export interface PieceFacts {
   readonly stretches: readonly ChordStretch[]
   /** The written bars in the order they are played. */
   readonly order: readonly number[]
+  /** Whether it opens on a pickup: its bars numbered from the first full one (`barNumber`). */
+  readonly pickup: boolean
 }
 
 function chordsOnce(chords: readonly Chord[]): PieceFacts['chords'] {
@@ -96,6 +99,10 @@ export function factsOf(piece: Piece): PieceFacts {
     chords: chordsOnce(chordsOf(chart)),
     patterns: [...patternsOfPiece(piece)],
     ...stretchesOf(chart.sections, chart.key),
+    pickup: opensOnPickup(
+      chart.sections.flatMap((section) => section.lines.flat()),
+      chart.sections[0]?.meter ?? chart.meter,
+    ),
   }
   known.set(piece, facts)
   return facts

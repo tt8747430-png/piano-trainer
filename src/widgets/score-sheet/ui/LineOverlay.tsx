@@ -2,7 +2,7 @@ import { useRef, type MouseEvent, type PointerEvent, type Ref, type RefObject } 
 import { useTranslation } from 'react-i18next'
 import { staffLayer, type Layer } from '@/features/score-editor'
 import { useBarName } from '@/shared/i18n'
-import { keySignature, printedChord, type Midi, type Tick } from '@/shared/lib/music'
+import { keySignature, printedBar, printedChord, type Midi, type Tick } from '@/shared/lib/music'
 import { staffClefAt, type BeatMark, type TimedMusic } from '@/shared/lib/notation'
 import {
   MARK,
@@ -343,6 +343,7 @@ export function LineOverlay({
       <PrintedSigns
         layout={layout}
         bars={line.bars.map((placed) => placed.index)}
+        pickup={line.pickup}
         keyless={keySignature(music.bars[0]?.key ?? music.key) === 0}
         edit={edit}
       />
@@ -357,7 +358,7 @@ export function LineOverlay({
             key={index}
             type="button"
             tabIndex={-1}
-            aria-label={barName((placed?.index ?? 0) + 1, chords.join(' '))}
+            aria-label={barName(printedBar(placed?.index ?? 0, line.pickup), chords.join(' '))}
             onDoubleClick={write(index)}
             {...chosenBy}
             // A pointer's target only (the arrows move the caret): no focus ring and no hover wash

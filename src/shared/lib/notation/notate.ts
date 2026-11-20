@@ -8,6 +8,7 @@ import {
   beatsBefore,
   beatsPerBar,
   beatsToTicks,
+  opensOnPickup,
   timeSignature,
   writtenOctave,
   writtenShift,
@@ -402,5 +403,6 @@ export function notate(music: TimedMusic): Score {
     ...(music.tempoText ? { tempoText: music.tempoText } : {}),
     staves: written,
     measures: drawnAs(measures),
+    ...(!music.continued && opensOnPickup(music.bars, music.meter) ? { pickup: true } : {}),
   }
 }

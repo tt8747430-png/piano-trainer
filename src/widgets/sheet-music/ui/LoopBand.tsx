@@ -14,6 +14,7 @@ export function LoopBand({
   onChange,
   firstBar = 0,
   lastPieceBar,
+  pickup,
 }: {
   layout: ScoreLayout
   loop: BarRange
@@ -22,6 +23,8 @@ export function LoopBand({
   firstBar?: number
   /** The piece's last bar: a grip is dragged across lines up to it. */
   lastPieceBar: number
+  /** Whether the piece opens on a pickup: its bars numbered from the first full one. */
+  pickup: boolean
 }) {
   const lastBar = firstBar + layout.measures.length - 1
   // On a line, the part of the loop it holds, a grip where the loop ends there.
@@ -41,6 +44,7 @@ export function LoopBand({
         <LoopGrip
           end="start"
           bar={loop.first}
+          pickup={pickup}
           min={0}
           max={loop.last}
           barAt={barUnderPoint}
@@ -52,6 +56,7 @@ export function LoopBand({
         <LoopGrip
           end="end"
           bar={loop.last}
+          pickup={pickup}
           min={loop.first}
           max={lastPieceBar}
           barAt={barUnderPoint}

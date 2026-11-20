@@ -1,5 +1,5 @@
 import type { Performance } from '@/shared/lib/arrangement'
-import type { Tick } from '@/shared/lib/music'
+import { barNumber, opensOnPickup, type Tick } from '@/shared/lib/music'
 import type { Span } from './lyric-lines'
 
 /** The chord sounding in a beat and the change after it, indexes into the performance's chords. */
@@ -63,7 +63,7 @@ interface SongChord {
   readonly symbol: string
   /** How many times the music changes to it. */
   readonly count: number
-  /** The bars it changes to it in, from 1, as played. */
+  /** The bars it changes to it in, as played, numbered as a musician numbers them (`barNumber`). */
   readonly bars: readonly number[]
 }
 
@@ -72,7 +72,7 @@ interface OrderCard {
   /** Index into the performance's chords: where a tap takes the cursor. */
   readonly chord: number
   readonly symbol: string
-  /** Its bar, from 1, as played. */
+  /** Its bar as played, numbered as a musician numbers it (`barNumber`). */
   readonly bar: number
   /** Its section, by the performance's numbering. */
   readonly section: number
@@ -80,6 +80,7 @@ interface OrderCard {
 
 /** Every change of chord as played (a chord held on is no change): one card each. */
 export function chordsInOrder(performance: Performance): readonly OrderCard[] {
+  const pickup = opensOnPickup(performance.bars, performance.meter)
   return performance.chords.flatMap((chord, index) =>
     performance.chords[index - 1]?.symbol === chord.symbol
       ? []
@@ -87,7 +88,7 @@ export function chordsInOrder(performance: Performance): readonly OrderCard[] {
           {
             chord: index,
             symbol: chord.symbol,
-            bar: chord.bar + 1,
+            bar: barNumber(chord.bar, pickup),
             section: performance.bars[chord.bar]?.section ?? 0,
           },
         ],

@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react'
 import type { Performance } from '@/shared/lib/arrangement'
+import { opensOnPickup } from '@/shared/lib/music'
 import { usePositionName } from '@/shared/ui'
 import { barLabels, LabelRow, labelRow, labelScale, type ScoreLayout } from '@/shared/ui/score'
 import { chordPositions } from '../model/chord-positions'
@@ -45,6 +46,7 @@ export const SheetLabels = memo(function SheetLabels({
         performance.bars.map((bar, index) => ({ section: bar.section, tempo: tempos[index] })),
         firstBar,
         firstBar + layout.measures.length,
+        opensOnPickup(performance.bars, performance.meter),
       ),
     [performance, tempos, firstBar, layout],
   )

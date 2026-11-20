@@ -13,6 +13,7 @@ import { pieceStepId } from '@/entities/step'
 import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { editsContent, useAccount } from '@/shared/lib/account'
+import { opensOnPickup } from '@/shared/lib/music'
 import { ButtonLink } from '@/shared/ui'
 import { useLocale } from '@/shared/i18n'
 import { PieceFirstPage } from '@/widgets/piece-cover'
@@ -53,6 +54,7 @@ export function PieceView({ piece }: { piece: Piece }) {
     (most, bar, i) => Math.max(most, (bar.written ?? i) + 1),
     0,
   )
+  const pickup = opensOnPickup(performance.bars, performance.meter)
   return (
     // One centred 880 column on a laptop, the bar on its edges (the SongLaptop board): the cover beside
     // the song's name, facts and plays, then its chords, sections and details across the column.
@@ -110,7 +112,7 @@ export function PieceView({ piece }: { piece: Piece }) {
               piece={piece}
               keyLink={(key) => <ScaleLink entry={piece}>{key}</ScaleLink>}
             />
-            <SongPlace piece={piece} bars={writtenBars} />
+            <SongPlace piece={piece} bars={writtenBars} pickup={pickup} />
             <PieceAbout entry={piece} />
           </div>
         </section>
@@ -119,7 +121,7 @@ export function PieceView({ piece }: { piece: Piece }) {
         </PieceChords>
         {/* Its sections under its chords, as the Song board's (a song of one section too: its page is the way in). */}
         {sections.length > 0 ? (
-          <SectionRows piece={piece} headings={headings} sections={sections} />
+          <SectionRows piece={piece} headings={headings} sections={sections} pickup={pickup} />
         ) : null}
         {/* Your practice and Details side by side on a wide screen (canvas, row 2); Details alone,
               before any practice, takes the whole width. */}

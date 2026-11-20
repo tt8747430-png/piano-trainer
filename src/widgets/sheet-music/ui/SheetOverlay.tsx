@@ -1,7 +1,7 @@
 import type { RefObject } from 'react'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import type { Tick } from '@/shared/lib/music'
+import { opensOnPickup, type Tick } from '@/shared/lib/music'
 import type { VerdictMark } from '@/shared/ui'
 import { Playhead, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { BarTargets } from './BarTargets'
@@ -90,6 +90,7 @@ export function SheetOverlay({
           onChange={onLoopChange}
           firstBar={firstBar}
           lastPieceBar={performance.bars.length - 1}
+          pickup={opensOnPickup(performance.bars, performance.meter)}
         />
       ) : null}
       {group && here ? (

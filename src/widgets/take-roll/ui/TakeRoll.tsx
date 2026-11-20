@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { QuantisedNote, Take } from '@/entities/take'
 import { cn } from '@/shared/lib'
 import {
+  barNumber,
   MIDDLE_C,
   midi,
   PIANO,
@@ -103,6 +104,7 @@ function SplitHandle({
  */
 export function TakeRoll({
   take,
+  pickup,
   kept,
   playing,
   onPlayFrom,
@@ -113,6 +115,8 @@ export function TakeRoll({
   className,
 }: {
   take: Take
+  /** Whether its song opens on a pickup: its bars numbered as the score numbers them (`barNumber`). */
+  pickup: boolean
   /** The bars kept (Keep bars' choice), from 0: on the yellow wash. */
   kept?: { readonly first: number; readonly last: number } | undefined
   /** While it plays: when on the audio clock it started, and from where in the take (ms). */
@@ -148,7 +152,10 @@ export function TakeRoll({
   const laneY = (key: number) => (highest - key) * LANE
   const hand = (key: number) => (key >= splitKey ? 'fill-roll-upper' : 'fill-roll-lower')
   const isKept = (bar: number) => !kept || (bar >= kept.first && bar <= kept.last)
-  const playingBar = playing ? (roll.bars[barIndexAt(roll, playing.fromMs)]?.number ?? null) : null
+  const playingAt = playing ? roll.bars[barIndexAt(roll, playing.fromMs)]?.number : undefined
+  // `number` counts the written bars from 1; said as the score numbers them.
+  const said = (number: number) => barNumber(number - 1, pickup)
+  const playingBar = playingAt === undefined ? null : said(playingAt)
   return (
     <div className={cn('flex flex-col gap-2 card', bars ? 'p-3' : 'px-3 py-2')}>
       <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-none">
@@ -227,13 +234,13 @@ export function TakeRoll({
                 <li key={at} className="min-w-0">
                   <button
                     type="button"
-                    aria-label={t('roll.playFrom', { n: number })}
+                    aria-label={t('roll.playFrom', { n: said(number) })}
                     data-kept={kept && isKept(bar) ? '' : undefined}
                     onClick={() => onPlayFrom(bar)}
                     className="flex h-11 w-full items-center justify-center py-1.5 text-xs text-muted-foreground tabular-nums focus-visible:-outline-offset-3 data-kept:[&>span]:bg-paint-yellow"
                   >
                     <span className="flex size-full items-center justify-center rounded-md transition-colors duration-200 ease-out hover:bg-muted">
-                      {number}
+                      {said(number)}
                     </span>
                   </button>
                 </li>

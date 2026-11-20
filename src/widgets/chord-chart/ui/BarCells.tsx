@@ -29,7 +29,8 @@ export function BarCells({
   looped = false,
   face,
 }: {
-  number: number
+  /** Its number as printed (`printedBar`): none for a pickup. */
+  number: number | null
   /** Each beat's chords, those starting in it. */
   cells: readonly (readonly string[])[]
   /** Method labels and a short bar's length, under the chords. */

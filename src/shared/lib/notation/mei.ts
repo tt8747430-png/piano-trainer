@@ -1,4 +1,5 @@
 import {
+  barNumber,
   EXPRESSION_TEXT,
   keySignature,
   meterOf,
@@ -376,7 +377,7 @@ class Writer {
       resting > 1 ? `<multiRest num="${resting}"/>` : repeatSign(this.score.measures, index)
     const attrs = [
       `xml:id="m-${index}"`,
-      `n="${index + 1}"`,
+      `n="${barNumber(index, this.score.pickup === true)}"`,
       last.barline ? `right="${RIGHT[last.barline]}"` : '',
       measure.repeatStart ? 'left="rptstart"' : '',
     ].filter(Boolean)

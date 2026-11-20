@@ -5,7 +5,7 @@ import { beatCells } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
-import type { Tick } from '@/shared/lib/music'
+import { barNumber, opensOnPickup, printedBar, type Tick } from '@/shared/lib/music'
 import type { BarWords } from '../model/bar-words'
 import {
   chartBar,
@@ -111,6 +111,7 @@ export function ChordChart({
   // The Player's Grid as its board (PlayerViewGrid): caps heads, the row's first bar number in a
   // gutter, white beat cells 1 apart, each bar opening on its ink rule.
   const grid = tap === 'go'
+  const pickup = opensOnPickup(performance.bars, performance.meter)
   const screenRoom = useRowRoom()
   const room = rowBeats ?? screenRoom
   // Read once a performance: the Player's chart renders again as each beat plays.
@@ -189,8 +190,11 @@ export function ChordChart({
               {bars ? (
                 <span className="text-sm text-muted-foreground tabular-nums">
                   {bars.first === bars.last
-                    ? t('barOne', { n: bars.first + 1 })
-                    : t('barsFromTo', { first: bars.first + 1, last: bars.last + 1 })}
+                    ? t('barOne', { n: barNumber(bars.first, pickup) })
+                    : t('barsFromTo', {
+                        first: barNumber(bars.first, pickup),
+                        last: barNumber(bars.last, pickup),
+                      })}
                 </span>
               ) : null}
             </header>
@@ -226,7 +230,7 @@ export function ChordChart({
                     tap === 'print' ? (
                       <PrintedBar
                         key={written}
-                        number={written + 1}
+                        number={printedBar(written, pickup)}
                         symbols={symbols}
                         cells={cells}
                         notes={notes}
@@ -236,7 +240,8 @@ export function ChordChart({
                       <BarButton
                         key={written}
                         tap={tap}
-                        number={written + 1}
+                        bar={written}
+                        number={printedBar(written, pickup)}
                         symbols={symbols}
                         cells={cells}
                         notes={notes}
@@ -261,7 +266,7 @@ export function ChordChart({
                   aria-hidden
                   className="w-4 shrink-0 pt-[5px] sm:w-[26px] text-right text-[10px] text-muted-foreground/60 tabular-nums"
                 >
-                  {first ? first.written + 1 : null}
+                  {first ? printedBar(first.written, pickup) : null}
                 </span>
                 {cellsRow}
               </div>

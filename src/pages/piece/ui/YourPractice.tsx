@@ -9,6 +9,7 @@ import { nextStep, practiceSummary, useTakes, type NextStep } from '@/entities/t
 import { loopParam } from '@/features/practice'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
+import { barNumber, opensOnPickup } from '@/shared/lib/music'
 import { ButtonLink, ProgressBar, SettingsGroup } from '@/shared/ui'
 import { monthDaySaid } from '@/shared/lib'
 
@@ -24,6 +25,7 @@ const ROW =
  * one honey control, so the step is a quiet button. Nothing before the first time it is played.
  */
 export function YourPractice({ piece, performance }: { piece: Piece; performance: Performance }) {
+  const pickup = opensOnPickup(performance.bars, performance.meter)
   const { t } = useTranslation('piece')
   const locale = useLocale()
   const { t: common } = useTranslation('common')
@@ -92,9 +94,9 @@ export function YourPractice({ piece, performance }: { piece: Piece; performance
                     >
                       <span className="sr-only">
                         {share === null
-                          ? t('practice.barNone', { bar: bar + 1 })
+                          ? t('practice.barNone', { bar: barNumber(bar, pickup) })
                           : t('practice.barSaid', {
-                              bar: bar + 1,
+                              bar: barNumber(bar, pickup),
                               percent: percent(Math.round(share * 100)),
                             })}
                       </span>
@@ -106,7 +108,7 @@ export function YourPractice({ piece, performance }: { piece: Piece; performance
           </>
         ) : null}
       </dl>
-      {step ? <StepLink piece={piece} step={step} /> : null}
+      {step ? <StepLink piece={piece} step={step} pickup={pickup} /> : null}
     </SettingsGroup>
   )
 }
@@ -143,7 +145,7 @@ function ShareRow({
 }
 
 /** The next step as a quiet link into the Player: the loop and the tempo set. */
-function StepLink({ piece, step }: { piece: Piece; step: NextStep }) {
+function StepLink({ piece, step, pickup }: { piece: Piece; step: NextStep; pickup: boolean }) {
   const { t } = useTranslation('piece')
   const locale = useLocale()
   const speed = formatPercent(locale, Math.round(step.speed * 100))
@@ -152,8 +154,11 @@ function StepLink({ piece, step }: { piece: Piece; step: NextStep }) {
     step.kind === 'tempo'
       ? t('practice.next.tempo', { speed })
       : step.bars.first === step.bars.last
-        ? t('practice.next.loopOne', { bar: step.bars.first + 1, speed })
-        : t('practice.next.loop', { bars: `${step.bars.first + 1}–${step.bars.last + 1}`, speed })
+        ? t('practice.next.loopOne', { bar: barNumber(step.bars.first, pickup), speed })
+        : t('practice.next.loop', {
+            bars: `${barNumber(step.bars.first, pickup)}–${barNumber(step.bars.last, pickup)}`,
+            speed,
+          })
   return (
     <div className="border-t border-hairline p-3">
       <ButtonLink

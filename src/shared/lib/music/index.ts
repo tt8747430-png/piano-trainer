@@ -1,5 +1,7 @@
 export { isMidi, midi, PITCH_CLASSES, pitchClass, type Midi, type PitchClass } from './pitch'
 export {
+  barNumber,
+  barsCounted,
   barTicks,
   beatGrouping,
   beatsPerBar,
@@ -10,6 +12,8 @@ export {
   eighthTicks,
   groupTicks,
   isCompound,
+  opensOnPickup,
+  printedBar,
   isMeter,
   METER_COUNTS,
   METER_UNITS,

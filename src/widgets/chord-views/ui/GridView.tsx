@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { writtenBarOf, type BarRange, type PlayedBeat } from '@/features/practice'
 import { barUnder, useElementSize, useScrollMotion } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
-import type { Tick } from '@/shared/lib/music'
+import { opensOnPickup, type Tick } from '@/shared/lib/music'
 import { LoopGrip } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { loopedBars, playedOf } from '../model/beat-span'
@@ -141,6 +141,7 @@ function GridLoopGrips({
           <LoopGrip
             end="start"
             bar={first}
+            pickup={opensOnPickup(performance.bars, performance.meter)}
             min={0}
             max={last}
             barAt={barUnder}
@@ -153,6 +154,7 @@ function GridLoopGrips({
           <LoopGrip
             end="end"
             bar={last}
+            pickup={opensOnPickup(performance.bars, performance.meter)}
             min={first}
             max={lastWritten}
             barAt={barUnder}

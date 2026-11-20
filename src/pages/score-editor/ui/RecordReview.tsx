@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { quantise, type Take } from '@/entities/take'
-import { barAt, type TakeInto } from '@/features/score-editor'
-import { MIDDLE_C, type Midi } from '@/shared/lib/music'
+import { barAt, draftPickup, type TakeInto } from '@/features/score-editor'
+import { barNumber, MIDDLE_C, type Midi } from '@/shared/lib/music'
 import { notate, singleStaff } from '@/shared/lib/notation'
 import { Dropdown, Labelled, sayUndo, Segmented, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -35,7 +35,11 @@ export function RecordReview({ take }: { take: Take }) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
   const key = useEditorState((state) => state.draft.key)
-  const fromBar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
+  const pickup = useEditorState((state) => draftPickup(state.draft))
+  const fromBar = barNumber(
+    useEditorState((state) => barAt(state.draft, state.caret).index),
+    pickup,
+  )
   const staves = useStaffHeads()
   const leadSheet = useEditorState((state) => state.draft.leadSheet)
   const layerName = useLayerName(staves)
@@ -93,6 +97,7 @@ export function RecordReview({ take }: { take: Take }) {
         </div>
         <TakeRoll
           take={take}
+          pickup={pickup}
           playing={play.playing}
           onPlayFrom={play.playFrom}
           quantised={notes}

@@ -247,6 +247,8 @@ export const music: LocaleResources['music'] = {
     error: 'Ноты не удаётся показать.',
     bar: 'Такт {{n}}',
     barChords: 'Такт {{n}}: {{chords}}',
+    pickup: 'Затакт',
+    pickupChords: 'Затакт: {{chords}}',
     loopStart: 'Начало повтора',
     loopEnd: 'Конец повтора',
     staves: { piano: 'Фортепиано' },

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import type { DiagramChord } from '@/features/practice'
 import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
-import { printedSymbol, type Tick } from '@/shared/lib/music'
+import { barNumber, opensOnPickup, printedSymbol, type Tick } from '@/shared/lib/music'
 import { ChordDiagram } from '@/widgets/chord-diagrams'
 import type { ShownLine } from '../model/repeated-lines'
 import { ChordChip } from './ChordChip'
@@ -40,6 +40,7 @@ export function LyricRow({
   onGo: (at: Tick) => void
 }) {
   const { t } = useTranslation('player')
+  const pickup = opensOnPickup(performance.bars, performance.meter)
   const first = line.bars[0] ?? 0
   const last = line.bars.at(-1) ?? first
   return (
@@ -58,8 +59,8 @@ export function LyricRow({
         tabIndex={-1}
         aria-label={
           first === last
-            ? t('line.one', { n: first + 1 })
-            : t('line.many', { first: first + 1, last: last + 1 })
+            ? t('line.one', { n: barNumber(first, pickup) })
+            : t('line.many', { first: barNumber(first, pickup), last: barNumber(last, pickup) })
         }
         aria-current={playing ? 'step' : undefined}
         onClick={() => onGo(line.from)}

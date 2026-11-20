@@ -11,7 +11,8 @@ export function PrintedBar({
   notes,
   style,
 }: {
-  number: number
+  /** Its number as printed (`printedBar`): none for a pickup. */
+  number: number | null
   symbols: readonly string[]
   cells: readonly (readonly string[])[]
   notes: readonly string[]

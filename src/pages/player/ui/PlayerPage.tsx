@@ -33,7 +33,7 @@ import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song
 import { useSongExport } from '@/features/song-files'
 import { useLocale, useKeyName } from '@/shared/i18n'
 import { useUp, useSetSearch } from '@/shared/lib'
-import { isCompound } from '@/shared/lib/music'
+import { isCompound, opensOnPickup } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
 import { SwingField, useScoreTracks } from '@/widgets/practice-player'
 import type { PlayerSearch } from '../model/player-search'
@@ -274,6 +274,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
       <SectionsSheet
         starts={starts}
         headings={headings}
+        pickup={opensOnPickup(performance.bars, performance.meter)}
         current={sectionAt(performance, player.practice.state.beatGroup)}
         onGo={goToBar}
         open={sectionsOpen}
