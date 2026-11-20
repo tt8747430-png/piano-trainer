@@ -8,12 +8,12 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · PENDING · Learn's laptop board in the 88 place bar (`LPLACEBAR`) · LearnLaptop,AppLayersLaptop · pending
-- 2026-11-20 · PENDING · the overview's Jazz vocabulary counts the app's 10 exercises · Main,Laptop · pending
 
 
 ## Changes
 
+- 2026-11-20 · 1d208d23 · Learn's laptop board in the 88 place bar (`LPLACEBAR`) · LearnLaptop,AppLayersLaptop · v703
+- 2026-11-20 · bce2c4e8 · the overview's Jazz vocabulary counts the app's 10 exercises · Main,Laptop · v703
 - 2026-11-20 · f6cb4cbd · one heart, Lucide's, on every board · Accompaniment,AccompanimentLaptop,AllSongs,AllSongsLaptop,Explore,ExploreLaptop,FingerTechnique,FingerTechniqueLaptop,Folder,FolderLaptop,JazzVocabulary,JazzVocabularyLaptop,PatternNew,PatternNewLaptop,Progressions,ProgressionsLaptop,Settings,SettingsLaptop,Song,SongLaptop,Songs,SongsLaptop · v701
 - 2026-11-20 · dd36063b · a Practice library's search 8 under its large bar, as Songs' and the app · Progressions,Accompaniment,FingerTechnique,JazzVocabulary · v700
 - 2026-11-20 · 92a95e30 · the Chord player's laptop keys C2 to C7 with faces; a chord's raised part as the app's on the key tiles (B°, never Dm's m) · ChordPlayer,ChordPlayerLaptop · v699
