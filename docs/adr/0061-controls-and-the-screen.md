@@ -18,7 +18,7 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   | One of many (12 keys, chord qualities, scales, voicings, a tempo's rung) | a menu: the value with ⌃⌄ (`Dropdown` in a settings row, `MenuPicker` in a row of pickers) |
   | Two to five, every one in sight                                          | a segmented control on the row (`Segmented`)                                               |
   | Which hands                                                              | `HandsSegmented`: Left · Both · Right, as the hands sit at the keys                        |
-  | On or off                                                                | a switch (`SwitchRow`)                                                                      |
+  | On or off                                                                | a switch (`SwitchRow`)                                                                     |
   | A number                                                                 | a stepper (`Stepper`)                                                                      |
   | Several of many                                                          | a pop-up that checks several (`MultiDropdown`), or a checklist sheet                       |
   | A few filters                                                            | chips (`ToggleChips`), and only there; chips that wrap stand 8 apart                       |
