@@ -14,7 +14,7 @@ export function CountInBeat({ count }: { count: number | null }) {
       <span
         key={count}
         aria-hidden
-        className="text-[min(40vw,40vh,12rem)] leading-none font-bold text-foreground/85 tabular-nums drop-shadow-sm duration-150 motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-75"
+        className="text-[min(40vw,40dvh,12rem)] leading-none font-bold text-foreground/85 tabular-nums drop-shadow-sm duration-150 motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-75"
       >
         {count}
       </span>
