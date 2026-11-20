@@ -38,7 +38,7 @@ function CourseAction({ course }: { course: Course }) {
   return (
     <ButtonLink
       size="lg"
-      className="w-full lg:w-auto lg:min-w-90"
+      className="w-full"
       render={
         step.kind === 'piece' ? (
           // A guided song's page, where it is played and marked learned.

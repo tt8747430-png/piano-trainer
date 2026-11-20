@@ -136,7 +136,7 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
             way ? (
               <ButtonLink
                 size="lg"
-                className="w-full lg:w-auto lg:min-w-90"
+                className="w-full"
                 render={inCourse(course, way.lesson.id)}
               >
                 {t(`journey.${word}`, { title: localText(way.lesson.title, locale) })}

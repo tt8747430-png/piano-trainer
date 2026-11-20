@@ -104,7 +104,7 @@ export function LessonRow({
 
 /**
  * Lessons in their order (canvas 128): one spine runs through their tiles on a phone, with no card
- * round them; on a laptop they stand in rows of `across` (a level's three, a course's four), in
+ * round them; on a laptop they stand in rows of `across` (a level's three 32 apart, a course's four 24 apart), in
  * reading order, with no spine. A level's chapters and a course's lessons are drawn this way; it shows
  * the order, it locks nothing.
  */
@@ -112,10 +112,10 @@ export function LessonLine({ across, children }: { across: 3 | 4; children: Reac
   return (
     <ol
       className={cn(
-        'flex flex-col lg:grid lg:gap-x-8',
+        'flex flex-col lg:grid',
         across === 3
-          ? 'lg:grid-cols-[repeat(auto-fill,minmax(max(13.75rem,calc((100%-4rem)/3)),1fr))]'
-          : 'lg:grid-cols-[repeat(auto-fill,minmax(max(12.5rem,calc((100%-6rem)/4)),1fr))]',
+          ? 'lg:grid-cols-[repeat(auto-fill,minmax(max(13.75rem,calc((100%-4rem)/3)),1fr))] lg:gap-x-8'
+          : 'lg:grid-cols-[repeat(auto-fill,minmax(max(12.5rem,calc((100%-4.5rem)/4)),1fr))] lg:gap-x-6',
       )}
     >
       {children}
