@@ -118,11 +118,11 @@ export function ItemRow({
   columns: TableColumns
   trailing: ReactNode
   /** In Edit: no link, the row moving as it is dragged. */
-  arrange?: { ref: Ref<HTMLTableRowElement>; style: CSSProperties; lifted: boolean }
+  arrange?: { node: Ref<HTMLTableRowElement>; style: CSSProperties; lifted: boolean }
 }) {
   return (
     <tr
-      ref={arrange?.ref}
+      ref={arrange?.node}
       style={arrange?.style}
       // the board's row is 56, its hairline inside it
       className={cn(

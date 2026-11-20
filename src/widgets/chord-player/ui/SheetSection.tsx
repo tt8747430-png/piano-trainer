@@ -92,7 +92,7 @@ export function SheetSection({
     transition,
     isDragging,
   } = useSortable({ id: sectionDragId(index) })
-  const end = useDroppable({ id: endDragId(index) })
+  const { setNodeRef: endDrop, isOver: overEnd } = useDroppable({ id: endDragId(index) })
   const ids = chords.map((_, at) => chordDragId(index, at))
   const same = (place: BoxPlace | null, at: number) =>
     place !== null && place.section === index && place.index === at
@@ -228,7 +228,7 @@ export function SheetSection({
             }),
           )}
           <li
-            ref={end.setNodeRef}
+            ref={endDrop}
             className="flex min-w-11"
             style={{ gridColumn: `span ${wide ? 1 : 2}` }}
           >
@@ -239,7 +239,7 @@ export function SheetSection({
               onClick={() => acts.add(index)}
               className={cn(
                 'grid h-[60px] flex-1 place-items-center rounded-[6px] text-muted-foreground shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-200 ease-out hover:bg-muted lg:h-[76px]',
-                end.isOver && 'bg-primary/35',
+                overEnd && 'bg-primary/35',
               )}
             >
               <Plus aria-hidden className="size-6" />

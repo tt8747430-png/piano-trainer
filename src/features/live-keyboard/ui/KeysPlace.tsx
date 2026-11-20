@@ -150,7 +150,7 @@ export function KeysPlace({
       height: rect.height,
     }
   }
-  const hold = (sides: Sides) => (event: React.PointerEvent) => {
+  const hold = (sides: Sides, event: React.PointerEvent) => {
     const from = now()
     if (from === null) return
     event.preventDefault()
@@ -207,7 +207,7 @@ export function KeysPlace({
         type="button"
         aria-label={t('keysWindow.move')}
         title={t('keysWindow.hint')}
-        onPointerDown={hold(MOVE)}
+        onPointerDown={(event) => hold(MOVE, event)}
         onDoubleClick={() => kept.set(null)}
         onKeyDown={nudge}
         className="absolute top-0 left-1/2 z-10 flex h-6 w-24 -translate-x-1/2 cursor-grab touch-none items-center justify-center outline-none before:absolute before:inset-x-0 before:-inset-y-2.5 before:content-[''] focus-visible:ring-2 focus-visible:ring-ring active:cursor-grabbing"
@@ -221,7 +221,7 @@ export function KeysPlace({
         <span
           key={place}
           aria-hidden
-          onPointerDown={hold(sides)}
+          onPointerDown={(event) => hold(sides, event)}
           className={cn('absolute z-10 touch-none', place, cursor)}
         >
           <span

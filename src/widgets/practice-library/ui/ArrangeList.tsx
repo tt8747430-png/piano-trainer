@@ -73,20 +73,22 @@ const HANDLE =
 /** A handle: the one thing a drag starts from, by mouse, held finger or keyboard. */
 function Handle({
   label,
-  sortable,
-}: {
+  activator,
+  attributes,
+  listeners,
+}: Pick<ReturnType<typeof useSortable>, 'attributes' | 'listeners'> & {
   label: string
-  sortable: Pick<ReturnType<typeof useSortable>, 'attributes' | 'listeners' | 'setActivatorNodeRef'>
+  activator: ReturnType<typeof useSortable>['setActivatorNodeRef']
 }) {
   return (
     <button
-      ref={sortable.setActivatorNodeRef}
+      ref={activator}
       type="button"
       aria-label={label}
       title={label}
       className={HANDLE}
-      {...sortable.attributes}
-      {...sortable.listeners}
+      {...attributes}
+      {...listeners}
     >
       <GripVertical aria-hidden className="size-4.5" />
     </button>
@@ -116,20 +118,24 @@ function SortablePlace({
   menu: ReactNode
   children: ReactNode
 }) {
-  const sortable = useSortable({ id })
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id })
   const [shut, setShut] = useState(false)
   const table = useContext(TableOf)
   const style = {
-    transform: CSS.Translate.toString(sortable.transform),
-    transition: sortable.transition,
+    transform: CSS.Translate.toString(transform),
+    transition: transition,
   }
   if (table)
     return (
-      <tbody
-        ref={sortable.setNodeRef}
-        style={style}
-        className={cn(sortable.isDragging && 'opacity-0')}
-      >
+      <tbody ref={setNodeRef} style={style} className={cn(isDragging && 'opacity-0')}>
         <FoldHeadRow
           span={spanOf(table.levels, table.columns)}
           name={name}
@@ -140,7 +146,12 @@ function SortablePlace({
           action={
             <>
               {menu}
-              <Handle label={label} sortable={sortable} />
+              <Handle
+                label={label}
+                activator={setActivatorNodeRef}
+                attributes={attributes}
+                listeners={listeners}
+              />
               {/* over the rows' handles, the More's room kept */}
               <span aria-hidden className="w-12" />
             </>
@@ -151,12 +162,12 @@ function SortablePlace({
     )
   return (
     <li
-      ref={sortable.setNodeRef}
+      ref={setNodeRef}
       style={{
-        transform: CSS.Translate.toString(sortable.transform),
-        transition: sortable.transition,
+        transform: CSS.Translate.toString(transform),
+        transition: transition,
       }}
-      className={cn('min-w-0', sortable.isDragging && 'opacity-0')}
+      className={cn('min-w-0', isDragging && 'opacity-0')}
     >
       <FoldSection
         title={name}
@@ -167,7 +178,12 @@ function SortablePlace({
         action={
           <span className="-my-2.5 me-1 flex items-center">
             {menu}
-            <Handle label={label} sortable={sortable} />
+            <Handle
+              label={label}
+              activator={setActivatorNodeRef}
+              attributes={attributes}
+              listeners={listeners}
+            />
           </span>
         }
       >
@@ -180,10 +196,23 @@ function SortablePlace({
 /** A row in Edit: its face as it reads, its handle where its heart stood, so nothing moves. */
 function SortableRow({ id, item }: { id: string; item: LibraryItem }) {
   const { t } = useTranslation('practice')
-  const sortable = useSortable({ id })
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id })
   const table = useContext(TableOf)
   const handle = (
-    <Handle label={t('library.edit.moveRow', { name: item.name })} sortable={sortable} />
+    <Handle
+      label={t('library.edit.moveRow', { name: item.name })}
+      activator={setActivatorNodeRef}
+      attributes={attributes}
+      listeners={listeners}
+    />
   )
   if (table)
     return (
@@ -192,12 +221,12 @@ function SortableRow({ id, item }: { id: string; item: LibraryItem }) {
         levels={table.levels}
         columns={table.columns}
         arrange={{
-          ref: sortable.setNodeRef,
+          node: setNodeRef,
           style: {
-            transform: CSS.Translate.toString(sortable.transform),
-            transition: sortable.transition,
+            transform: CSS.Translate.toString(transform),
+            transition: transition,
           },
-          lifted: sortable.isDragging,
+          lifted: isDragging,
         }}
         // where the heart stood, the More's room kept
         trailing={
@@ -212,14 +241,19 @@ function SortableRow({ id, item }: { id: string; item: LibraryItem }) {
     <LibraryRow
       item={item}
       arrange={{
-        ref: sortable.setNodeRef,
+        node: setNodeRef,
         style: {
-          transform: CSS.Translate.toString(sortable.transform),
-          transition: sortable.transition,
+          transform: CSS.Translate.toString(transform),
+          transition: transition,
         },
-        lifted: sortable.isDragging,
+        lifted: isDragging,
         handle: (
-          <Handle label={t('library.edit.moveRow', { name: item.name })} sortable={sortable} />
+          <Handle
+            label={t('library.edit.moveRow', { name: item.name })}
+            activator={setActivatorNodeRef}
+            attributes={attributes}
+            listeners={listeners}
+          />
         ),
       }}
     />

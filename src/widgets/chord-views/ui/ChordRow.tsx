@@ -49,8 +49,11 @@ export function ChordRow({
   const following = useRef(false)
   const placed = useRef(false)
   const settle = useRef(0)
+  // The chord sounding, for a scroll that settles after the render that moved it.
   const sounding = useRef(current)
-  sounding.current = current
+  useEffect(() => {
+    sounding.current = current
+  })
 
   useEffect(() => {
     const el = row.current
