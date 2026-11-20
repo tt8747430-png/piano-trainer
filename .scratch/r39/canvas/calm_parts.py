@@ -12,9 +12,11 @@ MEL = [('D4', 1, 'A-', ''), ('G4', 2, 'ma-', 'G'), ('B4', .5, 'zing', ''), ('G4'
 # New Britain as the app's Amazing Grace holds it (Wikipedia's score of the hymn): the slurred eighths take one syllable,
 # the chords are the app's chart, bar by bar (G · G7 · C · G · G · G · D)
 STEP = {'D4': -1, 'E4': 0, 'G4': 2, 'A4': 3, 'B4': 4, 'D5': 6}
-def score_svg(w, sel=None, played=None, size=1.0):
-    """Two systems of the melody on a treble staff, 3/4, G major, chords over it and words under it. sel: index in honey."""
-    sp = 8 * size; out = []; first8 = True; beam_x = 0; systems = [MEL[:6], MEL[6:13], MEL[13:]]; gy = 0; idx = 0; H = 0; acc = 2
+def score_svg(w, sel=None, played=None, size=1.0, cover=False):
+    """Two systems of the melody on a treble staff, 3/4, G major, chords over it and words under it. sel: index in honey.
+    cover: a song page's first page as the app engraves it (PieceFirstPage, measured 2026-11-20): the first staff 57 down,
+    the systems 115 apart, the chord symbols 12.5 bold 28 over the staff (the Player's chord row), the words 15.5 under it."""
+    sp = 8 * size; out = []; first8 = True; beam_x = 0; systems = [MEL[:6], MEL[6:13], MEL[13:]]; gy = 23 if cover else 0; idx = 0; H = 0; acc = 2
     for si, sysn in enumerate(systems):
         top = gy + 34 * size; base = top + 4 * sp
         out.append('<path d="' + ''.join(f'M4 {top + i * sp:.1f}H{w - 4}' for i in range(5)) + f'" stroke="{INK}" stroke-width="0.9"></path>')
@@ -58,17 +60,18 @@ def score_svg(w, sel=None, played=None, size=1.0):
             else:
                 out.append(f'<path d="M{sx:.1f} {y:.1f}V{y + (-3.5 if up else 3.5) * sp:.1f}" stroke="{col}" stroke-width="1.2"></path>')
             if b == 3: out.append(f'<circle cx="{x + 10 * size:.1f}" cy="{y - (sp / 2 if STEP[p] % 2 == 0 else 0):.1f}" r="{1.6 * size:.1f}" fill="{col}"></circle>')
-            if ch: out.append(f'<text x="{x - 5:.1f}" y="{top - 10 * size:.1f}" font-size="{15 * size:.0f}" font-weight="700" font-family="{SERIF}" fill="{INK}">{ch}</text>')
+            if ch: out.append(f'<text x="{x - 5:.1f}" y="{top - (28 if cover else 10) * size:.1f}" font-size="{(12.5 if cover else 15) * size:.1f}" font-weight="700" font-family="{SERIF}" fill="{INK}">{ch}</text>')
             # the words in the engine's serif, a word's syllables parted by a hyphen midway between them (Verovio's)
-            out.append(f'<text x="{x:.1f}" y="{base + 26 * size:.1f}" text-anchor="middle" font-size="{14 * size:.0f}" font-family="{SERIF}" fill="{col}">{syl.rstrip("-")}</text>')
-            if syl.endswith('-'): out.append(f'<text x="{x + adv[k] / 2:.1f}" y="{base + 26 * size:.1f}" text-anchor="middle" font-size="{14 * size:.0f}" font-family="{SERIF}" fill="{INK}">-</text>')
+            ly = (15.5 if cover else 14) * size
+            out.append(f'<text x="{x:.1f}" y="{base + 26 * size:.1f}" text-anchor="middle" font-size="{ly:.1f}" font-family="{SERIF}" fill="{col}">{syl.rstrip("-")}</text>')
+            if syl.endswith('-'): out.append(f'<text x="{x + adv[k] / 2:.1f}" y="{base + 26 * size:.1f}" text-anchor="middle" font-size="{ly:.1f}" font-family="{SERIF}" fill="{INK}">-</text>')
             if syl and k + 1 < len(sysn) and not sysn[k + 1][2]:
                 out.append(f'<path d="M{x + len(syl) * 3.9 * size + 2:.1f} {base + 27 * size:.1f}H{x + adv[k] + 5 * size:.1f}" stroke="{col}" stroke-width="1"></path>')
             x += adv[k]; acc += b
             if acc % 3 == 0 and idx < last:
                 out.append(f'<path d="M{x - adv[k] * 0.5:.1f} {top:.1f}V{base:.1f}" stroke="{INK}" stroke-width="0.9"></path>')
             idx += 1
-        gy = base + 40 * size; H = gy
+        gy = base + (49 if cover else 40) * size; H = base + (28 if cover else 40) * size
     return f'<svg viewBox="0 0 {w} {H:.0f}" width="100%" role="img" aria-label="Amazing Grace, bars 1 to 7" style="display: block">' + ''.join(out) + '</svg>'
 
 

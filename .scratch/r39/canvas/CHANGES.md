@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · a song's cover as the app engraves it: the first staff 57 down, the systems 115 apart, the chord symbols 12.5 bold 28 over the staff, the words 15.5, its title and credits on the app's line heights · Song,SongLaptop · pending
 
 ## Changes
 

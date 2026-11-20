@@ -67,17 +67,20 @@ const PANEL_EDGE_RIGHT =
 export function ScoreEditor({
   target,
   bar,
+  credits = false,
   draft,
   done,
 }: {
   target: EditorTarget
   bar?: number | undefined
+  /** Opened on the gear's Title and credits (the song page's pencil). */
+  credits?: boolean | undefined
   /** An editor's draft of a song's original (ADR 0116): its state and acts, in the gear. */
   draft?: EditorDraft
   /** Done in its own place (a lesson's example's, back to its lesson). */
   done?: ReactNode
 }) {
-  const editor = useScoreEditor(target, bar)
+  const editor = useScoreEditor(target, bar, credits)
   // The learner's own song or version, saved as it is edited: what Export writes from the gear.
   const repertoire = useRepertoire()
   const own =

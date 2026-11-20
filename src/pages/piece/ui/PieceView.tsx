@@ -88,11 +88,19 @@ export function PieceView({ piece }: { piece: Piece }) {
                   variant="ghost"
                   size="icon"
                   className="shrink-0 rounded-pill glass text-foreground hover:bg-glass"
-                  aria-label={t('piece:editScore')}
-                  title={t('piece:editScore')}
-                  render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+                  // Title and credits, as the Song board's pencil: the editor opened on that page of
+                  // its gear, the one place they are typed; the score itself is the ···'s Edit score.
+                  aria-label={t('piece:editCredits')}
+                  title={t('piece:editCredits')}
+                  render={
+                    <Link
+                      to="/edit/$pieceId"
+                      params={{ pieceId: piece.id }}
+                      search={{ credits: true }}
+                    />
+                  }
                 >
-                  <Pencil aria-hidden />
+                  <Pencil aria-hidden className="size-4.5" />
                 </ButtonLink>
               </div>
               <PieceByline piece={piece} />

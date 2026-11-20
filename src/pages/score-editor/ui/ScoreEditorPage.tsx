@@ -31,7 +31,7 @@ import { EditorGate } from './EditorGate'
 function Editing({ id }: { id: string }) {
   const { t } = useTranslation('common')
   // The bar the caret opens on, as printed: the Player's cursor's, where Edit came from it (ADR 0115).
-  const { bar } = useSearch({ from: '/full-screen/edit/$pieceId' })
+  const { bar, credits } = useSearch({ from: '/full-screen/edit/$pieceId' })
   // The visit opens on what the store holds now; the editor saves into it from there.
   const pieces = usePiecesStoreApi()
   const [target] = useState(() => editorTarget(pieces.getState(), id))
@@ -45,14 +45,14 @@ function Editing({ id }: { id: string }) {
         <ButtonLink render={<Link to="/songs" />}>{t('notFound.toSongs')}</ButtonLink>
       </NotFound>
     )
-  return <ScoreEditor target={target} bar={bar} />
+  return <ScoreEditor target={target} bar={bar} credits={credits} />
 }
 
 /** A built-in song's original, an editor's to change (ADR 0116): its draft opened, then edited. */
 function EditingOriginal({ piece }: { piece: ChartPiece }) {
   const { t } = useTranslation('editor')
   const locale = useLocale()
-  const { bar } = useSearch({ from: '/full-screen/edit/$pieceId' })
+  const { bar, credits } = useSearch({ from: '/full-screen/edit/$pieceId' })
   const draft = useOriginalDraft(piece)
   const navigate = useNavigate()
   const { load, save } = draft
@@ -88,6 +88,7 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
       key={draft.opened}
       target={target}
       bar={bar}
+      credits={credits}
       // Where the draft stands, beside the gear's title, and its acts, the gear's last group (R31-E):
       // never over the music, never beside Done.
       draft={{

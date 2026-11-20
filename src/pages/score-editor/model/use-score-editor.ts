@@ -63,7 +63,11 @@ function useCloseTo(target: EditorTarget): () => void {
  * takes (ADR 0028): while one records, its keys write nothing and Space or Escape stops it.
  * Opened at `bar` (as printed), the caret starts there.
  */
-export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorValue {
+export function useScoreEditor(
+  target: EditorTarget,
+  bar?: number,
+  credits = false,
+): ScoreEditorValue {
   // The screen stays on while this screen is open: a phone on the stand does not lock mid-song.
   useWakeLock()
   const pieces = usePiecesStoreApi()
@@ -138,8 +142,12 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   // The staves heard and in sight (A40): the Instruments' All, S and eye, the Player's `staves`.
   const [staves] = useEditorStaves()
   const hidden = useMemo(() => hiddenStaves(staves), [staves])
-  // The gear's sheet (R31-E), at its page, or shut (null).
-  const [gear, setGear] = useState<GearPage | null>(null)
+  // The gear's sheet (R31-E), at its page, or shut (null); on Title and credits where the song's
+  // page's pencil opened the editor, and the URL forgets it.
+  const [gear, setGear] = useState<GearPage | null>(credits ? 'credits' : null)
+  useEffect(() => {
+    if (credits) setSearch({ credits: undefined })
+  }, [credits, setSearch])
   // The field open over the sheet, typing a chord symbol, a syllable or fingers where they print
   // (ADR 0096), each where the View shows it.
   const fieldsShown = useMemo(

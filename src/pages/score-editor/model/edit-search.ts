@@ -7,6 +7,8 @@ export interface EditSearch {
   readonly takes: boolean
   readonly record: boolean
   readonly bar?: number
+  /** Opened on Title and credits (the song page's pencil, the Song board's): forgotten once open. */
+  readonly credits?: boolean
   /** Which staves play and show (A40), as the Player writes them (`stavesParam`, A35). */
   readonly staves?: string
 }

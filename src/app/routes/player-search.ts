@@ -270,6 +270,7 @@ const readEditSearch = (raw: Raw): EditSearch => ({
   takes: raw.takes === true,
   record: raw.record === true,
   bar: bar(raw),
+  ...(raw.credits === true ? { credits: true } : {}),
   // Which staves play and show (A40), the Player's own `staves` (A35).
   ...(isStavesParam(raw.staves) ? { staves: raw.staves } : {}),
 })

@@ -56,6 +56,7 @@ export const piece = {
   more: 'More',
   practise: 'Practise',
   editScore: 'Edit score',
+  editCredits: 'Edit title and credits',
   writeChart: 'Write the chart',
   // A songbook entry whose chords are not written yet.
   noChart: {
