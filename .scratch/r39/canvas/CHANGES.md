@@ -8,12 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · pending · a pattern's bar engraved as the app (brace, Bravura 4/4, Verovio's spacing, the band's C); Bravura's black and whole noteheads on the pattern and progression staves · Pattern,PatternLaptop,Progression,ProgressionLaptop · pending
-
 
 
 ## Changes
 
+- 2026-11-20 · a4091fdc · a pattern's bar engraved as the app (brace, Bravura 4/4, Verovio's spacing, the band's C); Bravura's black and whole noteheads on the pattern and progression staves · Pattern,PatternLaptop,Progression,ProgressionLaptop · v692
 - 2026-11-20 · d7fdfb33 · a progression's staff engraved as the app (voice-led voicing, brace, Bravura 4/4, Verovio's spacing, no symbols); opens on I, F→C "5th up" · Progression,ProgressionLaptop · v691
 - 2026-11-20 · f0763037 · Chords' laptop board opens on Cmaj7 as the app; its staff's lines, barlines and ledgers at an engraver's thickness (1.3, 1.4, 1.4 in its 10-unit space) · Chords,ChordsLaptop · v690
 - 2026-11-20 · 8dbdb8af · rows border-box with min-height raised by their padding (no visible change) · Accompaniment,AllSongs,AllSongsLaptop,AppLayers,AppLayersLaptop,Archive,ArchiveLaptop,Chords,ChordsLaptop,Course,CourseLaptop,EditorDraft,EditorDraftLaptop,FingerTechnique,Folder,FolderLaptop,Groups,GroupsLaptop,JazzVocabulary,Learn,LearnCourses,LearnCoursesLaptop,LearnLaptop,LearnYours,LearnYoursLaptop,Lesson,LessonLaptop,Main,Pattern,PatternLaptop,Profile,ProfileLaptop,Progression,ProgressionLaptop,Progressions,Scales,ScalesLaptop,Songs,SongsLaptop,Trash,TrashLaptop · v689
