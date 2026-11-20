@@ -99,8 +99,8 @@ export function PracticePage() {
   return (
     <div className="flex flex-col">
       <ScreenHeader title={t('title')} large tools={<PlaceActions />} />
-      {/* The first heading 22 under the title, as the board's fold row. */}
-      <div className="mt-4.5 flex flex-col gap-8">
+      {/* The first heading where the boards set it: 20 under the title on a phone, 33 on a laptop. */}
+      <div className="mt-5 flex flex-col gap-8 lg:mt-[33px]">
         {groups.map(({ id, places }) => (
           <PracticeGroup
             key={id}
@@ -121,7 +121,7 @@ export function PracticePage() {
                 />
               ))}
             </ul>
-            <ul className="hidden grid-cols-3 gap-3 lg:grid xl:grid-cols-5">
+            <ul className="hidden grid-cols-3 gap-4 lg:grid xl:grid-cols-5">
               {places.map(({ key, ...place }) => (
                 <li key={key} className="flex min-w-0 [&>a]:flex-1">
                   <PageCard {...place} />

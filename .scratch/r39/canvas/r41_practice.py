@@ -29,7 +29,7 @@ THEORY = [('keys', 'Chords', 'Chord types, voicings, inversions', '', 'Chords.dc
           ('roll', 'Accompaniment', 'Bass and chord patterns', '', 'Accompaniment.dc.html')]
 # one row per page it opens (loop round 58: Barry Harris and Piano With Jonny were two rows onto the one Jazz vocabulary
 # page that holds both books)
-EXERCISES = [('drill', 'Finger technique', '2 exercises', '', 'FingerTechnique.dc.html'), ('sixdim', 'Jazz vocabulary', '4 exercises', '', 'JazzVocabulary.dc.html')]
+EXERCISES = [('drill', 'Finger technique', '2 exercises', '', 'FingerTechnique.dc.html'), ('sixdim', 'Jazz vocabulary', '10 exercises', '', 'JazzVocabulary.dc.html')]
 TOOLS = [('chart', 'Chord player', 'Lead sheets with backing', '', 'ChordPlayer.dc.html'), ('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'A4 = 440 Hz', '', 'Tuner.dc.html'),
          ('lens', 'Chord finder', 'Last: Cmaj7', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Every key and its signature', '', 'CircleOfFifths.dc.html')]
 MAIN = js(r"    return { ...common(st, set),"

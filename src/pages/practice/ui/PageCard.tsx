@@ -23,7 +23,7 @@ export function PageCard({
     render: link,
     props: {
       className:
-        'flex min-h-44 flex-col gap-2.5 card rounded-[16px] p-3.5 transition-colors duration-200 ease-out hover:ring-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+        'flex min-h-44 flex-col gap-3 card rounded-[14px] p-4 transition-colors duration-200 ease-out hover:ring-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       children: (
         <>
           <span
@@ -41,8 +41,12 @@ export function PageCard({
             )}
           </span>
           <span className="flex flex-col gap-0.5">
-            <span className="text-[1.0625rem] font-bold text-balance">{title}</span>
-            <span className="text-sm text-pretty text-muted-foreground tabular-nums">{detail}</span>
+            <span className="text-[1.0625rem] leading-[normal] font-bold text-balance">
+              {title}
+            </span>
+            <span className="text-sm leading-[normal] text-pretty text-muted-foreground tabular-nums">
+              {detail}
+            </span>
           </span>
         </>
       ),
