@@ -146,6 +146,24 @@ export function SheetTrigger(props: Parameters<typeof DrawerTrigger>[0]) {
 }
 
 /**
+ * A sheet keeps the tallest height it has had while it stays open, as an iOS sheet keeps its detent:
+ * turning to a shorter page (Count-in under the settings) or back never snaps it down for a frame and
+ * up again. Set in the resize observer's callback, before paint, so no frame shows the shorter sheet;
+ * never past the room the sheet may take (the phone's keyboard up).
+ */
+function holdTallest(popup: HTMLElement | null) {
+  if (popup === null) return
+  let tallest = 0
+  const observer = new ResizeObserver(() => {
+    if (popup.offsetHeight <= tallest) return
+    tallest = popup.offsetHeight
+    popup.style.minHeight = `min(${tallest}px, var(--drawer-content-max-height, 100dvh))`
+  })
+  observer.observe(popup)
+  return () => observer.disconnect()
+}
+
+/**
  * The app's bottom sheet: a drawer from the bottom that always shows its swipe handle. Every sheet
  * minds the phone's keyboard (Mindscape's, Base UI's `VirtualKeyboardProvider`): a field in it is
  * focused without the page scrolling to it, so the app behind never lifts, and the sheet rises
@@ -263,6 +281,7 @@ export function SheetContent({
   if (popped)
     return (
       <PopoverContent
+        ref={holdTallest}
         side={popped.side ?? 'bottom'}
         align={popped.align ?? 'start'}
         sideOffset={8}
@@ -299,6 +318,7 @@ export function SheetContent({
     )
   return (
     <DrawerContent
+      ref={holdTallest}
       {...(initialFocus ? { initialFocus } : {})}
       className={cn(
         'page-column rounded-t-sheet bg-background pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
