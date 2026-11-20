@@ -160,7 +160,7 @@ export function ProgressionEditor({
   /** A router `Link` to Progressions. */
   toProgressions: ReactElement
 }) {
-  const { t } = useTranslation(['practice', 'learn'])
+  const { t } = useTranslation(['practice', 'common'])
   const shown = useLocale()
   // The language written: the interface's to start with, switched in the bar.
   const [locale, setLocale] = useState<Locale>(shown)
@@ -191,7 +191,7 @@ export function ProgressionEditor({
         }}
         settings={
           <RoundButton
-            label={t('learn:settings.title')}
+            label={t('common:nav.settings')}
             icon={Settings}
             onClick={() => settingsWindow.openAt('settings')}
           />

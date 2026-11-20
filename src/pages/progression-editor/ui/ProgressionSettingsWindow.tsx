@@ -43,12 +43,12 @@ export function ProgressionSettingsWindow({
   /** The editor's own draft: the window reads it as it stands, never afresh. */
   draft: ContentDraft<LibraryProgression>
 } & SettingsWindowState) {
-  const { t } = useTranslation(['learn', 'editor'])
+  const { t } = useTranslation(['common', 'editor'])
   return (
     <SettingsWindow
       open={open}
       onOpenChange={onOpenChange}
-      title={t(page === 'publish' ? 'editor:publishPage.title' : 'settings.title')}
+      title={t(page === 'publish' ? 'editor:publishPage.title' : 'nav.settings')}
       onBack={page === 'publish' ? () => onPage('settings') : undefined}
     >
       {page === 'publish' ? (
