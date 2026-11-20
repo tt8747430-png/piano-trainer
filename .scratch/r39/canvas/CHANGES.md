@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · 75295369 · every laptop popover one shape, the kit's POPOVER: the Player's Practice, Piano, Hands, Pattern, Sort and filter, Settings and view popovers 16 in (were 12), as Played through and every other board · PlayerDesk (every Player laptop board) · pending
 - 2026-11-20 · d376d118 · the account menu leads each item with its Lucide picture (16, ink), 12 before the word, as Claude's · every laptop board (52) · pending
 - 2026-11-20 · 036a7416 · the Practice sheet: no Metronome sound row or page (the Player's click does not follow it; its home is the Metronome); Wait without a piano says "Connect a piano or show the Keyboard." · PlayerApp,PlayerDesk · pending
 - 2026-11-20 · 23dc1755 · the Player opens on Play (its Practice's default), as the app · PlayerApp,PlayerDesk (every Player board) · pending
