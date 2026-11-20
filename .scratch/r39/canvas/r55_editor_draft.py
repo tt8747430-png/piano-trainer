@@ -25,7 +25,7 @@ def DMENU(sfx):
     return ED_MENU(sfx, 'openVers') + GROUP(('link', 'Publish…', '', 'askPub'), ('action', 'Discard changes', 'askDisc', RED), bg=SHEET)
 DSAVED = f'<p role="status" style="margin: -8px 0 0; text-align: center; font-size: 13px; color: {{{{saveC}}}}">{{{{saveT}}}}</p>'
 ASKP = lambda c, t, b, ok, go: ASK(c, t, b, ok, go, danger=False)
-VROW = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{vers}}}}" as="v" hint-placeholder-count="3"><div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 6px 6px 6px 16px; box-shadow: inset 0 -1px 0 {FILL}">'
+VROW = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{vers}}}}" as="v" hint-placeholder-count="3"><div style="min-height: 72px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 6px 6px 6px 16px; box-shadow: inset 0 -1px 0 {FILL}">'
         f'<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-variant-numeric: tabular-nums">{{{{v.t}}}}</span>{IF("v.newest", f"<span style=\"font-size: 13px; font-weight: 600; color: {SOFT}\">Newest</span>")}</span>'
         + IF('v.older', f'<button type="button" onClick="{{{{v.restore}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 15px; font-weight: 600; color: {INK}">Restore</button>') + '</div></sc-for></div>')
 VERSBODY = f'' + VROW

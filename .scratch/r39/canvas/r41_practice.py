@@ -5,7 +5,7 @@ from bravura_glyphs import BRAVURA
 # library shape).
 
 def PROW(p, t, s, v='', href='#'):
-    return (f'<a href="{href}" style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">{pic(p)}'
+    return (f'<a href="{href}" style="min-height: 80px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">{pic(p)}'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{s}</span></span>'
             f'<span style="font-size: 14px; color: {SOFT}; white-space: nowrap">{v}</span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a>')
 PLIST = lambda rows: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">' + ''.join(PROW(*r) for r in rows) + '</div>'

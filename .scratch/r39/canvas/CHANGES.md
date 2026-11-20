@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · rows border-box with min-height raised by their padding (no visible change) · Accompaniment,AllSongs,AllSongsLaptop,AppLayers,AppLayersLaptop,Archive,ArchiveLaptop,Chords,ChordsLaptop,Course,CourseLaptop,EditorDraft,EditorDraftLaptop,FingerTechnique,Folder,FolderLaptop,Groups,GroupsLaptop,JazzVocabulary,Learn,LearnCourses,LearnCoursesLaptop,LearnLaptop,LearnYours,LearnYoursLaptop,Lesson,LessonLaptop,Main,Pattern,PatternLaptop,Profile,ProfileLaptop,Progression,ProgressionLaptop,Progressions,Scales,ScalesLaptop,Songs,SongsLaptop,Trash,TrashLaptop · pending
 
 
 ## Changes

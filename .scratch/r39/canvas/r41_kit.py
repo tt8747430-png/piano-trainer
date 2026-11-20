@@ -84,7 +84,7 @@ def TITLEBAR(title, right='', back='', backlabel='Back', soft='', wrap=False):
     fs = 26 if soft else 24 if wrap else 28  # two titles side by side (My songs · Explore) take a step down so neither is cut
     # a page's own name (a course's, a lesson's Settings') takes a second line before it is ever cut
     s = f'<span style="flex: none; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; color: {LINE}; white-space: nowrap">{soft}</span>' if soft else ''
-    return (f'<header data-float style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 12px 4px 16px">{b}'
+    return (f'<header data-float style="flex: none; min-height: 60px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 12px 4px 16px">{b}'
             f'<h1 data-bar-title style="margin: 0; min-width: 0; flex: {"none" if soft else "0 1 auto"}; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; ' + ('display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-wrap: balance' if wrap else 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis') + f'">{title}</h1>{s}'
             f'<span style="flex: 1"></span><div style="flex: none; display: flex; align-items: center; gap: 8px">{right}</div></header>')
 def LTITLEBAR(title, right='', back='', backact=''):
