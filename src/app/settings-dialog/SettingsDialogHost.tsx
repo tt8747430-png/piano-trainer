@@ -2,7 +2,7 @@ import { useNavigate, useRouter, useRouterState } from '@tanstack/react-router'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { opensInDialog, SettingsDialog } from '@/widgets/settings-screen'
-import { backgroundHref, rememberBackground, SETTINGS_PARAM, withSettings } from './background'
+import { backgroundHref, rememberBackground } from './background'
 
 const screens = () => import('../routes/settings-screens')
 const adminScreens = () => import('../routes/admin-screens')
@@ -48,7 +48,7 @@ function pageOf(path: string, loaded: Loaded): ComponentType | null | undefined 
 
 /**
  * The laptop's Settings dialog over the page it was opened from (claude.ai's, the board's SETDLG):
- * shown while the page's address holds a Settings place; × and Escape take it off. It keeps the page
+ * shown while the history entry holds a Settings place (never the address); × and Escape take it off. It keeps the page
  * behind remembered as the learner moves, so the next Settings opens over it. On a phone the place's
  * own page opens instead.
  */
@@ -63,8 +63,8 @@ export function SettingsDialogHost() {
   useEffect(() => {
     if (!opensInDialog(location.pathname)) rememberBackground(location.href)
   }, [location])
-  const held = new URLSearchParams(location.searchStr).get(SETTINGS_PARAM)
-  // A place's own address, on its way to the dialog's param (a link in the dialog's nav), keeps the
+  const held = location.state.settings ?? null
+  // A place's own address, on its way into the entry's state (a link in the dialog's nav), keeps the
   // dialog up showing that place: it is never taken down and opened again between two places.
   const passing = location.pathname === '/settings' ? '/settings/general' : location.pathname
   const path =
@@ -109,7 +109,7 @@ export function SettingsDialogHost() {
         const steps = history.location.state.__TSR_index - (under.current ?? -1)
         // Opened from a page in the app: back to it. Opened cold at a Settings address: the page.
         if (under.current !== null && under.current >= 0 && steps > 0) history.go(-steps)
-        else void navigate({ href: withSettings(backgroundHref(), null), replace: true })
+        else void navigate({ href: backgroundHref(), replace: true })
       }}
     >
       <Pane />

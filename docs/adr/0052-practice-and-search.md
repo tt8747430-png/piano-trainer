@@ -45,8 +45,9 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   **On a phone** one grouped list, each row its icon in a coloured square, each page pushed with Back (to Settings,
   or to the page it is under). **On a laptop** (from 64rem) Settings is a dialog over the page it was opened from, as
   claude.ai's: a Settings address (a row's link, Search's, the gear's) is turned by its route's `opensAsDialog` into
-  the page behind's with `?settings=<path>` (`app/settings-dialog`), and `SettingsDialogHost` in the shell shows that
-  place's page as the pane; × and Escape take the param off. The dialog is 22 round, at most 75rem wide and the
+  the page behind's, the place held in the history entry's state and never in the address (`app/settings-dialog`;
+  owner, 2026-11-20: claude.ai's address does not change between its places), and `SettingsDialogHost` in the shell
+  shows that place's page as the pane; Back steps back through the places, × and Escape go back past them all. The dialog is 22 round, at most 75rem wide and the
   window less 6rem tall, its bar the word Settings and ×; a 16.5rem nav (a search field, the account as a plain row,
   each group's small heading and its places as 40 rows, the open one on the chosen wash, Administration last, whose
   own places replace the list under "‹ Settings") beside the pane (at most 45rem, its title with Back to its parent
