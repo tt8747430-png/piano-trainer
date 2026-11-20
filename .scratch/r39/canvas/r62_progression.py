@@ -77,7 +77,7 @@ def PMENU62(pos):
             + head('Chords') + item('sizes') + f'<div style="height: 1px; margin: 4px 6px; background: {LINE}"></div>' + head('Approach chords') + item('leads') + '</div></sc-if>')
 PR_SET62 = GROUP(('seg', 'Written as', 'prWSeg', 200), ('seg', 'Voicing', 'voiceSeg', 200), ('seg', 'First chord’s inversion', 'prISeg', 200))
 SHEETS62 = BSHEET('rootOn', 'Key', ROOTGRID()) + BSHEET('setOn', 'Progression settings', PR_SET62) + BSHEET('keysOn', 'Piano', SC_KEYS60)
-POPS62 = POPOVER('rootOn', 'Key', ROOTGRID(), 'left: 120px; top: 380px') + POPOVER('setOn', 'Progression settings', PR_SET62) + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 70px')
+POPS62 = POPOVER('rootOn', 'Key', ROOTGRID(), 'left: 120px; top: 380px') + POPOVER('setOn', 'Progression settings', PR_SET62) + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 64px')
 
 ph62 = (TOP62 + KBPAGE_OPEN + f'<div style="flex: none; margin: 8px 0 0">{KB60("kbE", 150)}</div><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 120px; display: flex; flex-direction: column; gap: 16px">'
         + TITLE62 + TILES62 + MUSIC62 + WALKS62 + BETWEEN62 + SONGS62 + '</main></div>' + KBPAGE_CSS

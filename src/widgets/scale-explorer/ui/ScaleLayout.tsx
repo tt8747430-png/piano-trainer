@@ -44,7 +44,7 @@ export function ScaleLayout({
         {children}
       </div>
       {bar}
-      <Sheet open={sheet.open} onOpenChange={sheet.onOpenChange}>
+      <Sheet hung="header" open={sheet.open} onOpenChange={sheet.onOpenChange}>
         <SheetContent title={t('scales.settings')}>
           <div className="flex flex-col gap-4">
             {fields}

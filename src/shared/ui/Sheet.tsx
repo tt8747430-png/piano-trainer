@@ -1,5 +1,5 @@
 import { Drawer as DrawerPrimitive } from '@base-ui/react/drawer'
-import type { ComponentProps, ReactNode } from 'react'
+import { createContext, use, type ComponentProps, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { InfoTip } from './InfoTip'
@@ -32,10 +32,8 @@ const FLOATING_CARD = [
 const LAPTOP_CARD = [
   'data-[swipe-axis=x]:data-[swipe-direction=right]:mx-0',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:inset-y-auto',
-  'data-[swipe-axis=x]:data-[swipe-direction=right]:top-19',
-  'data-[swipe-axis=x]:data-[swipe-direction=right]:right-10',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:h-auto',
-  'data-[swipe-axis=x]:data-[swipe-direction=right]:w-100',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:w-95',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:max-w-[calc(100vw-5rem)]',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:max-h-[calc(var(--app-height,100dvh)-6.25rem)]',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:rounded-[16px]',
@@ -49,6 +47,27 @@ const LAPTOP_CARD = [
   'data-[swipe-axis=x]:data-[swipe-direction=right]:data-ending-style:opacity-0',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:[&>[data-slot=drawer-swipe-handle]]:hidden',
 ].join(' ')
+
+/**
+ * Where the card hangs, by the bar its button is in: a page's `ScreenHeader` (the boards' POPOVER,
+ * 64 under the frame's top and 40 from its right) or the full-screen Player's and editor's
+ * `ScoreBar` (PlayerDesk's and EditorLaptop's, 76 under the top, on the bar's 24 edge).
+ */
+const HUNG_PLACE = {
+  header: [
+    'data-[swipe-axis=x]:data-[swipe-direction=right]:top-16',
+    'data-[swipe-axis=x]:data-[swipe-direction=right]:right-10',
+  ].join(' '),
+  'score-bar': [
+    'data-[swipe-axis=x]:data-[swipe-direction=right]:top-19',
+    'data-[swipe-axis=x]:data-[swipe-direction=right]:right-6',
+  ].join(' '),
+} as const
+
+/** The bar a sheet hangs from on a laptop, or none: it stays a bottom sheet. */
+type Hung = keyof typeof HUNG_PLACE
+
+const HungContext = createContext<Hung>('header')
 
 /**
  * `rising` on a laptop: a run's Setup (the run boards' `PVSETL` popover), 620 wide, centred over the
@@ -75,22 +94,26 @@ export { DrawerTrigger as SheetTrigger } from './primitives/drawer'
  */
 export function Sheet({
   children,
-  hung = false,
+  hung,
   ...props
 }: Omit<ComponentProps<typeof Drawer>, 'children' | 'swipeDirection' | 'modal'> & {
   children?: ReactNode
   /**
    * On a laptop, a screen's settings hung under the bar's button that opens them (the boards'
-   * POPOVER), with nothing dimmed behind it; a phone keeps the bottom sheet. The sheet decides which
-   * by the screen's width, so no screen asks.
+   * POPOVER), with nothing dimmed behind it, placed by that bar; a phone keeps the bottom sheet. The
+   * sheet decides which by the screen's width, so no screen asks.
    */
-  hung?: boolean
+  hung?: Hung
 }) {
   const laptop = useMediaQuery(LAPTOP)
-  const card = hung && laptop
+  const card = hung !== undefined && laptop
   return (
     <Drawer showSwipeHandle swipeDirection={card ? 'right' : 'down'} modal={!card} {...props}>
-      <DrawerPrimitive.VirtualKeyboardProvider>{children}</DrawerPrimitive.VirtualKeyboardProvider>
+      <HungContext value={hung ?? 'header'}>
+        <DrawerPrimitive.VirtualKeyboardProvider>
+          {children}
+        </DrawerPrimitive.VirtualKeyboardProvider>
+      </HungContext>
     </Drawer>
   )
 }
@@ -148,15 +171,17 @@ export function SheetContent({
   dismiss?: 'done' | 'cancel' | 'close'
 }) {
   const { t } = useTranslation('common')
+  const hung = use(HungContext)
   return (
     <DrawerContent
       {...(initialFocus ? { initialFocus } : {})}
       className={cn(
         'mx-auto w-full max-w-2xl rounded-t-sheet bg-background pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
         // From the right, a laptop's settings (the boards' POPOVER, EditorLaptop's and PlayerDesk's
-        // gear): a card hung 8 under the bar's buttons at their right edge, 400 wide (420 `wide`), as tall as
-        // it holds, 16 round with the hairline and the second shade; it fades in place.
+        // gear): a card hung under the bar's buttons, 380 wide (420 `wide`), as tall as it holds, 16
+        // round with the hairline and the second shade; it fades in place.
         LAPTOP_CARD,
+        HUNG_PLACE[hung],
         // At most 86% of the screen's height, as the boards' BSHEET: the bar stays in sight above it.
         'data-[swipe-axis=y]:[--drawer-content-max-height:calc(var(--app-height,100dvh)*0.86)]',
         // The room anchored while no keyboard is up: the phone's keyboard never squeezes it. A tall

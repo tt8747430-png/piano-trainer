@@ -273,7 +273,7 @@ export function EditorGear({
   return (
     <>
       <Sheet
-        hung
+        hung="score-bar"
         open={view.gear !== null}
         onOpenChange={(open) => view.setGear(open ? page : null)}
       >

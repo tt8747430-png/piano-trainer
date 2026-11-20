@@ -67,7 +67,7 @@ WAYMENU = lambda pos: MENU60('playMenu', 'Play as', 'ways', pos).replace('<sc-fo
 TOP61 = TOP60.replace('Scales and keys</span>', 'Intervals</span>')
 IV_KEYS61 = SC_KEYS60
 SHEETS61 = BSHEET('rootOn', 'From', ROOTGRID()) + BSHEET('setOn', 'Interval settings', IV_SET) + BSHEET('keysOn', 'Piano', IV_KEYS61)
-POPS61 = POPOVER('rootOn', 'From', ROOTGRID(), 'left: calc(50% - 400px); bottom: 100px; top: auto') + POPOVER('setOn', 'Interval settings', IV_SET) + POPOVER('keysOn', 'Piano', IV_KEYS61, 'right: 40px; top: 70px')
+POPS61 = POPOVER('rootOn', 'From', ROOTGRID(), 'left: calc(50% - 400px); bottom: 100px; top: auto') + POPOVER('setOn', 'Interval settings', IV_SET) + POPOVER('keysOn', 'Piano', IV_KEYS61, 'right: 40px; top: 64px')
 
 ph61 = (TOP61 + KBPAGE_OPEN + f'<div style="flex: none; margin: 8px 0 0">{KB60("kbE", 150)}</div><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 120px; display: flex; flex-direction: column; gap: 16px">'
         + f'<div style="display: flex; flex-direction: column; gap: 8px">{TITLE61}{MUSIC61}</div>' + GRID61 + '</main></div>' + KBPAGE_CSS  # round 63: the name with what it names

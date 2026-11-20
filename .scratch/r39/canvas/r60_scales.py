@@ -130,7 +130,7 @@ KB60 = lambda k, h: KEYS(h, k, edge=True)
 import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as PS
 SC_KEYS60 = PS.PIANO_SHEET_2D()  # the one Piano sheet, its 2D part
 SHEETS60 = SC_SHEETS + BSHEET('keysOn', 'Piano', SC_KEYS60)
-POPS60 = SC_POPS + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 70px')
+POPS60 = SC_POPS + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 64px')
 
 ph60 = (TOP60 + KBPAGE_OPEN + f'<div style="flex: none; margin: 8px 0 0">{KB60("kbE", 150)}</div><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 120px; display: flex; flex-direction: column; gap: 16px">'
         + TITLE60 + VIEW60(4) + PRACT60 + '</main></div>' + KBPAGE_CSS

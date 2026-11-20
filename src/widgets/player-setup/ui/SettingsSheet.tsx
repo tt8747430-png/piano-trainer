@@ -105,7 +105,7 @@ export function SettingsSheet({
       : (extra?.label ?? inner?.title ?? t('settingsPage.open'))
   return (
     <Sheet
-      hung
+      hung="score-bar"
       open={open}
       onOpenChange={(next) => {
         setOpen(next)

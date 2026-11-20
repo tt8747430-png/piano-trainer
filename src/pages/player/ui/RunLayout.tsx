@@ -312,7 +312,7 @@ export function RunLayout({
           <Gauge aria-hidden />
         </FloatingPiece>
       </div>
-      <Sheet hung open={setupOpen} onOpenChange={setSetupOpen}>
+      <Sheet hung="header" open={setupOpen} onOpenChange={setSetupOpen}>
         <SheetContent title={t('player:setup')} rising dismiss="close">
           <div className="flex flex-col gap-6">
             <Labelled label={t('player:pace.title')}>

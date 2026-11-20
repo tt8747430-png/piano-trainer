@@ -42,7 +42,7 @@ export function InsertSheet({ editor, locale }: { editor: Editor; locale: Locale
         {t('edit.doc.insert')}
       </Button>
       <Sheet
-        hung
+        hung="header"
         open={open}
         onOpenChange={(next) => {
           setOpen(next)

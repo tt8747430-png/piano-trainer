@@ -228,7 +228,7 @@ export function PianoSheet<R extends string>({
       </PanelPopover>
     )
   return (
-    <Sheet open={open} onOpenChange={setOpen} hung>
+    <Sheet open={open} onOpenChange={setOpen} hung="header">
       <SheetTrigger render={trigger} />
       <SheetContent title={t('pianoSheet.title')}>{body}</SheetContent>
     </Sheet>
