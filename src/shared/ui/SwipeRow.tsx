@@ -14,6 +14,7 @@ import {
   cn,
   dragFrame,
   impact,
+  REDUCED_MOTION,
   resolveSwipeRelease,
   type SwipeGeometry,
   useGestureHold,
@@ -58,7 +59,7 @@ export function SwipeRow({
   className?: string
 }) {
   // Read per row, as the app's other motion is (`useSortableList`): the OS's setting as it is now.
-  const reduce = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const reduce = useMediaQuery(REDUCED_MOTION)
   const x = useMotionValue(0)
   const [open, setOpen] = useState<Side | null>(null)
   const [armed, setArmed] = useState<Side | null>(null)

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
 import type { BarRange, CellBar, PlayedBeat } from '@/features/practice'
-import { barUnder, cn, useElementSize, useMediaQuery } from '@/shared/lib'
+import { barUnder, cn, REDUCED_MOTION, useElementSize, useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { printedSymbol, type Tick } from '@/shared/lib/music'
 import { LeadSymbol, LoopGrip } from '@/shared/ui'
@@ -49,7 +49,7 @@ export function BeatStrip({
     [performance, bars],
   )
   const sounding = (firsts[beat.bar] ?? 0) + beat.beat
-  const still = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const still = useMediaQuery(REDUCED_MOTION)
   const strip = useRef<HTMLDivElement>(null)
   const { width } = useElementSize(strip)
   const placed = useRef(false)

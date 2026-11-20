@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import { DIAGRAM_KEYS, diagramChord } from '@/features/practice'
-import { cn, useElementSize, useMediaQuery } from '@/shared/lib'
+import { cn, REDUCED_MOTION, useElementSize, useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { printedSymbol, type Tick } from '@/shared/lib/music'
 import { KeyDiagram, LeadSymbol } from '@/shared/ui'
@@ -34,7 +34,7 @@ export function ChordRow({
 }) {
   const { t } = useTranslation('player')
   const chosen = usePieceInversions()?.chosen
-  const still = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const still = useMediaQuery(REDUCED_MOTION)
   const events = useMemo(() => chordEvents(performance), [performance])
   const drawn = useMemo(
     () =>

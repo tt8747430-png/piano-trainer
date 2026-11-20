@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, type CSSProperties, type KeyboardEvent } from 'react'
-import { cn } from '@/shared/lib'
+import { cn, motionReduced } from '@/shared/lib'
 
 /** One value of a wheel, as it is printed on it; a greyed one is passed over. */
 export interface WheelOption<T extends string | number> {
@@ -20,10 +20,6 @@ const SETTLE = 120
 /** How long a digit typed waits for the next, in ms. */
 const TYPED = 900
 
-const reduced = () =>
-  typeof window !== 'undefined' &&
-  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true
-
 /** A wheel's scroller moved to `top`, said to be the wheel's own scroll (`placing`), smoothly where asked. */
 function scrollTo(
   box: HTMLDivElement | null,
@@ -33,7 +29,7 @@ function scrollTo(
 ) {
   if (!box || Math.abs(box.scrollTop - top) < 1) return
   placing.current = true
-  if (smooth && !reduced() && box.scrollTo) box.scrollTo({ top, behavior: 'smooth' })
+  if (smooth && !motionReduced() && box.scrollTo) box.scrollTo({ top, behavior: 'smooth' })
   else box.scrollTop = top
 }
 

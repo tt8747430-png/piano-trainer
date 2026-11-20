@@ -14,6 +14,13 @@ export const LAPTOP = '(min-width: 64rem)'
  */
 export const WIDE = '(min-width: 80rem)'
 
+/** The learner asks for less motion: what would move changes at once. */
+export const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
+
+/** Whether less motion is asked for now, for a change made outside render (a scroll, a transition). */
+export const motionReduced = (): boolean =>
+  typeof window !== 'undefined' && window.matchMedia?.(REDUCED_MOTION).matches === true
+
 /** One MediaQueryList per query and `matchMedia`: a render asks it, it never builds one anew. */
 const lists = new WeakMap<typeof window.matchMedia, Map<string, MediaQueryList>>()
 

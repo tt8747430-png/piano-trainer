@@ -19,7 +19,7 @@ import {
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useMediaQuery } from '@/shared/lib'
+import { REDUCED_MOTION, useMediaQuery } from '@/shared/lib'
 import {
   CARRY,
   DndContextOf,
@@ -30,7 +30,6 @@ import {
 } from '../model/library-dnd'
 
 const DROP_ANIMATION = { duration: 200, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
-const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
 
 /**
  * The library's one drag while Select is on (Mindscape's `LibrarySelectList`), over every list in it:

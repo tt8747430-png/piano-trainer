@@ -31,7 +31,7 @@ import { libraryParam, progressionMode } from '@/entities/progression-library'
 import { selectChordPlayer, useSettings } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
-import { cn, LAPTOP, useMediaQuery, useRootSize, WIDE } from '@/shared/lib'
+import { cn, LAPTOP, REDUCED_MOTION, useMediaQuery, useRootSize, WIDE } from '@/shared/lib'
 import {
   barCount,
   duplicateSection,
@@ -106,7 +106,6 @@ import { SheetsMenu } from './SheetsMenu'
 import { KeyChords } from './KeyChords'
 import { StyleSheet } from './StyleSheet'
 
-const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
 /** How a dropped tile settles into its place: the app's one ease-out (DESIGN.md, Motion). */
 const DROP_ANIMATION = { duration: 200, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
 /** The height of what floats over the keys, which the chord sounding keeps clear of. */

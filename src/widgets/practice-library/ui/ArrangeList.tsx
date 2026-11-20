@@ -33,7 +33,7 @@ import {
   type ArrangedPlace,
 } from '@/entities/practice-library'
 import { arrangeLibrary } from '@/features/manage-practice-library'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn, REDUCED_MOTION, useMediaQuery } from '@/shared/lib'
 import { ActionMenu, confirm, FoldSection, GROUPED_LIST } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
@@ -50,7 +50,6 @@ import type { ArrangeSheet } from '../model/use-arranged-library'
 /** On a laptop Edit arranges the table itself (the board's): its columns, read by each place and row. */
 const TableOf = createContext<{ levels: boolean; columns: TableColumns } | null>(null)
 
-const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
 const DROP_ANIMATION = { duration: 200, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
 
 /** Only what the thing in hand may land among, the one under the pointer first (memory-palaces'). */

@@ -93,7 +93,14 @@ export { UpProvider } from './up-provider'
 export type { FindUp, Up } from './up-context'
 export { READ_DISTANCE, useHiddenWhileReading } from './use-hidden-while-reading'
 export { hasFinePointer } from './fine-pointer'
-export { LANDSCAPE_PHONE, LAPTOP, WIDE, useMediaQuery } from './use-media-query'
+export {
+  LANDSCAPE_PHONE,
+  LAPTOP,
+  motionReduced,
+  REDUCED_MOTION,
+  WIDE,
+  useMediaQuery,
+} from './use-media-query'
 export { setFocusMode, useFocusMode } from './use-focus-mode'
 export { useWakeLock } from './use-wake-lock'
 export { startKeyboardViewport, visibleBottom } from './keyboard-viewport'

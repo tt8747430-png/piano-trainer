@@ -3,7 +3,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ProgressionNames } from '@/entities/settings'
-import { cn } from '@/shared/lib'
+import { cn, motionReduced } from '@/shared/lib'
 import { CHORD_BEATS } from '@/shared/lib/arrangement'
 import { chordSymbol, printedSymbol, type Chord, type Key } from '@/shared/lib/music'
 import { LeadSymbol } from '@/shared/ui'
@@ -91,8 +91,10 @@ export function ChordTile({
   const box = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (!lit) return
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    box.current?.scrollIntoView({ block: 'nearest', behavior: still ? 'instant' : 'smooth' })
+    box.current?.scrollIntoView({
+      block: 'nearest',
+      behavior: motionReduced() ? 'instant' : 'smooth',
+    })
   }, [lit])
   /** Its length while its handle is dragged: shown at once, saved on letting go. */
   const [stretch, setStretch] = useState<number | null>(null)

@@ -34,6 +34,7 @@ import { fingerAngles } from '../../model/poses'
 import { createKeyboard, type Keyboard, type PianoPaint } from './keyboard'
 import { addNails, placeHand, poseFinger, setUpHand, tint, type HandRig } from './rig'
 import { withPaint } from './paint'
+import { REDUCED_MOTION } from '@/shared/lib'
 
 /** What the stage shows: the music, where it is, and what the learner holds. */
 export interface StageInput {
@@ -273,7 +274,7 @@ export function createStage(
 
   // With less motion asked for, a step, the hands' fading and the camera land at once; the hands
   // playing still play, as a film of them would.
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)')
+  const still = window.matchMedia(REDUCED_MOTION)
   const eased = (dt: number, tau: number) => (still.matches ? 1 : 1 - Math.exp(-dt / tau))
 
   /** One frame: the hands and keys eased toward where the music has them; whether they settled. */

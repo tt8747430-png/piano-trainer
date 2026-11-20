@@ -1,4 +1,5 @@
 import { flushSync } from 'react-dom'
+import { motionReduced } from './use-media-query'
 
 /**
  * Makes a change to the screen inside a view transition, so an element named alike before and after
@@ -9,8 +10,7 @@ import { flushSync } from 'react-dom'
  * the motion can follow it. At once where the browser has none, or the learner asks for less motion.
  */
 export function morph(change: () => void, way?: string): void {
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (!('startViewTransition' in document) || still) {
+  if (!('startViewTransition' in document) || motionReduced()) {
     change()
     return
   }

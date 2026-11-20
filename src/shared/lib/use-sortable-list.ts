@@ -15,11 +15,10 @@ import { sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { useState } from 'react'
 import { moveBlock } from './move-block'
 import { useHeldOrder } from './use-held-order'
-import { useMediaQuery } from './use-media-query'
+import { REDUCED_MOTION, useMediaQuery } from './use-media-query'
 
 /** How a dropped row settles into its place: the app's one ease-out (DESIGN.md, Motion). */
 const DROP_ANIMATION: DropAnimation = { duration: 200, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
-const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
 
 /** A list sorted by drag, as `useSortableList` keeps it. */
 export interface SortableList<T extends UniqueIdentifier> {
