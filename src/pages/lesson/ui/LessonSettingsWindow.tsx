@@ -1,6 +1,6 @@
-import { Link, useNavigate, useParams } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { Book } from 'lucide-react'
-import type { ReactElement, ReactNode } from 'react'
+import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { courseLesson } from '@/entities/course'
 import { LESSONS, lessonById, lessonPlace, type Lesson } from '@/entities/lesson'
@@ -9,17 +9,9 @@ import { selectOwnLesson, useOwnLessons } from '@/entities/own-lessons'
 import { DraftPublishing, RemoveGroup, useLessonDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { shareLink } from '@/shared/lib'
+import { shareLink, type SettingsWindowState } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import {
-  ActionRow,
-  BackButton,
-  RowLink,
-  say,
-  ScreenHeader,
-  SettingsGroup,
-  ThingHead,
-} from '@/shared/ui'
+import { ActionRow, RowLink, say, SettingsGroup, SettingsWindow, ThingHead } from '@/shared/ui'
 import { useStanding } from '@/widgets/content-editor'
 import { OwnLessonSettings } from './OwnLessonSettings'
 
@@ -39,12 +31,14 @@ type Where =
     }
   | { readonly kind: 'course'; readonly course: string; readonly link: ReactElement }
 
-/** A level's lesson's Settings (`/lessons/$lessonId/settings`), or one of the learner's own (R30-5). */
-export function LessonSettingsPage() {
+/** A level's lesson's Settings, or one of the learner's own (R30-5): a window over the lesson. */
+export function LessonSettingsWindow({
+  lessonId,
+  ...win
+}: { lessonId: string } & SettingsWindowState) {
   const locale = useLocale()
-  const { lessonId } = useParams({ from: '/shell/lessons/$lessonId/settings' })
   const own = useOwnLessons(selectOwnLesson(lessonId))
-  if (own) return <OwnLessonSettings key={lessonId} lesson={own} />
+  if (own) return <OwnLessonSettings key={lessonId} lesson={own} {...win} />
   const lesson = lessonById(lessonId)
   const place = lessonPlace(lessonId)
   // The route finds no lesson that no level has.
@@ -56,7 +50,7 @@ export function LessonSettingsPage() {
       id={lessonId}
       step={lessonStepId(lessonId)}
       path={`/lessons/${lessonId}`}
-      back={<BackButton />}
+      {...win}
       where={{
         kind: 'level',
         levelId: place.journey.id,
@@ -70,10 +64,13 @@ export function LessonSettingsPage() {
   )
 }
 
-/** A course's lesson's Settings (`/courses/$courseId/$lessonId/settings`). */
-export function CourseLessonSettingsPage() {
+/** A course's lesson's Settings: a window over the lesson. */
+export function CourseLessonSettingsWindow({
+  courseId,
+  lessonId,
+  ...win
+}: { courseId: string; lessonId: string } & SettingsWindowState) {
   const locale = useLocale()
-  const { courseId, lessonId } = useParams({ from: '/shell/courses/$courseId/$lessonId/settings' })
   const place = courseLesson(courseId, lessonId)
   // The route finds no lesson its course does not have.
   if (!place) return null
@@ -84,7 +81,7 @@ export function CourseLessonSettingsPage() {
       id={`${courseId}/${lessonId}`}
       step={courseLessonStepId(courseId, lessonId)}
       path={`/courses/${courseId}/${lessonId}`}
-      back={<BackButton />}
+      {...win}
       where={{
         kind: 'course',
         course: localText(place.course.title, locale),
@@ -106,17 +103,16 @@ function LessonSettings({
   id,
   step,
   path,
-  back,
   where,
-}: {
+  open,
+  onOpenChange,
+}: SettingsWindowState & {
   lesson: Lesson
   /** Its id in the database (a course's as `<course>/<lesson>`). */
   id: string
   step: StepId
   /** Its page's path, its link shared. */
   path: string
-  /** The screen's Back (`BackButton`). */
-  back: ReactNode
   where: Where
 }) {
   const { t } = useTranslation('learn')
@@ -134,9 +130,8 @@ function LessonSettings({
       ? `${t('place', { n: where.n, total: where.total })} · ${where.level}`
       : where.course
   return (
-    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
-      <ScreenHeader column="until-laptop" title={t('settings.title')} back={back} />
-      <div className="page-column flex flex-col gap-6 lg:max-w-295">
+    <SettingsWindow open={open} onOpenChange={onOpenChange} title={t('settings.title')}>
+      <div className="flex flex-col gap-6">
         <ThingHead
           mark={
             <span className="grid size-16 shrink-0 place-items-center rounded-pill bg-card ring-1 ring-border ring-inset">
@@ -191,7 +186,7 @@ function LessonSettings({
           />
         ) : null}
       </div>
-    </div>
+    </SettingsWindow>
   )
 }
 

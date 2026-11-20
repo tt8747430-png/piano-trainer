@@ -233,7 +233,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     const levelId = lessonPlace(lessonId)?.journey.id
     return levelId ? up({ to: '/levels/$levelId', params: { levelId } }) : up({ to: '/' })
   },
-  '/shell/lessons/$lessonId/settings': toLesson,
   '/shell/lessons/$lessonId/edit': toLesson,
   '/full-screen/lessons/$lessonId/example': ({ params, search }) => {
     const course = text(search.course)
@@ -248,10 +247,8 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       ? up({ to: '/your-lessons' })
       : up({ to: '/courses' })
   },
-  '/shell/courses/$courseId/settings': toCourse,
   '/shell/courses/$courseId/edit': toCourse,
   '/shell/courses/$courseId/$lessonId': toCourse,
-  '/shell/courses/$courseId/$lessonId/settings': toCourseLesson,
   '/shell/courses/$courseId/$lessonId/edit': toCourseLesson,
 
   // Practice: each page and a trainer up to Practice; a pattern up to Accompaniment,

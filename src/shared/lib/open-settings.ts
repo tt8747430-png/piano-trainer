@@ -19,7 +19,13 @@ declare module '@tanstack/history' {
  * by a link that said so (`OPEN_SETTINGS`); closing it takes the word out of the entry, so neither a
  * reload nor a Back to it opens the window again.
  */
-export function useSettingsWindow() {
+/** Whether a thing's Settings' window is open, and how it opens and closes. */
+export interface SettingsWindowState {
+  readonly open: boolean
+  readonly onOpenChange: (open: boolean) => void
+}
+
+export function useSettingsWindow(): SettingsWindowState {
   const asked = useLocation({ select: (location) => location.state.thingSettings === true })
   const navigate = useNavigate()
   const [open, setOpen] = useState(asked)
@@ -27,5 +33,5 @@ export function useSettingsWindow() {
     setOpen(next)
     if (!next && asked) void navigate({ to: '.', replace: true, state: {} })
   }
-  return { open, onOpenChange } as const
+  return { open, onOpenChange }
 }

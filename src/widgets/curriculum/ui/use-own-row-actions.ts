@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useOwnLessonsStoreApi, type OwnCourse, type OwnLesson } from '@/entities/own-lessons'
 import { useProgressStoreApi } from '@/entities/progress'
 import { duplicateOwnCourse, duplicateOwnLesson } from '@/features/manage-own-lessons'
+import { OPEN_SETTINGS } from '@/shared/lib'
 import { LessonIcon, say, sayUndo, type MenuAction } from '@/shared/ui'
 import { deleteOwn } from '../model/delete-own'
 
@@ -13,7 +14,8 @@ type OwnThing =
   | { readonly kind: 'course'; readonly id: OwnCourse['id'] }
 
 /**
- * A row's More in Your lessons, one list for a lesson and a course: Open, Duplicate, Settings, and
+ * A row's More in Your lessons, one list for a lesson and a course: Open, Duplicate, Settings (its
+ * page with the window over it), and
  * Delete at once with Undo in its toast.
  */
 export function useOwnRowActions(thing: OwnThing, title: string): readonly MenuAction[] {
@@ -50,8 +52,16 @@ export function useOwnRowActions(thing: OwnThing, title: string): readonly MenuA
       icon: Settings,
       onSelect: () =>
         void (thing.kind === 'lesson'
-          ? navigate({ to: '/lessons/$lessonId/settings', params: { lessonId: thing.id } })
-          : navigate({ to: '/courses/$courseId/settings', params: { courseId: thing.id } })),
+          ? navigate({
+              to: '/lessons/$lessonId',
+              params: { lessonId: thing.id },
+              state: OPEN_SETTINGS,
+            })
+          : navigate({
+              to: '/courses/$courseId',
+              params: { courseId: thing.id },
+              state: OPEN_SETTINGS,
+            })),
     },
     {
       key: 'delete',

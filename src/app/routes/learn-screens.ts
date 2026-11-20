@@ -6,10 +6,5 @@ export {
   selectOwnCourse,
   selectOwnLesson,
 } from '@/entities/own-lessons'
-export { CoursePage, CourseSettingsPage } from '@/pages/course'
-export {
-  CourseLessonPage,
-  CourseLessonSettingsPage,
-  LessonPage,
-  LessonSettingsPage,
-} from '@/pages/lesson'
+export { CoursePage } from '@/pages/course'
+export { CourseLessonPage, LessonPage } from '@/pages/lesson'

@@ -6,9 +6,10 @@ import { selectOwnCourse, useOwnLessons } from '@/entities/own-lessons'
 import { PieceLink, pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { stepOf, type StepId } from '@/entities/step'
+import { useSettingsWindow } from '@/shared/lib'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader, PageName } from '@/shared/ui'
+import { BackButton, ButtonLink, PAINT, RoundButton, ScreenHeader, PageName } from '@/shared/ui'
 import {
   CourseBanner,
   CourseLessons,
@@ -17,6 +18,7 @@ import {
   GuidedSongs,
   openCourseStep,
 } from '@/widgets/curriculum'
+import { CourseSettingsWindow } from './CourseSettingsWindow'
 import { OwnCoursePage } from './OwnCoursePage'
 
 /**
@@ -82,6 +84,7 @@ export function CoursePage() {
 
 /** One of the app's courses. */
 function AppCourse({ courseId }: { courseId: string }) {
+  const settingsWindow = useSettingsWindow()
   const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
   const learned = useProgress(selectLearned)
@@ -101,10 +104,10 @@ function AppCourse({ courseId }: { courseId: string }) {
         titleOnPage
         back={<BackButton />}
         settings={
-          <RoundLink
+          <RoundButton
             label={t('settings.open')}
             icon={Settings}
-            render={<Link to="/courses/$courseId/settings" params={{ courseId }} />}
+            onClick={() => settingsWindow.onOpenChange(true)}
           />
         }
         edit={
@@ -140,6 +143,7 @@ function AppCourse({ courseId }: { courseId: string }) {
         <CourseLessons course={course} next={next} />
         <GuidedSongs course={course} />
       </div>
+      <CourseSettingsWindow courseId={courseId} {...settingsWindow} />
     </div>
   )
 }

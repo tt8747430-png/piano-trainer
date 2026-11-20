@@ -1,43 +1,39 @@
-import { Link, useNavigate, useParams } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { COURSES, courseById, courseStepIds, type Course } from '@/entities/course'
 import { selectOwnCourse, useOwnLessons } from '@/entities/own-lessons'
 import { DraftPublishing, RemoveGroup, useCourseDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { shareLink } from '@/shared/lib'
+import { shareLink, type SettingsWindowState } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import {
-  ActionRow,
-  BackButton,
-  RowLink,
-  say,
-  ScreenHeader,
-  SettingsGroup,
-  ThingHead,
-} from '@/shared/ui'
+import { ActionRow, RowLink, say, SettingsGroup, SettingsWindow, ThingHead } from '@/shared/ui'
 import { useStanding } from '@/widgets/content-editor'
 import { CourseMark } from './CourseMark'
 import { OwnCourseSettings } from './OwnCourseSettings'
 
 /**
- * A course's Settings (`/courses/$courseId/settings`), one shape with a lesson's (owner, 2026-11-18:
+ * A course's Settings, a window over the course (THINGWIN), one shape with a lesson's (owner, 2026-11-18:
  * "refactor the courses settings like the lesons settings with better structure"; the board's
  * THINGSET): the course at the head (its picture, its name, its lessons), The course (the shelf it
  * stands on, a way to the shelves' Edit), Share, for an editor its Publishing, the learner's progress
  * in it, and Delete last and apart. One column, phone and laptop. A course of the learner's own
  * (R30-5): `OwnCourseSettings`.
  */
-export function CourseSettingsPage() {
+export function CourseSettingsWindow({
+  courseId,
+  open,
+  onOpenChange,
+}: { courseId: string } & SettingsWindowState) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const { account } = useAccount()
   const navigate = useNavigate()
-  const { courseId } = useParams({ from: '/shell/courses/$courseId/settings' })
   const own = useOwnLessons(selectOwnCourse(courseId))
   const course = courseById(courseId)
-  if (own) return <OwnCourseSettings key={courseId} course={own} />
-  // The route finds no course that is not there.
+  if (own)
+    return <OwnCourseSettings key={courseId} course={own} open={open} onOpenChange={onOpenChange} />
+  // Its page finds no course that is not there.
   if (!course) return null
   const title = localText(course.title, locale)
   const share = async () => {
@@ -46,9 +42,8 @@ export function CourseSettingsPage() {
     if (shared === 'failed') say(t('settings.shareFailed'))
   }
   return (
-    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
-      <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
-      <div className="page-column flex flex-col gap-6 lg:max-w-295">
+    <SettingsWindow open={open} onOpenChange={onOpenChange} title={t('settings.title')}>
+      <div className="flex flex-col gap-6">
         <ThingHead
           mark={<CourseMark />}
           name={title}
@@ -86,7 +81,7 @@ export function CourseSettingsPage() {
           />
         ) : null}
       </div>
-    </div>
+    </SettingsWindow>
   )
 }
 

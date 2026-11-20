@@ -6,6 +6,7 @@ import { localText, useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton } from '@/shared/ui'
 import { LessonLayout, PlaceLink } from './LessonLayout'
+import { CourseLessonSettingsWindow } from './LessonSettingsWindow'
 
 /**
  * A course's lesson (ADR 0053): its course over it and its number there; the lesson before it, and on
@@ -52,7 +53,9 @@ export function CourseLessonPage() {
             }
           : undefined
       }
-      settings={<Link to="/courses/$courseId/$lessonId/settings" params={{ courseId, lessonId }} />}
+      settings={(win) => (
+        <CourseLessonSettingsWindow courseId={courseId} lessonId={lessonId} {...win} />
+      )}
       back={<BackButton />}
       after={(place.lesson.after ?? []).flatMap((id) => {
         const at = place.course.lessons.findIndex((each) => each.id === id)

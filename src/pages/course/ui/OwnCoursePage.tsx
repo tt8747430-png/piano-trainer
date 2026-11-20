@@ -12,8 +12,9 @@ import {
 } from '@/entities/own-lessons'
 import { selectLearned, selectRead, useProgress, isLearned } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
+import { useSettingsWindow } from '@/shared/lib'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader, PageName } from '@/shared/ui'
+import { BackButton, ButtonLink, PAINT, RoundButton, ScreenHeader, PageName } from '@/shared/ui'
 import {
   CourseBanner,
   CourseOverview,
@@ -22,6 +23,7 @@ import {
   LessonRow,
   LessonStop,
 } from '@/widgets/curriculum'
+import { CourseSettingsWindow } from './CourseSettingsWindow'
 
 /** A lesson read in the course: its page, carrying the course on. */
 const inCourse = (course: OwnCourse, lessonId: string) => (
@@ -88,6 +90,7 @@ function Lessons({
  * one way in in honey (Start course, Continue, Review); then its lessons. Its gear opens its Settings, its pencil the course editor.
  */
 export function OwnCoursePage({ course }: { course: OwnCourse }) {
+  const settingsWindow = useSettingsWindow()
   const { t } = useTranslation('learn')
   const navigate = useNavigate()
   const learned = useProgress(selectLearned)
@@ -106,10 +109,10 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
         titleOnPage
         back={<BackButton />}
         settings={
-          <RoundLink
+          <RoundButton
             label={t('settings.open')}
             icon={Settings}
-            render={<Link to="/courses/$courseId/settings" params={{ courseId: course.id }} />}
+            onClick={() => settingsWindow.onOpenChange(true)}
           />
         }
         edit={{
@@ -141,6 +144,7 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
         />
         <Lessons course={course} lessons={lessons} next={open?.lesson.id} />
       </div>
+      <CourseSettingsWindow courseId={course.id} {...settingsWindow} />
     </div>
   )
 }

@@ -7,7 +7,8 @@ import { lessonStepId } from '@/entities/step'
 import { duplicateOwnLesson, renameOwnLesson } from '@/features/manage-own-lessons'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, say, sayUndo, ScreenHeader, ThingHead } from '@/shared/ui'
+import { type SettingsWindowState } from '@/shared/lib'
+import { say, sayUndo, SettingsWindow, ThingHead } from '@/shared/ui'
 import { deleteOwn, InCoursesRow, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 
 /**
@@ -15,7 +16,11 @@ import { deleteOwn, InCoursesRow, OwnDeleteGroup, OwnItemRows } from '@/widgets/
  * THINGSET): the lesson at the head; The lesson, Rename, In courses and Duplicate (the copy opened); its Progress reset; and Delete last, at
  * once with Undo, its progress going with it. No Share link: the lesson lives on the learner's devices.
  */
-export function OwnLessonSettings({ lesson }: { lesson: OwnLesson }) {
+export function OwnLessonSettings({
+  lesson,
+  open,
+  onOpenChange,
+}: { lesson: OwnLesson } & SettingsWindowState) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const navigate = useNavigate()
@@ -24,9 +29,8 @@ export function OwnLessonSettings({ lesson }: { lesson: OwnLesson }) {
   const title = localText(lesson.title, locale)
   const step = lessonStepId(lesson.id)
   return (
-    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
-      <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
-      <div className="page-column flex flex-col gap-6 lg:max-w-295">
+    <SettingsWindow open={open} onOpenChange={onOpenChange} title={t('settings.title')}>
+      <div className="flex flex-col gap-6">
         <ThingHead
           mark={
             <span className="grid size-16 shrink-0 place-items-center rounded-pill bg-card ring-1 ring-border ring-inset">
@@ -68,6 +72,6 @@ export function OwnLessonSettings({ lesson }: { lesson: OwnLesson }) {
           }}
         />
       </div>
-    </div>
+    </SettingsWindow>
   )
 }

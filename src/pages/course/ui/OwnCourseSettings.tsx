@@ -16,7 +16,8 @@ import {
 } from '@/features/manage-own-lessons'
 import { LookFields } from '@/features/manage-library'
 import { ResetStepsRow } from '@/features/reset-progress'
-import { BackButton, say, sayUndo, ScreenHeader, SettingsGroup, ThingHead } from '@/shared/ui'
+import { type SettingsWindowState } from '@/shared/lib'
+import { say, sayUndo, SettingsGroup, SettingsWindow, ThingHead } from '@/shared/ui'
 import { deleteOwn, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 import { CourseMark } from './CourseMark'
 
@@ -24,16 +25,19 @@ import { CourseMark } from './CourseMark'
  * A course of the learner's own's Settings (R30-5), as a course's: The course, Rename and Duplicate
  * (the copy opened); its lessons' progress reset; and Delete last, at once with Undo, its lessons kept.
  */
-export function OwnCourseSettings({ course }: { course: OwnCourse }) {
+export function OwnCourseSettings({
+  course,
+  open,
+  onOpenChange,
+}: { course: OwnCourse } & SettingsWindowState) {
   const { t } = useTranslation('learn')
   const navigate = useNavigate()
   const progress = useProgressStoreApi()
   const store = useOwnLessonsStoreApi()
   const lessons = ownCourseLessons(course, useOwnLessons(selectOwnLessons))
   return (
-    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
-      <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
-      <div className="page-column flex flex-col gap-6 lg:max-w-295">
+    <SettingsWindow open={open} onOpenChange={onOpenChange} title={t('settings.title')}>
+      <div className="flex flex-col gap-6">
         <ThingHead
           mark={<CourseMark />}
           name={course.title}
@@ -83,6 +87,6 @@ export function OwnCourseSettings({ course }: { course: OwnCourse }) {
           }}
         />
       </div>
-    </div>
+    </SettingsWindow>
   )
 }

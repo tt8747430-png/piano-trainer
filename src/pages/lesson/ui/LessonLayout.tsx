@@ -8,7 +8,8 @@ import { selectIsLearned, useProgress, useProgressStoreApi } from '@/entities/pr
 import { markLearned, unmarkLearned } from '@/features/mark-learned'
 import { recordSectionRead } from '@/features/record-reading'
 import { localText, useLocale } from '@/shared/i18n'
-import { RoundLink, sayUndo, ScreenHeader, type EditAction, PageName } from '@/shared/ui'
+import { useSettingsWindow, type SettingsWindowState } from '@/shared/lib'
+import { RoundButton, sayUndo, ScreenHeader, type EditAction, PageName } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
 
 /** A lesson either side of this one, or the way on past the last: a router `Link`, named. */
@@ -58,11 +59,12 @@ export function LessonLayout({
   track: LessonTrack
   /** Its Edit: the pencil beside its title, an editor's, or the learner's on their own lesson. */
   edit?: EditAction | undefined
-  /** A router `Link` to its Settings page. */
-  settings: ReactElement
+  /** Its Settings, a window over the lesson (`SettingsWindow`), given whether it is open. */
+  settings: (window: SettingsWindowState) => ReactNode
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
+  const settingsWindow = useSettingsWindow()
   const progress = useProgressStoreApi()
   const learned = useProgress(selectIsLearned(step))
   const summary = localText(lesson.summary, locale)
@@ -78,7 +80,13 @@ export function LessonLayout({
       <ScreenHeader
         title={title}
         back={back}
-        settings={<RoundLink label={t('settings.open')} icon={Settings} render={settings} />}
+        settings={
+          <RoundButton
+            label={t('settings.open')}
+            icon={Settings}
+            onClick={() => settingsWindow.onOpenChange(true)}
+          />
+        }
         edit={edit}
         // A document: its title large on the page, as the lesson editor shows it (Edit looks as it
         // reads); the bar keeps it for a screen reader.
@@ -123,6 +131,7 @@ export function LessonLayout({
           </div>
         }
       />
+      {settings(settingsWindow)}
     </div>
   )
 }

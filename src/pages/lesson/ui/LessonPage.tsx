@@ -16,6 +16,7 @@ import { localText, useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, type EditAction } from '@/shared/ui'
 import { LessonLayout, PlaceLink, type LessonTrack } from './LessonLayout'
+import { LessonSettingsWindow } from './LessonSettingsWindow'
 
 const ROUTE = '/shell/lessons/$lessonId'
 
@@ -54,7 +55,7 @@ function LessonScreen({
       lesson={lesson}
       step={lessonStepId(lesson.id)}
       edit={edit}
-      settings={<Link to="/lessons/$lessonId/settings" params={{ lessonId: lesson.id }} />}
+      settings={(win) => <LessonSettingsWindow lessonId={lesson.id} {...win} />}
       back={<BackButton />}
       after={(lesson.after ?? []).flatMap((id) => {
         const before = lessonById(id)
