@@ -6,10 +6,11 @@ before the turn moves on, so the record outlives a compaction: `.claude/hooks/ca
 into the compaction and back into the context after it. A publish that is refused marks its line **pending**;
 the next publish sends every pending board and the lines get the new version.
 
-
+## Pending
 
 ## Changes
 
+- 2026-11-20 · a8660c3f · the laptop takes a page over the full-screen editor, in its frame with no sidebar, as the app · TakesLaptop · v712
 - 2026-11-20 · 57ca4d6b · a progression's Settings and its Publish (the editor's gear and Publish) open over the editor as the window (THINGWIN), Publish a page inside it with Back to Settings; the editor stays behind as it is · ProgressionEdit, ProgressionEditLaptop · v711
 - 2026-11-20 · 9920a564 · a lesson's and a course's Settings (the app's and the learner's own) open over their page as the song's do: the kit's one THINGWIN, on a laptop the app Settings' window (centred on the window, 720, the page dimmed, Settings and ×), on a phone a tall sheet with Done; the lesson's or course's page behind as it is; the own lesson's Rename and In courses over the window, dimming it · Lesson, LessonLaptop, Course, CourseLaptop, YourLessonSettings, YourLessonSettingsLaptop, YourCourseSettings, YourCourseSettingsLaptop · v711
 - 2026-11-20 · b29e67a8 · a song's Settings opens over the song, never a page of its own: on a laptop the app Settings' window (centred, 720, the page dimmed, Settings and ×; Publish a page inside with Back), on a phone a tall sheet with Done; the song page behind as it is · SongSettings, SongSettingsLaptop · v711
