@@ -95,6 +95,7 @@ lm = f'''<div style="flex: none; padding: 0 40px"><div style="width: min(880px, 
 </div>'''
 pl = SONG_MORE.replace('EditorDraft.dc.html', 'EditorDraftLaptop.dc.html').replace('Editor.dc.html', 'EditorLaptop.dc.html').replace('SongSettings.dc.html', 'SongSettingsLaptop.dc.html') + POPOVER('creditsOn', 'Title and credits', CREDITS, 'left: 120px; top: 520px', 420)
 detail('Song', 'A song', SG, ph, lm, '', sh, pl, 'Songs')
+SONG_PH, SONG_LM, SONG_SG, SONG_SH, SONG_PL = ph, lm, SG, sh, pl  # a song's Settings opens over this page (r53, SETWIN)
 s = open(OUT + 'SongLaptop.dc.html').read().replace('href="Progression.dc.html"', 'href="ProgressionLaptop.dc.html"'); open(OUT + 'SongLaptop.dc.html', 'w').write(s)
 
 # ── the score editor ──

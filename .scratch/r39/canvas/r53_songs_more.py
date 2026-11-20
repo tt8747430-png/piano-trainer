@@ -502,6 +502,34 @@ def LAPIFY(s):
 # a song's Settings in the one Settings shape (the 56 bar, the centred 1180 column 24 under it: YourLessonSettings); a section keeps its 88 head
 smlm = (IF('isSettings', LTOP('SongLaptop.dc.html', '', 'Settings'), 'true') + IF('isSection', LTOP('SongLaptop.dc.html', '', '{{pageT}}')) + IF('isPublish', LTITLEBAR('{{pageT}}', backact='back')) + FULLW(LAPIFY(SMBODY_L)) + LAPIFY(FAB).replace('bottom: 40px', 'bottom: 32px') + TOASTL)
 SM_LAP = LAPSHEET(SMSHEETS, 400)
-for stem, root, ttl in (('SongSettings', "'settings'", 'A song’s Settings and Publish'), ('Section', "'section'", 'A section of a song')):
-    detail(stem, ttl, js(SM_SRC.replace('__ROOT__', root)), smph, smlm, '', SMSHEETS, SM_LAP, 'Songs')
+detail('Section', 'A section of a song', js(SM_SRC.replace('__ROOT__', "'section'")), smph, smlm, '', SMSHEETS, SM_LAP, 'Songs')
+# A thing's Settings opens over its page, never a page of its own (owner, 2026-11-20: "why dont we do such things like
+# the app settings in such popup window … the claude.ai doesn't make that"): on a laptop the app Settings' window
+# (SETDLG's shell: centred, 22 round, the page dimmed, a 56 bar with its title and ×) one pane wide, its Publish a page
+# inside it with Back; on a phone a tall sheet (BSHEET's: 86%, the grabber, Done) with Publish pushed inside it.
+# The song's own script runs beside the Settings' (each in its own scope), so the page behind is the song as it is.
+def _SGBODY(src):
+    return src.split(R41PRE + '\n', 1)[1].rsplit('\n  }\n}\n', 1)[0]
+SETWIN_JS = js('    const __sg = (() => {\n' + _SGBODY(SONG_SG) + '\n    })();\n' + SM_SRC.replace('__ROOT__', "'settings'").replace('return { ...common(st, set),', "const winOn = st.win ?? true;\n    return { ...__sg, ...common(st, set), winOn, closeWin: () => S({ win: false, page: 'settings' }), openWin: () => S({ win: true, page: 'settings' }),", 1))
+_WBACK = IF('isPublish', IB('Settings', CHEV_L, 'back'))
+_WTITLE = '<span style="font-size: 17px; font-weight: 600">{{pageT}}</span>'
+def SETWIN_P(body):
+    return (f'<sc-if value="{{{{winOn}}}}" hint-placeholder-val="{{{{true}}}}"><div onClick="{{{{closeWin}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div>'
+            f'<section role="dialog" aria-modal="true" aria-label="{{{{pageT}}}}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; height: 86%; box-sizing: border-box; border-radius: 22px 22px 0 0; background: {PAGE}; display: flex; flex-direction: column">'
+            f'<div style="flex: none; padding: 6px 16px 8px; display: flex; flex-direction: column; gap: 10px"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>'
+            f'<div style="display: grid; grid-template-columns: minmax(56px, 1fr) auto minmax(56px, 1fr); align-items: center; min-height: 44px"><div>{_WBACK}</div>{_WTITLE}<button type="button" onClick="{{{{closeWin}}}}" style="justify-self: end; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">Done</button></div></div>'
+            f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{body}</div></section></sc-if>')
+def SETWIN_L(body):
+    return (f'<sc-if value="{{{{winOn}}}}" hint-placeholder-val="{{{{true}}}}"><div onClick="{{{{closeWin}}}}" style="position: absolute; top: 0; bottom: 0; left: -248px; right: 0; z-index: 60; background: rgba(51, 41, 33, 0.32)"></div>'
+            f'<div role="dialog" aria-modal="true" aria-label="{{{{pageT}}}}" style="position: absolute; z-index: 61; left: 50%; top: 48px; transform: translateX(calc(-50% - 124px)); width: 720px; max-height: calc(100% - 96px); border-radius: 22px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, 0 24px 64px rgba(51, 41, 33, 0.28); display: flex; flex-direction: column; overflow: hidden">'
+            f'<header style="flex: none; height: 56px; display: flex; align-items: center; gap: 4px; padding: 0 8px 0 {{{{winPad}}}}px; box-shadow: inset 0 -1px 0 {LINE}">{_WBACK}<h1 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">{{{{pageT}}}}</h1>'
+            f'<button type="button" onClick="{{{{closeWin}}}}" aria-label="Close" data-tip="Close" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; display: flex; align-items: center; justify-content: center; color: {INK}">{_XI}</button></header>'
+            f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 20px 32px 32px; display: flex; flex-direction: column; gap: 16px">{body}</main></div></sc-if>')
+SETWIN_JS = SETWIN_JS.replace('winOn, closeWin', "winPad: page === 'publish' ? 12 : 24, winOn, closeWin", 1)
+# the pane holds one column: Settings' groups, or Publish's form over its preview (the window is 720, never two columns)
+_SWBODY = SHOWSTATES() + IF('isSettings', SSET, 'true') + IF('isPublish', SPUB)
+swph = SONG_PH + SETWIN_P(_SWBODY) + TOAST(40, z=70)  # the toast over the window it answers
+swlm = SONG_LM + LAPIFY(SETWIN_L(_SWBODY)) + TOAST(28, z=70, laptop=True)
+detail('SongSettings', 'A song’s Settings, over the song', SETWIN_JS, swph, swlm, '', SONG_SH + SMSHEETS, SONG_PL + SM_LAP, 'Songs')
+s = open(OUT + 'SongSettingsLaptop.dc.html').read().replace('href="Progression.dc.html"', 'href="ProgressionLaptop.dc.html"'); open(OUT + 'SongSettingsLaptop.dc.html', 'w').write(s)
 print('r53 songs places, song pages ok')
