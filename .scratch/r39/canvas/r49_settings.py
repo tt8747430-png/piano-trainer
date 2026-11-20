@@ -191,7 +191,8 @@ def PAGEBODIES(pre, lap=False):
         # owner, 2026-11-18, "refactor all the settings": by how often each is wanted, Language first and Software update,
         # the rarest, last; on a phone Language is one segmented row as Touch and Pedal, not two 56-tall boxes
         if p == 'General': b = (LLANG + body[len(THEMES):] if lap else SEC(GROUP(('seg', 'Language', 'langSeg'), bg=SHEET))) + LAYSEC + UPDSEC
-        if p == 'Appearance': b = LTHEME if lap else _th
+        # its bar already names it Appearance: the column heads with the three screens, no caps head saying it again
+        if p == 'Appearance': b = LTHEME if lap else _th.replace(CAPS('Appearance'), '', 1)
         if lap: b = b.replace('<div style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8', '<div data-group style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8').replace('<div role="radiogroup" style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8', '<div data-group role="radiogroup" style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8')
         out.append(f'<sc-if value="{{{{{pre}{SLUG(p)}}}}}" hint-placeholder-val="{{{{{"true" if (lap and p == "General") else "false"}}}}}">{b}</sc-if>')
     return ''.join(out)

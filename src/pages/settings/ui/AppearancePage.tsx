@@ -8,8 +8,8 @@ import { AppearanceChoice } from './GeneralChoices'
 /**
  * Settings › Appearance, its own place as Apple's Display & Brightness (owner, 2026-11-17: "look
  * where the apple puts its settings"): the theme alone. On a phone its three small screens across
- * the column under the heading (the board's THEMES); in the laptop's dialog one Theme row with the
- * screens at its end (the board's LTHEME, claude.ai's Appearance).
+ * the column under the bar, no heading saying it again (the board's THEMES); in the laptop's
+ * dialog one Theme row with the screens at its end (the board's LTHEME, claude.ai's Appearance).
  */
 export function AppearancePage() {
   const { t } = useTranslation('settings')
@@ -34,9 +34,7 @@ export function AppearancePage() {
           </GroupRow>
         </SettingsGroup>
       ) : (
-        <SettingsGroup bare title={t('theme.label')}>
-          <div data-setting="theme">{choice}</div>
-        </SettingsGroup>
+        <div data-setting="theme">{choice}</div>
       )}
     </SettingsScreen>
   )
