@@ -19,10 +19,14 @@ export const selectTempo =
   (state: ProgressState): number | undefined =>
     state.tempos[key]
 
+/** Whether a step is learned: one test for every list that marks its learned steps. */
+export const isLearned = (learned: ProgressState['learned'], id: StepId): boolean =>
+  learned[id] !== undefined
+
 export const selectIsLearned =
   (id: StepId) =>
   (state: ProgressState): boolean =>
-    state.learned[id] !== undefined
+    isLearned(state.learned, id)
 
 export const selectAnswers =
   (skill: SkillId) =>

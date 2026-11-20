@@ -10,7 +10,7 @@ import {
   type CourseLesson,
   type OwnCourse,
 } from '@/entities/own-lessons'
-import { selectLearned, selectRead, useProgress } from '@/entities/progress'
+import { selectLearned, selectRead, useProgress, isLearned } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
@@ -55,7 +55,7 @@ function Lessons({
         <LessonLine across={4}>
           {lessons.map(({ lesson, own }, i) => {
             const step = lessonStepId(lesson.id)
-            const done = learned[step] !== undefined
+            const done = isLearned(learned, step)
             const place = own ? undefined : lessonPlace(lesson.id)
             return (
               <LessonStop
@@ -93,8 +93,8 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
   const navigate = useNavigate()
   const learned = useProgress(selectLearned)
   const lessons = ownCourseLessons(course, useOwnLessons(selectOwnLessons))
-  const open = lessons.find(({ lesson }) => learned[lessonStepId(lesson.id)] === undefined)
-  const done = lessons.filter(({ lesson }) => learned[lessonStepId(lesson.id)] !== undefined)
+  const open = lessons.find(({ lesson }) => !isLearned(learned, lessonStepId(lesson.id)))
+  const done = lessons.filter(({ lesson }) => isLearned(learned, lessonStepId(lesson.id)))
   const progress = { done: done.length, total: lessons.length }
   const way = open ?? lessons[0]
   const paint = PAINT[course.look.paint]
@@ -134,11 +134,7 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
           progress={progress}
           action={
             way ? (
-              <ButtonLink
-                size="lg"
-                className="w-full"
-                render={inCourse(course, way.lesson.id)}
-              >
+              <ButtonLink size="lg" className="w-full" render={inCourse(course, way.lesson.id)}>
                 {t(`journey.${word}`, { title: localText(way.lesson.title, locale) })}
               </ButtonLink>
             ) : undefined

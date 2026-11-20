@@ -11,7 +11,7 @@ import {
   type OwnCourse,
   type OwnLesson,
 } from '@/entities/own-lessons'
-import { selectLearned, useProgress, useProgressStoreApi } from '@/entities/progress'
+import { selectLearned, useProgress, useProgressStoreApi, isLearned } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { duplicateOwnCourse, duplicateOwnLesson } from '@/features/manage-own-lessons'
 import { localText, useLocale } from '@/shared/i18n'
@@ -145,7 +145,7 @@ function OwnLessonItem({
   const progress = useProgressStoreApi()
   const learned = useProgress(selectLearned)
   const step = lessonStepId(lesson.id)
-  const done = learned[step] !== undefined
+  const done = isLearned(learned, step)
   const title = localText(lesson.title, locale)
   const length = t('own.sectionCount', { count: lesson.sections.length })
   const actions: MenuAction[] = [
@@ -237,7 +237,7 @@ function OwnCourseItem({
   const progress = useProgressStoreApi()
   const learned = useProgress(selectLearned)
   const listed = ownCourseLessons(course, lessons)
-  const done = listed.filter(({ lesson }) => learned[lessonStepId(lesson.id)] !== undefined).length
+  const done = listed.filter(({ lesson }) => isLearned(learned, lessonStepId(lesson.id))).length
   const length = t('course.lessonCount', { count: listed.length })
   const facts = [
     t('own.course'),

@@ -60,6 +60,7 @@ export {
   selectAnswers,
   selectDays,
   selectHolds,
+  isLearned,
   selectIsLearned,
   selectLearned,
   selectLessonDone,

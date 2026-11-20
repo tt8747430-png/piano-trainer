@@ -1,3 +1,4 @@
+import { isLearned } from '@/entities/progress'
 import { allCourses, courseStepIds, type Course } from '@/entities/course'
 import { allJourneys, type Journey } from '@/entities/lesson'
 import { isStepId, stepIdOf, stepOf, type Step, type StepId } from '@/entities/step'
@@ -12,13 +13,13 @@ export type ContinueStep =
 
 /** A journey's first step not yet learned. */
 function openInJourney(journey: Journey, learned: Learned): ContinueStep | undefined {
-  const step = journeySteps(journey).find((each) => learned[stepIdOf(each)] === undefined)
+  const step = journeySteps(journey).find((each) => !isLearned(learned, stepIdOf(each)))
   return step ? { id: stepIdOf(step), step, journey } : undefined
 }
 
 /** A course's first step not yet learned: a lesson, then a guided song; none once all are. */
 export const openCourseStep = (course: Course, learned: Learned): StepId | undefined =>
-  courseStepIds(course).find((each) => learned[each] === undefined)
+  courseStepIds(course).find((each) => !isLearned(learned, each))
 
 /** A course's open step as Continue opens it. */
 function openInCourse(course: Course, learned: Learned): ContinueStep | undefined {

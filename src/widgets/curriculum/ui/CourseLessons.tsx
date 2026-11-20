@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type Course } from '@/entities/course'
-import { selectLearned, selectRead, useProgress } from '@/entities/progress'
+import { selectLearned, selectRead, useProgress, isLearned } from '@/entities/progress'
 import { courseLessonStepId, type StepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { lessonShare } from '../model/progress'
@@ -32,7 +32,7 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
       <LessonLine across={4}>
         {course.lessons.map((lesson, i) => {
           const step = courseLessonStepId(course.id, lesson.id)
-          const done = learned[step] !== undefined
+          const done = isLearned(learned, step)
           const current = step === next
           const share = lessonShare(lesson.sections.length, read[step], done)
           const after = afterWorthSaying(

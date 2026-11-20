@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { entryTitles, PieceLink, type Entry } from '@/entities/piece'
-import { useProgress } from '@/entities/progress'
+import { useProgress, isLearned } from '@/entities/progress'
 import { pieceStepId } from '@/entities/step'
 import { useLocale } from '@/shared/i18n'
 import { SectionHead, SeeAll } from '@/shared/ui'
@@ -30,7 +30,7 @@ export function AllSongsShelf({ songs }: { songs: readonly Entry[] }) {
       <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-0.5 [scrollbar-width:none]">
         {songs.slice(0, SHOWN).map((entry) => {
           const play = plays[entry.id]
-          const done = learned[pieceStepId(entry.id)] !== undefined
+          const done = isLearned(learned, pieceStepId(entry.id))
           const partway = !done && play !== undefined && play.at > 0
           return (
             <li key={entry.id} className="w-33 flex-none snap-start">

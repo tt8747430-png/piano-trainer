@@ -1,3 +1,4 @@
+import { isLearned } from '@/entities/progress'
 import type { Course } from '@/entities/course'
 import type { Journey, JourneyStep } from '@/entities/lesson'
 import { courseLessonStepId, stepIdOf, type StepId } from '@/entities/step'
@@ -10,7 +11,7 @@ export interface Progress {
 type Learned = Readonly<Partial<Record<StepId, string>>>
 
 const progressOf = (ids: readonly StepId[], learned: Learned): Progress => ({
-  done: ids.filter((id) => learned[id] !== undefined).length,
+  done: ids.filter((id) => isLearned(learned, id)).length,
   total: ids.length,
 })
 

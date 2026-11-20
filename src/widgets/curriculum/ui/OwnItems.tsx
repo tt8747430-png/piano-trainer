@@ -9,7 +9,7 @@ import {
   selectOwnLessons,
   useOwnLessons,
 } from '@/entities/own-lessons'
-import { selectLearned, useProgress } from '@/entities/progress'
+import { selectLearned, useProgress, isLearned } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
@@ -77,9 +77,7 @@ export function OwnItems() {
   const rows = [
     ...shownCourses.map((course) => {
       const listed = ownCourseLessons(course, lessons)
-      const done = listed.filter(
-        ({ lesson }) => learned[lessonStepId(lesson.id)] !== undefined,
-      ).length
+      const done = listed.filter(({ lesson }) => isLearned(learned, lessonStepId(lesson.id))).length
       const facts = [
         t('own.course'),
         t('course.lessonCount', { count: listed.length }),
@@ -96,8 +94,9 @@ export function OwnItems() {
     ...shownLessons.map((lesson) => ({
       key: lesson.id,
       link: <Link to="/lessons/$lessonId" params={{ lessonId: lesson.id }} />,
-      kind:
-        learned[lessonStepId(lesson.id)] === undefined ? ('lesson' as const) : ('learned' as const),
+      kind: !isLearned(learned, lessonStepId(lesson.id))
+        ? ('lesson' as const)
+        : ('learned' as const),
       title: localText(lesson.title, locale),
       detail: `${t('kind.lesson')} · ${t('own.sectionCount', { count: lesson.sections.length })}`,
     })),

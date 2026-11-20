@@ -8,6 +8,7 @@ import {
   selectLearned,
   selectRead,
   useProgress,
+  isLearned,
 } from '@/entities/progress'
 import { lessonStepId, skillsOfStep, StepLink, stepIdOf, type StepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
@@ -51,7 +52,7 @@ function StepRow({
   const read = useProgress(selectRead)
   const answers = useProgress(selectAllAnswers)
   const id = stepIdOf(step)
-  const done = learned[id] !== undefined
+  const done = isLearned(learned, id)
   const lesson = step.kind === 'lesson' ? lessonById(step.lessonId) : undefined
   const share = lesson ? lessonShare(lesson.sections.length, read[id], done) : 0
   const asked = (lesson?.after ?? []).flatMap((each) => {
@@ -113,7 +114,7 @@ function ChapterGroup({
   const id = useId()
   const learned = useProgress(selectLearned)
   const ids = chapter.steps.map(stepIdOf)
-  const done = ids.filter((each) => learned[each] !== undefined).length
+  const done = ids.filter((each) => isLearned(learned, each)).length
   const title = localText(chapter.title, locale)
   return (
     <section aria-labelledby={id} className="flex flex-col gap-0.5">
@@ -167,7 +168,7 @@ export function LevelLessons({ journey }: { journey: Journey }) {
       .map((step, i): [StepId, number] => [stepIdOf(step), i + 1]),
   )
   const order = steps.map(stepIdOf)
-  const isDone = (id: StepId) => learned[id] !== undefined
+  const isDone = (id: StepId) => isLearned(learned, id)
   const go = steps.find((step) => !isDone(stepIdOf(step))) ?? steps[0]
   const goWord =
     progress.done === 0 ? 'start' : progress.done === progress.total ? 'review' : 'continue'
