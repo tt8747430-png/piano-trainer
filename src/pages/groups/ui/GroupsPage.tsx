@@ -10,12 +10,13 @@ import {
   NewMenu,
   RoundButton,
   RowLink,
+  RowsLoading,
   ScreenHeader,
   SettingsGroup,
   type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { GroupsState, RowsLoading } from './GroupsState'
+import { GroupsState } from './GroupsState'
 import { JoinLinkSheet } from './JoinLinkSheet'
 
 /** What is open over Groups: New group, or Join with a link. */

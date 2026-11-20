@@ -4,9 +4,16 @@ import { useTranslation } from 'react-i18next'
 import { GroupMark, useGroupsData } from '@/features/share-folder'
 import { GROUP_NAME_MAX, type LearnerGroup, type SharedFolder } from '@/shared/api/groups'
 import { useGroups } from '@/shared/lib/groups'
-import { BackButton, ConfirmDialog, MoreMenu, NameField, ScreenHeader } from '@/shared/ui'
+import {
+  BackButton,
+  ConfirmDialog,
+  MoreMenu,
+  NameField,
+  RowsLoading,
+  ScreenHeader,
+} from '@/shared/ui'
 import { GroupMembers, type MemberAsk } from './GroupMembers'
-import { GroupsState, RowsLoading } from './GroupsState'
+import { GroupsState } from './GroupsState'
 import { GroupShared } from './GroupShared'
 import { InviteCard } from './InviteCard'
 

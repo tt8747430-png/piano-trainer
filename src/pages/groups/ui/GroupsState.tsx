@@ -53,14 +53,3 @@ export function GroupsState({
     />
   )
 }
-
-/** Rows being read: their outlines, named for a screen reader. */
-export function RowsLoading({ label, rows = 3 }: { label: string; rows?: number }) {
-  return (
-    <div role="status" aria-label={label} className="flex flex-col gap-2">
-      {Array.from({ length: rows }, (_, row) => (
-        <div key={row} className="h-16 rounded-card bg-muted motion-safe:animate-pulse" />
-      ))}
-    </div>
-  )
-}

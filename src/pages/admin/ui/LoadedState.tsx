@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { NetFailure } from '@/shared/api/network'
 import { Button } from '@/shared/ui/primitives/button'
+import { RowsLoading } from '@/shared/ui'
 import type { Loaded } from '../model/use-loaded'
 
 /** Why a call came back without its answer, in words: offline, turned down, or failed. */
@@ -25,12 +26,7 @@ export function LoadedState<T>({
   children: (value: T) => ReactNode
 }) {
   const { t } = useTranslation('admin')
-  if (loaded.kind === 'loading')
-    return (
-      <p role="status" className="text-muted-foreground">
-        {t('loading')}
-      </p>
-    )
+  if (loaded.kind === 'loading') return <RowsLoading label={t('loading')} />
   if (loaded.kind === 'failed')
     return (
       <div className="flex flex-col items-start gap-3">

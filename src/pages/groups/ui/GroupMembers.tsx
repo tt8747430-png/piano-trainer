@@ -4,9 +4,8 @@ import { useTranslation } from 'react-i18next'
 import type { GroupMember, LearnerGroup } from '@/shared/api/groups'
 import type { NetFailure } from '@/shared/api/network'
 import { useGroups } from '@/shared/lib/groups'
-import { ActionMenu, SettingsGroup } from '@/shared/ui'
+import { ActionMenu, RowsLoading, SettingsGroup } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { RowsLoading } from './GroupsState'
 
 /** Asking before a member is removed. */
 export type MemberAsk = { readonly kind: 'remove'; readonly member: GroupMember }

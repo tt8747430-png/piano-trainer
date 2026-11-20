@@ -21,12 +21,13 @@ import {
   DangerRow,
   RowButton,
   RowLink,
+  RowsLoading,
   Said,
   ScreenHeader,
   SettingsGroup,
   type RowAction,
 } from '@/shared/ui'
-import { GroupsState, RowsLoading } from './GroupsState'
+import { GroupsState } from './GroupsState'
 
 const isFolderPaint = isOneOf(FOLDER_PAINTS)
 
