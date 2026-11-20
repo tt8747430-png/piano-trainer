@@ -31,7 +31,7 @@ export function ProgressionBetween({
         {t('progressions.between.title')}
       </h3>
       {from && to && ways.length > 0 ? (
-        <ul className="overflow-hidden rounded-card bg-card ring-1 ring-border">
+        <ul className="card overflow-hidden">
           {PASSING_CATEGORIES.flatMap((category) =>
             ways.filter((way) => way.category === category),
           ).map((way) => (

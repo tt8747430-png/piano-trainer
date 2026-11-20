@@ -11,7 +11,7 @@ export function PractiseRows({ title, children }: { title: string; children: Rea
   return (
     <section className="flex flex-col gap-2">
       <h3 className="font-sans text-sm leading-[normal] font-semibold text-foreground">{title}</h3>
-      <ul className="overflow-hidden rounded-card bg-card ring-1 ring-border">{children}</ul>
+      <ul className="card overflow-hidden">{children}</ul>
     </section>
   )
 }

@@ -74,7 +74,7 @@ export function KeyFifths({ value, kind }: { value: Key; kind: ScaleKind }) {
         {t('scales.onCircleOfFifths')}
         <ChevronRight aria-hidden className="size-4" />
       </Link>
-      <div className="grid grid-cols-3 overflow-hidden rounded-card bg-card ring-1 ring-border">
+      <div className="card grid grid-cols-3 overflow-hidden">
         {[below, major, above].map((each) => (
           <div
             key={keySymbol(each)}

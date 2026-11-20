@@ -40,7 +40,7 @@ export function ScaleChordGrid({ chords }: { chords: readonly PlacedScaleChord[]
                 aria-label={`${symbol}, ${placed.numeral}`}
                 onClick={() => playback.toggle(id, () => chordSounds(keys, { arpeggio: false }))}
                 className={cn(
-                  'flex flex-col items-center gap-2 rounded-card bg-card p-3 ring-1 ring-border transition-colors duration-150 ease-out hover:bg-muted/50',
+                  'card flex flex-col items-center gap-2 p-3 transition-colors duration-150 ease-out hover:bg-muted/50',
                   playing && 'ring-2 ring-primary',
                 )}
               >
