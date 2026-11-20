@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · PENDING · one heart, Lucide's, on every board · Accompaniment,AccompanimentLaptop,AllSongs,AllSongsLaptop,Explore,ExploreLaptop,FingerTechnique,FingerTechniqueLaptop,Folder,FolderLaptop,JazzVocabulary,JazzVocabularyLaptop,PatternNew,PatternNewLaptop,Progressions,ProgressionsLaptop,Settings,SettingsLaptop,Song,SongLaptop,Songs,SongsLaptop · pending
 
 
 ## Changes

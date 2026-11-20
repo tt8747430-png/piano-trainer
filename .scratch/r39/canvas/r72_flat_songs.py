@@ -54,7 +54,7 @@ FL_JS = r'''
 def FLJS(rows, bare_l='A new learner', guest=False):
     return js('    const GUEST = ' + ('true' if guest else 'false') + '; const ROWS = ' + json.dumps(rows, ensure_ascii=False) + '; const FOLD = ' + json.dumps([[t, n, c] for t, n, c, k in FOLDERS_ALL if k != 'shared'], ensure_ascii=False) + '; const BARE_L = ' + json.dumps(bare_l) + ';' + FL_JS)
 
-HEART_T = '<svg viewBox="0 0 24 24" width="24" height="24" fill="#B84A3E" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"></path></svg>'
+HEART_T = '<svg viewBox="0 0 24 24" width="24" height="24" fill="#B84A3E" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path></svg>'
 SHARED_T = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#44684A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"></path></svg>'
 
 def TILE56(pic, w=56):

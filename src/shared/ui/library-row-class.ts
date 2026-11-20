@@ -20,10 +20,11 @@ export const GROUPED_LIST = 'card flex flex-col rows-line overflow-hidden'
 
 /**
  * A library row's face (canvas 133): its title heavier than a settings row's, since the song or folder
- * is what is hunted for, and its line one line, cut with an ellipsis.
+ * is what is hunted for, and its line one line at its normal height, cut at the letter with an
+ * ellipsis as the boards' (a clamp cut it at a word).
  */
 export const ROW_LIBRARY_FACE =
-  '**:data-[slot=row-title]:font-semibold **:data-[slot=row-title]:leading-[1.25] **:data-[slot=row-detail]:line-clamp-1'
+  '**:data-[slot=row-title]:font-semibold **:data-[slot=row-title]:leading-[1.25] **:data-[slot=row-detail]:block **:data-[slot=row-detail]:[-webkit-line-clamp:none] **:data-[slot=row-detail]:text-ellipsis **:data-[slot=row-detail]:whitespace-nowrap **:data-[slot=row-detail]:leading-[normal] **:data-[slot=row-detail]:mt-0.5'
 
 /** What only a mouse reaches (More on a library row): a finger has the swipe and the long press. */
 export const POINTER_ONLY = 'pointer-coarse:hidden'

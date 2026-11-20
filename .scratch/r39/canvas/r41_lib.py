@@ -42,7 +42,7 @@ LIBJS = r'''
       delRow: () => set({ sheet: null, gone: [...gone, st.rowK], toastT: '“' + (names[st.rowK] ?? st.rowK) + '” deleted', lastGone: st.rowK }),
       toastOn: !!st.toastT, toastT: st.toastT ?? '', toastUndo: !!st.lastGone, undo: () => set({ gone: gone.filter((x) => x !== st.lastGone), toastT: null, lastGone: null }),
 '''
-HEARTI = f'<svg viewBox="0 0 24 24" width="20" height="20" fill="{{{{r.heartFill}}}}" stroke="{{{{r.heart}}}}" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"></path></svg>'
+HEARTI = f'<svg viewBox="0 0 24 24" width="20" height="20" fill="{{{{r.heartFill}}}}" stroke="{{{{r.heart}}}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path></svg>'
 LGRIP = lambda name: f'<span role="button" aria-label="Move: {name}" data-tip="Drag to move" style="flex: none; width: 44px; height: 44px; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: grab">{GRIP}</span>'
 def LIB_ROW(laptop=False):
     return (f'<div style="min-height: 64px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 12px; box-shadow: inset 0 -1px 0 {FILL}">'
