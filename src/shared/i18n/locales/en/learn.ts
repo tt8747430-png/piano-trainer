@@ -199,6 +199,8 @@ export const learn = {
   fingers: 'Fingers on the scales',
   // A lesson's example: the piece a pattern plays over, where it opens, and how to hear it.
   example: {
+    // A note's label over its words, as the boards' aside.
+    note: 'Note',
     over: 'Played over “{{piece}}”',
     openInPlayer: 'Open in the Player',
     inProgressions: 'Open in Progressions',

@@ -201,6 +201,8 @@ export const learn: LocaleResources['learn'] = {
   done: 'Готово',
   fingers: 'Аппликатура в гаммах',
   example: {
+    // A note's label over its words, as the boards' aside.
+    note: 'Заметка',
     over: 'На аккордах «{{piece}}»',
     openInPlayer: 'Открыть в плеере',
     inProgressions: 'Открыть в последовательностях',
