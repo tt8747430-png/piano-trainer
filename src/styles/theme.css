@@ -641,6 +641,13 @@
 @utility right-gutter {
   right: max(var(--gutter), env(safe-area-inset-right));
 }
+/* The page's reading column, 672 wide and centred (DESIGN.md, Placement): a page's content, its bar's row
+   (`ScreenHeader column`) and a phone's sheet stand on it, so their edges meet at every width. */
+@utility page-column {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--container-2xl);
+}
 /* A grid of cards that takes the width it is given: as many columns of at least 18rem as fit. */
 @utility grid-cards {
   display: grid;

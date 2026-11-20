@@ -31,7 +31,7 @@ export function OwnLessonSettings({ lesson }: { lesson: OwnLesson }) {
   return (
     <div className="flex flex-col gap-2 pb-8 lg:gap-6">
       <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:max-w-295">
+      <div className="page-column flex flex-col gap-6 lg:max-w-295">
         <ThingHead
           mark={
             <span className="grid size-16 shrink-0 place-items-center rounded-pill bg-card ring-1 ring-border ring-inset">

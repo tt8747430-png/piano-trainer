@@ -139,7 +139,7 @@ export function ChordsOverLyrics({
           onLoop={onLoop}
         />
         {pinned ? (
-          <div className="mx-auto mt-1 w-full max-w-2xl px-gutter landscape-phone:px-0">
+          <div className="page-column mt-1 px-gutter landscape-phone:px-0">
             <ChordSummary chords={summary} sounding={sounding} onChord={onSymbol} />
           </div>
         ) : null}
@@ -148,7 +148,7 @@ export function ChordsOverLyrics({
           width; the strip above runs across the view. The width is in rem: a width in the font's own
           `ch` had Chrome restyle the whole screen at every beat played. Its text at the size chosen,
           every length in its lines in `em`. */}
-      <div className="mx-auto flex w-full max-w-2xl flex-col" style={{ fontSize: `${textSize}%` }}>
+      <div className="page-column flex flex-col" style={{ fontSize: `${textSize}%` }}>
         {shown.map(({ line, index, starts }) => {
           const heading = headings[line.section]
           return (

@@ -113,7 +113,7 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
   return (
     <div className="flex flex-col gap-6 pb-8">
       <ScreenHeader column title={t('cardStyle.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+      <div className="page-column flex flex-col gap-6">
         {/* The preview first (the board's): the place's own rows as a phone or a laptop draws them. */}
         <div className="flex flex-col gap-2.5 rounded-[18px] bg-muted p-4">
           <Segmented<Device>

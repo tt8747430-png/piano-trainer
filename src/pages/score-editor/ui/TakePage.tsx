@@ -71,7 +71,7 @@ function TakeView({ take }: { take: Take }) {
         back={<BackButton />}
         tools={<RoundButton label={t('recorder.download')} icon={Download} onClick={download} />}
       />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 lg:mx-0 lg:max-w-[73.75rem] lg:px-[calc(3.5rem-var(--gutter))]">
+      <div className="page-column flex flex-col gap-4 lg:mx-0 lg:max-w-[73.75rem] lg:px-[calc(3.5rem-var(--gutter))]">
         <TakeNameField take={take} />
         <div className="flex items-center gap-3">
           <Button

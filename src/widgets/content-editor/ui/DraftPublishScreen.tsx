@@ -103,7 +103,7 @@ export function DraftPublishScreen<T>({
           </InfoTip>
         }
       />
-      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6">
+      <div className="page-column flex flex-1 flex-col gap-6">
         {!editsContent(account) ? (
           <NotOpen line={t('original.editorsOnly')} />
         ) : load.state !== 'ready' ? (

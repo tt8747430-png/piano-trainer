@@ -57,7 +57,7 @@ export function JoinGroupPage() {
       ? read
       : { kind: 'guest' }
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 pb-8">
+    <div className="page-column flex flex-col gap-6 pb-8">
       <ScreenHeader title={t('groups.title')} back={<BackButton />} />
       {shown.kind === 'guest' ? (
         <Said

@@ -47,7 +47,7 @@ export function StreakPage() {
   return (
     <div className="flex flex-col gap-2">
       <ScreenHeader column title={t('profile.streakPage.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+      <div className="page-column flex flex-col gap-4">
         <section className="flex items-center gap-4 p-1">
           <span className="grid size-16 shrink-0 place-items-center rounded-full bg-paint-sand text-played">
             <Flame aria-hidden className={cn('size-8.5', run > 0 && 'fill-current')} />

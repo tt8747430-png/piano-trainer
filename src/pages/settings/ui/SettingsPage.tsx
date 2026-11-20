@@ -15,7 +15,7 @@ export function SettingsPage() {
   return (
     <div className="flex flex-col gap-1">
       <ScreenHeader column title={t('title')} back={<BackButton />} />
-      <div className="mx-auto w-full max-w-2xl">
+      <div className="page-column">
         <SettingsList />
       </div>
     </div>

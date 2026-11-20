@@ -77,7 +77,7 @@ export function SettingsScreen({
         back={<BackButton />}
         tools={actions}
       />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+      <div className="page-column flex flex-col gap-4">
         {lead === undefined ? null : (
           <>
             {lead}

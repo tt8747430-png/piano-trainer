@@ -49,7 +49,7 @@ export function LegalPage({ page }: { page: 'privacy' | 'terms' }) {
   return (
     <div className="flex flex-col">
       <ScreenHeader column="until-laptop" title={t(`${page}.title`)} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 px-1 pt-1 pb-12 lg:mx-0 lg:max-w-none lg:gap-6 lg:px-0 lg:pt-6 lg:pb-14">
+      <div className="page-column flex flex-col gap-5 px-1 pt-1 pb-12 lg:mx-0 lg:max-w-none lg:gap-6 lg:px-0 lg:pt-6 lg:pb-14">
         <p className="text-sm leading-[normal] text-muted-foreground">{t('updated', { date })}</p>
         <nav
           aria-label={t('contents')}

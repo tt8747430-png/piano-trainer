@@ -64,7 +64,7 @@ function ProgressionSettings({ progression }: { progression: LibraryProgression 
   return (
     <div className="flex flex-col gap-6 pb-8">
       <ScreenHeader column title={t('learn:settings.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
+      <div className="page-column flex flex-col gap-7">
         {editsContent(account) ? (
           <>
             <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>

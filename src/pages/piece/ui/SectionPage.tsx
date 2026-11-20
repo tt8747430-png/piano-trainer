@@ -41,7 +41,7 @@ function SectionView({ piece, section }: { piece: Piece; section: number }) {
           Settings), then its ways in: one column on a phone; on a laptop the
           Section board's two, the chords and in time at the left, the changes and patterns at the
           right, every row 56 and, there, its state beside its words with no chevron far from them. */}
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 lg:mx-0 lg:max-w-none lg:gap-5 lg:px-[calc(3.5rem-var(--gutter))] [&_.group\/row]:min-h-14 lg:[&_.group\/row>span:has([data-slot=row-title])]:flex-none lg:[&_[data-slot=row-chevron]]:hidden">
+      <div className="page-column flex flex-col gap-4 lg:mx-0 lg:max-w-none lg:gap-5 lg:px-[calc(3.5rem-var(--gutter))] [&_.group\/row]:min-h-14 lg:[&_.group\/row>span:has([data-slot=row-title])]:flex-none lg:[&_[data-slot=row-chevron]]:hidden">
         <SectionCard heading={heading} lessons={lessons} />
         <SectionLessonGroups piece={piece} performance={performance} lessons={lessons} />
       </div>

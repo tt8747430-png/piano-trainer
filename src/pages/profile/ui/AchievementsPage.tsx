@@ -37,7 +37,7 @@ export function AchievementsPage() {
   return (
     <div className="flex flex-col gap-2">
       <ScreenHeader column title={t('profile.achievements.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
+      <div className="page-column flex flex-col gap-8">
         <section aria-labelledby={recordsId} className="flex flex-col gap-2">
           <h2 id={recordsId} className="px-4 caps">
             {t('profile.achievements.records')}
@@ -87,7 +87,7 @@ export function AchievementPage() {
   return (
     <div className="flex flex-col gap-2">
       <ScreenHeader column title={name} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
+      <div className="page-column flex flex-col gap-5">
         <section className="flex flex-col items-center gap-2 text-center">
           <MilestoneMark earned={day !== null} size="hero" />
           <p className="font-sans text-[1.625rem]/tight font-bold text-balance">{name}</p>

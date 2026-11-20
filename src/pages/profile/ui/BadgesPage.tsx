@@ -19,7 +19,7 @@ export function BadgesPage() {
   return (
     <div className="flex flex-col gap-2">
       <ScreenHeader column title={t('profile.badges.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
+      <div className="page-column flex flex-col gap-7">
         <ProfileList page>
           {badges.map((badge) => (
             <BadgeRow key={badge.id} badge={badge} />
@@ -51,7 +51,7 @@ export function BadgePage() {
   return (
     <div className="flex flex-col gap-2">
       <ScreenHeader column title={name} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
+      <div className="page-column flex flex-col gap-5">
         <section className="flex flex-col items-center gap-2 text-center">
           <BadgeMark tier={badge.tier} size="hero" />
           <p className="font-sans text-[1.625rem]/tight font-bold text-balance">{name}</p>

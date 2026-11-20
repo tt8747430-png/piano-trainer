@@ -176,7 +176,7 @@ export function SheetContent({
     <DrawerContent
       {...(initialFocus ? { initialFocus } : {})}
       className={cn(
-        'mx-auto w-full max-w-2xl rounded-t-sheet bg-background pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
+        'page-column rounded-t-sheet bg-background pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
         // From the right, a laptop's settings (the boards' POPOVER, EditorLaptop's and PlayerDesk's
         // gear): a card hung under the bar's buttons, 380 wide (420 `wide`), as tall as it holds, 16
         // round with the hairline and the second shade; it fades in place.

@@ -40,7 +40,7 @@ export type ScreenHeaderProps = {
   /** The screen's Edit: its pencil beside the title, Done in its place while editing. */
   edit?: EditAction
   /**
-   * The page reads in the 672 column (`max-w-2xl`): the bar's row stands on the same column, so the
+   * The page reads in the 672 column (`page-column`): the bar's row stands on the same column, so the
    * title and the content share their left edge at every width (craft-details, every width holds).
    * `until-laptop` for a page whose column widens to the window from 64rem (Profile).
    */
@@ -118,7 +118,7 @@ export function ScreenHeader({
             'flex min-h-14 items-center py-1',
             // after Back the title stands 12 off it (TITLEBAR, LTITLEBAR)
             back ? 'gap-3' : 'gap-1.5 sm:gap-2',
-            column && 'mx-auto w-full max-w-2xl',
+            column && 'page-column',
             column === 'until-laptop' && 'lg:mx-0 lg:max-w-none',
           )}
         >
@@ -156,7 +156,7 @@ export function ScreenHeader({
         <div
           className={cn(
             'flex min-h-14 items-center',
-            column && 'mx-auto w-full max-w-2xl',
+            column && 'page-column',
             column === 'until-laptop' && 'lg:mx-0 lg:max-w-none',
           )}
         >

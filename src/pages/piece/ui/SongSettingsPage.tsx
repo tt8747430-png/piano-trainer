@@ -136,7 +136,7 @@ function SongSettings({ piece }: { piece: Piece }) {
       {/* The one Settings shape (canvas v550, YourLessonSettings): the head (THINGHEAD), its groups 24
           apart, the loss of the whole song 40 apart at the foot; on a laptop the centred 1180 column 24
           under the 56 bar, Library and Share side by side, the loss its own card across both. */}
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:grid lg:max-w-295 lg:grid-cols-2 lg:items-start lg:gap-x-8">
+      <div className="page-column flex flex-col gap-6 lg:grid lg:max-w-295 lg:grid-cols-2 lg:items-start lg:gap-x-8">
         {/* The song at the head: what these settings are for (R32-C). */}
         <div className="lg:col-span-2">
           {/* Its cover's picture is chosen here, a tap on it (R32-C): the library's tile. */}

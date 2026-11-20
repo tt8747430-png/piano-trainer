@@ -146,7 +146,7 @@ export function ShelfEditor({ bar }: { bar: (actions: ReactNode) => ReactNode })
           </>
         ) : null,
       )}
-      <div className="mx-auto mt-4 flex w-full max-w-2xl min-w-0 flex-col gap-2">
+      <div className="page-column mt-4 flex min-w-0 flex-col gap-2">
         {load.state !== 'ready' ? (
           <DraftGate load={load} reopen={draft.reopen} />
         ) : (
