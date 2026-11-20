@@ -1,6 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Ellipsis, KeyboardMusic, Trash2 } from 'lucide-react'
-import { Fragment, useState, type ReactNode } from 'react'
+import { Fragment, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   lessonById,
@@ -13,7 +13,7 @@ import { STAGE_PAINT } from '@/entities/step'
 import { DraftActions, DraftStatus, useAddLesson, useJourneyDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { cn, slug } from '@/shared/lib'
-import { ActionMenu, confirm, PAINT, say, ScaleIcon } from '@/shared/ui'
+import { ActionMenu, PAINT, say, sayUndo, ScaleIcon } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   AddRow,
@@ -26,7 +26,7 @@ import {
 import { rowKey, withOrder } from '../model/journey-order'
 import { useStepTitle } from '../model/use-step-title'
 
-/** A chapter's heading, renamed in place, and its menu: Remove chapter, asked first. Dragged by its handle. */
+/** A chapter's heading, renamed in place, and its menu: Remove chapter, at once with Undo. Dragged by its handle. */
 function ChapterHead({
   chapter,
   at,
@@ -88,7 +88,7 @@ function ChapterHead({
 /**
  * The level as one document in one language (round 21), in place on the Lessons: its title and
  * goal written where they show; each chapter's heading renamed in place, its ⋯ Remove chapter
- * (asked first); its steps rows dragged into order within the chapter or onto another, each row's
+ * (with Undo); its steps rows dragged into order within the chapter or onto another, each row's
  * menu Remove (with Undo); Add lesson at a chapter's end, Add chapter at the level's.
  */
 function LevelDocument({
@@ -108,7 +108,10 @@ function LevelDocument({
   const stepTitle = useStepTitle()
   const words = i18n.getFixedT(locale, 'learn')
   const [journey, setJourney] = useState(initial)
+  // The level as last changed: what an Undo puts a chapter back into, whatever came after it.
+  const latest = useRef(initial)
   const change = (next: Journey) => {
+    latest.current = next
     setJourney(next)
     onChange(next)
   }
@@ -134,13 +137,14 @@ function LevelDocument({
       link: <Link to="/lessons/$lessonId/edit" params={{ lessonId: step.lessonId }} />,
     }
   }
-  const removeChapter = async (chapter: Chapter, name: string) => {
-    const asked = await confirm({
-      title: t('edit.journey.removingChapter', { title: name }),
-      body: t('edit.journey.removingChapterBody'),
-      action: t('edit.order.remove'),
+  // Its lessons leave the level, the lessons kept: a loss Undo takes back, so it asks nothing.
+  const removeChapter = (chapter: Chapter, name: string) => {
+    const at = journey.chapters.indexOf(chapter)
+    chapters(journey.chapters.filter((each) => each !== chapter))
+    sayUndo(t('edit.order.removed', { title: name }), () => {
+      const now = latest.current
+      change({ ...now, chapters: now.chapters.toSpliced(at, 0, chapter) })
     })
-    if (asked) chapters(journey.chapters.filter((each) => each !== chapter))
   }
   return (
     <div className="flex flex-col gap-2">
@@ -178,7 +182,7 @@ function LevelDocument({
                     journey.chapters.map((each) => (each === chapter ? { ...each, title } : each)),
                   )
                 }
-                onRemove={() => void removeChapter(chapter, name)}
+                onRemove={() => removeChapter(chapter, name)}
               />
             ),
             rows: chapter.steps.map((step) => rowOf(chapter, step)),

@@ -392,8 +392,6 @@ export const learn: LocaleResources['learn'] = {
     },
     journey: {
       removeChapter: 'Удалить главу',
-      removingChapter: 'Удалить «{{title}}»?',
-      removingChapterBody: 'Её уроки уйдут с этого уровня. Сами уроки сохранятся.',
       chapterAdded: 'Глава добавлена: {{title}}',
       chapterN: 'Глава {{n}}',
       lesson: 'Урок',

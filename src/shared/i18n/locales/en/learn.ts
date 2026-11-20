@@ -395,8 +395,6 @@ export const learn = {
     },
     journey: {
       removeChapter: 'Remove chapter',
-      removingChapter: 'Remove “{{title}}”?',
-      removingChapterBody: 'Its lessons leave this level. The lessons themselves are kept.',
       chapterAdded: 'Chapter added: {{title}}',
       chapterN: 'Chapter {{n}}',
       lesson: 'Lesson',
