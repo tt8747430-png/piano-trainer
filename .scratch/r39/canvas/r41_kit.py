@@ -156,8 +156,9 @@ WCHIPS = lambda lst: CHIPS(lst, wrap=True)
 # Lucide's minus and plus at 20, stroke 2, as the app's Stepper draws them (they were the font's − and + at 20)
 STEP_MINUS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path></svg>'
 STEP_PLUS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5v14"></path></svg>'
-def STEPPER(val, dn, up, w=64):
-    b = lambda a, s, l: f'<button type="button" aria-label="{l}" onClick="{{{{{a}}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; font: inherit; display: inline-flex; align-items: center; justify-content: center">{s}</button>'
+def STEPPER(val, dn, up, w=64, dis=False):
+    # dis: the board sets {dn}Dis and {up}Dis, and a − or + at its bound dims as the app's Stepper (muted at 50%)
+    b = lambda a, s, l: f'<button type="button" class="stp" aria-label="{l}" onClick="{{{{{a}}}}}"{f' disabled="{{{{{a}Dis}}}}"' if dis else ''} style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; font: inherit; display: inline-flex; align-items: center; justify-content: center">{s}</button>'
     return f'<div style="flex: none; display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{b(dn, STEP_MINUS, "Less")}<span style="min-width: {w}px; text-align: center; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{{val}}}}}</span>{b(up, STEP_PLUS, "More")}</div>'
 def TOGGLE(on, face=False):  # face: the switch's picture inside a row that is itself the switch, hidden from readers
     return f'<span {"aria-hidden=\"true\"" if face else f"role=\"switch\" aria-checked=\"{{{{{on}}}}}\""} style="flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{on}Bg}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.12); position: relative"><span style="position: absolute; top: 2px; left: {{{{{on}X}}}}px; width: 27px; height: 27px; border-radius: 14px; background: {SHEET}; box-shadow: 0 2px 4px rgba(51,41,33,.2)"></span></span>'
@@ -178,7 +179,7 @@ def GROUP(*rows, bg=FILL):
             else:
                 out.append(f'<button type="button" {("onClick=\"{{" + tgt + "}}\"") if tgt else ""} style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{val}<span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>')
         elif k == 'seg': out.append(f'<div style="{base.replace("align-items: center; gap: 12px; padding: 6px 12px 6px 16px", "flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 12px 12px 16px")}"><span style="font-size: 16px">{r[1]}</span>{SEGC(r[2], 44, 14)}</div>')
-        elif k == 'step': out.append(f'<div style="{base}">{lab}{STEPPER(*r[2:5])}</div>')
+        elif k == 'step': out.append(f'<div style="{base}">{lab}{STEPPER(*r[2:5], dis=len(r) > 6 and r[6])}</div>')
         elif k == 'segr': out.append(f'<div style="{base.replace("padding: 6px 12px 6px 16px", "padding: 4px 12px 4px 16px")}">{lab}<div style="flex: none; width: {r[3] if len(r) > 3 else 360}px">{SEGC(r[2], 44, 14)}</div></div>')  # a laptop row: the choice at the row's end, as a stepper; its 48 control takes 4 of padding so the row is 56, the stepper row's height (similarity)
         # a switch row is one control: the row is the switch and carries its name; the drawn switch is its picture
         elif k == 'toggle': out.append(f'<button type="button" role="switch" aria-checked="{{{{{r[2]}}}}}" onClick="{{{{{r[3]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{TOGGLE(r[2], face=True)}</button>')

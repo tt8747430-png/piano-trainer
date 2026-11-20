@@ -8,7 +8,7 @@
 TOP64 = (TOP60.replace('Scales and keys</span>', 'Metronome</span>').replace(ROUND60("Piano", KEYSI, "openKeys"), '')
          .replace(ROUND60("Settings", COG, "openSet"), ''))
 ME_ROWS = GROUP(('step', 'Time signature', 'meterL', 'mDn', 'mUp'), ('link', 'Subdivision', '{{subL}}', 'openSub'), ('link', 'Sound', 'Woodblock', ''),
-                ('step', 'Volume', 'meVolL', 'meVolDn', 'meVolUp', 80), ('toggle', 'Flash on the beat', 'meFlOn', 'meFlT'),
+                ('step', 'Volume', 'meVolL', 'meVolDn', 'meVolUp', 80, True), ('toggle', 'Flash on the beat', 'meFlOn', 'meFlT'),
                 ('link', 'Speed trainer', 'Off', ''), ('link', 'Silent bars', 'Off', ''), bg=SHEET)
 TAPP = (f'<button type="button" aria-label="Tap tempo" style="pointer-events: auto; flex: none; min-width: 72px; padding: 0 12px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; '
         f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">{HANDI}<span style="font-size: 12px; font-weight: 600">Tap</span></button>')
@@ -16,7 +16,7 @@ STARTP = PLAYCAP('{{startL}}')
 BAR64 = lambda pos: f'<div role="toolbar" aria-label="Tap tempo and start" style="position: absolute; {pos}; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 12px; pointer-events: none">{TAPP}{STARTP}</div>'
 ME64 = ME.replace("    return { ...common(st, set), setOn:", """    const states = [['Playing', !!st.playing, { playing: true }], ['40 BPM', bpm === 40, { bpm: 40 }], ['7/4, accents and rests', meter === 7, { meter: 7, lv: ['accent', 'beat', 'silent', 'beat', 'accent', 'beat', 'silent'] }]]
       .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', fg: on ? '#FEFDFB' : '#332921', pick: () => set(on ? { playing: false, bpm: null, meter: null, lv: null } : o) }));
-    return { ...common(st, set), states, setOn:""", 1).replace("startL: st.playing ? 'Stop' : 'Start' };", "startL: st.playing ? 'Stop' : 'Start', playing: !!st.playing, notPlaying: !st.playing, togglePlay: () => set({ playing: !st.playing }), meFlOn: !!st.fl, meFlOnBg: st.fl ? '#44684A' : '#DAD1C8', meFlOnX: st.fl ? 22 : 2, meFlT: () => set({ fl: !st.fl }), meVolL: (st.vol ?? 100) + '%', meVolDn: () => set({ vol: Math.max(10, (st.vol ?? 100) - 10) }), meVolUp: () => set({ vol: Math.min(100, (st.vol ?? 100) + 10) }) };")
+    return { ...common(st, set), states, setOn:""", 1).replace("startL: st.playing ? 'Stop' : 'Start' };", "startL: st.playing ? 'Stop' : 'Start', playing: !!st.playing, notPlaying: !st.playing, togglePlay: () => set({ playing: !st.playing }), meFlOn: !!st.fl, meFlOnBg: st.fl ? '#44684A' : '#DAD1C8', meFlOnX: st.fl ? 22 : 2, meFlT: () => set({ fl: !st.fl }), meVolL: (st.vol ?? 100) + '%', meVolDn: () => set({ vol: Math.max(10, (st.vol ?? 100) - 10) }), meVolUp: () => set({ vol: Math.min(100, (st.vol ?? 100) + 10) }), meVolDnDis: (st.vol ?? 100) <= 10, meVolUpDis: (st.vol ?? 100) >= 100 };")
 assert ME64 != ME, 'Metronome return not found'
 ph64 = (TOP64 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
         + SHOWSTATES() + TEMPO(72) + BEATS(110) + ME_ROWS + '</main>' + BAR64('left: 12px; right: 12px; bottom: 34px'))

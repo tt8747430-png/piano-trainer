@@ -37,6 +37,7 @@ body{margin:0}
 button{font:inherit;cursor:pointer}
 .nos{scrollbar-width:none}.nos::-webkit-scrollbar{display:none}
 main>*{flex:none}
+.stp:disabled{color:rgba(104,94,86,.5)!important;cursor:default}
 </style>
 </helmet>
 '''

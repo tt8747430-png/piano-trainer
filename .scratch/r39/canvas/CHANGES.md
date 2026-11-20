@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · pending · a stepper's − or + dims at its bound as the app's (Metronome Volume 10–100, Tuner Reference pitch 415–466 Hz); the kit's disabled rule in every board's head · Accompaniment,AccompanimentLaptop,Admin,AdminLaptop,AllSongs,AllSongsLaptop,AppLayers,AppLayersLaptop,Archive,ArchiveLaptop,Check,CheckLaptop,ChordFinder,ChordFinderLaptop,ChordPlayer,ChordPlayerLaptop,Chords,ChordsLaptop,CircleOfFifths,CircleOfFifthsLaptop,Course,CourseLaptop,Editor,EditorDraft,EditorDraftLaptop,EditorLaptop,Exercise,ExerciseLaptop,Explore,ExploreLaptop,FingerTechnique,FingerTechniqueLaptop,Folder,FolderLaptop,Groups,GroupsLaptop,Intervals,IntervalsLaptop,JazzVocabulary,JazzVocabularyLaptop,Laptop,Learn,LearnCourses,LearnCoursesLaptop,LearnLaptop,LearnLevel,LearnLevelLaptop,LearnYours,LearnYoursLaptop,Legal,LegalLaptop,Lesson,LessonLaptop,Main,Metronome,MetronomeLaptop,Pattern,PatternLaptop,PatternNew,PatternNewLaptop,PlayChord,PlayChordLaptop,PlayChromatic,PlayChromaticLaptop,PlayExercise,PlayExerciseLaptop,PlayProgression,PlayProgressionLaptop,PlayWalk,PlayWalkLaptop,PracticeResult,PracticeResultLaptop,Profile,ProfileLaptop,Progression,ProgressionEdit,ProgressionEditLaptop,ProgressionLaptop,Progressions,ProgressionsLaptop,Scales,ScalesLaptop,Section,SectionLaptop,Settings,SettingsLaptop,SharedFolder,SharedFolderLaptop,SignIn,SignInLaptop,Song,SongLaptop,SongSettings,SongSettingsLaptop,Songs,SongsLaptop,Take,TakeLaptop,Takes,TakesLaptop,Trash,TrashLaptop,Tuner,TunerLaptop,YourCourseSettings,YourCourseSettingsLaptop,YourLessonSettings,YourLessonSettingsLaptop · pending
+
 
 ## Changes
 
