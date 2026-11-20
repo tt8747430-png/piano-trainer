@@ -1,5 +1,4 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Check, Star } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -12,23 +11,11 @@ import {
 } from '@/entities/progress'
 import { runPlaceOf, useRunName } from '@/features/trainer'
 import { useLocale } from '@/shared/i18n'
-import { cn, formatLocale, useMediaQuery } from '@/shared/lib'
+import { formatLocale, useMediaQuery } from '@/shared/lib'
 import { BackButton, ButtonLink, Docked, ScreenHeader, SettingsGroup } from '@/shared/ui'
 import { useToday } from '@/widgets/practice-days'
-import { RunResults } from '@/widgets/run-results'
+import { RunHero, RunResults, StatTile } from '@/widgets/run-results'
 import { useHistoryDay } from '../model/runs'
-
-/** A figure of the run (canvas 160): its value first and large, its name under it. */
-function Tile({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="flex min-w-0 flex-col gap-0.5 card p-3">
-      <dd className="text-2xl leading-tight font-bold tracking-[-0.01em] whitespace-nowrap tabular-nums">
-        {value}
-      </dd>
-      <dt className="mt-auto pt-1 text-[0.8125rem] font-semibold text-muted-foreground">{label}</dt>
-    </div>
-  )
-}
 
 /**
  * Retry: the trainer again at the run's own level and drill; docked at the foot on a phone, under
@@ -42,7 +29,7 @@ function Retry({ run }: { run: QuizRun }) {
   const retry = (
     <ButtonLink
       size="lg"
-      className="h-13 w-full rounded-full font-bold sm:mx-auto sm:w-90"
+      className="w-full sm:mx-auto sm:w-90"
       render={
         <Link
           to="/practice/trainer/$trainerId"
@@ -129,41 +116,26 @@ function QuizResult({
     )
   const perfect = run.accuracy === 100
   const right = Math.round((run.accuracy / 100) * run.answered)
-  const Mark = perfect ? Star : Check
   const best = record && record.best > run.accuracy
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col">
       {header(run.at)}
-      <div className="mx-auto flex w-full max-w-xl flex-col gap-5 pt-2 pb-docked-8 sm:gap-6 sm:pb-4">
-        <div className="flex flex-col items-center gap-2 text-center">
-          <span
-            aria-hidden
-            className={cn(
-              'grid size-24 place-items-center rounded-full [&_svg]:size-11',
-              perfect
-                ? 'bg-paint-yellow text-on-paint-yellow'
-                : 'bg-paint-grass text-on-paint-grass',
-            )}
-          >
-            <Mark strokeWidth={2.4} className={perfect ? 'fill-current' : undefined} />
-          </span>
-          <h1 className="mt-2 font-sans text-[1.625rem] leading-tight font-bold tracking-[-0.01em] text-balance">
-            {name}
-          </h1>
+      <div className="mx-auto flex w-full max-w-xl flex-col gap-5 pt-2 pb-docked-8 sm:gap-6 sm:pb-4 lg:pt-6">
+        <RunHero perfect={perfect} title={name}>
           <p className="text-muted-foreground tabular-nums">
             {perfect
               ? t('profile.history.result.perfect')
               : t('profile.history.result.correct', { right, count: run.answered })}
           </p>
-        </div>
-        <dl className="grid grid-cols-3 gap-2">
-          <Tile
-            value={t('profile.history.accuracy', { percent: run.accuracy })}
+        </RunHero>
+        <dl className="grid grid-cols-3 gap-3">
+          <StatTile
+            figure={t('profile.history.accuracy', { percent: run.accuracy })}
             label={t('profile.history.result.accuracy')}
           />
-          <Tile value={String(run.streak)} label={t('profile.history.result.streak')} />
-          <Tile
-            value={t('profile.history.result.seconds', {
+          <StatTile figure={String(run.streak)} label={t('profile.history.result.streak')} />
+          <StatTile
+            figure={t('profile.history.result.seconds', {
               s: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(
                 run.averageMs / 1000,
               ),

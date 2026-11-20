@@ -1,3 +1,5 @@
 export { mistakeBars } from './model/mistakes'
 export { AllPractice, RunResults } from './ui/RunResults'
+export { RunHero } from './ui/RunHero'
 export { RunStaff } from './ui/RunStaff'
+export { StatTile } from './ui/StatTile'

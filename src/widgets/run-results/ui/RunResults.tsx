@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Check, ChevronRight, Star } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PlayedRun, RunStep } from '@/entities/progress'
@@ -7,46 +7,12 @@ import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { Docked } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { mistakeBars } from '../model/mistakes'
+import { RunHero } from './RunHero'
 import { RunStaff } from './RunStaff'
+import { StatTile } from './StatTile'
 
 /** A perfect run's Retry goes this much faster (the board's "Retry at 80 BPM" after 72). */
 const FASTER = 8
-
-/**
- * A stat tile (`RS_TILE`), the same three rows in every tile: the figure (its unit quieter), one line
- * of context, the label; 16 inset, rows closer than the inset.
- */
-function Tile({
-  figure,
-  unit,
-  sub,
-  label,
-}: {
-  figure: string
-  unit?: string
-  sub: string
-  label: string
-}) {
-  return (
-    <div className="flex min-w-0 flex-col gap-0.5 card p-4">
-      <dt className="order-3 pt-1.5 text-[0.8125rem] leading-[normal] font-semibold text-muted-foreground">
-        {label}
-      </dt>
-      <dd className="order-1 text-[1.5rem] leading-[normal] font-bold tracking-[-0.01em] whitespace-nowrap tabular-nums">
-        {figure}
-        {unit ? (
-          <span className="text-[0.9375rem] font-semibold tracking-normal text-muted-foreground">
-            {' '}
-            {unit}
-          </span>
-        ) : null}
-      </dd>
-      <dd className="order-2 truncate text-[0.8125rem] leading-[normal] text-muted-foreground tabular-nums">
-        {sub}
-      </dd>
-    </div>
-  )
-}
 
 /** A bar's mark under it (`RS_CAP`): ✓ in sage, Wrong notes in crimson, Paused in the deep yellow. */
 function Mark({ step }: { step: RunStep }) {
@@ -112,7 +78,6 @@ export function RunResults({
     (_, line) => line * perLine,
   )
   const r = 'profile.history.result'
-  const Verdict = perfect ? Star : Check
   const acts = (
     <div className="grid gap-2">
       {mistakes ? (
@@ -162,32 +127,19 @@ export function RunResults({
         laptop ? 'max-w-190 gap-6 pt-6 pb-12' : 'gap-5 pt-2 pb-docked-8',
       )}
     >
-      <div className="flex flex-col items-center gap-2 text-center">
-        <span
-          aria-hidden
-          className={cn(
-            'grid size-24 place-items-center rounded-full [&_svg]:size-11',
-            perfect ? 'bg-paint-yellow text-on-paint-yellow' : 'bg-paint-grass text-on-paint-grass',
-          )}
-        >
-          <Verdict strokeWidth={2.4} className={perfect ? 'fill-current' : undefined} />
-        </span>
-        <h1 className="mt-2 font-sans text-[1.625rem] leading-[normal] font-bold tracking-[-0.01em] text-balance">
-          {run.title}
-        </h1>
-      </div>
+      <RunHero perfect={perfect} title={run.title} />
       <dl className={cn('grid grid-cols-3', laptop ? 'gap-4' : 'gap-3')}>
-        <Tile
+        <StatTile
           figure={t('profile.history.accuracy', { percent: run.accuracy })}
           sub={t(`${r}.ofAll`, { right, count: bars })}
           label={t(`${r}.accuracy`)}
         />
-        <Tile
+        <StatTile
           figure={String(pauses)}
           sub={t(chords.length > 0 ? `${r}.ofChords` : `${r}.ofBars`, { count: bars })}
           label={t(`${r}.pauses`)}
         />
-        <Tile
+        <StatTile
           figure={String(run.tempo)}
           unit={t('music:tempoField.bpm')}
           sub={t(`${r}.inWait`)}
