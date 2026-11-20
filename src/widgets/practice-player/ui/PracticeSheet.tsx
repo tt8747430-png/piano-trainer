@@ -16,7 +16,7 @@ import {
   SettingsGroup,
   Sheet,
   SheetContent,
-  TransportPopover,
+  PanelPopover,
 } from '@/shared/ui'
 import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
@@ -309,15 +309,17 @@ export function PracticeSheet({
   // title at its left and no Done; on a phone the sheet.
   if (laptop)
     return (
-      <TransportPopover
+      <PanelPopover
         title={t('practiceSheet.title')}
         open={open}
         onOpenChange={setOpen}
         trigger={button}
+        side="top"
+        sideOffset={12}
         className="w-105"
       >
         {body}
-      </TransportPopover>
+      </PanelPopover>
     )
   return (
     <Sheet open={open} onOpenChange={setOpen}>

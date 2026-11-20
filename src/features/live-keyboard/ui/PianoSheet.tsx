@@ -25,7 +25,7 @@ import {
   SheetContent,
   SheetTrigger,
   SwitchRow,
-  TransportPopover,
+  PanelPopover,
 } from '@/shared/ui'
 
 /** The canvas's BLOCK: a card, 12 round, 12 16 16 inside, its name over its choice, 8 apart. */
@@ -215,15 +215,17 @@ export function PianoSheet<R extends string>({
   )
   if (laptop && anchored)
     return (
-      <TransportPopover
+      <PanelPopover
         title={t('pianoSheet.title')}
         open={open}
         onOpenChange={setOpen}
         trigger={trigger}
+        side="top"
+        sideOffset={12}
         className="w-95"
       >
         {body}
-      </TransportPopover>
+      </PanelPopover>
     )
   return (
     <Sheet open={open} onOpenChange={setOpen} hung>

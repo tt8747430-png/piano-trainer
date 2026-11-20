@@ -1,7 +1,6 @@
 import { useState, type ComponentProps, type ReactElement, type ReactNode } from 'react'
 import { useMediaQuery } from '@/shared/lib'
-import { LIBRARY_PANES, RowTrigger, Sheet, SheetContent } from '@/shared/ui'
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
+import { LIBRARY_PANES, PanelPopover, RowTrigger, Sheet, SheetContent } from '@/shared/ui'
 
 /** What an editor is given: how to close its picker, and the ref of the field it focuses as it opens. */
 export interface PickerTools {
@@ -34,18 +33,17 @@ export function Picker({
   const focus = () => field ?? true
   if (laptop)
     return (
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger render={(props) => trigger(props)} />
-        <PopoverContent
-          aria-label={title}
-          align="end"
-          initialFocus={focus}
-          className="max-h-(--available-height) w-[min(24rem,calc(100vw-2rem))] gap-3 overflow-y-auto p-4 text-base"
-        >
-          <h2 className="font-display text-xl font-semibold">{title}</h2>
-          {open ? children(tools) : null}
-        </PopoverContent>
-      </Popover>
+      <PanelPopover
+        title={title}
+        open={open}
+        onOpenChange={setOpen}
+        trigger={(props) => trigger(props)}
+        align="end"
+        initialFocus={focus}
+        className="w-[min(24rem,calc(100vw-2rem))] text-base"
+      >
+        {open ? children(tools) : null}
+      </PanelPopover>
     )
   return (
     <>
