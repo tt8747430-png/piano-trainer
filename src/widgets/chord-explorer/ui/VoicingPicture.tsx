@@ -9,17 +9,25 @@ const step = ({ midi, tone }: PlacedTone) =>
  * notes as noteheads, lowest at the foot, their steps scaled to fit; a note a step above the one under
  * it stands aside, as a second is written.
  */
+/** Each note's place, a second's upper note set aside unless the one under it already stands aside. */
+function headsOf(notes: readonly number[]): { at: number; aside: boolean }[] {
+  const heads: { at: number; aside: boolean }[] = []
+  for (const at of notes) {
+    const below = heads.at(-1)
+    heads.push({ at, aside: below !== undefined && at - below.at === 1 && !below.aside })
+  }
+  return heads
+}
+
 export function VoicingPicture({ placed }: { placed: PlacedChord }) {
   const notes = [...placed.lh, ...placed.rh].toSorted((a, b) => a.midi - b.midi).map(step)
   const low = notes[0] ?? 0
   const high = notes.at(-1) ?? 0
   const scale = Math.min(2, 16 / Math.max(1, high - low))
-  let previous: { at: number; aside: boolean } | null = null
-  const heads = notes.map((at) => {
-    const aside = previous !== null && at - previous.at === 1 && !previous.aside
-    previous = { at, aside }
-    return { cx: aside ? 15 : 10, cy: 19.5 - (at - low) * scale }
-  })
+  const heads = headsOf(notes).map(({ at, aside }) => ({
+    cx: aside ? 15 : 10,
+    cy: 19.5 - (at - low) * scale,
+  }))
   return (
     <svg viewBox="0 0 24 22" width="24" height="22" aria-hidden className="size-auto">
       <path

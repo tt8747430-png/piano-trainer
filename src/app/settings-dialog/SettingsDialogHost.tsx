@@ -1,5 +1,5 @@
 import { useNavigate, useRouterState } from '@tanstack/react-router'
-import { lazy, Suspense, useEffect, type ComponentType } from 'react'
+import { lazy, Suspense, useEffect, type ComponentType, type ReactNode } from 'react'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { opensInDialog, SettingsDialog } from '@/widgets/settings-screen'
 import { backgroundHref, rememberBackground, SETTINGS_PARAM, withSettings } from './background'
@@ -7,58 +7,38 @@ import { backgroundHref, rememberBackground, SETTINGS_PARAM, withSettings } from
 const screens = () => import('../routes/settings-screens')
 const adminScreens = () => import('../routes/admin-screens')
 
-/** Each place the dialog opens, by its address: the same page its route shows on a phone. */
-const PANES: Readonly<Record<string, ComponentType>> = {
-  '/settings/general': lazy(() => screens().then((loaded) => ({ default: loaded.GeneralPage }))),
-  '/settings/general/layouts': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.PageLayoutsPage })),
-  ),
-  '/settings/appearance': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.AppearancePage })),
-  ),
-  '/settings/storage': lazy(() => screens().then((loaded) => ({ default: loaded.StoragePage }))),
-  '/settings/connect-piano': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.MidiSettingsPage })),
-  ),
-  '/settings/connect-piano/log': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.MidiLogPage })),
-  ),
-  '/settings/connect-piano/timing': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.TimingCalibrationPage })),
-  ),
-  '/settings/select-toolbar': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.SelectToolbarPage })),
-  ),
-  '/settings/swipe-actions': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.SwipeActionsPage })),
-  ),
-  '/settings/how-to-use': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.HowToUsePage })),
-  ),
-  '/settings/feedback': lazy(() => screens().then((loaded) => ({ default: loaded.FeedbackPage }))),
-  '/settings/about': lazy(() => screens().then((loaded) => ({ default: loaded.AboutPage }))),
-  '/settings/account': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.AccountSettingsPage })),
-  ),
-  '/settings/account/profile': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.EditProfilePage })),
-  ),
-  '/settings/account/email': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.EmailPage })),
-  ),
-  '/settings/account/password': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.ChangePasswordPage })),
-  ),
-  '/settings/privacy': lazy(() =>
-    screens().then((loaded) => ({ default: loaded.ProfilePrivacyPage })),
-  ),
-  '/admin': lazy(() => adminScreens().then((loaded) => ({ default: loaded.AdminPage }))),
-}
-const ADMIN_SECTION = lazy(() =>
-  adminScreens().then((loaded) => ({ default: loaded.AdminSectionPage })),
-)
+type Pane = () => ReactNode
 
-const paneOf = (path: string): ComponentType | null =>
+/** A page loaded when the dialog first opens it, drawn by a pane made once, outside any render. */
+function page<M>(load: () => Promise<M>, pick: (loaded: M) => ComponentType): Pane {
+  const Page = lazy(() => load().then((loaded) => ({ default: pick(loaded) })))
+  return () => <Page />
+}
+
+/** Each place the dialog opens, by its address: the same page its route shows on a phone. */
+const PANES: Readonly<Record<string, Pane>> = {
+  '/settings/general': page(screens, (loaded) => loaded.GeneralPage),
+  '/settings/general/layouts': page(screens, (loaded) => loaded.PageLayoutsPage),
+  '/settings/appearance': page(screens, (loaded) => loaded.AppearancePage),
+  '/settings/storage': page(screens, (loaded) => loaded.StoragePage),
+  '/settings/connect-piano': page(screens, (loaded) => loaded.MidiSettingsPage),
+  '/settings/connect-piano/log': page(screens, (loaded) => loaded.MidiLogPage),
+  '/settings/connect-piano/timing': page(screens, (loaded) => loaded.TimingCalibrationPage),
+  '/settings/select-toolbar': page(screens, (loaded) => loaded.SelectToolbarPage),
+  '/settings/swipe-actions': page(screens, (loaded) => loaded.SwipeActionsPage),
+  '/settings/how-to-use': page(screens, (loaded) => loaded.HowToUsePage),
+  '/settings/feedback': page(screens, (loaded) => loaded.FeedbackPage),
+  '/settings/about': page(screens, (loaded) => loaded.AboutPage),
+  '/settings/account': page(screens, (loaded) => loaded.AccountSettingsPage),
+  '/settings/account/profile': page(screens, (loaded) => loaded.EditProfilePage),
+  '/settings/account/email': page(screens, (loaded) => loaded.EmailPage),
+  '/settings/account/password': page(screens, (loaded) => loaded.ChangePasswordPage),
+  '/settings/privacy': page(screens, (loaded) => loaded.ProfilePrivacyPage),
+  '/admin': page(adminScreens, (loaded) => loaded.AdminPage),
+}
+const ADMIN_SECTION = page(adminScreens, (loaded) => loaded.AdminSectionPage)
+
+const paneOf = (path: string): Pane | null =>
   PANES[path] ?? (path.startsWith('/admin/') ? ADMIN_SECTION : null)
 
 /**
@@ -81,16 +61,14 @@ export function SettingsDialogHost() {
     if (path !== null && !wide) void navigate({ href: path, replace: true })
   }, [path, wide, navigate])
   if (path === null || !wide) return null
-  const Pane = paneOf(path)
-  if (Pane === null) return null
+  const pane = paneOf(path)
+  if (pane === null) return null
   return (
     <SettingsDialog
       path={path}
       onClose={() => void navigate({ href: withSettings(backgroundHref(), null), replace: true })}
     >
-      <Suspense fallback={null}>
-        <Pane />
-      </Suspense>
+      <Suspense fallback={null}>{pane()}</Suspense>
     </SettingsDialog>
   )
 }
