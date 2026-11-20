@@ -158,7 +158,7 @@ ED_MENU = lambda sfx, vh=None: (MENUCARD(('link', 'Title and credits', 'Amazing 
                        + MENUCARD(*(() if vh else (('link', 'Export…', 'MusicXML, MIDI', ''),)), ('action', 'Print', 'closeSheet', INK)))
 FIELD = lambda label, val: (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
                             f'<input {KB["title"]} value="{val}" placeholder="{label}" style="height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
-ED_CREDITS = (FIELD('Title', 'Amazing Grace') + FIELD('Subtitle', '') + FIELD('Words', 'John Newton') + FIELD('Music', 'New Britain') + FIELD('Arranged by', 'Ana Popescu') + FIELD('Copyright', 'Public domain')
+ED_CREDITS = (FIELD('Title', 'Amazing Grace') + FIELD('Subtitle', '') + FIELD('Words', 'John Newton') + FIELD('Music', 'New Britain (American folk tune)') + FIELD('Arranged by', 'Ana Popescu') + FIELD('Copyright', 'Public domain')
               + f'<div style="display: flex">{BTN("Save", "closeSheet", h=48)}</div>')
 INSTROW = lambda name, staff, k: (f'<div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 6px 0 16px"><span style="flex: none; color: {INK}; display: flex">{KEYSI}</span>'
                                f'<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{name}</span><span style="font-size: 13px; color: {SOFT}">{staff}</span></span>'

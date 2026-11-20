@@ -71,7 +71,7 @@ SECTS = GROUP(('link', 'Verse', 'bars 1–16', 'Section.dc.html'), bg=SHEET)  # 
 PROGS = GROUP(('link', 'Gospel hymn', 'I – IV – I – V', 'Progression.dc.html'), ('link', 'Authentic cadence', 'I – V – I', 'Progression.dc.html'), ('link', 'Plagal cadence', 'I – IV – I', 'Progression.dc.html'), bg=SHEET)
 DETAILS = GROUP(('link', 'Level', 'Intermediate', ''), ('link', 'Genre', 'Not set', ''), ('link', 'Language', 'Not set', ''), ('link', 'Tags', 'Not set', ''), bg=SHEET)  # a built-in song's, as the app reads them: its course's level, the rest the learner's to set
 SONG_MORE = ROWMENU('moreOn', 'Amazing Grace', [('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Edit the original', '', 'EditorDraft.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html')])
-CREDITS = GROUP(('link', 'Title', 'Amazing Grace', ''), ('link', 'Words', 'John Newton', ''), ('link', 'Music', 'New Britain', ''), bg=SHEET)
+CREDITS = GROUP(('link', 'Title', 'Amazing Grace', ''), ('link', 'Words', 'John Newton', ''), ('link', 'Music', 'New Britain (American folk tune)', ''), bg=SHEET)
 ph = f'''{TOP('Songs.dc.html', '', LEARNED + HEARTB + DOTS())}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 60px; display: flex; flex-direction: column; gap: 16px">
 {COVER_BIG(330, 17)}{TITLE}{FACTS}{ACTS}
