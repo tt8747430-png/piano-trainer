@@ -1,5 +1,5 @@
-import { Link, useNavigate } from '@tanstack/react-router'
-import { Check, ChevronRight, Copy, Library, SearchX, Settings, Trash2 } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { Check, ChevronRight, Copy, Library, SearchX, Trash2 } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -32,11 +32,11 @@ import {
   ScreenHeader,
   SearchField,
   SortMenu,
-  type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { NewOwnSheet, type OwnKind } from './NewOwnSheet'
 import { useNewOwnActions } from './use-new-own-actions'
+import { useOwnRowActions } from './use-own-row-actions'
 import { deleteOwn } from '../model/delete-own'
 import type { OwnLibraryView, OwnShown, OwnSort } from '../model/learn-view'
 
@@ -140,48 +140,12 @@ function OwnLessonItem({
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const navigate = useNavigate()
-  const store = useOwnLessonsStoreApi()
-  const progress = useProgressStoreApi()
   const learned = useProgress(selectLearned)
   const step = lessonStepId(lesson.id)
   const done = isLearned(learned, step)
   const title = localText(lesson.title, locale)
   const length = t('own.sectionCount', { count: lesson.sections.length })
-  const actions: MenuAction[] = [
-    {
-      key: 'open',
-      label: t('own.open'),
-      icon: LessonIcon,
-      onSelect: () => void navigate({ to: '/lessons/$lessonId', params: { lessonId: lesson.id } }),
-    },
-    {
-      key: 'duplicate',
-      label: t('own.duplicate'),
-      icon: Copy,
-      onSelect: () => {
-        if (duplicateOwnLesson(store, lesson.id, t('own.copyName', { name: title })))
-          say(t('own.duplicated'))
-      },
-    },
-    {
-      key: 'settings',
-      label: t('own.settings'),
-      icon: Settings,
-      onSelect: () =>
-        void navigate({ to: '/lessons/$lessonId/settings', params: { lessonId: lesson.id } }),
-    },
-    {
-      key: 'delete',
-      label: t('own.delete'),
-      icon: Trash2,
-      destructive: true,
-      onSelect: () => {
-        const deleted = deleteOwn(store, progress, { lessons: [lesson.id] })
-        if (deleted) sayUndo(t('own.deleted', { title }), deleted.undo)
-      },
-    },
-  ]
+  const actions = useOwnRowActions({ kind: 'lesson', id: lesson.id }, title)
   return (
     <Row
       picking={picking}
@@ -232,9 +196,6 @@ function OwnCourseItem({
   onPick: () => void
 }) {
   const { t } = useTranslation('learn')
-  const navigate = useNavigate()
-  const store = useOwnLessonsStoreApi()
-  const progress = useProgressStoreApi()
   const learned = useProgress(selectLearned)
   const listed = ownCourseLessons(course, lessons)
   const done = listed.filter(({ lesson }) => isLearned(learned, lessonStepId(lesson.id))).length
@@ -248,40 +209,7 @@ function OwnCourseItem({
     mine ? lessons.filter((each) => each.id === lesson.id) : [],
   )
   const paint = PAINT[course.look.paint].fill
-  const actions: MenuAction[] = [
-    {
-      key: 'open',
-      label: t('own.open'),
-      icon: Library,
-      onSelect: () => void navigate({ to: '/courses/$courseId', params: { courseId: course.id } }),
-    },
-    {
-      key: 'duplicate',
-      label: t('own.duplicate'),
-      icon: Copy,
-      onSelect: () => {
-        if (duplicateOwnCourse(store, course.id, t('own.copyName', { name: course.title })))
-          say(t('own.duplicated'))
-      },
-    },
-    {
-      key: 'settings',
-      label: t('own.settings'),
-      icon: Settings,
-      onSelect: () =>
-        void navigate({ to: '/courses/$courseId/settings', params: { courseId: course.id } }),
-    },
-    {
-      key: 'delete',
-      label: t('own.delete'),
-      icon: Trash2,
-      destructive: true,
-      onSelect: () => {
-        const deleted = deleteOwn(store, progress, { courses: [course.id] })
-        if (deleted) sayUndo(t('own.deleted', { title: course.title }), deleted.undo)
-      },
-    },
-  ]
+  const actions = useOwnRowActions({ kind: 'course', id: course.id }, course.title)
   return (
     <Row
       fold
