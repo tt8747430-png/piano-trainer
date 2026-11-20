@@ -64,7 +64,7 @@ def SCALESTAFF(label):
     gl = lambda key, name, dx, dy: f'<sc-if value="{{{{{key}}}}}" hint-placeholder-val="{{{{false}}}}"><path transform="translate({{{{z.ax}}}} {{{{z.ay}}}}) translate({dx} {dy}) scale(.028 -.028)" d="{BRAVURA[name][0]}" fill="{INK}"></path></sc-if>'
     o += '<sc-for list="{{ss.sig}}" as="z" hint-placeholder-count="1">' + gl('z.s', 'sharp', 0, -6) + gl('z.f', 'flat', 0, -4) + '</sc-for>'
     o += f'<sc-for list="{{{{ss.led}}}}" as="l" hint-placeholder-count="0"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
-    o += (f'<sc-for list="{{{{ss.notes}}}}" as="z" hint-placeholder-count="8"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.y}}}}" rx="5" ry="3.7" transform="rotate(-20 {{{{z.x}}}} {{{{z.y}}}})" fill="{INK}"></ellipse><path d="{{{{z.stem}}}}" stroke="{INK}" stroke-width="1.1"></path>'
+    o += (f'<sc-for list="{{{{ss.notes}}}}" as="z" hint-placeholder-count="8"><path transform="translate({{{{z.hx}}}} {{{{z.y}}}}) scale(.028 -.028)" d="{BRAVURA["black"][0]}" fill="{INK}"></path><path d="{{{{z.stem}}}}" stroke="{INK}" stroke-width="1.1"></path>'
           + gl('z.a1', 'sharp', 1, -5) + gl('z.a2', 'flat', 1, -5) + gl('z.a3', 'natural', 2, -5) + gl('z.a4', 'dsharp', 1, -5) + gl('z.a5', 'dflat', -4, -5)
           + ''.join(f'<sc-if value="{{{{z.f{d}}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.x}}}}" y="{{{{z.fy}}}}" text-anchor="middle" font-size="12" font-weight="700" fill="{INK}">{d}</text></sc-if>' for d in range(1, 6))
           + '</sc-for>')
@@ -80,7 +80,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const MODE = [0, -3, -3, -3, -2, -1, 0, -3, -3], FIF = [0, 2, 4, -1, 1, 3, 5];
     const sigOf = (l, a, k) => FIF[l] + 7 * a + MODE[k], okFor = (k) => (l, a) => Math.abs(sigOf(l, a, k)) <= 7;
     const DL = [[0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 4, 5], [0, 2, 3, 4, 6], [0, 2, 3, 4, 4, 6]];
-    const kind = st.kind ?? 0, rl = st.rl ?? 4, ra = st.ra ?? 0, root = (NP[rl] + ra + 12) % 12;
+    const kind = st.kind ?? 0, rl = st.rl ?? 0, ra = st.ra ?? 0, root = (NP[rl] + ra + 12) % 12;
     const spell = (i) => { const iv = IV[kind][i % IV[kind].length], L = (rl + DL[kind][i % DL[kind].length]) % 7, pc = (root + iv) % 12, d = ((pc - NP[L] + 18) % 12) - 6; return L7[L] + A7[String(d)]; };
     const tonic = L7[rl] + A7[String(ra)], sg = sigOf(rl, ra, kind);
     const SIGW = sg === 0 ? 'no sharps or flats' : (Math.abs(sg) + (sg > 0 ? (sg === 1 ? ' sharp' : ' sharps') : (sg === -1 ? ' flat' : ' flats')));

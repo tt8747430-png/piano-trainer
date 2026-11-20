@@ -26,10 +26,10 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
         .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? { playing: false, rl: null, ra: null, kind: null } : o) })),
       // the left hand an octave under the right, as the app plays and engraves it (G3 to G4 under G4 to G5), on its own
       // bass staff, its fingers under it (piano-chords-and-scales-app 006); its ledgers over the staff where it climbs
-      ssB: (() => { const ledB = [], Yb = (k) => 102.5 - k * 3.5;
-        const notes = notesS.map((z, i) => { const k = Math.round((58 - z.y) / 3.5), y = z.y + 44.5, up = k < -1, f = fingOk && nN === 8 ? FGP[1][i] : '';
+      ssB: (() => { const ledB = [], Yb = (k) => 110.5 - k * 3.5;
+        const notes = notesS.map((z, i) => { const k = Math.round((58 - z.y) / 3.5), y = z.y + 52.5, up = k < -1, f = fingOk && nN === 8 ? FGP[1][i] : '';
           for (let j = -7; j >= k; j -= 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) }); for (let j = 5; j <= k; j += 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) });
-          return { ...z, y, ay: z.ay + 44.5, stem: up ? 'M' + (z.x + 4.6) + ' ' + y + 'V' + (y - 24) : 'M' + (z.x - 4.6) + ' ' + y + 'V' + (y + 24), fy: 160, f1: f === '1', f2: f === '2', f3: f === '3', f4: f === '4', f5: f === '5' }; });
+          return { ...z, y, ay: z.ay + 52.5, stem: up ? 'M' + (z.x + 4.6) + ' ' + y + 'V' + (y - 24) : 'M' + (z.x - 4.6) + ' ' + y + 'V' + (y + 24), fy: 160, f1: f === '1', f2: f === '2', f3: f === '3', f4: f === '4', f5: f === '5' }; });
         return { sig: sig.map((z) => ({ ...z, ay: z.ay + 69 })), notes, led: ledB }; })(),
       // the key's place on the circle of fifths, drawn as the circle draws it (owner, 2026-11-16: "what is with this relative
       // minor … and on the circle of fifths. this doenst make any sense"): its slice, IV · I · V, each major over its
@@ -48,42 +48,44 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
       practiseT: 'Practise ' + tonic + ' ' + KINDS[kind].toLowerCase() + ' in the Player' };''')
 assert SC60 != SC, 'SC return not found'
 # The run as the app engraves it (ScaleSheet, the scale's 8ths in 4/4): the meter after the key, each half bar's four
-# notes beamed, a group's stems up under its staff's middle line (44, the bass's 106) and down over it, its beam sloped at most a space, every stem
-# at least 20 long; the fingers clear of the beams.
-BEAMJS = r"""const BEAM = (sts, off) => { const mid = off ? 106 : 44, beams = [], out = sts.notes.map((z) => ({ ...z }));
+# notes beamed, a group's stems up under its staff's middle line (44, the bass's 106) and down over it, its beam sloped at most a space, its shortest
+# stem 3.4 spaces (23.8), or 2.9 (20) where the note nearest the beam is past the middle line, as Verovio's; the fingers just over the beam,
+# or over the top line when the beam is inside the staff (under it for the bass), as Verovio sets them.
+BEAMJS = r"""const BEAM = (sts, off) => { const mid = off ? 114 : 44, beams = [], out = sts.notes.map((z) => ({ ...z, hx: +(z.x - 4.13).toFixed(2) }));
   for (let g = 0; g < out.length; g += 4) { const grp = out.slice(g, g + 4); if (grp.length < 2) continue;
     const up = grp.reduce((a, z) => a + z.y, 0) / grp.length > mid, xs = grp.map((z) => z.x + (up ? 4.6 : -4.6));
-    let e1 = grp[0].y + (up ? -24 : 24), e2 = grp[grp.length - 1].y + (up ? -24 : 24); e2 = e1 + Math.max(-7, Math.min(7, e2 - e1));
-    const at = (i) => e1 + (e2 - e1) * (xs[i] - xs[0]) / (xs[xs.length - 1] - xs[0]);
-    const sh = Math.max(0, ...grp.map((z, i) => up ? at(i) - (z.y - 20) : (z.y + 20) - at(i))), L = (i) => +(at(i) + (up ? -sh : sh)).toFixed(1), t = up ? 3.5 : -3.5;
-    grp.forEach((z, i) => { z.stem = 'M' + xs[i] + ' ' + z.y + 'V' + L(i); if (off === 0) z.fy = Math.min(16, (up ? L(i) : z.y - 4) - 6); else z.fy = Math.max(133, (up ? z.y + 4 : L(i)) + 13); });
+    const e1 = grp[0].y, e2 = e1 + Math.max(-7, Math.min(7, grp[grp.length - 1].y - e1)), ys = grp.map((z) => z.y);
+    const at = (i) => e1 + (e2 - e1) * (xs[i] - xs[0]) / (xs[xs.length - 1] - xs[0]), past = up ? Math.min(...ys) < mid : Math.max(...ys) > mid, least = past ? 20 : 23.8;
+    const sh = Math.max(...grp.map((z, i) => up ? at(i) - (z.y - least) : (z.y + least) - at(i))), L = (i) => +(at(i) + (up ? -sh : sh)).toFixed(1), t = up ? 3.5 : -3.5;
+    grp.forEach((z, i) => { z.stem = 'M' + xs[i] + ' ' + z.y + 'V' + L(i); if (off === 0) z.fy = +Math.min(25.8, (up ? L(i) : z.y - 4) - 5.1).toFixed(1); else z.fy = +Math.max(137.6, (up ? z.y + 4 : L(i)) + 10.6).toFixed(1); });
     const n = grp.length - 1; beams.push({ d: 'M' + (xs[0] - .55) + ' ' + L(0) + 'L' + (xs[n] + .55) + ' ' + L(n) + 'L' + (xs[n] + .55) + ' ' + (L(n) + t) + 'L' + (xs[0] - .55) + ' ' + (L(0) + t) + 'Z' }); }
-  return { ...sts, notes: out, beams, mx: 40 + sts.sig.length * 8 + (sts.sig.length ? 4 : 0) }; };
+  return { ...sts, notes: out, beams, mx: 37 + sts.sig.length * 8 + (sts.sig.length ? 4 : 0) }; };
 """
 SC60 = (SC60.replace('// switches by key:', BEAMJS + '// switches by key:', 1)
-        .replace('x0 = 34 + nS * 8 + 22', 'x0 = 34 + nS * 8 + 38', 1)
+        .replace('x = +(x0 + dx * (i + 0.5)).toFixed(1)', 'x = +(70.6 + nS * 8 + (244 - nS * 8) * i / (nN - 1)).toFixed(1)', 1)
         .replace('      chords: tri, ss: { sig, notes: notesS, led },', '      chords: tri, ss: BEAM({ sig, notes: notesS, led }, 0),', 1)
         .replace("        return { sig: sig.map((z) => ({ ...z, ay: z.ay + 69 })), notes, led: ledB }; })(),", "        return BEAM({ sig: sig.map((z) => ({ ...z, ay: z.ay + 69 })), notes, led: ledB }, 69); })(),", 1))
-assert 'BEAM({ sig, notes' in SC60 and '}, 69); })(),' in SC60 and 'nS * 8 + 38' in SC60 and 'const BEAM' in SC60
+assert 'BEAM({ sig, notes' in SC60 and '}, 69); })(),' in SC60 and '244 - nS * 8' in SC60 and 'const BEAM' in SC60
 
 # The name as its pop-up buttons, the kit's one title part (Chords' PART and CHEV_UD): 44 serif, 54 tall, 12/8 in, 8 apart.
 PILL60 = lambda label, val, act: (f'<button type="button" aria-haspopup="dialog" aria-label="{label}: {{{{{val}}}}}" onClick="{{{{{act}}}}}" style="{PART}; flex: none">{{{{{val}}}}}{CHEV_UD}</button>')
 TITLE60F = lambda fs: (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; font-family: {SERIF}; font-size: {fs}px; font-weight: 700; line-height: 1.1">{PILL60("Tonic", "tonicL", "openRoot")}{PILL60("Scale", "kindLow", "openKind")}</div></div>')
 TITLE60 = TITLE60F(44)
-def GRANDSTAFF(label):
+def GRANDSTAFF(label, maxw=None):
     """The scale on a grand staff, each hand on its staff with its fingers, as the books print a scale (and the example's 006)."""
     tre = SCALESTAFF(label)
     inner = tre[tre.index('>') + 1:tre.rindex('</svg>')]
+    inner = inner.replace('H356"', 'H345.2"').replace('<text x="6" y="58" font-size="28"', '<text x="11" y="58" font-size="28"')
     bass = inner.replace('{{ss.', '{{ssB.')
-    for i in range(5): bass = bass.replace(f'<path d="M4 {30 + i * 7}H356"', f'<path d="M4 {92 + i * 7}H356"', 1)
-    bass = bass.replace('<text x="6" y="58" font-size="28" font-family="Noto Music, serif" fill="' + INK + '">𝄞</text>', '<text x="8" y="120" font-size="31" font-family="Noto Music, serif" fill="' + INK + '">𝄢</text>')
+    for i in range(5): bass = bass.replace(f'<path d="M4 {30 + i * 7}H345.2"', f'<path d="M4 {100 + i * 7}H345.2"', 1)
+    bass = bass.replace('<text x="11" y="58" font-size="28" font-family="Noto Music, serif" fill="' + INK + '">𝄞</text>', '<text x="11" y="128" font-size="31" font-family="Noto Music, serif" fill="' + INK + '">𝄢</text>')
     # the piano's brace before the system's line, as the app's engraving
-    brace = (f'<path d="M4 30V120" stroke="{INK}" stroke-width="1.4"></path><path d="M356 30V120" stroke="{INK}" stroke-width=".9"></path>'
-             f'<path d="M-1 30C-9 38 -1 66 -8 75C-1 84 -9 112 -1 120" fill="none" stroke="{INK}" stroke-width="1.6" stroke-linecap="round"></path>')
+    brace = (f'<path d="M4 30V128" stroke="{INK}" stroke-width="1.4"></path><path d="M345.2 30V128" stroke="{INK}" stroke-width="1"></path>'
+             f'<path d="M1 30C-7 38 1 70 -6 79C1 88 -7 120 1 128" fill="none" stroke="{INK}" stroke-width="1.6" stroke-linecap="round"></path>')
     # the meter in Bravura's time digits, as the engine engraves it: each digit two spaces tall, centred on its half
     meter = lambda key, y0: ''.join(f'<path transform="translate({{{{{key}.mx}}}} {y0 - 7 + d}) scale(.028 -.028)" d="{BRAVURA["t4"][0]}" fill="{INK}"></path>' for d in (0, 14))
     beams = lambda key: f'<sc-for list="{{{{{key}.beams}}}}" as="b" hint-placeholder-count="2"><path d="{{{{b.d}}}}" fill="{INK}"></path></sc-for>'
-    return f'<svg viewBox="-10 0 370 168" width="100%" role="img" aria-label="{label}" style="display: block">{inner}{bass}{brace}{meter("ss", 44)}{meter("ssB", 106)}{beams("ss")}{beams("ssB")}</svg>'
+    return f'<svg viewBox="-17 -5.9 362.6 169.3" width="100%" role="img" aria-label="{label}" style="display: block; overflow: visible{f'; max-width: {maxw}px; margin: 0 auto' if maxw else ''}">{inner}{bass}{brace}{meter("ss", 44)}{meter("ssB", 114)}{beams("ss")}{beams("ssB")}</svg>'
 # the two hands' figures stand on their staves; only the honest note for a scale with no standard fingering stays under them
 FING60 = (f'<sc-if value="{{{{noFing}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 0; text-align: center; font-size: 15px; color: {SOFT}">No standard fingering for this scale</p></sc-if>')
 SCCARDS = lambda cols: (CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"')
@@ -99,7 +101,7 @@ KEYG60 = (f'<sc-if value="{{{{hasKey}}}}" hint-placeholder-val="{{{{true}}}}"><s
 # One page, no tabs (owner, 2026-11-16: "are the tabs correct? do we need them … should we somehow merge them"): the
 # Key tab repeated the Scale tab's staff for two rows, and the three tabs hid less than a screen between them; the
 # run, the scale's chords and its key now read down one page, each once.
-VIEW60 = lambda cols: (CARD(GRANDSTAFF("The scale up one octave, each hand on its staff with its fingers") + FING60, "16px 12px")
+VIEW60 = lambda cols, maxw=None: (CARD(GRANDSTAFF("The scale up one octave, each hand on its staff with its fingers", maxw) + FING60, "16px 12px")
     + f'<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 14px; font-weight: 600; color: {INK}">{{{{chordsT}}}}</h3>' + SCCARDS(cols) + '</section></sc-if>'
     + (KEYG60 if cols < 7 else ''))
 
@@ -138,7 +140,7 @@ ph60 = (TOP60 + KBPAGE_OPEN + f'<div style="flex: none; margin: 8px 0 0">{KB60("
 # that column, and the floating bar is centred on it.
 lm60 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP60)
         + f'<div style="flex: none; margin-top: 8px">{KB60("kbLE", 180)}</div>'
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 28px 0 120px"><div style="width: min(880px, calc(100% - 80px)); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{TITLE60F(56)}' + VIEW60(7).replace('" style="display: block">', '" style="display: block; max-width: 640px; margin: 0 auto">')
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 28px 0 120px"><div style="width: min(880px, calc(100% - 80px)); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{TITLE60F(56)}' + VIEW60(7, 640)
         + f'{KEYG60}{PRACT60}</div></div>'
         + BAR60('left: 50%; translate: -50% 0; bottom: 24px; width: 560px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 100px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'left: calc(50% + 160px); bottom: 100px') + TEMPOPOP('left: calc(50% - 400px); bottom: 100px') + '</div>')
 phone('Scales', 'Scales and keys, phone', ph60, SC60, SHEETS60)

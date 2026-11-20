@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · Scales' run engraved as the app: the engine's staff gap and spread, Bravura heads, Verovio's stems and fingers, the app's room; the laptop's 640 cap restored · Scales,ScalesLaptop · pending
 
 
 ## Changes
