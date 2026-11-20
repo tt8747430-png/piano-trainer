@@ -17,10 +17,16 @@ const INSET = 14
 const CLEF = 54
 const SLOT = 86
 const ADD_AT = 28
+/** A chord's name is a button over its whole bar, 3 units in from each end (the canvas's `cname`). */
+const NAME_INSET = 3
 const ADD_ROOM = 56
 const END_ROOM = 20
 /** Verovio's page runs 6 units further under the staff than the canvas's picture. */
 const VEROVIO_FOOT = 6
+/** ...and 12 units further over it: the canvas's picture starts 18 units over the top line. */
+const VEROVIO_HEAD = 12
+/** The chords' names stand in a row 40 pixels tall over the canvas's picture, at every size. */
+const NAMES_ROW = 40
 
 /** The empty bar drawn after the last chord: where it starts, each staff's lines, their paint. */
 interface EmptyBar {
@@ -140,8 +146,12 @@ export function ChordSheet({
     >
       <div ref={scroller} className="relative overflow-x-auto overscroll-x-contain">
         <div
-          className="relative pt-[21px]"
-          style={{ width: width + 2 * INSET * unit, paddingInline: INSET * unit }}
+          className="relative"
+          style={{
+            width: width + 2 * INSET * unit,
+            paddingInline: INSET * unit,
+            paddingTop: NAMES_ROW - VEROVIO_HEAD * unit,
+          }}
         >
           {/* The engraving's own room under the staff, past the canvas's, given back. */}
           {room > 0 ? (
@@ -212,12 +222,12 @@ export function ChordSheet({
                   aria-label={t('practice:chords.next.change', { chord: name })}
                   title={t('practice:chords.next.change', { chord: name })}
                   onClick={() => onName(i)}
-                  className={`absolute top-0 flex h-11 -translate-x-1/2 items-center rounded-[10px] px-2 font-display text-[1.0625rem] whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                  className={`absolute top-0 flex h-11 items-center justify-center rounded-[10px] font-display text-[1.0625rem] whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                     i === at || !several
                       ? 'font-bold text-link'
                       : 'font-semibold text-muted-foreground'
                   }`}
-                  style={{ left: bar.middle - bar.left }}
+                  style={{ insetInline: NAME_INSET * unit }}
                 >
                   {name}
                 </button>
