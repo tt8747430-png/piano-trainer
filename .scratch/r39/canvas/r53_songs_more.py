@@ -514,7 +514,7 @@ SETWIN_JS = js('    const __sg = (() => {\n' + _SGBODY(SONG_SG) + '\n    })();\n
 _WBACK = IF('isPublish', IB('Settings', CHEV_L, 'back'))
 SETWIN_P = lambda body: THINGWIN(False, 'winOn', 'closeWin', '{{pageT}}', body, _WBACK)
 SETWIN_L = lambda body: THINGWIN(True, 'winOn', 'closeWin', '{{pageT}}', body, _WBACK, '{{winPad}}')
-SETWIN_JS = SETWIN_JS.replace('winOn, closeWin', "winPad: page === 'publish' ? 12 : 24, winOn, closeWin", 1)
+SETWIN_JS = SETWIN_JS.replace('winOn, closeWin', "winPad: page === 'publish' ? 12 : 32, winOn, closeWin", 1)
 # the pane holds one column: Settings' groups, or Publish's form over its preview (the window is 720, never two columns)
 _SWBODY = SHOWSTATES() + IF('isSettings', SSET, 'true') + IF('isPublish', SPUB)
 swph = SONG_PH + SETWIN_P(_SWBODY) + TOAST(40, z=70)  # the toast over the window it answers

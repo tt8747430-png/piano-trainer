@@ -106,7 +106,7 @@ print('r54 trainer, check ok')
 PE_SRC = r'''
     const S = (o) => set(o), page = st.page ?? 'edit', role = st.role ?? 'Editor';''' + TOAST_JS + r'''
     const style = st.style ?? 'Pop', draft = st.draft ?? 'Draft · 2 changes', name = st.name ?? 'Axis of Awesome';
-    return { ...common(st, set), isEditor: role === 'Editor', isLearner: role !== 'Editor', isEdit: page === 'edit', isSet: page === 'settings', isPub: page === 'publish', notEdit: page !== 'edit', winOn: page !== 'edit', closeWin: () => S({ page: 'edit', sheet: null }), winPad: page === 'publish' ? 12 : 24,
+    return { ...common(st, set), isEditor: role === 'Editor', isLearner: role !== 'Editor', isEdit: page === 'edit', isSet: page === 'settings', isPub: page === 'publish', notEdit: page !== 'edit', winOn: page !== 'edit', closeWin: () => S({ page: 'edit', sheet: null }), winPad: page === 'publish' ? 12 : 32,
       pageT: { edit: 'Edit progression', settings: 'Settings', publish: 'Publish' }[page], back: () => S({ page: page === 'publish' ? 'settings' : 'edit' }), backT: page === 'publish' ? 'Settings' : 'Edit progression',
       goSet: () => S({ page: 'settings', sheet: null }), goPub: () => S({ page: 'publish', sheet: null }), draftT: draft, styles: chipsOf(['Pop', 'Rock', 'Jazz', 'Blues', 'Classical', 'R&B / Soul', 'Gospel', 'Modal', 'Theory'], style, (x) => S({ style: x, draft: 'Draft · 3 changes' })),
       name, setName: (e) => S({ name: e.target.value, draft: 'Draft · 3 changes' }),

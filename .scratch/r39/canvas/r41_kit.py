@@ -238,7 +238,7 @@ def BSHEET(cond, title, body, done='Done', tall=False, back='', maxh=''):
 # it); on a phone a tall sheet (BSHEET's 86%, the grabber, Back, the title, Done). on/close: the state's names; title:
 # its markup's text ({{pageT}}); back: the Back of a page inside, shown by its own condition, or ''.
 _WXI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>'
-def THINGWIN(lap, on, close, title, body, back='', pad='24', shown='true'):
+def THINGWIN(lap, on, close, title, body, back='', pad='32', shown='true'):
     if not lap:
         return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{{shown}}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div>'
                 f'<section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; height: 86%; box-sizing: border-box; border-radius: 22px 22px 0 0; background: {PAGE}; display: flex; flex-direction: column">'

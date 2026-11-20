@@ -50,7 +50,7 @@ export function SettingsWindow({
         <header
           className={cn(
             'flex h-14 shrink-0 items-center gap-1 border-b border-border pr-2',
-            back ? 'pl-3' : 'pl-6',
+            back ? 'pl-3' : 'pl-8',
           )}
         >
           {back}
