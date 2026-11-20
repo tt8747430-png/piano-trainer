@@ -167,12 +167,54 @@ RS_JS = lambda mode: js(r'''
       shows: ['After mistakes', 'Perfect run'].map((l) => ({ l, bg: show === l ? '#332921' : '#EEE9E2', fg: show === l ? '#FEFDFB' : '#332921', pick: () => S({ show: l, view: 'results' }) })),
       playing: !!st.playing, playLabel: st.playing ? 'Pause' : 'Play',
       togglePlay: () => { if (st.playing) { S({ playing: false }); return; } S({ playing: true }); setTimeout(() => S({ playing: false, view: 'results' }), 1400); },
-      kb: calmKeys(53, 79, CM7, 402, 112), kbL: calmKeys(36, 96, CM7, 1462, 170), chordT: st.playing ? 'Chord 12 of 12' : 'Chord 11 of 12', prog: st.playing ? '100%' : '92%',
+      kb: calmKeys(53, 79, CM7, 402, 112), kbL: calmKeys(36, 96, CM7, 1462, 170), chordT: 'Key 1 of 12', prog: st.playing ? '100%' : '8%',
       again: () => S({ view: 'run', playing: false }), closeSheet: () => S({ sheet: null }) };''')
 
 # the run, in the Player: the bar (Close, the exercise, Wait mode), the staff with the run, the keys, the transport
 RS_KEYS = lambda h, k='kb': KEYS(h, k, edge=True, ring=False)  # the one instrument, edge to edge
 
+
+# The chord run as the app plays it (`inversionsExercise`): Cmaj7 climbing through its inversions, a chord each half
+# note in both hands, the left an octave under the right, written on the grand staff in 4/4 as the app's engraver sets
+# it (PlayExercise's Hanon, round 69): root position, 1st, 2nd, 3rd, the octave, then back down.
+INV = [[0, 2, 4, 6], [2, 4, 6, 7], [4, 6, 7, 9], [6, 7, 9, 11], [7, 9, 11, 13], [6, 7, 9, 11], [4, 6, 7, 9], [2, 4, 6, 7]]
+def PV_INV(w, bars, first):
+    tre = lambda s: 48 - (s - 2) * 4           # diatonic steps from C4; E4 the treble's bottom line at 48
+    bas = lambda s: 136 - (s + 10) * 4         # G2 (ten steps under C4) the bass's bottom line at 136
+    lines = ''.join(f'<path d="M14 {16 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path><path d="M14 {104 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path>' for i in range(5))
+    out = lines + f'<path d="M14.5 16V136" stroke="{INK}" stroke-width="1.2"></path><path d="M{w - .6} 16V48M{w - .6} 104V136" stroke="{INK}" stroke-width="1.2"></path>'
+    out += f'<path d="M11 16C4 24 12 62 5 76C12 90 4 128 11 136C1 124 9 90 2 76C9 62 1 28 11 16Z" fill="{INK}"></path>'
+    out += f'<text x="18" y="54" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄞</text><text x="18" y="120" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄢</text>'
+    x0 = 52
+    if first == 0:
+        out += ''.join(f'<text x="58" y="{y}" text-anchor="middle" font-family="Noto Music, serif" font-size="19" font-weight="700" fill="{INK}">4</text>' for y in (31, 47, 119, 135))
+        x0 = 72
+    else:
+        out += f'<text x="14" y="4" font-size="11" fill="{SOFT}">{first + 1}</text>'
+    bw = (w - x0) / bars
+    def chord(x, steps, y, mid, ledgers):
+        up = sum(steps) / len(steps) < mid           # under the middle line the stem goes up, as an engraver sets it
+        ys = [y(st) for st in steps]
+        g = ''
+        for i, (st, yy) in enumerate(zip(steps, ys)):
+            second = (up and i > 0 and st - steps[i - 1] == 1) or (not up and i < len(steps) - 1 and steps[i + 1] - st == 1)
+            hx = x + (9.6 if up else -9.6) if second else x
+            g += ''.join(f'<path d="M{hx - 7:.1f} {ly}H{hx + 7:.1f}" stroke="{INK}" stroke-width="1"></path>' for ly in ledgers(yy))
+            g += f'<ellipse cx="{hx:.1f}" cy="{yy}" rx="5.4" ry="3.9" transform="rotate(-24 {hx:.1f} {yy})" fill="none" stroke="{INK}" stroke-width="1.7"></ellipse>'
+        sx = x + 4.8 if up else x - 4.8
+        g += f'<path d="M{sx:.1f} {max(ys) if up else min(ys)}V{min(ys) - 28 if up else max(ys) + 28}" stroke="{INK}" stroke-width="1.1"></path>'
+        return g
+    tled = lambda yy: [ly for ly in (56, 64) if yy >= ly] + [ly for ly in (8, 0) if yy <= ly]
+    bled = lambda yy: [ly for ly in (96, 88, 80, 72, 64) if yy <= ly]
+    for b in range(bars):
+        bx = x0 + b * bw
+        if b:
+            out += f'<path d="M{bx:.1f} 16V48M{bx:.1f} 104V136" stroke="{INK}" stroke-width=".8"></path>'
+        for h in range(2):
+            steps = INV[(first + b) * 2 + h]
+            x = bx + bw * (0.27 + 0.48 * h)
+            out += chord(x, steps, tre, 6, tled) + chord(x, [st - 7 for st in steps], bas, -4, bled)
+    return f'<svg viewBox="0 -8 {w} 184" width="{w}" height="184" aria-hidden="true" style="display: block; flex: none">{out}</svg>'
 
 def RS_RUNVIEW(lap):
     close = 'ChordsLaptop.dc.html' if lap else 'Chords.dc.html'
@@ -183,8 +225,10 @@ def RS_RUNVIEW(lap):
     # round 63: the run's music is the page's subject, so it stands on the paper, never in a lone card (edge-lines law
     # 3); on a laptop it is set larger (zoom 1.35) and centred in the band over the transport, never a 760px card
     # with 300px of bare paper under it
-    staff = RS_RUNSTAFF(6 if lap else 4, 120 if lap else 84, True).replace(f'color: {RS_SAGE_INK}; font-weight: 700" aria-label="Correct">✓', f'color: transparent" aria-hidden="true">·')
-    staff = f'<div style="zoom: 1.35">{staff}</div>' if lap else staff
+    # the exercise's music engraved as the app sets it, as PlayExercise's: two lines of two bars on a phone, one of
+    # four on a laptop (round 69); its results keep the run's chords as whole notes (RS_RUNSTAFF)
+    inv = lambda n, cw, at: f'<div style="display: flex; justify-content: safe center; overflow: hidden">{PV_INV(cw, n, at)}</div>'
+    staff = f'<div style="zoom: 1.35">{inv(4, 872, 0)}</div>' if lap else inv(2, 370, 0) + inv(2, 370, 2)
     prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{chordT}}}}</span></div>')
     # Setup · Play · Tempo, as every run's (the run boards' RUNBAR)
@@ -192,7 +236,7 @@ def RS_RUNVIEW(lap):
     # the music scrolls in what is left, the keys and Play stay at the foot (a phone on its side, round 66)
     inner = f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 80px; display: flex; flex-direction: column; gap: 16px">{staff}{prog}</div><div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>'
     if lap:
-        return (bar + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1018px; max-width: 100%; display: flex; flex-direction: column; gap: 8px">{staff}{prog}</div>'
+        return (bar + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1177px; max-width: 100%; display: flex; flex-direction: column; gap: 8px">{staff}{prog}</div>'
                 f'<div style="flex: 1"></div></main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>{RUNBAR("left: 50%; translate: -50% 0; bottom: 186px", transport, "Setup, play and tempo")}')
     # the transport floats, as the Player's: the kit's glass dock 12 above the keys, reserving no space; the music's
     # scroll ends clear of it (owner, 2026-11-18: "the floating actions guidelines are broken by that implementation").

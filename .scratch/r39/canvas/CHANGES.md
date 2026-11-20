@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · PlayChord's run is the Inversions exercise on the grand staff, Key 1 of 12, as the app and PlayExercise · PlayChord,PlayChordLaptop · pending
+
 
 
 
