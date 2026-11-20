@@ -11,7 +11,7 @@ import {
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
-import { formatLocale } from '@/shared/lib'
+import { dateSaid } from '@/shared/lib'
 
 /**
  * Signed in to an account that is to be deleted (ADR 0116): the learner keeps it (the deletion is
@@ -38,12 +38,7 @@ export function DeletionGate() {
     const result = await auth.cancelDeletion()
     if (result.ok) setPurgeAfter(null)
   }
-  const date =
-    purgeAfter === null
-      ? ''
-      : new Intl.DateTimeFormat(formatLocale(locale), { dateStyle: 'long' }).format(
-          new Date(purgeAfter),
-        )
+  const date = purgeAfter === null ? '' : dateSaid(purgeAfter, locale)
   return (
     <AlertDialog open={account !== null && purgeAfter !== null}>
       {/* The AppLayers board's gate, the welcome's box: 22 corners, 20 about, a 20 title, then Sign out

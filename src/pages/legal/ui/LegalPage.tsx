@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { BackButton, RowLink, ScreenHeader, SettingsGroup } from '@/shared/ui'
-import { formatLocale } from '@/shared/lib'
+import { dateSaid } from '@/shared/lib'
 
 /** When either page last changed. */
 const UPDATED = new Date(Date.UTC(2026, 10, 4))
@@ -32,7 +32,7 @@ const TERMS = ['use', 'account', 'publish', 'content', 'thirdParty', 'contact', 
 export function LegalPage({ page }: { page: 'privacy' | 'terms' }) {
   const { t } = useTranslation('legal')
   const locale = useLocale()
-  const date = new Intl.DateTimeFormat(formatLocale(locale), { dateStyle: 'long' }).format(UPDATED)
+  const date = dateSaid(UPDATED, locale)
   const other = page === 'privacy' ? 'terms' : 'privacy'
   const sections =
     page === 'privacy'

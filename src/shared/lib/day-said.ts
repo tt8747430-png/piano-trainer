@@ -22,3 +22,7 @@ export function daySaid(at: string | number, locale: string, now: number, opens 
 /** A time of day as the language writes it, short: "14:20" in English (en-GB) and Russian. */
 export const clockSaid = (at: string | number | Date, locale: string): string =>
   new Intl.DateTimeFormat(formatLocale(locale), { timeStyle: 'short' }).format(new Date(at))
+
+/** A date in full, as a notice or a policy dates itself: "20 November 2026" in English (en-GB). */
+export const dateSaid = (at: string | number | Date, locale: string): string =>
+  new Intl.DateTimeFormat(formatLocale(locale), { dateStyle: 'long' }).format(new Date(at))

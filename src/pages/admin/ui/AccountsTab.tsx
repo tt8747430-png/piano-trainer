@@ -6,10 +6,9 @@ import type { AccountRole } from '@/shared/api/auth'
 import { useLocale } from '@/shared/i18n'
 import { useAdmin } from '@/shared/lib/admin'
 import { ChoiceChips, ConfirmDialog, Said, SearchField, SettingsGroup } from '@/shared/ui'
-import { useLoaded } from '@/shared/lib'
 import { useChangeProblem } from '../model/use-change-problem'
 import { FailureLine, LoadedState } from './LoadedState'
-import { daySaid, formatLocale, useNow } from '@/shared/lib'
+import { dateSaid, daySaid, useLoaded, useNow } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
 import { Face } from './Face'
 import { nameOf } from '../model/name-of'
@@ -45,8 +44,6 @@ export function AccountsTab() {
     if (account.role === 'admin' && role !== 'admin') setDemoting({ account, role })
     else setRole(account, role)
   }
-  const joined = (iso: string) =>
-    new Intl.DateTimeFormat(formatLocale(locale), { dateStyle: 'long' }).format(new Date(iso))
   return (
     <div className="flex flex-col gap-3">
       <SearchField value={query} onChange={setQuery} label={t('accounts.search')} />
@@ -79,7 +76,7 @@ export function AccountsTab() {
                         </span>
                       ) : null}
                       <span className="text-[0.8125rem] text-muted-foreground">
-                        {t('accounts.joined', { date: joined(account.joinedAt) })} ·{' '}
+                        {t('accounts.joined', { date: dateSaid(account.joinedAt, locale) })} ·{' '}
                         {account.lastSignInAt
                           ? t('accounts.lastSeen', {
                               date: daySaid(account.lastSignInAt, locale, now, false),
