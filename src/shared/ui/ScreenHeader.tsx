@@ -108,8 +108,9 @@ export function ScreenHeader({
         // The laptop boards' three heads: a place's 88 head, its title on the 56 column (LPLACEBAR);
         // a sub-page's 56 bar flush at the top, Back 40 in and its last button 28 from the trailing edge
         // (LPAD, LTITLEBAR), its title large after Back or a page's own. Each Back's -4 optical inset is
-        // the row's.
-        large && !back ? '' : 'lg:pr-7 lg:pl-11 lg:pt-0',
+        // the row's. A bar on the page's column keeps the page's even gutter, so the column centres
+        // where the page's does and Back stands on the content's edge.
+        large && !back ? '' : column === true ? 'lg:pt-0' : 'lg:pr-7 lg:pl-11 lg:pt-0',
       )}
     >
       {large ? (
