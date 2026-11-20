@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · Chords' laptop board opens on Cmaj7 as the app; its staff's lines, barlines and ledgers at an engraver's thickness (1.3, 1.4, 1.4 in its 10-unit space) · Chords,ChordsLaptop · pending
 
 
 ## Changes
