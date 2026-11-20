@@ -5,7 +5,7 @@ import { PieceLink, pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { StepLink } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { LessonIcon } from '@/shared/ui'
+import { LessonIcon, ProgressBar } from '@/shared/ui'
 import {
   continuePlace,
   continueStep,
@@ -39,22 +39,17 @@ export function ContinueAction() {
   const place = continuePlace(next, learned)
   const progress =
     'course' in next ? courseProgress(next.course, learned) : journeyProgress(next.journey, learned)
-  const share = progress.total === 0 ? 0 : progress.done / progress.total
   const count =
     'n' in place
       ? t('lessonOf', { n: place.n, count: place.count })
       : t('progress', { learned: place.done, total: place.total })
   const bar = (
-    <span
-      role="progressbar"
-      aria-label={t('continueProgress')}
-      aria-valuemin={0}
-      aria-valuemax={100}
-      aria-valuenow={Math.round(share * 100)}
-      className="block h-1.5 overflow-hidden rounded-pill bg-muted"
-    >
-      <span className="block h-full rounded-pill bg-learned" style={{ width: `${share * 100}%` }} />
-    </span>
+    <ProgressBar
+      done={progress.done}
+      total={progress.total}
+      label={t('continueProgress')}
+      className="flex-none"
+    />
   )
   const face = (
     <>

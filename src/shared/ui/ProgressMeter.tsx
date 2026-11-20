@@ -1,17 +1,55 @@
+import { Meter } from '@base-ui/react/meter'
 import { cn } from '@/shared/lib'
 
-/** How much of something is done, as a thin bar in the learned paint. */
-export function ProgressBar({ done, total }: { done: number; total: number }) {
+/** A bar's paint: the learned green, the one action's honey, ink, or soft ink. */
+const TONES = {
+  learned: 'bg-learned',
+  primary: 'bg-primary',
+  ink: 'bg-foreground',
+  soft: 'bg-muted-foreground',
+} as const
+
+/**
+ * How much of something is: a thin bar filled in its paint, on the kit's meter. Named (`label`, and
+ * `said` for its value in words: "40% of your time"), a screen reader hears it as a meter; unnamed,
+ * it is a picture of a count its row says already. It changes at once: a bar's width never animates.
+ */
+export function ProgressBar({
+  done,
+  total,
+  label,
+  said,
+  tone = 'learned',
+  className,
+}: {
+  done: number
+  total: number
+  label?: string
+  said?: string
+  tone?: keyof typeof TONES
+  /** Its height and width where the row sets them (`h-2 max-w-40`). */
+  className?: string
+}) {
   return (
-    <span
-      aria-hidden
-      className="block h-1.5 min-h-1.5 flex-1 overflow-hidden rounded-pill bg-muted"
+    <Meter.Root
+      value={done}
+      max={Math.max(total, 1)}
+      aria-label={label}
+      aria-hidden={label === undefined ? true : undefined}
+      {...(said === undefined ? {} : { getAriaValueText: () => said })}
+      render={<span />}
+      className={cn('block h-1.5 min-h-1.5 flex-1', className)}
     >
-      <span
-        className="block h-full rounded-pill bg-learned transition-[width] duration-300 ease-out"
-        style={{ width: `${total === 0 ? 0 : (done / total) * 100}%` }}
-      />
-    </span>
+      <Meter.Track
+        render={<span />}
+        className="block size-full overflow-hidden rounded-pill bg-muted"
+      >
+        <Meter.Indicator
+          render={<span />}
+          className={cn('block h-full rounded-pill', TONES[tone])}
+        />
+      </Meter.Track>
+    </Meter.Root>
   )
 }
 

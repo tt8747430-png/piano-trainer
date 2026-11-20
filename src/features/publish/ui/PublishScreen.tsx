@@ -21,6 +21,7 @@ import {
   GroupRows,
   LIBRARY_PANES,
   PAINT,
+  ProgressBar,
   ScreenHeader,
   Segmented,
   Sheet,
@@ -263,19 +264,13 @@ function PublishForm({
             {t('public.findableCount', { filled: found.filled, of: found.of })}
           </span>
         </div>
-        <span
-          role="meter"
-          aria-label={t('public.findable')}
-          aria-valuemin={0}
-          aria-valuemax={found.of}
-          aria-valuenow={found.filled}
-          className="block h-1.5 overflow-hidden rounded-pill bg-muted"
-        >
-          <span
-            className="block h-full rounded-pill bg-primary transition-[width] duration-200"
-            style={{ width: `${(100 * found.filled) / found.of}%` }}
-          />
-        </span>
+        <ProgressBar
+          done={found.filled}
+          total={found.of}
+          label={t('public.findable')}
+          tone="primary"
+          className="flex-none"
+        />
       </div>
       <Field label={t('public.titleField')}>
         <input

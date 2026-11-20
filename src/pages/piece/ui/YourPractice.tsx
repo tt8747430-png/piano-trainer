@@ -9,7 +9,7 @@ import { nextStep, practiceSummary, useTakes, type NextStep } from '@/entities/t
 import { loopParam } from '@/features/practice'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
-import { ButtonLink, SettingsGroup } from '@/shared/ui'
+import { ButtonLink, ProgressBar, SettingsGroup } from '@/shared/ui'
 import { formatLocale } from '@/shared/lib'
 
 /** A row of the card: its name, then what it says. */
@@ -132,24 +132,14 @@ function ShareRow({
     <div className={ROW}>
       <dt className="shrink-0 font-medium">{label}</dt>
       <dd className="flex min-w-0 flex-1 items-center justify-end gap-3">
-        <span
-          role="meter"
-          aria-label={label}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={value}
-          aria-valuetext={t('practice.share', { percent: said(value) })}
-          className="block h-2 max-w-40 flex-1 overflow-hidden rounded-pill bg-muted"
-        >
-          <span
-            className={
-              solid
-                ? 'block h-full rounded-pill bg-foreground'
-                : 'block h-full rounded-pill bg-muted-foreground'
-            }
-            style={{ width: `${value}%` }}
-          />
-        </span>
+        <ProgressBar
+          done={value}
+          total={100}
+          label={label}
+          said={t('practice.share', { percent: said(value) })}
+          tone={solid ? 'ink' : 'soft'}
+          className="h-2 min-h-2 max-w-40"
+        />
         <span className="w-12 text-end text-muted-foreground tabular-nums">{said(value)}</span>
       </dd>
     </div>
