@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · PENDINGSHA · the Practice sheet: no Metronome sound row or page (the Player's click does not follow it; its home is the Metronome); Wait without a piano says "Connect a piano or show the Keyboard." · PlayerApp,PlayerDesk · pending
+- 2026-11-20 · 036a7416 · the Practice sheet: no Metronome sound row or page (the Player's click does not follow it; its home is the Metronome); Wait without a piano says "Connect a piano or show the Keyboard." · PlayerApp,PlayerDesk · pending
 - 2026-11-20 · 23dc1755 · the Player opens on Play (its Practice's default), as the app · PlayerApp,PlayerDesk (every Player board) · pending
 - 2026-11-20 · 2288af07 · the Player's credit "New Britain (American folk tune)" and its one section "Verse", as the song and the app · PlayerApp,PlayerDesk (every Player board) · pending
 
