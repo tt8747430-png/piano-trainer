@@ -5,11 +5,11 @@ import { toggled } from '@/shared/lib'
 import {
   MIDDLE_C,
   midi,
-  noteName,
   parseChordSymbol,
   parseNoteName,
   pitchClass,
   pitchClassOf,
+  printedNote,
   type Midi,
   type PitchClass,
 } from '@/shared/lib/music'
@@ -57,7 +57,7 @@ export function questionAnswer(answer: LessonAnswer): QuestionAnswer {
     if (!spelled) throw new RangeError(`A question answers with "${name}", which is not a note`)
     const pc = pitchClassOf(spelled)
     const key: number = last === null ? MIDDLE_C + pc : nextKey(last, pc, order)
-    marks.set(midi(key), { tone: 'scale', label: noteName(spelled) })
+    marks.set(midi(key), { tone: 'scale', label: printedNote(spelled) })
     last = key
   }
   return { keys: [...marks.keys()], marks, inOrder: order !== null }

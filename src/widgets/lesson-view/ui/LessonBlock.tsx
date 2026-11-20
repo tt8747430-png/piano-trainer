@@ -61,10 +61,13 @@ function OwnKeys({
   )
 }
 
-/** One link on its card, as a lesson's rows are. */
+/**
+ * One link as the Lesson boards draw it: on the paper with no card, a 60 row from the column's edge,
+ * its 44 tile, its title and the chevron.
+ */
 function LinkCard({ title, target }: { title: string; target: LessonLink }) {
   return (
-    <ul className="card px-2">
+    <ul className="[&_a]:min-h-15 [&_a]:px-0 [&_[data-slot=row-tile]_svg]:size-5">
       <li>
         <LessonLinkRow title={title} target={target} />
       </li>

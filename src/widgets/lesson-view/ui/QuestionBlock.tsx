@@ -94,7 +94,7 @@ export function QuestionBlock({
         {state.stage === 'right' || state.stage === 'answer' ? null : (
           <Button
             variant="soft"
-            className="h-11 rounded-pill px-4 text-[0.9375rem] font-bold"
+            className="h-11 rounded-pill border-transparent bg-muted px-4 text-[0.9375rem] font-bold hover:bg-(--hairline)"
             onClick={() => {
               dispatch({ type: 'reveal' })
               play(answerSounds(said, answer.keys))
