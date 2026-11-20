@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · pending · the editor boards' chord names bold in the book serif, as the Player boards' · Editor,EditorLaptop,EditorDraft,EditorDraftLaptop · pending
+
 ## Changes
 
 - 2026-11-20 · 40da8ebd · the editor's score is the song's Melody over the Piano's grand staff, as the app engraves it; the key's sharp on F · Editor,EditorLaptop,EditorDraft,EditorDraftLaptop,Song,SongLaptop · v672

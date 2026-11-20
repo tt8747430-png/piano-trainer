@@ -72,7 +72,7 @@ function partsOf(
             node: print(
               { kind: 'tempo', tempo },
               <>
-                <span className="font-music">{unitNote(tempoUnit ?? beatUnit(meter))}</span>={' '}
+                <span className="font-music">{unitNote(tempoUnit ?? beatUnit(meter))}</span> ={' '}
                 {tempoMark(tempo, tempoUnit ?? beatUnit(meter), meter)}
               </>,
             ),
@@ -139,7 +139,7 @@ export function LabelRow({
             style={{
               left: measure.x + LABEL_INSET_PX,
               maxWidth: Math.max(0, until - measure.x - 2 * LABEL_INSET_PX),
-              fontSize: `${0.75 * size}rem`,
+              fontSize: `${Math.max(0.75, 0.875 * size)}rem`,
             }}
           >
             {parts.map(({ key, node }, at) => (
@@ -155,7 +155,7 @@ export function LabelRow({
         <span
           key={at}
           aria-hidden
-          className="absolute bottom-0.5 font-display leading-none font-semibold whitespace-nowrap"
+          className="absolute bottom-0.5 font-display leading-none font-bold whitespace-nowrap"
           style={{ left: x, fontSize: px }}
         >
           <RowSymbol symbol={symbol} />

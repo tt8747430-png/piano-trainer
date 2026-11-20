@@ -130,7 +130,7 @@ def score_grand(w, systems, sel=None, size=1.0):
         for bi, b in enumerate(bars):
             ch, mel, pno = GBARS[b]; bw = widths[bi]; nb = beats[bi]; lead = 16 * s; span = bw - lead - 10 * s
             at = lambda t: x + lead + t / nb * span
-            if ch: out.append(f'<text x="{at(0) - 5 * s:.1f}" y="{mtop - 10 * s:.1f}" font-size="{15 * s:.0f}" font-weight="700" fill="{INK}">{ch}</text>')
+            if ch: out.append(f'<text x="{at(0) - 5 * s:.1f}" y="{mtop - 10 * s:.1f}" font-size="{15 * s:.0f}" font-weight="700" font-family="{SERIF}" fill="{INK}">{ch}</text>')
             t = 0; evx = []
             for ei, e in enumerate(mel):
                 p, d, syl = e[0], e[1], e[2]; ex = at(t); on = sel == (b, ei); col = '#8C6418' if on else INK
