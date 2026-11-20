@@ -10,19 +10,12 @@ import {
   type JourneyStep,
 } from '@/entities/lesson'
 import { STAGE_PAINT } from '@/entities/step'
-import { DraftActions, DraftStatus, useAddLesson, useJourneyDraft } from '@/features/edit-original'
+import { PublishWord, useAddLesson, useJourneyDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { cn, slug } from '@/shared/lib'
 import { ActionMenu, PAINT, say, sayUndo, ScaleIcon } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  AddRow,
-  DocText,
-  languageActions,
-  DraftGate,
-  RowGroups,
-  type RowOrder,
-} from '@/widgets/content-editor'
+import { AddRow, DocText, DraftGate, RowGroups, type RowOrder } from '@/widgets/content-editor'
 import { rowKey, withOrder } from '../model/journey-order'
 import { useStepTitle } from '../model/use-step-title'
 
@@ -224,9 +217,10 @@ function LevelDocument({
 
 /**
  * A level in Edit mode (R29 B4, content as data ADR 0116), in place on its page: the
- * level's draft as one document, one language at a time (chosen in the draft's menu); a new lesson
- * made on the server unpublished and opened in the lesson editor. Its bar (`bar`) carries where the
- * draft stands, Publish and the draft's menu before the page's Done; until the draft opens, why not.
+ * level's draft as one document, in the app's language; a new lesson
+ * made on the server unpublished and opened in the lesson editor. Its bar (`bar`) carries, as the
+ * board's EDITR: Publish (one tap, a word that reads Published until the next change) before the
+ * page's Done; until the draft opens, why not.
  */
 export function LevelEditor({
   journey,
@@ -237,16 +231,13 @@ export function LevelEditor({
   bar: (actions: ReactNode) => ReactNode
 }) {
   const { t } = useTranslation(['learn', 'editor', 'common'])
-  const { t: words } = useTranslation('learn')
-  const shown = useLocale()
-  const [locale, setLocale] = useState<Locale>(shown)
+  const locale = useLocale()
   const draft = useJourneyDraft(journey)
   const addLesson = useAddLesson()
   const navigate = useNavigate()
-  // The last change, where the document opens again (another language): kept as it was written.
+  // The last change, where the document opens again: kept as it was written.
   const [written, setWritten] = useState<{ opened: number; journey: Journey } | null>(null)
   const { load } = draft
-  const title = localText(load.state === 'ready' ? load.value.title : journey.title, shown)
   const save = (next: Journey) => {
     setWritten({ opened: draft.opened, journey: next })
     draft.save(next)
@@ -270,16 +261,11 @@ export function LevelEditor({
     <>
       {bar(
         load.state === 'ready' ? (
-          <>
-            <DraftStatus draft={draft} className="me-1" />
-            <DraftActions
-              draft={draft}
-              title={title}
-              unreadable={t('learn:edit.journey.unreadable')}
-              onReset={draft.reopen}
-              more={languageActions(locale, setLocale, words)}
-            />
-          </>
+          <PublishWord
+            draft={draft}
+            unreadable={t('learn:edit.journey.unreadable')}
+            onReset={draft.reopen}
+          />
         ) : null,
       )}
       <div className="page-column mt-4 flex min-w-0 flex-col gap-6">

@@ -1,6 +1,5 @@
 export { DraftGate, DraftScreen, NotOpen } from './ui/DraftScreen'
 export { LocalScreen } from './ui/LocalScreen'
-export { LANGUAGE_NAMES, languageActions } from './ui/LanguageChoice'
 export { NewCourseSheet } from './ui/NewCourseSheet'
 export { NewProgressionSheet } from './ui/NewProgressionSheet'
 export { AddRow, type Addable, type AddGroup } from './ui/AddRow'

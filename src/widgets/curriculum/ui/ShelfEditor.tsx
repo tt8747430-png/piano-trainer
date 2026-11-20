@@ -4,7 +4,7 @@ import { Fragment, lazy, Suspense, useRef, useState, type ReactNode } from 'reac
 import { useTranslation } from 'react-i18next'
 import { courseById, SHELVES, type CourseOrder, type Shelf, SHELF_PAINT } from '@/entities/course'
 import { hasAbout } from '@/entities/lesson'
-import { DraftActions, DraftStatus, useCourseOrderDraft } from '@/features/edit-original'
+import { PublishWord, useCourseOrderDraft } from '@/features/edit-original'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { PAINT } from '@/shared/ui'
@@ -117,14 +117,14 @@ function ShelvesDocument({
  * The Courses' shelves in Edit mode (R29 B4, content as data ADR 0116 r25), in place on Learn: each
  * shelf's courses rows dragged into order (a course changes shelf by its own Shelf, in its editor),
  * New course at a shelf's end; the order a draft of `catalog` `courses`, published as one. Its bar
- * (`bar`) carries the draft's status, Publish and menu before the page's Done.
+ * (`bar`) carries Publish before the page's Done, as the board's EDITR.
  */
 export function ShelfEditor({ bar }: { bar: (actions: ReactNode) => ReactNode }) {
   const { t } = useTranslation(['learn', 'editor'])
   const locale = useLocale()
   const draft = useCourseOrderDraft()
   const [making, setMaking] = useState<Shelf | null>(null)
-  // The last change, where the document opens again (another language): kept as it was written.
+  // The last change, where the document opens again: kept as it was written.
   const [written, setWritten] = useState<{ opened: number; order: CourseOrder } | null>(null)
   const { load } = draft
   const save = (next: CourseOrder) => {
@@ -135,15 +135,11 @@ export function ShelfEditor({ bar }: { bar: (actions: ReactNode) => ReactNode })
     <>
       {bar(
         load.state === 'ready' ? (
-          <>
-            <DraftStatus draft={draft} className="me-1" />
-            <DraftActions
-              draft={draft}
-              title={t('learn:courses')}
-              unreadable={t('learn:edit.courses.editorsOnly')}
-              onReset={draft.reopen}
-            />
-          </>
+          <PublishWord
+            draft={draft}
+            unreadable={t('learn:edit.courses.editorsOnly')}
+            onReset={draft.reopen}
+          />
         ) : null,
       )}
       <div className="page-column mt-4 flex min-w-0 flex-col gap-2">
