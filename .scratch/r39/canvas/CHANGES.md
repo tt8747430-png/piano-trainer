@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · Chords' heads Bravura's filled whole head with the app's outlines; a lone staff without its opening line · Chords,ChordsLaptop · pending
 
 
 ## Changes
