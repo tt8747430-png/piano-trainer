@@ -4,7 +4,7 @@ import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
 import { ShareFolderSheet, useFolderShare } from '@/features/share-folder'
-import { useForgetScreens, useMediaQuery, useUp } from '@/shared/lib'
+import { useMediaQuery, useUp } from '@/shared/lib'
 import {
   BackButton,
   LIBRARY_PANES,
@@ -16,6 +16,7 @@ import {
 import { Button } from '@/shared/ui/primitives/button'
 import { PlaceBar } from '@/widgets/song-library'
 import type { LibraryPage } from '../model/use-library-page'
+import { useLeaveFolder } from '../model/use-leave-folder'
 
 /**
  * A list's bar (R72's LISTPAGE): Back, which goes up a level, named so; its title, All songs,
@@ -50,7 +51,7 @@ export function LibraryHeader({
   const { select } = page
   const up = useUp()
   const navigate = useNavigate()
-  const forget = useForgetScreens()
+  const leaveFolder = useLeaveFolder()
   const shareOf = useFolderShare()
   const [sharing, setSharing] = useState(false)
   // Select only where there is something to choose.
@@ -87,13 +88,7 @@ export function LibraryHeader({
   if (!folder) return null
   const name = nameOf(folder)
   const above = folder.parent ? folders.find((each) => each.id === folder.parent) : undefined
-  // Out of the library (archived): to where it stood, its folder or Home; its screens gone for Back.
-  const leave = () => {
-    forget(`/songs/folders/${folder.id}`)
-    return above
-      ? navigate({ to: '/songs/folders/$folderId', params: { folderId: above.id }, replace: true })
-      : navigate({ to: '/songs', replace: true })
-  }
+  const leave = () => leaveFolder(folder.id, above)
   const actions: (MenuAction | false)[] = [
     // Its name and its colour, both edited in place under the bar (`FolderEditPanel`).
     edit !== undefined && {

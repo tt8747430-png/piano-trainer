@@ -1,5 +1,4 @@
-import { useForgetScreens } from '@/shared/lib'
-import { Link, useNavigate, useParams } from '@tanstack/react-router'
+import { Link, useParams } from '@tanstack/react-router'
 import { Archive, FolderInput, LayoutGrid, Users } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -22,6 +21,7 @@ import {
   ScreenHeader,
   SettingsGroup,
 } from '@/shared/ui'
+import { useLeaveFolder } from '../model/use-leave-folder'
 
 /**
  * A folder's Settings (R29, the owner's yes to ST17; a song's Settings page's shape): how its rows
@@ -50,7 +50,6 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
   const acts = useLibraryActs()
   const permits = usePermissions()
   const may = (act: 'archiveFolder' | 'deleteFolder') => permits(act, { builtIn: folder.builtIn })
-  const navigate = useNavigate()
   const [moving, setMoving] = useState<Moving | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [sharing, setSharing] = useState(false)
@@ -60,17 +59,10 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
     groups.kind === 'ready'
       ? groups.shared.filter((each) => each.mine && each.folderKey === folder.id).length
       : 0
-  const forget = useForgetScreens()
+  const leaveFolder = useLeaveFolder()
   const name = nameOf(folder)
   const above = folder.parent ? folders.find((each) => each.id === folder.parent) : undefined
-  // Out of the library (archived or deleted): to where it stood, its folder or Home.
-  const leave = () => {
-    // Its screens are gone for Back too: the folder's page and its Settings.
-    forget(`/songs/folders/${folder.id}`)
-    return above
-      ? navigate({ to: '/songs/folders/$folderId', params: { folderId: above.id }, replace: true })
-      : navigate({ to: '/songs', replace: true })
-  }
+  const leave = () => leaveFolder(folder.id, above)
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader column title={t('folder.settings')} back={<BackButton />} />
