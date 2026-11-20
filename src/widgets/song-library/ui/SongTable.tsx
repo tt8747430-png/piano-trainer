@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PieceLink, type Entry } from '@/entities/piece'
-import { menuOf, RowMore, type RowAction } from '@/shared/ui'
+import { CheckMark, menuOf, RowMore, type RowAction } from '@/shared/ui'
 import { PieceMark } from '@/widgets/piece-cover'
 import { useEntryFace } from '@/widgets/piece-list'
-import { SelectCheck } from './SelectRow'
 import { useSongStanding } from './use-song-status'
 
 /**
@@ -49,7 +48,7 @@ function SongTableRow({
             onClick={() => select.toggle(entry.id)}
             className="flex min-h-10 w-full min-w-0 items-center gap-4 rounded-control text-left text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none [&_[data-slot=row-tile]]:size-10 [&_[data-slot=row-tile]]:rounded-[9px]"
           >
-            <SelectCheck checked={select.chosen(entry.id)} />
+            <CheckMark checked={select.chosen(entry.id)} />
             <PieceMark entry={entry} />
             <span className="truncate text-[0.9375rem]/[normal] font-semibold">{face.title}</span>
           </button>

@@ -27,6 +27,7 @@ import { cn } from '@/shared/lib'
 import {
   BackButton,
   ChoiceChips,
+  CheckMark,
   FloatingActions,
   LessonIcon,
   NewDial,
@@ -50,20 +51,6 @@ type Sort = 'recent' | 'name'
 type Pick = `${'lesson' | 'course'}:${string}`
 
 /** Select's mark, the canvas's YCHECK: a 24 circle leading the row, ink and ticked once picked. */
-function PickMark({ on }: { on: boolean }) {
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        'mx-2.5 grid size-6 shrink-0 place-items-center rounded-pill border-2 text-card transition-colors duration-200 ease-out',
-        on ? 'border-foreground bg-foreground' : 'border-input',
-      )}
-    >
-      {on ? <Check className="size-3.5" strokeWidth={3} /> : null}
-    </span>
-  )
-}
-
 /** A row's shape, phone and laptop (the canvas's LROW and TROW_L): the laptop's columns follow its name. */
 function Row({
   picking,
@@ -112,7 +99,7 @@ function Row({
           fold ? 'gap-0 lg:gap-2' : 'gap-3',
         )}
       >
-        {picking ? <PickMark on={picked} /> : null}
+        {picking ? <CheckMark checked={picked} className="mx-2.5" /> : null}
         {indent}
         {link}
       </div>

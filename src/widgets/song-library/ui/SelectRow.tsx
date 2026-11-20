@@ -1,31 +1,13 @@
 import { useDraggable, useDroppable } from '@dnd-kit/core'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Check, GripVertical } from 'lucide-react'
+import { GripVertical } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { CARRY, INTO, useLibraryDnd } from '../model/library-dnd'
-import { ROW_BODY, ROW_CARD, ROW_CONTROL, ROW_FLAT, ROW_LIBRARY_FACE } from '@/shared/ui'
+import { CheckMark, ROW_BODY, ROW_CARD, ROW_CONTROL, ROW_FLAT, ROW_LIBRARY_FACE } from '@/shared/ui'
 import { useCardLook } from './card-look'
-
-/**
- * The check a chosen row wears (R72's CHECKBOX, 24): filled while chosen, a ring while not, fading in
- * before the row's picture as Select starts.
- */
-export function SelectCheck({ checked }: { checked: boolean }) {
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        'grid size-6 shrink-0 place-items-center rounded-pill border-2 transition-colors duration-200 ease-out motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-90 motion-safe:duration-200',
-        checked ? 'border-transparent bg-selected text-selected-foreground' : 'border-input',
-      )}
-    >
-      {checked ? <Check className="size-3.5" strokeWidth={3} /> : null}
-    </span>
-  )
-}
 
 /**
  * A row while Select is on (R72's SONGROW in Select, Flat's): the same card, a tap choosing it or
@@ -109,7 +91,7 @@ export function SelectRow({
           onClick={onToggle}
           className={cn(ROW_CONTROL, '-mr-3 ml-1')}
         >
-          <SelectCheck checked={checked} />
+          <CheckMark checked={checked} />
         </button>
         {/* The row's face chooses it too, as the check does: one stop for a keyboard, the check's.
             Held or dragged, it carries the row. */}
@@ -166,7 +148,7 @@ export function RowInHand({
     <div aria-hidden className={cn(ROW_CARD, 'relative cursor-grabbing elevation-3')}>
       {carried ? null : (
         <span className={cn(ROW_CONTROL, '-mr-3 ml-1')}>
-          <SelectCheck checked={checked} />
+          <CheckMark checked={checked} />
         </span>
       )}
       <div className={ROW_BODY}>{children}</div>

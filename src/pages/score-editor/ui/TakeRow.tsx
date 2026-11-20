@@ -3,10 +3,9 @@ import { Download, Ellipsis, NotebookPen, Trash2 } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Take } from '@/entities/take'
-import { ActionMenu, PlayButton, say } from '@/shared/ui'
+import { ActionMenu, CheckMark, PlayButton, say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { cn } from '@/shared/lib/cn'
-import { SelectCheck } from '@/widgets/song-library'
 import { useScoreEditorContext } from '../model/editor-context'
 import { useTakeTitle } from '../model/use-take-title'
 import { TakeName } from './TakeName'
@@ -52,7 +51,7 @@ export function TakeRow({
           className="flex min-h-16 w-full items-center gap-3 py-2 pr-1 pl-3 text-left transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
         >
           <span className="grid size-11 shrink-0 place-items-center">
-            <SelectCheck checked={chosen} />
+            <CheckMark checked={chosen} />
           </span>
           <span className="min-w-0 flex-1">
             <TakeName take={take} />

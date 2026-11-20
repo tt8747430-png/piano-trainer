@@ -7,6 +7,7 @@ import { useLocale } from '@/shared/i18n'
 import { cn, daySaid, useMediaQuery } from '@/shared/lib'
 import {
   BackButton,
+  CheckMark,
   LIBRARY_PANES,
   RowFace,
   RowMore,
@@ -17,7 +18,7 @@ import {
 import { Button } from '@/shared/ui/primitives/button'
 import { PieceMark } from '@/widgets/piece-cover'
 import { useEntryFace } from '@/widgets/piece-list'
-import { PLACE_COLUMN, PlaceBar, SelectAct, SelectCheck, SelectDock } from '@/widgets/song-library'
+import { PLACE_COLUMN, PlaceBar, SelectAct, SelectDock } from '@/widgets/song-library'
 
 /** One row of the Archive or the Trash: what it is, when it went there, and its ··· acts. */
 export interface ShelfItem {
@@ -136,7 +137,7 @@ function ShelfRow({
         onClick={onToggle}
         className={lead}
       >
-        <SelectCheck checked={chosen} />
+        <CheckMark checked={chosen} />
         {face}
       </button>
     ) : song ? (
