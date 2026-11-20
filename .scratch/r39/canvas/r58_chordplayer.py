@@ -15,15 +15,15 @@ r'''    // each bar's chords and their lengths in beats; the chorus's 4th bar ho
     const TAGS0 = [{ intro: 'Intro I', mains: ['Main A', 'Main B'], into: 'Fill in' }, { mains: ['Main C'], into: 'Break' }, { mains: ['Main D'], ending: 'Ending I' }];
     const TAGS = st.tags || TAGS0, follow = st.follow ?? false;
     const tagLine = (t) => [t.intro, t.mains.join(', '), t.into, t.ending].filter((x) => x && x !== 'None').join(' · ');''', 1)
-CP58 = CP58.replace("    const secs = SECS.map(([m, name, rep, bars], si) => ({ m, name, rep: '× ' + rep, bars: bars.map((cs, bi) => ({ cs: cs.map((c) => ({ c })), bg: play[0] === si && play[1] === bi ? '#EDC684' : !st.playing && slot.si === si && slot.bi === bi ? '#F6E7C8' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi] }) })) }));",
+CP58 = CP58.replace("    const secs = SECS.map(([m, name, rep, bars], si) => ({ m, name, rep: '× ' + rep, bars: bars.map((cs, bi) => ({ cs: cs.map((c) => ({ c })), bg: play[0] === si && play[1] === bi ? '#EDC684' : !st.playing && (slot || {}).si === si && (slot || {}).bi === bi ? '#F6E7C8' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi] }) })) }));",
 r'''    const beatNow = st.playing ? ((st.pos ?? 4) % 2) * 2 : -1;
     const secs = SECS.map(([m, name, rep, bars], si) => ({ m, name, rep: '× ' + rep, tag: follow ? tagLine(TAGS[si] || { mains: [] }) : '', tagOn: follow, openTag: () => set({ sheet: 'tag', tagAt: si }),
       bars: bars.map((cs, bi) => { const ls = lens(si, bi, cs), sum = ls.reduce((a, b) => a + b, 0), wrong = sum !== 4, now = play[0] === si && play[1] === bi;
         return { cs: cs.map((c, ci) => ({ c, grow: String(ls[ci]), pick: () => set({ sheet: 'chord', sel: [si, bi], selC: ci }) })),
           ticks: Array.from({ length: Math.max(sum, 1) }, (_, k) => ({ bg: now && k === beatNow ? '#332921' : '#B9AEA3', w: k === 0 ? '10px' : '6px' })),
           wrong, wrongTip: 'Bar ' + (bi + 1) + ' holds ' + sum + ' beats, not 4: tap to set its chords’ lengths',
-          bg: now ? '#EDC684' : !st.playing && slot.si === si && slot.bi === bi ? '#F6E7C8' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi], selC: 0 }) }; }) }));
-    const selB = st.sel ? SECS[st.sel[0]][3][st.sel[1]] : SECS[0][3][0], selCi = st.selC ?? 0, selSym = selB[selCi] || selB[0];
+          bg: now ? '#EDC684' : !st.playing && (slot || {}).si === si && (slot || {}).bi === bi ? '#F6E7C8' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi], selC: 0 }) }; }) }));
+    const selB = (st.sel ? SECS[st.sel[0]][3][st.sel[1]] : SECS[0][3][0]) || ['C'], selCi = st.selC ?? 0, selSym = selB[selCi] || selB[0];
     const selLen = st.sel ? lens(st.sel[0], st.sel[1], selB)[selCi] : 4;
     const setLen = (d) => { if (!st.sel) return; const k = st.sel[0] + ':' + st.sel[1], cur = lens(st.sel[0], st.sel[1], selB).slice(); cur[selCi] = Math.max(1, Math.min(8, cur[selCi] + d)); set({ len: { ...LEN, [k]: cur } }); };
     const editSecs = (fn) => { const c = JSON.parse(JSON.stringify(SECS)); const l = JSON.parse(JSON.stringify(LEN)); fn(c, l); set({ secs: c, len: l, draft: true }); };
@@ -140,7 +140,7 @@ def CHART59(cols, gap, bh, bf, plus):
             + f'<span style="flex: 1"></span><span aria-label="Move {{{{x.name}}}}" style="flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: {SOFT}; cursor: grab">{GRIP}</span></div>')
     tag = f'<sc-if value="{{{{x.tagOn}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{x.openTag}}}}" aria-label="On the Genos: {{{{x.tag}}}}" style="align-self: flex-start; max-width: 100%; height: 44px; margin: -6px 0 -2px; padding: 0; border: 0; background: transparent; font: inherit; color: {INK}"><span style="height: 30px; padding: 0 12px; border-radius: 8px; box-shadow: inset 0 0 0 1px {LINE}; display: flex; align-items: center; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.tag}}}}</span></button></sc-if>'
     return (f'<div style="display: flex; flex-direction: column; gap: 16px">'
-            f'<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-size: 22px; font-weight: 600">My verse and chorus</span><sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; font-weight: 600; color: #7A5418">Draft</span></sc-if><span style="display: inline-flex; align-items: center; gap: 8px; align-self: center; font-size: 13px; font-weight: 600; color: {SOFT}"><span style="width: 8px; height: 8px; border-radius: 4px; background: #3F7A4A"></span>Live</span></div>'
+            f'<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-size: 22px; font-weight: 600">My verse and chorus</span><sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; font-weight: 600; color: #7A5418">Draft</span></sc-if><sc-if value="{{{{liveOn}}}}" hint-placeholder-val="{{{{true}}}}"><span style="display: inline-flex; align-items: center; gap: 8px; align-self: center; font-size: 13px; font-weight: 600; color: {SOFT}"><span style="width: 8px; height: 8px; border-radius: 4px; background: #3F7A4A"></span>Live</span></sc-if></div>'
             f'<sc-for list="{{{{sec59}}}}" as="x" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px">{head}{tag}'
             f'<div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: {gap}px">{box}{plusb}</div></section></sc-for>'
             + ADDCARD('Add section', 'addSec') + '</div>')
@@ -254,11 +254,12 @@ CP58 = CP58.replace("    return { ...common(st, set), sec59,", r"""    const LAY
       mk1: sheetsL === 'My verse and chorus' ? '✓' : '', mk2: sheetsL === 'Blues in F' ? '✓' : '', mk3: sheetsL === 'Autumn Leaves sketch' ? '✓' : '',
       sheetsL, sheetsOn: st.sheet === 'sheets', openSheets: (e) => set({ sheet: 'sheets', menuPos: ANCHOR(e, 280) }),
       openS1: () => set({ sheet: null, sheetName: 'My verse and chorus' }), openS2: () => set({ sheet: null, sheetName: 'Blues in F', toastT: 'Opened Blues in F' }), openS3: () => set({ sheet: null, sheetName: 'Autumn Leaves sketch', toastT: 'Opened Autumn Leaves sketch' }),
-      newSheet: () => set({ sheet: null, sheetName: 'Untitled sheet', toastT: 'New sheet' }),
+      newSheet: () => set({ sheet: null, sheetName: 'New chord sheet', secs: [['A', 'Verse', 1, []]], len: {}, bpm: 100, reps: 0, vars: [1], fresh: true, draft: false }),
+      liveOn: !st.fresh, undoOff: !!st.fresh, playOff: !!st.fresh && !(st.secs || []).some((x) => x[3].length),
       toastOn: !!st.toastT, toastT: st.toastT ?? '', toastUndo: !!st.lastLay, undo: () => set({ lay: st.lastLay || LAY0, toastT: null, lastLay: null }),""", 1)
 assert CP58.count('LAY0') >= 4, 'R76 JS patch missed'
 CP58 = CP58.replace("states: [{ l: 'Following the Genos', bg: follow ? '#332921' : '#EEE9E2', pick: () => set({ follow: !follow }) }],",
-  "states: [{ l: 'Following the Genos', bg: follow ? '#332921' : '#EEE9E2', pick: () => set({ follow: !follow }) }, { l: 'Edit layout', bg: st.editLay ? '#332921' : '#EEE9E2', pick: () => set({ editLay: !st.editLay, dragP: null }) }, { l: 'Genos minimized', bg: (st.lay && st.lay.genos.mode === 'min') ? '#332921' : '#EEE9E2', pick: () => set({ follow: true, lay: { ...(st.lay || {}), keys: (st.lay || {}).keys || { at: 'bottom', size: 'M', hid: false }, dock: (st.lay || {}).dock || { at: 'float', mode: 'full', hid: false }, chords: (st.lay || {}).chords || { at: 'right', size: 'Wide', hid: false }, genos: { at: 'right', hid: false, mode: (st.lay && st.lay.genos.mode === 'min') ? 'full' : 'min' } } }) }],", 1)
+  "states: [{ l: 'Following the Genos', bg: follow ? '#332921' : '#EEE9E2', pick: () => set({ follow: !follow }) }, { l: 'Edit layout', bg: st.editLay ? '#332921' : '#EEE9E2', pick: () => set({ editLay: !st.editLay, dragP: null }) }, { l: 'Genos minimized', bg: (st.lay && st.lay.genos.mode === 'min') ? '#332921' : '#EEE9E2', pick: () => set({ follow: true, lay: { ...(st.lay || {}), keys: (st.lay || {}).keys || { at: 'bottom', size: 'M', hid: false }, dock: (st.lay || {}).dock || { at: 'float', mode: 'full', hid: false }, chords: (st.lay || {}).chords || { at: 'right', size: 'Wide', hid: false }, genos: { at: 'right', hid: false, mode: (st.lay && st.lay.genos.mode === 'min') ? 'full' : 'min' } } }) }, { l: 'New sheet (first run)', bg: st.fresh ? '#332921' : '#EEE9E2', pick: () => set(st.fresh ? { fresh: false, secs: null, len: null, bpm: null, reps: null, vars: null, sheetName: null } : { sheet: null, sheetName: 'New chord sheet', secs: [['A', 'Verse', 1, []]], len: {}, bpm: 100, reps: 0, vars: [1], fresh: true, draft: false }) }],", 1)
 assert 'Genos minimized' in CP58
 
 # the sheet's name opens the sheets: the last opened first, as it opens on (a chart opens where it was left)
@@ -288,7 +289,7 @@ ZONE = lambda cond, act, label, pos: f'<sc-if value="{{{{{cond}}}}}" hint-placeh
 DRAGHINT = f'<sc-if value="{{{{dragOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 50%; top: 100px; transform: translateX(-50%); z-index: 47; height: 36px; padding: 0 14px; border-radius: 18px; background: {INK}; color: {SHEET}; display: flex; align-items: center; font-size: 14px; font-weight: 600; white-space: nowrap">{{{{dragT}}}}</div></sc-if>'
 TRAY = (f'<sc-if value="{{{{anyHidden}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: none; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 0 16px 8px"><span style="font-size: 14px; color: {SOFT}">Hidden</span>'
         f'<sc-for list="{{{{hiddenPanels}}}}" as="h" hint-placeholder-count="1"><button type="button" onClick="{{{{h.show}}}}" style="height: 44px; padding: 0 14px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600">+ {{{{h.l}}}}</button></sc-for></div></sc-if>')
-BARR = (f'<sc-if value="{{{{layNot}}}}" hint-placeholder-val="{{{{true}}}}">' + UNDOB + GEAR() + DOTSB + '</sc-if>'
+BARR = (f'<sc-if value="{{{{layNot}}}}" hint-placeholder-val="{{{{true}}}}">' + UNDOB.replace('<button type="button"', '<button type="button" class="ibd" disabled="{{undoOff}}"', 1) + GEAR() + DOTSB + '</sc-if>'
         + f'<sc-if value="{{{{layEdit}}}}" hint-placeholder-val="{{{{false}}}}">' + TB('Reset', 'resetLay') + TB('Done', 'doneLay') + '</sc-if>')
 
 # the Genos, three sizes: Full (every control), Compact (Start/Stop and Main A–D in a row), Minimized (a pill)
@@ -310,6 +311,10 @@ def GENOS76(pos, wide):
     return f'<div style="{pos}">{full}{comp}{pill}</div>'
 
 # the Controls: Full (Style · Key · Tempo · Repeats · Play) or Play only, floating or as a row under the bar
+# Play rests at half strength on a sheet with no chord yet, as the app's (a new sheet's empty Verse)
+_pb = 'aria-pressed="{{playing}}" onClick="{{togglePlay}}"'
+assert CP_DOCK.count(_pb) == 1
+CP_DOCK = CP_DOCK.replace(_pb, _pb + ' class="ibd" disabled="{{playOff}}"', 1)
 DOCKFULL = DOCK(CP_DOCK, '{{dockPos}}')
 DOCKFULL = DOCKFULL[:-len('</div>')] + PTAG('pickD', 'openLayD', 'Controls', 'left: 8px; top: -26px') + '</div>'
 PLAYONLY = f'<div style="position: absolute; right: 16px; {{{{dockPos}}}}; z-index: 40; width: 68px; height: 68px; border-radius: 34px; {GLASSFX}; display: flex; align-items: center; justify-content: center">{PLAYBTN()}' + PTAG('pickD', 'openLayD', 'Controls', 'right: 0; top: -50px') + '</div>'

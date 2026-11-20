@@ -38,6 +38,7 @@ button{font:inherit;cursor:pointer}
 .nos{scrollbar-width:none}.nos::-webkit-scrollbar{display:none}
 main>*{flex:none}
 .stp:disabled{color:rgba(104,94,86,.5)!important;cursor:default}
+.ibd:disabled{opacity:.5;cursor:default}
 </style>
 </helmet>
 '''

@@ -756,15 +756,24 @@ export function ChordPlayer({
                     />
                   ))}
                 </SortableContext>
+                {/* Add section alone in its card, the kit's ADDCARD: a 56 row, a 36 sand circle with
+                    its +, the words in the link colour. */}
                 {shown.sections.length < MOST_SECTIONS ? (
-                  <button
-                    type="button"
-                    onClick={() => hand.edit((sheet) => addSection(sheet))}
-                    className="-my-1 -ml-2 flex h-11 items-center gap-1 self-start rounded-control px-2 text-[15px] font-semibold text-link transition-colors duration-200 ease-out hover:bg-muted"
-                  >
-                    <Plus aria-hidden className="size-4" />
-                    {t('chordPlayer.addSection')}
-                  </button>
+                  <div className="card overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => hand.edit((sheet) => addSection(sheet))}
+                      className="flex min-h-14 w-full items-center gap-3 px-4 text-left text-base font-semibold text-link transition-colors duration-150 ease-out hover:bg-muted/60 focus-visible:-outline-offset-3"
+                    >
+                      <span
+                        aria-hidden
+                        className="grid size-9 shrink-0 place-items-center rounded-pill bg-muted"
+                      >
+                        <Plus className="size-5" strokeWidth={2.2} />
+                      </span>
+                      {t('chordPlayer.addSection')}
+                    </button>
+                  </div>
                 ) : null}
               </div>
             </div>

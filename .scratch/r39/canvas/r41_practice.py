@@ -304,7 +304,7 @@ const SW = (st, set, keys) => Object.fromEntries(keys.flatMap(([k, d]) => { cons
 const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k + 'Seg', seg(opts, st[k] ?? d, (l) => set({ [k]: l }))]));
     const SECS = [['A', 'Verse', 2, [['C'], ['G'], ['Am'], ['F'], ['C'], ['G'], ['F', 'G'], ['C']]], ['B', 'Chorus', 1, [['F'], ['G'], ['C', 'C/E'], ['F', 'G7'], ['Am'], ['F'], ['G7'], ['C']]], ['C', 'Bridge', 1, [['Dm7'], ['G7'], ['Em7', 'A7'], ['Dm7', 'G7']]]];
     const play = st.playing ? (st.at ?? [0, 2]) : [-1, -1], STY = ['Pop 1', 'Pop ballad', 'Rock 8ths', 'Worship', 'Swing', 'Bossa nova'], s = st.style ?? 0, bpm = st.bpm ?? 96;
-    const secs = SECS.map(([m, name, rep, bars], si) => ({ m, name, rep: '× ' + rep, bars: bars.map((cs, bi) => ({ cs: cs.map((c) => ({ c })), bg: play[0] === si && play[1] === bi ? '#EDC684' : !st.playing && slot.si === si && slot.bi === bi ? '#F6E7C8' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi] }) })) }));
+    const secs = SECS.map(([m, name, rep, bars], si) => ({ m, name, rep: '× ' + rep, bars: bars.map((cs, bi) => ({ cs: cs.map((c) => ({ c })), bg: play[0] === si && play[1] === bi ? '#EDC684' : !st.playing && (slot || {}).si === si && (slot || {}).bi === bi ? '#F6E7C8' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi] }) })) }));
     // the dock's Key rewrites the chart in the new key (each chord's root and bass moved by the same step)
     const KEYS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'], k = st.key ?? 0, reps = st.reps ?? 3, PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
     const trp1 = (x, d) => { const m = /^([A-G])([♯♭]?)(.*)$/.exec(x); if (!m || !d) return x; return KEYS[((PC[m[1]] + (m[2] === '♯' ? 1 : m[2] === '♭' ? -1 : 0) + d) % 12 + 12) % 12] + m[3]; };
@@ -314,7 +314,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       keyTiles: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°', 'G7'].map((c) => { const t = trp(c, k), m = t.match(/^([A-G][♭♯]?m?)(\d+)$/); return { c: t, r: m ? m[1] : t, x: m ? m[2] : '', put: () => { const [si, bi, ci] = st.selB59 || [0, 0, 0], c2 = JSON.parse(JSON.stringify(st.secs || SECS)); if (c2[si] && c2[si][3][bi]) c2[si][3][bi][ci] = t; set({ secs: c2, draft: true }); } }; }), keyL: KEYS[k], keyHead: KEYS[k] + ' major chords',
       openKey: () => set({ sheet: 'key' }), keyOn: st.sheet === 'key', wKey: wheel(KEYS, k, (i) => set({ key: i, secs: SECS.map(([m, n, r, bars]) => [m, n, r, bars.map((cs) => cs.map((c) => trp(c, i - k)))]) })),
       openTempo: () => set({ sheet: 'tempo' }), tempoOn: st.sheet === 'tempo', wTempo: wheel(Array.from({ length: 43 }, (_, i) => String(40 + 4 * i)), Math.round((bpm - 40) / 4), (i) => set({ bpm: 40 + 4 * i })),
-      openRep: () => set({ sheet: 'rep' }), repOn: st.sheet === 'rep', repL: '× ' + reps, wRep: wheel(['× 1', '× 2', '× 3', '× 4', '× 5', '× 6', '× 7', '× 8'], reps - 1, (i) => set({ reps: i + 1 })) };''')
+      openRep: () => set({ sheet: 'rep' }), repOn: st.sheet === 'rep', repL: reps === 0 ? '∞' : '× ' + reps, wRep: wheel(['∞', '× 1', '× 2', '× 3', '× 4', '× 5', '× 6', '× 7', '× 8'], reps, (i) => set({ reps: i })) };''')
 CHART = (f'<div style="border-radius: 6px; background: #FFFFFF; box-shadow: 0 0 0 1px {LINE}, 0 10px 24px -18px rgba(51,41,33,.45); padding: 16px 14px 18px; display: flex; flex-direction: column; gap: 16px">'
          f'<div style="text-align: center; font-family: {SERIF}; font-size: 20px">My verse and chorus</div>'
          f'<sc-for list="{{{{secs}}}}" as="x" hint-placeholder-count="2"><section style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 8px"><span style="width: 22px; height: 22px; box-sizing: border-box; border: 1.5px solid {INK}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">{{{{x.m}}}}</span><span style="font-size: 14px; font-weight: 600">{{{{x.name}}}}</span>{SPACER}<span style="font-size: 13px; color: {SOFT}">{{{{x.rep}}}}</span><span style="display: flex; color: {SOFT}">{GRIP}</span></div>'
@@ -340,8 +340,9 @@ CP_PIANO_JS = r'''
       // the left hand plays the bass in the third octave, the right hand the chord in root position from middle C's octave
       return [{ m: 48 + b, role: bi >= 0 ? roles[bi] : 1, iv: bi >= 0 ? iv[bi] : 0, hand: 'lh' }, ...iv.map((v, i) => ({ m: 60 + r + v, role: roles[i], iv: v, hand: 'rh' }))]; };
     const SLOTS = SECS.flatMap(([, , , bars], si) => bars.flatMap((cs, bi) => (cs.length === 1 ? [cs[0], cs[0]] : cs).map((c) => ({ si, bi, c }))));
-    const sel = st.sel, slot = st.playing ? SLOTS[(st.pos ?? 4) % SLOTS.length] : (sel ? SLOTS.find((x) => x.si === sel[0] && x.bi === sel[1]) : SLOTS[0]);
-    const notes = parse(slot.c), all = SLOTS.flatMap((x) => parse(x.c).map((n) => n.m));
+    const sel = st.sel, slot = st.playing ? SLOTS[(st.pos ?? 4) % SLOTS.length] : (sel ? SLOTS.find((x) => x.si === sel[0] && x.bi === sel[1]) : SLOTS[0]) || null;
+    // a sheet with no chord yet (a new sheet's empty Verse) lights nothing over C3 to C5
+    const notes = slot ? parse(slot.c) : [], all = SLOTS.length ? SLOTS.flatMap((x) => parse(x.c).map((n) => n.m)) : [48, 72];
     const isW = (m) => [0, 2, 4, 5, 7, 9, 11].includes(m % 12), dn = (m) => { while (!isW(m)) m--; return m; }, up = (m) => { while (!isW(m)) m++; return m; };
     const [lo, hi] = kbRange === '4' ? [36, 83] : kbRange === '88' ? [21, 108] : [dn(Math.min(...all)), up(Math.max(...all))];
     const labOf = (n) => kbLabel === 'names' ? NM[n.m % 12] : kbLabel === 'degrees' ? DEG[n.m % 12] : kbLabel === 'intervals' ? ['1', '♭2', '2', '♭3', '3', '4', '♭5', '5', '♯5', '6', '♭7', '7'][n.iv] : '';
@@ -363,7 +364,7 @@ CP_PIANO_JS = r'''
     const strip = (() => { const W = 340, w = W / 52; let i = 0, x0 = null, x1 = 0, bl = '';
       for (let m = 21; m <= 108; m++) { if (isW(m)) { if (m >= lo && x0 === null) x0 = i * w; if (m <= hi) x1 = (i + 1) * w; i++; } else bl += 'M' + (i * w - w * 0.3).toFixed(2) + ' 0h' + (w * 0.6).toFixed(2) + 'v15h-' + (w * 0.6).toFixed(2) + 'z'; }
       const nm = (m) => NM[m % 12] + (Math.floor(m / 12) - 1); return { x: x0.toFixed(2), w: (x1 - x0).toFixed(2), bl, cap: nm(lo) + ' – ' + nm(hi) }; })();
-    const cpPiano = { cpKb: kbOnS, cpKb2: kbOnS && kbView === '2d', cpKb3: is3d, cpPad: kbOnS ? 16 : 118, kbw: whites, kbb: blacks, kbwL: wide.whites, kbbL: wide.blacks, nowChord: slot.c,
+    const cpPiano = { cpKb: kbOnS, cpKb2: kbOnS && kbView === '2d', cpKb3: is3d, cpPad: kbOnS ? 16 : 118, kbw: whites, kbb: blacks, kbwL: wide.whites, kbbL: wide.blacks, nowChord: slot ? slot.c : '',
       handsRef: (el) => { this._cv = el; }, labelsRef: (el) => { this._lb = el; },
       pianoOn: st.sheet === 'piano', openPiano: () => set({ sheet: 'piano' }), backSet: () => set({ sheet: 'set' }), pianoVal: !kbOnS ? 'Hidden' : kbView === '2d' ? '2D keys' : '3D piano',
       pianoSw: ''' + PS.SW_JS('kbOnS', '() => set({ kbOn: !kbOnS })') + r''', kbHandsSw: ''' + PS.SW_JS('kbHands', '() => set({ kbHands: !kbHands })') + r''',
@@ -399,7 +400,7 @@ _PBODY = PS.PIANO_SHEET(False, 3, 4)
 CP_PSHEET = BSHEET('pianoOn', 'Piano', _PBODY, back=_BACKP, maxh='calc(100% - 124px)')
 CP_PPOP = POPOVER('pianoOn', 'Piano', _PBODY, 'right: 40px; top: 64px', 400, back=_BACKP)
 
-CP = CP.replace("    const play = st.playing ? (st.at ?? [0, 2])", CP_PIANO_JS + "    const play = st.playing ? [slot.si, slot.bi]", 1).replace("styleOn: st.sheet === 'style',", "styleOn: st.sheet === 'style', ...cpPiano,", 1)
+CP = CP.replace("    const play = st.playing ? (st.at ?? [0, 2])", CP_PIANO_JS + "    const play = st.playing ? [(slot || {}).si, (slot || {}).bi]", 1).replace("styleOn: st.sheet === 'style',", "styleOn: st.sheet === 'style', ...cpPiano,", 1)
 CP = 'const PT_BUNDLE = ' + json.dumps(PT_BUNDLE_CP) + ';\n' + CP.replace('class Component extends DCLogic {\n', 'class Component extends DCLogic {' + CP_LIFE, 1)
 CP = CP.replace("keyTiles:", "namesSeg: seg(['Chords', 'Numerals', 'Nashville'], st.names ?? 'Chords', (l) => set({ names: l })), ...SW(st, set, [['cpPi', true], ['cpBa', true], ['cpDr', true], ['cpRep', true]]), ...SG(st, set, [['cpV', ['Smooth voice leading', 'Block chords'], 'Smooth voice leading']]), keyTiles:")
 UNDOB = IB('Undo', UNDO)
