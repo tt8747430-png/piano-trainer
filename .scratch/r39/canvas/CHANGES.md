@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · pending · the boards' score covers set chord names and words in the engine's serif, a word's syllables hyphenated · Editor,EditorLaptop,EditorDraft,EditorDraftLaptop,Song,SongLaptop · pending
+
 ## Changes
 
 - 2026-11-20 · 4f21a0ec · one grass ink (#44684A) on the grass paint on every board; the Check's keyboard names its Cs as the kit's keys do · Check,CheckLaptop,Course,CourseLaptop,Learn,LearnCourses,LearnCoursesLaptop,LearnLaptop,LearnLevel,LearnLevelLaptop,LearnYours,LearnYoursLaptop,Lesson,LessonLaptop,PlayChord,PlayChordLaptop,PracticeResult,PracticeResultLaptop,Profile,ProfileLaptop,Settings,SettingsLaptop,Song,SongLaptop,YourLessonSettings,YourLessonSettingsLaptop · v677

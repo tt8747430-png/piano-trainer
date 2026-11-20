@@ -3,7 +3,7 @@
 # --- song
 
 # ── the score: Amazing Grace, melody, chords and words ──
-MEL = [('D4', 1, 'A', ''), ('G4', 2, 'ma', 'G'), ('B4', .5, 'zing', ''), ('G4', .5, '', ''), ('B4', 2, 'grace!', 'G⁷'), ('A4', 1, 'How', ''), ('G4', 2, 'sweet', 'C'), ('E4', 1, 'the', ''),
+MEL = [('D4', 1, 'A-', ''), ('G4', 2, 'ma-', 'G'), ('B4', .5, 'zing', ''), ('G4', .5, '', ''), ('B4', 2, 'grace!', 'G⁷'), ('A4', 1, 'How', ''), ('G4', 2, 'sweet', 'C'), ('E4', 1, 'the', ''),
        ('D4', 2, 'sound,', 'G'), ('D4', 1, 'That', ''), ('G4', 2, 'saved', 'G'), ('B4', .5, 'a', ''), ('G4', .5, '', ''), ('B4', 2, 'wretch', 'G'), ('A4', 1, 'like', ''), ('D5', 3, 'me!', 'D')]
 # New Britain as the app's Amazing Grace holds it (Wikipedia's score of the hymn): the slurred eighths take one syllable,
 # the chords are the app's chart, bar by bar (G · G7 · C · G · G · G · D)
@@ -54,8 +54,10 @@ def score_svg(w, sel=None, played=None, size=1.0):
             else:
                 out.append(f'<path d="M{sx:.1f} {y:.1f}V{y + (-3.5 if up else 3.5) * sp:.1f}" stroke="{col}" stroke-width="1.2"></path>')
             if b == 3: out.append(f'<circle cx="{x + 10 * size:.1f}" cy="{y - (sp / 2 if STEP[p] % 2 == 0 else 0):.1f}" r="{1.6 * size:.1f}" fill="{col}"></circle>')
-            if ch: out.append(f'<text x="{x - 5:.1f}" y="{top - 10 * size:.1f}" font-size="{15 * size:.0f}" font-weight="700" fill="{INK}">{ch}</text>')
-            out.append(f'<text x="{x:.1f}" y="{base + 26 * size:.1f}" text-anchor="middle" font-size="{14 * size:.0f}" fill="{col}">{syl}</text>')
+            if ch: out.append(f'<text x="{x - 5:.1f}" y="{top - 10 * size:.1f}" font-size="{15 * size:.0f}" font-weight="700" font-family="{SERIF}" fill="{INK}">{ch}</text>')
+            # the words in the engine's serif, a word's syllables parted by a hyphen midway between them (Verovio's)
+            out.append(f'<text x="{x:.1f}" y="{base + 26 * size:.1f}" text-anchor="middle" font-size="{14 * size:.0f}" font-family="{SERIF}" fill="{col}">{syl.rstrip("-")}</text>')
+            if syl.endswith('-'): out.append(f'<text x="{x + adv[k] / 2:.1f}" y="{base + 26 * size:.1f}" text-anchor="middle" font-size="{14 * size:.0f}" font-family="{SERIF}" fill="{INK}">-</text>')
             if syl and k + 1 < len(sysn) and not sysn[k + 1][2]:
                 out.append(f'<path d="M{x + len(syl) * 3.9 * size + 2:.1f} {base + 27 * size:.1f}H{x + adv[k] + 5 * size:.1f}" stroke="{col}" stroke-width="1"></path>')
             x += adv[k]; acc += b
@@ -144,10 +146,10 @@ def score_grand(w, systems, sel=None, size=1.0):
                 if d in (1.5, 3): out.append(f'<circle cx="{ex + 10 * s:.1f}" cy="{y - (sp / 2 if st % 2 == 0 else 0):.1f}" r="{1.6 * s:.1f}" fill="{col}"></circle>')
                 evx.append((ex, y, st, d, col))
                 if syl.strip('-_'):
-                    out.append(f'<text x="{ex:.1f}" y="{mbase + 26 * s:.1f}" text-anchor="middle" font-size="{14 * s:.0f}" fill="{col}">{syl.strip("-_")}</text>')
+                    out.append(f'<text x="{ex:.1f}" y="{mbase + 26 * s:.1f}" text-anchor="middle" font-size="{14 * s:.0f}" font-family="{SERIF}" fill="{col}">{syl.strip("-_")}</text>')
                     nx = at(t + d) if ei + 1 < len(mel) else x + bw + lead
                     half = len(syl.strip('-_')) * 3.9 * s
-                    if syl.endswith('-'): out.append(f'<text x="{(ex + nx) / 2:.1f}" y="{mbase + 26 * s:.1f}" text-anchor="middle" font-size="{14 * s:.0f}" fill="{INK}">-</text>')
+                    if syl.endswith('-'): out.append(f'<text x="{(ex + nx) / 2:.1f}" y="{mbase + 26 * s:.1f}" text-anchor="middle" font-size="{14 * s:.0f}" font-family="{SERIF}" fill="{INK}">-</text>')
                     if syl.endswith('_'): ln(f'M{ex + half + 2:.1f} {mbase + 27 * s:.1f}H{at(t + d) + 5 * s if ei + 1 < len(mel) else ex + half + 20 * s:.1f}', 1)
                 if len(e) > 3 and bi + 1 < len(bars):  # the held "me!" tied over the barline
                     nx2 = x + bw + lead + 16 * s
