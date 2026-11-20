@@ -1,4 +1,4 @@
-import { Link2Off, TriangleAlert, UserRound, Users, WifiOff } from 'lucide-react'
+import { CloudOff, Link2Off, TriangleAlert, UserRound, Users } from 'lucide-react'
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -77,8 +77,9 @@ export function JoinGroupPage() {
         <Said icon={Link2Off} title={t('groups.joinGone')} />
       ) : shown.kind === 'failed' ? (
         <Said
-          icon={shown.offline ? WifiOff : TriangleAlert}
-          title={t(shown.offline ? 'groups.offline' : 'groups.failed')}
+          icon={shown.offline ? CloudOff : TriangleAlert}
+          title={t(shown.offline ? 'groups.offlineTitle' : 'groups.failedTitle')}
+          description={t(shown.offline ? 'groups.offlineLine' : 'groups.failedLine')}
         />
       ) : (
         <Said

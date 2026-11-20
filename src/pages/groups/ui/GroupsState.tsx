@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Users } from 'lucide-react'
+import { CloudOff, TriangleAlert, Users } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { GroupsData } from '@/features/share-folder'
@@ -26,8 +26,9 @@ export function GroupsState({
   if (data.kind === 'failed')
     return (
       <Said
-        icon={Users}
-        title={t(data.reason === 'offline' ? 'groups.offline' : 'groups.failed')}
+        icon={data.reason === 'offline' ? CloudOff : TriangleAlert}
+        title={t(data.reason === 'offline' ? 'groups.offlineTitle' : 'groups.failedTitle')}
+        description={t(data.reason === 'offline' ? 'groups.offlineLine' : 'groups.failedLine')}
         primary
         action={<Button onClick={onRetry}>{t('groups.retry')}</Button>}
       />

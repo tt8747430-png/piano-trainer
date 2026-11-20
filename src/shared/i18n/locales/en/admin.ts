@@ -45,6 +45,12 @@ export const admin = {
   failed: 'Could not load. Try again in a moment.',
   refused: 'The server declined the request.',
   again: 'Try again',
+  offlineTitle: 'You’re offline',
+  offlineLine: 'Administration needs the internet.',
+  failedTitle: 'This didn’t load',
+  failedLine: 'Try again in a moment.',
+  refusedTitle: 'The server declined',
+  refusedLine: 'Your account may no longer be an administrator’s.',
   notAdmin: 'Administration requires an administrator account',
   accounts: {
     search: 'Search by name or email',
