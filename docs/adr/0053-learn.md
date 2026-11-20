@@ -21,7 +21,8 @@ the courses, its title in the bar.
   See all; and **Made by you**, the learner's own, hidden while there are none. The honey floating + opens New
   lesson and New course (`NewDial`, `NewOwnSheet`), on Learn and on Made by you; Continue's button is ink, so the +
   is the one honey act. Continue follows the track last learned on: after a course's lesson or song, that course's
-  next step; otherwise the journeys' next.
+  next step; otherwise the journeys' next. Its eyebrow says Start on a track with nothing learned, Continue on one begun, and Review once
+  everything is learned, when it opens the first journey's first lesson again.
 - **A level's page** (`/levels/$levelId`, Back to Learn): its name the page's serif heading on a phone (the laptop's
   bar names it), its goal, its count over its meter and its one way in (Start, Continue or Review and the lesson
   it opens, the honey 50), then its chapters 32 apart; its lessons on one timeline (a dot until reached, the book

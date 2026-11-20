@@ -11,6 +11,7 @@ import {
   continueStep,
   courseProgress,
   journeyProgress,
+  reviewStep,
   useStepTitle,
 } from '@/widgets/curriculum'
 
@@ -20,8 +21,9 @@ import {
  * track (`CONTBAR`, the same on both sizes), and a 56 round ink button with the lesson's book: Continue
  * is never honey, so the floating + stays the screen's one honey act. On a laptop (`CONTL`) the card is
  * one row: the words, then the track filling the room to the button with "Lesson 7 of 13" over its
- * right end (goal-gradient). Its next guided song opens on its page. Nothing once everything is
- * learned.
+ * right end (goal-gradient). Its next guided song opens on its page. The eyebrow's verb is the
+ * board's: Start on a track with nothing learned, Continue on one begun, and Review once everything
+ * is learned, opening the first journey's first lesson.
  */
 export function ContinueAction() {
   const { t } = useTranslation('learn')
@@ -29,7 +31,8 @@ export function ContinueAction() {
   const id = useId()
   const learned = useProgress(selectLearned)
   const stepTitle = useStepTitle()
-  const next = continueStep(learned)
+  const open = continueStep(learned)
+  const next = open ?? reviewStep()
   if (!next) return null
   const { step } = next
   const read = step.kind === 'lesson' || step.kind === 'course-lesson'
@@ -39,6 +42,7 @@ export function ContinueAction() {
   const place = continuePlace(next, learned)
   const progress =
     'course' in next ? courseProgress(next.course, learned) : journeyProgress(next.journey, learned)
+  const verb = !open ? 'reviewTrack' : progress.done === 0 ? 'startTrack' : 'continue'
   const count =
     'n' in place
       ? t('lessonOf', { n: place.n, count: place.count })
@@ -55,7 +59,7 @@ export function ContinueAction() {
     <>
       <span className="flex min-w-0 flex-1 flex-col gap-1 lg:flex-none">
         <span className="text-[0.8125rem]/4 font-semibold text-eyebrow">
-          {t('continue')} · {localText(track.title, locale)}
+          {t(verb)} · {localText(track.title, locale)}
         </span>
         <h2 id={id} className="font-display text-2xl/[1.2] font-normal text-balance">
           {title}

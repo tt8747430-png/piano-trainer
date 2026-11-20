@@ -1,6 +1,7 @@
 export {
   continuePlace,
   continueStep,
+  reviewStep,
   currentJourney,
   openCourseStep,
   type ContinueStep,

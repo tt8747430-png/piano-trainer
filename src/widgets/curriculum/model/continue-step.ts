@@ -56,6 +56,16 @@ export function continueStep(learned: Learned): ContinueStep | null {
 }
 
 /**
+ * What Continue opens once everything is learned (the LearnLaptop board's "Review ·"): the first
+ * journey's first step, to go over again.
+ */
+export function reviewStep(): ContinueStep | null {
+  const journey = allJourneys()[0]
+  const step = journey && journeySteps(journey)[0]
+  return journey && step ? { id: stepIdOf(step), step, journey } : null
+}
+
+/**
  * The journey Lessons opens on: the first with a step not yet learned (where the Lessons' next step
  * is, whichever track Continue is on), else the first journey once every one is learned.
  */

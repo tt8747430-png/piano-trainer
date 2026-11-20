@@ -46,6 +46,8 @@ export const learn = {
   coverLessonsOf_other: '{{done}} of {{count}} lessons',
   // Continue: the next lesson of the journey or the course in progress, in one tap.
   continue: 'Continue',
+  startTrack: 'Start',
+  reviewTrack: 'Review',
   known: '{{known}} of {{total}} known',
   // One skill (a scale) is known or not yet; a family of chord qualities counts them.
   knownOne: 'Known',
