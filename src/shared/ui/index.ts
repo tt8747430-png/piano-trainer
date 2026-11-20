@@ -187,6 +187,7 @@ export {
   ROW_FLAT,
   ROW_LIBRARY_FACE,
 } from './library-row-class'
+export { ROW_CLASS } from './row-class'
 export { menuOf, swipeOf, type RowAction } from './row-actions'
 export { RowMore } from './RowMore'
 export { TempoSteps } from './TempoSteps'

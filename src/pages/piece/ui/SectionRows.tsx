@@ -1,7 +1,7 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Piece } from '@/entities/piece'
-import { GROUPED_LIST, HEADED_SECTION, OpensMark, SectionHead } from '@/shared/ui'
+import { GROUPED_LIST, HEADED_SECTION, OpensMark, ROW_CLASS, SectionHead } from '@/shared/ui'
 import type { SectionLessons } from '../model/section-lessons'
 import { SectionLink } from './SectionLink'
 
@@ -34,11 +34,7 @@ export function SectionRows({
             : null
           return (
             <li key={section}>
-              <SectionLink
-                piece={piece}
-                section={section}
-                className="flex min-h-12 items-center gap-3 px-4 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
-              >
+              <SectionLink piece={piece} section={section} className={ROW_CLASS}>
                 <span className="min-w-0 flex-1 truncate">{heading}</span>
                 {said ? (
                   <span className="shrink-0 whitespace-nowrap text-muted-foreground tabular-nums">
