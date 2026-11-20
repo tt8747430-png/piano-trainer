@@ -1,4 +1,4 @@
-import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -7,32 +7,9 @@ import { FolderSheet, type FolderSheetTarget } from '@/features/manage-library'
 import { useGroupsData } from '@/features/share-folder'
 import { cn, isOneOf } from '@/shared/lib'
 import { playlistPaint } from '@/widgets/piece-cover'
+import { useSongsPlace, type SongsPlace } from './use-songs-place'
 
 const isFolderPaint = isOneOf(FOLDER_PAINTS)
-
-/** Which of Songs' places is shown (the board's `_SUBCUR`), read from the address. */
-type Here =
-  | { readonly kind: 'all' | 'explore' | 'favourites' | 'archive' | 'trash' | 'none' }
-  | { readonly kind: 'folder' | 'shared'; readonly id: string }
-
-function useHere(): Here {
-  const pathname = useRouterState({ select: (state) => state.location.pathname })
-  const view = useRouterState({
-    select: (state) => ('view' in state.location.search ? state.location.search.view : undefined),
-  })
-  const favourites = useRouterState({
-    select: (state) => 'favourites' in state.location.search && state.location.search.favourites,
-  })
-  if (pathname === '/songs') return { kind: view === 'explore' ? 'explore' : 'all' }
-  if (pathname === '/songs/all') return { kind: favourites === true ? 'favourites' : 'all' }
-  if (pathname === '/songs/archive') return { kind: 'archive' }
-  if (pathname === '/songs/trash') return { kind: 'trash' }
-  const folder = /^\/songs\/folders\/([^/]+)/.exec(pathname)?.[1]
-  if (folder) return { kind: 'folder', id: decodeURIComponent(folder) }
-  const shared = /^\/songs\/shared-folders\/([^/]+)/.exec(pathname)?.[1]
-  if (shared) return { kind: 'shared', id: decodeURIComponent(shared) }
-  return { kind: 'none' }
-}
 
 /** A sub-item (the board's SONGS_SUB `item`): 40 tall, its words on the Songs label's edge (44). */
 const ITEM =
@@ -78,7 +55,7 @@ function Face({ label, count, swatch }: { label: string; count?: number; swatch?
  */
 export function SongsPlaces() {
   const { t } = useTranslation('songs')
-  const here = useHere()
+  const here = useSongsPlace()
   const layout = useLibraryLayout()
   const nameOf = useFolderName()
   const permits = usePermissions()
@@ -91,7 +68,7 @@ export function SongsPlaces() {
     (sum, folder) => sum + folder.songs.length,
     layout.home.length,
   )
-  const is = (kind: Here['kind'], id?: string) =>
+  const is = (kind: SongsPlace['kind'], id?: string) =>
     here.kind === kind && (id === undefined || ('id' in here && here.id === id))
   return (
     <div role="group" aria-label={t('library.label')} className="mt-2 mb-1 flex flex-col gap-0.5">
@@ -159,9 +136,4 @@ export function SongsPlaces() {
       />
     </div>
   )
-}
-
-/** Whether one of Songs' places is shown, so Songs in the sidebar is only bold (the board's `here`). */
-export function useSongsPlaceShown(): boolean {
-  return useHere().kind !== 'none'
 }

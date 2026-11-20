@@ -1,5 +1,6 @@
 import { LibraryRow } from './LibraryRow'
-import { FoldHeadRow, ItemRow, spanOf, TableFrame, type TableColumns } from './LibraryTable'
+import { FoldHeadRow, ItemRow, TableFrame, type TableColumns } from './LibraryTable'
+import { spanOf } from './span-of'
 import { LibraryTile } from './LibraryTile'
 import {
   closestCenter,

@@ -1,4 +1,3 @@
-import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import {
   ARRANGER_NUMBERS,
@@ -9,25 +8,12 @@ import {
   type SectionMarks,
 } from '@/shared/lib/arrangement'
 import { GroupRows, GroupSegmented, SettingsGroup, Sheet, SheetContent } from '@/shared/ui'
+import { ROMAN } from './marks-line'
 
-const ROMAN: Readonly<Record<ArrangerNumber, string>> = { 1: 'I', 2: 'II', 3: 'III' }
 type Pick<V extends string> = V | 'none'
 const orNone = <V extends string>(value: V | null): Pick<V> => value ?? 'none'
 const fromNone = <V extends string>(value: Pick<V>): V | null => (value === 'none' ? null : value)
 const numbered = (value: ArrangerNumber | null) => (value === null ? 'none' : String(value))
-
-/** A section's marks in a line, as its head's tag shows them: "Intro I · Main A, Main B · Fill in". */
-export function marksLine(marks: SectionMarks, t: TFunction<'practice'>): string {
-  const mains = marks.mains.filter((main): main is Main => main !== null)
-  return [
-    marks.intro === null ? null : t('chordPlayer.arranger.intro', { n: ROMAN[marks.intro] }),
-    mains.length ? mains.map((main) => t('chordPlayer.arranger.main', { main })).join(', ') : null,
-    marks.into === null ? null : t(`chordPlayer.arranger.into.${marks.into}`),
-    marks.ending === null ? null : t('chordPlayer.arranger.ending', { n: ROMAN[marks.ending] }),
-  ]
-    .filter(Boolean)
-    .join(' · ')
-}
 
 /**
  * A section on the arranger (canvas 171, the tag on its head): its Intro where it opens the sheet,

@@ -1,5 +1,4 @@
 import { useNavigate } from '@tanstack/react-router'
-import { Library } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FolderLook } from '@/entities/library'
@@ -21,29 +20,12 @@ import {
   setInCourse,
 } from '@/features/manage-own-lessons'
 import { localText, useLocale } from '@/shared/i18n'
-import { ChoiceChips, NewSheet, SheetPart, type MenuAction, LessonIcon } from '@/shared/ui'
+import { ChoiceChips, NewSheet, SheetPart } from '@/shared/ui'
 
 /** What the learner makes: a lesson or a course of their own. */
 export type OwnKind = 'lesson' | 'course'
 const NO_COURSE = 'none'
 const EMPTY = 'empty'
-
-/**
- * New's two (canvas 167): New lesson and New course, for the phone's dial and the menus of Learn's row
- * and the laptop's New; each opens its own sheet.
- */
-export function useNewOwnActions(onPick: (kind: OwnKind) => void): readonly MenuAction[] {
-  const { t } = useTranslation('learn')
-  return [
-    {
-      key: 'lesson',
-      label: t('own.newLesson'),
-      icon: LessonIcon,
-      onSelect: () => onPick('lesson'),
-    },
-    { key: 'course', label: t('own.newCourse'), icon: Library, onSelect: () => onPick('course') },
-  ]
-}
 
 /**
  * New lesson or New course (canvas 167), as Flat's New score: its name, then the one thing it needs,

@@ -7,7 +7,7 @@ import { useLoaded } from '@/shared/lib'
 import { LoadedState } from './LoadedState'
 import { daySaid, formatLocale, useNow } from '@/shared/lib'
 import { SettingsGroup } from '@/shared/ui'
-import { nameOf } from './Face'
+import { nameOf } from '../model/name-of'
 
 const ACTIONS = [
   'set-role',

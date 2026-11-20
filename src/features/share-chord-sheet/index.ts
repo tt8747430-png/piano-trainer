@@ -6,4 +6,5 @@ export {
   shareSheet,
   takeOnline,
 } from './model/online-sheet'
-export { onlineSheetPath, ShareChordSheet } from './ui/ShareChordSheet'
+export { ShareChordSheet } from './ui/ShareChordSheet'
+export { onlineSheetPath } from './model/online-sheet-path'

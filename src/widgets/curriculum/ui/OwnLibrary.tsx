@@ -43,7 +43,8 @@ import {
   type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { NewOwnSheet, useNewOwnActions, type OwnKind } from './NewOwnSheet'
+import { NewOwnSheet, type OwnKind } from './NewOwnSheet'
+import { useNewOwnActions } from './use-new-own-actions'
 
 type Kind = 'all' | 'lessons' | 'courses'
 type Sort = 'recent' | 'name'

@@ -18,7 +18,8 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { ScaleIcon } from './icons/ScaleIcon'
-import { PAGE_PICTURES, type PagePicture } from './PagePictures'
+import { PAGE_PICTURES } from './page-pictures'
+import type { PagePicture } from './PagePictures'
 import type { Paint } from './paint'
 
 /**

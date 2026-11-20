@@ -9,11 +9,9 @@ import { useChordShare } from '@/shared/lib/chord-share'
 import { ButtonLink, Problem, Said, say, Segmented, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { setSheetAccess, shareSheet } from '../model/online-sheet'
+import { onlineSheetPath } from '../model/online-sheet-path'
 
 type Access = 'view' | 'edit'
-
-/** A shared sheet's link, opened in the Chord player. */
-export const onlineSheetPath = (id: string) => `/practice/chord-player?link=${id}`
 
 /**
  * Share (R39-10, canvas v173's CP_SHARE): one line on what sharing does, People with the link View only

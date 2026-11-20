@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
-import { staffScale, useSectionHeading, useStaffNames, useStaffTitle } from '@/entities/piece'
+import { staffScale, useStaffNames, useStaffTitle } from '@/entities/piece'
 import { barAt, barsOf, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
 import { creditsRoom, PageCanvas, SheetPage, useSameWhileEqual, type TitlePlace } from '@/shared/ui'
@@ -14,6 +14,7 @@ import { lineMusic, oneLine } from '../model/line-music'
 import type { EditPrinted } from '../model/printed'
 import { LayerNames, useLayerName } from '../model/use-layer-name'
 import { SheetLine } from './SheetLine'
+import { useHeadings } from './use-headings'
 
 /** No staff hidden, and none written. */
 const NO_STAVES: readonly StaffId[] = []
@@ -41,16 +42,6 @@ const itemKey = (item: PageItem) =>
   item.kind === 'title'
     ? 'title'
     : `${item.sheet.line.section} ${item.sheet.line.line} ${item.sheet.line.start}`
-
-/**
- * Each section's name in the learner's language, by section: printed at its first bar (ADR 0097).
- * The same array while the names are, so a line's row is not drawn again for every edit.
- */
-export function useHeadings(draft: Draft): readonly string[] {
-  const named = useSectionHeading()
-  const said = draft.sections.map((section) => named({ ...section.heading, lines: [] })).join('\n')
-  return useMemo(() => said.split('\n'), [said])
-}
 
 /**
  * A page's items as the blocks that stay together as it is spread (ADR 0087): the title with the

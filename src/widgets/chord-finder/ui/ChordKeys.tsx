@@ -2,19 +2,13 @@ import { Link } from '@tanstack/react-router'
 import { useKeyName } from '@/shared/i18n'
 import {
   keyScale,
-  keysHolding,
   noteParam,
   numeralText,
   printedSymbol,
   type FoundChord,
 } from '@/shared/lib/music'
 import { PAGE_TILES, RowLink } from '@/shared/ui'
-
-/** The keys that hold the chord found (piano.org's key finder), each with the chord's numeral there. */
-export function useKeysHolding(found: FoundChord | undefined) {
-  const { root, quality } = found?.chord ?? {}
-  return root && quality ? keysHolding(root, quality) : []
-}
+import { useKeysHolding } from './use-keys-holding'
 
 /**
  * The keys that hold the chord found, as piano.org's key finder lists them, in the sheet In these keys

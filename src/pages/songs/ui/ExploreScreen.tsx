@@ -10,7 +10,8 @@ import {
 } from '@/shared/ui'
 import { PLACE_COLUMN, PlaceBar } from '@/widgets/song-library'
 import { EXPLORE_CATEGORIES, EXPLORE_KINDS, type SongsHome } from '../model/explore-view'
-import { ExploreResults, ExploreSort, useExploreFeed } from './ExploreResults'
+import { ExploreResults, ExploreSort } from './ExploreResults'
+import { useExploreFeed } from './use-explore-feed'
 import { FRESH } from './songs-fresh'
 
 /**

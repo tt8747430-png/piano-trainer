@@ -17,7 +17,7 @@ function Frame({ className, children }: { className?: string; children: ReactNod
 }
 
 /** Chords: seven keys, the chord's three lit in the paint. */
-const Keys: PagePicture = ({ className }) => (
+export const KeysPicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     {[0, 1, 2, 3, 4, 5, 6].map((i) => (
       <rect
@@ -37,7 +37,7 @@ const Keys: PagePicture = ({ className }) => (
 )
 
 /** Scales and keys: a staff, six notes climbing. */
-const Staff: PagePicture = ({ className }) => (
+export const StaffPicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     {[0, 1, 2, 3, 4].map((i) => (
       <path key={i} d={`M6 ${14 + i * 4}H38`} strokeWidth={0.7} className={LINE} />
@@ -49,7 +49,7 @@ const Staff: PagePicture = ({ className }) => (
 )
 
 /** Intervals: two notes and the leap between them. */
-const Arc: PagePicture = ({ className }) => (
+export const ArcPicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     <ellipse cx={13} cy={30} rx={3} ry={2.3} className={INK} />
     <ellipse cx={31} cy={18} rx={3} ry={2.3} className={INK} />
@@ -58,7 +58,7 @@ const Arc: PagePicture = ({ className }) => (
 )
 
 /** Progressions: the numerals of the commonest, each on its own place. */
-const Roman: PagePicture = ({ className }) => (
+export const RomanPicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     {(
       [
@@ -83,7 +83,7 @@ const Roman: PagePicture = ({ className }) => (
 )
 
 /** Accompaniment: a bass under a rocking pattern. */
-const Roll: PagePicture = ({ className }) => (
+export const RollPicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     {[0, 1, 2, 3].map((i) => (
       <rect
@@ -101,7 +101,7 @@ const Roll: PagePicture = ({ className }) => (
 )
 
 /** Finger technique: five fingers up and back, a Hanon bar. */
-const Drill: PagePicture = ({ className }) => (
+export const DrillPicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     {[0, 2, 3, 4, 5, 4, 3, 2].map((step, i) => (
       <ellipse key={i} cx={8 + i * 4.4} cy={30 - step * 2.4} rx={1.8} ry={1.4} className={INK} />
@@ -111,7 +111,7 @@ const Drill: PagePicture = ({ className }) => (
 )
 
 /** Jazz vocabulary: Barry Harris's 6th-diminished, its sign alone (the canvas's `sixdim`). */
-const SixDim: PagePicture = ({ className }) => (
+export const SixDimPicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     <text
       x={22}
@@ -127,7 +127,7 @@ const SixDim: PagePicture = ({ className }) => (
 )
 
 /** A jazz book: swung eighths under a triplet's 3. */
-const Swing: PagePicture = ({ className }) => (
+export const SwingPicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     {(
       [
@@ -164,7 +164,7 @@ const Swing: PagePicture = ({ className }) => (
 )
 
 /** The Chord player: a chord sheet's boxes. */
-const Chart: PagePicture = ({ className }) => (
+export const ChartPicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     {[0, 1, 2, 3, 4, 5].map((i) => (
       <rect
@@ -181,7 +181,7 @@ const Chart: PagePicture = ({ className }) => (
 )
 
 /** The Metronome: its case and its pendulum. */
-const Metro: PagePicture = ({ className }) => (
+export const MetroPicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     <path
       d="M15 34 19 10h6l4 24z"
@@ -195,7 +195,7 @@ const Metro: PagePicture = ({ className }) => (
 )
 
 /** The Tuner: a gauge and its needle, in copper. */
-const Needle: PagePicture = ({ className }) => (
+export const NeedlePicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     <path d="M9 30A14 14 0 0 1 35 30" fill="none" strokeWidth={1.4} className={LINE} />
     <path d="M22 31 25 15" strokeWidth={2} strokeLinecap="round" className="stroke-(--p-copper)" />
@@ -204,7 +204,7 @@ const Needle: PagePicture = ({ className }) => (
 )
 
 /** The Chord finder: keys under a lens. */
-const Lens: PagePicture = ({ className }) => (
+export const LensPicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     {[0, 1, 2, 3, 4, 5].map((i) => (
       <rect key={i} x={7 + i * 5} y={20} width={4.6} height={16} rx={1} className={WHITE} />
@@ -215,31 +215,10 @@ const Lens: PagePicture = ({ className }) => (
 )
 
 /** The Circle of fifths: the wheel, C's wedge lit in honey. */
-const Circle: PagePicture = ({ className }) => (
+export const CirclePicture: PagePicture = ({ className }) => (
   <Frame className={className}>
     <circle cx={22} cy={22} r={14} strokeWidth={1.2} className={cn(WHITE, LINE)} />
     <circle cx={22} cy={22} r={7} fill="none" strokeWidth={0.8} className={LINE} />
     <path d="M22 8 29 9.9 22 15z" strokeWidth={0.6} className={cn('fill-primary', LINE)} />
   </Frame>
 )
-
-/**
- * The pictures Practice's rows and cards wear (the canvas's `pic`): each page shows what it holds,
- * the keys of a chord, a scale on a staff, a leap, the numerals, a bass pattern, a drill, swung
- * eighths, a chord sheet, the tools' faces.
- */
-export const PAGE_PICTURES = {
-  keys: Keys,
-  staff: Staff,
-  arc: Arc,
-  roman: Roman,
-  roll: Roll,
-  drill: Drill,
-  swing: Swing,
-  sixdim: SixDim,
-  chart: Chart,
-  metro: Metro,
-  needle: Needle,
-  lens: Lens,
-  circle: Circle,
-} as const satisfies Readonly<Record<string, PagePicture>>

@@ -1,13 +1,8 @@
-import { createContext, use, useId, type ComponentProps } from 'react'
+import { use, useId, type ComponentProps } from 'react'
 import { cn } from '@/shared/lib'
 import { Button } from './primitives/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from './primitives/tooltip'
-
-/**
- * Why the keys inside cannot act now ("Select one or more notes first."), for a palette's section
- * that waits on a choice: each key in it greys in place and says so in its tooltip (Flat's rule).
- */
-export const KeysWait = createContext<string | null>(null)
+import { KeysWait } from './keys-wait'
 
 /**
  * A palette's key: a big square of its glyph or icon, named by `label` for a screen reader and in a

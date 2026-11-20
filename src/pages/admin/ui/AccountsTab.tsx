@@ -11,7 +11,8 @@ import { useChangeProblem } from '../model/use-change-problem'
 import { FailureLine, LoadedState } from './LoadedState'
 import { daySaid, formatLocale, useNow } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
-import { Face, nameOf } from './Face'
+import { Face } from './Face'
+import { nameOf } from '../model/name-of'
 
 const ROLES = ['learner', 'editor', 'admin'] as const satisfies readonly AccountRole[]
 

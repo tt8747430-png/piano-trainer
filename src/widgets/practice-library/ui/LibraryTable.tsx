@@ -7,6 +7,7 @@ import { HeartToggle, menuOf, RowMore } from '@/shared/ui'
 import type { LibraryItem, ShownSection } from '../model/library-view'
 import { LevelMark } from './LevelMark'
 import { LibraryTile } from './LibraryTile'
+import { spanOf } from './span-of'
 
 /** A library table's columns, named as its board names them (Exercise · Focus · Level). */
 export interface TableColumns {
@@ -150,9 +151,6 @@ export function ItemRow({
     </tr>
   )
 }
-
-/** How many columns a fold head spans. */
-export const spanOf = (levels: boolean, columns: TableColumns) => (levels || columns.third ? 4 : 3)
 
 /** One book's (or style's) rows under its fold heading, as the phone's runs: its name and count. */
 function SectionRows({
