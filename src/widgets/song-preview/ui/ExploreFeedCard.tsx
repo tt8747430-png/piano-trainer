@@ -20,7 +20,7 @@ const TYPE_BADGE = {
  * Shared by, Saves, ···.
  */
 export const EXPLORE_COLUMNS =
-  'grid grid-cols-[minmax(0,2.3fr)_minmax(0,1.5fr)_9rem_minmax(0,1.3fr)_5.5rem_2.75rem] items-center gap-4 pr-2 pl-3'
+  'grid grid-cols-[minmax(12.5rem,2.2fr)_minmax(0,1.4fr)_8rem_minmax(0,1.2fr)_4.5rem_2.75rem] items-center gap-4 pr-2 pl-3'
 
 /**
  * A published song or pattern in Explore, as a row (the Explore boards' FEEDROW; 2026-11-17 and
