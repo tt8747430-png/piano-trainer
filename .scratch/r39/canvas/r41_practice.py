@@ -1,4 +1,5 @@
 import json
+from bravura_glyphs import BRAVURA
 # R41 Practice: each page to its own reference, in the calm language, holding R39's rulings (every control labelled,
 # a gear for the page's settings, a key or root from the root grid, fingering never on the keys, libraries in the one
 # library shape).
@@ -59,11 +60,12 @@ def SCALESTAFF(label):
     # the chosen scale up one octave on a treble staff with its own key signature (R42 v68); glyphs as literal text
     o = ''.join(f'<path d="M4 {30 + i * 7}H356" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
     o += f'<text x="6" y="58" font-size="28" font-family="Noto Music, serif" fill="{INK}">𝄞</text>'
-    gl = lambda key, ch, size=18: f'<sc-if value="{{{{{key}}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.ax}}}}" y="{{{{z.ay}}}}" font-size="{size}" font-family="Noto Music, serif" fill="{INK}">{ch}</text></sc-if>'
-    o += '<sc-for list="{{ss.sig}}" as="z" hint-placeholder-count="1">' + gl('z.s', '♯') + gl('z.f', '♭') + '</sc-for>'
+    # accidentals in Bravura, the glyphs the engine engraves, a space 7 (each from its line: ay less the text's old drop)
+    gl = lambda key, name, dx, dy: f'<sc-if value="{{{{{key}}}}}" hint-placeholder-val="{{{{false}}}}"><path transform="translate({{{{z.ax}}}} {{{{z.ay}}}}) translate({dx} {dy}) scale(.028 -.028)" d="{BRAVURA[name][0]}" fill="{INK}"></path></sc-if>'
+    o += '<sc-for list="{{ss.sig}}" as="z" hint-placeholder-count="1">' + gl('z.s', 'sharp', 0, -6) + gl('z.f', 'flat', 0, -4) + '</sc-for>'
     o += f'<sc-for list="{{{{ss.led}}}}" as="l" hint-placeholder-count="0"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
     o += (f'<sc-for list="{{{{ss.notes}}}}" as="z" hint-placeholder-count="8"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.y}}}}" rx="5" ry="3.7" transform="rotate(-20 {{{{z.x}}}} {{{{z.y}}}})" fill="{INK}"></ellipse><path d="{{{{z.stem}}}}" stroke="{INK}" stroke-width="1.1"></path>'
-          + gl('z.a1', '♯', 16) + gl('z.a2', '♭', 16) + gl('z.a3', '♮', 16) + gl('z.a4', '𝄪', 16) + gl('z.a5', '𝄫', 16)
+          + gl('z.a1', 'sharp', 1, -5) + gl('z.a2', 'flat', 1, -5) + gl('z.a3', 'natural', 2, -5) + gl('z.a4', 'dsharp', 1, -5) + gl('z.a5', 'dflat', -4, -5)
           + ''.join(f'<sc-if value="{{{{z.f{d}}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.x}}}}" y="{{{{z.fy}}}}" text-anchor="middle" font-size="12" font-weight="700" fill="{INK}">{d}</text></sc-if>' for d in range(1, 6))
           + '</sc-for>')
     return f'<svg viewBox="0 0 360 96" width="100%" role="img" aria-label="{label}" style="display: block">{o}</svg>'

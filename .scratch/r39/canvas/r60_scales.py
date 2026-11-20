@@ -24,11 +24,12 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
         return [['Scale', [...nm, nm[0]].join(' ') + ' …'], ['In 3rds', steps(3, (s) => at(s) + ' ' + at(s + 2))], ['In 6ths', steps(3, (s) => at(s) + ' ' + at(s + 5))], ['In groups', steps(2, (s) => [0, 1, 2, 3].map((m) => at(s + m)).join(' '))], ['Contrary motion', steps(3, (s) => at(s) + ' ' + at(-s))]].concat(kind <= 3 ? [['Daily scale routine', [...nm, nm[0]].join(' ') + ' …']] : []).map(([t, s]) => ({ t, s })); })(),
       states: [['Playing', !!st.playing, { playing: true }], ['F♯ major, six sharps', rl === 3 && ra === 1 && kind === 0, { rl: 3, ra: 1, kind: 0 }], ['Minor pentatonic (five notes, no fingering)', kind === 7, { kind: 7 }]]
         .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? { playing: false, rl: null, ra: null, kind: null } : o) })),
-      // the left hand two octaves under the right, on its own bass staff, its fingers under it (piano-chords-and-scales-app 006)
-      ssB: (() => { const ledB = [], Yb = (k) => 127 - k * 3.5;
-        const notes = notesS.map((z, i) => { const k = Math.round((58 - z.y) / 3.5), kb = k - 2, y = z.y + 69, up = kb < 4, f = fingOk && nN === 8 ? FGP[1][i] : '';
-          for (let j = 0; j >= k; j -= 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) }); for (let j = 12; j <= k; j += 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) });
-          return { ...z, y, ay: z.ay + 69, stem: up ? 'M' + (z.x + 4.6) + ' ' + y + 'V' + (y - 24) : 'M' + (z.x - 4.6) + ' ' + y + 'V' + (y + 24), fy: 160, f1: f === '1', f2: f === '2', f3: f === '3', f4: f === '4', f5: f === '5' }; });
+      // the left hand an octave under the right, as the app plays and engraves it (G3 to G4 under G4 to G5), on its own
+      // bass staff, its fingers under it (piano-chords-and-scales-app 006); its ledgers over the staff where it climbs
+      ssB: (() => { const ledB = [], Yb = (k) => 102.5 - k * 3.5;
+        const notes = notesS.map((z, i) => { const k = Math.round((58 - z.y) / 3.5), y = z.y + 44.5, up = k < -1, f = fingOk && nN === 8 ? FGP[1][i] : '';
+          for (let j = -7; j >= k; j -= 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) }); for (let j = 5; j <= k; j += 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) });
+          return { ...z, y, ay: z.ay + 44.5, stem: up ? 'M' + (z.x + 4.6) + ' ' + y + 'V' + (y - 24) : 'M' + (z.x - 4.6) + ' ' + y + 'V' + (y + 24), fy: 160, f1: f === '1', f2: f === '2', f3: f === '3', f4: f === '4', f5: f === '5' }; });
         return { sig: sig.map((z) => ({ ...z, ay: z.ay + 69 })), notes, led: ledB }; })(),
       // the key's place on the circle of fifths, drawn as the circle draws it (owner, 2026-11-16: "what is with this relative
       // minor … and on the circle of fifths. this doenst make any sense"): its slice, IV · I · V, each major over its
@@ -55,7 +56,7 @@ BEAMJS = r"""const BEAM = (sts, off) => { const mid = off ? 106 : 44, beams = []
     let e1 = grp[0].y + (up ? -24 : 24), e2 = grp[grp.length - 1].y + (up ? -24 : 24); e2 = e1 + Math.max(-7, Math.min(7, e2 - e1));
     const at = (i) => e1 + (e2 - e1) * (xs[i] - xs[0]) / (xs[xs.length - 1] - xs[0]);
     const sh = Math.max(0, ...grp.map((z, i) => up ? at(i) - (z.y - 20) : (z.y + 20) - at(i))), L = (i) => +(at(i) + (up ? -sh : sh)).toFixed(1), t = up ? 3.5 : -3.5;
-    grp.forEach((z, i) => { z.stem = 'M' + xs[i] + ' ' + z.y + 'V' + L(i); if (off === 0) z.fy = Math.min(16, (up ? L(i) : z.y - 4) - 6); else z.fy = Math.max(160, (up ? z.y + 4 : L(i)) + 13); });
+    grp.forEach((z, i) => { z.stem = 'M' + xs[i] + ' ' + z.y + 'V' + L(i); if (off === 0) z.fy = Math.min(16, (up ? L(i) : z.y - 4) - 6); else z.fy = Math.max(133, (up ? z.y + 4 : L(i)) + 13); });
     const n = grp.length - 1; beams.push({ d: 'M' + (xs[0] - .55) + ' ' + L(0) + 'L' + (xs[n] + .55) + ' ' + L(n) + 'L' + (xs[n] + .55) + ' ' + (L(n) + t) + 'L' + (xs[0] - .55) + ' ' + (L(0) + t) + 'Z' }); }
   return { ...sts, notes: out, beams, mx: 40 + sts.sig.length * 8 + (sts.sig.length ? 4 : 0) }; };
 """
@@ -79,7 +80,8 @@ def GRANDSTAFF(label):
     # the piano's brace before the system's line, as the app's engraving
     brace = (f'<path d="M4 30V120" stroke="{INK}" stroke-width="1.4"></path><path d="M356 30V120" stroke="{INK}" stroke-width=".9"></path>'
              f'<path d="M-1 30C-9 38 -1 66 -8 75C-1 84 -9 112 -1 120" fill="none" stroke="{INK}" stroke-width="1.6" stroke-linecap="round"></path>')
-    meter = lambda key, y0: ''.join(f'<text x="{{{{{key}.mx}}}}" y="{y0 + d}" font-size="21" font-weight="700" font-family="Instrument Serif, serif" fill="{INK}">4</text>' for d in (0, 14))
+    # the meter in Bravura's time digits, as the engine engraves it: each digit two spaces tall, centred on its half
+    meter = lambda key, y0: ''.join(f'<path transform="translate({{{{{key}.mx}}}} {y0 - 7 + d}) scale(.028 -.028)" d="{BRAVURA["t4"][0]}" fill="{INK}"></path>' for d in (0, 14))
     beams = lambda key: f'<sc-for list="{{{{{key}.beams}}}}" as="b" hint-placeholder-count="2"><path d="{{{{b.d}}}}" fill="{INK}"></path></sc-for>'
     return f'<svg viewBox="-10 0 370 168" width="100%" role="img" aria-label="{label}" style="display: block">{inner}{bass}{brace}{meter("ss", 44)}{meter("ssB", 106)}{beams("ss")}{beams("ssB")}</svg>'
 # the two hands' figures stand on their staves; only the honest note for a scale with no standard fingering stays under them

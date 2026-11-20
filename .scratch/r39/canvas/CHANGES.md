@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · Scales' left hand an octave under as the app engraves it; Bravura's sharp, flat, natural and 4/4 on the scale's staff · Scales,ScalesLaptop · pending
 
 
 ## Changes
