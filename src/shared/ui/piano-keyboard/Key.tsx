@@ -77,7 +77,7 @@ const MIDDLE_C = 60
 /** A phone's narrow keys (a white key under 12px): the keys' container is under 39rem. */
 const SLIM = {
   key: '@max-[39rem]:overflow-visible',
-  label: 'z-5 @max-[39rem]:px-0 @max-[39rem]:whitespace-nowrap @max-[39rem]:wrap-normal',
+  label: 'z-1 @max-[39rem]:px-0 @max-[39rem]:whitespace-nowrap @max-[39rem]:wrap-normal',
   text: '@max-[39rem]:text-[0.5rem]',
   gone: '@max-[39rem]:hidden',
 } as const

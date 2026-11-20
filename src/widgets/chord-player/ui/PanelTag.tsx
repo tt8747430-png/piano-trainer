@@ -67,11 +67,11 @@ export function PanelTag({ panel, className }: { panel: ChordPanel; className: s
     <>
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0.5 z-[44] rounded-xl outline-2 -outline-offset-2 outline-layout-edge outline-dashed"
+        className="pointer-events-none absolute inset-0.5 z-40 rounded-xl outline-2 -outline-offset-2 outline-layout-edge outline-dashed"
       />
       <div
         className={cn(
-          'absolute z-[45] flex h-11 items-center rounded-pill glass pr-1 text-foreground',
+          'absolute z-40 flex h-11 items-center rounded-pill glass pr-1 text-foreground',
           className,
         )}
       >

@@ -75,7 +75,7 @@ export function KeysGrab({
         }
       }}
       className={cn(
-        'absolute left-1/2 z-[46] grid h-11 w-22 -translate-x-1/2 cursor-ns-resize touch-none place-items-center',
+        'absolute left-1/2 z-40 grid h-11 w-22 -translate-x-1/2 cursor-ns-resize touch-none place-items-center',
         top ? '-bottom-[22px]' : '-top-[22px]',
       )}
     >

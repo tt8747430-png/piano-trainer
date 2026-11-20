@@ -404,6 +404,14 @@ with sand, as the boards' `CARD` and `GROUP` draw them (a 1px ring that takes no
 - **Popover** (`shadow-md` with a 1px ring of ink at 10%): popovers and menus, opening 5px inside the safe area, clear
   of the notch, the status bar and the home indicator.
 
+### Stacking
+
+One scale, no value between its steps: `z-1` a part over its neighbours inside a component (a slim key's name), `z-10`
+a lift inside content (a black key, a chord's handles), `z-20` what sticks while its page scrolls, `z-30` what floats
+over the page (the floating actions and bars), `z-40` the bars and the Chord player's Edit layout (its zones, outlines,
+tags and the keys' grab, later in the page over earlier), `z-50` every layer (sheets, dialogs, popovers, menus, the
+search palette), `z-60` the toast alone, so an Undo said from a sheet is seen over it.
+
 Sheets rise over a page dimmed to 10% black and need no shadow.
 
 **The Piano Exception Rule.** The keys' light and shade (`key-face-*`), the felt strip, the case's shade, a white key's
