@@ -4,7 +4,7 @@ import { quantise, type Take } from '@/entities/take'
 import { barAt, type TakeInto } from '@/features/score-editor'
 import { MIDDLE_C, type Midi } from '@/shared/lib/music'
 import { notate, singleStaff } from '@/shared/lib/notation'
-import { Dropdown, NamedSegmented, say, SettingsGroup, SwitchRow } from '@/shared/ui'
+import { Dropdown, Labelled, say, Segmented, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { ScoreView } from '@/shared/ui/score'
 import { TakeRoll } from '@/widgets/take-roll'
@@ -100,16 +100,18 @@ export function RecordReview({ take }: { take: Take }) {
           split={piano ? { key: split, onChange: setSplit } : undefined}
         />
       </section>
-      <NamedSegmented
-        label={t('review.quantize')}
-        value={chosen}
-        options={grids.map((each) => ({
-          value: gridKey(each),
-          label: gridName(gridKey(each)),
-          title: gridName(gridKey(each)),
-        }))}
-        onChange={setChosen}
-      />
+      <Labelled label={t('review.quantize')}>
+        <Segmented
+          label={t('review.quantize')}
+          value={chosen}
+          options={grids.map((each) => ({
+            value: gridKey(each),
+            label: gridName(gridKey(each)),
+            title: gridName(gridKey(each)),
+          }))}
+          onChange={setChosen}
+        />
+      </Labelled>
       {/* Hide raw notes and Into in one group, as the board's GROUP: Into a row, its value at its end. */}
       <SettingsGroup flush>
         <SwitchRow

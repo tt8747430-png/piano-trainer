@@ -91,7 +91,6 @@ export {
   GroupSwitch,
 } from './GroupRows'
 export { HandsPicture, HandsSegmented, HandSwatch } from './HandsSegmented'
-export { NamedSegmented } from './NamedSegmented'
 export { KeyPicker } from './pickers/KeyPicker'
 export { KeysChecklist } from './pickers/KeysChecklist'
 export { MenuPicker } from './pickers/MenuPicker'

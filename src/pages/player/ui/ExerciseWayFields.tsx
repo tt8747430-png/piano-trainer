@@ -9,7 +9,7 @@ import {
 import { localText, useLocale } from '@/shared/i18n'
 import { HANON_NUMBERS, HANON_RHYTHMS } from '@/shared/lib/exercise'
 import { fingeringsOf, isInversion, spellChord } from '@/shared/lib/music'
-import { Dropdown, InversionChoice, Labelled, NamedSegmented, Segmented } from '@/shared/ui'
+import { Dropdown, InversionChoice, Labelled, Segmented } from '@/shared/ui'
 import type { ExerciseChange } from '../model/exercise-search'
 
 /**
@@ -84,20 +84,27 @@ export function ExerciseWayFields({
       ) : null}
       {fields.octaves && fields.octaves.length > 1 ? (
         // Bare numbers: the name on screen says what they count.
-        <NamedSegmented
-          label={t('exercise.octaves')}
-          value={choice.octaves}
-          options={fields.octaves.map((octaves) => ({ value: octaves, label: String(octaves) }))}
-          onChange={(octaves) => onChange({ octaves })}
-        />
+        <Labelled label={t('exercise.octaves')}>
+          <Segmented
+            label={t('exercise.octaves')}
+            value={choice.octaves}
+            options={fields.octaves.map((octaves) => ({ value: octaves, label: String(octaves) }))}
+            onChange={(octaves) => onChange({ octaves })}
+          />
+        </Labelled>
       ) : null}
       {fields.figure ? (
-        <NamedSegmented
-          label={t('exercise.figure')}
-          value={choice.figure}
-          options={fields.figure.map((figure) => ({ value: figure, label: [...figure].join('-') }))}
-          onChange={(figure) => onChange({ figure })}
-        />
+        <Labelled label={t('exercise.figure')}>
+          <Segmented
+            label={t('exercise.figure')}
+            value={choice.figure}
+            options={fields.figure.map((figure) => ({
+              value: figure,
+              label: [...figure].join('-'),
+            }))}
+            onChange={(figure) => onChange({ figure })}
+          />
+        </Labelled>
       ) : null}
       {fields.voicing ? (
         <Labelled label={t('exercise.voicing')}>

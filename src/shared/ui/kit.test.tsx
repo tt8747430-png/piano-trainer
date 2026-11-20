@@ -9,7 +9,6 @@ import { FactCard } from './FactCard'
 import { InversionChoice } from './InversionChoice'
 import { TitleTabs } from './TitleTabs'
 import { RankMark } from './RankMark'
-import { NamedSegmented } from './NamedSegmented'
 import { Labelled } from './Labelled'
 import { MenuSection } from './MenuSection'
 import { optionName } from './option'
@@ -290,18 +289,6 @@ describe('Segmented', () => {
     expect(greyed).toHaveAccessibleDescription('Its keys run past B4')
     await user.click(greyed)
     expect(onChange).not.toHaveBeenCalled()
-  })
-})
-
-describe('NamedSegmented', () => {
-  it('shows its name beside the segments, and is named by it once', async () => {
-    const user = userEvent.setup()
-    const onChange = vi.fn()
-    render(<NamedSegmented label="Mode" value="step" options={MODES} onChange={onChange} />)
-    expect(screen.getByText('Mode')).toBeVisible()
-    expect(screen.getByRole('radiogroup', { name: 'Mode' })).toBeInTheDocument()
-    await user.click(screen.getByRole('radio', { name: 'Wait' }))
-    expect(onChange).toHaveBeenCalledWith('wait')
   })
 })
 
