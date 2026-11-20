@@ -14,7 +14,6 @@ export interface BarNote {
   readonly midi: Midi
   readonly spelled: SpelledNote
   readonly finger?: Finger
-  readonly crossing?: true
   /** Drawn on the piano's other staff (ADR 0114). */
   readonly cross?: true
   readonly role?: ChordRole

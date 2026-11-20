@@ -254,7 +254,6 @@ export {
 } from './place'
 export {
   arpeggioFingering,
-  fingerCrossings,
   handPositions,
   FINGERINGS,
   FINGERS,

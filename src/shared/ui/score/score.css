@@ -141,16 +141,10 @@
 [data-slot='score'][data-muted='treble'] g.staff[data-staff='treble'] g.note-chosen g.verse {
   color: var(--muted-foreground);
 }
-/* A finger that crosses (a scale's thumb passing under, a finger over it), typed so by the score:
-   in the link's sky and bold, as the keys' finger row fills its circle. */
-/* A finger takes the ink (Verovio sets no fill on its text), so it reads by Night as by Day. */
-[data-slot='score'] g.fing text {
+/* A finger takes the ink (Verovio sets no fill on its text), so it reads by Night as by Day, and
+   is the sans at 700, every finger alike, as the boards print a scale's (`SCALESTAFF`). */
+[data-slot='score'] g.fing :is(text, tspan) {
   fill: currentColor;
-}
-[data-slot='score'] g.fing.crossing {
-  color: var(--link);
-}
-[data-slot='score'] g.fing.crossing text {
-  fill: currentColor;
+  font-family: var(--font-sans);
   font-weight: 700;
 }

@@ -523,8 +523,7 @@ class Writer {
       const noteId = `n-${staff}-${event.tick}-${i}`
       if (this.options.fingers && written.finger !== undefined)
         controls.push(
-          // A crossing's finger is typed, so the engraving's class marks it for the accent colour.
-          `<fing startid="#${noteId}" place="${below ? 'below' : 'above'}"${written.crossing ? ' type="crossing"' : ''}>${written.finger}</fing>`,
+          `<fing startid="#${noteId}" place="${below ? 'below' : 'above'}">${written.finger}</fing>`,
         )
       const attrs = [
         `xml:id="${noteId}"`,
