@@ -67,7 +67,9 @@ export function useSettingsWindow(): SettingsWindowState & {
     show(page)
   }
   const onPage = (page: SettingsWindowPage) => {
-    if (under.current === null) return show(page)
+    // Opened by a link (its entry already holds the window): its pages replace that entry, so Back
+    // leaves the window at once, to where the link was followed from.
+    if (under.current === null) return show(page, true)
     trail.current = trail.current.slice(0, at() - under.current)
     const behind = trail.current.lastIndexOf(page)
     if (behind >= 0 && behind < trail.current.length - 1) {
