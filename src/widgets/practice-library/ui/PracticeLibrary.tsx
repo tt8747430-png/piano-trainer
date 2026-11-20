@@ -2,12 +2,11 @@ import { selectRecent, usePracticeLibrary } from '@/entities/practice-library'
 import { useDeferredValue, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { cn, useMediaQuery, useSetSearch } from '@/shared/lib'
+import { cn, useMediaQuery, useSetSearch, LAPTOP } from '@/shared/lib'
 import {
   FilteredNotice,
   FoldSection,
   GROUPED_LIST,
-  LIBRARY_PANES,
   ScreenHeader,
   type ScreenHeaderProps,
   ShowAll,
@@ -109,7 +108,7 @@ export function PracticeLibrary({
 }) {
   const { t } = useTranslation(['practice', 'common'])
   const locale = useLocale()
-  const wide = useMediaQuery(LIBRARY_PANES)
+  const wide = useMediaQuery(LAPTOP)
   const set = useSetSearch<PracticeLibraryView>()
   const q = useDeferredValue(view.q)
   const recent = usePracticeLibrary(selectRecent(kind))

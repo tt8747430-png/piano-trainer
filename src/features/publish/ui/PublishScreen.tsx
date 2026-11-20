@@ -11,7 +11,7 @@ import {
   type PublicEntry,
   type PublicKind,
 } from '@/shared/api/public-library'
-import { cn, copyText, useMediaQuery } from '@/shared/lib'
+import { cn, copyText, useMediaQuery, LAPTOP } from '@/shared/lib'
 import {
   ButtonLink,
   ChoiceList,
@@ -19,7 +19,6 @@ import {
   GroupAction,
   GroupLink,
   GroupRows,
-  LIBRARY_PANES,
   PAINT,
   ProgressBar,
   ScreenHeader,
@@ -227,7 +226,7 @@ function PublishForm({
 }) {
   const { t } = useTranslation('songs')
   const id = useId()
-  const laptop = useMediaQuery(LIBRARY_PANES)
+  const laptop = useMediaQuery(LAPTOP)
   const [face, setFace] = useState<PublishFace>(publishing.face)
   const [tag, setTag] = useState('')
   const [licences, setLicences] = useState(false)

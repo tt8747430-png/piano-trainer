@@ -12,7 +12,7 @@ import type { ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setSidebar } from '@/features/set-preference'
-import { cn, OPEN_PLAINLY, setFocusMode, useFocusMode, useMediaQuery } from '@/shared/lib'
+import { cn, OPEN_PLAINLY, setFocusMode, useFocusMode, useMediaQuery, LAPTOP } from '@/shared/lib'
 import { useAccount, useLearnerProfile } from '@/shared/lib/account'
 import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/shared/lib/shortcuts'
 import { Avatar } from '@/shared/ui'
@@ -134,8 +134,6 @@ const PLACES: readonly Place[] = [
 ]
 /** The sidebar, open or collapsed: the platform's modifier and B. */
 const SIDEBAR_KEY: Combo = { code: 'KeyB', mod: true }
-/** Where the navigation is the sidebar (the `lg` breakpoint), with Settings at its foot. */
-const SIDEBAR_SHOWN = '(min-width: 64rem)'
 /**
  * Search, at the sidebar's foot on a laptop: the palette over the screen (rule 27), on the
  * platform's modifier and K from anywhere (a phone has it in a place's bar).
@@ -161,7 +159,7 @@ function PlaceLink({
   const { t } = useTranslation('common')
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   // The sidebar (a laptop's) has Settings of its own; a phone's bar has it in the Profile.
-  const sidebar = useMediaQuery(SIDEBAR_SHOWN)
+  const sidebar = useMediaQuery(LAPTOP)
   // The place is current under its other prefix too, as the router marks its own address.
   const prefixes = sidebar ? also : [...also, ...alsoWithoutSidebar]
   const current = prefixes.some(
@@ -265,7 +263,7 @@ export function AppNav({ keep = false }: { keep?: boolean }) {
   const away = !keep && (exploring || !PLACES.some(({ to }) => to === pathname))
   // A laptop's sidebar puts the learner at its foot, under Search and Settings; a phone's bar keeps
   // the Profile as its last tab.
-  const sidebarShown = useMediaQuery(SIDEBAR_SHOWN)
+  const sidebarShown = useMediaQuery(LAPTOP)
   const songsOpen = pathname === '/songs' || pathname.startsWith('/songs/')
   const songsPlaceShown = useSongsPlaceShown()
   return (

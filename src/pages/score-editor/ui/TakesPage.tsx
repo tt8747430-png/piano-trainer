@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { selectRoomLeft, selectTake, selectTakesOf, useTakes, type TakeId } from '@/entities/take'
-import { flipped, useMediaQuery } from '@/shared/lib'
+import { flipped, useMediaQuery, LAPTOP } from '@/shared/lib'
 import { BackButton, sayUndo, ScreenHeader, SelectAct, SelectDock } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useScoreEditorContext } from '../model/editor-context'
@@ -35,7 +35,7 @@ export function TakesPage() {
   const [picked, setPicked] = useState<ReadonlySet<TakeId> | null>(null)
   // On a laptop the takes are a row of cards and the one picked is reviewed under them (the
   // TakesLaptop board): a take just kept, else the one last picked, else the newest.
-  const laptop = useMediaQuery('(min-width: 64rem)')
+  const laptop = useMediaQuery(LAPTOP)
   const [pickedId, setPickedId] = useState<TakeId | null>(null)
   const reviewed = laptop
     ? (writing ?? list.find((take) => take.id === pickedId) ?? list[0])

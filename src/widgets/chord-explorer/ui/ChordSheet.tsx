@@ -6,6 +6,7 @@ import { notate } from '@/shared/lib/notation'
 import { chordBars } from '@/shared/lib/schedule'
 import { useMediaQuery } from '@/shared/lib/use-media-query'
 import { LazyScoreView } from '@/shared/ui'
+import { LAPTOP } from '@/shared/lib'
 
 /**
  * The canvas's staff (`r42_chords.py`, `sv`), in its units: the lines 14 in from each side, the
@@ -88,7 +89,7 @@ export function ChordSheet({
     [chords],
   )
   const several = chords.length > 1
-  const unit = useMediaQuery('(min-width: 64rem)') ? 1.75 : 1.5
+  const unit = useMediaQuery(LAPTOP) ? 1.75 : 1.5
   const section = useRef<HTMLElement>(null)
   const scroller = useRef<HTMLDivElement>(null)
   const [room, setRoom] = useState(0)

@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn, useMediaQuery } from '@/shared/lib'
-import { LIBRARY_PANES } from './FilterSheet'
+import { cn, useMediaQuery, LAPTOP } from '@/shared/lib'
 import { Button } from './primitives/button'
 import { Dialog, DialogClose, DialogContent, DialogTitle } from './primitives/dialog'
 import { Sheet, SheetContent } from './Sheet'
@@ -36,7 +35,7 @@ export function MakeSheet({
   children: ReactNode
 }) {
   const { t } = useTranslation('common')
-  const laptop = useMediaQuery(LIBRARY_PANES)
+  const laptop = useMediaQuery(LAPTOP)
   if (!laptop)
     return (
       <Sheet open={open} onOpenChange={onOpenChange}>

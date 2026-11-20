@@ -1,6 +1,6 @@
 import { useState, type ComponentProps, type ReactElement, type ReactNode } from 'react'
-import { useMediaQuery } from '@/shared/lib'
-import { LIBRARY_PANES, PanelPopover, RowTrigger, Sheet, SheetContent } from '@/shared/ui'
+import { useMediaQuery, LAPTOP } from '@/shared/lib'
+import { PanelPopover, RowTrigger, Sheet, SheetContent } from '@/shared/ui'
 
 /** What an editor is given: how to close its picker, and the ref of the field it focuses as it opens. */
 export interface PickerTools {
@@ -25,7 +25,7 @@ export function Picker({
   trigger: Trigger
   children: (tools: PickerTools) => ReactNode
 }) {
-  const laptop = useMediaQuery(LIBRARY_PANES)
+  const laptop = useMediaQuery(LAPTOP)
   const [open, setOpen] = useState(false)
   // The field to focus, once the editor has drawn it: the sheet or popover then opens on it.
   const [field, setField] = useState<HTMLInputElement | HTMLTextAreaElement | null>(null)

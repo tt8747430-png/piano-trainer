@@ -15,7 +15,7 @@ import {
   type ShelvedFolder,
 } from '@/entities/library'
 import { resetCardLook, setCardLook } from '@/features/manage-library'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn, useMediaQuery, LAPTOP } from '@/shared/lib'
 import { BLOCK_PRESETS, presetOf, sameStyle, STYLE_LAYOUTS } from '@/shared/lib/style'
 import {
   ActionMenu,
@@ -23,7 +23,6 @@ import {
   BackButton,
   ButtonLink,
   ConfirmDialog,
-  LIBRARY_PANES,
   NotFound,
   ScreenHeader,
   Segmented,
@@ -83,7 +82,7 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
   const nameOf = useFolderName()
   const store = useLibraryStoreApi()
   const layout = useLibraryLayout()
-  const laptop = useMediaQuery(LIBRARY_PANES)
+  const laptop = useMediaQuery(LAPTOP)
   const place: CardPlace = folder?.id ?? 'home'
   // The look as it stands: every change takes effect at once (the board's; no Apply).
   const draft = useLibrary((state) => state.cardLooks[place]) ?? DEFAULT_CARD_LOOK

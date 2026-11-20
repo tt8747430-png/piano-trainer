@@ -2,7 +2,7 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { Archive } from 'lucide-react'
 import { useDeferredValue, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { CountSort, LIBRARY_PANES, RowLink } from '@/shared/ui'
+import { CountSort, RowLink } from '@/shared/ui'
 import {
   folderArchive,
   LIBRARY_SORTS,
@@ -16,7 +16,7 @@ import {
 import { useRepertoire } from '@/entities/piece'
 import { editFolder, FolderEditPanel, type FolderEdit } from '@/features/manage-library'
 import { useSongDrop, useSongImport } from '@/features/song-files'
-import { cn, useMediaQuery, useSetSearch } from '@/shared/lib'
+import { cn, useMediaQuery, useSetSearch, LAPTOP } from '@/shared/lib'
 import { PLACE_COLUMN } from '@/widgets/song-library'
 import type { FolderSearch, SongsFilter } from '../model/songs-filter'
 import { useLibraryPage } from '../model/use-library-page'
@@ -54,7 +54,7 @@ export function LibraryScreen({
   const nameOf = useFolderName()
   const navigate = useNavigate()
   const q = useDeferredValue(filter.q)
-  const laptop = useMediaQuery(LIBRARY_PANES)
+  const laptop = useMediaQuery(LAPTOP)
   const page = useLibraryPage(
     folder,
     { ...filter, q },

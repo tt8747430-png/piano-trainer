@@ -1,13 +1,12 @@
 import { Check, X } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn, useMediaQuery, LAPTOP } from '@/shared/lib'
 import { InfoTip, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 
 /** Where a sign's picker stands by what was tapped: a laptop's popover, else a sheet from the foot. */
-const LAPTOP = '(min-width: 64rem)'
 
 /**
  * A picker's title row, the sheet's in a popover: its name, what it changes under it, its ⓘ where it

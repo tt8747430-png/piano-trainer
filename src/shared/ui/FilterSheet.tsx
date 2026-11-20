@@ -1,18 +1,12 @@
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useMediaQuery } from '@/shared/lib'
+import { useMediaQuery, LAPTOP } from '@/shared/lib'
 import { FoldGroup } from './FoldGroup'
 import { FilterIcon } from './icons/FilterIcon'
 import { Button } from './primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
 import { Toggle } from './primitives/toggle'
 import { Sheet, SheetContent } from './Sheet'
-
-/**
- * The width from which a library (Songs', Practice's) shows its tree beside its rows, and its filters
- * open in a popover by their button: the sidebar's, `lg`.
- */
-export const LIBRARY_PANES = '(min-width: 64rem)'
 
 /**
  * A library's Filter button and its filters (ADR 0106, the owner's example): the button, its count on
@@ -34,7 +28,7 @@ export function FilterSheet({
   children: ReactNode
 }) {
   const { t } = useTranslation('common')
-  const laptop = useMediaQuery(LIBRARY_PANES)
+  const laptop = useMediaQuery(LAPTOP)
   const [open, setOpen] = useState(false)
   const title = t(sorted ? 'library.filters.sortTitle' : 'library.filters.title')
   const label = count > 0 ? t('library.filters.on', { count }) : title

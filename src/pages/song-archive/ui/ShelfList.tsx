@@ -4,11 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { FolderTile, useFolderName, type ShelvedEntry } from '@/entities/library'
 import { entryTitles, PieceLink, useRepertoire, type Entry } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
-import { cn, daySaid, flipped, matchesQuery, useMediaQuery, useNow } from '@/shared/lib'
+import { cn, daySaid, flipped, matchesQuery, useMediaQuery, useNow, LAPTOP } from '@/shared/lib'
 import {
   BackButton,
   CheckMark,
-  LIBRARY_PANES,
   RowFace,
   RowMore,
   ScreenHeader,
@@ -230,7 +229,7 @@ export function ShelfList({
   const locale = useLocale()
   const repertoire = useRepertoire()
   const nameOf = useFolderName()
-  const laptop = useMediaQuery(LIBRARY_PANES)
+  const laptop = useMediaQuery(LAPTOP)
   const [selecting, setSelecting] = useState(false)
   const [chosen, setChosen] = useState<ReadonlySet<string>>(new Set())
   const [query, setQuery] = useState('')

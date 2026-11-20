@@ -1,7 +1,6 @@
-import { useMediaQuery } from '@/shared/lib'
+import { useMediaQuery, LAPTOP } from '@/shared/lib'
 
 /** A laptop's width, and a tablet's or a phone's on its side. */
-const LAPTOP = '(min-width: 64rem)'
 const TABLET = '(min-width: 40rem)'
 
 /**

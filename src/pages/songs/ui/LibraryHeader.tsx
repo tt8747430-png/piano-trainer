@@ -4,15 +4,8 @@ import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
 import { ShareFolderSheet, useFolderShare } from '@/features/share-folder'
-import { useMediaQuery, useUp } from '@/shared/lib'
-import {
-  BackButton,
-  LIBRARY_PANES,
-  MoreMenu,
-  ScreenHeader,
-  type EditAction,
-  type MenuAction,
-} from '@/shared/ui'
+import { useMediaQuery, useUp, LAPTOP } from '@/shared/lib'
+import { BackButton, MoreMenu, ScreenHeader, type EditAction, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { PlaceBar } from '@/widgets/song-library'
 import type { LibraryPage } from '../model/use-library-page'
@@ -44,7 +37,7 @@ export function LibraryHeader({
   /** How many it lists, beside its name on a laptop. */
   count?: string | undefined
 }) {
-  const laptop = useMediaQuery(LIBRARY_PANES)
+  const laptop = useMediaQuery(LAPTOP)
   const { t } = useTranslation('songs')
   const nameOf = useFolderName()
   const { folders } = useLibraryLayout()

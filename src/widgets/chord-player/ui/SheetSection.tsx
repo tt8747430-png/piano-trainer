@@ -4,7 +4,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, Plus, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { ProgressionNames } from '@/entities/settings'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn, useMediaQuery, LAPTOP } from '@/shared/lib'
 import {
   sectionBars,
   sectionChords,
@@ -22,9 +22,6 @@ const STILL = () => null
 
 /** A style's variations, Musicca's 1 to 4. */
 const VARIATIONS = [1, 2, 3, 4] as const
-
-/** A laptop's sheet holds four bars a row, a phone's two (canvas 173). */
-const WIDE = '(min-width: 64rem)'
 
 /** One of the head's values (canvas 173): its fill 36 tall in a 44 target. */
 const PILL =
@@ -80,7 +77,7 @@ export function SheetSection({
   const name = t(`chordPlayer.sections.${section.kind}`)
   const bars = sectionBars(section, meter)
   const perBar = beatsPerBar(meter)
-  const wide = useMediaQuery(WIDE)
+  const wide = useMediaQuery(LAPTOP)
   const columns = perBar * (wide ? 4 : 2)
   const chords = sectionChords(section)
   const {
