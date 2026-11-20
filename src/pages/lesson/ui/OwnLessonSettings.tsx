@@ -7,7 +7,7 @@ import { lessonStepId } from '@/entities/step'
 import { duplicateOwnLesson, renameOwnLesson } from '@/features/manage-own-lessons'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { type SettingsWindowState } from '@/shared/lib'
+import { type SettingsWindowOpen } from '@/shared/lib'
 import { say, sayUndo, SettingsWindow, ThingHead } from '@/shared/ui'
 import { deleteOwn, InCoursesRow, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 
@@ -20,7 +20,7 @@ export function OwnLessonSettings({
   lesson,
   open,
   onOpenChange,
-}: { lesson: OwnLesson } & Pick<SettingsWindowState, 'open' | 'onOpenChange'>) {
+}: { lesson: OwnLesson } & SettingsWindowOpen) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const navigate = useNavigate()

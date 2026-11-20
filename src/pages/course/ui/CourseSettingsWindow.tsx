@@ -5,7 +5,7 @@ import { selectOwnCourse, useOwnLessons } from '@/entities/own-lessons'
 import { DraftPublishing, RemoveGroup, useCourseDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { shareLink, type SettingsWindowState } from '@/shared/lib'
+import { shareLink, type SettingsWindowOpen } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ActionRow, RowLink, say, SettingsGroup, SettingsWindow, ThingHead } from '@/shared/ui'
 import { useStanding } from '@/widgets/content-editor'
@@ -24,7 +24,7 @@ export function CourseSettingsWindow({
   courseId,
   open,
   onOpenChange,
-}: { courseId: string } & Pick<SettingsWindowState, 'open' | 'onOpenChange'>) {
+}: { courseId: string } & SettingsWindowOpen) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const { account } = useAccount()

@@ -63,6 +63,27 @@ export function FolderSheet({
   )
 }
 
+/**
+ * New playlist as a page inside a song's Settings window (the SongSettings boards' New playlist): its
+ * name and Create under it, a sheet never holding a sheet; made at Home, `onMade` hears its id.
+ */
+export function NewFolderPage({ onMade }: { onMade: (id: OwnFolderId) => void }) {
+  const { t } = useTranslation('songs')
+  return (
+    <div className="flex flex-col gap-6">
+      <FolderForm
+        target={{ kind: 'new', parent: null }}
+        onDone={(id) => {
+          if (id) onMade(id)
+        }}
+      />
+      <Button type="submit" form={FOLDER_FORM} size="lg" className="w-full">
+        {t('folder.create')}
+      </Button>
+    </div>
+  )
+}
+
 /** The form's id, which Create at the sheet's foot submits. */
 const FOLDER_FORM = 'new-folder'
 

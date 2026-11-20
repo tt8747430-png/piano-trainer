@@ -21,7 +21,6 @@ import {
   GroupRows,
   PAINT,
   ProgressBar,
-  ScreenHeader,
   Segmented,
   Sheet,
   SheetContent,
@@ -98,7 +97,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 }
 
 /**
- * Publish (R72, Flat's discoverability form), a page of its own for a learner's song or pattern:
+ * Publish (R72, Flat's discoverability form), for a learner's song (inside its Settings' window) or pattern (a page of its own):
  * the item's head; then, before it is published, what others find it by (a meter of how easily it is
  * found, n of 5: its title, who wrote it, what it is, its tags, a description of 20 characters),
  * Title and Composer, Type (Original · Arrangement · Other), Tags as chips with × and suggestions with
@@ -110,18 +109,14 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 export function PublishScreen({
   item,
   publishing,
-  back,
 }: {
   item: PublishPreview
   publishing: ReturnType<typeof usePublish>
-  /** The bar's way back (the pattern's page); none inside a window, whose bar is its own (a song's Settings). */
-  back?: ReactNode
 }) {
   const { t } = useTranslation(['songs', 'editor'])
   const live = publishing.state === 'published' || publishing.state === 'changed'
   return (
-    <div className={cn('flex flex-col gap-2 lg:gap-6', back && 'min-h-screen-free')}>
-      {back ? <ScreenHeader title={t('editor:publishPage.title')} back={back} /> : null}
+    <div className="flex flex-col gap-2 lg:gap-6">
       <PublishSaid said={publishing.said} />
       <div className="flex w-full flex-1 flex-col gap-4 lg:gap-6">
         {/* The thing's head as its Settings', the boards' THINGHEAD (canvas v550). */}

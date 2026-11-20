@@ -1,34 +1,28 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Music } from 'lucide-react'
-import {
-  hasEditableOriginal,
-  isDegreePiece,
-  PIECES,
-  type ChartPiece,
-  type Piece,
-} from '@/entities/piece'
+import { PIECES, type ChartPiece, type Piece } from '@/entities/piece'
 import { useOriginalDraft } from '@/features/edit-original'
-import { editsContent, useAccount } from '@/shared/lib/account'
 import { DraftPublishScreen } from '@/widgets/content-editor'
-import { PublishScreen } from '@/features/publish'
+import { PublishScreen, type PublishItem, type usePublish } from '@/features/publish'
 import { TileMark } from '@/shared/ui'
 import { PieceMark } from '@/widgets/piece-cover'
 import { useSongByline } from '../model/use-song-byline'
-import { useSongPublish } from '../model/use-song-publish'
 
 /**
  * A song's Publish (R29 B6), a page inside its Settings' window (the SongSettings boards), reached by
- * its Publish row: a learner's own song to Explore (round 27, Noji's); one of the app's, an editor's,
- * to every learner. The window's bar is its bar.
+ * its Publish row: a learner's own song to Explore (round 27, Noji's). The window's bar is its bar.
  */
-export function SongPublish({ piece }: { piece: Piece }) {
-  const { item, title, publishing } = useSongPublish(piece)
+export function SongPublish({
+  piece,
+  item,
+  publishing,
+}: {
+  piece: Piece
+  item: PublishItem
+  publishing: ReturnType<typeof usePublish>
+}) {
   const line = useSongByline(piece)
-  const { account } = useAccount()
-  if (!item && editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece))
-    return <OriginalPublish piece={piece} title={title} />
-  if (!item) return null
   return (
     <PublishScreen
       item={{
@@ -50,7 +44,7 @@ export function SongPublish({ piece }: { piece: Piece }) {
 }
 
 /** One of the app's songs published to every learner, an editor's (R29 B6). */
-function OriginalPublish({ piece, title }: { piece: ChartPiece; title: string }) {
+export function OriginalPublish({ piece, title }: { piece: ChartPiece; title: string }) {
   const { t } = useTranslation('editor')
   const draft = useOriginalDraft(piece)
   return (

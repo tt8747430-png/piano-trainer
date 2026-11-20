@@ -33,7 +33,7 @@ export function SettingsDialog({
     <Dialog open onOpenChange={(open) => (open ? undefined : onClose())}>
       <DialogContent
         showCloseButton={false}
-        className="flex h-[calc(100dvh-6rem)] w-[min(75rem,calc(100vw-10rem))] max-w-none flex-col gap-0 overflow-hidden rounded-sheet bg-card p-0 text-base text-foreground shadow-[0_0_0_1px_var(--color-border),0_24px_64px_rgb(51_41_33/0.28)] sm:max-w-none"
+        className="flex h-(--window-room) w-[min(75rem,calc(100vw-10rem))] max-w-none flex-col gap-0 overflow-hidden rounded-sheet bg-card p-0 text-base text-foreground window-shadow sm:max-w-none"
       >
         <header className="flex h-14 shrink-0 items-center border-b border-border pr-2 pl-6">
           <DialogTitle className="flex-1 font-sans text-lg leading-normal font-semibold">

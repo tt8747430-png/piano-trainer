@@ -8,7 +8,10 @@ declare module '@tanstack/history' {
   }
 }
 
-/** The page Settings was opened from: what the dialog stands over and what closing it returns to. */
+/**
+ * The page Settings was opened from: what the dialog stands over and what closing it returns to. A
+ * Settings address opened cold stands over Learn, as claude.ai's over a new chat.
+ */
 let background = '/'
 
 /** Keeps the page a Settings dialog would open over (every page but Settings' own). */

@@ -5,18 +5,9 @@ import { VersionsDialog, type ContentDraft, type Unreadable } from '@/features/e
 import { CopyLinkField, RightsCheck, StandingLine } from '@/features/publish'
 import type { ContentKind } from '@/shared/api/content'
 import type { NetResult } from '@/shared/api/network'
-import { cn } from '@/shared/lib'
 import { useAccount, editsContent } from '@/shared/lib/account'
 import { useContentEditing } from '@/shared/lib/content-editing'
-import {
-  ButtonLink,
-  ConfirmDialog,
-  InfoTip,
-  MenuSection,
-  OpensMark,
-  say,
-  ScreenHeader,
-} from '@/shared/ui'
+import { ButtonLink, ConfirmDialog, InfoTip, MenuSection, OpensMark, say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useStanding } from '../model/use-standing'
 import { DraftGate, NotOpen } from './DraftScreen'
@@ -37,7 +28,6 @@ export function DraftPublishScreen<T>({
   view,
   preview,
   unreadable,
-  back,
   removable = false,
 }: {
   kind: ContentKind
@@ -53,8 +43,6 @@ export function DraftPublishScreen<T>({
   preview: ReactNode
   /** What is said where Publish is refused for a draft that does not read. */
   unreadable: string
-  /** The screen's Back (`BackButton`); none inside a window, whose bar is its own (a song's Settings). */
-  back?: ReactNode
   /** Made in the app, not shipped with it: it may be unpublished. */
   removable?: boolean
 }) {
@@ -94,82 +82,73 @@ export function DraftPublishScreen<T>({
       setPublished(true)
     })
   return (
-    <div className={cn('flex flex-col gap-6', back && 'min-h-screen-free pb-8')}>
-      {back ? (
-        <ScreenHeader
-          title={t('publishPage.title')}
-          back={back}
-          tools={
-            <InfoTip name={t('publishPage.title')} bar>
-              {t('publishPage.whyBody')}
-            </InfoTip>
-          }
-        />
-      ) : null}
-      <div className={cn('flex flex-1 flex-col gap-6', back && 'page-column')}>
-        {!editsContent(account) ? (
-          <NotOpen line={t('original.editorsOnly')} />
-        ) : load.state !== 'ready' ? (
-          <DraftGate load={load} reopen={draft.reopen} />
-        ) : published === null ? (
-          <NotOpen kind="opening" line={t('original.opening')} />
-        ) : (
-          <>
+    <div className="flex flex-col gap-6">
+      {!editsContent(account) ? (
+        <NotOpen line={t('original.editorsOnly')} />
+      ) : load.state !== 'ready' ? (
+        <DraftGate load={load} reopen={draft.reopen} />
+      ) : published === null ? (
+        <NotOpen kind="opening" line={t('original.opening')} />
+      ) : (
+        <>
+          {/* Where it stands, and why it is published (inside the window, whose bar is its own). */}
+          <div className="flex items-center justify-between gap-2">
             <StandingLine standing={standing} />
-            <MenuSection title={t('publishPage.changes')} inset>
-              <p className="px-1 text-pretty">
-                {draft.drafted || !published
-                  ? t('publishPage.changesDrafted')
-                  : t('publishPage.changesNone')}
-              </p>
+            <InfoTip name={t('publishPage.title')}>{t('publishPage.whyBody')}</InfoTip>
+          </div>
+          <MenuSection title={t('publishPage.changes')} inset>
+            <p className="px-1 text-pretty">
+              {draft.drafted || !published
+                ? t('publishPage.changesDrafted')
+                : t('publishPage.changesNone')}
+            </p>
+          </MenuSection>
+          <MenuSection title={t('publishPage.preview')} inset>
+            {preview}
+          </MenuSection>
+          {published ? (
+            <MenuSection title={t('publishPage.link')} inset className="gap-3">
+              <CopyLinkField url={`${window.location.origin}${path}`} />
+              <ButtonLink variant="outline" size="lg" render={view}>
+                {t('publishPage.view')}
+              </ButtonLink>
+              <Button
+                variant="ghost"
+                size="lg"
+                className="justify-between"
+                onClick={() => setAsked('versions')}
+              >
+                <span className="flex items-center gap-2">
+                  <History aria-hidden />
+                  {t('publishPage.versions')}
+                </span>
+                <OpensMark />
+              </Button>
             </MenuSection>
-            <MenuSection title={t('publishPage.preview')} inset>
-              {preview}
-            </MenuSection>
-            {published ? (
-              <MenuSection title={t('publishPage.link')} inset className="gap-3">
-                <CopyLinkField url={`${window.location.origin}${path}`} />
-                <ButtonLink variant="outline" size="lg" render={view}>
-                  {t('publishPage.view')}
-                </ButtonLink>
-                <Button
-                  variant="ghost"
-                  size="lg"
-                  className="justify-between"
-                  onClick={() => setAsked('versions')}
-                >
-                  <span className="flex items-center gap-2">
-                    <History aria-hidden />
-                    {t('publishPage.versions')}
-                  </span>
-                  <OpensMark />
-                </Button>
-              </MenuSection>
-            ) : null}
-            <div className="mt-auto flex flex-col gap-3 pt-4">
-              <RightsCheck checked={rights} onChange={setRights} />
+          ) : null}
+          <div className="mt-auto flex flex-col gap-3 pt-4">
+            <RightsCheck checked={rights} onChange={setRights} />
+            <Button
+              size="lg"
+              disabled={busy || !rights || (published === true && !draft.drafted)}
+              onClick={publish}
+            >
+              {published ? t('publishPage.publishNew') : t('publishPage.publish')}
+            </Button>
+            {published && removable ? (
               <Button
                 size="lg"
-                disabled={busy || !rights || (published === true && !draft.drafted)}
-                onClick={publish}
+                variant="soft"
+                className="text-destructive"
+                disabled={busy}
+                onClick={() => setAsked('unpublish')}
               >
-                {published ? t('publishPage.publishNew') : t('publishPage.publish')}
+                {t('publishPage.unpublish')}
               </Button>
-              {published && removable ? (
-                <Button
-                  size="lg"
-                  variant="soft"
-                  className="text-destructive"
-                  disabled={busy}
-                  onClick={() => setAsked('unpublish')}
-                >
-                  {t('publishPage.unpublish')}
-                </Button>
-              ) : null}
-            </div>
-          </>
-        )}
-      </div>
+            ) : null}
+          </div>
+        </>
+      )}
       <VersionsDialog
         open={asked === 'versions'}
         onOpenChange={(open) => (open ? undefined : setAsked(null))}

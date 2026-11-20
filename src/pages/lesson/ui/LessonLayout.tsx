@@ -60,7 +60,7 @@ export function LessonLayout({
   /** Its Edit: the pencil beside its title, an editor's, or the learner's on their own lesson. */
   edit?: EditAction | undefined
   /** Its Settings, a window over the lesson (`SettingsWindow`), given whether it is open. */
-  settings: (window: SettingsWindowState) => ReactNode
+  settings: (shown: SettingsWindowState) => ReactNode
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()

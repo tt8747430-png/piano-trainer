@@ -899,6 +899,12 @@
     0 0 0 1px var(--border),
     var(--elevation-2);
 }
+/* A window over the page (the app Settings, a thing's Settings): the line ring and its deep shade. */
+@utility window-shadow {
+  box-shadow:
+    0 0 0 1px var(--border),
+    var(--elevation-window);
+}
 @utility elevation-2 {
   box-shadow: var(--elevation-2);
 }

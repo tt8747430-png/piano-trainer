@@ -14,7 +14,6 @@ import { shareLink, useForgetScreens, type SettingsWindowState } from '@/shared/
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   ActionRow,
-  BackButton,
   ProgressionTiles,
   say,
   SettingsGroup,
@@ -50,11 +49,7 @@ export function ProgressionSettingsWindow({
       open={open}
       onOpenChange={onOpenChange}
       title={t(page === 'publish' ? 'editor:publishPage.title' : 'settings.title')}
-      back={
-        page === 'publish' ? (
-          <BackButton label={t('settings.title')} onClick={() => onPage('settings')} />
-        ) : undefined
-      }
+      onBack={page === 'publish' ? () => onPage('settings') : undefined}
     >
       {page === 'publish' ? (
         <ProgressionPublish progression={progression} draft={draft} />
@@ -104,12 +99,7 @@ function ProgressionSettings({
       {editsContent(account) ? (
         <>
           <SettingsGroup flush title={t('learn:settings.share')}>
-            <PublishRow
-              kind="progression"
-              id={progression.id}
-              draft={draft}
-              link={<button type="button" onClick={onPublish} />}
-            />
+            <PublishRow kind="progression" id={progression.id} draft={draft} onOpen={onPublish} />
             <ActionRow title={t('editor:publishPage.shareLink')} onClick={() => void share()} />
           </SettingsGroup>
           {shipsWithApp(progression.id) ? null : (

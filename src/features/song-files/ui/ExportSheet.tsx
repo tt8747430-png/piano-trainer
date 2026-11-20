@@ -27,20 +27,11 @@ type Row = {
 }
 
 /**
- * Export… (ADR 0107), one sheet of the music's ways out, as every screen opens it (a song's page, its
- * library row, the Player's and the editor's More; Noji's Export deck, MuseScore's Export): each a
- * row named for its file. A row chosen does its work and closes the sheet. `subject`, the
- * name under the title, null while it is shut.
+ * The rows of Export… (ADR 0107), each named for its file: a row chosen does its work, then `onDone`.
+ * In a sheet as every screen opens it (a song's page, its library row, the Player's and the editor's
+ * More; Noji's Export deck, MuseScore's Export), or as a page inside a song's Settings' window.
  */
-export function ExportSheet({
-  subject,
-  files,
-  onOpenChange,
-}: {
-  subject: string | null
-  files: ExportFiles
-  onOpenChange: (open: boolean) => void
-}) {
+export function ExportRows({ files, onDone }: { files: ExportFiles; onDone: () => void }) {
   const { t } = useTranslation('songs')
   const rows: Row[] = [
     ...(files.musicXml
@@ -81,28 +72,51 @@ export function ExportSheet({
       : []),
   ]
   return (
+    <ul aria-label={t('export.title')} className="flex flex-col gap-1">
+      {rows.map((row) => (
+        <li key={row.key}>
+          <RowButton
+            title={row.title}
+            icon={row.icon}
+            paint={row.paint}
+            onClick={() => {
+              onDone()
+              row.onSelect()
+            }}
+          />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+/**
+ * Export… as a sheet, the music's ways out under `subject`, its name, null while it is shut.
+ */
+export function ExportSheet({
+  subject,
+  files,
+  onOpenChange,
+}: {
+  subject: string | null
+  files: ExportFiles
+  onOpenChange: (open: boolean) => void
+}) {
+  const { t } = useTranslation('songs')
+  return (
     <Sheet at={{}} open={subject !== null} onOpenChange={onOpenChange}>
       {subject !== null ? (
         <SheetContent title={t('export.title')} description={subject}>
-          <ul aria-label={t('export.title')} className="flex flex-col gap-1">
-            {rows.map((row) => (
-              <li key={row.key}>
-                <RowButton
-                  title={row.title}
-                  icon={row.icon}
-                  paint={row.paint}
-                  onClick={() => {
-                    onOpenChange(false)
-                    row.onSelect()
-                  }}
-                />
-              </li>
-            ))}
-          </ul>
+          <ExportRows files={files} onDone={() => onOpenChange(false)} />
         </SheetContent>
       ) : null}
     </Sheet>
   )
+}
+
+/** Export…'s rows for a song of the library, as a page inside its Settings' window. */
+export function SongExportRows({ piece, onDone }: { piece: Piece; onDone: () => void }) {
+  return <ExportRows files={useSongExport(piece)} onDone={onDone} />
 }
 
 /**

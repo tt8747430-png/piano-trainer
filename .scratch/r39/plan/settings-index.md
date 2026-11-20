@@ -17,7 +17,10 @@
 2. **A thing's Settings opens over its page, never as a page of its own.** This covers a song's, a lesson's, a
    course's and a progression's Settings. On a laptop it is the app Settings' window (a centred dialog over the page,
    its places in a nav where it has more than one); on a phone it is a tall sheet with its pages inside, Back at the
-   top. Its route goes, and a link to it opens the window.
+   top. Its route goes, and a link to it opens the window. The window and its page are the history entry's state on
+   every size (`useSettingsWindow`): Back steps out of a page inside (New playlist → Move to → Settings), then out of
+   the window, and the address stays the thing's. A song's Publish, Export, Move to and New playlist are its pages
+   (done 2026-11-20): a sheet never holds a sheet.
 3. **A sheet keeps its height between its pages** (done, `Sheet`'s `holdTallest`, 2026-11-20; a thing's laptop window too, `holdTallestUnder`).
 
 ## The index

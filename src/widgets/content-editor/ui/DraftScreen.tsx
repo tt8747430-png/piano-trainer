@@ -112,7 +112,7 @@ export function DraftScreen<T>({
   language,
   edit,
   settings,
-  publishPage,
+  toPublish,
   oneTap = false,
   children,
 }: {
@@ -142,7 +142,7 @@ export function DraftScreen<T>({
   /** A router `Link` to the item's Settings, its gear in the bar. */
   settings?: ReactNode
   /** The item's Publish page (R29 B6), which the bar's Publish opens. */
-  publishPage?: { readonly link: ReactElement; readonly open: () => void }
+  toPublish?: { readonly link: ReactElement; readonly open: () => void }
   /**
    * A Learn page's Edit (a lesson, a course; the kit's EDITR): its bar Publish and Done alone, Publish
    * one tap with Undo; Versions and Discard changes are its Settings', and it is written in the app's
@@ -185,7 +185,7 @@ export function DraftScreen<T>({
                 title={title}
                 unreadable={unreadable}
                 onReset={draft.reopen}
-                publishPage={publishPage}
+                toPublish={toPublish}
                 more={language ? languageActions(language.value, language.onChange, words) : []}
               />
             </>

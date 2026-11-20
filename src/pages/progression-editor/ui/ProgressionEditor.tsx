@@ -183,7 +183,7 @@ export function ProgressionEditor({
         unreadable={t('progressions.edit.unreadable')}
         language={{ value: locale, onChange: setLocale }}
         // Its Settings, a window over the editor, and Publish a page inside it (the ProgressionEdit boards).
-        publishPage={{
+        toPublish={{
           link: <button type="button" onClick={() => settingsWindow.openAt('publish')} />,
           open: () => void draft.flush().then(() => settingsWindow.openAt('publish')),
         }}

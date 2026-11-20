@@ -86,8 +86,8 @@ export function DraftSaid({ draft }: { draft: DraftState }) {
   )
 }
 
-/** The item's Publish page (R29 B6): a router `Link` to it, and the way there from a menu or a row. */
-interface PublishPage {
+/** The way to the item's Publish (R29 B6), a page in its Settings window: the bar's Publish, and a menu's or a row's. */
+interface ToPublish {
   readonly link: ReactElement
   readonly open: () => void
 }
@@ -106,7 +106,7 @@ export function DraftActions({
   unreadable,
   onReset,
   more = [],
-  publishPage,
+  toPublish,
 }: {
   draft: DraftActing
   title: string
@@ -115,7 +115,7 @@ export function DraftActions({
   /** What is said where a publish is refused for a draft that does not read as the item. */
   unreadable: string
   onReset: () => void
-  publishPage?: PublishPage | undefined
+  toPublish?: ToPublish | undefined
 }) {
   const { t } = useTranslation('editor')
   const ask = useDraftAsk()
@@ -130,7 +130,7 @@ export function DraftActions({
         render={<RoundButton label={t('original.more')} icon={Ellipsis} className="shrink-0" />}
         actions={[
           ...more,
-          ...(publishPage
+          ...(toPublish
             ? []
             : [
                 {
@@ -151,8 +151,8 @@ export function DraftActions({
           },
         ]}
       />
-      {publishPage ? (
-        <ButtonLink className="shrink-0 px-4" render={publishPage.link}>
+      {toPublish ? (
+        <ButtonLink className="shrink-0 px-4" render={toPublish.link}>
           {t('original.publish')}
         </ButtonLink>
       ) : (
@@ -309,14 +309,14 @@ export function DraftRows({
   title,
   unreadable,
   onReset,
-  publishPage,
+  toPublish,
 }: {
   part: 'versions' | 'publishing'
   draft: DraftActing
   title: string
   unreadable: string
   onReset: () => void
-  publishPage: PublishPage
+  toPublish: ToPublish
 }) {
   const { t } = useTranslation('editor')
   const ask = useDraftAsk()
@@ -326,7 +326,7 @@ export function DraftRows({
         <RowTrigger title={t('original.versions')} onClick={() => ask.setAsked('versions')} />
       ) : (
         <>
-          <RowTrigger title={t('original.publishMore')} onClick={publishPage.open} />
+          <RowTrigger title={t('original.publishMore')} onClick={toPublish.open} />
           <RowButton
             title={t('original.discard')}
             destructive

@@ -145,7 +145,7 @@ This is the app as built. The canvas runs ahead: a ruling drawn but not yet port
 
 ## Rules that span areas
 
-- **State:** what you look at is in the URL, but for Settings' places on a laptop (the history entry's state); what must be remembered is a saved store; a screen's last view is `pt-views`;
+- **State:** what you look at is in the URL, but for Settings' places on a laptop and a thing's Settings window with its pages (the history entry's state); what must be remembered is a saved store; a screen's last view is `pt-views`;
   everything else is component state.
 - **Back** is Up within the app: where the learner came from, else the parent in `parents.ts`. Screens call `useUp()`; a
   view, tab or step written into the URL replaces the entry (`useSetSearch`).

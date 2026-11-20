@@ -1,5 +1,5 @@
 import { useNavigate, useRouter } from '@tanstack/react-router'
-import { useRef, useState, type ReactElement } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
 import {
@@ -17,18 +17,21 @@ import { useTakesStoreApi } from '@/entities/take'
 import { selectView } from '@/entities/views'
 import { useOriginalDraft } from '@/features/edit-original'
 import { deleteSong, duplicateSong } from '@/features/edit-piece'
-import { useLibraryActs, useSongActions } from '@/features/manage-library'
+import {
+  MovePlaces,
+  NewFolderPage,
+  useLibraryActs,
+  useSongActions,
+} from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
-import { SongExportSheet } from '@/features/song-files'
-import { useForgetScreens, type SettingsWindowState } from '@/shared/lib'
+import { SongExportRows } from '@/features/song-files'
+import { useForgetScreens, type SettingsWindowPage, type SettingsWindowState } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   ActionRow,
-  BackButton,
   DangerGroup,
   DangerRow,
   RowButton,
-  RowLink,
   sayUndo,
   SettingsGroup,
   SettingsWindow,
@@ -38,7 +41,7 @@ import { PublishRow } from '@/widgets/content-editor'
 import { useSongByline } from '../model/use-song-byline'
 import { useSongPublish } from '../model/use-song-publish'
 import { ResetVersionAsk } from './ResetVersionAsk'
-import { SongPublish } from './SongPublish'
+import { OriginalPublish, SongPublish } from './SongPublish'
 import { SongCoverPicker } from './SongCover'
 
 /**
@@ -65,10 +68,10 @@ export function SongSettingsWindow({
   const layout = useLibraryLayout()
   const folderName = useFolderName()
   const library = useSongActions(piece)
-  const [exporting, setExporting] = useState(false)
   const [asking, setAsking] = useState(false)
-  // The window's page: its Settings, or Publish inside it with Back to them (the SongSettings boards).
-  const toPublish = <button type="button" onClick={() => onPage('publish')} />
+  // The window's page: its Settings, or Publish, Export or Move to inside it with Back to them (the
+  // SongSettings boards): a sheet never holds a second sheet.
+  const toPublish = () => onPage('publish')
   const piecesStore = usePiecesStoreApi()
   const navigate = useNavigate()
   const copyable = !isDegreePiece(piece)
@@ -121,22 +124,44 @@ export function SongSettingsWindow({
   const archived = place === 'archived'
   const original =
     editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece) ? piece : null
+  // Publish only where the song has one (a history entry may name it for a song that has none).
+  const shown = page === 'publish' && !item && !original ? 'settings' : page
   return (
     <SettingsWindow
       open={open}
       onOpenChange={onOpenChange}
-      title={t(page === 'publish' ? 'editor:publishPage.title' : 'settings.title')}
-      back={
-        page === 'publish' ? (
-          <BackButton label={t('settings.title')} onClick={() => onPage('settings')} />
-        ) : undefined
+      title={t(TITLES[shown])}
+      backTo={shown === 'newFolder' ? t('songs:move.title') : undefined}
+      onBack={
+        shown === 'settings'
+          ? undefined
+          : () => onPage(shown === 'newFolder' ? 'folder' : 'settings')
       }
     >
       <ShareSaid said={shared.said} />
       {/* The one Settings shape (YourLessonSettings): the head (THINGHEAD), its groups 24 apart,
           the loss of the whole song at the foot. */}
-      {page === 'publish' ? (
-        <SongPublish piece={piece} />
+      {shown === 'publish' ? (
+        item ? (
+          <SongPublish piece={piece} item={item} publishing={publishing} />
+        ) : original ? (
+          <OriginalPublish piece={original} title={title} />
+        ) : null
+      ) : shown === 'export' ? (
+        <SongExportRows piece={piece} onDone={() => onPage('settings')} />
+      ) : shown === 'folder' ? (
+        <MovePlaces
+          moving={{ songs: [piece.id], folders: [] }}
+          onDone={() => onPage('settings')}
+          onNew={() => onPage('newFolder')}
+        />
+      ) : shown === 'newFolder' ? (
+        <NewFolderPage
+          onMade={(id) => {
+            onPage('settings')
+            acts.move({ songs: [piece.id], folders: [] }, id)
+          }}
+        />
       ) : (
         <div className="flex flex-col gap-6">
           {/* The song at the head, its cover's picture chosen with a tap on it (R32-C). */}
@@ -149,7 +174,7 @@ export function SongSettingsWindow({
                   title={t('settings.folder')}
                   value={folder}
                   opens
-                  onClick={() => library.actions.find((each) => each.key === 'move')?.onSelect()}
+                  onClick={() => onPage('folder')}
                 />
               )}
               {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
@@ -167,7 +192,7 @@ export function SongSettingsWindow({
           {/* Publish, Share link and Export, each once: Export holds the files alone (R31-S). */}
           <SettingsGroup flush title={t('settings.share')}>
             {item ? (
-              <RowLink
+              <RowButton
                 title={t('editor:publishPage.open')}
                 value={t(
                   publishing.state === 'published'
@@ -176,17 +201,18 @@ export function SongSettingsWindow({
                       ? 'editor:publishPage.standing.changed'
                       : 'editor:publishPage.standing.unpublished',
                 )}
-                render={toPublish}
+                opens
+                onClick={toPublish}
               />
             ) : original ? (
-              <OriginalPublishRow piece={original} link={toPublish} />
+              <OriginalPublishRow piece={original} onOpen={toPublish} />
             ) : null}
             {shareable ? <ActionRow title={t('settings.shareLink')} onClick={share} /> : null}
             <RowButton
               title={t('songs:export.action')}
               value={t('settings.exportLine')}
               opens
-              onClick={() => setExporting(true)}
+              onClick={() => onPage('export')}
             />
           </SettingsGroup>
           {ownMusic ? (
@@ -201,8 +227,6 @@ export function SongSettingsWindow({
           ) : null}
         </div>
       )}
-      {inLibrary ? library.sheet : null}
-      <SongExportSheet piece={exporting ? piece : null} onOpenChange={setExporting} />
       {ownMusic?.kind === 'version' ? (
         <ResetVersionAsk
           piece={ownMusic}
@@ -215,8 +239,17 @@ export function SongSettingsWindow({
   )
 }
 
+/** Each page's title in the window. */
+const TITLES = {
+  settings: 'settings.title',
+  publish: 'editor:publishPage.title',
+  export: 'songs:export.title',
+  folder: 'songs:move.title',
+  newFolder: 'songs:folder.new',
+} as const satisfies Record<SettingsWindowPage, string>
+
 /** An editor's built-in song's Publish… (R29 B6): its Publish page, where its draft stands. */
-function OriginalPublishRow({ piece, link }: { piece: ChartPiece; link: ReactElement }) {
+function OriginalPublishRow({ piece, onOpen }: { piece: ChartPiece; onOpen: () => void }) {
   const draft = useOriginalDraft(piece)
-  return <PublishRow kind="piece" id={piece.id} draft={draft} link={link} />
+  return <PublishRow kind="piece" id={piece.id} draft={draft} onOpen={onOpen} />
 }

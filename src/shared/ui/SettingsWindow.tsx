@@ -2,13 +2,14 @@ import { X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
+import { BackButton } from './BackButton'
 import { Button } from './primitives/button'
 import { Dialog, DialogClose, DialogContent, DialogTitle } from './primitives/dialog'
 import { holdTallestUnder } from './hold-tallest'
 import { Sheet, SheetContent } from './Sheet'
 
 /** The window's held height (Publish back to Settings), never past its room. */
-const holdWindow = holdTallestUnder('calc(100dvh - 6rem)')
+const holdWindow = holdTallestUnder('var(--window-room)')
 
 /**
  * A thing's Settings over its page, never a page of its own (the SongSettings boards' SETWIN): on a
@@ -20,18 +21,24 @@ export function SettingsWindow({
   open,
   onOpenChange,
   title,
-  back,
+  onBack,
+  backTo,
   children,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   title: string
-  /** A page inside the window: its Back, before the title. */
-  back?: ReactNode
+  /** A page inside the window (Publish, Export): Back to Settings, before the title. */
+  onBack?: (() => void) | undefined
+  /** Where Back goes when not to Settings (New playlist, back to Move to). */
+  backTo?: string | undefined
   children: ReactNode
 }) {
   const { t } = useTranslation('common')
   const laptop = useMediaQuery(LAPTOP)
+  const back = onBack ? (
+    <BackButton label={backTo ?? t('nav.settings')} onClick={onBack} />
+  ) : undefined
   if (!laptop)
     return (
       <Sheet open={open} onOpenChange={onOpenChange}>
@@ -45,7 +52,7 @@ export function SettingsWindow({
       <DialogContent
         ref={holdWindow}
         showCloseButton={false}
-        className="top-12 flex max-h-[calc(100dvh-6rem)] w-180 max-w-none translate-y-0 flex-col gap-0 overflow-hidden rounded-sheet bg-card p-0 text-base text-foreground shadow-[0_0_0_1px_var(--color-border),0_24px_64px_rgb(51_41_33/0.28)] sm:max-w-none"
+        className="top-12 flex max-h-(--window-room) w-180 max-w-none translate-y-0 flex-col gap-0 overflow-hidden rounded-sheet bg-card p-0 text-base text-foreground window-shadow sm:max-w-none"
       >
         <header
           className={cn(

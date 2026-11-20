@@ -8,6 +8,7 @@ import {
   isPiece,
   musicOf,
   selectOwnSong,
+  shelfOf,
   usePieces,
   usePiecesStoreApi,
   type ChartPiece,
@@ -57,16 +58,19 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
   const draft = useOriginalDraft(piece)
   const navigate = useNavigate()
   const { load, save } = draft
-  // Its Publish (R29 B6), a page in the song's Settings' window, the rights ticked there each time:
-  // the song's page opens with the window turned to it.
-  const toPublish = {
-    to: '/songs/$pieceId',
+  // Its Publish (R29 B6), a page in its Settings' window, the rights ticked there each time: its page
+  // (a song's in Songs, a study's in Practice) opens with the window turned to it.
+  const publishRoute = {
+    to:
+      shelfOf(piece.kind) === 'practice'
+        ? '/practice/accompaniment/studies/$pieceId'
+        : '/songs/$pieceId',
     params: { pieceId: piece.id },
     state: OPEN_PUBLISH,
   } as const
-  const publishPage = {
-    link: <Link {...toPublish} />,
-    open: () => void draft.flush().then(() => navigate(toPublish)),
+  const toPublish = {
+    link: <Link {...publishRoute} onClick={() => void draft.flush()} />,
+    open: () => void draft.flush().then(() => navigate(publishRoute)),
   }
   // The score writes the draft's music; the rest of the song (what its page says) stays the draft's.
   const target = useMemo(() => {
@@ -112,7 +116,7 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
             title={entryTitles(piece, locale).primary}
             unreadable={t('original.unreadable')}
             onReset={draft.reopen}
-            publishPage={publishPage}
+            toPublish={toPublish}
           />
         ),
         rows: (
@@ -122,7 +126,7 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
             title={entryTitles(piece, locale).primary}
             unreadable={t('original.unreadable')}
             onReset={draft.reopen}
-            publishPage={publishPage}
+            toPublish={toPublish}
           />
         ),
       }}

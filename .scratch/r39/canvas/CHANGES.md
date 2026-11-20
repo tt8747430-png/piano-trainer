@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · 50da51eb · a song's New playlist (from Move to) is a page of its Settings window: a name and Create, Back to Move to; Create goes back to Settings with Undo · SongSettings, SongSettingsLaptop, Section, SectionLaptop · **pending**
 - 2026-11-20 · fdd724fb · a song's Export and Move to are pages inside its Settings window, Back to Settings (a sheet never holds a sheet) · SongSettings, SongSettingsLaptop, Section, SectionLaptop · **pending**
 - 2026-11-20 · b7b924d2 · a thing's laptop window sets its title on its content's edge, 32 in (was 24, the body 32) · SongSettingsLaptop, LessonLaptop, CourseLaptop, ProgressionEditLaptop, YourLessonSettingsLaptop, YourCourseSettingsLaptop · **pending**
 

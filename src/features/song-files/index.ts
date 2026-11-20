@@ -1,7 +1,13 @@
 export { importSong } from './import-song'
 export { exportMidi, type PlayedMusic } from './model/export-midi'
 export type { MusicXmlFormat } from './model/export-music-xml'
-export { ExportSheet, SongExportSheet, type ExportFiles } from './ui/ExportSheet'
+export {
+  ExportRows,
+  ExportSheet,
+  SongExportRows,
+  SongExportSheet,
+  type ExportFiles,
+} from './ui/ExportSheet'
 export { useSongExport, useSongFiles, type SongFiles } from './ui/use-song-export'
 export { useSongImport } from './ui/use-song-import'
 export { useSongDrop } from './ui/use-song-drop'

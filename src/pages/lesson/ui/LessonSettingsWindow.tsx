@@ -9,7 +9,7 @@ import { selectOwnLesson, useOwnLessons } from '@/entities/own-lessons'
 import { DraftPublishing, RemoveGroup, useLessonDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { shareLink, type SettingsWindowState } from '@/shared/lib'
+import { shareLink, type SettingsWindowOpen } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ActionRow, RowLink, say, SettingsGroup, SettingsWindow, ThingHead } from '@/shared/ui'
 import { useStanding } from '@/widgets/content-editor'
@@ -35,7 +35,7 @@ type Where =
 export function LessonSettingsWindow({
   lessonId,
   ...win
-}: { lessonId: string } & Pick<SettingsWindowState, 'open' | 'onOpenChange'>) {
+}: { lessonId: string } & SettingsWindowOpen) {
   const locale = useLocale()
   const own = useOwnLessons(selectOwnLesson(lessonId))
   if (own) return <OwnLessonSettings key={lessonId} lesson={own} {...win} />
@@ -69,7 +69,7 @@ export function CourseLessonSettingsWindow({
   courseId,
   lessonId,
   ...win
-}: { courseId: string; lessonId: string } & Pick<SettingsWindowState, 'open' | 'onOpenChange'>) {
+}: { courseId: string; lessonId: string } & SettingsWindowOpen) {
   const locale = useLocale()
   const place = courseLesson(courseId, lessonId)
   // The route finds no lesson its course does not have.
@@ -106,7 +106,7 @@ function LessonSettings({
   where,
   open,
   onOpenChange,
-}: Pick<SettingsWindowState, 'open' | 'onOpenChange'> & {
+}: SettingsWindowOpen & {
   lesson: Lesson
   /** Its id in the database (a course's as `<course>/<lesson>`). */
   id: string

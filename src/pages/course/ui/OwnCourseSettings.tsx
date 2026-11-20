@@ -16,7 +16,7 @@ import {
 } from '@/features/manage-own-lessons'
 import { LookFields } from '@/features/manage-library'
 import { ResetStepsRow } from '@/features/reset-progress'
-import { type SettingsWindowState } from '@/shared/lib'
+import { type SettingsWindowOpen } from '@/shared/lib'
 import { say, sayUndo, SettingsGroup, SettingsWindow, ThingHead } from '@/shared/ui'
 import { deleteOwn, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 import { CourseMark } from './CourseMark'
@@ -29,7 +29,7 @@ export function OwnCourseSettings({
   course,
   open,
   onOpenChange,
-}: { course: OwnCourse } & Pick<SettingsWindowState, 'open' | 'onOpenChange'>) {
+}: { course: OwnCourse } & SettingsWindowOpen) {
   const { t } = useTranslation('learn')
   const navigate = useNavigate()
   const progress = useProgressStoreApi()

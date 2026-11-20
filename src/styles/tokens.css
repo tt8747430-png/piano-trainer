@@ -244,6 +244,11 @@
     0 1px 3px color-mix(in oklab, var(--shade) var(--shade-near), transparent),
     0 6px 14px -4px color-mix(in oklab, var(--shade) var(--shade-far), transparent),
     0 14px 28px -8px color-mix(in oklab, var(--shade) var(--shade-far), transparent);
+  /* A window over the page (the app Settings, a thing's Settings): a deep, soft shade, the board's
+     SETDLG and THINGWIN. */
+  --elevation-window: 0 24px 64px color-mix(in oklab, var(--shade) 28%, transparent);
+  /* The room a window may take: the screen less 48 above and below. */
+  --window-room: calc(100dvh - 6rem);
   --elevation-3:
     0 2px 4px color-mix(in oklab, var(--shade) var(--shade-near), transparent),
     0 10px 20px -6px color-mix(in oklab, var(--shade) var(--shade-far), transparent),

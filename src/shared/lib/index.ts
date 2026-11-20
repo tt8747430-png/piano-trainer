@@ -25,6 +25,7 @@ export {
   OPEN_SETTINGS,
   useSettingsWindow,
   type SettingsWindowPage,
+  type SettingsWindowOpen,
   type SettingsWindowState,
 } from './open-settings'
 export { isOneOf } from './is-one-of'

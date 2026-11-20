@@ -40,8 +40,8 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   downloads when opened: the Public library's items, and recordings once they move to storage (round 7). Until
   content is edited in the app (round 6), `entities/*/content` is the source: `scripts/export-content.mjs` and
   `scripts/seed-content.mjs` publish it.
-- **The Public library:** a learner's own song is private until they publish it (its Settings › Publish…, the
-  Publish page `/songs/$pieceId/publish`, R72's, Flat's discoverability form: a meter of how easily it is found (n of
+- **The Public library:** a learner's own song is private until they publish it (its Settings › Publish, a page
+  inside the song's Settings window, R72's, Flat's discoverability form: a meter of how easily it is found (n of
   5: title, composer, type, tags, a description of at least 20 characters), Title, Composer, Type (Original,
   Arrangement, Other), Tags (chips, suggestions, at most 8; a first publish starts with the song's genre as its tag, Hymn, Classical, Study…, and its library tags), Description, Licence (All rights reserved, CC BY, CC
   BY-SA, Public domain), all kept in the item's `meta` JSON with no column of their own (the old `category` column is
