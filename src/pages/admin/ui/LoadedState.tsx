@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import type { NetFailure } from '@/shared/api/network'
 import { Button } from '@/shared/ui/primitives/button'
 import { RowsLoading, Said } from '@/shared/ui'
-import type { Loaded } from '../model/use-loaded'
+import type { Loaded } from '@/shared/lib'
 
 /** Why a call came back without its answer, in words: offline, turned down, or failed. */
 export function FailureLine({ reason }: { reason: NetFailure }) {

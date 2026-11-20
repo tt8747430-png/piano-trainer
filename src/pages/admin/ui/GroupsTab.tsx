@@ -21,7 +21,7 @@ import { AddRow } from '@/widgets/content-editor'
 import { SettingsScreen } from '@/widgets/settings-screen'
 import { useChangeProblem } from '../model/use-change-problem'
 import { Face, nameOf } from './Face'
-import { useLoaded } from '../model/use-loaded'
+import { useLoaded } from '@/shared/lib'
 import { FailureLine, LoadedState } from './LoadedState'
 
 /** What Groups reads: the groups, the accounts their members are, the flags they turn on. */

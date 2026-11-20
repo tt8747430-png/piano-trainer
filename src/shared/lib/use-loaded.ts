@@ -8,7 +8,9 @@ export type Loaded<T> =
 
 /**
  * What `load` answers, loaded when its inputs change and again on `reload` (after a change, or Try
- * again); what was shown stays until the new answer.
+ * again); what was shown stays until the new answer, but a failure gives way to loading at once, so
+ * Try again is seen to act. The one read of a network answer on a screen (Administration, a group's
+ * members).
  */
 export function useLoaded<T>(load: () => Promise<NetResult<T>>): {
   loaded: Loaded<T>
@@ -30,5 +32,9 @@ export function useLoaded<T>(load: () => Promise<NetResult<T>>): {
       current = false
     }
   }, [load, attempt])
-  return { loaded, reload: useCallback(() => setAttempt((n) => n + 1), []) }
+  const reload = useCallback(() => {
+    setLoaded((was) => (was.kind === 'failed' ? { kind: 'loading' } : was))
+    setAttempt((n) => n + 1)
+  }, [])
+  return { loaded, reload }
 }

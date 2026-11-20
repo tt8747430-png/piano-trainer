@@ -5,7 +5,7 @@ import type { DraftListing } from '@/shared/api/content-editing'
 import { isLocalText, localText, useLocale } from '@/shared/i18n'
 import { useContentEditing } from '@/shared/lib/content-editing'
 import { OpensMark, SettingsGroup } from '@/shared/ui'
-import { useLoaded } from '../model/use-loaded'
+import { useLoaded } from '@/shared/lib'
 import { LoadedState } from './LoadedState'
 import { daySaid, useNow } from '@/shared/lib'
 

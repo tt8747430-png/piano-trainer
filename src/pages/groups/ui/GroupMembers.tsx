@@ -1,20 +1,14 @@
 import { Ellipsis } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { GroupMember, LearnerGroup } from '@/shared/api/groups'
-import type { NetFailure } from '@/shared/api/network'
+import { useLoaded } from '@/shared/lib'
 import { useGroups } from '@/shared/lib/groups'
 import { ActionMenu, RowsLoading, SettingsGroup } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** Asking before a member is removed. */
 export type MemberAsk = { readonly kind: 'remove'; readonly member: GroupMember }
-
-/** The members as they are read: being read, read, or unread (and why). */
-type Read =
-  | { readonly kind: 'loading' }
-  | { readonly kind: 'failed'; readonly reason: NetFailure }
-  | { readonly kind: 'ready'; readonly members: readonly GroupMember[] }
 
 /** Its owner first, then the learner, then the rest in the order they joined. */
 const ordered = (members: readonly GroupMember[]) =>
@@ -34,23 +28,10 @@ export function GroupMembers({
 }) {
   const { t } = useTranslation('songs')
   const port = useGroups()
-  const [read, setRead] = useState<Read>({ kind: 'loading' })
-  const [round, setRound] = useState(0)
-  useEffect(() => {
-    let current = true
-    void port.members(group.id).then((answer) => {
-      if (!current) return
-      setRead(
-        answer.ok
-          ? { kind: 'ready', members: answer.value }
-          : { kind: 'failed', reason: answer.reason },
-      )
-    })
-    return () => {
-      current = false
-    }
-  }, [port, group.id, round])
-  const count = read.kind === 'ready' ? read.members.length : group.members
+  const { loaded: read, reload } = useLoaded(
+    useCallback(() => port.members(group.id), [port, group.id]),
+  )
+  const count = read.kind === 'ready' ? read.value.length : group.members
   return (
     <SettingsGroup flush title={`${t('groups.membersTitle')} (${count})`}>
       {read.kind === 'loading' ? (
@@ -62,19 +43,13 @@ export function GroupMembers({
           <p role="alert" className="flex-1 text-muted-foreground">
             {t(read.reason === 'offline' ? 'groups.offline' : 'groups.membersFailed')}
           </p>
-          <Button
-            variant="soft"
-            onClick={() => {
-              setRead({ kind: 'loading' })
-              setRound((was) => was + 1)
-            }}
-          >
+          <Button variant="soft" onClick={reload}>
             {t('groups.retry')}
           </Button>
         </div>
       ) : (
         <ul className="flex flex-col">
-          {ordered(read.members).map((member) => {
+          {ordered(read.value).map((member) => {
             const name = member.name.trim() || t('groups.member')
             return (
               <li key={member.userId} className="flex min-h-16 items-center gap-3 px-4 py-2">

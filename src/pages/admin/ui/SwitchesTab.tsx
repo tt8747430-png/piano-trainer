@@ -17,7 +17,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { SettingsScreen } from '@/widgets/settings-screen'
 import { useChangeProblem } from '../model/use-change-problem'
-import { useLoaded } from '../model/use-loaded'
+import { useLoaded } from '@/shared/lib'
 import { FailureLine, LoadedState } from './LoadedState'
 
 const STATES = ['everyone', 'nobody', 'groups'] as const satisfies readonly SwitchState[]
