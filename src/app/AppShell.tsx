@@ -1,8 +1,7 @@
-import { useRouterState } from '@tanstack/react-router'
 import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings } from '@/entities/settings'
-import { useFocusMode } from '@/shared/lib'
+import { useFocusMode, useShownLocation } from '@/shared/lib'
 import { FloatingHost, RouteShellContext, ScreenBarProvider } from '@/shared/ui'
 import { TooltipProvider } from '@/shared/ui/primitives/tooltip'
 import { AppNav, PlaceActions } from '@/widgets/app-nav'
@@ -23,7 +22,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const sidebar = useSettings(selectSidebar)
   // Focus hides the sidebar for the session; the learner's own choice comes back when it ends.
   const shown = useFocusMode() ? 'focus' : sidebar
-  const screen = useRouterState({ select: (state) => state.location.pathname })
+  const screen = useShownLocation().pathname
   // A screen that cannot open keeps the place's Search and the tab bar (the AppLayers board).
   const [stateShown, setStateShown] = useState(false)
   const routeShell = useMemo(() => ({ tools: <PlaceActions />, showing: setStateShown }), [])

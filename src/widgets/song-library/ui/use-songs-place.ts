@@ -1,4 +1,4 @@
-import { useRouterState } from '@tanstack/react-router'
+import { useShownLocation } from '@/shared/lib'
 
 /** Which of Songs' places is shown (the board's `_SUBCUR`), read from the address. */
 export type SongsPlace =
@@ -7,13 +7,9 @@ export type SongsPlace =
 
 /** Which of Songs' places the address shows. */
 export function useSongsPlace(): SongsPlace {
-  const pathname = useRouterState({ select: (state) => state.location.pathname })
-  const view = useRouterState({
-    select: (state) => ('view' in state.location.search ? state.location.search.view : undefined),
-  })
-  const favourites = useRouterState({
-    select: (state) => 'favourites' in state.location.search && state.location.search.favourites,
-  })
+  const { pathname, search } = useShownLocation()
+  const view = 'view' in search ? search.view : undefined
+  const favourites = 'favourites' in search && search.favourites
   if (pathname === '/songs') return { kind: view === 'explore' ? 'explore' : 'all' }
   if (pathname === '/songs/all') return { kind: favourites === true ? 'favourites' : 'all' }
   if (pathname === '/songs/archive') return { kind: 'archive' }

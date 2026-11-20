@@ -1,8 +1,8 @@
-import { Link, useRouterState } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { ChevronsUpDown, Globe, LogIn, LogOut, Settings, UserRound } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn, OPEN_PLAINLY } from '@/shared/lib'
+import { cn, OPEN_PLAINLY, useShownLocation } from '@/shared/lib'
 import { useAccount, useLearnerProfile } from '@/shared/lib/account'
 import { Avatar, ConfirmDialog } from '@/shared/ui'
 import {
@@ -36,7 +36,7 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
   const { account, auth } = useAccount()
   const { state } = useLearnerProfile()
   const [asking, setAsking] = useState(false)
-  const pathname = useRouterState({ select: (router) => router.location.pathname })
+  const pathname = useShownLocation().pathname
   const picture = state.kind === 'ready' ? state.profile.avatar : null
   const name = account ? account.name || account.email : t('nav.signIn')
   const current = ['/profile', '/account', '/settings', '/admin', '/legal'].some(

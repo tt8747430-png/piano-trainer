@@ -1,4 +1,4 @@
-import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import {
   GraduationCap,
   Maximize,
@@ -12,7 +12,15 @@ import type { ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setSidebar } from '@/features/set-preference'
-import { cn, OPEN_PLAINLY, setFocusMode, useFocusMode, useMediaQuery, LAPTOP } from '@/shared/lib'
+import {
+  cn,
+  OPEN_PLAINLY,
+  setFocusMode,
+  useFocusMode,
+  useMediaQuery,
+  useShownLocation,
+  LAPTOP,
+} from '@/shared/lib'
 import { useAccount, useLearnerProfile } from '@/shared/lib/account'
 import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/shared/lib/shortcuts'
 import { Avatar } from '@/shared/ui'
@@ -157,7 +165,7 @@ function PlaceLink({
   collapsed: boolean
 }) {
   const { t } = useTranslation('common')
-  const pathname = useRouterState({ select: (state) => state.location.pathname })
+  const pathname = useShownLocation().pathname
   // The sidebar (a laptop's) has Settings of its own; a phone's bar has it in the Profile.
   const sidebar = useMediaQuery(LAPTOP)
   // The place is current under its other prefix too, as the router marks its own address.
@@ -254,12 +262,10 @@ export function AppNav({ keep = false }: { keep?: boolean }) {
   )
   // A phone's tab bar is the places' own (memory-palaces'): on what a place opens it steps away, Back
   // the way out, and the screen has the whole height.
-  const pathname = useRouterState({ select: (state) => state.location.pathname })
+  const pathname = useShownLocation().pathname
   // Explore is a page My songs opens (the Explore board: Back, its name, no tab bar), though its view
   // is written into the place's URL.
-  const exploring = useRouterState({
-    select: (state) => new URLSearchParams(state.location.searchStr).get('view') === 'explore',
-  })
+  const exploring = new URLSearchParams(useShownLocation().searchStr).get('view') === 'explore'
   const away = !keep && (exploring || !PLACES.some(({ to }) => to === pathname))
   // A laptop's sidebar puts the learner at its foot, under Search and Settings; a phone's bar keeps
   // the Profile as its last tab.
