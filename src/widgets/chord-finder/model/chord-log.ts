@@ -1,5 +1,5 @@
 import { REMEMBERED_CHORDS } from '@/entities/settings'
-import type { Midi } from '@/shared/lib/music'
+import { lowestFirst, type Midi } from '@/shared/lib/music'
 import { namesChord } from './finding'
 
 /** The chords played, oldest first, and the keys down now (ADR 0052). */
@@ -15,8 +15,6 @@ export const EMPTY_LOG: ChordLog = { chords: [], held: [], letGo: true }
 
 /** The chords the log keeps, the newest: as many as the device remembers. */
 export const LOGGED_CHORDS = REMEMBERED_CHORDS
-
-const lowestFirst = (keys: Iterable<Midi>): Midi[] => [...new Set(keys)].sort((a, b) => a - b)
 
 /**
  * The log once the keys down are `keys`: a key added while every key stays down grows the newest

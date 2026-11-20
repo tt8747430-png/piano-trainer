@@ -3,7 +3,14 @@ import { selectChordFinder, useSettings, useSettingsStoreApi } from '@/entities/
 import { useKeysDown } from '@/features/connect-midi'
 import { rememberChords } from '@/features/set-preference'
 import { keyListParam, readKeyList, toggled, useSetSearch, useWakeLock } from '@/shared/lib'
-import { keyFromParam, pitchClass, pitchClassOf, type Key, type Midi } from '@/shared/lib/music'
+import {
+  keyFromParam,
+  lowestFirst,
+  pitchClass,
+  pitchClassOf,
+  type Key,
+  type Midi,
+} from '@/shared/lib/music'
 import {
   EMPTY_LOG,
   findChord,
@@ -51,8 +58,6 @@ interface ChordFinder {
   /** Forgets the chords played, on the staff and on the device; returns what brings them back (Undo). */
   forget(): () => void
 }
-
-const lowestFirst = (keys: Iterable<Midi>): Midi[] => [...keys].sort((a, b) => a - b)
 
 /**
  * The chord a MIDI keyboard plays, as its keys went down, read on once they are let go; else the keys
