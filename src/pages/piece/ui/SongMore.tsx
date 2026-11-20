@@ -5,10 +5,11 @@ import type { Piece } from '@/entities/piece'
 import { ActionMenu, RoundButton } from '@/shared/ui'
 
 /**
- * A song's More (the board's SONG_MORE at the bar's end): Edit score and Settings. Duplicate,
- * Archive, Share link and Export live in the song's Settings alone, one way to each act.
+ * A song's More (the board's SONG_MORE at the bar's end): Edit score and Settings, the window over
+ * the page. Duplicate, Archive, Share link and Export live in the song's Settings alone, one way to
+ * each act.
  */
-export function SongMore({ piece }: { piece: Piece }) {
+export function SongMore({ piece, onSettings }: { piece: Piece; onSettings: () => void }) {
   const { t } = useTranslation('piece')
   const navigate = useNavigate()
   return (
@@ -26,8 +27,7 @@ export function SongMore({ piece }: { piece: Piece }) {
         {
           key: 'settings',
           label: t('settings.open'),
-          onSelect: () =>
-            void navigate({ to: '/songs/$pieceId/settings', params: { pieceId: piece.id } }),
+          onSelect: onSettings,
         },
       ]}
     />

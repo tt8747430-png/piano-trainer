@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams, useRouter } from '@tanstack/react-router'
+import { Link, useNavigate, useRouter } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
@@ -9,7 +9,6 @@ import {
   selectHasVersion,
   usePieces,
   usePiecesStoreApi,
-  useRepertoire,
   type ChartPiece,
   type Piece,
   type PieceId,
@@ -25,16 +24,13 @@ import { useForgetScreens } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   ActionRow,
-  BackButton,
-  ButtonLink,
   DangerGroup,
   DangerRow,
-  NotFound,
   RowButton,
   RowLink,
   sayUndo,
-  ScreenHeader,
   SettingsGroup,
+  SettingsWindow,
   ThingHead,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
@@ -43,28 +39,22 @@ import { useSongPublish } from '../model/use-song-publish'
 import { ResetVersionAsk } from './ResetVersionAsk'
 import { SongCoverPicker } from './SongCover'
 
-/** The route's song, or the way back where it is gone (an own song deleted in another tab). */
-export function SongSettingsPage() {
-  const { t } = useTranslation('common')
-  const { pieceId } = useParams({ from: '/shell/songs/$pieceId/settings' })
-  const piece = useRepertoire().piece(pieceId)
-  if (!piece)
-    return (
-      <NotFound>
-        <ButtonLink render={<Link to="/songs" />}>{t('notFound.toSongs')}</ButtonLink>
-      </NotFound>
-    )
-  return <SongSettings key={piece.id} piece={piece} />
-}
-
 /**
- * A song's Settings (R32-C; Noji's and memory-palaces' deck settings): how the song lives in the
- * library and how it leaves it, the page editing what it says of itself. The song at the head; its
- * Library (Playlist, Duplicate, Archive or Restore); Share (Publish with its state, Share
+ * A song's Settings (R32-C; Noji's and memory-palaces' deck settings), a window over the song's page
+ * (the SongSettings boards): how the song lives in the library and how it leaves it. The song at the
+ * head; its Library (Folder, Duplicate, Archive or Restore); Share (Publish with its state, Share
  * link, Export…); and last, apart, the learner's own music given up: Delete, or Reset to the
- * original, asked first.
+ * original, asked first. One column, as the window is 720 wide.
  */
-function SongSettings({ piece }: { piece: Piece }) {
+export function SongSettingsWindow({
+  piece,
+  open,
+  onOpenChange,
+}: {
+  piece: Piece
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
   const { t } = useTranslation(['piece', 'songs', 'editor'])
   const { account } = useAccount()
   const own = isOwnSongId(piece.id) ? piece.id : null
@@ -130,18 +120,13 @@ function SongSettings({ piece }: { piece: Piece }) {
   const original =
     editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece) ? piece : null
   return (
-    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
-      <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
+    <SettingsWindow open={open} onOpenChange={onOpenChange} title={t('settings.title')}>
       <ShareSaid said={shared.said} />
-      {/* The one Settings shape (canvas v550, YourLessonSettings): the head (THINGHEAD), its groups 24
-          apart, the loss of the whole song 40 apart at the foot; on a laptop the centred 1180 column 24
-          under the 56 bar, Library and Share side by side, the loss its own card across both. */}
-      <div className="page-column flex flex-col gap-6 lg:grid lg:max-w-295 lg:grid-cols-2 lg:items-start lg:gap-x-8">
-        {/* The song at the head: what these settings are for (R32-C). */}
-        <div className="lg:col-span-2">
-          {/* Its cover's picture is chosen here, a tap on it (R32-C): the library's tile. */}
-          <ThingHead mark={<SongCoverPicker piece={piece} />} name={title} line={byline} />
-        </div>
+      {/* The one Settings shape (YourLessonSettings): the head (THINGHEAD), its groups 24 apart,
+          the loss of the whole song at the foot. */}
+      <div className="flex flex-col gap-6">
+        {/* The song at the head, its cover's picture chosen with a tap on it (R32-C). */}
+        <ThingHead mark={<SongCoverPicker piece={piece} />} name={title} line={byline} />
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
             {/* Where it may leave its folder (R29 B4): one of the app's songs in its folder stays. */}
@@ -191,7 +176,7 @@ function SongSettings({ piece }: { piece: Piece }) {
           />
         </SettingsGroup>
         {ownMusic ? (
-          <div ref={danger} className="-mt-2 lg:col-span-2">
+          <div ref={danger} className="-mt-2">
             <DangerGroup>
               <DangerRow
                 title={t(ownMusic.kind === 'song' ? 'settings.deleteSong' : 'reset')}
@@ -211,7 +196,7 @@ function SongSettings({ piece }: { piece: Piece }) {
           returnTo={danger}
         />
       ) : null}
-    </div>
+    </SettingsWindow>
   )
 }
 

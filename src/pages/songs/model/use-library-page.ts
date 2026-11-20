@@ -1,4 +1,4 @@
-import { useForgetScreens } from '@/shared/lib'
+import { OPEN_SETTINGS, useForgetScreens } from '@/shared/lib'
 import { useNavigate } from '@tanstack/react-router'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -230,14 +230,14 @@ export function useLibraryPage(
         params: { folderId: id },
         search: { edit: true },
       }),
-    /** A song opened where its row's ⋯ says: played, its score edited, or its Settings (R31-S). */
+    /** A song opened where its row's ⋯ says: played, its score edited, or its page with its Settings over it (R31-S). */
     openSong: (id: PieceId, where: 'play' | 'edit' | 'settings') =>
       void navigate(
         where === 'play'
           ? { to: '/play/$pieceId', params: { pieceId: id } }
           : where === 'edit'
             ? { to: '/edit/$pieceId', params: { pieceId: id } }
-            : { to: '/songs/$pieceId/settings', params: { pieceId: id } },
+            : { to: '/songs/$pieceId', params: { pieceId: id }, state: OPEN_SETTINGS },
       ),
     /** At Home, where the folders are: Filter asks for the songs in none (R31-S). */
     atHome: folder === null,

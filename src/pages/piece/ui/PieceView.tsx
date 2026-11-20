@@ -13,6 +13,7 @@ import { pieceStepId } from '@/entities/step'
 import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { editsContent, useAccount } from '@/shared/lib/account'
+import { useSettingsWindow } from '@/shared/lib'
 import { opensOnPickup } from '@/shared/lib/music'
 import { ButtonLink } from '@/shared/ui'
 import { useLocale } from '@/shared/i18n'
@@ -26,6 +27,7 @@ import { PieceProgressions } from './PieceProgressions'
 import { SectionRows } from './SectionRows'
 import { SongDetails } from './SongDetails'
 import { SongMore } from './SongMore'
+import { SongSettingsWindow } from './SongSettingsWindow'
 import { SongPlace } from './SongPlace'
 import { YourPractice } from './YourPractice'
 
@@ -55,6 +57,7 @@ export function PieceView({ piece }: { piece: Piece }) {
     0,
   )
   const pickup = opensOnPickup(performance.bars, performance.meter)
+  const settings = useSettingsWindow()
   return (
     // One centred 880 column on a laptop, the bar on its edges (the SongLaptop board): the cover beside
     // the song's name, facts and plays, then its chords, sections and details across the column.
@@ -68,7 +71,7 @@ export function PieceView({ piece }: { piece: Piece }) {
           </>
         }
         titleOnPage
-        settings={<SongMore piece={piece} />}
+        settings={<SongMore piece={piece} onSettings={() => settings.onOpenChange(true)} />}
       />
       <div className="flex flex-col gap-4 lg:gap-5">
         <section
@@ -130,6 +133,7 @@ export function PieceView({ piece }: { piece: Piece }) {
           {details}
         </div>
       </div>
+      <SongSettingsWindow piece={piece} {...settings} />
     </div>
   )
 }

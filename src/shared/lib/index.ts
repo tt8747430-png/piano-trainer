@@ -20,6 +20,7 @@ export {
 export { foldText, matchesQuery, WORD_BREAK } from './fold-text'
 export { IN_PLACE } from './in-place'
 export { OPEN_PLAINLY } from './open-plainly'
+export { OPEN_SETTINGS, useSettingsWindow } from './open-settings'
 export { isOneOf } from './is-one-of'
 export {
   CAMERA_ANGLES,

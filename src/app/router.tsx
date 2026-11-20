@@ -500,20 +500,7 @@ const pieceRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
-// A song's Settings and its Publish in library (round 26), pages of their own under its page.
-const pieceSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/songs/$pieceId/settings',
-  notFoundComponent: notFoundIn('songs'),
-  beforeLoad: async ({ params, context }) => {
-    // A song's, or a study's (its page on Practice has the same gear).
-    const { entryIn } = await songsScreens()
-    const entry = entryIn(context.pieces.getState(), params.pieceId)
-    if (!entry || entry.kind === 'listing') throw notFound()
-    await ensureContent(context.content, 'piece', params.pieceId)
-  },
-  component: lazyRouteComponent(songsScreens, 'SongSettingsPage'),
-})
+// A song's Publish in library (round 26), a page of its own under its page.
 const piecePublishRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/$pieceId/publish',
@@ -1108,7 +1095,6 @@ const routeTree = rootRoute.addChildren([
     sharedFolderRoute,
     publicSongRoute,
     pieceRoute,
-    pieceSettingsRoute,
     piecePublishRoute,
     folderRoute,
     allSongsRoute,

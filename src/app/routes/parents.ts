@@ -143,7 +143,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       ? up({ to: '/songs/folders/$folderId', params: { folderId } })
       : up({ to: '/songs' })
   },
-  '/shell/songs/$pieceId/settings': pieceHome,
   // Groups (R30 S6): from Songs; a group and an invite link up to Groups; a shared folder up to its group.
   '/shell/songs/groups': toSongs,
   '/shell/songs/groups/join': () => up({ to: '/songs/groups' }),
