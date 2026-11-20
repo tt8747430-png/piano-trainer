@@ -17,6 +17,7 @@ import {
   InfoTip,
   Labelled,
   nameMark,
+  ProgressBar,
   RoundButton,
   ScreenHeader,
   Segmented,
@@ -27,7 +28,6 @@ import {
   type KeyMark,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Progress } from '@/shared/ui/primitives/progress'
 import {
   usePlayerShortcuts,
   WaitLine,
@@ -257,12 +257,12 @@ export function RunLayout({
           {waits ? <WaitLine feedback={player.feedback} /> : null}
           {place === null ? null : (
             <div className="flex items-center gap-3">
-              <Progress
-                value={place.at}
-                max={place.of}
-                aria-label={where}
-                getAriaValueText={() => where}
-                className="flex-1 [&_[data-slot=progress-indicator]]:bg-learned [&_[data-slot=progress-track]]:h-2"
+              <ProgressBar
+                done={place.at}
+                total={place.of}
+                label={where}
+                said={where}
+                className="h-2 min-h-2"
               />
               <span
                 aria-hidden

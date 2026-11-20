@@ -7,8 +7,7 @@ import { selectAnswers, selectIsLearned, useProgressStoreApi } from '@/entities/
 import { checkPlan, useTrainer, type CheckPlan } from '@/features/trainer'
 import { useUp } from '@/shared/lib'
 import { useShortcuts } from '@/shared/lib/shortcuts'
-import { RoundButton, ScreenHeader } from '@/shared/ui'
-import { Progress } from '@/shared/ui/primitives/progress'
+import { ProgressBar, RoundButton, ScreenHeader } from '@/shared/ui'
 import { useStepTitle } from '@/widgets/curriculum'
 import { TrainerBoard } from '@/widgets/trainer-board'
 import { CheckResult } from './CheckResult'
@@ -43,13 +42,13 @@ function CheckFlow({ plan, again }: { plan: CheckPlan; again: () => void }) {
       {/* The results keep the bar alone, as the board's. */}
       {trainer.summary ? null : (
         <div className="mx-auto -mt-2 flex w-full max-w-190 items-center gap-3">
-          <Progress
-            value={answered}
-            max={plan.length}
-            aria-label={progress}
-            getAriaValueText={() => progress}
-            // The run's progress is grass, 8 tall, as the Check's board and every course's.
-            className="flex-1 [&_[data-slot=progress-indicator]]:bg-learned [&_[data-slot=progress-track]]:h-2"
+          {/* The run's progress is grass, 8 tall, as the Check's board and every course's. */}
+          <ProgressBar
+            done={answered}
+            total={plan.length}
+            label={progress}
+            said={progress}
+            className="h-2 min-h-2"
           />
           <span
             aria-hidden
