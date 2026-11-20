@@ -47,7 +47,7 @@ export function ExploreShelf() {
         <SeeAll label={t('explore.seeAll')} onClick={() => show({ ...FRESH, view: 'explore' })} />
       </SectionHead>
       {shown.length > 0 ? (
-        <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-6 lg:gap-5 lg:overflow-visible lg:px-0">
+        <ul className="-mx-gutter -mt-1 flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pt-1 pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-6 lg:gap-5 lg:overflow-visible lg:px-0">
           {shown.map((entry) => (
             <li key={entry.id} className="w-33 flex-none snap-start lg:w-auto lg:min-w-0">
               <ShelfCard entry={entry} />

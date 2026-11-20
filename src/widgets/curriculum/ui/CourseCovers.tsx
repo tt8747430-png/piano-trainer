@@ -93,7 +93,7 @@ export function CourseCovers() {
       className="min-w-0"
       action={<SeeAll label={t('seeAll')} render={<Link to="/courses" />} />}
     >
-      <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] lg:gap-4 lg:overflow-visible lg:px-0">
+      <ul className="-mx-gutter -mt-1 flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pt-1 pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] lg:gap-4 lg:overflow-visible lg:px-0">
         {shown.map((course) => (
           <li key={course.id} className="flex">
             <CourseCover
