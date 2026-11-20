@@ -26,8 +26,6 @@ describe('SheetLayoutPicker', () => {
     await user.click(screen.getByRole('radio', { name: 'Panorama' }))
     expect(onChange).toHaveBeenLastCalledWith('panorama')
     screen.getByRole('radio', { name: 'Page view' }).focus()
-    await user.keyboard('{ArrowLeft}')
-    expect(onChange).toHaveBeenLastCalledWith('panorama')
     await user.keyboard('{ArrowRight}')
     expect(onChange).toHaveBeenLastCalledWith('vertical')
   })

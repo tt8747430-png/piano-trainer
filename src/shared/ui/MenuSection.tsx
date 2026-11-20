@@ -23,7 +23,7 @@ export function MenuSection({
   return (
     <section aria-label={title} className={cn('flex flex-col gap-2', className)}>
       <div className="flex items-center gap-1.5">
-        <h2 className="text-sm font-semibold text-muted-foreground">{title}</h2>
+        <h2 className="font-sans text-sm font-semibold text-muted-foreground">{title}</h2>
         {info ? <InfoTip name={title}>{info}</InfoTip> : null}
       </div>
       {children}
