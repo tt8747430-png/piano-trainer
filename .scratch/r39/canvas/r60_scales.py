@@ -75,7 +75,7 @@ def GRANDSTAFF(label):
     inner = tre[tre.index('>') + 1:tre.rindex('</svg>')]
     bass = inner.replace('{{ss.', '{{ssB.')
     for i in range(5): bass = bass.replace(f'<path d="M4 {30 + i * 7}H356"', f'<path d="M4 {92 + i * 7}H356"', 1)
-    bass = bass.replace('<text x="6" y="64" font-size="44" font-family="Noto Music, serif" fill="' + INK + '">𝄞</text>', '<text x="8" y="113" font-size="40" font-family="Noto Music, serif" fill="' + INK + '">𝄢</text>')
+    bass = bass.replace('<text x="6" y="58" font-size="28" font-family="Noto Music, serif" fill="' + INK + '">𝄞</text>', '<text x="8" y="120" font-size="31" font-family="Noto Music, serif" fill="' + INK + '">𝄢</text>')
     # the piano's brace before the system's line, as the app's engraving
     brace = (f'<path d="M4 30V120" stroke="{INK}" stroke-width="1.4"></path><path d="M356 30V120" stroke="{INK}" stroke-width=".9"></path>'
              f'<path d="M-1 30C-9 38 -1 66 -8 75C-1 84 -9 112 -1 120" fill="none" stroke="{INK}" stroke-width="1.6" stroke-linecap="round"></path>')

@@ -1,5 +1,5 @@
 import { Play, Square } from 'lucide-react'
-import { useRef } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { useElementSize } from '@/shared/lib'
@@ -13,6 +13,14 @@ import { useIntervalName } from './use-interval-name'
 
 /** The width at which the engraving's lines stand the board's 7 units apart (11 at 370): its scale 1. */
 const STAFF_WIDTH = 343
+/** The board's room is 238 units wide and its staff's top line 48 under its top (`STAFF61`). */
+const TOP_LINE = 48 / 238
+
+/** Hands the engraving's top line up to the hero once it is drawn, to stand it where the board does. */
+function TopLine({ at, onAt }: { at: number; onAt: (at: number) => void }) {
+  useLayoutEffect(() => onAt(at), [at, onAt])
+  return null
+}
 
 /**
  * The interval chosen, the page's subject (canvas 170): its name and, behind its ⓘ, what it sounds
@@ -34,6 +42,7 @@ export function IntervalHero({
   const locale = useLocale()
   const staff = useRef<HTMLElement>(null)
   const { width } = useElementSize(staff)
+  const [topLine, setTopLine] = useState<number>()
   const said = useIntervalName()
   const { title } = said(name)
   const songs = intervalSongs(name)
@@ -82,14 +91,22 @@ export function IntervalHero({
       <figure className="flex flex-col gap-3">
         {/* The staff spans the column, to the board's 560 (`STAFF61`), its two notes spread along it, in
             the board's picture: a room 238 by 102 of its units, 7 between the lines, so it grows with the
-            width (159 tall at 370, 240 at 560) and the page holds still whichever interval it shows. */}
+            width (159 tall at 370, 240 at 560). Its top line stands where the board's does, the room above it
+            kept for notes over the staff, so the staff holds still whichever interval it shows. */}
         <section
           ref={staff}
           aria-label={t('intervals.written')}
-          className="mx-auto flex aspect-[238/102] w-full max-w-140 min-w-40 items-center justify-center"
+          className="mx-auto flex aspect-[238/102] w-full max-w-140 min-w-40 items-start justify-center"
+          style={
+            topLine === undefined
+              ? undefined
+              : { paddingTop: Math.max(0, width * TOP_LINE - topLine) }
+          }
         >
           {width > 0 ? (
-            <LazyScoreView score={score} fill={width} scale={width / STAFF_WIDTH} />
+            <LazyScoreView score={score} fill={width} scale={width / STAFF_WIDTH}>
+              {(layout) => <TopLine at={layout.staffTop} onAt={setTopLine} />}
+            </LazyScoreView>
           ) : null}
         </section>
         <div className="flex items-center gap-3">

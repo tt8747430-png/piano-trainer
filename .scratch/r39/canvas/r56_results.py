@@ -35,7 +35,7 @@ def RS_CELL(notes, w, red=None, last=False, clef=False):
     if last:
         lines += f'<path d="M{w - .6} 16V48" stroke="{INK}" stroke-width="1.2"></path>'
     if clef:
-        return f'<svg viewBox="0 -6 {w} 82" width="{w}" height="82" aria-hidden="true" style="display: block; flex: none">{lines}<text x="2" y="54" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄞</text></svg>'
+        return f'<svg viewBox="0 -6 {w} 82" width="{w}" height="82" aria-hidden="true" style="display: block; flex: none">{lines}<text x="2" y="48" font-family="Noto Music, serif" font-size="32" fill="{INK}">𝄞</text></svg>'
     # round 41: a note may carry its accidental, (letter, octave, '♯' or '♭'), set left of the chord as an engraver does
     accs = {RS_STEP(n[0], n[1]): n[2] for n in notes if len(n) > 2}
     steps = sorted(RS_STEP(n[0], n[1]) for n in notes)
@@ -184,7 +184,7 @@ def PV_INV(w, bars, first):
     lines = ''.join(f'<path d="M14 {16 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path><path d="M14 {104 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path>' for i in range(5))
     out = lines + f'<path d="M14.5 16V136" stroke="{INK}" stroke-width="1.2"></path><path d="M{w - .6} 16V48M{w - .6} 104V136" stroke="{INK}" stroke-width="1.2"></path>'
     out += f'<path d="M11 16C4 24 12 62 5 76C12 90 4 128 11 136C1 124 9 90 2 76C9 62 1 28 11 16Z" fill="{INK}"></path>'
-    out += f'<text x="18" y="54" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄞</text><text x="18" y="120" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄢</text>'
+    out += f'<text x="18" y="48" font-family="Noto Music, serif" font-size="32" fill="{INK}">𝄞</text><text x="18" y="136" font-family="Noto Music, serif" font-size="36" fill="{INK}">𝄢</text>'
     x0 = 52
     if first == 0:
         out += ''.join(f'<text x="58" y="{y}" text-anchor="middle" font-family="Noto Music, serif" font-size="19" font-weight="700" fill="{INK}">4</text>' for y in (31, 47, 119, 135))
@@ -279,7 +279,7 @@ def PV_HANON(w, bars, first):
     lines = ''.join(f'<path d="M14 {16 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path><path d="M14 {104 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path>' for i in range(5))
     out = lines + f'<path d="M14.5 16V136" stroke="{INK}" stroke-width="1.2"></path><path d="M{w - .6} 16V48M{w - .6} 104V136" stroke="{INK}" stroke-width="1.2"></path>'
     out += f'<path d="M11 16C4 24 12 62 5 76C12 90 4 128 11 136C1 124 9 90 2 76C9 62 1 28 11 16Z" fill="{INK}"></path>'
-    out += f'<text x="18" y="54" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄞</text><text x="18" y="120" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄢</text>'
+    out += f'<text x="18" y="48" font-family="Noto Music, serif" font-size="32" fill="{INK}">𝄞</text><text x="18" y="136" font-family="Noto Music, serif" font-size="36" fill="{INK}">𝄢</text>'
     x0 = 52
     if first == 0:
         out += ''.join(f'<text x="58" y="{y}" text-anchor="middle" font-family="Noto Music, serif" font-size="19" font-weight="700" fill="{INK}">{d}</text>' for y, d in ((31, 2), (47, 4), (119, 2), (135, 4)))

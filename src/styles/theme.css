@@ -987,9 +987,13 @@
   }
 }
 /* The keys shown or hidden from the bar's Keyboard (R34) leave and come as one, fading, while the
-   page under them takes or gives their room at once; the screen's floating actions ride with them. */
+   page under them takes or gives their room at once; the screen's floating actions ride with them.
+   Named only while the change runs (`morph`): a named element is a backdrop root, and the glass over
+   or inside it would blur nothing, the tiles under a floating bar showing through its honey. */
 @utility vt-keys {
-  view-transition-name: keys;
+  :root[data-morphing] & {
+    view-transition-name: keys;
+  }
 }
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -997,7 +1001,9 @@
 }
 /* The screen's floating actions ride up and down with the keys under them, never jumping. */
 @utility vt-floating {
-  view-transition-name: floating-actions;
+  :root[data-morphing] & {
+    view-transition-name: floating-actions;
+  }
 }
 ::view-transition-group(keys),
 ::view-transition-group(floating-actions) {

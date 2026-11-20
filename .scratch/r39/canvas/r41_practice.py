@@ -48,7 +48,7 @@ detail('Main', 'Practice', MAIN, ph, lm, '', '', '')
 def scale_staff(w, fingers):
     sp = 7; top = 30; base = top + 4 * sp
     o = ''.join(f'<path d="M4 {top + i * sp}H{w - 4}" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
-    o += f'<text x="6" y="{base + 6}" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="38" y="{top + 2}" font-size="18" font-family="Noto Music, serif" fill="{INK}">♯</text>'
+    o += f'<text x="6" y="{base}" font-size="{4 * sp}" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="38" y="{top + 2}" font-size="18" font-family="Noto Music, serif" fill="{INK}">♯</text>'
     x0, dx = 68, (w - 84) / 8
     for i in range(8):
         x = x0 + i * dx; y = base - (2 + i) * sp / 2
@@ -58,7 +58,7 @@ def scale_staff(w, fingers):
 def SCALESTAFF(label):
     # the chosen scale up one octave on a treble staff with its own key signature (R42 v68); glyphs as literal text
     o = ''.join(f'<path d="M4 {30 + i * 7}H356" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
-    o += f'<text x="6" y="64" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text>'
+    o += f'<text x="6" y="58" font-size="28" font-family="Noto Music, serif" fill="{INK}">𝄞</text>'
     gl = lambda key, ch, size=18: f'<sc-if value="{{{{{key}}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.ax}}}}" y="{{{{z.ay}}}}" font-size="{size}" font-family="Noto Music, serif" fill="{INK}">{ch}</text></sc-if>'
     o += '<sc-for list="{{ss.sig}}" as="z" hint-placeholder-count="1">' + gl('z.s', '♯') + gl('z.f', '♭') + '</sc-for>'
     o += f'<sc-for list="{{{{ss.led}}}}" as="l" hint-placeholder-count="0"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'

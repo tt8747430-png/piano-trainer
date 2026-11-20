@@ -1,5 +1,5 @@
-/* Verovio draws in currentColor (ADR 0087): the notes take the ink, the staff's lines and barlines the
-   control line. The tokens themselves: theme.css maps them to utilities `inline`, so no
+/* Verovio draws in currentColor (ADR 0087): the notes, the staff's lines and barlines all take the ink, as
+   the boards print a staff. The tokens themselves: theme.css maps them to utilities `inline`, so no
    `--color-*` variable exists at runtime. */
 [data-slot='score'] {
   color: var(--foreground);
@@ -17,9 +17,6 @@
    Not a polyline: a hairpin's and an octave line's say `fill="none"`, which CSS would override. */
 [data-slot='score'] :is(use, path, polygon, rect, ellipse) {
   fill: currentColor;
-}
-[data-slot='score'] :is(g.staff > path, g.barLine, g.ledgerLines) {
-  color: var(--input);
 }
 /* The bars' numbers are the sheet's own labels. */
 [data-slot='score'] g.mNum {

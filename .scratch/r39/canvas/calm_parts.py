@@ -15,7 +15,7 @@ def score_svg(w, sel=None, played=None, size=1.0):
         top = gy + 34 * size; base = top + 4 * sp
         out.append('<path d="' + ''.join(f'M4 {top + i * sp:.1f}H{w - 4}' for i in range(5)) + f'" stroke="{INK}" stroke-width="0.9"></path>')
         out.append(f'<path d="M4 {top:.1f}V{base:.1f}M{w - 4} {top:.1f}V{base:.1f}" stroke="{INK}" stroke-width="1"></path>')
-        out.append(f'<text x="8" y="{base + 7 * size:.1f}" font-size="{50 * size:.0f}" font-family="Noto Music, serif" fill="{INK}">𝄞</text>')
+        out.append(f'<text x="8" y="{base:.1f}" font-size="{4 * sp:.0f}" font-family="Noto Music, serif" fill="{INK}">𝄞</text>')
         out.append(f'<text x="{40 * size:.1f}" y="{top + 0.6 * sp:.1f}" font-size="{20 * size:.0f}" font-family="Noto Music, serif" fill="{INK}">♯</text>')
         x0 = 58 * size
         if si == 0:
@@ -118,8 +118,8 @@ def score_grand(w, systems, sel=None, size=1.0):
             out.append(f'<text x="{x0:.1f}" y="{mtop - 22 * s:.1f}" font-size="{11 * s:.0f}" fill="{SOFT}">{bars[0] + 1}</text>')
         x = x0 + 4 * s
         for top, clef in ((mtop, 't'), (ttop, 't'), (btop, 'b')):
-            if clef == 't': out.append(f'<text x="{x:.1f}" y="{top + 3 * sp:.1f}" font-size="{32 * s:.0f}" font-family="Noto Music, serif" fill="{INK}">𝄞</text>')
-            else: out.append(f'<text x="{x:.1f}" y="{top + 3 * sp:.1f}" font-size="{32 * s:.0f}" font-family="Noto Music, serif" fill="{INK}">𝄢</text>')
+            if clef == 't': out.append(f'<text x="{x:.1f}" y="{top + 4 * sp:.1f}" font-size="{4 * sp:.0f}" font-family="Noto Music, serif" fill="{INK}">𝄞</text>')
+            else: out.append(f'<text x="{x:.1f}" y="{top + 4 * sp:.1f}" font-size="{4.46 * sp:.0f}" font-family="Noto Music, serif" fill="{INK}">𝄢</text>')
             out.append(f'<text x="{x + 30 * s:.1f}" y="{top + (0.6 if clef == "t" else 1.6) * sp:.1f}" font-size="{20 * s:.0f}" font-family="Noto Music, serif" fill="{INK}">♯</text>')
             if first:
                 out.append(f'<text x="{x + 46 * s:.1f}" y="{top + 2 * sp - 1:.1f}" font-size="{19 * s:.0f}" font-weight="700" font-family="Georgia, serif" fill="{INK}">3</text><text x="{x + 46 * s:.1f}" y="{top + 4 * sp - 1:.1f}" font-size="{19 * s:.0f}" font-weight="700" font-family="Georgia, serif" fill="{INK}">4</text>')
@@ -200,7 +200,7 @@ def score_grand(w, systems, sel=None, size=1.0):
 # --- hanon
 def hanon(w, shift=0):  # shift: the figure's start a step higher, as Hanon's next two bars climb
     notes = [n + shift for n in [0, 2, 3, 4, 5, 4, 3, 2, 1, 3, 4, 5, 6, 5, 4, 3]]; x0, dx = 60, (w - 76) / 16; out = []
-    out.append('<path d="' + ''.join(f'M4 {y}H{w-4}' for y in (26, 34, 42, 50, 58)) + f'" stroke="{INK}" stroke-width="0.9" fill="none"></path><text x="6" y="62" font-size="46" font-family="Noto Music, serif" fill="{INK}">𝄞</text>')
+    out.append('<path d="' + ''.join(f'M4 {y}H{w-4}' for y in (26, 34, 42, 50, 58)) + f'" stroke="{INK}" stroke-width="0.9" fill="none"></path><text x="6" y="58" font-size="32" font-family="Noto Music, serif" fill="{INK}">𝄞</text>')
     hs = []
     for i, s in enumerate(notes):
         x = x0 + i * dx + (6 if i >= 8 else 0); y = 66 - s * 4

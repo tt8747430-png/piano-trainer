@@ -25,21 +25,21 @@ IV61 = IV.replace("allSeg: seg(", r'''steps: STEP,
       kbLE: calmKeys(lo - 12, lo + 36, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 1462, 180),
       staff: (() => { const L = 'CDEFGAB', NAT = [0, 2, 4, 5, 7, 9, 11], st0 = L.indexOf(NN[from].charAt(0)), d2 = st0 + STEP;
         const y = (d) => 65 - d * 3.5, acc = (d, pc) => { const k = ((pc - NAT[d % 7]) % 12 + 12) % 12; return k === 1 ? '♯' : k === 11 ? '♭' : ''; };
-        const har = way === 'Harmonic', x1 = har ? 180 : 150, x2 = har ? (n <= 2 ? 192 : 180) : 210;
-        const notes = [[st0, from, x1], [d2, (from + n) % 12, x2]].map(([d, pc, x]) => ({ x, y: y(d), acc: acc(d, pc), ax: x - 18, ay: y(d) + 5, hasAcc: !!acc(d, pc), ...(() => { const a = acc(d, pc), X = x - 14, Y = y(d); return a === '♭' ? { ad: `M${X - 3} ${Y - 15}V${Y + 4}C${X + 4} ${Y + 1} ${X + 5} ${Y - 5} ${X - 3} ${Y - 3}`, bd: '' } : a === '♯' ? { ad: `M${X - 2} ${Y - 11}V${Y + 9}M${X + 2} ${Y - 12}V${Y + 8}`, bd: `M${X - 5} ${Y - 2}L${X + 5} ${Y - 5}M${X - 5} ${Y + 4}L${X + 5} ${Y + 1}` } : { ad: '', bd: '' }; })() }));
-        const led = []; notes.forEach((z) => { const d = (65 - z.y) / 3.5; if (d <= 0) led.push({ d: 'M' + (z.x - 10) + ' 65H' + (z.x + 10) }); if (d >= 12) for (let k = 12; k <= d; k += 2) led.push({ d: 'M' + (z.x - 10) + ' ' + y(k) + 'H' + (z.x + 10) }); });
+        const har = way === 'Harmonic', x1 = 63, x2 = har ? (n <= 2 ? 76 : 63) : 163;
+        const notes = [[st0, from, x1], [d2, (from + n) % 12, x2]].map(([d, pc, x]) => ({ x, y: y(d), acc: acc(d, pc), ax: x - 18, ay: y(d) + 5, hd: (() => { const Y = y(d), c = Math.cos(-1.05), n = Math.sin(-1.05), px = (x + 2.4 * c).toFixed(2), py = (Y + 2.4 * n).toFixed(2), qx = (x - 2.4 * c).toFixed(2), qy = (Y - 2.4 * n).toFixed(2); return `M${x - 5.85} ${Y}a5.85 3.6 0 1 0 11.7 0a5.85 3.6 0 1 0 -11.7 0ZM${px} ${py}A2.4 1.55 -60 1 0 ${qx} ${qy}A2.4 1.55 -60 1 0 ${px} ${py}Z`; })(), hasAcc: !!acc(d, pc), ...(() => { const a = acc(d, pc), X = x - 14, Y = y(d); return a === '♭' ? { ad: `M${X - 3} ${Y - 15}V${Y + 4}C${X + 4} ${Y + 1} ${X + 5} ${Y - 5} ${X - 3} ${Y - 3}`, bd: '' } : a === '♯' ? { ad: `M${X - 2} ${Y - 11}V${Y + 9}M${X + 2} ${Y - 12}V${Y + 8}`, bd: `M${X - 5} ${Y - 2}L${X + 5} ${Y - 5}M${X - 5} ${Y + 4}L${X + 5} ${Y + 1}` } : { ad: '', bd: '' }; })() }));
+        const led = []; notes.forEach((z) => { const d = (65 - z.y) / 3.5; if (d <= 0) led.push({ d: 'M' + (z.x - 7.7) + ' 65H' + (z.x + 7.7) }); if (d >= 12) for (let k = 12; k <= d; k += 2) led.push({ d: 'M' + (z.x - 7.7) + ' ' + y(k) + 'H' + (z.x + 7.7) }); });
         return { notes, led }; })(),
       allSeg: seg(''')
 assert IV61 != IV, 'IV return not found'
 
 STAFF61 = (lambda: (
     f'<svg viewBox="20 -18 238 102" width="100%" role="img" aria-label="The interval on the staff" style="display: block; max-width: 560px; margin: 0 auto">'
-    + ''.join(f'<path d="M24 {30 + i * 7}H254" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
-    + f'<text x="26" y="64" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text>'
+    + ''.join(f'<path d="M20 {30 + i * 7}H258" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
+    + f'<text x="22" y="58" font-size="28" font-family="Noto Music, serif" fill="{INK}">𝄞</text>'
     + f'<sc-for list="{{{{staff.led}}}}" as="l" hint-placeholder-count="0"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
-    + f'<sc-for list="{{{{staff.notes}}}}" as="z" hint-placeholder-count="2"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.y}}}}" rx="6.4" ry="4.2" transform="rotate(-20 {{{{z.x}}}} {{{{z.y}}}})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
+    + f'<sc-for list="{{{{staff.notes}}}}" as="z" hint-placeholder-count="2"><path d="{{{{z.hd}}}}" fill="{INK}" fill-rule="evenodd"></path>'
     + f'<path d="{{{{z.ad}}}}" fill="none" stroke="{INK}" stroke-width="1.4" stroke-linecap="round"></path><path d="{{{{z.bd}}}}" fill="none" stroke="{INK}" stroke-width="2.6"></path></sc-for>'
-    + f'<path d="M253 30V58" stroke="{INK}" stroke-width="1"></path></svg>'))()
+    + f'<path d="M257.5 30V58" stroke="{INK}" stroke-width="1"></path></svg>'))()
 INFO61 = '<span style="width: 8px"></span>' + INFOB('About the interval', 'toggleAbout', 'aboutOn')
 ABOUT61 = INFOTIP('aboutOn', 'toggleAbout', '{{name}}', f'<p style="margin: 0">{{{{mean}}}}</p>' + ''.join(f'<div style="display: flex; align-items: baseline; gap: 12px"><span style="flex: none; width: 84px; color: {SOFT}">{k}</span><span style="font-weight: 600">{{{{{v}}}}}</span></div>' for k, v in (('Down', 'downS'), ('Inverts to', 'inv'))), 'left: 0; top: 56px')
 TITLE61 = (SHOWSTATES() + f'<div style="position: relative; flex: none; display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 2px">'

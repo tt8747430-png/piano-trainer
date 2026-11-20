@@ -51,7 +51,7 @@ def STAFF():
         notes += (f'<ellipse cx="{x}" cy="{y}" rx="6" ry="4.4" transform="rotate(-20 {x} {y})" fill="#332921"></ellipse><line x1="{x + 5.5}" x2="{x + 5.5}" y1="{y - 1}" y2="{y - 30}" stroke="#332921" stroke-width="1.3"></line>'
                   + (f'<line x1="{x - 10}" x2="{x + 10}" y1="80" y2="80" stroke="#332921" stroke-width="1"></line>' if y == 80 else ''))
     return (f'<svg viewBox="0 0 370 100" preserveAspectRatio="xMinYMid meet" role="img" aria-label="C D E F on the staff" style="width: 100%; height: 100px">{lines}'
-            f'<text x="4" y="78" font-size="52" fill="#332921" style="font-family: serif">𝄞</text><text x="44" y="56" font-size="18" font-weight="700" fill="#332921">4</text><text x="44" y="72" font-size="18" font-weight="700" fill="#332921">4</text>{notes}</svg>')
+            f'<text x="4" y="72" font-size="32" fill="#332921" style="font-family: Noto Music, serif">𝄞</text><text x="44" y="56" font-size="18" font-weight="700" fill="#332921">4</text><text x="44" y="72" font-size="18" font-weight="700" fill="#332921">4</text>{notes}</svg>')
 def ROLL():
     rows = [('G', [1, 3, 5, 7]), ('E', [2, 6]), ('C', [0, 4])]
     out = '<div role="img" aria-label="Alberti bass: C G E G" style="display: grid; grid-template-columns: 24px repeat(8, minmax(0, 1fr)); gap: 4px">'

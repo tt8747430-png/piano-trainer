@@ -25,7 +25,7 @@ def _staff63():
     s = ''.join(f'<path d="M24 {30 + i * 7}H270" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
     s += ''.join(f'<path d="M24 {84 + i * 7}H270" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
     s += f'<path d="M24 30V112" stroke="{INK}" stroke-width="1.2"></path><path d="M270 30V112" stroke="{INK}" stroke-width="1"></path>'
-    s += f'<text x="27" y="62" font-size="42" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="28" y="104" font-size="30" font-family="Noto Music, serif" fill="{INK}">𝄢</text>'
+    s += f'<text x="27" y="58" font-size="28" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="28" y="112" font-size="31" font-family="Noto Music, serif" fill="{INK}">𝄢</text>'
     s += f'<text x="62" y="16" font-size="13" font-weight="700" fill="{INK}">C</text>'
     # the right hand rocks in eighths, as the app plays M2: the upper notes together (E4 G4), then the lowest
     # alone (C4, on a ledger line below the staff), four times

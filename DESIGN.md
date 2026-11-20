@@ -598,8 +598,8 @@ appears under a finger; the layout's one control.
 
 ### The music
 
-- **Sheet music** is engraved by Verovio in `currentColor` from the tokens: notes in ink, staff lines in the control line,
-  a staff not practised in soft ink.
+- **Sheet music** is engraved by Verovio in `currentColor` from the tokens: notes, staff lines and barlines in ink, as the
+  boards print a staff; a staff not practised in soft ink.
 - **What is chosen is coloured, never boxed:** notes in the selection colour, a range or loop a light band of it, tight
   to the notes. The playhead is one thin line across the staves in sight. Empty staff chooses nothing.
 - **What sounds is lit, in the Player:** the heads at the playhead take their hand's colour, as their keys do: the right

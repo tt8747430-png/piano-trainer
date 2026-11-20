@@ -7,7 +7,7 @@ def cover(title, by, w=150, notes=(2, 4, 4, 3, 2, 0, -1)):
     n = ''.join(f'<ellipse cx="{30 + i * (w - 44) / len(notes):.1f}" cy="{66 - p * 2.5}" rx="3" ry="2.3" fill="{INK}"></ellipse>' for i, p in enumerate(notes))
     return (f'<svg viewBox="0 0 {w} 96" width="100%" aria-hidden="true" style="display: block; border-radius: 10px; background: #FFFFFF; box-shadow: 0 0 0 1px {LINE}, 0 6px 14px -8px rgba(51,41,33,.25)">'
             f'<text x="{w / 2}" y="20" text-anchor="middle" font-family="{SERIF}" font-size="12" fill="{INK}">{title}</text><text x="{w / 2}" y="32" text-anchor="middle" font-size="7" fill="{SOFT}">{by}</text>'
-            f'{st}<text x="9" y="70" font-family="Noto Music, serif" font-size="24" fill="{INK}">𝄞</text>{n}</svg>')
+            f'{st}<text x="9" y="66" font-family="Noto Music, serif" font-size="20" fill="{INK}">𝄞</text>{n}</svg>')
 SHELF = [('Amazing Grace', 'John Newton', 'Bar 9 of 16', '56%'), ('Ode to Joy', 'Beethoven', 'Bar 5 of 12', '40%'), ('Für Elise', 'Beethoven', 'Bar 3 of 24', '12%')]
 def shelf(w, n=3):
     cards = ''.join(f'<a href="{{SONG}}" style="flex: none; width: {w}px; display: flex; flex-direction: column; gap: 8px; color: {INK}; text-decoration: none">{cover(t, b, notes=INC.get(t, (2, 4, 4, 3, 2, 0, -1)))}<span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="height: 3px; border-radius: 2px; background: {FILL}"><span style="display: block; width: {p}; height: 3px; border-radius: 2px; background: #C26A2E"></span></span><span style="font-size: 13px; color: {SOFT}">{s}</span></a>' for t, b, s, p in SHELF[:n])
