@@ -1,3 +1,4 @@
+import { isRecord } from '@/shared/lib'
 import {
   isLeftFigureId,
   isPatternId,
@@ -49,8 +50,8 @@ export type SharedPattern = Omit<OwnPattern, 'id'>
 
 /** A body read as a shared pattern: a name an own pattern takes and a catalog figure for each hand. */
 export function readSharedPattern(body: unknown): SharedPattern | null {
-  if (typeof body !== 'object' || body === null) return null
-  const { name, rh, lh } = body as Record<string, unknown>
+  if (!isRecord(body)) return null
+  const { name, rh, lh } = body
   const named = typeof name === 'string' ? ownName(name) : null
   return named && isRightFigureId(rh) && isLeftFigureId(lh) ? { name: named, rh, lh } : null
 }

@@ -3,6 +3,7 @@ import { isStepId } from '@/entities/step'
 import { PROGRESSION } from '@/features/practice'
 import {
   isOneOf,
+  isRecord,
   partsFromParams,
   partsParams,
   readColour,
@@ -102,9 +103,7 @@ function readChordSteps(value: unknown): ChordStep[] | undefined {
   if (!Array.isArray(value) || value.length < 2) return undefined
   return value
     .slice(0, MOST_CHORDS)
-    .map((each: unknown) =>
-      readChordStep(typeof each === 'object' && each !== null ? (each as Raw) : {}),
-    )
+    .map((each: unknown) => readChordStep(isRecord(each) ? each : {}))
 }
 
 export function readChordsSearch(raw: Raw): ChordsSearch {

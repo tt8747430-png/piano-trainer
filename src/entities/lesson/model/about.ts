@@ -1,3 +1,4 @@
+import { isRecord } from '@/shared/lib'
 import type { LocalText } from '@/shared/i18n'
 import { sanitiseStyle } from '@/shared/lib/style'
 import type { LessonBlock, LessonSection } from './types'
@@ -10,15 +11,10 @@ import type { LessonBlock, LessonSection } from './types'
 export type About = readonly LessonSection[]
 
 const isText = (value: unknown): value is LocalText =>
-  typeof value === 'object' &&
-  value !== null &&
-  typeof (value as Partial<LocalText>).en === 'string' &&
-  typeof (value as Partial<LocalText>).ru === 'string'
+  isRecord(value) && typeof value.en === 'string' && typeof value.ru === 'string'
 
 const isBlock = (value: unknown): value is LessonBlock =>
-  typeof value === 'object' &&
-  value !== null &&
-  typeof (value as { kind?: unknown }).kind === 'string'
+  isRecord(value) && typeof value.kind === 'string'
 
 /** A block with its style read through the one sanitiser; none where it has none. */
 function styled<T extends { readonly style?: unknown }>(value: T): T {
@@ -33,9 +29,9 @@ function styled<T extends { readonly style?: unknown }>(value: T): T {
 export function readAbout(value: unknown): About | undefined {
   if (!Array.isArray(value)) return undefined
   const sections: LessonSection[] = []
-  for (const each of value as unknown[]) {
-    if (typeof each !== 'object' || each === null) return undefined
-    const section = each as Partial<Record<keyof LessonSection, unknown>>
+  const list: readonly unknown[] = value
+  for (const section of list) {
+    if (!isRecord(section)) return undefined
     if (!isText(section.heading) || !Array.isArray(section.blocks)) return undefined
     if (!section.blocks.every(isBlock)) return undefined
     if (section.takeaway !== undefined && !isText(section.takeaway)) return undefined

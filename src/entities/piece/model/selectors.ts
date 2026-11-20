@@ -29,11 +29,11 @@ import {
 const BUNDLED_BY_ID = new Map(
   COLLECTIONS.flatMap((collection) => collection.entries).map((entry) => [entry.id, entry]),
 )
-let built = {
-  revision: -1,
-  index: BUNDLED_BY_ID as ReadonlyMap<string, Entry>,
-  made: [] as readonly MadeSong[],
-}
+let built: {
+  revision: number
+  index: ReadonlyMap<string, Entry>
+  made: readonly MadeSong[]
+} = { revision: -1, index: BUNDLED_BY_ID, made: [] }
 
 /**
  * A newer copy with the app's own recording file: the database holds a recording's timing, never
@@ -43,7 +43,7 @@ function withOwnRecording(entry: Entry, update: Piece): Piece {
   const file = 'recording' in entry ? entry.recording?.src : undefined
   if (!('recording' in update) || !update.recording) return update
   const { recording, ...rest } = update
-  return file ? { ...update, recording: { ...recording, src: file } } : (rest as Piece)
+  return file ? { ...update, recording: { ...recording, src: file } } : rest
 }
 
 /**

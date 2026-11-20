@@ -3,6 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  isFolderId,
   libraryCatalog,
   selectDirection,
   selectFavourites,
@@ -38,6 +39,9 @@ import type { SongsFilter } from './songs-filter'
 export type Chosen = `folder:${FolderId}` | `song:${PieceId}`
 export const folderKey = (id: FolderId): Chosen => `folder:${id}`
 export const songKey = (id: PieceId): Chosen => `song:${id}`
+/** Whether a row's key, carried back from a drag, is a folder's or a song's. */
+export const isChosen = (key: string): key is Chosen =>
+  key.startsWith('song:') || (key.startsWith('folder:') && isFolderId(key.slice('folder:'.length)))
 
 /** What the page has open over it, one at a time (CODE_STYLE §3: one union, never a flag each). */
 export type Pending =

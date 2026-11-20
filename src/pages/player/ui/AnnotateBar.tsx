@@ -11,6 +11,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/
 /** The dynamics a learner marks, softest first. */
 const DYNAMICS = ['pp', 'p', 'mp', 'mf', 'f', 'ff'] as const
 const FINGERS = [1, 2, 3, 4, 5] as const
+/** A mark's key in the chooser: what it shows, and the mark it makes. */
+type Choice = readonly [string | number, Annotation]
 
 /** Each mark's face on its button: what it prints. */
 const FACE: Readonly<Record<AnnotationKind, string>> = {
@@ -85,22 +87,11 @@ export function AnnotateBar({
           </form>
         ) : (
           <div className="flex flex-wrap gap-1">
-            {(kind === 'fingering' ? FINGERS : DYNAMICS).map((value) => (
-              <Button
-                key={value}
-                variant="outline"
-                className="min-w-11"
-                onClick={() =>
-                  kind === 'fingering'
-                    ? mark({ at, staff, kind, value: value as (typeof FINGERS)[number] })
-                    : mark({
-                        at,
-                        staff,
-                        kind: 'dynamic',
-                        value: value as (typeof DYNAMICS)[number],
-                      })
-                }
-              >
+            {(kind === 'fingering'
+              ? FINGERS.map((value): Choice => [value, { at, staff, kind, value }])
+              : DYNAMICS.map((value): Choice => [value, { at, staff, kind: 'dynamic', value }])
+            ).map(([value, made]) => (
+              <Button key={value} variant="outline" className="min-w-11" onClick={() => mark(made)}>
                 {value}
               </Button>
             ))}

@@ -116,7 +116,7 @@ export function orderStaves(draft: Draft, order: readonly number[]): Draft {
   const { lyricsOn } = draft
   return {
     ...draft,
-    staves: order.map((at) => draft.staves[at] as DraftStaff),
+    staves: order.flatMap((at) => draft.staves[at] ?? []),
     lyricsOn: typeof lyricsOn === 'number' ? order.indexOf(lyricsOn) : lyricsOn,
   }
 }

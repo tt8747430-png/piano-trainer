@@ -38,14 +38,10 @@ function ProgressionDocument({
   // The lines written as one value: a progression keeps a line in one mode at least.
   const setLines = (major: string, minor: string) => {
     const { major: _major, minor: _minor, ...rest } = progression
-    const lines = {
-      ...(lineOf(major) === undefined ? {} : { major }),
-      ...(lineOf(minor) === undefined ? {} : { minor }),
-    }
-    change({
-      ...rest,
-      ...(lines.major === undefined && lines.minor === undefined ? { major } : lines),
-    } as LibraryProgression)
+    const minorReads = lineOf(minor) !== undefined
+    if (!minorReads) change({ ...rest, major })
+    else if (lineOf(major) === undefined) change({ ...rest, minor })
+    else change({ ...rest, major, minor })
   }
   const unread = (line: string) => line.trim() !== '' && !parseNumerals(line)
   const major = progression.major ?? ''

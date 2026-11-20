@@ -93,4 +93,6 @@ export const JUMP_WORDS = {
   'ds-coda': 'D.S. al Coda',
 } as const satisfies Partial<Readonly<Record<BarMarkChoice, string>>>
 export type JumpWords = keyof typeof JUMP_WORDS
-export const isJumpWords = isOneOf(Object.keys(JUMP_WORDS) as JumpWords[])
+/** Whether a choice is a jump printed as words. */
+export const isJumpWords = (value: unknown): value is JumpWords =>
+  typeof value === 'string' && Object.hasOwn(JUMP_WORDS, value)

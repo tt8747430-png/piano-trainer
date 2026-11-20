@@ -13,7 +13,7 @@ import {
   SettingsGroup as Group,
   Sheet,
   SheetContent,
-  type BuiltInAvatar,
+  isBuiltInAvatar,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { SettingsScreen } from '@/widgets/settings-screen'
@@ -242,18 +242,20 @@ function PhotoSheet({
           </Group>
           <Group title={t('editProfile.pictures')}>
             <ul className="grid grid-cols-4 gap-3 sm:grid-cols-6">
-              {(Object.keys(BUILT_IN_AVATARS) as BuiltInAvatar[]).map((id) => (
-                <li key={id} className="grid place-items-center">
-                  <button
-                    type="button"
-                    aria-label={t(`editProfile.avatars.${id}`)}
-                    className="rounded-pill focus-visible:outline-offset-2"
-                    onClick={() => void save({ avatar: id }).then((result) => done(result.ok))}
-                  >
-                    <Avatar name={null} picture={id} size="row" />
-                  </button>
-                </li>
-              ))}
+              {Object.keys(BUILT_IN_AVATARS)
+                .filter(isBuiltInAvatar)
+                .map((id) => (
+                  <li key={id} className="grid place-items-center">
+                    <button
+                      type="button"
+                      aria-label={t(`editProfile.avatars.${id}`)}
+                      className="rounded-pill focus-visible:outline-offset-2"
+                      onClick={() => void save({ avatar: id }).then((result) => done(result.ok))}
+                    >
+                      <Avatar name={null} picture={id} size="row" />
+                    </button>
+                  </li>
+                ))}
             </ul>
           </Group>
           {hasPhoto ? (

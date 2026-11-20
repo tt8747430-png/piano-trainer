@@ -53,7 +53,9 @@ type Lessons = Readonly<Partial<Record<LessonKey, string>>>
 
 /** The lessons as they are kept: the latest LESSONS_KEPT by the date each was first done. */
 export function keptLessons(lessons: Lessons): Lessons {
-  const entries = Object.entries(lessons) as [LessonKey, string][]
+  const entries = Object.entries(lessons).flatMap(([key, at]) =>
+    at === undefined ? [] : [[key, at] as const],
+  )
   if (entries.length <= LESSONS_KEPT) return lessons
   const latest = entries
     .toSorted(([, a], [, b]) => Date.parse(b) - Date.parse(a))

@@ -1,3 +1,4 @@
+import { isOneOf } from '@/shared/lib'
 /**
  * The bars a learner arranges (R29 B10, memory-palaces' select toolbar): per surface the acts it
  * has, how many it holds, and its defaults. Only acts each kind already has: a bar never offers an
@@ -78,5 +79,4 @@ export const barAvailable = (surface: BarSurface, bar: readonly BarAct[]): reado
 export const barOf = (bars: Bars, surface: BarSurface): readonly BarAct[] =>
   bars[surface] ?? DEFAULT_BARS[surface]
 
-export const isBarSurface = (value: string): value is BarSurface =>
-  (BAR_SURFACES as readonly string[]).includes(value)
+export const isBarSurface = isOneOf<BarSurface>(BAR_SURFACES)

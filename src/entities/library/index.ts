@@ -25,6 +25,7 @@ export {
   type CardPlace,
   createLibraryStore,
   INITIAL_LIBRARY,
+  isFolderId,
   LIBRARY_STORAGE_KEY,
   LIBRARY_VERSION,
   type LibraryState,

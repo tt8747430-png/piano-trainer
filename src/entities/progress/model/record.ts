@@ -1,4 +1,4 @@
-import type { SkillId } from '@/shared/lib/music'
+import { isSkillId } from '@/shared/lib/music'
 import { streakOf } from './days'
 import { ratingOf } from './mastery'
 import { practiceSeconds } from './time'
@@ -32,8 +32,8 @@ export function practiceRecord(state: ProgressState): PracticeRecord {
     songsPlayed: count(state.practised),
     songsLearned: Object.keys(state.learned).filter((step) => step.startsWith('piece:')).length,
     practiceSeconds: practiceSeconds(state),
-    skillsKnown: (Object.keys(state.answers) as SkillId[]).filter(
-      (skill) => ratingOf(state.answers, skill) === 'known',
-    ).length,
+    skillsKnown: Object.keys(state.answers)
+      .filter(isSkillId)
+      .filter((skill) => ratingOf(state.answers, skill) === 'known').length,
   }
 }

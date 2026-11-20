@@ -3,7 +3,7 @@ import { BellOff, CheckCheck, Flame, Medal, Target, Trash2, TrendingUp, X } from
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNotifications, useNotificationsStoreApi, type Notice } from '@/entities/notification'
-import { isMilestoneId, localDay, type BadgeId } from '@/entities/progress'
+import { isBadgeId, isMilestoneId, localDay } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
 import { cn, formatLocale } from '@/shared/lib'
 import {
@@ -20,6 +20,8 @@ import {
 import { MILESTONE_ICON } from '../model/icons'
 
 const GROUPS = ['today', 'yesterday', 'earlier'] as const
+/** A badge's tiers, by their number from 1. */
+const TIERS = ['bronze', 'silver', 'gold', 'platinum'] as const
 
 /** Which group a notice falls in, by the day on the learner's calendar. */
 function groupOf(notice: Notice, now: Date): (typeof GROUPS)[number] {
@@ -40,10 +42,10 @@ function useNoticeTitle(): (notice: Notice) => string {
     if (kind === 'milestone')
       return isMilestoneId(ref) ? t(`profile.achievements.names.${ref}`) : ref
     const [badge = '', tier = '1'] = ref.split(':')
-    const tierName = ['bronze', 'silver', 'gold', 'platinum'][Number(tier) - 1] ?? 'bronze'
+    const tierName = TIERS[Number(tier) - 1] ?? 'bronze'
     return t('profile.notifications.tier', {
-      tier: t(`profile.badges.tiers.${tierName as 'bronze'}`),
-      badge: t(`profile.badges.names.${badge as BadgeId}`),
+      tier: t(`profile.badges.tiers.${tierName}`),
+      badge: isBadgeId(badge) ? t(`profile.badges.names.${badge}`) : badge,
     })
   }
 }

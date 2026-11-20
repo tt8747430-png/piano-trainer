@@ -39,7 +39,7 @@ export function wizardChord(choice: WizardChoice): Chord {
 }
 
 const isWizardAccidental = (value: number): value is WizardAccidental =>
-  (WIZARD_ACCIDENTALS as readonly number[]).includes(value)
+  WIZARD_ACCIDENTALS.some((accidental) => accidental === value)
 
 /**
  * The choices that build a chord typed (an inversion where its bass is a chord tone), else C major. A

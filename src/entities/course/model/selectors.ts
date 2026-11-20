@@ -6,10 +6,14 @@ import { COURSES } from '../content'
 import { COURSE_ORDER_ID, inCourseOrder, isCourseOrder } from './order'
 import { isWholeCourse, updatesCourse, type Course, type Shelf } from './types'
 
-let built = {
+let built: {
+  revision: number
+  courses: readonly Course[]
+  index: ReadonlyMap<string, Course>
+} = {
   revision: -1,
   courses: COURSES,
-  index: new Map(COURSES.map((course) => [course.id, course])) as ReadonlyMap<string, Course>,
+  index: new Map(COURSES.map((course) => [course.id, course])),
 }
 
 /**

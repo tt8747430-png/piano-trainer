@@ -1,4 +1,5 @@
 import { readSharedSong, type SharedSong } from '@/entities/piece'
+import { isRecord } from '@/shared/lib'
 
 /** The link's format: a later one is a later app's, read as no song. */
 const FORMAT = 1
@@ -81,9 +82,8 @@ export async function readSongLink(data: string): Promise<SharedSong | null> {
     const text = await textUpTo(inflated, SONG_LIMIT)
     if (text === null) return null
     const file: unknown = JSON.parse(text)
-    if (typeof file !== 'object' || file === null || !('v' in file) || file.v !== FORMAT)
-      return null
-    const { t, m } = file as { t?: unknown; m?: unknown }
+    if (!isRecord(file) || file.v !== FORMAT) return null
+    const { t, m } = file
     return readSharedSong(typeof m === 'object' && m !== null ? { ...m, title: t } : null)
   } catch {
     return null

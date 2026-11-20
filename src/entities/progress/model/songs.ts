@@ -1,3 +1,4 @@
+import { isRecord } from '@/shared/lib'
 import type { PieceId } from '@/entities/piece'
 import { HANDS, type Hands } from '@/shared/lib/schedule'
 
@@ -28,8 +29,8 @@ const isPlace = (value: unknown): value is number =>
 const isScore = (value: unknown): value is number => isPlace(value) && value <= 100
 
 function bestOf(value: unknown): SongPlay['best'] {
-  if (typeof value !== 'object' || value === null) return {}
-  const saved = value as Partial<Record<string, unknown>>
+  if (!isRecord(value)) return {}
+  const saved = value
   return Object.fromEntries(
     HANDS.flatMap((hands) => {
       const score = saved[hands]
@@ -40,10 +41,8 @@ function bestOf(value: unknown): SongPlay['best'] {
 
 /** A saved song's play as it can be read; nothing where it cannot. */
 export function songPlay(value: unknown): SongPlay | undefined {
-  if (typeof value !== 'object' || value === null) return undefined
-  const { played, at, times, seconds, bars, last, best } = value as Partial<
-    Record<keyof SongPlay, unknown>
-  >
+  if (!isRecord(value)) return undefined
+  const { played, at, times, seconds, bars, last, best } = value
   if (!Array.isArray(played) || !isPlace(at) || !isPlace(times) || !isPlace(bars)) return undefined
   if (typeof seconds !== 'number' || !Number.isFinite(seconds) || seconds < 0) return undefined
   if (typeof last !== 'string' || Number.isNaN(Date.parse(last))) return undefined

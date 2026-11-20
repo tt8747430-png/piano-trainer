@@ -2,6 +2,7 @@ import { Check } from 'lucide-react'
 import { useCallback, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Report } from '@/shared/api/admin'
+import { isOneOf } from '@/shared/lib'
 import { useAdmin } from '@/shared/lib/admin'
 import { ConfirmDialog, say, SettingsGroup } from '@/shared/ui'
 import {
@@ -18,8 +19,7 @@ import { cn } from '@/shared/lib'
 
 /** The reasons a report gives, as the Public library's Report sheet offers them. */
 const REASONS = ['not-theirs', 'offensive', 'spam', 'broken'] as const
-const isReason = (value: string): value is (typeof REASONS)[number] =>
-  (REASONS as readonly string[]).includes(value)
+const isReason = isOneOf<(typeof REASONS)[number]>(REASONS)
 
 /**
  * Administration › Content reports (the Admin board): one card of the Public library's reports, the

@@ -4,7 +4,6 @@ import {
   RECORDER_COUNT_INS,
   selectEditing,
   selectRecorder,
-  type RecorderCountIn,
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
@@ -82,7 +81,10 @@ export function ScorePageBody({ page }: { page: SettingsPage }) {
               value: String(bars),
               label: t(`common:recorderSettings.countIns.${bars}`),
             }))}
-            onChange={(bars) => setRecorderCountIn(settings, Number(bars) as RecorderCountIn)}
+            onChange={(bars) => {
+              const countIn = RECORDER_COUNT_INS.find((each) => String(each) === bars)
+              if (countIn !== undefined) setRecorderCountIn(settings, countIn)
+            }}
           />
         </>
       )

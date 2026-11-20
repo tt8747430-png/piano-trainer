@@ -111,7 +111,7 @@ function barsOf(saved: unknown, length: number): number[] | null {
     (at, i) => at !== null && (i === 0 || at > (lines[i - 1] ?? Number.POSITIVE_INFINITY)),
   )
   const closing = lines.at(-1)
-  return rising && closing != null && closing >= length ? (lines as number[]) : null
+  return rising && closing != null && closing >= length ? lines.filter((at) => at !== null) : null
 }
 
 /** A saved take whose fields read; its notes and presses kept one by one. */

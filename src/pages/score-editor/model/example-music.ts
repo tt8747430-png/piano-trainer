@@ -206,8 +206,8 @@ export function exampleBlock(
     block: {
       ...rest,
       clef,
-      notes: upper as string,
-      ...(lower !== undefined ? { bass: lower as string } : {}),
+      notes: upper,
+      ...(lower !== undefined ? { bass: lower } : {}),
       ...(meter === '4/4' ? {} : { meter }),
       ...(sameKey ? {} : { key: chart.key }),
     },

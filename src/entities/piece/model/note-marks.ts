@@ -12,7 +12,7 @@ import {
   numeralText,
   parseNumeral,
   type SwingMark,
-  type TremoloStrokes,
+  TREMOLO_STROKES,
 } from '@/shared/lib/music'
 import { pitchText } from './music'
 import { readPitch } from './note-text'
@@ -78,8 +78,14 @@ const EXPRESSION_WORDS: Readonly<Record<Expression, string>> = {
 const OCTAVE_WORDS: readonly OctaveLine[] = OCTAVE_LINES
 const DYNAMIC_WORDS: readonly Dynamic[] = DYNAMICS
 
-const lookup = <K extends string>(words: Readonly<Record<K, string>>) =>
-  new Map(Object.entries(words).map(([kind, word]) => [word as string, kind as K]))
+const lookup = <K extends string>(words: Readonly<Record<K, string>>) => {
+  const isKind = (kind: string): kind is K => kind in words
+  return new Map(
+    Object.keys(words)
+      .filter(isKind)
+      .map((kind): [string, K] => [words[kind], kind]),
+  )
+}
 const ARTICULATION_BY_WORD = lookup(ARTICULATION_WORDS)
 const ORNAMENT_BY_WORD = lookup(ORNAMENT_WORDS)
 const HAIRPIN_BY_WORD = lookup(HAIRPIN_WORDS)
@@ -170,7 +176,10 @@ export function readMarks(text: string): NoteMarks | null {
     else if (word === 'arpv') read = once('arpeggio', 'down')
     else if (word === GLISS) read = once('glissando', true)
     else if (TWO_NOTE_TREMOLO.test(word))
-      read = once('twoNoteTremolo', Number(word.slice('ftrem'.length)) as TremoloStrokes)
+      read = once(
+        'twoNoteTremolo',
+        TREMOLO_STROKES.find((strokes) => strokes === Number(word.slice('ftrem'.length))),
+      )
     else if (SWING_BY_WORD.has(word)) read = once('swing', SWING_BY_WORD.get(word))
     else if (word.startsWith(TEMPO)) {
       const tempo = readTempo(word.slice(TEMPO.length))

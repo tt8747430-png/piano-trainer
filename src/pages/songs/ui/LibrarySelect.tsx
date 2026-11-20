@@ -17,7 +17,7 @@ import {
   SongCardFace,
   SortableRows,
 } from '@/widgets/song-library'
-import { folderKey, songKey, type Chosen, type LibraryPage } from '../model/use-library-page'
+import { folderKey, isChosen, songKey, type LibraryPage } from '../model/use-library-page'
 
 /**
  * The library while Select is on (Mindscape's `LibrarySelectList`): the rows on screen, each chosen
@@ -39,12 +39,14 @@ export function LibrarySelect({
   const { t } = useTranslation('songs')
   const nameOf = useFolderName()
   const { view, select, sortable } = page
-  const folders = new Map(view.folders.map((each) => [each.folder.id, each]))
+  const folders = new Map<string, (typeof view.folders)[number]>(
+    view.folders.map((each) => [each.folder.id, each]),
+  )
   const entries = new Map(
     view.groups.flatMap((group) => group.entries.map((entry) => [entry.id, entry] as const)),
   )
   const folderName = (id: string) => {
-    const each = folders.get(id as never)
+    const each = folders.get(id)
     return each ? nameOf(each.folder) : ''
   }
   const songName = (id: PieceId) => page.titleOf(id)
@@ -54,7 +56,7 @@ export function LibrarySelect({
       : songName(key.slice('song:'.length))
   const face = (key: string) => {
     if (key.startsWith('folder:')) {
-      const each = folders.get(key.slice('folder:'.length) as never)
+      const each = folders.get(key.slice('folder:'.length))
       return each ? <FolderFace folder={each.folder} holds={each} /> : null
     }
     const entry = entries.get(key.slice('song:'.length))
@@ -71,7 +73,7 @@ export function LibrarySelect({
   return (
     <CardLookProvider value={look ?? DEFAULT_CARD_LOOK}>
       <LibraryDnd
-        carried={(key) => select.carried(key as Chosen)}
+        carried={(key) => (isChosen(key) ? select.carried(key) : [])}
         nameOf={keyName}
         targetName={(target) =>
           'into' in target
@@ -83,13 +85,17 @@ export function LibrarySelect({
         inHand={(keys) => {
           const [first] = keys
           return first ? (
-            <RowInHand checked={select.chosen.has(first as Chosen)} count={keys.length} carried>
+            <RowInHand
+              checked={isChosen(first) && select.chosen.has(first)}
+              count={keys.length}
+              carried
+            >
               {face(first)}
             </RowInHand>
           ) : null
         }}
-        onCarry={(keys, target) => select.carry(keys as Chosen[], target)}
-        accepts={(keys, target) => select.accepts(keys as Chosen[], target)}
+        onCarry={(keys, target) => select.carry(keys.filter(isChosen), target)}
+        accepts={(keys, target) => select.accepts(keys.filter(isChosen), target)}
       >
         <div className="flex flex-col gap-6">
           {view.folders.length > 0 ? (

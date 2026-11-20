@@ -40,8 +40,15 @@ const REPEAT = '𝄎'
 /** What the palette shows as chosen: the chosen note's value, else the next note's. */
 /** The value shown, kept while it reads the same: its tuplet is a fresh object each time it is read. */
 function useShown(): ChosenValue | null {
-  const key = useEditorState((state) => JSON.stringify(shownValue(state)))
-  return useMemo(() => JSON.parse(key) as ChosenValue | null, [key])
+  const value = useEditorState((state) => shownValue(state)?.value)
+  const dots = useEditorState((state) => shownValue(state)?.dots ?? 0)
+  const num = useEditorState((state) => shownValue(state)?.tuplet?.num)
+  const numbase = useEditorState((state) => shownValue(state)?.tuplet?.numbase)
+  return useMemo(() => {
+    if (value === undefined) return null
+    const tuplet = num === undefined || numbase === undefined ? {} : { tuplet: { num, numbase } }
+    return { value, dots, ...tuplet }
+  }, [value, dots, num, numbase])
 }
 
 /** Each value's key, Flat's 1 to 7. */

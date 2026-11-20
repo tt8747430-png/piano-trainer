@@ -1,5 +1,5 @@
 import type { KeyboardEvent, PointerEvent } from 'react'
-import { isBlackKey, WHITE_KEYS, type Midi } from '@/shared/lib/music'
+import { isBlackKey, midi, WHITE_KEYS, type Midi } from '@/shared/lib/music'
 
 const LOWEST = 21
 const HIGHEST = 108
@@ -33,11 +33,13 @@ export function KeyStrip({
   move?: KeyStripMove
 }) {
   const blacks: string[] = []
-  for (let key = LOWEST; key <= HIGHEST; key++)
-    if (isBlackKey(key as Midi))
+  for (let at = LOWEST; at <= HIGHEST; at++) {
+    const key = midi(at)
+    if (isBlackKey(key))
       blacks.push(
-        `M${(across(key as Midi) - WHITE * 0.3).toFixed(2)} 0h${(WHITE * 0.6).toFixed(2)}v15h-${(WHITE * 0.6).toFixed(2)}z`,
+        `M${(across(key) - WHITE * 0.3).toFixed(2)} 0h${(WHITE * 0.6).toFixed(2)}v15h-${(WHITE * 0.6).toFixed(2)}z`,
       )
+  }
   const from = across(low)
   const to = across(high) + (isBlackKey(high) ? WHITE * 0.3 : WHITE)
   const last = move ? WHITE_KEYS.length - move.whites : 0

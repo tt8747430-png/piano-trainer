@@ -1,6 +1,6 @@
 import type { RegisteredRouter, RouteIds, ValidateNavigateOptions } from '@tanstack/react-router'
 import { exerciseOf, isExerciseId, shelfOf } from '@/entities/exercise'
-import type { Up } from '@/shared/lib'
+import { isRecord, type Up } from '@/shared/lib'
 import type { RouterContext } from '../router'
 import { readChordsSearch, readProgressionsSearch, readScalesSearch } from './explorer-search'
 import { isPracticeSettingsFrom, type PracticeSettingsFrom } from './practice-search'
@@ -353,6 +353,6 @@ export function parentOf(
   learner: Omit<UpFrom, 'params' | 'search'>,
 ): Up | null | Promise<Up | null> {
   if (!isScreen(match.routeId)) return up({ to: '/' })
-  const search = match.search as Readonly<Record<string, unknown>>
+  const search = isRecord(match.search) ? match.search : {}
   return PARENTS[match.routeId]({ ...learner, params: match.params, search })
 }

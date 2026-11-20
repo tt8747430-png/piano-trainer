@@ -6,7 +6,6 @@ import {
   useMemo,
   useRef,
   useState,
-  type CSSProperties,
   type ReactElement,
   type ReactNode,
 } from 'react'
@@ -44,6 +43,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import type { RowChord } from '../model/chord-row'
 import { chordsMusic } from '../model/chords-music'
 import { voicedShown } from '../model/marks'
+import { fitStyle } from './fit-style'
 import { TappableStaff } from './TappableStaff'
 
 /** How fast a row walks, a chord each two beats. */
@@ -244,7 +244,7 @@ export function RowStaff({ spans = false }: { spans?: boolean }) {
           key={line}
           ref={line === 0 ? first : undefined}
           className="w-max max-w-none"
-          style={zoom < 1 ? ({ zoom, '--fit': zoom } as CSSProperties) : undefined}
+          style={fitStyle(zoom)}
         >
           <TappableStaff
             music={music}

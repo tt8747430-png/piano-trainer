@@ -1,5 +1,6 @@
-import { useRef, type CSSProperties, type ReactNode } from 'react'
+import { useRef, type ReactNode } from 'react'
 import { useFitZoom } from '@/shared/lib'
+import { fitStyle } from './fit-style'
 
 /**
  * A row of music drawn whole within its room, shrunk where it is wider: a card's line of
@@ -12,11 +13,7 @@ export function FittedRow({ children }: { children: ReactNode }) {
   const zoom = useFitZoom(room, drawn)
   return (
     <div ref={room} className="min-w-0">
-      <div
-        ref={drawn}
-        className="w-max"
-        style={zoom < 1 ? ({ zoom, '--fit': zoom } as CSSProperties) : undefined}
-      >
+      <div ref={drawn} className="w-max" style={fitStyle(zoom)}>
         {children}
       </div>
     </div>

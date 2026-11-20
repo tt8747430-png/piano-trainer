@@ -1,3 +1,4 @@
+import { isRecord } from '@/shared/lib'
 import { isStage, type Stage, type Step } from '@/entities/step'
 import type { LocalText } from '@/shared/i18n'
 import { CHORD_FAMILIES, SCALE_KINDS } from '@/shared/lib/music'
@@ -26,8 +27,8 @@ export interface Journey {
 }
 
 const isText = (value: unknown): value is LocalText => {
-  if (typeof value !== 'object' || value === null) return false
-  const { en, ru } = value as Partial<LocalText>
+  if (!isRecord(value)) return false
+  const { en, ru } = value
   return typeof en === 'string' && typeof ru === 'string'
 }
 
@@ -35,8 +36,8 @@ const isId = (value: unknown): value is string => typeof value === 'string' && v
 
 /** A step as the database keeps it: a lesson by id, a chord family's or a scale's Check. */
 function isJourneyStep(value: unknown): value is JourneyStep {
-  if (typeof value !== 'object' || value === null) return false
-  const step = value as Partial<Record<string, unknown>>
+  if (!isRecord(value)) return false
+  const step = value
   switch (step.kind) {
     case 'lesson':
       return isId(step.lessonId)
@@ -50,8 +51,8 @@ function isJourneyStep(value: unknown): value is JourneyStep {
 }
 
 function isChapter(value: unknown): value is Chapter {
-  if (typeof value !== 'object' || value === null) return false
-  const chapter = value as Partial<Chapter>
+  if (!isRecord(value)) return false
+  const chapter = value
   return (
     isId(chapter.id) &&
     isText(chapter.title) &&
@@ -65,8 +66,8 @@ function isChapter(value: unknown): value is Chapter {
  * title and goal, and its chapters in order, each its steps in order. A journey is kept whole.
  */
 export function updatesJourney(id: string, body: unknown): body is Journey {
-  if (typeof body !== 'object' || body === null) return false
-  const journey = body as Partial<Journey>
+  if (!isRecord(body)) return false
+  const journey = body
   return (
     journey.id === id &&
     isStage(journey.stage) &&

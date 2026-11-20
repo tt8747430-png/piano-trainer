@@ -1,3 +1,4 @@
+import { isRecord } from '@/shared/lib'
 import type { PatternId } from '@/entities/pattern'
 import type { LocalText } from '@/shared/i18n'
 import { parseNumerals, type ChordSize, type ChurchMode } from '@/shared/lib/music'
@@ -46,8 +47,8 @@ export interface ProgressionDetails {
 }
 
 const isText = (value: unknown): value is LocalText => {
-  if (typeof value !== 'object' || value === null) return false
-  const { en, ru } = value as Partial<LocalText>
+  if (!isRecord(value)) return false
+  const { en, ru } = value
   return typeof en === 'string' && typeof ru === 'string' && en.trim() !== '' && ru.trim() !== ''
 }
 
@@ -60,8 +61,8 @@ const readsAsLine = (line: unknown): line is string =>
  * a minor key, or both.
  */
 export function readsAsProgression(id: string, body: unknown): body is LibraryProgression {
-  if (typeof body !== 'object' || body === null) return false
-  const progression = body as Partial<LibraryProgression> & { major?: unknown; minor?: unknown }
+  if (!isRecord(body)) return false
+  const progression = body
   const { major, minor } = progression
   return (
     progression.id === id &&
@@ -75,8 +76,8 @@ export function readsAsProgression(id: string, body: unknown): body is LibraryPr
 }
 
 const isLocalText = (value: unknown): value is LocalText => {
-  if (typeof value !== 'object' || value === null) return false
-  const { en, ru } = value as Partial<LocalText>
+  if (!isRecord(value)) return false
+  const { en, ru } = value
   return typeof en === 'string' && typeof ru === 'string'
 }
 
@@ -85,8 +86,8 @@ const isLocalText = (value: unknown): value is LocalText => {
  * editor opens on; publishing asks `readsAsProgression`.
  */
 export function isProgressionDraft(id: string, body: unknown): body is LibraryProgression {
-  if (typeof body !== 'object' || body === null) return false
-  const draft = body as Partial<LibraryProgression> & { major?: unknown; minor?: unknown }
+  if (!isRecord(body)) return false
+  const draft = body
   return (
     draft.id === id &&
     PROGRESSION_STYLES.some((style) => style === draft.style) &&

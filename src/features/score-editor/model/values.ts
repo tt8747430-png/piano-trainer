@@ -20,11 +20,7 @@ export const takesDot = (value: ChosenValue['value'], meter: Meter, dots: Dots =
   Number.isInteger(ticksOf({ value, dots }, meter))
 
 /** Whether the value is whole ticks in a tuplet of `num` in the meter, and the meter writes such a tuplet. */
-export const takesTuplet = (
-  value: ChosenValue['value'],
-  num: TupletCount,
-  meter: Meter,
-): boolean => {
+export const takesTuplet = (value: ChosenValue['value'], num: number, meter: Meter): boolean => {
   const tuplet = tupletOf(num, meter)
   return tuplet !== null && Number.isInteger(ticksOf({ value, dots: 0, tuplet }, meter))
 }
@@ -40,8 +36,7 @@ export function withValue(
 ): ChosenValue {
   const { tuplet } = chosen
   if (tuplet) {
-    const num = tuplet.num as TupletCount
-    return takesTuplet(value, num, meter) ? { value, dots: 0, tuplet } : { value, dots: 0 }
+    return takesTuplet(value, tuplet.num, meter) ? { value, dots: 0, tuplet } : { value, dots: 0 }
   }
   return {
     value,

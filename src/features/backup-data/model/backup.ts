@@ -28,7 +28,9 @@ const STORES = {
   [OWN_LESSONS_STORAGE_KEY]: OWN_LESSONS_VERSION,
   [PAGE_LAYOUTS_STORAGE_KEY]: PAGE_LAYOUTS_VERSION,
 } as const
-export const SAVE_KEYS = Object.keys(STORES) as (keyof typeof STORES)[]
+type SaveKey = keyof typeof STORES
+/** The keys a backup holds, each a store's. */
+export const SAVE_KEYS = Object.keys(STORES).filter((key): key is SaveKey => key in STORES)
 
 const KIND = 'piano-trainer-backup'
 const FORMAT = 1

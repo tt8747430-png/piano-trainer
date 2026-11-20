@@ -1,3 +1,4 @@
+import { isOneOf } from '@/shared/lib'
 import { PEDALS, pedalLine, TICKS_PER_BEAT, type Pedal, type PedalEvent } from '@/shared/lib/music'
 import { ticksIn } from './beats'
 import { ContentError } from './content-error'
@@ -6,7 +7,7 @@ import type { PieceId } from './types'
 /** `change@15.5`, `up@31:3`: a kind, then its beat from the music's start, a decimal or a fraction. */
 const EVENT = /^([a-z]+)@(\d*\.?\d+|\d+:\d+)$/
 
-const isPedal = (word: string): word is Pedal => (PEDALS as readonly string[]).includes(word)
+const isPedal = isOneOf<Pedal>(PEDALS)
 
 /** Beats written as the staves write them (`4`, `15.5`, `1:3`), as whole ticks, or null. */
 function beatTicks(text: string): number | null {

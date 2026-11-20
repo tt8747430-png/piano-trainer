@@ -53,19 +53,18 @@ export function withSongFacts<T extends FactsOf>(
   oneLanguage = false,
 ): T {
   const about = facts.about.trim()
-  const { note: _note, ...rest } = piece
-  return {
-    ...rest,
-    [titleField(piece, locale)]: facts.title.trim() || piece[titleField(piece, locale)],
-    ...(about
-      ? {
-          note:
-            piece.note && !oneLanguage
-              ? { ...piece.note, [locale]: about }
-              : { en: about, ru: about },
-        }
-      : {}),
-  } as T
+  const field = titleField(piece, locale)
+  const next = { ...piece }
+  // The copy's facts, written through: the note last, as a spread would put it.
+  const written: { -readonly [K in keyof FactsOf]: FactsOf[K] } = next
+  delete written.note
+  const title = facts.title.trim()
+  if (field === 'title') written.title = title || piece.title
+  else written[field] = title || piece[field]
+  if (about)
+    written.note =
+      piece.note && !oneLanguage ? { ...piece.note, [locale]: about } : { en: about, ru: about }
+  return next
 }
 
 /**

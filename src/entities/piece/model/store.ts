@@ -89,7 +89,7 @@ export const syncOf = (ms: number): number =>
 
 const KEY_TEXT = /^[A-G][#b]?m?$/
 /** A key as a song's text names it, one a signature writes (no A# major, with its ten sharps). */
-const isKeyText = (value: unknown): value is KeyText => {
+export const isKeyText = (value: unknown): value is KeyText => {
   if (typeof value !== 'string' || !KEY_TEXT.test(value)) return false
   const key = parseKey(value)
   return key !== null && isWrittenKey(key)
@@ -176,8 +176,11 @@ function singsLyrics(piece: ChartPiece): boolean {
 }
 
 /** A field only where it has a value. */
-const optional = <K extends string, V>(key: K, value: V | undefined) =>
-  (value === undefined ? {} : { [key]: value }) as Partial<Record<K, V>>
+const optional = <K extends string, V>(key: K, value: V | undefined): Partial<Record<K, V>> => {
+  const field: Partial<Record<K, V>> = {}
+  if (value !== undefined) field[key] = value
+  return field
+}
 
 /**
  * Saved music that reads as a piece's: its fields, its chart, single staves and hands; null

@@ -1,3 +1,4 @@
+import { isRecord } from '@/shared/lib'
 import { readAbout, type About, type Lesson } from '@/entities/lesson'
 import type { PieceId } from '@/entities/piece'
 import { isStage, type Stage } from '@/entities/step'
@@ -85,8 +86,8 @@ const isWeeks = (value: unknown): value is number =>
 
 /** Text in both languages, blank or not. */
 const isText = (value: unknown): value is LocalText => {
-  if (typeof value !== 'object' || value === null) return false
-  const { en, ru } = value as Partial<LocalText>
+  if (!isRecord(value)) return false
+  const { en, ru } = value
   return typeof en === 'string' && typeof ru === 'string'
 }
 
@@ -99,8 +100,8 @@ const isIdList = (value: unknown): value is readonly string[] =>
 
 /** Whether a body reads as a record of the course `id`, words missing or not: a draft of it. */
 export function isCourseRecord(id: string, body: unknown): body is CourseRecord {
-  if (typeof body !== 'object' || body === null) return false
-  const record = body as Partial<CourseRecord>
+  if (!isRecord(body)) return false
+  const record = body
   return (
     record.id === id &&
     isText(record.title) &&

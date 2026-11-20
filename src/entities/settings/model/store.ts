@@ -47,7 +47,6 @@ import {
   DEVICE_NAME_MAX,
   FOLDED_MAX,
   SECTION_ID_MAX,
-  PRACTICE_TOGGLES,
   REMEMBERED_CHORDS,
   defaultKeyboard,
   detectLocale,
@@ -81,6 +80,7 @@ import {
   type MidiSettings,
   type OtherHandSettings,
   type PlaybackSettings,
+  type PracticeToggle,
   type PracticeToggles,
   type EditingSettings,
   type RecorderSettings,
@@ -154,17 +154,21 @@ export function createSettingsStore({
 /** A toggle keeps what was saved; one never saved (a newer toggle) takes its default. */
 function practiceToggles(value: unknown): PracticeToggles {
   const saved = savedObject<PracticeToggles>(value)
-  return Object.fromEntries(
-    PRACTICE_TOGGLES.map((toggle) => {
-      const kept: unknown = saved[toggle]
-      return [toggle, typeof kept === 'boolean' ? kept : DEFAULT_PRACTICE[toggle]]
-    }),
-  ) as Record<keyof PracticeToggles, boolean>
+  const kept = (toggle: PracticeToggle): boolean => {
+    const was: unknown = saved[toggle]
+    return typeof was === 'boolean' ? was : DEFAULT_PRACTICE[toggle]
+  }
+  return {
+    fingerNumbers: kept('fingerNumbers'),
+    namedNotes: kept('namedNotes'),
+    positions: kept('positions'),
+    metronome: kept('metronome'),
+  }
 }
 
 /** A volume as saved: a whole percent from 0 to 100. */
 const isVolume = (value: unknown): value is number =>
-  Number.isInteger(value) && (value as number) >= 0 && (value as number) <= 100
+  typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 100
 
 /** Each part's volume as saved where it is one, at full otherwise; a staff's kept by a staff's id. */
 function soundSettings(value: unknown): SoundSettings {
@@ -371,9 +375,10 @@ function scoreViewSettings(value: unknown): ScoreViewSettings {
 
 /** A tempo the Metronome keeps: whole beats a minute within its range. */
 const isBpm = (value: unknown): value is number =>
+  typeof value === 'number' &&
   Number.isInteger(value) &&
-  (value as number) >= BPM_RANGE.min &&
-  (value as number) <= BPM_RANGE.max
+  value >= BPM_RANGE.min &&
+  value <= BPM_RANGE.max
 
 /** The Metronome's tempo, meter, sound, beats, subdivision and trainers, each as saved where valid (A39). */
 function metronomeSettings(value: unknown): MetronomeSettings {
@@ -408,9 +413,7 @@ function metronomeSettings(value: unknown): MetronomeSettings {
       step: count(speed.step, initial.speed.step),
       every: count(speed.every, initial.speed.every),
     },
-    volume: (METRONOME_VOLUMES as readonly unknown[]).includes(saved.volume)
-      ? (saved.volume as number)
-      : initial.volume,
+    volume: METRONOME_VOLUMES.find((volume) => volume === saved.volume) ?? initial.volume,
     flash: typeof saved.flash === 'boolean' ? saved.flash : initial.flash,
   }
 }

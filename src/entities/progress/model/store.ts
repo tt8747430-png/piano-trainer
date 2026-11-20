@@ -1,7 +1,7 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isStepId, type StepId } from '@/entities/step'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
-import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
+import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import { DAYS_KEPT, keptDays } from './days'
 import {
@@ -62,12 +62,14 @@ function kept<K extends string, V>(
   isKey: (key: string) => key is K,
   read: (value: unknown) => V | undefined,
 ): Partial<Record<K, V>> {
-  if (!isRecord(saved)) return {}
-  const entries = Object.entries(saved).flatMap(([key, value]) => {
-    const valid = isKey(key) ? read(value) : undefined
-    return valid === undefined ? [] : [[key, valid] as const]
-  })
-  return Object.fromEntries(entries) as Partial<Record<K, V>>
+  const result: Partial<Record<K, V>> = {}
+  if (!isRecord(saved)) return result
+  for (const [key, value] of Object.entries(saved)) {
+    if (!isKey(key)) continue
+    const valid = read(value)
+    if (valid !== undefined) result[key] = valid
+  }
+  return result
 }
 
 const isPieceKey = (key: string): key is string => key !== ''
@@ -118,7 +120,7 @@ const isKeyName = (key: string): key is string => /^[A-G](#|b)?m?$/.test(key)
 /** What an earned day is kept under: a badge's tier (`streak:2`) or a milestone's id. */
 const isEarnedKey = (key: string): key is string => /^[a-z][a-z-]*(:[1-4])?$/.test(key)
 
-const isFirst = (key: string): key is FirstId => (FIRSTS as readonly string[]).includes(key)
+const isFirst = isOneOf<FirstId>(FIRSTS)
 
 /** Of the days kept with a value, the latest `DAYS_KEPT`. */
 function latestDays<V>(record: Partial<Record<string, V>>): Partial<Record<string, V>> {

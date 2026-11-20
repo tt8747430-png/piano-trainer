@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import {
+  asChartPiece,
   entryTitles,
   isDegreePiece,
   musicOf,
   staffNamesOf,
   usePieceHeadingsOf,
   useStaffTitle,
-  versionableEntry,
   type ChartPiece,
   type Piece,
 } from '@/entities/piece'
@@ -27,8 +27,7 @@ function creditNames(credits: readonly Credit[] | undefined, roles: readonly str
 }
 
 /** A piece as its chart in its key: one written in degrees as the editor writes it (ADR 0115). */
-const chartOf = (piece: Piece): ChartPiece =>
-  isDegreePiece(piece) ? (versionableEntry(piece.id) as ChartPiece) : piece
+const chartOf = (piece: Piece): ChartPiece => (isDegreePiece(piece) ? asChartPiece(piece) : piece)
 
 /** A song's files: its score as MusicXML, its music as played as MIDI. */
 export interface SongFiles {

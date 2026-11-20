@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
+import { isOneOf } from '@/shared/lib'
 import { useAdmin } from '@/shared/lib/admin'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
@@ -22,7 +23,7 @@ const ACTIONS = [
   'dismiss',
 ] as const
 type Action = (typeof ACTIONS)[number]
-const isAction = (value: string): value is Action => (ACTIONS as readonly string[]).includes(value)
+const isAction = isOneOf<Action>(ACTIONS)
 
 /** When an act was done, as the Admin board says it: "Today 09:14", "Yesterday", "7 Nov". */
 function when(at: string, locale: string, now: number) {

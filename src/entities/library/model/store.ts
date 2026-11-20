@@ -86,7 +86,8 @@ export const createLibraryStore = (saving: SavingOptions = {}): LibraryStore =>
     saving,
   )
 
-const isFolderId = (value: unknown): value is FolderId =>
+/** Whether a value names a folder: the learner's own or a collection's. */
+export const isFolderId = (value: unknown): value is FolderId =>
   isOwnFolderId(value) || isSongCollectionId(value)
 const isPicture = isOneOf(FOLDER_PICTURES)
 const isPaint = isOneOf(FOLDER_PAINTS)

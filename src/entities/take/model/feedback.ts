@@ -153,9 +153,14 @@ export function feedbackOf(
     }
   }
   const notes = due.flatMap((note) => verdicts.get(note) ?? [])
-  const counts = Object.fromEntries(
-    VERDICTS.map((verdict) => [verdict, notes.filter((note) => note.verdict === verdict).length]),
-  ) as Record<Verdict, number>
+  const counted = (verdict: Verdict) => notes.filter((note) => note.verdict === verdict).length
+  const counts: Record<Verdict, number> = {
+    right: counted('right'),
+    wrong: counted('wrong'),
+    missed: counted('missed'),
+    early: counted('early'),
+    late: counted('late'),
+  }
   return { notes, counts, percent: shareOf(notes) }
 }
 

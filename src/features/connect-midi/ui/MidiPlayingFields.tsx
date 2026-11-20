@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { selectMidi, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setMidi } from '@/features/set-preference'
-import { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift } from '@/shared/lib'
+import { OCTAVE_SHIFTS, PEDAL_WAYS } from '@/shared/lib'
 import { TOUCHES } from '@/shared/lib/schedule'
 import { GroupRow, GroupSegmented, Stepper } from '@/shared/ui'
 
@@ -28,7 +28,10 @@ export function MidiPlayingFields() {
           min={LOWEST}
           max={HIGHEST}
           format={shiftLabel}
-          onChange={(next) => setMidi(store, { octaveShift: next as OctaveShift })}
+          onChange={(next) => {
+            const octaveShift = OCTAVE_SHIFTS.find((shift) => shift === next)
+            if (octaveShift !== undefined) setMidi(store, { octaveShift })
+          }}
           decrease={t('midiSettings.octaveShift.down')}
           increase={t('midiSettings.octaveShift.up')}
         />

@@ -37,6 +37,9 @@ import { useLibraryPage, type LibraryPage } from '../model/use-library-page'
 /** The presets a place's cards take (the board's four; Night is a lesson block's alone). */
 const CARD_PRESETS = ['plain', 'soft', 'bold', 'paper'] as const
 type CardPreset = (typeof CARD_PRESETS)[number]
+/** A preset as the cards take it: none for one they do not. */
+const cardPreset = (preset: string | null): CardPreset | null =>
+  CARD_PRESETS.find((each) => each === preset) ?? null
 
 /** Which device the preview draws the rows on. */
 type Device = 'phone' | 'laptop'
@@ -131,7 +134,7 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
           </h2>
           <Segmented<CardPreset>
             label={t('common:style.presets')}
-            value={presetOf({ ...draft.style, layout: 'list' }) as CardPreset | null}
+            value={cardPreset(presetOf({ ...draft.style, layout: 'list' }))}
             options={CARD_PRESETS.map((preset) => ({
               value: preset,
               label: t(`common:style.preset.${preset}`),

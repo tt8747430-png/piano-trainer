@@ -36,10 +36,10 @@ function sanitize(persisted: unknown): ViewsState {
   const { views: saved, searchRecent } = savedObject<ViewsState>(persisted)
   return {
     views: latestViews(
-      Object.entries(isRecord(saved) ? saved : {}).flatMap(([path, view]) => {
-        if (!path.startsWith('/') || !isRecord(view)) return []
-        return [[path, viewOf(view)] as readonly [string, RememberedView]]
-      }),
+      Object.entries(isRecord(saved) ? saved : {}).flatMap(
+        ([path, view]): (readonly [string, RememberedView])[] =>
+          !path.startsWith('/') || !isRecord(view) ? [] : [[path, viewOf(view)]],
+      ),
     ),
     searchRecent: Array.isArray(searchRecent)
       ? searchRecent

@@ -54,12 +54,16 @@ const AT_START = ['repeatStart', 'segno', 'coda', 'pageBreak'] as const
 const AT_END = ['fine', 'toCoda'] as const
 
 const isOne = <T extends string>(all: readonly T[], value: string): value is T =>
-  (all as readonly string[]).includes(value)
+  all.some((each) => each === value)
 
 /** A bar with one mark set to `value`, or without it where `value` is undefined. */
 function withMark<K extends keyof BarMarks>(bar: DraftBar, key: K, value: BarMarks[K]): DraftBar {
-  const { [key]: _was, ...rest } = bar
-  return (value === undefined ? rest : { ...rest, [key]: value }) as DraftBar
+  const next: { -readonly [P in keyof DraftBar]: DraftBar[P] } = { ...bar }
+  // The copy's marks, written through: the mark moves to the end, as a spread would put it.
+  const marks: { -readonly [P in keyof BarMarks]: BarMarks[P] } = next
+  delete marks[key]
+  if (value !== undefined) marks[key] = value
+  return next
 }
 
 /** A bar with `value` at `key`, or without it where it is there already. */
@@ -97,7 +101,7 @@ export function markBars(draft: Draft, { from, to }: BarRange, choice: BarMarkCh
   let marked = draft
   for (let index = from; index <= to; index += 1)
     marked = withBar(marked, index, (bar) =>
-      choice === 'plain' ? (withoutBarMarks(bar) as DraftBar) : toggled(bar, 'ending', ending),
+      choice === 'plain' ? withoutBarMarks(bar) : toggled(bar, 'ending', ending),
     )
   return marked
 }

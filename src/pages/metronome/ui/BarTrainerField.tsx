@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { MetronomeSettings } from '@/entities/settings'
-import { TRAINER_BARS, type TrainerBars } from '@/shared/lib/schedule'
+import { TRAINER_BARS } from '@/shared/lib/schedule'
 import { GroupRow, GroupRows, GroupSwitch, Stepper } from '@/shared/ui'
 
 type Trainer = MetronomeSettings['trainer']
@@ -42,7 +42,9 @@ export function BarTrainerField({
             min={FEWEST}
             max={MOST}
             format={bars}
-            onChange={(value) => onChange({ [key]: value as TrainerBars })}
+            onChange={(value) =>
+              onChange({ [key]: TRAINER_BARS.find((each) => each === value) ?? trainer[key] })
+            }
             decrease={`${t(label)} −`}
             increase={`${t(label)} +`}
           />

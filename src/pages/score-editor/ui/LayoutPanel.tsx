@@ -170,9 +170,12 @@ export function LayoutPanel() {
     names.map((text) => (text === undefined ? undefined : { text })),
   )
   const set = (change: PieceLayout & { readonly barsPerLine?: number | undefined }) => {
-    const next: Record<string, unknown> = { ...draft.layout, ...change }
+    const next: { -readonly [K in keyof PieceLayout]: PieceLayout[K] } = {
+      ...draft.layout,
+      ...change,
+    }
     if (next.barsPerLine === undefined) delete next.barsPerLine
-    actions.dispatch({ type: 'layout', layout: next as PieceLayout })
+    actions.dispatch({ type: 'layout', layout: next })
   }
   const toggle = (group: Group) =>
     setOpen((was) => {

@@ -100,6 +100,7 @@ export {
 } from './model/song-facts'
 export {
   createPiecesStore,
+  isKeyText,
   PIECES_STORAGE_KEY,
   PIECES_VERSION,
   readSharedSong,

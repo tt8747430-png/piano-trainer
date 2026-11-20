@@ -7,6 +7,7 @@ import {
   isCompound,
   keyOfNotes,
   meterOf,
+  midi,
   pitchClass,
   pedalLine,
   signatureKey,
@@ -24,7 +25,7 @@ import { MOST_NOTES, SongFileError, titleOf, type ReadSong } from './song-of-mus
 /** A track's name that says it is the piano's. */
 const PIANO_NAME = /piano|pno|klav|keyboard|right hand|left hand|фортеп|рояль|пианино|правая|левая/i
 /** Where a piano part played on one track is split between the hands: middle C and up the right's. */
-const SPLIT: Midi = 60 as Midi
+const SPLIT: Midi = midi(60)
 const LOWEST = 21
 const HIGHEST = 108
 /** MIDI's own tempo where a file says none: 120 quarters a minute. */
@@ -36,7 +37,7 @@ function takeOf(parts: readonly MidiPart[], msPerTick: number, tempo: number, me
   const notes = parts
     .flatMap((part) => part.notes)
     .map((n) => ({
-      midi: n.key as Midi,
+      midi: midi(n.key),
       at: n.on * msPerTick,
       held: (n.off - n.on) * msPerTick,
       velocity: n.velocity,

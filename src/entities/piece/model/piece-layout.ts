@@ -100,9 +100,10 @@ const oneOf = <T extends string>(choices: readonly T[], value: unknown): T | und
   choices.find((choice) => choice === value)
 
 export const isBarsPerLine = (value: unknown): value is number =>
+  typeof value === 'number' &&
   Number.isInteger(value) &&
-  (value as number) >= BARS_PER_LINE.min &&
-  (value as number) <= BARS_PER_LINE.max
+  value >= BARS_PER_LINE.min &&
+  value <= BARS_PER_LINE.max
 
 /**
  * A layout as the score keeps it, read field by field (a field that does not read, or reads as the
@@ -110,21 +111,18 @@ export const isBarsPerLine = (value: unknown): value is number =>
  */
 export function savedLayout(saved: unknown): PieceLayout | undefined {
   if (!isRecord(saved)) return undefined
-  const kept: Record<string, unknown> = {}
+  const kept: { -readonly [K in keyof PieceLayout]: PieceLayout[K] } = {}
   const keep = <K extends keyof PieceLayout>(key: K, value: PieceLayout[K] | undefined) => {
-    const standard = STANDARD_LAYOUT[key as keyof FullLayout]
+    const standard = STANDARD_LAYOUT[key]
     if (value !== undefined && JSON.stringify(value) !== JSON.stringify(standard)) kept[key] = value
   }
   keep('pageSize', oneOf(PAGE_SIZES, saved.pageSize))
   keep('orientation', oneOf(ORIENTATIONS, saved.orientation))
   if (isRecord(saved.margins)) {
     const margins = saved.margins
-    const read = MARGIN_SIDES.map((side) => inRange(margins[side], MARGIN_CM))
-    if (read.every((each) => each !== undefined))
-      keep(
-        'margins',
-        Object.fromEntries(MARGIN_SIDES.map((side, i) => [side, read[i]])) as PageMargins,
-      )
+    const [top, bottom, left, right] = MARGIN_SIDES.map((side) => inRange(margins[side], MARGIN_CM))
+    if (top !== undefined && bottom !== undefined && left !== undefined && right !== undefined)
+      keep('margins', { top, bottom, left, right })
   }
   keep('staffSize', inRange(saved.staffSize, STAFF_MM))
   keep('staffSpace', inRange(saved.staffSpace, STAFF_SPACE))
@@ -134,7 +132,7 @@ export function savedLayout(saved: unknown): PieceLayout | undefined {
   keep('measureNumbers', oneOf(MEASURE_NUMBERS, saved.measureNumbers))
   keep('hideEmpty', oneOf(HIDE_EMPTY, saved.hideEmpty))
   keep('font', oneOf(MUSIC_FONTS, saved.font))
-  return Object.keys(kept).length > 0 ? (kept as PieceLayout) : undefined
+  return Object.keys(kept).length > 0 ? kept : undefined
 }
 
 /** Every field of a score's layout, its own where it says one, else the standard. */
