@@ -27,7 +27,7 @@ import type { GroupWord, LibraryKind } from '../model/library-words'
 
 /**
  * A practice library's search and filters (canvas, Songs' own): one search box and beside it Sort and
- * filter, its count on it, opening the sort first on a phone (the table's headings sort on a laptop),
+ * filter, its count on it, opening the sort first on every size,
  * then Level (the levels the place holds) and, for a library of styles, Style; under them on a phone
  * the place chips (All · Favourites · Mine), then each filter on and a book's place as a chip that
  * takes it off.
@@ -39,7 +39,6 @@ export function LibrarySearch({
   groups,
   groupWord,
   levels,
-  wide,
   screen,
   names,
   mine,
@@ -56,8 +55,6 @@ export function LibrarySearch({
   groups: readonly LibraryGroup[]
   groupWord: GroupWord
   levels: boolean
-  /** A laptop's width: the table's headings sort, so the filters hold no sort. */
-  wide: boolean
   screen: string
   names: Readonly<Record<string, string>>
   /** Whether the learner makes rows of their own here: Mine is a place chip. */
@@ -114,7 +111,7 @@ export function LibrarySearch({
         />
       </div>
       <FilterSheet
-        sorted={!wide}
+        sorted
         count={count}
         foot={(close) => (
           <FilterFoot
@@ -131,15 +128,13 @@ export function LibrarySearch({
           />
         )}
       >
-        {wide ? null : (
-          <FilterGroup title={t('practice:library.sortBy')}>
-            {sorts.map((sort) => (
-              <FilterChoice key={sort} pressed={view.sort === sort} onPress={() => set({ sort })}>
-                {sortName(sort)}
-              </FilterChoice>
-            ))}
-          </FilterGroup>
-        )}
+        <FilterGroup title={t('practice:library.sortBy')}>
+          {sorts.map((sort) => (
+            <FilterChoice key={sort} pressed={view.sort === sort} onPress={() => set({ sort })}>
+              {sortName(sort)}
+            </FilterChoice>
+          ))}
+        </FilterGroup>
         {levels ? (
           <FilterGroup title={t('practice:library.table.level')}>
             <FilterChoice pressed={view.stage === 'any'} onPress={() => set({ stage: 'any' })}>

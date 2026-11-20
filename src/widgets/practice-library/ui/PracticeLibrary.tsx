@@ -67,8 +67,8 @@ function Section({ section, folds }: { section: ShownSection; folds: boolean }) 
  * One library for Exercises, Accompaniment and Progressions (R30-4), the Songs library's shape: the
  * search with Sort and Filter. On a phone, Favourites while there are some, then each book (or style,
  * or the learner's folder) a run of rows, folded after five, Mine last; from a laptop's width the
- * same place chips under the title on Back's edge and, under them, the table of those runs, which
- * its headings sort: no second pane of places beside the sidebar (canvas v439). Arranged by the learner
+ * same place chips under the title on Back's edge and, under them, the table of those runs, sorted by
+ * its Sort and filter sheet: no second pane of places beside the sidebar (canvas v439). Arranged by the learner
  * (R32): the places and rows in their order, renamed, moved and hidden as set, each row's More with
  * Rename…, Move to… and Hide; in Edit (`editing`, the pencil in the page's bar) every place and row
  * with its handle, a place's More and New folder. What it shows is the URL's (`view`); the rows,
@@ -143,7 +143,6 @@ export function PracticeLibrary({
     groups: arranged.groups,
     groupWord,
     levels,
-    wide,
     screen,
     names,
     mine: mine !== undefined,

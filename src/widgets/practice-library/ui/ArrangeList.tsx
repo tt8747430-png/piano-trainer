@@ -406,11 +406,11 @@ export function ArrangeList({
           strategy={verticalListSortingStrategy}
         >
           {table ? (
-            <TableOf.Provider value={table}>
+            <TableOf value={table}>
               <TableFrame levels={table.levels} columns={table.columns}>
                 {placeList}
               </TableFrame>
-            </TableOf.Provider>
+            </TableOf>
           ) : (
             <ul aria-label={t('library.edit.places')} className="flex flex-col gap-4">
               {placeList}

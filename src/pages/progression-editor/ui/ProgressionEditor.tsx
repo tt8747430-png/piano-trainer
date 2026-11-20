@@ -125,7 +125,7 @@ function LineRow({
   onChange: (line: string) => void
 }) {
   return (
-    <label className="flex min-h-12 items-center gap-3 ps-4 pe-4 text-base">
+    <label className="flex min-h-12 items-center gap-3 rounded-control ps-4 pe-4 text-base has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50">
       <span className="shrink-0">{label}</span>
       <input
         value={value}
@@ -136,7 +136,7 @@ function LineRow({
         enterKeyHint="done"
         onChange={(event) => onChange(event.target.value)}
         className={cn(
-          'min-w-0 flex-1 bg-transparent text-end font-display text-base outline-none',
+          'min-w-0 flex-1 bg-transparent text-end font-display text-base focus-visible:outline-none',
           wrong && 'text-destructive',
         )}
       />
@@ -166,6 +166,7 @@ export function ProgressionEditor({
   const [locale, setLocale] = useState<Locale>(shown)
   const draft = useProgressionDraft(progression)
   const settingsWindow = useSettingsWindow()
+  const openPublish = () => void draft.flush().then(() => settingsWindow.openAt('publish'))
   // A new progression's name is its draft's: the device has none of it.
   const opened = draft.load.state === 'ready' ? draft.load.value : progression
   const title = localText(opened.name, shown) || opened.id
@@ -184,8 +185,9 @@ export function ProgressionEditor({
         language={{ value: locale, onChange: setLocale }}
         // Its Settings, a window over the editor, and Publish a page inside it (the ProgressionEdit boards).
         toPublish={{
-          link: <button type="button" onClick={() => settingsWindow.openAt('publish')} />,
-          open: () => void draft.flush().then(() => settingsWindow.openAt('publish')),
+          // Its draft kept first, from the bar's honey Publish as from the menu's.
+          link: <button type="button" onClick={openPublish} />,
+          open: openPublish,
         }}
         settings={
           <RoundButton

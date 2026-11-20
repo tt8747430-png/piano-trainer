@@ -76,9 +76,11 @@ export function useProgressionLibrary(): {
       id: progression.id,
       name: progression.name,
       detail: numeralsLine(parsed),
+      third: t(progression.minor ? 'music:key.minorMode' : 'music:key.majorMode'),
       words: [numeralsLine(parsed)],
       group: MINE,
-      picture: { chords: parsed, minor: false },
+      // Its own mode paints its roles, as the library's do.
+      picture: { chords: parsed, minor: progression.minor },
       link: link(progression.id),
       favourite,
       actions: [favouriteAction(progression.id, favourite)],
