@@ -39,23 +39,6 @@ export function About({ entry }: { entry: PublicEntry }) {
   )
 }
 
-/** An item's facts in one line of chips, as a song's page has its key, time and tempo. */
-export function FactChips({ facts }: { facts: readonly { name: string; value: string }[] }) {
-  return (
-    <dl className="flex flex-wrap items-center gap-2">
-      {facts.map((fact) => (
-        <div
-          key={fact.name}
-          className="flex h-8 items-center gap-1.5 rounded-pill bg-muted/70 px-3 text-sm"
-        >
-          <dt className="text-muted-foreground">{fact.name}</dt>
-          <dd className="font-semibold">{fact.value}</dd>
-        </div>
-      ))}
-    </dl>
-  )
-}
-
 /** Grey where the item will be, while it is read; said once, to a screen reader. */
 export function ReadingItem({ label }: { label: string }) {
   return (

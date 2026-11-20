@@ -29,4 +29,4 @@ export { pedalId, scoreToMei, type NextLine, type PrintedName, type StaffLabels 
 export { barStartOf, beamPlan } from './beams'
 export { barRange, beatGrid, snapRange, type BeatMark, type TickRange } from './beats'
 export { noteIds, notePlace } from './note-ids'
-export { annotate, circledAt, type ScoreAnnotation } from './annotate'
+export { annotate, type ScoreAnnotation } from './annotate'

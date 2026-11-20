@@ -8,7 +8,6 @@ export {
   SHEET_TEMPO,
   sheetName,
   TRANSPOSE_RANGE,
-  type BandPart,
   type ChordSheetEntry,
   type ChordSheetSettings,
   type CountIn,

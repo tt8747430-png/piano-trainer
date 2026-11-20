@@ -170,5 +170,3 @@ export function useLibraryActs() {
     },
   }
 }
-
-export type LibraryActs = ReturnType<typeof useLibraryActs>

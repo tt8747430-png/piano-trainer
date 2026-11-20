@@ -126,18 +126,3 @@ export function withWaitScore(
   }
   return withSong(songs, pieceId, { ...base, best: { ...base.best, [hands]: score } })
 }
-
-/**
- * The songs to go on with (canvas 133, Songs' Continue): each stopped part way and not learned, the
- * latest played first (Flat's Recent scores, by when), with its place.
- */
-export function songsToContinue(
-  songs: Readonly<Partial<Record<PieceId, SongPlay>>>,
-  learned: (id: PieceId) => boolean,
-): readonly (readonly [PieceId, SongPlay])[] {
-  return Object.entries(songs)
-    .flatMap(([id, play]): (readonly [PieceId, SongPlay])[] =>
-      play && play.at > 0 && play.at < play.bars && !learned(id) ? [[id, play]] : [],
-    )
-    .toSorted(([, a], [, b]) => Date.parse(b.last) - Date.parse(a.last))
-}

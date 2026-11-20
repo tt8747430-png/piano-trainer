@@ -225,57 +225,6 @@ export function FabLink({
   )
 }
 
-/**
- * A screen's one Play as its main floating button, named by what it plays, Stop while it sounds; the
- * screen's Enter plays it (`usePlayKey`).
- */
-export function PlayFab({
-  label,
-  playing,
-  onClick,
-}: {
-  label: string
-  playing: boolean
-  onClick: () => void
-}) {
-  const { t } = useTranslation('common')
-  return (
-    <Fab
-      label={playing ? t('stop') : label}
-      icon={playing ? Square : Play}
-      aria-pressed={playing}
-      onClick={onClick}
-    />
-  )
-}
-
-/**
- * A second action beside the main one, always in sight: its icon on a round button, its name its
- * tooltip.
- */
-export function FabPill({
-  label,
-  icon: Icon,
-  className,
-  ...props
-}: { label: string; icon: LucideIcon } & Omit<
-  ComponentProps<typeof Button>,
-  'children' | 'size' | 'variant'
->) {
-  return (
-    <Button
-      variant="surface"
-      size="icon"
-      aria-label={label}
-      title={label}
-      className={cn(MINI_FAB, className)}
-      {...props}
-    >
-      <Icon aria-hidden className={filled(Icon)} />
-    </Button>
-  )
-}
-
 /** Closes the dial once one of its actions is chosen. */
 const CloseDial = createContext<() => void>(() => {})
 

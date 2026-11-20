@@ -23,7 +23,6 @@ export {
   moveChordAcross,
   moveSection,
   playOrder,
-  playedTicks,
   relayMeter,
   removeChord,
   removeSection,

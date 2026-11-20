@@ -1,6 +1,6 @@
 import type { Midi, Tick } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
-import { leftAt, xAtTick, type Extent, type Head, type ScoreLayout } from './layout'
+import { leftAt, xAtTick, type Extent, type ScoreLayout } from './layout'
 
 /**
  * The one selection's measures, in staff spaces (ADR 0096), the score editor's and the Player's
@@ -71,16 +71,6 @@ export interface Chosen {
   readonly to: Tick
   readonly midi?: Midi | undefined
 }
-
-/** The heads a choice is over. */
-export const headsChosen = (layout: Pick<ScoreLayout, 'heads'>, chosen: Chosen): Head[] =>
-  (layout.heads ?? []).filter(
-    (head) =>
-      head.tick >= chosen.from &&
-      head.tick < chosen.to &&
-      (!chosen.staves || chosen.staves.includes(head.staff)) &&
-      (chosen.midi === undefined || head.midi === chosen.midi),
-  )
 
 type Laid = Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads' | 'rests' | 'signs'>
 

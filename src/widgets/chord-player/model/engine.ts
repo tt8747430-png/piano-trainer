@@ -392,7 +392,6 @@ export function createChordEngine({
     },
   }
 }
-export type ChordEngine = ReturnType<typeof createChordEngine>
 
 const sameBox = (a: BoxPlace | null, b: BoxPlace | null) =>
   a === b || (a !== null && b !== null && a.section === b.section && a.index === b.index)

@@ -95,13 +95,6 @@ const triadSemitones = (triad: Triad): readonly number[] =>
 /** A triad's own suffix: '' for major, `m`, `°`, `+`, `sus2`, `sus4`. */
 const triadSuffix = (triad: Triad): string => triadName(triadSemitones(triad)).suffix
 
-/** How each 7th is written as a degree, as the keys label it: ♭7, 7, 𝄫7. */
-export const SEVENTH_DEGREE: Readonly<Record<Seventh, string>> = {
-  minor: INTERVALS.m7.degree,
-  major: INTERVALS.M7.degree,
-  diminished: INTERVALS.d7.degree,
-}
-
 /** How each part is written in a symbol. */
 const ADDED_SYMBOL: Readonly<Record<AddedTone, string>> = {
   add2: 'add2',

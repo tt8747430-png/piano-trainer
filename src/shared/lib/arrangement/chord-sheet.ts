@@ -476,10 +476,6 @@ export function playOrder(sheet: ChordSheet): PlayedBar[] {
   return played
 }
 
-/** The sheet's length in ticks, as `playOrder` lays its bars. */
-export const playedTicks = (sheet: ChordSheet): Tick =>
-  playOrder(sheet).reduce((sum, bar) => sum + beatsToTicks(bar.beats), 0)
-
 /** A chart of the bars in play order (`arrange`'s input): each section's each time round a section of it, four bars a line. */
 export function sheetToChart(sheet: ChordSheet): Chart {
   // Each section's each time round, its bars in order.
@@ -498,6 +494,3 @@ export function sheetToChart(sheet: ChordSheet): Chart {
   }))
   return { key: sheet.key, meter: sheet.meter, sections }
 }
-
-/** Where a beat of a played bar falls, in ticks. */
-export const beatTick = (bar: PlayedBar, beat: number): Tick => bar.startTick + beatsToTicks(beat)

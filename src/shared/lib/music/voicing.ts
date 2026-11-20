@@ -31,10 +31,6 @@ export type VoicingBar = 'fourNotes' | 'noThird' | 'noSeventh' | 'notDorian'
 const FROM_CLOSE: readonly Voicing[] = ['close', 'drop2', 'drop3', 'locked']
 export const voicingTakesInversion = (voicing: Voicing): boolean => FROM_CLOSE.includes(voicing)
 
-/** The voicings the left hand holds alone. */
-const LEFT_ALONE: readonly Voicing[] = ['shell', 'rootlessA', 'rootlessB']
-export const voicingInLeftHand = (voicing: Voicing): boolean => LEFT_ALONE.includes(voicing)
-
 const OCTAVE = 12
 /** A drop voicing and locked hands are made from a close chord of four notes. */
 const FOUR = 4

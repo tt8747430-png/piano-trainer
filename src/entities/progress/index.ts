@@ -63,7 +63,6 @@ export {
   selectIsLearned,
   selectLearned,
   selectLessonDone,
-  selectLessons,
   selectExercised,
   selectHistory,
   selectRun,
@@ -72,17 +71,10 @@ export {
   selectRead,
   selectTempo,
   selectTrainerRecord,
-  selectTrainerRecords,
 } from './model/selectors'
 export { ProgressStoreProvider, useProgress, useProgressStoreApi } from './model/context'
 export { practiceRecord, type PracticeRecord } from './model/record'
-export {
-  songsToContinue,
-  withSongStretch,
-  withWaitScore,
-  type SongPlay,
-  type SongStretch,
-} from './model/songs'
+export { withSongStretch, withWaitScore, type SongPlay, type SongStretch } from './model/songs'
 export {
   BADGES,
   badgesOf,
@@ -96,7 +88,6 @@ export {
 export {
   earnedKeys,
   isMilestoneId,
-  levelMinutes,
   levelOf,
   MILESTONES,
   profileFigures,

@@ -2,7 +2,6 @@ import { TRANSPOSITION_RANGE } from '@/shared/lib/music'
 
 /** The band's instruments, each turned on or off and up or down on a sheet (R29 CP6). */
 export const BAND_PARTS = ['piano', 'bass', 'drums'] as const
-export type BandPart = (typeof BAND_PARTS)[number]
 
 export interface PartLevel {
   readonly on: boolean

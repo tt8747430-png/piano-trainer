@@ -2,7 +2,7 @@ export { ThingHead } from './ThingHead'
 export { Avatar } from './Avatar'
 export { BUILT_IN_AVATARS, isBuiltInAvatar, type BuiltInAvatar } from './avatars'
 export { BackButton } from './BackButton'
-export { BackMark, OpensMark } from './NavMarks'
+export { OpensMark } from './NavMarks'
 export { ButtonLink } from './ButtonLink'
 export { ChordButton } from './ChordButton'
 export { ChoiceChips } from './ChoiceChips'
@@ -43,10 +43,8 @@ export { PAGE_PICTURES, type PagePicture } from './PagePictures'
 export {
   Fab,
   FabLink,
-  FabPill,
   FloatingActions,
   FloatingHost,
-  PlayFab,
   SpeedDial,
   SpeedDialAction,
 } from './FloatingActions'

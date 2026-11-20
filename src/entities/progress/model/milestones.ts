@@ -40,9 +40,6 @@ export const isMilestoneId = (value: unknown): value is MilestoneId =>
 /** The level the time practised reaches: level n at n² × 10 minutes (0 before the first ten). */
 export const levelOf = (seconds: number): number => Math.floor(Math.sqrt(seconds / 60 / 10))
 
-/** The minutes of practice a level needs. */
-export const levelMinutes = (level: number): number => level * level * 10
-
 /** What the Profile counts, from the progress and what the learner keeps besides it. */
 export function profileFigures(
   state: ProgressState,

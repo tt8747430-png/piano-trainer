@@ -84,7 +84,3 @@ export function annotate(score: Score, marks: readonly ScoreAnnotation[]): Score
   })
   return { ...score, measures }
 }
-
-/** The notes a learner circled, by their onset and staff: what the sheet rings (`noteIds`). */
-export const circledAt = (marks: readonly ScoreAnnotation[]): readonly ScoreAnnotation[] =>
-  marks.filter((mark) => mark.kind === 'circle')

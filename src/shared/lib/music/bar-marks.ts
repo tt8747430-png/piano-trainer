@@ -6,9 +6,6 @@ export type Barline = (typeof BARLINES)[number]
 export const ENDINGS = [1, 2, 3, 4] as const
 export type Ending = (typeof ENDINGS)[number]
 
-/** How many times a repeated passage may be played: Flat's repeat ×N, twice to nine times. */
-export const REPEAT_TIMES = [2, 3, 4, 5, 6, 7, 8, 9] as const
-
 /**
  * A jump back at a bar's end, taken once: to the start (Da Capo) or the sign (Dal Segno), then on to
  * the end, to Fine, or to the coda from To Coda.

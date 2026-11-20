@@ -35,7 +35,6 @@ export {
   onBeatMs,
   shareOf,
   feedbackOf,
-  VERDICTS,
   type Feedback,
   type NoteVerdict,
   type Verdict,

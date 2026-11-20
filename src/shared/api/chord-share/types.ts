@@ -66,6 +66,3 @@ export interface ChordSharePort {
   /** Opens the sheet's live line. */
   open(id: string, events: SheetLineEvents): SheetLine
 }
-
-/** A link's id: a uuid, as the server makes it. */
-export const ONLINE_SHEET_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/

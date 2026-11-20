@@ -7,7 +7,6 @@ type Played = Pick<Performance, 'notes' | 'bars'>
 
 /** How a written note was played in a take (R29 B8, Feedback). */
 export type Verdict = 'right' | 'wrong' | 'missed' | 'early' | 'late'
-export const VERDICTS: readonly Verdict[] = ['right', 'wrong', 'missed', 'early', 'late']
 
 /**
  * A written note judged: where it is, how it was played (`by`: ms off its time, where played), and
