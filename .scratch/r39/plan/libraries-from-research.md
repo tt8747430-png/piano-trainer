@@ -30,7 +30,7 @@ fifths or a tempo control from a library.
 | --- | --- | --- | --- |
 | Engraving | `verovio` | GUIDO, Manufaktura, OSMD, abcjs | keep Verovio: the one web engine that is the apps' own (ChordLab) |
 | Menus, dialogs, popovers, toasts | `@base-ui/react` (shadcn) | Radix (Flat), Base UI (claude.ai) | keep; claude.ai's timings ported (f1546388) |
-| Hand-built ARIA parts | meters, a listbox, radio groups, toolbars | Base UI Meter, Toolbar, Radio, NumberField | the three meters are the kit's `ProgressBar` on Base UI's Meter now; the rest go area by area |
+| Hand-built ARIA parts | meters, a listbox, radio groups, toolbars | Base UI Meter, Toolbar, Radio, NumberField | the three meters are the kit's `ProgressBar` on Base UI's Meter. Kept, each for a reason checked in Base UI 1's parts: `Listbox` (Base UI has no always-open list, only Select's and Combobox's popups), `OctaveGrid` (a radio grid moved in two dimensions across split black keys; Base UI's RadioGroup moves along one line), `Toolbar` (Base UI's needs every control to be its `Toolbar.Button`; ours roves over any kit button with `useRovingFocus`) |
 | Piano sound, drums, bass | own sampler, sample sets in `public/` | `smplr`, GeneralUser GS, FluidR3 drum WAVs (MIT), Greg Sullivan e-pianos (CC BY 3.0) | keep our sampler; the sets are a content choice, kept |
 | Transport and metronome | own look-ahead scheduler (`shared/api/audio/lookahead.ts`) | `tone` | keep: one clock for the Player, Metronome and runs |
 | Music theory | the kernel `shared/lib/music` | `tonal` | keep: the kernel imports no package (`CLAUDE.md`) |
