@@ -1,24 +1,22 @@
-import type { KeyboardEvent, ReactNode } from 'react'
+import { Radio } from '@base-ui/react/radio'
+import { RadioGroup } from '@base-ui/react/radio-group'
+import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 
-/** The canvas's `_TILE`: white on a hairline, ink once chosen. */
+/**
+ * The canvas's `_TILE`: white on a hairline, ink once chosen; the muted fill under a pointer while it
+ * is not the one chosen; faded where it cannot be chosen.
+ */
 const TILE =
-  'min-w-0 rounded-[12px] bg-card text-foreground ring-1 ring-border transition-colors duration-150 aria-checked:bg-foreground aria-checked:text-background'
-
-/** Where the arrows take the choice: forward or back, wrapping at the ends. */
-const STEPS: Readonly<Partial<Record<string, number>>> = {
-  ArrowRight: 1,
-  ArrowDown: 1,
-  ArrowLeft: -1,
-  ArrowUp: -1,
-}
+  'min-w-0 cursor-default rounded-[12px] bg-card text-foreground ring-1 ring-border transition-colors duration-150 select-none hover:not-aria-checked:bg-muted aria-checked:bg-foreground aria-checked:text-background data-disabled:opacity-50'
 
 /**
  * One choice of a few, drawn as tiles side by side (a new song's staves, key and time signature; a
- * block's layout and preset): a radio group with one tab stop on the chosen tile, the arrows moving
- * the choice as a radio group's do, a tap or Space choosing. `tile` draws a tile's face; `name` names a
- * tile whose face is a picture or a figure. The tiles are the canvas's `_TILE`; `bare` leaves the
- * face to `tileClassName` alone (a preset's card drawn in its own style).
+ * block's preset): the kit's radio group, as `Segmented` and `PictureTiles` are, the arrows moving
+ * to a tile and choosing it. `tile` draws a tile's face; `name` names a tile whose face is a picture
+ * or a figure. A tap on the tile already chosen calls `onChange` with it again, for a choice that a
+ * second tap takes back (the key, back to C major). The tiles are the canvas's `_TILE`; `bare` leaves
+ * the face to `tileClassName` alone (a preset's card drawn in its own style).
  */
 export function ChoiceTiles<V extends string | number>({
   label,
@@ -43,40 +41,30 @@ export function ChoiceTiles<V extends string | number>({
   tileClassName?: string
   bare?: boolean
 }) {
-  const stop = value !== null && options.includes(value) ? value : options[0]
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const step = STEPS[event.key]
-    if (step === undefined) return
-    event.preventDefault()
-    const at = Math.max(
-      0,
-      options.findIndex((option) => option === stop),
-    )
-    const next = options[(at + step + options.length) % options.length]
-    if (next === undefined) return
-    onChange(next)
-    event.currentTarget.querySelector<HTMLElement>(`[data-tile="${String(next)}"]`)?.focus()
-  }
   return (
-    <div role="radiogroup" aria-label={label} className={className} onKeyDown={onKeyDown}>
+    <RadioGroup
+      aria-label={label}
+      value={value}
+      onValueChange={(next) => {
+        const picked = options.find((option) => option === next)
+        if (picked !== undefined && picked !== value) onChange(picked)
+      }}
+      className={className}
+    >
       {options.map((option) => {
         const chosen = option === value
         return (
-          <button
+          <Radio.Root
             key={option}
-            type="button"
-            role="radio"
-            aria-checked={chosen}
+            value={option}
             aria-label={name?.(option)}
-            tabIndex={option === stop ? 0 : -1}
-            data-tile={option}
-            onClick={() => onChange(option)}
+            onClick={chosen ? () => onChange(option) : undefined}
             className={cn(!bare && TILE, 'focus-visible:-outline-offset-3', tileClassName)}
           >
             {tile(option, chosen)}
-          </button>
+          </Radio.Root>
         )
       })}
-    </div>
+    </RadioGroup>
   )
 }

@@ -13,7 +13,7 @@ import {
   type BlockStyle,
   type StylePaint,
 } from '@/shared/lib/style'
-import { ChoiceTiles, Pinned, Segmented } from '@/shared/ui'
+import { ChoiceTiles, PictureTiles, Pinned, Segmented } from '@/shared/ui'
 
 const PRESETS = Object.keys(BLOCK_PRESETS) as BlockPreset[]
 const RADII = [0, 1, 2, 3, 4] as const
@@ -131,20 +131,16 @@ export function StyleEditor({
         <PresetStrip value={value} onChange={onChange} />
         {layouts ? (
           <StyleChoice title={t('style.layout')}>
-            <ChoiceTiles
+            <PictureTiles
               label={t('style.layout')}
               value={value.layout}
-              options={STYLE_LAYOUTS}
+              columns={3}
+              tiles={STYLE_LAYOUTS.map((layout) => ({
+                value: layout,
+                label: t(`style.layouts.${layout}.label`),
+                picture: <RowsPicture layout={layout} />,
+              }))}
               onChange={(layout) => set('layout', layout)}
-              className="grid grid-cols-3 gap-2"
-              bare
-              tileClassName="choice flex min-h-20 flex-col items-center justify-center gap-2 rounded-card border border-border bg-card px-2 py-3 text-base"
-              tile={(layout) => (
-                <>
-                  <RowsPicture layout={layout} />
-                  {t(`style.layouts.${layout}.label`)}
-                </>
-              )}
             />
           </StyleChoice>
         ) : null}
