@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · PENDINGSHA · the Player's phone bar at 70 and its title at 133, where the editor's board and the app have them, the View menu with them · PlayerApp (Player, PlayerLoop, PlayerKeyboard, PlayerDone, PlayerHands, PlayerViewSheet and the Player's phone layers) · pending
+
 ## Changes
 
 - 2026-11-20 · 5b1c73de · Explore's Loading in the loaded list's shape (the phone's card of 88 rows, the laptop's table head and 60 rows), no count or order until songs are found · Explore,ExploreLaptop · v706

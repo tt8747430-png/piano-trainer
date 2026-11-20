@@ -484,7 +484,7 @@ def onebar(t, phone):
         view = vb.group(0).replace('position: absolute; z-index: 48; right: 60px; top: 66px; ', 'position: relative; padding: 0; ').replace('border-radius: 9999px', 'border-radius: 22px')
         t = t[:vb.start()] + t[vb.end():]
         # the views' menu hangs from the bar's foot, at its trailing edge
-        t = t.replace('right: 12px; top: 116px; width: 220px;', 'right: 16px; top: 112px; width: 220px;', 1)
+        t = t.replace('right: 12px; top: 116px; width: 220px;', 'right: 16px; top: 120px; width: 220px;', 1)
         right = f'<div style="display: flex; justify-content: flex-end; min-width: 132px"><div role="group" aria-label="View and settings" style="flex: none; display: flex; border-radius: 22px; {GLASSFX}; pointer-events: auto">{view}{gear}</div></div>'
     else:
         nb = re.search(r'<nav aria-label="View".*?</nav>\n?', t, re.S)
@@ -537,7 +537,7 @@ def floating(t, phone):
     t = t.replace('height: {{kbH}}px; object-fit: cover">', 'height: {{kbH}}px; object-fit: cover; ' + lift + '">', 1)
     t = t.replace('height: {{kbH}}px; overflow: hidden; background: #2A1F18">', 'height: {{kbH}}px; overflow: hidden; background: #2A1F18; ' + lift + '">', 1)
     if phone:
-        t = t.replace("sheetTop: keys ? 40 : 116,", "sheetTop: 116,", 1).replace("statusFg: keys ? '#FFFFFF' : '#332921',", "statusFg: '#332921',", 1).replace("panoTop: keys ? 191 : 376,", "panoTop: 376,", 1)
+        t = t.replace("sheetTop: keys ? 40 : 116,", "sheetTop: 124,", 1).replace("statusFg: keys ? '#FFFFFF' : '#332921',", "statusFg: '#332921',", 1).replace("panoTop: keys ? 191 : 376,", "panoTop: 376,", 1)
     else:
         t = t.replace("sheetTop: keys ? 44 : 64, bandTop: (keys ? 44 : 64) + 100,", "sheetTop: 76, bandTop: 176,", 1).replace("panoTop: keys ? 166 : 340,", "panoTop: 340,", 1)
     h = 'position: absolute; z-index: 21; background: rgba(254,253,251,.92); box-shadow: 0 0 0 1px rgba(51,41,33,.25)'

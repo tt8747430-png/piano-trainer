@@ -59,12 +59,13 @@ export function Transport({
   docked?: boolean
 }) {
   return (
-    // Under 390px its controls are 40px, ‹ › narrower and the pill hugs them, so the seven fit a
+    // On a phone its three groups stand on the gutter, 48px buttons as the board (8 apart at 402, 4 under
+    // it, so they fit a 393 phone). Under 390px its controls are 40px, ‹ › narrower and the pill hugs them, so the seven fit a
     // 320px screen; under 360px Play is 48px.
     <FloatingBar
       label={label}
       docked={docked}
-      className="gap-2 small-phone:gap-1 narrow-phone:gap-0 narrow-phone:px-0 landscape-phone:gap-0.5"
+      className="gap-2 max-sm:px-0 max-[402px]:gap-1 narrow-phone:gap-0 landscape-phone:gap-0.5"
     >
       <div className={GROUP}>
         {start}

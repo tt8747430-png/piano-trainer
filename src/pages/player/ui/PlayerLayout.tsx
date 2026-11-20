@@ -402,10 +402,10 @@ export function PlayerLayout({
       {keys}
       {/* The transport floats over the music's foot as the board's (loop 25, PlayerApp): three
           glass groups, no band or hairline under them, the music scrolling on beneath; on a laptop
-          30 above the window's foot, as PlayerDesk. */}
+          30 above the window’s foot, as PlayerDesk; on a phone its groups 10 above the home indicator. */}
       <PlayerArea
         area="dock"
-        className="mb-[calc(env(safe-area-inset-bottom)+0.5rem)]! w-full narrow-phone:px-1 landscape-phone:mb-1! lg:mb-6!"
+        className="mb-[calc(env(safe-area-inset-bottom)+0.25rem)]! w-full narrow-phone:px-1 landscape-phone:mb-1! lg:mb-6!"
       >
         <div className="mx-auto w-full max-w-xl lg:w-fit">
           <PlayerDock
