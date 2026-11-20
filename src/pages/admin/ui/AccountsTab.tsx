@@ -9,7 +9,7 @@ import { ChoiceChips, ConfirmDialog, SearchField, SettingsGroup } from '@/shared
 import { useLoaded } from '../model/use-loaded'
 import { useChangeProblem } from '../model/use-change-problem'
 import { FailureLine, LoadedState } from './LoadedState'
-import { daySaid, formatLocale } from '@/shared/lib'
+import { daySaid, formatLocale, useNow } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   Empty,
@@ -31,6 +31,7 @@ const ROLES = ['learner', 'editor', 'admin'] as const satisfies readonly Account
 export function AccountsTab() {
   const { t } = useTranslation('admin')
   const locale = useLocale()
+  const now = useNow()
   const admin = useAdmin()
   const [query, setQuery] = useState('')
   // Asked once typing rests: the accounts come from a function, one call a word, not a letter.
@@ -99,7 +100,7 @@ export function AccountsTab() {
                         {t('accounts.joined', { date: joined(account.joinedAt) })} ·{' '}
                         {account.lastSignInAt
                           ? t('accounts.lastSeen', {
-                              date: daySaid(account.lastSignInAt, locale, Date.now(), false),
+                              date: daySaid(account.lastSignInAt, locale, now, false),
                             })
                           : t('accounts.never')}
                       </span>

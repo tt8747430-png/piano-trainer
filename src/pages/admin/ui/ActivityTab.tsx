@@ -4,7 +4,7 @@ import { useLocale } from '@/shared/i18n'
 import { useAdmin } from '@/shared/lib/admin'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
-import { daySaid, formatLocale } from '@/shared/lib'
+import { daySaid, formatLocale, useNow } from '@/shared/lib'
 import { SettingsGroup } from '@/shared/ui'
 import { nameOf } from './Face'
 
@@ -39,6 +39,7 @@ function when(at: string, locale: string, now: number) {
 export function ActivityTab() {
   const { t } = useTranslation('admin')
   const locale = useLocale()
+  const now = useNow()
   const admin = useAdmin()
   const load = useCallback(async () => {
     const [entries, accounts] = await Promise.all([admin.activity(), admin.accounts('')])
@@ -72,7 +73,7 @@ export function ActivityTab() {
                   </span>
                 </span>
                 <span className="text-[0.8125rem] whitespace-nowrap text-muted-foreground tabular-nums">
-                  {when(entry.at, locale, Date.now())}
+                  {when(entry.at, locale, now)}
                 </span>
               </div>
             ))}

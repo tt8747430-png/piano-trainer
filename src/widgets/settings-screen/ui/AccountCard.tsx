@@ -1,9 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Account } from '@/shared/api/auth'
 import { useLocale } from '@/shared/i18n'
-import { cn, formatLocale, useOnline } from '@/shared/lib'
+import { cn, formatLocale, useNow, useOnline } from '@/shared/lib'
 import { useAccount, useSync } from '@/shared/lib/account'
 import { syncLine, type SyncLine } from '@/shared/lib/sync'
 import { Avatar, OpensMark } from '@/shared/ui'
@@ -24,19 +23,9 @@ export function AccountCard({
   const { account } = useAccount()
   const { status } = useSync()
   const online = useOnline()
-  const now = useMinute()
+  const now = useNow()
   const line = syncLine(online ? status : { ...status, state: 'offline' }, now)
   return <AccountCardFace account={account} line={line} current={current} plain={plain} />
-}
-
-/** The time now, to the minute: "Synced 2 min ago" keeps up while Settings stays open. */
-function useMinute(): number {
-  const [now, setNow] = useState(() => Date.now())
-  useEffect(() => {
-    const timer = window.setInterval(() => setNow(Date.now()), 60_000)
-    return () => window.clearInterval(timer)
-  }, [])
-  return now
 }
 
 /** The card as drawn: the learner and their line of sync, or the way to sign in. */

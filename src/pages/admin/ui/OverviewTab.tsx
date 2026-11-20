@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { daySaid, formatLocale } from '@/shared/lib'
+import { daySaid, formatLocale, useNow } from '@/shared/lib'
 import { useLocale } from '@/shared/i18n'
 import { RowLink, SettingsGroup } from '@/shared/ui'
 import { useOverview } from '../model/use-overview'
@@ -35,6 +35,7 @@ function Tile({ value, label, compare }: { value: string; label: string; compare
 export function OverviewTab() {
   const { t } = useTranslation('admin')
   const locale = useLocale()
+  const now = useNow()
   const { loaded, reload } = useOverview()
   const diff = new Intl.NumberFormat(formatLocale(locale), { signDisplay: 'exceptZero' })
   return (
@@ -78,7 +79,7 @@ export function OverviewTab() {
                   ? t('overview.reportsNone')
                   : t('overview.reportsOpen', {
                       count: overview.reports,
-                      when: daySaid(overview.oldestReportAt, locale, Date.now(), false),
+                      when: daySaid(overview.oldestReportAt, locale, now, false),
                     })
               }
               render={<Link to="/admin/$section" params={{ section: 'reports' }} />}

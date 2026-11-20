@@ -7,7 +7,7 @@ import { useContentEditing } from '@/shared/lib/content-editing'
 import { OpensMark, SettingsGroup } from '@/shared/ui'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
-import { daySaid } from '@/shared/lib'
+import { daySaid, useNow } from '@/shared/lib'
 
 /**
  * The editor a draft opens in: a song's original, a lesson's (a course's under its course), a
@@ -62,6 +62,7 @@ const isLocalText = (value: unknown): value is LocalText =>
 export function DraftsTab() {
   const { t } = useTranslation('admin')
   const locale = useLocale()
+  const now = useNow()
   const editing = useContentEditing()
   const load = useCallback(() => editing.drafts(), [editing])
   const { loaded, reload } = useLoaded(load)
@@ -95,7 +96,7 @@ export function DraftsTab() {
                         <span className="truncate font-semibold">{nameOf(draft)}</span>
                         <span className="truncate text-sm leading-[normal] text-muted-foreground">
                           {t('drafts.edited', {
-                            date: daySaid(draft.updatedAt, locale, Date.now(), false),
+                            date: daySaid(draft.updatedAt, locale, now, false),
                           })}
                           {draft.published ? null : (
                             <>

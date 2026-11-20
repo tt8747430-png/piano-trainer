@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { cn, formatLocale, useOnline } from '@/shared/lib'
+import { cn, formatLocale, useNow, useOnline } from '@/shared/lib'
 import { useSync } from '@/shared/lib/account'
 import { syncLine } from '@/shared/lib/sync'
 import { GroupRow, SettingsGroup } from '@/shared/ui'
@@ -23,10 +23,11 @@ export function SyncGroup() {
   const { t } = useTranslation('settings')
   const locale = useLocale()
   const online = useOnline()
+  const now = useNow()
   const { status } = useSync()
   const state = online ? status.state : 'offline'
   // When it last synced, as the account card says it: "2 min ago", then hours, then days.
-  const last = syncLine({ ...status, state: 'idle', waiting: 0 }, Date.now())
+  const last = syncLine({ ...status, state: 'idle', waiting: 0 }, now)
   const when =
     last.kind === 'synced'
       ? t('sync.last', {

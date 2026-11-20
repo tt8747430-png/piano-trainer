@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { FolderTile, useFolderName, type ShelvedEntry } from '@/entities/library'
 import { entryTitles, PieceLink, useRepertoire, type Entry } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
-import { cn, daySaid, useMediaQuery } from '@/shared/lib'
+import { cn, daySaid, useMediaQuery, useNow } from '@/shared/lib'
 import {
   BackButton,
   CheckMark,
@@ -94,7 +94,8 @@ function ShelfItemRow(props: RowProps) {
 /** The day it went there: "12 November". */
 function useDay(at: number): string {
   const locale = useLocale()
-  return at > 0 ? daySaid(at, locale, Date.now()) : ''
+  const now = useNow()
+  return at > 0 ? daySaid(at, locale, now) : ''
 }
 
 function ShelfRow({

@@ -5,7 +5,7 @@ import { useAdmin } from '@/shared/lib/admin'
 import { groupErrors, splitReports } from '../model/group-errors'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
-import { daySaid } from '@/shared/lib'
+import { daySaid, useNow } from '@/shared/lib'
 import { SettingsGroup } from '@/shared/ui'
 
 /**
@@ -17,6 +17,7 @@ import { SettingsGroup } from '@/shared/ui'
 export function ErrorsTab() {
   const { t } = useTranslation('admin')
   const locale = useLocale()
+  const now = useNow()
   const admin = useAdmin()
   const load = useCallback(async () => {
     const result = await admin.errors()
@@ -39,7 +40,7 @@ export function ErrorsTab() {
                   </span>
                   <span className="truncate text-[0.8125rem] text-muted-foreground">
                     {t('errors.where', {
-                      date: daySaid(latest.at, locale, Date.now()),
+                      date: daySaid(latest.at, locale, now),
                       path: latest.path,
                       build: latest.build,
                     })}

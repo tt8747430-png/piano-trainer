@@ -5,7 +5,7 @@ import { useAdmin } from '@/shared/lib/admin'
 import { splitReports } from '../model/group-errors'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
-import { daySaid } from '@/shared/lib'
+import { daySaid, useNow } from '@/shared/lib'
 import { SettingsGroup } from '@/shared/ui'
 
 /**
@@ -16,6 +16,7 @@ import { SettingsGroup } from '@/shared/ui'
 export function FeedbackTab() {
   const { t } = useTranslation('admin')
   const locale = useLocale()
+  const now = useNow()
   const admin = useAdmin()
   const load = useCallback(async () => {
     const result = await admin.errors()
@@ -36,7 +37,7 @@ export function FeedbackTab() {
                   className="flex min-w-0 flex-col gap-1 px-4 py-3 leading-[normal]"
                 >
                   <span className="text-[0.8125rem] text-muted-foreground">
-                    {daySaid(each.at, locale, Date.now())}
+                    {daySaid(each.at, locale, now)}
                   </span>
                   <p className="leading-[1.4] wrap-break-word whitespace-pre-line">{each.text}</p>
                 </div>
