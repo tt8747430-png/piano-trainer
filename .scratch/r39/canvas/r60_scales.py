@@ -46,6 +46,24 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
         return { c: t.c, r: t.c, x: '', d: t.d, kb, ring: on ? '0 0 0 2px #EDC684' : '0 0 0 1px #DAD1C8', hear: () => set({ hear: i }) }; }), chordsT: 'Chords in ' + tonic + ' ' + KINDS[kind].toLowerCase(),
       practiseT: 'Practise ' + tonic + ' ' + KINDS[kind].toLowerCase() + ' in the Player' };''')
 assert SC60 != SC, 'SC return not found'
+# The run as the app engraves it (ScaleSheet, the scale's 8ths in 4/4): the meter after the key, each half bar's four
+# notes beamed, a group's stems up under its staff's middle line (44, the bass's 106) and down over it, its beam sloped at most a space, every stem
+# at least 20 long; the fingers clear of the beams.
+BEAMJS = r"""const BEAM = (sts, off) => { const mid = off ? 106 : 44, beams = [], out = sts.notes.map((z) => ({ ...z }));
+  for (let g = 0; g < out.length; g += 4) { const grp = out.slice(g, g + 4); if (grp.length < 2) continue;
+    const up = grp.reduce((a, z) => a + z.y, 0) / grp.length > mid, xs = grp.map((z) => z.x + (up ? 4.6 : -4.6));
+    let e1 = grp[0].y + (up ? -24 : 24), e2 = grp[grp.length - 1].y + (up ? -24 : 24); e2 = e1 + Math.max(-7, Math.min(7, e2 - e1));
+    const at = (i) => e1 + (e2 - e1) * (xs[i] - xs[0]) / (xs[xs.length - 1] - xs[0]);
+    const sh = Math.max(0, ...grp.map((z, i) => up ? at(i) - (z.y - 20) : (z.y + 20) - at(i))), L = (i) => +(at(i) + (up ? -sh : sh)).toFixed(1), t = up ? 3.5 : -3.5;
+    grp.forEach((z, i) => { z.stem = 'M' + xs[i] + ' ' + z.y + 'V' + L(i); if (off === 0) z.fy = Math.min(16, (up ? L(i) : z.y - 4) - 6); else z.fy = Math.max(160, (up ? z.y + 4 : L(i)) + 13); });
+    const n = grp.length - 1; beams.push({ d: 'M' + (xs[0] - .55) + ' ' + L(0) + 'L' + (xs[n] + .55) + ' ' + L(n) + 'L' + (xs[n] + .55) + ' ' + (L(n) + t) + 'L' + (xs[0] - .55) + ' ' + (L(0) + t) + 'Z' }); }
+  return { ...sts, notes: out, beams, mx: 40 + sts.sig.length * 8 + (sts.sig.length ? 4 : 0) }; };
+"""
+SC60 = (SC60.replace('// switches by key:', BEAMJS + '// switches by key:', 1)
+        .replace('x0 = 34 + nS * 8 + 22', 'x0 = 34 + nS * 8 + 38', 1)
+        .replace('      chords: tri, ss: { sig, notes: notesS, led },', '      chords: tri, ss: BEAM({ sig, notes: notesS, led }, 0),', 1)
+        .replace("        return { sig: sig.map((z) => ({ ...z, ay: z.ay + 69 })), notes, led: ledB }; })(),", "        return BEAM({ sig: sig.map((z) => ({ ...z, ay: z.ay + 69 })), notes, led: ledB }, 69); })(),", 1))
+assert 'BEAM({ sig, notes' in SC60 and '}, 69); })(),' in SC60 and 'nS * 8 + 38' in SC60 and 'const BEAM' in SC60
 
 # The name as its pop-up buttons, the kit's one title part (Chords' PART and CHEV_UD): 44 serif, 54 tall, 12/8 in, 8 apart.
 PILL60 = lambda label, val, act: (f'<button type="button" aria-haspopup="dialog" aria-label="{label}: {{{{{val}}}}}" onClick="{{{{{act}}}}}" style="{PART}; flex: none">{{{{{val}}}}}{CHEV_UD}</button>')
@@ -58,8 +76,12 @@ def GRANDSTAFF(label):
     bass = inner.replace('{{ss.', '{{ssB.')
     for i in range(5): bass = bass.replace(f'<path d="M4 {30 + i * 7}H356"', f'<path d="M4 {92 + i * 7}H356"', 1)
     bass = bass.replace('<text x="6" y="64" font-size="44" font-family="Noto Music, serif" fill="' + INK + '">𝄞</text>', '<text x="8" y="113" font-size="40" font-family="Noto Music, serif" fill="' + INK + '">𝄢</text>')
-    brace = f'<path d="M4 30V120" stroke="{INK}" stroke-width="1.4"></path><path d="M356 30V120" stroke="{INK}" stroke-width=".9"></path>'
-    return f'<svg viewBox="0 0 360 168" width="100%" role="img" aria-label="{label}" style="display: block">{inner}{bass}{brace}</svg>'
+    # the piano's brace before the system's line, as the app's engraving
+    brace = (f'<path d="M4 30V120" stroke="{INK}" stroke-width="1.4"></path><path d="M356 30V120" stroke="{INK}" stroke-width=".9"></path>'
+             f'<path d="M-1 30C-9 38 -1 66 -8 75C-1 84 -9 112 -1 120" fill="none" stroke="{INK}" stroke-width="1.6" stroke-linecap="round"></path>')
+    meter = lambda key, y0: ''.join(f'<text x="{{{{{key}.mx}}}}" y="{y0 + d}" font-size="21" font-weight="700" font-family="Instrument Serif, serif" fill="{INK}">4</text>' for d in (0, 14))
+    beams = lambda key: f'<sc-for list="{{{{{key}.beams}}}}" as="b" hint-placeholder-count="2"><path d="{{{{b.d}}}}" fill="{INK}"></path></sc-for>'
+    return f'<svg viewBox="-10 0 370 168" width="100%" role="img" aria-label="{label}" style="display: block">{inner}{bass}{brace}{meter("ss", 44)}{meter("ssB", 106)}{beams("ss")}{beams("ssB")}</svg>'
 # the two hands' figures stand on their staves; only the honest note for a scale with no standard fingering stays under them
 FING60 = (f'<sc-if value="{{{{noFing}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 0; text-align: center; font-size: 15px; color: {SOFT}">No standard fingering for this scale</p></sc-if>')
 SCCARDS = lambda cols: (CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"')
