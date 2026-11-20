@@ -173,7 +173,7 @@ export function BlockHandle({
         <Button
           variant="ghost"
           size="icon"
-          className="size-11 text-muted-foreground md:size-9"
+          className="size-11 text-muted-foreground md:size-10"
           aria-label={t('edit.doc.addBelow')}
           title={t('edit.doc.addBelow')}
           // The caret stays in the document until the new line takes it.
