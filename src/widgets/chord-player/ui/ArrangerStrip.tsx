@@ -13,7 +13,7 @@ export type GenosSize = 'full' | 'compact' | 'minimized'
 
 /** The card the panel is drawn on, 14 round: floating over the page, or flat in a laptop's column. */
 const CARD =
-  'rounded-[14px] bg-card shadow-[0_0_0_1px_var(--color-border),0_1px_3px_rgb(51_41_33/0.12),0_6px_14px_-4px_rgb(51_41_33/0.14),0_14px_28px_-8px_rgb(51_41_33/0.14)]'
+  'rounded-[14px] bg-card layer-shadow'
 const FLAT_CARD = 'rounded-[14px] bg-card shadow-[0_0_0_1px_var(--color-border)]'
 
 /** A panel button and its lamp, as the Genos lights it: on (chosen), or off. */

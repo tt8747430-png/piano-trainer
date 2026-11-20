@@ -220,7 +220,7 @@ export function BarPreview({ bar }: { bar: readonly BarAct[] }) {
   const { t } = useTranslation('settings')
   return (
     <div role="img" aria-label={t('bars.previewToolbar')} className="flex py-2">
-      <div className="flex h-17 min-w-0 flex-1 items-center gap-1 rounded-pill bg-card px-2 shadow-[0_0_0_1px_var(--color-border),0_6px_18px_-8px_rgb(51_41_33/0.3)]">
+      <div className="flex h-17 min-w-0 flex-1 items-center gap-1 rounded-pill bg-card px-2 layer-shadow">
         <span className="px-3 text-[0.9375rem] font-bold whitespace-nowrap">
           {t('bars.previewSelected')}
         </span>

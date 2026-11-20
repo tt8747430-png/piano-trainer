@@ -26,7 +26,7 @@ const FLOATING_CARD = [
   'lg:data-[swipe-direction=down]:border-0',
   'lg:data-[swipe-direction=down]:after:hidden',
   'lg:max-h-[calc(var(--app-height,100dvh)-9rem)]',
-  'lg:shadow-[0_0_0_1px_rgb(51_41_33/0.06),0_-8px_30px_-12px_rgb(51_41_33/0.28)]',
+  'lg:layer-shadow',
 ].join(' ')
 
 const LAPTOP_CARD = [
