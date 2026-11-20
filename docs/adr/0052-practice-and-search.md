@@ -73,7 +73,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   finder, Circle of fifths), the Metronome and Tuner showing what they are set to. One card of rows on a phone, cards
   five across on a laptop. No Up next and no Quiz: nothing the app cannot stand behind, and no trainer beside a topic's page. A page's URL sits under
   its page's.
-- **Choosing a root, a quality or a scale** is one row of pickers at the top of the page (`PickerRow`, ADR 0061):
+- **Choosing a root, a quality or a scale** is one row of pickers at the top of the page (ADR 0061):
   the root's value with ⌃⌄ opening an octave of twelve keys (`NotePicker`, a black key split "C♯ | D♭"; a pitch alone
   `PitchPicker`), a quality, a voicing or a scale's kind a menu (`MenuPicker`), a key the circle of fifths
   (`KeyPicker`). The step strips with ‹ › and their 17 spellings are gone (round 29).
@@ -111,7 +111,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     the interval on a laptop; **Play all** floats. The cards with a staff are the lessons';
   - **Exercises, Accompaniment and Progressions are one library** (`widgets/practice-library`, R30-4), the Songs
     library's shape and its own parts (the kit's `FilterSheet`, `FilterChips`, `SortChoice`, `RowMore`,
-    `FavouriteMark`, `SortHeading`): the search with Sort (Book or Style, Name, Level) and Filter (Level; Style for
+    `SortHeading`): the search with Sort (Book or Style, Name, Level) and Filter (Level; Style for
     Progressions), and under it the places as chips on both sizes (All, Favourites, the books or styles, Mine,
     Hidden); on a phone Favourites while there are some, each book (or style) a run of rows folded after five with
     Show all n, Mine last, a row its picture (a progression's its chords as tiles tinted by role, `ProgressionTiles`,

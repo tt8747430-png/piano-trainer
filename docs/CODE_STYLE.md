@@ -55,8 +55,7 @@ user. shadcn primitives come from the CLI, and its sizes under 44px are removed.
 
 **Choosing a control:** five or fewer short nouns are a `Segmented`; more, or longer, a `Dropdown`; on or off a
 `SwitchRow`; a number a `Stepper`; a pitch a `PitchPicker`; a note as written a `NotePicker`; a key a `KeyPicker`; several
-keys a `KeysChecklist`; an explorer's list of words a `MenuPicker` in its `PickerRow`; an inversion its `InversionChoice`;
-several on-or-offs on a sheet `ToggleTile`s.
+keys a `KeysChecklist`; an explorer's list of words a `MenuPicker`; an inversion its `InversionChoice`.
 
 **Tokens** have two layers: primitives (`--p-*`) in `src/styles/tokens.css` and semantic roles over them, exposed as
 utilities by `@theme inline` in `src/styles/theme.css`.

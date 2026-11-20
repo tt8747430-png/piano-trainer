@@ -5,7 +5,6 @@ import { describe, expect, it, vi } from 'vitest'
 import { ButtonLink } from './ButtonLink'
 import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
-import { FactCard } from './FactCard'
 import { InversionChoice } from './InversionChoice'
 import { TitleTabs } from './TitleTabs'
 import { RankMark } from './RankMark'
@@ -14,7 +13,6 @@ import { MenuSection } from './MenuSection'
 import { optionName } from './option'
 import { Pinned } from './Pinned'
 import { PlayLabel } from './PlayLabel'
-import { RatingMark } from './RatingMark'
 import { RoundButton } from './RoundButton'
 import { RoundLink } from './RoundLink'
 import { RowButton } from './RowButton'
@@ -27,7 +25,6 @@ import { Segmented } from './Segmented'
 import { SettingField } from './SettingField'
 import { SwitchRow } from './SwitchRow'
 import { ToggleChips } from './ToggleChips'
-import { ToggleTile } from './ToggleTile'
 import { TypedField } from './TypedField'
 
 const MODES = [
@@ -464,46 +461,7 @@ describe('a choice’s explanation', () => {
   })
 })
 
-describe('ToggleTile', () => {
-  it('says what it does in its tooltip, never in a line on it', () => {
-    render(
-      <ToggleTile
-        label="Glissando"
-        tip="A swipe plays the keys"
-        icon={Settings}
-        pressed={false}
-        onPressedChange={() => {}}
-      />,
-    )
-    const tile = screen.getByRole('button', { name: 'Glissando' })
-    expect(tile).toHaveAccessibleDescription('A swipe plays the keys')
-    expect(tile).toHaveAttribute('title', 'A swipe plays the keys')
-    expect(tile).not.toHaveTextContent('A swipe plays the keys')
-  })
-
-  it('closed, still says why when pointed at', () => {
-    render(
-      <ToggleTile
-        label="Recording"
-        tip="Only in D minor"
-        icon={Settings}
-        pressed={false}
-        disabled
-        onPressedChange={() => {}}
-      />,
-    )
-    const tile = screen.getByRole('button', { name: 'Recording' })
-    expect(tile).toBeDisabled()
-    expect(tile).toHaveAccessibleDescription('Only in D minor')
-  })
-})
-
 describe('marks', () => {
-  it('names a rating in words', () => {
-    render(<RatingMark rating="gap" />)
-    expect(screen.getByText('Gap')).toHaveClass('sr-only')
-  })
-
   it('names a rank by its label', () => {
     render(<RankMark rank={2} label="Intermediate" />)
     expect(screen.getByRole('img', { name: 'Intermediate' })).toBeInTheDocument()
@@ -725,20 +683,6 @@ describe('RowGroup', () => {
     expect(
       screen.getByRole('heading', { level: 3, name: 'One change at a time' }),
     ).toBeInTheDocument()
-  })
-})
-
-describe('FactCard', () => {
-  it('names its fact under its icon, in a list of facts', () => {
-    render(
-      <dl>
-        <FactCard icon={Settings} name="Tempo">
-          72 BPM
-        </FactCard>
-      </dl>,
-    )
-    expect(screen.getByRole('term')).toHaveTextContent('Tempo')
-    expect(screen.getByRole('definition')).toHaveTextContent('72 BPM')
   })
 })
 

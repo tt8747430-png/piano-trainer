@@ -18,7 +18,7 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   | One of many (12 keys, chord qualities, scales, voicings, a tempo's rung) | a menu: the value with ⌃⌄ (`Dropdown` in a settings row, `MenuPicker` in a row of pickers) |
   | Two to five, every one in sight                                          | a segmented control on the row (`Segmented`)                                               |
   | Which hands                                                              | `HandsSegmented`: Left · Both · Right, as the hands sit at the keys                        |
-  | On or off                                                                | a switch (`SwitchRow`), or a `ToggleTile` where several sit together                       |
+  | On or off                                                                | a switch (`SwitchRow`)                                                                      |
   | A number                                                                 | a stepper (`Stepper`)                                                                      |
   | Several of many                                                          | a pop-up that checks several (`MultiDropdown`), or a checklist sheet                       |
   | A few filters                                                            | chips (`ToggleChips`), and only there; chips that wrap stand 8 apart                       |
@@ -50,9 +50,8 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
     stays its grid of signs (`KeySignaturePicker`, ADR 0114).
   - `KeysChecklist`: several keys (a drill's Custom): the 15 signatures as rows "C major / A minor", Select all ·
     Clear all, Apply.
-  - An explorer's choices stand in one row of them (`PickerRow`): `Root C ⌃⌄ · Quality Major ⌃⌄ · Voicing Close ⌃⌄`,
-    wrapping on a narrow phone. A list of words in that row is a `MenuPicker`; an option the thing cannot take is
-    left out of it.
+  - An explorer's choices stand in one row: `Root C ⌃⌄ · Quality Major ⌃⌄ · Voicing Close ⌃⌄`, wrapping on a
+    narrow phone. A list of words in that row is a `MenuPicker`; an option the thing cannot take is left out of it.
 - **A row that chooses is never a row that leaves.** `RowLink` is only a link; `RowButton` opens a sheet over its
   page.
 - **One action at the thumb.** A screen's job floats in the thumb's reach (`FloatingActions` in the shell's one

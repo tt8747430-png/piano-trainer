@@ -179,10 +179,6 @@
    */
   --radius-control: var(--radius);
   --radius-card: calc(var(--radius) + 2px);
-  /* The narrowest a card in a `CardGrid` is drawn (P11): a chord's, a row's, a tile's. */
-  --card-min-chord: 8.5rem;
-  --card-min-row: 18rem;
-  --card-min-tile: 11rem;
   --radius-sheet: calc(var(--radius) + 10px);
   --radius-menu: calc(var(--radius) + 4px);
   --radius-menu-item: calc(var(--radius) - 2px);
