@@ -55,9 +55,7 @@ function CourseCover({
       >
         <span className="flex min-h-6 items-center gap-2">
           {current ? <NextMark /> : null}
-          <span className="truncate text-xs font-semibold text-muted-foreground tabular-nums">
-            {state}
-          </span>
+          <span className="truncate text-xs font-semibold text-muted-foreground">{state}</span>
         </span>
         <span className="font-display text-[1.1875rem]/[1.15] text-balance text-foreground">
           {localText(course.title, locale)}

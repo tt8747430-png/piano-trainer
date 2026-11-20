@@ -193,7 +193,7 @@ export function LevelLessons({ journey }: { journey: Journey }) {
           count={`${t(`common:stage.${journey.stage}`)} · ${t('learn:progress', counts)}`}
           said={t('learn:progress', counts)}
           above
-          className="text-sm/[normal] tabular-nums"
+          className="text-sm/[normal]"
         />
         {go ? (
           <ButtonLink size="lg" className="mt-1 w-full" render={<StepLink step={go} />}>

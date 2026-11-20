@@ -53,7 +53,7 @@ export function LevelRows() {
           </span>
           <span className="text-sm leading-[normal] text-pretty text-muted-foreground">
             {localText(journey.title, locale)}
-            <span className="hidden tabular-nums lg:inline"> · {count}</span>
+            <span className="hidden lg:inline"> · {count}</span>
           </span>
         </span>
         <span className="shrink-0 text-sm whitespace-nowrap text-muted-foreground tabular-nums lg:hidden">

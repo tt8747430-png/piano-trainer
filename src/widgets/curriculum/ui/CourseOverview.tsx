@@ -59,7 +59,7 @@ export function CourseOverview({
               </p>
             ) : (
               <>
-                <p className="text-sm/[normal] text-muted-foreground tabular-nums">
+                <p className="text-sm/[normal] text-muted-foreground">
                   {t('progress', { learned: progress.done, total: progress.total })}
                 </p>
                 <ProgressBar done={progress.done} total={progress.total} />
