@@ -13,15 +13,7 @@ import {
 } from '@/entities/own-lessons'
 import { selectLearned, useProgress, useProgressStoreApi } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
-import {
-  deleteOwnCourse,
-  deleteOwnLesson,
-  duplicateOwnCourse,
-  duplicateOwnLesson,
-  restoreOwnCourse,
-  restoreOwnLesson,
-} from '@/features/manage-own-lessons'
-import { resetSteps, restoreSteps } from '@/features/reset-progress'
+import { duplicateOwnCourse, duplicateOwnLesson } from '@/features/manage-own-lessons'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn, flipped, matchesQuery } from '@/shared/lib'
 import {
@@ -45,6 +37,7 @@ import {
 import { Button } from '@/shared/ui/primitives/button'
 import { NewOwnSheet, type OwnKind } from './NewOwnSheet'
 import { useNewOwnActions } from './use-new-own-actions'
+import { deleteOwn } from '../model/delete-own'
 
 type Kind = 'all' | 'lessons' | 'courses'
 type Sort = 'recent' | 'name'
@@ -187,13 +180,8 @@ function OwnLessonItem({
       icon: Trash2,
       destructive: true,
       onSelect: () => {
-        const deleted = deleteOwnLesson(store, lesson.id)
-        if (!deleted) return
-        const forgotten = resetSteps(progress, [step])
-        sayUndo(t('own.deleted', { title }), () => {
-          restoreOwnLesson(store, deleted)
-          restoreSteps(progress, forgotten)
-        })
+        const deleted = deleteOwn(store, progress, { lessons: [lesson.id] })
+        if (deleted) sayUndo(t('own.deleted', { title }), deleted.undo)
       },
     },
   ]
@@ -249,6 +237,7 @@ function OwnCourseItem({
   const { t } = useTranslation('learn')
   const navigate = useNavigate()
   const store = useOwnLessonsStoreApi()
+  const progress = useProgressStoreApi()
   const learned = useProgress(selectLearned)
   const listed = ownCourseLessons(course, lessons)
   const done = listed.filter(({ lesson }) => learned[lessonStepId(lesson.id)] !== undefined).length
@@ -291,9 +280,8 @@ function OwnCourseItem({
       icon: Trash2,
       destructive: true,
       onSelect: () => {
-        const deleted = deleteOwnCourse(store, course.id)
-        if (!deleted) return
-        sayUndo(t('own.deleted', { title: course.title }), () => restoreOwnCourse(store, deleted))
+        const deleted = deleteOwn(store, progress, { courses: [course.id] })
+        if (deleted) sayUndo(t('own.deleted', { title: course.title }), deleted.undo)
       },
     },
   ]
@@ -359,6 +347,7 @@ export function OwnLibrary() {
   const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
   const store = useOwnLessonsStoreApi()
+  const progress = useProgressStoreApi()
   const lessons = useOwnLessons(selectOwnLessons)
   const courses = useOwnLessons(selectOwnCourses)
   const [query, setQuery] = useState('')
@@ -452,28 +441,18 @@ export function OwnLibrary() {
   }
   const deleteChosen = () => {
     const { lessonIds, courseIds } = split(chosen)
-    const goneCourses = courseIds.flatMap((id) => {
-      const deleted = deleteOwnCourse(store, id)
-      return deleted ? [deleted] : []
-    })
-    const goneLessons = lessonIds.flatMap((id) => {
-      const deleted = deleteOwnLesson(store, id)
-      return deleted ? [deleted] : []
-    })
+    const deleted = deleteOwn(store, progress, { lessons: lessonIds, courses: courseIds })
     stopPicking()
-    const total = goneCourses.length + goneLessons.length
-    if (total === 0) return
+    if (!deleted) return
+    const { lessons: goneLessons, courses: goneCourses } = deleted
     const only =
       goneCourses[0]?.course.title ??
       (goneLessons[0] ? lessonName(goneLessons[0].lesson) : undefined)
     sayUndo(
-      total === 1 && only !== undefined
+      goneLessons.length + goneCourses.length === 1 && only !== undefined
         ? t('own.deleted', { title: only })
         : t('own.deletedMany', { things: counted(goneLessons.length, goneCourses.length) }),
-      () => {
-        for (const lesson of goneLessons) restoreOwnLesson(store, lesson)
-        for (const course of goneCourses) restoreOwnCourse(store, course)
-      },
+      deleted.undo,
     )
   }
   const title = selecting

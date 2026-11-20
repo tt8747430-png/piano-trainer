@@ -4,16 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { useOwnLessonsStoreApi, type OwnLesson } from '@/entities/own-lessons'
 import { useProgressStoreApi } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
-import {
-  deleteOwnLesson,
-  duplicateOwnLesson,
-  renameOwnLesson,
-  restoreOwnLesson,
-} from '@/features/manage-own-lessons'
-import { ResetStepsRow, resetSteps, restoreSteps } from '@/features/reset-progress'
+import { duplicateOwnLesson, renameOwnLesson } from '@/features/manage-own-lessons'
+import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, say, sayUndo, ScreenHeader, ThingHead } from '@/shared/ui'
-import { InCoursesRow, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
+import { deleteOwn, InCoursesRow, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 
 /**
  * A lesson of the learner's own's Settings (R30-5), the same shape as a level's lesson's (the board's
@@ -68,13 +63,8 @@ export function OwnLessonSettings({ lesson }: { lesson: OwnLesson }) {
           }}
           onDelete={() => {
             void navigate({ to: '/your-lessons', replace: true })
-            const deleted = deleteOwnLesson(store, lesson.id)
-            if (!deleted) return
-            const forgotten = resetSteps(progress, [step])
-            sayUndo(t('own.deleted', { title }), () => {
-              restoreOwnLesson(store, deleted)
-              restoreSteps(progress, forgotten)
-            })
+            const deleted = deleteOwn(store, progress, { lessons: [lesson.id] })
+            if (deleted) sayUndo(t('own.deleted', { title }), deleted.undo)
           }}
         />
       </div>

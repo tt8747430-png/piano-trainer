@@ -7,18 +7,17 @@ import {
   useOwnLessonsStoreApi,
   type OwnCourse,
 } from '@/entities/own-lessons'
+import { useProgressStoreApi } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import {
-  deleteOwnCourse,
   duplicateOwnCourse,
   renameOwnCourse,
-  restoreOwnCourse,
   setOwnCourseLook,
 } from '@/features/manage-own-lessons'
 import { LookFields } from '@/features/manage-library'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { BackButton, say, sayUndo, ScreenHeader, SettingsGroup, ThingHead } from '@/shared/ui'
-import { OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
+import { deleteOwn, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 import { CourseMark } from './CourseMark'
 
 /**
@@ -28,6 +27,7 @@ import { CourseMark } from './CourseMark'
 export function OwnCourseSettings({ course }: { course: OwnCourse }) {
   const { t } = useTranslation('learn')
   const navigate = useNavigate()
+  const progress = useProgressStoreApi()
   const store = useOwnLessonsStoreApi()
   const lessons = ownCourseLessons(course, useOwnLessons(selectOwnLessons))
   return (
@@ -78,11 +78,8 @@ export function OwnCourseSettings({ course }: { course: OwnCourse }) {
           }}
           onDelete={() => {
             void navigate({ to: '/your-lessons', replace: true })
-            const deleted = deleteOwnCourse(store, course.id)
-            if (!deleted) return
-            sayUndo(t('own.deleted', { title: course.title }), () =>
-              restoreOwnCourse(store, deleted),
-            )
+            const deleted = deleteOwn(store, progress, { courses: [course.id] })
+            if (deleted) sayUndo(t('own.deleted', { title: course.title }), deleted.undo)
           }}
         />
       </div>
