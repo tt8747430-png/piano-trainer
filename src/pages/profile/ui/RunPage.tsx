@@ -11,7 +11,7 @@ import {
 } from '@/entities/progress'
 import { runPlaceOf, useRunName } from '@/features/trainer'
 import { useLocale } from '@/shared/i18n'
-import { formatLocale, useMediaQuery } from '@/shared/lib'
+import { clockSaid, useMediaQuery } from '@/shared/lib'
 import { BackButton, ButtonLink, Docked, ScreenHeader, SettingsGroup } from '@/shared/ui'
 import { useToday } from '@/widgets/practice-days'
 import { RunHero, RunResults, StatTile } from '@/widgets/run-results'
@@ -56,11 +56,10 @@ export function RunPage() {
   const locale = useLocale()
   const { runId } = useParams({ from: '/shell/profile/history/$runId' })
   const run = useProgress(selectRun(runId))
-  const clock = new Intl.DateTimeFormat(formatLocale(locale), { timeStyle: 'short' })
   const dayName = useHistoryDay(useToday())
   const header = (at: string) => (
     <ScreenHeader
-      title={`${dayName(localDay(new Date(at)))}, ${clock.format(new Date(at))}`}
+      title={`${dayName(localDay(new Date(at)))}, ${clockSaid(at, locale)}`}
       back={<BackButton />}
     />
   )

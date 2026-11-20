@@ -18,3 +18,7 @@ export function daySaid(at: string | number, locale: string, now: number, opens 
         )
   return opens ? said.charAt(0).toLocaleUpperCase(locale) + said.slice(1) : said
 }
+
+/** A time of day as the language writes it, short: "14:20" in English (en-GB) and Russian. */
+export const clockSaid = (at: string | number | Date, locale: string): string =>
+  new Intl.DateTimeFormat(formatLocale(locale), { timeStyle: 'short' }).format(new Date(at))

@@ -1,11 +1,9 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { isOneOf } from '@/shared/lib'
+import { clockSaid, daySaid, isOneOf, useLoaded, useNow } from '@/shared/lib'
 import { useAdmin } from '@/shared/lib/admin'
-import { useLoaded } from '@/shared/lib'
 import { LoadedState } from './LoadedState'
-import { daySaid, formatLocale, useNow } from '@/shared/lib'
 import { SettingsGroup } from '@/shared/ui'
 import { nameOf } from '../model/name-of'
 
@@ -29,7 +27,7 @@ const isAction = isOneOf<Action>(ACTIONS)
 function when(at: string, locale: string, now: number) {
   const day = daySaid(at, locale, now)
   return new Date(at).toDateString() === new Date(now).toDateString()
-    ? `${day} ${new Intl.DateTimeFormat(formatLocale(locale), { timeStyle: 'short' }).format(new Date(at))}`
+    ? `${day} ${clockSaid(at, locale)}`
     : day
 }
 

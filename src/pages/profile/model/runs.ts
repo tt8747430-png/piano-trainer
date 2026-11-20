@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { dateOfDay, localDay, type PracticeRun } from '@/entities/progress'
 import { useRunName } from '@/features/trainer'
 import { useLocale } from '@/shared/i18n'
-import { formatLocale } from '@/shared/lib'
+import { clockSaid, formatLocale } from '@/shared/lib'
 
 /** A run as Practice history shows it: its name, its time and count, its accuracy. */
 export interface RunLine {
@@ -17,10 +17,9 @@ export function useRunLines(): (runs: readonly PracticeRun[]) => readonly RunLin
   const { t } = useTranslation(['account', 'music'])
   const locale = useLocale()
   const runName = useRunName()
-  const clock = new Intl.DateTimeFormat(formatLocale(locale), { timeStyle: 'short' })
   return (runs) =>
     runs.flatMap((run) => {
-      const time = clock.format(new Date(run.at))
+      const time = clockSaid(run.at, locale)
       const accuracy = t('profile.history.accuracy', { percent: run.accuracy })
       // A run played reads its tempo ("72 BPM · 14:20"), a quiz how many it answered.
       if (run.kind === 'played')
