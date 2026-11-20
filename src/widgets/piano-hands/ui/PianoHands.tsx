@@ -27,7 +27,8 @@ function placeTags(layer: HTMLElement, tags: readonly KeyTag[], place: KeyPlace)
   const width = layer.clientWidth
   const height = layer.clientHeight
   const placed = tags.map((tag, at) => {
-    let element = layer.children[at] as HTMLElement | undefined
+    const child = layer.children[at]
+    let element = child instanceof HTMLElement ? child : undefined
     if (!element) {
       element = layer.ownerDocument.createElement('span')
       element.className =

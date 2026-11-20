@@ -1,7 +1,7 @@
 import { Extension, Node, type AnyExtension, type NodeViewRenderer } from '@tiptap/core'
 import { StarterKit } from '@tiptap/starter-kit'
-import type { LessonBlock } from '@/entities/lesson'
 import { sanitiseStyle, styleVars } from '@/shared/lib/style'
+import { carriedBlockOf } from './carried'
 import { moveBlock } from './doc-blocks'
 import { DOC } from './lesson-doc'
 
@@ -80,7 +80,7 @@ const LessonExample = Node.create<{ view: NodeViewRenderer | null }>({
       // Copied and pasted, it keeps its fields.
       parseHTML: (element: HTMLElement) => {
         try {
-          return JSON.parse(element.getAttribute('data-lesson-example') ?? '') as LessonBlock
+          return carriedBlockOf(JSON.parse(element.getAttribute('data-lesson-example') ?? ''))
         } catch {
           return null
         }

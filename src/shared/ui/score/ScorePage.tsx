@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Score, StaffId, StaffLabels } from '@/shared/lib/notation'
+import { useSameWhileEqual } from '../use-same-while-equal'
 import { drawPage } from './verovio/draw'
 import type { PageSetup } from './verovio/toolkit'
 import './score.css'
@@ -26,10 +27,10 @@ export function ScorePage({
   const { t } = useTranslation('music')
   const host = useRef<HTMLDivElement>(null)
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading')
-  // As one string, so a new object of the same page draws nothing again.
-  const pageKey = JSON.stringify(page)
-  const stavesKey = staves.join(' ')
-  const labelsKey = labels ? JSON.stringify(labels) : ''
+  // The same objects while they are equal, so a new object of the same page draws nothing again.
+  const shownPage = useSameWhileEqual(page)
+  const shownStaves = useSameWhileEqual(staves)
+  const shownLabels = useSameWhileEqual(labels)
   useEffect(() => {
     const element = host.current
     if (!element) return
@@ -39,10 +40,10 @@ export function ScorePage({
       score,
       element,
       {
-        page: JSON.parse(pageKey) as PageSetup,
-        staves: stavesKey.split(' ') as StaffId[],
+        page: shownPage,
+        staves: shownStaves,
         title,
-        labels: labelsKey ? (JSON.parse(labelsKey) as StaffLabels) : undefined,
+        labels: shownLabels,
       },
       stopped.signal,
     )
@@ -53,7 +54,7 @@ export function ScorePage({
         if (!stopped.signal.aborted) setState('error')
       })
     return () => stopped.abort()
-  }, [score, pageKey, stavesKey, labelsKey, title])
+  }, [score, shownPage, shownStaves, shownLabels, title])
   return (
     <figure
       aria-label={t('sheet.firstPage')}

@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
-import { useState, type CSSProperties, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   imageSource,
@@ -111,7 +111,7 @@ function VariantsBlock({ variants }: { variants: readonly LessonVariant[] }) {
 /** A block in a style of its own (R29 B9): its card drawn by the theme's `[data-block-style]`. */
 export function StyledBlock({ style, children }: { style: BlockStyle; children: ReactNode }) {
   return (
-    <div data-block-style="" style={styleVars(style) as CSSProperties}>
+    <div data-block-style="" style={styleVars(style)}>
       {children}
     </div>
   )

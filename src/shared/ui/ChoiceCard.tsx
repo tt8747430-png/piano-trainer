@@ -63,7 +63,10 @@ export function ChoiceCard<V extends string>({
         aria-labelledby={id}
         aria-describedby={description ? `${id}-description` : undefined}
         value={value}
-        onValueChange={(next) => onChange(next as V)}
+        onValueChange={(next) => {
+          const chosen = options.find((option) => option.value === next)
+          if (chosen) onChange(chosen.value)
+        }}
         className="gap-0"
       >
         {options.map((option) => {

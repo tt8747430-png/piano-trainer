@@ -5,12 +5,12 @@ import {
   noteFromParam,
   noteParam,
   partsOf,
+  pitchClass,
   pitchClassOf,
   qualityRootSpelling,
   spellScale,
   type ChordQuality,
   type Key,
-  type PitchClass,
 } from '@/shared/lib/music'
 import {
   changedView,
@@ -29,7 +29,7 @@ export interface NextChord {
   readonly step: ChordStep
   /** A numeral in the key ("ii7"), or the move from the chosen chord, by its semitones (−3 to 3). */
   readonly numeral?: string
-  readonly move?: number
+  readonly move?: Move
 }
 
 /** The key's chords, degree by degree, as the canvas's tables (KQ): triads, then sevenths. */
@@ -69,6 +69,7 @@ const LIKELY: Readonly<Record<'major' | 'minor', readonly (readonly number[])[]>
 }
 /** The chromatic moves offered, in semitones: a half step, a whole step, a minor 3rd, up then down. */
 const MOVES = [1, -1, 2, -2, 3, -3] as const
+type Move = (typeof MOVES)[number]
 /** How many chords are offered. */
 const OFFERED = 6
 
@@ -123,7 +124,7 @@ export function nextChords(view: ChordView, way: NextWay): NextChord[] {
     if (!quality) return []
     const from = pitchClassOf(chosen.root)
     return MOVES.map((move) => ({
-      step: stepFor(qualityRootSpelling(((from + move + 12) % 12) as PitchClass, quality), quality),
+      step: stepFor(qualityRootSpelling(pitchClass(from + move), quality), quality),
       move,
     }))
       .filter(fresh)

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import {
   SECTION_KINDS,
   SECTION_REPEATS,
+  VARIATIONS,
   type SheetSection as Section,
   type Variation,
 } from '@/shared/lib/arrangement'
@@ -106,7 +107,11 @@ export function SectionSheet({
           {variations.length > 1 ? (
             <GroupSegmented
               label={t('chordPlayer.variation')}
-              value={Math.min(section.variation, variations.length) as Variation}
+              value={
+                VARIATIONS.find(
+                  (each) => each === Math.min(section.variation, variations.length),
+                ) ?? section.variation
+              }
               options={variations.map((value) => ({ value, label: String(value) }))}
               onChange={(variation) => onChange({ variation })}
             />

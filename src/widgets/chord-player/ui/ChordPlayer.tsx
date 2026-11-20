@@ -141,9 +141,8 @@ function sheetNumerals(sheet: ChordSheet): Numeral[] | null {
   const numerals = sheet.sections.flatMap((section) =>
     sectionChords(section).map(({ chord }) => numeralOf(chord, sheet.key)),
   )
-  return numerals.length > 0 && numerals.every((numeral) => numeral !== null)
-    ? (numerals as Numeral[])
-    : null
+  const known = numerals.filter((numeral) => numeral !== null)
+  return numerals.length > 0 && known.length === numerals.length ? known : null
 }
 
 /** The dock's sheets, one open at a time. */

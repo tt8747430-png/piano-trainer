@@ -7,6 +7,7 @@ import {
   type StaffId,
   type StaffLabels,
 } from '@/shared/lib/notation'
+import { useSameWhileEqual } from '../use-same-while-equal'
 
 /** No single staff named. */
 const NO_NAMES: readonly (PrintedName | undefined)[] = []
@@ -31,12 +32,12 @@ export function useStaffLabels(
     const name = names[staffPlace(staff)]
     return name ? [[staff, name] as const] : []
   })
-  const key = JSON.stringify(named)
+  const shown = useSameWhileEqual(named)
   return useMemo(
-    () => ({
-      ...(Object.fromEntries(JSON.parse(key) as typeof named) as StaffLabels),
+    (): StaffLabels => ({
+      ...Object.fromEntries(shown),
       ...(piano ? { piano: { text: t('sheet.staves.piano') } } : {}),
     }),
-    [t, key, piano],
+    [t, shown, piano],
   )
 }

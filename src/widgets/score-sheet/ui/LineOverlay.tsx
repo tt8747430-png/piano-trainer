@@ -319,7 +319,7 @@ export function LineOverlay({
           aria-hidden
           data-slot="field-anchor"
           className="pointer-events-none absolute"
-          style={fieldBox}
+          style={{ ...fieldBox }}
         />
       ) : null}
       {/* The caret's notes' grip, under what is printed before them (a time signature, a clef):

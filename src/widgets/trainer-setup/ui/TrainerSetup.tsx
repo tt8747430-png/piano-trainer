@@ -33,7 +33,6 @@ import {
   SCALE_FAMILIES,
   scaleKindsIn,
   type Midi,
-  type NoteParam,
 } from '@/shared/lib/music'
 import {
   Dropdown,
@@ -119,19 +118,18 @@ export function TrainerSetup({
   const drill = drillOf(trainer, view)
   const fields = new Set(level === CUSTOM ? trainer.custom : [])
   const write = (field: ListField, chosen: readonly string[]) => {
-    const kept: readonly string[] = (CUSTOM_CHOICES[field] as readonly string[]).filter((value) =>
-      chosen.includes(value),
-    )
+    const choices: readonly string[] = CUSTOM_CHOICES[field]
+    const kept = choices.filter((value) => chosen.includes(value))
     // Its own in any order is its own: the URL leaves it out.
     const own: readonly string[] = CUSTOM_OWN[field]
     const isOwn = kept.length === own.length && own.every((value) => kept.includes(value))
     onChange({ [field]: isOwn ? undefined : listParam(kept) })
   }
-  const listOf = (field: ListField) =>
-    orOwn(
-      readList(view[field], CUSTOM_CHOICES[field] as readonly string[]),
-      CUSTOM_OWN[field] as readonly string[],
-    )
+  const listOf = (field: ListField) => {
+    const choices: readonly string[] = CUSTOM_CHOICES[field]
+    const own: readonly string[] = CUSTOM_OWN[field]
+    return orOwn(readList(view[field], choices), own)
+  }
 
   return (
     <div className="flex w-full max-w-2xl flex-col gap-6">
@@ -221,10 +219,9 @@ export function TrainerSetup({
         {fields.has('roots') ? (
           <KeysChecklist
             label={t('quiz:choice.keys')}
-            value={listOf('roots').map((root) => ({
-              tonic: noteFromParam(root as NoteParam),
-              minor: false,
-            }))}
+            value={orOwn(readList(view.roots, CUSTOM_CHOICES.roots), CUSTOM_OWN.roots).map(
+              (root) => ({ tonic: noteFromParam(root), minor: false }),
+            )}
             onChange={(keys) =>
               write(
                 'roots',

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   fitInversion,
+  isInversion,
   midi,
   type Inversion,
   type KeyRange,
@@ -82,7 +83,9 @@ export function PositionField({
           label={t('position.first')}
           disabled={disabled}
           value={fitInversion(position.inversion, notes)}
-          onChange={(inversion) => onChange({ inversion: inversion as Inversion })}
+          onChange={(inversion) => {
+            if (isInversion(inversion)) onChange({ inversion })
+          }}
         />
       </Labelled>
       <SwitchRow

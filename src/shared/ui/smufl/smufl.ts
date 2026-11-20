@@ -312,3 +312,6 @@ export interface SmuflOutline {
 }
 
 export type SmuflName = keyof typeof SMUFL
+
+/** Whether a name is one of the font's glyphs. */
+export const isSmuflName = (name: string): name is SmuflName => Object.hasOwn(SMUFL, name)

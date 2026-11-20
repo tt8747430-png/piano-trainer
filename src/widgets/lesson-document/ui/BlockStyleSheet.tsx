@@ -37,7 +37,7 @@ export function BlockStyleSheet({
     selector: ({ editor: each }) =>
       index === null ? null : (each.state.doc.maybeChild(index) ?? null),
   })
-  const saved = node?.attrs['style'] as unknown
+  const saved: unknown = node?.attrs['style']
   const style = saved ? sanitiseStyle(saved) : DEFAULT_STYLE
   const name = node ? nodeName(node, t) : ''
   const words = node?.textContent.trim() || name

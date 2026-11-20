@@ -116,8 +116,11 @@ const SONGS: Readonly<Record<SongInterval, IntervalSongs>> = {
   },
 }
 
+/** Whether an interval has songs of its own. */
+const isSongInterval = (name: string): name is SongInterval => Object.hasOwn(SONGS, name)
+
 /** The songs that open with a row's interval; none for an interval past the octave. */
 export function intervalSongs(name: RowInterval): IntervalSongs | undefined {
   if (name === 'A4' || name === 'd5') return SONGS.tritone
-  return name in SONGS ? SONGS[name as SongInterval] : undefined
+  return isSongInterval(name) ? SONGS[name] : undefined
 }

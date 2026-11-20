@@ -144,7 +144,7 @@ function GridLoopGrips({
             min={0}
             max={last}
             barAt={barUnder}
-            style={places.start}
+            style={{ ...places.start }}
             onMove={(written) => {
               const played = playedOf(performance, written, loop.first, 0, loop.last)
               if (played !== null) onLoop({ first: played, last: loop.last })
@@ -156,7 +156,7 @@ function GridLoopGrips({
             min={first}
             max={lastWritten}
             barAt={barUnder}
-            style={places.end}
+            style={{ ...places.end }}
             onMove={(written) => {
               const played = playedOf(performance, written, loop.last, loop.first, bars - 1)
               if (played !== null) onLoop({ first: loop.first, last: played })

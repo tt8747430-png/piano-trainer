@@ -25,6 +25,6 @@ export function cardLookProps(look: CardLook | undefined): {
     'data-card-look': '',
     'data-spacing': look.style.padding,
     'data-layout': look.style.layout,
-    style: styleVars(look.style) as CSSProperties,
+    style: styleVars(look.style),
   }
 }

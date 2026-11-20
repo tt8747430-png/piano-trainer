@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import { useId, type CSSProperties, type ReactNode } from 'react'
+import { useId, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import {
@@ -15,7 +15,9 @@ import {
 } from '@/shared/lib/style'
 import { ChoiceTiles, PictureTiles, Pinned, Segmented } from '@/shared/ui'
 
-const PRESETS = Object.keys(BLOCK_PRESETS) as BlockPreset[]
+const PRESETS = Object.keys(BLOCK_PRESETS).filter((name): name is BlockPreset =>
+  Object.hasOwn(BLOCK_PRESETS, name),
+)
 const RADII = [0, 1, 2, 3, 4] as const
 const RADIUS_NAMES = ['square', 'slight', 'medium', 'round', 'roundest'] as const
 const STEPS = [0, 1, 2] as const
@@ -70,7 +72,7 @@ export function StyledCard({
   children: ReactNode
 }) {
   return (
-    <div data-card-look="" style={styleVars(style) as CSSProperties} className="contents">
+    <div data-card-look="" style={styleVars(style)} className="contents">
       <div className={cn('card', className)}>{children}</div>
     </div>
   )
@@ -260,6 +262,9 @@ function PresetStrip({
   )
 }
 
+/** Whether a colour is written as the colour field writes one, `#rrggbb`. */
+const isHex = (colour: string): colour is `#${string}` => /^#[0-9a-f]{6}$/i.test(colour)
+
 /** A colour: the paints as round swatches, then a custom colour (`#rrggbb`). */
 function ColourRow({
   label,
@@ -317,7 +322,10 @@ function ColourRow({
             type="color"
             aria-label={`${label}: ${t('style.custom')}`}
             value={custom ? value : '#888888'}
-            onChange={(event) => onChange(event.target.value as `#${string}`)}
+            onChange={(event) => {
+              const colour = event.target.value
+              if (isHex(colour)) onChange(colour)
+            }}
             className="absolute inset-0 cursor-pointer opacity-0"
           />
         </label>

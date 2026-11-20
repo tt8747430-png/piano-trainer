@@ -1,4 +1,4 @@
-import { isBlackKey, type Finger, type Hand, type Midi } from '@/shared/lib/music'
+import { isBlackKey, midi, pitchClass, type Finger, type Hand, type Midi } from '@/shared/lib/music'
 
 /** A white key's width and length, a black key's, in the drawing's units. */
 const WHITE = 18
@@ -24,11 +24,14 @@ export interface FingeredKey {
   readonly finger: Finger
 }
 
+/** Whether a key, counted on past the keyboard's ends too, is black: its note's in the lowest octave is. */
+const isBlack = (key: number): boolean => isBlackKey(midi(pitchClass(key)))
+
 /** Each white key from `from` to `to` in turn, and where it starts. */
 function whiteKeys(from: number, to: number): { key: number; x: number }[] {
   const keys: { key: number; x: number }[] = []
   for (let key = from; key <= to; key += 1)
-    if (!isBlackKey(key as Midi)) keys.push({ key, x: keys.length * WHITE })
+    if (!isBlack(key)) keys.push({ key, x: keys.length * WHITE })
   return keys
 }
 
@@ -56,14 +59,13 @@ export function HandCard({
   const highest = Math.max(...notes.map((note) => note.key))
   // A white key either side, so the played keys never stand at the edge.
   let from = lowest - 1
-  while (isBlackKey(from as Midi)) from -= 1
+  while (isBlack(from)) from -= 1
   let to = highest + 1
-  while (isBlackKey(to as Midi)) to += 1
+  while (isBlack(to)) to += 1
   const whites = whiteKeys(from, to)
   const width = whites.length * WHITE
   const xOf = (key: number): number => {
-    if (!isBlackKey(key as Midi))
-      return (whites.find((white) => white.key === key)?.x ?? 0) + WHITE / 2
+    if (!isBlack(key)) return (whites.find((white) => white.key === key)?.x ?? 0) + WHITE / 2
     // A black key stands on the line between the white keys either side of it.
     return (whites.find((white) => white.key === key - 1)?.x ?? 0) + WHITE
   }
@@ -133,7 +135,7 @@ export function HandCard({
           />
         ))}
         {Array.from({ length: to - from + 1 }, (_, at) => from + at)
-          .filter((key) => isBlackKey(key as Midi))
+          .filter((key) => isBlack(key))
           .map((key) => (
             <rect
               key={key}

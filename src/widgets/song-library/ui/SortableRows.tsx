@@ -47,7 +47,10 @@ export function SortableRows<Id extends string>({
         const found = own(id)
         return found === undefined ? '' : nameOf(found)
       },
-      at: (id) => ({ place: list.items.indexOf(id as Id) + 1, count: list.items.length }),
+      at: (id) => ({
+        place: list.items.findIndex((item) => item === id) + 1,
+        count: list.items.length,
+      }),
     }
   })
   useEffect(

@@ -199,14 +199,14 @@ export function pickAt(
   const grab = GRAB * spaceOf(layout)
   const heads = layout.heads ?? []
   // A grace note's head, small and close before its note's: nearer to it than its note's is.
-  const near = (each: readonly Extent[]) =>
+  const near = <T extends Extent>(each: readonly T[]) =>
     each
       .filter((head) => holds(head, x, y, grab))
       .sort((a, b) => centre(a, x, y) - centre(b, x, y))[0]
   const grace = near(layout.graces ?? [])
   const note = near(heads)
   if (grace && (!note || centre(grace, x, y) < centre(note, x, y))) {
-    const { staff, tick, index } = grace as Head
+    const { staff, tick, index } = grace
     return { staff, tick, index, grace: true }
   }
   const under = heads

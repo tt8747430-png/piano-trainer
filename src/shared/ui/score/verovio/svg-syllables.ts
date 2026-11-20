@@ -1,4 +1,4 @@
-import type { StaffId } from '@/shared/lib/notation'
+import { isStaffId } from '@/shared/lib/notation'
 import type { Extent, Lyric } from '../layout'
 import { textBox } from './svg-glyphs'
 
@@ -12,7 +12,7 @@ export function syllablesOf(svg: SVGSVGElement, at: (box: Extent) => Extent): Ly
   return [...svg.querySelectorAll('g.verse[id^="v-"]')].flatMap((verse) => {
     const [, staff, tick, n] = verse.id.split('-')
     const box = textBox(verse.querySelector('text'), 'start')
-    if (!staff || !box) return []
-    return [{ staff: staff as StaffId, tick: Number(tick), verse: Number(n), ...at(box) }]
+    if (!isStaffId(staff) || !box) return []
+    return [{ staff, tick: Number(tick), verse: Number(n), ...at(box) }]
   })
 }

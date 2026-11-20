@@ -45,23 +45,23 @@ export function HandsPicture({ hands }: { hands: Hands }) {
  * with its swatch where the keys are painted by hand (the Player, an exercise), none in the
  * explorers, whose keys wear a chord's tones.
  */
-export function HandsSegmented<V extends Hands>({
+export function HandsSegmented({
   label,
   value,
   onChange,
-  hands = ORDER as readonly V[],
+  hands = ORDER,
   painted = false,
 }: {
   label: string
-  value: V
-  onChange: (hands: V) => void
+  value: Hands
+  onChange: (hands: Hands) => void
   /** The hands offered, put in the keys' order: every one by default. */
-  hands?: readonly V[]
+  hands?: readonly Hands[]
   /** Each hand's swatch beside its name, where the keys wear the hands' colours. */
   painted?: boolean
 }) {
   const { t } = useTranslation('common')
-  const options = ORDER.filter((each): each is V => hands.includes(each as V)).map((each) => ({
+  const options = ORDER.filter((each) => hands.includes(each)).map((each) => ({
     value: each,
     label: t(`handsShort.${each}`),
     icon: painted ? (

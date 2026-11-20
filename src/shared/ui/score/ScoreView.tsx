@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Midi, Tick, TimeSignature } from '@/shared/lib/music'
 import type { NextLine, Score, StaffId, StaffLabels } from '@/shared/lib/notation'
+import { useSameWhileEqual } from '../use-same-while-equal'
 import { drawnStaves } from './drawn-staves'
 import type { ScoreLayout } from './layout'
 import { scoreHeight } from './size'
@@ -82,15 +83,13 @@ export function ScoreView({
   // As numbers, so a new object of the same time engraves nothing again.
   const beforeCount = timeBefore?.count
   const beforeUnit = timeBefore?.unit
-  // As one string, so a new object of the same signature engraves nothing again.
-  const nextKey = next
-    ? JSON.stringify({ key: next.key, time: next.time, clefs: next.clefs } satisfies NextLine)
-    : ''
-  // As one string, so a new object of the same names engraves nothing again.
-  const labelsKey = labels ? JSON.stringify(labels) : ''
-  const drawn = drawnStaves(score, staff, staves)
-  // As one string, so a new list of the same staves engraves nothing again.
-  const shownKey = drawn.join(' ')
+  // The same object while the signature is, so a new object of the same one engraves nothing again.
+  const nextLine = useSameWhileEqual<NextLine | undefined>(
+    next ? { key: next.key, time: next.time, clefs: next.clefs } : undefined,
+  )
+  // The same names, and the same list of the same staves, engrave nothing again.
+  const shownLabels = useSameWhileEqual(labels)
+  const drawn = useSameWhileEqual(drawnStaves(score, staff, staves))
 
   // Verovio draws off the page's thread; what was drawn stays until the new drawing is whole.
   useEffect(() => {
@@ -104,13 +103,13 @@ export function ScoreView({
         scale,
         fingers,
         names,
-        staves: shownKey.split(' ') as StaffId[],
+        staves: drawn,
         timeBefore:
           beforeCount === undefined || beforeUnit === undefined
             ? undefined
             : { count: beforeCount, unit: beforeUnit },
-        next: nextKey ? (JSON.parse(nextKey) as NextLine) : undefined,
-        labels: labelsKey ? (JSON.parse(labelsKey) as StaffLabels) : undefined,
+        next: nextLine,
+        labels: shownLabels,
         fill,
       },
       stopped.signal,
@@ -122,7 +121,7 @@ export function ScoreView({
         if (!stopped.signal.aborted) setEngraving({ status: 'error' })
       })
     return () => stopped.abort()
-  }, [score, scale, fingers, names, shownKey, beforeCount, beforeUnit, nextKey, labelsKey, fill])
+  }, [score, scale, fingers, names, drawn, beforeCount, beforeUnit, nextLine, shownLabels, fill])
 
   // The chosen notes are marked on the engraving as it is, so moving the caret engraves nothing again.
   const selectedStaff = selected?.staff

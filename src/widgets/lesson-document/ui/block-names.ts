@@ -1,6 +1,7 @@
 import type { Node } from '@tiptap/pm/model'
 import type { TFunction } from 'i18next'
 import type { LessonBlock } from '@/entities/lesson'
+import { carriedBlockOf } from '../model/carried'
 import { DOC } from '../model/lesson-doc'
 import type { Insertable } from './commands'
 
@@ -10,7 +11,7 @@ export const blockName = (block: LessonBlock) =>
 
 /** What a block of the document is called: an example by its kind, the rest by what it is. */
 export function nodeName(node: Node, t: TFunction<'learn'>): string {
-  const block = node.attrs['block'] as LessonBlock | null | undefined
+  const block = carriedBlockOf(node.attrs['block'])
   if (node.type.name === DOC.example && block) return t(`edit.blocks.${blockName(block)}`)
   if (node.type.name === DOC.note && node.childCount === 2) return t('edit.blocks.rule')
   switch (node.type.name) {

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { staffScale, useSectionHeading, useStaffNames, useStaffTitle } from '@/entities/piece'
 import { barAt, barsOf, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
-import { creditsRoom, PageCanvas, SheetPage, type TitlePlace } from '@/shared/ui'
+import { creditsRoom, PageCanvas, SheetPage, useSameWhileEqual, type TitlePlace } from '@/shared/ui'
 import { lineLead, measureWidths, notate, type StaffId } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { labelRow, scoreHeight, useStaffLabels, versesOf } from '@/shared/ui/score'
@@ -15,7 +15,7 @@ import type { EditPrinted } from '../model/printed'
 import { LayerNames, useLayerName } from '../model/use-layer-name'
 import { SheetLine } from './SheetLine'
 
-/** No staff hidden. */
+/** No staff hidden, and none written. */
 const NO_STAVES: readonly StaffId[] = []
 /** The room between lines on a page at full size, for dealing lines onto pages. */
 const LINE_GAP = 16
@@ -187,13 +187,12 @@ export function ScoreSheet({
   }, [draft, lyrics])
   // The staves a line draws: the score's, less those the View hides (ADR 0114, 0097), never every
   // one; the verses under the staff that sings them.
-  const written = whole?.staves.join(' ') ?? ''
-  const hiddenKey = hidden.join(' ')
+  const written = useSameWhileEqual(whole?.staves ?? NO_STAVES)
+  const hiding = useSameWhileEqual(hidden)
   const drawn = useMemo(() => {
-    const staves = written ? (written.split(' ') as StaffId[]) : []
-    const kept = staves.filter((staff) => !hiddenKey.split(' ').includes(staff))
-    return kept.length > 0 ? kept : staves
-  }, [written, hiddenKey])
+    const kept = written.filter((staff) => !hiding.includes(staff))
+    return kept.length > 0 ? kept : written
+  }, [written, hiding])
   const staves = drawn.length > 0 ? drawn.length : 2
   const verses = whole ? versesOf(whole, drawn) : 0
   // The staves' names at the first line's head (ADR 0114, 0097): each single staff's own, else its

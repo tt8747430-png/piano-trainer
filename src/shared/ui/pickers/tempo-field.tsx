@@ -117,7 +117,7 @@ export function TempoField({
       commit()
     }
   }
-  const custom = value.text !== null && !(TEMPO_TERMS as readonly string[]).includes(value.text)
+  const custom = value.text !== null && !TEMPO_TERMS.some((term) => term === value.text)
   const [ownWords, setOwnWords] = useState(custom)
   const textChoice = value.text === null ? '' : ownWords || custom ? 'own' : value.text
   const hear = () => {

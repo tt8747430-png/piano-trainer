@@ -163,8 +163,7 @@ export type KeyStateWords = Readonly<Record<'wrong' | 'missing' | 'lit', string>
   readonly roles: Readonly<Record<ChordRole, string>>
 }
 
-const isChordRole = (fill: KeyFill): fill is ChordRole =>
-  (CHORD_ROLES as readonly string[]).includes(fill)
+const isChordRole = (fill: KeyFill): fill is ChordRole => CHORD_ROLES.some((role) => role === fill)
 
 /**
  * What a key says besides its note, for a screen reader: a chord tone's role, what its mark prints

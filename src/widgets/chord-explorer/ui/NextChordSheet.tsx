@@ -46,8 +46,7 @@ export function NextChordSheet({
   const offered = nextChords(view, way)
   const key = keyName(staffKey(view))
   const types = useChordTypes(noteFromParam(view.root))
-  const what = (each: NextChord) =>
-    each.numeral ?? t(`chords.next.moves.${String(each.move ?? 1)}` as 'chords.next.moves.1')
+  const what = (each: NextChord) => each.numeral ?? t(`chords.next.moves.${each.move ?? 1}`)
   const close = (next: boolean) => {
     if (!next) setAll(false)
     onOpenChange(next)

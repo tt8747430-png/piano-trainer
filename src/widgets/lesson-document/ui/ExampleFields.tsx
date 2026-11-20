@@ -142,7 +142,8 @@ export function PatternFields({
 }
 
 /** What a link of each kind opens on its own, before anything is chosen for it. */
-type Fresh = 'lesson' | 'chords' | 'scales' | 'key' | 'intervals' | 'progressions'
+const FRESH_KINDS = ['lesson', 'chords', 'scales', 'key', 'intervals', 'progressions'] as const
+type Fresh = (typeof FRESH_KINDS)[number]
 const FRESH: Readonly<Record<Fresh, LessonLink>> = {
   lesson: { opens: 'lesson', lesson: lessonIds()[0] ?? '' },
   chords: { opens: 'chords', chord: 'C' },
@@ -168,15 +169,14 @@ export function LinkFields({
   const locale = useLocale()
   const target = block.target
   const go = (next: LessonLink) => onChange({ ...block, target: next })
-  const kinds = Object.keys(FRESH) as Fresh[]
-  const fresh = (kind: string): kind is Fresh => kind in FRESH
+  const fresh = (kind: string): kind is Fresh => FRESH_KINDS.some((each) => each === kind)
   const asWritten = !fresh(target.opens)
   return (
     <>
       <Dropdown
         label={t('learn:edit.doc.opens')}
         value={asWritten ? 'other' : target.opens}
-        options={[...kinds, ...(asWritten ? (['other'] as const) : [])].map((kind) => ({
+        options={[...FRESH_KINDS, ...(asWritten ? (['other'] as const) : [])].map((kind) => ({
           value: kind,
           label: t(`learn:edit.doc.opensKind.${kind}`),
         }))}

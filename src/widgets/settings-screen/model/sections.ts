@@ -143,7 +143,7 @@ export type AdminSection = (typeof ADMIN_SECTIONS)[number]
 
 /** Whether a path's segment names one of the Administration's sections. */
 export const isAdminSection = (value: string): value is AdminSection =>
-  (ADMIN_SECTIONS as readonly string[]).includes(value)
+  ADMIN_SECTIONS.some((section) => section === value)
 
 /** Each section's picture: the people and the content first, then the logs and the tools. */
 export const ADMIN_PICTURES: Readonly<Record<AdminSection, { icon: LucideIcon; paint: Paint }>> = {

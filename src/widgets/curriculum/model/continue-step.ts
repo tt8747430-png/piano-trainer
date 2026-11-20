@@ -1,6 +1,6 @@
 import { allCourses, courseStepIds, type Course } from '@/entities/course'
 import { allJourneys, type Journey } from '@/entities/lesson'
-import { stepIdOf, stepOf, type Step, type StepId } from '@/entities/step'
+import { isStepId, stepIdOf, stepOf, type Step, type StepId } from '@/entities/step'
 import { courseProgress, journeyProgress, journeySteps } from './progress'
 
 type Learned = Readonly<Partial<Record<StepId, string>>>
@@ -38,8 +38,8 @@ function courseOf(id: StepId): Course | undefined {
  * journey; null once everything is learned.
  */
 export function continueStep(learned: Learned): ContinueStep | null {
-  const [latest] = (Object.entries(learned) as [StepId, string | undefined][])
-    .flatMap(([id, at]) => (at === undefined ? [] : [{ id, at: Date.parse(at) }]))
+  const [latest] = Object.entries(learned)
+    .flatMap(([id, at]) => (at === undefined || !isStepId(id) ? [] : [{ id, at: Date.parse(at) }]))
     .sort((a, b) => b.at - a.at)
   const course = latest && courseOf(latest.id)
   const inCourse = course && openInCourse(course, learned)

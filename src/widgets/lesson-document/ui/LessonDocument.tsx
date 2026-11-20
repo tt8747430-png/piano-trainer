@@ -1,17 +1,11 @@
 import { Placeholder } from '@tiptap/extensions'
-import { EditorContent, ReactNodeViewRenderer, useEditor, type JSONContent } from '@tiptap/react'
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-  type RefObject,
-} from 'react'
+import { EditorContent, ReactNodeViewRenderer, useEditor } from '@tiptap/react'
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { About, Lesson } from '@/entities/lesson'
 import { i18n, type Locale } from '@/shared/i18n'
 import { cn, useKeyboardTop } from '@/shared/lib'
+import { fromEditorJson, toEditorJson } from '../model/doc-json'
 import { docExtensions } from '../model/doc-schema'
 import {
   aboutToDoc,
@@ -159,14 +153,14 @@ function BlocksDocument({
         }),
       ],
     }),
-    content: content as JSONContent,
+    content: toEditorJson(content),
     immediatelyRender: true,
     shouldRerenderOnTransaction: false,
     editorProps: {
       attributes: { class: 'lesson-doc', 'aria-label': label, lang: locale },
       handleKeyDown: (_, event) => slashKeys.current?.(event) ?? false,
     },
-    onUpdate: ({ editor: each }) => onDoc(each.getJSON() as DocNode),
+    onUpdate: ({ editor: each }) => onDoc(fromEditorJson(each.getJSON())),
   })
   const toolbar = <DocToolbar editor={editor} locale={locale} />
   return (
@@ -176,9 +170,7 @@ function BlocksDocument({
         <div
           ref={frame}
           className="relative pr-11 pb-28 md:pr-0 md:pl-20"
-          style={
-            { '--takeaway-label': JSON.stringify(words('edit.doc.takeaway')) } as CSSProperties
-          }
+          style={{ '--takeaway-label': JSON.stringify(words('edit.doc.takeaway')) }}
         >
           <EditorContent editor={editor} />
           <BlockHandle editor={editor} frame={frame} />

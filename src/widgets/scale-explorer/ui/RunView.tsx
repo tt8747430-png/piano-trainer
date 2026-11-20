@@ -37,17 +37,12 @@ import { ScaleChordGrid } from '@/features/play-example'
 import { keyOfScale } from '../model/scale-key'
 import { runStaff } from '../model/run-staff'
 import { runShown, scaleRunOf } from '../model/scale-run'
-import { MAX_OCTAVES, MIN_OCTAVES, type RunOctaves, type ScaleView } from '../model/scale-view'
+import { RUN_OCTAVES, type ScaleView } from '../model/scale-view'
 import { KeyFifths } from './KeyFifths'
 import { ScaleExercises } from './ScaleExercises'
 import { ScaleLayout } from './ScaleLayout'
 import { ScaleSheet } from './ScaleSheet'
 
-/** The run's octaves, one to four as the scale books practise them (R29-P9). */
-const OCTAVES = Array.from(
-  { length: MAX_OCTAVES - MIN_OCTAVES + 1 },
-  (_, at) => (MIN_OCTAVES + at) as RunOctaves,
-)
 /** The tempo the Tempo sheet steps through, in BPM, as a practised scale is taken. */
 const TEMPO_STEPS = { min: 40, max: 240 } as const
 
@@ -250,7 +245,7 @@ export function RunView({
                       checked: (direction ?? 'both') === way,
                       onSelect: () => onChange({ direction: way === 'both' ? undefined : way }),
                     })),
-                    ...OCTAVES.map((count) => ({
+                    ...RUN_OCTAVES.map((count) => ({
                       key: `octaves-${count}`,
                       group: 'octaves',
                       unnamed: true,

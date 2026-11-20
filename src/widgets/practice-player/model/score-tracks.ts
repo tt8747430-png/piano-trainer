@@ -4,6 +4,7 @@ import { useStaffNames, useStaffTitle, type StaffName } from '@/entities/piece'
 import type { TrackId } from '@/features/practice'
 import type { Clef } from '@/shared/lib/music'
 import { singleStaff } from '@/shared/lib/notation'
+import { useSameWhileEqual } from '@/shared/ui'
 
 /**
  * A track the Player plays (A35): its id, its name for a reader, a staff's clef, and whether the score
@@ -34,18 +35,15 @@ export function useScoreTracks({
   const { t } = useTranslation(['music', 'player'])
   const names = useStaffNames(staves)
   const title = useStaffTitle()
-  const clefs = staves.map(({ clef }) => clef).join(' ')
+  const clefs = useSameWhileEqual(staves.map(({ clef }) => clef))
   return useMemo(
     () => [
-      ...clefs
-        .split(' ')
-        .filter(Boolean)
-        .map((clef, place) => ({
-          id: singleStaff(place),
-          label: title(names[place], place),
-          clef: clef as Clef,
-          drawn: true,
-        })),
+      ...clefs.map((clef, place) => ({
+        id: singleStaff(place),
+        label: title(names[place], place),
+        clef,
+        drawn: true,
+      })),
       { id: 'treble', label: t('music:view.upper'), clef: 'treble', drawn: piano },
       { id: 'bass', label: t('music:view.lower'), clef: 'bass', drawn: piano },
       ...(recording

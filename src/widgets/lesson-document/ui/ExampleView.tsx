@@ -43,6 +43,7 @@ import {
   blockReads,
   withBlockExample,
 } from '../model/block-examples'
+import { carriedBlockOf, carriedStyleOf, inStyle } from '../model/carried'
 import { blockName } from './block-names'
 import { LinkFields, PatternFields, VoicingsFields } from './ExampleFields'
 import { DocLocale } from './doc-locale'
@@ -415,8 +416,7 @@ function notesBefore(doc: ReactNodeViewProps['editor']['state']['doc'], pos: num
   let count = 0
   doc.descendants((each, at) => {
     if (pos === undefined || at >= pos) return false
-    const block = each.attrs['block'] as LessonBlock | null | undefined
-    if (block?.kind === 'notes') count += 1
+    if (carriedBlockOf(each.attrs['block'])?.kind === 'notes') count += 1
     return true
   })
   return count
@@ -475,7 +475,7 @@ export function ExampleView({
   const styleBlock = use(StyleBlock)
   // As it reads until it is worked on (round 25): chosen, or a field of it focused.
   const [focused, setFocused] = useState(false)
-  const block = node.attrs['block'] as LessonBlock | null
+  const block = carriedBlockOf(node.attrs['block'])
   // Its fields open: at once for one that does not read yet (one just put in).
   const [opened, setOpened] = useState(
     () => block !== null && (!blockReads(block) || (block.kind === 'image' && block.src === '')),
@@ -493,9 +493,8 @@ export function ExampleView({
   const words = i18n.getFixedT(locale, 'learn')
   const change = (next: LessonBlock) => updateAttributes({ block: next })
   // Drawn in the style its node carries (its ⋯ › Style), over the one its block was written with.
-  const style = node.attrs['style'] as BlockStyle | null
-  const { style: _written, ...plain } = block
-  const shown = (style ? { ...plain, style } : plain) as LessonBlock
+  const style = carriedStyleOf(node.attrs['style'])
+  const shown = inStyle(block, style)
   const name = t(`edit.blocks.${blockName(block)}`)
   const examples = blockExamples(block)
   const editable = HAS_FIELDS.has(block.kind) || examples.length > 0
@@ -606,12 +605,13 @@ export function ExampleView({
           key={JSON.stringify(shown)}
           fallback={<p className="text-sm text-muted-foreground">{t('edit.doc.notShown')}</p>}
         >
-          {shown.kind === 'image' && imageSource(shown.src) === null ? (
+          {shown.kind === 'question' ? null : shown.kind === 'image' &&
+            imageSource(shown.src) === null ? (
             <p className="rounded-card bg-muted p-4 text-sm text-muted-foreground">
               {t('edit.doc.imageEmpty')}
             </p>
           ) : (
-            <Shown block={shown as Exclude<LessonBlock, { kind: 'question' }>} />
+            <Shown block={shown} />
           )}
         </Drawn>
       ) : (

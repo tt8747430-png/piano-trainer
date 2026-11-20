@@ -1,5 +1,6 @@
 import type { Node } from '@tiptap/pm/model'
 import { NodeSelection, TextSelection, type EditorState, type Transaction } from '@tiptap/pm/state'
+import { isRecord } from '@/shared/lib'
 import { DOC } from './lesson-doc'
 
 /**
@@ -114,20 +115,21 @@ const isBoth = (value: unknown): value is Both =>
 
 /** The lines a block of words holds: a step each, a rule and its note, else its words. */
 function linesOf(node: Node): Line[] {
-  const block = node.attrs['block'] as Record<string, unknown> | null | undefined
+  const carried: unknown = node.attrs['block']
+  const block = isRecord(carried) ? carried : undefined
   const lines: Line[] = []
   switch (node.type.name) {
     case 'orderedList':
       node.forEach((step) => {
-        const text = step.attrs['text'] as unknown
+        const text: unknown = step.attrs['text']
         lines.push({ text: step.textContent, both: isBoth(text) ? text : null })
       })
       return lines
     case 'note':
       node.forEach((part) => {
-        const carried = part.type.name === 'noteRule' ? block?.['rule'] : block?.['text']
+        const own = part.type.name === 'noteRule' ? block?.['rule'] : block?.['text']
         if (part.textContent || node.childCount === 1)
-          lines.push({ text: part.textContent, both: isBoth(carried) ? carried : null })
+          lines.push({ text: part.textContent, both: isBoth(own) ? own : null })
       })
       return lines
     case 'paragraph': {
@@ -136,7 +138,7 @@ function linesOf(node: Node): Line[] {
       return [{ text: node.textContent, both: isBoth(both) ? both : null }]
     }
     default: {
-      const text = node.attrs['text'] as unknown
+      const text: unknown = node.attrs['text']
       return [{ text: node.textContent, both: isBoth(text) ? text : null }]
     }
   }
