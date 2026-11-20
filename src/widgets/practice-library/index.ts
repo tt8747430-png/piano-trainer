@@ -15,6 +15,7 @@ export {
   type PracticeSort,
 } from './model/library-view'
 export { LIBRARY_KINDS, type GroupWord, type LibraryKind } from './model/library-words'
+export { LibraryTile } from './ui/LibraryTile'
 export { PracticeLibrary } from './ui/PracticeLibrary'
 export { useLibraryNew } from './ui/LibraryNew'
 export { useArrangeMode } from './model/use-arrange-mode'

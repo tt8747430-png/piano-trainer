@@ -1,5 +1,4 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { ListMusic } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   libraryNumerals,
@@ -21,6 +20,7 @@ import {
   ThingHead,
 } from '@/shared/ui'
 import { DraftPublishScreen, NotOpen, PublishRow } from '@/widgets/content-editor'
+import { LibraryTile } from '@/widgets/practice-library'
 
 /** Where a progression is shown: its own page (R30-4). */
 const progressionPath = (progression: LibraryProgression): string =>
@@ -88,9 +88,15 @@ function ProgressionSettings({
   return (
     <div className="flex flex-col gap-6">
       <ThingHead
+        // Its list picture, the library row's chord columns, at the head's 64 as a song's tile.
         mark={
-          <span className="grid size-16 shrink-0 place-items-center rounded-pill bg-card ring-1 ring-border ring-inset">
-            <ListMusic aria-hidden className="size-6" />
+          <span className="block shrink-0 [&_[data-slot=row-tile]]:size-16 [&_[data-slot=row-tile]]:rounded-[10px]">
+            <LibraryTile
+              picture={{
+                chords: libraryNumerals(written, progressionMode(written, false)),
+                minor: progressionMode(written, false),
+              }}
+            />
           </span>
         }
         name={title}
