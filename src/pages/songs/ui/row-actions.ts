@@ -4,7 +4,6 @@ import {
   Heart,
   HeartOff,
   Music,
-  Palette,
   PencilLine,
   Play,
   Settings,
@@ -94,14 +93,6 @@ export function folderActions(
       icon: PencilLine,
       paint: 'grass',
       onSelect: () => page.editFolder(folder.id),
-    },
-    {
-      key: 'card-style',
-      group: 'look',
-      label: t('cardStyle.open'),
-      icon: Palette,
-      paint: 'yellow',
-      onSelect: () => page.openCardStyle(folder.id),
     },
     page.may('moveOut') && {
       key: 'move',

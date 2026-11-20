@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { LIBRARY_SORTS, SORT_DIRECTIONS, type CardPlace } from '@/entities/library'
+import { LIBRARY_SORTS, SORT_DIRECTIONS } from '@/entities/library'
 import { SortMenu } from '@/shared/ui'
 import { SongTable } from '@/widgets/song-library'
 import { songKey, type LibraryPage } from '../model/use-library-page'
@@ -13,12 +13,10 @@ import { songActions } from './row-actions'
  */
 export function LibraryTable({
   page,
-  place,
   noFolders,
   onClear,
 }: {
   page: LibraryPage
-  place: CardPlace
   noFolders: boolean
   onClear: () => void
 }) {
@@ -28,7 +26,7 @@ export function LibraryTable({
   return (
     <div className="flex flex-col gap-6">
       {noFolders || view.folders.length === 0 || select.on ? null : (
-        <LibraryBrowse page={page} place={place} moreFolders={null} onClear={onClear} foldersOnly />
+        <LibraryBrowse page={page} moreFolders={null} onClear={onClear} foldersOnly />
       )}
       {songs.length > 0 ? (
         <SongTable

@@ -1,14 +1,8 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  DEFAULT_CARD_LOOK,
-  useFolderName,
-  useLibrary,
-  type ShelvedFolder,
-} from '@/entities/library'
+import { useFolderName, type ShelvedFolder } from '@/entities/library'
 import type { PieceId } from '@/entities/piece'
 import {
-  CardLookProvider,
   FolderFace,
   LibraryDnd,
   RowInHand,
@@ -69,9 +63,8 @@ export function LibrarySelect({
   }
   const placeName = folder?.parent ? anyFolderName(folder.parent) : t('library.home')
   // The place's look, as its rows wear it out of Select: nothing moves on entering it.
-  const look = useLibrary((state) => state.cardLooks[folder?.id ?? 'home'])
   return (
-    <CardLookProvider value={look ?? DEFAULT_CARD_LOOK}>
+    <>
       <LibraryDnd
         carried={(key) => (isChosen(key) ? select.carried(key) : [])}
         nameOf={keyName}
@@ -176,6 +169,6 @@ export function LibrarySelect({
         </div>
         {children}
       </LibraryDnd>
-    </CardLookProvider>
+    </>
   )
 }

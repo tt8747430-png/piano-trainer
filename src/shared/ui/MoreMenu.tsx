@@ -6,7 +6,8 @@ import { Button } from './primitives/button'
 
 /**
  * A screen bar's More: a round ⋯ on the bar's soft fill opening the screen's other actions (DESIGN.md,
- * Placement), its destructive action last, red and alone. Nothing while it holds no action.
+ * Placement), its destructive action last, red and alone. Nothing while it holds no action; one act
+ * alone is its own button on the bar, never a menu of one item (ui-and-mockups, Actions).
  */
 export function MoreMenu({
   actions,
@@ -20,7 +21,24 @@ export function MoreMenu({
 }) {
   const { t } = useTranslation('common')
   const name = label ?? t('more')
-  if (actions.length === 0) return null
+  const shown = actions.filter((action) => !action.hidden)
+  const only = shown.length === 1 ? shown[0] : undefined
+  if (shown.length === 0) return null
+  if (only?.icon && only.checked === undefined) {
+    const Icon = only.icon
+    return (
+      <Button
+        ref={ref}
+        variant="bar"
+        size="icon"
+        aria-label={only.label}
+        title={only.label}
+        onClick={only.onSelect}
+      >
+        <Icon aria-hidden />
+      </Button>
+    )
+  }
   return (
     <ActionMenu
       ref={ref}

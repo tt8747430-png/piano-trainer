@@ -58,7 +58,7 @@ export function SongsFound({
               <SelectionBar page={page} folder={null} />
             </LibrarySelect>
           ) : (
-            <LibraryBrowse page={page} place="home" noFolders onClear={onClear} />
+            <LibraryBrowse page={page} noFolders onClear={onClear} />
           )}
         </section>
       ) : null}

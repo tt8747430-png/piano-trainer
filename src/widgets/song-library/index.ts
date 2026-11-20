@@ -1,5 +1,4 @@
 export { useCarrying, type CarryTarget } from './model/library-dnd'
-export { CardLookProvider, cardLookProps, useCardLook } from './ui/card-look'
 export { DropZone } from './ui/DropZone'
 export { FolderFace, type FolderHolds } from './ui/FolderFace'
 export { useHoldsLine } from './ui/use-holds-line'

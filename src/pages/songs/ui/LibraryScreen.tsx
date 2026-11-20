@@ -178,25 +178,14 @@ export function LibraryScreen({
           onClear={clear}
         />
       ) : laptop ? (
-        <LibraryTable
-          page={page}
-          place={folder?.id ?? 'home'}
-          noFolders={all !== false}
-          onClear={clear}
-        />
+        <LibraryTable page={page} noFolders={all !== false} onClear={clear} />
       ) : page.select.on ? (
         // Select's bar in the rows' drag: its places take what a row's face carries.
         <LibrarySelect page={page} folder={folder}>
           <SelectionBar page={page} folder={folder} />
         </LibrarySelect>
       ) : (
-        <LibraryBrowse
-          page={page}
-          place={folder?.id ?? 'home'}
-          noFolders={all !== false}
-          moreFolders={null}
-          onClear={clear}
-        />
+        <LibraryBrowse page={page} noFolders={all !== false} moreFolders={null} onClear={clear} />
       )}
       {folder && archived > 0 && !page.select.on ? (
         <div className="card">

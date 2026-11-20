@@ -22,14 +22,10 @@ import {
   type SavedFolder,
   type SongPlace,
 } from './types'
-import { sanitiseCardLooks, type CardLook } from './card-look'
 import { isEmptyDetails, sanitiseSongDetails, type SongDetails } from './song-details'
 
-/** Where a card look is kept: a folder, or Home (R29 B9). */
-export type CardPlace = FolderId | 'home'
-
 export const LIBRARY_STORAGE_KEY = 'pt-library'
-export const LIBRARY_VERSION = 8
+export const LIBRARY_VERSION = 9
 
 /**
  * The learner's library (ADR 0106), only what they changed: read over the catalog
@@ -51,8 +47,6 @@ export interface LibraryState {
   readonly direction: SortDirection
   /** The next own folder's number: a deleted folder's id is never given again. */
   readonly nextFolder: number
-  /** How each place draws its rows, where the learner (or an editor, for everyone) styled them (B9). */
-  readonly cardLooks: Partial<Record<CardPlace, CardLook>>
   /** A song's own colour and picture (B9, Appearance), where the learner gave it one. */
   readonly songLooks: Partial<Record<PieceId, FolderLook>>
   /** A song's details in the library (R30 S5: level, genre, language, tags), where the learner gave some. */
@@ -70,7 +64,6 @@ export const INITIAL_LIBRARY: LibraryState = {
   sort: 'played',
   direction: 'descending',
   nextFolder: 1,
-  cardLooks: {},
   songLooks: {},
   songDetails: {},
 }
@@ -211,9 +204,5 @@ function sanitize(persisted: unknown): LibraryState {
     nextFolder: Math.max(next, past, 1),
     songLooks: songLooksOf(saved.songLooks),
     songDetails: songDetailsOf(saved.songDetails),
-    cardLooks: sanitiseCardLooks(
-      saved.cardLooks,
-      (place): place is CardPlace => place === 'home' || isFolderId(place),
-    ),
   }
 }

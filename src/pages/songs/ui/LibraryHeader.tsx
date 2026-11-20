@@ -1,5 +1,4 @@
-import { useNavigate } from '@tanstack/react-router'
-import { Archive, Palette, PencilLine, Settings, Users } from 'lucide-react'
+import { Archive, Palette, PencilLine, Users } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
@@ -43,7 +42,6 @@ export function LibraryHeader({
   const { folders } = useLibraryLayout()
   const { select } = page
   const up = useUp()
-  const navigate = useNavigate()
   const leaveFolder = useLeaveFolder()
   const shareOf = useFolderShare()
   const [sharing, setSharing] = useState(false)
@@ -106,13 +104,6 @@ export function LibraryHeader({
         page.acts.archiveFolder(folder)
         void leave()
       },
-    },
-    {
-      key: 'settings',
-      label: t('folder.settings'),
-      icon: Settings,
-      onSelect: () =>
-        void navigate({ to: '/songs/folders/$folderId/settings', params: { folderId: folder.id } }),
     },
   ]
   const more = edit?.editing ? null : (

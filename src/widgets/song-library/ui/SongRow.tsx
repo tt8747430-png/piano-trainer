@@ -5,7 +5,6 @@ import { cn, useLongPress } from '@/shared/lib'
 import {
   menuOf,
   ROW_BODY,
-  ROW_CARD,
   ROW_FLAT,
   ROW_LIBRARY_FACE,
   RowFace,
@@ -16,7 +15,6 @@ import {
 } from '@/shared/ui'
 import { PieceMark } from '@/widgets/piece-cover'
 import { useEntryFace } from '@/widgets/piece-list'
-import { useCardLook } from './card-look'
 import { useSongStatus } from './use-song-status'
 
 /**
@@ -26,27 +24,27 @@ import { useSongStatus } from './use-song-status'
 export const SONG_FACE =
   'gap-4 py-3 pl-3 [&_[data-slot=row-tile]]:size-14 [&_[data-slot=row-tile]]:rounded-xl **:data-[slot=row-title]:leading-5 **:data-[slot=row-detail]:mt-0.5 **:data-[slot=row-detail]:leading-[normal] **:data-[slot=row-status]:mt-0.5 **:data-[slot=row-status]:leading-[normal]'
 
+/** A song's row shows its key under its title; where it stands is its own line. */
+const SONG_SHOWS = { key: true, chords: false, progress: false } as const
+
 /**
  * What a song's card shows, read or chosen in Select (R72's SONGROW): its first notes, its title over
  * its composer and key, and where it stands with when it was last played.
  */
 export function SongCardFace({ entry }: { entry: Entry }) {
-  const { show } = useCardLook()
-  const { face } = useEntryFace(entry, { ...show, progress: false })
+  const { face } = useEntryFace(entry, SONG_SHOWS)
   const status = useSongStatus(entry)
   return (
     <>
       <PieceMark entry={entry} />
       <RowFace {...face}>
         {face.children}
-        {show.progress ? (
-          <span
-            data-slot="row-status"
-            className="block truncate text-sm text-muted-foreground tabular-nums"
-          >
-            {status}
-          </span>
-        ) : null}
+        <span
+          data-slot="row-status"
+          className="block truncate text-sm text-muted-foreground tabular-nums"
+        >
+          {status}
+        </span>
       </RowFace>
     </>
   )
@@ -72,9 +70,7 @@ export function SongRow({
   // What each swipe offers: the learner's (R29 B10, Settings › Swipe actions).
   const leading = useSettings((state) => barOf(state.bars, 'swipe.songs.leading'))
   const trailing = useSettings((state) => barOf(state.bars, 'swipe.songs.trailing'))
-  // What the place's look shows (R29 B9, Card style), and whether its rows share one card.
-  const { show, style } = useCardLook()
-  const { face } = useEntryFace(entry, { ...show, progress: false })
+  const { face } = useEntryFace(entry, SONG_SHOWS)
   const press = useLongPress({ onLongPress: onSelect })
   return (
     <li className="min-w-0">
@@ -83,12 +79,7 @@ export function SongRow({
         trailing={swipeOf(actions, trailing)}
         className="h-full"
       >
-        <div
-          className={cn(
-            cn(style.layout === 'list' ? ROW_FLAT : ROW_CARD, 'min-h-22'),
-            'has-[>a:hover]:bg-muted',
-          )}
-        >
+        <div className={cn(cn(ROW_FLAT, 'min-h-22'), 'has-[>a:hover]:bg-muted')}>
           <PieceLink entry={entry} className={cn(ROW_BODY, ROW_LIBRARY_FACE, SONG_FACE)} {...press}>
             <SongCardFace entry={entry} />
           </PieceLink>

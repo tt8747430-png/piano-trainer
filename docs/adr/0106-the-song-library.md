@@ -113,14 +113,14 @@ details.
   (`PlaceBar`): the name in 30 bold with its count, the acts, Select beside the search, the search 320 wide at the
   end, both ends on the 56 column (`PLACE_COLUMN`). Under it the songs are one table on the paper (`SongTable`), its
   folders first; Select turns each row into its check.
-- **A song list on a phone is one list** (2026-11-18, the default Card style List): one card holding its rows, a
+- **A song list is one list** (2026-11-18; every place draws it, with no card style): one card holding its rows, a
   hairline from the title's edge (84), moving right with the title in Select. A row (R72's SONGROW): its first notes in a 56
   tile, its title over its composer and key and a third line saying where it stands and when it was last played
   ("Bar 9 of 16 · Today", "Learned · 9 Nov", "Not started", a learner's own song never played "Not started · Added
   today"); ··· at its end on every pointer holds its acts,
   Favourite among them, so the row carries no heart; a folder shows no place chips.
 - **Over the songs, their count and their sort** (R72's COUNTROW, `CountSort`): "5 songs" quiet at the start, the sort
-  in the link's colour with ⇅ at the end, a menu of the four sorts and, under a line, Ascending · Descending. A folder's name is its bar's title beside Back (no head under the bar), then Select, where there is something to choose, and the board's ···: Rename and Colour (its name and paint edited in place under the bar, as wide as the search), Share with a group, Archive folder (at once, with Undo, back to where it stood), and Folder settings (Card style, Move, Delete).
+  in the link's colour with ⇅ at the end, a menu of the four sorts and, under a line, Ascending · Descending. A folder's name is its bar's title beside Back (no head under the bar), then Select, where there is something to choose, and the board's ···: Rename and Colour (its name and paint edited in place under the bar, as wide as the search), Share with a group, and Archive folder (at once, with Undo, back to where it stood), last; a folder has no Settings page and no Card style (r72). A ··· with one act alone is that act's own bar button.
 - **Explore is a feed** (R72, Flat's community): the search, of songs and people, word by word over each title and composer as the library's search reads its own (People by name); Songs | People (`Segmented`,
   compact); for Songs the kinds as chips, All, Classical, Folk, Pop, Hymns, Studies (the items tagged with Publish's
   suggested tag of that name) and Patterns; the count and its order (Newest, Most saved, Top rated, `CountSort`).

@@ -230,9 +230,6 @@ export function useLibraryPage(
         params: { folderId: id },
         search: { edit: true },
       }),
-    /** A folder's Card style, from its row's ⋯ (R31-S). */
-    openCardStyle: (id: FolderId) =>
-      void navigate({ to: '/songs/folders/$folderId/card-style', params: { folderId: id } }),
     /** A song opened where its row's ⋯ says: played, its score edited, or its Settings (R31-S). */
     openSong: (id: PieceId, where: 'play' | 'edit' | 'settings') =>
       void navigate(

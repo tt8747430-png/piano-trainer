@@ -1,7 +1,5 @@
 export type { AllSongsSearch, FolderSearch, SongsFilter } from './model/songs-filter'
-export { FolderCardStylePage } from './ui/CardStylePage'
 export { FolderPage } from './ui/FolderPage'
-export { FolderSettingsPage } from './ui/FolderSettingsPage'
 export { AllSongsPage, SongsPage } from './ui/SongsPage'
 export type {
   ExploreCategory,

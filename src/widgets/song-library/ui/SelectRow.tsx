@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { CARRY, INTO, useLibraryDnd } from '../model/library-dnd'
 import { CheckMark, ROW_BODY, ROW_CARD, ROW_CONTROL, ROW_FLAT, ROW_LIBRARY_FACE } from '@/shared/ui'
-import { useCardLook } from './card-look'
 
 /**
  * A row while Select is on (R72's SONGROW in Select, Flat's): the same card, a tap choosing it or
@@ -58,7 +57,6 @@ export function SelectRow({
   } = useSortable({ id, disabled: !sortable, attributes: { roleDescription: t('drag.role') } })
   const move = t('drag.move', { name })
   const { carrying } = useLibraryDnd()
-  const grouped = useCardLook().style.layout === 'list'
   const carried = carrying?.has(carry) === true
   const { setNodeRef: setCarrierRef, listeners: carrierListeners } = useDraggable({
     id: `${CARRY}${carry}`,
@@ -79,7 +77,8 @@ export function SelectRow({
       <div
         data-drop={lit ? '' : undefined}
         className={cn(
-          grouped ? ROW_FLAT : cn(ROW_CARD, tall && 'min-h-22'),
+          ROW_FLAT,
+          tall && 'min-h-22',
           'hover:bg-muted data-drop:bg-selected/15 data-drop:ring-2 data-drop:ring-selected data-drop:ring-inset',
         )}
       >

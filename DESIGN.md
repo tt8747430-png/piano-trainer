@@ -517,7 +517,7 @@ square at the top.
   a page under its first keeps Back with the title centred.
 - **Properties** (a song's Details): a `RowTrigger` per property, its name and value, the value "Not set" in soft ink
   where empty; a tap opens its editor beside it (a popover on a laptop, a sheet on a phone), titled with its name.
-- **A place's card style** (`StyleEditor`): the preview is a pinned pane on the muted fill, of fixed height, never over a
+- **A lesson block's style** (`StyleEditor`): the preview is a pinned pane on the muted fill, of fixed height, never over a
   control; presets lead as a strip of drawn tiles, the chosen ringed in ink. Styles are made of the paints, so the dark
   theme redraws them; Night alone is a dark card in both themes.
 - **Popover and ⓘ:** an `InfoTip` is a 16px ⓘ in soft ink beside a name; no line of explanation stands under a control.

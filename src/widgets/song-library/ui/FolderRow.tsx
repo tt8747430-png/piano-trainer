@@ -8,7 +8,6 @@ import {
   menuOf,
   POINTER_ONLY,
   ROW_BODY,
-  ROW_CARD,
   ROW_FLAT,
   ROW_LIBRARY_FACE,
   RowMore,
@@ -16,7 +15,6 @@ import {
   SwipeRow,
   type RowAction,
 } from '@/shared/ui'
-import { useCardLook } from './card-look'
 import { FolderFace, type FolderHolds } from './FolderFace'
 
 /** A folder's swipe (ADR 0106): to the right Edit; to the left Move, then Archive at the edge. */
@@ -42,7 +40,6 @@ export function FolderRow({
   // What each swipe offers: the learner's (R29 B10, Settings › Swipe actions).
   const leading = useSettings((state) => barOf(state.bars, 'swipe.folders.leading'))
   const trailing = useSettings((state) => barOf(state.bars, 'swipe.folders.trailing'))
-  const { style } = useCardLook()
   const nameOf = useFolderName()
   const press = useLongPress({ onLongPress: onSelect })
   return (
@@ -52,9 +49,7 @@ export function FolderRow({
         trailing={swipeOf(actions, trailing)}
         className="h-full"
       >
-        <div
-          className={cn(style.layout === 'list' ? ROW_FLAT : ROW_CARD, 'has-[>a:hover]:bg-muted')}
-        >
+        <div className={cn(ROW_FLAT, 'has-[>a:hover]:bg-muted')}>
           <Link
             to="/songs/folders/$folderId"
             params={{ folderId: folder.id }}

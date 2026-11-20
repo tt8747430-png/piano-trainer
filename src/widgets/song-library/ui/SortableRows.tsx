@@ -1,9 +1,8 @@
 import { GROUPED_LIST } from '@/shared/ui'
-import { useCardLook } from './card-look'
 import type { DragCancelEvent, DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 import { useEffect, useLayoutEffect, useRef, type ReactNode } from 'react'
-import { cn, useSortableList } from '@/shared/lib'
+import { useSortableList } from '@/shared/lib'
 import { useLibraryDnd, type SortedList } from '../model/library-dnd'
 
 /**
@@ -61,19 +60,10 @@ export function SortableRows<Id extends string>({
       }),
     [join, label],
   )
-  // In Select as out of it (`LibraryRows`): a List's rows in one card (canvas 133), Cards' each its
-  // own, 12 apart and two across on a laptop, Grid's in its grid.
-  const { layout } = useCardLook().style
+  // In Select as out of it (`LibraryRows`): the rows in one card (canvas 133).
   return (
     <SortableContext items={[...list.items]} strategy={rectSortingStrategy}>
-      <ul
-        aria-label={label}
-        className={
-          layout === 'list'
-            ? GROUPED_LIST
-            : cn('grid gap-3', layout === 'grid' ? 'grid-cards auto-rows-fr' : 'lg:grid-cols-2')
-        }
-      >
+      <ul aria-label={label} className={GROUPED_LIST}>
         {list.items.map((id) => row(id))}
       </ul>
     </SortableContext>
