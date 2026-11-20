@@ -125,14 +125,14 @@ This is the app as built. The canvas runs ahead: a ruling drawn but not yet port
   Publish; MusicXML and MIDI in and out. `pages/songs`, `piece`, `public-library`; `widgets/song-library`, `piece-cover`;
   `features/manage-library`, `song-files`, `publish`, `share-folder`; `entities/library`, `piece`. Groups and
   folders shared with them: `pages/groups`, `shared/api/groups`.
-- **Practice** (`/practice`): Theory (Chords, Scales and keys, Intervals, Progressions, Accompaniment), Exercises by
-  book, the Tools last (the Chord player, Metronome, Tuner, Chord finder, Circle of fifths), each tool's settings
+- **Practice** (`/practice`): Theory (Chords, Scales and keys, Intervals, Progressions, Accompaniment), Exercises on
+  two shelves (Finger technique, Jazz vocabulary), the Tools last (the Chord player, Metronome, Tuner, Chord finder, Circle of fifths), each tool's settings
   in place, a sheet from the page's gear (`SettingsGear`); the Tools have no menu in any bar. Exercises,
   Accompaniment (patterns only) and Progressions are one library, `widgets/practice-library`, arranged by the learner;
   its favourites, arrangements and the learner's progressions `entities/practice-library`; a progression's page is
   `pages/progression`.
 - **The Player** (`/play/$pieceId`): one screen over any Performance. The transport's Pace: Listen at a speed, Wait
-  mode, Interpret; the foot's Hands, in every mode; versions Original · Simplified · Easy; the hands at the keys, 3D,
+  mode; the foot's Hands, in every mode; versions Original · Simplified · Easy; the hands at the keys, 3D,
   in the keys' place. `pages/player`; `widgets/practice-player`, `piano-hands`, `chord-views`, `sheet-music`,
   `player-setup`; `features/practice`.
 - **The score editor** (`/edit/$pieceId`): the Player's score in Edit mode, sharing its bar. A docked panel
