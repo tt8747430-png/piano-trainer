@@ -7,39 +7,59 @@ import { backgroundHref, rememberBackground, SETTINGS_PARAM, withSettings } from
 const screens = () => import('../routes/settings-screens')
 const adminScreens = () => import('../routes/admin-screens')
 
-type Pane = () => ReactNode
-
-/** A page loaded when the dialog first opens it, drawn by a pane made once, outside any render. */
-function page<M>(load: () => Promise<M>, pick: (loaded: M) => ComponentType): Pane {
-  const Page = lazy(() => load().then((loaded) => ({ default: pick(loaded) })))
-  return () => <Page />
-}
+type Screens = Awaited<ReturnType<typeof screens>>
+type AdminScreens = Awaited<ReturnType<typeof adminScreens>>
 
 /** Each place the dialog opens, by its address: the same page its route shows on a phone. */
-const PANES: Readonly<Record<string, Pane>> = {
-  '/settings/general': page(screens, (loaded) => loaded.GeneralPage),
-  '/settings/general/layouts': page(screens, (loaded) => loaded.PageLayoutsPage),
-  '/settings/appearance': page(screens, (loaded) => loaded.AppearancePage),
-  '/settings/storage': page(screens, (loaded) => loaded.StoragePage),
-  '/settings/connect-piano': page(screens, (loaded) => loaded.MidiSettingsPage),
-  '/settings/connect-piano/log': page(screens, (loaded) => loaded.MidiLogPage),
-  '/settings/connect-piano/timing': page(screens, (loaded) => loaded.TimingCalibrationPage),
-  '/settings/select-toolbar': page(screens, (loaded) => loaded.SelectToolbarPage),
-  '/settings/swipe-actions': page(screens, (loaded) => loaded.SwipeActionsPage),
-  '/settings/how-to-use': page(screens, (loaded) => loaded.HowToUsePage),
-  '/settings/feedback': page(screens, (loaded) => loaded.FeedbackPage),
-  '/settings/about': page(screens, (loaded) => loaded.AboutPage),
-  '/settings/account': page(screens, (loaded) => loaded.AccountSettingsPage),
-  '/settings/account/profile': page(screens, (loaded) => loaded.EditProfilePage),
-  '/settings/account/email': page(screens, (loaded) => loaded.EmailPage),
-  '/settings/account/password': page(screens, (loaded) => loaded.ChangePasswordPage),
-  '/settings/privacy': page(screens, (loaded) => loaded.ProfilePrivacyPage),
-  '/admin': page(adminScreens, (loaded) => loaded.AdminPage),
+const PAGES: Readonly<Record<string, (loaded: Screens) => ComponentType>> = {
+  '/settings/general': (loaded) => loaded.GeneralPage,
+  '/settings/general/layouts': (loaded) => loaded.PageLayoutsPage,
+  '/settings/appearance': (loaded) => loaded.AppearancePage,
+  '/settings/storage': (loaded) => loaded.StoragePage,
+  '/settings/connect-piano': (loaded) => loaded.MidiSettingsPage,
+  '/settings/connect-piano/log': (loaded) => loaded.MidiLogPage,
+  '/settings/connect-piano/timing': (loaded) => loaded.TimingCalibrationPage,
+  '/settings/select-toolbar': (loaded) => loaded.SelectToolbarPage,
+  '/settings/swipe-actions': (loaded) => loaded.SwipeActionsPage,
+  '/settings/how-to-use': (loaded) => loaded.HowToUsePage,
+  '/settings/feedback': (loaded) => loaded.FeedbackPage,
+  '/settings/about': (loaded) => loaded.AboutPage,
+  '/settings/account': (loaded) => loaded.AccountSettingsPage,
+  '/settings/account/profile': (loaded) => loaded.EditProfilePage,
+  '/settings/account/email': (loaded) => loaded.EmailPage,
+  '/settings/account/password': (loaded) => loaded.ChangePasswordPage,
+  '/settings/privacy': (loaded) => loaded.ProfilePrivacyPage,
 }
-const ADMIN_SECTION = page(adminScreens, (loaded) => loaded.AdminSectionPage)
 
-const paneOf = (path: string): Pane | null =>
-  PANES[path] ?? (path.startsWith('/admin/') ? ADMIN_SECTION : null)
+/**
+ * The places' pages, loaded once as one: moving between them never suspends again, so a place
+ * opened for the first time draws at once instead of leaving the pane blank for a few frames.
+ */
+const SettingsPane = lazy(() =>
+  screens().then((loaded) => ({
+    default: function SettingsPane({ path }: { path: string }) {
+      const Page = PAGES[path]?.(loaded)
+      return Page ? <Page /> : null
+    },
+  })),
+)
+
+/** Administration's overview and its sections, loaded once as one, as Settings' places are. */
+const AdminPane = lazy(() =>
+  adminScreens().then((loaded: AdminScreens) => ({
+    default: function AdminPane({ path }: { path: string }) {
+      const Page = path === '/admin' ? loaded.AdminPage : loaded.AdminSectionPage
+      return <Page />
+    },
+  })),
+)
+
+const paneOf = (path: string): ReactNode =>
+  path in PAGES ? (
+    <SettingsPane path={path} />
+  ) : path === '/admin' || path.startsWith('/admin/') ? (
+    <AdminPane path={path} />
+  ) : null
 
 /**
  * The laptop's Settings dialog over the page it was opened from (claude.ai's, the board's SETDLG):
@@ -68,7 +88,7 @@ export function SettingsDialogHost() {
       path={path}
       onClose={() => void navigate({ href: withSettings(backgroundHref(), null), replace: true })}
     >
-      <Suspense fallback={null}>{pane()}</Suspense>
+      <Suspense fallback={null}>{pane}</Suspense>
     </SettingsDialog>
   )
 }

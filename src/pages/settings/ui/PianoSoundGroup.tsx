@@ -29,7 +29,19 @@ export function PianoSoundGroup() {
   return (
     <SettingsGroup flush title={t('piano.sound')} info={t('pianoSound.info')}>
       {sound.state === 'reading' ? (
-        <p className="px-4 py-3 text-muted-foreground">{t('pianoSound.reading')}</p>
+        // While the cache is read (a moment), the card's own shape with its values not yet in, so
+        // the page neither flashes a line of text nor moves when they come.
+        <div aria-busy className="flex flex-col gap-2 p-4">
+          <p className="flex items-baseline justify-between gap-3">
+            <span className="font-semibold">{t('player:pianoSheet.grand')}</span>
+          </p>
+          <span aria-hidden className="h-1.5 rounded-pill bg-muted" />
+          <p className="text-sm text-muted-foreground">{t('pianoSound.reading')}</p>
+        </div>
+      ) : null}
+      {sound.state === 'reading' ? (
+        // Most learners have not kept the piano yet: its Download row holds its room, greyed.
+        <ActionRow title={t('pianoSound.download')} disabled onClick={() => undefined} />
       ) : sound.state === 'known' ? (
         <>
           {/* The board's offline card: the grand and how much is kept, its bar, then where it stands. */}

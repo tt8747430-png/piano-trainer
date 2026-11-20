@@ -29,9 +29,24 @@ export function KeepOnDeviceFields({
   const locale = useLocale()
   const { kept, refused, keepSafe } = useDeviceStorage(storage)
   if (kept.state === 'unknown')
+    // While the browser is asked (a moment), the card's own rows with their values not yet in, so
+    // the page does not move when they come.
     return (
       <SettingsGroup flush title={t('storage.label')} info={t('storage.info')}>
-        <p className="px-4 py-3 text-muted-foreground">{t('storage.reading')}</p>
+        <div aria-busy className="flex flex-col gap-2 p-4">
+          <p className="font-semibold text-muted-foreground">{t('storage.reading')}</p>
+          <span aria-hidden className="h-1.5 rounded-pill bg-muted" />
+          <p aria-hidden className="text-[0.8125rem]">
+            &nbsp;
+          </p>
+        </div>
+        <SwitchRow
+          label={t('storage.keepSafe')}
+          checked={false}
+          disabled
+          reason={t('storage.reading')}
+          onCheckedChange={() => undefined}
+        />
       </SettingsGroup>
     )
   const used = kept.used ?? 0
