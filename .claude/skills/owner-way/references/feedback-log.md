@@ -677,6 +677,8 @@ owner's, typos fixed.
 
 ## Practice
 
+- **The Circle of fifths' board opens on C major, as the app (loop, the board-to-app port, 2026-11-20):** the board opened on G major (1 sharp) where the app opens on C major (No sharps or flats), so the two could not be measured on one key; the board's default key is C now, as Chords' Cmaj7 and Scales' C major were set to the app's.
+
 - **Every board's noteheads are Bravura's (loop, the board-to-app port, 2026-11-20):** after the Practice staves, the song page's and editor's Amazing Grace, Hanon's figure, a lesson's staff block and a take's written bar still drew their heads as rotated ellipses (a half note a stroked ring), where the engine engraves Bravura's black and half heads. The kit's one `HEADG` (`calm_parts.py`) draws Bravura's glyph at the staff's space, centred on its note, in the note's colour (the selected honey, a played note soft); `bravura_glyphs.py` gains the half head (E0A3) from the font. Song, Editor, EditorDraft, Lesson and Takes, both sizes.
 
 - **Chords' heads are the engine's filled whole head, and a lone staff has no opening line (loop, the board-to-app port, 2026-11-20):** the Chords board drew a chord's tones as rotated ellipses 14 a space wide, where the app engraves Bravura's filled whole head (E0FA, 1.69 spaces) in the tone's paint, outlined 40 units in ink and 55 in sky when chosen; the board now draws that glyph (`bravura_glyphs.py`'s `wholeFilled`) with the same outlines (1.6 and 2.2 in its 10-unit space). Its staff began with a line at the left end, which the engine prints only to join two staves; a treble staff alone starts bare, as the app's.
