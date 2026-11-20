@@ -61,7 +61,7 @@ def RESULT(w):
     # the take written as notes, the grand staff the review writes into (Amazing Grace's first bar)
     ys = [10 + i * 8 for i in range(5)]; yb = [78 + i * 8 for i in range(5)]
     lines = ''.join(f'<path d="M8 {y}H{w - 8}" stroke="#685E56" stroke-width="1"></path>' for y in ys + yb)
-    heads = ''.join(f'<ellipse cx="{x}" cy="{y}" rx="5.5" ry="4" fill="{INK}" transform="rotate(-20 {x} {y})"></ellipse><path d="M{x + 5} {y}V{y - 26}" stroke="{INK}" stroke-width="1.3"></path>' for x, y in _HEADS(w))
+    heads = ''.join(HEADG('black', x, y, 8) + f'<path d="M{x + 5} {y}V{y - 26}" stroke="{INK}" stroke-width="1.3"></path>' for x, y in _HEADS(w))
     return (f'<svg viewBox="0 0 {w} 120" width="100%" role="img" aria-label="The take written as notes: bar 1" style="display: block">{lines}'
             f'<path d="M8 10V110M{w - 8} 10V110" stroke="#685E56" stroke-width="1.2"></path><text x="16" y="42" font-family="Noto Music, serif" font-size="32" fill="{INK}">𝄞</text><text x="16" y="110" font-family="Noto Music, serif" font-size="36" fill="{INK}">𝄢</text>{heads}'
             f'<rect x="110" y="94" width="14" height="4" fill="{INK}"></rect>' + (f'<path d="M{(70 + w - 30) // 2 - 8} 10V110" stroke="#685E56" stroke-width="1"></path><rect x="{(70 + w - 30) // 2 + 40}" y="94" width="14" height="4" fill="{INK}"></rect>' if w > 500 else '') + '</svg>')

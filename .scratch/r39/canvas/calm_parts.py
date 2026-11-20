@@ -1,5 +1,9 @@
 # What the R41 canvas keeps from the R40 boards: the engraved melody (Amazing Grace), the Hanon figure and the
 # circle of fifths' logic. The R40 boards themselves are gone; nothing here writes a board.
+from bravura_glyphs import BRAVURA
+# a notehead as the engine engraves it: Bravura's black, half or whole head at the staff's space sp, centred on its note
+def HEADG(kind, x, y, sp, col=None):
+    return f'<path transform="translate({x - BRAVURA[kind][1] * sp / 500:.2f} {y:.1f}) scale({sp / 250:.4f} {-sp / 250:.4f})" d="{BRAVURA[kind][0]}" fill="{col or INK}"></path>'
 # --- song
 
 # ── the score: Amazing Grace, melody, chords and words ──
@@ -41,7 +45,7 @@ def score_svg(w, sel=None, played=None, size=1.0):
                 out.append(f'<rect x="{x - 10 * size:.1f}" y="{y1:.1f}" width="{(21 if su else 20) * size:.1f}" height="{y2 - y1:.1f}" rx="{6 * size:.1f}" fill="{ACCENT}" opacity=".55"></rect>')
             if STEP[p] < 0: out.append(f'<path d="M{x - 9 * size:.1f} {base + sp:.1f}H{x + 9 * size:.1f}" stroke="{INK}" stroke-width="0.9"></path>')
             hollow = b >= 2
-            out.append(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{5.6 * size:.1f}" ry="{4 * size:.1f}" transform="rotate(-20 {x:.1f} {y:.1f})" fill="{"none" if hollow else col}" stroke="{col}" stroke-width="{1.8 if hollow else 0}"></ellipse>')
+            out.append(HEADG('half' if hollow else 'black', x, y, sp, col))
             eighth = b == .5; up = eighth or STEP[p] < 4
             sx = x + (5.2 if up else -5.2) * size
             if eighth:
@@ -97,7 +101,7 @@ def score_grand(w, systems, sel=None, size=1.0):
     ln = lambda d, sw=0.9, c=INK: out.append(f'<path d="{d}" stroke="{c}" stroke-width="{sw}" fill="none"></path>')
     def staff(top, x0, x1): ln(''.join(f'M{x0:.1f} {top + i * sp:.1f}H{x1:.1f}' for i in range(5)))
     def head(x, y, hollow, col):
-        out.append(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{5.6 * s:.1f}" ry="{4 * s:.1f}" transform="rotate(-20 {x:.1f} {y:.1f})" fill="{"none" if hollow else col}" stroke="{col}" stroke-width="{1.8 if hollow else 0}"></ellipse>')
+        out.append(HEADG('half' if hollow else 'black', x, y, sp, col))
     def ledgers(x, st, base, w2=9):
         for k in range(-2, st - 1, -2): ln(f'M{x - w2 * s:.1f} {base - k * sp / 2:.1f}H{x + w2 * s:.1f}')
         for k in range(10, st + 1, 2): ln(f'M{x - w2 * s:.1f} {base - k * sp / 2:.1f}H{x + w2 * s:.1f}')
@@ -205,7 +209,7 @@ def hanon(w, shift=0):  # shift: the figure's start a step higher, as Hanon's ne
     for i, s in enumerate(notes):
         x = x0 + i * dx + (6 if i >= 8 else 0); y = 66 - s * 4
         if s == 0: out.append(f'<path d="M{x-7:.1f} 66H{x+7:.1f}" stroke="{INK}" stroke-width="0.9"></path>')
-        out.append(f'<ellipse cx="{x:.1f}" cy="{y}" rx="4.6" ry="3.4" transform="rotate(-20 {x:.1f} {y})" fill="{INK}"></ellipse>'); hs.append((x, y))
+        out.append(HEADG('black', x, y, 8)); hs.append((x, y))
     for g in range(4):
         grp = hs[g*4:g*4+4]; top = min(y for _, y in grp) - 26
         out += [f'<path d="M{x+4.2:.1f} {y-1}V{top}" stroke="{INK}" stroke-width="1"></path>' for x, y in grp]

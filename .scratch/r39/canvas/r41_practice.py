@@ -53,7 +53,7 @@ def scale_staff(w, fingers):
     x0, dx = 68, (w - 84) / 8
     for i in range(8):
         x = x0 + i * dx; y = base - (2 + i) * sp / 2
-        o += f'<ellipse cx="{x:.1f}" cy="{y}" rx="5" ry="3.7" transform="rotate(-20 {x:.1f} {y})" fill="{INK}"></ellipse><path d="M{x + 4.6:.1f} {y}V{y - 24}" stroke="{INK}" stroke-width="1.1"></path>'
+        o += HEADG('black', x, y, sp) + f'<path d="M{x + 4.6:.1f} {y}V{y - 24}" stroke="{INK}" stroke-width="1.1"></path>'
         o += f'<text x="{x:.1f}" y="{min(top - 10, y - 30)}" text-anchor="middle" font-size="12" font-weight="700" fill="{INK}">{fingers[i]}</text>'
     return f'<svg viewBox="0 0 {w} 96" width="100%" role="img" aria-label="G major, up one octave, right-hand fingering over the notes" style="display: block">{o}</svg>'
 def SCALESTAFF(label):
