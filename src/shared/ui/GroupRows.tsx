@@ -1,3 +1,5 @@
+import { Radio } from '@base-ui/react/radio'
+import { RadioGroup } from '@base-ui/react/radio-group'
 import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
 import { Check, ChevronRight } from 'lucide-react'
@@ -186,27 +188,28 @@ export function ChoiceList<T extends string>({
   onChange: (value: T) => void
 }) {
   return (
-    <div
-      role="radiogroup"
+    <RadioGroup
       aria-label={label}
+      value={value}
+      onValueChange={(next) => {
+        const picked = options.find((option) => option.value === next)
+        if (picked) onChange(picked.value)
+      }}
       className="flex flex-col rows-line overflow-hidden rounded-xl bg-card"
     >
       {options.map((option) => (
-        <button
+        <Radio.Root
           key={option.value}
-          type="button"
-          role="radio"
-          aria-checked={option.value === value}
-          onClick={() => onChange(option.value)}
+          value={option.value}
           className="flex min-h-12 items-center px-4 text-left text-base transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
         >
           <span className="min-w-0 flex-1">{option.label}</span>
           {option.value === value ? (
             <Check aria-hidden className="size-5 shrink-0 text-link" strokeWidth={2.5} />
           ) : null}
-        </button>
+        </Radio.Root>
       ))}
-    </div>
+    </RadioGroup>
   )
 }
 
