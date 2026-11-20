@@ -381,7 +381,7 @@ function PublishForm({
           />
         </GroupRows>
       </Field>
-      <Sheet open={licences} onOpenChange={setLicences}>
+      <Sheet at={{}} open={licences} onOpenChange={setLicences}>
         <SheetContent title={t('public.licence')}>
           <ChoiceList
             label={t('public.licence')}

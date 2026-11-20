@@ -67,7 +67,7 @@ export function ListSheetRow({
   return (
     // Its own box in a list of rows: the list's hairline is drawn under it, the button's hover inside.
     <div>
-      <Sheet>
+      <Sheet at={{}}>
         <SheetTrigger
           render={
             <button

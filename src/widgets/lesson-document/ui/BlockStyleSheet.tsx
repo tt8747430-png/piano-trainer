@@ -43,6 +43,7 @@ export function BlockStyleSheet({
   const words = node?.textContent.trim() || name
   return (
     <Sheet
+      at={{ width: 'w-105' }}
       open={index !== null && node !== null}
       onOpenChange={(open) => (open ? undefined : onClose())}
     >

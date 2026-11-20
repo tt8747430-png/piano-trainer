@@ -51,7 +51,7 @@ export function ShortcutsHelp({ children }: { children: ReactNode }) {
   return (
     <OpenShortcutsContext value={show}>
       {children}
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet hung="header" open={open} onOpenChange={setOpen}>
         <SheetContent title={t('shortcuts.title')}>
           <ShortcutsList />
         </SheetContent>

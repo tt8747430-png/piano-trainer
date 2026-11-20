@@ -94,7 +94,7 @@ function ChooseFolderSheet({
   const { folders } = useLibraryLayout()
   const nameOf = useFolderName()
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{}} open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('groups.chooseFolder')}>
         {folders.length === 0 ? (
           <p className="text-pretty text-muted-foreground">{t('groups.noFolders')}</p>

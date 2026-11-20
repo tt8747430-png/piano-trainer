@@ -135,7 +135,7 @@ export function StyleSheet({
 }) {
   const { t } = useTranslation('practice')
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{ side: 'top', width: 'w-105' }} open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('chordPlayer.style')} tall>
         <StyleList book={book} value={value} onChoose={onChoose} />
       </SheetContent>

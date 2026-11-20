@@ -104,7 +104,7 @@ export function ChordDialog({
     onChord(next)
   }
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{ width: 'w-115' }} open={open} onOpenChange={onOpenChange}>
       <SheetContent title={printedChord(chord)}>
         <div className="flex flex-col gap-4">
           {typed !== null ? (

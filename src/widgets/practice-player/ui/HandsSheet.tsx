@@ -39,7 +39,7 @@ export function HandsSheet({
   const toggle = (hand: Hand, on: boolean) =>
     onHands(on ? (plays(OTHER[hand]) ? 'both' : hand) : OTHER[hand])
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{ side: 'top', width: 'w-90' }} open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('parts.title')}>
         <div className="flex flex-col gap-3">
           {(['rh', 'lh'] as const).map((hand) => (

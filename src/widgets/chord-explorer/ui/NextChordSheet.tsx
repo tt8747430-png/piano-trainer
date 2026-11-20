@@ -52,7 +52,7 @@ export function NextChordSheet({
     onOpenChange(next)
   }
   return (
-    <Sheet open={open} onOpenChange={close}>
+    <Sheet at={{ width: 'w-100' }} open={open} onOpenChange={close}>
       <SheetContent
         title={
           changing ? t('chords.next.change', { chord: symbolOf(changing) }) : t('chords.next.title')

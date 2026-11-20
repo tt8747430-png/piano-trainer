@@ -792,7 +792,11 @@ export function ChordPlayer({
           </div>
         ) : null}
         <LayoutZones />
-        <Sheet open={dock !== null} onOpenChange={(open) => (open ? null : setDock(null))}>
+        <Sheet
+          at={{ side: 'top', width: 'w-80' }}
+          open={dock !== null}
+          onOpenChange={(open) => (open ? null : setDock(null))}
+        >
           {dock === 'key' ? (
             <SheetContent title={t('chordPlayer.dock.key')}>
               <div className="flex flex-col items-center gap-3 py-2">

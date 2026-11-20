@@ -244,7 +244,11 @@ export function ChordPlayerSettingsPage() {
         </div>
       </div>
 
-      <Sheet open={opened !== null} onOpenChange={(open) => (open ? null : setOpened(null))}>
+      <Sheet
+        at={{}}
+        open={opened !== null}
+        onOpenChange={(open) => (open ? null : setOpened(null))}
+      >
         {opened === 'countIn' ? (
           <SheetContent
             title={t('chordPlayer.settings.countIn')}

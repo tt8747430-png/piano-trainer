@@ -18,11 +18,12 @@ function PopoverContent({
   side = 'bottom',
   sideOffset = 4,
   anchor,
+  collisionAvoidance,
   ...props
 }: PopoverPrimitive.Popup.Props &
   Pick<
     PopoverPrimitive.Positioner.Props,
-    'align' | 'alignOffset' | 'side' | 'sideOffset' | 'anchor'
+    'align' | 'alignOffset' | 'side' | 'sideOffset' | 'anchor' | 'collisionAvoidance'
   >) {
   // Clear of the notch, the status bar and the home indicator (R36).
   const padding = useLayerPadding()
@@ -31,6 +32,7 @@ function PopoverContent({
       <PopoverPrimitive.Positioner
         collisionPadding={padding}
         anchor={anchor}
+        {...(collisionAvoidance ? { collisionAvoidance } : {})}
         align={align}
         alignOffset={alignOffset}
         side={side}

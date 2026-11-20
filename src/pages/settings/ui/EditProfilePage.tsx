@@ -218,7 +218,7 @@ function PhotoSheet({
     done((await uploadAvatar(made)).ok)
   }
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{}} open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('editProfile.changePhoto')}>
         <div className="flex flex-col gap-5 pb-2">
           <input

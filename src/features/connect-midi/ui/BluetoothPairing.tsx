@@ -31,7 +31,7 @@ export function BluetoothPairing() {
   return (
     <>
       <GroupLink label={t('midiSettings.bluetooth.connect')} onClick={() => setOpen(true)} />
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet at={{ width: 'w-105' }} open={open} onOpenChange={setOpen}>
         <SheetContent
           title={t('midiSettings.bluetooth.connect')}
           description={t('midiSettings.bluetooth.steps')}

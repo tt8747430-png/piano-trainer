@@ -277,7 +277,7 @@ export function RunView({
               }))}
             />
           </FloatingPieces>
-          <Sheet open={tempoOpen} onOpenChange={setTempoOpen}>
+          <Sheet at={{ side: 'top' }} open={tempoOpen} onOpenChange={setTempoOpen}>
             <SheetContent title={t('practice:scales.tempo')}>
               <Stepper
                 label={t('practice:scales.tempo')}

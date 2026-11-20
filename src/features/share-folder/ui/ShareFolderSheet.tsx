@@ -27,7 +27,7 @@ export function ShareFolderSheet({
   folder: FolderShare
 }) {
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{}} open={open} onOpenChange={onOpenChange}>
       {open ? <ShareForm folder={folder} onDone={() => onOpenChange(false)} /> : null}
     </Sheet>
   )

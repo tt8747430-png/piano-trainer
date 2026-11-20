@@ -130,7 +130,7 @@ function LessonBar({
   const name = lesson.sections[at] ? localText(lesson.sections[at].heading, locale) : ''
   return (
     <FloatingBar label={t('lessonBar')} className="lg:max-w-130">
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet at={{ side: 'top', width: 'w-130' }} open={open} onOpenChange={setOpen}>
         <SheetTrigger
           render={
             <Button

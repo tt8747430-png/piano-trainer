@@ -37,7 +37,7 @@ export function MetronomeSettings({ metronome }: { metronome: Metronome }) {
   const [opened, setOpened] = useState<Opened | null>(null)
   const meter = METRONOME_METERS.findIndex((each) => each === metronome.meter)
   const sheet = (which: Opened, title: string, body: ReactNode) => (
-    <Sheet open={opened === which} onOpenChange={(open) => setOpened(open ? which : null)}>
+    <Sheet at={{}} open={opened === which} onOpenChange={(open) => setOpened(open ? which : null)}>
       <SheetContent title={title}>{body}</SheetContent>
     </Sheet>
   )

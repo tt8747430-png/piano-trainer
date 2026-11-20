@@ -53,7 +53,7 @@ export function SectionSheet({
   const { t } = useTranslation('practice')
   const name = t(`chordPlayer.sections.${section.kind}`)
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{}} open={open} onOpenChange={onOpenChange}>
       <SheetContent
         title={name}
         footer={

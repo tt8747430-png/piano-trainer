@@ -67,7 +67,7 @@ function MoveSheet({
   const { t } = useTranslation('practice')
   const move = useMoveItem(kind)
   return (
-    <Sheet open onOpenChange={(open) => (open ? null : onClose())}>
+    <Sheet at={{}} open onOpenChange={(open) => (open ? null : onClose())}>
       <SheetContent title={t('library.edit.moveTitle', { name: sheet.name })}>
         <ul className="card flex flex-col rows-hairline overflow-hidden">
           {places.map((place) => (

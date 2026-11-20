@@ -1,5 +1,5 @@
 import { Drawer as DrawerPrimitive } from '@base-ui/react/drawer'
-import { createContext, use, type ComponentProps, type ReactNode } from 'react'
+import { createContext, use, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { InfoTip } from './InfoTip'
@@ -7,12 +7,14 @@ import { Button } from './primitives/button'
 import {
   Drawer,
   DrawerClose,
+  DrawerTrigger,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
 } from './primitives/drawer'
+import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
 
 /**
  * A sheet from the right as the boards' laptop popover. Each class names the right edge as well as
@@ -83,8 +85,65 @@ const RISING_CARD = [
   'data-[swipe-axis=x]:data-[swipe-direction=right]:[--closed-transform:translate3d(0,0.5rem,0)]',
 ].join(' ')
 
-/** What opens a sheet: the drawer's own trigger, named for the sheet. */
-export { DrawerTrigger as SheetTrigger } from './primitives/drawer'
+/**
+ * On a laptop, a sheet opened from a control in the page (a row, a transport's button, a chord, a
+ * menu's item): the boards' POPOVER at that control, 380 wide unless it says, nothing dimmed behind
+ * it, the page's own scroll and clicks kept. Its side and alignment are the trigger's to say.
+ */
+export interface SheetAt {
+  readonly side?: 'top' | 'bottom' | 'left' | 'right'
+  readonly align?: 'start' | 'center' | 'end'
+  /** Its width class: 320 (`w-80`), 380 (`w-95`, the default), 420 (`w-105`), 460 (`w-115`), 520 (`w-130`). */
+  readonly width?: string
+}
+
+/** A sheet opened as a popover: where it stands, and the control it stands at. */
+interface Popped extends SheetAt {
+  readonly anchor: Element | null
+}
+
+const PoppedContext = createContext<Popped | null>(null)
+
+const PRESSABLE = 'button, a[href], [role=button], [role=menuitem], [role=option], [role=row]'
+
+/**
+ * The control the learner last pressed or keyed: a sheet that opens from it stands at it. A menu's
+ * item goes with its menu, so a sheet from a ··· menu stands at the ··· that opened the menu.
+ */
+let pressed: Element | null = null
+let pressedAt = 0
+/** The control pressed just now, or none: a sheet a shortcut opens has no control to stand at. */
+const justPressed = () => (performance.now() - pressedAt < 1000 ? pressed : null)
+function notePress(target: EventTarget | null) {
+  if (!(target instanceof Element)) return
+  const control = target.closest(PRESSABLE)
+  if (control === null) return
+  const menu = control.closest('[role=menu], [role=listbox]')
+  pressed =
+    (menu === null
+      ? null
+      : document.querySelector('[aria-haspopup][aria-expanded=true], [data-popup-open]')) ?? control
+  pressedAt = performance.now()
+}
+if (typeof document !== 'undefined') {
+  document.addEventListener('pointerdown', (event) => notePress(event.target), true)
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.key === 'Enter' || event.key === ' ') notePress(document.activeElement)
+    },
+    true,
+  )
+}
+
+/** What opens a sheet: the drawer's own trigger, or the popover's on a laptop, named for the sheet. */
+export function SheetTrigger(props: Parameters<typeof DrawerTrigger>[0]) {
+  return use(PoppedContext) ? (
+    <PopoverTrigger render={props.render} />
+  ) : (
+    <DrawerTrigger {...props} />
+  )
+}
 
 /**
  * The app's bottom sheet: a drawer from the bottom that always shows its swipe handle. Every sheet
@@ -95,20 +154,48 @@ export { DrawerTrigger as SheetTrigger } from './primitives/drawer'
 export function Sheet({
   children,
   hung,
-  ...props
-}: Omit<ComponentProps<typeof Drawer>, 'children' | 'swipeDirection' | 'modal'> & {
+  at,
+  open,
+  onOpenChange,
+}: {
   children?: ReactNode
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
   /**
    * On a laptop, a screen's settings hung under the bar's button that opens them (the boards'
    * POPOVER), with nothing dimmed behind it, placed by that bar; a phone keeps the bottom sheet. The
    * sheet decides which by the screen's width, so no screen asks.
    */
   hung?: Hung
+  /** On a laptop, a popover at the control that opened it (`SheetAt`); a phone keeps the bottom sheet. */
+  at?: SheetAt
 }) {
   const laptop = useMediaQuery(LAPTOP)
+  // The control it opened from, taken as it opens (a sheet opened by its own trigger stands at that).
+  const [anchor, setAnchor] = useState<Element | null>(null)
+  const now = open === true && anchor === null ? justPressed() : null
+  if (now !== null) setAnchor(now)
+  if (open === false && anchor !== null) setAnchor(null)
+  if (at !== undefined && laptop)
+    return (
+      <Popover
+        {...(open === undefined ? {} : { open })}
+        onOpenChange={(next) => onOpenChange?.(next)}
+      >
+        <PoppedContext value={{ ...at, anchor: open === undefined ? null : anchor }}>
+          {children}
+        </PoppedContext>
+      </Popover>
+    )
   const card = hung !== undefined && laptop
   return (
-    <Drawer showSwipeHandle swipeDirection={card ? 'right' : 'down'} modal={!card} {...props}>
+    <Drawer
+      showSwipeHandle
+      swipeDirection={card ? 'right' : 'down'}
+      modal={!card}
+      {...(open === undefined ? {} : { open })}
+      onOpenChange={(next) => onOpenChange?.(next)}
+    >
       <HungContext value={hung ?? 'header'}>
         <DrawerPrimitive.VirtualKeyboardProvider>
           {children}
@@ -172,6 +259,44 @@ export function SheetContent({
 }) {
   const { t } = useTranslation('common')
   const hung = use(HungContext)
+  const popped = use(PoppedContext)
+  if (popped)
+    return (
+      <PopoverContent
+        side={popped.side ?? 'bottom'}
+        align={popped.align ?? 'start'}
+        sideOffset={8}
+        // It keeps the side it was given and grows no taller than the room there, scrolling inside.
+        collisionAvoidance={{ side: 'none', align: 'shift' }}
+        {...(popped.anchor ? { anchor: popped.anchor } : {})}
+        {...(initialFocus ? { initialFocus } : {})}
+        aria-label={title}
+        className={cn(
+          'max-h-[min(var(--available-height),calc(var(--app-height,100dvh)-10rem))] gap-3 overflow-y-auto rounded-menu p-4 text-base',
+          popped.width ?? 'w-95',
+        )}
+      >
+        <div className="flex min-w-0 items-center gap-2">
+          {back}
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1">
+              <h2 className="font-sans text-lg/[normal] font-semibold text-balance break-words">
+                {title}
+              </h2>
+              {info ? <InfoTip name={title}>{info}</InfoTip> : null}
+              {status}
+            </div>
+            {description ? (
+              <div className="text-sm leading-snug text-pretty break-words text-muted-foreground">
+                {description}
+              </div>
+            ) : null}
+          </div>
+        </div>
+        {children}
+        {footer ? <div className="border-t border-hairline pt-3">{footer}</div> : null}
+      </PopoverContent>
+    )
   return (
     <DrawerContent
       {...(initialFocus ? { initialFocus } : {})}

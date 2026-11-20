@@ -27,7 +27,7 @@ export function SectionsSheet({
 }) {
   const { t } = useTranslation(['player', 'music'])
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet hung="score-bar" open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('player:sections.title')}>
         <ul className="flex flex-col gap-1">
           {starts.map(({ section, bar }) => (

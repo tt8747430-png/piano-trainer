@@ -39,6 +39,7 @@ export function KeysChecklist({
   return (
     <div>
       <Sheet
+        at={{}}
         open={open}
         onOpenChange={(next) => {
           if (next) setDraft(new Set(value.map(keySignature)))

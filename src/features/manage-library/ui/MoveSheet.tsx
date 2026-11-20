@@ -49,7 +49,7 @@ export function MoveSheet({
   const acts = useLibraryActs()
   return (
     <>
-      <Sheet open={moving !== null} onOpenChange={onOpenChange}>
+      <Sheet at={{}} open={moving !== null} onOpenChange={onOpenChange}>
         {moving ? (
           <MovePicker
             moving={moving}

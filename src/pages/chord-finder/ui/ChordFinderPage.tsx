@@ -206,7 +206,7 @@ export function ChordFinderPage() {
       ) : null}
       {reading ? <ChordNotes found={reading} keys={keys} /> : null}
       {reading ? (
-        <Sheet open={keysOpen} onOpenChange={setKeysOpen}>
+        <Sheet at={{}} open={keysOpen} onOpenChange={setKeysOpen}>
           <SheetContent title={t('practice:chordFinder.inKeys')}>
             <ChordKeys found={reading} />
           </SheetContent>

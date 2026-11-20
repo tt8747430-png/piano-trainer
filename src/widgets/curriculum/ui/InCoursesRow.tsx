@@ -31,7 +31,7 @@ export function InCoursesRow({ lessonId }: { lessonId: OwnLessonId }) {
         opens
         onClick={() => setOpen(true)}
       />
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet at={{}} open={open} onOpenChange={setOpen}>
         <SheetContent title={t('own.inCourses')}>
           <ul className="flex flex-col rows-hairline overflow-hidden card">
             {courses.map((course) => (

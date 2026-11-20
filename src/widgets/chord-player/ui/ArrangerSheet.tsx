@@ -55,7 +55,7 @@ export function ArrangerSheet({
     return ARRANGER_NUMBERS.find((each) => each === n) ?? null
   }
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{ width: 'w-115' }} open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('chordPlayer.arranger.title', { name })}>
         <div className="flex flex-col gap-4">
           {first ? (

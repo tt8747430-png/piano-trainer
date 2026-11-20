@@ -28,7 +28,7 @@ export function ShareChordSheet({
   sheet: SavedChordSheet
 }) {
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{ width: 'w-115' }} open={open} onOpenChange={onOpenChange}>
       {open ? <ShareForm sheet={sheet} onDone={() => onOpenChange(false)} /> : null}
     </Sheet>
   )

@@ -70,7 +70,7 @@ export function LibrarySheet({
   }
   return (
     <>
-      <Sheet open={open} onOpenChange={onOpenChange}>
+      <Sheet at={{ width: 'w-80' }} open={open} onOpenChange={onOpenChange}>
         <SheetContent title={t('chordPlayer.library')} tall>
           <div className="flex flex-col gap-6">
             <MenuSection title={t('chordPlayer.mine')} inset className="gap-1">
