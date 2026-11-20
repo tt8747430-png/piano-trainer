@@ -15,9 +15,16 @@ import { moveTo } from '@/features/manage-library'
 import { setRecorderClick, setRecorderCountIn } from '@/features/set-preference'
 import { nextName } from '@/shared/lib'
 import { C_MAJOR } from '@/shared/lib/music'
-import { GroupLink, GroupRow, GroupRows, GroupSegmented, MakeSheet, Stepper } from '@/shared/ui'
+import {
+  GroupLink,
+  GroupRow,
+  GroupRows,
+  GroupSegmented,
+  GroupSwitch,
+  MakeSheet,
+  Stepper,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Switch } from '@/shared/ui/primitives/switch'
 
 /**
  * Record (R72's RECFORM, Flat's): what it hears (the piano connected, else Not connected, as a take
@@ -106,13 +113,11 @@ export function RecordSheet({
               increase={t('making.faster')}
             />
           </GroupRow>
-          <GroupRow label={t('recording.click')}>
-            <Switch
-              checked={click}
-              onCheckedChange={(on) => setRecorderClick(settings, on)}
-              aria-label={t('recording.click')}
-            />
-          </GroupRow>
+          <GroupSwitch
+            label={t('recording.click')}
+            checked={click}
+            onCheckedChange={(on) => setRecorderClick(settings, on)}
+          />
           <GroupSegmented
             label={t('recording.countIn')}
             value={countIn}

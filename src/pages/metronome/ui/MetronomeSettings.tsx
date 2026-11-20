@@ -14,11 +14,11 @@ import {
   GroupLink,
   GroupRow,
   GroupRows,
+  GroupSwitch,
   Sheet,
   SheetContent,
   Stepper,
 } from '@/shared/ui'
-import { Switch } from '@/shared/ui/primitives/switch'
 import { BarTrainerField } from './BarTrainerField'
 import { SpeedTrainerField } from './SpeedTrainerField'
 
@@ -96,13 +96,12 @@ export function MetronomeSettings({ metronome }: { metronome: Metronome }) {
             increase={`${t('metronome.volume')} +`}
           />
         </GroupRow>
-        <GroupRow label={t('metronome.flash')} setting="metronome.flash">
-          <Switch
-            aria-label={t('metronome.flash')}
-            checked={metronome.flash}
-            onCheckedChange={metronome.setFlash}
-          />
-        </GroupRow>
+        <GroupSwitch
+          label={t('metronome.flash')}
+          setting="metronome.flash"
+          checked={metronome.flash}
+          onCheckedChange={metronome.setFlash}
+        />
         <GroupLink
           label={t('metronome.speed.label')}
           value={

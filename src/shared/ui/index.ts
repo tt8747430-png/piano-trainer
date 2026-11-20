@@ -87,6 +87,7 @@ export {
   GroupRow,
   GroupRows,
   GroupSegmented,
+  GroupSwitch,
 } from './GroupRows'
 export { HandsPicture, HandsSegmented, HandSwatch } from './HandsSegmented'
 export { NamedSegmented } from './NamedSegmented'

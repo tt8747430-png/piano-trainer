@@ -8,14 +8,14 @@ import { setPlayback } from '@/features/set-preference'
 import {
   FloatingBarButton,
   GroupField,
-  GroupRows,
   GroupRow,
+  GroupRows,
+  GroupSwitch,
   RadioCards,
   Segmented,
   SettingsGroup,
   Sheet,
   SheetContent,
-  SwitchRow,
   TransportPopover,
 } from '@/shared/ui'
 import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
@@ -295,11 +295,10 @@ export function PracticeSheet({
                 />
               </span>
             </GroupRow>
-            <SwitchRow
+            <GroupSwitch
               label={t('practiceSheet.speedUp')}
               checked={loop.speedUp}
               onCheckedChange={loop.onSpeedUp}
-              className="min-h-12 border-b-0 ps-4 pe-3"
             />
           </GroupRows>
         </SettingsGroup>

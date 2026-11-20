@@ -5,6 +5,7 @@ import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 import type { OptionValue } from './option'
 import { Segmented } from './Segmented'
+import { SwitchRow } from './SwitchRow'
 
 /** A row's room, as the canvas's `GROUP` draws it: 48 high, its name in the body's size. */
 const ROW = 'flex min-h-12 w-full items-center gap-2.5 py-1.5 ps-4 pe-3 text-base'
@@ -46,7 +47,15 @@ export function GroupRows({
   )
 }
 
-/** A row whose control stands at its end: a stepper, a switch. */
+/**
+ * On or off as a row of the group: the kit's `SwitchRow` (a tap anywhere on the row turns it, its ⓘ
+ * after the label) in the group's row, the group drawing the hairline between rows.
+ */
+export function GroupSwitch(props: Omit<ComponentProps<typeof SwitchRow>, 'className' | 'icon'>) {
+  return <SwitchRow {...props} className={cn(ROW, 'gap-4 border-b-0')} />
+}
+
+/** A row whose control stands at its end: a stepper, a picker. */
 export function GroupRow({
   label,
   setting,

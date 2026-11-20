@@ -11,13 +11,13 @@ import {
   GroupRow,
   GroupRows,
   GroupSegmented,
+  GroupSwitch,
   MenuPicker,
   Sheet,
   SheetContent,
   Stepper,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Switch } from '@/shared/ui/primitives/switch'
 
 /**
  * A section's sheet, opened from its head (canvas 171): its name, how many times it plays, Loop this
@@ -98,13 +98,11 @@ export function SectionSheet({
               onChange={(repeats) => onChange({ repeats })}
             />
           </GroupRow>
-          <GroupRow label={t('chordPlayer.loopSection')}>
-            <Switch
-              aria-label={t('chordPlayer.loopSection')}
-              checked={looped}
-              onCheckedChange={onLoop}
-            />
-          </GroupRow>
+          <GroupSwitch
+            label={t('chordPlayer.loopSection')}
+            checked={looped}
+            onCheckedChange={onLoop}
+          />
           {variations.length > 1 ? (
             <GroupSegmented
               label={t('chordPlayer.variation')}
