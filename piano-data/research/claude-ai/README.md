@@ -19,7 +19,7 @@ The site's build is `0d4c697ee9`, git hash `0d4c697ee92cd073dd85742c468e4621a738
 
 ## Limits
 - **Not stored here:**
-  - The code is Anthropic's proprietary work, so it stays outside the repo, in `~/Downloads/claude-ai-bundles/`. The docs quote at most one short line per claim.
+  - The code is Anthropic's proprietary work, so it stays outside the repo, in `~/Downloads/claude-ai-formatted/` and `~/Downloads/claude-ai-site/`. The docs quote at most one short line per claim.
   - The walk-through GIF is at `~/Downloads/claude-ai-flows.gif`. It shows the account email, so it isn't committed.
 - **Server-side behaviour:** server logic (limits, memory, search ranking on the server) is visible only as API calls.
 - **Feature-gated flows:** flows behind feature flags or other plans may be missing.
