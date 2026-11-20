@@ -93,7 +93,7 @@ function StepRow({
 
 /**
  * A chapter: its number and name in the soft 14 over its line, how much of it is learned beside it
- * ("3 of 3"; at the row's end on a phone, beside the name on a laptop), its rows 6 under it.
+ * ("3 of 3"; at the row's end on a phone, beside the name on a laptop), its rows tucked 2 into its 28 band.
  */
 function ChapterGroup({
   chapter,
@@ -117,7 +117,7 @@ function ChapterGroup({
   const title = localText(chapter.title, locale)
   return (
     <section aria-labelledby={id} className="flex flex-col gap-0.5">
-      <h3 className="flex min-h-7 items-center justify-between gap-3 font-sans text-sm font-semibold text-muted-foreground lg:justify-start">
+      <h3 className="-mb-1 flex min-h-7 items-center justify-between gap-3 font-sans text-sm font-semibold text-muted-foreground lg:justify-start">
         <span id={id} className="sr-only">
           {t('journey.chapter', { n, title })}
         </span>
@@ -150,7 +150,7 @@ function ChapterGroup({
 /**
  * A level's page's body (the LearnLevel boards' LVHEAD and PATHF): what it teaches in a line of
  * reading (65ch at most), its stage and how much is learned over the 6 meter, then the one honey act,
- * Start, Continue or Review and the lesson it opens; then its chapters 32 apart, each a line of its
+ * Start, Continue or Review and the lesson it opens; then its chapters 32 apart (40 on a laptop), each a line of its
  * steps. Its name is the serif heading above it. Every step opens; the order only suggests.
  */
 export function LevelLessons({ journey }: { journey: Journey }) {
@@ -182,7 +182,7 @@ export function LevelLessons({ journey }: { journey: Journey }) {
   }
   const counts = { learned: progress.done, total: progress.total }
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 lg:gap-10">
       <div className="flex w-full flex-col gap-2 lg:max-w-160">
         <p className="mb-1 max-w-[65ch] text-base/normal text-pretty text-muted-foreground">
           {localText(journey.goal, locale)}
@@ -193,7 +193,7 @@ export function LevelLessons({ journey }: { journey: Journey }) {
           count={`${t(`common:stage.${journey.stage}`)} · ${t('learn:progress', counts)}`}
           said={t('learn:progress', counts)}
           above
-          className="text-sm tabular-nums"
+          className="text-sm/[normal] tabular-nums"
         />
         {go ? (
           <ButtonLink size="lg" className="mt-1 w-full" render={<StepLink step={go} />}>
@@ -201,7 +201,7 @@ export function LevelLessons({ journey }: { journey: Journey }) {
           </ButtonLink>
         ) : null}
       </div>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 lg:gap-10">
         {journey.chapters.map((chapter, i) => (
           <ChapterGroup
             key={chapter.id}
