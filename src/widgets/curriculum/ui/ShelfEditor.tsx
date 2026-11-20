@@ -9,7 +9,7 @@ import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { PAINT } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { NewCourseSheet, NotOpen, RowGroups, type RowOrder } from '@/widgets/content-editor'
+import { NewCourseSheet, DraftGate, RowGroups, type RowOrder } from '@/widgets/content-editor'
 
 /** The About's document, the editor's own chunk: Learn opens without it. */
 const AboutDocument = lazy(() =>
@@ -147,17 +147,8 @@ export function ShelfEditor({ bar }: { bar: (actions: ReactNode) => ReactNode })
         ) : null,
       )}
       <div className="mx-auto mt-4 flex w-full max-w-2xl min-w-0 flex-col gap-2">
-        {load.state === 'loading' ? (
-          <NotOpen kind="opening" line={t('editor:original.opening')} />
-        ) : load.state === 'failed' ? (
-          <NotOpen
-            kind={load.reason === 'offline' ? 'offline' : 'failed'}
-            line={t(
-              load.reason === 'offline' ? 'editor:original.offline' : 'editor:original.failed',
-            )}
-          >
-            <Button onClick={draft.reopen}>{t('editor:original.retry')}</Button>
-          </NotOpen>
+        {load.state !== 'ready' ? (
+          <DraftGate load={load} reopen={draft.reopen} />
         ) : (
           <Fragment key={draft.opened}>
             <ShelvesDocument

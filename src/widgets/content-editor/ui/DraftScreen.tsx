@@ -2,7 +2,13 @@ import { CircleAlert, LoaderCircle, Lock, Pencil, WifiOff } from 'lucide-react'
 import type { ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { DraftActions, DraftStatus, PublishWord, type ContentDraft } from '@/features/edit-original'
+import {
+  DraftActions,
+  DraftStatus,
+  PublishWord,
+  type ContentDraft,
+  type DraftLoad,
+} from '@/features/edit-original'
 import type { Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, Said, ScreenHeader, type EditAction } from '@/shared/ui'
@@ -55,6 +61,35 @@ export function NotOpen({
       primary={!quiet}
       quiet={quiet}
     />
+  )
+}
+
+/**
+ * Why a draft's form is not open yet, or nothing once it is (the boards' `r55_editor_draft`): opening;
+ * offline, with the quiet way on (`back` where the screen has one, else Try again); failed, with the
+ * honey Try again. Every editor over a draft says it this one way.
+ */
+export function DraftGate({
+  load,
+  reopen,
+  back,
+}: {
+  load: DraftLoad<unknown>
+  reopen: () => void
+  back?: ReactNode
+}) {
+  const { t } = useTranslation('editor')
+  if (load.state === 'ready') return null
+  if (load.state === 'loading') return <NotOpen kind="opening" line={t('original.opening')} />
+  const retry = <Button onClick={reopen}>{t('original.retry')}</Button>
+  return load.reason === 'offline' ? (
+    <NotOpen kind="offline" line={t('original.offline')} quiet>
+      {back ?? retry}
+    </NotOpen>
+  ) : (
+    <NotOpen kind="failed" line={t('original.failed')}>
+      {retry}
+    </NotOpen>
   )
 }
 
@@ -116,7 +151,6 @@ export function DraftScreen<T>({
   oneTap?: boolean
   children: (initial: T) => ReactNode
 }) {
-  const { t } = useTranslation('editor')
   const { t: words } = useTranslation('learn')
   const { account } = useAccount()
   const { load } = draft
@@ -126,17 +160,13 @@ export function DraftScreen<T>({
     <NotOpen line={editorsOnly} {...(editorsWhy ? { why: editorsWhy } : {})}>
       <ButtonLink render={backTo.link}>{backTo.label}</ButtonLink>
     </NotOpen>
-  ) : load.state === 'loading' ? (
-    <NotOpen kind="opening" line={t('original.opening')} />
-  ) : load.state === 'failed' && load.reason === 'offline' ? (
-    <NotOpen kind="offline" line={t('original.offline')} quiet>
-      <ButtonLink render={backTo.link}>{backTo.label}</ButtonLink>
-    </NotOpen>
-  ) : load.state === 'failed' ? (
-    <NotOpen kind="failed" line={t('original.failed')}>
-      <Button onClick={draft.reopen}>{t('original.retry')}</Button>
-    </NotOpen>
-  ) : null
+  ) : load.state === 'ready' ? null : (
+    <DraftGate
+      load={load}
+      reopen={draft.reopen}
+      back={<ButtonLink render={backTo.link}>{backTo.label}</ButtonLink>}
+    />
+  )
   return (
     <div className={cn('flex w-full flex-col gap-4 pb-8', !form && 'mx-auto max-w-3xl')}>
       <ScreenHeader

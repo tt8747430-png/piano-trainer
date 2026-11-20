@@ -10,7 +10,7 @@ import { useContentEditing } from '@/shared/lib/content-editing'
 import { ButtonLink, ConfirmDialog, InfoTip, OpensMark, say, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useStanding } from '../model/use-standing'
-import { NotOpen } from './DraftScreen'
+import { DraftGate, NotOpen } from './DraftScreen'
 
 /**
  * One Publish page for the app's items (R29 B6, ADR 0116's amendment), an editor's: Back, Publish
@@ -98,15 +98,10 @@ export function DraftPublishScreen<T>({
       <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6">
         {!editsContent(account) ? (
           <NotOpen line={t('original.editorsOnly')} />
-        ) : load.state === 'loading' || published === null ? (
+        ) : load.state !== 'ready' ? (
+          <DraftGate load={load} reopen={draft.reopen} />
+        ) : published === null ? (
           <NotOpen kind="opening" line={t('original.opening')} />
-        ) : load.state === 'failed' ? (
-          <NotOpen
-            kind={load.reason === 'offline' ? 'offline' : 'failed'}
-            line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')}
-          >
-            <Button onClick={draft.reopen}>{t('original.retry')}</Button>
-          </NotOpen>
         ) : (
           <>
             <StandingLine standing={standing} />
