@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import { chordSummary } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
+import { HEADED_SECTION, SectionHead } from '@/shared/ui'
 import { ChordSummary } from '@/widgets/chord-diagrams'
 
 /**
@@ -24,10 +25,8 @@ export function PieceChords({
   const chords = useMemo(() => chordSummary(performance, chosen), [performance, chosen])
   if (chords.length === 0) return null
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="font-sans text-xl font-bold">
-        {t('chordSummary')}
-      </h2>
+    <section aria-labelledby={id} className={HEADED_SECTION}>
+      <SectionHead id={id} title={t('chordSummary')} />
       <ChordSummary chords={chords} />
       {children}
     </section>

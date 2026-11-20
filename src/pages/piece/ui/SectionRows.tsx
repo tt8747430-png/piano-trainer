@@ -1,7 +1,7 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Piece } from '@/entities/piece'
-import { GROUPED_LIST, OpensMark } from '@/shared/ui'
+import { GROUPED_LIST, HEADED_SECTION, OpensMark, SectionHead } from '@/shared/ui'
 import type { SectionLessons } from '../model/section-lessons'
 import { SectionLink } from './SectionLink'
 
@@ -21,10 +21,8 @@ export function SectionRows({
   const { t } = useTranslation('piece')
   const id = useId()
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="font-sans text-xl font-bold">
-        {t('learnSong.sections')}
-      </h2>
+    <section aria-labelledby={id} className={HEADED_SECTION}>
+      <SectionHead id={id} title={t('learnSong.sections')} />
       <ul className={GROUPED_LIST}>
         {headings.map((heading, section) => {
           const each = sections[section]

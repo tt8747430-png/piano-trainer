@@ -2,6 +2,13 @@ import { useRender } from '@base-ui/react/use-render'
 import type { ReactNode } from 'react'
 
 /**
+ * A page's section under a `SectionHead` as the boards' `H2` stands in its section (`r41_kit.py`): the
+ * head 16 into the section, so a section stands 16 further from the one above than the page's own gap,
+ * and its content 8 under the head.
+ */
+export const HEADED_SECTION = 'flex flex-col gap-2 pt-4'
+
+/**
  * A section's head (the boards' `H2`): its name, 20 bold, and at the right what opens the whole of
  * it (`SeeAll`), on one baseline; the row is the name's height, so the section stands as close under
  * the one before as the boards draw it.
@@ -18,7 +25,7 @@ export function SectionHead({
 }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
-      <h2 id={id} className="font-sans text-xl font-bold">
+      <h2 id={id} className="font-sans text-xl leading-6 font-bold">
         {title}
       </h2>
       {children}

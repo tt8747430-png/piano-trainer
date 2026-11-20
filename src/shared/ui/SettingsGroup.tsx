@@ -1,6 +1,7 @@
 import { useId, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 import { InfoTip } from './InfoTip'
+import { HEADED_SECTION } from './SectionHead'
 
 /**
  * A group of settings, as an app's settings read (iOS's grouped list, memory-palaces' `SettingsSection`):
@@ -35,7 +36,7 @@ export function SettingsGroup({
     <section
       aria-labelledby={title ? id : undefined}
       data-slot="settings-group"
-      className={cn('flex flex-col', heading ? 'gap-3' : 'gap-2', className)}
+      className={cn(heading ? HEADED_SECTION : 'flex flex-col gap-2', className)}
     >
       {title ? (
         <div
@@ -46,7 +47,7 @@ export function SettingsGroup({
           <h2
             id={id}
             data-slot="settings-heading"
-            className={heading ? 'font-sans text-xl font-bold' : 'caps'}
+            className={heading ? 'font-sans text-xl leading-6 font-bold' : 'caps'}
           >
             {title}
           </h2>
