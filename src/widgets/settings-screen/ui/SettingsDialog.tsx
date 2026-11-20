@@ -9,7 +9,7 @@ import { SettingsNav } from './SettingsNav'
 
 /**
  * Settings on a laptop (claude.ai's, the board's SETDLG): a dialog over the page it was opened from,
- * the page dimmed behind; 1200 wide at most, 48 from the screen's top and foot, 22 round. Its bar is
+ * the page dimmed behind; 960 by 720 at most, centred on the window as claude.ai's, 22 round. Its bar is
  * the word Settings and a close ×; on its left the nav (264, its own scroll), on its right the place
  * open, left-aligned at most 720 wide, scrolling on its own. Administration opens in the same shell.
  */
@@ -33,7 +33,7 @@ export function SettingsDialog({
     <Dialog open onOpenChange={(open) => (open ? undefined : onClose())}>
       <DialogContent
         showCloseButton={false}
-        className="flex h-(--window-room) w-[min(75rem,calc(100vw-10rem))] max-w-none flex-col gap-0 overflow-hidden rounded-sheet bg-card p-0 text-base text-foreground window-shadow sm:max-w-none"
+        className="flex h-(--window-height) w-[min(60rem,calc(100vw-10rem))] max-w-none flex-col gap-0 overflow-hidden rounded-sheet bg-card p-0 text-base text-foreground window-shadow sm:max-w-none"
       >
         <header className="flex h-14 shrink-0 items-center border-b border-border pr-2 pl-6">
           <DialogTitle className="flex-1 font-sans text-lg leading-normal font-semibold">

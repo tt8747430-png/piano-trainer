@@ -26,7 +26,7 @@ no card on top.
   library's other tags offered as one types, Create for a new one). On one of the app's songs a learner reads its
   credits; nothing is edited in a mode of the page's own.
 - **The song's Settings** (Noji's deck settings) open over the song, never a page of their own: on a laptop the app
-  Settings' window (`SettingsWindow`, 720 wide, the page dimmed), on a phone a tall sheet. The song at its head;
+  Settings' window (`SettingsWindow`, 720 by 720, centred on the window, the page dimmed), on a phone a tall sheet. The song at its head;
   Library (Folder, Duplicate, Archive or Restore); Share (Publish with its state; Share link; Export); and apart,
   Delete (to the Trash at once, with Undo, ADR 0106) or Reset to the original, asked first. Publish, Export and
   Folder (Move to) are pages inside the window with Back to Settings: a sheet never holds a second sheet. The

@@ -249,6 +249,9 @@
   --elevation-window: 0 24px 64px color-mix(in oklab, var(--shade) 28%, transparent);
   /* The room a window may take: the screen less 48 above and below. */
   --window-room: calc(100dvh - 6rem);
+  /* Every laptop window's one height, centred on the window as claude.ai's Settings: 720, less on a
+     short screen. A page inside scrolls; the window never grows or shrinks as its pages turn. */
+  --window-height: min(45rem, var(--window-room));
   --elevation-3:
     0 2px 4px color-mix(in oklab, var(--shade) var(--shade-near), transparent),
     0 10px 20px -6px color-mix(in oklab, var(--shade) var(--shade-far), transparent),
