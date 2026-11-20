@@ -12,7 +12,7 @@ function ShortcutsList() {
     <div className="flex flex-col gap-6">
       {groups.map((group) => (
         <section key={group.name} className="flex flex-col">
-          <h3 className="pb-1 text-sm text-muted-foreground">{group.name}</h3>
+          <h3 className="pb-1 font-sans text-sm text-muted-foreground">{group.name}</h3>
           {group.rows.map((row) => (
             <div
               key={row.label}

@@ -31,7 +31,7 @@ export function About({ entry }: { entry: PublicEntry }) {
   if (!text) return null
   return (
     <section aria-labelledby="public-about" className="flex flex-col gap-1.5">
-      <h2 id="public-about" className="text-sm font-semibold text-muted-foreground">
+      <h2 id="public-about" className="font-sans text-sm font-semibold text-muted-foreground">
         {t(entry.kind === 'pattern' ? 'explore.aboutPattern' : 'explore.aboutSong')}
       </h2>
       <p className="text-pretty whitespace-pre-line">{text}</p>
