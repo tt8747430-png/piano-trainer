@@ -100,13 +100,10 @@ export function ExploreResults({
         <ExplorePeople entries={browse.entries} query={home.q} onClear={onClear} />
       ) : entries.length === 0 && query ? (
         <Said
+          quiet
           icon={SearchX}
           title={t(patterns ? 'explore.noMatchPatterns' : 'explore.noMatch', { query })}
-          action={
-            <Button variant="soft" onClick={onClear}>
-              {t('explore.clear')}
-            </Button>
-          }
+          action={<Button onClick={onClear}>{t('explore.clear')}</Button>}
         />
       ) : entries.length === 0 ? (
         <ExploreEmpty />

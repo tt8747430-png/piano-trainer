@@ -540,14 +540,11 @@ export function OwnLibrary({
           />
         ) : !any ? (
           <Said
+            quiet
             icon={SearchX}
             title={t('own.noMatch', { query: query.trim() })}
             description={t('own.noMatchLine')}
-            action={
-              <Button variant="secondary" size="lg" onClick={() => setQuery('')}>
-                {t('own.clear')}
-              </Button>
-            }
+            action={<Button onClick={() => setQuery('')}>{t('own.clear')}</Button>}
           />
         ) : (
           <div className="flex flex-col">

@@ -684,7 +684,6 @@ export const practice = {
     anyStyle: 'Any',
     chipLevel: 'Level: {{level}}',
     showNone: 'Nothing to show',
-    clear: 'Clear',
     noFavourites: 'No favourites yet',
     noneFiltered: 'Nothing here matches these filters.',
     empty: 'Nothing here yet.',

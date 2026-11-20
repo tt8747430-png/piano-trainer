@@ -27,12 +27,13 @@ export function LibraryEmpty({
   /** What an empty Mine offers: the way to make one. */
   mine?: ReactNode
 }) {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'common'])
   const set = useSetSearch<PracticeLibraryView>()
   if (filtering) {
     const searched = view.q.trim()
     return (
       <Said
+        quiet
         icon={searched ? SearchX : ListFilter}
         title={
           searched
@@ -40,8 +41,8 @@ export function LibraryEmpty({
             : t('library.noneFiltered')
         }
         action={
-          <Button variant="ghost" onClick={() => set({ q: '', stage: 'any' })}>
-            {t('library.clear')}
+          <Button onClick={() => set({ q: '', stage: 'any' })}>
+            {searched ? t('common:clearSearch') : t('common:library.clearFilters')}
           </Button>
         }
       />

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import type { PublicEntry } from '@/shared/api/public-library'
 import { matchesQuery } from '@/shared/lib'
 import { Avatar, Said } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 
 /** One person who publishes: their name, picture and how many songs Explore holds of theirs. */
 interface Person {
@@ -47,16 +48,11 @@ export function ExplorePeople({
   if (people.length === 0)
     return (
       <Said
+        quiet
         icon={wanted ? SearchX : Users}
         title={wanted ? t('explore.noPeople', { query: query.trim() }) : t('explore.noPeopleYet')}
         description={wanted ? undefined : t('explore.noPeopleYetLine')}
-        action={
-          wanted ? (
-            <button type="button" onClick={onClear} className="font-semibold text-link">
-              {t('explore.clear')}
-            </button>
-          ) : undefined
-        }
+        action={wanted ? <Button onClick={onClear}>{t('explore.clear')}</Button> : undefined}
       />
     )
   return (

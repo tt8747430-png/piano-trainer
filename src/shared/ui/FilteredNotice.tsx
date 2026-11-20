@@ -4,7 +4,8 @@ import { Button } from './primitives/button'
 
 /**
  * What the filters are doing to the list (Mindscape's `FilteredNotice`): how many rows they keep of
- * how many, and Clear filters, which shows them all again. Nothing while they hide none.
+ * how many, and Clear filters, which shows them all again. Nothing while they hide none, or
+ * hide all: the empty state then says so and carries the one Clear.
  */
 export function FilteredNotice({
   shown,
@@ -16,7 +17,7 @@ export function FilteredNotice({
   onClear: () => void
 }) {
   const { t } = useTranslation('common')
-  if (hidden <= 0) return null
+  if (hidden <= 0 || shown === 0) return null
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
       <p role="status" className="flex items-center gap-1.5 text-sm text-muted-foreground">

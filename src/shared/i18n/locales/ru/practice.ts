@@ -646,7 +646,6 @@ export const practice: LocaleResources['practice'] = {
     anyStyle: 'Любой',
     chipLevel: 'Уровень: {{level}}',
     showNone: 'Нечего показать',
-    clear: 'Сбросить',
     noFavourites: 'В избранном пока пусто',
     noneFiltered: 'Здесь ничего не подходит под эти фильтры.',
     empty: 'Здесь пока ничего нет.',

@@ -29,14 +29,11 @@ export function LibraryEmpty({
   if (page.view.filtering)
     return (
       <Said
+        quiet
         icon={SearchX}
         title={t('emptyQuery', { query: filter.q.trim() })}
         description={t('emptyQueryLine')}
-        action={
-          <Button variant="ghost" onClick={onClear}>
-            {common('clearSearch')}
-          </Button>
-        }
+        action={<Button onClick={onClear}>{common('clearSearch')}</Button>}
       />
     )
   // A folder or Favourites with nothing in it: the one empty state, saying what shows here, with the

@@ -43,14 +43,11 @@ export function SongsFound({
     <div className="flex flex-col gap-6">
       {!songs && folders.length === 0 ? (
         <Said
+          quiet
           icon={SearchX}
           title={t('found.none', { query })}
           description={t('found.noneLine')}
-          action={
-            <Button variant="soft" onClick={onClear}>
-              {t('found.clear')}
-            </Button>
-          }
+          action={<Button onClick={onClear}>{t('found.clear')}</Button>}
         />
       ) : null}
       {songs ? (
