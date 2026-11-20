@@ -5,6 +5,7 @@ import { VersionsDialog, type ContentDraft, type Unreadable } from '@/features/e
 import { CopyLinkField, RightsCheck, StandingLine } from '@/features/publish'
 import type { ContentKind } from '@/shared/api/content'
 import type { NetResult } from '@/shared/api/network'
+import { cn } from '@/shared/lib'
 import { useAccount, editsContent } from '@/shared/lib/account'
 import { useContentEditing } from '@/shared/lib/content-editing'
 import {
@@ -52,8 +53,8 @@ export function DraftPublishScreen<T>({
   preview: ReactNode
   /** What is said where Publish is refused for a draft that does not read. */
   unreadable: string
-  /** The screen's Back (`BackButton`). */
-  back: ReactNode
+  /** The screen's Back (`BackButton`); none inside a window, whose bar is its own (a song's Settings). */
+  back?: ReactNode
   /** Made in the app, not shipped with it: it may be unpublished. */
   removable?: boolean
 }) {
@@ -93,17 +94,19 @@ export function DraftPublishScreen<T>({
       setPublished(true)
     })
   return (
-    <div className="flex min-h-screen-free flex-col gap-6 pb-8">
-      <ScreenHeader
-        title={t('publishPage.title')}
-        back={back}
-        tools={
-          <InfoTip name={t('publishPage.title')} bar>
-            {t('publishPage.whyBody')}
-          </InfoTip>
-        }
-      />
-      <div className="page-column flex flex-1 flex-col gap-6">
+    <div className={cn('flex flex-col gap-6', back && 'min-h-screen-free pb-8')}>
+      {back ? (
+        <ScreenHeader
+          title={t('publishPage.title')}
+          back={back}
+          tools={
+            <InfoTip name={t('publishPage.title')} bar>
+              {t('publishPage.whyBody')}
+            </InfoTip>
+          }
+        />
+      ) : null}
+      <div className={cn('flex flex-1 flex-col gap-6', back && 'page-column')}>
         {!editsContent(account) ? (
           <NotOpen line={t('original.editorsOnly')} />
         ) : load.state !== 'ready' ? (

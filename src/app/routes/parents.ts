@@ -148,7 +148,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/songs/groups/join': () => up({ to: '/songs/groups' }),
   '/shell/songs/groups/$groupId': () => up({ to: '/songs/groups' }),
   '/shell/songs/shared-folders/$sharedId': toSongs,
-  '/shell/songs/$pieceId/publish': pieceHome,
   '/shell/songs/$pieceId/sections/$section': (from) =>
     up({ to: '/songs/$pieceId', params: { pieceId: param(from, 'pieceId') } }),
   '/shell/songs/folders/$folderId': async (from) => {

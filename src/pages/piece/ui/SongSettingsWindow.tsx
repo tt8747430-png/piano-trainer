@@ -1,5 +1,5 @@
-import { Link, useNavigate, useRouter } from '@tanstack/react-router'
-import { useRef, useState } from 'react'
+import { useNavigate, useRouter } from '@tanstack/react-router'
+import { useRef, useState, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
 import {
@@ -24,6 +24,7 @@ import { useForgetScreens } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   ActionRow,
+  BackButton,
   DangerGroup,
   DangerRow,
   RowButton,
@@ -37,6 +38,7 @@ import { PublishRow } from '@/widgets/content-editor'
 import { useSongByline } from '../model/use-song-byline'
 import { useSongPublish } from '../model/use-song-publish'
 import { ResetVersionAsk } from './ResetVersionAsk'
+import { SongPublish } from './SongPublish'
 import { SongCoverPicker } from './SongCover'
 
 /**
@@ -67,6 +69,9 @@ export function SongSettingsWindow({
   const library = useSongActions(piece)
   const [exporting, setExporting] = useState(false)
   const [asking, setAsking] = useState(false)
+  // The window's page: its Settings, or Publish inside it with Back to them (the SongSettings boards).
+  const [page, setPage] = useState<'settings' | 'publish'>('settings')
+  const toPublish = <button type="button" onClick={() => setPage('publish')} />
   const piecesStore = usePiecesStoreApi()
   const navigate = useNavigate()
   const copyable = !isDegreePiece(piece)
@@ -120,72 +125,88 @@ export function SongSettingsWindow({
   const original =
     editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece) ? piece : null
   return (
-    <SettingsWindow open={open} onOpenChange={onOpenChange} title={t('settings.title')}>
+    <SettingsWindow
+      open={open}
+      onOpenChange={(next) => {
+        onOpenChange(next)
+        if (!next) setPage('settings')
+      }}
+      title={t(page === 'publish' ? 'editor:publishPage.title' : 'settings.title')}
+      back={
+        page === 'publish' ? (
+          <BackButton label={t('settings.title')} onClick={() => setPage('settings')} />
+        ) : undefined
+      }
+    >
       <ShareSaid said={shared.said} />
       {/* The one Settings shape (YourLessonSettings): the head (THINGHEAD), its groups 24 apart,
           the loss of the whole song at the foot. */}
-      <div className="flex flex-col gap-6">
-        {/* The song at the head, its cover's picture chosen with a tap on it (R32-C). */}
-        <ThingHead mark={<SongCoverPicker piece={piece} />} name={title} line={byline} />
-        {inLibrary ? (
-          <SettingsGroup flush title={t('settings.library')}>
-            {/* Where it may leave its folder (R29 B4): one of the app's songs in its folder stays. */}
-            {archived || !library.actions.some((each) => each.key === 'move') ? null : (
-              <RowButton
-                title={t('settings.folder')}
-                value={folder}
-                opens
-                onClick={() => library.actions.find((each) => each.key === 'move')?.onSelect()}
+      {page === 'publish' ? (
+        <SongPublish piece={piece} />
+      ) : (
+        <div className="flex flex-col gap-6">
+          {/* The song at the head, its cover's picture chosen with a tap on it (R32-C). */}
+          <ThingHead mark={<SongCoverPicker piece={piece} />} name={title} line={byline} />
+          {inLibrary ? (
+            <SettingsGroup flush title={t('settings.library')}>
+              {/* Where it may leave its folder (R29 B4): one of the app's songs in its folder stays. */}
+              {archived || !library.actions.some((each) => each.key === 'move') ? null : (
+                <RowButton
+                  title={t('settings.folder')}
+                  value={folder}
+                  opens
+                  onClick={() => library.actions.find((each) => each.key === 'move')?.onSelect()}
+                />
+              )}
+              {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
+              {copyable ? <ActionRow title={t('settings.duplicate')} onClick={duplicate} /> : null}
+              <ActionRow
+                title={t(archived ? 'songs:library.restore' : 'songs:library.archive')}
+                onClick={() =>
+                  library.actions
+                    .find((each) => each.key === (archived ? 'restore' : 'archive'))
+                    ?.onSelect()
+                }
               />
-            )}
-            {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
-            {copyable ? <ActionRow title={t('settings.duplicate')} onClick={duplicate} /> : null}
-            <ActionRow
-              title={t(archived ? 'songs:library.restore' : 'songs:library.archive')}
-              onClick={() =>
-                library.actions
-                  .find((each) => each.key === (archived ? 'restore' : 'archive'))
-                  ?.onSelect()
-              }
+            </SettingsGroup>
+          ) : null}
+          {/* Publish, Share link and Export, each once: Export holds the files alone (R31-S). */}
+          <SettingsGroup flush title={t('settings.share')}>
+            {item ? (
+              <RowLink
+                title={t('editor:publishPage.open')}
+                value={t(
+                  publishing.state === 'published'
+                    ? 'editor:publishPage.standing.published'
+                    : publishing.state === 'changed'
+                      ? 'editor:publishPage.standing.changed'
+                      : 'editor:publishPage.standing.unpublished',
+                )}
+                render={toPublish}
+              />
+            ) : original ? (
+              <OriginalPublishRow piece={original} link={toPublish} />
+            ) : null}
+            {shareable ? <ActionRow title={t('settings.shareLink')} onClick={share} /> : null}
+            <RowButton
+              title={t('songs:export.action')}
+              value={t('settings.exportLine')}
+              opens
+              onClick={() => setExporting(true)}
             />
           </SettingsGroup>
-        ) : null}
-        {/* Publish, Share link and Export, each once: Export holds the files alone (R31-S). */}
-        <SettingsGroup flush title={t('settings.share')}>
-          {item ? (
-            <RowLink
-              title={t('editor:publishPage.open')}
-              value={t(
-                publishing.state === 'published'
-                  ? 'editor:publishPage.standing.published'
-                  : publishing.state === 'changed'
-                    ? 'editor:publishPage.standing.changed'
-                    : 'editor:publishPage.standing.unpublished',
-              )}
-              render={<Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />}
-            />
-          ) : original ? (
-            <OriginalPublishRow piece={original} />
+          {ownMusic ? (
+            <div ref={danger} className="-mt-2">
+              <DangerGroup>
+                <DangerRow
+                  title={t(ownMusic.kind === 'song' ? 'settings.deleteSong' : 'reset')}
+                  onClick={() => (ownMusic.kind === 'song' ? trash(ownMusic.id) : setAsking(true))}
+                />
+              </DangerGroup>
+            </div>
           ) : null}
-          {shareable ? <ActionRow title={t('settings.shareLink')} onClick={share} /> : null}
-          <RowButton
-            title={t('songs:export.action')}
-            value={t('settings.exportLine')}
-            opens
-            onClick={() => setExporting(true)}
-          />
-        </SettingsGroup>
-        {ownMusic ? (
-          <div ref={danger} className="-mt-2">
-            <DangerGroup>
-              <DangerRow
-                title={t(ownMusic.kind === 'song' ? 'settings.deleteSong' : 'reset')}
-                onClick={() => (ownMusic.kind === 'song' ? trash(ownMusic.id) : setAsking(true))}
-              />
-            </DangerGroup>
-          </div>
-        ) : null}
-      </div>
+        </div>
+      )}
       {inLibrary ? library.sheet : null}
       <SongExportSheet piece={exporting ? piece : null} onOpenChange={setExporting} />
       {ownMusic?.kind === 'version' ? (
@@ -201,14 +222,7 @@ export function SongSettingsWindow({
 }
 
 /** An editor's built-in song's Publish… (R29 B6): its Publish page, where its draft stands. */
-function OriginalPublishRow({ piece }: { piece: ChartPiece }) {
+function OriginalPublishRow({ piece, link }: { piece: ChartPiece; link: ReactElement }) {
   const draft = useOriginalDraft(piece)
-  return (
-    <PublishRow
-      kind="piece"
-      id={piece.id}
-      draft={draft}
-      link={<Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />}
-    />
-  )
+  return <PublishRow kind="piece" id={piece.id} draft={draft} link={link} />
 }

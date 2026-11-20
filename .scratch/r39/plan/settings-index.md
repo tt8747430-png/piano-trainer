@@ -45,7 +45,7 @@ C = a laptop card hung under the gear, F = a laptop popover at its control.
 
 | Thing | Opened from | Route today | Phone | Laptop | Board | To do |
 | --- | --- | --- | --- | --- | --- | --- |
-| A song | song page ··· › Settings (`SongMore`), a library row's ··· | none (was `/songs/$pieceId/settings`) | S | D | SongSettings, SongSettingsLaptop | done 2026-11-20 (`SettingsWindow`); Publish inside it next |
+| A song | song page ··· › Settings (`SongMore`), a library row's ··· | none (was `/songs/$pieceId/settings`) | S | D | SongSettings, SongSettingsLaptop | done 2026-11-20 (`SettingsWindow`), Publish a page inside it (`/songs/$pieceId/publish` gone) |
 | A lesson (built-in or yours) | lesson bar gear (`LessonLayout`) | `/lessons/$lessonId/settings`, `/courses/$courseId/$lessonId/settings` | P | P | YourLessonSettings, YourLessonSettingsLaptop | canvas, then port |
 | A course (built-in or yours) | course bar gear (`CoursePage`, `OwnCoursePage`) | `/courses/$courseId/settings` | P | P | YourCourseSettings, YourCourseSettingsLaptop | canvas, then port |
 | A progression (an editor's draft) | editor bar gear (`ProgressionEditor`) | `/practice/progressions/$progressionId/settings` | P | P | ProgressionEdit, ProgressionEditLaptop (its Settings state) | canvas, then port |

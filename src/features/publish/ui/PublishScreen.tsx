@@ -114,14 +114,14 @@ export function PublishScreen({
 }: {
   item: PublishPreview
   publishing: ReturnType<typeof usePublish>
-  /** The bar's way back: the song's Settings, the pattern's page. */
-  back: ReactNode
+  /** The bar's way back (the pattern's page); none inside a window, whose bar is its own (a song's Settings). */
+  back?: ReactNode
 }) {
   const { t } = useTranslation(['songs', 'editor'])
   const live = publishing.state === 'published' || publishing.state === 'changed'
   return (
-    <div className="flex min-h-screen-free flex-col gap-2 lg:gap-6">
-      <ScreenHeader title={t('editor:publishPage.title')} back={back} />
+    <div className={cn('flex flex-col gap-2 lg:gap-6', back && 'min-h-screen-free')}>
+      {back ? <ScreenHeader title={t('editor:publishPage.title')} back={back} /> : null}
       <PublishSaid said={publishing.said} />
       <div className="flex w-full flex-1 flex-col gap-4 lg:gap-6">
         {/* The thing's head as its Settings', the boards' THINGHEAD (canvas v550). */}

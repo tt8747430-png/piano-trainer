@@ -500,17 +500,6 @@ const pieceRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
-// A song's Publish in library (round 26), a page of its own under its page.
-const piecePublishRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/songs/$pieceId/publish',
-  notFoundComponent: notFoundIn('songs'),
-  beforeLoad: async ({ params, context }) => {
-    const { entryIn } = await songsScreens()
-    if (!entryIn(context.pieces.getState(), params.pieceId)) throw notFound()
-  },
-  component: lazyRouteComponent(songsScreens, 'PublishPage'),
-})
 // A folder of the library (ADR 0106): its songs, under the filters Home has; not found where the
 // library has no such folder, or it is archived.
 const folderRoute = createRoute({
@@ -1095,7 +1084,6 @@ const routeTree = rootRoute.addChildren([
     sharedFolderRoute,
     publicSongRoute,
     pieceRoute,
-    piecePublishRoute,
     folderRoute,
     allSongsRoute,
     archiveRoute,

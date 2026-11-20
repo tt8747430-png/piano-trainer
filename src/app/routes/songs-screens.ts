@@ -48,7 +48,7 @@ export function folderOf(pieces: PiecesState, library: LibraryState, id: string)
   const place = placeIn(layout, id)
   return place && place !== 'archived' ? place.folder : null
 }
-export { PiecePage, PublishPage, SectionPage } from '@/pages/piece'
+export { PiecePage, SectionPage } from '@/pages/piece'
 export { ArchivePage, FolderArchivedPage, TrashPage } from '@/pages/song-archive'
 export { SharedSongPage } from '@/pages/shared-song'
 export { FolderPage, SongsPage, AllSongsPage } from '@/pages/songs'
