@@ -45,7 +45,7 @@ LROWS = (f'<div style="position: relative; margin-top: -12px"><span aria-hidden=
 SONGROWS = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{songs}}}}" as="g" hint-placeholder-count="3"><a href="Song.dc.html" style="min-height: 76px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; text-decoration: none">'
             f'<span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 8px; background: {{{{g.pic}}}} center / cover; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{g.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{g.d}}}}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a></sc-for></div>')
 def CBODY(lap):
-    h1 = f'<h1 contenteditable="{{{{editing}}}}" style="margin: 0; font-family: {SERIF}; font-size: {36 if lap else 30}px; font-weight: 600; line-height: 1.15; outline: none; text-wrap: balance">{{{{t}}}}</h1>'
+    h1 = f'<h1 contenteditable="{{{{editing}}}}" style="margin: 0; font-family: {SERIF}; font-size: {36 if lap else 30}px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; outline: none; text-wrap: balance">{{{{t}}}}</h1>'
     # the course's name is the page's heading, under its cover, on a phone and a laptop alike, in both modes (a lesson's
     # shape): Edit moves nothing
     head = (f'<div style="display: flex; flex-direction: column; gap: 8px">' + h1 +

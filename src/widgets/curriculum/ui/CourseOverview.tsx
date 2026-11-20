@@ -74,15 +74,3 @@ export function CourseOverview({
     </div>
   )
 }
-
-/** A course's name as its page's serif heading under its cover: 30 on a phone, 36 on a laptop. */
-export function CourseTitle({ children }: { children: ReactNode }) {
-  return (
-    <p
-      aria-hidden
-      className="font-display text-[1.875rem]/[1.15] font-semibold text-balance lg:text-[2.25rem]/[1.15]"
-    >
-      {children}
-    </p>
-  )
-}

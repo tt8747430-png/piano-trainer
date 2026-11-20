@@ -178,7 +178,7 @@ def DOC(lap=False):
         out += f'<section onClick="{{{{{S}.pick}}}}" style="position: relative; {secst}; border-radius: 8px; outline: 2px solid {{{{{S}.ring}}}}; outline-offset: 6px">{body}</section>'
     sec = out
     head = (f'<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600; color: #A8551F">{{{{place}}}} · Foundations</span>'
-            f'<h1 contenteditable="{{{{editing}}}}" style="margin: 0; font-family: {SERIF}; font-size: {36 if lap else 30}px; line-height: 1.15; font-weight: 600; outline: none; text-wrap: balance">{{{{title}}}}</h1>'
+            f'<h1 contenteditable="{{{{editing}}}}" style="margin: 0; font-family: {SERIF}; font-size: {36 if lap else 30}px; line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; outline: none; text-wrap: balance">{{{{title}}}}</h1>'
             f'<p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 17px; line-height: 1.5; color: {SOFT}; outline: none">{{{{summary}}}}</p>'
             + '</div>')
     end = (f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openIns}}}}" style="height: 48px; border: 0; border-radius: 12px; background: transparent; box-shadow: inset 0 0 0 1.5px {LINE}; color: {SOFT}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 8px; padding: 0 16px">{PLUS}Type / to insert music, a note and more</button></sc-if>')

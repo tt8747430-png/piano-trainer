@@ -13,11 +13,10 @@ import {
 import { selectLearned, selectRead, useProgress, isLearned } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader, PageName } from '@/shared/ui'
 import {
   CourseBanner,
   CourseOverview,
-  CourseTitle,
   LessonLine,
   lessonShare,
   LessonRow,
@@ -128,7 +127,7 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
       <div className="-mt-6 flex min-w-0 flex-col gap-8 lg:-mt-4">
         <CourseOverview
           cover={<CourseBanner fill={paint.fill} ink={paint.ink} />}
-          title={<CourseTitle>{course.title}</CourseTitle>}
+          title={<PageName>{course.title}</PageName>}
           summary={course.line || undefined}
           facts={[t('own.course'), t('course.lessonCount', { count: lessons.length })]}
           progress={progress}

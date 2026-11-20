@@ -4,7 +4,7 @@ import { useCan } from '@/entities/library'
 import { journeyById, type Journey } from '@/entities/lesson'
 import { localText, useLocale } from '@/shared/i18n'
 import { useSetSearch } from '@/shared/lib'
-import { BackButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, ScreenHeader, PageName } from '@/shared/ui'
 import { LevelEditor, LevelLessons, type LearnEdit } from '@/widgets/curriculum'
 
 /**
@@ -54,12 +54,7 @@ function Level({ journey }: { journey: Journey }) {
       {bar(null)}
       {/* On a laptop the column starts on the title's edge, 16 under the head, as the board's LearnLevel. */}
       <div className="mt-1 flex min-w-0 flex-col gap-4 lg:mt-6 lg:ps-10">
-        <p
-          aria-hidden
-          className="font-display text-[1.875rem]/[1.15] font-semibold tracking-[-0.01em] text-balance lg:hidden"
-        >
-          {title}
-        </p>
+        <PageName className="lg:hidden">{title}</PageName>
         <LevelLessons journey={journey} />
       </div>
     </div>

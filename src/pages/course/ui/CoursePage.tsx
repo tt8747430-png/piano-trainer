@@ -8,13 +8,12 @@ import { selectLearned, useProgress } from '@/entities/progress'
 import { stepOf, type StepId } from '@/entities/step'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader, PageName } from '@/shared/ui'
 import {
   CourseBanner,
   CourseLessons,
   CourseOverview,
   courseProgress,
-  CourseTitle,
   GuidedSongs,
   openCourseStep,
 } from '@/widgets/curriculum'
@@ -126,7 +125,7 @@ function AppCourse({ courseId }: { courseId: string }) {
       <div className="-mt-6 flex min-w-0 flex-col gap-8">
         <CourseOverview
           cover={<CourseBanner fill={paint.fill} ink={paint.ink} />}
-          title={<CourseTitle>{title}</CourseTitle>}
+          title={<PageName>{title}</PageName>}
           summary={localText(course.summary, locale)}
           facts={[
             t(`common:stage.${course.stage}`),

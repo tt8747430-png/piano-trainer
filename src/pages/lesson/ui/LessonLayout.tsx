@@ -8,7 +8,7 @@ import { selectIsLearned, useProgress, useProgressStoreApi } from '@/entities/pr
 import { markLearned, unmarkLearned } from '@/features/mark-learned'
 import { recordSectionRead } from '@/features/record-reading'
 import { localText, useLocale } from '@/shared/i18n'
-import { RoundLink, sayUndo, ScreenHeader, type EditAction } from '@/shared/ui'
+import { RoundLink, sayUndo, ScreenHeader, type EditAction, PageName } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
 
 /** A lesson either side of this one, or the way on past the last: a router `Link`, named. */
@@ -100,12 +100,7 @@ export function LessonLayout({
             >
               {place}
             </nav>
-            <p
-              aria-hidden
-              className="font-display text-[1.875rem]/[1.15] font-semibold text-balance lg:text-[2.25rem]/[1.15]"
-            >
-              {title}
-            </p>
+            <PageName>{title}</PageName>
             {summary ? (
               <p className="text-lg/normal text-pretty text-muted-foreground">{summary}</p>
             ) : null}

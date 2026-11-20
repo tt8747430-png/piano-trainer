@@ -17,7 +17,7 @@ export {
 export { LessonLine, LessonRow, LessonStop } from './ui/LessonRow'
 export { useStepTitle, type StepTitle } from './model/use-step-title'
 export { CourseBanner } from './ui/CourseBanner'
-export { CourseOverview, CourseTitle } from './ui/CourseOverview'
+export { CourseOverview } from './ui/CourseOverview'
 export { CourseLessons } from './ui/CourseLessons'
 export { CourseShelves, CoursesAbout } from './ui/CourseShelves'
 export { CourseCovers } from './ui/CourseCovers'
