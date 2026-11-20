@@ -127,9 +127,10 @@ export function ProgressionExplorer({
           >
             <RowRoles />
             {/* The chords on the staff at reading size, on the paper with no card round them
-                (canvas, "A progression's chords on the staff at reading size"). */}
-            <figure className="flex flex-col items-center">
-              <RowStaff />
+                (canvas, "A progression's chords on the staff at reading size"), the column's gap
+                under the legend, as the board's (16, 20 on a laptop). */}
+            <figure className="mt-1 flex flex-col items-center lg:mt-2">
+              <RowStaff spans />
             </figure>
             <RowPlay
               variant="pieces"

@@ -4,6 +4,7 @@
 # their role with the root's move under each, the legend, and the chords on the staff; Practise through the keys as
 # the Scales page's Practise rows; Passing chords; the songs it is heard in; and one floating bar as Scales': Loop ·
 # Play ⌄ (Chords: Triads, 7ths, 9ths; Approach chords: None, Secondary dominants, ii–V) · Practise (the Player).
+from bravura_glyphs import BRAVURA
 PR62 = PR.replace("toggleLoop: () => set({ loop: !loop }) };", r'''toggleLoop: () => set({ loop: !loop }),
       kbE: calmKeys(lo62 - 0, lo62 + 24, marks, 402, 150), kbLE: calmKeys(36, 84, marks, 1462, 180),
       loopCap: loop ? 'Looping' : 'Loop', loopTint: loop ? '#332921' : 'rgba(254,253,251,.86)', loopInk: loop ? '#FEFDFB' : '#332921',
@@ -12,14 +13,18 @@ PR62 = PR.replace("toggleLoop: () => set({ loop: !loop }) };", r'''toggleLoop: (
       sizes: ['Triads', '7ths', '9ths'].map((d) => ({ d, on: d === (st.size ?? 'Triads'), mark: d === (st.size ?? 'Triads') ? '✓' : '', pick: () => set({ size: d, menu: null }) })),
       leads: ['None', 'Secondary dominants', 'ii–V'].map((d) => ({ d, on: d === (st.lead ?? 'None'), mark: d === (st.lead ?? 'None') ? '✓' : '', pick: () => set({ lead: d, menu: null }) })),
       keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }), fav: !!st.fav, favFill: st.fav ? '#C2554A' : 'none', toggleFav: () => set({ fav: !st.fav }),
-      staff: (() => { const L = 'CDEFGAB', NAT = [0, 2, 4, 5, 7, 9, 11], y = (d) => 65 - d * 3.5, names = [], bars = [], notes = [], led = [], bass = [];
-        P.forEach((n, i) => { const rpc = (key + DEG[n]) % 12, l0 = L.indexOf(NN[rpc].charAt(0)), third = n === n.toLowerCase() ? 3 : 4, x = 80 + i * 52;
-          names.push({ x, name: ch(n) }); if (i < P.length - 1) bars.push({ d: 'M' + (x + 26) + ' 30V120' });
-          // the left hand's root on the bass staff, C3 to B3 (the ruling: "the left hand's root is on it")
-          { const k = ((rpc - NAT[l0]) % 12 + 12) % 12, acc = k === 1 ? '♯' : k === 11 ? '♭' : '', cy = 109.5 - l0 * 3.5; bass.push({ x, cy, ax: x - 18, ay: cy + 5, acc, hasAcc: !!acc }); }
-          [[l0, rpc], [l0 + 2, (rpc + third) % 12], [l0 + 4, (rpc + 7) % 12]].forEach(([d, pc]) => { const k = ((pc - NAT[d % 7]) % 12 + 12) % 12, acc = k === 1 ? '♯' : k === 11 ? '♭' : '';
-            notes.push({ x, cy: y(d), ax: x - 18, ay: y(d) + 5, acc, hasAcc: !!acc }); if (d <= 0) led.push({ d: 'M' + (x - 10) + ' 65H' + (x + 10) }); }); });
-        return { names, bars, notes, led, bass }; })(),
+      // the chords as the app engraves them (RowStaff, a 246-unit view at 7 units a space): the voice-led voicing,
+      // the bass under middle C on the bass staff, each a whole note in its bar, no symbols (the tiles name them)
+      staff: (() => { const L = 'CDEFGAB', NAT = [0, 2, 4, 5, 7, 9, 11], notes = [], led = [];
+        const V = { I: [['R', 60, 0], ['3', 64, 0], ['5', 67, 0], ['R', 48, 0]], V: [['5', 62, 7], ['R', 67, 7], ['R', 55, 7], ['3', 59, 7]], vi: [['3', 60, 9], ['5', 64, 9], ['R', 45, 9], ['R', 57, 9]], IV: [['5', 60, 5], ['R', 65, 5], ['R', 53, 5], ['3', 57, 5]] };
+        const shift = key <= 5 ? key : key - 12, X = [100.1, 144.65, 189.2, 233.7];
+        P.forEach((n, i) => { const rpc = (key + DEG[n]) % 12, l0 = L.indexOf(NN[rpc].charAt(0)), x = X[i];
+          V[n].forEach(([tone, m0]) => { const m = m0 + shift, li = (l0 + { R: 0, '3': 2, '5': 4 }[tone]) % 7, oct = Math.round((m - NAT[li]) / 12) - 1, d = oct * 7 + li;
+            const k = m - 12 * (oct + 1) - NAT[li], lh = m < 60, y = lh ? 108.5 - (d - 21) * 3.5 : 56 - (d - 28) * 3.5;
+            notes.push({ x, cy: y, ax: x - 15, ay: y + 5, a1: k === 1, a2: k === -1 });
+            if (!lh && d <= 28) led.push({ d: 'M' + (x - 7.7) + ' 56H' + (x + 7.7) }); if (!lh && d >= 40) led.push({ d: 'M' + (x - 7.7) + ' 14H' + (x + 7.7) });
+            if (lh && d >= 28) led.push({ d: 'M' + (x - 7.7) + ' 84H' + (x + 7.7) }); if (lh && d <= 16) led.push({ d: 'M' + (x - 7.7) + ' 126H' + (x + 7.7) }); }); });
+        return { notes, led }; })(),
       walks: [['In C major', 'C G Am F, round and round'], ['Chromatically, rising', 'C G Am F · D♭ A♭ B♭m G♭ …'], ['Chromatically, falling', 'C G Am F · B F♯ G♯m E …'], ['In whole steps, rising', 'C G Am F · D A Bm G …'], ['Circle of fifths, falling', 'C G Am F · F C Dm B♭ …'], ['In minor thirds', 'C G Am F · E♭ B♭ Cm A♭ …']].map(([t, s]) => ({ t, s })) };''').replace("const cur = P[at]", "const lo62 = 48, cur = P[at]")
 assert PR62 != PR, 'PR return not found'
 
@@ -35,17 +40,17 @@ TITLE62 = (f'<div style="flex: none; display: flex; flex-direction: column; gap:
            f'<button type="button" aria-label="Favourite" aria-pressed="{{{{fav}}}}" onClick="{{{{toggleFav}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{HEARTI}</button></div>'
            f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}; text-wrap: pretty">Bright and singable, the sound of a thousand hits · Pop</p></div>'
            f'<button type="button" aria-label="Key: {{{{keyL}}}}" onClick="{{{{openRoot}}}}" style="align-self: flex-start; height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid {LINE}; background: {SHEET}; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; gap: 8px"><span style="color: {SOFT}">Key</span><b>{{{{keyL}}}}</b><span style="color: {SOFT}; display: flex">{CHEVS}</span></button></div>')
-STAFF62 = (f'<svg viewBox="20 0 246 132" width="100%" role="img" aria-label="The chords on the grand staff" style="display: block; max-width: 560px; margin: 0 auto">'
-           + ''.join(f'<path d="M24 {30 + i * 7}H262" stroke="{INK}" stroke-width=".9"></path><path d="M24 {92 + i * 7}H262" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
-           + f'<text x="26" y="58" font-size="28" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="28" y="120" font-size="31" font-family="Noto Music, serif" fill="{INK}">𝄢</text>'
-           + f'<path d="M24 30V120" stroke="{INK}" stroke-width="1.4"></path><path d="M262 30V120" stroke="{INK}" stroke-width="1"></path>'
-           + f'<sc-for list="{{{{staff.bass}}}}" as="z" hint-placeholder-count="4"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.cy}}}}" rx="6.4" ry="4.2" transform="rotate(-20 {{{{z.x}}}} {{{{z.cy}}}})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
-           + f'<sc-if value="{{{{z.hasAcc}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.ax}}}}" y="{{{{z.ay}}}}" font-size="15" font-family="Noto Music, serif" fill="{INK}">{{{{z.acc}}}}</text></sc-if></sc-for>'
-           + f'<sc-for list="{{{{staff.names}}}}" as="c" hint-placeholder-count="4"><text x="{{{{c.x}}}}" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="{INK}">{{{{c.name}}}}</text></sc-for>'
-           + f'<sc-for list="{{{{staff.bars}}}}" as="l" hint-placeholder-count="3"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
-           + f'<sc-for list="{{{{staff.led}}}}" as="l" hint-placeholder-count="1"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
-           + f'<sc-for list="{{{{staff.notes}}}}" as="z" hint-placeholder-count="12"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.cy}}}}" rx="6.4" ry="4.2" transform="rotate(-20 {{{{z.x}}}} {{{{z.cy}}}})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
-           + f'<sc-if value="{{{{z.hasAcc}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.ax}}}}" y="{{{{z.ay}}}}" font-size="15" font-family="Noto Music, serif" fill="{INK}">{{{{z.acc}}}}</text></sc-if></sc-for></svg>')
+# the staff as the app engraves the row (RowStaff spans: 7 units a space of a 246-unit view, measured at 370): the brace,
+# both clefs on their lines at four spaces, 4/4 in Bravura's digits, four whole-note bars 44.5 apart, the staves six spaces apart
+STAFF62 = (f'<svg viewBox="20 0 247 140" width="100%" role="img" aria-label="The chords on the grand staff" style="display: block; max-width: 560px; margin: 0 auto; overflow: visible">'
+           + ''.join(f'<path d="M43.5 {21 + i * 7}H267" stroke="{INK}" stroke-width=".9"></path><path d="M43.5 {91 + i * 7}H267" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
+           + f'<text x="48" y="49" font-size="28" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="48" y="119" font-size="31" font-family="Noto Music, serif" fill="{INK}">𝄢</text>'
+           + ''.join(f'<path transform="translate(74.3 {y}) scale(.028 -.028)" d="{BRAVURA["t4"][0]}" fill="{INK}"></path>' for y in (28, 42, 98, 112))
+           + f'<path d="M43.5 21V119" stroke="{INK}" stroke-width="1.4"></path>' + ''.join(f'<path d="M{x} 21V119" stroke="{INK}" stroke-width="1"></path>' for x in (133.7, 178.2, 222.8, 267))
+           + f'<path d="M40.5 21C32.5 29 40.5 61 33.5 70C40.5 79 32.5 111 40.5 119" fill="none" stroke="{INK}" stroke-width="1.6" stroke-linecap="round"></path>'
+           + f'<sc-for list="{{{{staff.led}}}}" as="l" hint-placeholder-count="3"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
+           + f'<sc-for list="{{{{staff.notes}}}}" as="z" hint-placeholder-count="16"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.cy}}}}" rx="5.6" ry="3.7" transform="rotate(-20 {{{{z.x}}}} {{{{z.cy}}}})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
+           + f'''<sc-if value="{{{{z.a1}}}}" hint-placeholder-val="{{{{false}}}}"><path transform="translate({{{{z.ax}}}} {{{{z.ay}}}}) translate(1 -5) scale(.028 -.028)" d="{BRAVURA['sharp'][0]}" fill="{INK}"></path></sc-if><sc-if value="{{{{z.a2}}}}" hint-placeholder-val="{{{{false}}}}"><path transform="translate({{{{z.ax}}}} {{{{z.ay}}}}) translate(1 -5) scale(.028 -.028)" d="{BRAVURA['flat'][0]}" fill="{INK}"></path></sc-if></sc-for></svg>''')
 # the chords on the staff at reading size (10 a space on a phone), framed to its four bars, on the paper: no card round
 # the page's own music (laws, "The page's subject is its largest thing")
 MUSIC62 = f'<figure style="flex: none; margin: 0">{STAFF62}</figure>'

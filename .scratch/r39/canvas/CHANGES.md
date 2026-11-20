@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · pending · a progression's staff engraved as the app (voice-led voicing, brace, Bravura 4/4, Verovio's spacing, no symbols); opens on I, F→C "5th up" · Progression,ProgressionLaptop · pending
+
 
 
 ## Changes

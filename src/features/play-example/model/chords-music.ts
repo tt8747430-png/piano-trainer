@@ -27,6 +27,7 @@ function spelledIn(chord: Chord, key: Midi): SpelledNote {
  * A row of chords on the grand staff as the keys play it: each chord a whole note in a bar of its
  * own, with its symbol over it, every key under middle C on the bass staff and the rest on the
  * treble, each spelled as its chord spells it. No key signature: every accidental is written.
+ * Without `symbols` the bars carry no chord symbol, where the chords are named beside the staff.
  */
 export function chordsMusic(
   chords: readonly {
@@ -34,12 +35,13 @@ export function chordsMusic(
     readonly symbol: string
     readonly keys: readonly Midi[]
   }[],
+  { symbols = true }: { readonly symbols?: boolean } = {},
 ): TimedMusic {
   return {
     key: { tonic: note('C'), minor: false },
     meter: '4/4',
     bars: chords.map((_, i) => ({ startTick: i * WHOLE_BAR, beats: 4 })),
-    chords: chords.map(({ symbol }, i) => ({ startTick: i * WHOLE_BAR, symbol })),
+    chords: symbols ? chords.map(({ symbol }, i) => ({ startTick: i * WHOLE_BAR, symbol })) : [],
     notes: chords.flatMap(({ chord, keys }, i) =>
       keys.map((key): TimedNote => ({
         midi: key,

@@ -278,8 +278,8 @@ const SW = (st, set, keys) => Object.fromEntries(keys.flatMap(([k, d]) => { cons
 const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k + 'Seg', seg(opts, st[k] ?? d, (l) => set({ [k]: l }))]));
     const P = ['I', 'V', 'vi', 'IV'], DEG = { I: 0, ii: 2, iii: 4, IV: 5, V: 7, vi: 9 };
     const FN = { I: ['Tonic', '#F3D2C8'], vi: ['Tonic', '#F3D2C8'], iii: ['Tonic', '#F3D2C8'], IV: ['Predominant', '#D3E5F2'], ii: ['Predominant', '#D3E5F2'], V: ['Dominant', '#DCE9D6'] };
-    const MOVE = ['5th up', '2nd up', '3rd down', '4th down'];
-    const key = st.key ?? 0, at = st.at ?? 1, loop = !!st.loop;
+    const MOVE = ['5th up', '2nd up', '3rd down', '5th up'];
+    const key = st.key ?? 0, at = st.at ?? 0, loop = !!st.loop;
     const ch = (n) => NN[(key + DEG[n]) % 12] + (n === n.toLowerCase() ? 'm' : '');
     const cur = P[at], r = (key + DEG[cur]) % 12, minor = cur === cur.toLowerCase(), marks = {};
     [[0, 1], [minor ? 3 : 4, 3], [7, 5]].forEach(([iv, t]) => { marks[60 + ((r + iv) % 12)] = [ROLE[t], NN[(r + iv) % 12]]; }); marks[48 + r] = [ROLE[1], NN[r]];

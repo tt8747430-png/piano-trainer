@@ -44,6 +44,7 @@ export function TappableStaff({
   fingers,
   names = false,
   symbols = true,
+  bands = true,
   muted,
   firstBar = 1,
   tempo,
@@ -67,6 +68,8 @@ export function TappableStaff({
   names?: boolean
   /** Each bar's band names its chord, where it has one; else its number. */
   symbols?: boolean
+  /** A band over each bar plays it; a staff whose bars are each one chord, named beside it, has none. */
+  bands?: boolean
   muted?: StaffId | undefined
   /** The number of its first bar, for a line of a longer passage. */
   firstBar?: number
@@ -194,7 +197,7 @@ export function TappableStaff({
             {/* A passage's last line keeps its bar however short, and a lone chord its band, which
                 prints its name. Fingerings take the band's place over the staff, so a fingered line
                 plays whole or a note at a time. */}
-            {!fingers && (bars.length > 1 || firstBar > 1 || bars[0]?.symbol !== undefined)
+            {bands && !fingers && (bars.length > 1 || firstBar > 1 || bars[0]?.symbol !== undefined)
               ? layout.measures.map((measure, i) => {
                   const bar = bars[i]
                   if (!bar) return null

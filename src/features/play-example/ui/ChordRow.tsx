@@ -22,7 +22,7 @@ import {
 import { notate } from '@/shared/lib/notation'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback, usePlayhead } from '@/shared/lib/services'
-import { useFitZoom } from '@/shared/lib'
+import { useElementSize, useFitZoom } from '@/shared/lib'
 import {
   KeysIcon,
   FloatingActions,
@@ -165,11 +165,22 @@ const STAFF_TEMPO = 120
 const BARS_A_LINE = 4
 
 /**
- * The row on the grand staff as its keys play it, four bars a line: the bass on the bass staff, the
- * hand on the treble, each chord's symbol and numeral over its bar, which plays it as the row voices
- * it. Every line is drawn at the same size, shrunk as the first, full line must be to fit.
+ * A progression's staff spans the column at its board's size (STAFF62, a 246-unit view at 7 units a
+ * space): a space is 7/246 of the width, and scale 1 draws 10, so the scale is the width over this.
  */
-export function RowStaff() {
+const SPAN_UNITS_A_SCALE = 2460 / 7
+/** The widest a progression's staff is drawn, centred, as its board's 560. */
+const SPAN_MOST_WIDTH = 560
+
+/**
+ * The row on the grand staff as its keys play it, four bars a line: the bass on the bass staff, the
+ * hand on the treble, each bar playing its chord as the row voices it. Every line is drawn at the
+ * same size. In a lesson each chord's symbol and numeral stand over its bar, every line shrunk as
+ * the first, full line must be to fit; with `spans` (a progression's page, whose tiles name the
+ * chords) the bars are bare and each line spans the column at its board's size, a short last line
+ * the part of it its bars take.
+ */
+export function RowStaff({ spans = false }: { spans?: boolean }) {
   const { t } = useTranslation('music')
   const { chords, voiced, onShow } = useRow()
   const lines = useMemo(() => {
@@ -180,13 +191,47 @@ export function RowStaff() {
     }))
     return Array.from({ length: Math.ceil(bars.length / BARS_A_LINE) }, (_, line) => {
       const from = line * BARS_A_LINE
-      const music = chordsMusic(bars.slice(from, from + BARS_A_LINE))
-      return { from, music, score: notate(music) }
+      const shown = bars.slice(from, from + BARS_A_LINE)
+      const music = chordsMusic(shown, { symbols: !spans })
+      return { from, count: shown.length, music, score: notate(music) }
     })
-  }, [chords, voiced])
+  }, [chords, voiced, spans])
   const room = useRef<HTMLDivElement>(null)
   const first = useRef<HTMLDivElement>(null)
   const zoom = useFitZoom(room, first)
+  const width = Math.min(useElementSize(room).width, SPAN_MOST_WIDTH)
+  const barShown = (from: number) => (bar: number) => {
+    const chord = chords[from + bar]?.chord
+    const keys = voiced[from + bar] ?? []
+    return chord ? voicedShown(chord, keys) : unmarked(keys)
+  }
+  if (spans)
+    return (
+      <div
+        ref={room}
+        role="group"
+        aria-label={t('rowChords')}
+        className="flex w-full flex-col items-center gap-2"
+      >
+        {width > 0
+          ? lines.map(({ from, count, music, score }, line) => (
+              <TappableStaff
+                key={line}
+                music={music}
+                score={score}
+                firstBar={from + 1}
+                tempo={STAFF_TEMPO}
+                scale={width / SPAN_UNITS_A_SCALE}
+                fill={(width * count) / BARS_A_LINE}
+                bands={false}
+                continues={line > 0}
+                barShown={barShown(from)}
+                onShow={onShow}
+              />
+            ))
+          : null}
+      </div>
+    )
   return (
     <div
       ref={room}
@@ -207,11 +252,7 @@ export function RowStaff() {
             firstBar={from + 1}
             tempo={STAFF_TEMPO}
             captions={chords.slice(from, from + BARS_A_LINE).map((chord) => chord.caption)}
-            barShown={(bar) => {
-              const chord = chords[from + bar]?.chord
-              const keys = voiced[from + bar] ?? []
-              return chord ? voicedShown(chord, keys) : unmarked(keys)
-            }}
+            barShown={barShown(from)}
             onShow={onShow}
           />
         </div>
