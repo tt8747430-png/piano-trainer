@@ -45,7 +45,7 @@ export function StreakPage() {
             })
           : t('profile.streakPage.counted')
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-2">
       <ScreenHeader column title={t('profile.streakPage.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
         <section className="flex items-center gap-4 p-1">

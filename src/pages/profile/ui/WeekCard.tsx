@@ -57,12 +57,6 @@ export function WeekCard() {
         className="flex flex-col card px-4 pt-3.5 pb-3 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3 lg:justify-center"
       >
         <div className="relative flex gap-2 [--chart-h:4.5rem] [--chart-top:calc(var(--chart-h)-0.5rem)] lg:[--chart-h:9.375rem] lg:[--chart-top:calc(var(--chart-h)-0.375rem)]">
-          {/* A week with no day practised says what fills it, over the flat days. */}
-          {played === 0 ? (
-            <p className="absolute inset-x-0 top-5 text-center text-sm text-pretty text-muted-foreground">
-              {t('profile.week.empty')}
-            </p>
-          ) : null}
           <div
             aria-hidden
             className="relative h-(--chart-h) w-5 shrink-0 text-right text-xs leading-3 text-muted-foreground tabular-nums"
@@ -71,7 +65,13 @@ export function WeekCard() {
             <span className="absolute right-0 bottom-[calc(var(--chart-top)/2-6px)]">{step}</span>
             <span className="absolute right-0 -bottom-1.5">0</span>
           </div>
-          <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <div className="relative flex min-w-0 flex-1 flex-col gap-2">
+            {/* A week with no day practised says what fills it, over the flat days' plot. */}
+            {played === 0 ? (
+              <p className="absolute inset-x-0 top-1 text-center text-sm text-pretty text-muted-foreground">
+                {t('profile.week.empty')}
+              </p>
+            ) : null}
             <ol className="relative flex h-(--chart-h) items-end gap-2 shadow-[inset_0_-1px_0_var(--color-border)]">
               <span
                 aria-hidden

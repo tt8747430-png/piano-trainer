@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { badgesOf, TIERS, useProgress, type BadgeId } from '@/entities/progress'
 import { useProfileFigures } from '@/features/track-achievements'
 import { cn } from '@/shared/lib'
-import { BackButton, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { BackButton, ScreenHeader } from '@/shared/ui'
 import { useDayName } from '../model/format'
 import { useBadgeStanding } from '../model/use-badge-standing'
+import { ProfileList } from './ProfileList'
 import { BadgeRow } from './BadgesPreview'
 import { BadgeMark } from './marks'
 
@@ -16,14 +17,14 @@ export function BadgesPage() {
   const figures = useProfileFigures()
   const badges = useMemo(() => badgesOf(figures), [figures])
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-2">
       <ScreenHeader column title={t('profile.badges.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <SettingsGroup flush>
+        <ProfileList page>
           {badges.map((badge) => (
             <BadgeRow key={badge.id} badge={badge} />
           ))}
-        </SettingsGroup>
+        </ProfileList>
       </div>
     </div>
   )
@@ -48,7 +49,7 @@ export function BadgePage() {
   const id: BadgeId = badge.id
   const name = t(`profile.badges.names.${id}`)
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-2">
       <ScreenHeader column title={name} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
         <section className="flex flex-col items-center gap-2 text-center">

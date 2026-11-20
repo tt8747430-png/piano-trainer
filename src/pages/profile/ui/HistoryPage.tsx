@@ -116,7 +116,7 @@ export function HistoryPage() {
     .map(({ day, runs: kept }) => ({ day, lines: lines(kept) }))
     .filter(({ lines: shown }) => shown.length > 0)
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-2">
       <ScreenHeader column title={t('profile.history.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
         <MonthChart />

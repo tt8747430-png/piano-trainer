@@ -8,9 +8,9 @@ BADGES9 = [('Streak Keeper', 'Silver', 2, 'Practise on days in a row. Your longe
            ('Scale Master', '', 0, 'Play a key’s chords in the Player: each of the 24 keys counts once.', [('Bronze', '3 keys', '1 to go'), ('Silver', '8 keys', 'Locked'), ('Gold', '15 keys', 'Locked'), ('Platinum', '24 keys', 'Locked')], '2 keys'),
            ('Daily Devotion', 'Silver', 2, 'Practise on any day. Every day you practise counts.', [('Bronze', '7 days', 'Reached 20 October'), ('Silver', '30 days', 'Reached 9 November'), ('Gold', '100 days', '62 to go'), ('Platinum', '365 days', 'Locked')], '38 days'),
            ('Library Builder', 'Gold', 3, 'Make your own songs and playlists in Songs.', [('Bronze', '1 song or playlist', 'Reached 2 March 2025'), ('Silver', '5 songs or playlists', 'Reached 4 June 2025'), ('Gold', '15 songs or playlists', 'Reached 1 October'), ('Platinum', '40 songs or playlists', '24 to go')], '16 songs or playlists')]
-RECORDS = [('Level', 'Level 7'), ('Longest streak', '16 days'), ('Best accuracy', '94%'), ('Days practised', '38')]
+RECORDS = [('Level', '7'), ('Longest streak', '16 days'), ('Best accuracy', '94%'), ('Days practised', '38')]
 MILES = [('First lesson done', 'Earned 28 October 2026', 'Finish any lesson in Learn.'), ('First recording', 'Earned 30 October 2026', 'Record a take in the score editor.'),
-         ('First published song', '', 'Publish a song of your own to Explore.'), ('First MIDI session', 'Earned 12 October 2026', 'Play a song on a MIDI keyboard.'), ('A perfect run', '', 'Play a whole song in Wait mode with no wrong notes.')]
+         ('First published song', '', 'Publish a song of your own to Explore.'), ('First MIDI session', 'Earned 12 October 2026', 'Play a MIDI keyboard for a minute.'), ('A perfect run', '', 'Play a song in Wait mode, or a practice run, with no wrong notes.')]
 NOTES9 = [('Today', [('Level 7 reached', '2 h ago', 'lvl', True), ('Best accuracy: 94%', '5 h ago', 'acc', True)]), ('Yesterday', [('Silver Streak Keeper', 'Yesterday, 19:40', 'badge', False)]),
           ('Earlier', [('Bronze Repertoire', '3 November', 'badge', False), ('Gold Library Builder', '1 October', 'badge', False), ('New longest streak: 16 days', '22 September', 'streak', False)])]
 # Practice history (canvas 160): every practice run, by day; opens its results
@@ -46,7 +46,7 @@ P9_JS = js('const BADGES = ' + json.dumps(BADGES9, ensure_ascii=False) + ', MILE
       whoDemo: ['Signed in', 'Guest', 'First run', 'Loading'].map((l) => ({ l, bg: who === l ? '#332921' : '#EEE9E2', fg: who === l ? '#FEFDFB' : '#332921', pick: () => S({ who: l }) })), week, isMain: !page, isSub: !!page, pageT: titles[page] || page || '', backT: back ? titles[back] : 'Profile', goBack: () => S({ page: back }),
       isStreak: page === 'streak', isBadges: page === 'badges', isBadge: !!badge, isAch: page === 'ach', isMile: !!mile, isNotes: page === 'notes', isHistory: page === 'history', goHistory: () => S({ page: 'history' }), runDays, runLatest, bars30, showH1: !badge && !mile, barT: badge || mile ? '' : (titles[page] || page || ''),
       subW: ['streak', 'badges', 'history'].includes(page) ? 1180 : 704, goStreak: () => S({ page: 'streak' }), goBadges: () => S({ page: 'badges' }), goAch: () => S({ page: 'ach' }), goNotes: () => S({ page: 'notes' }),
-      goB0: () => S({ page: 'Streak Keeper' }), goB1: () => S({ page: 'Repertoire' }), goB2: () => S({ page: 'Lesson Finisher' }), goM0: () => S({ page: 'First recording' }), goM1: () => S({ page: 'First lesson done' }), goM5: () => S({ page: 'A perfect run' }),
+      goB0: () => S({ page: 'Streak Keeper' }), goB1: () => S({ page: 'Repertoire' }), goB2: () => S({ page: 'Lesson Finisher' }), goM0: () => S({ page: 'First recording' }), goM1: () => S({ page: 'First lesson done' }), goM5: () => S({ page: 'A perfect run' }), goM2: () => S({ page: 'First published song' }), goM3: () => S({ page: 'First MIDI session' }),
       monT: M.t, monN: M.n + ' days', cells, prevMon: () => S({ mon: 1 }), nextMon: () => S({ mon: 0 }), canNext: mon === 1, nextOp: mon === 1 ? 1 : 0.35,
       badges, bName: badge ? badge[0] : '', bTier: badge ? (badge[1] ? 'Tier ' + badge[2] + ' of 4 · ' + badge[1] : 'Not started') : '', bMed: badge ? MEDC[badge[1]] : '#DAD1C8', bWay: badge ? badge[3] : '', bYou: badge ? badge[5] : '', tiers,
       miles: MILES.map(([n, e], i) => ({ n, e: e || 'Not earned yet', got: !!e, bg: e ? '#DCE9D6' : '#EEE9E2', ink: e ? '#2F5A35' : '#9A9089', nink: e ? '#332921' : '#685E56', locked: !e, open: () => S({ page: n }) })),
@@ -66,7 +66,7 @@ def _BSUB(n):
     k = int(nx[2].split()[0]); u = nx[1].split(' ', 1)[1]; u = u[:-1] if k == 1 and u.endswith('s') else u
     return (f'{b[1]} · ' if b[1] else '') + f'{k} more {u} to {nx[0]}'
 BADGES9H = H2('Badges', SEEALL9('goBadges')) + BOX(''.join(BROW(n, next(x for x in BADGES9 if x[0] == n)[1], _BSUB(n), a) for n, a in (('Streak Keeper', 'goB0'), ('Repertoire', 'goB1'), ('Lesson Finisher', 'goB2'))))
-ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW('First lesson done', 'Earned 28 October 2026', True, 'goM1') + AROW('First recording', 'Earned 30 October 2026', True, 'goM0') + AROW('A perfect run', 'Not earned yet', False, 'goM5'))
+ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW('First recording', 'Earned 30 October 2026', True, 'goM0') + AROW('First lesson done', 'Earned 28 October 2026', True, 'goM1') + AROW('First MIDI session', 'Earned 12 October 2026', True, 'goM3'))
 
 # ── Practice history (canvas 160): Profile is where every practice run is kept; each row opens its results ──
 RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style="box-sizing: border-box; min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">'
@@ -81,9 +81,10 @@ _NOBAR = '<span aria-hidden="true" style="display: block; height: 6px; margin-to
 def _FIRST(n):
     b = next(x for x in BADGES9 if x[0] == n); k, u = b[4][0][1].split(' ', 1)
     return f'{k} more {u[:-1] if k == "1" and u.endswith("s") else u} to Bronze'
-TILES9N = f'<div style="display: flex; gap: 12px">{TILE(FLAME, "0", "Day streak", act="goStreak")}{TILE(NOTE, "0", "Songs learned", href="AllSongs.dc.html")}{TILE(CLOCK, "0 min", "Practice time", act="goHistory")}</div>'
+# an unlit streak is drawn unlit: the flame outlined in soft ink at 0, filled once a day is practised (the app's tone)
+TILES9N = f'<div style="display: flex; gap: 12px">{TILE(FLAME.replace('fill="#C26A2E"', f'fill="none" stroke="{SOFT}" stroke-width="2.2" stroke-linejoin="round"'), "0", "Day streak", act="goStreak")}{TILE(NOTE, "0", "Songs learned", href="AllSongs.dc.html")}{TILE(CLOCK, "0 min", "Practice time", act="goHistory")}</div>'
 BADGES9N = H2('Badges', SEEALL9('goBadges')) + BOX(''.join(BROW(n, '', _FIRST(n), a, _NOBAR) for n, a in (('Streak Keeper', 'goB0'), ('Repertoire', 'goB1'), ('Lesson Finisher', 'goB2'))))
-ACH9N = H2('Achievements', SEEALL9('goAch')) + BOX(AROW('First lesson done', 'Not earned yet', False, 'goM1') + AROW('First recording', 'Not earned yet', False, 'goM0') + AROW('A perfect run', 'Not earned yet', False, 'goM5'))
+ACH9N = H2('Achievements', SEEALL9('goAch')) + BOX(AROW('First lesson done', 'Not earned yet', False, 'goM1') + AROW('First recording', 'Not earned yet', False, 'goM0') + AROW('First published song', 'Not earned yet', False, 'goM2'))
 HIST9N = H2('Practice history') + BOX(f'<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 16px 16px 8px"><span style="font-size: 15px; line-height: 1.45; color: {SOFT}">No practice yet. Every run in Practice is kept here.</span>'
                                       f'<a href="Main.dc.html" style="height: 44px; display: flex; align-items: center; font-size: 15px; font-weight: 600; color: {LINK}; text-decoration: none">Open Practice</a></div>')
 FRESH9 = lambda learner, first: IF9('notFresh', learner, 'true') + IF9('isFresh', first)

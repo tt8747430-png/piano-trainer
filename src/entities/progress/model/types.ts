@@ -114,7 +114,7 @@ export interface ProgressState {
   readonly seconds: Readonly<Partial<Record<string, number>>>
   /** The keys practised (B1, Scale Master): a scale or a key's chords played in it, and the day it first was. */
   readonly keys: Readonly<Partial<Record<string, string>>>
-  /** The day each badge tier (`streak:2`) and milestone (`first-song`) was first reached. */
+  /** The day each badge tier (`streak:2`) and milestone (`first-lesson`) was first reached. */
   readonly earned: Readonly<Partial<Record<string, string>>>
   /** The day of a first the stores do not keep: a song published, a minute on a connected piano. */
   readonly firsts: Readonly<Partial<Record<FirstId, string>>>

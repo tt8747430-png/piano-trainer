@@ -15,7 +15,13 @@ export function MilestoneRow({ id, day }: { id: MilestoneId; day: string | null 
   return (
     <RowLink
       mark={<MilestoneMark earned={day !== null} />}
-      title={t(`profile.achievements.names.${id}`)}
+      title={
+        day ? (
+          t(`profile.achievements.names.${id}`)
+        ) : (
+          <span className="text-muted-foreground">{t(`profile.achievements.names.${id}`)}</span>
+        )
+      }
       detail={
         day
           ? t('profile.achievements.earned', { date: dayName(day) })
