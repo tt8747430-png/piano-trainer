@@ -103,15 +103,7 @@ function RowTools({ row, onRename }: { row: StaffRow; onRename: () => void }) {
         label={more}
         align="end"
         trigger={<Ellipsis aria-hidden />}
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-11 rounded-pill"
-            aria-label={more}
-            title={more}
-          />
-        }
+        render={<Button variant="ghost" size="icon" aria-label={more} title={more} />}
         actions={[
           ...(row.onRename
             ? [

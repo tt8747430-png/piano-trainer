@@ -357,11 +357,7 @@ export function RunLayout({
               </GroupRow>
             </GroupRows>
             {laptop ? null : (
-              <Button
-                size="lg"
-                className="-mt-2 h-13 w-full text-[1.0625rem] font-bold"
-                onClick={start}
-              >
+              <Button size="lg" className="-mt-2 h-13 w-full text-[1.0625rem]" onClick={start}>
                 {t('player:run.start')}
               </Button>
             )}

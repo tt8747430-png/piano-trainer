@@ -31,7 +31,7 @@ function Toasts() {
             render={
               <Button
                 variant="ghost"
-                className="h-11 px-3 text-[0.9375rem] font-bold text-toast-action hover:bg-background/10 hover:text-toast-action"
+                className="px-3 text-[0.9375rem] text-toast-action hover:bg-background/10 hover:text-toast-action"
               />
             }
           />

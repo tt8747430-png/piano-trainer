@@ -46,7 +46,6 @@ export function SettingsDialog({
                 size="icon"
                 aria-label={t('dialog.close')}
                 title={t('dialog.close')}
-                className="rounded-full"
               />
             }
           >

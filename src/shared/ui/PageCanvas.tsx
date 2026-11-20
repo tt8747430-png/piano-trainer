@@ -252,7 +252,6 @@ export function PageCanvas({
         <Button
           variant="ghost"
           size="icon"
-          className="size-11 rounded-pill"
           aria-label={t('sheet.canvas.zoomOut')}
           title={t('sheet.canvas.zoomOut')}
           onClick={() => zoomBy(1 / ZOOM_STEP)}
@@ -265,7 +264,6 @@ export function PageCanvas({
         <Button
           variant="ghost"
           size="icon"
-          className="size-11 rounded-pill"
           aria-label={t('sheet.canvas.zoomIn')}
           title={t('sheet.canvas.zoomIn')}
           onClick={() => zoomBy(ZOOM_STEP)}
@@ -275,7 +273,6 @@ export function PageCanvas({
         <Button
           variant="ghost"
           size="icon"
-          className="size-11 rounded-pill"
           aria-label={t('sheet.canvas.fit')}
           title={t('sheet.canvas.fit')}
           onClick={() => {

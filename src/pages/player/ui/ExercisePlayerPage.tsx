@@ -140,7 +140,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
       }
       next={
         goOn ? (
-          <Button variant="link" className="h-11 shrink-0 px-0 text-sm" onClick={goOn}>
+          <Button variant="link" className="shrink-0 px-0 text-sm" onClick={goOn}>
             {t('exercise.nextKey')}
             <ChevronRight data-icon="inline-end" aria-hidden />
           </Button>

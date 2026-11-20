@@ -86,7 +86,7 @@ export function QuestionBlock({
         </p>
         <Button
           variant="ghost"
-          className="h-11 px-3 text-[0.9375rem] font-semibold text-link hover:bg-transparent"
+          className="px-3 text-[0.9375rem] font-semibold text-link hover:bg-transparent"
           onClick={() => dispatch({ type: 'retry' })}
         >
           {t('question.again')}
@@ -94,7 +94,7 @@ export function QuestionBlock({
         {state.stage === 'right' || state.stage === 'answer' ? null : (
           <Button
             variant="soft"
-            className="h-11 rounded-pill border-transparent bg-muted px-4 text-[0.9375rem] font-bold hover:bg-(--hairline)"
+            className="border-transparent bg-muted px-4 text-[0.9375rem] hover:bg-(--hairline)"
             onClick={() => {
               dispatch({ type: 'reveal' })
               play(answerSounds(said, answer.keys))

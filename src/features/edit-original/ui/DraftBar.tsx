@@ -152,12 +152,12 @@ export function DraftActions({
         ]}
       />
       {publishPage ? (
-        <ButtonLink className="h-11 shrink-0 rounded-pill px-4" render={publishPage.link}>
+        <ButtonLink className="shrink-0 px-4" render={publishPage.link}>
           {t('original.publish')}
         </ButtonLink>
       ) : (
         <Button
-          className="h-11 shrink-0 rounded-pill px-4"
+          className="shrink-0 px-4"
           disabled={!draft.drafted || busy}
           onClick={() => setAsked('publish')}
         >

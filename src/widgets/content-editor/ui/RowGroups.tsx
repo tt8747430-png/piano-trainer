@@ -98,13 +98,7 @@ function RowMenu({ title, onRemove }: { title: string; onRemove: () => void }) {
       align="end"
       trigger={<Ellipsis aria-hidden />}
       render={
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-11 shrink-0"
-          aria-label={label}
-          title={label}
-        />
+        <Button variant="ghost" size="icon" className="shrink-0" aria-label={label} title={label} />
       }
       actions={[
         {

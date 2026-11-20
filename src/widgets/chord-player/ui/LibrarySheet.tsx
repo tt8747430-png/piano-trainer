@@ -98,13 +98,7 @@ export function LibrarySheet({
                           align="end"
                           trigger={<Ellipsis aria-hidden />}
                           render={
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="size-11"
-                              aria-label={label}
-                              title={label}
-                            />
+                            <Button variant="ghost" size="icon" aria-label={label} title={label} />
                           }
                           actions={[
                             {

@@ -372,7 +372,7 @@ export function TrainerSetup({
         {/* Start in words (A41): the one thing to do, a labelled primary button, not a lone ▶. */}
         <Button
           size="lg"
-          className="min-h-14 rounded-pill px-7 text-base elevation-float [&_svg]:fill-current"
+          className="min-h-14 px-7 elevation-float [&_svg]:fill-current"
           onClick={onStart}
         >
           <Play aria-hidden data-icon="inline-start" className="fill-current" />

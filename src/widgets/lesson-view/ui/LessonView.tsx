@@ -137,7 +137,7 @@ function LessonBar({
               variant="ghost"
               aria-label={t('contentsAt', { at: at + 1, of })}
               title={t('contents')}
-              className="h-12.5 min-w-0 flex-1 flex-col items-start gap-0 rounded-pill px-3 leading-tight"
+              className="h-12.5 min-w-0 flex-1 flex-col items-start gap-0 px-3 leading-tight"
             />
           }
         >

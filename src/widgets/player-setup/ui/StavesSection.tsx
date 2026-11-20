@@ -139,7 +139,7 @@ export function StavesSection({
       {tracks.some((track) => track.id === 'recording') ? (
         <Button
           variant="outline"
-          className="min-h-11 self-start rounded-pill px-4 text-base"
+          className="min-h-11 self-start px-4"
           onClick={() => onlyTheChords(settings)}
         >
           {t('sound.onlyChords')}

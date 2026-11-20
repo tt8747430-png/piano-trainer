@@ -16,7 +16,7 @@ export function LearnerViewNotice() {
       className="pointer-events-auto flex items-center justify-between gap-3 self-center rounded-pill border border-border bg-raised py-1 pr-1 pl-4 elevation-2"
     >
       <span className="font-medium">{t('learnerView.on')}</span>
-      <Button variant="soft" className="rounded-pill" onClick={() => learner.set(false)}>
+      <Button variant="soft" onClick={() => learner.set(false)}>
         {t('learnerView.exit')}
       </Button>
     </div>

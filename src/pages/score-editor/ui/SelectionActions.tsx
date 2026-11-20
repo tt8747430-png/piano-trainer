@@ -39,7 +39,7 @@ function EditButton({
             aria-disabled={blocked ? true : undefined}
             disabled={disabled}
             onClick={blocked ? undefined : onClick}
-            className="size-11 shrink-0 aria-disabled:opacity-50 narrow-phone:w-9 [&_svg:not([class*=size-])]:size-5"
+            className="shrink-0 aria-disabled:opacity-50 narrow-phone:w-9 [&_svg:not([class*=size-])]:size-5"
           />
         }
       >

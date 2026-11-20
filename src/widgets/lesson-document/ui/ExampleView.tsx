@@ -524,7 +524,7 @@ export function ExampleView({
           {editable ? (
             <Button
               variant={open ? 'secondary' : 'ghost'}
-              className="h-11 gap-1.5 px-3 md:h-10"
+              className="gap-1.5 px-3 md:h-10"
               aria-expanded={open}
               aria-controls={open ? panelId : undefined}
               onClick={() => setOpened(!open)}

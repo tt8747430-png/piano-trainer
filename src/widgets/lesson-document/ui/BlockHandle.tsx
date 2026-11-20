@@ -173,7 +173,7 @@ export function BlockHandle({
         <Button
           variant="ghost"
           size="icon"
-          className="size-11 text-muted-foreground md:size-10"
+          className="text-muted-foreground md:size-10"
           aria-label={t('edit.doc.addBelow')}
           title={t('edit.doc.addBelow')}
           // The caret stays in the document until the new line takes it.
@@ -192,7 +192,7 @@ export function BlockHandle({
               draggable
               aria-label={label}
               title={label}
-              className="size-11 cursor-grab touch-none text-muted-foreground active:cursor-grabbing md:size-9"
+              className="cursor-grab touch-none text-muted-foreground active:cursor-grabbing md:size-9"
               // The block its menu acts on stays selected, the handle beside it, while the menu is open.
               onPointerDown={(event) => {
                 selectBlock(editor, index)

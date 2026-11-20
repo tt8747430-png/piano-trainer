@@ -113,7 +113,7 @@ export function TakeRow({
             size="icon"
             aria-label={t('recorder.more')}
             title={t('recorder.more')}
-            className="shrink-0 rounded-pill"
+            className="shrink-0"
           />
         }
         trigger={<Ellipsis aria-hidden />}

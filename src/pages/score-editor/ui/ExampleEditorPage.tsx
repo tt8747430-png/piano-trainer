@@ -117,7 +117,7 @@ function ExampleScore({
     <ScoreEditor
       target={target}
       done={
-        <Button variant="tool" className="rounded-pill px-4 font-semibold" onClick={back}>
+        <Button variant="tool" className="px-4 font-semibold" onClick={back}>
           {tc('editMode.done')}
         </Button>
       }

@@ -30,7 +30,7 @@ function ToolButton({
     <Button
       variant="tool"
       size="icon"
-      className="size-11 shrink-0"
+      className="shrink-0"
       aria-label={label}
       title={label}
       aria-pressed={pressed}

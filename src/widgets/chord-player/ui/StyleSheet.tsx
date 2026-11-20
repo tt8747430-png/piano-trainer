@@ -97,7 +97,7 @@ function StyleList({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="size-11 shrink-0"
+                    className="shrink-0"
                     aria-label={t('chordPlayer.hear', { style: name })}
                     title={t('chordPlayer.hear', { style: name })}
                     aria-pressed={playback.playing === style.id}

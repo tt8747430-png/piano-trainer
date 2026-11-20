@@ -383,7 +383,7 @@ export function RowPlay({
     )
   if (label)
     return (
-      <Button variant="soft" onClick={playRow} className="self-start rounded-pill">
+      <Button variant="soft" onClick={playRow} className="self-start">
         <PlayLabel playing={playing === 'row'}>
           <Play aria-hidden data-icon="inline-start" className="fill-current" />
           {label}

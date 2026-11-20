@@ -68,13 +68,7 @@ function ChapterHead({
         align="end"
         trigger={<Ellipsis aria-hidden />}
         render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-11 shrink-0"
-            aria-label={menu}
-            title={menu}
-          />
+          <Button variant="ghost" size="icon" className="shrink-0" aria-label={menu} title={menu} />
         }
         actions={[
           {

@@ -44,7 +44,7 @@ export function CopyLinkField({ url }: { url: string }) {
       <Button
         variant="ghost"
         size="icon"
-        className="size-11 shrink-0 rounded-control"
+        className="shrink-0 rounded-control"
         aria-label={t('public.copyLink')}
         title={t('public.copyLink')}
         onClick={() =>

@@ -59,19 +59,10 @@ export function Welcome({ shown }: { shown: boolean }) {
           />
         </SettingsGroup>
         <div className="mt-1.5 grid gap-2">
-          <Button
-            size="lg"
-            className="h-[50px] rounded-full font-bold"
-            onClick={() => setWelcomed(settings)}
-          >
+          <Button size="lg" onClick={() => setWelcomed(settings)}>
             {t('welcome.start')}
           </Button>
-          <Button
-            size="lg"
-            variant="ghost"
-            className="h-[50px] rounded-full bg-muted font-bold hover:bg-muted/80"
-            onClick={signIn}
-          >
+          <Button size="lg" variant="ghost" className="bg-muted hover:bg-muted/80" onClick={signIn}>
             {t('welcome.signIn')}
           </Button>
         </div>

@@ -23,7 +23,7 @@ export function FilteredNotice({
         <ListFilter aria-hidden className="size-4 shrink-0" />
         {t('library.filtered', { shown, total: shown + hidden })}
       </p>
-      <Button variant="link" className="h-11 px-0" onClick={onClear}>
+      <Button variant="link" className="px-0" onClick={onClear}>
         {t('library.clearFilters')}
       </Button>
     </div>

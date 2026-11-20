@@ -81,16 +81,12 @@ export function KeysChecklist({
           <div className="flex gap-4 pb-2">
             <Button
               variant="link"
-              className="h-11 px-0 text-base text-link"
+              className="px-0 text-link"
               onClick={() => setDraft(new Set(SIGNATURES))}
             >
               {t('picker.selectAll')}
             </Button>
-            <Button
-              variant="link"
-              className="h-11 px-0 text-base text-link"
-              onClick={() => setDraft(new Set())}
-            >
+            <Button variant="link" className="px-0 text-link" onClick={() => setDraft(new Set())}>
               {t('picker.clearAll')}
             </Button>
           </div>

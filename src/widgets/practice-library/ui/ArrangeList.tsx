@@ -311,7 +311,6 @@ export function ArrangeList({
               <Button
                 variant="ghost"
                 size="icon"
-                className="size-11"
                 aria-label={t('library.edit.placeMenu', { name: place.name })}
                 title={t('library.edit.placeMenu', { name: place.name })}
               />

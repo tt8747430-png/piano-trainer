@@ -79,7 +79,7 @@ function ShareForm({ sheet, onDone }: { sheet: SavedChordSheet; onDone: () => vo
             {problem ? <Problem>{problem}</Problem> : null}
             <Button
               size="lg"
-              className="h-[50px] w-full"
+              className="w-full"
               disabled={busy || !ready}
               onClick={() => void copy()}
             >

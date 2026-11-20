@@ -195,10 +195,7 @@ function Hero() {
             {t('profile.guestKept')}
           </p>
           {/* GUEST_P's Sign in: a 44 honey pill, bold. */}
-          <ButtonLink
-            className="h-11 rounded-full px-5 font-bold"
-            render={<Link to="/account/sign-in" />}
-          >
+          <ButtonLink className="px-5" render={<Link to="/account/sign-in" />}>
             {t('profile.signIn')}
           </ButtonLink>
         </div>

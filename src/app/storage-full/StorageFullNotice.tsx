@@ -21,7 +21,7 @@ export function StorageFullNotice() {
     >
       <ButtonLink
         render={<Link to="/settings/storage" />}
-        className="rounded-full bg-alert-foreground px-4 font-bold text-alert hover:brightness-110"
+        className="bg-alert-foreground px-4 text-alert hover:brightness-110"
         onClick={() => setFull(false)}
       >
         {t('storageFull.settings')}

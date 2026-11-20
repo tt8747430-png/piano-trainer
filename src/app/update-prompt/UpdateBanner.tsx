@@ -28,12 +28,12 @@ export function UpdateBanner({
         <>
           <Button
             variant="ghost"
-            className="h-11 px-3 text-[0.9375rem] font-normal text-background hover:bg-background/10 hover:text-background"
+            className="px-3 text-[0.9375rem] font-normal text-background hover:bg-background/10 hover:text-background"
             onClick={onLater}
           >
             {t('update.later')}
           </Button>
-          <Button className="h-11 rounded-full px-4 text-[0.9375rem] font-bold" onClick={onUpdate}>
+          <Button className="px-4 text-[0.9375rem]" onClick={onUpdate}>
             {t('update.update')}
           </Button>
         </>

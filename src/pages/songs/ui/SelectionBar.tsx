@@ -119,7 +119,7 @@ export function SelectionBar({
             render={
               <Button
                 variant="ghost"
-                className="h-13 min-w-0 flex-1 flex-col gap-0.5 rounded-pill px-1 text-xs font-semibold"
+                className="h-13 min-w-0 flex-1 flex-col gap-0.5 px-1 text-xs font-semibold"
               />
             }
           >

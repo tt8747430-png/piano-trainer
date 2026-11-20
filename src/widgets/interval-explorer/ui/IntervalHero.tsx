@@ -118,7 +118,7 @@ export function IntervalHero({
           <Button
             variant="ghost"
             size="icon"
-            className="size-11 shrink-0 rounded-full bg-muted hover:bg-muted/70"
+            className="shrink-0 bg-muted hover:bg-muted/70"
             aria-label={t('intervals.play', { name: title })}
             aria-pressed={playing}
             onClick={onPlay}

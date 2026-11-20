@@ -57,7 +57,7 @@ function HeldStep({
       aria-label={label}
       title={label}
       disabled={disabled}
-      className="size-11 shrink-0 rounded-control"
+      className="shrink-0 rounded-control"
       onPointerDown={(event) => {
         if (event.button !== 0) return
         step.current()
@@ -179,7 +179,7 @@ export function TempoField({
             size="icon"
             aria-label={t('tempoField.hear')}
             title={t('tempoField.hear')}
-            className="size-11 shrink-0 rounded-pill text-link"
+            className="shrink-0 text-link"
             onClick={hear}
           >
             <Play aria-hidden className="fill-current" />
