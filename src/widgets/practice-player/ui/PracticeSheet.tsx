@@ -17,9 +17,10 @@ import {
   SheetContent,
   SwitchRow,
 } from '@/shared/ui'
-import { cn } from '@/shared/lib'
+import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { beatsPerBar, tempoWord } from '@/shared/lib/music'
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { BETWEENS, type Between } from '../model/practice-view'
 import { PlayAlongIcon } from './PlayAlongIcon'
 import { DOCK_CAPTIONED } from './dock-sizes'
@@ -142,6 +143,7 @@ export function PracticeSheet({
   const settings = useSettingsStoreApi()
   const { countdown } = useSettings(selectPlayback)
   const [open, setOpen] = useState(false)
+  const laptop = useMediaQuery(LAPTOP)
   const way = wayOf(mode)
   const Icon = WAY_ICON[way]
   const name = t(`practiceSheet.${way}`)
@@ -150,159 +152,183 @@ export function PracticeSheet({
     setPlayback(settings, { countdown: next === 'off' ? 'none' : 'audible' })
     onClick(next === 'on')
   }
+  const button = (
+    <FloatingBarButton
+      label={t('practiceSheet.of', { mode: name })}
+      caption={name}
+      aria-haspopup="dialog"
+      className={DOCK_CAPTIONED}
+      // The popover's trigger opens and closes it itself.
+      {...(laptop ? {} : { onClick: () => setOpen(true) })}
+    >
+      <Icon aria-hidden />
+    </FloatingBarButton>
+  )
+  const body = (
+    <div className="flex flex-col gap-5">
+      <RadioCards
+        label={t('practiceSheet.title')}
+        value={way}
+        cards={WAYS.map((each) => ({
+          value: each,
+          label: t(`practiceSheet.${each}`),
+          picture: (() => {
+            const Icon = WAY_ICON[each]
+            return <Icon className="size-6" />
+          })(),
+        }))}
+        onChange={(next) => (next === 'play' ? onPlay(tempo) : onWait())}
+      />
+      {way === 'wait' && !piano ? (
+        <p className="-mt-2 text-sm text-pretty text-muted-foreground">
+          {t(handsAtKeys ? 'pace.needsKeysNotHands' : 'pace.needsPiano')}
+        </p>
+      ) : null}
+      <SettingsGroup bare title={t('practiceSheet.tempo')}>
+        <GroupRows surface="sheet" label={t('practiceSheet.tempo')}>
+          <GroupField className="flex-col items-stretch gap-3 p-4">
+            <BeatLights performance={performance} practice={practice} />
+            <div className="flex items-center justify-center gap-4">
+              <button
+                type="button"
+                aria-label={tPractice('metronome.slower', { step: 1 })}
+                title={tPractice('metronome.slower', { step: 1 })}
+                onClick={() => onTempo(tempo - 1)}
+                className={STEP}
+              >
+                −
+              </button>
+              <p className="flex min-w-25 flex-col items-center">
+                <span className="sr-only">{tPractice('metronome.tempo', { bpm: tempo })}</span>
+                <span aria-hidden className="text-[2.5rem]/none font-bold tabular-nums">
+                  {tempo}
+                </span>
+                <span
+                  aria-hidden
+                  className="mt-1 text-xs/[normal] font-semibold text-muted-foreground"
+                >
+                  {`${tPractice('metronome.bpm')} · ${tMusic(`tempoWord.${tempoWord(tempo)}.name`)}`}
+                </span>
+              </p>
+              <button
+                type="button"
+                aria-label={tPractice('metronome.faster', { step: 1 })}
+                title={tPractice('metronome.faster', { step: 1 })}
+                onClick={() => onTempo(tempo + 1)}
+                className={STEP}
+              >
+                +
+              </button>
+              <button
+                type="button"
+                aria-label={tPractice('metronome.tap')}
+                onClick={() => {
+                  const bpm = taps.tap()
+                  if (bpm !== null) onTempo(bpm)
+                }}
+                className={cn(PILL, 'h-11 bg-hairline px-4 text-sm')}
+              >
+                {t('practiceSheet.tap')}
+              </button>
+            </div>
+            {tempo === ownTempo ? null : (
+              <button
+                type="button"
+                onClick={() => onTempo(ownTempo)}
+                className={cn(PILL, 'h-7.5 self-center bg-muted px-4 text-[0.8125rem]')}
+              >
+                {t('practiceSheet.scoreTempo', { tempo: ownTempo })}
+              </button>
+            )}
+          </GroupField>
+          <GroupRow label={t('practiceSheet.metronome')} setting="playback.countdown">
+            <span className="w-59 shrink-0">
+              <Segmented
+                label={t('practiceSheet.metronome')}
+                value={metronome}
+                options={CLICKS.map((each) => ({
+                  value: each,
+                  label: t(
+                    `practiceSheet.metronome${each === 'off' ? 'Off' : each === 'on' ? 'On' : 'CountIn'}`,
+                  ),
+                }))}
+                onChange={setMetronome}
+              />
+            </span>
+          </GroupRow>
+        </GroupRows>
+      </SettingsGroup>
+      {loop ? (
+        <SettingsGroup
+          bare
+          title={
+            loop.bars.first === loop.bars.last
+              ? t('practiceSheet.loopBar', { first: loop.bars.first })
+              : t('practiceSheet.loopBars', loop.bars)
+          }
+        >
+          <GroupRows surface="sheet" label={t('loop')}>
+            <GroupRow label={t('practiceSheet.repeats')}>
+              <span className="w-47 shrink-0">
+                <Segmented
+                  label={t('practiceSheet.repeats')}
+                  value={loop.repeats ?? 0}
+                  options={REPEATS.map((times) =>
+                    times === null
+                      ? { value: 0, label: '∞', title: t('practiceSheet.endless') }
+                      : { value: times, label: String(times) },
+                  )}
+                  onChange={(times) => loop.onRepeats(times === 0 ? null : times)}
+                />
+              </span>
+            </GroupRow>
+            <GroupRow label={t('practiceSheet.between')}>
+              <span className="w-44 shrink-0">
+                <Segmented
+                  label={t('practiceSheet.between')}
+                  value={loop.between}
+                  options={BETWEENS.map((each) => ({
+                    value: each,
+                    label: t(`practiceSheet.${BETWEEN_WORD[each]}`),
+                  }))}
+                  onChange={loop.onBetween}
+                />
+              </span>
+            </GroupRow>
+            <SwitchRow
+              label={t('practiceSheet.speedUp')}
+              checked={loop.speedUp}
+              onCheckedChange={loop.onSpeedUp}
+              className="min-h-12 border-b-0 ps-4 pe-3"
+            />
+          </GroupRows>
+        </SettingsGroup>
+      ) : null}
+    </div>
+  )
+  // On a laptop a popover over its button, as PlayerDesk draws it: 420 wide, 16 round, 12 in, its
+  // title at its left and no Done; on a phone the sheet.
+  if (laptop)
+    return (
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger render={button} />
+        <PopoverContent
+          side="top"
+          sideOffset={12}
+          aria-label={t('practiceSheet.title')}
+          className="max-h-(--available-height) w-105 gap-3 overflow-y-auto rounded-2xl p-3"
+        >
+          <h2 className="px-1 font-sans text-[1.0625rem]/[normal] font-semibold">
+            {t('practiceSheet.title')}
+          </h2>
+          {body}
+        </PopoverContent>
+      </Popover>
+    )
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <FloatingBarButton
-        label={t('practiceSheet.of', { mode: name })}
-        caption={name}
-        aria-haspopup="dialog"
-        className={DOCK_CAPTIONED}
-        onClick={() => setOpen(true)}
-      >
-        <Icon aria-hidden />
-      </FloatingBarButton>
-      <SheetContent title={t('practiceSheet.title')}>
-        <div className="flex flex-col gap-5">
-          <RadioCards
-            label={t('practiceSheet.title')}
-            value={way}
-            cards={WAYS.map((each) => ({
-              value: each,
-              label: t(`practiceSheet.${each}`),
-              picture: (() => {
-                const Icon = WAY_ICON[each]
-                return <Icon className="size-6" />
-              })(),
-            }))}
-            onChange={(next) => (next === 'play' ? onPlay(tempo) : onWait())}
-          />
-          {way === 'wait' && !piano ? (
-            <p className="-mt-2 text-sm text-pretty text-muted-foreground">
-              {t(handsAtKeys ? 'pace.needsKeysNotHands' : 'pace.needsPiano')}
-            </p>
-          ) : null}
-          <SettingsGroup bare title={t('practiceSheet.tempo')}>
-            <GroupRows surface="sheet" label={t('practiceSheet.tempo')}>
-              <GroupField className="flex-col items-stretch gap-3 p-4">
-                <BeatLights performance={performance} practice={practice} />
-                <div className="flex items-center justify-center gap-4">
-                  <button
-                    type="button"
-                    aria-label={tPractice('metronome.slower', { step: 1 })}
-                    title={tPractice('metronome.slower', { step: 1 })}
-                    onClick={() => onTempo(tempo - 1)}
-                    className={STEP}
-                  >
-                    −
-                  </button>
-                  <p className="flex min-w-25 flex-col items-center">
-                    <span className="sr-only">{tPractice('metronome.tempo', { bpm: tempo })}</span>
-                    <span aria-hidden className="text-[2.5rem]/none font-bold tabular-nums">
-                      {tempo}
-                    </span>
-                    <span
-                      aria-hidden
-                      className="mt-1 text-xs/[normal] font-semibold text-muted-foreground"
-                    >
-                      {`${tPractice('metronome.bpm')} · ${tMusic(`tempoWord.${tempoWord(tempo)}.name`)}`}
-                    </span>
-                  </p>
-                  <button
-                    type="button"
-                    aria-label={tPractice('metronome.faster', { step: 1 })}
-                    title={tPractice('metronome.faster', { step: 1 })}
-                    onClick={() => onTempo(tempo + 1)}
-                    className={STEP}
-                  >
-                    +
-                  </button>
-                  <button
-                    type="button"
-                    aria-label={tPractice('metronome.tap')}
-                    onClick={() => {
-                      const bpm = taps.tap()
-                      if (bpm !== null) onTempo(bpm)
-                    }}
-                    className={cn(PILL, 'h-11 bg-hairline px-4 text-sm')}
-                  >
-                    {t('practiceSheet.tap')}
-                  </button>
-                </div>
-                {tempo === ownTempo ? null : (
-                  <button
-                    type="button"
-                    onClick={() => onTempo(ownTempo)}
-                    className={cn(PILL, 'h-7.5 self-center bg-muted px-4 text-[0.8125rem]')}
-                  >
-                    {t('practiceSheet.scoreTempo', { tempo: ownTempo })}
-                  </button>
-                )}
-              </GroupField>
-              <GroupRow label={t('practiceSheet.metronome')} setting="playback.countdown">
-                <span className="w-59 shrink-0">
-                  <Segmented
-                    label={t('practiceSheet.metronome')}
-                    value={metronome}
-                    options={CLICKS.map((each) => ({
-                      value: each,
-                      label: t(
-                        `practiceSheet.metronome${each === 'off' ? 'Off' : each === 'on' ? 'On' : 'CountIn'}`,
-                      ),
-                    }))}
-                    onChange={setMetronome}
-                  />
-                </span>
-              </GroupRow>
-            </GroupRows>
-          </SettingsGroup>
-          {loop ? (
-            <SettingsGroup
-              bare
-              title={
-                loop.bars.first === loop.bars.last
-                  ? t('practiceSheet.loopBar', { first: loop.bars.first })
-                  : t('practiceSheet.loopBars', loop.bars)
-              }
-            >
-              <GroupRows surface="sheet" label={t('loop')}>
-                <GroupRow label={t('practiceSheet.repeats')}>
-                  <span className="w-47 shrink-0">
-                    <Segmented
-                      label={t('practiceSheet.repeats')}
-                      value={loop.repeats ?? 0}
-                      options={REPEATS.map((times) =>
-                        times === null
-                          ? { value: 0, label: '∞', title: t('practiceSheet.endless') }
-                          : { value: times, label: String(times) },
-                      )}
-                      onChange={(times) => loop.onRepeats(times === 0 ? null : times)}
-                    />
-                  </span>
-                </GroupRow>
-                <GroupRow label={t('practiceSheet.between')}>
-                  <span className="w-44 shrink-0">
-                    <Segmented
-                      label={t('practiceSheet.between')}
-                      value={loop.between}
-                      options={BETWEENS.map((each) => ({
-                        value: each,
-                        label: t(`practiceSheet.${BETWEEN_WORD[each]}`),
-                      }))}
-                      onChange={loop.onBetween}
-                    />
-                  </span>
-                </GroupRow>
-                <SwitchRow
-                  label={t('practiceSheet.speedUp')}
-                  checked={loop.speedUp}
-                  onCheckedChange={loop.onSpeedUp}
-                  className="min-h-12 border-b-0 ps-4 pe-3"
-                />
-              </GroupRows>
-            </SettingsGroup>
-          ) : null}
-        </div>
-      </SheetContent>
+      {button}
+      <SheetContent title={t('practiceSheet.title')}>{body}</SheetContent>
     </Sheet>
   )
 }
