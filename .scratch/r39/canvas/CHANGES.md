@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · PENDING · Learn's laptop board in the 88 place bar (`LPLACEBAR`) · LearnLaptop · pending
+- 2026-11-20 · PENDING · Learn's laptop board in the 88 place bar (`LPLACEBAR`) · LearnLaptop,AppLayersLaptop · pending
 - 2026-11-20 · PENDING · the overview's Jazz vocabulary counts the app's 10 exercises · Main,Laptop · pending
 
 
