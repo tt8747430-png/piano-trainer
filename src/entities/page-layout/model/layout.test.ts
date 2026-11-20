@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   changedPages,
   changesOf,
-  layoutOf,
+  panelLayout,
+  panelsOf,
   panelSpec,
   placeOn,
   placesFor,
@@ -10,9 +11,13 @@ import {
   withPanel,
 } from './layout'
 
-describe('layoutOf', () => {
+describe('panelLayout', () => {
   it('comes as the board draws it: keys at the foot, controls floating, the Genos compact on the right', () => {
-    expect(layoutOf({}, 'chord-player')).toEqual({
+    const page = panelsOf('chord-player').map((panel) => [
+      panel,
+      panelLayout({}, 'chord-player', panel),
+    ])
+    expect(Object.fromEntries(page)).toEqual({
       keys: { place: 'bottom', size: 'medium', hidden: false },
       dock: { place: 'float', size: 'full', hidden: false },
       genos: { place: 'right', size: 'compact', hidden: false },
@@ -27,7 +32,7 @@ describe('withPanel', () => {
     expect(moved).toEqual({
       'chord-player': { keys: { place: 'top', size: 'medium', hidden: false } },
     })
-    expect(layoutOf(moved, 'chord-player').keys.place).toBe('top')
+    expect(panelLayout(moved, 'chord-player', 'keys').place).toBe('top')
   })
 
   it('forgets a panel put back as it came, and the page with nothing changed', () => {

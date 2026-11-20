@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  layoutOf,
+  panelLayout,
   panelSpec,
   placeOn,
   placesFor,
@@ -41,7 +41,10 @@ export interface ChordLayout {
 export function useChordLayout(laptop: boolean): ChordLayout {
   const store = usePageLayoutsStoreApi()
   const pages = usePageLayouts(selectLayouts)
-  const panels = useMemo(() => layoutOf(pages, CHORD_PLAYER_PAGE), [pages])
+  const panels = useMemo(() => {
+    const of = (panel: ChordPanel) => panelLayout(pages, CHORD_PLAYER_PAGE, panel)
+    return { keys: of('keys'), dock: of('dock'), genos: of('genos'), chords: of('chords') }
+  }, [pages])
   return {
     panels,
     changed: pages[CHORD_PLAYER_PAGE] !== undefined,

@@ -157,9 +157,7 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
         index.filter((entry) => entry.target.opens === 'page' && entry.target.page === page),
       ).map((entry) => {
         const page = entry.target.opens === 'page' ? entry.target.page : undefined
-        const group = PRACTICE_GROUPS.find(
-          (each) => page && (each.pages as readonly string[]).includes(page),
-        )
+        const group = PRACTICE_GROUPS.find((each) => page && each.pages.some((one) => one === page))
         return {
           ...result(entry),
           detail: group

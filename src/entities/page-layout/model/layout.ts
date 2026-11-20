@@ -69,7 +69,9 @@ export const PAGE_PANELS = {
 } as const satisfies Readonly<Record<string, Readonly<Record<string, PanelSpec>>>>
 
 export type LayoutPage = keyof typeof PAGE_PANELS
-export const LAYOUT_PAGES = Object.keys(PAGE_PANELS) as LayoutPage[]
+export const LAYOUT_PAGES: readonly LayoutPage[] = Object.keys(PAGE_PANELS).filter(
+  (key): key is LayoutPage => key in PAGE_PANELS,
+)
 export type PanelOf<P extends LayoutPage> = keyof (typeof PAGE_PANELS)[P] & string
 
 /** A panel as the learner left it. */
@@ -78,11 +80,6 @@ export interface PanelLayout {
   readonly size: PanelSize
   readonly hidden: boolean
 }
-
-/** A page's panels, each as it stands. */
-export type PageLayout<P extends LayoutPage = LayoutPage> = Readonly<
-  Record<PanelOf<P>, PanelLayout>
->
 
 /** What the learner changed of each page: its panels that differ from how they came, and only those. */
 export type ChangedLayouts = Readonly<
@@ -93,7 +90,7 @@ const specsOf = (page: LayoutPage): Readonly<Record<string, PanelSpec>> => PAGE_
 
 /** The panels a page draws, in its order. */
 export const panelsOf = <P extends LayoutPage>(page: P): PanelOf<P>[] =>
-  Object.keys(PAGE_PANELS[page]) as PanelOf<P>[]
+  Object.keys(PAGE_PANELS[page]).filter((key): key is PanelOf<P> => key in PAGE_PANELS[page])
 
 /** A panel as it comes. */
 const fresh = (spec: PanelSpec): PanelLayout => ({
@@ -105,14 +102,12 @@ const fresh = (spec: PanelSpec): PanelLayout => ({
 const samePanel = (a: PanelLayout, b: PanelLayout): boolean =>
   a.place === b.place && a.size === b.size && a.hidden === b.hidden
 
-/** A page's panels as they stand: the learner's changes over how each came. */
-export function layoutOf<P extends LayoutPage>(changed: ChangedLayouts, page: P): PageLayout<P> {
-  const own: Readonly<Record<string, PanelLayout>> = changed[page] ?? {}
-  const specs = specsOf(page)
-  return Object.fromEntries(
-    Object.entries(specs).map(([panel, spec]) => [panel, own[panel] ?? fresh(spec)]),
-  ) as PageLayout<P>
-}
+/** A page's panel as it stands: the learner's change over how it came. */
+export const panelLayout = <P extends LayoutPage>(
+  changed: ChangedLayouts,
+  page: P,
+  panel: PanelOf<P>,
+): PanelLayout => changed[page]?.[panel] ?? fresh(panelSpec(page, panel))
 
 /** The places a panel may go at this size: a phone has no column beside the content. */
 export const placesFor = (spec: PanelSpec, laptop: boolean): readonly Place[] =>
@@ -140,7 +135,7 @@ export function withPanel<P extends LayoutPage>(
   change: Partial<PanelLayout>,
 ): ChangedLayouts {
   const spec = panelSpec(page, panel)
-  const current = layoutOf(changed, page)[panel]
+  const current = panelLayout(changed, page, panel)
   const next: PanelLayout = {
     place:
       change.place !== undefined && spec.places.includes(change.place)
