@@ -16,8 +16,8 @@ Open, in this order:
 4. ~~Accompaniment rows: Listen, and the hands line on a phone~~ stale: the Accompaniment board (r41_practice) draws each row's idea under its name, its level and heart, no Listen, and the app matches it at 402 (2026-11-20); the older spec line was superseded by the board.
 5. ~~CLAUDE.md's map~~ done: the Player's Pace lists Interpret (gone); Practice says Exercises by book (two shelves now).
 6. (Part done 2026-11-20: every arbitrary corner equal to a scale step is now its token across the app, 14 card, 12 control, 8 tile, 16 menu; the picture tiles' 9, 10, 11 and 18 and the small 2 to 6 wait for their own tokens.) Arbitrary values to tokens: `PracticePage.tsx:103`, `LibraryTable.tsx:32,40,251`, `PatternPage.tsx:198,214`,
-   `LibraryTile` radii; `ChordPlayerSettings.tsx` (340 lines) and `ArrangeList.tsx` (445) split; Chord player's
-   gear onto `SettingsGear`; progression strings out of the `learn` namespace.
+   `LibraryTile` radii; `ChordPlayerSettings.tsx` (340 lines) and `ArrangeList.tsx` (445) split; ~~Chord player's
+   gear onto `SettingsGear`~~ done: its gear is the kit's `GearButton` (its sheet has pages, as Scales'); progression strings out of the `learn` namespace.
 7. Smells: `ArrangeList` handle and style built three times; `FoldHeadRow` vs `FoldSection`; folds in `useState`
    where Practice uses `useFold`; the names list in `ChordPlayerSettings` vs `PROGRESSION_NAMES`.
 8. `PatternPage.test.tsx`'s publish test still expects the old address (waits for the owner's test run). `practice-machine.test.ts`: 10 of 39 red since the machine keys by Midi (waits for the owner's test run).

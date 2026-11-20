@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { Settings } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BAND_PARTS, COUNT_INS, type CountIn } from '@/entities/chord-sheet'
@@ -20,7 +19,6 @@ import { useServices } from '@/shared/lib/services'
 import {
   BackButton,
   GroupAction,
-  RoundButton,
   RowButton,
   RowLink,
   sayUndo,
@@ -33,6 +31,7 @@ import {
 } from '@/shared/ui'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useChordSheet, useResetChordLayout } from '@/widgets/chord-player'
+import { GearButton } from '@/widgets/practice-pages'
 
 const PERCENT = { style: 'unit', unit: 'percent' } as const
 const STEP = 5
@@ -111,13 +110,7 @@ export function ChordPlayerSettings({
   const title = t('settings.open', { page: t('pages.chordPlayer') })
   return (
     <>
-      <RoundButton
-        label={title}
-        icon={Settings}
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        onClick={() => setOpen(true)}
-      />
+      <GearButton title={title} open={open} onOpen={() => setOpen(true)} />
       <Sheet hung="header" open={open} onOpenChange={setOpen}>
         {open ? (
           <SettingsBody
