@@ -35,7 +35,7 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   No strip that hides its options behind ‹ ›, and no scrolling strip fades at its edges. A choice that has a picture
   is a tile wearing it (`PictureTiles`): a layout, a view, a swing feel, a sign; an inversion is its noteheads.
   Settings changed less often are a sheet on a phone and a popover on a laptop. Views of one thing are a `Segmented` in
-  the page's content; a place's views are its title (`TitleTabs`).
+  the page's content.
 
 - **Four pickers for notes and keys** (`shared/ui/pickers`), one look: a value with ⌃⌄ opening a popover, a bottom
   sheet below 30rem.

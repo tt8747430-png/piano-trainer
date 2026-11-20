@@ -441,9 +441,7 @@ square at the top.
   actions 4px apart there, so a tool's name fits whole on two lines beside its tools ("Определитель аккордов"); a
   word is never split. A place's or a detail page's title is larger
   in the same row and may take two lines. Nothing hangs under the bar: a status goes in it or in its menu, and a page's
-  views sit in its content. A place's views (Learn's Lessons · Courses, Songs' My songs · Explore) are its title
-  (`TitleTabs`): their words where the title stands, in the sans at the large title's size, the one shown in ink with an
-  ink line under it, the other in soft ink; the place's name stays the page's heading, unseen. A pane kept in sight
+  views sit in its content. A pane kept in sight
   under the bar (a style's preview) is `Pinned`: solid, edge to edge, moving with the bar; never a card floating over
   the controls. What is docked at the foot (`Docked`) owns the ground down to the screen's edge. It slides away while reading down and returns as the page turns up.
 - **Glass is the controls' layer, and every bar and floating button wears it** (owner, 2026-11-16: "I want

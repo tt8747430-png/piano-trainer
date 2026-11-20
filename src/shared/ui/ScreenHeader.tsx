@@ -51,28 +51,17 @@ export type ScreenHeaderProps = {
   titleOnPage?: boolean | 'phone'
   /** A large title that is a name and may wrap (a course's, Your lessons and courses): 24 on a phone. */
   named?: boolean
-} & (
-  | {
-      /** A place's title, set larger in the same row. */
-      large: true
-      /**
-       * A place's views (R31-S): its title's place in the bar taken by their words (a `TitleTabs`), on
-       * a phone and a laptop alike; the title is still the page's heading, to a screen reader.
-       */
-      views?: ReactNode
-    }
-  | { large?: false; views?: never }
-)
+  /** A place (Learn, Songs, Practice) or a detail page: its title set larger in the same row. */
+  large?: boolean
+}
 
 /**
  * A screen's bar: one row of one height on every screen, Back, the title (one line, cut short with an
  * ellipsis) and at most two actions, More holding the rest; never a second row (R29-P1: a page's
  * views are a segmented control in its content). A place (Learn, Songs, Practice) or a detail page (a
- * song, a course) is `large`: the same one row, its title set larger and allowed a second line; a
- * place's views (`views`, Learn's Lessons · Courses, Songs' My songs · Explore) stand as its title, a
- * tab each (R31-S). A hairline marks the bar once the page runs
- * under it. It stays at the top, clear of the notch, slides away while reading down
- * and comes back as soon as the page turns up; it stays while focus is inside it.
+ * song, a course) is `large`: the same one row, its title set larger and allowed a second line. It
+ * stays at the top while the page scrolls under it, clear of the notch, glass with no band or line
+ * (`DESIGN.md`, Placement).
  *
  * It must be a child of the page's root: a sticky bar goes no further than its parent does.
  */
@@ -83,7 +72,6 @@ export function ScreenHeader({
   settings,
   more,
   edit,
-  views,
   large = false,
   titleOnPage = false,
   named = false,
@@ -148,13 +136,10 @@ export function ScreenHeader({
                 large && named && 'max-sm:text-2xl',
                 titleOnPage === true && 'sr-only',
                 titleOnPage === 'phone' && 'max-lg:sr-only',
-                // A place's views say where it is: its name stays the page's heading, unseen.
-                views && 'sr-only',
               )}
             >
               {title}
             </h1>
-            {views}
           </div>
           {tools || settings || more || edit ? (
             <div className="ms-auto -me-1 flex shrink-0 items-center gap-2 lg:me-0 print:hidden">
@@ -195,13 +180,10 @@ export function ScreenHeader({
                 large && named && 'max-sm:text-2xl',
                 titleOnPage === true && 'sr-only',
                 titleOnPage === 'phone' && 'max-lg:sr-only',
-                // A place's views say where it is: its name stays the page's heading, unseen.
-                views && 'sr-only',
               )}
             >
               {title}
             </h1>
-            {views}
           </div>
           {/* The bar's glass circles stand 8 apart, as the boards' IB; on a phone the last 12 from the
               edge, as Back stands at the start (TOP's 12). */}

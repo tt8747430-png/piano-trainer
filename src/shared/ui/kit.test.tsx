@@ -6,7 +6,6 @@ import { ButtonLink } from './ButtonLink'
 import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
 import { InversionChoice } from './InversionChoice'
-import { TitleTabs } from './TitleTabs'
 import { RankMark } from './RankMark'
 import { Labelled } from './Labelled'
 import { MenuSection } from './MenuSection'
@@ -38,37 +37,6 @@ describe('ScreenHeader', () => {
     render(<ScreenHeader title="Learn" settings={<button type="button">Settings</button>} />)
     expect(screen.getByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
-  })
-
-  it('sets a place’s views as its title, its name still the page’s heading (R31-S)', async () => {
-    const user = userEvent.setup()
-    const shown: string[] = []
-    render(
-      <ScreenHeader
-        title="Songs"
-        large
-        views={
-          <TitleTabs
-            label="Views"
-            value="mine"
-            options={[
-              { value: 'mine', label: 'My songs' },
-              { value: 'explore', label: 'Explore' },
-            ]}
-            onChange={(view) => shown.push(view)}
-          />
-        }
-        tools={<button type="button">Select</button>}
-      />,
-    )
-    const bar = screen.getByRole('banner')
-    expect(within(bar).getByRole('heading', { level: 1, name: 'Songs' })).toHaveClass('sr-only')
-    expect(within(bar).getByRole('radio', { name: 'My songs' })).toBeChecked()
-    await user.click(within(bar).getByRole('radio', { name: 'Explore' }))
-    expect(shown).toEqual(['explore'])
-    // One row: the views where the title stands, nothing under the bar.
-    expect(bar.nextElementSibling).toBeNull()
-    expect(within(bar).getByRole('button', { name: 'Select' })).toBeInTheDocument()
   })
 
   it('gives only a place its views', () => {
