@@ -14,6 +14,7 @@ export function NotePicker({
   onChange,
   name = printedNote,
   bare,
+  title,
   className,
 }: {
   label: string
@@ -22,6 +23,8 @@ export function NotePicker({
   /** How the button names the note chosen, where it says more than the note ("C♯ minor"). */
   name?: (spelled: SpelledNote) => ReactNode
   bare?: boolean
+  /** A part of a name made of its pickers (`PickerShell`'s `title`). */
+  title?: boolean
   className?: string
 }) {
   return (
@@ -30,6 +33,7 @@ export function NotePicker({
       value={name(value)}
       spoken={printedNote(value)}
       bare={bare}
+      title={title}
       className={className}
     >
       {({ close, start }) => (

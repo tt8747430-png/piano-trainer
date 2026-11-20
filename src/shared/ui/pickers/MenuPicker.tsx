@@ -14,6 +14,7 @@ export function MenuPicker<V extends OptionValue>({
   value,
   onChange,
   bare,
+  title,
   face,
   trigger,
   className,
@@ -23,6 +24,8 @@ export function MenuPicker<V extends OptionValue>({
   value: V
   onChange: (value: V) => void
   bare?: boolean
+  /** A part of a name made of its pickers (`PickerShell`'s `title`). */
+  title?: boolean
   /** How the button shows the value, where not by its label: shorter, or a picture. */
   face?: (value: V) => ReactNode
   /** A trigger that carries its own face (a settings group's row), in place of the value with ⌃⌄. */
@@ -43,6 +46,7 @@ export function MenuPicker<V extends OptionValue>({
       value={face ? face(value) : (current?.label ?? String(value))}
       spoken={spoken}
       bare={bare}
+      title={title}
       trigger={trigger}
       className={className}
     >

@@ -13,7 +13,7 @@ import {
   type ChordQuality,
   type Tone,
 } from '@/shared/lib/music'
-import { MenuPicker, NotePicker, TITLE_PART } from '@/shared/ui'
+import { MenuPicker, NotePicker } from '@/shared/ui'
 import { takesTwoHands, type ChordView } from '../model/chord-view'
 import { useChordTypes } from './use-chord-types'
 
@@ -54,14 +54,13 @@ export function ChordName({
       className="flex flex-wrap items-stretch justify-start gap-2"
     >
       <NotePicker
-        bare
+        title
         label={t('practice:root')}
         value={root}
         onChange={(spelled) => onChange({ root: noteParam(spelled) })}
-        className={TITLE_PART}
       />
       <MenuPicker
-        bare
+        title
         label={t('practice:chords.builder.chord')}
         value={quality ?? 'maj'}
         groups={types}
@@ -75,11 +74,10 @@ export function ChordName({
           )
         }
         onChange={(each) => onChange(qualityParams(each))}
-        className={TITLE_PART}
       />
       {inversions.length > 1 ? (
         <MenuPicker
-          bare
+          title
           label={t('practice:chords.inTheBass.label')}
           value={chord.inversion}
           options={inversions.map((inversion) => ({
@@ -102,7 +100,6 @@ export function ChordName({
             )
           }
           onChange={(inversion) => onChange({ inversion })}
-          className={TITLE_PART}
         />
       ) : null}
     </div>
