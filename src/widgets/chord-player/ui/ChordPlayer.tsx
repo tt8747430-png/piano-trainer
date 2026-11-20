@@ -31,7 +31,7 @@ import { libraryParam, progressionMode } from '@/entities/progression-library'
 import { selectChordPlayer, useSettings } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
-import { cn, LAPTOP, useMediaQuery, WIDE } from '@/shared/lib'
+import { cn, LAPTOP, useMediaQuery, useRootSize, WIDE } from '@/shared/lib'
 import {
   barCount,
   duplicateSection,
@@ -109,6 +109,8 @@ import { StyleSheet } from './StyleSheet'
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
 /** How a dropped tile settles into its place: the app's one ease-out (DESIGN.md, Motion). */
 const DROP_ANIMATION = { duration: 200, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+/** The height of what floats over the keys, which the chord sounding keeps clear of. */
+const OVER_FOOT = { block: '--over-foot' }
 
 /**
  * What a drop may land on (memory-palaces' `useSortableBlock`): only what the thing in hand may land
@@ -400,20 +402,8 @@ export function ChordPlayer({
   const column = useRef<HTMLDivElement>(null)
   /** What floats over the keys (the dock, the Genos strip): its height is `--over-foot`, which the
       chord sounding keeps clear of as the sheet follows it. */
-  const floating = useRef<HTMLDivElement>(null)
-  useLayoutEffect(() => {
-    const element = floating.current
-    if (!element) return
-    const root = document.documentElement
-    const observer = new ResizeObserver(([entry]) =>
-      root.style.setProperty('--over-foot', `${entry?.borderBoxSize[0]?.blockSize ?? 0}px`),
-    )
-    observer.observe(element)
-    return () => {
-      observer.disconnect()
-      root.style.removeProperty('--over-foot')
-    }
-  })
+  const [floating, setFloating] = useState<HTMLDivElement | null>(null)
+  useRootSize(floating, OVER_FOOT)
   const [over, setOver] = useState<{ left: number; width: number } | null>(null)
   useLayoutEffect(() => {
     const element = column.current
@@ -803,7 +793,7 @@ export function ChordPlayer({
             Controls, the Genos at the foot (canvas R76), on a phone and a laptop alike. */}
         {over ? (
           <div
-            ref={floating}
+            ref={setFloating}
             className="pointer-events-none fixed z-30 flex flex-col items-center gap-2"
             style={{
               left: over.left,

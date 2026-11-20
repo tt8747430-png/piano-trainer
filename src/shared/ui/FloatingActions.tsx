@@ -4,7 +4,6 @@ import {
   useContext,
   useEffect,
   useId,
-  useLayoutEffect,
   useState,
   type ComponentProps,
   type ReactElement,
@@ -12,7 +11,7 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
+import { cn, useRootSize } from '@/shared/lib'
 import { ButtonLink } from './ButtonLink'
 import { FloatingContext } from './floating-context'
 import { KindTile } from './KindTile'
@@ -37,7 +36,10 @@ const DIAL_ASIDE = 'aside:top-0 aside:bottom-auto aside:mb-0'
 /** The page keeps this far clear of the actions: their row's margin over the foot. */
 const FLOATING_GAP_PX = 12
 /** The room the actions take along one side, their gap included; none while there are none. */
-const room = (px: number | undefined) => `${px ? px + FLOATING_GAP_PX : 0}px`
+const room = (px: number) => `${px ? px + FLOATING_GAP_PX : 0}px`
+
+/** The page pads clear of them by that room, both ways. */
+const ROOM = { block: '--floating-block', inline: '--floating-inline', write: room }
 
 /** What a tap may land on and still be the page's own, not a tap on the page: a control or the keys. */
 const CONTROLS =
@@ -82,25 +84,7 @@ export function FloatingHost({
     document.addEventListener('click', tap)
     return () => document.removeEventListener('click', tap)
   }, [])
-  // Measured before the first paint, so the page never pads for them a frame late and reflows (A31).
-  useLayoutEffect(() => {
-    if (!column) return
-    const root = document.documentElement.style
-    const box = column.getBoundingClientRect()
-    root.setProperty('--floating-block', room(box.height))
-    root.setProperty('--floating-inline', room(box.width))
-    const observer = new ResizeObserver(([entry]) => {
-      const size = entry?.borderBoxSize[0]
-      root.setProperty('--floating-block', room(size?.blockSize))
-      root.setProperty('--floating-inline', room(size?.inlineSize))
-    })
-    observer.observe(column)
-    return () => {
-      observer.disconnect()
-      root.removeProperty('--floating-block')
-      root.removeProperty('--floating-inline')
-    }
-  }, [column])
+  useRootSize(column, ROOM)
   return (
     <FloatingContext.Provider value={{ column }}>
       {children}

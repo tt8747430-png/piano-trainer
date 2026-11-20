@@ -1,9 +1,12 @@
-import { useLayoutEffect, useRef, type ReactNode } from 'react'
-import { cn } from '@/shared/lib'
+import { useState, type ReactNode } from 'react'
+import { cn, useRootSize } from '@/shared/lib'
 
 /** Its gutters and foot: its content's own where it bleeds edge to edge (a page's keys, R34). */
 const PADDING =
   'px-gutter pt-1 pb-2 landscape-phone:pr-gutter-safe landscape-phone:pb-safe-2 lg:pb-safe-4'
+
+/** Its height, which the page pads its foot clear of. */
+const DOCKED = { block: '--docked' }
 
 /**
  * Keeps its content at the foot of the screen, over the phone's tab bar, the screen's width beside a
@@ -22,25 +25,11 @@ export function Docked({
   bleed?: boolean
   className?: string
 }) {
-  const docked = useRef<HTMLDivElement>(null)
-  // Measured before the first paint, so what floats over it never starts at the foot and jumps (A31).
-  useLayoutEffect(() => {
-    const element = docked.current
-    if (!element) return
-    const root = document.documentElement
-    root.style.setProperty('--docked', `${element.getBoundingClientRect().height}px`)
-    const observer = new ResizeObserver(([entry]) =>
-      root.style.setProperty('--docked', `${entry?.borderBoxSize[0]?.blockSize ?? 0}px`),
-    )
-    observer.observe(element)
-    return () => {
-      observer.disconnect()
-      root.style.removeProperty('--docked')
-    }
-  }, [])
+  const [docked, setDocked] = useState<HTMLDivElement | null>(null)
+  useRootSize(docked, DOCKED)
   return (
     <div
-      ref={docked}
+      ref={setDocked}
       data-slot="docked"
       className={cn(
         "fixed inset-x-0 bottom-over-floating z-20 bg-background print:hidden after:absolute after:inset-x-0 after:top-full after:h-[calc(var(--nav-bar)+var(--floating-foot))] after:bg-background after:content-[''] lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed lg:group-data-[sidebar=focus]/main:left-0",
