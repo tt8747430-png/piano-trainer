@@ -16,6 +16,7 @@ import {
   FAVOURITES,
   RECENT,
   HIDDEN,
+  KEY_MODES,
   MINE,
   PRACTICE_SORTS,
   type LibraryGroup,
@@ -28,7 +29,8 @@ import type { GroupWord, LibraryKind } from '../model/library-words'
 /**
  * A practice library's search and filters (canvas, Songs' own): one search box and beside it Sort and
  * filter, its count on it, opening the sort first on every size,
- * then Level (the levels the place holds) and, for a library of styles, Style; under them on a phone
+ * then Level (the levels the place holds, each with its count), Key for a library of progressions
+ * (Major key, Minor key, each with its count) and, for a library of styles, Style; under them on a phone
  * the place chips (All · Favourites · Mine), then each filter on and a book's place as a chip that
  * takes it off.
  */
@@ -39,6 +41,7 @@ export function LibrarySearch({
   groups,
   groupWord,
   levels,
+  modes,
   screen,
   names,
   mine,
@@ -55,12 +58,14 @@ export function LibrarySearch({
   groups: readonly LibraryGroup[]
   groupWord: GroupWord
   levels: boolean
+  /** Whether its rows have keys (Progressions): the sheet's Key filter. */
+  modes: boolean
   screen: string
   names: Readonly<Record<string, string>>
   /** Whether the learner makes rows of their own here: Mine is a place chip. */
   mine: boolean
 }) {
-  const { t } = useTranslation(['practice', 'common'])
+  const { t } = useTranslation(['practice', 'common', 'music'])
   const set = useSetSearch<PracticeLibraryView>()
   const sorts = PRACTICE_SORTS.filter((sort) => levels || sort !== 'level')
   const sortName = (sort: (typeof PRACTICE_SORTS)[number]) =>
@@ -93,6 +98,13 @@ export function LibrarySearch({
           }),
           off: () => set({ stage: 'any' }),
         },
+    view.mode === 'any'
+      ? null
+      : {
+          id: 'mode',
+          name: t(`practice:library.keyMode.${view.mode}`),
+          off: () => set({ mode: 'any' }),
+        },
     shown.place === ALL || placeName === undefined || placeChips.includes(shown.place)
       ? null
       : { id: 'place', name: placeName, off: () => set({ place: ALL }) },
@@ -117,7 +129,11 @@ export function LibrarySearch({
           <FilterFoot
             on={count > 0}
             onClear={() =>
-              set(styles && count > 0 ? { stage: 'any', place: ALL } : { stage: 'any' })
+              set(
+                styles && count > 0
+                  ? { stage: 'any', mode: 'any', place: ALL }
+                  : { stage: 'any', mode: 'any' },
+              )
             }
             show={
               kept > 0
@@ -145,8 +161,26 @@ export function LibrarySearch({
                 key={stage}
                 pressed={view.stage === stage}
                 onPress={() => set({ stage })}
+                count={shown.stageCounts[stage] ?? 0}
               >
                 {t(`common:stage.${stage}`)}
+              </FilterChoice>
+            ))}
+          </FilterGroup>
+        ) : null}
+        {modes ? (
+          <FilterGroup title={t('music:key.label')}>
+            <FilterChoice pressed={view.mode === 'any'} onPress={() => set({ mode: 'any' })}>
+              {t('practice:library.anyKey')}
+            </FilterChoice>
+            {KEY_MODES.map((mode) => (
+              <FilterChoice
+                key={mode}
+                pressed={view.mode === mode}
+                onPress={() => set({ mode })}
+                count={shown.modeCounts[mode]}
+              >
+                {t(`practice:library.keyMode.${mode}`)}
               </FilterChoice>
             ))}
           </FilterGroup>

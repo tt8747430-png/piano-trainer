@@ -143,6 +143,8 @@ export function PracticeLibrary({
     groups: arranged.groups,
     groupWord,
     levels,
+    // A Key filter where the rows carry their keys (Progressions).
+    modes: items.some((item) => item.modes !== undefined),
     screen,
     names,
     mine: mine !== undefined,
@@ -177,7 +179,7 @@ export function PracticeLibrary({
       <FilteredNotice
         shown={shown.items.length}
         hidden={shown.filtering ? shown.scope - shown.items.length : 0}
-        onClear={() => set({ q: '', stage: 'any' })}
+        onClear={() => set({ q: '', stage: 'any', mode: 'any' })}
       />
       {editing ? (
         <ArrangeList

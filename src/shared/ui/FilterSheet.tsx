@@ -108,14 +108,19 @@ export function FilterGroup({
   )
 }
 
-/** One choice of a filter's group: a chip pressed while it is the one chosen. */
+/**
+ * One choice of a filter's group: a chip pressed while it is the one chosen, with how many it keeps
+ * after its name where the group counts them (the boards' Major key 18).
+ */
 export function FilterChoice({
   pressed,
   onPress,
+  count,
   children,
 }: {
   pressed: boolean
   onPress: () => void
+  count?: number | undefined
   children: ReactNode
 }) {
   return (
@@ -128,6 +133,9 @@ export function FilterChoice({
         className="h-11 max-w-full min-w-14 text-muted-foreground aria-pressed:text-foreground"
       >
         <span className="truncate">{children}</span>
+        {count === undefined ? null : (
+          <span className="font-medium tabular-nums opacity-60">{count}</span>
+        )}
       </Toggle>
     </li>
   )

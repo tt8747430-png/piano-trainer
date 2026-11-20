@@ -17,14 +17,15 @@ import { togglePracticeFavourite } from '@/features/manage-practice-library'
 import { localText, useLocale } from '@/shared/i18n'
 import { numeralsLine, parseNumerals } from '@/shared/lib/music'
 import type { RowAction } from '@/shared/ui'
-import { MINE, type LibraryGroup, type LibraryItem } from '@/widgets/practice-library'
+import { MINE, type KeyMode, type LibraryGroup, type LibraryItem } from '@/widgets/practice-library'
 
 /**
  * The Progressions library's styles and rows (canvas, Progressions): each style of the library a
  * place, each progression its chords as columns in their roles' paints, its name over its numerals (in its major
- * line where it has one), how it sounds found by the search; Mine the progressions the learner keeps. The library has no levels, so it shows, sorts and filters by none.
+ * line where it has one, its minor one while the Key filter keeps Minor key), how it sounds found by the search;
+ * Mine the progressions the learner keeps. It filters by key (Major key, Minor key), never by level.
  */
-export function useProgressionLibrary(): {
+export function useProgressionLibrary(mode: KeyMode | 'any'): {
   groups: readonly LibraryGroup[]
   items: readonly LibraryItem[]
 } {
@@ -46,7 +47,7 @@ export function useProgressionLibrary(): {
   )
   const library = styles.flatMap(({ style, progressions }) =>
     progressions.map((progression): LibraryItem => {
-      const minor = progressionMode(progression, false)
+      const minor = progressionMode(progression, mode === 'minor')
       const numerals = libraryLine(progression, minor)
       const favourite = favourites.includes(progression.id)
       return {
@@ -54,6 +55,10 @@ export function useProgressionLibrary(): {
         name: localText(progression.name, locale),
         detail: numerals,
         third: t(minor ? 'music:key.minorMode' : 'music:key.majorMode'),
+        modes: [
+          ...(progression.major === undefined ? [] : ['major' as const]),
+          ...(progression.minor === undefined ? [] : ['minor' as const]),
+        ],
         group: style,
         words: [
           progression.name.en,
@@ -77,6 +82,7 @@ export function useProgressionLibrary(): {
       name: progression.name,
       detail: numeralsLine(parsed),
       third: t(progression.minor ? 'music:key.minorMode' : 'music:key.majorMode'),
+      modes: [progression.minor ? 'minor' : 'major'],
       words: [numeralsLine(parsed)],
       group: MINE,
       // Its own mode paints its roles, as the library's do.

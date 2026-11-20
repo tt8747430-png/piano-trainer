@@ -2,7 +2,7 @@ import { useLocation, useNavigate, useRouter } from '@tanstack/react-router'
 import { useRef } from 'react'
 
 /** The pages a thing's Settings' window holds: its Settings, and the pages inside it with Back. */
-export type SettingsWindowPage = 'settings' | 'publish' | 'export' | 'playlist'
+export type SettingsWindowPage = 'settings' | 'publish' | 'export' | 'folder' | 'newFolder'
 
 /**
  * A link that opens a thing's page with its Settings' window over it (a song's row ··· › Settings):

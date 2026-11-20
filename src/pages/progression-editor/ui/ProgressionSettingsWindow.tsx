@@ -43,7 +43,7 @@ export function ProgressionSettingsWindow({
   /** The editor's own draft: the window reads it as it stands, never afresh. */
   draft: ContentDraft<LibraryProgression>
 } & SettingsWindowState) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation(['learn', 'editor'])
   return (
     <SettingsWindow
       open={open}

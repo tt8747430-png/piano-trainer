@@ -41,7 +41,7 @@ export function LibraryEmpty({
             : t('library.noneFiltered')
         }
         action={
-          <Button onClick={() => set({ q: '', stage: 'any' })}>
+          <Button onClick={() => set({ q: '', stage: 'any', mode: 'any' })}>
             {searched ? t('common:clearSearch') : t('common:library.clearFilters')}
           </Button>
         }

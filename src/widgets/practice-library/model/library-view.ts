@@ -31,7 +31,13 @@ export interface PracticeLibraryView {
   readonly sort: PracticeSort
   readonly place: string
   readonly stage: Stage | 'any'
+  /** The one key shown, where the library's rows have keys (Progressions). */
+  readonly mode: KeyMode | 'any'
 }
+
+/** A key's mode, as a progression is written in it: what Progressions' Key filter keeps. */
+export const KEY_MODES = ['major', 'minor'] as const
+export type KeyMode = (typeof KEY_MODES)[number]
 
 /**
  * A book of a library (Barry Harris, Called to Play), a style (Pop) or the learner's folder: a place
@@ -72,6 +78,8 @@ export interface LibraryItem {
   readonly section?: LibrarySection
   /** Its level, where its content has one. */
   readonly stage?: Stage
+  /** The keys it is written in, where its content has them (a progression: major, minor or both). */
+  readonly modes?: readonly KeyMode[]
   /** The table's second column where not its line (an accompaniment's hands, a progression's numerals). */
   readonly extra?: string
   /** The table's third column where the library has no levels (a progression's Key). */
@@ -114,6 +122,10 @@ export interface LibraryShown {
   readonly scope: number
   /** The levels the place holds, in order. */
   readonly stages: readonly Stage[]
+  /** How many rows of the place each level holds, the search aside: its Level filter's counts. */
+  readonly stageCounts: Readonly<Partial<Record<Stage, number>>>
+  /** How many rows of the place are written in each key, the search aside: its Key filter's counts. */
+  readonly modeCounts: Readonly<Record<KeyMode, number>>
 }
 
 /** The places a library has: its groups, then Mine and Hidden where it has them. */
@@ -165,6 +177,7 @@ export function libraryShown(
   const scoped = items.filter(inPlace)
   const keeps = (item: LibraryItem) =>
     (view.stage === 'any' || item.stage === view.stage) &&
+    (view.mode === 'any' || (item.modes ?? []).includes(view.mode)) &&
     matchesQuery([item.name, item.detail, item.extra ?? '', ...(item.words ?? [])], view.q)
   const order = new Map(places.map((id, at) => [id, at]))
   const groupAt = (item: LibraryItem) => order.get(item.group) ?? places.length
@@ -182,7 +195,7 @@ export function libraryShown(
     list.toSorted((a, b) => recent.indexOf(a.id) - recent.indexOf(b.id))
   const kept = scoped.filter(keeps)
   const shown = place === RECENT && view.sort === 'group' ? byRecent(kept) : sorted(kept)
-  const filtering = view.q.trim() !== '' || view.stage !== 'any'
+  const filtering = view.q.trim() !== '' || view.stage !== 'any' || view.mode !== 'any'
   const counts: Record<string, number> = {
     [ALL]: items.filter((item) => item.group !== HIDDEN).length,
     [FAVOURITES]: items.filter((item) => item.favourite).length,
@@ -232,14 +245,32 @@ export function libraryShown(
   const stages = [...new Set(scoped.flatMap((item) => (item.stage ? [item.stage] : [])))].toSorted(
     (a, b) => stageRank(a) - stageRank(b),
   )
-  return { place, items: shown, sections, counts, filtering, scope: scoped.length, stages }
+  const stageCounts = Object.fromEntries(
+    stages.map((stage) => [stage, scoped.filter((item) => item.stage === stage).length]),
+  )
+  const modeCounts = {
+    major: scoped.filter((item) => item.modes?.includes('major')).length,
+    minor: scoped.filter((item) => item.modes?.includes('minor')).length,
+  }
+  return {
+    place,
+    items: shown,
+    sections,
+    counts,
+    filtering,
+    scope: scoped.length,
+    stages,
+    stageCounts,
+    modeCounts,
+  }
 }
 
-/** How many filters are on: the level, and for a library of styles the style (its tree's place). */
+/** How many filters are on: the level, the key, and for a library of styles the style (its tree's place). */
 export const libraryFiltersOn = (
   view: PracticeLibraryView,
   groups: readonly LibraryGroup[],
   groupWord: GroupWord,
 ): number =>
   Number(view.stage !== 'any') +
+  Number(view.mode !== 'any') +
   Number(groupWord === 'style' && groups.some((group) => group.id === view.place))

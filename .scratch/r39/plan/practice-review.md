@@ -12,7 +12,7 @@ Open, in this order:
 1. ~~A pattern's Publish still has an address~~ done: a window over the pattern (canvas v715). It had an address (`/practice/accompaniment/patterns/$patternRef/publish`): ruling 1670, no
    thing's Settings or Publish has one. Move it into the pattern's Settings window, as the song's and progression's.
 2. ~~A progression's Settings head draws a Lucide glyph~~ done: the library tile at 64.
-3. Progressions' sheet: a Key filter (Major key · n, Minor key · n); Recently played sort where the spec asks.
+3. ~~Progressions' sheet: a Key filter~~ done (the board's Key, counts on every filter choice). It asked for a Key filter (Major key · n, Minor key · n); Recently played sort where the spec asks.
 4. Accompaniment rows: Listen, and the hands line on a phone in place of the description (ruling 551).
 5. ~~CLAUDE.md's map~~ done: the Player's Pace lists Interpret (gone); Practice says Exercises by book (two shelves now).
 6. Arbitrary values to tokens: `PracticePage.tsx:103`, `LibraryTable.tsx:32,40,251`, `PatternPage.tsx:198,214`,

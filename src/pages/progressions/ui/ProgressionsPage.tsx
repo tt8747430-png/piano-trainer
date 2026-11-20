@@ -28,7 +28,7 @@ export function ProgressionsPage() {
   const view = useSearch({ from: '/shell/practice/progressions' })
   const { account } = useAccount()
   const navigate = useNavigate()
-  const { groups, items } = useProgressionLibrary()
+  const { groups, items } = useProgressionLibrary(view.mode)
   const { editing, edit } = useArrangeMode()
   const [open, setOpen] = useState<Open>('none')
   const editor = editsContent(account)

@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { blankLesson, lessonById } from '@/entities/lesson'
 import { OWN_LESSONS_STORAGE_KEY, type OwnLessonsState } from '@/entities/own-lessons'
-import { createMemoryStorage, REST_MS } from '@/shared/lib'
+import { createMemoryStorage, OPEN_SETTINGS, REST_MS } from '@/shared/lib'
 import { stubTextLayout } from '@/shared/test/layout'
 
 const INTROS = {
@@ -144,7 +144,11 @@ describe('Your lessons (R30-5)', () => {
       'own-lesson-2',
     ])
     await act(() =>
-      router.navigate({ to: '/lessons/$lessonId/settings', params: { lessonId: 'own-lesson-1' } }),
+      router.navigate({
+        to: '/lessons/$lessonId',
+        params: { lessonId: 'own-lesson-1' },
+        state: OPEN_SETTINGS,
+      }),
     )
     await user.click(await screen.findByRole('button', { name: 'Delete lesson' }))
     await user.click(
@@ -279,7 +283,11 @@ describe('Your courses (R30-5)', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/courses/own-course-2'))
     expect(ownLessonsStore.getState().courses[1]?.title).toBe('Sunday hymn playing copy')
     await act(() =>
-      router.navigate({ to: '/courses/$courseId/settings', params: { courseId: 'own-course-1' } }),
+      router.navigate({
+        to: '/courses/$courseId',
+        params: { courseId: 'own-course-1' },
+        state: OPEN_SETTINGS,
+      }),
     )
     await user.click(await screen.findByRole('button', { name: 'Delete course' }))
     await user.click(

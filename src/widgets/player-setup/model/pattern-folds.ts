@@ -9,7 +9,13 @@ import {
 } from '@/widgets/practice-library'
 
 /** What the Pattern sheet opens on: every pattern, in its books' order, nothing searched. */
-export const PATTERN_VIEW: PracticeLibraryView = { q: '', sort: 'group', place: ALL, stage: 'any' }
+export const PATTERN_VIEW: PracticeLibraryView = {
+  q: '',
+  sort: 'group',
+  place: ALL,
+  stage: 'any',
+  mode: 'any',
+}
 
 /** A fold's picture: Recently used's clock, Favourites' heart, a book's, or a plain list. */
 export type FoldIcon = 'recent' | 'favourites' | 'book' | 'list'

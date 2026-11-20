@@ -16,7 +16,12 @@ import {
   type ExerciseShelf,
 } from '@/entities/exercise'
 import type { ExercisePageSearch } from '@/pages/exercise'
-import type { PracticeLibraryView, PracticeSort } from '@/widgets/practice-library'
+import {
+  KEY_MODES,
+  type KeyMode,
+  type PracticeLibraryView,
+  type PracticeSort,
+} from '@/widgets/practice-library'
 import { readNote, readText, valueOr, wholeIn } from '@/shared/lib'
 import { noteParam, parseNoteInOctave, PIANO } from '@/shared/lib/music'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
@@ -89,14 +94,17 @@ function readExercisePageSearch(raw: Raw): ExercisePageSearch {
 export const exercisePageSearch = routeSearch(readExercisePageSearch, EXERCISE_PAGE_DEFAULTS)
 
 // A library of Practice's (R30-4: Exercises, Accompaniment, Progressions), as Songs' holds its
-// filters: what is searched, the sort, the place open in its tree, the one level shown. A place is a
+// filters: what is searched, the sort, the place open in its tree, the one level and the one key shown. A place is a
 // word the page reads against its own books; one it does not have shows All.
 const PRACTICE_LIBRARY_DEFAULTS: PracticeLibraryView = {
   q: '',
   sort: 'group',
   place: 'all',
   stage: 'any',
+  mode: 'any',
 }
+const isKeyMode = (value: unknown): value is KeyMode =>
+  typeof value === 'string' && (KEY_MODES as readonly string[]).includes(value)
 const PRACTICE_SORTS: readonly string[] = [
   'group',
   'name',
@@ -113,6 +121,7 @@ export function readPracticeLibrarySearch(raw: Raw): PracticeLibraryView {
         ? raw.place
         : PRACTICE_LIBRARY_DEFAULTS.place,
     stage: isStage(raw.stage) ? raw.stage : PRACTICE_LIBRARY_DEFAULTS.stage,
+    mode: isKeyMode(raw.mode) ? raw.mode : PRACTICE_LIBRARY_DEFAULTS.mode,
   }
 }
 /** What a library remembers between visits: its place and its sort; the search and level are one visit's. */

@@ -683,6 +683,8 @@ export const practice = {
     anyLevel: 'Any',
     anyStyle: 'Any',
     chipLevel: 'Level: {{level}}',
+    anyKey: 'Any',
+    keyMode: { major: 'Major key', minor: 'Minor key' },
     showNone: 'Nothing to show',
     noFavourites: 'No favourites yet',
     noneFiltered: 'Nothing here matches these filters.',
