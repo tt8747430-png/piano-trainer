@@ -218,7 +218,7 @@ export function SheetContent({
               !back && 'group-data-[swipe-axis=x]/drawer-popup:justify-start',
             )}
           >
-            <DrawerTitle className="font-sans text-[1.0625rem] leading-snug font-semibold text-balance break-words">
+            <DrawerTitle className="font-sans text-lg leading-snug font-semibold text-balance break-words">
               {title}
             </DrawerTitle>
             {info ? <InfoTip name={title}>{info}</InfoTip> : null}

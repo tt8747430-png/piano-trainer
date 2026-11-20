@@ -21,7 +21,7 @@ export function SectionCard({
   return (
     <div className="flex items-center gap-4 py-2">
       {rounds > 1 ? (
-        <span className="shrink-0 text-[1.75rem] leading-none font-bold tabular-nums">
+        <span className="shrink-0 text-3xl leading-none font-bold tabular-nums">
           {t('learnSection.rounds', { n: rounds })}
         </span>
       ) : null}

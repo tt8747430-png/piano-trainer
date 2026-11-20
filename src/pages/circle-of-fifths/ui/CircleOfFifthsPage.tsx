@@ -107,7 +107,7 @@ export function CircleOfFifthsPage() {
       >
         <h2
           aria-live="polite"
-          className="max-w-[27cqw] font-display text-[1.375rem] leading-[1.05] font-bold tracking-[-0.01em] text-balance lg:text-[2.25rem]"
+          className="max-w-[27cqw] font-display text-2xl leading-[1.05] font-bold tracking-[-0.01em] text-balance lg:text-[2.25rem]"
         >
           {name(key)}
         </h2>

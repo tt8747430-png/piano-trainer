@@ -21,7 +21,7 @@ export function GuideSection({
   const body = useId()
   return (
     <section className="card overflow-hidden">
-      <h2 className="font-sans text-[1.0625rem]/6 font-semibold">
+      <h2 className="font-sans text-lg/6 font-semibold">
         <button
           type="button"
           aria-expanded={open}

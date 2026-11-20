@@ -175,7 +175,7 @@ function Hero() {
           </div>
         ) : (
           <div className="flex min-w-0 flex-col gap-0.5">
-            <p className="text-[1.75rem] leading-tight font-bold tracking-[-0.01em] text-balance break-words">
+            <p className="text-3xl leading-tight font-bold tracking-[-0.01em] text-balance break-words">
               {name}
             </p>
             {year ? (
@@ -189,9 +189,7 @@ function Hero() {
         )
       ) : (
         <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
-          <p className="text-[1.375rem] leading-tight font-bold text-balance">
-            {t('profile.guest')}
-          </p>
+          <p className="text-2xl leading-tight font-bold text-balance">{t('profile.guest')}</p>
           {/* What a guest stands to lose, said truly (R38, canvas 136): kept here, not everywhere. */}
           <p className="text-sm/[1.4] text-pretty text-muted-foreground">
             {t('profile.guestKept')}

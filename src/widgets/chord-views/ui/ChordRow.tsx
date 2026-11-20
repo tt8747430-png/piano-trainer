@@ -123,7 +123,7 @@ export function ChordRow({
             </span>
             <span
               aria-hidden
-              className="text-[1.0625rem] leading-none font-medium whitespace-nowrap lg:text-2xl"
+              className="text-lg leading-none font-medium whitespace-nowrap lg:text-2xl"
             >
               {chord ? <LeadSymbol text={printedSymbol(chord.symbol)} /> : t('noChordShort')}
             </span>

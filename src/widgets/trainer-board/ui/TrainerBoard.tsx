@@ -237,7 +237,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
                 className={cn(
                   'text-balance hyphens-auto wrap-break-word outline-none',
                   building
-                    ? 'text-[2.75rem] leading-[3.1875rem] landscape-phone:text-3xl'
+                    ? 'text-5xl leading-[3.1875rem] landscape-phone:text-3xl'
                     : 'text-3xl sm:text-4xl landscape-phone:text-2xl',
                 )}
               >

@@ -30,7 +30,7 @@ export function SongHead({
     <div className="flex min-w-0 items-center gap-3">
       <TileMark large icon={Music} paint="sand" />
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="truncate text-[1.0625rem]/[1.2] font-bold">{title}</span>
+        <span className="truncate text-lg/[1.2] font-bold">{title}</span>
         {detail ? (
           <span className="truncate text-[0.8125rem] text-muted-foreground tabular-nums">
             {detail}

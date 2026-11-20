@@ -204,7 +204,7 @@ export function LessonView({
           id={sectionId(s)}
           // The board's section: its words 17 on 1.55, a line of reading (65ch) at most; its
           // examples the column's width; its parts 12 apart.
-          className="flex flex-col gap-3 text-[1.0625rem]/[1.55] *:[p]:max-w-[65ch] *:[p]:text-pretty"
+          className="flex flex-col gap-3 text-lg/[1.55] *:[p]:max-w-[65ch] *:[p]:text-pretty"
         >
           <SectionHeading text={section.heading} style={section.style} />
           {section.blocks.map((block, b) => {

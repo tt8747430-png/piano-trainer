@@ -142,7 +142,7 @@ export function ScreenHeader({
               className={cn(
                 'bar-title min-w-0 font-sans outline-none',
                 large
-                  ? 'line-clamp-2 text-[1.75rem] lg:text-[1.875rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
+                  ? 'line-clamp-2 text-3xl lg:text-[1.875rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
                   : 'truncate text-[1.0625rem] font-semibold',
                 // A name that may wrap takes a step down on a phone, as the boards' TITLEBAR (24 to 28).
                 large && named && 'max-sm:text-2xl',
@@ -187,9 +187,9 @@ export function ScreenHeader({
               {...pageHeading}
               className={cn(
                 // A laptop page's title is its 30 bold, as the boards' LPAD.
-                'bar-title min-w-0 font-sans outline-none lg:text-[1.875rem] lg:font-bold lg:tracking-[-0.01em]',
+                'bar-title min-w-0 font-sans outline-none lg:text-[1.875rem] lg:leading-[1.15] lg:font-bold lg:tracking-[-0.01em]',
                 large
-                  ? 'line-clamp-2 text-[1.75rem] lg:text-[1.875rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
+                  ? 'line-clamp-2 text-3xl lg:text-[1.875rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
                   : 'truncate text-[1.0625rem] font-semibold',
                 // A name that may wrap takes a step down on a phone, as the boards' TITLEBAR (24 to 28).
                 large && named && 'max-sm:text-2xl',

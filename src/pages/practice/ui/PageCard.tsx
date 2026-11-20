@@ -41,9 +41,7 @@ export function PageCard({
             )}
           </span>
           <span className="flex flex-col gap-0.5">
-            <span className="text-[1.0625rem] leading-[normal] font-bold text-balance">
-              {title}
-            </span>
+            <span className="text-lg leading-[normal] font-bold text-balance">{title}</span>
             <span className="text-sm leading-[normal] text-pretty text-muted-foreground tabular-nums">
               {detail}
             </span>

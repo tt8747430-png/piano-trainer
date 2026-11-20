@@ -80,7 +80,7 @@ export function PieceView({ piece }: { piece: Piece }) {
               <div className="flex items-center gap-2">
                 <p
                   aria-hidden
-                  className="min-w-0 font-sans text-[1.75rem]/[1.15] font-bold tracking-[-0.01em] text-balance break-words"
+                  className="min-w-0 font-sans text-3xl/[1.15] font-bold tracking-[-0.01em] text-balance break-words"
                 >
                   {entryTitles(piece, locale).primary}
                 </p>

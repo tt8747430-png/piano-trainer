@@ -61,7 +61,7 @@ export function MakeSheet({
         )}
       >
         <div className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-center gap-2 px-5 pt-3 pb-2">
-          <DialogTitle className="col-start-2 text-center font-sans text-[1.0625rem] leading-snug font-semibold text-balance">
+          <DialogTitle className="col-start-2 text-center font-sans text-lg leading-snug font-semibold text-balance">
             {title}
           </DialogTitle>
           <DialogClose

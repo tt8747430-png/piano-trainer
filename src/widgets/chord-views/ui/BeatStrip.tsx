@@ -112,7 +112,7 @@ export function BeatStrip({
                     ) : named && named.symbols.length > 0 ? (
                       <span
                         data-chords=""
-                        className="absolute top-1/2 left-1.5 z-1 -translate-y-1/2 text-[1.0625rem] leading-none font-medium whitespace-nowrap lg:left-2.5 lg:text-[1.375rem]"
+                        className="absolute top-1/2 left-1.5 z-1 -translate-y-1/2 text-lg leading-none font-medium whitespace-nowrap lg:left-2.5 lg:text-[1.375rem]"
                       >
                         {named.symbols.map((symbol, i) => (
                           <span key={i}>

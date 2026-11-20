@@ -42,7 +42,7 @@ export function PanelPopover({
           className,
         )}
       >
-        <h2 className="font-sans text-[1.0625rem]/[normal] font-semibold">{title}</h2>
+        <h2 className="font-sans text-lg/[normal] font-semibold">{title}</h2>
         {children}
       </PopoverContent>
     </Popover>

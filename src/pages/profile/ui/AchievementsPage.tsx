@@ -48,7 +48,7 @@ export function AchievementsPage() {
                 <dt className="text-[0.8125rem] leading-[normal] text-pretty text-muted-foreground">
                   {label}
                 </dt>
-                <dd className="font-sans text-[1.375rem] leading-[normal] font-bold text-balance tabular-nums">
+                <dd className="font-sans text-2xl leading-[normal] font-bold text-balance tabular-nums">
                   {value}
                 </dd>
               </div>

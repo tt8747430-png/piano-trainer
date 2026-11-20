@@ -125,7 +125,7 @@ export function PickerShell({
  * (half-whole diminished) wraps within the screen rather than running past it.
  */
 const TITLE_PART =
-  'h-auto min-h-12 max-w-full items-center gap-2 whitespace-normal [&>span]:min-w-0 [&>span]:text-left [&>span]:text-balance rounded-[14px] [&>span]:flex [&>span]:items-center border-0 bg-muted pt-0.5 pe-2 pb-1 ps-3 font-display text-[2.75rem] leading-[1.1] font-bold hover:bg-muted md:text-[3.5rem] [&>span]:font-bold'
+  'h-auto min-h-12 max-w-full items-center gap-2 whitespace-normal [&>span]:min-w-0 [&>span]:text-left [&>span]:text-balance rounded-[14px] [&>span]:flex [&>span]:items-center border-0 bg-muted pt-0.5 pe-2 pb-1 ps-3 font-display text-5xl leading-[1.1] font-bold hover:bg-muted md:text-[3.5rem] [&>span]:font-bold'
 
 /**
  * The name's ⌃⌄, the canvas's CHEV_UD: two chevrons 7 by 3.5 of a 12 by 18 box drawn at 10 by 15,

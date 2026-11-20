@@ -96,7 +96,7 @@ export function LessonLayout({
           <div className="flex flex-col gap-2">
             <nav
               aria-label={t('placeLabel')}
-              className="text-[0.875rem]/[normal] font-semibold text-eyebrow print:hidden"
+              className="text-sm/[normal] font-semibold text-eyebrow print:hidden"
             >
               {place}
             </nav>
@@ -107,7 +107,7 @@ export function LessonLayout({
               {title}
             </p>
             {summary ? (
-              <p className="text-[1.0625rem]/normal text-pretty text-muted-foreground">{summary}</p>
+              <p className="text-lg/normal text-pretty text-muted-foreground">{summary}</p>
             ) : null}
             {after.length > 0 ? (
               // The lessons to read first (the board's "After: 6 · …"): each its own 44px link, a row of

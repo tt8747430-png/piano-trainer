@@ -53,7 +53,7 @@ export function StreakPage() {
             <Flame aria-hidden className={cn('size-8.5', run > 0 && 'fill-current')} />
           </span>
           <span className="flex min-w-0 flex-col gap-1">
-            <span className="font-sans text-[1.75rem]/tight font-bold tracking-[-0.01em]">
+            <span className="font-sans text-3xl/tight font-bold tracking-[-0.01em]">
               {t('profile.streakPage.days', { count: run })}
             </span>
             <span className="text-[0.9375rem]/snug text-pretty text-muted-foreground">{line}</span>

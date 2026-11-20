@@ -57,7 +57,7 @@ export function ContinueAction() {
         <span className="text-[0.8125rem]/4 font-semibold text-eyebrow">
           {t('continue')} · {localText(track.title, locale)}
         </span>
-        <h2 id={id} className="font-display text-[1.375rem]/[1.2] font-normal text-balance">
+        <h2 id={id} className="font-display text-2xl/[1.2] font-normal text-balance">
           {title}
         </h2>
         <span className="flex flex-col gap-2.5 lg:hidden">
