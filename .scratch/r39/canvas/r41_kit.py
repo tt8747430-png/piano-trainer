@@ -296,7 +296,7 @@ def TABBAR(cur):
         svg = f'<svg {_TI}>{TAB_ICONS[l]}</svg>'
         return (f'<a href="{h}" {("aria-current=\"page\"") if on else ""} style="flex: 1 1 0; min-width: 0; height: 52px; border-radius: 26px; '
                 f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; '
-                f'color: {INK if on else "#6B6259"}; background: {FILL if on else "transparent"}">{svg}'
+                f'color: {INK if on else "#685E56"}; background: {FILL if on else "transparent"}">{svg}'
                 f'<span style="font-size: 12px; font-weight: {700 if on else 500}; line-height: 1">{l}</span></a>')
     a = ''.join(one(l, h) for l, h in items)
     edge = ''  # nothing behind what floats (owner, 2026-11-15: floating buttons with a background make no sense)

@@ -87,7 +87,7 @@ const NN = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭'
 function calmKeys(lo, hi, marks, W, H) {
   const ws = []; for (let m = lo; m <= hi; m++) if (NAT.includes(m % 12)) ws.push(m);
   const w = W / ws.length, bw = w * 0.6;
-  const whites = ws.map((m, i) => { const k = marks[m]; return { left: (i * w / W * 100).toFixed(3) + '%', w: (w / W * 100).toFixed(3) + '%', h: H, bg: k ? k[0] : '#FEFDFA', label: k ? k[1] : (m % 12 === 0 ? 'C' + (Math.floor(m / 12) - 1) : ''), ink: k ? '#332921' : '#6B6259', fw: k ? 700 : 500 }; });
+  const whites = ws.map((m, i) => { const k = marks[m]; return { left: (i * w / W * 100).toFixed(3) + '%', w: (w / W * 100).toFixed(3) + '%', h: H, bg: k ? k[0] : '#FEFDFA', label: k ? k[1] : (m % 12 === 0 ? 'C' + (Math.floor(m / 12) - 1) : ''), ink: k ? '#332921' : '#685E56', fw: k ? 700 : 500 }; });
   const blacks = []; for (let m = lo; m <= hi; m++) { if (NAT.includes(m % 12)) continue; const i = ws.indexOf(m - 1); const k = marks[m]; blacks.push({ left: (((i + 1) * w - bw / 2) / W * 100).toFixed(3) + '%', w: (bw / W * 100).toFixed(3) + '%', h: Math.round(H * 0.62), bg: k ? k[0] : '#332C28', label: k ? k[1] : '' }); }
   return { whites, blacks };
 }
@@ -177,8 +177,8 @@ def SONGS_SUB(fname):
         lead = f'<span aria-hidden="true" style="flex: none; width: 20px; height: 20px; margin-left: -28px; border-radius: 5px; background: {sq}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08)"></span>' if sq else ''
         return (f'<a href="{href}"' + (' aria-current="page"' if on else '') + f' style="height: 40px; border-radius: 10px; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 44px; text-decoration: none; font-size: 15px; '
                 + ('background: #EAE2D7; color: #1A1612; font-weight: 600' if on else 'background: transparent; color: #4A433C; font-weight: 500') + f'">{lead}<span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{label}</span>'
-                + (f'<span style="color: #6B6259; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums">{n}</span>' if n else '') + '</a>')
-    head = ('<div style="height: 40px; display: flex; align-items: center; padding: 0 0 0 44px; margin-top: 4px"><span style="flex: 1; font-size: 13px; font-weight: 600; color: #6B6259">Playlists</span>'
+                + (f'<span style="color: #685E56; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums">{n}</span>' if n else '') + '</a>')
+    head = ('<div style="height: 40px; display: flex; align-items: center; padding: 0 0 0 44px; margin-top: 4px"><span style="flex: 1; font-size: 13px; font-weight: 600; color: #685E56">Playlists</span>'
             '<button type="button" aria-label="New playlist" data-tip="New playlist" onClick="{{openFolder}}" style="position: relative; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: #4A433C; display: flex; align-items: center; justify-content: center">'
             '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button></div>')
     rows = (item('All songs', 'SongsLaptop.dc.html', '8') + item('Explore', 'ExploreLaptop.dc.html') + head

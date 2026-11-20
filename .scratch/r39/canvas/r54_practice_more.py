@@ -18,7 +18,7 @@ KEYS_JS = r'''
     const tapKeys = (lo, hi, W, H, on, tap, paint) => {
       const ws = []; for (let m = lo; m <= hi; m++) if (WHITE.includes(m % 12)) ws.push(m);
       const w = W / ws.length, bw = w * 0.6, nm = (m) => NAMES[m % 12] + (Math.floor(m / 12) - 1);
-      const whites = ws.map((m, i) => ({ name: nm(m), on: on.includes(m), left: (i * w / W * 100).toFixed(3) + '%', w: (w / W * 100).toFixed(3) + '%', bg: paint[m] || (on.includes(m) ? '#F2B33D' : '#FEFDFB'), label: on.includes(m) || paint[m] ? NAMES[m % 12] : (m % 12 === 0 ? 'C' + (Math.floor(m / 12) - 1) : ''), ink: on.includes(m) || paint[m] ? '#332921' : '#6B6259', fw: on.includes(m) || paint[m] ? 700 : 500, tap: () => tap(m) }));
+      const whites = ws.map((m, i) => ({ name: nm(m), on: on.includes(m), left: (i * w / W * 100).toFixed(3) + '%', w: (w / W * 100).toFixed(3) + '%', bg: paint[m] || (on.includes(m) ? '#F2B33D' : '#FEFDFB'), label: on.includes(m) || paint[m] ? NAMES[m % 12] : (m % 12 === 0 ? 'C' + (Math.floor(m / 12) - 1) : ''), ink: on.includes(m) || paint[m] ? '#332921' : '#685E56', fw: on.includes(m) || paint[m] ? 700 : 500, tap: () => tap(m) }));
       const blacks = []; for (let m = lo; m <= hi; m++) { if (WHITE.includes(m % 12)) continue; const i = ws.indexOf(m - 1); blacks.push({ name: nm(m), on: on.includes(m), left: (((i + 1) * w - bw / 2) / W * 100).toFixed(3) + '%', w: (bw / W * 100).toFixed(3) + '%', bg: paint[m] || (on.includes(m) ? '#F2B33D' : '#332C28'), tap: () => tap(m) }); }
       return { whites, blacks };
     };'''

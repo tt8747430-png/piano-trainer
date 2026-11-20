@@ -81,14 +81,14 @@ def _acct(m):
     row = ('<button type="button" data-acct aria-haspopup="menu" aria-expanded="{{lapAcctAria}}" onClick="{{lapAcctT}}" style="width: 100%; min-height: 52px; border: 0; border-radius: 10px; '
            'background: {{lapAcctBg}}; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612; font: inherit; text-align: left">'
            + pic + '<span data-sidetext style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">' + name + '</span>'
-           '<span data-sidetext style="display: flex; color: #6B6259">' + _UPDOWN + '</span></button>')
+           '<span data-sidetext style="display: flex; color: #685E56">' + _UPDOWN + '</span></button>')
     menu = ('<sc-if value="{{lapAcctOn}}" hint-placeholder-val="{{false}}"><div onClick="{{lapAcctT}}" style="position: fixed; inset: 0; z-index: 70"></div>'
             '<div role="menu" data-acctmenu aria-label="' + name + '" style="position: absolute; left: 12px; right: 12px; bottom: 76px; z-index: 71; '
             'display: flex; flex-direction: column; gap: 2px; padding: 6px; border-radius: 16px; background: rgba(254,253,251,.86); -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)">'
             '<div style="padding: 8px 12px; font-size: 13px; color: #685E56; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">ana@example.com</div>'
             '<a role="menuitem" href="ProfileLaptop.dc.html" style="' + _MI + '">' + _I_USER + 'Profile</a>'
             '<a role="menuitem" href="SettingsLaptop.dc.html" style="' + _MI + '">' + _I_GEAR + 'Settings</a>'
-            '<a role="menuitem" href="SettingsLaptop.dc.html" style="' + _MI + '">' + _I_GLOBE + '<span style="flex: 1">Language</span><span style="color: #6B6259">English</span></a>'
+            '<a role="menuitem" href="SettingsLaptop.dc.html" style="' + _MI + '">' + _I_GLOBE + '<span style="flex: 1">Language</span><span style="color: #685E56">English</span></a>'
             '<div style="height: 1px; margin: 4px 12px; background: #DAD1C8"></div>'
             '<a role="menuitem" href="SignInLaptop.dc.html" style="' + _MI + '">' + _I_OUT + 'Sign out</a></div></sc-if>')
     return '<div data-acctwrap' + (' data-current' if cur else '') + ' style="position: relative">' + row + '</div>' + menu

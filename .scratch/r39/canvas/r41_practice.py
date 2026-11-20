@@ -360,7 +360,7 @@ CP_PIANO_JS = r'''
     const mkKeys = (lo, hi) => { const nW = Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).filter(isW).length, kw = 100 / nW;
       let wi = 0; const whites = [], blacks = [];
       for (let m = lo; m <= hi; m++) { const n = lit.get(m), l = n ? labOf(n) : '';
-        if (isW(m)) { whites.push({ left: (wi * kw).toFixed(3) + '%', w: kw.toFixed(3) + '%', bg: n ? HANDC(n) : '#FEFDFB', ol: HANDO(n), olo: HANDOO(n), l: nW <= 36 ? (n ? l : m % 12 === 0 ? 'C' + (Math.floor(m / 12) - 1) : '') : '', ink: n ? '#332921' : '#6B6259', fw: n ? 700 : 500 }); wi++; }
+        if (isW(m)) { whites.push({ left: (wi * kw).toFixed(3) + '%', w: kw.toFixed(3) + '%', bg: n ? HANDC(n) : '#FEFDFB', ol: HANDO(n), olo: HANDOO(n), l: nW <= 36 ? (n ? l : m % 12 === 0 ? 'C' + (Math.floor(m / 12) - 1) : '') : '', ink: n ? '#332921' : '#685E56', fw: n ? 700 : 500 }); wi++; }
         else blacks.push({ left: (wi * kw - kw * 0.3).toFixed(3) + '%', w: (kw * 0.6).toFixed(3) + '%', bg: n ? HANDC(n) : '#332C28', ol: HANDO(n), olo: HANDOO(n), l: nW <= 22 ? l : '' }); }
       return { whites, blacks }; };
     const { whites, blacks } = mkKeys(lo, hi), wide = mkKeys(Math.min(lo, 36), Math.max(hi, 96));

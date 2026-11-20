@@ -23,7 +23,7 @@ def SKEYS(lit, lo=60, hi=76, h=96, label='The keys'):
     out = [f'<div role="img" aria-label="{label}" style="position: relative; flex: none; width: 100%; height: {h + 5}px; overflow: hidden; {FRAME}">{FELT}']
     for i, m in enumerate(ws):
         p = lit.get(m)
-        out.append(f'<span style="{WK}; left: {i * w:.3f}%; width: {w:.3f}%; height: {h}px; background: {p[0] if p else "#FEFDFA"}; color: {INK if p else "#6B6259"}; font-weight: {700 if p else 500}">{p[1] if p else ("C" + str(m // 12 - 1) if m % 12 == 0 else "")}</span>')
+        out.append(f'<span style="{WK}; left: {i * w:.3f}%; width: {w:.3f}%; height: {h}px; background: {p[0] if p else "#FEFDFA"}; color: {INK if p else "#685E56"}; font-weight: {700 if p else 500}">{p[1] if p else ("C" + str(m // 12 - 1) if m % 12 == 0 else "")}</span>')
     for m in range(lo, hi + 1):
         if m % 12 in NAT: continue
         i = ws.index(m - 1); p = lit.get(m)

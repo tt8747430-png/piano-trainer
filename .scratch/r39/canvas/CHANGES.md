@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · one soft ink: the sidebar's Search, Ctrl K, Playlists, counts and the account chevron, and the keys' quiet names, in the kit's SOFT #685E56 (a near-duplicate #6B6259 had drifted in) · every laptop board, Chords, Scales, ChordPlayer, Lesson (the keys) · **pending**
 - 2026-11-20 · cbbd14c3 · Songs' See all at 15, as every other board's (it was 16) · Songs · **pending**
 - 2026-11-20 · 3373f717 · a page's name one shape: a lesson's and a course's serif name tightened -0.01em, as a level's (30 on a phone, 36 on a laptop) · Lesson, LessonLaptop, Course, CourseLaptop · **pending**
 - 2026-11-20 · a4b4e45d · Settings › Appearance on a phone: no caps "Appearance" head under its own bar title; the three screens 8 under the bar · Settings · **pending**
