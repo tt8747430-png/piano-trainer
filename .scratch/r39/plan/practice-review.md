@@ -9,7 +9,7 @@ Two-axis review of `origin/main...HEAD` over the Practice area. Fixed in the fir
 
 Open, in this order:
 
-1. A pattern's Publish still has an address (`/practice/accompaniment/patterns/$patternRef/publish`): ruling 1670, no
+1. ~~A pattern's Publish still has an address~~ done: a window over the pattern (canvas v715). It had an address (`/practice/accompaniment/patterns/$patternRef/publish`): ruling 1670, no
    thing's Settings or Publish has one. Move it into the pattern's Settings window, as the song's and progression's.
 2. ~~A progression's Settings head draws a Lucide glyph~~ done: the library tile at 64.
 3. Progressions' sheet: a Key filter (Major key · n, Minor key · n); Recently played sort where the spec asks.
@@ -20,4 +20,4 @@ Open, in this order:
    gear onto `SettingsGear`; progression strings out of the `learn` namespace.
 7. Smells: `ArrangeList` handle and style built three times; `FoldHeadRow` vs `FoldSection`; folds in `useState`
    where Practice uses `useFold`; the names list in `ChordPlayerSettings` vs `PROGRESSION_NAMES`.
-8. `practice-machine.test.ts`: 10 of 39 red since the machine keys by Midi (waits for the owner's test run).
+8. `PatternPage.test.tsx`'s publish test still expects the old address (waits for the owner's test run). `practice-machine.test.ts`: 10 of 39 red since the machine keys by Midi (waits for the owner's test run).

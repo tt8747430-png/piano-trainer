@@ -288,7 +288,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/accompaniment/patterns/new': toAccompaniment,
   '/shell/practice/accompaniment/patterns/$patternRef': toPatternPlace,
   '/shell/practice/accompaniment/patterns/$patternRef/edit': toPattern,
-  '/shell/practice/accompaniment/patterns/$patternRef/publish': toPattern,
   // A study is its method book's course's (R32: Accompaniment lists patterns only).
   '/shell/practice/accompaniment/studies/$pieceId': async (from) => {
     const { studyPlace } = await import('./accompaniment-screens')

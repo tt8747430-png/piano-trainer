@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · (pending commit) · a pattern's Publish (its ··· Publish…) opens over the pattern as the window (THINGWIN), never a page with an address: on a laptop the 720 window centred, on a phone a tall sheet with Done · Pattern, PatternLaptop · pending
+- 2026-11-20 · a0d8094d · a pattern's Publish (its ··· Publish…) opens over the pattern as the window (THINGWIN), never a page with an address: on a laptop the 720 window centred, on a phone a tall sheet with Done · Pattern, PatternLaptop · pending
 
 ## Changes
 

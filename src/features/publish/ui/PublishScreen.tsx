@@ -97,7 +97,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 }
 
 /**
- * Publish (R72, Flat's discoverability form), for a learner's song (inside its Settings' window) or pattern (a page of its own):
+ * Publish (R72, Flat's discoverability form), for a learner's song (inside its Settings' window) or pattern (a window over it):
  * the item's head; then, before it is published, what others find it by (a meter of how easily it is
  * found, n of 5: its title, who wrote it, what it is, its tags, a description of 20 characters),
  * Title and Composer, Type (Original · Arrangement · Other), Tags as chips with × and suggestions with

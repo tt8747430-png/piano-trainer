@@ -765,19 +765,6 @@ const editPatternRoute = createRoute({
   },
   component: lazyRouteComponent(accompanimentScreens, 'EditPatternPage'),
 })
-// A pattern of the learner's own published to the Public library, on its own page (round 27).
-const publishPatternRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/accompaniment/patterns/$patternRef/publish',
-  notFoundComponent: notFoundIn('accompaniment'),
-  beforeLoad: ({ params, context }) => {
-    if (!isOwnPatternId(params.patternRef) || !inBook(params.patternRef, context.patterns)) {
-      throw notFound()
-    }
-  },
-  component: lazyRouteComponent(accompanimentScreens, 'PatternPublishPage'),
-})
-
 /**
  * A lesson's page is there for a lesson of a level, brought onto the device first (ADR 0116), or for
  * one of the learner's own while they keep it (R30-5); else it is not found.
@@ -1064,7 +1051,6 @@ const routeTree = rootRoute.addChildren([
     newPatternRoute,
     patternRoute,
     editPatternRoute,
-    publishPatternRoute,
     lessonRoute,
     courseLessonRoute,
     lessonEditRoute,

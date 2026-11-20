@@ -26,5 +26,5 @@ export function studyPlace(pieceId: string): string {
   return book ?? 'all'
 }
 export { AccompanimentPage } from '@/pages/accompaniment'
-export { PatternPage, PatternPublishPage } from '@/pages/pattern'
+export { PatternPage } from '@/pages/pattern'
 export { EditPatternPage, NewPatternPage } from '@/pages/pattern-editor'

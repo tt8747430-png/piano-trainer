@@ -45,10 +45,11 @@ import {
 } from '@/shared/ui'
 import { PatternPieces, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
 import { EntryRow } from '@/widgets/piece-list'
-import { useForgetScreens } from '@/shared/lib'
+import { useForgetScreens, useSettingsWindow } from '@/shared/lib'
 import { C_MAJOR, keyParam, keysAround } from '@/shared/lib/music'
 import { PROGRESSION } from '@/features/practice'
 import { ProgressionPractice } from '@/widgets/progression-explorer'
+import { PatternPublishWindow } from './PatternPublishWindow'
 
 /** How many songs and lessons Used in shows before Show all. */
 const FOLDED = 5
@@ -69,11 +70,11 @@ function FavouriteButton({ pattern }: { pattern: BookPattern }) {
 
 /**
  * A pattern's actions for its bar's More: for a built-in one, a pattern of the learner's own from it
- * and hiding it from the Player; for the learner's own, Edit, Publish in library (a page of its own,
- * round 27) and Delete, last, done at once with Undo in its toast. What was done (a line) comes
+ * and hiding it from the Player; for the learner's own, Edit, Publish in library (a window over the
+ * page, `onPublish`) and Delete, last, done at once with Undo in its toast. What was done (a line) comes
  * with them.
  */
-function usePatternActions(pattern: BookPattern, name: string) {
+function usePatternActions(pattern: BookPattern, name: string, onPublish: () => void) {
   const { t } = useTranslation(['practice', 'songs', 'editor'])
   const store = usePatternsStoreApi()
   const navigate = useNavigate()
@@ -135,11 +136,7 @@ function usePatternActions(pattern: BookPattern, name: string) {
             key: 'publish',
             label: t('editor:publishPage.open'),
             icon: Globe,
-            onSelect: () =>
-              void navigate({
-                to: '/practice/accompaniment/patterns/$patternRef/publish',
-                params: { patternRef: own },
-              }),
+            onSelect: onPublish,
           },
           {
             key: 'delete',
@@ -177,7 +174,8 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
   const sample = usePatternSample(pattern, book, over)
   const [shown, show] = useShownKeys(`${pattern.ref} ${overId ?? ''}`, sample.shown)
   const name = localText(pattern.name, locale)
-  const more = usePatternActions(pattern, name)
+  const publishWindow = useSettingsWindow()
+  const more = usePatternActions(pattern, name, () => publishWindow.openAt('publish'))
   const own = isOwnPatternId(pattern.ref)
   const [allUses, setAllUses] = useState(false)
   const overs = [
@@ -194,6 +192,13 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
         settings={<PianoButton />}
         more={<MoreMenu actions={more.actions} />}
       />
+      {own ? (
+        <PatternPublishWindow
+          pattern={pattern}
+          open={publishWindow.open}
+          onOpenChange={publishWindow.onOpenChange}
+        />
+      ) : null}
       <PinnedKeyboard shown={shown} place="top" least={PATTERN_KEYS} />
       <div className="flex flex-col gap-4 lg:mx-auto lg:mt-2 lg:w-full lg:max-w-220 lg:gap-6">
         <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
