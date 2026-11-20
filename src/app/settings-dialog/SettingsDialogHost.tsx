@@ -79,7 +79,15 @@ export function SettingsDialogHost() {
     if (!opensInDialog(location.pathname)) rememberBackground(location.href)
   }, [location])
   const held = new URLSearchParams(location.searchStr).get(SETTINGS_PARAM)
-  const path = held !== null && opensInDialog(held) ? held : null
+  // A place's own address, on its way to the dialog's param (a link in the dialog's nav), keeps the
+  // dialog up showing that place: it is never taken down and opened again between two places.
+  const passing = location.pathname === '/settings' ? '/settings/general' : location.pathname
+  const path =
+    held !== null && opensInDialog(held)
+      ? held
+      : wide && opensInDialog(location.pathname)
+        ? passing
+        : null
   // On a phone the place's own page, in the dialog's place in history.
   useEffect(() => {
     if (path !== null && !wide) void navigate({ href: path, replace: true })
