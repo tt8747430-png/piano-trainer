@@ -208,6 +208,10 @@ function parseOwnNumeral(token: string): Numeral | null {
 /** A numeral in a line: anything but a space, comma, hyphen or dash, and whatever its brackets hold (`V7(#5,♭9)`). */
 const NUMERAL_TOKEN = /(?:[^\s,\-–—(]|\([^)]*\)|\()+/g
 
+/** Whether a saved line of numerals reads (`parseNumerals`), at least one chord. */
+export const readsAsNumerals = (line: unknown): line is string =>
+  typeof line === 'string' && (parseNumerals(line)?.length ?? 0) > 0
+
 /** A line of numerals apart by spaces, commas, hyphens or dashes; null if any cannot be read, or none is there. */
 export function parseNumerals(text: string): Numeral[] | null {
   const tokens = text.match(NUMERAL_TOKEN) ?? []

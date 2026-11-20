@@ -210,6 +210,7 @@ export {
   numeralText,
   parseNumeral,
   parseNumerals,
+  readsAsNumerals,
   readDegree,
   type Numeral,
 } from './numerals'

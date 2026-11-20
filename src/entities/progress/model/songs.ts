@@ -1,4 +1,4 @@
-import { isRecord } from '@/shared/lib'
+import { isCount, isRecord } from '@/shared/lib'
 import type { PieceId } from '@/entities/piece'
 import { HANDS, type Hands } from '@/shared/lib/schedule'
 
@@ -23,10 +23,7 @@ export interface SongPlay {
 /** How many songs keep their place: the latest played. */
 export const SONGS_KEPT = 100
 
-const isPlace = (value: unknown): value is number =>
-  typeof value === 'number' && Number.isInteger(value) && value >= 0
-
-const isScore = (value: unknown): value is number => isPlace(value) && value <= 100
+const isScore = (value: unknown): value is number => isCount(value) && value <= 100
 
 function bestOf(value: unknown): SongPlay['best'] {
   if (!isRecord(value)) return {}
@@ -43,10 +40,10 @@ function bestOf(value: unknown): SongPlay['best'] {
 export function songPlay(value: unknown): SongPlay | undefined {
   if (!isRecord(value)) return undefined
   const { played, at, times, seconds, bars, last, best } = value
-  if (!Array.isArray(played) || !isPlace(at) || !isPlace(times) || !isPlace(bars)) return undefined
+  if (!Array.isArray(played) || !isCount(at) || !isCount(times) || !isCount(bars)) return undefined
   if (typeof seconds !== 'number' || !Number.isFinite(seconds) || seconds < 0) return undefined
   if (typeof last !== 'string' || Number.isNaN(Date.parse(last))) return undefined
-  const sorted = [...new Set(played.filter(isPlace))].sort((a, b) => a - b)
+  const sorted = [...new Set(played.filter(isCount))].sort((a, b) => a - b)
   return { played: sorted, at, times, seconds, bars, last, best: bestOf(best) }
 }
 

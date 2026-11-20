@@ -65,7 +65,7 @@ export {
   safeLocalStorage,
   unguarded,
 } from './safe-storage'
-export { isRecord, savedObject } from './saved'
+export { isCount, isRecord, savedObject } from './saved'
 export { createSavedStore, type SavingOptions } from './saved-store'
 export { downloadFile } from './download-file'
 export {

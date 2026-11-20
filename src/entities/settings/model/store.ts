@@ -4,6 +4,7 @@ import { isLocale } from '@/shared/i18n/locale'
 import { isStaffId } from '@/shared/lib/notation'
 import {
   createSavedStore,
+  isCount,
   isLatency,
   isOneOf,
   SHEET_VIEWS,
@@ -167,8 +168,7 @@ function practiceToggles(value: unknown): PracticeToggles {
 }
 
 /** A volume as saved: a whole percent from 0 to 100. */
-const isVolume = (value: unknown): value is number =>
-  typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 100
+const isVolume = (value: unknown): value is number => isCount(value) && value <= 100
 
 /** Each part's volume as saved where it is one, at full otherwise; a staff's kept by a staff's id. */
 function soundSettings(value: unknown): SoundSettings {

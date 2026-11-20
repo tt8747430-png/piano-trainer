@@ -1,3 +1,4 @@
+import { readsAsNumerals } from '@/shared/lib/music'
 import type { StoreApi } from 'zustand/vanilla'
 import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
 import {
@@ -14,7 +15,6 @@ import {
   isOwnProgressionId,
   ownProgressionName,
   ownProgressionNumber,
-  readsAsLine,
   type OwnProgression,
   type OwnProgressionId,
   type PracticeKind,
@@ -80,7 +80,7 @@ function ownProgression(saved: unknown): OwnProgression | null {
   if (!isRecord(saved)) return null
   const { id, name, line, minor, mode } = saved
   const kept = typeof name === 'string' ? ownProgressionName(name) : null
-  if (!isOwnProgressionId(id) || !kept || !readsAsLine(line) || typeof minor !== 'boolean')
+  if (!isOwnProgressionId(id) || !kept || !readsAsNumerals(line) || typeof minor !== 'boolean')
     return null
   return { id, name: kept, line, minor, ...(isChurchMode(mode) ? { mode } : {}) }
 }

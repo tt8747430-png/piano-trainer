@@ -1,7 +1,7 @@
 import { isRecord } from '@/shared/lib'
 import type { PatternId } from '@/entities/pattern'
 import { isLocalText, isWrittenText, type LocalText } from '@/shared/i18n'
-import { parseNumerals, type ChordSize, type ChurchMode } from '@/shared/lib/music'
+import { readsAsNumerals, type ChordSize, type ChurchMode } from '@/shared/lib/music'
 
 /** The styles the Progressions library groups its progressions by. */
 export const PROGRESSION_STYLES = [
@@ -46,9 +46,6 @@ export interface ProgressionDetails {
   readonly mode?: ChurchMode
 }
 
-const readsAsLine = (line: unknown): line is string =>
-  typeof line === 'string' && (parseNumerals(line)?.length ?? 0) > 0
-
 /**
  * Whether a body from the database reads as the progression `id` (content as data, ADR 0116): a
  * style, a name and a character in both languages, and a line of numerals that reads in a major key,
@@ -64,8 +61,8 @@ export function readsAsProgression(id: string, body: unknown): body is LibraryPr
     isWrittenText(progression.name) &&
     isWrittenText(progression.character) &&
     (major !== undefined || minor !== undefined) &&
-    (major === undefined || readsAsLine(major)) &&
-    (minor === undefined || readsAsLine(minor))
+    (major === undefined || readsAsNumerals(major)) &&
+    (minor === undefined || readsAsNumerals(minor))
   )
 }
 

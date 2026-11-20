@@ -1,7 +1,14 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isStepId, type StepId } from '@/entities/step'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
-import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
+import {
+  createSavedStore,
+  isCount,
+  isOneOf,
+  isRecord,
+  savedObject,
+  type SavingOptions,
+} from '@/shared/lib'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import { DAYS_KEPT, keptDays } from './days'
 import {
@@ -52,9 +59,6 @@ const isDate = (value: unknown): value is string =>
 
 const isAnswer = (value: unknown): value is Answer =>
   isRecord(value) && typeof value.correct === 'boolean' && isDate(value.at)
-
-const isCount = (value: unknown): value is number =>
-  typeof value === 'number' && Number.isInteger(value) && value >= 0
 
 /** The entries of a saved record whose key passes and whose value can be read, as a new record. */
 function kept<K extends string, V>(

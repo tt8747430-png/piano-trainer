@@ -1,7 +1,14 @@
 import { annotationOf, type Annotation } from './annotations'
 import type { StoreApi } from 'zustand/vanilla'
 import { isPatternId } from '@/entities/pattern'
-import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
+import {
+  createSavedStore,
+  isCount,
+  isOneOf,
+  isRecord,
+  savedObject,
+  type SavingOptions,
+} from '@/shared/lib'
 import {
   CLEFS,
   isMeter,
@@ -99,8 +106,7 @@ const isClef = isOneOf(CLEFS)
 const isText = (value: unknown): value is string => typeof value === 'string'
 /** A staff the lyrics are on, of `staves` single staves: one of them by its place, or the upper staff. */
 const isLyricsStaff = (value: unknown, staves: number): value is LyricsStaff =>
-  value === 'rh' ||
-  (typeof value === 'number' && Number.isInteger(value) && value >= 0 && value < staves)
+  value === 'rh' || (isCount(value) && value < staves)
 /** A tempo in the song's beats a minute: a mark in another unit's may be a part of one, a whole tick's. */
 const isTempo = (value: unknown): value is number =>
   typeof value === 'number' &&
