@@ -93,6 +93,8 @@ def LTITLEBAR(title, right='', back='', backact=''):
     # one laptop sub-page bar (2026-11-19): LPAD's 56, Back 40 in and the title 12 after it, as the app's ScreenHeader,
     # the content 24 under it as every laptop page's
     return f'<header style="flex: none; height: 56px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; padding: 0 28px 0 {40 if (back or backact) else 56}px">{b}<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>'
+# a place's own page (Learn, Practice) on a laptop: the 88 bar, its name 56 in at 30 bold, as Practice's board and the app's
+LPLACEBAR = lambda title, right='': f'<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 56px"><h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>'
 # One frame for every place of an area on a laptop (owner, 2026-11-17: "the pages change to much from the all songs to
 # explore … the user doesnt understand where it goes"; Jakob's law, NN/g consistency): an 88 bar, the place's name at
 # 56 in 30 bold with its count beside it, the place's acts, then the search pinned at the trailing edge (Finder, Apple

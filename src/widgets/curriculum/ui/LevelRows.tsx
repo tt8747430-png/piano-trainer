@@ -48,8 +48,10 @@ export function LevelRows() {
       >
         <LevelRing n={i + 1} share={share} />
         <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="font-semibold">{t(`common:stage.${journey.stage}`)}</span>
-          <span className="text-sm text-pretty text-muted-foreground">
+          <span className="leading-[normal] font-semibold">
+            {t(`common:stage.${journey.stage}`)}
+          </span>
+          <span className="text-sm leading-[normal] text-pretty text-muted-foreground">
             {localText(journey.title, locale)}
             <span className="hidden tabular-nums lg:inline"> · {count}</span>
           </span>
