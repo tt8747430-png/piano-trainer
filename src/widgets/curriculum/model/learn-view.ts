@@ -5,3 +5,12 @@
 export interface LearnEdit {
   readonly edit: boolean
 }
+
+/** What Your lessons shows (canvas 165): its search, which kind, and their order. */
+export type OwnShown = 'all' | 'lessons' | 'courses'
+export type OwnSort = 'recent' | 'name'
+export interface OwnLibraryView {
+  readonly q: string
+  readonly kind: OwnShown
+  readonly sort: OwnSort
+}

@@ -38,9 +38,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { NewOwnSheet, type OwnKind } from './NewOwnSheet'
 import { useNewOwnActions } from './use-new-own-actions'
 import { deleteOwn } from '../model/delete-own'
-
-type Kind = 'all' | 'lessons' | 'courses'
-type Sort = 'recent' | 'name'
+import type { OwnLibraryView, OwnShown, OwnSort } from '../model/learn-view'
 
 /** What Select holds: a lesson's or a course's id, kept apart by kind. */
 type Pick = `${'lesson' | 'course'}:${string}`
@@ -342,16 +340,23 @@ function OwnCourseItem({
  * On a laptop the search stands in the bar and the list is the libraries' table (Name · Length ·
  * Progress). Select's floating bar duplicates or deletes what is picked, or all when nothing is.
  */
-export function OwnLibrary() {
+export function OwnLibrary({
+  view,
+  onView,
+}: {
+  /** What is shown, from the URL. */
+  view: OwnLibraryView
+  /** Writes a change of it into the URL, in place. */
+  onView: (change: Partial<OwnLibraryView>) => void
+}) {
   const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
   const store = useOwnLessonsStoreApi()
   const progress = useProgressStoreApi()
   const lessons = useOwnLessons(selectOwnLessons)
   const courses = useOwnLessons(selectOwnCourses)
-  const [query, setQuery] = useState('')
-  const [kind, setKind] = useState<Kind>('all')
-  const [sort, setSort] = useState<Sort>('recent')
+  const { q: query, kind, sort } = view
+  const setQuery = (q: string) => onView({ q })
   const [opened, setOpened] = useState<ReadonlySet<string>>(new Set())
   const [picking, setPicking] = useState(false)
   const [picks, setPicks] = useState<ReadonlySet<Pick>>(new Set())
@@ -466,7 +471,7 @@ export function OwnLibrary() {
       label={t('own.search')}
       hint={t('own.searchHint')}
       end={
-        <SortMenu<Sort>
+        <SortMenu<OwnSort>
           field
           label={t('common:library.sort')}
           sort={sort}
@@ -474,7 +479,7 @@ export function OwnLibrary() {
             { value: 'recent', label: t('own.sortRecent') },
             { value: 'name', label: t('own.sortName') },
           ]}
-          onSort={setSort}
+          onSort={(next) => onView({ sort: next })}
         />
       }
     />
@@ -506,7 +511,7 @@ export function OwnLibrary() {
         {none ? null : (
           <>
             <div className="lg:hidden">{search}</div>
-            <ChoiceChips<Kind>
+            <ChoiceChips<OwnShown>
               label={t('own.show')}
               value={kind}
               options={[
@@ -514,7 +519,7 @@ export function OwnLibrary() {
                 { value: 'lessons', label: t('own.lessonsOnly') },
                 { value: 'courses', label: t('own.coursesOnly') },
               ]}
-              onChange={setKind}
+              onChange={(next) => onView({ kind: next })}
             />
           </>
         )}

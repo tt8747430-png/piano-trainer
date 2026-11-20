@@ -65,7 +65,13 @@ import {
   WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
-import { learnEditSearch, lessonSearch } from './routes/learn-search'
+import {
+  learnEditSearch,
+  lessonSearch,
+  readYoursSearch,
+  YOURS_KEPT,
+  yoursSearch,
+} from './routes/learn-search'
 import {
   exercisePageSearch,
   PRACTICE_LIBRARY_KEPT,
@@ -186,6 +192,8 @@ const coursesRoute = createRoute({
 const yoursRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/your-lessons',
+  ...yoursSearch,
+  ...remembered(readYoursSearch, YOURS_KEPT, YOURS_KEPT),
   component: lazyRouteComponent(homeScreens, 'YoursPage'),
 })
 const settingsRoute = createRoute({

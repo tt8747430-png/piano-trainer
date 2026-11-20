@@ -5,7 +5,7 @@ export {
   openCourseStep,
   type ContinueStep,
 } from './model/continue-step'
-export type { LearnEdit } from './model/learn-view'
+export type { LearnEdit, OwnLibraryView, OwnShown, OwnSort } from './model/learn-view'
 export {
   courseProgress,
   isComplete,
