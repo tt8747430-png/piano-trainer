@@ -1,4 +1,5 @@
 import { selectRecent, usePracticeLibrary } from '@/entities/practice-library'
+import { useFold } from '@/features/fold-section'
 import { useDeferredValue, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
@@ -22,7 +23,7 @@ import {
   type PracticeLibraryView,
   type ShownSection,
 } from '../model/library-view'
-import type { GroupWord, LibraryKind } from '../model/library-words'
+import { libraryFoldId, type GroupWord, type LibraryKind } from '../model/library-words'
 import { useArrangedLibrary, type ArrangeSheet } from '../model/use-arranged-library'
 import { ArrangeList } from './ArrangeList'
 import { ArrangeSheets } from './ArrangeSheets'
@@ -35,16 +36,25 @@ import { LibraryTable, type TableColumns } from './LibraryTable'
 const FOLDED = 5
 
 /** A phone's run of rows under its name and count, folding away, after five Show all n. */
-function Section({ section, folds }: { section: ShownSection; folds: boolean }) {
+function Section({
+  section,
+  folds,
+  foldId,
+}: {
+  section: ShownSection
+  folds: boolean
+  /** Its fold's place in Settings, the laptop table's too. */
+  foldId: string
+}) {
   const { t } = useTranslation('practice')
   const [open, setOpen] = useState(false)
-  const [shut, setShut] = useState(false)
+  const fold = useFold(foldId)
   const folded = folds && !open && section.items.length > FOLDED
   return (
     <FoldSection
       title={section.name}
       count={section.items.length}
-      fold={{ open: !shut, toggle: () => setShut((now) => !now) }}
+      fold={fold}
       // the board's head: 44 with its words centred (6 under the section's top), the card 8 under it
       className="gap-3.5 pt-1.5"
     >
@@ -198,11 +208,16 @@ export function PracticeLibrary({
           mine={mine?.empty}
         />
       ) : wide ? (
-        <LibraryTable sections={shown.sections} levels={levels} columns={columns} />
+        <LibraryTable kind={kind} sections={shown.sections} levels={levels} columns={columns} />
       ) : (
         <div className="flex flex-col gap-4">
           {shown.sections.map((section) => (
-            <Section key={section.id} section={section} folds={!narrowed} />
+            <Section
+              key={section.id}
+              section={section}
+              folds={!narrowed}
+              foldId={libraryFoldId(kind, section.id)}
+            />
           ))}
         </div>
       )}

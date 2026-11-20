@@ -1,10 +1,12 @@
 import { useRender } from '@base-ui/react/use-render'
 import { ChevronDown } from 'lucide-react'
-import { useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react'
+import { useFold } from '@/features/fold-section'
+import { useRef, type CSSProperties, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, useElementSize } from '@/shared/lib'
 import { HeartToggle, menuOf, RowMore } from '@/shared/ui'
 import type { LibraryItem, ShownSection } from '../model/library-view'
+import { libraryFoldId, type LibraryKind } from '../model/library-words'
 import { LevelMark } from './LevelMark'
 import { LibraryTile } from './LibraryTile'
 import { spanOf } from './span-of'
@@ -157,13 +159,17 @@ function SectionRows({
   section,
   levels,
   columns,
+  foldId,
 }: {
   section: ShownSection
   levels: boolean
   columns: TableColumns
+  /** Its fold's place in Settings, the phone's run's too: folded on one size, folded on both. */
+  foldId: string
 }) {
   const { t } = useTranslation(['practice', 'common'])
-  const [shut, setShut] = useState(false)
+  const fold = useFold(foldId)
+  const shut = !fold.open
   return (
     <tbody>
       <FoldHeadRow
@@ -171,7 +177,7 @@ function SectionRows({
         name={section.name}
         count={section.items.length}
         shut={shut}
-        onToggle={() => setShut((was) => !was)}
+        onToggle={fold.toggle}
       />
       {shut
         ? null
@@ -205,10 +211,12 @@ function SectionRows({
  * words, not a second way to sort.
  */
 export function LibraryTable({
+  kind,
   sections,
   levels,
   columns,
 }: {
+  kind: LibraryKind
   sections: readonly ShownSection[]
   levels: boolean
   columns: TableColumns
@@ -216,7 +224,13 @@ export function LibraryTable({
   return (
     <TableFrame levels={levels} columns={columns}>
       {sections.map((section) => (
-        <SectionRows key={section.id} section={section} levels={levels} columns={columns} />
+        <SectionRows
+          key={section.id}
+          section={section}
+          levels={levels}
+          columns={columns}
+          foldId={libraryFoldId(kind, section.id)}
+        />
       ))}
     </TableFrame>
   )

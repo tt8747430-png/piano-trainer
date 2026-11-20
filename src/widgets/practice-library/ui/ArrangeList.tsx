@@ -13,6 +13,7 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-
 import { CSS } from '@dnd-kit/utilities'
 import { Ellipsis, Eye, EyeOff, GripVertical, PencilLine, Trash2 } from 'lucide-react'
 import { createContext, useContext, useState, type ReactNode } from 'react'
+import { useFold } from '@/features/fold-section'
 import { useTranslation } from 'react-i18next'
 import {
   deleteFolder,
@@ -35,7 +36,7 @@ import {
   rowDragId,
 } from '../model/arrange-dnd'
 import type { LibraryItem } from '../model/library-view'
-import type { LibraryKind } from '../model/library-words'
+import { libraryFoldId, type LibraryKind } from '../model/library-words'
 import type { ArrangeSheet } from '../model/use-arranged-library'
 
 /** On a laptop Edit arranges the table itself (the board's): its columns, read by each place and row. */
@@ -97,9 +98,12 @@ function SortablePlace({
   count,
   mark,
   menu,
+  foldId,
   children,
 }: {
   id: string
+  /** Its fold's place in Settings, shared with the library as it reads. */
+  foldId: string
   label: string
   name: string
   count: number
@@ -117,7 +121,8 @@ function SortablePlace({
     transition,
     isDragging,
   } = useSortable({ id })
-  const [shut, setShut] = useState(false)
+  const fold = useFold(foldId)
+  const shut = !fold.open
   const table = useContext(TableOf)
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -132,7 +137,7 @@ function SortablePlace({
           count={count}
           mark={mark}
           shut={shut}
-          onToggle={() => setShut((now) => !now)}
+          onToggle={fold.toggle}
           action={
             <>
               {menu}
@@ -163,7 +168,7 @@ function SortablePlace({
         title={name}
         count={count}
         mark={mark}
-        fold={{ open: !shut, toggle: () => setShut((now) => !now) }}
+        fold={fold}
         className="gap-3.5 pt-1.5"
         action={
           <span className="-my-2.5 me-1 flex items-center">
@@ -298,6 +303,7 @@ export function ArrangeList({
       <SortablePlace
         key={place.id}
         id={placeDragId(place.id)}
+        foldId={libraryFoldId(kind, place.id)}
         label={t('library.edit.movePlace', { name: place.name })}
         name={place.name}
         mark={place.hidden ? t('library.edit.hiddenPlace') : undefined}
