@@ -253,7 +253,8 @@ export const learn: LocaleResources['learn'] = {
       undo: 'Отменить',
       redo: 'Повторить',
       blockMenu: 'Ещё: {{name}}',
-      addBelow: 'Добавить ниже',
+      move: 'Переместить блок',
+      block: 'Блок',
       turnInto: 'Превратить в',
       turn: {
         text: 'Текст',

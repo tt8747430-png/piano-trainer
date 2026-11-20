@@ -255,7 +255,8 @@ export const learn = {
       undo: 'Undo',
       redo: 'Redo',
       blockMenu: 'More: {{name}}',
-      addBelow: 'Add below',
+      move: 'Move the block',
+      block: 'The block',
       turnInto: 'Turn into',
       turn: {
         text: 'Text',

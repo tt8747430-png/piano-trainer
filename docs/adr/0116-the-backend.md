@@ -77,17 +77,19 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   `DraftPublishing`), the learner's progress, then Delete last and 16 apart; one column, 1180 at most on a laptop.
 - **The lesson editor** (`pages/lesson-editor`, round 21 to 28; Notion's, Craft's and BlockNote's block editors,
   Obsidian's Live Preview) is one TipTap document that reads as the lesson and as a page being edited:
-  - each block's **gutter** shows beside the block under the pointer, or the caret's on a phone (left of the text on
-    a laptop, at its right on a phone): **＋** puts a line under it with `/` typed, the slash menu open on it;
-    **⋮⋮** dragged moves the block, tapped opens its menu: **Turn into** (text, section heading, numbered steps,
-    note, in short; its lines kept, a step each into steps, joined for the rest; `turnBlockInto`), Duplicate,
-    Delete. Order is by dragging or Alt+↑/↓, never Move up/down in a menu (the owner's rule), so the brief's Move
-    up/down was left out;
+  - nothing waits in a margin beside the text (loop 63, the owner: "the drag handle reserves space"): the column
+    starts on the page's gutter. The caret's block has its tools in the floating toolbar, as Craft's and Notion's
+    on iOS: **Move** dragged, by mouse or finger, puts it where it is dropped (a honey line shows where with a
+    finger); **···** opens its menu: **Turn into** (text, section heading, numbered steps, note, in short; its
+    lines kept, a step each into steps, joined for the rest; `turnBlockInto`), Style, Duplicate, Delete. Both stand
+    dimmed on the title and the summary, which keep their place. Order is by dragging or Alt+↑/↓, never Move up/down
+    in a menu (the owner's rule);
   - an empty line hints **"Type / to insert music, a note and more"** only where the caret is, as Notion's; the
     title, summary, heading, note and takeaway always say what they are for;
-  - **selected words** get a bubble with the lead in bold, the one mark a lesson's text has; the floating toolbar
-    keeps Insert, Undo and Redo. Each action has one place: a block's kind is its menu's, bold the bubble's;
-  - **Insert** (the board's INSLIST) opens a sheet titled Insert, on a laptop the card 420 wide by the bar: a search
+  - the floating toolbar is the board's dock: **Bold** (the lead, the one mark a lesson's text has, where the words
+    can carry it), Undo, Redo | Move, ··· | **Insert**, the ink pill last. Each action has one place: a block's
+    kind is its menu's, bold the toolbar's; no bubble over selected words;
+  - **Insert** (the board's INSLIST) opens a sheet titled Insert, on a laptop a popover 420 wide over its button: a search
     (44 tall, on the fill, "Insert") keeping the kinds whose name holds what is typed, then Text, Music and Ask and
     link, each a caps label over a card of rows 52 tall, a kind's glyph on its 36 tile (`KindTile`) and its name;
     a tap adds the block where the caret stood and closes the sheet; a search that keeps none is the kit's `Said`;

@@ -201,16 +201,3 @@ export function turnBlockInto(
   tr.setSelection(TextSelection.near(tr.doc.resolve(end - 1), -1))
   return tr.scrollIntoView()
 }
-
-/**
- * The transaction putting an empty line under block `index` with `/` typed in it, the caret after
- * it: the gutter's + opens the menu of what can go there (Notion's). Null above the lesson's blocks.
- */
-export function lineAfter(state: EditorState, index: number): Transaction | null {
-  if (index < fixedBlocks(state.doc) || index >= state.doc.childCount) return null
-  const at = blockStart(state.doc, index) + state.doc.child(index).nodeSize
-  const line = state.schema.nodes['paragraph']!.create(null, state.schema.text('/'))
-  const tr = state.tr.insert(at, line)
-  tr.setSelection(TextSelection.create(tr.doc, at + 2))
-  return tr.scrollIntoView()
-}

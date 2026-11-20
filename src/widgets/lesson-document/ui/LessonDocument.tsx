@@ -15,8 +15,7 @@ import {
   lessonToDoc,
   type DocNode,
 } from '../model/lesson-doc'
-import { BlockHandle } from './BlockHandle'
-import { DocToolbar, TextBubble } from './DocToolbar'
+import { DocToolbar } from './DocToolbar'
 import { DocLocale } from './doc-locale'
 import { ExampleView } from './ExampleView'
 import { SlashMenu, type SlashKeys } from './SlashMenu'
@@ -162,19 +161,17 @@ function BlocksDocument({
     },
     onUpdate: ({ editor: each }) => onDoc(fromEditorJson(each.getJSON())),
   })
-  const toolbar = <DocToolbar editor={editor} locale={locale} />
+  const toolbar = <DocToolbar editor={editor} locale={locale} frame={frame} />
   return (
     <DocLocale value={locale}>
       <StyleBlock value={setStyling}>
         <ToolbarDock editorDom={frame}>{toolbar}</ToolbarDock>
         <div
           ref={frame}
-          className="relative pr-11 pb-28 md:pr-0 md:pl-20"
+          className="relative pb-28"
           style={{ '--takeaway-label': JSON.stringify(words('edit.doc.takeaway')) }}
         >
           <EditorContent editor={editor} />
-          <BlockHandle editor={editor} frame={frame} />
-          <TextBubble editor={editor} />
           <SlashMenu editor={editor} locale={locale} frame={frame} keysRef={slashKeys} />
         </div>
         <BlockStyleSheet editor={editor} index={styling} onClose={() => setStyling(null)} />

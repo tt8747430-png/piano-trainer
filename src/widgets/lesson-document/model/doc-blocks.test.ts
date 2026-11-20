@@ -7,7 +7,6 @@ import { LESSONS, type Lesson } from '@/entities/lesson'
 import {
   blockTurn,
   duplicateBlock,
-  lineAfter,
   moveBlock,
   moveBlockTo,
   removeBlock,
@@ -189,16 +188,5 @@ describe('a block turned into another (round 28, its menu’s Turn into)', () =>
     expect(turnBlockInto(state, 3, 'steps')).toBeNull()
     expect(turnBlockInto(state, 4, 'text')).toBeNull()
     expect(turnBlockInto(state, 0, 'text')).toBeNull()
-  })
-})
-
-describe('a line added under a block (round 28, its gutter’s +)', () => {
-  it('puts an empty line under it with / typed, the caret after it', () => {
-    const state = stateOf(LESSON)
-    const added = state.apply(lineAfter(state, 4)!)
-    expect(texts(added)).toEqual(['T', 'S', 'H', 'one', 'lessonExample', '/', 'three'])
-    expect(added.selection.$from.parent.textContent).toBe('/')
-    expect(added.selection.$from.parentOffset).toBe(1)
-    expect(lineAfter(state, 0)).toBeNull()
   })
 })

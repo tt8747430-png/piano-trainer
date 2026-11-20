@@ -32,7 +32,7 @@ export function InsertSheet({ editor, locale }: { editor: Editor; locale: Locale
   return (
     <>
       <Button
-        className="shrink-0 rounded-control px-3"
+        className="shrink-0 bg-foreground px-4 text-[0.9375rem] text-background hover:brightness-110"
         // The caret stays in the document: the block goes in where it stood.
         onMouseDown={(event) => event.preventDefault()}
         onClick={() => setOpen(true)}

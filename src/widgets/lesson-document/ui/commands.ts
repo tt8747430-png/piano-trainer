@@ -9,7 +9,6 @@ import {
   blockStart,
   duplicateBlock,
   fixedBlocks,
-  lineAfter,
   moveBlock,
   removeBlock,
   selectedBlock,
@@ -94,14 +93,6 @@ export function insertBlock(editor: Editor, kind: Insertable, locale: Locale): v
 /** Block `index` of words turned into `into` (its menu's Turn into), the caret in it. */
 export function turnInto(editor: Editor, index: number, into: TurnInto): void {
   const tr = turnBlockInto(editor.state, index, into)
-  if (!tr) return
-  editor.view.dispatch(closeHistory(tr))
-  editor.view.focus()
-}
-
-/** An empty line under block `index` with `/` typed: what can go there, in the `/` menu. */
-export function addLineAfter(editor: Editor, index: number): void {
-  const tr = lineAfter(editor.state, index)
   if (!tr) return
   editor.view.dispatch(closeHistory(tr))
   editor.view.focus()
