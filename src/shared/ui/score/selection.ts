@@ -21,6 +21,8 @@ export const GRAB = 0.35
 export const MARK_CLASS = {
   band: 'rounded-control bg-ring/15',
   line: 'w-0.5 rounded-pill bg-ring',
+  // The loop is the practice's, not a selection: honey, as the Player's boards (a 12% wash).
+  loop: 'bg-honey-ring/12',
 } as const
 
 export type MarkKind = keyof typeof MARK_CLASS

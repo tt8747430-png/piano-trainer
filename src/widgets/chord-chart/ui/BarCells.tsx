@@ -60,7 +60,7 @@ export function BarCells({
               : playing
                 ? 'bg-secondary text-secondary-foreground'
                 : looped
-                  ? 'bg-ring/15'
+                  ? 'bg-paint-yellow'
                   : face === 'grid'
                     ? 'bg-card group-hover/bar:bg-muted'
                     : 'group-hover/bar:bg-muted/60',

@@ -431,6 +431,12 @@ export const player = {
     close: 'Remove the loop, or close',
   },
   loop: 'Loop',
+  // The transport's Loop while bars are looped: named by them, a tap removes the loop (its boards).
+  loopOn: {
+    bars: 'Bars {{first}}–{{last}}',
+    bar: 'Bar {{first}}',
+    remove: 'Loop {{bars}}, remove',
+  },
   back: 'Back',
   /** The transport's ‹ and ›: a note (or chord) at a time. */
   previousNote: 'Previous note',

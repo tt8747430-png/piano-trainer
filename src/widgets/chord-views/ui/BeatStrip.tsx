@@ -98,7 +98,7 @@ export function BeatStrip({
                       now
                         ? 'bg-foreground text-background'
                         : looped
-                          ? 'bg-ring/25 text-foreground'
+                          ? 'bg-paint-yellow text-foreground'
                           : 'bg-card text-foreground',
                     )}
                   >

@@ -49,7 +49,7 @@ export function LyricRow({
       data-looped={looped ? '' : undefined}
       className={cn(
         'relative -mx-2 rounded-control px-2 py-1 transition-colors duration-200 ease-out',
-        looped && 'bg-ring/15',
+        looped && 'bg-paint-yellow',
         playing && 'font-bold',
       )}
     >

@@ -410,7 +410,14 @@ export function PlayerLayout({
         <div className="mx-auto w-full max-w-xl lg:w-fit">
           <PlayerDock
             practice={practice}
-            loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
+            loop={
+              <LoopButton
+                bars={
+                  player.loop ? { first: player.loop.first + 1, last: player.loop.last + 1 } : null
+                }
+                onToggle={player.toggleLoop}
+              />
+            }
             pace={
               <PracticeSheet
                 performance={performance}

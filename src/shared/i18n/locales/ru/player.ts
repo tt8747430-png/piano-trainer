@@ -397,6 +397,11 @@ export const player: LocaleResources['player'] = {
     close: 'Снять повтор или закрыть',
   },
   loop: 'Повтор',
+  loopOn: {
+    bars: 'Такты {{first}}–{{last}}',
+    bar: 'Такт {{first}}',
+    remove: 'Повтор: {{bars}}, снять',
+  },
   back: 'Назад',
   previousNote: 'Предыдущая нота',
   nextNote: 'Следующая нота',
