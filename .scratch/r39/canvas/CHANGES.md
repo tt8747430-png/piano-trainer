@@ -8,14 +8,13 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · (this commit) · the Courses' and a level's laptop bar is the one sub-page bar (LTITLEBAR: 56, Back 40 in, the title 12 after it, content 24 under), as Your lessons', a course's and a lesson's; it was an 88 head with Back 44 in · LearnCoursesLaptop,LearnLevelLaptop · pending
-- 2026-11-20 · (this commit) · a lesson's line of notes as the app engraves it: 4/4 after the clef, a barline between its two bars and at its end, the bar numbers over it · Lesson,LessonLaptop · pending
-- 2026-11-20 · (this commit) · a lesson's scale keys in the Scales page's colours (the tonic its own, the rest the scale's wash); the W/H ⓘ legend gone, as the app · Lesson,LessonLaptop · pending
-- 2026-11-20 · (this commit) · the Lesson boards read the app's real lesson (major-scales.ts): its five sections block for block, each scale on its own keys, a line of notes and the fingering's grand staff in Bravura, a Note, the question on D major's seven notes, the two links; no invented In short, After or versions · Lesson,LessonLaptop · pending
-
 
 ## Changes
 
+- 2026-11-20 · 7ab59c59 · the Courses' and a level's laptop bar is the one sub-page bar (LTITLEBAR: 56, Back 40 in, the title 12 after it, content 24 under), as Your lessons', a course's and a lesson's; it was an 88 head with Back 44 in · LearnCoursesLaptop,LearnLevelLaptop · v704
+- 2026-11-20 · 1c41d4e2 · a lesson's line of notes as the app engraves it: 4/4 after the clef, a barline between its two bars and at its end, the bar numbers over it · Lesson,LessonLaptop · v704
+- 2026-11-20 · 1c41d4e2 · a lesson's scale keys in the Scales page's colours (the tonic its own, the rest the scale's wash); the W/H ⓘ legend gone, as the app · Lesson,LessonLaptop · v704
+- 2026-11-20 · 1c41d4e2 · the Lesson boards read the app's real lesson (major-scales.ts): its five sections block for block, each scale on its own keys, a line of notes and the fingering's grand staff in Bravura, a Note, the question on D major's seven notes, the two links; no invented In short, After or versions · Lesson,LessonLaptop · v704
 - 2026-11-20 · 1d208d23 · Learn's laptop board in the 88 place bar (`LPLACEBAR`) · LearnLaptop,AppLayersLaptop · v703
 - 2026-11-20 · bce2c4e8 · the overview's Jazz vocabulary counts the app's 10 exercises · Main,Laptop · v703
 - 2026-11-20 · f6cb4cbd · one heart, Lucide's, on every board · Accompaniment,AccompanimentLaptop,AllSongs,AllSongsLaptop,Explore,ExploreLaptop,FingerTechnique,FingerTechniqueLaptop,Folder,FolderLaptop,JazzVocabulary,JazzVocabularyLaptop,PatternNew,PatternNewLaptop,Progressions,ProgressionsLaptop,Settings,SettingsLaptop,Song,SongLaptop,Songs,SongsLaptop · v701
