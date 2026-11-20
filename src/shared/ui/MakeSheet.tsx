@@ -68,7 +68,7 @@ export function MakeSheet({
             render={
               <Button
                 variant="ghost"
-                className="col-start-3 justify-self-end px-1 text-[1.0625rem] font-semibold text-link hover:bg-transparent hover:underline"
+                className="col-start-3 justify-self-end px-1 text-lg font-semibold text-link hover:bg-transparent hover:underline"
               />
             }
           >

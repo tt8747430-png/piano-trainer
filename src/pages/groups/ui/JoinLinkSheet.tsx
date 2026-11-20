@@ -2,12 +2,13 @@ import { useNavigate } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { inviteCodeOf } from '@/features/share-folder'
-import { NameField, Problem, Sheet, SheetContent } from '@/shared/ui'
+import { MakeSheet, NameField, Problem } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
  * Join with a link (R32-C): the invite link someone sent, pasted whole or as its code, and Open,
- * which opens the invite's page (its group, Join). A text that is no invite link says so.
+ * which opens the invite's page (its group, Join). A text that is no invite link says so. A form
+ * of one field, as New group: a sheet on a phone, centred on a laptop (`MakeSheet`).
  */
 export function JoinLinkSheet({
   open,
@@ -29,39 +30,46 @@ export function JoinLinkSheet({
     void navigate({ to: '/songs/groups/join', search: { code } })
   }
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        title={t('groups.joinLink')}
-        initialFocus={() => field.current ?? true}
-        footer={
-          <Button size="lg" className="w-full" disabled={link.trim() === ''} onClick={openInvite}>
-            {t('groups.joinLinkOpen')}
-          </Button>
-        }
-      >
-        <form
-          onSubmit={(event) => {
-            event.preventDefault()
-            openInvite()
-          }}
-          className="flex flex-col gap-2"
+    <MakeSheet
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t('groups.joinLink')}
+      initialFocus={() => field.current ?? true}
+      footer={
+        <Button
+          type="submit"
+          form="join-link"
+          size="lg"
+          className="w-full"
+          disabled={link.trim() === ''}
         >
-          <NameField
-            ref={field}
-            label={t('groups.joinLinkField')}
-            placeholder={t('groups.joinLinkPlaceholder')}
-            value={link}
-            inputMode="url"
-            enterKeyHint="go"
-            aria-invalid={wrong}
-            onChange={(event) => {
-              setLink(event.target.value)
-              setWrong(false)
-            }}
-          />
-          {wrong ? <Problem>{t('groups.joinLinkWrong')}</Problem> : null}
-        </form>
-      </SheetContent>
-    </Sheet>
+          {t('groups.joinLinkOpen')}
+        </Button>
+      }
+    >
+      <form
+        id="join-link"
+        onSubmit={(event) => {
+          event.preventDefault()
+          openInvite()
+        }}
+        className="flex flex-col gap-2"
+      >
+        <NameField
+          ref={field}
+          label={t('groups.joinLinkField')}
+          placeholder={t('groups.joinLinkPlaceholder')}
+          value={link}
+          inputMode="url"
+          enterKeyHint="go"
+          aria-invalid={wrong}
+          onChange={(event) => {
+            setLink(event.target.value)
+            setWrong(false)
+          }}
+        />
+        {wrong ? <Problem>{t('groups.joinLinkWrong')}</Problem> : null}
+      </form>
+    </MakeSheet>
   )
 }
