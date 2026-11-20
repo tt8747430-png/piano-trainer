@@ -176,10 +176,7 @@ function Group({
   }
   return (
     <section aria-labelledby={id} className="flex flex-col gap-1.5">
-      <h2
-        id={id}
-        className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
-      >
+      <h2 id={id} className="px-1 caps">
         {title}
       </h2>
       <ul className="flex flex-col rows-hairline overflow-hidden card">

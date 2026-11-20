@@ -8,11 +8,7 @@ import { usePatternLibrary } from '../model/use-pattern-library'
 
 /** A group's heading: small capitals in soft ink, its chips under it. */
 function GroupTitle({ children }: { children: string }) {
-  return (
-    <h3 className="mx-1 mt-2 -mb-1 font-sans text-[0.8125rem] font-semibold tracking-[0.04em] text-muted-foreground uppercase">
-      {children}
-    </h3>
-  )
+  return <h3 className="mx-1 mt-2 -mb-1 caps">{children}</h3>
 }
 
 /** A group's chips: the sheet's honey chips, a row's room between their rows. */

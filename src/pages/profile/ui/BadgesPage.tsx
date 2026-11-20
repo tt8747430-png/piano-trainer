@@ -62,10 +62,7 @@ export function BadgePage() {
           </p>
         </section>
         <section aria-labelledby="badge-how" className="flex flex-col gap-1.5">
-          <h2
-            id="badge-how"
-            className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
-          >
+          <h2 id="badge-how" className="px-1 caps">
             {t('profile.badges.how')}
           </h2>
           <p className="card p-4 text-pretty">{t(`profile.badges.ways.${id}`)}</p>

@@ -342,10 +342,7 @@ function Kbd({ children }: { children: ReactNode }) {
 /** A group's name over its card, in small capitals as every group's in the app. */
 function Caps({ id, children }: { id?: string; children: ReactNode }) {
   return (
-    <p
-      id={id}
-      className="px-4 text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
-    >
+    <p id={id} className="px-4 caps">
       {children}
     </p>
   )

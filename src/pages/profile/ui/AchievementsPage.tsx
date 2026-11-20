@@ -39,10 +39,7 @@ export function AchievementsPage() {
       <ScreenHeader column title={t('profile.achievements.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
         <section aria-labelledby={recordsId} className="flex flex-col gap-2">
-          <h2
-            id={recordsId}
-            className="px-4 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
-          >
+          <h2 id={recordsId} className="px-4 caps">
             {t('profile.achievements.records')}
           </h2>
           <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -101,10 +98,7 @@ export function AchievementPage() {
           </p>
         </section>
         <section aria-labelledby="achievement-how" className="flex flex-col gap-1.5">
-          <h2
-            id="achievement-how"
-            className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
-          >
+          <h2 id="achievement-how" className="px-1 caps">
             {t('profile.achievements.how')}
           </h2>
           <p className="card p-4 text-pretty">{t(`profile.achievements.ways.${achievementId}`)}</p>

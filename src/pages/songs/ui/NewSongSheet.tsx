@@ -153,9 +153,7 @@ export function NewSongSheet({
     >
       <form id="new-song" onSubmit={submit} className="flex flex-col gap-5">
         <label className="flex flex-col gap-2">
-          <span className="mx-1 text-[0.8125rem] font-semibold tracking-[0.04em] text-muted-foreground uppercase">
-            {t('making.name')}
-          </span>
+          <span className="mx-1 caps">{t('making.name')}</span>
           <input
             autoFocus
             value={title}

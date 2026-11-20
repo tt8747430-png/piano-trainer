@@ -129,9 +129,7 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
           <StylePreview look={draft} page={page} device={device} />
         </div>
         <section className="flex flex-col gap-2">
-          <h2 className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase">
-            {t('common:style.presets')}
-          </h2>
+          <h2 className="px-1 caps">{t('common:style.presets')}</h2>
           <Segmented<CardPreset>
             label={t('common:style.presets')}
             value={cardPreset(presetOf({ ...draft.style, layout: 'list' }))}
@@ -145,9 +143,7 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
           />
         </section>
         <section className="flex flex-col gap-2">
-          <h2 className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase">
-            {t('common:style.layout')}
-          </h2>
+          <h2 className="px-1 caps">{t('common:style.layout')}</h2>
           <Segmented
             label={t('common:style.layout')}
             value={draft.style.layout}

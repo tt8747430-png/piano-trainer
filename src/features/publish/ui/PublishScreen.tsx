@@ -92,9 +92,7 @@ function Tile({ id, kind, size }: { id: string; kind: PublicKind; size: 'head' |
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="mx-1 text-[0.8125rem] font-semibold tracking-[0.04em] text-muted-foreground uppercase">
-        {label}
-      </span>
+      <span className="mx-1 caps">{label}</span>
       {children}
     </div>
   )
@@ -350,10 +348,7 @@ function PublishForm({
         ) : null}
       </Field>
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor={id}
-          className="mx-1 text-[0.8125rem] font-semibold tracking-[0.04em] text-muted-foreground uppercase"
-        >
+        <label htmlFor={id} className="mx-1 caps">
           {t('public.description')}
         </label>
         <Textarea
@@ -408,9 +403,7 @@ function PublishForm({
   const preview = (
     <div className="flex flex-col gap-4">
       <section aria-label={t('public.preview')} className="flex flex-col gap-2">
-        <h2 className="mx-1 font-sans text-[0.8125rem] font-semibold tracking-[0.04em] text-muted-foreground uppercase">
-          {t('public.preview')}
-        </h2>
+        <h2 className="mx-1 caps">{t('public.preview')}</h2>
         <div className="flex items-center gap-4 card p-3">
           <Tile id={item.id} kind={item.kind} size="card" />
           <span className="flex min-w-0 flex-col gap-0.5">

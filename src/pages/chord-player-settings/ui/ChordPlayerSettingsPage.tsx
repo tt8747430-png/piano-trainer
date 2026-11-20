@@ -266,9 +266,7 @@ export function ChordPlayerSettingsPage() {
                 onChange={(volume) => hand.setSettings({ volume })}
               />
               <section className="flex flex-col gap-4">
-                <h3 className="font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase">
-                  {t('chordPlayer.settings.levels')}
-                </h3>
+                <h3 className="caps">{t('chordPlayer.settings.levels')}</h3>
                 {drawn
                   .filter((part) => settings[part].on)
                   .map((part) => (
