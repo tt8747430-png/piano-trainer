@@ -65,11 +65,21 @@ function SplitHandle({
       }}
       onPointerUp={() => (dragging.current = false)}
       onPointerCancel={() => (dragging.current = false)}
+      // The slider's keys: a key up or down, an octave with Shift or Page Up and Down, the ends.
       onKeyDown={(event) => {
-        const by = event.key === 'ArrowUp' ? 1 : event.key === 'ArrowDown' ? -1 : 0
-        if (by === 0) return
+        const octave = event.shiftKey ? 12 : 1
+        const to: Partial<Record<string, number>> = {
+          ArrowUp: split.key + octave,
+          ArrowDown: split.key - octave,
+          PageUp: split.key + 12,
+          PageDown: split.key - 12,
+          Home: PIANO.from + 1,
+          End: PIANO.to,
+        }
+        const next = to[event.key]
+        if (next === undefined) return
         event.preventDefault()
-        move(split.key + (event.shiftKey ? 12 * by : by))
+        move(next)
       }}
       className="group absolute inset-x-0 z-10 -mt-3 flex h-6 cursor-ns-resize touch-none items-center focus-visible:outline-none"
       style={{ top: `${top * 100}%` }}
