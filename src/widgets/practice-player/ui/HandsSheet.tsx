@@ -5,7 +5,7 @@ import { setOtherHand, setStaffVolume } from '@/features/set-preference'
 import { cn } from '@/shared/lib'
 import type { Hand } from '@/shared/lib/music'
 import type { Hands } from '@/shared/lib/schedule'
-import { Sheet, SheetContent, VolumeSlider } from '@/shared/ui'
+import { Sheet, SheetContent, SwitchRow, VolumeSlider } from '@/shared/ui'
 import { Switch } from '@/shared/ui/primitives/switch'
 
 /** Each hand's staff, whose volume is the hand's. */
@@ -73,15 +73,13 @@ export function HandsSheet({
                 />
               </div>
               {plays(hand) ? null : (
-                <label className="flex min-h-12 items-center justify-between gap-3 border-t border-hairline px-3">
-                  <span className="text-base" data-setting="otherHand.look">
-                    {t('parts.dim')}
-                  </span>
-                  <Switch
-                    checked={dim}
-                    onCheckedChange={(on) => setOtherHand(settings, { look: on ? 'dim' : 'show' })}
-                  />
-                </label>
+                <SwitchRow
+                  label={t('parts.dim')}
+                  setting="otherHand.look"
+                  checked={dim}
+                  onCheckedChange={(on) => setOtherHand(settings, { look: on ? 'dim' : 'show' })}
+                  className="min-h-12 border-t border-b-0 border-hairline px-3 py-0"
+                />
               )}
             </div>
           ))}

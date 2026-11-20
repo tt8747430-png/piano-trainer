@@ -1,6 +1,5 @@
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import {
   BackButton,
   RowButton,
@@ -78,8 +77,6 @@ export function SettingsSheet({
   const { t } = useTranslation('player')
   const { head, pages, links = [], acts } = useSettingsExtras()
   const [open, setOpen] = useState(false)
-  // On a laptop a card hung under the gear (PlayerDesk's popover), over the music.
-  const laptop = useMediaQuery(LAPTOP)
   const extra = pages.find((each) => each.id === page)
   const rows: readonly (SettingsRow & { readonly render?: ReactElement })[] = [
     ...music,
@@ -108,8 +105,7 @@ export function SettingsSheet({
       : (extra?.label ?? inner?.title ?? t('settingsPage.open'))
   return (
     <Sheet
-      swipeDirection={laptop ? 'right' : 'down'}
-      modal={!laptop}
+      hung
       open={open}
       onOpenChange={(next) => {
         setOpen(next)

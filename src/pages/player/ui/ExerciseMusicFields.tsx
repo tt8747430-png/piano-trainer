@@ -14,7 +14,7 @@ import {
   spellScale,
   printedNote,
 } from '@/shared/lib/music'
-import { Dropdown, NamedSegmented, NotePicker } from '@/shared/ui'
+import { Dropdown, Labelled, NotePicker, Segmented } from '@/shared/ui'
 import type { ExerciseChange } from '../model/exercise-search'
 
 /** The arpeggio types by feel's families: triads, then 7ths. */
@@ -89,15 +89,17 @@ export function ExerciseMusicFields({
         </div>
       ) : null}
       {fields.tonality ? (
-        <NamedSegmented
-          label={t('player:exercise.tonality')}
-          value={choice.tonality}
-          options={TONALITIES.map((tonality) => ({
-            value: tonality,
-            label: t(`player:exercise.tonalities.${tonality}`),
-          }))}
-          onChange={(tonality) => onChange({ tonality })}
-        />
+        <Labelled label={t('player:exercise.tonality')}>
+          <Segmented
+            label={t('player:exercise.tonality')}
+            value={choice.tonality}
+            options={TONALITIES.map((tonality) => ({
+              value: tonality,
+              label: t(`player:exercise.tonalities.${tonality}`),
+            }))}
+            onChange={(tonality) => onChange({ tonality })}
+          />
+        </Labelled>
       ) : null}
     </>
   )

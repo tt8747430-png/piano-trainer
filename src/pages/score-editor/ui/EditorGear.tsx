@@ -273,8 +273,7 @@ export function EditorGear({
   return (
     <>
       <Sheet
-        swipeDirection={laptop ? 'right' : 'down'}
-        modal={!laptop}
+        hung
         open={view.gear !== null}
         onOpenChange={(open) => view.setGear(open ? page : null)}
       >

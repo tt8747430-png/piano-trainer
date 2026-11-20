@@ -1,7 +1,7 @@
 import { Drawer as DrawerPrimitive } from '@base-ui/react/drawer'
 import type { ComponentProps, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
+import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { InfoTip } from './InfoTip'
 import { Button } from './primitives/button'
 import {
@@ -75,10 +75,21 @@ export { DrawerTrigger as SheetTrigger } from './primitives/drawer'
  */
 export function Sheet({
   children,
+  hung = false,
   ...props
-}: Omit<ComponentProps<typeof Drawer>, 'children'> & { children?: ReactNode }) {
+}: Omit<ComponentProps<typeof Drawer>, 'children' | 'swipeDirection' | 'modal'> & {
+  children?: ReactNode
+  /**
+   * On a laptop, a screen's settings hung under the bar's button that opens them (the boards'
+   * POPOVER), with nothing dimmed behind it; a phone keeps the bottom sheet. The sheet decides which
+   * by the screen's width, so no screen asks.
+   */
+  hung?: boolean
+}) {
+  const laptop = useMediaQuery(LAPTOP)
+  const card = hung && laptop
   return (
-    <Drawer showSwipeHandle {...props}>
+    <Drawer showSwipeHandle swipeDirection={card ? 'right' : 'down'} modal={!card} {...props}>
       <DrawerPrimitive.VirtualKeyboardProvider>{children}</DrawerPrimitive.VirtualKeyboardProvider>
     </Drawer>
   )

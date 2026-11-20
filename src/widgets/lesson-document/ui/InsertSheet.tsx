@@ -42,8 +42,7 @@ export function InsertSheet({ editor, locale }: { editor: Editor; locale: Locale
         {t('edit.doc.insert')}
       </Button>
       <Sheet
-        swipeDirection={laptop ? 'right' : 'down'}
-        modal={!laptop}
+        hung
         open={open}
         onOpenChange={(next) => {
           setOpen(next)

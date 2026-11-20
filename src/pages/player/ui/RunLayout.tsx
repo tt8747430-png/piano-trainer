@@ -2,7 +2,7 @@ import { Gauge, SlidersHorizontal, SlidersVertical, X } from 'lucide-react'
 import { useLocation } from '@tanstack/react-router'
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useProgressStoreApi, type PlayedRun } from '@/entities/progress'
+import { useProgress, useProgressStoreApi } from '@/entities/progress'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { recordPlayedRun } from '@/features/record-run'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
@@ -147,21 +147,24 @@ export function RunLayout({
   const finished = player.feedback?.kind === 'finished' ? player.feedback : null
   const store = useProgressStoreApi()
   const location = useLocation()
-  const [result, setResult] = useState<{
-    readonly run: PlayedRun
-    readonly best: number | null
-    readonly attempt: number
+  const key = playedKey(location.pathname, location.searchStr)
+  // The pass that ended, noted as the screen renders it, with the run's history before it is kept:
+  // its best and how many times it was played.
+  const pass = practice.state.passes
+  const [ended, setEnded] = useState<{
+    readonly pass: number
+    readonly before: { readonly best: number; readonly runs: number } | undefined
   } | null>(null)
+  if (finished !== null && ended?.pass !== pass)
+    setEnded({ pass, before: store.getState().trainers[key] })
+  // Retry or Practise mistakes leaves that pass's results.
+  const [left, setLeft] = useState(-1)
   // The pass kept last, by its number, so a pass is kept once however often this runs.
   const kept = useRef(-1)
-  const pass = practice.state.passes
   useEffect(() => {
-    if (finished === null || kept.current === pass) return
-    kept.current = pass
-    const key = playedKey(location.pathname, location.searchStr)
-    const before = store.getState().trainers[key]
+    if (finished === null || ended === null || kept.current === ended.pass) return
+    kept.current = ended.pass
     const steps = playedSteps(finished.bars, finished.slips, finished.pauses)
-    const at = new Date()
     recordPlayedRun(
       store,
       key,
@@ -176,19 +179,26 @@ export function RunLayout({
             : [],
         accuracy: finished.score,
       },
-      at,
+      new Date(),
     )
-    const run = store.getState().history[0]
-    if (run?.kind === 'played')
-      setResult({ run, best: before ? before.best : null, attempt: (before?.runs ?? 0) + 1 })
-  }, [finished, pass, store, location, title, player.tempo, music, chords])
+  }, [finished, ended, store, key, location.href, title, player.tempo, music, chords])
+  // The results read the run as kept: it shows once the store has it (one more run than before).
+  const latest = useProgress((state) => state.history[0])
+  const runs = useProgress((state) => state.trainers[key]?.runs ?? 0)
+  const result =
+    ended !== null &&
+    left !== ended.pass &&
+    latest?.kind === 'played' &&
+    runs === (ended.before?.runs ?? 0) + 1
+      ? { run: latest, best: ended.before ? ended.before.best : null, attempt: runs }
+      : null
   const waits = view.mode === 'wait'
   const start = () => {
     setSetupOpen(false)
     practice.play()
   }
   const again = (then: () => void) => {
-    setResult(null)
+    if (ended) setLeft(ended.pass)
     then()
     practice.play()
   }
@@ -302,12 +312,7 @@ export function RunLayout({
           <Gauge aria-hidden />
         </FloatingPiece>
       </div>
-      <Sheet
-        swipeDirection={laptop ? 'right' : 'down'}
-        modal={!laptop}
-        open={setupOpen}
-        onOpenChange={setSetupOpen}
-      >
+      <Sheet hung open={setupOpen} onOpenChange={setSetupOpen}>
         <SheetContent title={t('player:setup')} rising dismiss="close">
           <div className="flex flex-col gap-6">
             <Labelled label={t('player:pace.title')}>

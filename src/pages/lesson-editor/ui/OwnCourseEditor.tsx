@@ -16,9 +16,8 @@ import { LookFields } from '@/features/manage-library'
 import { createOwnLesson, saveOwnCourse } from '@/features/manage-own-lessons'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { useRestingSave } from '@/shared/lib'
-import { LessonIcon, type EditAction } from '@/shared/ui'
+import { LessonIcon, PanelPopover, type EditAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import {
   LocalScreen,
   Properties,
@@ -60,20 +59,28 @@ function CoverChoice({
     picture: t(`songs:folder.pictures.${course.look.picture}`),
     paint: t(`songs:folder.paints.${course.look.paint}`),
   })
+  const [open, setOpen] = useState(false)
   return (
-    <Popover>
-      <PopoverTrigger
-        render={<Button variant="ghost" className="h-auto min-h-11 max-w-full gap-3 px-2" />}
-        aria-label={`${t('learn:own.cover')}: ${value}`}
-      >
-        <FolderTile look={course.look} />
-        <span className="truncate">{value}</span>
-        <ChevronDown aria-hidden className="size-4 shrink-0 text-muted-foreground" />
-      </PopoverTrigger>
-      <PopoverContent align="end" aria-label={t('learn:own.cover')} className="w-auto p-4">
-        <LookFields look={course.look} onChange={(look) => onChange({ ...course, look })} />
-      </PopoverContent>
-    </Popover>
+    <PanelPopover
+      title={t('learn:own.cover')}
+      open={open}
+      onOpenChange={setOpen}
+      align="end"
+      className="w-auto"
+      trigger={
+        <Button
+          variant="ghost"
+          className="h-auto min-h-11 max-w-full gap-3 px-2"
+          aria-label={`${t('learn:own.cover')}: ${value}`}
+        >
+          <FolderTile look={course.look} />
+          <span className="truncate">{value}</span>
+          <ChevronDown aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+        </Button>
+      }
+    >
+      <LookFields look={course.look} onChange={(look) => onChange({ ...course, look })} />
+    </PanelPopover>
   )
 }
 

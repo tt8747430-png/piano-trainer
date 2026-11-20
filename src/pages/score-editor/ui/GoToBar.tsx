@@ -1,8 +1,8 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt, barsOf } from '@/features/score-editor'
+import { PanelPopover } from '@/shared/ui'
 import { Input } from '@/shared/ui/primitives/input'
-import { Popover, PopoverContent, PopoverTitle } from '@/shared/ui/primitives/popover'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /**
@@ -27,32 +27,29 @@ export function GoToBar() {
   return (
     <>
       <div ref={setAnchor} aria-hidden className="absolute top-0 left-1/2 size-0" />
-      <Popover open={view.goingTo} onOpenChange={view.setGoingTo}>
-        <PopoverContent
-          anchor={anchor}
-          sideOffset={8}
-          initialFocus={field}
-          className="w-65 gap-3 rounded-[16px] p-4"
-        >
-          <PopoverTitle className="font-sans text-[1.0625rem] font-semibold">
-            {t('goToBar.title')}
-          </PopoverTitle>
-          <form onSubmit={go} className="flex items-center gap-3">
-            <Input
-              ref={field}
-              defaultValue={String(here)}
-              inputMode="numeric"
-              enterKeyHint="go"
-              aria-label={t('goToBar.bar')}
-              onFocus={(event) => event.currentTarget.select()}
-              className="h-12 w-24 rounded-xl px-4 text-[1.0625rem] tabular-nums md:text-[1.0625rem]"
-            />
-            <span className="text-[0.9375rem] text-muted-foreground tabular-nums">
-              {t('goToBar.of', { count })}
-            </span>
-          </form>
-        </PopoverContent>
-      </Popover>
+      <PanelPopover
+        title={t('goToBar.title')}
+        open={view.goingTo}
+        onOpenChange={view.setGoingTo}
+        anchor={anchor}
+        initialFocus={field}
+        className="w-65"
+      >
+        <form onSubmit={go} className="flex items-center gap-3">
+          <Input
+            ref={field}
+            defaultValue={String(here)}
+            inputMode="numeric"
+            enterKeyHint="go"
+            aria-label={t('goToBar.bar')}
+            onFocus={(event) => event.currentTarget.select()}
+            className="h-12 w-24 rounded-xl px-4 text-[1.0625rem] tabular-nums md:text-[1.0625rem]"
+          />
+          <span className="text-[0.9375rem] text-muted-foreground tabular-nums">
+            {t('goToBar.of', { count })}
+          </span>
+        </form>
+      </PanelPopover>
     </>
   )
 }

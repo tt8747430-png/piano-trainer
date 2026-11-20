@@ -13,7 +13,7 @@ import {
   type BlockStyle,
   type StylePaint,
 } from '@/shared/lib/style'
-import { Pinned, Segmented } from '@/shared/ui'
+import { ChoiceTiles, PictureTiles, Pinned, Segmented } from '@/shared/ui'
 
 const PRESETS = Object.keys(BLOCK_PRESETS) as BlockPreset[]
 const RADII = [0, 1, 2, 3, 4] as const
@@ -131,25 +131,17 @@ export function StyleEditor({
         <PresetStrip value={value} onChange={onChange} />
         {layouts ? (
           <StyleChoice title={t('style.layout')}>
-            <div
-              role="radiogroup"
-              aria-label={t('style.layout')}
-              className="grid grid-cols-3 gap-2"
-            >
-              {STYLE_LAYOUTS.map((layout) => (
-                <button
-                  key={layout}
-                  type="button"
-                  role="radio"
-                  aria-checked={value.layout === layout}
-                  onClick={() => set('layout', layout)}
-                  className="choice flex min-h-20 flex-col items-center justify-center gap-2 rounded-card border border-border bg-card px-2 py-3 text-base focus-visible:-outline-offset-3"
-                >
-                  <RowsPicture layout={layout} />
-                  {t(`style.layouts.${layout}.label`)}
-                </button>
-              ))}
-            </div>
+            <PictureTiles
+              label={t('style.layout')}
+              value={value.layout}
+              columns={3}
+              tiles={STYLE_LAYOUTS.map((layout) => ({
+                value: layout,
+                label: t(`style.layouts.${layout}.label`),
+                picture: <RowsPicture layout={layout} />,
+              }))}
+              onChange={(layout) => set('layout', layout)}
+            />
           </StyleChoice>
         ) : null}
         <StyleChoice title={t('style.padding')}>
@@ -235,52 +227,35 @@ function PresetStrip({
   const { t } = useTranslation('common')
   const chosen = presetOf(value)
   const tile =
-    'flex w-24 shrink-0 snap-start flex-col items-center gap-1.5 rounded-card p-1 text-sm focus-visible:-outline-offset-3'
+    'flex w-24 shrink-0 snap-start flex-col items-center gap-1.5 rounded-card p-1 text-sm'
   const face =
     'grid h-18 w-full place-items-center rounded-card bg-muted ring-offset-2 ring-offset-background transition-shadow duration-200'
   return (
     <StyleChoice title={t('style.presets')}>
-      <div
-        role="radiogroup"
-        aria-label={t('style.presets')}
+      <ChoiceTiles
+        label={t('style.presets')}
+        value={chosen ?? 'custom'}
+        options={chosen === null ? [...PRESETS, 'custom'] : PRESETS}
+        onChange={(preset) => {
+          if (preset !== 'custom') onChange(BLOCK_PRESETS[preset])
+        }}
         className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-2 overflow-x-auto px-gutter py-1 scrollbar-none lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0"
-      >
-        {PRESETS.map((preset) => (
-          <button
-            key={preset}
-            type="button"
-            role="radio"
-            aria-checked={chosen === preset}
-            onClick={() => onChange(BLOCK_PRESETS[preset])}
-            className={tile}
-          >
-            <span className={cn(face, chosen === preset && 'ring-2 ring-foreground')}>
+        bare
+        tileClassName={tile}
+        tile={(preset, on) => (
+          <>
+            <span className={cn(face, on && 'ring-2 ring-foreground')}>
               <StyledCard
-                style={BLOCK_PRESETS[preset]}
+                style={preset === 'custom' ? value : BLOCK_PRESETS[preset]}
                 className="grid h-11 w-16 place-items-center font-display text-lg font-semibold"
               >
                 <span aria-hidden>Aa</span>
               </StyledCard>
             </span>
-            <span className={cn(chosen === preset && 'font-semibold')}>
-              {t(`style.preset.${preset}`)}
-            </span>
-          </button>
-        ))}
-        {chosen === null ? (
-          <button type="button" role="radio" aria-checked className={tile}>
-            <span className={cn(face, 'ring-2 ring-foreground')}>
-              <StyledCard
-                style={value}
-                className="grid h-11 w-16 place-items-center font-display text-lg font-semibold"
-              >
-                <span aria-hidden>Aa</span>
-              </StyledCard>
-            </span>
-            <span className="font-semibold">{t('style.preset.custom')}</span>
-          </button>
-        ) : null}
-      </div>
+            <span className={cn(on && 'font-semibold')}>{t(`style.preset.${preset}`)}</span>
+          </>
+        )}
+      />
     </StyleChoice>
   )
 }
