@@ -106,7 +106,7 @@ print('r54 trainer, check ok')
 PE_SRC = r'''
     const S = (o) => set(o), page = st.page ?? 'edit', role = st.role ?? 'Editor';''' + TOAST_JS + r'''
     const style = st.style ?? 'Pop', draft = st.draft ?? 'Draft · 2 changes', name = st.name ?? 'Axis of Awesome';
-    return { ...common(st, set), isEditor: role === 'Editor', isLearner: role !== 'Editor', isEdit: page === 'edit', isSet: page === 'settings', isPub: page === 'publish', notEdit: page !== 'edit',
+    return { ...common(st, set), isEditor: role === 'Editor', isLearner: role !== 'Editor', isEdit: page === 'edit', isSet: page === 'settings', isPub: page === 'publish', notEdit: page !== 'edit', winOn: page !== 'edit', closeWin: () => S({ page: 'edit', sheet: null }), winPad: page === 'publish' ? 12 : 24,
       pageT: { edit: 'Edit progression', settings: 'Settings', publish: 'Publish' }[page], back: () => S({ page: page === 'publish' ? 'settings' : 'edit' }), backT: page === 'publish' ? 'Settings' : 'Edit progression',
       goSet: () => S({ page: 'settings', sheet: null }), goPub: () => S({ page: 'publish', sheet: null }), draftT: draft, styles: chipsOf(['Pop', 'Rock', 'Jazz', 'Blues', 'Classical', 'R&B / Soul', 'Gospel', 'Modal', 'Theory'], style, (x) => S({ style: x, draft: 'Draft · 3 changes' })),
       name, setName: (e) => S({ name: e.target.value, draft: 'Draft · 3 changes' }),
@@ -135,12 +135,13 @@ PEPUB = (CARD(f'<div style="display: flex; flex-direction: column; gap: 4px"><sp
          + f'<div style="display: flex; gap: 8px">{BTN("Discard changes", "discard", "", "quiet", 50)}{BTN("Publish", "publish", "", "primary", 50)}</div>')
 PEGATE = EMPTY('isLearner', '✎', 'Only an editor edits a progression.', 'Ask an editor, or use Make your own from it at the foot of the progression’s page.', f'{BTN("Back to Progressions", "", "Progressions.dc.html", "primary", 48, False)}')
 PESHEETS = (PEMENU + ASK('discardOn', 'Discard your changes?', 'The draft goes back to the published version. This can’t be undone.', 'Discard', 'doDiscard'))
-PEBODY = IF('isEdit', PEEDIT, 'true') + IF('isSet', PESET) + IF('isPub', PEPUB)
-PEBODY_L = IF('isSet', PESET) + IF('isPub', PEPUB)
-peph = (IF('isEditor', IF('isEdit', TOP('Progression.dc.html', '', PEACTS, 'Axis of Awesome'), 'true') + IF('notEdit', TOP('', '{{pageT}}', '', 'Back', IB('{{backT}}', CHEV_L, 'back'))) + NARROW(PEBODY), 'true')
+# its Settings and their Publish a window over the editor (THINGWIN; owner, 2026-11-20: "why dont we do such things
+# like the app settings in such popup window"), never pages of their own; Publish a page inside it with Back
+PEWIN = lambda lap: THINGWIN(lap, 'winOn', 'closeWin', '{{pageT}}', IF('isSet', PESET, 'true') + IF('isPub', PEPUB), IF('isPub', IB('Settings', CHEV_L, 'back')), '{{winPad}}', 'false')
+peph = (IF('isEditor', TOP('Progression.dc.html', '', PEACTS, 'Axis of Awesome') + NARROW(PEEDIT) + PEWIN(False), 'true')
         + IF('isLearner', TOP('Progression.dc.html', '', '', 'Axis of Awesome') + NARROW(PEGATE)) + STRIP() + f'<div style="height: 26px; flex: none"></div>' + TOASTS)
 LPE = lambda s: s.replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html').replace('Progression.dc.html', 'ProgressionLaptop.dc.html')
-pelm = (IF('isEditor', IF('isEdit', LTITLEBAR('{{pageT}}', PEACTS, back='ProgressionLaptop.dc.html'), 'true') + IF('notEdit', LTITLEBAR('{{pageT}}', backact='back')) + IF('isEdit', LCOL(PEEDIT_L, 704), 'true') + IF('notEdit', LCOL(PEBODY_L, 640)), 'true')
+pelm = (IF('isEditor', LTITLEBAR('Edit progression', PEACTS, back='ProgressionLaptop.dc.html') + LCOL(PEEDIT_L, 704) + LPE(PEWIN(True)), 'true')
         + IF('isLearner', LTOP('ProgressionLaptop.dc.html', '') + WIDE(LPE(PEGATE), 640)) + STRIP() + TOASTL)
 detail('ProgressionEdit', 'Edit a progression (editors)', js(PE_SRC), peph, pelm, '', PESHEETS, LAPSHEET(PESHEETS), 'Practice')
 

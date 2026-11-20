@@ -48,7 +48,7 @@ C = a laptop card hung under the gear, F = a laptop popover at its control.
 | A song | song page ··· › Settings (`SongMore`), a library row's ··· | none (was `/songs/$pieceId/settings`) | S | D | SongSettings, SongSettingsLaptop | done 2026-11-20 (`SettingsWindow`), Publish a page inside it (`/songs/$pieceId/publish` gone) |
 | A lesson (built-in or yours) | lesson bar gear (`LessonLayout`) | none (were `/lessons/$lessonId/settings`, `/courses/$courseId/$lessonId/settings`) | S | D | Lesson, LessonLaptop, YourLessonSettings, YourLessonSettingsLaptop | done 2026-11-20 (THINGWIN, `SettingsWindow`) |
 | A course (built-in or yours) | course bar gear (`CoursePage`, `OwnCoursePage`) | none (was `/courses/$courseId/settings`) | S | D | Course, CourseLaptop, YourCourseSettings, YourCourseSettingsLaptop | done 2026-11-20 (THINGWIN, `SettingsWindow`) |
-| A progression (an editor's draft) | editor bar gear (`ProgressionEditor`) | `/practice/progressions/$progressionId/settings` | P | P | ProgressionEdit, ProgressionEditLaptop (its Settings state) | canvas, then port |
+| A progression (an editor's draft) | editor bar gear (`ProgressionEditor`) | `/practice/progressions/$progressionId/settings` | P | P | ProgressionEdit, ProgressionEditLaptop | canvas done 2026-11-20 (THINGWIN, Publish inside); port next |
 | A folder or playlist | the library's ··· | none: its menu and sheets | S | F | Folder, FolderLaptop | — |
 
 ### A screen's own settings, in place (already sheets and cards; no address)
