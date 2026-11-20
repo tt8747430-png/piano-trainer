@@ -2,7 +2,7 @@ import { isRecord } from '@/shared/lib'
 import { readAbout, type About, type Lesson } from '@/entities/lesson'
 import type { PieceId } from '@/entities/piece'
 import { isStage, type Stage } from '@/entities/step'
-import type { LocalText } from '@/shared/i18n'
+import { isLocalText, isWrittenText, type LocalText } from '@/shared/i18n'
 
 /**
  * The shelves Courses lists, in order (ADR 0053): the beginner's and the intermediate's courses, the
@@ -84,17 +84,6 @@ export const COURSE_WEEKS: readonly number[] = Array.from({ length: 24 }, (_, i)
 const isWeeks = (value: unknown): value is number =>
   typeof value === 'number' && COURSE_WEEKS.includes(value)
 
-/** Text in both languages, blank or not. */
-const isText = (value: unknown): value is LocalText => {
-  if (!isRecord(value)) return false
-  const { en, ru } = value
-  return typeof en === 'string' && typeof ru === 'string'
-}
-
-/** Words in both languages, neither blank. */
-const isWritten = (value: unknown): value is LocalText =>
-  isText(value) && value.en.trim() !== '' && value.ru.trim() !== ''
-
 const isIdList = (value: unknown): value is readonly string[] =>
   Array.isArray(value) && value.every((id) => typeof id === 'string' && id.trim() !== '')
 
@@ -104,9 +93,9 @@ export function isCourseRecord(id: string, body: unknown): body is CourseRecord 
   const record = body
   return (
     record.id === id &&
-    isText(record.title) &&
-    isText(record.summary) &&
-    (record.line === undefined || isText(record.line)) &&
+    isLocalText(record.title) &&
+    isLocalText(record.summary) &&
+    (record.line === undefined || isLocalText(record.line)) &&
     (record.lessons === undefined || isIdList(record.lessons)) &&
     (record.shelf === undefined || isShelf(record.shelf)) &&
     (record.stage === undefined || isStage(record.stage)) &&
@@ -137,7 +126,7 @@ export const isWholeCourse = (record: CourseRecord): record is WholeCourseRecord
  */
 export function updatesCourse(id: string, body: unknown): body is CourseRecord {
   if (typeof body !== 'object' || body === null) return false
-  return isCourseRecord(id, body) && isWritten(body.title) && isWritten(body.summary)
+  return isCourseRecord(id, body) && isWrittenText(body.title) && isWrittenText(body.summary)
 }
 
 /** A course an editor has only begun, as the device has it: no words, no lessons, no songs. */

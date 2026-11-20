@@ -1,3 +1,4 @@
+import { isLocalText, type LocalText } from '@/shared/i18n'
 import type { Node } from '@tiptap/pm/model'
 import { NodeSelection, TextSelection, type EditorState, type Transaction } from '@tiptap/pm/state'
 import { isRecord } from '@/shared/lib'
@@ -102,16 +103,11 @@ const TURN_OF: Record<string, TurnInto> = {
 /** What a block of words is, among what it can be turned into; null for an example, title or summary. */
 export const blockTurn = (node: Node): TurnInto | null => TURN_OF[node.type.name] ?? null
 
-type Both = { en: string; ru: string }
-
 /** A line of a block's words, with both languages where the block carried them. */
 interface Line {
   readonly text: string
-  readonly both: Both | null
+  readonly both: LocalText | null
 }
-
-const isBoth = (value: unknown): value is Both =>
-  typeof value === 'object' && value !== null && 'en' in value && 'ru' in value
 
 /** The lines a block of words holds: a step each, a rule and its note, else its words. */
 function linesOf(node: Node): Line[] {
@@ -122,24 +118,24 @@ function linesOf(node: Node): Line[] {
     case 'orderedList':
       node.forEach((step) => {
         const text: unknown = step.attrs['text']
-        lines.push({ text: step.textContent, both: isBoth(text) ? text : null })
+        lines.push({ text: step.textContent, both: isLocalText(text) ? text : null })
       })
       return lines
     case 'note':
       node.forEach((part) => {
         const own = part.type.name === 'noteRule' ? block?.['rule'] : block?.['text']
         if (part.textContent || node.childCount === 1)
-          lines.push({ text: part.textContent, both: isBoth(own) ? own : null })
+          lines.push({ text: part.textContent, both: isLocalText(own) ? own : null })
       })
       return lines
     case 'paragraph': {
       // A lead in bold reads into the words after it: carried whole only where it has none.
       const both = block?.['kind'] === 'text' && !block['lead'] ? block['text'] : null
-      return [{ text: node.textContent, both: isBoth(both) ? both : null }]
+      return [{ text: node.textContent, both: isLocalText(both) ? both : null }]
     }
     default: {
       const text: unknown = node.attrs['text']
-      return [{ text: node.textContent, both: isBoth(text) ? text : null }]
+      return [{ text: node.textContent, both: isLocalText(text) ? text : null }]
     }
   }
 }

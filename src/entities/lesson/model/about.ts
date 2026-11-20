@@ -1,5 +1,5 @@
 import { isRecord } from '@/shared/lib'
-import type { LocalText } from '@/shared/i18n'
+import { isLocalText } from '@/shared/i18n'
 import { sanitiseStyle } from '@/shared/lib/style'
 import type { LessonBlock, LessonSection } from './types'
 
@@ -9,9 +9,6 @@ import type { LessonBlock, LessonSection } from './types'
  * document; read by the lesson view's blocks.
  */
 export type About = readonly LessonSection[]
-
-const isText = (value: unknown): value is LocalText =>
-  isRecord(value) && typeof value.en === 'string' && typeof value.ru === 'string'
 
 const isBlock = (value: unknown): value is LessonBlock =>
   isRecord(value) && typeof value.kind === 'string'
@@ -32,9 +29,9 @@ export function readAbout(value: unknown): About | undefined {
   const list: readonly unknown[] = value
   for (const section of list) {
     if (!isRecord(section)) return undefined
-    if (!isText(section.heading) || !Array.isArray(section.blocks)) return undefined
+    if (!isLocalText(section.heading) || !Array.isArray(section.blocks)) return undefined
     if (!section.blocks.every(isBlock)) return undefined
-    if (section.takeaway !== undefined && !isText(section.takeaway)) return undefined
+    if (section.takeaway !== undefined && !isLocalText(section.takeaway)) return undefined
     sections.push({
       heading: section.heading,
       blocks: section.blocks.map((block) => styled(block)),

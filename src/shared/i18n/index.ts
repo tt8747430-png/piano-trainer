@@ -36,7 +36,7 @@ i18n.services.formatter?.add('lowercase', (value: string, lng) => value.toLocale
 export { i18n }
 
 export { formatDecimal, formatPercent } from './format-number'
-export { localText, type LocalText } from './local-text'
+export { isLocalText, isWrittenText, localText, type LocalText } from './local-text'
 export { LOCALES, type Locale } from './locale'
 export { useLocale } from './use-locale'
 export { useBarName } from './use-bar-name'

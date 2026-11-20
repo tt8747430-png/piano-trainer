@@ -1,6 +1,6 @@
 import { isRecord } from '@/shared/lib'
 import type { PatternId } from '@/entities/pattern'
-import type { LocalText } from '@/shared/i18n'
+import { isLocalText, isWrittenText, type LocalText } from '@/shared/i18n'
 import { parseNumerals, type ChordSize, type ChurchMode } from '@/shared/lib/music'
 
 /** The styles the Progressions library groups its progressions by. */
@@ -46,12 +46,6 @@ export interface ProgressionDetails {
   readonly mode?: ChurchMode
 }
 
-const isText = (value: unknown): value is LocalText => {
-  if (!isRecord(value)) return false
-  const { en, ru } = value
-  return typeof en === 'string' && typeof ru === 'string' && en.trim() !== '' && ru.trim() !== ''
-}
-
 const readsAsLine = (line: unknown): line is string =>
   typeof line === 'string' && (parseNumerals(line)?.length ?? 0) > 0
 
@@ -67,18 +61,12 @@ export function readsAsProgression(id: string, body: unknown): body is LibraryPr
   return (
     progression.id === id &&
     PROGRESSION_STYLES.some((style) => style === progression.style) &&
-    isText(progression.name) &&
-    isText(progression.character) &&
+    isWrittenText(progression.name) &&
+    isWrittenText(progression.character) &&
     (major !== undefined || minor !== undefined) &&
     (major === undefined || readsAsLine(major)) &&
     (minor === undefined || readsAsLine(minor))
   )
-}
-
-const isLocalText = (value: unknown): value is LocalText => {
-  if (!isRecord(value)) return false
-  const { en, ru } = value
-  return typeof en === 'string' && typeof ru === 'string'
 }
 
 /**

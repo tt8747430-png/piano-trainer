@@ -1,6 +1,6 @@
 import { isRecord } from '@/shared/lib'
 import { isStage, type Stage, type Step } from '@/entities/step'
-import type { LocalText } from '@/shared/i18n'
+import { isLocalText, type LocalText } from '@/shared/i18n'
 import { CHORD_FAMILIES, SCALE_KINDS } from '@/shared/lib/music'
 
 /** A node of a journey's chapter: a lesson to read, or a chord family or scale to check on Practice. */
@@ -26,12 +26,6 @@ export interface Journey {
   readonly chapters: readonly Chapter[]
 }
 
-const isText = (value: unknown): value is LocalText => {
-  if (!isRecord(value)) return false
-  const { en, ru } = value
-  return typeof en === 'string' && typeof ru === 'string'
-}
-
 const isId = (value: unknown): value is string => typeof value === 'string' && value.trim() !== ''
 
 /** A step as the database keeps it: a lesson by id, a chord family's or a scale's Check. */
@@ -55,7 +49,7 @@ function isChapter(value: unknown): value is Chapter {
   const chapter = value
   return (
     isId(chapter.id) &&
-    isText(chapter.title) &&
+    isLocalText(chapter.title) &&
     Array.isArray(chapter.steps) &&
     chapter.steps.every(isJourneyStep)
   )
@@ -71,8 +65,8 @@ export function updatesJourney(id: string, body: unknown): body is Journey {
   return (
     journey.id === id &&
     isStage(journey.stage) &&
-    isText(journey.title) &&
-    isText(journey.goal) &&
+    isLocalText(journey.title) &&
+    isLocalText(journey.goal) &&
     Array.isArray(journey.chapters) &&
     journey.chapters.every(isChapter)
   )

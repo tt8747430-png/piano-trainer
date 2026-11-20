@@ -2,8 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Fragment, useCallback, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DraftListing } from '@/shared/api/content-editing'
-import { localText, useLocale, type LocalText } from '@/shared/i18n'
-import { isRecord } from '@/shared/lib'
+import { isLocalText, localText, useLocale } from '@/shared/i18n'
 import { useContentEditing } from '@/shared/lib/content-editing'
 import { OpensMark, SettingsGroup } from '@/shared/ui'
 import { useLoaded } from '../model/use-loaded'
@@ -48,9 +47,6 @@ function editorOf(
     }
   }
 }
-
-const isLocalText = (value: unknown): value is LocalText =>
-  isRecord(value) && typeof value.en === 'string' && typeof value.ru === 'string'
 
 /**
  * The drafts editors left (content as data, ADR 0116), the newest first, one card as the Admin

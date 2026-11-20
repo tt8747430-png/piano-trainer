@@ -1,5 +1,5 @@
 import type { About, Lesson, LessonBlock, LessonSection } from '@/entities/lesson'
-import type { Locale, LocalText } from '@/shared/i18n'
+import { isLocalText, type Locale, type LocalText } from '@/shared/i18n'
 import type { BlockStyle } from '@/shared/lib/style'
 import { carriedBlockOf, carriedStyleOf, inStyle } from './carried'
 
@@ -151,9 +151,6 @@ const written = (carried: unknown, locale: Locale, text: string): LocalText => (
   ...(isLocalText(carried) ? carried : BLANK),
   [locale]: text,
 })
-
-const isLocalText = (value: unknown): value is LocalText =>
-  typeof value === 'object' && value !== null && 'en' in value && 'ru' in value
 
 /** The style a node carries; none where it carries none. */
 const styleOf = (node: DocNode): BlockStyle | undefined =>
