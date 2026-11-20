@@ -5,6 +5,7 @@ import { BAND_PARTS, COUNT_INS, type CountIn } from '@/entities/chord-sheet'
 import { selectLayoutChanged, usePageLayouts } from '@/entities/page-layout'
 import { styleBook, usePatternBook } from '@/entities/pattern'
 import {
+  PROGRESSION_NAMES,
   PROGRESSION_VOICINGS,
   selectChordPlayer,
   useSettings,
@@ -287,7 +288,7 @@ function SettingsBody({
             <Segmented
               label={t('chordPlayer.settings.writtenAs')}
               value={prefs.names}
-              options={(['chords', 'numerals', 'nashville'] as const).map((value) => ({
+              options={PROGRESSION_NAMES.map((value) => ({
                 value,
                 label: t(`chordPlayer.settings.names.${value}`),
               }))}

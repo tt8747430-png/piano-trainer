@@ -21,3 +21,4 @@ Open, in this order:
 7. Smells: `ArrangeList` handle and style built three times (tried 2026-11-20: one hook returning the node, style and handle trips `react-hooks/refs`, refs read through a returned object; kept as written); `FoldHeadRow` vs `FoldSection`; folds in `useState` (done 2026-11-20: `useFold`, keyed `library:<kind>:<section>`)
    where Practice uses `useFold`; the names list in `ChordPlayerSettings` vs `PROGRESSION_NAMES`.
 8. `PatternPage.test.tsx`'s publish test still expects the old address (waits for the owner's test run). `practice-machine.test.ts`: 10 of 39 red since the machine keys by Midi (waits for the owner's test run).
+8. Voicing's third wording: the Player's setup for a progression run has a switch, Smooth voice leading (`PositionField`, `music:position.nearest`), for what the progression page and the Chord player call Voicing (Voice-led · Block). One home or one word, to settle on the canvas first.

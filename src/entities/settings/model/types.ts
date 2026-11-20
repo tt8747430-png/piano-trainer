@@ -472,7 +472,7 @@ export const DEFAULT_CHORD_FINDER: ChordFinderSettings = {
 }
 
 /** How Progressions writes its chords: Roman numerals, Nashville numbers, or chord symbols. */
-export const PROGRESSION_NAMES = ['numerals', 'nashville', 'chords'] as const
+export const PROGRESSION_NAMES = ['chords', 'numerals', 'nashville'] as const
 export type ProgressionNames = (typeof PROGRESSION_NAMES)[number]
 export const isProgressionNames = isOneOf(PROGRESSION_NAMES)
 

@@ -1089,9 +1089,9 @@ export const practice = {
         nashville: 'Nashville',
       },
       voicing: 'Voicing',
-      voicings: { led: 'Smooth voice leading', block: 'Block chords' },
+      voicings: { led: 'Voice-led', block: 'Block' },
       voicingInfo:
-        'Smooth voice leading moves each chord to the nearest notes of the one before; block chords play each in root position.',
+        'Voice-led, each chord moves to the nearest notes of the one before. Block, every chord stands in root position.',
       relaid: 'Laid out in {{meter}}',
       follow: 'Follow a MIDI arranger',
       followInfo:

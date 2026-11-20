@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · Written as reads Chords · Numerals · Nashville everywhere (a progression read Numerals first); the Chord player's Voicing reads Voice-led · Block as a progression's (was Smooth voice leading · Block chords) · Progression, ProgressionLaptop, ChordPlayer, ChordPlayerLaptop · pending
+
 ## Changes
 
 - 2026-11-20 · a0d8094d · a pattern's Publish (its ··· Publish…) opens over the pattern as the window (THINGWIN), never a page with an address: on a laptop the 720 window centred, on a phone a tall sheet with Done · Pattern, PatternLaptop · v715
