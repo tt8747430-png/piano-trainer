@@ -1,4 +1,3 @@
-export { ScoreViewMenu } from './ui/ScoreViewMenu'
 export { SheetLayoutTools } from './ui/SheetLayoutTools'
 export { SheetViewFields } from './ui/SheetViewFields'
 export { ViewSection } from './ui/ViewSection'

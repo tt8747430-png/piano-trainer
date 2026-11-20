@@ -9,7 +9,6 @@ export {
   type PublishSaid as PublishSaidKind,
   type PublishState,
 } from './model/use-publish'
-export { publicFace } from './ui/public-face'
 export { PublishSaid } from './ui/PublishSaid'
 export { PublishScreen, type PublishPreview } from './ui/PublishScreen'
 export {

@@ -7,7 +7,6 @@ export {
   type PracticePageId,
 } from './model/practice-pages'
 export { usePracticeVisits } from './ui/use-practice-visits'
-export { PageRow } from './ui/PageRow'
 export { usePageWords } from './ui/use-page-words'
 export { GearButton, SettingsGear } from './ui/SettingsGear'
 export { PianoButton } from './ui/PianoButton'

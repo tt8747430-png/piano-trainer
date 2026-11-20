@@ -68,4 +68,3 @@ export {
 export { arrangeProgression } from './progression'
 export { PROGRESSION, type ProgressionChoice } from './progression-choice'
 export { walkingFit } from './walking'
-export { PractiseChords } from './ui/PractiseChords'
