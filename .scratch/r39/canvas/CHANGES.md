@@ -8,7 +8,6 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · (this commit) · PlayChord's run is the Inversions exercise on the grand staff, Key 1 of 12, as the app and PlayExercise · PlayChord,PlayChordLaptop,PracticeResult,PracticeResultLaptop · pending
 
 
 
@@ -17,6 +16,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-20 · 70fa07aa, 5c9b3c95 · PlayChord's run is the Inversions exercise on the grand staff, Key 1 of 12, as the app and PlayExercise · PlayChord,PlayChordLaptop,PracticeResult,PracticeResultLaptop · v671
 - 2026-11-20 · 2bcf7f0f · the layers open over the bare page, the notice under the 62 status bar, a route state's line wraps pretty · AppLayers,AppLayersLaptop · v670
 - 2026-11-19 · eb9fcaa1 · search suggestions 60 as their code says (measured 76) · AppLayers,AppLayersLaptop · v669
 - 2026-11-19 · cd82d5cb · Feedback, Error log, Audit log and Drafts say a day as the library does (10 Nov, Today 09:14, Yesterday) · Admin,AdminLaptop · v668
