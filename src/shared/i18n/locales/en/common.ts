@@ -194,12 +194,8 @@ export const common = {
   // The MIDI keyboard's screen (Settings › MIDI keyboard, ADR 0034) and its MIDI log.
   midiSettings: {
     input: 'MIDI input',
-    inputNote:
-      'The app hears the keys and pedals played on a MIDI keyboard. Off, it hears none and asks nothing as it opens.',
     output: 'MIDI output',
-    outputNote: 'Songs and examples sound from the piano’s own speakers',
     sound: 'MIDI input plays sound',
-    soundNote: 'For a piano without speakers: the app sounds the keys you press',
     needsInput: 'Needs MIDI input',
     unsupportedNote:
       'Web MIDI works in Chrome, Edge, Opera and Firefox on a computer or an Android phone. Safari, and every browser on an iPhone or iPad, has none.',

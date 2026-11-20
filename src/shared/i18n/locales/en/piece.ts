@@ -7,7 +7,6 @@ export const piece = {
   // the piece is a song's or a study's, by its kind: Russian names it.
   learnSong: {
     progress: '{{done}} of {{total}}',
-    progressSaid: 'Lessons done: {{done}} of {{total}}',
     sections: 'Sections',
     lessons_one: '{{count}} lesson',
     lessons_other: '{{count}} lessons',

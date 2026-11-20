@@ -173,12 +173,8 @@ export const common: LocaleResources['common'] = {
   },
   midiSettings: {
     input: 'MIDI-вход',
-    inputNote:
-      'Приложение слышит клавиши и педали MIDI-клавиатуры. Когда выключено, ничего не слышит и ничего не спрашивает при запуске.',
     output: 'MIDI-выход',
-    outputNote: 'Песни и примеры звучат из динамиков самого пианино',
     sound: 'Звук MIDI-входа',
-    soundNote: 'Для пианино без динамиков: приложение озвучивает нажатые клавиши',
     needsInput: 'Нужен MIDI-вход',
     unsupportedNote:
       'Web MIDI есть в Chrome, Edge, Opera и Firefox на компьютере или Android-телефоне. В Safari и во всех браузерах на iPhone и iPad его нет.',

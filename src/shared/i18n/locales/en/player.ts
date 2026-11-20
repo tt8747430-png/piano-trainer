@@ -325,8 +325,6 @@ export const player = {
     click: 'Metronome',
     clickInfo: 'A click on every beat while the music plays.',
     volume: 'Volume',
-    volumeInfo:
-      'How loud each part plays. Only the chords turns the recording right down and both hands up, so you hear the chords alone.',
     staves: 'Staves',
     recording: 'Recording',
     onlyChords: 'Only the chords',
@@ -401,18 +399,13 @@ export const player = {
     title: 'Pace',
     of: 'Pace: {{value}}',
     // Listening, the button shows the tempo as a metronome mark: its name says it too (WCAG 2.5.3).
-    ofTempo: 'Pace: {{value}}, ♩ = {{tempo}}',
-    ownPace: 'At your own pace',
-    playAlong: 'Listen and play along',
     needsPiano: 'Connect a piano or show the Keyboard.',
     // The hands at the keys stand in for them, and hands on screen cannot be played.
     needsKeysNotHands: 'Connect a piano, or show the Keyboard instead of the hands.',
     speed: '{{percent}} speed',
     // The popover's slider: a share of the piece's tempo, 50% to 200% in 5% steps (ADR 0105).
-    speedLabel: 'Speed',
     own: 'Original tempo',
     speedTraining: 'Speed training',
-    speedTrainingDetail: '{{percent}} faster each pass, up to 100%',
   },
   // The Player's shortcuts, as the sheet lists them.
   shortcuts: {

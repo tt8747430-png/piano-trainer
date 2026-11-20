@@ -302,8 +302,6 @@ export const player: LocaleResources['player'] = {
     click: 'Метроном',
     clickInfo: 'Щелчок на каждую долю, пока играет музыка.',
     volume: 'Громкость',
-    volumeInfo:
-      'Насколько громко звучит каждая партия. «Только аккорды» убирает запись и делает обе руки громкими, чтобы слышать одни аккорды.',
     staves: 'Нотоносцы',
     recording: 'Запись',
     onlyChords: 'Только аккорды',
@@ -370,16 +368,11 @@ export const player: LocaleResources['player'] = {
   pace: {
     title: 'Темп',
     of: 'Темп: {{value}}',
-    ofTempo: 'Темп: {{value}}, ♩ = {{tempo}}',
-    ownPace: 'В своём темпе',
-    playAlong: 'Слушать и подыгрывать',
     needsPiano: 'Подключите пианино или включите клавиатуру.',
     needsKeysNotHands: 'Подключите пианино или покажите клавиатуру вместо рук.',
     speed: 'Скорость {{percent}}',
-    speedLabel: 'Скорость',
     own: 'Исходный темп',
     speedTraining: 'Разгон темпа',
-    speedTrainingDetail: 'Каждый круг на {{percent}} быстрее, до 100 %',
   },
   shortcuts: {
     group: 'Плеер',

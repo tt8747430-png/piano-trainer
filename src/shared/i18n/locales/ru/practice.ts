@@ -451,7 +451,6 @@ export const practice: LocaleResources['practice'] = {
     rememberDetail:
       'Нотный стан хранит последние {{count}} сыгранных аккордов на этом устройстве, пока вы их не очистите.',
     slash: 'Слэш-аккорды для обращений',
-    groups: { names: 'Названия аккордов', analysis: 'Анализ', history: 'История' },
     bass: 'В басу {{note}}',
     voicing: {
       quartal: 'Кварты',
@@ -543,13 +542,10 @@ export const practice: LocaleResources['practice'] = {
   },
 
   reharmonise: {
-    asSpelled: 'как {{degree}}: {{note}} (= {{melody}})',
     note: 'Нота мелодии',
     as: 'как {{degree}}',
     inKey: 'в тональности',
     onlyInKey: 'Только в тональности',
-    noneInKey: 'Ни один аккорд тональности не содержит {{note}}.',
-    showBorrowed: 'Показать и заимствованные аккорды',
     group: {
       triads: 'Трезвучия',
       major: 'Мажорные септаккорды',

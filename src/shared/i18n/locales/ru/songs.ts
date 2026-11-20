@@ -186,7 +186,6 @@ export const songs: LocaleResources['songs'] = {
   folder: {
     archived: 'В архиве',
     archivedCount: 'В архиве ({{count}})',
-    archivedIn: 'В архиве из «{{name}}»',
     list: 'Плейлисты',
     new: 'Новый плейлист',
     edit: 'Изменить плейлист',
@@ -332,7 +331,6 @@ export const songs: LocaleResources['songs'] = {
   archive: {
     title: 'Архив',
     search: 'Поиск в архиве',
-    openCount: 'Архив: {{count}}',
     empty: {
       title: 'В архиве пусто',
       description:
@@ -343,7 +341,6 @@ export const songs: LocaleResources['songs'] = {
   trash: {
     title: 'Корзина',
     search: 'Поиск в корзине',
-    openCount: 'Корзина: {{count}}',
     emptied: 'Корзина очищена',
     deleteForGood: 'Удалить безвозвратно',
     emptying: {
@@ -432,20 +429,14 @@ export const songs: LocaleResources['songs'] = {
     saves_other: '{{count}} сохранения',
     savesNone: 'Ещё не сохраняли',
     empty: 'Здесь пока нет песен.',
-    emptyPatterns: 'Здесь пока нет рисунков.',
-    firstSong: 'Опубликуйте свою песню на её странице: Ещё › Опубликовать.',
-    firstPattern: 'Опубликуйте свой рисунок на его странице.',
     toSongs: 'Ваши песни',
-    toPatterns: 'Ваши рисунки',
     noMatch: 'Нет песен по запросу «{{query}}».',
-    noMatchPattern: 'Нет рисунков по запросу «{{query}}».',
     loading: 'Загружаем общую библиотеку…',
     offline: 'Нет подключения к интернету. Для общей библиотеки нужна сеть.',
     failed: 'Общая библиотека не загрузилась. Попробуйте чуть позже.',
     again: 'Ещё раз',
     gone: 'Этой песни больше нет в общей библиотеке.',
     save: 'Сохранить в мои песни',
-    savePattern: 'Сохранить в мои рисунки',
     rightHand: 'Правая рука',
     leftHand: 'Левая рука',
     report: 'Пожаловаться',
@@ -462,7 +453,6 @@ export const songs: LocaleResources['songs'] = {
     send: 'Отправить',
     cancel: 'Отмена',
     reported: 'Спасибо: жалоба отправлена.',
-    signInToSave: 'Войдите, чтобы сохранять песни из общей библиотеки.',
     signInToReport: 'Войдите, чтобы пожаловаться на песню.',
     signIn: 'Войти',
     // Публикация (R72, форма Flat «как вас найдут»).

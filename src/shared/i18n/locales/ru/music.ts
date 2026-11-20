@@ -151,7 +151,6 @@ export const music: LocaleResources['music'] = {
     bebopDominant: 'доминантовая бибоп-гамма',
   },
   // Тон и полутон: Т и П.
-  gap: { W: 'Т', H: 'П', 'W+H': 'Т+П' },
   // Карточки справочника интервалов: название интервала и его краткое обозначение.
   tempoField: {
     beat: 'Доля',
@@ -357,8 +356,6 @@ export const music: LocaleResources['music'] = {
     presto: { name: 'Престо', meaning: 'Очень быстро' },
     prestissimo: { name: 'Престиссимо', meaning: 'Как можно быстрее' },
   },
-  tempoRange: '{{from}}–{{to}} уд/мин',
-  tempoRangeFrom: 'от {{from}} уд/мин',
   degree: {
     label: 'Ступени',
     tonic: 'Тоника',

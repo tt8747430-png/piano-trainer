@@ -479,7 +479,6 @@ export const practice = {
       'Marks the key’s scale on every octave of the keyboard, each key with its note.',
     slash: 'Slash chords for inversions',
     // Its Settings' groups (R32).
-    groups: { names: 'Chord names', analysis: 'Analysis', history: 'History' },
     // The bass where the name leaves it out and it is no inversion: a bass beyond the 7th.
     bass: '{{note}} in the bass',
     // How the keys are laid out, as jazz pianists name it.
@@ -575,13 +574,10 @@ export const practice = {
   },
 
   reharmonise: {
-    asSpelled: 'as {{degree}}: {{note}} (= {{melody}})',
     note: 'Melody note',
     as: 'as {{degree}}',
     inKey: 'in the key',
     onlyInKey: 'In the key only',
-    noneInKey: 'No chord of the key holds {{note}}.',
-    showBorrowed: 'Show borrowed chords too',
     group: {
       triads: 'Triads',
       major: 'Major 7ths',

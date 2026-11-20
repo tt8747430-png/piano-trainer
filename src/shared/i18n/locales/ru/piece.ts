@@ -5,7 +5,6 @@ export const piece: LocaleResources['piece'] = {
   barsFromTo: 'такты {{first}}–{{last}}',
   learnSong: {
     progress: '{{done}} из {{total}}',
-    progressSaid: 'Пройдено уроков: {{done}} из {{total}}',
     sections: 'Разделы',
     lessons_one: '{{count}} урок',
     lessons_few: '{{count}} урока',

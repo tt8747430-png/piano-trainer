@@ -355,21 +355,6 @@ export function scaleDifferences(
   )
 }
 
-/** The gap between neighbouring notes of a scale: a half step, a whole step, or both (three semitones). */
-type ScaleGap = 'H' | 'W' | 'W+H'
-const GAP_BY_SEMITONES: Readonly<Record<number, ScaleGap>> = { 1: 'H', 2: 'W', 3: 'W+H' }
-
-/** The gaps between neighbouring notes up to the octave: W, H, or W+H. */
-export function scaleGaps(kind: ScaleKind): ScaleGap[] {
-  const semitones = [...scaleIntervals(kind).map((interval) => interval.semitones), 12]
-  return semitones.slice(1).map((above, i) => {
-    const size = above - (semitones[i] ?? 0)
-    const gap = GAP_BY_SEMITONES[size]
-    if (!gap) throw new RangeError(`${kind} has a gap of ${size} semitones`)
-    return gap
-  })
-}
-
 /** A scale coming back down: melodic minor comes down as natural minor, as it is taught; any other as it went up. */
 export const kindComingDown = (kind: ScaleKind): ScaleKind =>
   kind === 'melodic' ? 'natural' : kind

@@ -180,7 +180,6 @@ export const learn: LocaleResources['learn'] = {
     songCount_many: '{{count}} песен',
     songCount_other: '{{count}} песни',
     done: 'Курс пройден',
-    nextUp: 'Далее: {{title}}',
     // Документ курса под его шапкой (R29 B9), от редактора.
     about: 'Описание',
     facts: 'О курсе',
@@ -190,11 +189,8 @@ export const learn: LocaleResources['learn'] = {
   placeLabel: 'Где этот урок',
   contents: 'В этом уроке',
   lessonLearned: 'Урок «{{title}}» изучен',
-  inThisLesson: 'В этом уроке',
   sectionOf: 'Раздел {{at}} из {{of}}',
   contentsAt: 'В этом уроке: раздел {{at}} из {{of}}',
-  previousSection: 'Предыдущий раздел',
-  nextSection: 'Следующий раздел',
   lessonBar: 'Урок',
   variants: 'Варианты',
   takeaway: 'Коротко',
@@ -249,8 +245,6 @@ export const learn: LocaleResources['learn'] = {
     doc: {
       label: 'Урок',
       language: 'Язык текста',
-      readFirst: 'Сначала прочесть',
-      readFirstNone: 'Ничего',
       toolbar: 'Оформление',
       lead: 'Вступление жирным',
       insert: 'Вставить',

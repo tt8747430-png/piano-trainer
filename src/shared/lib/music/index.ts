@@ -229,7 +229,6 @@ export {
   scaleDifferences,
   type ComparedScale,
   scaleDegreeNames,
-  scaleGaps,
   scaleHasChords,
   scaleIntervals,
   scaleKey,

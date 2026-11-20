@@ -172,7 +172,6 @@ export const learn = {
     songCount_other: '{{count}} songs',
     done: 'Course complete',
     // What Continue leads to, beside how much is learned.
-    nextUp: 'Next: {{title}}',
     facts: 'About this course',
     // The course's own document under its head (R29 B9), an editor's.
     about: 'About',
@@ -184,12 +183,9 @@ export const learn = {
   afterLinks: 'After:',
   contents: 'In this lesson',
   lessonLearned: '“{{title}}” learned',
-  inThisLesson: 'In this lesson',
   sectionOf: 'Section {{at}} of {{of}}',
   contentsAt: 'In this lesson: section {{at}} of {{of}}',
   // A lesson's floating actions: its sections one by one, and its options.
-  previousSection: 'Previous section',
-  nextSection: 'Next section',
   lessonBar: 'Lesson',
   // A lesson's example in versions, the chips that choose one; a section's sentence at its end.
   variants: 'Versions',
@@ -251,8 +247,6 @@ export const learn = {
     doc: {
       label: 'The lesson',
       language: 'Written in',
-      readFirst: 'Read first',
-      readFirstNone: 'Nothing',
       toolbar: 'Formatting',
       lead: 'Lead in bold',
       insert: 'Insert',

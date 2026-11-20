@@ -156,7 +156,6 @@ export const music = {
     bebopDominant: 'bebop dominant',
   },
   // A scale's structure in whole and half steps.
-  gap: { W: 'W', H: 'H', 'W+H': 'W+H' },
   // A key, as a pop-up names it.
   tempoField: {
     beat: 'Beat',
@@ -387,8 +386,6 @@ export const music = {
     presto: { name: 'Presto', meaning: 'Very fast' },
     prestissimo: { name: 'Prestissimo', meaning: 'As fast as possible' },
   },
-  tempoRange: '{{from}}–{{to}} BPM',
-  tempoRangeFrom: '{{from}} BPM and faster',
   // A key's degrees by name, on the Key view's table.
   degree: {
     label: 'Scale degrees',

@@ -180,7 +180,6 @@ export const songs = {
     // A folder's Archived (D10): the songs hidden from it, to bring back.
     archived: 'Archived',
     archivedCount: 'Archived ({{count}})',
-    archivedIn: 'Archived from {{name}}',
     list: 'Playlists',
     new: 'New playlist',
     edit: 'Edit playlist',
@@ -327,7 +326,6 @@ export const songs = {
   archive: {
     title: 'Archive',
     search: 'Search the Archive',
-    openCount: 'Archive: {{count}}',
     empty: {
       title: 'Nothing archived',
       description: 'Songs and playlists you archive wait here, to be restored whenever you like.',
@@ -337,7 +335,6 @@ export const songs = {
   trash: {
     title: 'Trash',
     search: 'Search the Trash',
-    openCount: 'Trash: {{count}}',
     emptied: 'Trash emptied',
     deleteForGood: 'Delete permanently',
     emptying: {
@@ -424,20 +421,14 @@ export const songs = {
     saves_other: '{{count}} saves',
     savesNone: 'Not saved yet',
     empty: 'No songs here yet.',
-    emptyPatterns: 'No patterns here yet.',
-    firstSong: 'Publish one of your songs from its page: More › Publish.',
-    firstPattern: 'Publish one of your patterns from its page.',
     toSongs: 'Your songs',
-    toPatterns: 'Your patterns',
     noMatch: 'No song matches “{{query}}”.',
-    noMatchPattern: 'No pattern matches “{{query}}”.',
     loading: 'Loading the Public library…',
     offline: 'You’re offline. The Public library needs a connection.',
     failed: 'The Public library didn’t load. Try again in a moment.',
     again: 'Try again',
     gone: 'This song is no longer in the Public library.',
     save: 'Save to my songs',
-    savePattern: 'Save to my patterns',
     rightHand: 'Right hand',
     leftHand: 'Left hand',
     report: 'Report',
@@ -454,7 +445,6 @@ export const songs = {
     send: 'Send report',
     cancel: 'Cancel',
     reported: 'Thanks: the song is reported.',
-    signInToSave: 'Sign in to save songs from the Public library.',
     signInToReport: 'Sign in to report a song.',
     signIn: 'Sign in',
     // Publish (R72, Flat's discoverability form).
