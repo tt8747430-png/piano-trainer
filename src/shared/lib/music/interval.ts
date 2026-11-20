@@ -24,19 +24,20 @@ export interface LabelledInterval extends Interval {
 }
 
 /**
- * How an interval above a root is written as a degree: its number from the letter steps, past the
- * octave from 12 semitones on (a 9th, an 11th) unless an accidental reaches it within (`#7`), and its sign from how far it lies from the major or
- * perfect interval of that number: `♭3`, `#11`, `𝄫7`.
+ * How an interval above a root is written as a degree: its number from the letter steps, an octave
+ * further for each 12 semitones past its simple interval (a 9th, an 11th, the 15th of a double
+ * octave) unless an accidental reaches it within (`#7`), and its sign from how far it lies from the
+ * major or perfect interval of that number: `♭3`, `#11`, `𝄫7`.
  */
 export function degreeLabel(steps: number, semitones: number): string {
   const simple = plainSemitones(steps % 7)
   // Within the octave where its letters reach it by an accidental (B♯ over C is a #7, not a 14th).
-  const compound =
-    steps >= 7 || (semitones >= 12 && accidentalSign(semitones - simple) === undefined)
-  const plain = simple + (compound ? 12 : 0)
+  const octaves =
+    steps >= 7 ? Math.floor(steps / 7) : Math.max(0, Math.round((semitones - simple) / 12))
+  const plain = simple + octaves * 12
   const sign = accidentalSign(semitones - plain)
   if (sign === undefined) throw new RangeError(`${semitones} semitones is no ${steps}-step degree`)
-  return `${sign}${(steps % 7) + 1 + (compound ? 7 : 0)}`
+  return `${sign}${(steps % 7) + 1 + octaves * 7}`
 }
 
 /** An interval of `steps` letters and `semitones`, labelled as its degree. */
@@ -71,10 +72,17 @@ export const INTERVALS = {
   m9: labelled(1, 13),
   M9: labelled(1, 14),
   A9: labelled(1, 15),
+  m10: labelled(2, 15),
+  M10: labelled(2, 16),
   P11: labelled(3, 17),
   A11: labelled(3, 18),
+  d12: labelled(4, 18),
+  P12: labelled(4, 19),
   m13: labelled(5, 20),
   M13: labelled(5, 21),
+  m14: labelled(6, 22),
+  M14: labelled(6, 23),
+  P15: labelled(0, 24),
 } as const satisfies Record<string, LabelledInterval>
 export type IntervalName = keyof typeof INTERVALS
 

@@ -1,7 +1,7 @@
 import { allCourses, courseStepIds, type Course } from '@/entities/course'
 import { allJourneys, type Journey } from '@/entities/lesson'
 import { stepIdOf, stepOf, type Step, type StepId } from '@/entities/step'
-import { journeySteps } from './progress'
+import { courseProgress, journeyProgress, journeySteps } from './progress'
 
 type Learned = Readonly<Partial<Record<StepId, string>>>
 
@@ -64,4 +64,29 @@ export function currentJourney(learned: Learned): Journey {
   const first = journeys[0]
   if (!first) throw new Error('The Lessons need a journey')
   return journeys.find((journey) => openInJourney(journey, learned) !== undefined) ?? first
+}
+
+/**
+ * Where Continue's step stands on its track, as the level's and the course's lines number it: which
+ * lesson of how many; for a guided song, how many of the track's steps are learned.
+ */
+export function continuePlace(
+  next: ContinueStep,
+  learned: Learned,
+):
+  | { readonly n: number; readonly count: number }
+  | { readonly done: number; readonly total: number } {
+  const { step } = next
+  if (step.kind === 'lesson' || step.kind === 'course-lesson') {
+    const lessonIds =
+      'course' in next
+        ? next.course.lessons.map((lesson) => lesson.id)
+        : next.journey.chapters
+            .flatMap((chapter) => chapter.steps)
+            .flatMap((each) => (each.kind === 'lesson' ? [each.lessonId] : []))
+    return { n: lessonIds.indexOf(step.lessonId) + 1, count: lessonIds.length }
+  }
+  return 'course' in next
+    ? courseProgress(next.course, learned)
+    : journeyProgress(next.journey, learned)
 }

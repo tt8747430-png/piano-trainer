@@ -47,7 +47,7 @@ export function RemoveGroup({
     then()
   }
   return (
-    <DangerGroup footnote={t('remove.footnote')}>
+    <DangerGroup className="mt-4">
       <DangerRow title={t('remove.delete')} onClick={() => setAsked(true)} />
       <ConfirmDialog
         open={asked}

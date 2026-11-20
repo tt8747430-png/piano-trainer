@@ -73,7 +73,10 @@ export function SocialButtons({
         {t('apple')}
         <span className="text-[0.8125rem] font-medium">· {t('soon')}</span>
       </Button>
-      <div className="flex items-center gap-3 text-sm text-muted-foreground" aria-hidden>
+      <div
+        className="flex items-center gap-3 text-sm leading-[normal] text-muted-foreground"
+        aria-hidden
+      >
         <span className="h-px flex-1 bg-border" />
         {t('or')}
         <span className="h-px flex-1 bg-border" />

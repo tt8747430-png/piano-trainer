@@ -12,7 +12,7 @@ const account = (joinedAt: string, lastSignInAt: string | null) => ({
 })
 
 describe('overviewOf', () => {
-  it('counts accounts, the week’s new and active ones, its errors, open reports and drafts', () => {
+  it('counts accounts, the week’s new and active ones, its errors, open reports and unpublished drafts', () => {
     const overview = overviewOf(
       {
         accounts: [
@@ -24,7 +24,7 @@ describe('overviewOf', () => {
           { at: '2026-10-29T10:00:00Z', message: 'a', stack: '', path: '/', build: '1' },
           { at: '2026-10-01T10:00:00Z', message: 'b', stack: '', path: '/', build: '1' },
         ],
-        reports: 4,
+        reports: [{ reportedAt: '2026-10-28T10:00:00Z' }, { reportedAt: '2026-10-26T10:00:00Z' }],
         drafts: [{ published: true }, { published: false }, { published: false }],
       },
       NOW,
@@ -32,17 +32,20 @@ describe('overviewOf', () => {
     expect(overview).toEqual({
       accounts: '3',
       newThisWeek: 1,
+      newLastWeek: 0,
       activeThisWeek: 2,
+      activeShare: 67,
+      reports: 2,
+      oldestReportAt: '2026-10-26T10:00:00Z',
       errorsThisWeek: 1,
-      reports: 4,
-      drafts: 3,
+      errorKinds: 1,
       unpublished: 2,
     })
   })
 
   it('says a full first page of accounts is more', () => {
     const accounts = Array.from({ length: 50 }, () => account('2026-01-01T00:00:00Z', null))
-    expect(overviewOf({ accounts, errors: [], reports: 0, drafts: [] }, NOW, 50).accounts).toBe(
+    expect(overviewOf({ accounts, errors: [], reports: [], drafts: [] }, NOW, 50).accounts).toBe(
       '50+',
     )
   })

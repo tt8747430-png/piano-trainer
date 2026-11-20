@@ -89,15 +89,18 @@ function barChords(
       tiedFrom,
       tiedTo: noteEnd > end,
       ...(n.finger ? { finger: n.finger } : {}),
-      ...(n.finger && n.crossing ? { crossing: true } : {}),
+      ...(n.cross ? { cross: true } : {}),
       ...(n.role ? { role: n.role } : {}),
       ...(n.marks ? { marks: n.marks } : {}),
       ...(n.lyrics && staff === sung ? { lyrics: n.lyrics } : {}),
     }
-    const id = `${staff} ${start} ${stop}`
+    const id = `${staff} ${start} ${stop} ${n.voice ?? 1}`
     const group = groups.get(id)
     if (!group) {
-      groups.set(id, { staff, chord: { start, end: stop, notes: [written] } })
+      groups.set(id, {
+        staff,
+        chord: { start, end: stop, notes: [written], ...(n.voice ? { voice: n.voice } : {}) },
+      })
     } else if (!group.chord.notes.some((other) => other.midi === n.midi)) {
       group.chord = {
         ...group.chord,
@@ -186,9 +189,8 @@ function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
           octave: writtenOctave(n.midi, n.spelled) + writtenShift(n.marks) / 12,
           tie: !last || n.tiedTo,
           continued: i > 0 || n.tiedFrom,
-          ...(n.finger && i === 0 && !n.tiedFrom
-            ? { finger: n.finger, ...(n.crossing ? { crossing: true as const } : {}) }
-            : {}),
+          ...(n.finger && i === 0 && !n.tiedFrom ? { finger: n.finger } : {}),
+          ...(n.cross ? { cross: true } : {}),
           ...(n.role ? { role: n.role } : {}),
         })),
       })
@@ -231,7 +233,7 @@ function withAccidentals(voices: readonly DraftVoice[], key: Key): ScoreVoice[] 
               accidental: accidentalOf.get(`${v} ${e} ${i}`) ?? null,
               tie: draft.tie,
               ...(draft.finger ? { finger: draft.finger } : {}),
-              ...(draft.crossing ? { crossing: true } : {}),
+              ...(draft.cross ? { cross: true } : {}),
               ...(draft.role ? { role: draft.role } : {}),
             })),
           },

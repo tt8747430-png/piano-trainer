@@ -1,4 +1,4 @@
-import { CHORD_QUALITIES, type ChordQuality } from './chord'
+import { CHORD_QUALITIES, type ChordQuality } from './chord-quality'
 import { SCALE_KINDS, type ScaleKind } from './scale'
 
 /** Something the quiz rates: one chord quality or one scale kind. */

@@ -1,15 +1,29 @@
 import type { ReactNode } from 'react'
 import { cn, useMediaQuery } from '@/shared/lib'
-import { printedSymbol } from '@/shared/lib/music'
+import { printedSymbol, symbolParts } from '@/shared/lib/music'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
+
+/** A symbol as the chip prints it: its root and letters, its extensions raised. */
+function Printed({ symbol }: { symbol: string }) {
+  const { root, letters, raised, bass } = symbolParts(printedSymbol(symbol))
+  return (
+    <>
+      {root}
+      {letters}
+      {raised ? <sup className="ms-px text-[max(12px,0.6em)]">{raised}</sup> : null}
+      {bass}
+    </>
+  )
+}
 
 /** A device whose pointer rests on what it points at: a mouse or a trackpad, as the theme's hover. */
 const HOVERS = '(hover: hover) and (pointer: fine)'
 
 /**
- * A chord as a chip over the words (ADR 0108): its symbol in the display face as the sheet prints it
- * (`C♯m7`), at its line's text size (ADR 0108: every length in `em`), filled with the ink while it
- * sounds, a muted wash in its line's ink otherwise. A tap takes the cursor to it (`onGo`, ADR 0108);
+ * A chord as a chip over the words (ADR 0108), as the Lyrics board draws it: its symbol in the sans
+ * at 700, 13 to the words' 16, its extensions raised (`G⁷`), on a 21 tall chip 5 round and 7 in, at
+ * its line's text size (ADR 0108: every length in `em`), filled with the ink while it sounds, the
+ * muted wash otherwise. A tap takes the cursor to it (`onGo`, ADR 0108);
  * its target reaches past the chip sideways to a finger's size, up and down no further than the
  * room between lines, so it never takes a tap meant for the line over or under it. Where the device
  * hovers, a pointer resting on it shows its diagram (`diagram`, drawn only then) in a small popover
@@ -34,12 +48,12 @@ export function ChordChip({
       data-sounding={sounding ? '' : undefined}
       onClick={onGo}
       className={cn(
-        'pointer-events-auto relative min-w-[2em] rounded-control px-[0.375em] py-[0.125em] text-center font-display text-[1em] leading-tight font-semibold whitespace-nowrap transition-colors duration-200 ease-out before:absolute before:-inset-x-1.5 before:-inset-y-[0.25em]',
+        'pointer-events-auto relative h-[1.3125em] rounded-[0.3125em] px-[0.4375em] text-[0.8125em] leading-none font-bold whitespace-nowrap transition-colors duration-200 ease-out before:absolute before:-inset-x-1.5 before:-inset-y-[0.25em]',
         // Its line's ink otherwise: the line playing's, else the others' muted one.
         sounding ? 'bg-foreground text-background' : 'bg-muted hover:bg-hairline',
       )}
     >
-      {printedSymbol(symbol)}
+      <Printed symbol={symbol} />
     </button>
   )
   if (!hovers) return chip

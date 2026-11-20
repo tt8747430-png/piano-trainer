@@ -17,6 +17,8 @@ export interface OwnSong extends PieceMusic {
   readonly publicId?: string
   /** What is said about it, written on its page. */
   readonly note?: LocalText
+  /** When it came into the library, ISO: All songs' Added sort and a card's "Added 4 Nov". */
+  readonly added: string
 }
 
 /** The longest title an own song takes. */

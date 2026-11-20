@@ -1,18 +1,10 @@
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DEFAULT_CARD_LOOK, useFolderName, useLibrary, type CardPlace } from '@/entities/library'
-import {
-  CardLookProvider,
-  cardLookProps,
-  FolderRow,
-  LibraryRows,
-  SongRow,
-} from '@/widgets/song-library'
+import { CardLookProvider, FolderRow, LibraryRows, SongRow } from '@/widgets/song-library'
 import { folderKey, songKey, type LibraryPage } from '../model/use-library-page'
 import { folderActions, songActions } from './row-actions'
-import { SongTable } from './SongTable'
-import { FilteredNotice, FoldSection, type Fold } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { FilteredNotice, FoldSection, type Fold, ShowAll } from '@/shared/ui'
 
 /** How many of Home's every song show before Show all. */
 const FOLDED = 10
@@ -25,26 +17,26 @@ const FOLDED = 10
 export function LibraryBrowse({
   page,
   place,
-  table = false,
   moreFolders,
+  noFolders = false,
+  foldersOnly = false,
   onClear,
 }: {
   page: LibraryPage
   /** Where it is: its look is this place's Card style (R29 B9). */
   place: CardPlace
-  /** A laptop's right pane (R30 S2), the folders the tree's: its songs a table in the List layout. */
-  table?: boolean
   /** Rows at the foot of the folders: a phone's Home's Shared with me (canvas 133). */
   moreFolders?: ReactNode
+  /** All songs: its songs alone, the folders left to My songs. */
+  noFolders?: boolean
+  /** Its folders alone: a laptop's table lists the songs (`LibraryTable`). */
+  foldersOnly?: boolean
   onClear: () => void
 }) {
   const { t } = useTranslation(['songs', 'common'])
   const nameOf = useFolderName()
   const look = useLibrary((state) => state.cardLooks[place])
   const { view } = page
-  const styled = cardLookProps(look)
-  // A laptop's pane draws its songs as a table in List, as the style's cards in Cards and Grid.
-  const asTable = table && (look?.style.layout ?? 'list') === 'list'
   // Home's every song folds after its first (a calm page, never thousands of pixels): Show all n.
   const [unfolded, setUnfolded] = useState(false)
   const headed = view.groups.some((group) => group.key === 'all')
@@ -77,27 +69,7 @@ export function LibraryBrowse({
     <CardLookProvider value={look ?? DEFAULT_CARD_LOOK}>
       <div className="flex flex-col gap-6">
         <FilteredNotice shown={view.shown} hidden={view.hidden} onClear={onClear} />
-        {asTable ? (
-          // A laptop's table: the place's folders a folding group of its rows, over its songs (the
-          // SongsLaptop board), in one card in the place's style where it has one (R32-C).
-          look ? (
-            <div {...styled}>
-              <div className="card overflow-hidden px-2">
-                <SongTable
-                  entries={view.groups.flatMap((group) => group.entries)}
-                  folders={view.folders}
-                  page={page}
-                />
-              </div>
-            </div>
-          ) : (
-            <SongTable
-              entries={view.groups.flatMap((group) => group.entries)}
-              folders={view.folders}
-              page={page}
-            />
-          )
-        ) : view.folders.length > 0 || moreFolders ? (
+        {noFolders ? null : view.folders.length > 0 || moreFolders ? (
           headed ? (
             // Headed beside Continue and the songs, a phone's Home's sections (canvas 133), folding.
             <FoldSection
@@ -111,7 +83,7 @@ export function LibraryBrowse({
             <section aria-label={t('folder.list')}>{folderRows}</section>
           )
         ) : null}
-        {(asTable ? [] : view.groups).map((group) => {
+        {(foldersOnly ? [] : view.groups).map((group) => {
           if (group.entries.length === 0) return null
           const folds = group.key === 'all' && !unfolded && group.entries.length > FOLDED
           const rows = (
@@ -127,9 +99,10 @@ export function LibraryBrowse({
                 ))}
               </LibraryRows>
               {folds ? (
-                <Button variant="soft" className="self-start" onClick={() => setUnfolded(true)}>
-                  {t('library.showAll', { count: group.entries.length })}
-                </Button>
+                <ShowAll
+                  label={t('library.showAll', { count: group.entries.length })}
+                  onClick={() => setUnfolded(true)}
+                />
               ) : null}
             </>
           )

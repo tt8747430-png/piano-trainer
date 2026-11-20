@@ -13,7 +13,6 @@ import {
 import {
   buildChord,
   BUILT_SIZES,
-  CHORD_NOTES,
   CHURCH_MODES,
   chordInversions,
   type ChordFamily,
@@ -24,15 +23,12 @@ import {
   INVERSIONS,
   COMPARED_SCALES,
   keyFromParam,
-  keyMode,
   keyParam,
   type KeyParam,
-  lastInversion,
   note,
   noteFromParam,
   noteParam,
   ownFingering,
-  scaleHasChords,
   scaleIntervals,
   type ScaleKind,
   SEVENTHS,
@@ -45,7 +41,7 @@ import { MOST_CHORDS, type ChordStep, type ChordView } from '@/widgets/chord-exp
 import { INTERVAL_WAYS, type IntervalWay } from '@/shared/lib/schedule'
 import { isRowInterval, type IntervalView } from '@/widgets/interval-explorer'
 import type { ProgressionSearch, ProgressionsView } from '@/widgets/progression-explorer'
-import { STAFF_MARKS, type ScaleShow, type ScaleView } from '@/widgets/scale-explorer'
+import { STAFF_MARKS, type ScaleView } from '@/widgets/scale-explorer'
 import {
   C_MAJOR_PARAM,
   type Input,
@@ -137,26 +133,13 @@ type ScalesSearch = ScaleView & { readonly step?: ScaleStepId }
 export const SCALES_DEFAULTS: ScalesSearch = {
   root: noteParam(note('C')),
   kind: 'major',
-  show: 'scale',
   start: 1,
   marks: 'fingers',
   octaves: 1,
   rhythm: 'even',
-  tempo: 80,
+  tempo: 72,
   hands: 'both',
-  chords: 3,
-  inversion: 0,
-  keysPlay: 'chords',
-  arpeggio: false,
 }
-/** The views a scale has: its run, its chords with seven notes, its key where it is a key's scale. */
-const scaleShows = (kind: ScaleKind): readonly ScaleShow[] => [
-  'scale',
-  ...(scaleHasChords(kind) ? (['chords'] as const) : []),
-  ...(keyMode(kind) === null ? [] : (['key'] as const)),
-]
-const isKeysPlay = isOneOf<ScaleView['keysPlay']>(['chords', 'notes'])
-const isChordNotes = isOneOf(CHORD_NOTES)
 const isScaleStep = (value: unknown): value is ScaleStepId =>
   isStepId(value) && value.startsWith('scale:')
 const isFingering = isOneOf(FINGERINGS)
@@ -174,15 +157,10 @@ const isComparedScale = isOneOf(COMPARED_SCALES)
 export function readScalesSearch(raw: Raw): ScalesSearch {
   const kind = valueOr(isScaleKind, raw.kind, SCALES_DEFAULTS.kind)
   const root = readNote(raw.root)
-  const melody = readNote(raw.melody)
   const start = wholeIn(raw.start, 1, scaleIntervals(kind).length, SCALES_DEFAULTS.start)
-  const chords = scaleHasChords(kind)
-    ? valueOr(isChordNotes, raw.chords, SCALES_DEFAULTS.chords)
-    : SCALES_DEFAULTS.chords
   return {
     root: root ? noteParam(root) : SCALES_DEFAULTS.root,
     kind,
-    show: valueOr(isOneOf(scaleShows(kind)), raw.show, SCALES_DEFAULTS.show),
     start,
     marks: valueOr(isOneOf(STAFF_MARKS), raw.marks, SCALES_DEFAULTS.marks),
     octaves: raw.octaves === 2 || raw.octaves === 3 || raw.octaves === 4 ? raw.octaves : 1,
@@ -194,12 +172,6 @@ export function readScalesSearch(raw: Raw): ScalesSearch {
     rhythm: valueOr(isRhythm, raw.rhythm, SCALES_DEFAULTS.rhythm),
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, SCALES_DEFAULTS.tempo),
     hands: valueOr(isHands, raw.hands, SCALES_DEFAULTS.hands),
-    chords,
-    inversion: wholeIn(raw.inversion, 0, lastInversion(chords), SCALES_DEFAULTS.inversion),
-    keysPlay: valueOr(isKeysPlay, raw.keysPlay, SCALES_DEFAULTS.keysPlay),
-    arpeggio: raw.arpeggio === true,
-    melody: melody ? noteParam(melody) : undefined,
-    onlyInKey: raw.onlyInKey === true ? true : undefined,
     step: isScaleStep(raw.step) ? raw.step : undefined,
   }
 }
@@ -242,11 +214,6 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
     p: readNumerals(raw.p, openingLine(key)),
     size: valueOr(isChordSize, raw.size, PROGRESSIONS_DEFAULTS.size),
     lead: isLeadIn(raw.lead) ? raw.lead : undefined,
-    between:
-      typeof raw.between === 'number' && Number.isInteger(raw.between) && raw.between > 0
-        ? raw.between
-        : undefined,
-    inKey: raw.inKey === true ? true : undefined,
     mode: isChurchMode(raw.mode) ? raw.mode : undefined,
   }
 }
@@ -269,7 +236,7 @@ export const progressionsSearch = {
 }
 
 // A library's or the learner's own progression's page (R30-4): the key it is shown in, its chord size
-// (its own where left out), what leads into each chord, Passing chords' pair and In the key only.
+// (its own where left out) and what leads into each chord.
 const PROGRESSION_DEFAULTS: ProgressionSearch = { key: C_MAJOR_PARAM }
 export function readProgressionSearch(raw: Raw): ProgressionSearch {
   const line = readProgressionsSearch(raw)
@@ -277,8 +244,6 @@ export function readProgressionSearch(raw: Raw): ProgressionSearch {
     key: line.key,
     size: isChordSize(raw.size) ? raw.size : undefined,
     lead: line.lead,
-    between: line.between,
-    inKey: line.inKey,
   }
 }
 export const progressionSearch = routeSearch(readProgressionSearch, PROGRESSION_DEFAULTS)

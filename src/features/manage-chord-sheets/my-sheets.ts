@@ -1,4 +1,6 @@
 import {
+  IN_HAND,
+  MOST_RECENT_SHEETS,
   MOST_SHEETS,
   NEW_ENTRY,
   sheetName,
@@ -61,6 +63,19 @@ export function duplicateSheet(store: ChordSheetsStore, id: string, name: string
 /** A sheet deleted (asked first, R17). */
 export function deleteSheet(store: ChordSheetsStore, id: string): void {
   store.setState((state) => ({ mine: state.mine.filter((sheet) => sheet.id !== id) }))
+}
+
+/**
+ * A sheet opened (R76): first among the recent sheets, the Chord player's bar's menu; the sheet in
+ * hand when `id` is none. Opened again while first, nothing changes.
+ */
+export function markOpened(store: ChordSheetsStore, id: string | undefined): void {
+  const opened = id ?? IN_HAND
+  const { recent } = store.getState()
+  if (recent[0] === opened) return
+  store.setState({
+    recent: [opened, ...recent.filter((each) => each !== opened)].slice(0, MOST_RECENT_SHEETS),
+  })
 }
 
 /** New (R29 CP5): an empty Verse in hand, in Pop 1 at 100. */

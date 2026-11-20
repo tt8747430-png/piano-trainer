@@ -24,6 +24,7 @@ const course: Course = {
   shelf: 'chords',
   stage: 'intermediate',
   title: { en: 'Sixteen-Week Practice Plan', ru: 'План занятий на 16 недель' },
+  line: { en: 'Chords, voicings and playing by ear', ru: 'Аккорды, расположения и игра по слуху' },
   summary: {
     en: 'A sixteen-week plan in fifteen lessons: chord shapes and their fingering in every key, inversion drills, arpeggios, rhythm and the left hand, shells and rootless voicings, diminished and passing chords, arranging a hymn, improvising and playing by ear.',
     ru: 'План на шестнадцать недель в пятнадцати уроках: аккорды и их аппликатура во всех тональностях, упражнения на обращения, арпеджио, ритм и левая рука, шеллы и аккорды без баса, уменьшённые и проходящие аккорды, обработка гимна, импровизация и игра на слух.',

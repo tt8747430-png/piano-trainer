@@ -1,14 +1,15 @@
+import re
 # The one canvas's index: a canvas page per area, a row per screen, laptops left and phones right (R42 canvas 100). Replaces link.py (the pages now carry their own links). Run: python3 -I index.py
 import json, re, os
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/states_tool.py').read())  # every board's States box, before the links are checked
 P = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
-SONGS = [('Songs', 'SongsLaptop', 'My songs'), ('AllSongs', 'AllSongsLaptop', 'All songs, Select, Sort'), ('Explore', 'ExploreLaptop', 'Explore, a public song, a shared link'), ('Folder', 'FolderLaptop', 'A folder, its settings, Card style, Archived'), ('Archive', 'ArchiveLaptop', 'Archive and Trash'), ('Groups', 'GroupsLaptop', 'Groups, a group, a shared folder, Join'), ('Song', 'SongLaptop', 'A song'), ('SongSettings', 'SongSettingsLaptop', 'A song’s Settings and Publish'), ('Section', 'SectionLaptop', 'A section of a song'), ('Editor', 'EditorLaptop', 'Score editor'), ('EditorDraft', 'EditorDraftLaptop', 'A built-in song’s draft (editors)'), ('Takes', 'TakesLaptop', 'The takes, Review your recording'), ('Take', 'TakeLaptop', 'A take')]
+SONGS = [('Songs', 'SongsLaptop', 'My songs'), ('AllSongs', 'AllSongsLaptop', 'All songs, Select, Sort'), ('Explore', 'ExploreLaptop', 'Explore, a public song, a shared link'), ('Folder', 'FolderLaptop', 'A playlist, its settings, Card style, Archived'), ('SharedFolder', 'SharedFolderLaptop', 'A playlist shared with you'), ('Archive', 'ArchiveLaptop', 'Archive: Select, Restore, Move to Trash'), ('Trash', 'TrashLaptop', 'Trash: Select, Restore, Delete permanently'), ('Groups', 'GroupsLaptop', 'Groups, a group, a shared folder, Join'), ('Song', 'SongLaptop', 'A song'), ('SongSettings', 'SongSettingsLaptop', 'A song’s Settings and Publish'), ('Section', 'SectionLaptop', 'A section of a song'), ('Editor', 'EditorLaptop', 'Score editor'), ('EditorDraft', 'EditorDraftLaptop', 'A built-in song’s draft (editors)'), ('Takes', 'TakesLaptop', 'The takes, Review your recording'), ('Take', 'TakeLaptop', 'A take')]
 PLAYER = [('Player', 'PlayerLaptop', 'The Player'), ('PlayerLoop', 'PlayerLaptopLoop', 'The Player, practising with a loop'),
-          ('PlayerKeyboard', 'PlayerLaptopKeyboard', 'The Player, Keyboard'),
+          ('PlayerKeyboard', 'PlayerLaptopKeyboard', 'The Player, Keyboard'), ('PlayerDone', 'PlayerDoneLaptop', 'The Player, Played through'),
           ('PlayerHands', 'PlayerLaptopParts', 'The Player, Parts'), ('PlayerViewSheet', 'PlayerLaptopSheet', 'The Player, Sheet settings'), ('PlayWalk', 'PlayWalkLaptop', 'The Player: walk the chords'), ('PlayChromatic', 'PlayChromaticLaptop', 'The Player: a chromatic walk'), ('PlayProgression', 'PlayProgressionLaptop', 'The Player: a progression in 12 keys'), ('PlayExercise', 'PlayExerciseLaptop', 'The Player: an exercise')]
 PLAYER_PHONES = [('PlayerPractice', 'Practice: Wait · Play, the tempo, the metronome'), ('PlayerViewDiagrams', 'Diagrams settings'),
                  ('PlayerViewGrid', 'Grid settings'), ('PlayerViewLyrics', 'Lyrics settings'),
-                 ('PlayerSettings', 'Song settings: Arrangement or Accompaniment'), ('PlayerKey', 'Transpose'), ('PlayerDone', 'Played through'),
+                 ('PlayerSettings', 'Song settings: Arrangement or Accompaniment'), ('PlayerKey', 'Transpose'),
                  ('PlayerDiagrams', 'Diagrams')]
 PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords'), ('PlayChord', 'PlayChordLaptop', 'A chord practice run and its results'), ('Scales', 'ScalesLaptop', 'Scales and keys'),
             ('Intervals', 'IntervalsLaptop', 'Intervals'), ('Progressions', 'ProgressionsLaptop', 'Progressions'), ('Progression', 'ProgressionLaptop', 'A progression'), ('ProgressionEdit', 'ProgressionEditLaptop', 'A progression, edited by an editor'),
@@ -28,7 +29,7 @@ PAGES = [
     ('The Player’s layers, phone', [], [L(ph, 'The Player, ' + n + ', phone') for ph, n in PLAYER_PHONES])]),
   ('practice', 'Practice', [(n, [L(lp, n + ', laptop')],
                                 [L(ph, n + ', phone')]) for ph, lp, n in PRACTICE]),
-  ('places', 'Learn, Profile and Settings', [(n, [L(lp, n + ', laptop')], [L(ph, n + ', phone')]) for ph, lp, n in [('Learn', 'LearnLaptop', 'Learn'), ('LearnLevel', 'LearnLevelLaptop', 'A level'), ('LearnCourses', 'LearnCoursesLaptop', 'Courses'), ('LearnYours', 'LearnYoursLaptop', 'Your lessons and courses'), ('Profile', 'ProfileLaptop', 'Profile'), ('PracticeResult', 'PracticeResultLaptop', 'A practice run’s results, from Profile'), ('Settings', 'SettingsLaptop', 'Settings'), ('Admin', 'AdminLaptop', 'Administration'), ('Lesson', 'LessonLaptop', 'A lesson, read and edited'), ('Course', 'CourseLaptop', 'A course, read and edited'), ('YourLessonSettings', 'YourLessonSettingsLaptop', 'Your own lesson’s Settings'), ('YourCourseSettings', 'YourCourseSettingsLaptop', 'Your own course’s Settings'), ('SignIn', 'SignInLaptop', 'Sign in and the account pages'), ('Legal', 'LegalLaptop', 'Privacy Policy and Terms'), ('AppLayers', 'AppLayersLaptop', 'Across the app: search, MIDI, shortcuts, notices, route states')]])]
+  ('places', 'Learn, Profile and Settings', [(n, [L(lp, n + ', laptop')], [L(ph, n + ', phone')]) for ph, lp, n in [('Learn', 'LearnLaptop', 'Learn'), ('LearnLevel', 'LearnLevelLaptop', 'A level'), ('LearnCourses', 'LearnCoursesLaptop', 'Courses'), ('LearnYours', 'LearnYoursLaptop', 'Made by you'), ('Profile', 'ProfileLaptop', 'Profile'), ('PracticeResult', 'PracticeResultLaptop', 'A practice run’s results, from Profile'), ('Settings', 'SettingsLaptop', 'Settings'), ('Admin', 'AdminLaptop', 'Administration'), ('Lesson', 'LessonLaptop', 'A lesson, read and edited'), ('Course', 'CourseLaptop', 'A course, read and edited'), ('YourLessonSettings', 'YourLessonSettingsLaptop', 'Your own lesson’s Settings'), ('YourCourseSettings', 'YourCourseSettingsLaptop', 'Your own course’s Settings'), ('SignIn', 'SignInLaptop', 'Sign in and the account pages'), ('Legal', 'LegalLaptop', 'Privacy Policy and Terms'), ('AppLayers', 'AppLayersLaptop', 'Across the app: search, MIDI, shortcuts, notices, route states')]])]
 d = json.load(open(P + 'canvas.json'))
 boards, order, notes = {}, [], {}
 # canvas 101: on each page, the flow's phone screens in one row in the flow's order, then the laptop screens (Day only:
@@ -44,9 +45,15 @@ for pid, pname, rows in PAGES:
             boards[stem + '.dc.html'] = {'x': i * (w + GAP), 'y': y + TITLE, 'w': w, 'h': h, 'title': t, 'is_interactive': True, 'page': pid}
             order.append(stem + '.dc.html')
         y += TITLE + h + ROWGAP
+# what the page itself saved is kept (the owner's note sizes, its note order, the boards only the published copy has)
+for k, n in d.get('notes', {}).items():
+    if k in notes:
+        notes[k].update({f: n[f] for f in ('w', 'maxW') if f in n})
+for k in ('PlayerApp.dc.html', 'PlayerDesk.dc.html'):
+    if k in d.get('boards', {}):
+        boards[k] = d['boards'][k]; order.append(k)
 d.update(title='The ideal Piano Trainer', boards=boards, order=order, notes=notes,
          pages=[{'id': pid, 'name': pname} for pid, pname, _ in PAGES], launch={'view': 'canvas', 'page': 'practice'})
-d.pop('noteOrder', None)
 json.dump(d, open(P + 'canvas.json', 'w'), ensure_ascii=False, indent=2)
 # canvas 167: the one piano, every board's 2D keys in the app's faces (keyface.py)
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/keyface.py').read())
@@ -74,26 +81,21 @@ for b in boards:
         h0 = open(P + b).read(); h1 = folds(lapwin(keyface(h0)), b[:-8])
         # the bar floats (owner, 2026-11-15: "the headers … dont make sense to have background when we have floating buttons"):
         # its glass buttons stand over the page, which starts under them and scrolls beneath; nothing is painted behind them
-        if 'header data-float' in h1 and 'data-floatcss' not in h1:
-            h1 = h1.replace('</head>', '<style data-floatcss>header[data-float] { z-index: 30; pointer-events: none }'
+        FL = ('<style data-floatcss>header[data-float] { z-index: 30; pointer-events: none }'
                             ' header[data-float]:has(+ [style*=\"flex-direction: column\"], + :not([style*=\"display: flex\"]):not([style*=\"display: grid\"]):not(sc-if):not(style)) { margin-bottom: -56px }'
                             ' header[data-float] > * { pointer-events: auto }'
-                            ' header[data-float] + [style*=\"flex-direction: column\"]::before, header[data-float] + :not([style*=\"display: flex\"]):not([style*=\"display: grid\"]):not(sc-if):not(style)::before { content: \"\"; display: block; flex: none; height: 56px }'
+                            ' header[data-float] + [style*=\"flex-direction: column\"], header[data-float] + :not([style*=\"display: flex\"]):not([style*=\"display: grid\"]):not(sc-if):not(style) { border-top: 56px solid transparent; background-clip: padding-box }'
                             ' :has(> header[data-float]) { timeline-scope: --page } header[data-float] + * { scroll-timeline: --page y }'
                             ' header[data-float]:has(+ [style*=\"flex-direction: column\"], + :not([style*=\"display: flex\"]):not([style*=\"display: grid\"]):not(sc-if):not(style)) [data-bar-title] { animation: bar-title linear both; animation-timeline: --page; animation-range: 0 40px }'
-                            ' @keyframes bar-title { to { opacity: 0; transform: translateY(-6px) } }</style></head>', 1)
-        # on a phone the floating bar steps aside while the learner reads down and returns on the first move up (owner,
-        # 2026-11-15: "the main focus of the page and the other things can be easily hide or show"; Apple HIG, Toolbars:
-        # hide bars on swipe to give the content the screen; Material 3, top app bar: hide on scroll, return on scroll up)
-        if 'header data-float' in h1 and 'data-barhide' not in h1 and 'Laptop' not in b:
-            h1 = h1.replace('</head>', '<style data-barhide>header[data-float] { transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 160ms cubic-bezier(0.22, 1, 0.36, 1) }'
-                            ' header[data-float][data-away] { transform: translateY(-64px); opacity: 0; pointer-events: none !important }'
-                            ' header[data-float][data-away] > * { pointer-events: none !important }'
-                            ' @media (prefers-reduced-motion: reduce) { header[data-float] { transition: none } }</style>'
-                            '<script data-barhide>(() => { const last = new WeakMap(); document.addEventListener("scroll", (e) => { const t = e.target;'
-                            ' if (!(t instanceof Element)) return; const h = t.previousElementSibling; if (!h || !h.matches("header[data-float]")) return;'
-                            ' const y = t.scrollTop, p = last.has(t) ? last.get(t) : 0; if (Math.abs(y - p) < 6) return; last.set(t, y);'
-                            ' if (y > p && y > 56) h.setAttribute("data-away", ""); else h.removeAttribute("data-away"); }, true); })();</script></head>', 1)
+                            ' @keyframes bar-title { to { opacity: 0; transform: translateY(-6px) } }</style>')
+        if 'header data-float' in h1:  # rewritten where it stands, so a rebuild is byte-stable
+            h1 = re.sub(r'<style data-floatcss>.*?</style>', lambda m: FL, h1, count=1, flags=re.S) if 'data-floatcss' in h1 else h1.replace('</head>', FL + '</head>', 1)
+        else:
+            h1 = re.sub(r'<style data-floatcss>.*?</style>', '', h1, flags=re.S)
+        # the bar stays while the page scrolls under it (craft-details, the owner's articles 1, 2026-11-17: "never hidden by
+        # scrolling"); the hide-on-scroll of 2026-11-15 is stripped from every board
+        h1 = re.sub(r'<style data-barhide>.*?</style>', '', h1, flags=re.S)
+        h1 = re.sub(r'<script data-barhide>.*?</script>', '', h1, flags=re.S)
         # a sheet or popover keeps its own scroll: reaching its end never scrolls the page under it (Apple HIG, Sheets;
         # Web Interface Guidelines, overscroll-behavior: contain); a tap never waits on double-tap zoom (touch-action)
         if 'data-sheetcss' not in h1:

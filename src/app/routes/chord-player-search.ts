@@ -19,6 +19,7 @@ export function readChordPlayerSearch(raw: Raw): ChordPlayerView {
     p: p === '' ? undefined : p,
     key: key ? keyParam(key) : undefined,
     link: typeof raw.link === 'string' && LINK_ID.test(raw.link) ? raw.link : undefined,
+    layout: raw.layout === 'edit' ? 'edit' : undefined,
   }
 }
 export const chordPlayerSearch = routeSearch(readChordPlayerSearch, {})

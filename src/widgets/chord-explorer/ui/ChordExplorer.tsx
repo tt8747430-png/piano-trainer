@@ -1,4 +1,3 @@
-import { selectChords, selectKeyboard, useSettings } from '@/entities/settings'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
@@ -32,7 +31,6 @@ import {
   viewChord,
   type ChordView,
 } from '../model/chord-view'
-import { chordKeyLabels } from '../model/chord-labels'
 import { ChordName } from './ChordName'
 import { ChordPractice } from './ChordPractice'
 import { ChordSheet } from './ChordSheet'
@@ -44,7 +42,7 @@ import { VoicingPicture } from './VoicingPicture'
 /**
  * Any chord on any root, as the canvas's Chords board draws it, top to bottom: the hands at the keys
  * (or the keys); its name as three pickers (root, type, the note in the bass); the chord on a staff
- * with each hand's fingers under it; its ways into the Player; and floating at the foot, the voicing,
+ * with its fingers beside the notes; its ways into the Player; and floating at the foot, the voicing,
  * Play with how it plays, and the hands.
  */
 export function ChordExplorer({
@@ -59,11 +57,6 @@ export function ChordExplorer({
   const playback = usePlayback<string>()
   // Placed once per view: a Play or Stop re-renders here, and a new placement would engrave the staff again.
   const { chord: built, placed, fingers } = useMemo(() => viewChord(chord), [chord])
-  const { labels: labelled } = useSettings(selectChords)
-  const labels = useMemo(
-    () => chordKeyLabels(placed, fingers, labelled),
-    [placed, fingers, labelled],
-  )
   const at = Object.values(chord).join(' ')
   // The keys by role, no finger numbers on them unless Labels says Fingers (canvas 151).
   const [shown] = useShownKeys(at, chordShown([...placed.lh, ...placed.rh]))
@@ -118,9 +111,7 @@ export function ChordExplorer({
     practised(view)
   }
   const { quality } = built
-  // A choice sounds by itself, unless Settings › Keyboard turns that off: it has no button, so no
-  // Stop, and it cuts off what played.
-  const { autoplay } = useSettings(selectKeyboard)
+  // A choice sounds by itself: it has no button, so no Stop, and it cuts off what played.
   // A key's chords played in it count the key practised (B1's Keys practised, as the walk Player's).
   const progress = useProgressStoreApi()
   const practised = (view: ChordView) => {
@@ -132,7 +123,6 @@ export function ChordExplorer({
   const change = (next: Partial<ChordView>) => {
     const view = changedView(chord, next)
     onChange(view)
-    if (!autoplay) return
     play(chordSounds(chordKeys(view), { arpeggio: false }))
     practised(view)
   }
@@ -171,37 +161,23 @@ export function ChordExplorer({
   const handsChoice = chord.voicing === 'close' && !takesTwoHands(built.tones.length)
   const handsShown = handsChoice ? chord.hands : 'both'
 
-  // Each hand's fingers from its lowest key up, as the canvas's line under the staff says them.
-  const handFacts = (['rh', 'lh'] as const).filter((side) => fingers[side].length > 0)
-
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 lg:gap-6">
       <ChordStage chord={chord} shown={shown} />
-      {/* The body under the stage, 820 wide at most on a laptop, as the board's column. */}
-      <div className="flex flex-col gap-4 md:mx-auto md:w-full md:max-w-[51.25rem]">
+      {/* The body under the stage, 880 wide at most on a laptop, its parts 24 apart, as the board's column. */}
+      <div className="flex flex-col gap-4 md:mx-auto md:w-full md:max-w-[55rem] lg:gap-6">
         <h2 className="sr-only">{printedSymbol(symbol)}</h2>
         <ChordName chord={chord} tones={built.tones} quality={quality} onChange={change} />
-        <section className="flex flex-col gap-3 rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
+        <section className="flex flex-col gap-3 rounded-card bg-card px-3 py-4 ring-1 ring-border">
           <ChordSheet
             chords={sheet}
             at={sounding ?? chosenAt}
-            labels={labels}
             onPick={pick}
             onName={(i) => setNext({ editing: i })}
             onAdd={
               chordSteps(chord).length < MOST_CHORDS ? () => setNext({ editing: null }) : undefined
             }
           />
-          <p className="flex min-h-11 flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-            {handFacts.map((side) => (
-              <span key={side} className="whitespace-nowrap">
-                {t(`common:hands.${side}`)}
-                <b className="ms-1.5 font-bold whitespace-pre text-foreground tabular-nums">
-                  {fingers[side].join(' ')}
-                </b>
-              </span>
-            ))}
-          </p>
         </section>
         {quality ? (
           <ChordPractice

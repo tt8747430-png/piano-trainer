@@ -11,7 +11,7 @@ export const SIMPLE_INTERVALS: readonly ReferenceInterval[] = [...SIXTHS, 'm7', 
 const COMPOUND_INTERVALS: readonly ReferenceInterval[] = [
   'm9',
   'M9',
-  'A9',
+  'm10',
   'P11',
   'A11',
   'm13',

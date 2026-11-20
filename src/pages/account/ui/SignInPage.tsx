@@ -54,7 +54,7 @@ export function SignInPage() {
             onChange={(event) => setPassword(event.target.value)}
             error={invalid === 'password' ? t('invalid.password') : undefined}
           />
-          <Link to="/account/forgot" replace className={cn(ACCOUNT_LINK, '-mt-2.5 self-end')}>
+          <Link to="/account/forgot" replace className={cn(ACCOUNT_LINK, '-mt-2 self-end')}>
             {t('signIn.forgot')}
           </Link>
         </>

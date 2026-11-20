@@ -1,8 +1,11 @@
+import { mergeProps } from '@base-ui/react/merge-props'
+import { useRender } from '@base-ui/react/use-render'
 import { Check, ChevronRight } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 import type { OptionValue } from './option'
 import { Segmented } from './Segmented'
+import { SwitchRow } from './SwitchRow'
 
 /** A row's room, as the canvas's `GROUP` draws it: 48 high, its name in the body's size. */
 const ROW = 'flex min-h-12 w-full items-center gap-2.5 py-1.5 ps-4 pe-3 text-base'
@@ -29,9 +32,13 @@ export function GroupRows({
     <div
       role="group"
       aria-label={label}
+      // In the laptop's Settings dialog a group is rows on the pane, as every settings card there.
+      data-slot="settings-card"
       className={cn(
-        'flex flex-col rows-line overflow-hidden rounded-xl',
-        surface === 'sheet' ? 'bg-card' : 'bg-muted',
+        'flex flex-col rows-line overflow-hidden',
+        // On the page's paper a group is the card (14 corners, the hairline ring), as the kit's GROUP
+        // draws `bg=SHEET`; a filled group keeps its fill alone, 12 round.
+        surface === 'sheet' ? 'card' : 'rounded-xl bg-muted',
         className,
       )}
     >
@@ -40,7 +47,15 @@ export function GroupRows({
   )
 }
 
-/** A row whose control stands at its end: a stepper, a switch. */
+/**
+ * On or off as a row of the group: the kit's `SwitchRow` (a tap anywhere on the row turns it, its ⓘ
+ * after the label) in the group's row, the group drawing the hairline between rows.
+ */
+export function GroupSwitch(props: Omit<ComponentProps<typeof SwitchRow>, 'className' | 'icon'>) {
+  return <SwitchRow {...props} className={cn(ROW, 'gap-4 border-b-0')} />
+}
+
+/** A row whose control stands at its end: a stepper, a picker. */
 export function GroupRow({
   label,
   setting,
@@ -79,7 +94,7 @@ export function GroupField({
   return (
     <div data-setting={setting} className={cn('flex flex-col gap-2 py-3 ps-4 pe-3', className)}>
       {label ? (
-        <span aria-hidden className="text-base">
+        <span aria-hidden className="text-base leading-[normal]">
           {label}
         </span>
       ) : null}
@@ -101,37 +116,58 @@ export function GroupSegmented<V extends OptionValue>({
 }
 
 /**
- * A row that opens its choice (a sheet of options, a page, a picker's list): its name, its value in
- * Soft Ink, and a chevron. Given as a picker's `trigger`, the picker opens it.
+ * A row that opens what it names, its value in Soft Ink and a chevron at its end: a sheet by default,
+ * or with `render` a link to a page (a progression's songs and its other ways, the board's GROUP link).
  */
 export function GroupLink({
   label,
   value,
+  mark,
   setting,
   className,
+  render,
   ...button
 }: {
   label: string
   value?: string | undefined
+  /** The value's glyph before it, in Soft Ink (a swipe slot's act, the board's P_SWIPE). */
+  mark?: ReactNode
   setting?: string
+  /** The page it opens, a link in place of the button (the row is then no sheet's trigger, nor a setting's home). */
+  render?: useRender.RenderProp
 } & Omit<ComponentProps<'button'>, 'value' | 'children'>) {
-  return (
-    <button
-      type="button"
-      data-setting={setting}
-      aria-haspopup="dialog"
-      {...button}
-      className={cn(
-        ROW,
-        'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
-        className,
-      )}
-    >
-      <span className="shrink-0">{label}</span>
-      <span className="min-w-0 flex-1 truncate text-end text-muted-foreground">{value}</span>
-      <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
-    </button>
-  )
+  return useRender({
+    defaultTagName: 'button',
+    render: render ?? <button type="button" aria-haspopup="dialog" data-setting={setting} />,
+    props: mergeProps<'button'>(
+      {
+        ...button,
+        className: cn(
+          ROW,
+          'text-left text-foreground no-underline transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
+          className,
+        ),
+      },
+      {
+        children: (
+          <>
+            <span className="shrink-0">{label}</span>
+            {mark ? (
+              <span className="flex min-w-0 flex-1 items-center justify-end gap-3 text-muted-foreground">
+                {mark}
+                <span className="truncate">{value}</span>
+              </span>
+            ) : (
+              <span className="min-w-0 flex-1 truncate text-end text-muted-foreground">
+                {value}
+              </span>
+            )}
+            <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+          </>
+        ),
+      },
+    ),
+  })
 }
 
 /**
@@ -174,15 +210,31 @@ export function ChoiceList<T extends string>({
   )
 }
 
-/** A row that does something at once, in the link's colour, as the canvas's `GROUP` action rows. */
-export function GroupAction({ label, onClick }: { label: string; onClick: () => void }) {
+/**
+ * A row that does something at once, in the link's colour, as the canvas's `GROUP` action rows; a
+ * loss (Unpublish, Delete) in crimson, in a group of its own.
+ */
+export function GroupAction({
+  label,
+  onClick,
+  destructive = false,
+  disabled = false,
+}: {
+  label: string
+  onClick: () => void
+  destructive?: boolean
+  /** Nothing to do yet (Reset layout on a page as it came). */
+  disabled?: boolean
+}) {
   return (
     <button
       type="button"
+      disabled={disabled}
       onClick={onClick}
       className={cn(
         ROW,
-        'text-left text-link transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
+        'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
+        destructive ? 'text-destructive' : 'text-link',
       )}
     >
       {label}
@@ -190,12 +242,17 @@ export function GroupAction({ label, onClick }: { label: string; onClick: () => 
   )
 }
 
-/** A row of values under a quiet heading (Also read as, Played), as the canvas's `GROUP` raw rows. */
+/**
+ * A row of values under a quiet heading (Also read as, Played), as the canvas's `GROUP` raw rows and
+ * its `CHIPL`: each value a 32 sand pill, 8 apart; one that acts reaches 44 by its `::before`.
+ */
 export function GroupChips({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <section aria-label={label} className="flex flex-col gap-2 px-4 py-2.5">
+    <section aria-label={label} className="flex flex-col gap-2 px-4 py-3">
       <h3 className="font-sans text-sm font-normal text-muted-foreground">{label}</h3>
-      <div className="flex flex-wrap gap-1.5">{children}</div>
+      <div className="flex flex-wrap gap-2 *:relative *:flex *:h-8 *:items-center *:rounded-pill *:bg-muted *:px-3 *:text-[0.9375rem] *:font-semibold">
+        {children}
+      </div>
     </section>
   )
 }

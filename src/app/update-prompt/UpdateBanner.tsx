@@ -19,7 +19,7 @@ export function UpdateBanner({
   return (
     <div
       role="status"
-      className="pointer-events-auto flex min-h-14 items-center gap-2 rounded-2xl bg-foreground py-1.5 ps-4 pe-1.5 text-[0.9375rem] text-background shadow-(--elevation-3)"
+      className="pointer-events-auto flex min-h-13 items-center gap-2 rounded-card bg-foreground py-1.5 ps-4 pe-1.5 text-[0.9375rem] text-background shadow-(--elevation-3)"
     >
       <p className="flex-1 font-semibold">
         {t(installing ? 'update.restarting' : 'update.available')}

@@ -18,7 +18,7 @@ Every measure is on the 4 scale: groups 12 round with rows of 48 and 8 by 16 pad
 its picture 8 round (concentric); segments 44 high in an 11-round track; blocks 12 16 16 with 8 between."""
 
 INK, SOFT, FILL, LINE, SHEET = '#332921', '#685E56', '#EEE9E2', '#DAD1C8', '#FEFDFB'
-CARD = f'border-radius: 12px; background: {SHEET}; overflow: hidden; box-shadow: 0 0 0 1px rgba(51,41,33,.07)'
+CARD = f'border-radius: 14px; background: {SHEET}; overflow: hidden; box-shadow: 0 0 0 1px {LINE}'
 ROW = f'min-height: 48px; box-sizing: border-box; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: {INK}'
 SEP = 'box-shadow: inset 0 1px 0 #E9E2D8'
 HONEY_SEP = 'box-shadow: inset 0 1px 0 rgba(176,122,42,.3)'
@@ -29,7 +29,7 @@ PIC2D = '<g><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M8.3
 
 def SWITCH(v):  # the Chords page's switch: 51 by 31, green when on
     return (f'<span aria-hidden="true" style="position: relative; flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{v}.track}}}}">'
-            f'<span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)"></span></span>')
+            f'<span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: {SHEET}; box-shadow: 0 2px 4px rgba(51,41,33,.2)"></span></span>')
 
 
 def SWROW(label, v, sep=''):
@@ -117,16 +117,14 @@ STAGE_VARS = ("--key-white: #fefdfb; --key-black: #332c28; --key-bed: #cbc2b9; -
               + ''.join(f"--role-{n}: {c}; --role-{n}-wash: color-mix(in oklab, {c} 62%, #fefdfb); " for n, c in (('root', '#E19E8C'), ('3rd', '#85B8DC'), ('5th', '#9BC093'), ('7th', '#E8C67D'), ('9th', '#B8A8D8'), ('11th', '#D3AC8A'), ('13th', '#82C2C1'))))
 HANDS3D = r'''
   _hands3d() {
-    const cv = this._cv, d = this._handsIn; if (!cv || !d) { if (this._stage && !cv) { this._stage.dispose(); this._stage = null; this._stageCv = null; } return; }
+    const cv = this._cv, d = this._handsIn; if (d) d.angle = this.state.kbAngle === 'above' ? 'above' : 'seat'; if (!cv || !d) { if (this._stage && !cv) { this._stage.dispose(); this._stage = null; this._stageCv = null; } return; }
     try {
       if (!window.PTHands) (0, eval)(PT_BUNDLE);
-      const ang = this.state.kbAngle === 'above' ? 'above' : 'seat';
-      if (!this._stage || this._stageCv !== cv || this._ang !== ang) {
-        window.PTHands.setPitch(ang === 'above' ? 78 : 62); this._ang = ang;
+      if (!this._stage || this._stageCv !== cv) {
         if (this._stage) this._stage.dispose(); if (this._ro) this._ro.disconnect();
         cv.__ptAfter = (proj) => { const box = this._lb; if (!box) return; const L = this._labels3d || [], W = box.clientWidth, H = box.clientHeight;
           while (box.children.length > L.length) box.lastChild.remove();
-          L.forEach((l, i) => { let el = box.children[i]; if (!el) { el = document.createElement('span'); el.style.cssText = 'position: absolute; transform: translate(-50%, -100%); min-width: 22px; height: 22px; box-sizing: border-box; padding: 0 5px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #332921; box-shadow: 0 0 0 1.5px rgba(51,41,33,.55), 0 1px 3px rgba(51,41,33,.3); white-space: nowrap'; box.append(el); }
+          L.forEach((l, i) => { let el = box.children[i]; if (!el) { el = document.createElement('span'); el.style.cssText = 'position: absolute; transform: translate(-50%, -100%); min-width: 22px; height: 22px; box-sizing: border-box; padding: 0 5px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #332921; box-shadow: 0 0 0 1.5px rgba(51,41,33,.55), 0 1px 3px rgba(51,41,33,.3); white-space: nowrap'; box.append(el); }
             const p = proj(l.m, l.black); el.textContent = l.t; el.style.background = l.c; l.x = p[0] * W; l.w = Math.max(22, l.t.length * 8 + 10); l.el = el; el.style.top = Math.max(26, p[1] * H - 3).toFixed(1) + 'px'; });
           // labels over neighbouring keys (D and E♭) are moved apart until neither covers the other
           const by = L.slice().sort((a, b) => a.x - b.x); for (let i = 1; i < by.length; i++) { const need = (by[i - 1].w + by[i].w) / 2 + 3 - (by[i].x - by[i - 1].x); if (need > 0) { by[i - 1].x -= need / 2; by[i].x += need / 2; } }

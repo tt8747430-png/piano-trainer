@@ -30,12 +30,23 @@ const NO_WORDS: ReadonlyMap<number, BarWords> = new Map()
  * Beats of a row where no bar stands: before a pickup, or after a section's last bar, the barline
  * closing that bar before them (`closes`).
  */
-function Blank({ from, beats, closes = false }: { from: number; beats: number; closes?: boolean }) {
+function Blank({
+  from,
+  beats,
+  closes = false,
+  grid = false,
+}: {
+  from: number
+  beats: number
+  closes?: boolean
+  /** On the Player's Grid, where a row is its cells alone: nothing drawn. */
+  grid?: boolean
+}) {
   return (
     <span
       aria-hidden
       data-blank=""
-      className={cn('bg-muted/40', closes && 'border-l-2 border-l-foreground')}
+      className={cn(!grid && 'bg-muted/40', !grid && closes && 'border-l-2 border-l-foreground')}
       style={{ gridColumn: `${from + 1} / span ${beats}` }}
     />
   )
@@ -66,6 +77,7 @@ export function ChordChart({
   words = NO_WORDS,
   onBar,
   rowBeats,
+  rowBars,
   className,
 }: {
   performance: Performance
@@ -81,6 +93,8 @@ export function ChordChart({
   words?: ReadonlyMap<number, BarWords>
   /** How many beats a row holds: the screen's room by default. */
   rowBeats?: number
+  /** How many bars a row holds, where chosen: the Grid's Bars per row. */
+  rowBars?: number
   /** Where it stands in its page. */
   className?: string
 } & (
@@ -94,6 +108,9 @@ export function ChordChart({
 )) {
   const { t } = useTranslation('piece')
   const locale = useLocale()
+  // The Player's Grid as its board (PlayerViewGrid): caps heads, the row's first bar number in a
+  // gutter, white beat cells 1 apart, each bar opening on its ink rule.
+  const grid = tap === 'go'
   const screenRoom = useRowRoom()
   const room = rowBeats ?? screenRoom
   // Read once a performance: the Player's chart renders again as each beat plays.
@@ -140,20 +157,31 @@ export function ChordChart({
       shown.map(({ cells, slot }) => ({ cells: cells.length, slot })),
     ),
     room,
+    rowBars,
   )
   return (
     <div
-      className={cn('flex flex-col gap-6', className)}
-      style={{ maxWidth: `${columns * BEAT_MOST}rem` }}
+      className={cn('flex flex-col', grid ? 'gap-0' : 'gap-6', className)}
+      style={grid ? undefined : { maxWidth: `${columns * BEAT_MOST}rem` }}
     >
       {sections.map(({ heading, bars, shown }, section) => (
         <section
           key={section}
           id={sectionAnchor(section)}
           aria-labelledby={heading ? `${sectionAnchor(section)}-heading` : undefined}
-          className="flex flex-col gap-2"
+          className={cn('flex flex-col', grid ? 'gap-1' : 'gap-2')}
         >
-          {heading ? (
+          {heading && grid ? (
+            <h2
+              id={`${sectionAnchor(section)}-heading`}
+              className={cn(
+                'ms-[22px] mb-1 font-sans sm:ms-8 sm:mb-1.5 text-xs font-bold tracking-[0.04em] text-muted-foreground uppercase',
+                section > 0 && 'mt-6',
+              )}
+            >
+              {heading}
+            </h2>
+          ) : heading ? (
             <header className="flex items-baseline gap-2">
               <h2 id={`${sectionAnchor(section)}-heading`} className="text-xl">
                 {heading}
@@ -173,12 +201,16 @@ export function ChordChart({
           ).map((row, index) => {
             const last = row.at(-1)
             const end = last ? last.column + (shown[last.index]?.slot ?? 0) : 0
-            return (
+            const first = row[0] ? shown[row[0].index] : undefined
+            const cellsRow = (
               <div
                 key={index}
                 className={cn(
-                  'grid overflow-hidden rounded-control border-y border-y-border bg-card break-inside-avoid',
-                  end === columns && 'border-r-2 border-r-foreground',
+                  'grid',
+                  grid
+                    ? 'min-w-0 flex-1 gap-px'
+                    : 'overflow-hidden rounded-control border-y border-y-border bg-card break-inside-avoid',
+                  !grid && end === columns && 'border-r-2 border-r-foreground',
                 )}
                 style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
               >
@@ -188,7 +220,9 @@ export function ChordChart({
                   const { written, symbols, notes, cells, starts } = bar
                   const place = { gridColumn: `${column + lead + 1} / span ${cells.length}` }
                   return [
-                    lead > 0 ? <Blank key={`lead-${written}`} from={column} beats={lead} /> : null,
+                    lead > 0 ? (
+                      <Blank key={`lead-${written}`} from={column} beats={lead} grid={grid} />
+                    ) : null,
                     tap === 'print' ? (
                       <PrintedBar
                         key={written}
@@ -216,8 +250,23 @@ export function ChordChart({
                     ),
                   ]
                 })}
-                {end < columns ? <Blank from={end} beats={columns - end} closes /> : null}
+                {end < columns ? (
+                  <Blank from={end} beats={columns - end} closes grid={grid} />
+                ) : null}
               </div>
+            )
+            return grid ? (
+              <div key={index} className="flex gap-2 break-inside-avoid">
+                <span
+                  aria-hidden
+                  className="w-4 shrink-0 pt-[5px] sm:w-[26px] text-right text-[10px] text-muted-foreground/60 tabular-nums"
+                >
+                  {first ? first.written + 1 : null}
+                </span>
+                {cellsRow}
+              </div>
+            ) : (
+              cellsRow
             )
           })}
         </section>

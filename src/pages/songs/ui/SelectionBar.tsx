@@ -1,59 +1,19 @@
 import { Fragment, type ReactNode } from 'react'
 import { BAR_CATALOG, barOf, useSettings, type BarAct } from '@/entities/settings'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
-import {
-  Archive,
-  Download,
-  Ellipsis,
-  FolderInput,
-  FolderOutput,
-  Heart,
-  HeartOff,
-  Trash2,
-  type LucideIcon,
-} from 'lucide-react'
+import { Archive, Ellipsis, Folder, FolderOutput, Heart, Trash2, Upload } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
 import { FloatingActions } from '@/shared/ui'
-import { DropZone, useCarrying } from '@/widgets/song-library'
+import { DropZone, SelectAct, SelectDock, useCarrying } from '@/widgets/song-library'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
 
-/** One of the bar's actions: its icon over its name, greyed while nothing chosen can take it. */
-function BarAction({
-  label,
-  icon: Icon,
-  onClick,
-  disabled,
-  destructive = false,
-}: {
-  label: string
-  icon: LucideIcon
-  onClick: () => void
-  disabled: boolean
-  destructive?: boolean
-}) {
-  return (
-    <Button
-      variant="ghost"
-      disabled={disabled}
-      onClick={onClick}
-      className={
-        destructive
-          ? 'h-14 min-w-13 flex-col gap-0.5 rounded-control px-1 text-xs text-destructive sm:min-w-16'
-          : 'h-14 min-w-13 flex-col gap-0.5 rounded-control px-1 text-xs sm:min-w-16'
-      }
-    >
-      <Icon aria-hidden className="size-5" />
-      {label}
-    </Button>
-  )
-}
-
 /**
- * Select's bar at the foot (Mindscape's `SelectToolbar`), floating where the screen's actions float:
- * Favourite and Export… for the songs chosen, Move and Archive for every row chosen (folders with all they
- * hold), and Delete where everything chosen can be deleted (the learner's own songs, and folders).
+ * Select's bar at the foot (R72's SELBAR, a glass dock in New's place): by default Add to folder,
+ * Favourite and Archive (the learner's own choice in Settings › Select toolbar, the rest under More);
+ * Favourite and Export… act on the songs chosen, Add to folder and Archive on every row chosen (folders
+ * with all they hold), Delete where everything chosen can be deleted.
  * Its slots stay put as rows are chosen: one that cannot act on the choice is greyed, never taken
  * away; one the place never allows (a learner's built-in folder: Move and Delete, R29 B4) is not
  * there. While a row's face is carried, the bar is where it drops: Archive, and in a folder, out to
@@ -76,39 +36,40 @@ export function SelectionBar({
   const chosen = useSettings((state) => barOf(state.bars, 'select.songs'))
   const acts: Partial<Record<BarAct, ReactNode>> = {
     favourite: (
-      <BarAction
+      <SelectAct
         label={t(select.allFavourite ? 'select.unfavourite' : 'select.favourite')}
-        icon={select.allFavourite ? HeartOff : Heart}
+        icon={Heart}
         onClick={select.favourite}
         disabled={noSongs}
       />
     ),
     move: page.may('moveOut') ? (
-      <BarAction
+      <SelectAct
         label={t('select.move')}
-        icon={FolderInput}
+        icon={Folder}
         onClick={select.move}
         disabled={!select.movable}
       />
     ) : null,
     export: (
-      <BarAction
+      <SelectAct
         label={t('select.export')}
-        icon={Download}
+        icon={Upload}
         onClick={select.export}
         disabled={noSongs}
       />
     ),
     archive: (
-      <BarAction
+      <SelectAct
         label={t('select.archive')}
         icon={Archive}
         onClick={select.archive}
         disabled={!select.archivable}
+        destructive
       />
     ),
     delete: page.may('deleteSong') ? (
-      <BarAction
+      <SelectAct
         label={t('select.delete')}
         icon={Trash2}
         onClick={select.delete}
@@ -131,7 +92,7 @@ export function SelectionBar({
           role="group"
           aria-label={t('drag.zones')}
           data-takes-tab-bar=""
-          className="flex w-[min(24rem,calc(100vw-2rem))] gap-1 rounded-card border border-border bg-raised p-1 elevation-3"
+          className="flex w-[min(24rem,calc(100vw-2rem))] gap-1 rounded-card border border-border bg-raised p-1 elevation-float"
         >
           {folder && page.may('moveOut') ? (
             <DropZone
@@ -148,43 +109,35 @@ export function SelectionBar({
     )
   }
   return (
-    <FloatingActions>
-      <div
-        role="toolbar"
-        aria-label={t('select.actions')}
-        // Select's bar takes the phone's tab bar's place (memory-palaces'): one bar at the foot.
-        data-takes-tab-bar=""
-        className="flex gap-1 rounded-card border border-border bg-raised p-1 elevation-3"
-      >
-        {shown.map((act) => (
-          <Fragment key={act}>{acts[act]}</Fragment>
-        ))}
-        {rest.length > 0 ? (
-          <Popover>
-            <PopoverTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  className="h-14 min-w-13 flex-col gap-0.5 rounded-control px-1 text-xs sm:min-w-16"
-                />
-              }
-            >
-              <Ellipsis aria-hidden className="size-5" />
-              {t('select.more')}
-            </PopoverTrigger>
-            <PopoverContent
-              side="top"
-              align="end"
-              aria-label={t('select.more')}
-              className="flex w-auto gap-1 p-1"
-            >
-              {rest.map((act) => (
-                <Fragment key={act}>{acts[act]}</Fragment>
-              ))}
-            </PopoverContent>
-          </Popover>
-        ) : null}
-      </div>
-    </FloatingActions>
+    <SelectDock label={t('select.actions')}>
+      {shown.map((act) => (
+        <Fragment key={act}>{acts[act]}</Fragment>
+      ))}
+      {rest.length > 0 ? (
+        <Popover>
+          <PopoverTrigger
+            render={
+              <Button
+                variant="ghost"
+                className="h-13 min-w-0 flex-1 flex-col gap-0.5 rounded-pill px-1 text-xs font-semibold"
+              />
+            }
+          >
+            <Ellipsis aria-hidden className="size-5" />
+            {t('select.more')}
+          </PopoverTrigger>
+          <PopoverContent
+            side="top"
+            align="end"
+            aria-label={t('select.more')}
+            className="glass flex w-auto gap-2 rounded-pill px-2 py-2"
+          >
+            {rest.map((act) => (
+              <Fragment key={act}>{acts[act]}</Fragment>
+            ))}
+          </PopoverContent>
+        </Popover>
+      ) : null}
+    </SelectDock>
   )
 }

@@ -15,6 +15,12 @@ export const PaletteFormContext = createContext<PaletteForm>('grid')
 export const usePaletteForm = (): PaletteForm => use(PaletteFormContext)
 
 /**
+ * The Recent group's tools, the latest first, around the keys drawn in it (loop round 57, Flat's
+ * recent notation); `null` elsewhere. In it a key stands only when it is among them, in their order.
+ */
+export const RecentTools = createContext<readonly string[] | null>(null)
+
+/**
  * Which side of a key its tooltip opens on (A34): under the toolbar at the screen's top, over the
  * keys at its foot, so a tooltip never covers the bar's words or the music.
  */

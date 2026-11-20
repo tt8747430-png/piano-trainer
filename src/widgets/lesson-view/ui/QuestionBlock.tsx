@@ -1,111 +1,109 @@
-import { Check, CircleHelp, Eye, RotateCcw, X, type LucideIcon } from 'lucide-react'
-import { useId } from 'react'
+import { useId, useReducer } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { LessonAnswer } from '@/entities/lesson'
+import { useMidiKeyDown } from '@/features/connect-midi'
+import { ExampleKeys } from '@/features/live-keyboard'
 import { localText, useLocale, type LocalText } from '@/shared/i18n'
+import type { Midi } from '@/shared/lib/music'
+import { usePlay } from '@/shared/lib/services'
 import { Button } from '@/shared/ui/primitives/button'
-import type { QuestionState } from '../model/lesson-question'
-import { KeysIcon } from '@/shared/ui'
-
-/** The question's one button at each stage, so a keyboard user's focus stays on it. */
-interface QuestionAction {
-  readonly label: string
-  readonly icon: LucideIcon
-  onClick(): void
-}
+import {
+  answerSounds,
+  chosenOf,
+  FRESH_QUESTION,
+  questionKeys,
+  questionReducer,
+  type QuestionAnswer,
+} from '../model/lesson-question'
 
 /**
- * A question answered on the lesson's keys (Pianote's pop quiz), marked with a question's sign: Answer
- * opens it (ringed while open), and the keys tapped are judged as soon as they are as many notes as
- * the answer's, each chosen filling one of its dots; a wrong
- * answer can be fixed on the keys or shown. Its button stays one button through every stage, so a
- * keyboard user's focus stays on it; the verdict's region stays in the page, so its words are heard
- * when they come.
+ * A question on its own keys (the Lesson boards' question), open as it stands, on the paper as every
+ * example: its ask 17 bold on a 44 row, "Choose on the keys" under it, the keys, then where it
+ * stands ("3 of 7 notes", Correct) with Again and Show the answer. The keys tapped are judged as
+ * soon as they are as many notes as the answer's; the answer heard once it is right. The section
+ * being read takes the MIDI keyboard's keys (`listening`). Its verdict's region stays in the page,
+ * so its words are heard when they come.
  */
 export function QuestionBlock({
   ask,
-  stage,
-  count,
-  onOpen,
-  onReveal,
-  onRetry,
+  said,
+  answer,
+  listening,
 }: {
   ask: LocalText
-  /** This question's stage, or `closed` while another is open or none is. */
-  stage: NonNullable<QuestionState>['stage'] | 'closed'
-  /** The notes chosen, and how many the answer has. */
-  count: { readonly chosen: number; readonly total: number }
-  onOpen: () => void
-  onReveal: () => void
-  onRetry: () => void
+  /** The answer as the lesson says it. */
+  said: LessonAnswer
+  /** The answer on the keys. */
+  answer: QuestionAnswer
+  listening: boolean
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const id = useId()
-  const action: QuestionAction =
-    stage === 'closed'
-      ? { label: t('question.answer'), icon: KeysIcon, onClick: onOpen }
-      : stage === 'choosing' || stage === 'wrong'
-        ? { label: t('question.show'), icon: Eye, onClick: onReveal }
-        : { label: t('question.again'), icon: RotateCcw, onClick: onRetry }
-  const Icon = action.icon
-  const open = stage !== 'closed'
+  const play = usePlay()
+  const [state, dispatch] = useReducer(questionReducer, FRESH_QUESTION)
+  const keys = questionKeys(state, answer)
+  const count = chosenOf(state.chosen, answer)
+  const choose = (key: Midi) => {
+    if (state.stage === 'answer') return
+    const event = { type: 'toggle', key, answer } as const
+    const next = questionReducer(state, event)
+    dispatch(event)
+    if (next.stage === 'right') play(answerSounds(said, next.chosen))
+  }
+  useMidiKeyDown((key) => {
+    if (listening) choose(key)
+  })
+  const line =
+    state.stage === 'right'
+      ? t('question.right')
+      : state.stage === 'wrong'
+        ? t('question.wrong')
+        : state.stage === 'answer'
+          ? t('question.shown')
+          : t('question.chosen', count)
   return (
-    <div
-      role="group"
-      aria-labelledby={id}
-      data-open={open || undefined}
-      className="flex flex-col gap-3 card p-4 text-base transition-shadow duration-200 ease-out data-open:ring-2 data-open:ring-ring"
-    >
-      <div className="flex items-start gap-3">
-        <span
-          aria-hidden
-          className="grid size-10 shrink-0 place-items-center rounded-pill bg-paint-lilac text-on-paint-lilac"
-        >
-          <CircleHelp className="size-5" />
-        </span>
-        <p id={id} className="min-w-0 flex-1 pt-2 font-semibold text-pretty">
+    <figure role="group" aria-labelledby={id} className="mt-2 flex flex-col gap-3">
+      <div className="-mb-2 flex flex-col">
+        <p id={id} className="flex min-h-11 items-center text-[1.0625rem] font-bold text-pretty">
           {localText(ask, locale)}
         </p>
+        <p className="text-sm text-muted-foreground">{t('question.onKeys')}</p>
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pl-13">
-        <p role="status" className="flex min-h-6 items-center gap-2 text-sm empty:sr-only">
-          {stage === 'right' ? (
-            <span className="inline-flex items-center gap-1.5 font-semibold text-learned">
-              <Check aria-hidden className="size-5" strokeWidth={3} />
-              {t('question.right')}
-            </span>
-          ) : stage === 'wrong' ? (
-            <span className="inline-flex items-center gap-1.5 font-semibold text-destructive">
-              <X aria-hidden className="size-5" strokeWidth={3} />
-              {t('question.wrong')}
-            </span>
-          ) : stage === 'answer' ? (
-            t('question.shown')
-          ) : stage === 'choosing' ? (
-            <>
-              <KeysIcon aria-hidden className="size-4 text-muted-foreground" />
-              <span className="text-muted-foreground">{t('question.onKeys')}</span>
-              <span aria-hidden className="flex gap-1">
-                {Array.from({ length: count.total }, (_, i) => (
-                  <span
-                    key={i}
-                    className={
-                      i < count.chosen
-                        ? 'size-2.5 rounded-pill bg-primary'
-                        : 'size-2.5 rounded-pill border border-input'
-                    }
-                  />
-                ))}
-              </span>
-              <span className="sr-only">{t('question.chosen', count)}</span>
-            </>
-          ) : null}
+      <ExampleKeys
+        shown={keys}
+        selected={keys.selected}
+        wrong={keys.wrong}
+        onKeyPress={state.stage === 'answer' ? undefined : choose}
+      />
+      <div className="flex items-center gap-2">
+        <p
+          role="status"
+          data-stage={state.stage}
+          className="flex-1 text-sm font-semibold text-muted-foreground data-[stage=right]:text-learned data-[stage=wrong]:text-destructive"
+        >
+          {line}
         </p>
-        <Button variant="soft" className="rounded-pill" onClick={action.onClick}>
-          <Icon data-icon="inline-start" aria-hidden />
-          {action.label}
+        <Button
+          variant="ghost"
+          className="h-11 px-3 text-[0.9375rem] font-semibold text-link hover:bg-transparent"
+          onClick={() => dispatch({ type: 'retry' })}
+        >
+          {t('question.again')}
         </Button>
+        {state.stage === 'right' || state.stage === 'answer' ? null : (
+          <Button
+            variant="soft"
+            className="h-11 rounded-pill border-transparent bg-muted px-4 text-[0.9375rem] font-bold hover:bg-(--hairline)"
+            onClick={() => {
+              dispatch({ type: 'reveal' })
+              play(answerSounds(said, answer.keys))
+            }}
+          >
+            {t('question.show')}
+          </Button>
+        )}
       </div>
-    </div>
+    </figure>
   )
 }

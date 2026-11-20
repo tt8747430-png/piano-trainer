@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { note } from '@/shared/lib/music'
 import { noteEvents, standardMidiFile, type MidiTrack } from '@/shared/lib/standard-midi-file'
-import { keyOfNotes, songOfMidi } from './song-of-midi'
+import { keyOfNotes } from '@/shared/lib/music'
+import { songOfMidi } from './song-of-midi'
 import { SongFileError } from './song-of-music-xml'
 
 const Q = 480

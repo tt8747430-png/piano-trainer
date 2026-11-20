@@ -6,8 +6,12 @@ import { addToChord, insertNotes, writeNotes } from './notes'
 import type { EditorState, Struck } from './state'
 import { barAt } from './timeline'
 
-/** Keys going down within this many milliseconds of the first are struck together. */
-const STRUCK_TOGETHER_MS = 80
+/**
+ * Keys going down within this many milliseconds of the first are struck together: Dorico's default
+ * chord window (research F24), wide enough that a slower hand's chord is written as one, with no
+ * setting for it.
+ */
+const STRUCK_TOGETHER_MS = 100
 
 /** The chord the keys make, as a chart writes it; none for fewer than three notes or no chord. */
 function chordOfKeys(keys: readonly Midi[]): Chord | undefined {

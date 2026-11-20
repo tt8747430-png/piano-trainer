@@ -7,16 +7,16 @@ import { useLocale } from '@/shared/i18n'
 import { ConfirmDialog } from '@/shared/ui'
 
 /**
- * One song in the Trash deleted for good, asked first (R34): its takes go with it; the whole Trash
- * emptied where `song` is `'all'`.
+ * Songs in the Trash deleted for good, asked first (R34): their takes go with them; the whole Trash
+ * emptied where `songs` is `'all'`; one named by its title.
  */
 export function DeleteSongAsk({
-  song,
+  songs,
   count,
   onOpenChange,
   onDeleted,
 }: {
-  song: PieceId | 'all' | null
+  songs: readonly PieceId[] | 'all' | null
   /** The songs the Trash holds, said when it is emptied. */
   count: number
   onOpenChange: (open: boolean) => void
@@ -28,23 +28,32 @@ export function DeleteSongAsk({
   const pieces = usePiecesStoreApi()
   const takes = useTakesStoreApi()
   const repertoire = useRepertoire()
-  const entry = song && song !== 'all' ? repertoire.entry(song) : undefined
-  const all = song === 'all'
+  const all = songs === 'all'
+  const one = songs !== null && !all && songs.length === 1 ? songs[0] : undefined
+  const entry = one ? repertoire.entry(one) : undefined
   return (
     <ConfirmDialog
-      open={song !== null}
+      open={songs !== null}
       onOpenChange={onOpenChange}
       title={
         all
           ? t('trash.emptying.title')
-          : t('trash.deletingOne.title', { title: entry ? entryTitles(entry, locale).primary : '' })
+          : entry
+            ? t('trash.deletingOne.title', { title: entryTitles(entry, locale).primary })
+            : t('trash.deletingMany.title', { count: songs?.length ?? 0 })
       }
-      body={all ? t('trash.emptying.body', { count }) : t('trash.deletingOne.body')}
+      body={
+        all
+          ? t('trash.emptying.body', { count })
+          : entry
+            ? t('trash.deletingOne.body')
+            : t('trash.deletingMany.body')
+      }
       action={all ? t('trash.emptying.confirm') : t('trash.deletingOne.confirm')}
       cancel={t('trash.cancel')}
       onConfirm={() => {
-        if (song === null) return
-        emptyTrash({ library, pieces, takes }, libraryCatalog(repertoire), all ? undefined : [song])
+        if (songs === null) return
+        emptyTrash({ library, pieces, takes }, libraryCatalog(repertoire), all ? undefined : songs)
         onDeleted?.()
       }}
     />

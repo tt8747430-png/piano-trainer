@@ -1,3 +1,4 @@
+import type { ScoreHeader } from '@/entities/piece'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DiagramsMode } from '@/entities/settings'
@@ -9,40 +10,43 @@ import {
   type CellBar,
   type PlayedBeat,
 } from '@/features/practice'
-import { useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 import { chordsFrom } from '../model/chords-from'
 import { lyricLines, type Span } from '../model/lyric-lines'
 import { sungPlace } from '../model/sung-place'
 import { BeatStrip } from './BeatStrip'
-import { ChordPair } from './ChordPair'
+import { ChordRow } from './ChordRow'
 import { SummaryGrid } from './SummaryGrid'
 import { SungLines } from './SungLines'
+import { ViewTitle } from './ViewTitle'
 
 /**
- * Diagrams (ADR 0108, Chordify's), every chord on the same keys, each in the inversion
- * its piece chose. Animated, the pair (`ChordPair`): the chord sounding and the next beside it,
- * sliding with Listen's clock and swiped to the next chord or the one before, the page itself still.
- * Under them the beat strip, a page at a time, and under it, with the View's Lyrics on, the line sung
- * (`SungLines`). On a phone on its side, the strip and the words beside the chords. All of
- * it stands in the room above the transport, in the middle of it, the chords shrinking where it is
- * short (`diagrams-view`), nothing scrolling. In its summary mode, the strip and the words over the
+ * Diagrams (ADR 0108, Chordify's; loop round 61, the Player's Diagrams board), every chord on the
+ * same keys, each in the inversion its piece chose. Animated: under the title and its credits, the
+ * row of every change (`ChordRow`), the one sounding at its start and the next beside it, sliding
+ * to each change and swiped a chord at a time; under it the beat strip, following the beat; under
+ * that, with the View's Lyrics on, the line sung (`SungLines`). The three stand together in the
+ * middle of the room above the transport (`diagrams-view`); on a phone on its side, the strip and
+ * the words beside the chords. In its summary mode, the strip and the words over the
  * song's chords at once (`SummaryGrid`), the one sounding marked, scrolling down. A diagram, a card
  * or a beat tapped takes the cursor there (`onGo`).
  */
 export function ChordDiagrams({
+  title,
+  credits,
   performance,
   bars,
   beat,
   span,
   loop,
-  clock,
   words,
   mode,
   onGo,
   onLoop,
 }: {
+  title: string
+  credits?: ScoreHeader | undefined
   performance: Performance
   /** Every bar as played, in beats. */
   bars: readonly CellBar[]
@@ -50,8 +54,6 @@ export function ChordDiagrams({
   /** The beat sounding, as played and as its bar is written. */
   span: { readonly played: Span; readonly written: Span }
   loop: BarRange | null
-  /** Listen's clock while it plays. */
-  clock: (() => Tick | null) | null
   /** The View's Lyrics: the line sung under the strip. */
   words: boolean
   /** The View's mode for Diagrams (ADR 0108's `scoreView.diagrams`). */
@@ -62,7 +64,6 @@ export function ChordDiagrams({
 }) {
   const { t } = useTranslation('player')
   const chosen = usePieceInversions()?.chosen
-  const still = useMediaQuery('(prefers-reduced-motion: reduce)')
   const looped = loop ? loopTicks(performance, loop) : null
   const { now } = chordsFrom(performance, span.played, looped)
   const lines = useMemo(() => lyricLines(performance), [performance])
@@ -87,6 +88,7 @@ export function ChordDiagrams({
         aria-label={t('views.diagrams')}
         className="-mx-gutter flex h-full flex-col gap-4 overflow-x-hidden overflow-y-auto overscroll-contain px-gutter pb-(--float-room) *:shrink-0 landscape-phone:mx-0 landscape-phone:px-0"
       >
+        <ViewTitle title={title} credits={credits} />
         <div className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0">
           {strip}
         </div>
@@ -108,15 +110,8 @@ export function ChordDiagrams({
       aria-label={t('views.diagrams')}
       className="diagrams-view -mx-gutter h-full overflow-hidden px-gutter pb-(--float-room) landscape-phone:mx-0 landscape-phone:px-0"
     >
-      <ChordPair
-        performance={performance}
-        played={span.played}
-        looped={looped}
-        clock={clock}
-        moving={clock !== null && !still}
-        still={still}
-        onGo={onGo}
-      />
+      <ViewTitle title={title} credits={credits} />
+      <ChordRow performance={performance} at={span.played.from} onGo={onGo} />
       <div data-area="strip" className="-mx-gutter landscape-phone:mx-0">
         {strip}
       </div>

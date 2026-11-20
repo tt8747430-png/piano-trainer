@@ -46,7 +46,7 @@ export function KeepOnDeviceFields({
       footnote={kept.safe ? t('storage.safe') : refused ? t('storage.refused') : undefined}
     >
       {kept.used === null ? null : (
-        <div className="flex flex-col gap-2 px-4 py-3.5">
+        <div className="flex flex-col gap-2 p-4">
           <p className="font-semibold tabular-nums">
             {t('storage.used', { size: megabytes(used, locale) })}
           </p>

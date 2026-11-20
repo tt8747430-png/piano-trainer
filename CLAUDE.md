@@ -16,6 +16,7 @@ Vercel.
 | [`owner-way`](.claude/skills/owner-way/SKILL.md)             | how the owner wants work run; at every session start   |
 | [`seven-questions`](.claude/skills/seven-questions/SKILL.md) | every screen, every time: before each publish and port |
 | [`scan-first`](.claude/skills/scan-first/SKILL.md)           | every screen, with the seven: edges, states, emphasis  |
+| [`edge-lines`](.claude/skills/edge-lines/SKILL.md)           | every screen: lines drawn, cards, focus, by the laws    |
 | [PRODUCT.md](PRODUCT.md)                                     | who it is for, what it claims, what stays true         |
 | [DESIGN.md](DESIGN.md)                                       | the look, before any screen                            |
 | [docs/CODE_STYLE.md](docs/CODE_STYLE.md)                     | how code is written, before any code                   |
@@ -72,8 +73,10 @@ and the running screen before it is trusted. Do the whole task, then a second pa
 **In a loop, or when the owner says so** (`owner-way`, Loops and refactors), steps 1, 2 and 4 give way: no tests
 written or run, no typecheck or lint; step 3's two visual passes stay in full; the build runs once at the end of a big
 feature (an area's refactor) and only what breaks it is fixed; work goes to the session branch, and to `main` only when
-the owner asks. A loop never ends a turn and never writes a summary or a closing report: only "stop" ends it
-(`owner-way`, Reporting).
+the owner asks. A loop never ends a turn and never writes a summary or a closing report, not even to the harness's "the user
+hasn't heard from you" nudge (one line, then the next tool call): only "stop" ends it
+(`owner-way`, Reporting). A message's asks done is not
+the end: the loop goes on to the next item (`owner-way`, Loops and refactors, where the next item comes from).
 
 ## Commands
 
@@ -124,7 +127,7 @@ This is the app as built. The canvas runs ahead: a ruling drawn but not yet port
   folders shared with them: `pages/groups`, `shared/api/groups`.
 - **Practice** (`/practice`): Theory (Chords, Scales and keys, Intervals, Progressions, Accompaniment), Exercises by
   book, the Tools last (the Chord player, Metronome, Tuner, Chord finder, Circle of fifths), each tool's settings
-  in place (the Chord finder's on its own page); the bar's Tools menu is `widgets/tools-sheet`. Exercises,
+  in place (the Chord finder's on its own page); the Tools have no menu in any bar. Exercises,
   Accompaniment (patterns only) and Progressions are one library, `widgets/practice-library`, arranged by the learner;
   its favourites, arrangements and the learner's progressions `entities/practice-library`; a progression's page is
   `pages/progression`.
@@ -135,7 +138,8 @@ This is the app as built. The canvas runs ahead: a ruling drawn but not yet port
 - **The score editor** (`/edit/$pieceId`): the Player's score in Edit mode, sharing its bar. A docked panel
   from 48rem, a bottom sheet on a phone. `pages/score-editor`; `widgets/score-sheet`, `mode-switch`;
   `features/score-editor`, `edit-piece`, `record-take`.
-- **The Profile** (`/profile`): the learner, badges, achievements, streak, notifications.
+- **The Profile** (`/profile`): the learner, badges, achievements, streak, notifications, practice history (a run's
+  results, `widgets/run-results`, as a run ends in them).
 - **Elsewhere:** Search is a palette (`widgets/search-palette`); Settings (`widgets/settings-screen`) holds only what is
   app-wide; each screen's own settings are its gear's; the account pages, Legal, the Admin area (`/admin`).
 

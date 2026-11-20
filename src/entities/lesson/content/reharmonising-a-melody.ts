@@ -24,8 +24,8 @@ const reharmonisingAMelody: Lesson = {
         { kind: 'chords', symbols: ['C', 'Am', 'Em'], melody: note('E') },
         {
           kind: 'link',
-          title: { en: 'E in Reharmonise', ru: 'Ми в «Гармонизации мелодии»' },
-          target: { opens: 'harmonise', key: C_MAJOR, note: note('E') },
+          title: { en: 'Chords in C major', ru: 'Аккорды до мажора' },
+          target: { opens: 'key', key: C_MAJOR },
         },
       ],
     },
@@ -62,8 +62,8 @@ const reharmonisingAMelody: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'G in Reharmonise', ru: 'Соль в «Гармонизации мелодии»' },
-          target: { opens: 'harmonise', key: C_MAJOR, note: note('G') },
+          title: { en: 'Chords in C major', ru: 'Аккорды до мажора' },
+          target: { opens: 'key', key: C_MAJOR },
         },
       ],
     },

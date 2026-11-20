@@ -19,14 +19,17 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
       handItems: ['Both hands', 'Right hand', 'Left hand'].map((d) => ({ d, on: d.startsWith(hands), mark: d.startsWith(hands) ? '✓' : '', pick: () => set({ hands: d.split(' ')[0], menu: null }) })),
       handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', hB: hands === 'Both', hR: hands === 'Right', hL: hands === 'Left',
       keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }),
-      practise: [['Up and down, hands together', 'Two octaves, 72 BPM'], ['Hands separately', 'Right, then left'], ['Tempo ladder', '60 to 120 BPM, 8 at a time'], ['Contrary motion', 'From the tonic, outwards'], ['Hanon 1–20', 'The Virtuoso Pianist, part one']].map(([t, s]) => ({ t, s })),
+      // the app's own scale exercises, each with the music it opens on (ScaleExercises' opening)
+      practise: (() => { const nm = ivs.map((_, i) => spell(i)), n = nm.length, at = (s) => nm[((s % n) + n) % n], steps = (c, f) => Array.from({ length: c }, (_, s) => f(s)).join(' · ') + ' …';
+        return [['Scale', [...nm, nm[0]].join(' ') + ' …'], ['In 3rds', steps(3, (s) => at(s) + ' ' + at(s + 2))], ['In 6ths', steps(3, (s) => at(s) + ' ' + at(s + 5))], ['In groups', steps(2, (s) => [0, 1, 2, 3].map((m) => at(s + m)).join(' '))], ['Contrary motion', steps(3, (s) => at(s) + ' ' + at(-s))]].concat(kind <= 3 ? [['Daily scale routine', [...nm, nm[0]].join(' ') + ' …']] : []).map(([t, s]) => ({ t, s })); })(),
       states: [['Playing', !!st.playing, { playing: true }], ['F♯ major, six sharps', rl === 3 && ra === 1 && kind === 0, { rl: 3, ra: 1, kind: 0 }], ['Minor pentatonic (five notes, no fingering)', kind === 7, { kind: 7 }]]
         .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? { playing: false, rl: null, ra: null, kind: null } : o) })),
-      // the left hand two octaves under the right, on its own bass staff, its fingers under it (piano-chords-and-scales-app 006)
-      ssB: (() => { const ledB = [], Yb = (k) => 127 - k * 3.5;
-        const notes = notesS.map((z, i) => { const k = Math.round((58 - z.y) / 3.5), kb = k - 2, y = z.y + 69, up = kb < 4, f = fingOk && nN === 8 ? FGP[1][i] : '';
-          for (let j = 0; j >= k; j -= 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) }); for (let j = 12; j <= k; j += 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) });
-          return { ...z, y, ay: z.ay + 69, stem: up ? 'M' + (z.x + 4.6) + ' ' + y + 'V' + (y - 24) : 'M' + (z.x - 4.6) + ' ' + y + 'V' + (y + 24), fy: 160, f1: f === '1', f2: f === '2', f3: f === '3', f4: f === '4', f5: f === '5' }; });
+      // the left hand an octave under the right, as the app plays and engraves it (G3 to G4 under G4 to G5), on its own
+      // bass staff, its fingers under it (piano-chords-and-scales-app 006); its ledgers over the staff where it climbs
+      ssB: (() => { const ledB = [], Yb = (k) => 110.5 - k * 3.5;
+        const notes = notesS.map((z, i) => { const k = Math.round((58 - z.y) / 3.5), y = z.y + 52.5, up = k < -1, f = fingOk && nN === 8 ? FGP[1][i] : '';
+          for (let j = -7; j >= k; j -= 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) }); for (let j = 5; j <= k; j += 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) });
+          return { ...z, y, ay: z.ay + 52.5, stem: up ? 'M' + (z.x + 4.6) + ' ' + y + 'V' + (y - 24) : 'M' + (z.x - 4.6) + ' ' + y + 'V' + (y + 24), fy: 160, f1: f === '1', f2: f === '2', f3: f === '3', f4: f === '4', f5: f === '5' }; });
         return { sig: sig.map((z) => ({ ...z, ay: z.ay + 69 })), notes, led: ledB }; })(),
       // the key's place on the circle of fifths, drawn as the circle draws it (owner, 2026-11-16: "what is with this relative
       // minor … and on the circle of fifths. this doenst make any sense"): its slice, IV · I · V, each major over its
@@ -44,75 +47,100 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
         return { c: t.c, r: t.c, x: '', d: t.d, kb, ring: on ? '0 0 0 2px #EDC684' : '0 0 0 1px #DAD1C8', hear: () => set({ hear: i }) }; }), chordsT: 'Chords in ' + tonic + ' ' + KINDS[kind].toLowerCase(),
       practiseT: 'Practise ' + tonic + ' ' + KINDS[kind].toLowerCase() + ' in the Player' };''')
 assert SC60 != SC, 'SC return not found'
+# The run as the app engraves it (ScaleSheet, the scale's 8ths in 4/4): the meter after the key, each half bar's four
+# notes beamed, a group's stems up under its staff's middle line (44, the bass's 106) and down over it, its beam sloped at most a space, its shortest
+# stem 3.4 spaces (23.8), or 2.9 (20) where the note nearest the beam is past the middle line, as Verovio's; the fingers just over the beam,
+# or over the top line when the beam is inside the staff (under it for the bass), as Verovio sets them.
+BEAMJS = r"""const BEAM = (sts, off) => { const mid = off ? 114 : 44, beams = [], out = sts.notes.map((z) => ({ ...z, hx: +(z.x - 4.13).toFixed(2) }));
+  for (let g = 0; g < out.length; g += 4) { const grp = out.slice(g, g + 4); if (grp.length < 2) continue;
+    const up = grp.reduce((a, z) => a + z.y, 0) / grp.length > mid, xs = grp.map((z) => z.x + (up ? 4.6 : -4.6));
+    const e1 = grp[0].y, e2 = e1 + Math.max(-7, Math.min(7, grp[grp.length - 1].y - e1)), ys = grp.map((z) => z.y);
+    const at = (i) => e1 + (e2 - e1) * (xs[i] - xs[0]) / (xs[xs.length - 1] - xs[0]), past = up ? Math.min(...ys) < mid : Math.max(...ys) > mid, least = past ? 20 : 23.8;
+    const sh = Math.max(...grp.map((z, i) => up ? at(i) - (z.y - least) : (z.y + least) - at(i))), L = (i) => +(at(i) + (up ? -sh : sh)).toFixed(1), t = up ? 3.5 : -3.5;
+    grp.forEach((z, i) => { z.stem = 'M' + xs[i] + ' ' + z.y + 'V' + L(i); if (off === 0) z.fy = +Math.min(25.8, (up ? L(i) : z.y - 4) - 5.1).toFixed(1); else z.fy = +Math.max(137.6, (up ? z.y + 4 : L(i)) + 10.6).toFixed(1); });
+    const n = grp.length - 1; beams.push({ d: 'M' + (xs[0] - .55) + ' ' + L(0) + 'L' + (xs[n] + .55) + ' ' + L(n) + 'L' + (xs[n] + .55) + ' ' + (L(n) + t) + 'L' + (xs[0] - .55) + ' ' + (L(0) + t) + 'Z' }); }
+  return { ...sts, notes: out, beams, mx: 37 + sts.sig.length * 8 + (sts.sig.length ? 4 : 0) }; };
+"""
+SC60 = (SC60.replace('// switches by key:', BEAMJS + '// switches by key:', 1)
+        .replace('x = +(x0 + dx * (i + 0.5)).toFixed(1)', 'x = +(70.6 + nS * 8 + (244 - nS * 8) * i / (nN - 1)).toFixed(1)', 1)
+        .replace('      chords: tri, ss: { sig, notes: notesS, led },', '      chords: tri, ss: BEAM({ sig, notes: notesS, led }, 0),', 1)
+        .replace("        return { sig: sig.map((z) => ({ ...z, ay: z.ay + 69 })), notes, led: ledB }; })(),", "        return BEAM({ sig: sig.map((z) => ({ ...z, ay: z.ay + 69 })), notes, led: ledB }, 69); })(),", 1))
+assert 'BEAM({ sig, notes' in SC60 and '}, 69); })(),' in SC60 and '244 - nS * 8' in SC60 and 'const BEAM' in SC60
 
-PILL60 = lambda label, val, act: (f'<button type="button" aria-label="{label}: {{{{{val}}}}}" onClick="{{{{{act}}}}}" style="flex: none; height: 64px; padding: 0 12px 0 16px; border: 0; border-radius: 14px; background: {FILL}; color: {INK}; '
-                                  f'display: flex; align-items: center; gap: 8px; font: inherit"><span style="font-family: {SERIF}; font-size: 40px; font-weight: 700; line-height: 1; white-space: nowrap">{{{{{val}}}}}</span>'
-                                  f'<span style="display: flex; flex-direction: column; color: {SOFT}; margin-top: -2px">{CHEV_U2}{CHEV_D2}</span></button>')
-TITLE60 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; flex-wrap: wrap; gap: 8px">{PILL60("Tonic", "tonicL", "openRoot")}{PILL60("Scale", "kindLow", "openKind")}</div></div>')
-def GRANDSTAFF(label):
+# The name as its pop-up buttons, the kit's one title part (Chords' PART and CHEV_UD): 44 serif, 54 tall, 12/8 in, 8 apart.
+PILL60 = lambda label, val, act: (f'<button type="button" aria-haspopup="dialog" aria-label="{label}: {{{{{val}}}}}" onClick="{{{{{act}}}}}" style="{PART}; flex: none">{{{{{val}}}}}{CHEV_UD}</button>')
+TITLE60F = lambda fs: (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; font-family: {SERIF}; font-size: {fs}px; font-weight: 700; line-height: 1.1">{PILL60("Tonic", "tonicL", "openRoot")}{PILL60("Scale", "kindLow", "openKind")}</div></div>')
+TITLE60 = TITLE60F(44)
+def GRANDSTAFF(label, maxw=None):
     """The scale on a grand staff, each hand on its staff with its fingers, as the books print a scale (and the example's 006)."""
     tre = SCALESTAFF(label)
     inner = tre[tre.index('>') + 1:tre.rindex('</svg>')]
+    inner = inner.replace('H356"', 'H345.2"').replace('<text x="6" y="58" font-size="28"', '<text x="11" y="58" font-size="28"')
     bass = inner.replace('{{ss.', '{{ssB.')
-    for i in range(5): bass = bass.replace(f'<path d="M4 {30 + i * 7}H356"', f'<path d="M4 {92 + i * 7}H356"', 1)
-    bass = bass.replace('<text x="6" y="64" font-size="44" font-family="Noto Music, serif" fill="' + INK + '">𝄞</text>', '<text x="8" y="113" font-size="40" font-family="Noto Music, serif" fill="' + INK + '">𝄢</text>')
-    brace = f'<path d="M4 30V120" stroke="{INK}" stroke-width="1.4"></path><path d="M356 30V120" stroke="{INK}" stroke-width=".9"></path>'
-    return f'<svg viewBox="0 0 360 168" width="100%" role="img" aria-label="{label}" style="display: block">{inner}{bass}{brace}</svg>'
+    for i in range(5): bass = bass.replace(f'<path d="M4 {30 + i * 7}H345.2"', f'<path d="M4 {100 + i * 7}H345.2"', 1)
+    bass = bass.replace('<text x="11" y="58" font-size="28" font-family="Noto Music, serif" fill="' + INK + '">𝄞</text>', '<text x="11" y="128" font-size="31" font-family="Noto Music, serif" fill="' + INK + '">𝄢</text>')
+    # the piano's brace before the system's line, as the app's engraving
+    brace = (f'<path d="M4 30V128" stroke="{INK}" stroke-width="1.4"></path><path d="M345.2 30V128" stroke="{INK}" stroke-width="1"></path>'
+             f'<path d="M1 30C-7 38 1 70 -6 79C1 88 -7 120 1 128" fill="none" stroke="{INK}" stroke-width="1.6" stroke-linecap="round"></path>')
+    # the meter in Bravura's time digits, as the engine engraves it: each digit two spaces tall, centred on its half
+    meter = lambda key, y0: ''.join(f'<path transform="translate({{{{{key}.mx}}}} {y0 - 7 + d}) scale(.028 -.028)" d="{BRAVURA["t4"][0]}" fill="{INK}"></path>' for d in (0, 14))
+    beams = lambda key: f'<sc-for list="{{{{{key}.beams}}}}" as="b" hint-placeholder-count="2"><path d="{{{{b.d}}}}" fill="{INK}"></path></sc-for>'
+    return f'<svg viewBox="-17 -5.9 362.6 169.3" width="100%" role="img" aria-label="{label}" style="display: block; overflow: visible{f'; max-width: {maxw}px; margin: 0 auto' if maxw else ''}">{inner}{bass}{brace}{meter("ss", 44)}{meter("ssB", 114)}{beams("ss")}{beams("ssB")}</svg>'
 # the two hands' figures stand on their staves; only the honest note for a scale with no standard fingering stays under them
 FING60 = (f'<sc-if value="{{{{noFing}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 0; text-align: center; font-size: 15px; color: {SOFT}">No standard fingering for this scale</p></sc-if>')
 SCCARDS = lambda cols: (CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"')
     .replace('</sup></span></button>', '</sup></span><span style="margin-top: -4px; font-size: 13px; color: ' + SOFT + '">{{c.d}}</span></button>')
-    if cols < 7 else CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"').replace('class="nos" style="display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px"', 'style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; padding: 2px"').replace('style="flex: none; border: 0;', 'style="min-width: 0; border: 0;').replace('</sup></span></button>', '</sup></span><span style="margin-top: -4px; font-size: 13px; color: ' + SOFT + '">{{c.d}}</span></button>'))
+    if cols < 7 else CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"').replace('class="nos" style="display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px"', 'style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px"').replace('style="flex: none; border: 0;', 'style="min-width: 0; border: 0;').replace('</sup></span></button>', '</sup></span><span style="margin-top: -4px; font-size: 13px; color: ' + SOFT + '">{{c.d}}</span></button>'))
 KEYG60 = (f'<sc-if value="{{{{hasKey}}}}" hint-placeholder-val="{{{{true}}}}"><section style="flex: none; display: flex; flex-direction: column; gap: 8px">'
-          f'<a href="CircleOfFifths.dc.html" style="align-self: flex-start; min-height: 32px; margin: -6px 0 -6px 4px; display: flex; align-items: center; gap: 2px; font-size: 14px; font-weight: 600; color: {INK}; text-decoration: none">On the circle of fifths{CHEV_R}</a>'
-          f'<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
-          f'<sc-for list="{{{{fifths}}}}" as="f" hint-placeholder-count="3"><div style="display: flex; flex-direction: column; box-shadow: inset 1px 0 0 {LINE}; margin-left: -1px">'
-          f'<button type="button" aria-label="{{{{f.maj}}}} major" aria-pressed="{{{{f.majOn}}}}" onClick="{{{{f.goMaj}}}}" style="position: relative; height: 60px; border: 0; background: {{{{f.majBg}}}}; color: {INK}; font-family: {SERIF}; font-size: 22px; font-weight: 700; box-shadow: inset 0 -1px 0 {LINE}">{{{{f.maj}}}}<span style="position: absolute; top: 6px; right: 8px; font-family: inherit; font-size: 12px; font-weight: 500; color: {SOFT}">{{{{f.sig}}}}</span></button>'
+          f'<a href="CircleOfFifths.dc.html" style="align-self: flex-start; min-height: 32px; margin: -6px 0; display: flex; align-items: center; gap: 2px; font-size: 14px; font-weight: 600; color: {INK}; text-decoration: none">On the circle of fifths{CHEV_R}</a>'
+          f'<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; border-radius: 14px; background: {LINE}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
+          f'<sc-for list="{{{{fifths}}}}" as="f" hint-placeholder-count="3"><div style="display: flex; flex-direction: column; background: {SHEET}">'
+          f'<button type="button" aria-label="{{{{f.maj}}}} major" aria-pressed="{{{{f.majOn}}}}" onClick="{{{{f.goMaj}}}}" style="position: relative; height: 60px; border: 0; background: {{{{f.majBg}}}}; color: {INK}; font-family: {SERIF}; font-size: 22px; font-weight: 700; box-shadow: inset 0 -1px 0 {LINE}">{{{{f.maj}}}}<span style="position: absolute; top: 6px; right: 8px; font-family: Instrument Sans, system-ui, sans-serif; font-size: 12px; font-weight: 500; color: {SOFT}">{{{{f.sig}}}}</span></button>'
           f'<button type="button" aria-label="{{{{f.minA}}}}" aria-pressed="{{{{f.minOn}}}}" onClick="{{{{f.goMin}}}}" style="height: 48px; border: 0; background: {{{{f.minBg}}}}; color: {INK}; font-family: {SERIF}; font-size: 17px; font-weight: 600">{{{{f.min}}}}</button>'
           f'</div></sc-for></div></section></sc-if>')
 # One page, no tabs (owner, 2026-11-16: "are the tabs correct? do we need them … should we somehow merge them"): the
 # Key tab repeated the Scale tab's staff for two rows, and the three tabs hid less than a screen between them; the
 # run, the scale's chords and its key now read down one page, each once.
-VIEW60 = lambda cols: (CARD(GRANDSTAFF("The scale up one octave, each hand on its staff with its fingers") + FING60, "16px 12px")
-    + f'<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{{{{chordsT}}}}</h3>' + SCCARDS(cols) + '</section></sc-if>'
+VIEW60 = lambda cols, maxw=None: (CARD(GRANDSTAFF("The scale up one octave, each hand on its staff with its fingers", maxw) + FING60, "16px 12px")
+    + f'<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 14px; font-weight: 600; color: {INK}">{{{{chordsT}}}}</h3>' + SCCARDS(cols) + '</section></sc-if>'
     + (KEYG60 if cols < 7 else ''))
 
-PLAYM = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
-PRACT60 = (f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{{{{practiseT}}}}</h3>'
-           f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{practise}}}}" as="p" hint-placeholder-count="5"><a href="Exercise.dc.html" style="min-height: 60px; padding: 8px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">'
-           f'<span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {ACCENT}; display: flex; align-items: center; justify-content: center">{PLAYM}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{p.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{p.s}}}}</span></span>{CHEV_RS}</a></sc-for></div></section>')
+PLAYM = PLAY.replace('width="22" height="22"', 'width="14" height="14"')
+PRACT60 = (f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 14px; font-weight: 600; color: {INK}">{{{{practiseT}}}}</h3>'
+           f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{practise}}}}" as="p" hint-placeholder-count="6"><a href="Exercise.dc.html" style="min-height: 76px; box-sizing: border-box; padding: 8px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">'
+           f'<span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAYM}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{p.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{p.s}}}}</span></span>{CHEV_RS}</a></sc-for></div></section>')
 # the floating bar, as the Chords page's: the left is what the scale plays at, the centre Play, the right the hands
-TEMPOBTN = f'<button type="button" aria-label="Tempo: {{{{tempo}}}} BPM" aria-haspopup="dialog" onClick="{{{{openTempo}}}}" style="pointer-events: auto; justify-self: end; flex: none; min-width: 56px; padding: 0 12px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.05"><span style="font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{tempo}}}}</span><span style="font-size: 11px; font-weight: 600; color: {SOFT}">BPM</span></button>'
-PLAYSC = (f'<div role="group" aria-label="Play" style="pointer-events: auto; flex: none; width: 184px; {TINTGRP}; display: flex; align-items: center">'
-          f'<button type="button" onClick="{{{{toggle}}}}" style="flex: 1; min-width: 0; height: 100%; padding: 0 0 0 18px; border: 0; background: transparent; color: #332921; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; white-space: nowrap">'
+TEMPOBTN = f'<button type="button" aria-label="Tempo: {{{{tempo}}}} BPM" aria-haspopup="dialog" onClick="{{{{openTempo}}}}" style="pointer-events: auto; justify-self: end; flex: none; min-width: 56px; padding: 0 12px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.05"><span style="font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{tempo}}}}</span><span style="font-size: 12px; font-weight: 600; color: {SOFT}">BPM</span></button>'
+PLAYSC = (f'<div role="group" aria-label="Play" style="pointer-events: auto; flex: none; min-width: 176px; {TINTGRP}; display: flex; align-items: center">'
+          f'<button type="button" onClick="{{{{toggle}}}}" style="flex: 1; min-width: 0; height: 100%; padding: 0 0 0 16px; border: 0; background: transparent; color: #332921; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; white-space: nowrap">'
           f'<sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}<span>Play scale</span></sc-if><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}<span>Stop</span></sc-if></button>'
           f'<span aria-hidden="true" style="width: 1px; height: 28px; background: rgba(51,41,33,.22)"></span><button type="button" aria-label="Play: up, down, octaves" aria-haspopup="menu" onClick="{{{{openPlay}}}}" style="flex: none; width: 48px; height: 100%; border: 0; background: transparent; color: #332921; display: flex; align-items: center; justify-content: center">{CHEV_D}</button></div>')
 HANDSSC = f'<button type="button" aria-label="Hands: {{{{handsLabel}}}}" aria-haspopup="menu" onClick="{{{{openHands}}}}" style="pointer-events: auto; justify-self: start; flex: none; width: 56px; padding: 0; border: 0; {GLASSGRP}; color: {INK}; display: flex; align-items: center; justify-content: center">{HANDSI}</button>'
 def MENU60(cond, label, lst, pos, extra=''):
-    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeMenu}}}}" style="position: absolute; inset: 0; z-index: 50"></div><div role="menu" aria-label="{label}" style="position: absolute; {pos}; z-index: 51; width: 248px; padding: 6px; border-radius: 18px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeMenu}}}}" style="position: absolute; inset: 0; z-index: 50"></div><div role="menu" aria-label="{label}" style="position: absolute; {pos}; z-index: 51; width: 248px; display: flex; flex-direction: column; padding: 6px; border-radius: 16px; {GLASSFX}">'
             f'<sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="3"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="height: 44px; padding: 0 12px; border: 0; border-radius: 12px; background: transparent; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; text-align: left"><span style="flex: 1">{{{{o.d}}}}</span><span style="font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span></button></sc-for>{extra}</div></sc-if>')
 OCTROW = f'<div style="margin-top: 4px; padding: 8px 6px 2px 12px; box-shadow: inset 0 1px 0 {LINE}; display: flex; align-items: center; justify-content: space-between; gap: 8px"><span style="font-size: 16px">Octaves</span><div style="display: flex; align-items: center; gap: 4px"><button type="button" aria-label="Fewer octaves" onClick="{{{{octDn}}}}" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: {FILL}; color: {INK}; font: inherit; font-size: 20px">−</button><span style="min-width: 24px; text-align: center; font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{oct}}}}</span><button type="button" aria-label="More octaves" onClick="{{{{octUp}}}}" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: {FILL}; color: {INK}; font: inherit; font-size: 20px">+</button></div></div>'
-TEMPOPOP = lambda pos: (f'<sc-if value="{{{{tempoMenu}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeMenu}}}}" style="position: absolute; inset: 0; z-index: 50"></div><div role="dialog" aria-label="Tempo" style="position: absolute; {pos}; z-index: 51; width: 248px; box-sizing: border-box; padding: 12px; border-radius: 18px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">'
+TEMPOPOP = lambda pos: (f'<sc-if value="{{{{tempoMenu}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeMenu}}}}" style="position: absolute; inset: 0; z-index: 50"></div><div role="dialog" aria-label="Tempo" style="position: absolute; {pos}; z-index: 51; width: 248px; box-sizing: border-box; padding: 12px; border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">'
     f'<button type="button" aria-label="Slower" onClick="{{{{tDn}}}}" style="flex: none; width: 48px; height: 48px; border: 0; border-radius: 24px; background: {FILL}; color: {INK}; font: inherit; font-size: 24px">−</button><div style="flex: 1; text-align: center; line-height: 1.1"><div style="font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{tempo}}}}</div><div style="font-size: 13px; color: {SOFT}">BPM</div></div>'
     f'<button type="button" aria-label="Faster" onClick="{{{{tUp}}}}" style="flex: none; width: 48px; height: 48px; border: 0; border-radius: 24px; background: {FILL}; color: {INK}; font: inherit; font-size: 24px">+</button></div></sc-if>')
 BAR60 = lambda pos: f'<div role="toolbar" aria-label="Tempo, play and hands" style="position: absolute; {pos}; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; pointer-events: none">{TEMPOBTN}{PLAYSC}{HANDSSC}</div>'
 ROUND60 = lambda label, svg, act: IB(label, svg, act)  # the kit's one bar button
 TOP60 = TOP('Main.dc.html', 'Scales and keys', ROUND60("Settings", COG, "openSet") + ROUND60("Piano", KEYSI, "openKeys"), 'Back to Practice')
-KB60 = lambda k, h: KEYS(h).replace('kb.', k + '.').replace('border-radius: 14px;', 'border-radius: 0;', 1)
+KB60 = lambda k, h: KEYS(h, k, edge=True)
 import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as PS
 SC_KEYS60 = PS.PIANO_SHEET_2D()  # the one Piano sheet, its 2D part
 SHEETS60 = SC_SHEETS + BSHEET('keysOn', 'Piano', SC_KEYS60)
 POPS60 = SC_POPS + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 70px')
 
-ph60 = (TOP60 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
-        + TITLE60 + VIEW60(4) + PRACT60 + '</main>'
-        + BAR60('left: 12px; right: 12px; bottom: 30px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 104px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'right: 16px; bottom: 104px') + TEMPOPOP('left: 16px; bottom: 104px'))
+ph60 = (TOP60 + KBPAGE_OPEN + f'<div style="flex: none; margin: 8px 0 0">{KB60("kbE", 150)}</div><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 120px; display: flex; flex-direction: column; gap: 16px">'
+        + TITLE60 + VIEW60(4) + PRACT60 + '</main></div>' + KBPAGE_CSS
+        + BAR60('left: 12px; right: 12px; bottom: 34px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 104px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'right: 16px; bottom: 104px') + TEMPOPOP('left: 16px; bottom: 104px'))
 # One focus (owner, 2026-11-16: "the floating controls … should be centerd by the main focus content … the practices on
 # the right robs the focus"): on a laptop the scale leads one centred column, the key's rows and Practise follow it in
 # that column, and the floating bar is centred on it.
 lm60 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP60)
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 0 120px">'
-        + f'<div style="margin: 0 0 28px">{KB60("kbLE", 180)}</div><div style="width: min(880px, calc(100% - 80px)); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{TITLE60}' + VIEW60(7).replace('" style="display: block">', '" style="display: block; max-width: 640px; margin: 0 auto">')
+        + f'<div style="flex: none; margin-top: 8px">{KB60("kbLE", 180)}</div>'
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 28px 0 120px"><div style="width: min(880px, calc(100% - 80px)); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{TITLE60F(56)}' + VIEW60(7, 640)
         + f'{KEYG60}{PRACT60}</div></div>'
         + BAR60('left: 50%; translate: -50% 0; bottom: 24px; width: 560px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 100px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'left: calc(50% + 160px); bottom: 100px') + TEMPOPOP('left: calc(50% - 400px); bottom: 100px') + '</div>')
 phone('Scales', 'Scales and keys, phone', ph60, SC60, SHEETS60)

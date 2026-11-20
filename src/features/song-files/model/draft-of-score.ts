@@ -185,6 +185,18 @@ const draftNote = (n: ReadNote, end: Tick, lyrics: boolean): DraftNote => ({
 })
 
 /**
+ * A piano staff's notes in its two voices (ADR 0114): the file's lowest-numbered voice on the staff
+ * is the first, every other one the second, stems down.
+ */
+function inVoices(notes: readonly DraftNote[], read: readonly ReadNote[]): DraftNote[] {
+  const first = read.map((n) => Number(n.voice)).reduce((a, b) => Math.min(a, b), Infinity)
+  return notes.map((n, i): DraftNote => {
+    const voice = Number(read[i]?.voice)
+    return Number.isFinite(voice) && voice !== first ? { ...n, voice: 2 } : n
+  })
+}
+
+/**
  * A single staff's notes as one line (ADR 0097): its first voice, a chord's top note, each note cut
  * where the next starts; how many it leaves out.
  */
@@ -314,8 +326,14 @@ export function draftOfScore(score: ReadScore): { draft: Draft; leftOut: LeftCou
       (!pianoPart || pianoPart.staves.every((staff) => score.staves[staff]?.hidden)),
     lyricsOn,
     hands: {
-      rh: notesOn(rhStaff).map((n) => draftNote(n, end, keeps(rhStaff ?? -1))),
-      lh: notesOn(lhStaff).map((n) => draftNote(n, end, false)),
+      rh: inVoices(
+        notesOn(rhStaff).map((n) => draftNote(n, end, keeps(rhStaff ?? -1))),
+        notesOn(rhStaff),
+      ),
+      lh: inVoices(
+        notesOn(lhStaff).map((n) => draftNote(n, end, false)),
+        notesOn(lhStaff),
+      ),
     },
     pedal: score.pedal.filter(({ tick }) => tick <= end),
   }

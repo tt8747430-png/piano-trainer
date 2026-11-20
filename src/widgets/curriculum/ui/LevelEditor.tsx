@@ -286,9 +286,10 @@ export function LevelEditor({
       )}
       <div className="mx-auto mt-4 flex w-full max-w-2xl min-w-0 flex-col gap-6">
         {load.state === 'loading' ? (
-          <NotOpen line={t('editor:original.opening')} />
+          <NotOpen kind="opening" line={t('editor:original.opening')} />
         ) : load.state === 'failed' ? (
           <NotOpen
+            kind={load.reason === 'offline' ? 'offline' : 'failed'}
             line={t(
               load.reason === 'offline' ? 'editor:original.offline' : 'editor:original.failed',
             )}

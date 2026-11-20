@@ -59,7 +59,9 @@ describe('Sign in', () => {
   it('waits for a connection, saying so, with nothing to press', async () => {
     vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
     await renderApp('/account/sign-in')
-    expect(await screen.findByText('You’re offline. Your account needs a connection.')).toBeVisible()
+    expect(
+      await screen.findByText('You’re offline. Your account needs a connection.'),
+    ).toBeVisible()
     expect(screen.getByRole('button', { name: 'Sign in' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Continue with Google' })).toBeDisabled()
   })

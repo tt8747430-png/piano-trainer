@@ -7,6 +7,7 @@ const course: Course = {
   shelf: 'technique',
   stage: 'intermediate',
   title: { en: 'Minor Scales', ru: 'Минорные гаммы' },
+  line: { en: 'Natural, harmonic and melodic', ru: 'Натуральный, гармонический и мелодический' },
   summary: {
     en: 'All twelve minor scales, one key at a time in circle-of-fifths order. Play each in its natural, harmonic and melodic forms, with the fingering for each hand and its primary chords.',
     ru: 'Все двенадцать минорных гамм, по одной тональности, по квинтовому кругу. Каждую вы сыграете в натуральном, гармоническом и мелодическом виде, с аппликатурой каждой руки и главными трезвучиями.',

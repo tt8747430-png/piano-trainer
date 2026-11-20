@@ -8,7 +8,7 @@ import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
 import { FloatingHost } from '@/shared/ui'
-import { PageKeyboardTools } from './PageKeyboardTools'
+import { useFoldKeys } from '../model/use-fold-keys'
 import { PinnedKeyboard } from './PinnedKeyboard'
 
 /** A screen as tall or as short as asked: a phone on its side matches the `landscape-phone` query alone. */
@@ -25,7 +25,17 @@ function stubScreen(onSide: boolean) {
   }))
 }
 
-/** A page's keys with its bar's keyboard controls beside them, as a page's bar holds them (R34). */
+/** The Piano sheet's Show the piano, as a page's bar reaches it: the keys shown or folded. */
+function KeysSwitch({ screen: kind }: { screen?: 'reading' | 'playing' }) {
+  const { folded, fold } = useFoldKeys(kind)
+  return (
+    <button type="button" aria-pressed={!folded} onClick={() => fold(!folded)}>
+      Keyboard
+    </button>
+  )
+}
+
+/** A page's keys with the switch that shows or folds them. */
 function renderPinned({
   onSide,
   screen: kind,
@@ -49,7 +59,7 @@ function renderPinned({
         }}
       >
         <FloatingHost screen="page">
-          <PageKeyboardTools screen={kind} />
+          <KeysSwitch screen={kind} />
           <PinnedKeyboard shown={{ keys: [midi(60)], marks: new Map() }} screen={kind} />
         </FloatingHost>
       </ServicesProvider>

@@ -17,6 +17,7 @@ import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader } from '@/shared
 import {
   CourseBanner,
   CourseOverview,
+  CourseTitle,
   LessonLine,
   lessonShare,
   LessonRow,
@@ -44,23 +45,28 @@ function Lessons({
   const learned = useProgress(selectLearned)
   const read = useProgress(selectRead)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3">
+    <section aria-labelledby={id} className="flex flex-col gap-1">
       <h2 id={id} className="font-sans text-xl font-bold">
         {t('course.lessons')}
       </h2>
       {lessons.length === 0 ? (
         <p className="px-1 text-muted-foreground">{t('own.noCourseLessons')}</p>
       ) : (
-        <LessonLine>
+        <LessonLine across={4}>
           {lessons.map(({ lesson, own }, i) => {
             const step = lessonStepId(lesson.id)
             const done = learned[step] !== undefined
             const place = own ? undefined : lessonPlace(lesson.id)
             return (
-              <LessonStop key={lesson.id}>
+              <LessonStop
+                key={lesson.id}
+                reached={done || lesson.id === next}
+                passed={done}
+                first={i === 0}
+                last={i === lessons.length - 1}
+              >
                 <LessonRow
                   render={inCourse(course, lesson.id)}
-                  mark={i + 1}
                   done={done}
                   share={lessonShare(lesson.sections.length, read[step], done)}
                   current={lesson.id === next}
@@ -93,17 +99,12 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
   const way = open ?? lessons[0]
   const paint = PAINT[course.look.paint]
   const locale = useLocale()
-  const label = !open
-    ? t('course.review')
-    : progress.done === 0
-      ? t('course.start')
-      : t('course.continue')
+  const word = !open ? 'review' : progress.done === 0 ? 'start' : 'continue'
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 pb-8">
       <ScreenHeader
         title={course.title}
-        large
-        named
+        titleOnPage
         back={<BackButton />}
         settings={
           <RoundLink
@@ -123,30 +124,27 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
           onDone: () => undefined,
         }}
       />
-      {/* A laptop: the course held in view on the left, its lessons beside it. */}
-      <div className="-mt-4 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
+      {/* As the app's course: the head a band across the top on a laptop, the lessons under it. */}
+      <div className="-mt-6 flex min-w-0 flex-col gap-8 lg:-mt-4">
         <CourseOverview
-          className="min-w-0 lg:sticky lg:top-4 lg:w-100 lg:flex-none"
           cover={<CourseBanner fill={paint.fill} ink={paint.ink} />}
+          title={<CourseTitle>{course.title}</CourseTitle>}
           summary={course.line || undefined}
-          facts={[t('course.lessonCount', { count: lessons.length })]}
+          facts={[t('own.course'), t('course.lessonCount', { count: lessons.length })]}
           progress={progress}
-          next={open ? localText(open.lesson.title, locale) : undefined}
           action={
             way ? (
               <ButtonLink
                 size="lg"
-                className="h-13 w-full rounded-pill px-5 text-base font-bold"
+                className="w-full"
                 render={inCourse(course, way.lesson.id)}
               >
-                {label}
+                {t(`journey.${word}`, { title: localText(way.lesson.title, locale) })}
               </ButtonLink>
             ) : undefined
           }
         />
-        <div className="flex min-w-0 flex-1 flex-col gap-8">
-          <Lessons course={course} lessons={lessons} next={open?.lesson.id} />
-        </div>
+        <Lessons course={course} lessons={lessons} next={open?.lesson.id} />
       </div>
     </div>
   )

@@ -6,9 +6,9 @@ import { GroupLink, GroupRows, Sheet, SheetContent } from '@/shared/ui'
 import { useScaleSettingsSheet } from '../model/settings-sheet'
 
 /**
- * A view of a scale, as the Chords page reads (canvas 174): the keys at the top, edge to edge; then its
- * name, line and views; its music; then its sections. On a laptop (canvas 197) the keys are a card
- * heading the first column over the name and the music, the sections a 400 column beside them. The view's
+ * A scale's page, as the Scales board reads (`r60_scales.py`): the keys at the top, edge to edge; then
+ * its name, its music and its sections, one column. On a laptop the column is centred, 880 wide at most,
+ * the music 640 inside it, the keys 28 above it. The view's
  * choices are Scale settings, the gear's sheet (canvas 196), over a link to what the staff writes,
  * whose one home is Settings. The view's floating bar is its own.
  */
@@ -36,13 +36,11 @@ export function ScaleLayout({
   const staff = useSettings(selectScaleStaff)
   const written = (['tonic', 'tetrachords'] as const).filter((layer) => staff[layer])
   return (
-    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_25rem] lg:items-start lg:gap-x-10 lg:gap-y-5 lg:pt-2">
+    <div className="flex flex-col gap-4 lg:gap-7">
       {keyboard}
-      <div className="flex min-w-0 flex-col gap-4 lg:col-start-1 lg:row-start-2 lg:gap-5">
+      <div className="flex min-w-0 flex-col gap-4 lg:mx-auto lg:w-full lg:max-w-220 lg:gap-6">
         {heading}
         {music}
-      </div>
-      <div className="flex min-w-0 flex-col gap-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:gap-5 lg:pt-1">
         {children}
       </div>
       {bar}

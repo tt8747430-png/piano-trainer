@@ -29,13 +29,14 @@ export function entryTitles(
 }
 
 /**
- * What a search finds an entry by: every title it has, and the names its credits print ("getty"
- * finds Still, my soul, be still).
+ * What a search finds an entry by: every title it has, the subtitle its score prints, and the names
+ * its credits print ("getty" finds Still, my soul, be still).
  */
 export const entryWords = (entry: Entry): string[] => [
   entry.title,
   entry.titleEn ?? '',
   entry.titleRu ?? '',
+  'header' in entry ? (entry.header?.subtitle ?? '') : '',
   ...(entry.credits ?? []).flatMap((credit) => (credit.role === 'unknown' ? [] : [credit.names])),
 ]
 

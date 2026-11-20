@@ -34,6 +34,10 @@ is the owner's iPhone 17 Pro at 402×874, on the canvas and in the app; 393 is t
 | `macbook-safari` | 1710×904 | MacBook Air M3 15-inch, Safari filling the screen | measured in Safari on the owner's Mac                      |
 | `macbook-app`    | 1710×984 | the same Mac, the most an app window can take    | macOS's usable screen, measured; a title bar takes some    |
 
+Pass 2 also opens each changed screen at 744×1133 (`ipad-mini`, iPad mini upright, published spec) and 1024×768
+(`tablet-side`), the widths a tablet or an opened foldable takes (`craft-details`, Instructions from the owner's
+articles, 5); both are in the harness's matrix.
+
 Safari's bars collapse on scrolling, taking the phone to 393×735 (`100lvh`). The simulator ran a newer iOS than a real 14 Pro
 may, and Safari's bars differ by version, so to settle a size open a page logging `innerWidth`, `innerHeight` and `100svh`
 on the phone itself. The Mac's screen is 1710×1107 (macOS's default for this panel, native 2880×1864).

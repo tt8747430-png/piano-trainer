@@ -29,6 +29,7 @@ export function PickerShell({
   spoken,
   bare = false,
   wide = false,
+  title = false,
   trigger: ownTrigger,
   className,
   children,
@@ -42,6 +43,9 @@ export function PickerShell({
   bare?: boolean
   /** A panel that holds a picture (the circle of fifths): a wider popover. */
   wide?: boolean
+  /** A part of a name made of its pickers (a chord's root, type and bass; a scale's tonic and kind):
+   * the value alone, in the name's serif on its fill, with the name's taller ⌃⌄. */
+  title?: boolean
   /** A trigger that carries its own face (a floating bar's piece), in place of the picker's value. */
   trigger?: ReactElement
   className?: string
@@ -63,15 +67,20 @@ export function PickerShell({
   const panel = { close: () => setOpen(false), start: { 'data-picker-start': id } }
   const face = (
     <>
-      {bare ? null : (
+      {bare || title ? null : (
         <span aria-hidden className="text-muted-foreground">
           {label}
         </span>
       )}
-      <span aria-hidden className="min-w-0 truncate font-semibold">
+      {/* The value bold, as the boards set a picker field (a progression's Key, the finder's Spelled in). */}
+      <span aria-hidden className="min-w-0 truncate font-bold">
         {value}
       </span>
-      <ChevronsUpDown aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+      {title ? (
+        <TitleChevrons />
+      ) : (
+        <ChevronsUpDown aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+      )}
     </>
   )
   const trigger = ownTrigger ?? (
@@ -79,7 +88,7 @@ export function PickerShell({
       type="button"
       aria-label={`${label}: ${spoken}`}
       aria-haspopup="dialog"
-      className={cn(PICKER_TRIGGER, className)}
+      className={cn(PICKER_TRIGGER, title && TITLE_PART, className)}
     />
   )
   if (sheet) {
@@ -107,5 +116,36 @@ export function PickerShell({
         {children(panel)}
       </PopoverContent>
     </Popover>
+  )
+}
+
+/**
+ * One part of a name made of its pickers, the Chords canvas's PART value for value: the serif at 44
+ * (56 on a laptop) and bold, on the fill, 14 round, 48 high at least, 2 8 4 12 inside; a long name
+ * (half-whole diminished) wraps within the screen rather than running past it.
+ */
+const TITLE_PART =
+  'h-auto min-h-12 max-w-full items-center gap-2 whitespace-normal [&>span]:min-w-0 [&>span]:text-left [&>span]:text-balance rounded-[14px] [&>span]:flex [&>span]:items-center border-0 bg-muted pt-0.5 pe-2 pb-1 ps-3 font-display text-[2.75rem] leading-[1.1] font-bold hover:bg-muted md:text-[3.5rem] [&>span]:font-bold'
+
+/**
+ * The name's ⌃⌄, the canvas's CHEV_UD: two chevrons 7 by 3.5 of a 12 by 18 box drawn at 10 by 15,
+ * a 1.8 line, in ink at 55%; taller than a field's, as the name it sits beside.
+ */
+function TitleChevrons() {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 12 18"
+      width={10}
+      height={15}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="shrink-0 self-center text-foreground opacity-55"
+    >
+      <path d="m2.5 6.5 3.5-3.5 3.5 3.5M2.5 11.5l3.5 3.5 3.5-3.5" />
+    </svg>
   )
 }

@@ -7,7 +7,6 @@ import { BPM_RANGE } from '@/shared/lib/schedule'
 import { FloatingPiece } from '@/shared/ui'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { ToolPage } from '@/widgets/tool-page'
-import { MetronomeGear } from './MetronomeGear'
 import { MetronomeSettings } from './MetronomeSettings'
 import { TempoSteps } from '@/shared/ui'
 
@@ -70,8 +69,8 @@ export function MetronomePage() {
           <Hand aria-hidden />
         </FloatingPiece>
       }
+      column={760}
       side={<MetronomeSettings metronome={metronome} />}
-      gear={<MetronomeGear metronome={metronome} />}
     >
       <TempoSteps
         bpm={metronome.tempoNow}
@@ -79,7 +78,12 @@ export function MetronomePage() {
         large
         onStep={metronome.nudge}
       />
-      <div className="mb-1 flex h-7 w-full items-center" data-setting="metronome.bpm">
+      {/* The slider between its ends, 20 and 300, in 12 soft ink, 20 from the tempo and the beats, as the board's TEMPO. */}
+      <div
+        className="my-1 flex h-7 w-full items-center gap-3 text-xs text-muted-foreground tabular-nums"
+        data-setting="metronome.bpm"
+      >
+        <span aria-hidden>{BPM_RANGE.min}</span>
         <Slider
           value={metronome.tempoNow}
           min={BPM_RANGE.min}
@@ -89,6 +93,7 @@ export function MetronomePage() {
         >
           <SliderLabel className="sr-only">{t('practice:metronome.slider')}</SliderLabel>
         </Slider>
+        <span aria-hidden>{BPM_RANGE.max}</span>
       </div>
       {metronome.flash && metronome.playing && metronome.beat !== null ? (
         // Flash on the beat: a honey wash over the screen as each beat sounds, keyed to the beat

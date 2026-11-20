@@ -23,20 +23,30 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   change its music cannot be written with is said in a notice, the music last saved kept.
 - **The caret and the selection.** The staff written is the one the caret is on (a click, or Alt ↑ ↓). Writing past
   the last bar adds one. A double click writes the note there in its bar's key. ↑ ↓ move a step in the key, with
-  Shift a semitone, with Cmd or Ctrl an octave. The selection is notes, two tick spans: Shift ← → a note, with Alt to
-  the bar's end, Home or End to an end; Alt ↑ ↓ step through a chord's notes. Escape lets go.
+  Shift a semitone, with Cmd or Ctrl an octave. ← → move a step, with Cmd or Ctrl a bar, as Flat's and Dorico's (Alt
+  with ← → does nothing). The selection is notes, two tick spans: Shift ← → a note, with Cmd to the bar's end, Home or
+  End to an end; Cmd or Ctrl with A the whole staff, as Flat's and Dorico's; Alt ↑ ↓ step through a chord's notes.
+  Escape lets go. Cmd or Ctrl with G opens Go to bar, a small card under the sheet's head (the EditorLaptop board's):
+  the caret's bar in its field, "of 16" beside it; Enter takes the caret to that bar's first beat on its row.
 - **Every tool acts on what is chosen.** With only a caret, a value sets the next note's value; with notes chosen it
-  makes them that long (`setDuration`). ♯ ♭ ♮ are toggles; a rest makes a range's notes rests.
+  makes them that long (`setDuration`). Tie (`,`) at the caret joins a note to the same key's note after it, or, in
+  note input, holds on the note or chord just written at the value chosen, the caret after it (`tieOn`, Dorico's
+  NoteInput.Tie), so a note held across a barline is typed as it is played. ♮ ♯ ♭ and Respell, with nothing chosen and nothing at the
+  caret, act on the note or chord just written (`spellSpan`, Flat's sharpLastNote, Dorico's retrospective
+  respelling), so C♯ played on the keys becomes D♭ without going back to it. ⌥2 to ⌥8 add a note a 2nd to an octave
+  above the chord chosen or just written, in the key, ⇧⌥ below (`addInterval`, Flat's addNoteInterval); no palette
+  key, as Flat has none; the shortcuts sheet lists them. ♯ ♭ ♮ are toggles; a rest makes a range's notes rests.
 - **Only what applies is shown** (R32-B, MuseScore's Properties panel; the owner: "show only the actions relevant at
-  that time"): a key that cannot act on what is chosen is not drawn, never greyed (the tie where no note of the same
-  key follows, `canTie`; a dot or tuplet the value cannot take; the accidentals, Respell, the expressions, Roman
-  numeral and Tempo change with no note chosen; a line with nothing to draw over; a field that cannot open there).
+  that time"): a key that cannot act on what is chosen is not drawn, never greyed (the tie with no note of the same
+  key after it nor one just written before the caret, `canTie`; a dot or tuplet the value cannot take; the accidentals and Respell with no note chosen nor
+  one just written, the expressions, Roman numeral and Tempo change with no note chosen; a line with nothing to draw over; a field that cannot open there).
   Pitch, Articulations, Ornaments and Dynamics, whose every tool changes notes, say "Select a note to use these
   tools." in place of their grid. The strip holds only the categories that act where the caret writes: in the chord
   row Note (the values), Measures, Key signature, Time signature, Barlines and repeats.
 - **Three editing modes**, Flat's: **Replace** writes over what is at the caret; **Insert** writes there and pushes the
   staff's later notes right, adding bars at the end to hold them, and Delete or Cut close the gap; **Chord** adds the
-  key to the chord at the caret. I cycles them.
+  key to the chord at the caret. I cycles them. Keys struck within 100 ms of the first are one chord in every mode,
+  Dorico's default window, fixed: no setting for it.
 - **The clipboard acts on what is chosen**: bars in the chord row, notes on a staff (`Clip`). Paste writes from the
   caret on its staff and leaves what it pasted chosen; it is greyed where the clip cannot go, saying why.
 - **Edited where it is printed**, as Flat and Dorico do; there is no Song sheet, and nothing printed has a second
@@ -68,9 +78,18 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
 - **The selection strip** (`SelectionStrip`) heads the palette at every size: what the caret is on ("E4 · quarter
   note") over where ("Bar 1 · beat 1 · Melody"), then Delete (the notes chosen, else the ones before the caret),
   Piano keys (filled while shown) and Play from here, the screen's one honey control, Stop while it sounds.
-- **One gear** (`EditorGear`, Flat's document menu, the Player's shape: a sheet on a phone, a panel at the right on
-  a laptop, a page at a time with Back): View, Transpose, Record a take, Takes; Settings, each one tap away by its name
-  alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano; an original's Publish…, Versions and Discard
+- **One gear** (`EditorGear`, Flat's document menu, the Player's shape: a sheet on a phone; on
+  a laptop a 400-wide card hung 8 under the bar's ··· at its right edge, over the music, closed by a click outside, as the
+  EditorLaptop board's popover; titled with the song's name, "Saved on this device" or "Saved to your account" under it for the
+  learner's own song or version; a page at a time with Back): its groups untitled, parted by space alone (no headings over a drawer's
+  groups, the owner's ruling; research F21's titled groups not built): Title and credits (its
+  value the title, as the board's Credits; Back from it leads to the menu however it was opened), View, Transpose, Takes (Record a take is the note band's, between Piano keys and Play, a recorder's dot in
+  its ring, as the Editor boards draw it; with no MIDI keyboard it opens the menu's page that says so); Settings, each one tap away by its name
+  alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano, MIDI keyboard and, where keys type them
+  (a fine pointer), Shortcuts with ? as its value; Export… (the learner's own song or version, saved as it
+  is edited, through the song page's export sheet, as the board's Export row) and Print (`EditorPrint`: the draft as
+  the Player plays it as written, through the Player's `SongPrint`, as the editor shows it, its sections headed as
+  the sheet heads them); an original's Publish…, Versions and Discard
   changes, its saved state beside the title. It holds nothing the score prints (R32-B). The editor opens in the mode it was left in (`editorMode`).
 - **One palette** on the selection (`EditorPalette`, one tree for every size), as Flat's (R32-C, help.flat.io and
   the owner's captures of Flat's app and web editor): every category a titled section, all of them in one scroll;
@@ -87,20 +106,36 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     screen, the categories lighting the section in sight and scrolling to the one tapped. The keys fold away for
     it. Every tool is a 48px sand tile, the chosen in ink, wrapping 8px apart in a section. A field typed in swaps it for a slim bar over the phone's own keyboard
     (`FieldDocked`).
-  - **Categories in Flat's order:** Note (Input mode: Replace, Insert, Chord; Notation: Add note, whole to 64th,
+  - **Categories in Flat's order:** Note (Input mode: Replace, Insert, Chord, Voice 2; Notation: Add note, whole to 64th,
     dot, double dot, tie, Tuplets ⌄, rest, ♮ ♯ ♭, respell) · Pitch · Articulations · Ornaments · Dynamics ·
     Measures (bars added and deleted, line and page breaks, a new section; rests and repeats; Tempo and the tempo
     words, accel., rit., a tempo…, as Flat's Measure; swing) · Clef · Key signature · Time signature · Barlines &
     repeats · Text (lyrics, chord symbols, Roman numerals, free text, the character and technique words). In the
     row, a picker's signs alone (`PickerLayoutContext`: `row`; the sections' `palette`).
   - **Keys** are Flat's: equal cells of a bordered table, 44px at the least; a table of fewer keys than a row holds
-    (Input mode's three) shares the row among them; pressed, a sky glyph on a sky wash. A
+    (Input mode's four) shares the row among them; pressed, a sky glyph on a sky wash. A
     tooltip is the key's name then its shortcut, as Flat's. A key that cannot act is not drawn (R32-B).
+  - **Voice 2** (Flat's and Dorico's V; Shift with V, a letter alone being the piano's) is a toggle on the piano's
+    two staves, greyed on a single staff. On, a note is written in the staff's second voice, stems down under the
+    first, and a key played, a rest, Delete, Repeat and the pitch and mark edits reach that voice's notes alone
+    (`editedInVoice`); off, the first voice's alone, so a held note under a moving tune is written without either
+    erasing the other. Bars, the clipboard and the caret's moves act on the whole staff. The strip says it: "Bar 1
+    · beat 1 · Lower staff · voice 2". A note's voice is kept through the Performance (`voice: 2`) to the
+    engraving, where written voices hold over the guess by pitch (`separateVoices`); the saved hands write a
+    second-voice chord `v2:C3/2@1`, always placed by its beat; MusicXML reads a staff's lowest-numbered voice as
+    the first and any other as the second.
+  - **Cross to upper staff** and **Cross to lower staff** (Dorico's cross-staff; ⌘⇧↑ ⌘⇧↓, which no longer move an
+    octave) follow the octave pair in Pitch: the notes chosen, else the note just written, are drawn on the piano's
+    other staff and stay their hand's, heard, fingered and scored as written; the key toward their own staff
+    brings them back. Greyed on a single staff. The note carries `cross` to the engraving, which gives it the
+    other staff's `@staff` (Verovio's cross-staff note); the saved hands mark it `C4*`, before its finger.
 - **Flat's shortcuts** where the typing keys leave them free (`TOOL_SHORTCUTS`, one table for the keys, the tooltips
-  and the `?` sheet): 1–6 the values, 8 a rest, 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, the comma a tie,
+  and the `?` sheet): 1–6 the values, 8 a rest, Shift with R Repeat (the notes chosen, else the note or chord just written, written again after them and
+  chosen), 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, with Alt two, the comma a tie,
   a letter alone plays the piano, so Flat's J, S, T and P take Shift (Respell, a slur, a trill,
-  the pedal); Shift with < > the hairpins, Cmd or Ctrl with Shift and 8 or 9 the octave lines; Cmd or Ctrl with Shift
-  and Enter a bar after, with Backspace the bars deleted, with Enter a new line; [ ] the repeats; 7 the 64th, Shift
+  the pedal); Shift with < > the hairpins, Cmd or Ctrl with Shift and 8 or 9 the octave lines; Alt with Enter a bar
+  after, Cmd or Ctrl with Shift and Enter a bar at the end, with Backspace the bars deleted, with Enter the system
+  break (one key: pressed where a line starts at the bar, a second press joins the line to the one before); [ ] the repeats; 7 the 64th, Shift
   with 2 to 8 a tuplet (9 by its key: Shift with 9 is the acciaccatura's); Cmd or Ctrl with E free text, with Shift
   and K the Roman numeral. Bar repeats, multi-bar rests, the page break, swing and the new marks have no key of
   their own, as in Flat.
@@ -125,9 +160,9 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
 - **The score's Settings** (R32-B, Flat's document menu): pages of the gear's sheet, on the editor's draft, so each
   change is one Undo step back on the score; while the gear is open the editor's keys and MIDI write nothing. Precise
   names, most used first, each with a one-line description:
-  - **Instruments:** New song's families with − n + (`widgets/instrument-list`, one widget for both): a voice is
-    added under the last of its kind, else over the next voice down (a choir's order), named and clefed as New song
-    names it; a staff of no voice is Other's **Staff**; one fewer takes the last away with its notes (Undo brings
+  - **Instruments:** the families with − n + (`widgets/instrument-list`): a voice is
+    added under the last of its kind, else over the next voice down (a choir's order), named and clefed as its
+    family names it; a staff of no voice is Other's **Staff**; one fewer takes the last away with its notes (Undo brings
     them back); the piano hides (its music kept), never the last staff in sight; eight single staves at most. A staff
     is renamed on the score.
   - **Layout:** **Staff size**, five sizes from 75% to 130% (Flat's staff size, Dorico's space size), over the size
@@ -150,8 +185,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   chosen whole becoming one note; with only a caret, the caret's notes.
 - **A key or a meter changes at a section, never mid-bar; a clef at a bar.**
 - **Play** plays the bars as written, at the learner's speed, never changing the song's tempo.
-- **New song** chooses its instruments by family (the score's Settings' list) and starts with four bars of no
-  chord symbol.
+- **New song** starts as Piano, Melody or Voice and piano (ADR 0106), eight bars of no chord symbol; the rest of
+  a choir is added here.
 
 ## Consequences
 

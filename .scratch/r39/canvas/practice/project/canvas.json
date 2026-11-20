@@ -34,21 +34,39 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "A folder, its settings, Card style, Archived, phone",
+      "title": "A playlist, its settings, Card style, Archived, phone",
       "is_interactive": true,
       "page": "songs"
     },
-    "Archive.dc.html": {
+    "SharedFolder.dc.html": {
       "x": 2120,
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "Archive and Trash, phone",
+      "title": "A playlist shared with you, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Archive.dc.html": {
+      "x": 2650,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Archive: Select, Restore, Move to Trash, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Trash.dc.html": {
+      "x": 3180,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Trash: Select, Restore, Delete permanently, phone",
       "is_interactive": true,
       "page": "songs"
     },
     "Groups.dc.html": {
-      "x": 2650,
+      "x": 3710,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -57,7 +75,7 @@
       "page": "songs"
     },
     "Song.dc.html": {
-      "x": 3180,
+      "x": 4240,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -66,7 +84,7 @@
       "page": "songs"
     },
     "SongSettings.dc.html": {
-      "x": 3710,
+      "x": 4770,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -75,7 +93,7 @@
       "page": "songs"
     },
     "Section.dc.html": {
-      "x": 4240,
+      "x": 5300,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -84,7 +102,7 @@
       "page": "songs"
     },
     "Editor.dc.html": {
-      "x": 4770,
+      "x": 5830,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -93,7 +111,7 @@
       "page": "songs"
     },
     "EditorDraft.dc.html": {
-      "x": 5300,
+      "x": 6360,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -102,7 +120,7 @@
       "page": "songs"
     },
     "Takes.dc.html": {
-      "x": 5830,
+      "x": 6890,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -111,7 +129,7 @@
       "page": "songs"
     },
     "Take.dc.html": {
-      "x": 6360,
+      "x": 7420,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -151,21 +169,39 @@
       "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "A folder, its settings, Card style, Archived, laptop",
+      "title": "A playlist, its settings, Card style, Archived, laptop",
       "is_interactive": true,
       "page": "songs"
     },
-    "ArchiveLaptop.dc.html": {
+    "SharedFolderLaptop.dc.html": {
       "x": 8892,
       "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "Archive and Trash, laptop",
+      "title": "A playlist shared with you, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "ArchiveLaptop.dc.html": {
+      "x": 11115,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Archive: Select, Restore, Move to Trash, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "TrashLaptop.dc.html": {
+      "x": 13338,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Trash: Select, Restore, Delete permanently, laptop",
       "is_interactive": true,
       "page": "songs"
     },
     "GroupsLaptop.dc.html": {
-      "x": 11115,
+      "x": 15561,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -174,7 +210,7 @@
       "page": "songs"
     },
     "SongLaptop.dc.html": {
-      "x": 13338,
+      "x": 17784,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -183,7 +219,7 @@
       "page": "songs"
     },
     "SongSettingsLaptop.dc.html": {
-      "x": 15561,
+      "x": 20007,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -192,7 +228,7 @@
       "page": "songs"
     },
     "SectionLaptop.dc.html": {
-      "x": 17784,
+      "x": 22230,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -201,7 +237,7 @@
       "page": "songs"
     },
     "EditorLaptop.dc.html": {
-      "x": 20007,
+      "x": 24453,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -210,7 +246,7 @@
       "page": "songs"
     },
     "EditorDraftLaptop.dc.html": {
-      "x": 22230,
+      "x": 26676,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -219,7 +255,7 @@
       "page": "songs"
     },
     "TakesLaptop.dc.html": {
-      "x": 24453,
+      "x": 28899,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -228,7 +264,7 @@
       "page": "songs"
     },
     "TakeLaptop.dc.html": {
-      "x": 26676,
+      "x": 31122,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -263,8 +299,17 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerHands.dc.html": {
+    "PlayerDone.dc.html": {
       "x": 1590,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Played through, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerHands.dc.html": {
+      "x": 2120,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -273,7 +318,7 @@
       "page": "player"
     },
     "PlayerViewSheet.dc.html": {
-      "x": 2120,
+      "x": 2650,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -282,7 +327,7 @@
       "page": "player"
     },
     "PlayWalk.dc.html": {
-      "x": 2650,
+      "x": 3180,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -291,7 +336,7 @@
       "page": "player"
     },
     "PlayChromatic.dc.html": {
-      "x": 3180,
+      "x": 3710,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -300,7 +345,7 @@
       "page": "player"
     },
     "PlayProgression.dc.html": {
-      "x": 3710,
+      "x": 4240,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -309,7 +354,7 @@
       "page": "player"
     },
     "PlayExercise.dc.html": {
-      "x": 4240,
+      "x": 4770,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -318,7 +363,7 @@
       "page": "player"
     },
     "PlayerPractice.dc.html": {
-      "x": 4770,
+      "x": 5300,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -327,7 +372,7 @@
       "page": "player"
     },
     "PlayerViewDiagrams.dc.html": {
-      "x": 5300,
+      "x": 5830,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -336,7 +381,7 @@
       "page": "player"
     },
     "PlayerViewGrid.dc.html": {
-      "x": 5830,
+      "x": 6360,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -345,7 +390,7 @@
       "page": "player"
     },
     "PlayerViewLyrics.dc.html": {
-      "x": 6360,
+      "x": 6890,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -354,7 +399,7 @@
       "page": "player"
     },
     "PlayerSettings.dc.html": {
-      "x": 6890,
+      "x": 7420,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -363,20 +408,11 @@
       "page": "player"
     },
     "PlayerKey.dc.html": {
-      "x": 7420,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Transpose, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerDone.dc.html": {
       "x": 7950,
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "The Player, Played through, phone",
+      "title": "The Player, Transpose, phone",
       "is_interactive": true,
       "page": "player"
     },
@@ -416,8 +452,17 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerLaptopParts.dc.html": {
+    "PlayerDoneLaptop.dc.html": {
       "x": 6669,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Played through, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopParts.dc.html": {
+      "x": 8892,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -426,7 +471,7 @@
       "page": "player"
     },
     "PlayerLaptopSheet.dc.html": {
-      "x": 8892,
+      "x": 11115,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -435,7 +480,7 @@
       "page": "player"
     },
     "PlayWalkLaptop.dc.html": {
-      "x": 11115,
+      "x": 13338,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -444,7 +489,7 @@
       "page": "player"
     },
     "PlayChromaticLaptop.dc.html": {
-      "x": 13338,
+      "x": 15561,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -453,7 +498,7 @@
       "page": "player"
     },
     "PlayProgressionLaptop.dc.html": {
-      "x": 15561,
+      "x": 17784,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -462,7 +507,7 @@
       "page": "player"
     },
     "PlayExerciseLaptop.dc.html": {
-      "x": 17784,
+      "x": 20007,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -862,7 +907,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "Your lessons and courses, phone",
+      "title": "Made by you, phone",
       "is_interactive": true,
       "page": "places"
     },
@@ -997,7 +1042,7 @@
       "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "Your lessons and courses, laptop",
+      "title": "Made by you, laptop",
       "is_interactive": true,
       "page": "places"
     },
@@ -1099,6 +1144,18 @@
       "title": "Across the app: search, MIDI, shortcuts, notices, route states, laptop",
       "is_interactive": true,
       "page": "places"
+    },
+    "PlayerApp.dc.html": {
+      "h": 920,
+      "w": 450,
+      "x": 44460,
+      "y": 300
+    },
+    "PlayerDesk.dc.html": {
+      "h": 1299,
+      "w": 2143,
+      "x": 44990,
+      "y": 300
     }
   },
   "createdOnFiles": {
@@ -1110,54 +1167,70 @@
     "view": "canvas",
     "page": "practice"
   },
+  "noteOrder": [
+    "songs-phone",
+    "songs-laptop",
+    "player-phone",
+    "player-laptop",
+    "practice-phone",
+    "practice-laptop",
+    "places-phone",
+    "places-laptop"
+  ],
   "notes": {
     "songs-phone": {
       "x": 0,
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 6810,
-      "page": "songs"
+      "maxW": 7340,
+      "page": "songs",
+      "w": 240
     },
     "songs-laptop": {
       "x": 0,
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 28819,
-      "page": "songs"
+      "maxW": 8000,
+      "page": "songs",
+      "w": 240
     },
     "player-phone": {
       "x": 0,
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 8930,
-      "page": "player"
+      "maxW": 8000,
+      "page": "player",
+      "w": 240
     },
     "player-laptop": {
       "x": 0,
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 19927,
-      "page": "player"
+      "maxW": 8000,
+      "page": "player",
+      "w": 240
     },
     "practice-phone": {
       "x": 0,
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 10520,
-      "page": "practice"
+      "maxW": 8000,
+      "page": "practice",
+      "w": 240
     },
     "practice-laptop": {
       "x": 0,
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 44380,
-      "page": "practice"
+      "maxW": 8000,
+      "page": "practice",
+      "w": 240
     },
     "places-phone": {
       "x": 0,
@@ -1165,15 +1238,17 @@
       "text": "Phone",
       "kind": "title1",
       "maxW": 7870,
-      "page": "places"
+      "page": "places",
+      "w": 240
     },
     "places-laptop": {
       "x": 0,
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 33265,
-      "page": "places"
+      "maxW": 8000,
+      "page": "places",
+      "w": 240
     }
   },
   "order": [
@@ -1181,7 +1256,9 @@
     "AllSongs.dc.html",
     "Explore.dc.html",
     "Folder.dc.html",
+    "SharedFolder.dc.html",
     "Archive.dc.html",
+    "Trash.dc.html",
     "Groups.dc.html",
     "Song.dc.html",
     "SongSettings.dc.html",
@@ -1194,7 +1271,9 @@
     "AllSongsLaptop.dc.html",
     "ExploreLaptop.dc.html",
     "FolderLaptop.dc.html",
+    "SharedFolderLaptop.dc.html",
     "ArchiveLaptop.dc.html",
+    "TrashLaptop.dc.html",
     "GroupsLaptop.dc.html",
     "SongLaptop.dc.html",
     "SongSettingsLaptop.dc.html",
@@ -1206,6 +1285,7 @@
     "Player.dc.html",
     "PlayerLoop.dc.html",
     "PlayerKeyboard.dc.html",
+    "PlayerDone.dc.html",
     "PlayerHands.dc.html",
     "PlayerViewSheet.dc.html",
     "PlayWalk.dc.html",
@@ -1218,11 +1298,11 @@
     "PlayerViewLyrics.dc.html",
     "PlayerSettings.dc.html",
     "PlayerKey.dc.html",
-    "PlayerDone.dc.html",
     "PlayerDiagrams.dc.html",
     "PlayerLaptop.dc.html",
     "PlayerLaptopLoop.dc.html",
     "PlayerLaptopKeyboard.dc.html",
+    "PlayerDoneLaptop.dc.html",
     "PlayerLaptopParts.dc.html",
     "PlayerLaptopSheet.dc.html",
     "PlayWalkLaptop.dc.html",
@@ -1298,7 +1378,9 @@
     "YourCourseSettingsLaptop.dc.html",
     "SignInLaptop.dc.html",
     "LegalLaptop.dc.html",
-    "AppLayersLaptop.dc.html"
+    "AppLayersLaptop.dc.html",
+    "PlayerApp.dc.html",
+    "PlayerDesk.dc.html"
   ],
   "pages": [
     {

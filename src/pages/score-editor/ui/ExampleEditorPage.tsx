@@ -18,7 +18,7 @@ import {
   type ExampleRefusal,
   type NotesBlock,
 } from '../model/example-music'
-import { NotOpen } from './NotOpen'
+import { NotOpen } from '@/widgets/content-editor'
 import { ScoreEditor } from './ScoreEditor'
 
 /**
@@ -58,15 +58,18 @@ function ExampleOf({ lesson, draftId, at }: { lesson: Lesson; draftId: string; a
     await flush()
     up()
   }
-  if (load.state === 'loading') return <NotOpen line={t('original.opening')} />
+  if (load.state === 'loading') return <NotOpen kind="opening" line={t('original.opening')} />
   if (load.state === 'failed')
     return (
-      <NotOpen line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')}>
+      <NotOpen
+        kind={load.reason === 'offline' ? 'offline' : 'failed'}
+        line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')}
+      >
         <Button onClick={draft.reopen}>{t('original.retry')}</Button>
       </NotOpen>
     )
   const block = notesBlocks(load.value)[at]
-  if (!block) return <NotOpen line={t('example.missing')} />
+  if (!block) return <NotOpen kind="missing" line={t('example.missing')} />
   return (
     <ExampleScore
       key={draft.opened}

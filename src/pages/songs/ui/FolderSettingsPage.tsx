@@ -73,7 +73,7 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
   }
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('folder.settings')} back={<BackButton />} />
+      <ScreenHeader column title={t('folder.settings')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <p className="px-1 font-display text-2xl font-semibold text-balance">{name}</p>
         {/* Its name and look, then how its rows look (R29 B9): the card style the learner's own, in a

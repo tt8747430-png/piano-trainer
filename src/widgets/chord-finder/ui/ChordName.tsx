@@ -1,13 +1,7 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import {
-  printedNote,
-  printedSymbol,
-  type FoundChord,
-  type Key,
-  type Midi,
-} from '@/shared/lib/music'
+import { printedNote, printedSymbol, type FoundChord, type Midi } from '@/shared/lib/music'
 import { GroupChips } from '@/shared/ui'
 import { readingAt, toneOfKey, type Finding } from '../model/finding'
 import { chordLabel, useChordAbout } from './use-chord-about'
@@ -15,20 +9,22 @@ import { chordLabel, useChordAbout } from './use-chord-about'
 /** Where the chord shown comes from: keys held on the keyboard, the chord last played, keys tapped. */
 export type ChordSource = 'held' | 'last' | 'tapped'
 
-/** The page's name and the line under it, as the canvas's Chord finder sets them: large, bold, at the left. */
+/** The page's name and the line under it, as the canvas's Chord finder sets them: the book serif, 44 bold on both sizes, at the left. */
 function Named({ name, line, quiet = false }: { name: ReactNode; line?: string; quiet?: boolean }) {
   return (
     <div className="flex flex-col gap-1">
       <h2
         className={cn(
-          'font-sans text-[2.75rem] leading-[1.05] font-bold tracking-[-0.02em] text-balance lg:text-[4rem]',
-          quiet && 'text-[2.25rem] lg:text-[3rem]',
+          'font-display text-[2.75rem] leading-[1.05] font-bold tracking-[-0.01em] text-balance',
+          quiet && 'text-[2.25rem]',
         )}
       >
         {name}
       </h2>
       {line ? (
-        <p className="ms-0.5 text-[0.9375rem] text-pretty text-muted-foreground">{line}</p>
+        <p className="ms-0.5 text-[0.9375rem] leading-[normal] text-pretty text-muted-foreground">
+          {line}
+        </p>
       ) : null}
     </div>
   )
@@ -45,7 +41,6 @@ export function ChordName({
   reading,
   slash,
   keysFolded,
-  musicKey,
 }: {
   finding: Finding
   keys: readonly Midi[]
@@ -55,8 +50,6 @@ export function ChordName({
   slash: boolean
   /** The page's keys are folded away: a chord comes from a MIDI keyboard, or the keys come back. */
   keysFolded: boolean
-  /** The key the page spells in: the chord's numeral there ends the line under its name. */
-  musicKey: Key
 }) {
   const { t } = useTranslation(['practice', 'music'])
   const about = useChordAbout()
@@ -86,7 +79,7 @@ export function ChordName({
       return (
         <Named
           name={printedSymbol(chordLabel(shown, slash))}
-          line={about(shown, { keys, slash, musicKey }).join(' · ')}
+          line={about(shown, { keys, slash }).join(' · ')}
         />
       )
     }
@@ -132,7 +125,7 @@ export function ChordNotes({ found, keys }: { found: FoundChord; keys: readonly 
           key={tile.degree}
           className="flex h-18 flex-col items-center justify-center rounded-xl bg-card ring-1 ring-border"
         >
-          <span className="text-2xl font-bold">{tile.note}</span>
+          <span className="text-[1.5rem]/[normal] font-bold">{tile.note}</span>
           <span className="text-xs text-muted-foreground">
             {tile.bass ? t('chordFinder.bassDegree', { degree: tile.part }) : tile.part}
           </span>
@@ -172,7 +165,7 @@ export function ChordReadings({
           type="button"
           aria-label={t('chordFinder.reading', { symbol: printedSymbol(label) })}
           onClick={() => onReading(at)}
-          className="flex h-11 items-center rounded-pill px-3 text-[0.9375rem] font-semibold transition-colors hover:bg-foreground/[0.06] focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+          className="transition-[filter] before:absolute before:inset-x-0 before:-inset-y-1.5 hover:brightness-95 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
         >
           {printedSymbol(label)}
         </button>

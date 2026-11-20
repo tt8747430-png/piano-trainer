@@ -44,7 +44,7 @@ export function ChangePasswordPage() {
     say(t('changePassword.done'))
   }
   return (
-    <SettingsScreen title={t('changePassword.title')} sub>
+    <SettingsScreen title={t('changePassword.title')}>
       <form
         noValidate
         className="flex flex-col gap-5"
@@ -110,7 +110,7 @@ export function ProfilePrivacyPage() {
   const online = useOnline()
   const shown = state.kind === 'ready' && state.profile.public
   return (
-    <SettingsScreen title={t('privacy.title')} sub>
+    <SettingsScreen title={t('privacy.title')}>
       <Group>
         <SwitchRow
           label={t('privacy.show')}

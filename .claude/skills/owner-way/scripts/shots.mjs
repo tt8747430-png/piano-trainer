@@ -23,6 +23,9 @@ const ALL_SIZES = [
   { name: 'iphone-safari', width: 393, height: 695, touch: true },
   { name: 'iphone-side', width: 852, height: 393, touch: true, insets: { left: 59, right: 59, bottom: 21 }, standalone: true },
   { name: 'iphone-17-pro', width: 402, height: 874, touch: true, insets: { top: 62, bottom: 34 }, standalone: true },
+  // Pass 2's tablet widths (testing.md): an iPad mini upright, and a tablet or an opened foldable on its side.
+  { name: 'ipad-mini', width: 744, height: 1133, touch: true, standalone: true },
+  { name: 'tablet-side', width: 1024, height: 768, touch: true, standalone: true },
   { name: 'macbook-safari', width: 1710, height: 904, touch: false },
   { name: 'macbook-app', width: 1710, height: 984, touch: false },
 ]
@@ -101,7 +104,7 @@ for (const size of SIZES) {
         await page.goto(new URL(route, base).href, { waitUntil: 'networkidle' })
         // A score is engraved after the page loads: wait for its notes, as the learner does.
         await page
-          .waitForFunction(() => !document.querySelector('[data-slot="score-skeleton"]') && (!document.querySelector('[data-slot="score"]') || document.querySelector('[data-slot="score"] svg g.note')), null, { timeout: 15000 })
+          .waitForFunction(() => ![...document.querySelectorAll('[data-slot="score-skeleton"]')].some((each) => { const box = each.getBoundingClientRect(); let top = 0, bottom = innerHeight; for (let up = each.parentElement; up; up = up.parentElement) { const style = getComputedStyle(up); if (/(auto|scroll|hidden)/.test(style.overflowY)) { const edge = up.getBoundingClientRect(); top = Math.max(top, edge.top); bottom = Math.min(bottom, edge.bottom) } } return box.bottom > top && box.top < bottom }) && (!document.querySelector('[data-slot="score"]') || document.querySelector('[data-slot="score"] svg g.note')), null, { timeout: 15000 })
           .catch(() => problems.push(`${route}: the score was not drawn within 15 s`))
         // Never a shot before the page has fully loaded (the owner's rule).
         for (const part of await settle(page)) problems.push(`${route}: never settled (${part})`)

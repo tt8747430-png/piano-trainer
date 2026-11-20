@@ -1,3 +1,5 @@
+import { LibraryRow } from './LibraryRow'
+import { FoldHeadRow, ItemRow, spanOf, TableFrame, type TableColumns } from './LibraryTable'
 import { LibraryTile } from './LibraryTile'
 import {
   closestCenter,
@@ -19,7 +21,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Ellipsis, Eye, EyeOff, GripVertical, PencilLine, Trash2 } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { createContext, useContext, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   deleteFolder,
@@ -32,7 +34,7 @@ import {
 } from '@/entities/practice-library'
 import { arrangeLibrary } from '@/features/manage-practice-library'
 import { cn, useMediaQuery } from '@/shared/lib'
-import { ActionMenu, confirm } from '@/shared/ui'
+import { ActionMenu, confirm, FoldSection, GROUPED_LIST } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   arrangeDrop,
@@ -44,6 +46,9 @@ import {
 import type { LibraryItem } from '../model/library-view'
 import type { LibraryKind } from '../model/library-words'
 import type { ArrangeSheet } from '../model/use-arranged-library'
+
+/** On a laptop Edit arranges the table itself (the board's): its columns, read by each place and row. */
+const TableOf = createContext<{ levels: boolean; columns: TableColumns } | null>(null)
 
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
 const DROP_ANIMATION = { duration: 200, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
@@ -65,89 +70,159 @@ const scoped: CollisionDetection = (args) => {
 const HANDLE =
   'grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted active:cursor-grabbing'
 
+/** A handle: the one thing a drag starts from, by mouse, held finger or keyboard. */
+function Handle({
+  label,
+  sortable,
+}: {
+  label: string
+  sortable: Pick<ReturnType<typeof useSortable>, 'attributes' | 'listeners' | 'setActivatorNodeRef'>
+}) {
+  return (
+    <button
+      ref={sortable.setActivatorNodeRef}
+      type="button"
+      aria-label={label}
+      title={label}
+      className={HANDLE}
+      {...sortable.attributes}
+      {...sortable.listeners}
+    >
+      <GripVertical aria-hidden className="size-4.5" />
+    </button>
+  )
+}
+
 /**
- * A place in Edit: its handle (the one thing its drag starts from), its head beside it, its rows
- * under it; its box moves aside while another is dragged, and in hand its slot stays empty.
+ * A place in Edit, as it reads (the board's): its fold head with its count, its More and its
+ * handle at the head's end, its rows in their card under it; its box moves aside while another is
+ * dragged, and in hand its slot stays empty.
  */
 function SortablePlace({
   id,
   label,
-  head,
+  name,
+  count,
+  mark,
+  menu,
   children,
 }: {
   id: string
   label: string
-  head: ReactNode
+  name: string
+  count: number
+  /** After its count: Hidden, for a place hidden from the library. */
+  mark: string | undefined
+  menu: ReactNode
   children: ReactNode
 }) {
-  const {
-    attributes,
-    listeners,
-    setActivatorNodeRef,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id })
+  const sortable = useSortable({ id })
+  const [shut, setShut] = useState(false)
+  const table = useContext(TableOf)
+  const style = {
+    transform: CSS.Translate.toString(sortable.transform),
+    transition: sortable.transition,
+  }
+  if (table)
+    return (
+      <tbody
+        ref={sortable.setNodeRef}
+        style={style}
+        className={cn(sortable.isDragging && 'opacity-0')}
+      >
+        <FoldHeadRow
+          span={spanOf(table.levels, table.columns)}
+          name={name}
+          count={count}
+          mark={mark}
+          shut={shut}
+          onToggle={() => setShut((now) => !now)}
+          action={
+            <>
+              {menu}
+              <Handle label={label} sortable={sortable} />
+              {/* over the rows' handles, the More's room kept */}
+              <span aria-hidden className="w-12" />
+            </>
+          }
+        />
+        {shut ? null : children}
+      </tbody>
+    )
   return (
     <li
-      ref={setNodeRef}
-      style={{ transform: CSS.Translate.toString(transform), transition }}
-      className={cn('flex min-w-0 flex-col gap-2', isDragging && 'opacity-0')}
+      ref={sortable.setNodeRef}
+      style={{
+        transform: CSS.Translate.toString(sortable.transform),
+        transition: sortable.transition,
+      }}
+      className={cn('min-w-0', sortable.isDragging && 'opacity-0')}
     >
-      <div className="flex items-center gap-1">
-        <button
-          ref={setActivatorNodeRef}
-          type="button"
-          aria-label={label}
-          title={label}
-          className={HANDLE}
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical aria-hidden className="size-5" />
-        </button>
-        {head}
-      </div>
-      {children}
+      <FoldSection
+        title={name}
+        count={count}
+        mark={mark}
+        fold={{ open: !shut, toggle: () => setShut((now) => !now) }}
+        className="gap-3.5 pt-1.5"
+        action={
+          <span className="-my-2.5 me-1 flex items-center">
+            {menu}
+            <Handle label={label} sortable={sortable} />
+          </span>
+        }
+      >
+        {children}
+      </FoldSection>
     </li>
   )
 }
 
-/** A row in Edit: its picture and name, its handle where its More stood, so nothing else moves. */
+/** A row in Edit: its face as it reads, its handle where its heart stood, so nothing moves. */
 function SortableRow({ id, item }: { id: string; item: LibraryItem }) {
   const { t } = useTranslation('practice')
-  const {
-    attributes,
-    listeners,
-    setActivatorNodeRef,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id })
-  const label = t('library.edit.moveRow', { name: item.name })
+  const sortable = useSortable({ id })
+  const table = useContext(TableOf)
+  const handle = (
+    <Handle label={t('library.edit.moveRow', { name: item.name })} sortable={sortable} />
+  )
+  if (table)
+    return (
+      <ItemRow
+        item={item}
+        levels={table.levels}
+        columns={table.columns}
+        arrange={{
+          ref: sortable.setNodeRef,
+          style: {
+            transform: CSS.Translate.toString(sortable.transform),
+            transition: sortable.transition,
+          },
+          lifted: sortable.isDragging,
+        }}
+        // where the heart stood, the More's room kept
+        trailing={
+          <>
+            {handle}
+            <span aria-hidden className="w-11" />
+          </>
+        }
+      />
+    )
   return (
-    <li
-      ref={setNodeRef}
-      style={{ transform: CSS.Translate.toString(transform), transition }}
-      className={cn('min-w-0', isDragging && 'opacity-0')}
-    >
-      <div className="flex min-h-14 items-center gap-1 rounded-card bg-card pe-1">
-        <EditRowFace item={item} />
-        <button
-          ref={setActivatorNodeRef}
-          type="button"
-          aria-label={label}
-          title={label}
-          className={HANDLE}
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical aria-hidden className="size-5" />
-        </button>
-      </div>
-    </li>
+    <LibraryRow
+      item={item}
+      arrange={{
+        ref: sortable.setNodeRef,
+        style: {
+          transform: CSS.Translate.toString(sortable.transform),
+          transition: sortable.transition,
+        },
+        lifted: sortable.isDragging,
+        handle: (
+          <Handle label={t('library.edit.moveRow', { name: item.name })} sortable={sortable} />
+        ),
+      }}
+    />
   )
 }
 
@@ -162,11 +237,14 @@ export function ArrangeList({
   places,
   items,
   onSheet,
+  table,
 }: {
   kind: LibraryKind
   places: readonly ArrangedPlace[]
   items: readonly LibraryItem[]
   onSheet: (sheet: ArrangeSheet) => void
+  /** On a laptop: the table's columns, so Edit arranges the table as it reads. */
+  table?: { levels: boolean; columns: TableColumns } | undefined
 }) {
   const { t } = useTranslation('practice')
   const store = usePracticeLibraryStoreApi()
@@ -194,6 +272,97 @@ export function ArrangeList({
   const held = readArrangeId(inHand)
   const heldPlace = held?.kind === 'place' ? places.find((place) => place.id === held.place) : null
   const heldRow = held?.kind === 'row' ? items.find((item) => item.id === held.id) : null
+  const placeList = places.map((place) => {
+    const rows = items.filter((item) => item.group === place.id)
+    return (
+      <SortablePlace
+        key={place.id}
+        id={placeDragId(place.id)}
+        label={t('library.edit.movePlace', { name: place.name })}
+        name={place.name}
+        mark={place.hidden ? t('library.edit.hiddenPlace') : undefined}
+        count={rows.length}
+        menu={
+          <ActionMenu
+            label={t('library.edit.placeMenu', { name: place.name })}
+            align="end"
+            trigger={<Ellipsis aria-hidden />}
+            render={
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-11"
+                aria-label={t('library.edit.placeMenu', { name: place.name })}
+                title={t('library.edit.placeMenu', { name: place.name })}
+              />
+            }
+            actions={[
+              {
+                key: 'rename',
+                label: t('library.edit.rename'),
+                icon: PencilLine,
+                onSelect: () => onSheet({ kind: 'renamePlace', id: place.id, name: place.name }),
+              },
+              place.hidden
+                ? {
+                    key: 'show',
+                    label: t('library.edit.show'),
+                    icon: Eye,
+                    onSelect: () => change((each) => setPlaceHidden(each, place.id, false)),
+                  }
+                : {
+                    key: 'hide',
+                    label: t('library.edit.hide'),
+                    icon: EyeOff,
+                    onSelect: () => change((each) => setPlaceHidden(each, place.id, true)),
+                  },
+              ...(place.builtIn
+                ? []
+                : [
+                    {
+                      key: 'delete',
+                      label: t('library.edit.deleteFolder.action'),
+                      icon: Trash2,
+                      destructive: true,
+                      onSelect: () => void askDelete(place),
+                    },
+                  ]),
+            ]}
+          />
+        }
+      >
+        {rows.length > 0 ? (
+          <SortableContext
+            items={rows.map((row) => rowDragId(place.id, row.id))}
+            strategy={verticalListSortingStrategy}
+          >
+            {table ? (
+              rows.map((row) => (
+                <SortableRow key={row.id} id={rowDragId(place.id, row.id)} item={row} />
+              ))
+            ) : (
+              <ul className={GROUPED_LIST}>
+                {rows.map((row) => (
+                  <SortableRow key={row.id} id={rowDragId(place.id, row.id)} item={row} />
+                ))}
+              </ul>
+            )}
+          </SortableContext>
+        ) : table ? (
+          <tr>
+            <td
+              colSpan={spanOf(table.levels, table.columns)}
+              className="px-3 py-2 text-sm text-muted-foreground"
+            >
+              {t('library.edit.emptyPlace')}
+            </td>
+          </tr>
+        ) : (
+          <p className="px-3 text-sm text-muted-foreground">{t('library.edit.emptyPlace')}</p>
+        )}
+      </SortablePlace>
+    )
+  })
   return (
     <div className="flex flex-col gap-4">
       <DndContext
@@ -217,96 +386,17 @@ export function ArrangeList({
           items={places.map((place) => placeDragId(place.id))}
           strategy={verticalListSortingStrategy}
         >
-          <ul aria-label={t('library.edit.places')} className="flex flex-col gap-5">
-            {places.map((place) => {
-              const rows = items.filter((item) => item.group === place.id)
-              return (
-                <SortablePlace
-                  key={place.id}
-                  id={placeDragId(place.id)}
-                  label={t('library.edit.movePlace', { name: place.name })}
-                  head={
-                    <>
-                      <h2 className="min-w-0 flex-1 font-sans text-base font-semibold break-words">
-                        {place.name}
-                        {place.hidden ? (
-                          <span className="ms-2 text-sm font-normal text-muted-foreground">
-                            {t('library.edit.hiddenPlace')}
-                          </span>
-                        ) : null}
-                      </h2>
-                      <ActionMenu
-                        label={t('library.edit.placeMenu', { name: place.name })}
-                        align="end"
-                        trigger={<Ellipsis aria-hidden />}
-                        render={
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="size-11"
-                            aria-label={t('library.edit.placeMenu', { name: place.name })}
-                            title={t('library.edit.placeMenu', { name: place.name })}
-                          />
-                        }
-                        actions={[
-                          {
-                            key: 'rename',
-                            label: t('library.edit.rename'),
-                            icon: PencilLine,
-                            onSelect: () =>
-                              onSheet({ kind: 'renamePlace', id: place.id, name: place.name }),
-                          },
-                          place.hidden
-                            ? {
-                                key: 'show',
-                                label: t('library.edit.show'),
-                                icon: Eye,
-                                onSelect: () =>
-                                  change((each) => setPlaceHidden(each, place.id, false)),
-                              }
-                            : {
-                                key: 'hide',
-                                label: t('library.edit.hide'),
-                                icon: EyeOff,
-                                onSelect: () =>
-                                  change((each) => setPlaceHidden(each, place.id, true)),
-                              },
-                          ...(place.builtIn
-                            ? []
-                            : [
-                                {
-                                  key: 'delete',
-                                  label: t('library.edit.deleteFolder.action'),
-                                  icon: Trash2,
-                                  destructive: true,
-                                  onSelect: () => void askDelete(place),
-                                },
-                              ]),
-                        ]}
-                      />
-                    </>
-                  }
-                >
-                  {rows.length > 0 ? (
-                    <SortableContext
-                      items={rows.map((row) => rowDragId(place.id, row.id))}
-                      strategy={verticalListSortingStrategy}
-                    >
-                      <ul className="flex flex-col gap-1">
-                        {rows.map((row) => (
-                          <SortableRow key={row.id} id={rowDragId(place.id, row.id)} item={row} />
-                        ))}
-                      </ul>
-                    </SortableContext>
-                  ) : (
-                    <p className="px-3 text-sm text-muted-foreground">
-                      {t('library.edit.emptyPlace')}
-                    </p>
-                  )}
-                </SortablePlace>
-              )
-            })}
-          </ul>
+          {table ? (
+            <TableOf.Provider value={table}>
+              <TableFrame levels={table.levels} columns={table.columns}>
+                {placeList}
+              </TableFrame>
+            </TableOf.Provider>
+          ) : (
+            <ul aria-label={t('library.edit.places')} className="flex flex-col gap-4">
+              {placeList}
+            </ul>
+          )}
         </SortableContext>
         <DragOverlay dropAnimation={reduced ? null : DROP_ANIMATION}>
           {heldRow && held?.kind === 'row' ? (

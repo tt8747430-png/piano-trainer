@@ -1,6 +1,6 @@
 import { Navigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { LAPTOP, useMediaQuery } from '@/shared/lib'
+import { useMediaQuery, WIDE } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { SettingsList } from '@/widgets/settings-screen'
 
@@ -10,11 +10,11 @@ import { SettingsList } from '@/widgets/settings-screen'
  */
 export function SettingsPage() {
   const { t } = useTranslation('settings')
-  const wide = useMediaQuery(LAPTOP)
+  const wide = useMediaQuery(WIDE)
   if (wide) return <Navigate to="/settings/general" replace />
   return (
     <div className="flex flex-col gap-1">
-      <ScreenHeader title={t('title')} back={<BackButton />} large />
+      <ScreenHeader column title={t('title')} back={<BackButton />} />
       <div className="mx-auto w-full max-w-2xl">
         <SettingsList />
       </div>

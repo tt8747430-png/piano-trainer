@@ -14,7 +14,8 @@ export interface BarNote {
   readonly midi: Midi
   readonly spelled: SpelledNote
   readonly finger?: Finger
-  readonly crossing?: true
+  /** Drawn on the piano's other staff (ADR 0114). */
+  readonly cross?: true
   readonly role?: ChordRole
   readonly marks?: NoteMarks
   /** What it sings, by verse: a tune's note on the staff the words go under. */
@@ -28,6 +29,8 @@ export interface BarChord {
   readonly start: Tick
   readonly end: Tick
   readonly notes: readonly BarNote[]
+  /** Written in the staff's second voice (ADR 0114). */
+  readonly voice?: 2
 }
 
 /** A voice's chords in time order, not yet written in values, and its stem. */
@@ -75,12 +78,30 @@ function place(voice: BarChord[], chord: BarChord) {
   voice.push(chord)
 }
 
+/** Chords laid in one voice in time order, each cut short where the next starts. */
+function oneVoice(chords: readonly BarChord[]): BarChord[] {
+  const voice: BarChord[] = []
+  for (const chord of chords) place(voice, chord)
+  return voice
+}
+
 /**
- * A staff's chords in a bar as one or two voices: each chord goes in the first
- * voice free at its onset, or a second, the higher voice first. With two, the higher has its stems up.
+ * A staff's chords in a bar as one or two voices. Where a chord is written in voice 2, the written
+ * voices hold: the first stems up, the second down. Otherwise each chord goes in the first voice free
+ * at its onset, or a second, the higher voice first; with two, the higher has its stems up.
  */
 export function separateVoices(chords: readonly BarChord[]): VoiceChords[] {
   const ordered = [...chords].sort((a, b) => a.start - b.start || top(b) - top(a))
+  if (ordered.some((chord) => chord.voice === 2)) {
+    const one = oneVoice(ordered.filter((chord) => chord.voice !== 2))
+    const two = oneVoice(ordered.filter((chord) => chord.voice === 2))
+    return one.length === 0
+      ? [{ chords: two, stem: 'down' }]
+      : [
+          { chords: one, stem: 'up' },
+          { chords: two, stem: 'down' },
+        ]
+  }
   const voices: BarChord[][] = []
   for (const chord of ordered) {
     const free = voices.find((voice) => endOf(voice) <= chord.start)

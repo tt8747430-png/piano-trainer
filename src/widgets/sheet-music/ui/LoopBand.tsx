@@ -4,7 +4,7 @@ import { barsBand, loopEnds, ScoreMark, type ScoreLayout } from '@/shared/ui/sco
 import { barUnderPoint } from '../model/line-under'
 
 /**
- * The loop, the Player's bars chosen (ADR 0096): one light band of the selection colour over every
+ * The loop, the Player's bars chosen (ADR 0096): one light honey band over every
  * staff in sight for its bars, its notes coloured as the editor's chosen notes are, and a grip at
  * each end on its barline, clear of an accidental after the first.
  */
@@ -36,7 +36,7 @@ export function LoopBand({
   const ends = loopEnds(layout, from - firstBar, to - firstBar)
   return (
     <>
-      <ScoreMark slot="loop" kind="band" box={box} />
+      <ScoreMark slot="loop" kind="loop" box={box} />
       {from === loop.first ? (
         <LoopGrip
           end="start"

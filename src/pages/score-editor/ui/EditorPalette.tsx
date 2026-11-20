@@ -1,18 +1,26 @@
-import { ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Clock } from 'lucide-react'
 import { MotionConfig, motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectPaletteCategory, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import {
+  selectPaletteCategory,
+  selectPaletteRecent,
+  selectSectionFolded,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
 import { chosenNotes } from '@/features/score-editor'
-import { setPaletteCategory } from '@/features/set-preference'
+import { setPaletteCategory, setSectionFolded } from '@/features/set-preference'
 import { cn, useRovingFocus, useScrollMotion } from '@/shared/lib'
 import { PickerLayoutContext } from '@/shared/ui/pickers/picker-layout'
+import { KeysWait } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { gripRelease } from '../model/grip'
 import {
   isPaletteCategory,
   needsNote,
   openCategories,
+  RECENT_FROM,
   type PaletteCategory,
 } from '../model/palette-categories'
 import { BarKeys } from './BarKeys'
@@ -28,7 +36,7 @@ import {
   TwoNoteTremoloKeys,
 } from './MarkKeys'
 import { NoteKeys, PitchKeys } from './NoteKeys'
-import { PaletteFormContext, type PaletteForm } from './palette-form'
+import { PaletteFormContext, RecentTools, usePaletteForm, type PaletteForm } from './palette-form'
 import { GroupName, KeyGrid, PaletteSection } from './palette-keys'
 import { ClefKeys, RepeatKeys, TempoKeys, TextKeys } from './ScoreKeys'
 import { SelectionStrip } from './SelectionStrip'
@@ -36,19 +44,21 @@ import { TimePicker } from './TimePicker'
 
 /** The app's one ease-out (DESIGN.md's Motion). */
 const EASE = [0.22, 1, 0.36, 1] as const
+/** The fold's cross-fade, in seconds. */
+const FADE = 0.15
 /** How long the category's mark takes to slide, in seconds. */
 const SLIDE = 0.22
 
 /**
  * The palette's category (R31-E, R32-C): the tab lit in the strip and the section the palette keeps
- * in sight, as the learner left it, else Notes, Flat's first; where it does not act (the chord row's
+ * in sight, as the learner left it, else Recent, Flat's first (loop round 57); where it does not act (the chord row's
  * notes), the first that does.
  */
 function useCategory(): readonly [PaletteCategory, (category: PaletteCategory) => void] {
   const settings = useSettingsStoreApi()
   const saved = useSettings(selectPaletteCategory)
   const open = openCategories(useEditorState((state) => state.layer))
-  const wanted = isPaletteCategory(saved) ? saved : 'notes'
+  const wanted = isPaletteCategory(saved) ? saved : 'recent'
   const category = open.includes(wanted) ? wanted : (open[0] ?? 'measures')
   return [category, (next) => setPaletteCategory(settings, next)] as const
 }
@@ -61,24 +71,38 @@ function useCategory(): readonly [PaletteCategory, (category: PaletteCategory) =
  */
 function Category({ category }: { category: PaletteCategory }) {
   const { t } = useTranslation('editor')
+  const settings = useSettingsStoreApi()
   const waits = useEditorState((state) => needsNote(category, chosenNotes(state).length > 0))
+  const grid = usePaletteForm() === 'grid'
+  const fold = `palette.${category}`
+  const shut = useSettings(selectSectionFolded(fold)) && grid
   const title = t(`palette.category.${category}`)
   return (
     <PaletteSection category={category} title={title}>
-      {/* Notes titles its own sections: its input modes, then Notation. */}
-      {category === 'notes' ? null : <GroupName name={title} />}
-      {waits ? (
-        <fieldset
-          disabled
-          title={t('palette.chooseNote')}
-          aria-label={t('palette.chooseNote')}
-          // `contents`: the tools keep the layout of their form, the row or the panel; greyed each.
-          className="contents [&_button]:opacity-40"
-        >
+      {/* Each group folds by its heading (loop round 57, Dorico's panels); the row has none. */}
+      {grid ? (
+        <h3 className="-my-1.5">
+          <button
+            type="button"
+            aria-expanded={!shut}
+            onClick={() => setSectionFolded(settings, fold, !shut)}
+            className="flex min-h-11 w-full items-center justify-between font-sans text-[0.9375rem] leading-tight font-semibold text-foreground"
+          >
+            {title}
+            <ChevronDown
+              aria-hidden
+              className={cn(
+                'size-5 text-muted-foreground transition-transform duration-150 ease-out motion-reduce:transition-none',
+                shut && '-rotate-90',
+              )}
+            />
+          </button>
+        </h3>
+      ) : null}
+      {shut ? null : (
+        <KeysWait value={waits ? t('reason.chooseNote') : null}>
           <Tools category={category} />
-        </fieldset>
-      ) : (
-        <Tools category={category} />
+        </KeysWait>
       )}
     </PaletteSection>
   )
@@ -88,6 +112,8 @@ function Category({ category }: { category: PaletteCategory }) {
 function Tools({ category }: { category: PaletteCategory }) {
   const { t } = useTranslation('editor')
   switch (category) {
+    case 'recent':
+      return <RecentKeys />
     case 'notes':
       return <NoteKeys />
     case 'pitch':
@@ -149,6 +175,37 @@ function Tools({ category }: { category: PaletteCategory }) {
     case 'text':
       return <TextKeys />
   }
+}
+
+/**
+ * Recent (loop round 57, the Editor board, Flat's recent notation): the tools used last, the latest
+ * first, eight at most, in one grid; each is its own category's key, still in its place there, and
+ * greys as it does there while it cannot act.
+ */
+function RecentKeys() {
+  const { t } = useTranslation('editor')
+  const recent = useSettings(selectPaletteRecent)
+  const open = openCategories(useEditorState((state) => state.layer))
+  return (
+    <KeyGrid label={t('palette.category.recent')}>
+      <RecentTools value={recent}>
+        {RECENT_FROM.filter((category) => open.includes(category)).map((category) => (
+          <RecentFrom key={category} category={category} />
+        ))}
+      </RecentTools>
+    </KeyGrid>
+  )
+}
+
+/** One category's keys among Recent's, waiting as they do in their own. */
+function RecentFrom({ category }: { category: PaletteCategory }) {
+  const { t } = useTranslation('editor')
+  const waits = useEditorState((state) => needsNote(category, chosenNotes(state).length > 0))
+  return (
+    <KeysWait value={waits ? t('reason.chooseNote') : null}>
+      <Tools category={category} />
+    </KeysWait>
+  )
 }
 
 /** The palette's keys laid out in a form: the row's pickers their signs alone, else Flat's tables. */
@@ -217,8 +274,9 @@ function useSectionInSight(
  */
 const CATEGORY_SIGN: Record<
   PaletteCategory,
-  { sign: string; face: 'music' | 'term' | 'serif' | 'sans' }
+  { sign: ReactNode; face: 'music' | 'term' | 'serif' | 'sans' }
 > = {
+  recent: { sign: <Clock className="size-5" />, face: 'sans' },
   notes: { sign: '\u2669', face: 'music' },
   pitch: { sign: '\u266D\u266F', face: 'music' },
   articulations: { sign: '>', face: 'serif' },
@@ -234,8 +292,8 @@ const CATEGORY_SIGN: Record<
 
 const FACE = {
   music: 'font-music text-[1.625rem]',
-  term: 'font-serif text-lg font-bold italic',
-  serif: 'font-serif text-lg font-bold',
+  term: 'font-display text-lg font-bold italic',
+  serif: 'font-display text-lg font-bold',
   sans: 'font-sans text-[0.9375rem] font-semibold',
 } as const
 
@@ -441,7 +499,7 @@ export function PaletteSheet({
     <MotionConfig reducedMotion="user">
       <section
         aria-label={t('panel.label')}
-        className="mr-[calc(-1*max(var(--gutter),env(safe-area-inset-right)))] ml-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))] flex max-h-[50dvh] min-h-0 shrink-0 flex-col rounded-t-sheet border-t border-hairline bg-card px-[max(var(--gutter),env(safe-area-inset-left))] pb-[max(--spacing(3),env(safe-area-inset-bottom))] elevation-2 [[data-keys=bottom]:has(>[data-area=keys])_&]:pb-3"
+        className="mr-[calc(-1*max(var(--gutter),env(safe-area-inset-right)))] ml-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))] flex max-h-[50dvh] min-h-0 shrink-0 flex-col rounded-t-sheet border-t border-hairline bg-card px-[max(var(--gutter),env(safe-area-inset-left))] pb-[max(--spacing(3),env(safe-area-inset-bottom))] elevation-float [:has(>[data-area=keys])_&]:pb-3"
       >
         <fieldset disabled={takes.stage !== 'idle'} className="contents">
           <Grip
@@ -450,18 +508,30 @@ export function PaletteSheet({
             onFold={(next) => unfold(!next)}
           />
           <SelectionStrip className="-me-2 pb-2" />
+          {/* The row and the sections cross-fade as it folds and unfolds (research F19), never a jump. */}
           {unfolded ? (
-            <div
+            <motion.div
+              key="sections"
               ref={box}
               onScroll={onScroll}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: FADE, ease: EASE }}
               className="relative flex min-h-0 flex-col gap-4 overflow-y-auto overscroll-contain pt-1 pb-3"
             >
               <Laid form="grid">
                 <Sections />
               </Laid>
-            </div>
+            </motion.div>
           ) : (
-            <ToolRow category={category} />
+            <motion.div
+              key="row"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: FADE, ease: EASE }}
+            >
+              <ToolRow category={category} />
+            </motion.div>
           )}
           {/* Flat's tab bar at the foot, and the button that opens every section above it. */}
           <div className="flex shrink-0 items-center gap-2 pt-1">

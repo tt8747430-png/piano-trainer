@@ -28,6 +28,14 @@ Every screen's top bar, on the phone and the laptop, the Player's and the editor
   and put it on the trailing side of the toolbar."
 - **Symbols carry no ring of their own inside the glass.** Apple: "Borders … aren't necessary because the section
   provides a visible container."
+- **The Player and the editor share one bar, and one switch between them** (owner, 2026-11-16: "proper way to switch
+  from the player to editor not like this two different controls in the editor and in the player"). Close leading in
+  glass; Play · Edit centre, one glass capsule, the mode shown in ink, each half 65 wide so nothing moves; the screen's
+  own group trailing (the Player: View and Settings, on a laptop the four views beside Settings; the editor: Undo,
+  Redo, More). Both bars are the kit's `MODEBAR_P` / `MODEBAR_L` and `MODESW`, the trailing column held to the
+  editor's width, so the switch stands on the same pixels in both (phone 116 from the edge, top 62; laptop centred).
+  The title is printed on the score in the book serif at its regular weight, as the editor prints it; the Player's
+  other views print the same head. The song sheet's Edit score is gone: the bar's Edit is the one way in.
 - **A title stays short and sits after Back or Close,** 8px from its glass. Apple: "keep the title under 15
   characters long so you leave enough room for other controls." A song's name may run longer and ends in an ellipsis.
 
@@ -36,7 +44,8 @@ Glass), read 2026-11-16.
 
 ## History
 
-- 2026-11-16: icons side by side in a bar share one glass capsule on every board (`index.py`, `_glassgroups`): the song's Favourite and More, Songs' Archive and More, the Chord player's Undo, Settings and More, a lesson's Metronome and Settings, the theory pages' Settings and Piano, Learn's Search and MIDI keyboard, Profile's bell and Settings; text buttons (Learned, Edit) keep their own capsules in the same glass.
+- 2026-11-16 (replaced 2026-11-17, loop round 62: every bar button its own 44 glass circle, 8 apart, as every board draws it): icons side by side in a bar shared one glass capsule on every board (`index.py`, `_glassgroups`): the song's Favourite and More, Songs' Archive and More, the Chord player's Undo, Settings and More, a lesson's Metronome and Settings, the theory pages' Settings and Piano, Learn's Search and MIDI keyboard, Profile's bell and Settings; text buttons (Learned, Edit) keep their own capsules in the same glass.
 - 2026-11-16: the Player's bar drops its band; Close is glass, View and Settings share one glass; the laptop's Close,
   Settings and view switch use the same glass. Then the rules above, from Apple's guidelines, held against every board.
 - 2026-11-16: the kit's `TOP` centred its title between the bar's sides; it now leads after Back or Close, 8 from its glass, on every board that draws it.
+- 2026-11-16, loop round 61: the round-54 glass bar had been a hand edit to the built boards and a rebuild lost it; now `player/r43_player.py` (`onebar`) builds it, the editor and the Player take one switch from the kit, and the song sheet's Edit score went.

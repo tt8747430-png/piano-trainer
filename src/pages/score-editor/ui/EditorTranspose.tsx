@@ -54,7 +54,7 @@ export function EditorTranspose({ onDone }: { onDone: () => void }) {
             by: playedBy > 0 ? `+${playedBy}` : `−${-playedBy}`,
             key: keyName(transposedKey(draft.key, playedBy)),
           })}
-          <Button variant="soft" size="pill" onClick={() => setSemitones(playedBy)}>
+          <Button variant="soft" size="lg" onClick={() => setSemitones(playedBy)}>
             {t('transpose.useThis')}
           </Button>
         </p>

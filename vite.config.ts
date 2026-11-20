@@ -60,15 +60,11 @@ export const workbox = {
   globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,m4a,wav,glb}'],
   // The engraver's worker is the largest file; the recordings are held to less by a test.
   maximumFileSizeToCacheInBytes: PRECACHE_ENGRAVER_LIMIT,
-  // Only the fonts' subsets the app's text reaches: a browser fetches a subset when a glyph in
-  // its range is drawn. None of these ranges holds a character the app writes (Onest's latin-ext
-  // does, a credit's ž; its math and symbols hold ♭ ♯ and arrows); a glyph that ever needs one
-  // fetches it from the network.
+  // Instrument Sans ships only its latin and latin-ext subsets, both reached (a credit's ž), so
+  // every font file is kept; the serif is the system's.
   globIgnores: [
     // An iPhone's launch images: each phone reads its own once, at its install.
     '**/apple-splash-*.png',
-    '**/literata-{greek,greek-ext,vietnamese,cyrillic-ext,latin-ext}-*.woff2',
-    '**/onest-{vietnamese,cyrillic-ext}-*.woff2',
     // The grand piano's 9 MB (A27): fetched as its notes are first played, not at install.
     'samples/piano/**',
   ],

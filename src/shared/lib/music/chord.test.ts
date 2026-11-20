@@ -1,20 +1,22 @@
 import { describe, expect, it } from 'vitest'
 import {
-  CHORD_FAMILIES,
-  CHORD_QUALITIES,
   chordBass,
-  chordFamily,
-  chordRootSpelling,
   chordSymbol,
-  qualitiesIn,
   qualityIntervals,
   qualityRootSpelling,
-  qualitySpellings,
   qualitySuffix,
   spellChord,
   writtenSymbol,
-  type ChordQuality,
 } from './chord'
+import {
+  CHORD_FAMILIES,
+  CHORD_QUALITIES,
+  chordFamily,
+  chordRootSpelling,
+  qualitiesIn,
+  qualitySpellings,
+  type ChordQuality,
+} from './chord-quality'
 import { parseChordSymbol } from './chord-symbol'
 import { letterIndex, note, noteName, pitchClassOf, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
@@ -142,7 +144,7 @@ describe('spellChord', () => {
 describe('chordSymbol', () => {
   it.each([
     [{ root: note('C', 1), quality: 'm7' as const }, 'C#m7'],
-    [{ root: note('B', -1), quality: 'maj7' as const }, 'B♭Maj7'],
+    [{ root: note('B', -1), quality: 'maj7' as const }, 'B♭maj7'],
     [{ root: note('D', 1), quality: 'maj' as const, bass: note('F', 2) }, 'D#/F𝄪'],
     [{ root: note('C'), quality: 'maj' as const }, 'C'],
   ])('%j → %s', (chord, symbol) => {

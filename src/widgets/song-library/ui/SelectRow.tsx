@@ -10,28 +10,27 @@ import { ROW_BODY, ROW_CARD, ROW_CONTROL, ROW_FLAT, ROW_LIBRARY_FACE } from '@/s
 import { useCardLook } from './card-look'
 
 /**
- * The check a chosen row wears, umber while chosen (the neutral chosen), a ring while not. It comes
- * in where the row's More stood, fading, so nothing on the row moves as Select starts.
+ * The check a chosen row wears (R72's CHECKBOX, 24): filled while chosen, a ring while not, fading in
+ * before the row's picture as Select starts.
  */
 export function SelectCheck({ checked }: { checked: boolean }) {
   return (
     <span
       aria-hidden
       className={cn(
-        'grid size-7 shrink-0 place-items-center rounded-pill border transition-colors duration-200 ease-out motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-90 motion-safe:duration-200',
+        'grid size-6 shrink-0 place-items-center rounded-pill border-2 transition-colors duration-200 ease-out motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-90 motion-safe:duration-200',
         checked ? 'border-transparent bg-selected text-selected-foreground' : 'border-input',
       )}
     >
-      {checked ? <Check className="size-4" strokeWidth={3} /> : null}
+      {checked ? <Check className="size-3.5" strokeWidth={3} /> : null}
     </span>
   )
 }
 
 /**
- * A row while Select is on (Mindscape's `SelectRow`): a tap chooses it or lets it go, its check at
- * its end in the place its More stood, so its tile and title stay where they were (iOS Files'); in
- * the Manual order, its handle beside the check moves it by a finger, a mouse or the keyboard
- * (`sortable`). In the hand, its place is an empty slot, where it would land. Its face carries it
+ * A row while Select is on (R72's SONGROW in Select, Flat's): the same card, a tap choosing it or
+ * letting it go, its check before its picture; where the order is the learner's (`sortable`, the
+ * folders), its handle at its end moves it by a finger, a mouse or the keyboard. In the hand, its place is an empty slot, where it would land. Its face carries it
  * (`carry`, its key: held a moment by a finger, or dragged by a mouse), with every row chosen where
  * it is chosen, into a folder or onto the bar's places; a folder's row (`into`, its id) takes what is
  * carried, lit while it is over it, and greys while it is carried itself.
@@ -44,6 +43,8 @@ export function SelectRow({
   sortable,
   carry,
   into,
+  face,
+  tall = false,
   children,
 }: {
   id: string
@@ -56,6 +57,10 @@ export function SelectRow({
   carry: string
   /** A folder's id: what is carried drops into it. */
   into?: string | undefined
+  /** How its face is laid out, as the row's when read (`SONG_FACE`). */
+  face?: string
+  /** A song's card, 88 tall as when read. */
+  tall?: boolean
   /** Its face. */
   children: ReactNode
 }) {
@@ -92,11 +97,20 @@ export function SelectRow({
       <div
         data-drop={lit ? '' : undefined}
         className={cn(
-          grouped ? ROW_FLAT : ROW_CARD,
+          grouped ? ROW_FLAT : cn(ROW_CARD, tall && 'min-h-22'),
           'hover:bg-muted data-drop:bg-selected/15 data-drop:ring-2 data-drop:ring-selected data-drop:ring-inset',
-          checked && 'bg-selected/12 hover:bg-selected/18',
         )}
       >
+        <button
+          type="button"
+          role="checkbox"
+          aria-checked={checked}
+          aria-label={t('select.toggle', { name })}
+          onClick={onToggle}
+          className={cn(ROW_CONTROL, '-mr-3 ml-1')}
+        >
+          <SelectCheck checked={checked} />
+        </button>
         {/* The row's face chooses it too, as the check does: one stop for a keyboard, the check's.
             Held or dragged, it carries the row. */}
         <div
@@ -107,6 +121,7 @@ export function SelectRow({
           className={cn(
             ROW_BODY,
             ROW_LIBRARY_FACE,
+            face,
             'cursor-pointer touch-manipulation select-none',
           )}
         >
@@ -125,16 +140,6 @@ export function SelectRow({
             <GripVertical aria-hidden />
           </button>
         ) : null}
-        <button
-          type="button"
-          role="checkbox"
-          aria-checked={checked}
-          aria-label={t('select.toggle', { name })}
-          onClick={onToggle}
-          className={ROW_CONTROL}
-        >
-          <SelectCheck checked={checked} />
-        </button>
       </div>
     </li>
   )
@@ -158,25 +163,13 @@ export function RowInHand({
   children: ReactNode
 }) {
   return (
-    <div
-      aria-hidden
-      className={cn(
-        ROW_CARD,
-        'relative cursor-grabbing elevation-3',
-        checked && 'bg-selected/12 hover:bg-selected/18',
-      )}
-    >
-      <div className={ROW_BODY}>{children}</div>
+    <div aria-hidden className={cn(ROW_CARD, 'relative cursor-grabbing elevation-3')}>
       {carried ? null : (
-        <>
-          <span className={ROW_CONTROL}>
-            <GripVertical />
-          </span>
-          <span className={ROW_CONTROL}>
-            <SelectCheck checked={checked} />
-          </span>
-        </>
+        <span className={cn(ROW_CONTROL, '-mr-3 ml-1')}>
+          <SelectCheck checked={checked} />
+        </span>
       )}
+      <div className={ROW_BODY}>{children}</div>
       {count > 1 ? (
         <span
           data-slot="carried-count"

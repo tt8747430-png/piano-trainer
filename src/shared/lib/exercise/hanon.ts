@@ -1,5 +1,5 @@
 import type { Performance } from '@/shared/lib/arrangement'
-import { midi, type Finger, type SpelledNote } from '@/shared/lib/music'
+import { midi, TICKS_PER_BEAT, type Finger, type SpelledNote } from '@/shared/lib/music'
 import {
   fingered,
   inBeats,
@@ -11,7 +11,6 @@ import {
   type Played,
 } from './line'
 import { exercisePerformance } from './performance'
-import { BAR } from './time'
 
 /** Part I of The Virtuoso Pianist: Nos. 1 to 20. */
 export const HANON_NUMBERS = [
@@ -20,16 +19,20 @@ export const HANON_NUMBERS = [
 export type HanonNumber = (typeof HANON_NUMBERS)[number]
 
 /**
- * The rhythms Hanon's figures are practised in: even 8ths as printed, dotted (long-short) and
- * reverse dotted (short-long), each pair still filling a quarter so a figure keeps its bar.
+ * The rhythms Hanon's figures are practised in: even 16ths as printed, dotted (long-short) and
+ * reverse dotted (short-long), each pair still filling an 8th so a figure keeps its bar. In 8ths.
  */
 export const HANON_RHYTHMS = ['even', 'dotted', 'reverse'] as const
 export type HanonRhythm = (typeof HANON_RHYTHMS)[number]
 const RHYTHM_LENGTHS: Readonly<Record<HanonRhythm, readonly number[]>> = {
-  even: [1],
-  dotted: [1.5, 0.5],
-  reverse: [0.5, 1.5],
+  even: [0.5],
+  dotted: [0.75, 0.25],
+  reverse: [0.25, 0.75],
 }
+
+/** The book's bar: 2/4, a figure of eight 16ths. */
+const HANON_BEATS = 2
+const HANON_BAR = HANON_BEATS * TICKS_PER_BEAT
 
 /**
  * A run of one figure, carried a degree at a time: its first note's degree above the tonic, how many
@@ -244,7 +247,7 @@ export function hanonDegrees(number: HanonNumber): number[] {
 
 /**
  * Hanon's Nos. 1 to 20 (The Virtuoso Pianist, Part I) in any major key, as the book prints them in
- * C: in 8ths (or dotted, either way round), a figure a bar, both hands on the same notes with their own fingers, the left two
+ * C: in 2/4, in 16ths (or dotted, either way round), a figure a bar, both hands on the same notes with their own fingers, the left two
  * octaves below the right so each reads on its own staff; home on the tonic held for a bar (No. 20
  * on a chord).
  */
@@ -277,11 +280,16 @@ export function hanon(choice: {
     { rh: figures('rh'), lh: figures('lh') },
     0,
     RHYTHM_LENGTHS[choice.rhythm ?? 'even'],
+    HANON_BAR,
   )
   const endTick = Math.max(...body.map((n) => n.startTick + n.durationTicks))
   return exercisePerformance({
     key: { tonic: choice.root, minor: false },
-    notes: [...body, ...inBeats({ rh: [home('rh')], lh: [home('lh')] }, BAR, endTick)],
+    notes: [
+      ...body,
+      ...inBeats({ rh: [home('rh')], lh: [home('lh')] }, HANON_BAR, endTick, HANON_BAR),
+    ],
+    beats: HANON_BEATS,
     harmony: [{ chord: tonicChord(choice.root, 'major'), startTick: 0 }],
   })
 }

@@ -1,13 +1,11 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { CopyPlus, Eye, EyeOff, Globe, Heart, PencilLine, Trash2 } from 'lucide-react'
+import { CopyPlus, Eye, EyeOff, Globe, PencilLine, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   isOwnPatternId,
   isPatternId,
   isPatternRef,
-  LEFT_FIGURES,
-  RIGHT_FIGURES,
   selectIsFavourite,
   selectIsHidden,
   usePatternBook,
@@ -36,10 +34,11 @@ import {
   ActionMenu,
   BackButton,
   ButtonLink,
-  InfoTip,
+  PractiseRow,
+  PractiseRows,
   MoreMenu,
   NotFound,
-  RoundButton,
+  NameHeart,
   say,
   ScreenHeader,
   type MenuAction,
@@ -47,6 +46,9 @@ import {
 import { PatternPieces, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
 import { EntryRow } from '@/widgets/piece-list'
 import { useForgetScreens } from '@/shared/lib'
+import { C_MAJOR, keyParam, keysAround } from '@/shared/lib/music'
+import { PROGRESSION } from '@/features/practice'
+import { ProgressionPractice } from '@/widgets/progression-explorer'
 
 /** How many songs and lessons Used in shows before Show all. */
 const FOLDED = 5
@@ -57,12 +59,10 @@ function FavouriteButton({ pattern }: { pattern: BookPattern }) {
   const store = usePatternsStoreApi()
   const favourite = usePatterns(selectIsFavourite(pattern.ref))
   return (
-    <RoundButton
+    <NameHeart
+      pressed={favourite}
       label={t('patterns.favourite')}
-      icon={Heart}
-      aria-pressed={favourite}
-      onClick={() => toggleFavourite(store, pattern.ref)}
-      className="text-muted-foreground aria-pressed:text-destructive aria-pressed:[&_svg]:fill-current"
+      onToggle={() => toggleFavourite(store, pattern.ref)}
     />
   )
 }
@@ -161,11 +161,11 @@ function usePatternActions(pattern: BookPattern, name: string) {
 }
 
 /**
- * A pattern in the Chords page's shape (canvas 178): Back · Pattern · the keys' tools · More; the keys
+ * A pattern's page, as its board (`r63_pattern.py`): Back · Pattern · the keys' tools · More; the keys
  * at the top lighting what it plays; its name in the serif with its ♡, its book and whether it is
- * built in; one card of its bar on the grand staff and what it is; The hands; Used in; one floating
- * bar Loop · Play ⌄ (Play over a bar of C major or a song it is used in) · Practise, the Player. On
- * a laptop the keys run across the top, the pattern on the left, its hands and uses on the right.
+ * built in; its bar on the grand staff with what it is; Practise in the Player, round and round in C
+ * and through the keys (a tune's pattern, in its song); Used in; one floating bar Loop · Play ⌄ (Play
+ * over a bar of C major or a song it is used in). On a laptop, one centred column 880 wide.
  */
 function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBook }) {
   const { t } = useTranslation('practice')
@@ -193,64 +193,60 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
     <div className="flex flex-col gap-4">
       <ScreenHeader
         title={t('patterns.title')}
-        back={<BackButton variant="glass" />}
+        back={<BackButton />}
         settings={<PianoButton />}
         more={<MoreMenu actions={more.actions} />}
       />
-      <PinnedKeyboard shown={shown} place="top" />
-      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start lg:gap-10">
+      <PinnedKeyboard shown={shown} place="top" least={PATTERN_KEYS} />
+      <div className="flex flex-col gap-4 lg:mx-auto lg:mt-2 lg:w-full lg:max-w-220 lg:gap-6">
         <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-0.5">
-              <h2 className="font-serif text-[2.25rem] leading-[1.1] font-bold tracking-[-0.02em] text-balance">
+              <h2 className="font-display text-[2.25rem] leading-[1.1] font-bold tracking-[-0.01em] text-balance">
                 {name}
               </h2>
               <FavouriteButton pattern={pattern} />
             </div>
-            <p className="ms-0.5 text-[0.9375rem] text-muted-foreground">
-              {own
-                ? t('patterns.yours')
-                : `${partName(partOfShelf(pattern.group))} · ${t('patterns.builtIn')}`}
+            <p className="ms-0.5 text-[0.9375rem]/[normal] text-muted-foreground">
+              {own ? t('patterns.yours') : partName(partOfShelf(pattern.group))}
             </p>
           </div>
           {more.said}
-          <section className="flex flex-col items-center gap-3 rounded-2xl bg-card px-4 pt-4 pb-3.5 ring-1 ring-border">
+          {/* Its bar on the grand staff at reading size, on the paper with its line under it as
+              a caption, no card (canvas, "A pattern's grand staff at reading size"). */}
+          <section className="flex flex-col gap-3">
             <PatternStaff sample={sample} />
-            <p className="mx-1 self-stretch text-[0.9375rem] leading-snug text-pretty text-muted-foreground">
+            <p className="mx-1 max-w-[65ch] text-[0.9375rem] leading-[1.4] text-pretty text-muted-foreground">
               {localText(pattern.idea, locale)}
             </p>
           </section>
         </div>
         <div className="flex min-w-0 flex-col gap-4 lg:gap-6">
-          <section className="flex flex-col gap-2">
-            <div className="ms-1 flex items-center gap-1.5">
-              <h3 className="font-sans text-sm font-semibold text-foreground">
-                {t('patterns.hands')}
-              </h3>
-              {pattern.description ? (
-                <InfoTip name={t('patterns.hands')}>
-                  {localText(pattern.description, locale)}
-                </InfoTip>
-              ) : null}
-            </div>
-            <dl className="flex flex-col rows-line overflow-hidden rounded-2xl bg-card ring-1 ring-border">
-              {[
-                [t('patterns.rightHand'), localText(RIGHT_FIGURES[pattern.rh].name, locale)],
-                [t('patterns.leftHand'), localText(LEFT_FIGURES[pattern.lh].name, locale)],
-              ].map(([term, value]) => (
-                <div
-                  key={term}
-                  className="flex min-h-12 items-center justify-between gap-4 px-4 py-3"
-                >
-                  <dt>{term}</dt>
-                  <dd className="text-right text-muted-foreground">{value}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
+          {tune ? (
+            sample.piece ? (
+              <PractiseRows title={t('progressions.practiseRows')}>
+                <PractiseRow
+                  title={entryTitles(sample.piece, locale).primary}
+                  detail={t('patterns.practise')}
+                  render={
+                    <Link
+                      to="/play/$pieceId"
+                      params={{ pieceId: sample.piece.id }}
+                      search={{ pattern: pattern.ref }}
+                    />
+                  }
+                />
+              </PractiseRows>
+            ) : null
+          ) : (
+            <ProgressionPractice
+              musicKey={C_MAJOR}
+              inPlayer={{ p: PROGRESSION.numerals, key: keyParam(C_MAJOR), pattern: pattern.ref }}
+            />
+          )}
           {pieces.length > 0 ? (
             <section className="flex flex-col gap-2">
-              <h3 className="ms-1 font-sans text-sm font-semibold text-foreground">
+              <h3 className="font-sans text-sm font-semibold text-foreground">
                 {t('patterns.usedIn')}
               </h3>
               <ul className="card flex flex-col p-1.5">
@@ -270,19 +266,6 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
       <PatternPieces
         sample={sample}
         onShow={show}
-        practise={{
-          label: t('inPlayer'),
-          caption: t('patterns.practise'),
-          render: sample.piece ? (
-            <Link
-              to="/play/$pieceId"
-              params={{ pieceId: sample.piece.id }}
-              search={{ pattern: pattern.ref }}
-            />
-          ) : (
-            <Link to="/play/progression" search={{ pattern: pattern.ref }} />
-          ),
-        }}
         menuLabel={t('patterns.playOver')}
         menu={(trigger) => (
           <ActionMenu
@@ -320,3 +303,6 @@ export function PatternPage() {
     </NotFound>
   )
 }
+
+/** The board's keys under both hands: C2 to A4 on a phone, F1 to C6 on a laptop. */
+const PATTERN_KEYS = keysAround(48, [12, 21], [19, 36])

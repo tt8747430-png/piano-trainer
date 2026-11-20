@@ -28,7 +28,7 @@ import {
 import { setPracticeToggle, setScoreView } from '@/features/set-preference'
 import { clickVoice } from '@/features/metronome'
 import type { Performance } from '@/shared/lib/arrangement'
-import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
+import { beatsPerBar, rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import {
   audibleHands,
@@ -42,7 +42,7 @@ import {
 import { useWakeLock } from '@/shared/lib'
 import type { KeyMark } from '@/shared/ui'
 import { reachLoop, type LoopReach } from './loop-reach'
-import type { PracticeView } from './practice-view'
+import type { Between, PracticeView } from './practice-view'
 import { waitFeedback, type WaitFeedback } from './wait-feedback'
 
 /** No track changed: every one plays and shows. */
@@ -97,12 +97,20 @@ export interface PracticePlayer {
   setMode(mode: PracticeMode): void
   /** Listen at a tempo: the mode and the tempo in one change of the URL. */
   listenAt(tempo: number): void
+  /** Whether each pass of a loop plays faster, up to the piece's tempo. */
+  readonly speedTraining: boolean
   setSpeedTraining(on: boolean): void
   setHands(hands: Hands): void
   setSwing(feel: SwingFeel): void
   /** Beats of rest before each repeat; 0 for none. */
   readonly rest: number
   setRest(beats: number): void
+  /** What sounds between a loop's repeats: nothing, a bar counted in, or a bar's rest. */
+  readonly between: Between
+  setBetween(between: Between): void
+  /** How many times the loop plays; null for endless. */
+  readonly repeats: number | null
+  setRepeats(times: number | null): void
   /** The tempo chosen, the piece's own left out of the URL. */
   setTempo(tempo: number): void
   /** Loops the bar the cursor is in, or removes the loop. */
@@ -178,10 +186,11 @@ export function usePracticePlayer(
     loop,
     metronome: click,
     countIn: playback.countdown !== 'none',
-    countInHeard: playback.countdown === 'audible',
     speedStep: playback.speedStep,
     voicing,
     rest: view.rest ?? 0,
+    ...(view.restSilent ? { restSilent: true } : {}),
+    ...(loop && view.repeats !== undefined ? { repeats: view.repeats } : {}),
     recording,
     mix,
   })
@@ -255,11 +264,20 @@ export function usePracticePlayer(
       view.keys === undefined ? setScoreView(settings, { keys: on }) : setView({ keys: on }),
     setMode: (mode) => setView({ mode }),
     listenAt: (next) => setView({ mode: 'listen', tempo: next === ownTempo ? undefined : next }),
+    speedTraining: view.speedTraining,
     setSpeedTraining: (on) => setView({ speedTraining: on }),
     setHands: (next) => setView({ hands: next }),
     setSwing: (feel) => setView({ swing: feel }),
     rest: view.rest ?? 0,
     setRest: (beats) => setView({ rest: beats > 0 ? beats : undefined }),
+    between: view.rest === undefined ? 'none' : view.restSilent ? 'rest' : 'countIn',
+    setBetween: (between) =>
+      setView({
+        rest: between === 'none' ? undefined : beatsPerBar(performance.meter),
+        restSilent: between === 'rest' ? true : undefined,
+      }),
+    repeats: view.repeats ?? null,
+    setRepeats: (times) => setView({ repeats: times ?? undefined }),
     setTempo: (next) => setView({ tempo: next === ownTempo ? undefined : next }),
     toggleLoop: () => setView({ loop: loop ? undefined : loopParam({ first: bar, last: bar }) }),
     setLoop: (next) => setView({ loop: next ? loopParam(next) : undefined }),

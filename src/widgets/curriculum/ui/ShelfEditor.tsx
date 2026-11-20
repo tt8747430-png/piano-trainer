@@ -1,10 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { Plus } from 'lucide-react'
+import { Library, Plus } from 'lucide-react'
 import { Fragment, lazy, Suspense, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { courseById, courseIcon, SHELVES, type CourseOrder, type Shelf } from '@/entities/course'
+import { courseById, SHELVES, type CourseOrder, type Shelf, SHELF_PAINT } from '@/entities/course'
 import { hasAbout } from '@/entities/lesson'
-import { STAGE_PAINT } from '@/entities/step'
 import { DraftActions, DraftStatus, useCourseOrderDraft } from '@/features/edit-original'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
@@ -86,12 +85,12 @@ function ShelvesDocument({
           empty: t('edit.courses.empty'),
           head: <h2 className="mt-4 px-3 font-sans text-xl font-bold">{t(`shelves.${shelf}`)}</h2>,
           rows: courses.map((course) => {
-            const paint = PAINT[STAGE_PAINT[course.stage]]
+            const paint = PAINT[SHELF_PAINT[course.shelf]]
             return {
               key: course.id,
               title: localText(course.title, locale),
               detail: t('course.lessonCount', { count: course.lessons.length }),
-              icon: courseIcon(course.id),
+              icon: Library,
               paint: cn(paint.fill, paint.ink),
               link: <Link to="/courses/$courseId/edit" params={{ courseId: course.id }} />,
             }
@@ -149,9 +148,10 @@ export function ShelfEditor({ bar }: { bar: (actions: ReactNode) => ReactNode })
       )}
       <div className="mx-auto mt-4 flex w-full max-w-2xl min-w-0 flex-col gap-2">
         {load.state === 'loading' ? (
-          <NotOpen line={t('editor:original.opening')} />
+          <NotOpen kind="opening" line={t('editor:original.opening')} />
         ) : load.state === 'failed' ? (
           <NotOpen
+            kind={load.reason === 'offline' ? 'offline' : 'failed'}
             line={t(
               load.reason === 'offline' ? 'editor:original.offline' : 'editor:original.failed',
             )}

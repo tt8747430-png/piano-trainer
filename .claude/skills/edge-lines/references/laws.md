@@ -1,0 +1,731 @@
+# The laws, read from their sources
+
+Read in full on 2026-11-17 for the owner's "research properly the laws and the proper how and where to use the cards
+and the ui ux laws". Each law: what the source says, then what it asks of a Piano Trainer screen.
+
+## Grouping (Gestalt)
+
+**Proximity** ([NN/g, Harley 2020](https://www.nngroup.com/articles/gestalt-proximity/);
+[Laws of UX](https://lawsofux.com/law-of-proximity/)). "Items close together are likely to be perceived as part of the
+same group." It "can overpower competing visual cues such as similarity of color or shape". Whitespace both unites and
+separates: a heading sits closer to its own section than to the one before; a label closer to its field than to the
+next label. "Grouping together unrelated elements may camouflage them", and "far-away elements appear unrelated, are
+easily overlooked" (tunnel vision). Groupings shift in responsive layouts: two things side by side on a laptop may end
+far apart on a phone.
+- Here: the gap inside a group is smaller than the gap between groups, always, measured. A control sits beside what it
+  changes. A gap that is the same everywhere groups nothing.
+
+**Closeness of actions and objects** ([NN/g, Nielsen 2010](https://www.nngroup.com/articles/closeness-of-actions-and-objects-gui/)).
+"When buttons … are too far away from the objects they act on, people don't see them … and simply assume the features
+aren't available." iTunes' Update button at the window's foot, in "a separate colored stripe", went unseen for months.
+- Here: Play sits on the music it plays; a page's acts sit where the eye already is. A coloured strip under content
+  reads as outside it.
+
+### Spacing: how close groups things, how far separates them, how far is too far (researched 2026-11-18)
+
+The owner: "how much spacing should they have to be related and how much to differentiate from other, but not too
+much spacing? … take more specific and precise instructions". The sources, with their numbers:
+
+- **Kubovy & Wagemans 1995, "Grouping by proximity and multistability in dot lattices"** (Psychological Science
+  6(4):225–234). Viewers saw dot lattices for 300ms and said which way the dots grouped. The pull of a gap falls off
+  exponentially with its length: f(v) = e^(−α(v/a − 1)), where a is the shortest gap and v another. Across seven
+  observers α ran 6.72–11.57 (α ≈ 8 in their worked figure). The ratios they tested were 1.0, 1.26, 1.59 and 2.0,
+  steps of about 1.26 (Weber's law: the eye judges distance by ratio, not by pixels). With α ≈ 8, how strongly a
+  gap r times the shortest one still pulls, against the shortest:
+  | r (wider gap ÷ narrower) | 1.1 | 1.25 | 1.5 | 2 | 3 |
+  | --- | --- | --- | --- | --- | --- |
+  | pull of the wider gap | 0.45 | 0.14 | 0.02 | 0.0003 | ≈0 |
+  So under about 1.25 the grouping is ambiguous (people split); from 1.5 it is near-certain; at 2 it is certain.
+  Past 2–3× the eye gains nothing more: the extra space separates nothing further, it only empties the page.
+- **Jakob Nielsen, "Gestalt Principles for Visual UI Design" (2026):** "The practical lever is the ratio of space,
+  not its absolute amount: a form field 'belongs' to its label when the gap between them is visibly smaller than the
+  gap to the next field. When labels sit equidistant… roughly half of them guess wrong." And the other way: "Squeeze
+  everything together and you trigger a grouping collapse." His audit: "Is the gap inside each group unmistakably
+  smaller than the gap between groups?"; "Do the strongest cues (spacing, border, color, alignment, and motion) agree
+  about the same structure?"; "Does the hierarchy survive mobile reflow, text enlargement…?"; "Specify internal vs.
+  external spacing… in the component library."
+- **Refactoring UI (Wathan & Schoger), "Establish a spacing and sizing system":** "make sure no two values in your scale
+  are ever closer than about 25%" (their example scale 4, 8, 12, 16, 24, 32, 48, 64, 96, 128). On grouping: "Avoid
+  ambiguous spacing… if the margin below a form label is the same as the margin below its input, the form group won't
+  feel obviously connected… always ensure there's more space around the group than within it." And: "Start with too
+  much white space, then remove it until you're happy" — the end point is the least space that still groups.
+- **Atlassian Design System, spacing tokens:** 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80. Small (0–8) "for small
+  and compact pieces of UI"; medium (12–24) "for larger and less dense pieces"; large (32–80) "for the largest pieces of
+  UI and for layout elements". "Group similar items together using similar spacing."
+- **Uxcel:** "External spacing ≥ internal spacing. Keep outer ≥ inner." Micro whitespace inside a group, macro between
+  sections.
+- **Material 3, list item tokens** (material-web `md.comp.list.list-item`): one line 56, two lines 72, three lines 88
+  high; 16 leading and trailing; 10 above and below the text. Rows touch (0 apart) and are told apart by their
+  padding and a divider, so a list is one group by construction.
+
+**The rules, with numbers, for every board and port:**
+
+1. **Between ÷ within ≥ 1.5, aim for 2.** The gap that separates two groups is at least 1.5 times the gap inside
+   them (8 inside → 12 at the very least, 16 best; 12 → 24; 16 → 32). Under 1.25 the grouping is a coin toss.
+2. **No more than about 3×, past the smallest step that works.** Once separation is certain (2×), more space says
+   nothing more: 8 inside → sections 16–24 apart, not 48; 16 inside → 32, at most 48. A gap over 4× its neighbours'
+   (and 56 or more) cuts a thing off from what it belongs to (the owner's "too much spacing").
+3. **A heading belongs to what it heads:** the space above it is at least 1.5×, best 2–3×, the space below it
+   (section label 8 above its rows → 16–24 above the label).
+4. **A box's edge outranks its rows:** a card's inset is at least its row gap (outer ≥ inner), and its distance to the
+   next box at least its inset.
+5. **Two neighbouring steps are never both used for one job:** 12 and 16 side by side read as a mistake, not as two
+   levels (Refactoring UI's 25%: 12 → 16 is 33%, enough between levels; 14 → 16 is not). Use the scale's steps:
+   4, 8, 12, 16, 24, 32, 48, 64.
+6. **Levels:** inside a control 4–8; between rows of one group 0–12; between groups and sections 16–32 (phone),
+   24–48 (laptop); between whole regions of a laptop page 48–64. Each level about 2× the one below it.
+7. **Agree with the other cues:** when a hairline or a box already groups, the spacing must say the same thing, never
+   the opposite (Nielsen).
+
+`lines.mjs` holds rule 3 (PROBLEM at under 1×, NOTE under 1.5× and over 4×) and rule 4 (PROBLEM when rows sit as far
+apart as the edge).
+
+**Common region** ([NN/g, Harley 2020](https://www.nngroup.com/articles/common-region/); Palmer 1992;
+[Laws of UX](https://lawsofux.com/law-of-common-region/)). "Items within a boundary are perceived as a group and
+assumed to share some common characteristic or functionality." It is strong: it "can overpower other grouping
+principles such as proximity". Use it "when whitespace alone doesn't suffice". **Caution, overuse creates clutter:**
+"When possible, using whitespace alone to create clear groupings reduces the visual complexity"; borders "added in an
+abundance of caution" make busy designs; full-width bands create **false floors** where people stop scrolling. Ask
+before adding a box: is it needed to understand the grouping; can whitespace do it; must these be set apart from
+nearby things?
+- Here: a box is the last tool, not the first. A box around one thing groups nothing.
+
+**Uniform connectedness** ([Laws of UX](https://lawsofux.com/law-of-uniform-connectedness/)): visually connected
+elements read as more related than unconnected ones (a line, a shared fill). **Similarity**: alike-looking things read
+as one group even apart, so two different acts never look alike, and the same act always does.
+
+**Prägnanz** ([Laws of UX](https://lawsofux.com/law-of-pr%C3%A4gnanz/)): the eye takes the simplest reading. A screen
+of many boxes, bands and pills is read as noise.
+
+## Order and emphasis
+
+**Visual hierarchy, scale, balance, contrast** ([NN/g, Gordon 2020, reviewed 2026](https://www.nngroup.com/articles/principles-visual-design/)).
+"The most important elements in a design are bigger"; "a visually pleasing design generally uses no more than 3
+different sizes"; 2–3 type sizes. Hierarchy comes from scale, value, colour, spacing and placement. "If you have a
+hard time figuring out where to look on a page, it's more than likely that its layout is missing a clear visual
+hierarchy." Balance: visual weight distributed on both sides of an axis; "no one area draws your eye so much that you
+can't see the other areas". Contrast says two things differ in kind.
+- Here: one focal point per screen; a large white block beside an empty band is unbalanced weight.
+
+**Von Restorff** ([Laws of UX](https://lawsofux.com/von-restorff-effect/)): the one that differs is remembered. Two
+honey things cancel each other.
+
+**Apple HIG, Layout** ([developer.apple.com](https://developer.apple.com/design/human-interface-guidelines/layout),
+updated 2026-09-09). "Order content by relative importance … the most important items near the top and leading side."
+"Align elements to make them easier to scan … People assume that aligned items are related … indented items as
+subordinate." "Group related items … negative space, container shapes, or separator lines." "Use progressive
+disclosure." "Differentiate controls from content": Liquid Glass for controls, never a solid band under them. Keep
+functionality the same as the size changes; a larger space may show more of it.
+
+**Serial position, Hick, Miller, Choice overload, Cognitive load** ([Laws of UX](https://lawsofux.com/)): first and last
+are remembered; decisions slow with each option; working memory holds few things. Fewer controls at once.
+
+**Fitts** ([Laws of UX](https://lawsofux.com/fittss-law/)): time to a target grows with distance, shrinks with size.
+The primary act is large and in reach of the thumb.
+
+**Jakob** ([Laws of UX](https://lawsofux.com/jakobs-law/)): people expect our app to behave like the ones they use
+(Flat, Apple Music, forScore).
+
+**Aesthetic-usability** ([Laws of UX](https://lawsofux.com/aesthetic-usability-effect/)): what looks finished is trusted
+and forgiven more.
+
+## Laws the tool measures (2026-11-17)
+
+- **Fitts's law** (lawsofux.com/fittss-law): the time to reach a target grows with its distance and shrinks with its
+  size, so targets are 44pt on touch (Apple HIG) and at least 40 in a dense laptop row; primary acts sit where the
+  thumb or pointer already is.
+- **Hick's law** (lawsofux.com/hicks-law): the time to choose grows with the number of choices; a bar, menu or tab row
+  offers a few, the rare ones folded behind a More.
+- **Von Restorff effect** (lawsofux.com/von-restorff-effect): the one item that differs is remembered; one honey act
+  per screen, or none stands out.
+- **Jakob's law** (lawsofux.com/jakobs-law) and **consistency** (NN/g heuristic 4): people expect a place to work as
+  the others do; sibling pages keep one frame (bar, title, search, pane, the column content starts on) so moving
+  between them changes the content, not the page.
+- **Alignment of boxes side by side** (Müller-Brockmann, grid systems; HIG layout): columns share their tops, and a
+  box that starts inside its neighbour's height and ends below it reads as overlap, not as a column.
+- **Contrast** (WCAG 2.2, 1.4.3): text 4.5:1, large text 3:1.
+
+## Information architecture (Uxcel, "Basic Components of IA" and "What is UX Design?", sent 2026-11-18)
+
+The source's words first, then the instruction each one gives a board. Every instruction is a check with a yes or no.
+
+**The three pillars.** "Information architecture has 3 main pillars: context, content, and users." Context is "the
+goals, mission, constraints, and the devices"; content is "the actual information that needs to be organized"; users
+are "the people who will use the product".
+- Before a page is drawn, write three lines in the spec: its context (phone on the piano's stand, one free hand, a
+  laptop at a desk, offline in a hall), its content (the exact list of things it shows), its user's top task. A part
+  that serves none of the three goes.
+
+**Organization systems.** "Methods used to arrange and categorize information … grouping, labeling, and ordering."
+"Choosing the type of organization system depends on key user tasks. For example, if most users often search for books
+by author, organizing the books alphabetically by author's last name might be best." The screenshot: one undivided
+grid of "Our books" (wrong) against a row of categories, All · Biography · Fiction · Horror · Romance · Mystery ·
+Fantasy, the chosen one shown, then a titled shelf "Biography" with its own ‹ › (right).
+1. A collection of more than about 12 items is never one undivided grid or list: it is grouped by the key the learner
+   hunts by (level, book, key, kind, composer), named in the spec.
+2. The groups are shown as a row of choices at the top, the first one All, the chosen one marked; the content under
+   them is titled with the chosen group's name.
+3. The order inside a group follows the hunt: by a musical order where one exists (learning order, the circle of
+   fifths), else Recently used first; alphabetical only when the learner looks things up by name.
+
+**Labeling systems.** "Grouping items under clear labels like 'Electronics' or 'Furniture' … without using jargon";
+"ensure you use clear and meaningful labels consistently throughout the interface." The screenshot: a menu of
+"Tech & Tools, Ornamentation, Apparel, Children's Playsets, Cooking Tools, Literature, Personal Care" (wrong) against
+"Electronics, Furniture, Clothing, Toys, Kitchen Appliances, Books, Health & Beauty" (right).
+4. A category label is the plain, common name of what it holds, one or two words, the word the learner would type
+   in Search; never a coined or clever name. (Here the musician's term is the common name: Chords, Scales and keys,
+   Accompaniment.)
+5. Labels side by side are the same kind of word and the same level of generality (all nouns for kinds of thing; no
+   one label much broader or narrower than its siblings).
+6. One thing has one label on every screen, in the bar, the sidebar, the tab, Search and the page title.
+
+**Navigation systems.** Global, footer, sidebar, breadcrumbs. "A good navigation system is clear, concise, and helps
+users find what they need quickly." The screenshot: a top bar of "Catalog · Services · About Us · Contact" plus
+"Follow us" icons and "Terms of Use" crammed beside them (wrong) against the four places alone (right).
+7. The main navigation holds only the places (Learn, Songs, Practice, Profile). Nothing else stands beside them:
+   no social links, legal links, promotions or settings rows; those live at the foot of Settings or Profile.
+8. Navigation items are one kind (places), one style, evenly spaced; a sub-place is indented under its place (the
+   laptop sidebar), never a mixed row.
+9. Every page shows where it is: the current place marked in the bar or sidebar, the page's name in its bar, Back to
+   its parent.
+
+**Search systems.** "Save time … especially on large sites"; "auto-suggestions, filters, and advanced search options".
+10. Any collection a learner would hunt in has a search at its top; Search opens with help (recent, suggested) before a
+    word is typed, and its results are grouped by kind with counts.
+
+**Design value.** "What information to present, how much, and when." The screenshot: a hospital menu of "About Us, Our
+Cafeteria Menu, Visitor Guestbook, Gift Shop, Staff Blogs" (wrong) against "Departments ⌄, Specialists ⌄, Patient
+Records, Emergency Care" and one "Book Appointment" button at its foot (right).
+11. A menu or page lists first the things the learner comes for, never the organisation's own pages (about, news,
+    blog); the one main act of the menu is a filled button at its foot.
+12. An item with children shows a chevron ⌄ and opens in place; it never jumps to a page that only lists them.
+
+**Value for users.** The screenshot: a Courses menu listing six single courses, "History 101 … Organic Chemistry"
+(wrong), against three groups, "Undergraduate Courses, Graduate Courses, Online Courses" (right).
+13. A menu shows groups, not a sample of items: at most about seven entries, each a group the learner recognises;
+    single items are reached inside their group. Six items picked from a hundred is a wrong menu.
+
+**Strategy and technology value.** The structure serves the product's goal (here: practice that brings the learner
+back, Continue first) and the data model holds the same groups the screen shows.
+14. The first thing on a place's overview is the learner's next step (Continue); its groups match the model's
+    groups one for one (a level's Journey, a book's exercises), so one name means one set everywhere.
+
+**UX and UI ("What is UX Design?").** UX "focuses on the overall journey"; UI "on what users see and interact with";
+"observing what users do rather than just listening to what they say". The design-thinking stages: empathize,
+define, ideate, prototype, test, "not strictly linear".
+15. A screen change starts from the learner's journey (how they arrive, what they do, where they go next), written in
+    the spec's sketch phase, before any look; a looks-only fix that leaves the journey broken is not done.
+
+## One outcome per screen (Uxcel, "How to Design Landing Pages That Convert", sent 2026-11-18)
+
+The source's words, then the exact instruction for every board (a screen of ours is a page with one outcome, as a
+landing page is: the welcome, an empty library, a song's page, a lesson's end, Explore's song).
+
+- "A landing page commits fully to one outcome … every design choice becomes clearer when measured against a single
+  question: does this help someone take action?"
+  1. Each board's spec names its one outcome in one line (play this song, open the next lesson). Every part is asked
+     "does this help that outcome?"; a part that does not goes, or moves behind a ··· or a fold.
+- "Remove everything on the page that doesn't directly support that information … secondary offers, distracting
+  imagery … even navigation"; "most users read as little as 20% of web copy … limiting your paragraphs to 3-4 lines
+  and add descriptive subheadings for every couple of paragraphs." The screenshot: a five-line headline over a cloud of
+  five images (wrong) against a three-line headline and one picture (right).
+  2. No second offer beside the one act (no banner, promotion or "also try" inside the content).
+  3. One picture per block, the one that shows the thing (the score, the keys, the cover); never a collage.
+  4. A paragraph is at most 4 lines at the column's width (phone 402: about 4 × 45 characters); a lesson section of
+     more than two paragraphs gets a subhead.
+- "Users form a first impression … in 0.05 seconds"; "clear, concise headlines … Shorter is generally better." The
+  screenshot: "Becoming a designer may take years of study. We have a different offer for you" (wrong) against
+  "Become a UX Designer in 6 months" (right).
+  5. A screen's title or headline is one idea in at most about 6 words and two lines; a promise is concrete (a number,
+     a time, a thing) never a setup sentence.
+- Value proposition: "What is the product? How does it benefit users? How does it work?" — "a header, description, and
+  image/video". The screenshot: "We're managing your finances, while you have time enjoying your life moments" (wrong)
+  against "We manage your finances, you savor life's moments" (right): active, present, shorter.
+  6. A welcome or empty state answers the three questions in a header (what), a line (the benefit) and a picture (how
+     it works), in that order, in active present tense.
+- "Avoid jargon … If your product is targeted at a specialized group of users, you may use technical terms, but you
+  should explain what they mean first." The screenshot: "Optimize ROI through curricular frameworks and individualized
+  learning trajectories" (wrong) against "Unlock your full potential with personalized learning paths" (right).
+  7. Words are the learner's words. A musician's term is the learner's word here (the rulings); a term a beginner may
+     not know (voicing, inversion) has an ⓘ the first time it appears on a screen, never a paragraph.
+- CTA: "an accent color … contrasting hue"; "without requiring users to scroll"; "active verbs"; "a larger CTA button";
+  "a minimum touch target of 44x44 CSS pixels". The screenshot: "Start hiring" as a grey button (wrong) against the
+  same in the accent (right).
+  8. The one act is the screen's only honey (accent) fill, 44 high at least (48–56 for the page's main act), its label a
+     verb and its object, and it is on the first screen without scrolling at 402×874 and at 1710×904.
+  9. On a long page (over two screens) the act is reachable from the foot as well: it floats (one FAB) or repeats once
+     at the end, never more than twice.
+- "If there's content below the cut that isn't immediately apparent … use a visual indicator"; "the CTA, main image, and
+  headline are clearly visible without scrolling."
+  10. The first screen never ends on a clean break that looks like the end: the next block's top or a shelf's next
+      cover shows at the fold (a cut card, a peeking cover), so the learner sees there is more. The screenshot: a
+      hero that ends flat at the fold under "Get started" (wrong) against the same hero with a small drawn arrow
+      pointing down beside the act (right): where nothing peeks, a quiet ⌄ under the act says there is more.
+- "Use contextual images … that add to the meaning."
+  11. A picture is the content itself (the song's first bars, the chord's keys, a real cover), never stock or a
+      decorative illustration. The screenshot: "Let's travel to Switzerland" over a Paris street (wrong) against the
+      same words over the Alps (right): the picture proves the headline. Here: a song's cover is its own first bars,
+      a chord's card its own keys, a course's its own first piece; never a generic piano photo.
+- Social proof and authority ("reviews, ratings, stats"; logos).
+  12. Only where true and on a public thing: Explore's saves and plays, a course's learners; never invented numbers.
+      The screenshot: a vague claim, "Worldwide photographers choose our app", ringed by floating faces (wrong),
+      against quotes, each with its person's face and words ("I've been a professional photographer for 10 years…")
+      (right). And "Trusted by industry leaders worldwide" over faces and grey bars (wrong) against "Trusted by" and
+      five real logos in one row (right). So: proof is specific (a named person's words, a real count, a known
+      name), never an adjective; a count says what was counted ("1,240 saves"), on one line with its thing.
+  12a. A reward or perk is the concrete thing the learner gets, named in the headline: "Subscribe to stay updated on
+      new lessons" (wrong) against "Subscribe and get a free yoga practice session" (right). Here: a streak's or a
+      badge's line names what it unlocks or proves ("7 days: the Arpeggios course opens"), never "keep going".
+- "Design responsively"; "load times under 2.5 seconds".
+  13. The headline and the act hold at 393, 402, 744, 1024 and 1710 (testing.md); a screen shows its frame at once and
+      fills slow parts with skeletons, never a blank.
+- "Sticky chat elements should be desktop features only … mobile users always complain that sticky chats overlay search
+  results, filters, or worse, the Checkout button."
+  14. Nothing floats over a phone screen's content except the bars and its one floating act; help is a row in Settings
+      and a ⓘ, never a floating bubble.
+
+## Which component for which job (Uxcel, "Common UI Components Part I", sent 2026-11-18)
+
+The source's sentence for each component, then the instruction that holds on every board. A component used for
+another component's job is a finding.
+
+- **Button.** "Allow users to perform actions with a single click or tap"; "Use action verbs on button labels … so
+  they can act without reading supporting text."
+  1. A button does one act now, and its label is a verb (and its object): Play, Add to library, Next lesson. Never a
+     noun alone ("Settings" is a row or an icon, not a button), never "OK" or "Yes".
+  2. A button needs no line of text under it to be understood; if it does, its label is wrong.
+- **Checkbox.** "Multiple options to be selected … simultaneously"; "a checkmark inside" when on, "empty" when off;
+  "a label beside them … alone … or stacked."
+  3. Several independent picks from one list (Select mode's rows, a filter's options) are checkboxes, the label on
+     the right of the box, the whole row tapping it. Off is an empty ring, on is filled with a check (scan-first 5).
+- **Radio button.** "Only allow one"; "filled with a dot" when chosen; "once an option is selected, it cannot be
+  returned to that state … If the deselected state is important, you'll need to give users an alternative."
+  4. One choice of several that are all shown and exclusive is a radio group (or a segmented control when there are
+     two to four short options); one option is always chosen, the usual one by default. "None" is an option of its
+     own when it is a real choice (Off, None), never a radio that cannot be unticked.
+- **Toggle switch.** "Alternate between two options that cannot coexist … on and off"; "effective for tasks where the
+  response is instantaneous"; "make sure the on and off states … are immediately apparent."
+  5. On/off for a setting that takes effect at once is a switch, its row's label the thing switched ("Count-in"),
+     never a switch that needs a Save; on is filled with the track coloured, off is grey, both readable without colour
+     (the knob's side).
+- **Text input.** "Recognize different types of data … auto-format … switch the mobile keyboard."
+  6. Every field names its kind (`type`/`inputmode`: a tempo is numeric, an email is email, a search is search) and
+     carries a visible label; a value with a known form (BPM, 3/4) formats as typed and accepts loose input (Postel).
+- **Menu.** "Context-sensitive … appear when you need them and disappear when you don't."
+  7. A menu opens from the control the learner touched, holds the acts for that thing only, and closes on a tap
+     outside (ui-and-mockups: a ··· opens a menu at its button). Never a menu of one item; never the screen's main
+     act hidden in a menu.
+- **Form.** "Collect as little information as necessary to complete the user's action."
+  8. A form (New song, New playlist, sign in) asks only what the act needs now; everything else has a default and is
+     changed later in the thing's settings. Its one act is at its foot.
+- **Modal.** "Disable the rest of the elements … while keeping them visible"; "used sparingly, either in response to
+  an action users have taken or to warn them about something important"; "any time a modal is triggered indirectly,
+  it interrupts the flow."
+  9. A modal (a dialog, a sheet that blocks) opens only from the learner's own tap or for a loss that cannot be undone
+     (`ConfirmDialog`); never on arrival, never for news or a prompt to rate, sign in or upgrade.
+- **Card.** "Compact, self-contained information containers that present a snippet of content … like digital index
+  cards"; "may also contain interactive elements … such as a Learn More button."
+  10. As "Cards" below: a card is a thing you open, among siblings; at most one act of its own besides opening it.
+- **Table.** "Rows and columns … each row … a single entry, while columns categorize"; "headers provide labels for
+  columns"; "filters … sorting … search."
+  11. Data compared across several attributes (All songs on a laptop, Explore, the Admin lists) is a table: one row per
+      thing, a header row naming every column, numbers right-aligned in tabular digits, sorting from the header or a
+      sort menu, and search above it.
+- **Header.** "Navigational landmarks … essential context"; "keep the design of your header uniform throughout."
+  12. Every screen's bar is the one bar (`ScreenHeader`, `ScoreBar` on the Player and editor): Back at the left, the
+      page's name, its own acts at the right, the same height and inset on every board (`lines.mjs` flow checks it).
+- **Footer.** "Information that is useful but not necessarily the primary focus … contact information, links to
+  privacy policies or terms of use … closure."
+  13. What a web footer holds (Legal, About, version, Report a problem) lives at the foot of Settings, after its
+      groups, never on a working screen; the phone's tab bar is navigation, not a footer, and holds only the places.
+
+### More from "Common UI Components" (Uxcel, Design Terminology, sent 2026-11-18)
+
+- **Button or link.** "Clicking buttons changes the state of a system … while clicking links redirects you somewhere
+  else and doesn't change the system's state. Plus, links often appear in the text and thus, can be longer."
+  14. What changes something (Play, Save, Add, Delete, a toggle, opening a sheet or menu) is a button; what goes to
+      another page (See all, a lesson's "After: 6 · Half steps…", Find a song in Explore) is a link: link-coloured text
+      or a row with a chevron ›. The one exception is the screen's main act when it is the next step
+      itself (Continue, Next lesson, Start): it is the filled honey button though it opens a page. A secondary way to
+      another page is never a filled or tinted button, and a link never acts.
+- **Navigation.** "A product's navigation should be consistent across all pages."
+  15. The places' bar (phone tab bar, laptop sidebar) is identical on every board that shows it: same items, order,
+      icons, words and current mark.
+- **Hamburger menu.** "A compact way to hide navigation links … particularly useful for mobile."
+  16. No ☰ in this app: the four places are always shown in the tab bar, and a laptop's sidebar folds with its own
+      button (the sidebar glyph), never behind a hamburger.
+- **Breadcrumbs.** "Display users' current location"; "the last item … should stand out … It should not be a link."
+  17. Where a trail is shown (a lesson's "Foundations · Chapter 3 · Lesson 7", Settings' Place row), every step before
+      the last opens its page and the last one, the page itself, is plain ink and not a link.
+- **Containers.** "Divide content into meaningful sections … Rigid containers restrict the size … Flexible containers
+  grow to fit."
+  18. A container is drawn only where it marks a section (laws, Cards: whitespace first); a cover, a keyboard or a
+      staff sits in a rigid box of fixed proportion, a list or text in a flexible one that grows, never a fixed-height
+      box that cuts its words.
+- **Menus.** "Command labels paired with icons, and occasionally, some helper text."
+  19. A menu's items are a short command each, an icon at the left when any item has one (then all do), no helper
+      text unless the item's effect is a loss; the loss last, in crimson, after a hairline.
+- **Toggle / segmented buttons.** "Group 2 functions (sometimes 3) into a single container … All buttons are usually
+  equal in width, and only one button can be selected … highlighted with colors or overlays."
+  20. A segmented control holds 2 to 4 options of equal width, one always chosen and shown by a raised fill; more than
+      four, or options of very different length, become a menu or a radio list.
+- **Inputs.** "Labels, placeholder text, and design cues like icons can guide users."
+  21. A field's label is outside it and always visible; the placeholder shows only an example or format ("e.g. 92");
+      a search field carries the magnifier.
+- **Labels.** "A static piece of text that people can read and copy but not edit … help people understand the current
+  context and what they can do next."
+  22. A label is never tappable unless it is styled as a link or sits in a row that opens; static text and controls are
+      told apart by look (scan-first 4).
+- **Radio buttons.** "Once selected, an option can't be unselected … include a 'None of the above' or similar option."
+  23. As rule 4: Off or None is its own radio when not choosing is a real choice.
+- **Hyperlinks.** "Usually immediately recognizable by its bright color and/or underline."
+  24. A link inside running text is the link colour (`LINK`) and is the only text in that colour; the same colour on
+      plain text is a finding.
+
+## Predictions and suggestions (Uxcel, "What Is AI-Powered UX?", sent 2026-11-18)
+
+Where the app guesses for the learner: chords detected from a recording or an import, a suggested next song or
+lesson, Continue, a level placement, a practice pace. The source's words, then the rule.
+
+- "Show predictions as helpful suggestions, not decisions. Always let users easily accept, change, or ignore these
+  suggestions."
+  1. A guess is drawn as a suggestion (a quiet chip or row labelled Suggested, or a chord in the soft style), with
+     its accept in one tap, a way to change it in place, and a way to dismiss it; it never replaces the learner's own
+     choice or data until accepted.
+- "Predictions that miss the mark feel intrusive and waste interface space."
+  2. At most one suggestion block per screen, below what the learner came for, never above it; a dismissed
+     suggestion does not come back on the same screen in the same session.
+- "Users need to understand when the system is certain versus when it's making an educated guess"; "a weather app
+  might show a percentage chance of rain"; "hiding uncertainty often backfires."
+  3. A detected chord or note that is uncertain is marked as uncertain (a dashed outline, "?") and is the first one a
+     review step goes to; a certain one is drawn plainly. Never a percentage where a musician would not use one.
+- "Good designs include clear ways for users to provide feedback when predictions are wrong."
+  4. Correcting a guess is the same act as editing it (tap the chord, pick the right one); the correction is the
+     feedback, with no separate form.
+- "Balance personalization with transparency by showing users how the system learns from their behavior and giving
+  them control."
+  5. Every personal ordering says why in its head or ⓘ ("Recently played", "From your level"), and the learner can
+     change it (a sort menu) or clear it (Settings › Clear history).
+- Personalization of "layout", "features" and "complexity": "bringing frequently used features forward … keeping
+  interfaces simpler for beginners."
+  6. The frame never rearranges itself by use: bars, places and the order of settings stay where they are (Jakob,
+     consistency). Personal order is allowed only inside lists (Recently used first) and in Continue.
+- "Transparency mechanisms that help users understand … what data influences those decisions"; "clear user controls
+  over what information feeds into models"; "mechanisms for user redress."
+  7. Anything learned from the learner's playing is theirs: Settings shows what is kept and has Clear and Export;
+     Report a problem is reachable from the screen where a guess went wrong (its ··· menu). Never read a learner's
+     data to diagnose (`CLAUDE.md`).
+- "Automation offers consistency and reliability for well-defined tasks."
+  8. Where a rule gives the right answer (a key signature's accidentals, a scale's notes, a chord's tones), the app
+     uses the rule and shows it as fact, never as a guess.
+
+## Cognitive biases: in the learner and in us (Uxcel, "Cognitive Biases", sent 2026-11-18)
+
+- **False consensus.** "People assume that others think the same way they do … a designer loves using shortcut keys
+  … might design a software interface that relies heavily on these shortcuts."
+  1. Every act reachable by a shortcut or a gesture (a swipe, a long press, a letter key) is also a visible control
+     or a menu item; a shortcut is never the only way.
+  2. A design choice the owner has not ruled and the references do not settle is checked against two shipped apps'
+     screenshots (`piano-data/reference-apps`, the web) before it is drawn, never decided by our own taste alone.
+- **Halo and horn.** "If their first interaction is negative, they might continue to view the app negatively"; the
+  search "often forms users' initial impressions"; "simplify the account setup."
+  3. The first screens a new learner meets (welcome, Learn's first run, the first song played, Search) are checked
+     first in every round, at every width; Search answers the first letter with results or help, never a blank.
+  4. Nothing asks for an account before the first song plays; signing in is offered after a thing worth saving
+     exists (accounts optional, ADR 0116).
+- **Confirmation bias.** "Favor information that confirms their existing beliefs"; "have someone not involved in the
+  project review."
+  5. A fix is checked by a measure that could prove it wrong (the lines tool, a shot after the change, a fresh look at a
+     stale shot's date), never by looking for what confirms it. A shot's file time is checked before it is judged.
+- **Negativity bias.** "A single issue … can seem more significant than many of its good features"; "keep navigation
+  and search functions in standard locations"; "ensure that error messages are helpful and polite."
+  6. The worst moment of each flow (a failed import, a wrong note, a lost connection) is drawn as carefully as its
+     best: the error says what happened, what is kept, and the one act that fixes it, beside the place it failed.
+  7. Search, Back, Settings and the places stay where the platform puts them on every board.
+- **Anchoring.** "Rely heavily on the first piece of information they see"; "well-chosen numerical default values …
+  set expectations"; "providing an upfront time estimate."
+  8. Every number control starts on the usual value (tempo at the piece's marked tempo, Wait mode's pace at 100%, a
+     metronome at 4/4 and 80), and the default is shown as the default (grey, scan-first 5).
+  9. A wait over about 2 seconds (an import, an export, a recording's analysis) says how long it will take or how far
+     it has got, before it starts.
+- **Framing.** "Different presentations of the same information lead to different conclusions"; "use neutral language
+  … rather than asking users if they 'love' a new feature, ask how they 'feel'."
+  10. Progress is framed as what was done and what is next ("6 of 13 lessons", "2 more days to Gold"), never as a
+      failure count; a result after practice names the bars to work on as the next step, not as a score lost.
+  11. A loss is framed truly as a loss (R38), never softened into a gain; feedback prompts ask in neutral words.
+
+## Type anatomy (Uxcel, "Characters in Typography", sent 2026-11-18)
+
+The source's terms, then what each asks of our two faces (Literata for what is named, Onest for what is read and
+pressed; `DESIGN.md`, Typography). Each rule is a yes-or-no check on a board's shot.
+
+- **X-height:** "the larger the x-height … the more legible the typeface is, even at small font sizes."
+  1. Nothing on a screen is under 12px. 12px is only the Label and Key label, in Onest, never Literata, and never
+     a sentence: a 12px line is at most a few words (a bar number, a degree, "6 of 13").
+  2. Literata sets nothing under 16px (the Lines of a progression, a chord in a row) and nothing that is read as a
+     sentence; a sentence is Onest Body.
+- **Cap height and the baseline:** "the invisible horizontal line that all letters sit on … plays an important role
+  in measuring the vertical distance between text and an element."
+  3. Gaps around text are judged from the ink, not the line box: a heading's space above and below is measured from
+     its cap height and its baseline (the lines tool's `inkBox` does this). A gap that is on the scale box to box but
+     off it ink to ink is fixed by the ink.
+  4. Text beside an icon or a control sits on a shared line: an icon centred on the x-height of a one-line label
+     (Lucide at 20 beside 16px text); a number beside a word shares its baseline (`align-items: baseline` in a value
+     row, never `center` when the two are different sizes).
+- **Ascender and descender:** "if descenders are too long they can intersect with the ascenders of letters on the
+  next line … fix this by … adjusting line spacing."
+  5. A title that wraps to two lines keeps its token's line height (Title 1 1.2, Large title 1.15, Display 1.1); a
+     board never sets a two-line title tighter than 1.1. Check every wrapped title in the shot: no g, p, y touching
+     the b, d, h, k, l below it.
+  6. Nothing cuts a descender: a clamped or truncated line keeps its full line box (no `height` equal to the font
+     size, no `overflow: hidden` on a line-height under 1.2).
+- **Serif:** serifs "create a feeling of sophistication, trust, and world-class quality."
+  7. The serif is the name of the thing (a song, a chord, a lesson, a screen's title: the Serif Names Rule); it never
+     sets a button, a tab, a chip, a field or a key label. One serif and one sans on every board: no third family
+     (Noto Music only for a music sign that stands alone). The sidebar's wordmark, Piano Trainer in Instrument Serif,
+     is the logo, a picture, and no third family.
+- **Kerning:** "certain letter combinations (… W, Y, V, or T) have large gaps"; "kerning that looks fine at small
+  sizes … becomes unbalanced … when enlarged for headlines."
+  8. Kerning is the font's: `font-kerning: normal` everywhere (the default); no board turns it off.
+  9. At 34px and above (a screen's title, the Chord at 72), look at the shot for an open pair: a T or V beside a
+     lowercase letter, and the accidental after a root (C♯, E♭). A gap wider than the stems is a fault in Text
+     Accidentals' spacing, fixed in that font's metrics, never by a space or a margin in the board.
+- **Tracking:** "commonly applied to headlines … to diminish weird gaps"; "white text on a black background is …
+  more legible when it has increased tracking."
+  10. Three values only: titles 34px and above at -0.01em (the Chord's figures -0.03em); small capitals (a CAPS
+      heading, an EXERCISE-style eyebrow) at +0.04em; everything else 0. A fourth value on a board is a drift and is
+      changed to one of the three.
+  11. Nothing set in capitals is longer than four words; capitals are never set over a chord symbol (`seven-questions`
+      5).
+  12. By Night, light text on the dark page stays at these values; legibility by Night comes from the ink's contrast
+      (4.5:1) and weight, not from wider tracking.
+- **Weight:** "a common typeface may have 3 to 6 weights"; "when using very light … or very heavy weights … use
+  larger font sizes."
+  13. Four weights, each with its jobs, as the boards draw them: 400 for reading; 500 for a label and an inactive
+      tab; 600 for a control, a value and a small capital; 700 for a name, a title and an active tab. Nothing at
+      300 or below, nothing at 550 or 800 and above; no synthesised bold. (`DESIGN.md` names titles 600; the boards
+      set them 700, and the board is the spec: `DESIGN.md` moves to 700 at the port.)
+  14. Emphasis inside a sentence is 600, never italic, colour or underline (an underline is a link's alone).
+- **Tabular and proportional figures:** tabular "where values change constantly and may look offset"; proportional
+  "for numbers inside of headlines, subheads, or any other copy where it should blend into text."
+  15. Tabular (`font-variant-numeric: tabular-nums`): every number that changes in place (tempo, a timer, a bar, a
+      count that ticks, a progress "61%") and every number in a column read down (the levels' "6 of 13", a list's
+      counts, a table).
+  16. Proportional (the default): a number inside a sentence or a title ("Lesson 7 of 13" under a title, "Bar 84 of
+      138" in a sentence that does not tick, "2 more days to the Gold badge").
+  17. Numbers in a column are right-aligned on their last digit, so places line up.
+- **Ligatures:** "standard … exist in order to increase legibility"; "discretionary … serve a decorative function."
+  18. Standard ligatures stay on (the default) in names and prose; discretionary ligatures (`dlig`) are never turned
+      on. Ligatures go off (`font-variant-ligatures: none`) only where letters are read one by one: a code a learner
+      types, a key's name, a field the learner is editing.
+
+## A phone is not a small laptop (Uxcel, "Designing for Mobile Interfaces", sent 2026-11-18)
+
+The source: mobile sessions are "shorter, more frequent", often "while in motion, multitasking"; "users should be
+able to use all essential features regardless of how they hold their device"; "choose appropriate keyboard types …
+to minimize user effort"; gestures have three limits, "discoverability … consistency … accessibility"; "always
+provide visible alternative controls".
+
+1. **Portrait first, every feature on its side.** Every phone board is drawn upright first, and every feature also
+   works at 852×393 (`testing.md`); nothing says "turn your phone". The Player and the score editor on their side
+   keep the transport and the keys; a list on its side is the same list, wider.
+2. **Short sessions start where they ended.** A place opens on what the learner last did (Continue on Learn, the last
+   song on top of Songs, the last tool first in Practice); a page left mid-task (an edit, a take, a lesson's section)
+   comes back where it was, never at its top.
+3. **One hand, thumb's reach.** The one act of a phone screen (the honey control, Play, the +) sits in the lower
+   third; the bar at the top holds Back, the title and the gear, nothing pressed often.
+4. **Targets and the space between them.** Every target 44 high; two targets side by side stand at least 8 apart
+   edge to edge, or share one 44 row split by a hairline (a segmented control); a laptop row may go to 40 high
+   (`craft-details`, Hit area), never closer than 4.
+5. **The right keyboard for each field** (each input on a board carries it, so the port does too):
+   - a number (tempo, bars, a time signature's figures): `inputmode="numeric"`, a field of digits only;
+   - a search: `type="search"` and `enterkeyhint="search"`;
+   - an email: `type="email"`, `autocomplete="email"`, `autocapitalize="off"`;
+   - a password: `type="password"`, `autocomplete="current-password"` or `"new-password"`, with the eye that shows it;
+   - a name or a title (a song, a lesson, a folder): `autocapitalize="words"` for a title, `"sentences"` for a
+     description; `enterkeyhint="done"` on the last field of a New sheet;
+   - a link: `type="url"`.
+   Every field accepts paste and dictation; nothing blocks them.
+6. **Every gesture has a visible twin.** A swipe on a row is also in the row's ···; a long press is also a menu item;
+   pinch on the score is also the zoom in its gear; a drag to reorder has its handle. A gesture is a shortcut, never
+   the only way (biases, rule 1).
+7. **Sharp on every screen.** Pictures are SVG (covers, icons, the staff, the keys) or raster at 2× and 3×; sizes in
+   rem so they follow the reader's text size; nothing drawn as a bitmap of text.
+8. **Big decisions work on the phone too.** Sign in, Publish, Delete account, Empty Trash and sharing with people
+   are complete on a phone, with the same words and the same question as on a laptop; nothing says "use a computer".
+
+## Composition (Uxcel, "Intro to Design Composition", sent 2026-11-18)
+
+The source: composition is "the arrangement, alignment, and compilation of text, images, and other UI elements on a
+page"; "every element … is intentional — nothing is random"; "a simple guide: pick a format, use a grid, group
+elements, define the interaction between elements"; "establish a solid hierarchy and a grid before you start worrying
+about aesthetics"; "position elements in ways to naturally lead users to the most important parts, such as the CTA".
+Its picture: a Buy button laid over the product's photo, above its name, is wrong; the same button under the name and
+its line, the photo clear, is right.
+
+1. **Format, then grid, then groups, then the look** (the four phases, `ui-and-mockups`, Building a screen 4): a board
+   names its device (402 or 1710), its columns (one column on a phone; on a laptop the sidebar plus one or two
+   columns on the 56 inset), and its groups before any colour or word is drawn.
+2. **The grid is shared:** every block on a board starts on one of its column edges (16 on a phone; the sidebar's
+   edge and the column edges on a laptop); a block on its own edge is a fault the lines tool marks red.
+3. **The eye's path is the reading order:** the screen reads top to bottom as the learner needs it: what the thing
+   is (the picture, then its name and line), then what it holds, then what can be done with it. The act comes after
+   the facts it depends on, never over the picture and never above the name.
+4. **Nothing is laid over the picture** that is not about the picture: a cover, the staff and the keys carry only
+   their own marks (a play triangle on a cover, the chord's colours on the keys); a button, a price or a title sits
+   beside or under it. The heart may sit at a picture's corner, with its backing (`craft-details`, Over a picture).
+5. **One focal point, made by scale:** the one thing the screen is for is the largest thing on it (the chord's name
+   at 72, the score, a song's cover); everything else steps down the type scale, never sideways to a second thing
+   of the same size.
+6. **Nothing random:** every element on a board answers "what does the learner learn or do with this?" (the
+   `ux-writing` check 1, for pictures and shapes too). A decoration with no answer goes.
+7. **A story across pages:** sibling pages (a level, its lesson, the lesson's next) keep one frame and move only
+   the content, so the learner follows the plot, not the chrome (the lines tool's flow).
+
+## The design system, as layers (Uxcel, "What is a Design System?", sent 2026-11-18)
+
+The source: four layers, "Foundations … Tokens … Core systems … Components", each "a chain of dependency — small
+design choices at the core shape every component"; each layer has "assets, documentation, and processes"; a system
+gives "a shared language": "a designer refers to a color token … and a developer uses the same token in code; both
+know exactly which colour to apply"; "governance … regular reviewing, updating, and versioning".
+
+Our layers, and where each lives:
+
+| Layer | The canvas | The app |
+| ----- | ---------- | ------- |
+| Foundations | `DESIGN.md` (look, type, the named rules) | the same `DESIGN.md` |
+| Tokens | `calm_kit.py`'s constants (`INK`, `SOFT`, `LINE`, `FILL`, `PAGE`, `SHEET`, `LINK`, `ACCENT`) | `DESIGN.md`'s frontmatter, `src/styles/tokens.css` |
+| Core systems | the 4/8 spacing scale, the type scale, the four radii, elevation (glass on what floats) | the same, in `theme.css` |
+| Components | `r41_kit.py`'s helpers (`GROUP`, `BSHEET`, `ROWMENU`, `SEGC`, `BTN`, `DOCK`) | `src/shared/ui` |
+
+1. **A value comes from the layer below, never typed in:** a colour on a board is a kit constant; a gap is on the
+   scale; a radius is one of the four; a size is a type-scale step. A literal hex, a gap of 10 or a radius of 15 in a
+   generator is a drift: replace it with the constant, or add the token to `DESIGN.md` first if it is truly new.
+2. **A component is built once, in the kit:** a part drawn on two boards is a kit helper; a board never rewrites a
+   helper inline or patches its output with `.replace()` to change its look (a post-process is a drifted copy,
+   `design-consistency`). Change the helper, then name every board it changes.
+3. **One name on both sides:** a kit helper and its app component carry the same name or a name the port table maps
+   (the area's spec); a state key on a board names the same state the app's store holds. Words in code follow
+   `CLAUDE.md`'s "Words in code".
+4. **Each part carries its documentation:** a kit helper has a one-line docstring saying what it is for and when not
+   to use it; a token in `DESIGN.md` says its role (`craft-details`, owner's articles 7).
+5. **Governance is the loop:** every change to a token or a helper is a feedback-log bullet naming what changed, why,
+   and the boards it touched, and a commit of its own; nothing in the system changes without that line.
+6. **A change at the core is checked at the edge:** after a token or a core-system change, `checks/regress.py` and a
+   shot of every board that uses it (both sizes), since an inner change reaches every component.
+
+## The page's subject is its largest thing (owner, 2026-11-18, checked against the guidelines)
+
+The owner: "the score in the exercises is very important but it gets so little space and is so small that the user
+doesnt understand that this is the main things on the page. and check also all other practice pages for such things".
+The guidelines say the same: NN/g, "5 Principles of Visual Design in UX" (Scale): "emphasize the most important aspect
+of your design by making them biggest"; Apple HIG, Layout: "Order content by relative importance … the most important
+items near the top and leading side"; Material 3, Cards: "Don't force content into cards when spacing, headlines, or
+dividers would create a simpler visual hierarchy". Shipped music apps agree: forScore, Flat and flowkey give the score
+the screen, the controls around it.
+
+1. Each board names its subject in its spec (the score on an exercise or pattern, the interval on Intervals, the chord's
+   keys on Chords, the scale on Scales). It is the largest block on the first screen at 402×874 and 1710×904, larger
+   than any group of settings, any keyboard strip or any list.
+2. Music is drawn at reading size: a staff space of at least 10px on a phone (a 5-line staff at least 40 tall), the
+   staff across the column's full width; never a thumbnail of the score.
+3. The subject sits on the paper, never in a card on its own page (Cards, below).
+4. Enough of it to be read as music: at least two systems or four bars of an exercise or pattern on a phone.
+5. What sets it up (Number, Hands, Tempo) follows it, quieter, never above it or larger.
+
+## The keys never move (owner, 2026-11-18)
+
+The owner: "something appears under the keyboard as feedback of what the user has played and not correctly. this is
+very bad as it lifts the keyboard and puts background under it". The guidelines agree: Apple HIG, Feedback: "integrate
+status and other types of feedback into your interface … near the items they describe"; Material 3: a layout keeps its
+regions fixed while content changes; the lines tool's "controls hold their place".
+
+1. A keyboard, once drawn, keeps its top and height in every state of its page: answered, shown, wrong, right.
+2. A verdict ("Right", "Not quite: it's C E G") is said where the question is, as words in its colour, never as a
+   tinted band or card beside the keys.
+3. An act that replaces another (Next for Show answer · Clear · Check) takes the same slot at the same height.
+
+## Cards: where they belong, and where not
+
+**NN/g, "Cards: UI-Component Definition"** ([Laubheimer 2016](https://www.nngroup.com/articles/cards-component/)).
+A card is "a container for a few short, related pieces of information … a linked, short representation of a
+conceptual unit." Four properties: it **groups** several kinds of information about one thing; it is a **summary and
+a link** to the details (tap anywhere opens them); it **looks like a card** (border, a fill unlike the canvas, often a
+slight shadow as a sign it can be pressed); cards allow **flexible layouts** of mixed content. When useful: for
+**browsing**, not searching; for **heterogeneous** collections (dashboards, feeds of different kinds). Not useful:
+for homogeneous items (a list of similar songs) — "consider using a standard vertical list"; when people compare or
+scan for one item (lists are more scannable, ranked and compact); a photo gallery needs no card around each photo.
+"Cards work especially well … rather than when simply used as a modern-looking replacement for a list of content."
+
+**Material 3, Cards guidelines** ([m3.material.io](https://m3.material.io/components/cards/guidelines)). "Use a card to
+display content and actions on a single topic … entry points into deeper levels of detail." **Don't:** "force content
+into cards when spacing, headlines, or dividers would create a simpler visual hierarchy." Filled cards separate subtly,
+elevated more, outlined most; cards in a collection share one elevation; sort and filter sit outside the collection.
+On a phone "consider swapping cards for lists"; on a large screen "adjust the card layout so content remains the main
+focus" and "avoid extending UI elements across the screen".
+
+**What follows here**
+- A card is a **thing you can open**, or a few unlike facts about one thing, shown among siblings. Songs in a
+  playlist, rows of Explore, settings rows: a list, not a card each (Flat, Apple Music).
+- **Never a card around the page's own subject on its own page.** A song's page is the song; its info is the page, in
+  a plain column on the paper. A white box there groups nothing the margin did not already group, and draws the eye
+  away from the music.
+- **A lone card on a plain page** is a box dropped on the paper. If it is not one of a collection, ask whether
+  whitespace and a heading would do.
+- **Grouped settings** (iOS's inset grouped list) are the one card-like group of rows that stays: many short rows that
+  belong together, edge to edge inside, with hairlines.
+- **No card in a card.** Never a full-width band (false floor).
+
+## Floating actions
+
+**Material 3, FAB guidelines** ([m3.material.io](https://m3.material.io/components/floating-action-button/guidelines)).
+"Use a FAB for the most important action on a screen"; "Don't display multiple FABs on a single screen"; "FABs are not
+needed on every screen". For "primary, positive actions: create, favorite, share, start a process"; never minor or
+destructive ones (archive, trash). An extended FAB when a label is needed; a FAB menu when several kinds of creation
+belong to it. On a phone the lower right corner, "easy to reach and less likely to cover important content". "A FAB
+shouldn't contain … actions found elsewhere on a screen." "Individual components, such as cards, shouldn't have their
+own FAB." It stays in place on scroll.
+
+**What follows here**
+- One floating action per screen, honey: the library's + (a dial of New song, Record, Import, New playlist), a public
+  song's Add to my library (extended, labelled).
+- Play is not a second floating button beside it: it sits on the music it plays (closeness), a quiet control at the
+  head of the chart; a tap on a bar plays that bar.
+- Never two acts of different weight in one box in the content: two focal points.
+
+## What the owner's lines found, by law (2026-11-17, the public song board)
+
+| Mark | Law broken |
+| ---- | ---------- |
+| the eye goes to the Amazing Grace card, not the verses and chords | hierarchy, figure and ground: a white card on the page outweighs the music |
+| the card's top not level with the music's top | alignment (HIG): edges that nearly meet read as a mistake |
+| the play button doesn't fit there | closeness of actions and objects: Play away from what it plays |
+| the header empty | hierarchy: the bar holds the page's name |
+| the gap between the card and the sidebar too big | proximity and balance: the card floats free of everything |
+| white card on this background, other space empty | common region overused; balance |
+| Add to library and Play in one box on a phone | Von Restorff, one FAB: two focal points |
+| a pedal and a strip under the keyboard | removed features, and a coloured strip under content reads as outside it |
+
+## Software ergonomics (the owner's course: mebis "Grundlagen – Knowledge Base", section 2, sent 2026-11-17)
+
+- **Usability** is the extent to which a product can be used by given users in a given context to reach given goals
+  effectively, efficiently and satisfyingly (DIN ISO 9241-11); **UX** the whole experience from first touch to long use,
+  trust and joy included (DIN ISO 9241-210). The five E's: effective, efficient, engaging, error tolerant, easy to learn.
+  Functionality, usability and UX only work together.
+- **Gestalt, as the course lists them:** similarity (the same function wears the same icon and colour), proximity
+  (picture and its text close), Prägnanz (the one call to action differs in colour and size from the rest), closure
+  (a container with quiet lines unites text and picture), continuity (along a line the eye follows), common fate
+  (what moves together belongs together), common region, connectedness (a line joins steps). Expected places are
+  landmarks: a menu where people look for it, "as villagers use the church tower".
+- **Colour:** 3–4 colours for the essential parts (one brand colour, two neutrals); no crowd of strong colours; shades
+  of one colour for variety; the accent only on the central interactive element; text contrast at least 4.5:1; no
+  red–green pairs alone (about 8 % of men see colour differently); **never colour alone**: a change of colour also
+  changes type, an icon or a line.
+- **Type:** at most two families (one for headings, one for text); fixed sizes for each level, headings about twice
+  the text; weight and italic used on purpose; left-aligned ragged text, never justified; about 50–70 characters a line.
+  (The course prefers a sans for screens; `DESIGN.md`'s Literata for names and Onest for text stands: two families.)
+- **Accessibility (WCAG):** perceivable, operable, understandable, robust; large enough targets; clear structure, the
+  same labels for the same things, predictable links, plain language; text that scales.
+- **Dark patterns:** "you expect something to happen from experience, and something quite different happens":
+  misleading buttons, hidden costs, unclear ways out. Here: every link says where it goes and goes there (the owner's
+  "I don't want misleading links"), Play plays, a loss is named truly.

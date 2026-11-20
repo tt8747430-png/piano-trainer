@@ -40,7 +40,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 12
+export const PIECES_VERSION = 13
 
 /** The learner's pieces. */
 export interface PiecesState {
@@ -271,9 +271,12 @@ function songOf(saved: unknown): OwnSong | null {
   const note = readNote(saved.note)
   // The Explore item it was added from (B3): an id, as long as a title at most.
   const publicId = isText(saved.publicId) ? saved.publicId.trim().slice(0, TITLE_MAX) : ''
+  // When it came in: what All songs' Added sort reads.
+  if (!isText(saved.added) || Number.isNaN(Date.parse(saved.added))) return null
   return {
     id: saved.id,
     title: song.title,
+    added: saved.added,
     ...song.music,
     ...(author ? { author } : {}),
     ...(publicId ? { publicId } : {}),

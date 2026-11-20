@@ -29,7 +29,7 @@ describe('Button', () => {
       <>
         <Button variant="surface" size="icon" aria-label="Settings" />
         <Button variant="soft">Arpeggio</Button>
-        <Button size="pill">Next</Button>
+        <Button size="lg">Next</Button>
       </>,
     )
     expect(screen.getByRole('button', { name: 'Settings' })).toHaveClass('rounded-full', 'size-11')

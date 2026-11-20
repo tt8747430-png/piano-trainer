@@ -1,10 +1,8 @@
 import {
   Archive,
-  Download,
   FolderInput,
   Heart,
   HeartOff,
-  Link2,
   Music,
   Palette,
   PencilLine,
@@ -19,10 +17,9 @@ import type { RowAction } from '@/shared/ui'
 import type { LibraryPage } from '../model/use-library-page'
 
 /**
- * A song's actions in the library (ADR 0106, R31-S), in the menu's four parts: Play, Edit score and
- * Settings (a song with music); Favourite and Move to folder… (where it may leave the folder, R29
- * B4); Share link and Export… (its files, ADR 0107) where it has music; Archive, and Delete for the
- * learner's own song alone, asked first.
+ * A song's ··· in the library (R72's ROWSHEET, Flat's): Practise, Edit score where it has music, Add to
+ * a folder (where it may leave the folder, R29 B4), Favourite, Settings where it has music, Archive.
+ * Its files and Delete are its page's Settings (ADR 0107, R34).
  */
 export function songActions(
   entry: Entry,
@@ -31,105 +28,52 @@ export function songActions(
 ): RowAction[] {
   const favourite = page.favourites.includes(entry.id)
   const music = isPiece(entry)
-  return [
+  const actions: (RowAction | false)[] = [
     {
       key: 'play',
-      group: 'open',
-      label: t('library.play'),
+      label: t('library.practise'),
       icon: Play,
       paint: 'yellow',
       onSelect: () => page.openSong(entry.id, 'play'),
     },
-    ...(music
-      ? [
-          {
-            key: 'edit',
-            group: 'open',
-            label: t('library.editScore'),
-            icon: Music,
-            paint: 'sky' as const,
-            onSelect: () => page.openSong(entry.id, 'edit'),
-          },
-        ]
-      : []),
-    ...(music
-      ? [
-          {
-            key: 'settings',
-            group: 'open',
-            label: t('library.settings'),
-            icon: Settings,
-            paint: 'sand' as const,
-            onSelect: () => page.openSong(entry.id, 'settings'),
-          },
-        ]
-      : []),
+    music && {
+      key: 'edit',
+      label: t('library.editScore'),
+      icon: Music,
+      paint: 'sky',
+      onSelect: () => page.openSong(entry.id, 'edit'),
+    },
+    page.may('moveOut') && {
+      key: 'move',
+      label: t('library.addToFolder'),
+      icon: FolderInput,
+      paint: 'sky',
+      onSelect: () => page.moveOne({ songs: [entry.id], folders: [] }, page.titleOf(entry.id)),
+    },
     {
       key: 'favourite',
-      group: 'library',
       label: t(favourite ? 'common:library.unfavourite' : 'common:library.favourite'),
       icon: favourite ? HeartOff : Heart,
       paint: 'sand',
       onSelect: () => page.acts.toggleFavourite(entry.id),
     },
-    ...(page.may('moveOut')
-      ? [
-          {
-            key: 'move',
-            group: 'library',
-            label: t('library.moveTo'),
-            icon: FolderInput,
-            paint: 'sky' as const,
-            onSelect: () =>
-              page.moveOne({ songs: [entry.id], folders: [] }, page.titleOf(entry.id)),
-          },
-        ]
-      : []),
-    ...(music
-      ? [
-          {
-            key: 'share',
-            group: 'share',
-            label: t('library.shareLink'),
-            icon: Link2,
-            paint: 'grass' as const,
-            onSelect: () => page.open({ kind: 'share', song: entry.id }),
-          },
-          {
-            key: 'export',
-            group: 'share',
-            label: t('export.action'),
-            icon: Download,
-            paint: 'grass' as const,
-            onSelect: () => page.open({ kind: 'export', song: entry.id }),
-          },
-        ]
-      : []),
-    ...(page.may('archiveSong')
-      ? [
-          {
-            key: 'archive',
-            group: 'away',
-            label: t('library.archive'),
-            icon: Archive,
-            paint: 'lilac' as const,
-            onSelect: () => page.archive([entry.id]),
-          },
-        ]
-      : []),
-    ...(page.mayDelete(entry.id)
-      ? [
-          {
-            key: 'delete',
-            label: t('library.delete'),
-            icon: Trash2,
-            paint: 'sand' as const,
-            destructive: true,
-            onSelect: () => page.trash([entry.id]),
-          },
-        ]
-      : []),
+    music && {
+      key: 'settings',
+      label: t('library.settings'),
+      icon: Settings,
+      paint: 'sand',
+      onSelect: () => page.openSong(entry.id, 'settings'),
+    },
+    page.may('archiveSong') && {
+      key: 'archive',
+      label: t('library.archive'),
+      icon: Archive,
+      paint: 'lilac',
+      destructive: true,
+      onSelect: () => page.archive([entry.id]),
+    },
   ]
+  return actions.filter((action): action is RowAction => action !== false)
 }
 
 /**

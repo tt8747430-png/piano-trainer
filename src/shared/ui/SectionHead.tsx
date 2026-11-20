@@ -17,7 +17,7 @@ export function SectionHead({
   children?: ReactNode
 }) {
   return (
-    <div className="flex items-baseline justify-between gap-3 px-1">
+    <div className="flex items-baseline justify-between gap-3">
       <h2 id={id} className="font-sans text-xl font-bold">
         {title}
       </h2>
@@ -46,7 +46,7 @@ export function SeeAll({
       type: render ? undefined : 'button',
       onClick,
       className:
-        '-my-2.5 -mr-1 inline-flex min-h-11 min-w-11 items-center justify-end px-1 text-[0.9375rem] font-semibold text-link hover:underline',
+        '-my-3 -mr-1 inline-flex min-h-11 min-w-11 items-center justify-end px-1 text-[0.9375rem] font-semibold text-link hover:underline',
       children: label,
     },
   })

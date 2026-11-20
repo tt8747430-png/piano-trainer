@@ -1,18 +1,32 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { printedSymbol, type ChordFingers, type Midi, type PlacedChord } from '@/shared/lib/music'
+import { printedSymbol, type ChordFingers, type PlacedChord } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { chordBars } from '@/shared/lib/schedule'
+import { useMediaQuery } from '@/shared/lib/use-media-query'
 import { LazyScoreView } from '@/shared/ui'
 
-/** The canvas's staff space over the app's at its own size: 15 to 10. */
-const SCALE = 1.5
-/** The least room a bar takes when several chords share the staff, and the clef's, in pixels. */
-const BAR = 132
-const CLEF = 64
-/** The empty bar after the last chord, where the + adds the next, as the canvas's. */
-const ADD = 64
+/**
+ * The canvas's staff (`r42_chords.py`, `sv`), in its units: the lines 14 in from each side, the
+ * clef's room from the lines' start, each chord's bar, the empty place after the last (the + 28
+ * into it), and the room left at the staff's end. A unit is the canvas's scale, 1.5 on a phone and
+ * 1.75 on a laptop, a staff space 10 units.
+ */
+const INSET = 14
+const CLEF = 54
+const SLOT = 86
+const ADD_AT = 28
+/** A chord's name is a button over its whole bar, 3 units in from each end (the canvas's `cname`). */
+const NAME_INSET = 3
+const ADD_ROOM = 56
+const END_ROOM = 20
+/** Verovio's page runs 6 units further under the staff than the canvas's picture. */
+const VEROVIO_FOOT = 6
+/** ...and 12 units further over it: the canvas's picture starts 18 units over the top line. */
+const VEROVIO_HEAD = 12
+/** The chords' names stand in a row 40 pixels tall over the canvas's picture, at every size. */
+const NAMES_ROW = 40
 
 /** The empty bar drawn after the last chord: where it starts, each staff's lines, their paint. */
 interface EmptyBar {
@@ -29,14 +43,13 @@ export interface SheetChord {
   readonly symbol: string
 }
 
-/** A word set beside a head: its name left of the chord, its finger right of it. */
+/** A head's finger, set right of the chord. */
 interface HeadMark {
   readonly key: string
   readonly text: string
   readonly left: number
   readonly top: number
   readonly size: number
-  readonly end: boolean
 }
 
 /** Where a bar stands across the staff, in the staff's pixels: its edges and its chord's middle. */
@@ -56,15 +69,12 @@ interface BarPlace {
 export function ChordSheet({
   chords,
   at,
-  labels,
   onPick,
   onName,
   onAdd,
 }: {
   chords: readonly SheetChord[]
   at: number
-  /** What each of the chosen chord's heads carries left of it, as the Piano sheet's Labels says. */
-  labels: ReadonlyMap<Midi, string>
   /** A bar tapped: its chord chosen (and played). */
   onPick: (at: number) => void
   /** A chord's name tapped: the chord to change. */
@@ -78,37 +88,34 @@ export function ChordSheet({
     [chords],
   )
   const several = chords.length > 1
+  const unit = useMediaQuery('(min-width: 64rem)') ? 1.75 : 1.5
   const section = useRef<HTMLElement>(null)
   const scroller = useRef<HTMLDivElement>(null)
   const [room, setRoom] = useState(0)
   const [marks, setMarks] = useState<readonly HeadMark[]>([])
   const [bars, setBars] = useState<readonly BarPlace[]>([])
   const [empty, setEmpty] = useState<EmptyBar | null>(null)
-  const width = several ? Math.max(room, CLEF + chords.length * BAR + ADD) : room
-  const engraved = onAdd ? width - ADD : width
+  const engraved = (CLEF + chords.length * SLOT) * unit
+  const width = Math.max(room, engraved + (onAdd ? ADD_ROOM : END_ROOM) * unit)
   useLayoutEffect(() => {
     const box = section.current
     const staff = scroller.current
     if (!box || !staff) return
     const place = () => {
-      setRoom(box.clientWidth - 40)
+      setRoom(box.clientWidth - 2 * INSET * unit)
       const measures = [...staff.querySelectorAll<SVGGElement>('g.measure')]
-      measures.forEach((measure, i) => measure.toggleAttribute('data-chosen', several && i === at))
-      measures.forEach(centred)
+      measures.forEach((measure, i) => measure.toggleAttribute('data-chosen', i === at))
+      measures.forEach((measure) => centred(measure, CLEF * unit))
       setEmpty(emptyBar(staff, measures[measures.length - 1]))
       setBars(measures.map((measure) => barPlace(staff, measure)))
       setMarks(
         measures.flatMap((measure, i) => {
           const chord = chords[i]
           if (!chord) return []
-          const staves = [chord.placed.rh, chord.placed.lh].filter((hand) => hand.length > 0)
           const hands = [chord.fingers.rh, chord.fingers.lh].filter(
             (_, side) => (side === 0 ? chord.placed.rh : chord.placed.lh).length,
           )
-          const names = staves.map((hand) =>
-            hand.map((tone) => (several ? '' : (labels.get(tone.midi) ?? ''))),
-          )
-          return headMarks(staff, measure, `${i}`, names, hands)
+          return headMarks(staff, measure, `${i}`, hands)
         }),
       )
     }
@@ -121,7 +128,7 @@ export function ChordSheet({
       watch.disconnect()
       resize.disconnect()
     }
-  }, [chords, at, labels, several])
+  }, [chords, at, unit])
   // The chosen bar kept in view as chords are added or chosen.
   const chosen = bars[at]
   useLayoutEffect(() => {
@@ -135,16 +142,27 @@ export function ChordSheet({
       ref={section}
       aria-label={t('sheet.label')}
       data-chord-sheet
-      className="relative w-full min-w-40"
+      className="relative w-full min-w-40 py-1"
     >
       <div ref={scroller} className="relative overflow-x-auto overscroll-x-contain">
-        <div className="relative px-5 pt-7" style={{ width: width + 40 }}>
-          {engraved > 0 ? <LazyScoreView score={score} scale={SCALE} fill={engraved} /> : null}
-          {onAdd && empty ? (
+        <div
+          className="relative"
+          style={{
+            width: width + 2 * INSET * unit,
+            paddingInline: INSET * unit,
+            paddingTop: NAMES_ROW - VEROVIO_HEAD * unit,
+          }}
+        >
+          {/* The engraving's own room under the staff, past the canvas's, given back. */}
+          {room > 0 ? (
+            <div style={{ marginBottom: -VEROVIO_FOOT * unit }}>
+              <LazyScoreView score={score} scale={unit} fill={engraved} />
+            </div>
+          ) : null}
+          {empty ? (
             <div
-              aria-hidden={false}
               className="absolute inset-y-0"
-              style={{ left: empty.left, width: ADD }}
+              style={{ left: empty.left, width: width + INSET * unit - empty.left }}
             >
               {empty.staves.map((lines, s) => (
                 <span key={s}>
@@ -170,21 +188,23 @@ export function ChordSheet({
                   />
                 </span>
               ))}
-              <button
-                type="button"
-                aria-label={t('practice:chords.next.add')}
-                title={t('practice:chords.next.add')}
-                onClick={onAdd}
-                className="absolute flex size-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-honey-ink outline-none focus-visible:rounded-full focus-visible:ring-2 focus-visible:ring-ring"
-                style={{
-                  left: ADD / 2,
-                  top: middleOf(empty.staves),
-                }}
-              >
-                <span className="flex size-9 items-center justify-center rounded-full border-[1.5px] border-dashed border-honey-ink/55 bg-card">
-                  <Plus aria-hidden className="size-4.5" />
-                </span>
-              </button>
+              {onAdd ? (
+                <button
+                  type="button"
+                  aria-label={t('practice:chords.next.add')}
+                  title={t('practice:chords.next.add')}
+                  onClick={onAdd}
+                  className="absolute flex size-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-honey-ink outline-none focus-visible:rounded-full focus-visible:ring-2 focus-visible:ring-ring"
+                  style={{
+                    left: ADD_AT * unit,
+                    top: middleOf(empty.staves),
+                  }}
+                >
+                  <span className="flex size-9 items-center justify-center rounded-full border-[1.5px] border-dashed border-honey-ink/55 bg-card">
+                    <Plus aria-hidden className="size-4.5" />
+                  </span>
+                </button>
+              ) : null}
             </div>
           ) : null}
           {bars.map((bar, i) => {
@@ -202,12 +222,12 @@ export function ChordSheet({
                   aria-label={t('practice:chords.next.change', { chord: name })}
                   title={t('practice:chords.next.change', { chord: name })}
                   onClick={() => onName(i)}
-                  className={`absolute top-0 flex h-11 -translate-x-1/2 items-center rounded-[10px] px-2 font-display text-[1.0625rem] whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                  className={`absolute top-0 flex h-11 items-center justify-center rounded-[10px] font-display text-[1.0625rem] whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                     i === at || !several
                       ? 'font-bold text-link'
                       : 'font-semibold text-muted-foreground'
                   }`}
-                  style={{ left: bar.middle - bar.left }}
+                  style={{ insetInline: NAME_INSET * unit }}
                 >
                   {name}
                 </button>
@@ -227,11 +247,7 @@ export function ChordSheet({
             <span
               key={mark.key}
               aria-hidden
-              className={
-                mark.end
-                  ? 'pointer-events-none absolute -translate-y-1/2 font-sans leading-none font-bold text-foreground italic'
-                  : 'pointer-events-none absolute -translate-x-full -translate-y-1/2 font-sans leading-none font-bold whitespace-nowrap text-foreground'
-              }
+              className="pointer-events-none absolute -translate-y-1/2 font-sans leading-none font-bold text-foreground italic"
               style={{ left: mark.left, top: mark.top, fontSize: mark.size }}
             >
               {mark.text}
@@ -245,10 +261,11 @@ export function ChordSheet({
 
 /**
  * A chord moved to its bar's middle, as the canvas writes it (Verovio sets a bar's one chord at its
- * start): its layer and its ledger lines shifted together, by the room between the clef and
- * signatures (or the bar's start) and its barline.
+ * start): its layer and its ledger lines shifted together, to the middle of its slot, from the
+ * clef's room (the first bar's, `clef` pixels from the lines' start) or the bar's start to its
+ * barline.
  */
-function centred(measure: SVGGElement): void {
+function centred(measure: SVGGElement, clef: number): void {
   const moved = [...measure.querySelectorAll<SVGGElement>('g.layer, g.ledgerLines')]
   moved.forEach((part) => (part.style.transform = ''))
   const line = measure.querySelector<SVGPathElement>('g.staff > path')
@@ -260,7 +277,7 @@ function centred(measure: SVGGElement): void {
   const signs = [...measure.querySelectorAll('g.clef, g.keySig, g.meterSig')].map(
     (part) => part.getBoundingClientRect().right,
   )
-  const start = Math.max(span.left, ...signs)
+  const start = signs.length ? Math.max(span.left + clef, ...signs) : span.left
   const middle =
     (Math.min(...heads.map((h) => h.left)) + Math.max(...heads.map((h) => h.right))) / 2
   const units = line.getBBox().width / Math.max(1, span.width)
@@ -315,16 +332,15 @@ function barPlace(staff: HTMLElement, measure: SVGGElement): BarPlace {
 }
 
 /**
- * Each head's name and finger in one bar, staff by staff top down (the right hand's, then the
- * left's), the heads read from the bottom as the hand's notes are placed: the name 0.6 of a space
- * left of the leftmost head or accidental at 0.87 spaces, the finger a space past its rightmost
- * head at 1.1, each a space at least over the one below, as the canvas's 13 and 11 on its 10.
+ * Each head's finger in one bar, staff by staff top down (the right hand's, then the left's), the
+ * heads read from the bottom as the hand's notes are placed: a space past its rightmost head at 1.1,
+ * each a space at least over the one below, as the canvas's 11 on its 10. The staff carries no note
+ * names: the keys above already say them (loop round 58, "the Chords staff says each thing once").
  */
 function headMarks(
   staff: HTMLElement,
   measure: SVGGElement,
   bar: string,
-  names: readonly (readonly string[])[],
   fingers: readonly (readonly (number | undefined)[])[],
 ): HeadMark[] {
   const box = staff.getBoundingClientRect()
@@ -336,31 +352,11 @@ function headMarks(
     const [first] = heads
     if (!first) return []
     const space = first.height
-    const leftmost = Math.min(
-      ...[...lines.querySelectorAll('g.note .notehead, g.note g.accid')].map(
-        (part) => part.getBoundingClientRect().left,
-      ),
-    )
-    const nameAt = leftmost - origin.left - space * 0.6
     const fingerAt = Math.max(...heads.map((h) => h.right)) - origin.left + space
-    let nameAbove = Infinity
     let fingerAbove = Infinity
     return heads.flatMap((head, i) => {
       const level = head.top + head.height / 2 - origin.top
       const out: HeadMark[] = []
-      const name = names[s]?.[i] ?? ''
-      if (name) {
-        const nameTop = Math.min(level, nameAbove - space)
-        nameAbove = nameTop
-        out.push({
-          key: `n${bar}-${s}-${i}`,
-          text: name,
-          left: nameAt,
-          top: nameTop,
-          size: space * 0.87,
-          end: false,
-        })
-      }
       const finger = fingers[s]?.[i]
       if (finger !== undefined) {
         const fingerTop = Math.min(level, fingerAbove - space)
@@ -371,7 +367,6 @@ function headMarks(
           left: fingerAt,
           top: fingerTop,
           size: space * 1.1,
-          end: true,
         })
       }
       return out

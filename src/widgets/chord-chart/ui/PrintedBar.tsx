@@ -25,7 +25,7 @@ export function PrintedBar({
       className={BAR}
       style={{ ...style, gridTemplateColumns: `repeat(${cells.length}, minmax(0, 1fr))` }}
     >
-      <BarCells number={number} cells={cells} notes={notes} />
+      <BarCells number={number} cells={cells} notes={notes} face="chart" />
     </div>
   )
 }

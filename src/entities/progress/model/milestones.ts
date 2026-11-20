@@ -21,7 +21,6 @@ export interface ProfileFigures extends BadgeFigures {
 
 /** The one-time achievements (B1), each earned once by a figure reaching its goal. */
 export const MILESTONES = [
-  { id: 'first-song', figure: 'songsLearned', goal: 1 },
   { id: 'first-lesson', figure: 'lessonsDone', goal: 1 },
   { id: 'first-recording', figure: 'recordings', goal: 1 },
   { id: 'first-published', figure: 'published', goal: 1 },

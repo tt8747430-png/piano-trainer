@@ -7,7 +7,14 @@ import {
   isTimeLimit,
   type TrainerView,
 } from '@/features/trainer'
-import { isHanonNumber, isHanonRhythm, isOctaves, isTonality } from '@/entities/exercise'
+import {
+  isExerciseShelf,
+  isHanonNumber,
+  isHanonRhythm,
+  isOctaves,
+  isTonality,
+  type ExerciseShelf,
+} from '@/entities/exercise'
 import type { ExercisePageSearch } from '@/pages/exercise'
 import type { PracticeLibraryView, PracticeSort } from '@/widgets/practice-library'
 import { readNote, readText, valueOr, wholeIn } from '@/shared/lib'
@@ -137,3 +144,19 @@ export const practiceLibrarySearch = routeSearch(
   readPracticeLibrarySearch,
   PRACTICE_LIBRARY_DEFAULTS,
 )
+
+/** The Exercises route: a library's view and the shelf it shows (`book`) (Finger technique by default). */
+export interface ExercisesSearch extends PracticeLibraryView {
+  readonly book: ExerciseShelf
+}
+export const EXERCISES_DEFAULTS: ExercisesSearch = {
+  ...PRACTICE_LIBRARY_DEFAULTS,
+  book: 'technique',
+}
+export function readExercisesSearch(raw: Raw): ExercisesSearch {
+  return {
+    ...readPracticeLibrarySearch(raw),
+    book: isExerciseShelf(raw.book) ? raw.book : EXERCISES_DEFAULTS.book,
+  }
+}
+export const exercisesSearch = routeSearch(readExercisesSearch, EXERCISES_DEFAULTS)

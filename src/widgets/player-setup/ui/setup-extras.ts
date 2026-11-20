@@ -47,8 +47,6 @@ export interface SettingsExtras {
   /** Rows to a setting's home elsewhere, ranked among the pages. */
   readonly links?: readonly SettingsLinkRow[]
   readonly acts: readonly SettingsAct[]
-  /** Told when the sheet opens or closes as a panel at the right (a laptop): the screen makes room. */
-  readonly onPanel?: (open: boolean) => void
 }
 
 export const SettingsExtrasContext = createContext<SettingsExtras>({ pages: [], acts: [] })

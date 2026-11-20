@@ -11,8 +11,12 @@ import { notesShown } from '../model/notes-example'
 import { namesAt, noteColumns, passage, staffAt } from '../model/staff-taps'
 import { useStaffPlayhead } from '../model/use-staff-playhead'
 
-/** The chord a bar starts with, printed as the sheets print it (`C♯m7`); none for a bar of no chord. */
+/**
+ * The chord a bar starts with, printed as the sheets print it (`C♯m7`); none for a bar of no chord,
+ * nor on a drill's plain line, whose bars go by their numbers (A41).
+ */
 function barSymbol(music: TimedMusic, start: Tick): string | undefined {
+  if (music.plain) return undefined
   const symbol = music.chords.find((chord) => chord.startTick === start)?.symbol
   return symbol === undefined ? undefined : printedSymbol(symbol)
 }
@@ -36,9 +40,11 @@ export function TappableStaff({
   score,
   staff,
   scale,
+  fill,
   fingers,
   names = false,
   symbols = true,
+  bands = true,
   muted,
   firstBar = 1,
   tempo,
@@ -55,11 +61,15 @@ export function TappableStaff({
   /** One staff of the grand staff; the grand staff where none. */
   staff?: StaffId | undefined
   scale?: number
+  /** The width its line is justified to, drawn smaller where its music is wider. */
+  fill?: number | undefined
   fingers?: boolean
   /** Each notehead carries its note's name. */
   names?: boolean
   /** Each bar's band names its chord, where it has one; else its number. */
   symbols?: boolean
+  /** A band over each bar plays it; a staff whose bars are each one chord, named beside it, has none. */
+  bands?: boolean
   muted?: StaffId | undefined
   /** The number of its first bar, for a line of a longer passage. */
   firstBar?: number
@@ -141,6 +151,7 @@ export function TappableStaff({
       muted={muted}
       names={names}
       {...(scale === undefined ? {} : { scale })}
+      fill={fill}
       {...(fingers === undefined ? {} : { fingers })}
       selected={
         marked === null
@@ -186,7 +197,7 @@ export function TappableStaff({
             {/* A passage's last line keeps its bar however short, and a lone chord its band, which
                 prints its name. Fingerings take the band's place over the staff, so a fingered line
                 plays whole or a note at a time. */}
-            {!fingers && (bars.length > 1 || firstBar > 1 || bars[0]?.symbol !== undefined)
+            {bands && !fingers && (bars.length > 1 || firstBar > 1 || bars[0]?.symbol !== undefined)
               ? layout.measures.map((measure, i) => {
                   const bar = bars[i]
                   if (!bar) return null

@@ -19,8 +19,9 @@ export function TunerPage() {
   return (
     <ToolPage
       title={t('practice:pages.tuner')}
+      column={720}
       side={
-        <GroupRows label={label}>
+        <GroupRows label={label} surface="sheet">
           <GroupRow label={label} setting="tuner.a4">
             <Stepper
               label={label}
@@ -36,7 +37,10 @@ export function TunerPage() {
         </GroupRows>
       }
     >
-      <TunerReadout listening large />
+      {/* 24 under the bar and 32 over its row, as the board's page. */}
+      <div className="mt-4 mb-3 flex w-full flex-1 flex-col lg:mb-2">
+        <TunerReadout />
+      </div>
     </ToolPage>
   )
 }

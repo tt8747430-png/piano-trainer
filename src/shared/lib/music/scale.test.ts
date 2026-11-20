@@ -16,7 +16,6 @@ import {
   relativeKey,
   scaleGaps,
   characteristicDegree,
-  modeVamp,
   scaleDifferences,
   scaleHasChords,
   scaleIntervals,
@@ -108,9 +107,7 @@ describe('a mode’s character (A43)', () => {
     expect(spellScale(note('D'), 'dorian')[at ?? 0]?.note).toEqual(note('B'))
   })
 
-  it('swings Mixolydian between I and ♭VII, and gives major no vamp', () => {
-    expect(modeVamp('mixolydian')).toEqual([0, 6])
-    expect(modeVamp('major')).toEqual([])
+  it('gives major no characteristic degree', () => {
     expect(characteristicDegree('major')).toBeUndefined()
   })
 })

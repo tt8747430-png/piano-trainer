@@ -12,6 +12,7 @@ const course: Course = {
   shelf: 'beginner',
   stage: 'beginner',
   title: { en: 'Intro to Music Reading', ru: 'Введение в чтение нот' },
+  line: { en: 'Notes on both staves, at sight', ru: 'Ноты на обоих станах с листа' },
   summary: {
     en: 'Learn to read notes, starting at the keyboard. You meet pitch and the octave, then the staff, the treble and bass clefs, ledger lines, and sharps, flats and naturals.',
     ru: 'Учимся читать ноты, начиная с клавиатуры. Сначала высота звука и октава, затем нотный стан, скрипичный и басовый ключи, добавочные линейки, диезы, бемоли и бекары.',

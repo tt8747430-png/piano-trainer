@@ -3,20 +3,13 @@ import { Users } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { GroupsData } from '@/features/share-folder'
-import { ButtonLink } from '@/shared/ui'
+import { ButtonLink, Said } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
 
 /**
- * What a group page shows in place of its groups (R32-C): signed out, why groups need an account and
- * Sign in; failed or offline, what happened and Try again; read with none, No groups yet and `actions`.
+ * What a group page shows in place of its groups (R32-C), each the kit's one empty state: signed out,
+ * why groups need an account and Sign in; read with none, No groups yet and `actions`; failed or
+ * offline, what happened and Try again.
  */
 export function GroupsState({
   data,
@@ -29,40 +22,35 @@ export function GroupsState({
   actions?: ReactNode
 }) {
   const { t } = useTranslation('songs')
-  return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <Users aria-hidden />
-        </EmptyMedia>
-        {data.kind === 'guest' ? (
-          <>
-            <EmptyTitle>{t('groups.guestTitle')}</EmptyTitle>
-            <EmptyDescription>{t('groups.guestLine')}</EmptyDescription>
-          </>
-        ) : data.kind === 'failed' ? (
-          <EmptyTitle role="alert">
-            {t(data.reason === 'offline' ? 'groups.offline' : 'groups.failed')}
-          </EmptyTitle>
-        ) : (
-          <>
-            <EmptyTitle>{t('groups.empty')}</EmptyTitle>
-            <EmptyDescription>{t('groups.emptyLine')}</EmptyDescription>
-          </>
-        )}
-      </EmptyHeader>
-      <EmptyContent className="flex-row flex-wrap justify-center">
-        {data.kind === 'guest' ? (
-          <ButtonLink render={<Link to="/account/sign-in" />}>{t('groups.signIn')}</ButtonLink>
-        ) : data.kind === 'failed' ? (
-          <Button variant="soft" size="lg" onClick={onRetry}>
-            {t('groups.retry')}
-          </Button>
-        ) : (
-          actions
-        )}
-      </EmptyContent>
-    </Empty>
+  // Failed or offline: the kit's one empty state, Try again its one honey way on.
+  if (data.kind === 'failed')
+    return (
+      <Said
+        icon={Users}
+        title={t(data.reason === 'offline' ? 'groups.offline' : 'groups.failed')}
+        primary
+        action={<Button onClick={onRetry}>{t('groups.retry')}</Button>}
+      />
+    )
+  // Signed out, or no group yet (the Groups board's states): the kit's one empty state, its way on
+  // Sign in, or Join with a link and New group.
+  const guest = data.kind === 'guest'
+  return guest ? (
+    <Said
+      icon={Users}
+      title={t('groups.guestTitle')}
+      description={t('groups.guestLine')}
+      primary
+      action={<ButtonLink render={<Link to="/account/sign-in" />}>{t('groups.signIn')}</ButtonLink>}
+    />
+  ) : (
+    <Said
+      icon={Users}
+      title={t('groups.empty')}
+      description={t('groups.emptyLine')}
+      pair
+      action={actions}
+    />
   )
 }
 

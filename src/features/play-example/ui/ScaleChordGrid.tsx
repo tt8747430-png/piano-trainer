@@ -1,64 +1,59 @@
-import type { ReactNode } from 'react'
-import type { PlacedScaleChord } from '@/shared/lib/music'
+import { cn } from '@/shared/lib'
+import { printedSymbol, type PlacedScaleChord } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { ChordButton } from '@/shared/ui'
+import { LeadSymbol, MiniKeys } from '@/shared/ui'
 
-/** A chord's play is its own: after a size or an inversion changes, no chord of the new ones is pressed. */
+/** A chord's play is its own: after the scale changes, no chord of the new ones is pressed. */
 const idOf = (placed: PlacedScaleChord) =>
   `${placed.chord.degree} ${placed.symbol} ${placed.tones.map((tone) => tone.midi).join('-')}`
 
 /**
- * A scale's or a key's chords to tap, one column a degree (the seven-degree spine, A21), each its
- * symbol over its numeral and a line of its own (`detail`: its degree's name), pressed while it
- * sounds; those whose degree is in `holds` (they hold the note heard) ringed. Where a chord opens
- * elsewhere (`open`: Chords set to it), its link sits in the card's corner: one card, no second row.
+ * A scale's chords as cards (the Scales board's SCCARDS, the songs' CHORDS_ROW): each its keys over its
+ * symbol and its numeral, all on one stretch of keys; a tap plays it, ringed in honey while it sounds.
+ * One column a degree (a minor key's V stacks over its v); on a phone a strip that scrolls sideways, from
+ * 40rem the seven in a row.
  */
-export function ScaleChordGrid({
-  chords,
-  holds,
-  detail,
-  open,
-}: {
-  chords: readonly PlacedScaleChord[]
-  /** The chords that hold the note heard, ringed. */
-  holds?: ReadonlySet<PlacedScaleChord>
-  detail?: (placed: PlacedScaleChord) => string | undefined
-  open?: (placed: PlacedScaleChord) => ReactNode
-}) {
+export function ScaleChordGrid({ chords }: { chords: readonly PlacedScaleChord[] }) {
   const playback = usePlayback<string>()
-  // A degree with two chords (a minor key's V over v) stacks them in its one column.
   const columns = chords.reduce<PlacedScaleChord[][]>((all, placed) => {
     const last = all.at(-1)
     if (last?.[0]?.chord.degree === placed.chord.degree) last.push(placed)
     else all.push([placed])
     return all
   }, [])
+  if (chords.length === 0) return null
   return (
-    <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
+    <div className="-mx-gutter flex gap-2 overflow-x-auto px-gutter py-0.5 scrollbar-none sm:mx-0 sm:grid sm:grid-cols-7 sm:overflow-visible sm:p-0">
       {columns.map((column) => (
-        <div key={column.map(idOf).join('|')} className="flex flex-col gap-2">
+        <div key={column.map(idOf).join('|')} className="flex shrink-0 flex-col gap-2">
           {column.map((placed) => {
-            const link = open?.(placed)
+            const id = idOf(placed)
+            const playing = playback.playing === id
+            const symbol = printedSymbol(placed.symbol)
+            const keys = placed.tones.map((tone) => tone.midi)
             return (
-              <div key={idOf(placed)} className="relative flex flex-col">
-                <ChordButton
-                  symbol={placed.symbol}
-                  numeral={placed.numeral}
-                  detail={detail?.(placed)}
-                  playing={playback.playing === idOf(placed)}
-                  holds={holds?.has(placed) ?? false}
-                  onClick={() =>
-                    playback.toggle(idOf(placed), () =>
-                      chordSounds(
-                        placed.tones.map((tone) => tone.midi),
-                        { arpeggio: false },
-                      ),
-                    )
-                  }
-                />
-                {link ? <div className="absolute top-0.5 left-0.5">{link}</div> : null}
-              </div>
+              <button
+                key={id}
+                type="button"
+                aria-pressed={playing}
+                aria-label={`${symbol}, ${placed.numeral}`}
+                onClick={() => playback.toggle(id, () => chordSounds(keys, { arpeggio: false }))}
+                className={cn(
+                  'flex flex-col items-center gap-2 rounded-card bg-card p-3 ring-1 ring-border transition-colors duration-150 ease-out hover:bg-muted/50',
+                  playing && 'ring-2 ring-primary',
+                )}
+              >
+                <MiniKeys keys={keys} sounding={playing} className="sm:w-full" />
+                <span className="flex flex-col items-center">
+                  <span className="text-base font-bold">
+                    <LeadSymbol text={symbol} />
+                  </span>
+                  <span className="-mt-0.5 text-[0.8125rem] text-muted-foreground">
+                    {placed.numeral}
+                  </span>
+                </span>
+              </button>
             )
           })}
         </div>

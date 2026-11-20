@@ -1,8 +1,5 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { PublicCategory } from '@/shared/api/public-library'
-import { CategoryPicker } from '@/widgets/song-preview'
 import { Music } from 'lucide-react'
 import {
   hasEditableOriginal,
@@ -17,6 +14,8 @@ import { editsContent, useAccount } from '@/shared/lib/account'
 import { DraftPublishScreen } from '@/widgets/content-editor'
 import { PublishScreen } from '@/features/publish'
 import { BackButton, ButtonLink, NotFound, TileMark } from '@/shared/ui'
+import { PieceMark } from '@/widgets/piece-cover'
+import { useSongByline } from '../model/use-song-byline'
 import { useSongPublish } from '../model/use-song-publish'
 
 /** The route's song, or the way back where it is gone or cannot be published. */
@@ -38,13 +37,9 @@ export function PublishPage() {
  * (round 27, Noji's); one of the app's, an editor's, to every learner.
  */
 function Publish({ piece }: { piece: Piece }) {
-  const [chosen, setChosen] = useState<PublicCategory | null | undefined>(undefined)
-  const { item, title, publishing } = useSongPublish(piece, chosen ?? null)
+  const { item, title, publishing } = useSongPublish(piece)
+  const line = useSongByline(piece)
   const { account } = useAccount()
-  // Once its published category is read, it is the choice a new version keeps unless changed
-  // (adjusted while rendering, React's way for state that follows a prop).
-  const published = publishing.category
-  if (chosen === undefined && published !== null) setChosen(published)
   if (!item && editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece))
     return <OriginalPublish piece={piece} title={title} />
   if (!item)
@@ -55,14 +50,23 @@ function Publish({ piece }: { piece: Piece }) {
         </ButtonLink>
       </NotFound>
     )
-  // Its category (B3), as published until the learner chooses another.
-  const category = chosen === undefined ? publishing.category : chosen
   return (
     <PublishScreen
-      item={{ id: item.sourceId, kind: item.kind, title: item.title, meta: item.meta }}
+      item={{
+        id: item.sourceId,
+        kind: item.kind,
+        title: item.title,
+        meta: item.meta,
+        // The song's library tile at the head's 64, as its Settings' (SongCover).
+        mark: (
+          <span className="block shrink-0 [&_[data-slot=row-tile]]:size-16 [&_[data-slot=row-tile]]:rounded-[10px]">
+            <PieceMark entry={piece} />
+          </span>
+        ),
+        line,
+      }}
       publishing={publishing}
       back={<BackButton />}
-      fields={<CategoryPicker value={category} onChange={setChosen} />}
     />
   )
 }

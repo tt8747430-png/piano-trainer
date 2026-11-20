@@ -1,6 +1,7 @@
 import type { Editor } from '@tiptap/core'
 import type { TFunction } from 'i18next'
 import {
+  AudioWaveform,
   BookMarked,
   CircleHelp,
   Copy,
@@ -8,6 +9,7 @@ import {
   Heading2,
   Image,
   KeyboardMusic,
+  Layers,
   Link2,
   ListMusic,
   ListOrdered,
@@ -29,6 +31,7 @@ import { insertableName, nodeName } from './block-names'
 import {
   ABOUT_INSERTABLES,
   actOnBlock,
+  firstPattern,
   insertBlock,
   INSERTABLES,
   turnInto,
@@ -36,45 +39,45 @@ import {
 } from './commands'
 
 export const INSERT_ICONS: Record<Insertable, LucideIcon> = {
-  section: Heading2,
   text: Pilcrow,
   steps: ListOrdered,
   note: StickyNote,
   rule: BookMarked,
-  takeaway: Quote,
   chords: Music,
-  notes: Music2,
-  progression: ListMusic,
   grid: Grid3x3,
   scale: TrendingUp,
   interval: MoveVertical,
+  notes: Music2,
   voicings: KeyboardMusic,
+  pattern: AudioWaveform,
+  progression: ListMusic,
+  variants: Layers,
   question: CircleHelp,
   link: Link2,
   image: Image,
 }
 
-/** Which group of the Insert menu a kind is in: words, music, or what asks or leads on. */
+/** Which group of Insert's sheet a kind is in (the board's INSERT): words, music, or ask and link. */
 const GROUP_OF: Record<Insertable, 'text' | 'music' | 'learner'> = {
-  section: 'text',
   text: 'text',
   steps: 'text',
   note: 'text',
   rule: 'text',
-  takeaway: 'text',
   chords: 'music',
-  notes: 'music',
-  progression: 'music',
   grid: 'music',
   scale: 'music',
   interval: 'music',
+  notes: 'music',
   voicings: 'music',
+  pattern: 'music',
+  progression: 'music',
+  variants: 'music',
   question: 'learner',
   link: 'learner',
-  image: 'text',
+  image: 'learner',
 }
 
-/** The Insert menu's and the slash menu's rows: every kind, its picture, its name and its group. */
+/** Insert's sheet's and the slash menu's rows: every kind, its picture, its name and its group. */
 export function insertActions(
   editor: Editor,
   locale: Locale,
@@ -82,13 +85,15 @@ export function insertActions(
   before?: () => void,
 ): MenuAction[] {
   // A page's About has no title or summary of its own, and no question.
-  const kinds = fixedBlocks(editor.state.doc) === 0 ? ABOUT_INSERTABLES : INSERTABLES
+  const offered = fixedBlocks(editor.state.doc) === 0 ? ABOUT_INSERTABLES : INSERTABLES
+  // A pattern only where some piece plays one, to be heard over.
+  const kinds = firstPattern() ? offered : offered.filter((kind) => kind !== 'pattern')
   return kinds.map((kind) => ({
     key: kind,
     group: t(`edit.doc.groups.${GROUP_OF[kind]}`),
     label: insertableName(kind, t),
     icon: INSERT_ICONS[kind],
-    // Once the menu has closed and given the focus back to its button: the caret then goes into
+    // Once the sheet or menu has closed and given the focus back: the caret then goes into
     // the new block.
     onSelect: () =>
       void setTimeout(() => {

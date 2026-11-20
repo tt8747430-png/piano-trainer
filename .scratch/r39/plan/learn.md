@@ -103,6 +103,14 @@ are, what is next, and that every lesson can still be opened.
   hairline, the number in ink): colour only for learned (sage) and next (the honey ring).
 - **Learn by Night** (canvas 162): phone and laptop Night boards beside the Day ones.
 
+- **A lesson has no tools; its Settings hold only settings** (owner, 2026-11-18: "i dont like the structure of these
+  settings … and i dotn like that the settigs and hte tools are united and als oi dont see very much what is the
+  meaning and value for teh metronome or tuner or otehr tools in the lessons? where the user just learn. remove
+  them"): the lesson's bar is Share link (the link glyph), Settings and Edit; the Tools button, sheet and popover are
+  gone (the Metronome, Tuner and the rest live in Practice). Settings: The lesson (Place); Publishing (Status as a
+  value, "Published 8 November" or "Changes not published", Versions ›; Publish changes and Discard changes only
+  while there are changes); Your progress (Reset progress); Delete lesson apart at the foot. Lesson, LessonLaptop.
+
 ## History
 
 - Canvas 128 (2026-11-11): Learn drawn for the first time on the one canvas: phone and laptop, Lessons and Courses.

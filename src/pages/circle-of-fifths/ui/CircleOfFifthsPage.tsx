@@ -12,13 +12,11 @@ import {
   noteName,
   noteParam,
   pitchClassOf,
-  printedSymbol,
-  relativeKey,
   scaleChords,
   type Key,
   type KeyParam,
 } from '@/shared/lib/music'
-import { chordSounds, walkSounds } from '@/shared/lib/schedule'
+import { walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { FloatingPieceLink, ScaleIcon } from '@/shared/ui'
 import { ToolPage } from '@/widgets/tool-page'
@@ -47,11 +45,12 @@ function keyChords(key: Key) {
 }
 
 /**
- * The Circle of fifths (canvas 182), a tool of its own and never a key picker: the wheel large,
- * majors outside and their relative minors inside, a tap choosing the key. Under it on a phone and
- * beside it on a laptop, the key's name, its signature and relative key, and its seven chords as
- * tiles that play; at the foot Play the chords walks them, and Scales opens the key in Scales and
- * keys. The key chosen is the page's link (`?key=`).
+ * The Circle of fifths (canvas 182, its board r67), a tool of its own and never a key picker: the
+ * wheel large and the page's one focus, majors outside and their relative minors inside, a tap
+ * choosing the key, its name and signature in the wheel's centre. The wheel lights the relative minor
+ * and the key's chords, so no line or tiles say them again; Play the chords walks them, and Scales
+ * opens the key in Scales and keys, which holds the chords with their keys drawn. The key chosen is
+ * the page's link (`?key=`).
  */
 export function CircleOfFifthsPage() {
   const { t } = useTranslation(['practice', 'music'])
@@ -72,7 +71,6 @@ export function CircleOfFifthsPage() {
   return (
     <ToolPage
       title={title}
-      centred
       play={{
         label: t('practice:tools.circle.playAll'),
         playing: playback.playing === WALK,
@@ -94,7 +92,6 @@ export function CircleOfFifthsPage() {
               search={{
                 root: noteParam(key.tonic),
                 kind: key.minor ? 'natural' : 'major',
-                show: 'key',
               }}
             />
           }
@@ -102,54 +99,22 @@ export function CircleOfFifthsPage() {
           <ScaleIcon aria-hidden />
         </FloatingPieceLink>
       }
-      side={
-        <section aria-label={name(key)} className="flex flex-col gap-5">
-          <div className="flex flex-col gap-1">
-            <h2 className="font-display text-[2.25rem] leading-[1.1] font-bold tracking-[-0.02em] text-balance">
-              {name(key)}
-            </h2>
-            <p className="ms-0.5 text-[0.9375rem] text-pretty text-muted-foreground">
-              {t('practice:tools.circle.about', { signature, key: name(relativeKey(key)) })}
-            </p>
-          </div>
-          <section aria-labelledby="key-chords" className="flex flex-col gap-2">
-            <h3 id="key-chords" className="ms-1 font-sans text-sm font-semibold">
-              {t('practice:tools.circle.chords')}
-            </h3>
-            <div className="grid grid-cols-7 gap-1">
-              {chords.map((chord) => (
-                <button
-                  key={chord.symbol}
-                  type="button"
-                  aria-pressed={playback.playing === chord.symbol}
-                  aria-label={t('practice:tools.circle.play', {
-                    chord: printedSymbol(chord.symbol),
-                  })}
-                  onClick={() =>
-                    playback.toggle(chord.symbol, () =>
-                      chordSounds(chord.keys, { arpeggio: false }),
-                    )
-                  }
-                  className="flex h-16 min-w-0 flex-col items-center justify-center gap-px rounded-[10px] bg-card ring-1 ring-border transition-colors hover:bg-muted aria-pressed:bg-foreground aria-pressed:text-background focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
-                >
-                  <span className="max-w-full truncate text-base font-bold">
-                    {printedSymbol(chord.symbol)}
-                  </span>
-                  <span className="font-display text-[0.8125rem] text-muted-foreground in-aria-pressed:text-background/70">
-                    {printedSymbol(chord.numeral)}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </section>
-        </section>
-      }
     >
       <KeyWheel
         label={t('practice:tools.circle.label')}
         value={key}
         onChoose={(chosen) => change({ key: keyParam(chosen) })}
-      />
+      >
+        <h2
+          aria-live="polite"
+          className="max-w-[27cqw] font-display text-[1.375rem] leading-[1.05] font-bold tracking-[-0.01em] text-balance lg:text-[2.25rem]"
+        >
+          {name(key)}
+        </h2>
+        <p className="text-[0.8125rem] leading-[normal] text-muted-foreground lg:text-[0.9375rem]">
+          {signature}
+        </p>
+      </KeyWheel>
       <p className="sr-only">{t('practice:tools.circle.majors')}</p>
     </ToolPage>
   )

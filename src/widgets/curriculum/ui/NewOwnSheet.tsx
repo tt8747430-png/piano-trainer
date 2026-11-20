@@ -142,7 +142,7 @@ export function NewOwnSheet({ kind, onClose }: { kind: OwnKind | null; onClose: 
       ) : null}
       {kind === 'course' ? (
         <SheetPart title={t('own.cover')}>
-          <LookFields look={look} onChange={setLook} />
+          <LookFields look={look} onChange={setLook} pictures={false} paintLabel={false} covers />
         </SheetPart>
       ) : null}
     </NewSheet>

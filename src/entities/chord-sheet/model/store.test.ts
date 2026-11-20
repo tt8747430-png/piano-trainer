@@ -28,12 +28,12 @@ describe('the chord sheets store (pt-chord-sheets)', () => {
   it('starts with an empty Verse in hand in Pop 1 at 100, and none of the learner’s own', () => {
     const storage = createMemoryStorage()
     const store = createChordSheetsStore({ storage, otherTabs: new EventTarget() })
-    expect(store.getState()).toEqual({ scratch: NEW_ENTRY, mine: [], nextId: 1 })
+    expect(store.getState()).toEqual({ scratch: NEW_ENTRY, mine: [], nextId: 1, recent: [] })
     expect(NEW_ENTRY).toMatchObject({ text: 'C 4/4; verse:', style: 'pop-1', tempo: 100 })
     store.setState({ nextId: 2 })
-    expect(JSON.parse(storage.getItem('pt-chord-sheets') ?? 'null').version).toBe(1)
+    expect(JSON.parse(storage.getItem('pt-chord-sheets') ?? 'null').version).toBe(2)
   })
-  it('reads a version-1 save field by field', () => {
+  it('reads a version-2 save field by field', () => {
     const saved = { scratch: { ...MINE, id: undefined, name: undefined }, mine: [MINE], nextId: 2 }
     const state = restored(saved)
     expect(state.mine).toEqual([MINE])
@@ -45,7 +45,13 @@ describe('the chord sheets store (pt-chord-sheets)', () => {
       scratch: NEW_ENTRY,
       mine: [],
       nextId: 1,
+      recent: [],
     })
+  })
+  it('keeps the recent sheets that are still there, the sheet in hand among them, each once', () => {
+    expect(
+      restored({ mine: [MINE], recent: ['sheet-9', 'in-hand', 'sheet-1', 'in-hand', 7] }).recent,
+    ).toEqual(['in-hand', 'sheet-1'])
   })
   it('drops a sheet whose text does not read, a name that is blank, an id twice', () => {
     const state = restored({

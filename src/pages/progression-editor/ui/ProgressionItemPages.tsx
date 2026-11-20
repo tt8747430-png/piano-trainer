@@ -63,7 +63,7 @@ function ProgressionSettings({ progression }: { progression: LibraryProgression 
   }
   return (
     <div className="flex flex-col gap-6 pb-8">
-      <ScreenHeader title={t('learn:settings.title')} back={<BackButton />} />
+      <ScreenHeader column title={t('learn:settings.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         {editsContent(account) ? (
           <>
@@ -95,7 +95,10 @@ function ProgressionSettings({ progression }: { progression: LibraryProgression 
             )}
           </>
         ) : (
-          <NotOpen line={t('practice:progressions.edit.editorsOnly')} />
+          <NotOpen
+            line={t('practice:progressions.edit.editorsOnly')}
+            why={t('practice:progressions.edit.editorsWhy')}
+          />
         )}
       </div>
     </div>

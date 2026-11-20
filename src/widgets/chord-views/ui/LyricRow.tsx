@@ -10,8 +10,8 @@ import { LineSegments } from './LineSegments'
 
 /**
  * A line of Chords over lyrics (ADR 0108): its segments (`LineSegments`), each its chord as a
- * chip over the words sung up to the next, at its view's text size. The line playing reads in ink,
- * bold; the others are muted. A chip takes the cursor to its chord, the line anywhere else to its
+ * chip over the words sung up to the next, at its view's text size. The line playing reads bold, the
+ * others in ink at 400, as the Lyrics board. A chip takes the cursor to its chord, the line anywhere else to its
  * first beat (a pointer's way only: the transport is the keys'). On the loop's band where the loop
  * holds it. A line of chords alone played again straight after itself is shown once, `×N` at its end
  * (`times`).
@@ -49,8 +49,8 @@ export function LyricRow({
       data-looped={looped ? '' : undefined}
       className={cn(
         'relative -mx-2 rounded-control px-2 py-1 transition-colors duration-200 ease-out',
-        looped && 'bg-ring/15',
-        playing ? 'font-semibold text-foreground' : 'text-muted-foreground',
+        looped && 'bg-paint-yellow',
+        playing && 'font-bold',
       )}
     >
       <button
@@ -67,6 +67,7 @@ export function LyricRow({
       />
       <LineSegments
         line={line}
+        slot="h-[1.4375em] pb-[0.125em]"
         className="pointer-events-none"
         chord={(chord, segment) => (
           <ChordChip

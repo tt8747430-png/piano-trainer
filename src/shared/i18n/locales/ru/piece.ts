@@ -15,7 +15,7 @@ export const piece: LocaleResources['piece'] = {
   },
   learnSection: {
     title: 'Учим раздел «{{section}}»',
-    rounds: '{{n}} ×',
+    rounds: '{{n}}×',
     noChords: 'Без аккордов',
     chords: 'Аккорды',
     chordsInfo_one: 'Возьмите каждый аккорд на клавишах {{count}} раз, чтобы выучить его.',
@@ -56,6 +56,7 @@ export const piece: LocaleResources['piece'] = {
   more: 'Ещё',
   practise: 'Играть',
   editScore: 'Редактировать ноты',
+  editCredits: 'Изменить название и авторов',
   writeChart: 'Записать аккорды',
   noChart: {
     title: 'Аккорды недоступны',
@@ -77,9 +78,6 @@ export const piece: LocaleResources['piece'] = {
   shareFailed: 'Здесь ссылку сделать не удалось.',
   shareTooLong: 'Песня слишком длинная, чтобы поместиться в ссылку.',
   delete: 'Удалить',
-  deleting: {
-    says: 'Песня попадёт в корзину в «Песнях»: её можно восстановить, пока корзину не очистят.',
-  },
   aboutMore: 'Ещё',
   about: { song: 'О песне', study: 'Об этюде' },
   scaleOf: 'Гамма: {{scale}}',
@@ -180,6 +178,8 @@ export const piece: LocaleResources['piece'] = {
   practice: {
     title: 'Ваши занятия',
     last: 'Последний раз',
+    wait: 'Режим ожидания',
+    waitBest: 'Лучший {{percent}} · {{hands}}',
     takes: 'Записи',
     takeCount_one: '{{count}} запись',
     takeCount_few: '{{count}} записи',
@@ -202,15 +202,12 @@ export const piece: LocaleResources['piece'] = {
     exportLine: 'MusicXML, MIDI',
     deleteSong: 'Удалить песню',
     duplicate: 'Создать копию',
-    duplicateTitle: 'Создать копию «{{title}}»?',
-    duplicateBody:
-      'В вашу библиотеку будет добавлена редактируемая копия песни. Оригинал останется без изменений.',
+    duplicated: '«{{title}}» добавлена в ваши песни',
     copyTitle: '{{title}} (копия)',
     title: 'Настройки',
     open: 'Настройки',
     library: 'Библиотека',
-    folder: 'Папка',
-    favourite: 'В избранном',
+    folder: 'Плейлист',
     home: 'Библиотека',
     archived: 'В архиве',
     share: 'Поделиться',

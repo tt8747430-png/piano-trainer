@@ -58,7 +58,6 @@ export type LessonLink =
       readonly to: string
     }
   /** The Key view harmonising a melody note in its key. */
-  | { readonly opens: 'harmonise'; readonly key: Key; readonly note: SpelledNote }
   /** A song's chords on Progressions, read in their key: as typed, spaces between them. */
   | { readonly opens: 'song-chords'; readonly chords: string }
   /** A piece in the Player, with a pattern or its own. */

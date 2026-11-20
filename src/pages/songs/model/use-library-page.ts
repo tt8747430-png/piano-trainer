@@ -1,9 +1,10 @@
 import { useForgetScreens } from '@/shared/lib'
 import { useNavigate } from '@tanstack/react-router'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   libraryCatalog,
+  selectDirection,
   selectFavourites,
   selectSort,
   useFolderName,
@@ -14,14 +15,16 @@ import {
   type FolderId,
   type LibraryAct,
   type LibrarySort,
+  type SortDirection,
   type ShelvedFolder,
 } from '@/entities/library'
-import { entryTitles, isOwnSongId, useRepertoire, type PieceId } from '@/entities/piece'
+import { entryTitles, isOwnSongId, usePieces, useRepertoire, type PieceId } from '@/entities/piece'
 import { byLastOpened, selectLearned, selectPractised, useProgress } from '@/entities/progress'
 import {
   orderFolders,
   orderSongs,
   setSort,
+  setSortDirection,
   useLibraryActs,
   type FolderSheetTarget,
   type Moving,
@@ -43,10 +46,6 @@ export type Pending =
   | { readonly kind: 'delete-folder'; readonly folder: ShelvedFolder }
   | { readonly kind: 'delete-chosen' }
   | { readonly kind: 'new-song'; readonly record?: boolean }
-  | { readonly kind: 'move-in' }
-  | { readonly kind: 'new-group' }
-  | { readonly kind: 'export'; readonly song: PieceId }
-  | { readonly kind: 'share'; readonly song: PieceId }
   | { readonly kind: 'export-chosen'; readonly songs: readonly PieceId[]; readonly what: string }
 
 /**
@@ -57,16 +56,45 @@ export type Pending =
 export function useLibraryPage(
   folder: ShelvedFolder | null,
   filter: SongsFilter,
-  /** Beside the library's tree (a laptop's two panes): the folders are the tree's. */
-  { tree = false }: { tree?: boolean } = {},
+  {
+    tree = false,
+    favouritesOnly = false,
+    order,
+  }: {
+    /** One list of every song (All songs): no folders among them. */
+    tree?: boolean
+    /** The favourites alone (My songs' Favourites card). */
+    favouritesOnly?: boolean
+    /** An order of its own, never the learner's sort (My songs' shelf: the latest played first). */
+    order?: { readonly sort: LibrarySort; readonly direction: SortDirection }
+  } = {},
 ) {
   const { t } = useTranslation('songs')
+  const { t: tPiece } = useTranslation('piece')
   const locale = useLocale()
   const store = useLibraryStoreApi()
   const layout = useLibraryLayout()
   const repertoire = useRepertoire()
   const favourites = useLibrary(selectFavourites)
-  const sort = useLibrary(selectSort)
+  const savedSort = useLibrary(selectSort)
+  const savedDirection = useLibrary(selectDirection)
+  const sort = order?.sort ?? savedSort
+  const direction = order?.direction ?? savedDirection
+  const details = useLibrary((state) => state.songDetails)
+  const ownSongs = usePieces((state) => state.songs)
+  // When each of the learner's own songs came in: what Added sorts by (R72).
+  const addedOf = useMemo(() => {
+    const added = new Map<PieceId, string>(ownSongs.map((song) => [song.id, song.added]))
+    return (id: PieceId) => added.get(id) ?? null
+  }, [ownSongs])
+  const detailWords = useCallback(
+    (id: PieceId) => {
+      const own = details[id]
+      if (!own) return []
+      return [...own.tags, own.genre ? tPiece(`details.genres.${own.genre}`) : '']
+    },
+    [details, tPiece],
+  )
   const practised = useProgress(selectPractised)
   const learnedSteps = useProgress(selectLearned)
   const folderName = useFolderName()
@@ -85,6 +113,7 @@ export function useLibraryPage(
       folder?.id ?? null,
       filter,
       sort,
+      direction,
       {
         entryOf: (id) => repertoire.entry(id),
         titleOf: (entry) => entryTitles(entry, locale).primary,
@@ -100,24 +129,30 @@ export function useLibraryPage(
         compare,
         home: t('library.home'),
         allSongs: t('table.songs'),
+        addedOf,
+        detailWords,
       },
       // Every song at Home while browsing; Select drags in the library's own places.
-      { tree, everySong: !tree && !selecting },
+      { tree, everySong: !tree && !selecting, favouritesOnly },
     )
   }, [
     layout,
     folder,
     filter,
     sort,
+    direction,
     repertoire,
     locale,
     folderName,
     favourites,
     learnedSteps,
     practised,
+    addedOf,
+    detailWords,
     t,
     tree,
     selecting,
+    favouritesOnly,
   ])
 
   // Every row on screen, in order: what Select all chooses.
@@ -180,7 +215,6 @@ export function useLibraryPage(
   return {
     layout,
     view,
-    sort,
     favourites,
     pending,
     open: setPending,
@@ -215,9 +249,12 @@ export function useLibraryPage(
     archive: (ids: readonly PieceId[]) => acts.archive(ids),
     /** The learner's own songs deleted: into the Trash, with Undo (R34). */
     trash: (ids: readonly PieceId[]) => acts.trash(ids),
+    sort,
+    direction,
     setSort: (next: LibrarySort) => setSort(store, next),
-    /** Whether a drag may move the rows: only in the order the learner drags, with nothing hidden. */
-    sortable: sort === 'manual' && !view.filtering,
+    setDirection: (next: SortDirection) => setSortDirection(store, next),
+    /** Whether a drag may move the folders: with nothing hidden. Songs follow the sort (R72). */
+    sortable: !view.filtering,
     orderFolders: (order: FolderId[]) => orderFolders(store, catalog(), order),
     /** Opens Move to… for a song or a folder, named under the sheet's title. */
     moveOne: (moving: Moving, what: string) => setPending({ kind: 'move', moving, what }),
@@ -244,7 +281,7 @@ export function useLibraryPage(
       toggleAll: () =>
         setChosen((was) => (rows.every((key) => was.has(key)) ? new Set() : new Set(rows))),
       exit,
-      /** Favourite for every song chosen; where all already are, Remove from favourites. */
+      /** Favourite for every song chosen; where all already are, Remove from Favourites. */
       allFavourite: chosenSongs.length > 0 && chosenSongs.every((id) => favourites.includes(id)),
       favourite: () => {
         acts.favourite(chosenSongs, !chosenSongs.every((id) => favourites.includes(id)))

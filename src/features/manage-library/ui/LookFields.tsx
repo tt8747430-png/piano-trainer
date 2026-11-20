@@ -1,5 +1,6 @@
 import { Radio } from '@base-ui/react/radio'
 import { RadioGroup } from '@base-ui/react/radio-group'
+import { Folder } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   FOLDER_PAINTS,
@@ -24,11 +25,17 @@ export function LookFields({
   look,
   onChange,
   pictures = true,
+  paintLabel = true,
+  covers = false,
 }: {
   look: FolderLook
   onChange: (look: FolderLook) => void
   /** Whether its picture is chosen: a folder's is its pages, the board's, so it chooses its paint alone. */
   pictures?: boolean
+  /** Whether the paints carry their own label: not where a heading over them already names them (a course's Cover). */
+  paintLabel?: boolean
+  /** The paints as covers, the course boards' Cover: 52 squares 12 apart, each wearing the folder. */
+  covers?: boolean
 }) {
   const { t } = useTranslation('songs')
   const paint = PAINT[look.paint]
@@ -64,14 +71,16 @@ export function LookFields({
         </div>
       ) : null}
       <div className="flex flex-col gap-2">
-        <span aria-hidden className="text-sm text-muted-foreground">
-          {t('folder.paint')}
-        </span>
+        {paintLabel ? (
+          <span aria-hidden className="text-sm text-muted-foreground">
+            {t('folder.paint')}
+          </span>
+        ) : null}
         <RadioGroup
           aria-label={t('folder.paint')}
           value={look.paint}
           onValueChange={(next: FolderPaint) => onChange({ ...look, paint: next })}
-          className="flex flex-wrap gap-2"
+          className={cn('flex flex-wrap', covers ? 'gap-3' : 'gap-2')}
         >
           {FOLDER_PAINTS.map((each) => (
             <Radio.Root
@@ -79,8 +88,14 @@ export function LookFields({
               value={each}
               aria-label={t(`folder.paints.${each}`)}
               title={t(`folder.paints.${each}`)}
-              className={cn(CHOICE, 'rounded-pill', PAINT[each].fill)}
-            />
+              className={cn(
+                CHOICE,
+                covers ? 'size-13 rounded-[13px] text-foreground [&_svg]:size-5' : 'rounded-pill',
+                PAINT[each].fill,
+              )}
+            >
+              {covers ? <Folder aria-hidden /> : null}
+            </Radio.Root>
           ))}
         </RadioGroup>
       </div>

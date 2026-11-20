@@ -1,12 +1,14 @@
 import { ArrowDown, ArrowLeftRight, ArrowUp, ChevronDown } from 'lucide-react'
-import { useMemo } from 'react'
+import { use, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import {
   canTie,
   carriesAccidental,
   chosenNotes,
+  spellNotes,
   EDIT_MODES,
+  isHandLayer,
   NOTE_VALUES,
   selectionSpan,
   shownValue,
@@ -20,10 +22,9 @@ import { isCompound, type Accidental } from '@/shared/lib/music'
 import { TUPLET_COUNTS, type TupletCount } from '@/shared/lib/notation'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { useNotesChosen } from '../model/use-notes-chosen'
 import { TUPLET_WORDS, VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
 import type { Tool } from '../model/shortcuts'
-import { PaletteFormContext, usePaletteForm } from './palette-form'
+import { PaletteFormContext, RecentTools, usePaletteForm } from './palette-form'
 import { GroupName, KeyGrid, PaletteKey } from './palette-keys'
 import { LineKeys } from './LineKeys'
 import { PaletteGlyph, TupletGlyph } from './palette-glyph'
@@ -33,6 +34,8 @@ import type { SmuflName } from '@/shared/ui/smufl'
 const GLYPH = 'font-sans text-3xl leading-none'
 /** A quarter rest, as the staff draws it. */
 const REST = '𝄽'
+/** Repeat: the one-bar repeat sign, the music written again. */
+const REPEAT = '𝄎'
 
 /** What the palette shows as chosen: the chosen note's value, else the next note's. */
 /** The value shown, kept while it reads the same: its tuplet is a fresh object each time it is read. */
@@ -79,9 +82,10 @@ function ValueKeys() {
   )
 }
 
-/** A hairline between the toolbar's groups; nothing in a grid or a list. */
+/** A hairline between the toolbar's groups; nothing in a grid, a list or Recent's mixed row. */
 function Divider() {
-  if (usePaletteForm() !== 'bar') return null
+  const recent = use(RecentTools) !== null
+  if (usePaletteForm() !== 'bar' || recent) return null
   return <span aria-hidden className="mx-1 h-6 w-px shrink-0 self-center bg-hairline" />
 }
 
@@ -102,19 +106,19 @@ const ACCIDENTAL_KEYS = [0, 1, -1] as const satisfies readonly Accidental[]
 /**
  * The accidentals, Flat's (ADR 0114): each a toggle on the notes chosen, pressed while every one
  * carries its sign, a tap writing the sign or taking it off (the note back as the key spells it);
- * left out with no note chosen (R32-B).
+ * greyed in place with no note chosen (Flat's).
  */
 function AccidentalKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  const chosen = useNotesChosen()
+  // What they act on: the notes chosen, else the note or chord just written (research F6).
+  const spelt = useEditorState((state) => spellNotes(state).length > 0)
   const carried = useEditorState(
     useShallow((state) => {
-      const notes = chosenNotes(state)
+      const notes = spellNotes(state)
       return ACCIDENTAL_KEYS.map((accidental) => carriesAccidental(notes, accidental))
     }),
   )
-  if (!chosen) return null
   const keys = {
     1: { label: t('accidentals.sharp'), picture: <Sharp />, tool: 'sharp' },
     [-1]: { label: t('accidentals.flat'), picture: <Flat />, tool: 'flat' },
@@ -128,6 +132,8 @@ function AccidentalKeys() {
         label={label}
         tool={tool}
         pressed={carried[i] ?? false}
+        disabled={!spelt}
+        reason={t('reason.chooseNote')}
         onClick={() => actions.dispatch({ type: 'accidental', accidental })}
       >
         <span aria-hidden>{picture}</span>
@@ -196,13 +202,42 @@ function ModeKeys() {
           key={each}
           label={t(`mode.${each}`)}
           tool={each === 'chord' ? undefined : 'mode'}
+          id={`mode:${each}`}
           pressed={mode === each}
           onClick={() => actions.dispatch({ type: 'mode', mode: each })}
         >
           <ModeIcon mode={each} />
         </PaletteKey>
       ))}
+      <VoiceTwoKey />
     </KeyGrid>
+  )
+}
+
+/**
+ * Voice 2 (ADR 0114, Flat's and Dorico's ⇧V): on, the notes are written under the first voice's,
+ * stems down, and a key played or Delete reaches that voice alone. On the piano's staves only.
+ */
+function VoiceTwoKey() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const on = useEditorState((state) => state.voice === 2)
+  const piano = useEditorState((state) => isHandLayer(state.layer))
+  return (
+    <PaletteKey
+      label={t('voice.two')}
+      tool="voiceTwo"
+      pressed={on && piano}
+      disabled={!piano}
+      onClick={() => actions.dispatch({ type: 'voice' })}
+    >
+      <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
+        <Head cx={10} cy={8.5} />
+        <rect x="13.4" y="1.5" width="1.4" height="7" />
+        <Head cx={14} cy={15.5} soft />
+        <rect x="10.1" y="15.5" width="1.4" height="7" opacity="0.45" />
+      </svg>
+    </PaletteKey>
   )
 }
 
@@ -235,7 +270,7 @@ function AddNoteIcon() {
 /**
  * The everyday tools, Flat's Notation in its order (R31-E): Add note, the values whole to 64th,
  * Dotted and Double dotted (out of reach where the meter takes none), Tie, Tuplets (the meter's
- * first, a triplet or a duplet in compound time, its ⌄ opening the others), Rest, then the
+ * first, a triplet or a duplet in compound time, its ⌄ opening the others), Rest, Repeat, then the
  * accidentals ♮ ♯ ♭ and Respell. The note-entry toolbar over the sheet on a laptop, the phone's
  * folded row, and the Notes' grid.
  */
@@ -251,8 +286,8 @@ export function NoteBar() {
     takesDot((shownValue(state) ?? state.value).value, state.draft.meter, 2),
   )
   const onStaff = useEditorState((state) => state.layer !== 'chords')
-  const chosen = useNotesChosen()
-  // A tie only where a note there has the same key's note after it (R32-B).
+  const spelt = useEditorState((state) => spellNotes(state).length > 0)
+  // A tie acts only where a note there has the same key's note after it; else it greys (Flat's).
   const tieable = useEditorState(
     (state) =>
       state.layer !== 'chords' &&
@@ -271,31 +306,38 @@ export function NoteBar() {
       ) : null}
       <ValueKeys />
       <Divider />
-      {dottable ? (
+      <PaletteKey
+        label={t('dot')}
+        tool="dot"
+        pressed={shown?.dots === 1}
+        disabled={!dottable}
+        reason={t('reason.noDot')}
+        onClick={() => dispatch({ type: 'dot' })}
+      >
+        <span aria-hidden className={GLYPH}>
+          {VALUE_GLYPHS[4]}.
+        </span>
+      </PaletteKey>
+      <PaletteKey
+        label={t('doubleDot')}
+        tool="doubleDot"
+        pressed={shown?.dots === 2}
+        disabled={!doubleDottable}
+        reason={t('reason.noDot')}
+        onClick={() => dispatch({ type: 'dot', dots: 2 })}
+      >
+        <span aria-hidden className={GLYPH}>
+          {VALUE_GLYPHS[4]}..
+        </span>
+      </PaletteKey>
+      {onStaff ? (
         <PaletteKey
-          label={t('dot')}
-          tool="dot"
-          pressed={shown?.dots === 1}
-          onClick={() => dispatch({ type: 'dot' })}
+          label={t('marks.tie')}
+          tool="tie"
+          disabled={!tieable}
+          reason={t('reason.noTie')}
+          onClick={() => dispatch({ type: 'tie' })}
         >
-          <span aria-hidden className={GLYPH}>
-            {VALUE_GLYPHS[4]}.
-          </span>
-        </PaletteKey>
-      ) : null}
-      {doubleDottable ? (
-        <PaletteKey
-          label={t('doubleDot')}
-          pressed={shown?.dots === 2}
-          onClick={() => dispatch({ type: 'dot', dots: 2 })}
-        >
-          <span aria-hidden className={GLYPH}>
-            {VALUE_GLYPHS[4]}..
-          </span>
-        </PaletteKey>
-      ) : null}
-      {tieable ? (
-        <PaletteKey label={t('marks.tie')} tool="tie" onClick={() => dispatch({ type: 'tie' })}>
           <svg
             aria-hidden
             viewBox="0 0 24 24"
@@ -315,12 +357,27 @@ export function NoteBar() {
           {REST}
         </span>
       </PaletteKey>
+      {onStaff ? (
+        <PaletteKey
+          label={t('repeat')}
+          tool="repeat"
+          disabled={!spelt}
+          reason={t('reason.chooseNote')}
+          onClick={() => dispatch({ type: 'repeat' })}
+        >
+          <span aria-hidden className={GLYPH}>
+            {REPEAT}
+          </span>
+        </PaletteKey>
+      ) : null}
       <Divider />
       <AccidentalKeys />
-      {chosen ? (
+      {onStaff ? (
         <PaletteKey
           label={t('respell')}
           tool="respell"
+          disabled={!spelt}
+          reason={t('reason.chooseNote')}
           onClick={() => dispatch({ type: 'respell' })}
         >
           <span aria-hidden className="flex items-center [&_svg]:size-4.5">
@@ -340,16 +397,11 @@ export function NoteBar() {
  */
 export function NoteKeys() {
   const { t } = useTranslation('editor')
-  const row = usePaletteForm() === 'bar'
   return (
     <>
-      {row ? null : (
-        <>
-          <GroupName name={t('mode.label')} info={<ModesAbout />} />
-          <ModeKeys />
-          <GroupName name={t('palette.groups.notation')} />
-        </>
-      )}
+      <GroupName name={t('mode.label')} info={<ModesAbout />} />
+      <ModeKeys />
+      <GroupName name={t('palette.groups.notation')} />
       <KeyGrid label={t('palette.groups.notation')}>
         <NoteBar />
       </KeyGrid>
@@ -364,9 +416,11 @@ function TupletKey({ num }: { num: TupletCount }) {
   const shown = useShown()
   const meter = useEditorState((state) => state.draft.meter)
   const value = useEditorState((state) => (shownValue(state) ?? state.value).value)
-  if (!takesTuplet(value, num, meter)) return null
+  const takes = takesTuplet(value, num, meter)
   return (
     <PaletteKey
+      disabled={!takes}
+      reason={t('reason.noTuplet')}
       label={t(`tuplets.${TUPLET_WORDS[num]}`)}
       tool={num === 9 ? undefined : `tuplet${num}`}
       pressed={shown?.tuplet?.num === num}
@@ -533,6 +587,45 @@ function GraceKeys() {
 }
 
 /**
+ * Cross to upper or lower staff (ADR 0114, Dorico's ⌘⇧↑ ⌘⇧↓): the notes chosen drawn on the
+ * piano's other staff, still their hand's. On the piano's staves only.
+ */
+function CrossKeys() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const piano = useEditorState((state) => isHandLayer(state.layer))
+  return (['upper', 'lower'] as const).map((to) => (
+    <PaletteKey
+      key={to}
+      label={t(to === 'upper' ? 'crossUp' : 'crossDown')}
+      disabled={!piano}
+      onClick={() => actions.dispatch({ type: 'cross', to })}
+    >
+      <CrossIcon up={to === 'upper'} />
+    </PaletteKey>
+  ))
+}
+
+/** A note crossing to the staff a line marks, above or below it, with its arrow. */
+function CrossIcon({ up }: { up: boolean }) {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      <rect x="2" y={up ? 2.8 : 19.8} width="20" height="1.4" rx="0.7" />
+      <Head cx={8} cy={up ? 17.5 : 9.5} />
+      <rect x="11.4" y={up ? 9 : 2.5} width="1.4" height={up ? 8 : 6.5} />
+      <path
+        d={up ? 'M18 15V6m-2.5 2.5L18 6l2.5 2.5' : 'M18 9v9m-2.5-2.5L18 18l2.5-2.5'}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+/**
  * The Pitch section (Flat's Pitch and representation): each pair up then down, a step of the key, a
  * half step (sharps up, flats down), an octave; then the grace note (Flat's 9) and the octave lines.
  * Each key its picture alone, named in its tooltip.
@@ -558,6 +651,7 @@ export function PitchKeys() {
           <Move up={false} by={by} />
         </PaletteKey>,
       ])}
+      <CrossKeys />
       <GraceKeys />
       <LineKeys lines={['8va', '8vb', '15ma', '15mb']} />
     </KeyGrid>

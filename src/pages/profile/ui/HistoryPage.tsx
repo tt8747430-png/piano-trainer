@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { dateOfDay, localDay, selectHistory, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { cn, formatLocale } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { BackButton, ScreenHeader, SettingsGroup } from '@/shared/ui'
 import { useToday } from '@/widgets/practice-days'
 import { usePracticeTime } from '../model/format'
 import { byDay, useHistoryDay, useRunLines } from '../model/runs'
-import { RunRow } from './HistoryPreview'
+import { NoHistory, RunRow } from './HistoryPreview'
 
 const DAYS = 30
 
@@ -35,8 +35,12 @@ function MonthChart() {
   const most = Math.max(...month.map((day) => day.seconds))
   // The scale's top: the next whole half hour above the most practised day, at least 30 minutes.
   const top = Math.max(30, Math.ceil(most / 60 / 30) * 30)
-  const short = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short' })
-  const named = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' })
+  const short = new Intl.DateTimeFormat(formatLocale(locale), { day: 'numeric', month: 'short' })
+  const named = new Intl.DateTimeFormat(formatLocale(locale), {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  })
   return (
     <div className="flex flex-col gap-3 card px-4 py-4">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
@@ -112,13 +116,13 @@ export function HistoryPage() {
     .map(({ day, runs: kept }) => ({ day, lines: lines(kept) }))
     .filter(({ lines: shown }) => shown.length > 0)
   return (
-    <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('profile.history.title')} back={<BackButton />} />
+    <div className="flex flex-col gap-2">
+      <ScreenHeader column title={t('profile.history.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
         <MonthChart />
         {days.length === 0 ? (
-          <SettingsGroup>
-            <p className="py-1 text-pretty text-muted-foreground">{t('profile.history.none')}</p>
+          <SettingsGroup flush>
+            <NoHistory />
           </SettingsGroup>
         ) : (
           days.map(({ day, lines: shown }) => (

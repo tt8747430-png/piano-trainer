@@ -49,13 +49,15 @@ export interface TimedNote {
   readonly startTick: Tick
   readonly durationTicks: Tick
   readonly finger?: Finger
-  /** Its finger crosses: the thumb passing under, or a finger over the thumb (a scale's). */
-  readonly crossing?: true
   /** Its tone in the chord it sounds in, where a page names it: its notehead takes the tone's paint. */
   readonly role?: ChordRole
   readonly marks?: NoteMarks
   /** What it sings, by verse (ADR 0097): written under the staff whose notes sing it. */
   readonly lyrics?: NoteLyrics
+  /** Written in a staff's second voice, stems down under the first (ADR 0114, Flat's and Dorico's Voice 2). */
+  readonly voice?: 2
+  /** Drawn on the piano's other staff, still its hand's (ADR 0114, Dorico's cross-staff). */
+  readonly cross?: true
 }
 
 /** Timed notes with their bars and chord symbols: a Performance is this. */
@@ -111,8 +113,8 @@ export interface WrittenNote {
   /** Tied to the same key's next note. */
   readonly tie: boolean
   readonly finger?: Finger
-  /** Its finger crosses (`TimedNote`): the finger printed in the accent colour. */
-  readonly crossing?: true
+  /** Drawn on the piano's other staff (`TimedNote`): the engraving's `@staff`. */
+  readonly cross?: true
   /** Its tone in its chord (`TimedNote`): the engraving's class paints its notehead. */
   readonly role?: ChordRole
 }

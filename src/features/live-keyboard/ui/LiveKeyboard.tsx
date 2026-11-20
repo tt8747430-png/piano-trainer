@@ -36,6 +36,7 @@ export function LiveKeyboard({
   spacePedal = true,
   namesKeys = true,
   showsSound = true,
+  typable = true,
   floating,
   height,
   ...keyboard
@@ -54,20 +55,19 @@ export function LiveKeyboard({
   /** Space holds the pedal while typing plays the keys: off where the screen gives Space a job. */
   spacePedal?: boolean
   /**
-   * The keys carry their names as the learner chose: off where a key's name is the answer (a round
-   * played on the keys), whatever the setting.
+   * The keys carry their names as the learner chose: where a key's name is the answer (a round played
+   * on the keys), only each C's.
    */
   namesKeys?: boolean
   /** The keys the app sounds go down: off where what sounds is the question (a round by ear). */
   showsSound?: boolean
+  /** The computer's letters and Space play these keys: off for a page's many small keyboards (a lesson's). */
+  typable?: boolean
 }) {
-  const { typing, keySize, swipe, namedKeys, markNotes } = useSettings(selectKeyboard)
-  const settings = {
-    keySize,
-    swipe,
-    namedKeys: namesKeys ? namedKeys : ('none' as const),
-    markNotes,
-  }
+  const { typing, namedKeys } = useSettings(selectKeyboard)
+  // Where a key's name is the answer only the octaves' C stays named, as the Check board draws its
+  // keys, and none where the learner named none.
+  const settings = { namedKeys: namesKeys || namedKeys === 'none' ? namedKeys : ('c' as const) }
   const heard = useSoundingKeys(spotlight ? 'struck' : 'sounding')
   const sounding = showsSound ? heard : NOTHING
   const live = useSoundingKeys('live')
@@ -83,7 +83,7 @@ export function LiveKeyboard({
   const soundingRange = useMemo(() => rangeOf([...sounding, ...held]), [sounding, held])
   // Letters play only where there are letters to type: a setting synced from a laptop does nothing on
   // a phone, which has no way to turn it off (R29).
-  const typingPlays = typing && hasFinePointer()
+  const typingPlays = typable && typing && hasFinePointer()
   const typed = useTyping({
     enabled: typingPlays,
     onKey: play,
@@ -100,7 +100,7 @@ export function LiveKeyboard({
       { label: t('shortcuts.octave'), shown: ['Z', 'X'] },
       ...(spacePedal ? [{ label: t('shortcuts.pedal'), shown: ['Space'] }] : []),
     ],
-    { enabled: typing, scope: 'piano' },
+    { enabled: typable && typing, scope: 'piano' },
   )
   // A key the live voice sounds is down until its damper falls: held, or on under the pedal.
   const down = useMemo(

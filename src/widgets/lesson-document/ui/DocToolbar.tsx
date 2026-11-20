@@ -2,16 +2,15 @@ import type { Editor } from '@tiptap/core'
 import { useEditorState } from '@tiptap/react'
 import { TextSelection } from '@tiptap/pm/state'
 import { BubbleMenu } from '@tiptap/react/menus'
-import { Bold, Plus, Redo2, Undo2 } from 'lucide-react'
+import { Bold, Redo2, Undo2 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Locale } from '@/shared/i18n'
 import { cn, useMediaQuery } from '@/shared/lib'
-import { ActionMenu } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { selectedBlock } from '../model/doc-blocks'
 import { DOC } from '../model/lesson-doc'
-import { insertActions } from './menus'
+import { InsertSheet } from './InsertSheet'
 
 function ToolButton({
   label,
@@ -74,23 +73,8 @@ export function DocToolbar({
       aria-label={t('edit.doc.toolbar')}
       className={cn('flex items-center gap-0.5 overflow-x-auto overscroll-x-contain', className)}
     >
-      {/* Insert, the toolbar's one accent: every kind of block, grouped. */}
-      <ActionMenu
-        label={t('edit.doc.insert')}
-        trigger={
-          <>
-            <Plus data-icon="inline-start" aria-hidden />
-            {t('edit.doc.insert')}
-          </>
-        }
-        render={
-          <Button
-            className="h-11 shrink-0 rounded-control px-3"
-            onMouseDown={(event) => event.preventDefault()}
-          />
-        }
-        actions={insertActions(editor, locale, t)}
-      />
+      {/* Insert, the toolbar's one accent: its sheet of every kind of block, grouped. */}
+      <InsertSheet editor={editor} locale={locale} />
       <span aria-hidden className="mx-1 h-6 w-px shrink-0 bg-border" />
       <ToolButton
         label={t('edit.doc.undo')}
@@ -129,7 +113,7 @@ export function TextBubble({ editor }: { editor: Editor }) {
         const top = state.doc.maybeChild(selectedBlock(state))?.type.name
         return top === DOC.paragraph || top === DOC.steps
       }}
-      className="z-40 flex items-center rounded-control border border-border bg-raised p-1 elevation-2"
+      className="z-40 flex items-center rounded-control border border-border bg-raised p-1 elevation-float"
     >
       <ToolButton
         label={t('edit.doc.lead')}

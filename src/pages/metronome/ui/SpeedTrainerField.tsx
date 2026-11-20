@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { MetronomeSettings } from '@/entities/settings'
 import { BPM_RANGE } from '@/shared/lib/schedule'
-import { GroupRow, GroupRows, InfoTip, Stepper } from '@/shared/ui'
-import { Switch } from '@/shared/ui/primitives/switch'
+import { GroupRow, GroupRows, GroupSwitch, Stepper } from '@/shared/ui'
 
 type Speed = MetronomeSettings['speed']
 
@@ -29,16 +28,12 @@ export function SpeedTrainerField({
   const name = t('metronome.speed.label')
   return (
     <GroupRows label={name}>
-      <GroupRow
-        label={
-          <span className="inline-flex items-center gap-1.5">
-            {name}
-            <InfoTip name={name}>{t('metronome.speed.info')}</InfoTip>
-          </span>
-        }
-      >
-        <Switch aria-label={name} checked={speed.on} onCheckedChange={(on) => onChange({ on })} />
-      </GroupRow>
+      <GroupSwitch
+        label={name}
+        info={t('metronome.speed.info')}
+        checked={speed.on}
+        onCheckedChange={(on) => onChange({ on })}
+      />
       {rows.map(([key, min, max, format]) => (
         <GroupRow key={key} label={t(`metronome.speed.${key}`)}>
           <Stepper

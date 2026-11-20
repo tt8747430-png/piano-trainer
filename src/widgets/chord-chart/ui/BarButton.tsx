@@ -81,7 +81,7 @@ export function BarButton({
       data-bar={number - 1}
       onClick={(event) => onTap(beatTapped(event.target))}
       className={cn(
-        BAR,
+        tap === 'go' ? 'relative grid min-w-0 auto-rows-min gap-px' : BAR,
         'group/bar text-left transition-colors duration-200 ease-out focus-visible:-outline-offset-3',
       )}
       style={{ ...style, gridTemplateColumns: `repeat(${cells.length}, minmax(0, 1fr))` }}
@@ -94,8 +94,11 @@ export function BarButton({
         sounding={sounding}
         playing={playing}
         looped={looped}
+        face={tap === 'go' ? 'grid' : 'chart'}
       />
-      {playing ? <Square aria-hidden className="absolute top-1.5 right-1.5 size-3 fill-current" /> : null}
+      {playing ? (
+        <Square aria-hidden className="absolute top-1.5 right-1.5 size-3 fill-current" />
+      ) : null}
     </button>
   )
 }

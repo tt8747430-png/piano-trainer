@@ -1,5 +1,5 @@
 export { ChordChart } from './ui/ChordChart'
 export { CellChords } from './ui/CellChords'
 export { chartSections, sectionBars } from './model/chart-sections'
-export { useChartPlayback } from './model/use-chart-playback'
+export { useChartPlayback, WHOLE_SONG } from './model/use-chart-playback'
 export type { BarWords, BeatWords } from './model/bar-words'

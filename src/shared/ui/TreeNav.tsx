@@ -37,14 +37,7 @@ export const TreeList = ({ className, ...props }: ComponentProps<'ul'>) => (
 
 /** A heading over a run of a tree's rows (Places, Folders, Books), in the soft caps every group wears. */
 export const TreeHeading = ({ children, first }: { children: ReactNode; first?: boolean }) => (
-  <h2
-    className={cn(
-      'px-1 pb-1.5 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase',
-      !first && 'pt-4',
-    )}
-  >
-    {children}
-  </h2>
+  <h2 className={cn('caps px-1 pb-1.5', !first && 'pt-4')}>{children}</h2>
 )
 
 /**

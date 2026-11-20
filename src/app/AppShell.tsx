@@ -1,10 +1,11 @@
 import { useRouterState } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings } from '@/entities/settings'
-import { FloatingHost, ScreenBarProvider } from '@/shared/ui'
+import { useFocusMode } from '@/shared/lib'
+import { FloatingHost, RouteShellContext, ScreenBarProvider } from '@/shared/ui'
 import { TooltipProvider } from '@/shared/ui/primitives/tooltip'
-import { AppNav } from '@/widgets/app-nav'
+import { AppNav, PlaceActions } from '@/widgets/app-nav'
 import { usePracticeVisits } from '@/widgets/practice-pages'
 import { SearchPaletteProvider } from '@/widgets/search-palette'
 
@@ -20,7 +21,12 @@ import { SearchPaletteProvider } from '@/widgets/search-palette'
 export function AppShell({ children }: { children: ReactNode }) {
   const { t } = useTranslation('common')
   const sidebar = useSettings(selectSidebar)
+  // Focus hides the sidebar for the session; the learner's own choice comes back when it ends.
+  const shown = useFocusMode() ? 'focus' : sidebar
   const screen = useRouterState({ select: (state) => state.location.pathname })
+  // A screen that cannot open keeps the place's Search and the tab bar (the AppLayers board).
+  const [stateShown, setStateShown] = useState(false)
+  const routeShell = useMemo(() => ({ tools: <PlaceActions />, showing: setStateShown }), [])
   usePracticeVisits()
   return (
     <SearchPaletteProvider>
@@ -37,14 +43,16 @@ export function AppShell({ children }: { children: ReactNode }) {
           >
             {t('skipToContent')}
           </a>
-          <AppNav />
+          <AppNav keep={stateShown} />
           <main
             id="content"
             tabIndex={-1}
-            data-sidebar={sidebar}
-            className="group/main pt-safe pr-floating pb-foot-6 pl-(--gutter) outline-none print:p-0 landscape-phone:pb-foot-4 landscape-phone:pl-rail lg:pb-foot-12 lg:pl-sidebar lg:data-[sidebar=collapsed]:pl-sidebar-collapsed"
+            data-sidebar={shown}
+            className="group/main pt-safe pr-floating pb-foot-6 pl-(--gutter) outline-none print:p-0 landscape-phone:pb-foot-4 landscape-phone:pl-safe-left lg:pb-foot-12 lg:pl-sidebar lg:data-[sidebar=collapsed]:pl-sidebar-collapsed lg:data-[sidebar=focus]:pl-focus"
           >
-            <FloatingHost screen={screen}>{children}</FloatingHost>
+            <RouteShellContext value={routeShell}>
+              <FloatingHost screen={screen}>{children}</FloatingHost>
+            </RouteShellContext>
           </main>
         </TooltipProvider>
       </ScreenBarProvider>

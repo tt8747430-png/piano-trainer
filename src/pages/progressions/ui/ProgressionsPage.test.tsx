@@ -57,7 +57,7 @@ describe('Practice → Progressions, the library (R30-4)', () => {
     const user = userEvent.setup()
     const { practiceLibraryStore } = await renderApp('/practice/progressions')
     await user.click(await screen.findByRole('button', { name: 'More for Jazz cadence' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Add to favourites' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Add to Favourites' }))
     const favourites = await screen.findByRole('region', { name: 'Favourites' })
     expect(within(favourites).getByRole('link', { name: /^Jazz cadence/ })).toBeInTheDocument()
     expect(practiceLibraryStore.getState().favourites.progressions).toEqual(['jazz-cadence'])
@@ -133,7 +133,7 @@ describe('A progression’s own page (R30-4)', () => {
   it('is made a favourite from the ♡ in its bar', async () => {
     const user = userEvent.setup()
     const { practiceLibraryStore } = await renderApp('/practice/progressions/axis')
-    await user.click(await screen.findByRole('button', { name: 'Add to favourites' }))
+    await user.click(await screen.findByRole('button', { name: 'Add to Favourites' }))
     expect(practiceLibraryStore.getState().favourites.progressions).toEqual(['axis'])
   })
 

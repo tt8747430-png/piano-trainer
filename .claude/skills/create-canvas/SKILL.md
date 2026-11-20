@@ -157,6 +157,9 @@ Before claiming smooth performance, profile a representative populated canvas, n
 
 Finish with a short report that includes these details:
 
+In a loop (`owner-way`, Loops and refactors), this is one line inside the turn and the next item follows; never a closing report.
+
+
 - Changed: Paths, purpose, local experiments, shared component changes, and exact names of new previews.
 - Checks run: Tests that you ran and their results.
 - Not working or not tested: Limits, omissions, and reasons.

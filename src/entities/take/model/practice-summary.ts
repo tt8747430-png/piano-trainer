@@ -14,20 +14,20 @@ export interface PracticeSummary {
   readonly speed: number
 }
 
-/** Each bar's share of its judged notes played right; null where nothing in it was judged. */
+/** Each bar's share its judged notes earn, their penalties taken off; null where nothing was judged. */
 export function barShares(
   feedback: Pick<Feedback, 'notes'>,
   bars: Performance['bars'],
 ): (number | null)[] {
-  const right = bars.map(() => 0)
+  const earned = bars.map(() => 0)
   const judged = bars.map(() => 0)
   for (const note of feedback.notes) {
     const bar = bars.findLastIndex((each) => each.startTick <= note.tick)
     if (bar < 0) continue
     judged[bar] = (judged[bar] ?? 0) + 1
-    if (note.verdict === 'right') right[bar] = (right[bar] ?? 0) + 1
+    earned[bar] = (earned[bar] ?? 0) + 1 - note.penalty
   }
-  return judged.map((count, bar) => (count === 0 ? null : (right[bar] ?? 0) / count))
+  return judged.map((count, bar) => (count === 0 ? null : (earned[bar] ?? 0) / count))
 }
 
 /**
@@ -68,7 +68,7 @@ export type NextStep =
   | { readonly kind: 'tempo'; readonly speed: number }
 
 /** A pair of bars under this share right is looped. */
-const WEAK = 0.8
+export const WEAK = 0.8
 /** The speed a weak passage is looped at. */
 const LOOP_SPEED = 0.7
 
@@ -79,9 +79,18 @@ export function nextStep(summary: Pick<PracticeSummary, 'bars' | 'speed'>): Next
   return null
 }
 
-/** The weakest bar, or pair of bars side by side, of those judged: the lowest share right. */
-function weakestBars(bars: readonly (number | null)[]): { bars: Bars; share: number } | null {
+/**
+ * The weakest bar, or pair of bars side by side, of those judged: the lowest share right. The one
+ * rule for a take's next step and a Wait pass's hardest bars (CLAUDE.md, one implementation). Two
+ * equally weak, the one with more pauses wins (a Wait pass's time per step).
+ */
+export function weakestBars(
+  bars: readonly (number | null)[],
+  pausesIn: (bar: number) => number = () => 0,
+): { bars: Bars; share: number } | null {
   let worst: { bars: Bars; share: number } | null = null
+  const paused = (range: Bars) =>
+    pausesIn(range.first) + (range.last > range.first ? pausesIn(range.last) : 0)
   for (const [bar, share] of bars.entries()) {
     if (share === null) continue
     const next = bars[bar + 1]
@@ -89,7 +98,9 @@ function weakestBars(bars: readonly (number | null)[]): { bars: Bars; share: num
       next === null || next === undefined
         ? { bars: { first: bar, last: bar }, share }
         : { bars: { first: bar, last: bar + 1 }, share: (share + next) / 2 }
-    if (!worst || found.share < worst.share) worst = found
+    const tied =
+      worst !== null && found.share === worst.share && paused(found.bars) > paused(worst.bars)
+    if (!worst || found.share < worst.share || tied) worst = found
   }
   return worst
 }

@@ -78,3 +78,40 @@ export function ReadingItem({ label }: { label: string }) {
     </div>
   )
 }
+
+/**
+ * An item's facts as Flat's info pane lists them: each name over its value in two columns
+ * (Composer, Type, Published, the rest its page gives), then its tags as chips.
+ */
+export function Facts({
+  facts,
+  tags,
+}: {
+  facts: readonly { name: string; value: string; phoneOnly?: boolean }[]
+  tags: readonly string[]
+}) {
+  return (
+    <>
+      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2.5 text-[0.9375rem]">
+        {facts.map((fact) => (
+          <div key={fact.name} className={fact.phoneOnly ? 'contents sm:hidden' : 'contents'}>
+            <dt className="text-muted-foreground">{fact.name}</dt>
+            <dd className="font-semibold">{fact.value}</dd>
+          </div>
+        ))}
+      </dl>
+      {tags.length > 0 ? (
+        <ul className="flex flex-wrap gap-1.5">
+          {tags.map((tag) => (
+            <li
+              key={tag}
+              className="flex h-8 items-center rounded-pill bg-muted px-3 text-sm font-semibold"
+            >
+              {tag}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </>
+  )
+}

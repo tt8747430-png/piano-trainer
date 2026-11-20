@@ -1,23 +1,32 @@
 # R56 (canvas 160): a chord practice run's results, and Practice history in Profile.
-#   PlayChord      — the Player in a Chords practice run (Cmaj7 · Inversions), ending in its results, full screen
+#   PlayChord      — the Player in a Chords practice run (Inversions: Cmaj7), ending in its results, full screen
 #   PracticeResult — the same results opened from Profile › Practice history
 #   Profile        — gains Practice history: a 30-day chart, the runs by day, "Stored on this device"
 # The results follow memory-palaces' ResultScreen (an icon circle, the title, one line, a row of stat tiles, the actions
-# pinned at the foot) and what Piano Marvel, Melodics and Yousician show after a run: every chord marked right, wrong,
-# early or late and by how much; your best beside this score. Exec'd by r41.py after r55_editor_draft; uses
+# pinned at the foot) and what Piano Marvel, Melodics and Yousician show after a run: every chord marked right, a slip or
+# a pause (Wait mode waits, so it has no early or late); your best beside this score. Exec'd by r41.py after r55_editor_draft; uses
 # r53_songs_more's IF and r50_profile's pieces. Helpers carry the RS_ prefix.
 
-RS_SAGE, RS_SAGE_INK, RS_RED, RS_OCHRE = '#DCE9D6', '#2F5A35', '#A1352B', '#9A6A1E'
+RS_SAGE, RS_SAGE_INK, RS_RED, RS_OCHRE = '#DCE9D6', '#44684A', '#A1352B', '#8A5D16'
 RS_LET = 'CDEFGAB'
+from bravura_glyphs import BRAVURA
+# a notehead as the engine engraves it: Bravura's whole or black head at the staff's space, centred on its note
+RS_HEAD = lambda kind, x, y, sp, c=INK: f'<path transform="translate({x - BRAVURA[kind][1] * sp / 500:.2f} {y}) scale({sp / 250:.4f} {-sp / 250:.4f})" d="{BRAVURA[kind][0]}" fill="{c}"></path>'
 # the run: Cmaj7 through its inversions, three times (root position, 1st, 2nd, 3rd)
 RS_INV = [[('C', 4), ('E', 4), ('G', 4), ('B', 4)], [('E', 4), ('G', 4), ('B', 4), ('C', 5)],
           [('G', 4), ('B', 4), ('C', 5), ('E', 5)], [('B', 3), ('C', 4), ('E', 4), ('G', 4)]]
 RS_RUN = [RS_INV[i % 4] for i in range(12)]
-# what happened at each chord: None is right and on time; ('early'|'late', ms); ('wrong', played notes, the wrong one)
-RS_MARKS = {2: ('early', 40), 6: ('wrong', [('G', 4), ('B', 4), ('D', 5), ('E', 5)], ('D', 5)), 9: ('early', 25), 10: ('late', 60)}
+# what happened at each chord in Wait mode, which waits for it: None is right at once; ('paused',) took over two beats
+# (the practice machine's pauses, shown, never scored); ('wrong', played notes, the wrong one), a slip
+RS_MARKS = {2: ('paused',), 6: ('wrong',), 10: ('paused',)}
 RS_NAMES = ['Root position', '1st inversion', '2nd inversion', '3rd inversion']
 
 
+# The runs' foot is the Practice pages' bar of pieces (Chords, Scales, the Chord finder): glass pieces, an icon over its
+# caption, and the honey Play capsule at the centre (owner, 2026-11-18: "the floating actions guidelines are broken")
+SLIDERSI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M6 21v-7M6 10V3M12 21v-9M12 8V3M18 21v-5M18 12V3M3 14h6M9 8h6M15 16h6"></path></svg>'
+TEMPOI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>'
+RUNBAR = lambda pos, inner, label: (f'<div role="toolbar" aria-label="{label}" style="position: absolute; {pos}; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 12px; pointer-events: none">{inner}</div>')
 def RS_STEP(l, o):
     return RS_LET.index(l) + 7 * (o - 4)
 
@@ -29,20 +38,28 @@ def RS_CELL(notes, w, red=None, last=False, clef=False):
     if last:
         lines += f'<path d="M{w - .6} 16V48" stroke="{INK}" stroke-width="1.2"></path>'
     if clef:
-        return f'<svg viewBox="0 -6 {w} 82" width="{w}" height="82" aria-hidden="true" style="display: block; flex: none">{lines}<text x="2" y="54" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄞</text></svg>'
+        return f'<svg viewBox="0 -6 {w} 82" width="{w}" height="82" aria-hidden="true" style="display: block; flex: none">{lines}<text x="2" y="48" font-family="Noto Music, serif" font-size="32" fill="{INK}">𝄞</text></svg>'
     # round 41: a note may carry its accidental, (letter, octave, '♯' or '♭'), set left of the chord as an engraver does
     accs = {RS_STEP(n[0], n[1]): n[2] for n in notes if len(n) > 2}
     steps = sorted(RS_STEP(n[0], n[1]) for n in notes)
     cx, out, prev, shifted = w / 2 - 3, '', None, False
+    # accidentals in columns left of the chord, the highest nearest, one moving out when another stands
+    # less than a sixth above it in its column (Gould, Behind Bars), as the app's RunStaff
+    cols, col = [], {}
+    for s in sorted(accs, reverse=True):
+        at = next((i for i, c in enumerate(cols) if all(t - s >= 6 for t in c)), None)
+        if at is None:
+            cols.append([]); at = len(cols) - 1
+        cols[at].append(s); col[s] = at
     for s in steps:
         shifted = (prev is not None and s - prev == 1 and not shifted)
         x = cx + (10 if shifted else 0)
         if s in accs:
-            out += f'<text x="{cx - 16:.1f}" y="{y(s) + 4}" font-family="Noto Music, serif" font-size="14" fill="{INK}">{accs[s]}</text>'
+            out += f'<text x="{cx - 16 - 8 * col[s]:.1f}" y="{y(s) + 4}" font-family="Noto Music, serif" font-size="14" fill="{INK}">{accs[s]}</text>'
         if s <= 0:
             out += f'<path d="M{cx - 9} 56H{cx + 9 + (10 if shifted else 0)}" stroke="{INK}" stroke-width="1"></path>'
         c = RS_RED if red and RS_STEP(*red) == s else INK
-        out += f'<ellipse cx="{x:.1f}" cy="{y(s)}" rx="5.4" ry="3.9" transform="rotate(-24 {x:.1f} {y(s)})" fill="none" stroke="{c}" stroke-width="{2.4 if c == RS_RED else 1.7}"></ellipse>'
+        out += RS_HEAD('whole', x, y(s), 8, c)
         prev = s
     return f'<svg viewBox="0 -6 {w} 82" width="{w}" height="82" aria-hidden="true" style="display: block; flex: none">{lines}{out}</svg>'
 
@@ -53,7 +70,7 @@ def RS_CAP(i, perfect):
         return f'<span style="color: {RS_SAGE_INK}; font-weight: 700" aria-label="Correct">✓</span>'
     if m[0] == 'wrong':
         return f'<span style="color: {RS_RED}; font-weight: 600">Wrong notes</span>'
-    return f'<span style="color: {RS_OCHRE}; font-weight: 600; font-variant-numeric: tabular-nums">{m[0].capitalize()}<br>{m[1]} ms</span>'
+    return f'<span style="color: {RS_OCHRE}; font-weight: 600">Paused</span>'
 
 
 def RS_RUNSTAFF(per_row, cw, perfect):
@@ -61,24 +78,25 @@ def RS_RUNSTAFF(per_row, cw, perfect):
     for r in range(0, 12, per_row):
         cells = [f'<div style="flex: none; display: flex; flex-direction: column; align-items: center">{RS_CELL([], 34, clef=True)}<span style="height: 32px"></span></div>']
         for i in range(r, r + per_row):
-            m = None if perfect else RS_MARKS.get(i)
-            notes, red = (m[1], m[2]) if m and m[0] == 'wrong' else (RS_RUN[i], None)
-            cells.append(f'<div role="listitem" aria-label="{RS_NAMES[i % 4]}" style="flex: none; display: flex; flex-direction: column; align-items: center">{RS_CELL(notes, cw, red, last=(i == r + per_row - 1))}'
+            # every bar draws the chord as written: Wait mode keeps a slip, not which keys were pressed
+            cells.append(f'<div role="listitem" aria-label="{RS_NAMES[i % 4]}" style="flex: none; display: flex; flex-direction: column; align-items: center">{RS_CELL(RS_RUN[i], cw, None, last=(i == r + per_row - 1))}'
                          f'<span style="height: 32px; font-size: 12px; line-height: 16px; white-space: nowrap; text-align: center">{RS_CAP(i, perfect)}</span></div>')
         rows.append(f'<div role="list" style="display: flex; justify-content: center">{"".join(cells)}</div>')
     return '<div style="display: flex; flex-direction: column; gap: 4px">' + ''.join(rows) + '</div>'
 
 
 RS_LEGEND = (f'<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; font-size: 13px; color: {SOFT}">'
-             f'<span><b style="color: {RS_SAGE_INK}">✓</b> Correct</span><span><b style="color: {RS_RED}">●</b> Wrong notes</span><span><b style="color: {RS_OCHRE}">●</b> Early or late</span></div>')
+             f'<span><b style="color: {RS_SAGE_INK}">✓</b> Correct</span><span><b style="color: {RS_RED}">●</b> Wrong notes</span><span><b style="color: {RS_OCHRE}">●</b> Paused</span></div>')
 
 
 def RS_TILE(fig, unit, sub, label):
-    u = f'<span style="font-size: 15px; font-weight: 600; color: {SOFT}"> {unit}</span>' if unit else ''
-    s = f'<span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{sub}</span>' if sub else ''
-    return (f'<div class="rs-rise" style="min-width: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 12px; display: flex; flex-direction: column; gap: 2px">'
-            f'<span style="font-size: 24px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; white-space: nowrap">{fig}{u}</span>{s}'
-            f'<span style="margin-top: auto; padding-top: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{label}</span></div>')
+    """A stat tile, the same three rows in every tile (round 63): the figure (its unit quieter), one line of context,
+    the label; 16 inset, rows closer than the inset, so the three read as one group and the tiles as siblings."""
+    u = f'<span style="font-size: 15px; font-weight: 600; letter-spacing: 0; color: {SOFT}"> {unit}</span>' if unit else ''
+    return (f'<div class="rs-rise" style="min-width: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 2px">'
+            f'<span style="font-size: 24px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; white-space: nowrap">{fig}{u}</span>'
+            f'<span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{sub}</span>'
+            f'<span style="padding-top: 6px; font-size: 13px; font-weight: 600; color: {SOFT}">{label}</span></div>')
 
 
 RS_CHECK = f'<svg viewBox="0 0 24 24" width="44" height="44" {I.replace("stroke-width=\"2\"", "stroke-width=\"2.4\"")}><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>'
@@ -91,16 +109,17 @@ RS_MOTION = ('<style data-motion>@keyframes rs-rise { from { opacity: 0; transfo
 
 
 def RS_BODY(per_row, cw, perfect, from_profile, lap=False, parts=False):
-    icon = (f'<span class="rs-pop" style="width: 96px; height: 96px; border-radius: 48px; background: {"#F6E3BC" if perfect else RS_SAGE}; color: {"#9A6A1E" if perfect else RS_SAGE_INK}; '
+    icon = (f'<span class="rs-pop" style="width: 96px; height: 96px; border-radius: 48px; background: {"#F6E3BC" if perfect else RS_SAGE}; color: {"#8A5D16" if perfect else RS_SAGE_INK}; '
             f'display: flex; align-items: center; justify-content: center">{RS_STAR if perfect else RS_CHECK}</span>')
     head = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">{icon}'
-            f'<h1 class="rs-rise rs-d1" style="margin: 8px 0 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em"><span style="font-family: {SERIF}">Cmaj7</span> · Inversions</h1></div>')
-    tiles = ('<div class="rs-rise rs-d2" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">'
+            f'<h1 class="rs-rise rs-d1" style="margin: 8px 0 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em">Inversions: Cmaj7</h1></div>')
+    tiles = (f'<div class="rs-rise rs-d2" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: {16 if lap else 12}px">'
              + RS_TILE('100%' if perfect else '92%', '', '12 of 12' if perfect else '11 of 12', 'Accuracy')
-             + RS_TILE('12' if perfect else '9', '', 'on time' if perfect else 'on time<br>2 early · 1 late', 'Timing')
-             + RS_TILE('72', 'BPM', '', 'Tempo') + '</div>')
-    run = (f'<section class="rs-rise rs-d3" aria-label="The run" style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600">The run</h2>'
-           + CARD(f'<div style="display: flex; flex-direction: column; gap: 8px">{RS_RUNSTAFF(per_row, cw, perfect)}{"" if perfect else RS_LEGEND}</div>', '12px 8px') + '</section>')
+             + RS_TILE('0' if perfect else '2', '', 'of 12 chords', 'Pauses')
+             + RS_TILE('72', 'BPM', 'In Wait mode', 'Tempo') + '</div>')
+    run = (f'<section class="rs-rise rs-d3" aria-label="The run" style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0; font-size: 14px; font-weight: 600">The run</h2>'
+           + f'<div style="display: flex; flex-direction: column; gap: 8px">{RS_RUNSTAFF(per_row, cw, perfect)}{"" if perfect else RS_LEGEND}</div>' + '</section>')
+    # round 63: the run stands on the paper as in the run itself, never a lone card; the heading on the column's edge
     best = ('New personal best · Attempt 5' if perfect else 'Personal best 96% · Attempt 5')
     prof = '' if from_profile else (f'<a href="{"ProfileLaptop" if lap else "Profile"}.dc.html" style="height: 44px; display: inline-flex; align-items: center; gap: 4px; color: {LINK}; '
                                     f'font-size: 15px; font-weight: 600; text-decoration: none">All practice in Profile{CHEV_R}</a>')
@@ -109,6 +128,7 @@ def RS_BODY(per_row, cw, perfect, from_profile, lap=False, parts=False):
     return (head, tiles, run, foot) if parts else head + tiles + run + foot
 
 
+# a phone on its side: the acts stand in one row, so the results keep their room (round 66)
 def RS_ACTIONS(perfect, from_profile, lap=False):
     run = 'PlayChordLaptop.dc.html' if lap else 'PlayChord.dc.html'
     done = 'ChordsLaptop.dc.html' if lap else 'Chords.dc.html'
@@ -116,10 +136,10 @@ def RS_ACTIONS(perfect, from_profile, lap=False):
     if perfect:
         main = BTN('Retry at 80 BPM', act, href, 'primary', 52)
         rest = '' if from_profile else BTN('Done', '', done, 'quiet', 52)
-        return f'<div style="display: grid; gap: 8px">{main}{rest}</div>'
+        return f'<div class="rsacts" style="display: grid; gap: 8px">{main}{rest}</div>'
     main = BTN('Practise mistakes', act, href, 'primary', 52)
     rest = BTN('Retry', act, href, 'quiet', 52) + ('' if from_profile else BTN('Done', '', done, 'quiet', 52))
-    return f'<div style="display: grid; gap: 8px">{main}<div style="display: flex; gap: 8px">{rest}</div></div>'
+    return f'<div class="rsacts" style="display: grid; gap: 8px">{main}<div style="display: flex; gap: 8px">{rest}</div></div>'
 
 
 RS_SHOW = (f'<div aria-label="Canvas: show a state" style="flex: none; align-self: center; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 6px; border-radius: 14px; border: 1.5px dashed {LINE}">'
@@ -140,7 +160,8 @@ def RS_RESULTS(per_row, cw, from_profile, lap=False):
         return (f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 56px 48px; display: flex; flex-direction: column; gap: 24px">'
                 f'{RS_SHOW}{both(side)}</main>')
     return (f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: {8 if from_profile else 16}px 16px 24px; display: flex; flex-direction: column; gap: 20px">{RS_SHOW}{body}</main>'
-            f'<div style="flex: none; padding: 12px 16px 34px; box-shadow: 0 -1px 0 {LINE}; background: {PAGE}">{acts}</div>')
+            f'<div style="flex: none; padding: 12px 16px 34px; box-shadow: 0 -1px 0 {LINE}; background: {PAGE}">{acts}</div>'
+            + '<style data-rsacts>[data-menuroot] { container-type: size } @container (max-height: 520px) { .rsacts { display: flex !important } .rsacts > * { flex: 1 } }</style>')
 
 
 RS_JS = lambda mode: js(r'''
@@ -149,42 +170,99 @@ RS_JS = lambda mode: js(r'''
       shows: ['After mistakes', 'Perfect run'].map((l) => ({ l, bg: show === l ? '#332921' : '#EEE9E2', fg: show === l ? '#FEFDFB' : '#332921', pick: () => S({ show: l, view: 'results' }) })),
       playing: !!st.playing, playLabel: st.playing ? 'Pause' : 'Play',
       togglePlay: () => { if (st.playing) { S({ playing: false }); return; } S({ playing: true }); setTimeout(() => S({ playing: false, view: 'results' }), 1400); },
-      kb: calmKeys(53, 79, CM7, 402, 112), kbL: calmKeys(36, 96, CM7, 1462, 170), chordT: st.playing ? 'Chord 12 of 12' : 'Chord 11 of 12', prog: st.playing ? '100%' : '92%',
+      kb: calmKeys(53, 79, CM7, 402, 112), kbL: calmKeys(36, 96, CM7, 1462, 170), chordT: 'Key 1 of 12', prog: st.playing ? '100%' : '8%',
       again: () => S({ view: 'run', playing: false }), closeSheet: () => S({ sheet: null }) };''')
 
 # the run, in the Player: the bar (Close, the exercise, Wait mode), the staff with the run, the keys, the transport
-RS_KEYS = lambda h, k='kb': KEYS(h).replace('kb.', k + '.').replace('border-radius: 14px;', 'border-radius: 0;', 1).replace('box-shadow: 0 0 0 1px #DAD1C8', 'box-shadow: none', 1)  # the one instrument, edge to edge
+RS_KEYS = lambda h, k='kb': KEYS(h, k, edge=True, ring=False)  # the one instrument, edge to edge
 
+
+# The chord run as the app plays it (`inversionsExercise`): Cmaj7 climbing through its inversions, a chord each half
+# note in both hands, the left an octave under the right, written on the grand staff in 4/4 as the app's engraver sets
+# it (PlayExercise's Hanon, round 69): root position, 1st, 2nd, 3rd, the octave, then back down.
+INV = [[0, 2, 4, 6], [2, 4, 6, 7], [4, 6, 7, 9], [6, 7, 9, 11], [7, 9, 11, 13], [6, 7, 9, 11], [4, 6, 7, 9], [2, 4, 6, 7]]
+def PV_INV(w, bars, first):
+    tre = lambda s: 48 - (s - 2) * 4           # diatonic steps from C4; E4 the treble's bottom line at 48
+    bas = lambda s: 136 - (s + 10) * 4         # G2 (ten steps under C4) the bass's bottom line at 136
+    lines = ''.join(f'<path d="M14 {16 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path><path d="M14 {104 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path>' for i in range(5))
+    out = lines + f'<path d="M14.5 16V136" stroke="{INK}" stroke-width="1.2"></path><path d="M{w - .6} 16V48M{w - .6} 104V136" stroke="{INK}" stroke-width="1.2"></path>'
+    out += f'<path d="M11 16C4 24 12 62 5 76C12 90 4 128 11 136C1 124 9 90 2 76C9 62 1 28 11 16Z" fill="{INK}"></path>'
+    out += f'<text x="18" y="48" font-family="Noto Music, serif" font-size="32" fill="{INK}">𝄞</text><text x="18" y="136" font-family="Noto Music, serif" font-size="36" fill="{INK}">𝄢</text>'
+    x0 = 52
+    if first == 0:
+        out += ''.join(f'<text x="58" y="{y}" text-anchor="middle" font-family="Noto Music, serif" font-size="19" font-weight="700" fill="{INK}">4</text>' for y in (31, 47, 119, 135))
+        x0 = 72
+    else:
+        out += f'<text x="14" y="4" font-size="11" fill="{SOFT}">{first + 1}</text>'
+    bw = (w - x0) / bars
+    def chord(x, steps, y, mid, ledgers):
+        up = sum(steps) / len(steps) < mid           # under the middle line the stem goes up, as an engraver sets it
+        ys = [y(st) for st in steps]
+        g = ''
+        for i, (st, yy) in enumerate(zip(steps, ys)):
+            second = (up and i > 0 and st - steps[i - 1] == 1) or (not up and i < len(steps) - 1 and steps[i + 1] - st == 1)
+            hx = x + (9.6 if up else -9.6) if second else x
+            g += ''.join(f'<path d="M{hx - 7:.1f} {ly}H{hx + 7:.1f}" stroke="{INK}" stroke-width="1"></path>' for ly in ledgers(yy))
+            g += RS_HEAD('whole', hx, yy, 8)
+        sx = x + 4.8 if up else x - 4.8
+        g += f'<path d="M{sx:.1f} {max(ys) if up else min(ys)}V{min(ys) - 28 if up else max(ys) + 28}" stroke="{INK}" stroke-width="1.1"></path>'
+        return g
+    tled = lambda yy: [ly for ly in (56, 64) if yy >= ly] + [ly for ly in (8, 0) if yy <= ly]
+    bled = lambda yy: [ly for ly in (96, 88, 80, 72, 64) if yy <= ly]
+    for b in range(bars):
+        bx = x0 + b * bw
+        if b:
+            out += f'<path d="M{bx:.1f} 16V48M{bx:.1f} 104V136" stroke="{INK}" stroke-width=".8"></path>'
+        for h in range(2):
+            steps = INV[(first + b) * 2 + h]
+            x = bx + bw * (0.27 + 0.48 * h)
+            out += chord(x, steps, tre, 6, tled) + chord(x, [st - 7 for st in steps], bas, -4, bled)
+    return f'<svg viewBox="0 -8 {w} 184" width="{w}" height="184" aria-hidden="true" style="display: block; flex: none">{out}</svg>'
 
 def RS_RUNVIEW(lap):
     close = 'ChordsLaptop.dc.html' if lap else 'Chords.dc.html'
     wait = f'<span style="height: 32px; padding: 0 12px; border-radius: 16px; background: {FILL}; font-size: 13px; font-weight: 600; display: flex; align-items: center; white-space: nowrap">Wait mode</span>'
-    bar = TOP('', f'<span style="font-family: {SERIF}">Cmaj7</span> · Inversions', wait, 'Close', CLOSEB(close), n=2)  # the pill is two buttons wide
+    # the run view's bar, as every run's: Close, the exercise as the app titles it, Wait mode beside the gear
+    bar = TOP('', 'Inversions: Cmaj7', wait + IB('Player settings', GEARI, '', 'PlayerSettings.dc.html'), 'Close', CLOSEB(close))
     bar = LPAD(bar) if lap else bar
-    staff = CARD(RS_RUNSTAFF(6 if lap else 4, 92 if lap else 76, True).replace(f'color: {RS_SAGE_INK}; font-weight: 700" aria-label="Correct">✓', f'color: transparent" aria-hidden="true">·'), '12px 8px')
-    prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 6px; border-radius: 3px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 6px; border-radius: 3px; background: {INK}"></div></div>'
+    # round 63: the run's music is the page's subject, so it stands on the paper, never in a lone card (edge-lines law
+    # 3); on a laptop it is set larger (zoom 1.35) and centred in the band over the transport, never a 760px card
+    # with 300px of bare paper under it
+    # the exercise's music engraved as the app sets it, as PlayExercise's: two lines of two bars on a phone, one of
+    # four on a laptop (round 69); its results keep the run's chords as whole notes (RS_RUNSTAFF)
+    inv = lambda n, cw, at: f'<div style="display: flex; justify-content: safe center; overflow: hidden">{PV_INV(cw, n, at)}</div>'
+    staff = f'<div style="zoom: 1.35">{inv(4, 872, 0)}</div>' if lap else inv(2, 370, 0) + inv(2, 370, 2)
+    prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{chordT}}}}</span></div>')
-    transport = f'<div style="display: flex; align-items: center; justify-content: center; gap: 12px"><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">72 BPM</span>{PLAYBTN(56)}<span style="font-size: 14px; color: {SOFT}">Both hands</span></div>'
-    inner = f'{staff}{prog}<div style="flex: 1"></div>{RS_KEYS(170, "kbL") if lap else '<div style="flex: none; margin: 0 -16px">' + RS_KEYS(112) + '</div>'}{transport}'
+    # Setup · Play · Tempo, as every run's (the run boards' RUNBAR)
+    transport = PIECE('Setup', 'Setup', SLIDERSI) + PLAYCAP() + PIECE('Tempo', '60 BPM', TEMPOI)
+    # the music scrolls in what is left, the keys and Play stay at the foot (a phone on its side, round 66)
+    inner = f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 80px; display: flex; flex-direction: column; gap: 16px">{staff}{prog}</div><div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>'
     if lap:
-        return (bar + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="width: 760px; display: flex; flex-direction: column; gap: 16px">{staff}{prog}</div>'
-                f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
-    return bar + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{inner}</main>'
+        return (bar + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1177px; max-width: 100%; display: flex; flex-direction: column; gap: 8px">{staff}{prog}</div>'
+                f'<div style="flex: 1"></div></main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>{RUNBAR("left: 50%; translate: -50% 0; bottom: 186px", transport, "Setup, play and tempo")}')
+    # the transport floats, as the Player's: the kit's glass dock 12 above the keys, reserving no space; the music's
+    # scroll ends clear of it (owner, 2026-11-18: "the floating actions guidelines are broken by that implementation").
+    # A phone on its side has a 20 home band, so keys and dock both sit 14 lower (round 66)
+    short = ('<style data-rsrun>[data-menuroot] { container-type: size } @container (max-height: 520px) { .rsrun { padding-bottom: 20px !important } '
+             '.rsrun ~ [role=toolbar] { bottom: 144px !important } }</style>')
+    return bar + f'<main class="rsrun" style="flex: 1; min-height: 0; padding: 4px 16px 34px; display: flex; flex-direction: column; gap: 16px">{inner}</main>{RUNBAR("left: 12px; right: 12px; bottom: 158px", transport, "Tempo, play and hands")}' + short
 
 
 rs_ph = RS_MOTION + IF('isRun', RS_RUNVIEW(False), 'true') + IF('isResults', RS_RESULTS(4, 76, False))
 rs_lm = RS_MOTION + IF('isRun', RS_RUNVIEW(True), 'true') + IF('isResults', RS_RESULTS(6, 116, False, True))
 detail('PlayChord', 'The Player: a chord practice run and its results', RS_JS("'run'"), rs_ph, rs_lm, '', '', '', 'Practice')
 # opened from Profile › Practice history: the bar's Back, no Done and no link back to Profile
-rs_pph = RS_MOTION + TOP('Profile.dc.html', '', '', 'Back') + RS_RESULTS(4, 76, True)
-rs_plm = RS_MOTION + LTOP('ProfileLaptop.dc.html') + RS_RESULTS(6, 116, True, True)
+rs_pph = RS_MOTION + TOP('Profile.dc.html', 'Today, 14:20', '', 'Profile') + RS_RESULTS(4, 76, True)
+rs_plm = RS_MOTION + LTOP('ProfileLaptop.dc.html', '', 'Today, 14:20') + RS_RESULTS(6, 116, True, True)
 detail('PracticeResult', 'A practice run’s results, from Profile', RS_JS("'result'"), rs_pph, rs_plm, '', '', '', 'Profile')
 print('r56 results ok')
 
 # Round 41: the Player's runs (walk the chords, a chromatic walk, a progression in 12 keys, an exercise) in the run
 # view's parts, where a wireframe stood (a staff with no clef and grey dots, keys with no black keys in a card): the
 # chords engraved on the treble staff, the one piano edge to edge at the foot with the first chord's tones in their
-# paints, the transport centred under the staff; Setup opens the run's choices, as before.
+# paints, the transport centred under the staff; Setup opens the run's choices, as before. Round 68: the music stands
+# on the paper as the chord run's does (round 63), never in a lone card, at its 1.35 on a laptop.
 PV_WALK = [[('C', 4), ('E', 4), ('G', 4)], [('D', 4), ('F', 4), ('A', 4)], [('E', 4), ('G', 4), ('B', 4)], [('F', 4), ('A', 4), ('C', 5)], [('G', 4), ('B', 4), ('D', 5)], [('A', 4), ('C', 5), ('E', 5)], [('B', 4), ('D', 5), ('F', 5)], [('C', 5), ('E', 5), ('G', 5)]]
 _F, _S = '♭', '♯'
 PV_MUSIC = {'walk': PV_WALK,
@@ -192,25 +270,80 @@ PV_MUSIC = {'walk': PV_WALK,
                   [('E', 4), ('G', 4), ('B', 4), ('D', 5)], [('F', 4), ('A', 4, _F), ('C', 5), ('E', 5, _F)], [('F', 4, _S), ('A', 4), ('C', 5, _S), ('E', 5)], [('G', 4), ('B', 4, _F), ('D', 5), ('F', 5)]],
     'progression': [[('C', 4), ('E', 4), ('G', 4)], [('B', 3), ('D', 4), ('G', 4)], [('C', 4), ('E', 4), ('A', 4)], [('C', 4), ('F', 4), ('A', 4)]] * 2,
     'exercise': [[(l, o)] for l, o in (('C', 4), ('E', 4), ('F', 4), ('G', 4), ('A', 4), ('G', 4), ('F', 4), ('E', 4))]}
+
+# Round 69: an exercise's line engraved as the app's engraver sets it (Verovio, the grand staff in lines): Hanon No. 1
+# in C, its sixteenths beamed four to a beat in 2/4, the right hand from C4 and the left an octave under, each bar's
+# figure a step up (C E F G A G F E, D F G A B A G F, …); the bar number over each line but the first.
+HANON = [[0, 2, 3, 4, 5, 4, 3, 2]]
+HANON = [[d + k for d in HANON[0]] for k in range(4)]
+def PV_HANON(w, bars, first):
+    tre = lambda s: 48 - (s - 2) * 4          # diatonic steps from C4; E4 the treble's bottom line at 48
+    bas = lambda s: 136 - (s - 7 + 3) * 4     # the left hand two octaves under, from C2: steps from C3 less 7, G2 at 136
+    lines = ''.join(f'<path d="M14 {16 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path><path d="M14 {104 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path>' for i in range(5))
+    out = lines + f'<path d="M14.5 16V136" stroke="{INK}" stroke-width="1.2"></path><path d="M{w - .6} 16V48M{w - .6} 104V136" stroke="{INK}" stroke-width="1.2"></path>'
+    out += f'<path d="M11 16C4 24 12 62 5 76C12 90 4 128 11 136C1 124 9 90 2 76C9 62 1 28 11 16Z" fill="{INK}"></path>'
+    out += f'<text x="18" y="48" font-family="Noto Music, serif" font-size="32" fill="{INK}">𝄞</text><text x="18" y="136" font-family="Noto Music, serif" font-size="36" fill="{INK}">𝄢</text>'
+    x0 = 52
+    if first == 0:
+        out += ''.join(f'<text x="58" y="{y}" text-anchor="middle" font-family="Noto Music, serif" font-size="19" font-weight="700" fill="{INK}">{d}</text>' for y, d in ((31, 2), (47, 4), (119, 2), (135, 4)))
+        x0 = 72
+    else:
+        out += f'<text x="14" y="4" font-size="11" fill="{SOFT}">{first + 1}</text>'
+    bw = (w - x0) / bars
+    for b in range(bars):
+        bx = x0 + b * bw
+        if b:
+            out += f'<path d="M{bx:.1f} 16V48M{bx:.1f} 104V136" stroke="{INK}" stroke-width=".8"></path>'
+        steps = HANON[(first + b) % 4]
+        for g in range(2):
+            xs = [bx + 10 + (g * 4 + i) * (bw - 18) / 8 for i in range(4)]
+            for staff, yf, off, up in ((0, tre, 0, True), (1, bas, 0, True)):
+                ys = [yf(st) for st in steps[g * 4:g * 4 + 4]]
+                for x, y, st in zip(xs, ys, steps[g * 4:g * 4 + 4]):
+                    out += RS_HEAD('black', x, y, 8)
+                    if staff == 0 and st <= 0:
+                        out += f'<path d="M{x - 7:.1f} 56H{x + 7:.1f}" stroke="{INK}" stroke-width="1"></path>'
+                    if staff == 1:
+                        out += ''.join(f'<path d="M{x - 7:.1f} {ly}H{x + 7:.1f}" stroke="{INK}" stroke-width="1"></path>' for ly in (144, 152) if y >= ly)
+                if up:
+                    by0, by1 = ys[0] - 26, ys[-1] - 26
+                    top = min(by0, by1, min(ys) - 22)
+                    sl = max(-4, min(4, by1 - by0)); a, z = top + max(0, sl), top + max(0, -sl)
+                    sx = [x + 4.2 for x in xs]
+                else:
+                    by0, by1 = ys[0] + 26, ys[-1] + 26
+                    bot = max(by0, by1, max(ys) + 22)
+                    sl = max(-4, min(4, by1 - by0)); a, z = bot + min(0, sl), bot + min(0, -sl)
+                    sx = [x - 4.2 for x in xs]
+                beam = lambda t: a + (z - a) * (t - sx[0]) / (sx[-1] - sx[0])
+                for x, y in zip(sx, ys):
+                    out += f'<path d="M{x:.1f} {y}V{beam(x):.1f}" stroke="{INK}" stroke-width="1.1"></path>'
+                d = 1 if up else -1
+                for k in (0, 1):
+                    y0, y1 = a + d * 6 * k, z + d * 6 * k
+                    out += f'<path d="M{sx[0]:.1f} {y0:.1f}L{sx[-1]:.1f} {y1:.1f}L{sx[-1]:.1f} {y1 + d * 3.6:.1f}L{sx[0]:.1f} {y0 + d * 3.6:.1f}Z" fill="{INK}"></path>'
+    return f'<svg viewBox="0 -8 {w} 184" width="{w}" height="184" aria-hidden="true" style="display: block; flex: none">{out}</svg>'
 def PV_LINE(n, cw, v='walk', start=0, last=True):
+    if v == 'exercise':
+        return f'<div style="display: flex; justify-content: safe center; overflow: hidden">{PV_HANON(cw, n, start)}</div>'
     cells = RS_CELL([], 40, clef=True) + ''.join(RS_CELL(PV_MUSIC[v][i], cw, last=(last and i == start + n - 1)) for i in range(start, start + n))
-    return f'<div style="display: flex; justify-content: center">{cells}</div>'
-def PV_STAFF(n, cw, v='walk'):
-    return CARD(PV_LINE(n, cw, v), '12px 8px')
+    return f'<div style="display: flex; justify-content: safe center; overflow: hidden">{cells}</div>'
 def PV_RUN(lap, v):
-    setup = BTN('Setup', 'openSetup', '', 'quiet', 44, False)
-    transport = (f'<div style="display: flex; align-items: center; justify-content: center; gap: 12px">{setup}'
-                 f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{tempoV}}}}</span>{PLAYBTN(56)}</div>')
+    # where the run stands, as the chord run's row (one sibling shape; Duolingo's bar, reference-apps/duolingo-music 005)
+    prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{pvProg}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
+            f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{pvT}}}}</span></div>')
+    # floating 12 above the keys, reserving no space; Play at the centre, as the Player's and Flowkey's (flowkey 009)
+    transport = PIECE('Setup', 'Setup', SLIDERSI, 'onClick="{{openSetup}}"') + PLAYCAP() + PIECE('Tempo', '{{tempoC}}', TEMPOI, 'onClick="{{openSetup}}"')
     if lap:
-        return (PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html')
-                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="width: 1180px; display: flex; flex-direction: column; gap: 16px">{PV_STAFF(8, 140, v)}</div>'
-                f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
+        return (LPAD(PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html'))
+                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1177px; max-width: 100%; display: flex; flex-direction: column; gap: 8px"><div style="zoom: 1.35">{PV_LINE(4, 872, v) if v == 'exercise' else PV_LINE(8, 104, v)}</div>{prog}</div>'
+                f'<div style="flex: 1"></div></main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>{RUNBAR("left: 50%; translate: -50% 0; bottom: 186px", transport, "Tempo, play and hands")}')
     return (PVBAR.replace('Practice.dc.html', 'Main.dc.html')
-            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{CARD(PV_LINE(4, 76, v, 0, False) + '<div style="height: 16px"></div>' + PV_LINE(4, 76, v, 4), '12px 8px')}<div style="flex: 1"></div>'
-            f'<div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>{transport}</main>')
+            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 34px; display: flex; flex-direction: column; gap: 16px">{(PV_LINE(2, 370, v, 0) + PV_LINE(2, 370, v, 2)) if v == 'exercise' else (PV_LINE(4, 76, v, 0, False) + PV_LINE(4, 76, v, 4))}{prog}<div style="flex: 1"></div>'
+            f'<div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div></main>{RUNBAR("left: 12px; right: 12px; bottom: 158px", transport, "Setup, play and tempo")}')
 PV_CT = {"'walk'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }", "'progression'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }",
-         "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 60: [ROLE[1], 'C'] }"}
+         "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 36: [ROLE[1], 'C'], 60: [ROLE[1], 'C'] }"}
 PV_KB = lambda v: "const CT = " + PV_CT[v] + ";\n    return { kb: calmKeys(53, 79, CT, 402, 112), kbL: calmKeys(36, 96, CT, 1462, 170),"
 for stem, v, ttl in (('PlayWalk', "'walk'", 'The Player: walk the chords of a key'), ('PlayChromatic', "'chromatic'", 'The Player: a chromatic walk'), ('PlayProgression', "'progression'", 'The Player: a progression, in all 12 keys'), ('PlayExercise', "'exercise'", 'The Player: an exercise')):
-    detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSET, 'Close'), POPOVER('setupOn', 'Setup', PVSET, 'right: 40px; top: 64px', 420), 'Practice')
+    detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSTART, 'Close'), POPOVER('setupOn', 'Setup', PVSETL, 'left: calc(50% - 310px); bottom: 250px', 620), 'Practice')
 print('r56 runs ok')

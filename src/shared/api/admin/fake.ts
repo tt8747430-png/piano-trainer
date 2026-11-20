@@ -42,6 +42,7 @@ export function createFakeAdmin({
   const note = (action: string, target: string) =>
     void log.unshift({
       at: new Date(Date.UTC(2026, 9, 29, 12, log.length)).toISOString(),
+      adminId: null,
       action,
       target,
     })
@@ -90,11 +91,6 @@ export function createFakeAdmin({
       ask(async () => {
         switches.set(feature.key, feature)
         note('save-switch', feature.key)
-      }),
-    deleteSwitch: (key) =>
-      ask(async () => {
-        switches.delete(key)
-        note('delete-switch', key)
       }),
     reports: () => ask(async () => held),
     hide: (itemId, hidden) =>

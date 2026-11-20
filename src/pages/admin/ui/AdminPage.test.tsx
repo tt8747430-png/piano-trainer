@@ -223,11 +223,7 @@ describe('Administration (R32)', () => {
     online = false
     await user.click(within(role).getByRole('radio', { name: 'Editor' }))
     expect(
-      (
-        await screen.findAllByText(
-          'You’re offline. Administration needs a connection.',
-        )
-      )[0],
+      (await screen.findAllByText('You’re offline. Administration needs a connection.'))[0],
     ).toBeVisible()
     expect(screen.queryByText('The server declined the request.')).toBeNull()
   })

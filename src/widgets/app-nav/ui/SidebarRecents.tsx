@@ -35,7 +35,7 @@ export function SidebarRecents() {
           <li key={entry.id}>
             <PieceLink
               entry={entry}
-              className="flex h-10 items-center gap-3 rounded-control px-3 text-foreground transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
+              className="flex h-10 items-center pointer-coarse:h-11 gap-3 rounded-control px-3 text-foreground transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
             >
               <Music aria-hidden className="size-4 shrink-0 text-muted-foreground" />
               <span className="min-w-0 truncate">{entryTitles(entry, locale).primary}</span>

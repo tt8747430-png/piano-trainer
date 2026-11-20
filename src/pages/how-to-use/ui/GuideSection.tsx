@@ -40,7 +40,7 @@ export function GuideSection({
         </button>
       </h2>
       {open ? (
-        <div id={body} className="flex flex-col gap-2 px-4 pb-3.5">
+        <div id={body} className="flex flex-col gap-2 px-4 pb-4">
           {part.steps.map(({ key }) => (
             <p key={key} className="max-w-[65ch] text-base/normal text-pretty">
               {t(key)}

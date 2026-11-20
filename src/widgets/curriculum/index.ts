@@ -1,4 +1,5 @@
 export {
+  continuePlace,
   continueStep,
   currentJourney,
   openCourseStep,
@@ -16,17 +17,17 @@ export { LessonLine, LessonRow, LessonStop } from './ui/LessonRow'
 export { useStepTitle, type StepTitle } from './model/use-step-title'
 export { CourseBanner } from './ui/CourseBanner'
 export { CourseFacts } from './ui/CourseFacts'
-export { CourseOverview } from './ui/CourseOverview'
+export { CourseOverview, CourseTitle } from './ui/CourseOverview'
 export { CourseLessons } from './ui/CourseLessons'
-export { LearnedMeter } from './ui/LearnedMeter'
 export { CourseShelves, CoursesAbout } from './ui/CourseShelves'
 export { CourseCovers } from './ui/CourseCovers'
 export { GuidedSongs } from './ui/GuidedSongs'
 export { LevelLessons } from './ui/LevelLessons'
-export { LevelNav, LevelRows } from './ui/LevelRows'
+export { LevelRows } from './ui/LevelRows'
 export { OwnItems } from './ui/OwnItems'
 export { OwnLibrary } from './ui/OwnLibrary'
 export { InCoursesRow } from './ui/InCoursesRow'
 export { LevelEditor } from './ui/LevelEditor'
 export { ShelfEditor } from './ui/ShelfEditor'
 export { OwnDeleteGroup, OwnItemRows, type OwnItemWords } from './ui/OwnItemRows'
+export { NewOwnSheet, useNewOwnActions, type OwnKind } from './ui/NewOwnSheet'

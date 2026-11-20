@@ -40,17 +40,17 @@ export function Welcome({ shown }: { shown: boolean }) {
     <AlertDialog open={shown && ready && !signedIn && !welcomed}>
       {/* The AppLayers board's welcome: the app's tile, a sans title, Language in caps, then Start
           playing over Sign in, each the dialog's width. */}
-      <AlertDialogContent className="w-100 max-w-[calc(100%-2.5rem)] gap-3 rounded-[22px] bg-background px-5 pt-6 pb-5 shadow-(--elevation-3)">
+      <AlertDialogContent className="w-100 max-w-[calc(100%-3rem)] gap-3 rounded-[22px] bg-background p-5 shadow-(--elevation-3)">
         <img src="/favicon.svg" alt="" className="size-18 justify-self-center rounded-[18px]" />
         <AlertDialogHeader className="place-items-center gap-3 text-center">
-          <AlertDialogTitle className="font-sans text-2xl font-bold text-balance">
+          <AlertDialogTitle className="font-sans text-[1.5rem] leading-[normal] font-bold text-balance">
             {t('welcome.title')}
           </AlertDialogTitle>
           <AlertDialogDescription className="text-base/[1.45] text-pretty">
             {t('welcome.says')}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <SettingsGroup title={t('welcome.language')} bare>
+        <SettingsGroup title={t('welcome.language')} bare className="gap-3">
           <Segmented
             label={t('welcome.language')}
             value={locale}

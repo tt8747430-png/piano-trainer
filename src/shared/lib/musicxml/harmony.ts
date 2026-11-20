@@ -2,13 +2,16 @@
 // taken from it, and its bass.
 
 import {
+  CHORD_PARTS,
   CHORD_QUALITIES,
   chordBass,
+  isTableQuality,
+  kindOfParts,
   qualityIntervals,
   qualitySuffix,
   type Accidental,
   type Chord,
-  type ChordQuality,
+  type ChordKind,
   type Letter,
   type SpelledNote,
   readChordSymbol,
@@ -202,11 +205,17 @@ const ADDED_FROM: Readonly<Record<number, number>> = {
 const kindTones = (kind: string): Degree[] | undefined =>
   KINDS[kind]?.map(([degree, semitones]) => ({ degree, semitones }))
 
-const qualityTones = (quality: ChordQuality): Degree[] =>
+const qualityTones = (quality: ChordKind): Degree[] =>
   qualityIntervals(quality).map((interval) => ({
     degree: Number(interval.degree.replace(/\D/g, '')),
     semitones: interval.semitones,
   }))
+
+/** Every chord a harmony's degrees may make: the table's, then the builder's the table lacks. */
+const KNOWN_CHORDS: readonly ChordKind[] = [
+  ...CHORD_QUALITIES,
+  ...CHORD_PARTS.map(kindOfParts).filter((kind) => !isTableQuality(kind)),
+]
 
 const sameSemitones = (a: readonly Degree[], b: readonly Degree[]) => {
   const sorted = (tones: readonly Degree[]) =>
@@ -219,7 +228,7 @@ const sameSemitones = (a: readonly Degree[], b: readonly Degree[]) => {
 type DegreeChange = { readonly type: 'add' | 'alter' | 'subtract' } & Degree
 
 /** The kind closest to a quality, and the degrees that make it the quality. */
-function kindOf(quality: ChordQuality): { kind: string; changes: DegreeChange[] } {
+function kindOf(quality: ChordKind): { kind: string; changes: DegreeChange[] } {
   const tones = qualityTones(quality)
   let best: { kind: string; changes: DegreeChange[] } | undefined
   for (const kind of Object.keys(KINDS)) {
@@ -335,7 +344,7 @@ export function readHarmony(harmony: XmlElement): Chord | undefined {
     } else tones = undefined
   }
   const quality =
-    (tones && CHORD_QUALITIES.find((each) => sameSemitones(qualityTones(each), tones ?? []))) ??
+    (tones && KNOWN_CHORDS.find((each) => sameSemitones(qualityTones(each), tones ?? []))) ??
     (kindElement.attrs.text === undefined
       ? undefined
       : readChordSymbol(`C${kindElement.attrs.text}`)?.quality)

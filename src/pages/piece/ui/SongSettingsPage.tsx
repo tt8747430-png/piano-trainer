@@ -10,25 +10,22 @@ import {
   usePieces,
   usePiecesStoreApi,
   useRepertoire,
-  entryTitles,
-  shownCredits,
   type ChartPiece,
   type Piece,
   type PieceId,
 } from '@/entities/piece'
+import { useTakesStoreApi } from '@/entities/take'
 import { selectView } from '@/entities/views'
 import { useOriginalDraft } from '@/features/edit-original'
-import { duplicateSong } from '@/features/edit-piece'
-import { FavouriteSwitch, useLibraryActs, useSongActions } from '@/features/manage-library'
+import { deleteSong, duplicateSong } from '@/features/edit-piece'
+import { useLibraryActs, useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
-import { useLocale } from '@/shared/i18n'
 import { useForgetScreens } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   BackButton,
   ButtonLink,
-  ConfirmDialog,
   NotFound,
   DangerGroup,
   ActionRow,
@@ -37,8 +34,11 @@ import {
   RowLink,
   ScreenHeader,
   SettingsGroup,
+  ThingHead,
+  say,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
+import { useSongByline } from '../model/use-song-byline'
 import { useSongPublish } from '../model/use-song-publish'
 import { ResetVersionAsk } from './ResetVersionAsk'
 import { SongCoverPicker } from './SongCover'
@@ -60,7 +60,7 @@ export function SongSettingsPage() {
 /**
  * A song's Settings (R32-C; Noji's and memory-palaces' deck settings): how the song lives in the
  * library and how it leaves it, the page editing what it says of itself. The song at the head; its
- * Library (Folder, Favourite, Duplicate, Archive or Restore); Share (Publish with its state, Share
+ * Library (Playlist, Duplicate, Archive or Restore); Share (Publish with its state, Share
  * link, Export…); and last, apart, the learner's own music given up: Delete, or Reset to the
  * original, asked first.
  */
@@ -70,9 +70,6 @@ function SongSettings({ piece }: { piece: Piece }) {
   const own = isOwnSongId(piece.id) ? piece.id : null
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
   const { item, title, publishing } = useSongPublish(piece)
-  // Its other name (as the other language writes it), in a line under the title.
-  const subtitle = entryTitles(piece, useLocale()).secondary
-  const [writer] = shownCredits(piece)
   const shared = useShareSong()
   const router = useRouter()
   const layout = useLibraryLayout()
@@ -80,14 +77,20 @@ function SongSettings({ piece }: { piece: Piece }) {
   const library = useSongActions(piece)
   const [exporting, setExporting] = useState(false)
   const [asking, setAsking] = useState(false)
-  const [copying, setCopying] = useState(false)
   const piecesStore = usePiecesStoreApi()
   const navigate = useNavigate()
   const copyable = !isDegreePiece(piece)
+  const takesStore = useTakesStoreApi()
+  // Duplicate makes the copy at once, a gain and no loss (the SongSettings board): Undo in its toast
+  // deletes it again.
   const duplicate = () => {
     if (isDegreePiece(piece)) return
-    const id = duplicateSong(piecesStore, piece, t('settings.copyTitle', { title }))
-    void navigate({ to: '/songs/$pieceId', params: { pieceId: id } })
+    const copy = t('settings.copyTitle', { title })
+    const id = duplicateSong(piecesStore, piece, copy)
+    say(t('settings.duplicated', { title: copy }), {
+      label: t('songs:library.undo'),
+      onClick: () => deleteSong(piecesStore, takesStore, id),
+    })
   }
   const acts = useLibraryActs()
   const forget = useForgetScreens()
@@ -118,13 +121,7 @@ function SongSettings({ piece }: { piece: Piece }) {
     )
     if (what) shared.share(what)
   }
-  // Under the title (canvas 133): its other name or who wrote it, and Your song where it is the learner's.
-  const byline = [
-    subtitle ?? (writer && 'names' in writer ? writer.names : undefined),
-    own ? t('settings.yourSong') : undefined,
-  ]
-    .filter(Boolean)
-    .join(' · ')
+  const byline = useSongByline(piece)
   const ownMusic = own
     ? ({ kind: 'song', id: own, title } as const)
     : hasVersion
@@ -134,18 +131,17 @@ function SongSettings({ piece }: { piece: Piece }) {
   const original =
     editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece) ? piece : null
   return (
-    <div className="flex flex-col gap-2 pb-8">
-      <ScreenHeader title={t('settings.title')} back={<BackButton />} />
+    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
+      <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
       <ShareSaid said={shared.said} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+      {/* The one Settings shape (canvas v550, YourLessonSettings): the head (THINGHEAD), its groups 24
+          apart, the loss of the whole song 40 apart at the foot; on a laptop the centred 1180 column 24
+          under the 56 bar, Library and Share side by side, the loss its own card across both. */}
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:grid lg:max-w-295 lg:grid-cols-2 lg:items-start lg:gap-x-8">
         {/* The song at the head: what these settings are for (R32-C). */}
-        <div className="flex items-center gap-4">
-          {/* Its cover's picture is chosen here, a tap on it (R32-C): the page's cover is its music. */}
-          <SongCoverPicker piece={piece} className="w-16 text-2xl" />
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <p className="font-sans text-xl/tight font-bold text-balance">{title}</p>
-            {byline ? <p className="truncate text-sm text-muted-foreground">{byline}</p> : null}
-          </div>
+        <div className="lg:col-span-2">
+          {/* Its cover's picture is chosen here, a tap on it (R32-C): the library's tile. */}
+          <ThingHead mark={<SongCoverPicker piece={piece} />} name={title} line={byline} />
         </div>
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
@@ -158,11 +154,8 @@ function SongSettings({ piece }: { piece: Piece }) {
                 onClick={() => library.actions.find((each) => each.key === 'move')?.onSelect()}
               />
             )}
-            <FavouriteSwitch piece={piece.id} label={t('settings.favourite')} />
             {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
-            {copyable ? (
-              <ActionRow title={t('settings.duplicate')} onClick={() => setCopying(true)} />
-            ) : null}
+            {copyable ? <ActionRow title={t('settings.duplicate')} onClick={duplicate} /> : null}
             <ActionRow
               title={t(archived ? 'songs:library.restore' : 'songs:library.archive')}
               onClick={() =>
@@ -199,10 +192,8 @@ function SongSettings({ piece }: { piece: Piece }) {
           />
         </SettingsGroup>
         {ownMusic ? (
-          <div ref={danger}>
-            <DangerGroup
-              footnote={t(ownMusic.kind === 'song' ? 'deleting.says' : 'resetting.says')}
-            >
+          <div ref={danger} className="-mt-2 lg:col-span-2">
+            <DangerGroup>
               <DangerRow
                 title={t(ownMusic.kind === 'song' ? 'settings.deleteSong' : 'reset')}
                 onClick={() => (ownMusic.kind === 'song' ? trash(ownMusic.id) : setAsking(true))}
@@ -213,15 +204,6 @@ function SongSettings({ piece }: { piece: Piece }) {
       </div>
       {inLibrary ? library.sheet : null}
       <SongExportSheet piece={exporting ? piece : null} onOpenChange={setExporting} />
-      <ConfirmDialog
-        open={copying}
-        onOpenChange={setCopying}
-        title={t('settings.duplicateTitle', { title })}
-        body={t('settings.duplicateBody')}
-        action={t('settings.duplicate')}
-        destructive={false}
-        onConfirm={duplicate}
-      />
       {ownMusic?.kind === 'version' ? (
         <ResetVersionAsk
           piece={ownMusic}

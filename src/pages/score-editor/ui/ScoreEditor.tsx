@@ -1,11 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
 import {
   selectEditing,
-  selectKeyboard,
   selectPaletteFolded,
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
+import { useRepertoire, type Piece } from '@/entities/piece'
 import { setPaletteFolded } from '@/features/set-preference'
 import {
   cn,
@@ -27,6 +27,7 @@ import { useScoreEditor } from '../model/use-score-editor'
 import { useAnswerRecord } from '../model/use-record-take'
 import { CaretLine } from './CaretLine'
 import { EditorGear, type EditorDraft } from './EditorGear'
+import { GoToBar } from './GoToBar'
 import { SelectionActions } from './SelectionActions'
 import { EditorActions, EditorLead, EditorMode } from './EditorHeader'
 import { EditorKeyboard } from './EditorKeyboard'
@@ -35,7 +36,7 @@ import { EditorSheet } from './EditorSheet'
 import { FieldDocked } from './field-docked'
 import { OpenField } from './OpenField'
 import { RecordingBar } from './RecordingBar'
-import { TakesSheet } from './TakesSheet'
+import { TakesPage } from './TakesPage'
 import { UnsavedNotice } from './UnsavedNotice'
 
 /** What the sheet keeps between its music and what floats over it, in CSS px. */
@@ -66,26 +67,41 @@ const PANEL_EDGE_RIGHT =
 export function ScoreEditor({
   target,
   bar,
+  credits = false,
   draft,
   done,
 }: {
   target: EditorTarget
   bar?: number | undefined
+  /** Opened on the gear's Title and credits (the song page's pencil). */
+  credits?: boolean | undefined
   /** An editor's draft of a song's original (ADR 0116): its state and acts, in the gear. */
   draft?: EditorDraft
   /** Done in its own place (a lesson's example's, back to its lesson). */
   done?: ReactNode
 }) {
-  const editor = useScoreEditor(target, bar)
+  const editor = useScoreEditor(target, bar, credits)
+  // The learner's own song or version, saved as it is edited: what Export writes from the gear.
+  const repertoire = useRepertoire()
+  const own =
+    target.kind === 'song' || target.kind === 'version' ? repertoire.piece(target.id) : undefined
   return (
     <ScoreEditorContext value={editor}>
-      <EditorScreen draft={draft} done={done} />
+      <EditorScreen draft={draft} done={done} own={own} />
     </ScoreEditorContext>
   )
 }
 
 /** The editor's screen over its context's draft (`ScoreEditor`). */
-function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?: ReactNode }) {
+function EditorScreen({
+  draft,
+  done,
+  own,
+}: {
+  draft?: EditorDraft | undefined
+  done?: ReactNode
+  own: Piece | undefined
+}) {
   const editor = useScoreEditorContext()
   useEditorShortcutList()
   useAnswerRecord()
@@ -93,7 +109,6 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
   const panel = usePalettePanel()
   const right = useSettings((state) => selectEditing(state).paletteSide) === 'right'
   const idle = editor.takes.stage === 'idle'
-  const dock = useSettings((state) => selectKeyboard(state).dock)
   const settings = useSettingsStoreApi()
   const folded = useSettings(selectPaletteFolded)
   const fold = (next: boolean) => setPaletteFolded(settings, next)
@@ -167,17 +182,15 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
       {/* The Player's frame (ADR 0115): its bar's two groups, the work and the keys in the Player's
           places, so the bar and the keys stand still as Practise · Edit switches. */}
       <div
-        data-keys={dock}
         className={cn(
           SCORE_SCREEN,
           // As Flat's, what stands at the foot (the keys, else the palette) runs on under the home
           // indicator to the screen's edge, its own paper filling the inset.
-          '-mb-[calc(env(safe-area-inset-bottom)+0.5rem)] landscape-phone:mb-0 data-[keys=bottom]:[&>[data-area=keys]]:bg-card data-[keys=bottom]:[&>[data-area=keys]]:pb-safe',
+          '-mb-[calc(env(safe-area-inset-bottom)+0.5rem)] landscape-phone:mb-0 [&>[data-area=keys]]:bg-card [&>[data-area=keys]]:pb-safe',
         )}
       >
         <ScoreBar
-          floating
-          lead={<EditorLead />}
+          lead={<EditorLead own={own !== undefined} said={draft?.status} />}
           middle={<EditorMode done={done} />}
           actions={<EditorActions />}
         />
@@ -224,6 +237,8 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
               )}
               {/* What floats over the music (ADR 0115): above it, only its own controls taking a touch. */}
               <div className="pointer-events-none absolute inset-0 z-30">
+                {/* Go to bar's card, hung under the sheet's head (⌘G). */}
+                <GoToBar />
                 {/* A change that could not be saved, said at the sheet's head. */}
                 <div className="absolute inset-x-0 top-2 flex justify-center px-2">
                   <div className="pointer-events-auto w-full max-w-md">
@@ -265,8 +280,8 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
       <FieldDocked value={typing}>
         <OpenField anchor={typing ? docked : anchor} />
       </FieldDocked>
-      <TakesSheet />
-      <EditorGear draft={draft} />
+      <TakesPage />
+      <EditorGear draft={draft} own={own} />
     </>
   )
 }

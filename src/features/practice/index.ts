@@ -6,13 +6,7 @@ export {
   type PracticeState,
 } from './practice-machine'
 export { SONG_VERSIONS, type SongVersion } from './choice'
-export {
-  OWN_PACE_MODES,
-  PRACTICE_MODES,
-  waitsForNotes,
-  type OwnPaceMode,
-  type PracticeMode,
-} from './practice-mode'
+export { PRACTICE_MODES, waitsForNotes, type PracticeMode } from './practice-mode'
 export { usePractice, type Practice } from './use-practice'
 export { FULL_MIX, partGain, type Mix, type MixPart } from './mix'
 export {

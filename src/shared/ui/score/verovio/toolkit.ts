@@ -29,6 +29,13 @@ export interface PageSetup {
 const PER_MM = 10
 
 /** Verovio's options for a printed page (A40): its own units, tenths of a millimetre. */
+/**
+ * A staff's lines 0.13 of a space thick and its ledger lines 0.14, as the boards draw a staff and as
+ * Bravura's engraving defaults set them (staffLineThickness 0.13); Verovio's unit is half a space, and
+ * its own (0.15, 0.25) drew the lines half as thick, grey beside the notes.
+ */
+const LINES = { staffLineWidth: 0.26, ledgerLineThickness: 0.29 } as const
+
 export function pageOptions(page: PageSetup): Record<string, unknown> {
   const mm = (value: number) => Math.round(value * PER_MM)
   // Verovio's unit is half a staff space; a staff is four spaces high.
@@ -58,6 +65,7 @@ export function pageOptions(page: PageSetup): Record<string, unknown> {
     svgViewBox: true,
     svgRemoveXlink: true,
     font: page.font,
+    ...LINES,
   }
 }
 
@@ -119,6 +127,7 @@ export function verovioOptions({
     spacingLinear: 0.25,
     condense: 'auto',
     condenseFirstPage: false,
+    ...LINES,
   }
 }
 

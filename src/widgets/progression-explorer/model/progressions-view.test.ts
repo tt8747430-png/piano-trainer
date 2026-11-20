@@ -243,8 +243,7 @@ describe('progressionSearch', () => {
         p: 'I-V',
         size: 'sevenths',
         mode: 'lydian',
-        between: 1,
       }),
-    ).toEqual({ key: major('G'), size: 'sevenths', lead: undefined, between: 1, inKey: undefined })
+    ).toEqual({ key: major('G'), size: 'sevenths', lead: undefined })
   })
 })

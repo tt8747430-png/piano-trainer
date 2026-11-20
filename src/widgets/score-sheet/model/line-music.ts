@@ -143,6 +143,8 @@ function sounding(
       ...(n.finger === undefined ? {} : { finger: n.finger }),
       ...(n.marks ? { marks: n.marks } : {}),
       ...(lyrics && n.lyrics ? { lyrics: n.lyrics } : {}),
+      ...(n.voice ? { voice: n.voice } : {}),
+      ...(n.cross ? { cross: n.cross } : {}),
     }))
 }
 

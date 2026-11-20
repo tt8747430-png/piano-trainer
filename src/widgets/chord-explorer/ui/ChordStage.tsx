@@ -60,7 +60,8 @@ export function ChordStage({ chord, shown }: { chord: ChordView; shown: ShownKey
       />
     )
   return (
-    <Pinned bleed className="vt-keys">
+    // Right under the bar, as the board's 3D stage (the 2D keys stand 8 under it).
+    <Pinned bleed className="vt-keys -mt-4">
       <PianoHands
         height={laptop ? STAGE_HEIGHT.laptop : STAGE_HEIGHT.phone}
         notes={notes}

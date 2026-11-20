@@ -32,6 +32,8 @@ Source: a UI-design channel's video, "the seven things every good UI has" (trans
 - A title is only a little larger than the body, but darker and heavier; secondary text is Soft Ink.
 - One or two fonts (here a book serif for names, a sans for reading and acting). Headings slightly tighter.
 - Lines short enough to read. Five sizes on one card is the problem.
+- The type's anatomy, held as numbered checks (12px floor, ink-to-ink gaps, three tracking values, four weights,
+  tabular or proportional figures): `edge-lines/references/laws.md`, Type anatomy.
 - Large headings tighten: letter-spacing about -2 to -3%, line height 110 to 120%. An app screen rarely needs text
   larger than 24px outside its one name; a dashboard never.
 
@@ -86,6 +88,8 @@ written as an engraver would). The website, when there is one, is built from the
 | 7 motion | the board's `<style data-motion>`; screenshots taken 60ms after a tap | `emil-design-eng` |
 
 ## Reporting
+
+In a loop, one line inside the turn, never a closing report (`owner-way`). Otherwise:
 
 In the report, one line per question: kept, or fixed with what changed. A question that cannot be answered on the
 canvas (motion in a still drawing) says so.

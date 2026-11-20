@@ -7,41 +7,50 @@ import { Button } from './primitives/button'
 
 /**
  * Floating acts with no capsule round them, as the canvas's Chords page floats them (Apple's
- * toolbars on glass, iOS 26): each its own piece of glass, 56 tall, 12 apart, centred at the foot;
- * the one primary tinted honey. Put inside `FloatingActions`.
+ * toolbars on glass, iOS 26): each its own piece of glass, 56 tall, centred at the foot; the one
+ * primary tinted honey. Put inside `FloatingActions`. A Practice page's bar is the board's `BAR60`:
+ * three places 8 apart, Play in the middle one on the screen's centre and a piece either side
+ * (an empty `<span />` keeps a place); a tool page's (`tool`) is its pieces centred as a group, 12
+ * apart, as the tools' boards. On a laptop a bar stands 24 over the foot, 8 under a lone floating
+ * action's 32 (every laptop board's toolbar, `bottom: 24px`).
  */
-export function FloatingPieces({ label, children }: { label: string; children: ReactNode }) {
+export function FloatingPieces({
+  label,
+  tool = false,
+  children,
+}: {
+  label: string
+  tool?: boolean
+  children: ReactNode
+}) {
   return (
     <div
       role="toolbar"
       aria-label={label}
-      className="mx-auto flex items-center justify-center gap-3"
+      className={
+        tool
+          ? 'mx-auto flex items-center justify-center gap-3 lg:-mb-2'
+          : 'grid w-full lg:-mb-2 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 *:first:justify-self-end *:last:justify-self-start'
+      }
     >
-      {/* The page fades out under the pieces alone, as the canvas's 112px edge: clear, then the page
-          from 30%, so a page that fits the screen keeps its last row in sight. */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-x-0 bottom-0 -z-10 h-28 bg-linear-to-b from-transparent to-background to-30%"
-      />
       {children}
     </div>
   )
 }
 
 const PIECE =
-  'glass h-14 w-18 shrink-0 flex-col gap-0.5 rounded-pill px-1 text-foreground hover:bg-glass active:scale-96 [&_svg:not([class*=size-])]:size-5.5'
-const CAPTION =
-  'max-w-16 text-center text-[0.6875rem] leading-[1.05] font-semibold whitespace-normal'
+  'glass h-14 min-w-18 shrink-0 flex-col gap-px rounded-pill border-0 px-3 text-foreground hover:bg-glass active:scale-96 [&_svg:not([class*=size-])]:size-5.5'
+const CAPTION = 'text-xs leading-[1.05] font-semibold whitespace-nowrap'
 
 /**
  * A piece whose word is one short one (Key, Listen, BPM): round, 56 wide, as the Scales and Exercise
  * boards; a longer word (Russian's Тональность) widens it into a pill rather than spill out.
  */
-const ROUND = 'w-auto min-w-14 px-2.5 [&>span:last-child]:max-w-none'
+const ROUND = 'min-w-14'
 
 /**
- * A glass piece with its picture over a short word (Voicing's name, Hands): 72 wide, 56 tall, the
- * picture 22, the word 11px semibold; `round`, 56 wide.
+ * A glass piece with its picture over its word (Voicing's name, Hands), the kit's PIECE: 72 wide at
+ * least, 12 a side, 56 tall, the picture 22, the word 12px semibold on one line; `round`, 56 wide.
  */
 export function FloatingPiece({
   label,
@@ -126,7 +135,7 @@ export function FloatingPlayPiece({
       aria-pressed={playing}
       disabled={disabled}
       onClick={onClick}
-      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-4 text-base font-bold whitespace-nowrap text-primary-foreground active:scale-96 disabled:opacity-50"
+      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill border-0 px-6 text-[1.0625rem] font-bold whitespace-nowrap text-primary-foreground active:scale-96 disabled:opacity-50"
     >
       {playing ? (
         <Square aria-hidden className="size-4.5 fill-current" />
@@ -147,7 +156,7 @@ export function FloatingPlayLink({ label, render }: { label: string; render: Rea
     <ButtonLink
       variant="ghost"
       render={render}
-      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-4 text-base font-bold whitespace-nowrap text-primary-foreground hover:bg-transparent active:scale-96"
+      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill border-0 px-6 text-[1.0625rem] font-bold whitespace-nowrap text-primary-foreground hover:bg-transparent active:scale-96"
     >
       <Play aria-hidden className="size-4.5 fill-current" />
       <span>{label}</span>
@@ -187,7 +196,7 @@ export function FloatingPlaySplit({
         type="button"
         aria-pressed={playing}
         onClick={onPlay}
-        className="flex h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-l-pill ps-4 pe-3 text-base font-bold whitespace-nowrap"
+        className="flex h-14 min-w-0 flex-1 items-center gap-2 rounded-l-pill ps-4 text-[1.0625rem] font-bold whitespace-nowrap"
       >
         {playing ? (
           <Square aria-hidden className="size-4.5 fill-current" />
@@ -202,7 +211,7 @@ export function FloatingPlaySplit({
           type="button"
           aria-label={menuLabel}
           title={menuLabel}
-          className="flex h-14 w-11 shrink-0 items-center justify-center rounded-r-pill"
+          className="flex h-14 w-12 shrink-0 items-center justify-center rounded-r-pill"
         >
           <ChevronDown aria-hidden className="size-5" />
         </button>,

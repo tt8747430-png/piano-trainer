@@ -39,7 +39,7 @@ export function ChordKeys({ found }: { found: FoundChord }) {
             render={
               <Link
                 to="/practice/scales"
-                search={{ root: noteParam(key.tonic), kind: keyScale(key), show: 'key' }}
+                search={{ root: noteParam(key.tonic), kind: keyScale(key) }}
               />
             }
           />

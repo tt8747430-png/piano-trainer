@@ -1,10 +1,10 @@
 # One scrim (loop round 42; Material 3's scrim, 32%): every modal layer, a sheet or a dialog, dims what is under it
-# by the same amount, and on a laptop it dims the whole window, the sidebar too (a scrim drawn inside the main column
+# by the same amount (each generator draws it at .32), and on a laptop it dims the whole window, the sidebar too (a scrim drawn inside the main column
 # reaches back over the 248px sidebar; where its box is already the window, the frame's own clip cuts the reach).
 # Runs after every generator.
 import os, re
 _d = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
-_scr = re.compile(r'position: absolute; inset: 0; z-index: (\d+); background: rgba\(51,41,33,\.(?:24|28|32)\)')
+_scr = re.compile(r'position: absolute; inset: 0; z-index: (\d+); background: rgba\(51,41,33,\.32\)')
 for _f in os.listdir(_d):
     if not _f.endswith('.dc.html'):
         continue

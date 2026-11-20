@@ -73,7 +73,7 @@ const WITH_NAME =
   'h-[3.125rem] w-auto min-w-0 flex-1 gap-2 bg-muted px-5 text-base font-bold whitespace-nowrap hover:brightness-95 [&_svg:not([class*=size-])]:size-[1.125rem]'
 /** A control with a short caption under its picture (the Player's transport, its canvas). */
 const WITH_CAPTION =
-  'w-auto min-w-12 flex-col gap-0.5 px-2 max-sm:min-w-11 max-sm:px-1 text-[0.6875rem] leading-none font-semibold [&_svg]:size-5'
+  'w-auto min-w-12 flex-col gap-0.5 px-2 max-sm:px-1 small-phone:min-w-11 text-xs/[normal] font-semibold [&_svg]:size-5'
 /**
  * The bar's honey primary, the canvas's PLAYBTN: a 52px circle at its right end; named (Start), its
  * primary BTN, a pill 50 tall taking the room left.
@@ -246,7 +246,7 @@ export function FloatingBarValue({
       title={label}
       className="flex h-13 min-w-14 flex-1 flex-col items-center justify-center rounded-[14px] transition-colors duration-150 ease-out hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
     >
-      <span className="text-[11px] leading-tight text-muted-foreground">{label}</span>
+      <span className="text-xs leading-tight text-muted-foreground">{label}</span>
       <span className="max-w-full truncate text-base leading-tight font-bold whitespace-nowrap tabular-nums">
         {value}
       </span>

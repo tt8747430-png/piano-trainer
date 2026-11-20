@@ -3,10 +3,8 @@ import { useEffect, useRef, useState, type ReactElement, type ReactNode } from '
 import { useTranslation } from 'react-i18next'
 import { usePlayback } from '@/shared/lib/services'
 import {
-  KeysIcon,
   FloatingActions,
   FloatingPiece,
-  FloatingPieceLink,
   FloatingPieces,
   FloatingPlaySplit,
   usePlayKey,
@@ -17,18 +15,16 @@ import type { PatternSample } from '../model/pattern-sample'
 /**
  * A pattern's page's floating bar (canvas 178), as a progression's: Loop (ink while it loops, the
  * sample starting again as it ends), Play with what it plays over in its menu, the honey one Enter
- * plays too, and Practise, the pattern in the Player (`practise`).
+ * plays too; it is practised by the page's rows.
  */
 export function PatternPieces({
   sample,
   onShow,
-  practise,
   menuLabel,
   menu,
 }: {
   sample: PatternSample
   onShow: (shown: ShownKeys) => void
-  practise: { label: string; caption: string; render: ReactElement }
   menuLabel: string
   menu: (trigger: ReactElement) => ReactNode
 }) {
@@ -73,14 +69,9 @@ export function PatternPieces({
           menuLabel={menuLabel}
           menu={menu}
         />
-        <FloatingPieceLink
-          label={practise.label}
-          caption={practise.caption}
-          round
-          render={practise.render}
-        >
-          <KeysIcon aria-hidden />
-        </FloatingPieceLink>
+        {/* Practised by the page's rows, never a third piece: its place kept empty (the board's
+            BAR63: Loop · Play · an empty span). */}
+        <span aria-hidden />
       </FloatingPieces>
     </FloatingActions>
   )

@@ -4,11 +4,11 @@ import type { Piece } from '@/entities/piece'
 import { LookFields, setSongLook } from '@/features/manage-library'
 import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
-import { PieceCover } from '@/widgets/piece-cover'
+import { PieceCover, PieceMark } from '@/widgets/piece-cover'
 import { Picker } from './PropertyPicker'
 
 /**
- * The song page's cover (R32-C): a tap on it changes its picture and paint (a popover on a laptop, a
+ * A song's cover at the head of its Settings (R32-C), the library's tile at 64: a tap on it changes its picture and paint (a popover on a laptop, a
  * sheet on a phone), each kept as it is chosen, Remove cover putting its opening bars back (R34). Its
  * Favourite is the page's bar's, never over the cover (R34, D5). A study is in no library: no picker.
  */
@@ -27,9 +27,10 @@ export function SongCoverPicker({ piece, className }: { piece: Piece; className?
             {...props}
             aria-label={t('changeCover')}
             title={t('changeCover')}
-            className="block w-full rounded-card transition-transform duration-200 ease-out active:scale-[0.98] focus-visible:outline-offset-2"
+            className="block rounded-[10px] transition-transform duration-200 ease-out active:scale-[0.98] focus-visible:outline-offset-2 [&_[data-slot=row-tile]]:size-16 [&_[data-slot=row-tile]]:rounded-[10px]"
           >
-            <PieceCover entry={piece} decorative />
+            {/* The library's own tile, as every row wears it (THINGHEAD's COV, 64 with 10 corners). */}
+            <PieceMark entry={piece} />
           </button>
         )}
       >

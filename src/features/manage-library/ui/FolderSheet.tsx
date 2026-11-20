@@ -13,10 +13,9 @@ import {
 } from '@/entities/library'
 import { useRepertoire } from '@/entities/piece'
 import { nextName } from '@/shared/lib'
-import { NameField, Sheet, SheetContent } from '@/shared/ui'
+import { MakeSheet, NameField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { makeFolder } from '../make-folder'
-import { LookFields } from './LookFields'
 
 /** What the folder sheet is open on: a new folder, in a folder or at Home. */
 export interface FolderSheetTarget {
@@ -25,9 +24,10 @@ export interface FolderSheetTarget {
 }
 
 /**
- * New folder (Mindscape's `FolderSheet`): its name (suggested, "New folder", "New folder 2"), its
- * picture and its paint, made where the learner is, last there (`onMade` hears its id). A folder is
- * edited in place on its page (`FolderEditPanel`).
+ * New folder (R72's, the canvas's NEWNAME): its name alone (suggested, "New folder", "New folder 2")
+ * and Create, Cancel in its header; made where the learner is, last there (`onMade` hears its id),
+ * its paint the next of the five; a centred dialog on a laptop (`MakeSheet`). A folder is edited in
+ * place on its page (`FolderEditPanel`).
  */
 export function FolderSheet({
   target,
@@ -38,11 +38,20 @@ export function FolderSheet({
   onOpenChange: (open: boolean) => void
   onMade?: (id: OwnFolderId) => void
 }) {
+  const { t } = useTranslation('songs')
   return (
-    <Sheet open={target !== null} onOpenChange={onOpenChange}>
+    <MakeSheet
+      open={target !== null}
+      onOpenChange={onOpenChange}
+      title={t('folder.new')}
+      footer={
+        <Button type="submit" form={FOLDER_FORM} size="lg" className="w-full">
+          {t('folder.create')}
+        </Button>
+      }
+    >
       {target ? (
         <FolderForm
-          key="new"
           target={target}
           onDone={(id) => {
             onOpenChange(false)
@@ -50,9 +59,12 @@ export function FolderSheet({
           }}
         />
       ) : null}
-    </Sheet>
+    </MakeSheet>
   )
 }
+
+/** The form's id, which Create at the sheet's foot submits. */
+const FOLDER_FORM = 'new-folder'
 
 function FolderForm({
   target,
@@ -74,39 +86,30 @@ function FolderForm({
     layout.folders.map((folder) => nameOf(folder)),
   )
   const [name, setName] = useState('')
-  const [look, setLook] = useState<FolderLook>({
+  // Its paint the next of the five, so folders made one after another differ; ··· › Colour changes it.
+  const look: FolderLook = {
     picture: 'music',
     paint: FOLDER_PAINTS[layout.folders.length % FOLDER_PAINTS.length] ?? 'sand',
-  })
+  }
   const typed = name.trim()
-  const submit = (event?: FormEvent) => {
-    event?.preventDefault()
+  const submit = (event: FormEvent) => {
+    event.preventDefault()
     const catalog = libraryCatalog(repertoire)
     onDone(
       makeFolder(store, catalog, { name: typed || suggestion, ...look }, { parent: target.parent }),
     )
   }
   return (
-    <SheetContent
-      title={t('folder.new')}
-      footer={
-        <Button size="lg" className="w-full" onClick={() => submit()}>
-          {t('folder.create')}
-        </Button>
-      }
-    >
-      <form onSubmit={submit} className="flex flex-col gap-6">
-        <NameField
-          label={t('folder.name')}
-          autoFocus
-          value={name}
-          placeholder={suggestion}
-          enterKeyHint="done"
-          maxLength={FOLDER_NAME_MAX}
-          onChange={(event) => setName(event.target.value)}
-        />
-        <LookFields pictures={false} look={look} onChange={setLook} />
-      </form>
-    </SheetContent>
+    <form id={FOLDER_FORM} onSubmit={submit} className="flex flex-col gap-6">
+      <NameField
+        label={t('folder.name')}
+        autoFocus
+        value={name}
+        placeholder={suggestion}
+        enterKeyHint="done"
+        maxLength={FOLDER_NAME_MAX}
+        onChange={(event) => setName(event.target.value)}
+      />
+    </form>
   )
 }

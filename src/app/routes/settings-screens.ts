@@ -1,10 +1,12 @@
 export {
   AccountSettingsPage,
+  AppearancePage,
   ChangePasswordPage,
+  EmailPage,
   EditProfilePage,
   ProfilePrivacyPage,
   GeneralPage,
-  OnScreenPianoPage,
+  PageLayoutsPage,
   FeedbackPage,
   SelectToolbarPage,
   SwipeActionsPage,

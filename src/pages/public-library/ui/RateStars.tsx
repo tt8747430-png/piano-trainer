@@ -101,7 +101,7 @@ export function RateStars({
       ) : (
         <Link
           to="/account/sign-in"
-          className="ml-auto text-sm font-semibold text-link underline-offset-4 hover:underline"
+          className="ml-auto inline-flex min-h-11 items-center text-sm font-semibold text-link underline-offset-4 hover:underline"
         >
           {t('explore.signInToRate')}
         </Link>

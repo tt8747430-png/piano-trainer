@@ -9,6 +9,7 @@ const course: Course = {
   shelf: 'beginner',
   stage: 'beginner',
   title: { en: 'Introduction to the Piano', ru: 'Знакомство с фортепиано' },
+  line: { en: 'The keys, posture and your first tunes', ru: 'Клавиши, посадка и первые мелодии' },
   summary: {
     en: 'Your first weeks at the keys. Learn how to sit, number your fingers and find the C position. Then play easy tunes with each hand and reach the notes above G.',
     ru: 'Первые недели за инструментом. Вы научитесь сидеть, узнаете номера пальцев и позицию до. Потом сыграете простые мелодии каждой рукой и освоите ноты выше соль.',

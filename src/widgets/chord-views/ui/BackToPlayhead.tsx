@@ -14,7 +14,7 @@ export function BackToPlayhead({ follow }: { follow: Follow }) {
     <div className="pointer-events-none sticky bottom-[calc(var(--float-room,0px)+0.5rem)] z-10 flex justify-center">
       <Button
         variant="secondary"
-        className="pointer-events-auto rounded-pill elevation-2"
+        className="pointer-events-auto rounded-pill elevation-float"
         onClick={follow.resume}
       >
         <LocateFixed data-icon="inline-start" />

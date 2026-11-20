@@ -1,5 +1,6 @@
 export {
   advanceLoop,
+  loopOver,
   beatGroupAt,
   countAt,
   startLoop,

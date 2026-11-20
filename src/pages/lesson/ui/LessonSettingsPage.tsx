@@ -1,43 +1,26 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { ListChecks } from 'lucide-react'
-import { useState, type ReactElement, type ReactNode } from 'react'
+import { Book } from 'lucide-react'
+import type { ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { courseLesson } from '@/entities/course'
-import {
-  LESSONS,
-  lessonById,
-  lessonIds,
-  lessonLanguages,
-  lessonPlace,
-  withAfter,
-  type Lesson,
-} from '@/entities/lesson'
-import {
-  LESSON_READINGS,
-  selectLessonReading,
-  useSettings,
-  useSettingsStoreApi,
-} from '@/entities/settings'
-import { setLessonReading } from '@/features/set-preference'
+import { LESSONS, lessonById, lessonPlace, type Lesson } from '@/entities/lesson'
 import { courseLessonStepId, lessonStepId, type StepId } from '@/entities/step'
 import { selectOwnLesson, useOwnLessons } from '@/entities/own-lessons'
-import { RemoveGroup, useLessonDraft } from '@/features/edit-original'
+import { DraftPublishing, RemoveGroup, useLessonDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { shareLink } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
-  BackButton,
-  ChoiceCard,
-  ChoiceRow,
-  MultiDropdown,
   ActionRow,
+  BackButton,
   RowLink,
   say,
   ScreenHeader,
   SettingsGroup,
+  ThingHead,
 } from '@/shared/ui'
-import { PublishRow } from '@/widgets/content-editor'
+import { useStanding } from '@/widgets/content-editor'
 import { OwnLessonSettings } from './OwnLessonSettings'
 
 /** Where a lesson stands: a level's chapter, or a course. */
@@ -48,6 +31,10 @@ type Where =
       readonly levelId: string
       readonly level: string
       readonly chapter: string
+      /** Its number in the level, and the level's count. */
+      readonly n: number
+      readonly total: number
+      /** Where it is moved: the level's page, in Edit for an editor. */
       readonly manage: ReactElement
     }
   | { readonly kind: 'course'; readonly course: string; readonly link: ReactElement }
@@ -57,7 +44,7 @@ export function LessonSettingsPage() {
   const locale = useLocale()
   const { lessonId } = useParams({ from: '/shell/lessons/$lessonId/settings' })
   const own = useOwnLessons(selectOwnLesson(lessonId))
-  if (own) return <OwnLessonSettings key={lessonId} lesson={own} reading={<ReadingChoice />} />
+  if (own) return <OwnLessonSettings key={lessonId} lesson={own} />
   const lesson = lessonById(lessonId)
   const place = lessonPlace(lessonId)
   // The route finds no lesson that no level has.
@@ -70,19 +57,14 @@ export function LessonSettingsPage() {
       step={lessonStepId(lessonId)}
       path={`/lessons/${lessonId}`}
       back={<BackButton />}
-      readFirst
       where={{
         kind: 'level',
         levelId: place.journey.id,
         level: localText(place.journey.title, locale),
         chapter: localText(place.chapter.title, locale),
-        manage: (
-          <Link
-            to="/levels/$levelId"
-            params={{ levelId: place.journey.id }}
-            search={{ edit: true }}
-          />
-        ),
+        n: place.n,
+        total: place.total,
+        manage: <Link to="/levels/$levelId" params={{ levelId: place.journey.id }} />,
       }}
     />
   )
@@ -113,10 +95,11 @@ export function CourseLessonSettingsPage() {
 }
 
 /**
- * A lesson's Settings (round 28, as a song's: Noji's deck settings): one list of grouped rows. How
- * lessons read (One page, A section at a time), Share link, and apart the learner's own progress
- * reset, asked first. An editor's: where it stands (its level and chapter, Manage lessons; or its
- * course), the lessons to read first, the languages it is written in, and its changes with Publish.
+ * A lesson's Settings, one shape with a course's (owner, 2026-11-18: "i dont like the structure of
+ * these settings"; the board's THINGSET): the lesson at the head (its picture, its name, where it
+ * stands), The lesson (its Place, a way to where it is moved), Share, for an editor its Publishing
+ * (where it stands, Versions; Publish changes and Discard changes only while there are changes), the
+ * learner's progress, and the loss of the whole lesson last and apart. One column, phone and laptop.
  */
 function LessonSettings({
   lesson,
@@ -125,7 +108,6 @@ function LessonSettings({
   path,
   back,
   where,
-  readFirst = false,
 }: {
   lesson: Lesson
   /** Its id in the database (a course's as `<course>/<lesson>`). */
@@ -136,8 +118,6 @@ function LessonSettings({
   /** The screen's Back (`BackButton`). */
   back: ReactNode
   where: Where
-  /** A level's lesson: the lessons to read before it chosen here. */
-  readFirst?: boolean
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
@@ -149,26 +129,41 @@ function LessonSettings({
     if (shared === 'copied') say(t('settings.shared'))
     if (shared === 'failed') say(t('settings.shareFailed'))
   }
-  const shareRow = <ActionRow title={t('settings.shareLink')} onClick={() => void share()} />
+  const placeLine =
+    where.kind === 'level'
+      ? `${t('place', { n: where.n, total: where.total })} · ${where.level}`
+      : where.course
   return (
-    <div className="flex flex-col gap-2 pb-8">
-      <ScreenHeader title={t('settings.title')} back={back} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
-        <p className="px-1 text-muted-foreground text-pretty">{title}</p>
-        <ReadingChoice />
-        {editsContent(account) ? (
-          <EditorRows
-            lesson={lesson}
-            id={id}
-            where={where}
-            readFirst={readFirst}
-            shareRow={shareRow}
-          />
-        ) : (
-          <SettingsGroup flush title={t('settings.share')}>
-            {shareRow}
-          </SettingsGroup>
-        )}
+    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
+      <ScreenHeader column="until-laptop" title={t('settings.title')} back={back} />
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:max-w-295">
+        <ThingHead
+          mark={
+            <span className="grid size-16 shrink-0 place-items-center rounded-pill bg-card ring-1 ring-border ring-inset">
+              <Book aria-hidden className="size-6" />
+            </span>
+          }
+          name={title}
+          line={placeLine}
+        />
+        <SettingsGroup flush title={t('settings.lesson')}>
+          {where.kind === 'level' ? (
+            <RowLink
+              title={t('settings.place')}
+              value={`${where.level} · ${where.chapter} · ${t('lessonNumber', { n: where.n })}`}
+              render={where.manage}
+            />
+          ) : (
+            <RowLink title={t('settings.inCourse')} value={where.course} render={where.link} />
+          )}
+        </SettingsGroup>
+        <SettingsGroup flush title={t('settings.share')}>
+          <ActionRow title={t('settings.shareLink')} onClick={() => void share()} />
+        </SettingsGroup>
+        {editsContent(account) && where.kind === 'level' ? (
+          // A course's lesson is published with its course.
+          <LessonPublishing lesson={lesson} id={id} title={title} />
+        ) : null}
         <ResetStepsRow
           steps={[step]}
           words={{
@@ -181,7 +176,7 @@ function LessonSettings({
         where.kind === 'level' &&
         !LESSONS.some((each) => each.id === lesson.id) ? (
           // A level's lesson made in the app, not one the app ships with (a course's is its
-          // course's): Unpublish and Delete (round 28), last of all (R25).
+          // course's): Delete (round 28), last of all and apart (R25).
           <RemoveGroup
             kind="lesson"
             id={id}
@@ -200,114 +195,18 @@ function LessonSettings({
   )
 }
 
-/** A row that says a value, not a way on: its name, the value at its end (the boards' plain row). */
-function ValueRow({ title, value }: { title: string; value: string }) {
-  return (
-    // Its name kept whole: a long value wraps under itself, at the row's end.
-    <div className="flex min-h-12 min-w-0 items-center gap-3 px-4 py-2">
-      <span className="shrink-0 text-base">{title}</span>
-      <span className="min-w-0 flex-1 text-right text-balance text-muted-foreground">{value}</span>
-    </div>
-  )
-}
-
-/**
- * An editor's rows (ADR 0116): where the lesson stands, a way to where it is placed; the lessons to
- * read first, chosen here, saved to its draft; the languages its draft has in full; then (R29 B6)
- * Publish… with where it stands, and Share link.
- */
-function EditorRows({
-  lesson,
-  id,
-  where,
-  readFirst,
-  shareRow,
-}: {
-  lesson: Lesson
-  id: string
-  where: Where
-  readFirst: boolean
-  /** Share link, after Publish…. */
-  shareRow: ReactNode
-}) {
-  const { t } = useTranslation(['learn', 'settings'])
-  const locale = useLocale()
+/** A level's lesson's Publishing (ADR 0116), its draft's: where it stands, Versions, its changes. */
+function LessonPublishing({ lesson, id, title }: { lesson: Lesson; id: string; title: string }) {
+  const { t } = useTranslation(['editor', 'learn'])
   const draft = useLessonDraft(lesson, id)
-  // What was chosen since it opened: the draft's own until then.
-  const [chosen, setChosen] = useState<Lesson | null>(null)
-  const written = chosen ?? (draft.load.state === 'ready' ? draft.load.value : null)
-  const languages = written ? lessonLanguages(written) : []
+  const { published, standing } = useStanding('lesson', id, draft)
   return (
-    <>
-      <SettingsGroup flush title={t('settings.lesson')}>
-        {where.kind === 'level' ? (
-          <>
-            <RowLink title={t('settings.level')} value={where.level} render={where.manage} />
-            <ValueRow title={t('settings.chapter')} value={where.chapter} />
-          </>
-        ) : (
-          <RowLink title={t('settings.inCourse')} value={where.course} render={where.link} />
-        )}
-        {readFirst && written ? (
-          <ChoiceRow title={t('settings.readFirst')} icon={ListChecks} paint="grass">
-            <MultiDropdown
-              label={t('settings.readFirst')}
-              none={t('edit.doc.readFirstNone')}
-              bare
-              value={written.after ?? []}
-              options={lessonIds()
-                .filter((each) => each !== id)
-                .map((each) => ({
-                  value: each,
-                  label: localText(lessonById(each)?.title ?? { en: each, ru: each }, locale),
-                }))}
-              onChange={(after) => {
-                const next = withAfter(written, after)
-                setChosen(next)
-                draft.save(next)
-              }}
-            />
-          </ChoiceRow>
-        ) : null}
-        <ValueRow
-          title={t('settings.languages')}
-          value={
-            written === null
-              ? t('settings.opening')
-              : languages.length === 0
-                ? t('settings.noLanguage')
-                : languages.map((each) => t(`settings:language.${each}`)).join(', ')
-          }
-        />
-      </SettingsGroup>
-      <SettingsGroup flush title={t('settings.share')}>
-        {/* A level's lesson is published on its Publish page; a course's with its course. */}
-        {where.kind === 'level' ? (
-          <PublishRow
-            kind="lesson"
-            id={id}
-            draft={draft}
-            link={<Link to="/lessons/$lessonId/publish" params={{ lessonId: id }} />}
-          />
-        ) : null}
-        {shareRow}
-      </SettingsGroup>
-    </>
-  )
-}
-
-/** How lessons read (round 26), its one home: every lesson's Settings, the learner's own too. */
-function ReadingChoice() {
-  const { t } = useTranslation('learn')
-  const reading = useSettings(selectLessonReading)
-  const settings = useSettingsStoreApi()
-  return (
-    <ChoiceCard
-      title={t('reading.title')}
-      setting="lessonReading"
-      value={reading}
-      options={LESSON_READINGS.map((value) => ({ value, label: t(`reading.${value}`) }))}
-      onChange={(value) => setLessonReading(settings, value)}
+    <DraftPublishing
+      draft={draft}
+      title={title}
+      status={published === null ? undefined : t(`publishPage.standing.${standing}`)}
+      unreadable={t('learn:edit.unreadable')}
+      onReset={draft.reopen}
     />
   )
 }

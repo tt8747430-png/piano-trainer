@@ -3,6 +3,7 @@ import { Link2, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { groupTile, NewGroupSheet, useGroupsData } from '@/features/share-folder'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import {
   BackButton,
   NewDial,
@@ -32,24 +33,33 @@ export function GroupsPage() {
   const { data, reload } = useGroupsData()
   const [open, setOpen] = useState<Open>(null)
   const signedIn = data.kind !== 'guest'
+  const laptop = useMediaQuery(LAPTOP)
   const making: readonly MenuAction[] = [
     { key: 'new', label: t('groups.new'), icon: Plus, onSelect: () => setOpen('new') },
   ]
   const ready = data.kind === 'ready' && data.groups.length > 0
   const sharedWithMe = data.kind === 'ready' ? data.shared.filter((each) => !each.mine) : []
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 pb-8">
+    // Two lists 880 wide under the title on a laptop, never a grid of cards (canvas v441).
+    <div className="flex w-full flex-col gap-2 pb-8 lg:gap-6 [&>*:not([data-slot=screen-bar])]:max-w-220">
       <ScreenHeader
         title={t('groups.title')}
         back={<BackButton />}
         tools={
           signedIn ? (
             <>
-              <RoundButton
-                label={t('groups.joinLink')}
-                icon={Link2}
-                onClick={() => setOpen('join')}
-              />
+              {/* A word on a laptop, its glyph on a phone (the Groups boards). */}
+              {laptop ? (
+                <Button variant="bar" onClick={() => setOpen('join')}>
+                  {t('groups.joinLink')}
+                </Button>
+              ) : (
+                <RoundButton
+                  label={t('groups.joinLink')}
+                  icon={Link2}
+                  onClick={() => setOpen('join')}
+                />
+              )}
               {ready ? (
                 <span className="max-lg:hidden">
                   <NewMenu label={t('groups.new')} actions={making} />
@@ -69,11 +79,11 @@ export function GroupsPage() {
           onRetry={reload}
           actions={
             <>
+              <Button size="lg" variant="quiet" onClick={() => setOpen('join')}>
+                {t('groups.joinLink')}
+              </Button>
               <Button size="lg" onClick={() => setOpen('new')}>
                 {t('groups.new')}
-              </Button>
-              <Button size="lg" variant="soft" onClick={() => setOpen('join')}>
-                {t('groups.joinLink')}
               </Button>
             </>
           }

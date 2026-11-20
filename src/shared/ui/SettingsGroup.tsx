@@ -34,17 +34,19 @@ export function SettingsGroup({
   return (
     <section
       aria-labelledby={title ? id : undefined}
-      className={cn('flex flex-col', heading ? 'gap-3' : 'gap-1.5', className)}
+      data-slot="settings-group"
+      className={cn('flex flex-col', heading ? 'gap-3' : 'gap-2', className)}
     >
       {title ? (
-        <div className={cn('flex items-center gap-1', !heading && 'px-1')}>
+        <div
+          data-slot="settings-head"
+          // With an ⓘ the head is the boards' S9CAPS row, 28 tall, the words centred on it.
+          className={cn('flex items-center gap-1', !heading && 'px-4', info && 'min-h-7')}
+        >
           <h2
             id={id}
-            className={
-              heading
-                ? 'font-sans text-xl font-bold'
-                : 'font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase'
-            }
+            data-slot="settings-heading"
+            className={heading ? 'font-sans text-xl font-bold' : 'caps'}
           >
             {title}
           </h2>
@@ -60,6 +62,7 @@ export function SettingsGroup({
         <div className="flex flex-col gap-3">{children}</div>
       ) : (
         <div
+          data-slot="settings-card"
           className={cn(
             // A switch row draws its line beneath it; the card's edge stands for the last one's.
             'flex flex-col card [&>[data-slot=switch-row]:last-child]:border-b-0',
@@ -74,7 +77,12 @@ export function SettingsGroup({
           {children}
         </div>
       )}
-      {footnote ? <p className="px-3 text-sm text-muted-foreground">{footnote}</p> : null}
+      {/* On the rows' inset, as iOS sets a group's footer under its cells' text. */}
+      {footnote ? (
+        <p data-slot="settings-foot" className="px-4 text-sm text-muted-foreground">
+          {footnote}
+        </p>
+      ) : null}
     </section>
   )
 }

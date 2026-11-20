@@ -109,8 +109,7 @@ describe('LiveKeyboard', () => {
 
   it('is set up as the keyboard settings say', () => {
     const { settingsStore } = setUp()
-    act(() => setKeyboard(settingsStore, { keySize: 'piano', namedKeys: 'none' }))
-    expect(screen.queryByRole('button', { name: 'Octave up' })).not.toBeInTheDocument()
+    act(() => setKeyboard(settingsStore, { namedKeys: 'none' }))
     expect(screen.getByRole('button', { name: 'C4' }).textContent).toBe('')
   })
 

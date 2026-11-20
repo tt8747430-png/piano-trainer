@@ -49,7 +49,7 @@ export function BeatSquares({
         <ol
           aria-label={t('metronome.beats')}
           data-muted={muted || undefined}
-          className="flex h-27.5 w-full gap-2 lg:h-55"
+          className="flex h-27.5 w-full gap-2 lg:h-28"
         >
           {levels.map((level, beat) => (
             <li key={beat} className="flex min-w-0 flex-1">
@@ -75,10 +75,10 @@ export function BeatSquares({
                 <span
                   aria-hidden
                   className={cn(
-                    'absolute start-2 top-1.5 text-xs tabular-nums',
+                    'absolute start-2 top-1.5 text-xs font-semibold tabular-nums',
                     level === 'normal' || level === 'silent'
                       ? 'text-muted-foreground'
-                      : 'text-background',
+                      : 'text-card',
                   )}
                 >
                   {beat + 1}

@@ -1,67 +1,67 @@
 import { Link } from '@tanstack/react-router'
-import { KeyRound, LogIn, Mail, ShieldCheck, UserRoundPlus } from 'lucide-react'
 import { useReducer, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { useOnline, useUp } from '@/shared/lib'
+import { formatLocale, useOnline } from '@/shared/lib'
 import { authProblem, useAccount, useLearnerProfile, useLearnerView } from '@/shared/lib/account'
 import {
   Avatar,
   ConfirmDialog,
   DangerGroup,
   DangerRow,
-  RowFace,
+  GroupRow,
   RowLink,
   say,
   SettingsGroup as Group,
   SwitchRow,
+  ThingHead,
 } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 import { DELETE_CLOSED, deleteAccountMachine } from '../model/delete-account-machine'
 import { SyncGroup } from './SyncGroup'
 
 /**
- * Settings › Account (ADR 0116, A15), as memory-palaces' edit profile reads: the learner's picture at
- * its top; Profile, their name, saved once changed, their email and Change password; Sync, its one
- * home (where it stands, Sync now, what syncs); then, each red and alone (R25), Sign out (on this
- * device, asked first) and Delete account… last, the email typed to confirm, its 30 days' grace in
- * its footnote. An editor or administrator has Editorial access before Sync (R32). A guest is offered
- * Sign in and Create account.
+ * Settings › Account (ADR 0116, A15), in the shape every Settings page has (owner, 2026-11-18,
+ * "refactor the account settings and also refactor all the settings"; the board's ACC_IN): who it is
+ * at the head (the 64 picture, the name, the email), then Profile (Edit profile, Privacy), Sign-in and
+ * security (Email ›, Change password ›), Sync, Editorial access for an editor (R32), Sign out (asked
+ * first) and Delete account… alone 16 further down, the email typed to confirm. A guest is told they
+ * are not signed in and why it matters, then Sign in and Create account.
  */
 export function AccountSettingsPage() {
   const { t } = useTranslation(['settings', 'account'])
   const { account } = useAccount()
   const [scheduled, setScheduled] = useState<string | null>(null)
+  const privacy = usePrivacyValue()
   return (
     <SettingsScreen title={t('accountPage.title')}>
       {account ? (
         <>
-          <ProfileRow />
-          <Group flush>
-            {/* The email under its name, broken anywhere a long one must be to fit a phone. */}
-            <div className="flex min-h-16 items-center gap-3 py-2 pr-3 pl-2 wrap-anywhere">
-              <RowFace
-                title={t('accountPage.email')}
-                icon={Mail}
-                paint="sky"
-                detail={account.email}
-              />
-            </div>
+          <AccountHead />
+          <Group flush title={t('accountPage.profile')}>
             <RowLink
-              title={t('accountPage.password')}
-              icon={KeyRound}
-              paint="sand"
-              render={<Link to="/settings/account/password" />}
+              title={t('accountPage.editProfile')}
+              render={<Link to="/settings/account/profile" />}
             />
             <RowLink
-              title={t('account:privacy.title')}
-              icon={ShieldCheck}
-              paint="grass"
+              title={t('accountPage.privacy')}
+              value={privacy}
               render={<Link to="/settings/privacy" />}
             />
           </Group>
-          <EditorialAccess />
+          <Group flush title={t('accountPage.security')}>
+            <RowLink
+              title={t('accountPage.email')}
+              value={account.email}
+              render={<Link to="/settings/account/email" />}
+            />
+            <RowLink
+              title={t('accountPage.password')}
+              render={<Link to="/settings/account/password" />}
+            />
+          </Group>
           <SyncGroup />
+          <EditorialAccess />
           <SignOut />
           <DeleteAccount onScheduled={setScheduled} />
         </>
@@ -69,6 +69,29 @@ export function AccountSettingsPage() {
         <Guest scheduled={scheduled} />
       )}
     </SettingsScreen>
+  )
+}
+
+/** Privacy's value at its row's end: whether the profile shows, read from the server's `public`. */
+function usePrivacyValue(): string | undefined {
+  const { t } = useTranslation('account')
+  const { state } = useLearnerProfile()
+  if (state.kind !== 'ready') return undefined
+  return t(state.profile.public ? 'privacy.shown' : 'privacy.hidden')
+}
+
+/** Who the account is, the page's head (the board's THINGHEAD): the 64 picture, the name, the email. */
+function AccountHead() {
+  const { account } = useAccount()
+  const { state } = useLearnerProfile()
+  const profile = state.kind === 'ready' ? state.profile : null
+  const name = profile?.name || account?.name || account?.email || ''
+  return (
+    <ThingHead
+      mark={<Avatar name={name} picture={profile?.avatar ?? null} size="account" />}
+      name={name}
+      line={account?.email}
+    />
   )
 }
 
@@ -83,10 +106,9 @@ function EditorialAccess() {
   if (!learner.can || learner.role === null) return null
   return (
     <Group flush title={t('accountPage.editorial')}>
-      <dl className="flex min-h-16 items-center justify-between gap-4 px-4 py-2">
-        <dt className="text-lg font-semibold">{t('accountPage.role')}</dt>
-        <dd className="text-end text-muted-foreground">{t(`accountPage.roles.${learner.role}`)}</dd>
-      </dl>
+      <GroupRow label={t('accountPage.role')}>
+        <span className="text-muted-foreground">{t(`accountPage.roles.${learner.role}`)}</span>
+      </GroupRow>
       <SwitchRow
         label={t('learnerView.label')}
         info={t('learnerView.info')}
@@ -97,69 +119,46 @@ function EditorialAccess() {
   )
 }
 
-/** Signed out: the figure of a person, why (or when the account is to be deleted), Sign in and Create. */
+/**
+ * Signed out (the board's ACC_OUT): the figure of a person, "You are not signed in." and why it
+ * matters (or when the account is to be deleted), then Sign in and Create account as rows.
+ */
 function Guest({ scheduled }: { scheduled: string | null }) {
   const { t } = useTranslation('settings')
   const locale = useLocale()
   return (
     <>
-      <div className="flex flex-col items-center gap-3 pt-2 text-center">
-        <Avatar name={null} size="hero" />
-        <p role="status" className="max-w-sm text-pretty text-muted-foreground">
+      <div className="flex flex-col items-center gap-2 px-4 pt-6 pb-2 text-center">
+        <Avatar name={null} size="account" />
+        <p className="text-lg font-bold">{t('accountPage.signedOut')}</p>
+        <p role="status" className="max-w-75 text-[0.9375rem] text-pretty text-muted-foreground">
           {scheduled === null
-            ? t('accountPage.signedOut')
+            ? t('accountPage.signedOutWhy')
             : t('accountPage.delete.scheduled', {
-                date: new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(
+                date: new Intl.DateTimeFormat(formatLocale(locale), { dateStyle: 'long' }).format(
                   new Date(scheduled),
                 ),
               })}
         </p>
       </div>
       <Group flush>
-        <RowLink
-          title={t('accountPage.signIn')}
-          icon={LogIn}
-          paint="yellow"
-          render={<Link to="/account/sign-in" />}
-        />
-        <RowLink
-          title={t('accountPage.create')}
-          icon={UserRoundPlus}
-          paint="grass"
-          render={<Link to="/account/create" />}
-        />
+        <RowLink title={t('accountPage.signIn')} render={<Link to="/account/sign-in" />} />
+        <RowLink title={t('accountPage.create')} render={<Link to="/account/create" />} />
       </Group>
     </>
   )
 }
 
-/** The learner's picture and name, the page's first row: Edit profile (B1). */
-function ProfileRow() {
-  const { t } = useTranslation('account')
-  const { account } = useAccount()
-  const { state } = useLearnerProfile()
-  const profile = state.kind === 'ready' ? state.profile : null
-  const name = profile?.name || account?.name || account?.email || ''
-  return (
-    <Group flush>
-      <RowLink
-        mark={<Avatar name={name} picture={profile?.avatar ?? null} size="row" />}
-        title={name}
-        detail={t('editProfile.title')}
-        render={<Link to="/settings/account/profile" />}
-      />
-    </Group>
-  )
-}
-
-/** Sign out, on this device (R25): a red row in a group of its own, asking first, what stays said. */
+/**
+ * Sign out, on this device (R25): a red row in a group of its own, asking first, its dialog saying
+ * what stays; the page then shows the guest.
+ */
 function SignOut() {
   const { t } = useTranslation('settings')
   const { auth } = useAccount()
-  const back = useUp()
   const [open, setOpen] = useState(false)
   return (
-    <DangerGroup footnote={t('accountPage.signOutInfo')}>
+    <DangerGroup className="mt-0">
       <DangerRow title={t('accountPage.signOut')} onClick={() => setOpen(true)} />
       <ConfirmDialog
         open={open}
@@ -168,15 +167,15 @@ function SignOut() {
         body={t('accountPage.signOutInfo')}
         action={t('accountPage.signOut')}
         cancel={t('accountPage.signOutCancel')}
-        onConfirm={() => void auth.signOut().then(back)}
+        onConfirm={() => void auth.signOut()}
       />
     </DangerGroup>
   )
 }
 
 /**
- * Delete account… (R25): the page's last group, a red row, its 30 days' grace in the footnote; the
- * learner types their email to confirm (R17), and the deletion is scheduled.
+ * Delete account… (R25): the page's last group, alone 16 below Sign out, a red row; its dialog says
+ * the 30 days' grace, the learner types the word to confirm (R17), and the deletion is scheduled.
  */
 function DeleteAccount({ onScheduled }: { onScheduled: (purgeAfter: string) => void }) {
   const { t } = useTranslation(['settings', 'account'])
@@ -195,7 +194,7 @@ function DeleteAccount({ onScheduled }: { onScheduled: (purgeAfter: string) => v
     say(t(`account:problem.${authProblem(result)}`))
   }
   return (
-    <DangerGroup footnote={t('accountPage.delete.footnote')}>
+    <DangerGroup className="mt-4">
       <DangerRow
         title={t('accountPage.delete.button')}
         disabled={!online || state.kind === 'deleting'}

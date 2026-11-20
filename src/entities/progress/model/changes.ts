@@ -3,6 +3,8 @@ import { latestEvidence, stepCompletedBy } from './mastery'
 import { selectAnswers, selectIsLearned } from './selectors'
 import {
   HISTORY_KEPT,
+  type PlayedResult,
+  type PlayedRun,
   type PracticeRun,
   type ProgressState,
   type QuizAnswer,
@@ -44,6 +46,7 @@ export function withRun(
   const before = state.trainers[key]
   const when = at.toISOString()
   const kept: PracticeRun = {
+    kind: 'quiz',
     id: `${key}@${when}`,
     key,
     accuracy: run.accuracy,
@@ -62,6 +65,34 @@ export function withRun(
         last: run.accuracy,
         best: Math.max(before?.best ?? 0, run.accuracy),
         bestStreak: Math.max(before?.bestStreak ?? 0, run.streak),
+      },
+    },
+  }
+}
+
+/**
+ * A run played to its end (the run view's Wait pass): kept in the history, and counted with its key's
+ * runs, its last and its best, as a quiz's level is.
+ */
+export function withPlayedRun(
+  state: ProgressState,
+  key: RunKey,
+  run: PlayedResult,
+  at: Date,
+): ProgressState {
+  const before = state.trainers[key]
+  const when = at.toISOString()
+  const kept: PlayedRun = { kind: 'played', id: `${key}@${when}`, key, ...run, at: when }
+  return {
+    ...state,
+    history: [kept, ...state.history].slice(0, HISTORY_KEPT),
+    trainers: {
+      ...state.trainers,
+      [key]: {
+        runs: (before?.runs ?? 0) + 1,
+        last: run.accuracy,
+        best: Math.max(before?.best ?? 0, run.accuracy),
+        bestStreak: before?.bestStreak ?? 0,
       },
     },
   }

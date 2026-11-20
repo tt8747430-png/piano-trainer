@@ -520,15 +520,6 @@ describe('the live voice', () => {
     expect(soft.context.filters).toHaveLength(plain.context.filters.length + 1)
     expect(soft.context.filters[0]?.frequency.value).toBe(2640)
   })
-
-  it('plays the keys as loud as the piano’s volume, the square of its share', () => {
-    const { context, audio } = setUp()
-    audio.pianoVolume(0.5)
-    audio.press(midi(69), 100)
-    expect(context.gains.flatMap((gain) => gain.ramps)[0]?.value).toBeCloseTo(
-      velocityGain(100) * 0.25,
-    )
-  })
 })
 
 describe('a recording', () => {

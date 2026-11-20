@@ -8,7 +8,7 @@ import { STAGES, type Stage } from '@/entities/step'
 export function LevelMark({ stage, short = false }: { stage: Stage; short?: boolean }) {
   const { t } = useTranslation('common')
   return (
-    <span className="shrink-0 text-sm whitespace-nowrap text-muted-foreground">
+    <span className="shrink-0 text-sm whitespace-nowrap text-muted-foreground tabular-nums">
       {short ? t('levelNumber', { number: STAGES.indexOf(stage) + 1 }) : t(`stage.${stage}`)}
     </span>
   )

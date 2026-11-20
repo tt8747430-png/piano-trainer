@@ -9,6 +9,7 @@ const course: Course = {
   shelf: 'technique',
   stage: 'beginner',
   title: { en: 'How to Practise', ru: 'Как заниматься' },
+  line: { en: 'A daily plan and a scale routine', ru: 'План на день и работа над гаммами' },
   summary: {
     en: 'A plan for each day, a fifteen-minute scale routine with a tempo ladder, five days to faster fingers, and the mistakes that slow learners down.',
     ru: 'План на каждый день, пятнадцатиминутная работа над гаммой с лестницей темпов, пять дней к беглым пальцам и ошибки, которые тормозят учеников.',

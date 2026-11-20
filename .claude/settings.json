@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "mcp__Supabase",
-      "mcp__Supabase__*"
+      "mcp__Supabase__*",
+      "Artifact",
+      "ArtifactData",
+      "ArtifactComments"
     ]
   },
   "hooks": {
@@ -13,6 +16,26 @@
           {
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/read-instructions.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "resume|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/canvas-ledger.sh"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/canvas-ledger.sh"
           }
         ]
       }

@@ -35,8 +35,12 @@ export function PlaceRow({
     defaultTagName: 'a',
     render,
     props: {
-      // The canvas's PROW measures 80 tall: 64 inside, 8 above and below; a folder's row 64.
-      className: cn(ROW_BODY, ROW_LIBRARY_FACE, folder ? '[--row-min:4rem]' : '[--row-min:5rem]'),
+      // The canvas's PROW measures 80 tall, 64 inside, 8 above and below, its tile 12 in; a folder's row 64.
+      className: cn(
+        ROW_BODY,
+        ROW_LIBRARY_FACE,
+        folder ? '[--row-min:4rem]' : '[--row-min:5rem] pl-3',
+      ),
       children: (
         <>
           <TileMark large icon={icon} picture={picture} paint={paint} />

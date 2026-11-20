@@ -109,12 +109,12 @@ describe('colourNotes in a key (A33)', () => {
 })
 
 describe('withColour', () => {
-  it('adds a note and writes it in the symbol: C9, C7♯11, Cadd9, C7♭9♯11', () => {
+  it('adds a note and writes it in the symbol: C9, C7♯11, Cadd9, C7(♭9,♯11)', () => {
     expect(symbol(withColour(DOMINANT, INTERVALS.M9))).toBe('C9')
     expect(symbol(withColour(DOMINANT, INTERVALS.A11))).toBe('C7#11')
     expect(symbol(withColour(parts(), INTERVALS.M9))).toBe('Cadd9')
     const flatNine = withColour(DOMINANT, INTERVALS.m9)
-    expect(symbol(flatNine && withColour(flatNine, INTERVALS.A11))).toBe('C7♭9#11')
+    expect(symbol(flatNine && withColour(flatNine, INTERVALS.A11))).toBe('C7(♭9,#11)')
   })
 
   it('takes a note off again, the chord kept whole', () => {

@@ -1,3 +1,5 @@
+import type { ScoreHeader } from '@/entities/piece'
+import { useGridBars } from '@/entities/settings'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { writtenBarOf, type BarRange, type PlayedBeat } from '@/features/practice'
@@ -11,17 +13,20 @@ import { inSight } from '../model/in-sight'
 import { useFollow } from '../model/use-follow'
 import { BackToPlayhead } from './BackToPlayhead'
 import { gridWords } from '../model/lyric-lines'
+import { ViewTitle } from './ViewTitle'
 
 /**
- * The Grid (ADR 0108): the music's chord chart in beats, its sections headed,
+ * The Grid (ADR 0108): the music's chord chart in beats under its title, its sections headed,
  * the beat sounding filled, the loop's bars on its band, a grip at each of its ends dragging it bar by
  * bar (`onLoop`); a beat tapped takes the cursor there. Its own scroller, with room to scroll its last line clear of the transport floating over its foot. The
  * bar the cursor is in is kept in sight as the music moves on, as the sheet keeps the line playing;
- * opening, the Grid stays at its top where that bar is in sight there (a loop's
+ * opening, the Grid stays at its top, its title in sight, where that bar is in sight there (a loop's
  * further on is brought to). With the View's Lyrics, each bar's words under the beats they are sung
  * on (ADR 0108).
  */
 export function GridView({
+  title,
+  credits,
   performance,
   headings,
   beat,
@@ -31,6 +36,8 @@ export function GridView({
   onBeat,
   onLoop,
 }: {
+  title: string
+  credits?: ScoreHeader | undefined
   performance: Performance
   headings: readonly string[]
   beat: PlayedBeat
@@ -46,6 +53,7 @@ export function GridView({
 }) {
   const { t } = useTranslation('player')
   const bar = writtenBarOf(performance, beat.bar)
+  const perRow = useGridBars()
   const sung = useMemo(() => (words ? gridWords(performance) : undefined), [words, performance])
   const scroller = useRef<HTMLElement>(null)
   // The bar last kept in sight; none before the Grid opens.
@@ -68,11 +76,13 @@ export function GridView({
     <section
       ref={scroller}
       aria-label={t('views.grid')}
-      className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col gap-6 overflow-y-auto px-3 overscroll-contain *:shrink-0"
+      className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col gap-3.5 overflow-y-auto px-3 overscroll-contain *:shrink-0"
     >
-      <div className="relative mx-auto w-full">
+      <ViewTitle title={title} credits={credits} />
+      <div className="relative mx-auto w-full lg:px-24">
         <ChordChart
           tap="go"
+          rowBars={perRow}
           performance={performance}
           headings={headings}
           playing={bar}
@@ -83,7 +93,7 @@ export function GridView({
         />
         {loop ? <GridLoopGrips performance={performance} loop={loop} onLoop={onLoop} /> : null}
       </div>
-      <div aria-hidden className="-mt-6 h-(--float-room) shrink-0" />
+      <div aria-hidden className="-mt-3.5 h-(--float-room) shrink-0" />
       <BackToPlayhead follow={follow} />
     </section>
   )

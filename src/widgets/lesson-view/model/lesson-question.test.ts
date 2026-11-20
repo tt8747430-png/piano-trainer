@@ -4,6 +4,7 @@ import { COURSES } from '@/entities/course'
 import { lessonById, LESSONS } from '@/entities/lesson'
 import {
   answerSounds,
+  FRESH_QUESTION,
   chosenOf,
   isRight,
   questionAnswer,
@@ -131,52 +132,38 @@ describe('isRight', () => {
 })
 
 describe('questionReducer', () => {
-  const open = questionReducer(null, { type: 'open', id: '0.2' })
+  const open = FRESH_QUESTION
   const toggle = (state: QuestionState, key: number) =>
     questionReducer(state, { type: 'toggle', key: midi(key), answer: E_MINOR })
 
-  it('opens one question at a time, with nothing chosen', () => {
-    expect(open).toEqual({ id: '0.2', chosen: [], stage: 'choosing' })
-    const moved = questionReducer(
-      { id: '0.2', chosen: keys(64), stage: 'wrong' },
-      { type: 'open', id: '1.0' },
-    )
-    expect(moved).toEqual({ id: '1.0', chosen: [], stage: 'choosing' })
-  })
-
   it('toggles a key, and a change after a verdict chooses again', () => {
     const one = toggle(open, 64)
-    expect(one?.chosen).toEqual([64])
-    expect(toggle(one, 64)?.chosen).toEqual([])
-    const judged: QuestionState = { id: '0.2', chosen: keys(64, 67, 70), stage: 'wrong' }
-    expect(toggle(judged, 70)).toEqual({ id: '0.2', chosen: [64, 67], stage: 'choosing' })
+    expect(one.chosen).toEqual([64])
+    expect(toggle(one, 64).chosen).toEqual([])
+    const judged: QuestionState = { chosen: keys(64, 67, 70), stage: 'wrong' }
+    expect(toggle(judged, 70)).toEqual({ chosen: [64, 67], stage: 'choosing' })
   })
 
   it('judges the keys as soon as they are as many notes as the answer’s', () => {
     const two = toggle(toggle(open, 64), 67)
-    expect(two?.stage).toBe('choosing')
-    expect(toggle(two, 71)?.stage).toBe('right')
-    expect(toggle(two, 70)?.stage).toBe('wrong')
+    expect(two.stage).toBe('choosing')
+    expect(toggle(two, 71).stage).toBe('right')
+    expect(toggle(two, 70).stage).toBe('wrong')
     // A note doubled an octave up is one note of the answer, not one more.
-    expect(toggle(toggle(two, 76), 76)?.stage).toBe('choosing')
-    expect(toggle(two, 76)?.stage).toBe('choosing')
+    expect(toggle(toggle(two, 76), 76).stage).toBe('choosing')
+    expect(toggle(two, 76).stage).toBe('choosing')
   })
 
   it('shows the answer and starts again', () => {
-    expect(questionReducer(open, { type: 'reveal' })?.stage).toBe('answer')
-    expect(
-      questionReducer({ id: '0.2', chosen: keys(64), stage: 'answer' }, { type: 'retry' }),
-    ).toEqual({ id: '0.2', chosen: [], stage: 'choosing' })
+    expect(questionReducer(open, { type: 'reveal' }).stage).toBe('answer')
+    expect(questionReducer({ chosen: keys(64), stage: 'answer' }, { type: 'retry' })).toEqual(
+      FRESH_QUESTION,
+    )
   })
 
-  it('closes, when an example plays', () => {
-    expect(questionReducer(open, { type: 'close' })).toBeNull()
-  })
-
-  it('ignores a key while the answer is shown, and anything when no question is open', () => {
-    const shown: QuestionState = { id: '0.2', chosen: [], stage: 'answer' }
+  it('ignores a key while the answer is shown', () => {
+    const shown: QuestionState = { chosen: [], stage: 'answer' }
     expect(toggle(shown, 60)).toBe(shown)
-    expect(questionReducer(null, { type: 'reveal' })).toBeNull()
   })
 })
 
@@ -190,31 +177,29 @@ describe('chosenOf', () => {
 
 describe('questionKeys', () => {
   it('shows the chosen keys while choosing, the verdict after a check, the answer when shown', () => {
-    expect(
-      questionKeys({ id: 'q', chosen: keys(64), stage: 'choosing' }, E_MINOR).selected,
-    ).toEqual(new Set([64]))
+    expect(questionKeys({ chosen: keys(64), stage: 'choosing' }, E_MINOR).selected).toEqual(
+      new Set([64]),
+    )
     // Wrong: the keys that are not the answer's marked, the missing ones left to find.
-    const wrong = questionKeys({ id: 'q', chosen: keys(64, 68, 71), stage: 'wrong' }, E_MINOR)
+    const wrong = questionKeys({ chosen: keys(64, 68, 71), stage: 'wrong' }, E_MINOR)
     expect(wrong.wrong).toEqual(new Set([68]))
     expect(wrong.keys).toEqual([64, 68, 71])
-    expect(questionKeys({ id: 'q', chosen: [], stage: 'answer' }, E_MINOR).keys).toEqual([
-      64, 67, 71,
-    ])
+    expect(questionKeys({ chosen: [], stage: 'answer' }, E_MINOR).keys).toEqual([64, 67, 71])
   })
 
   it('judges an answer in order key by key, so a note in the wrong place is marked wrong', () => {
     const inversion = questionAnswer({ notes: ['E', 'G', 'C'], rising: true })
-    const wrong = questionKeys({ id: 'q', chosen: keys(60, 64, 67), stage: 'wrong' }, inversion)
+    const wrong = questionKeys({ chosen: keys(60, 64, 67), stage: 'wrong' }, inversion)
     expect(wrong.wrong).toEqual(new Set([60]))
     expect([...wrong.marks.keys()]).toEqual([64, 67])
-    const octave = questionKeys({ id: 'q', chosen: keys(52, 55, 60), stage: 'right' }, inversion)
+    const octave = questionKeys({ chosen: keys(52, 55, 60), stage: 'right' }, inversion)
     expect(octave.wrong).toEqual(new Set())
     expect(octave.marks.get(midi(60))).toEqual({ tone: 'scale', label: 'C' })
   })
 
   it('marks a slash chord’s lowest key wrong when it is not the bass', () => {
     const overB = questionAnswer({ chord: 'G/B' })
-    const judged = questionKeys({ id: 'q', chosen: keys(55, 59, 62), stage: 'wrong' }, overB)
+    const judged = questionKeys({ chosen: keys(55, 59, 62), stage: 'wrong' }, overB)
     expect(judged.wrong).toEqual(new Set([55]))
   })
 })

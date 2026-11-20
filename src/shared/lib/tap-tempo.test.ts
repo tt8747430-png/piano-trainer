@@ -30,3 +30,16 @@ describe('tapTempo', () => {
     expect(tapped([0, 500, 5000, 5250])).toEqual([null, 120, null, 240])
   })
 })
+
+describe('a stray tap (Chordio)', () => {
+  it('starts again from a gap half again off the average', () => {
+    let taps: readonly number[] = []
+    for (const time of [0, 500, 1000, 1500]) taps = tapTempo(taps, time).taps
+    // 500 ms gaps, then a double tap 100 ms after: only its own two taps are kept.
+    const doubled = tapTempo(taps, 1600)
+    expect(doubled.taps).toEqual([1500, 1600])
+    expect(doubled.bpm).toBe(600)
+    // A steady tap keeps them all.
+    expect(tapTempo(taps, 2000).bpm).toBe(120)
+  })
+})

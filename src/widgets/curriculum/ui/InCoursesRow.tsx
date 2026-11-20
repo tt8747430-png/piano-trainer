@@ -1,4 +1,3 @@
-import { FolderInput } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -26,11 +25,10 @@ export function InCoursesRow({ lessonId }: { lessonId: OwnLessonId }) {
     <>
       <RowButton
         title={t('own.inCourses')}
-        icon={FolderInput}
-        paint="yellow"
         value={
           named.length > 0 ? named.map((course) => course.title).join(', ') : t('own.noCourses')
         }
+        opens
         onClick={() => setOpen(true)}
       />
       <Sheet open={open} onOpenChange={setOpen}>

@@ -334,19 +334,6 @@ const CHARACTERISTIC: Partial<Record<ScaleKind, number>> = {
 }
 export const characteristicDegree = (kind: ScaleKind): number | undefined => CHARACTERISTIC[kind]
 
-/**
- * The chords a mode's vamp swings between (A43), by degree: Dorian i–IV, Mixolydian I–♭VII, Lydian
- * I–II, Phrygian i–♭II, Aeolian i–♭VI–♭VII. Empty for a scale with no vamp of its own.
- */
-const VAMPS: Partial<Record<ScaleKind, readonly number[]>> = {
-  dorian: [0, 3],
-  mixolydian: [0, 6],
-  lydian: [0, 1],
-  phrygian: [0, 1],
-  natural: [0, 5, 6],
-}
-export const modeVamp = (kind: ScaleKind): readonly number[] => VAMPS[kind] ?? []
-
 /** The scales a seven-note scale is compared with on its own tonic (A43): the major and the minor. */
 export const COMPARED_SCALES = ['major', 'natural'] as const
 export type ComparedScale = (typeof COMPARED_SCALES)[number]

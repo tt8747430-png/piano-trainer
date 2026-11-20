@@ -9,6 +9,7 @@ const course: Course = {
   shelf: 'chords',
   stage: 'intermediate',
   title: { en: 'Improvising with Chords', ru: 'Импровизация на аккордах' },
+  line: { en: 'Patterns, colours and your own melody', ru: 'Фактуры, краски и своя мелодия' },
   summary: {
     en: 'Turn a song’s chords into music of your own. Play them in different accompaniment patterns, colour them with 7ths, 6ths and added 9ths, and make up a melody over a loop.',
     ru: 'Превратите аккорды песни в собственную музыку. Играйте их разными фактурами, раскрашивайте септимами, секстами и добавленной ноной и сочиняйте мелодию над гармоническим кругом.',

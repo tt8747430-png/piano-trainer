@@ -19,13 +19,24 @@ back gets a score they did not ask for.
 - **It is played to the song's click**: a bar's count-in, then the click if the Click switch is on, and Play melody
   (the song's top single staff) under it if that is on. Both may change while it records. The take's beats are the
   piece's, so writing it needs no tempo found from the playing. Each key and pedal is placed where it was heard less
-  the piano's own lateness, as Calibrate timing measured it (ADR 0034); how did I play judges at ±80 ms, early or
-  late beyond that within half a beat (`feedbackOf`), so the windows need no setting of their own.
+  the piano's own lateness, as Calibrate timing measured it (ADR 0034); how did I play judges by the beat (`feedbackOf`,
+  Metronaut's windows): on the beat within a tenth of a beat (never under 40 ms nor over 120, `onBeatMs`), early or
+  late beyond it, close to a quarter of a beat (a third off) and further off to half a beat (two thirds off), wrong
+  or missed all of it; the take's share and each bar's are what the penalties leave, whole from 96 % (`shareOf`), so
+  the windows need no setting of their own.
 - **MIDI only.** Record needs a connected MIDI keyboard; without one its popover says so and how to connect one. The
   on-screen keys and the computer's keys are not recorded: their timing is the input's lag.
 - **In the editor's gear** (ADR 0114): Record a take, Takes (only once the song has one) and Settings › Recording;
   while it records, the recording strip stands at the sheet's foot. The takes' sheet opens by itself on
-  a take just kept. A take has a page (`/edit/$pieceId/takes/$takeId`): its name, a piano roll, Play and Keep bars.
+  a take just kept. Its takes are one card of 64 rows (Play in its sand circle, the name over when it was made, its
+  length and tempo, ···: Review, Download, Delete at once with Undo), with Select: Select in the sheet's header,
+  Cancel while on, the title "n selected" or "Select takes", a check in Play's place, and the selection bar at the
+  sheet's foot with Download and Delete, or Download all and Delete all while nothing is chosen. A take has a page
+  (`/edit/$pieceId/takes/$takeId`, the Take board): "Take" in the bar with Download; its name; Play beside its length
+  and tempo over its song and day; the piano roll across the page (`TakeRoll`: the notes from the split up in amber,
+  under it in blue, the bars on hairlines, the whole take across its width, its bars' numbers under it, each playing
+  from its bar, the kept ones on the yellow wash); Keep bars, which names the bars it keeps and asks; and Delete
+  apart at the foot. On a laptop Keep bars and Delete stand 560 wide under the roll. The page draws no keys.
 - **Saved in `pt-takes`**, written compactly. Room for 60,000 notes in all keeps the takes inside every browser's
   quota; a take stops at the room or at 10 minutes. A take ends kept when the editor is left or the app hidden.
   Deleting a song deletes its takes.

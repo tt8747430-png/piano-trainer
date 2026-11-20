@@ -90,4 +90,6 @@ files were sent too; this session could see only their thumbnails.
 
 ## Reporting
 
+In a loop, one line inside the turn, never a closing report (`owner-way`). Otherwise:
+
 One line per question in the report, beside the seven: kept, or fixed with what changed.

@@ -35,11 +35,14 @@ export function LineSegments({
   line,
   chord,
   end,
+  slot = 'h-[2.25em] pb-[0.375em]',
   className,
 }: {
   line: LyricLine
   chord: (chord: number, segment: number) => ReactNode
   end?: ReactNode
+  /** The room over the words a chord stands in: the Lyrics view's chip, 2 over the words (its board). */
+  slot?: string
   className?: string
 }) {
   // The verses sung in it, verse 1 first.
@@ -58,9 +61,7 @@ export function LineSegments({
       {line.segments.map(({ chord: at, verses: sung }, segment) =>
         line.sung ? (
           <span key={segment} className="flex max-w-full min-w-0 flex-col">
-            <span className="flex h-[2.25em] items-end pr-[0.5em] pb-[0.375em]">
-              {shown(at, segment)}
-            </span>
+            <span className={cn('flex items-end pr-[0.5em]', slot)}>{shown(at, segment)}</span>
             {verses.map((verse) => (
               <span key={verse} className={cn(verse > 0 && 'font-normal text-muted-foreground')}>
                 <Words words={sung[verse]} />

@@ -49,11 +49,22 @@
   --p-ochre: #a8742a;
   /* The canvas's eyebrow: a small line naming where something is (Continue, Lesson 7 of 13). */
   --p-rust: #a8551f;
+  --p-roll-amber: #f2b33d;
+  --p-roll-blue: #8fb3d9;
   --p-rust-night: #e39a66;
   /* A song's bars played through (canvas 125's bar map). */
   --p-copper: #c26a2e;
   --p-copper-night: #d98a52;
-  --p-crimson: #a34243;
+  /* A day practised on the streak's calendar (the board's CAL). */
+  --p-ember: #e8b48f;
+  --p-ember-night: #7a4e33;
+  /* A badge's medal, the metal of its tier (the board's MEDC): the same by day and by night. */
+  --p-medal-bronze: #c98b5a;
+  --p-medal-silver: #a9a39b;
+  --p-medal-gold: #d9a93e;
+  --p-medal-platinum: #8fb3b8;
+  --p-medal-none: #dad1c8;
+  --p-crimson: #b3261e;
   /* The shade cast by night: near black, warm. */
   --p-night-shade: #0a0705;
 
@@ -96,20 +107,36 @@
   --primary-foreground: var(--p-ink);
   /* A honey wash's edge: the Range strip's ring round the keys shown. */
   --honey-ring: var(--p-honey-deep);
+  /* The chosen among equals on a card (Played through's weakest bars): honey's wash under its ring. */
+  --honey-wash: #fbf1dd;
+  /* Edit layout (R76): a panel's dashed outline, and the honey zones a panel may be put in. */
+  --layout-edge: #b98a32;
+  --layout-zone: rgb(237 198 132 / 0.28);
+  /* A bar's slips, none to three or more (Played through, canvas 122): sand, then warming to honey. */
+  --slip-0: #e4ddd3;
+  --slip-1: #f8d9c2;
+  --slip-2: #f0a877;
+  --slip-3: var(--p-honey-deep);
   /* Honey as ink: a mark that adds (the staff's +), the canvas's #7A5418. */
   --honey-ink: var(--p-honey-ink);
   /* A toast's action (Undo): honey on the ink toast; by night the toast is light, so the deep honey. */
   --toast-action: var(--p-honey);
   --eyebrow: var(--p-rust);
   --played: var(--p-copper);
+  --practised-day: var(--p-ember);
+  --medal-bronze: var(--p-medal-bronze);
+  --medal-silver: var(--p-medal-silver);
+  --medal-gold: var(--p-medal-gold);
+  --medal-platinum: var(--p-medal-platinum);
+  --medal-none: var(--p-medal-none);
   /* What dims the page under a sheet or a dialog (the board's BSHEET): warm ink, no blur. */
   --scrim: rgb(51 41 33 / 0.28);
   /* The Circle of fifths' washes (canvas 182): the chosen key's neighbours outside, its relative and
-     its neighbours inside, honey lighter each step out. Drawn from the action and the page, so they
-     follow the theme. */
-  --wheel-near: color-mix(in oklab, var(--primary) 45%, var(--card));
-  --wheel-relative: color-mix(in oklab, var(--primary) 58%, var(--background));
-  --wheel-near-inner: color-mix(in oklab, var(--primary) 18%, var(--background));
+     its neighbours inside, honey lighter each step out. Drawn from the action and the card, so they
+     follow the theme; by Day within 2 of the board's #F6E7C8, #F3D9A8 and #FAF0DC. */
+  --wheel-near: color-mix(in oklab, var(--primary) 43%, var(--card));
+  --wheel-relative: color-mix(in oklab, var(--primary) 70%, var(--card));
+  --wheel-near-inner: color-mix(in oklab, var(--primary) 26%, var(--card));
   /* What is chosen: an item checked in umber, neutral, so colour keeps meaning something. */
   --selected: var(--p-ink);
   --selected-foreground: var(--p-paper-card);
@@ -117,14 +144,24 @@
   --secondary-foreground: var(--p-sky-mist-ink);
   --muted: var(--p-sand-100);
   --muted-foreground: var(--p-ink-soft);
+  /* The laptop sidebar's places (calm_kit's side rail): a place in a deeper soft ink, the current one in the
+     deepest ink, so the rail reads quieter than the page's own ink yet never as faint as a caption. */
+  --nav-foreground: #4a433c;
+  --nav-current-foreground: #1a1612;
   /*
    * The one selected fill (R15): a segment, a chip, a tab, a place, a tool, a picker's cell. A step
    * darker than the hover's muted sand, so hover never looks chosen; neutral, as the chosen is.
    */
   --chosen: var(--p-line);
-  /* A switch, the canvas's SWITCH: the sage track when on, the white knob over it. */
+  /*
+   * What the music plays now among choices that each show what they are (the Player's Pattern
+   * sheet, the board's #FBF1DD): a honey wash, its edge the honey ring. Drawn from the action and the
+   * card, so it follows the theme.
+   */
+  --chosen-honey: color-mix(in oklab, var(--primary) 25%, var(--card));
+  /* A switch, the canvas's SWITCH: the sage track when on, the knob in the cards' paper over it. */
   --switch-on: #7fb685;
-  --switch-knob: #ffffff;
+  --switch-knob: var(--p-paper-card);
   --accent: var(--p-sand-100);
   --accent-foreground: var(--p-ink);
   --link: var(--p-sky-deep);
@@ -192,6 +229,11 @@
   --shade: var(--p-ink);
   --shade-near: 12%;
   --shade-far: 14%;
+  /* What floats over the page (bars, the tab bar, the floating actions): a tight lift with no shade pooled
+     under it (the canvas's FLOAT; owner, 2026-11-19: "i dont like this dim under the floating actions"). */
+  --elevation-float:
+    0 1px 2px color-mix(in oklab, var(--shade) 10%, transparent),
+    0 2px 6px -2px color-mix(in oklab, var(--shade) 10%, transparent);
   --elevation-1:
     0 1px 2px color-mix(in oklab, var(--shade) var(--shade-near), transparent),
     0 3px 8px -2px color-mix(in oklab, var(--shade) var(--shade-far), transparent);
@@ -231,6 +273,12 @@
   --hand-rh-ink: var(--p-brick-deep);
   --hand-lh-ink: var(--p-lilac-deep);
   --hand-staff-ink: var(--p-grass-deep);
+  /*
+   * A take's piano roll (the Takes and Take boards' PROLL): the notes above the split in amber, those
+   * under it in blue, so the two staves a take is written into read apart at a glance; only on a roll.
+   */
+  --roll-upper: var(--p-roll-amber);
+  --roll-lower: var(--p-roll-blue);
 
   /*
    * The keys: paper keys parted by a soft line, a warm black, on their bed. By
@@ -254,14 +302,16 @@
   --key-cast: color-mix(in oklab, var(--p-ink) 22%, transparent);
   --on-key-white: var(--p-ink);
   --on-key-black: var(--p-white);
-  /* A chord tone, a key's tonic or its other notes wear their full paint, at rest and sounding (the board's keys,
-     canvas 197); a key down sinks under the felt, and a plain key down turns sky. A key's tonic is rose and its
-     other notes honey sand, as the root among a chord's tones (canvas, Scales). */
+  /* A chord tone and a key's tonic wear their full paint, at rest and sounding (the board's keys, canvas 197); a
+     key down sinks under the felt, and a plain key down turns sky. A key's tonic is rose and its other notes the
+     boards' honey sand, #F3D9A8 by Day (Scales, an exercise's first position), the honey 70% into the ivory. */
   --key-down: var(--p-sky);
   --on-key-down: var(--p-ink);
-  --key-scale: var(--p-yellow);
+  --key-scale: color-mix(in oklab, var(--primary) 70%, var(--key-white));
   --on-key-scale: var(--p-ink);
   --key-tonic: var(--p-brick);
+  /* A chord's keys on a small picture of the keys (the boards' MINIKEYS, #E9C4B8): brick washed into the ivory. */
+  --key-chord: color-mix(in oklab, var(--p-brick) 60%, var(--key-white));
   --on-key-tonic: var(--p-ink);
   /* The focused key's ring, in two tones so it shows on any key's colour: dark outside, light inside. */
   --key-focus: var(--p-ink);
@@ -273,6 +323,8 @@
   [data-theme='dark'] {
     --background: var(--p-dusk-950);
     --foreground: var(--p-dusk-ink);
+    --nav-foreground: var(--p-dusk-muted);
+    --nav-current-foreground: var(--p-dusk-ink);
     --card: var(--p-dusk-900);
     --card-foreground: var(--p-dusk-ink);
     --popover: var(--p-dusk-900);
@@ -281,10 +333,18 @@
     --primary: var(--p-honey-night);
     --primary-foreground: var(--p-dusk-950);
     --honey-ring: var(--p-honey-night);
+    --honey-wash: color-mix(in oklab, var(--p-honey-night) 18%, var(--card));
+    --layout-edge: var(--p-honey-night);
+    --layout-zone: color-mix(in oklab, var(--p-honey-night) 24%, transparent);
+    --slip-0: var(--p-dusk-control);
+    --slip-1: color-mix(in oklab, #f0a877 35%, var(--card));
+    --slip-2: color-mix(in oklab, #f0a877 70%, var(--card));
+    --slip-3: var(--p-honey-night);
     --honey-ink: var(--p-honey-night);
     --toast-action: var(--p-honey-ink);
     --eyebrow: var(--p-rust-night);
     --played: var(--p-copper-night);
+    --practised-day: var(--p-ember-night);
     --scrim: rgb(10 7 5 / 0.84);
     --hand-rh-ink: var(--p-brick);
     --hand-lh-ink: var(--p-lilac-light);
@@ -361,6 +421,8 @@
     --wheel-near: color-mix(in oklab, var(--primary) 22%, var(--card));
     --wheel-relative: color-mix(in oklab, var(--primary) 34%, var(--background));
     --wheel-near-inner: color-mix(in oklab, var(--primary) 13%, var(--background));
+    --chosen-honey: color-mix(in oklab, var(--primary) 40%, var(--card));
+    --layout-edge: var(--p-honey-ink);
   }
   @media screen {
     [data-theme='dark'] {

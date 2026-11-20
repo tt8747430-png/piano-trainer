@@ -2,20 +2,31 @@ import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { COURSES, courseById, courseStepIds, type Course } from '@/entities/course'
 import { selectOwnCourse, useOwnLessons } from '@/entities/own-lessons'
-import { RemoveGroup, useCourseDraft } from '@/features/edit-original'
+import { DraftPublishing, RemoveGroup, useCourseDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { shareLink } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { ActionRow, BackButton, RowLink, say, ScreenHeader, SettingsGroup } from '@/shared/ui'
-import { PublishRow } from '@/widgets/content-editor'
+import {
+  ActionRow,
+  BackButton,
+  RowLink,
+  say,
+  ScreenHeader,
+  SettingsGroup,
+  ThingHead,
+} from '@/shared/ui'
+import { useStanding } from '@/widgets/content-editor'
+import { CourseMark } from './CourseMark'
 import { OwnCourseSettings } from './OwnCourseSettings'
 
 /**
- * A course's Settings (`/courses/$courseId/settings`, round 28, as a song's): Share link, and apart
- * the learner's progress in it reset, asked first. An editor's: the shelf it stands on, and
- * (R29 B6) Publish… before Share link, Delete last. What it is (its title, summary, level and length) is
- * written on the course itself, in Edit. A course of the learner's own (R30-5): `OwnCourseSettings`.
+ * A course's Settings (`/courses/$courseId/settings`), one shape with a lesson's (owner, 2026-11-18:
+ * "refactor the courses settings like the lesons settings with better structure"; the board's
+ * THINGSET): the course at the head (its picture, its name, its lessons), The course (the shelf it
+ * stands on, a way to the shelves' Edit), Share, for an editor its Publishing, the learner's progress
+ * in it, and Delete last and apart. One column, phone and laptop. A course of the learner's own
+ * (R30-5): `OwnCourseSettings`.
  */
 export function CourseSettingsPage() {
   const { t } = useTranslation('learn')
@@ -35,15 +46,27 @@ export function CourseSettingsPage() {
     if (shared === 'failed') say(t('settings.shareFailed'))
   }
   return (
-    <div className="flex flex-col gap-2 pb-8">
-      <ScreenHeader title={t('settings.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
-        <p className="px-1 text-muted-foreground text-pretty">{title}</p>
-        {editsContent(account) ? <EditorRows course={course} /> : null}
+    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
+      <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:max-w-295">
+        <ThingHead
+          mark={<CourseMark />}
+          name={title}
+          line={t('settings.courseLine', { count: course.lessons.length })}
+        />
+        {editsContent(account) ? (
+          <SettingsGroup flush title={t('settings.course')}>
+            <RowLink
+              title={t('edit.course.shelf')}
+              value={t(`shelves.${course.shelf}`)}
+              render={<Link to="/courses" search={{ edit: true }} />}
+            />
+          </SettingsGroup>
+        ) : null}
         <SettingsGroup flush title={t('settings.share')}>
-          {editsContent(account) ? <CoursePublishRow course={course} /> : null}
           <ActionRow title={t('settings.shareLink')} onClick={() => void share()} />
         </SettingsGroup>
+        {editsContent(account) ? <CoursePublishing course={course} title={title} /> : null}
         <ResetStepsRow
           steps={courseStepIds(course)}
           words={{
@@ -53,8 +76,8 @@ export function CourseSettingsPage() {
           }}
         />
         {editsContent(account) && !COURSES.some((each) => each.id === course.id) ? (
-          // One made in the app, not one the app ships with: Unpublish and Delete (round 28), last
-          // of all (R25).
+          // One made in the app, not one the app ships with: Delete (round 28), last of all and
+          // apart (R25).
           <RemoveGroup
             kind="course"
             id={course.id}
@@ -67,29 +90,18 @@ export function CourseSettingsPage() {
   )
 }
 
-/** An editor's rows (ADR 0116): the shelf it stands on, a way to the shelves' Edit mode. */
-function EditorRows({ course }: { course: Course }) {
-  const { t } = useTranslation('learn')
-  return (
-    <SettingsGroup flush title={t('settings.course')}>
-      <RowLink
-        title={t('edit.course.shelf')}
-        value={t(`shelves.${course.shelf}`)}
-        render={<Link to="/courses" search={{ edit: true }} />}
-      />
-    </SettingsGroup>
-  )
-}
-
-/** Publish… (R29 B6): its Publish page, where it stands as its value. */
-function CoursePublishRow({ course }: { course: Course }) {
+/** A course's Publishing (ADR 0116), its draft's: where it stands, Versions, its changes. */
+function CoursePublishing({ course, title }: { course: Course; title: string }) {
+  const { t } = useTranslation(['editor', 'learn'])
   const draft = useCourseDraft(course)
+  const { published, standing } = useStanding('course', course.id, draft)
   return (
-    <PublishRow
-      kind="course"
-      id={course.id}
+    <DraftPublishing
       draft={draft}
-      link={<Link to="/courses/$courseId/publish" params={{ courseId: course.id }} />}
+      title={title}
+      status={published === null ? undefined : t(`publishPage.standing.${standing}`)}
+      unreadable={t('learn:edit.course.unreadable')}
+      onReset={draft.reopen}
     />
   )
 }

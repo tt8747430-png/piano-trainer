@@ -21,8 +21,6 @@ export interface LoopOptions {
   readonly fromTick: Tick
   readonly speedUp?: SpeedUp | undefined
   readonly countIn?: boolean
-  /** Whether the count-in's clicks sound: a count-in seen alone counts unheard (B7). */
-  readonly countInHeard?: boolean
   readonly metronome?: boolean
   /** The Metronome's sound and squares the clicks play in (A35, A39). */
   readonly voicing?: ClickVoicing | undefined
@@ -34,6 +32,10 @@ export interface LoopOptions {
    * ticks between loops): a breath to reset the hand before the passage comes round again.
    */
   readonly rest?: number
+  /** The rest's beats silent, a bar to breathe in, where they would click (Between repeats: Rest). */
+  readonly restSilent?: boolean
+  /** How many passes it plays, the first counting; endless without. */
+  readonly passes?: number
 }
 
 /** One pass queued on the audio clock: its sounds, cues and end count from `start`, at its tempo. */
@@ -102,14 +104,20 @@ function passAt(
     fromTick: first ? options.fromTick : options.range.from,
     toTick: options.range.to,
     countIn: first && options.countIn === true,
-    countInHeard: options.countInHeard !== false,
     metronome: options.metronome === true,
     ...(options.voicing ? { voicing: options.voicing } : {}),
     clicks: options.clicks !== false,
     swing: options.swing ?? 'straight',
   })
   return {
-    ...(first ? scheduled : rested(scheduled, options.rest ?? 0, tempo, options.clicks !== false)),
+    ...(first
+      ? scheduled
+      : rested(
+          scheduled,
+          options.rest ?? 0,
+          tempo,
+          options.clicks !== false && options.restSilent !== true,
+        )),
     start,
     tempo,
   }
@@ -130,8 +138,9 @@ export const startLoop = (performance: Performance, options: LoopOptions, start:
  */
 export function advanceLoop(loop: Loop, time: number): Loop {
   const last = loop.passes.at(-1)
+  const more = loop.options.passes === undefined || loop.queued < loop.options.passes
   const next =
-    last && time >= endOf(last) - LOOP_LEAD
+    more && last && time >= endOf(last) - LOOP_LEAD
       ? [
           passAt(
             loop.performance,
@@ -146,6 +155,9 @@ export function advanceLoop(loop: Loop, time: number): Loop {
     ? loop
     : { ...loop, passes, queued: loop.queued + next.length }
 }
+
+/** Whether a loop of so many passes has played them all: nothing is left to sound. */
+export const loopOver = (loop: Loop): boolean => loop.passes.length === 0
 
 /** The beat group sounding at `time` on the clock, or null before the music starts. */
 export function beatGroupAt(loop: Loop, time: number): number | null {

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import { createFakePublicLibrary } from './fake'
-import type { PublicCategory } from './types'
 
 const ANA = { id: 'ana', name: 'Ana' }
 const song = (title: string) => ({ title, music: { key: 'C', meter: '4/4' } })
@@ -15,14 +14,13 @@ const publication = (
   sourceId: string,
   title: string,
   version = '1',
-  category: PublicCategory | null = null,
+  tags: readonly string[] = [],
 ) => ({
   kind: 'song' as const,
   sourceId,
   title,
   authorName: 'Ana',
-  meta: { key: 'C', meter: '4/4' },
-  category,
+  meta: { key: 'C', meter: '4/4', tags },
   body: song(title),
   version,
 })
@@ -91,22 +89,17 @@ describe('a public library', () => {
     })
   })
 
-  it('keeps a song’s category, and browses one category', async () => {
+  it('keeps a song’s tags, and browses one tag', async () => {
     const { library: shelf } = library()
-    await shelf.publish(publication('my-1', 'Minuet', '1', 'classical'))
-    await shelf.publish(publication('my-2', 'Ballad', '1', 'pop'))
-    const classical = await shelf.browse({
-      kind: 'song',
-      sort: 'new',
-      query: '',
-      category: 'classical',
-    })
+    await shelf.publish(publication('my-1', 'Minuet', '1', ['Classical']))
+    await shelf.publish(publication('my-2', 'Ballad', '1', ['Pop']))
+    const classical = await shelf.browse({ kind: 'song', sort: 'new', query: '', tag: 'Classical' })
     expect(classical).toMatchObject({
       ok: true,
-      value: [{ title: 'Minuet', category: 'classical' }],
+      value: [{ title: 'Minuet', meta: { tags: ['Classical'] } }],
     })
     const all = await shelf.browse({ kind: 'song', sort: 'new', query: '' })
-    expect(all.ok && all.value.map((entry) => entry.category)).toEqual(['pop', 'classical'])
+    expect(all.ok && all.value.map((entry) => entry.title)).toEqual(['Ballad', 'Minuet'])
   })
 
   it('opens a song with the first line of its chart, for its card', async () => {

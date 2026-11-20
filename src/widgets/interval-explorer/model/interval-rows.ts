@@ -76,10 +76,6 @@ export function everyInterval(
 export const isRowInterval = (raw: unknown): raw is RowInterval =>
   ROW_INTERVALS.some((name) => name === raw)
 
-/** The group an interval is in: within the octave, or past it. */
-export const groupOf = (name: RowInterval): IntervalGroup =>
-  INTERVAL_ROWS.compound.some((each) => each === name) ? 'compound' : 'simple'
-
 /** What an interval within the octave turns into upside down (the 3rd into the 6th, 9 between them). */
 export const INVERSIONS: Readonly<Partial<Record<RowInterval, RowInterval>>> = {
   r: 'P8',

@@ -16,7 +16,7 @@ song, learn this lesson, write this bar) is the screen's first and largest thing
 | Progressive disclosure | the next step, not every option; detail behind ⓘ, sheets and folds                        |
 | Consistency            | one component per job; familiar platform patterns beat inventions                         |
 | Contrast               | honey marks the one action; danger is red and alone; 4.5:1 text, in both themes           |
-| Proximity              | what belongs together shares a card; destructive acts sit apart                           |
+| Proximity              | what belongs together sits closer than what does not; destructive acts sit apart         |
 | Alignment              | one gutter, one grid, shared edges, tabular numbers                                       |
 | Context                | same features upright, on its side and on a laptop; offline is no error                   |
 | User control           | undo or confirm every loss; a way back from every screen; drafts kept                     |
@@ -43,7 +43,9 @@ song, learn this lesson, write this bar) is the screen's first and largest thing
 
 - **Proximity:** what sits close is read as one thing. Items of a group are closer to each other than the group is to
   the next; a control sits beside what it changes, never across the screen from it.
-- **Common region:** a card, capsule or sheet says "these belong together"; never a card in a card.
+- **Common region:** a card, capsule or sheet says "these belong together", so strongly it overrides proximity; used
+  only when whitespace cannot group (NN/g): a card is a thing you open, among its siblings, never the page's own
+  subject on its own page, never a lone box on the paper, never a card in a card (`edge-lines`, its laws).
 - **Similarity:** the same thing looks the same everywhere (shape, colour, icon, word); things that look alike are read
   as alike, so two different acts never share a look.
 - **Continuity and alignment:** a row or column is followed by the eye; things on one edge are read as one list.

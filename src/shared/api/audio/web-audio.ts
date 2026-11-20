@@ -497,8 +497,6 @@ export function createWebAudioOutput({
   const held = new Map<Midi, Voice>()
   /** The keyboard's speaker the notes go to, while they go through the piano. */
   let piano: MidiSoundOutput | null = null
-  /** The live voice's volume: a gain, the square of the Volume's share (ADR 0105's way). */
-  let liveVolume = 1
 
   /** The AudioContext, created on first use; null where the browser has none. */
   const openContext = (): AudioContext | null => {
@@ -597,7 +595,7 @@ export function createWebAudioOutput({
       if (!audio) return
       if (heldBack(audio)) void audio.resume()
       // Under the soft pedal two thirds as loud and darker; every key as loud as the piano's Volume.
-      const level = liveVolume * (soft ? SOFT_GAIN : 1)
+      const level = soft ? SOFT_GAIN : 1
       const out = soft ? softTone(audio, key) : audio.destination
       const sampled = instruments?.piano(key, gain, audio.currentTime, level, out)
       held.set(
@@ -657,9 +655,6 @@ export function createWebAudioOutput({
     release: voice.release,
     pedal: voice.pedal,
     pedals: voice.pedals,
-    pianoVolume(share) {
-      liveVolume = Math.min(1, Math.max(0, share)) ** 2
-    },
     notesTo(output) {
       piano?.stop()
       piano = output

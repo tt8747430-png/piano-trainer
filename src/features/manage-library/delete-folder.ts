@@ -7,5 +7,5 @@ import * as edit from './model/layout-edits'
  * the app's songs in an own folder each to the archive, to be restored to its collection's folder.
  */
 export function deleteFolder(store: LibraryStore, catalog: LibraryCatalog, id: FolderId): void {
-  edit.editLibrary(store, catalog, (layout) => edit.dropFolder(layout, id, catalog))
+  edit.editLibrary(store, catalog, (layout) => edit.dropFolder(layout, id, catalog, Date.now()))
 }

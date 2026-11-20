@@ -1,8 +1,12 @@
+import { WORD_BREAK } from '@/shared/lib'
 import { netResult, type NetOptions } from '../network'
 import type { Json, Backend, PianoClient } from '../supabase'
 import {
   DESCRIPTION_MAX,
-  isPublicCategory,
+  isPublicLicence,
+  isPublicType,
+  TAG_MAX,
+  TAGS_MAX,
   RATED_MIN,
   type PublicEntry,
   type PublicLibrary,
@@ -13,7 +17,7 @@ import {
 // A song's first line of its chart rides along for its card (`body->sections->0->lines->0`): the
 // body itself stays on the server until the item is opened.
 const ENTRY =
-  'id, kind, title, author_id, saves, published_at, meta, category, opening:body->sections->0->lines->0'
+  'id, kind, title, author_id, saves, published_at, meta, opening:body->sections->0->lines->0'
 const LIMIT = 100
 
 interface EntryRow {
@@ -24,7 +28,6 @@ interface EntryRow {
   readonly saves: number
   readonly published_at: string
   readonly meta: Json
-  readonly category: string | null
   readonly opening: Json
 }
 
@@ -47,6 +50,18 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
   const rh = text(meta.rh)
   const lh = text(meta.lh)
   const description = text(meta.description)?.trim().slice(0, DESCRIPTION_MAX)
+  const composer = text(meta.composer)
+    ?.trim()
+    .slice(0, TAG_MAX * 4)
+  const type = isPublicType(meta.type) ? meta.type : undefined
+  const licence = isPublicLicence(meta.licence) ? meta.licence : undefined
+  const tags = Array.isArray(meta.tags)
+    ? meta.tags
+        .flatMap((tag) =>
+          typeof tag === 'string' && tag.trim() ? [tag.trim().slice(0, TAG_MAX)] : [],
+        )
+        .slice(0, TAGS_MAX)
+    : []
   const author = authors.get(row.author_id)
   const opening = typeof row.opening === 'string' ? row.opening : undefined
   return {
@@ -57,7 +72,6 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
     authorAvatar: builtInAvatar(author?.avatar ?? null),
     saves: row.saves,
     publishedAt: row.published_at,
-    category: isPublicCategory(row.category) ? row.category : null,
     rating: ratings.get(row.id) ?? null,
     ...(opening ? { opening } : {}),
     meta: {
@@ -66,6 +80,10 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
       ...(rh && { rh }),
       ...(lh && { lh }),
       ...(description && { description }),
+      ...(composer && { composer }),
+      ...(type && { type }),
+      ...(tags.length > 0 && { tags }),
+      ...(licence && { licence }),
     },
   }
 }
@@ -74,8 +92,9 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
 const thrown = (error: { message: string }, status: number) =>
   Object.assign(new Error(error.message), { status })
 
-/** A search typed by the learner, safe inside `ilike`: its own `%` and `_` match themselves. */
-const likeOf = (query: string) => `%${query.trim().replace(/[\\%_]/g, (char) => `\\${char}`)}%`
+/** A word as an `ilike` pattern inside an `or` filter: its wildcards escaped, quoted for its commas. */
+const likeOf = (word: string) =>
+  `"%${word.replace(/[\\%_]/g, (char) => `\\${char}`).replaceAll('"', '\\"')}%"`
 
 /** The Public library on Supabase (ADR 0116): its tables' row-level security and two functions. */
 export function createSupabasePublicLibrary(
@@ -131,12 +150,16 @@ export function createSupabasePublicLibrary(
     return data?.signedUrl ?? null
   }
   return {
-    browse: ({ kind, sort, query, category }) =>
+    browse: ({ kind, sort, query, tag }) =>
       ask(async (client) => {
         const filtered = () => {
           let request = client.from('public_items').select(ENTRY).eq('kind', kind)
-          if (category) request = request.eq('category', category)
-          if (query.trim()) request = request.ilike('title', likeOf(query))
+          if (tag) request = request.contains('meta', { tags: [tag] })
+          // Word by word, as the library's search: each word in the title or the composer's name.
+          for (const word of query.split(WORD_BREAK).filter(Boolean))
+            request = request.or(
+              `title.ilike.${likeOf(word)},meta->>composer.ilike.${likeOf(word)}`,
+            )
           return request
         }
         const { data, error, status } = await filtered()
@@ -186,14 +209,13 @@ export function createSupabasePublicLibrary(
         const avatar = await avatarOf(client, known.authors.get(data.author_id)?.avatar ?? null)
         return { entry: { ...entry, authorAvatar: avatar }, body: data.body }
       }),
-    publish: ({ kind, sourceId, title, authorName, meta, category, body, version }) =>
+    publish: ({ kind, sourceId, title, authorName, meta, body, version }) =>
       ask(async (client) => {
         const author = await me()
         const fields = {
           title,
           author_name: authorName,
           meta: meta as Json,
-          category: kind === 'song' ? (category ?? null) : null,
           body: body as Json,
           version,
         }

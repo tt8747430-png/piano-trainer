@@ -1,5 +1,7 @@
 export { chordLabels, chordLabelWidth, type ChordLabel } from './chord-label'
 export { cn } from './cn'
+export { daySaid } from './day-said'
+export { formatLocale } from './format-locale'
 export {
   partsFromParams,
   partsParams,
@@ -16,18 +18,14 @@ export {
   CHORD_LABELS,
   CHORD_RANGES,
   SONG_RANGES,
-  KEY_DOCKS,
   KEY_SIZES,
   NAMED_KEYS,
-  PEDALS_SHOWN,
   SWIPES,
   type CameraAngle,
   type ChordLabels,
   type ChordRange,
-  type KeyDock,
   type KeySize,
   type NamedKeys,
-  type PedalsShown,
   type SongRange,
   type Swipe,
 } from './keyboard-choices'
@@ -52,6 +50,7 @@ export {
 } from './latency'
 export {
   keepCentre,
+  onWhiteEdge,
   scrollToReveal,
   scrollToShow,
   keysInView,
@@ -93,9 +92,9 @@ export { useForgetScreens, useUp } from './use-up'
 export { UpProvider } from './up-provider'
 export type { FindUp, Up } from './up-context'
 export { READ_DISTANCE, useHiddenWhileReading } from './use-hidden-while-reading'
-export { useShownOnScrollUp } from './use-shown-on-scroll-up'
 export { hasFinePointer } from './fine-pointer'
-export { LANDSCAPE_PHONE, LAPTOP, useMediaQuery } from './use-media-query'
+export { LANDSCAPE_PHONE, LAPTOP, WIDE, useMediaQuery } from './use-media-query'
+export { setFocusMode, useFocusMode } from './use-focus-mode'
 export { useWakeLock } from './use-wake-lock'
 export { startKeyboardViewport, visibleBottom } from './keyboard-viewport'
 export { startKeyboardReveal } from './keyboard-reveal'

@@ -80,7 +80,8 @@ export function SheetSection({
   const name = t(`chordPlayer.sections.${section.kind}`)
   const bars = sectionBars(section, meter)
   const perBar = beatsPerBar(meter)
-  const columns = perBar * (useMediaQuery(WIDE) ? 4 : 2)
+  const wide = useMediaQuery(WIDE)
+  const columns = perBar * (wide ? 4 : 2)
   const chords = sectionChords(section)
   const {
     attributes,
@@ -102,7 +103,7 @@ export function SheetSection({
       style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn('flex min-w-0 flex-col gap-2', isDragging && 'opacity-0')}
     >
-      <div className="flex min-h-11 items-center gap-1.5">
+      <div className="flex min-h-11 items-center gap-2">
         <button
           type="button"
           onClick={onOpen}
@@ -150,12 +151,14 @@ export function SheetSection({
         >
           <Trash2 aria-hidden className="size-[18px]" />
         </button>
+        {/* A spacer, then the grip on the row's edge, as the board's head: the name shrinks before the grip moves. */}
+        <span aria-hidden className="flex-1" />
         <button
           ref={setActivatorNodeRef}
           type="button"
           aria-label={t('chordPlayer.drag', { name })}
           title={t('chordPlayer.drag', { name })}
-          className="-mr-3 ml-auto grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted active:cursor-grabbing"
+          className="grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted active:cursor-grabbing"
           {...attributes}
           {...listeners}
         >
@@ -185,7 +188,7 @@ export function SheetSection({
       <SortableContext items={ids} strategy={STILL}>
         <ol
           aria-label={t('chordPlayer.chordsOf', { name })}
-          className="grid gap-1 lg:gap-1.5"
+          className="grid gap-2 lg:gap-1.5"
           style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
         >
           {bars.flatMap((bar, at) =>
@@ -227,7 +230,7 @@ export function SheetSection({
           <li
             ref={end.setNodeRef}
             className="flex min-w-11"
-            style={{ gridColumn: `span ${Math.min(2, columns)}` }}
+            style={{ gridColumn: `span ${wide ? 1 : 2}` }}
           >
             <button
               type="button"

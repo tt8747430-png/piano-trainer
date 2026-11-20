@@ -40,15 +40,15 @@ export function TempoSteps({
   }
   return (
     // On its own page, 14 under the bar's buttons as the Metronome board sets it.
-    <div className={cn('flex w-full flex-col items-center gap-0.5', large && 'pt-3')}>
-      <p aria-hidden className="text-[0.9375rem] text-muted-foreground">
+    <div className="flex w-full flex-col items-center gap-0.5">
+      <p aria-hidden className="text-[0.9375rem]/[normal] text-muted-foreground">
         {mark ? `${mark} · ${t('metronome.bpm')}` : t('metronome.bpm')}
       </p>
-      <div className="flex w-full items-center justify-center gap-1.5 min-[25rem]:gap-2">
+      <div className="flex w-full items-center justify-between gap-1.5 min-[25rem]:gap-2">
         {STEPS.slice(0, 2).map(step)}
         <p
           className={cn(
-            'min-w-[1.9em] shrink-0 text-center font-bold tracking-[-0.03em]',
+            'min-w-[1.75em] shrink-0 text-center font-bold tracking-[-0.03em] tabular-nums',
             // The board's number keeps the font's own line height, 2 under its tempo's word.
             large ? 'text-[4.5rem]/[normal] lg:text-[7.5rem]/[normal]' : 'text-[4.5rem]/[normal]',
           )}

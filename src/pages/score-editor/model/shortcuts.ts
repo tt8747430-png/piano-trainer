@@ -4,7 +4,11 @@ import type { TupletCount } from '@/shared/lib/notation'
 import type { SheetField } from '@/widgets/score-sheet'
 
 /** A shortcut: an editor action, or a field opened to type in where it is printed (ADR 0096). */
-type Shortcut = EditorAction | { readonly type: 'field'; readonly field: SheetField['kind'] }
+type Shortcut =
+  | EditorAction
+  | { readonly type: 'field'; readonly field: SheetField['kind'] }
+  /** Go to bar's card (Flat's and Dorico's ⌘G, research F11). */
+  | { readonly type: 'goTo' }
 
 /** A tool's key: a physical key (`code`), its cap as printed, and the modifiers held with it. */
 interface ToolCombo {
@@ -12,6 +16,7 @@ interface ToolCombo {
   readonly cap: string
   readonly shift?: true
   readonly mod?: true
+  readonly alt?: true
 }
 
 /** A tool's shortcut, with what it does. */
@@ -47,6 +52,8 @@ export const TOOL_SHORTCUTS = {
   thirtySecond: value(32, 6),
   sixtyFourth: value(64, 7),
   rest: { code: 'Digit8', cap: '8', does: { type: 'rest' } },
+  // Flat's and Dorico's R; a letter alone plays the piano, so Shift (research F13).
+  repeat: { code: 'KeyR', cap: 'R', shift: true, does: { type: 'repeat' } },
   grace: { code: 'Digit9', cap: '9', does: { type: 'grace', kind: 'appoggiatura' } },
   acciaccatura: {
     code: 'Digit9',
@@ -59,6 +66,7 @@ export const TOOL_SHORTCUTS = {
   flat: { code: 'Minus', cap: '−', does: { type: 'accidental', accidental: -1 } },
   respell: { code: 'KeyJ', cap: 'J', shift: true, does: { type: 'respell' } },
   dot: { code: 'Period', cap: '.', does: { type: 'dot' } },
+  doubleDot: { code: 'Period', cap: '.', alt: true, does: { type: 'dot', dots: 2 } },
   tie: { code: 'Comma', cap: ',', does: { type: 'tie' } },
   // Flat's ⇧2–⇧8: a tuplet of two to eight on the value; ⇧9 is the acciaccatura's, so nine takes
   // its key alone (ADR 0097).
@@ -86,12 +94,14 @@ export const TOOL_SHORTCUTS = {
     shift: true,
     does: { type: 'mark', mark: { kind: 'pedal', pedal: 'down' } },
   },
-  barAfter: {
+  // Flat's: ⌥Enter a bar after, ⌘⇧Enter one at the end, ⌘Enter the system break (research F14).
+  barAfter: { code: 'Enter', cap: 'Enter', alt: true, does: { type: 'bars', edit: 'insert' } },
+  barEnd: {
     code: 'Enter',
     cap: 'Enter',
     shift: true,
     mod: true,
-    does: { type: 'bars', edit: 'insert' },
+    does: { type: 'bars', edit: 'insertEnd' },
   },
   barDelete: {
     code: 'Backspace',
@@ -107,6 +117,8 @@ export const TOOL_SHORTCUTS = {
   },
   repeatEnd: { code: 'BracketRight', cap: ']', does: { type: 'barMarks', choice: 'repeatEnd' } },
   mode: { code: 'KeyI', cap: 'I', does: { type: 'mode' } },
+  // Flat's and Dorico's V; a letter alone plays the piano, so Shift (research F8).
+  voiceTwo: { code: 'KeyV', cap: 'V', shift: true, does: { type: 'voice' } },
   chord: { code: 'KeyK', cap: 'K', mod: true, does: { type: 'field', field: 'chord' } },
   lyrics: { code: 'KeyL', cap: 'L', mod: true, does: { type: 'field', field: 'lyrics' } },
   fingering: { code: 'KeyF', cap: 'F', shift: true, does: { type: 'field', field: 'fingering' } },
@@ -120,24 +132,28 @@ export const isTool = (name: string): name is Tool => Object.hasOwn(TOOL_SHORTCU
 
 const TOOLS: readonly ToolShortcut[] = Object.values(TOOL_SHORTCUTS)
 
-/** The tool a press is the key of: its key with exactly its modifiers, Alt never. */
+/** The tool a press is the key of: its key with exactly its modifiers. */
 const toolOf = (press: KeyPress): ToolShortcut | undefined =>
-  press.altKey
-    ? undefined
-    : TOOLS.find(
-        (tool) =>
-          tool.code === press.code &&
-          (tool.shift === true) === press.shiftKey &&
-          (tool.mod === true) === (press.metaKey || press.ctrlKey),
-      )
+  TOOLS.find(
+    (tool) =>
+      tool.code === press.code &&
+      (tool.shift === true) === press.shiftKey &&
+      (tool.alt === true) === press.altKey &&
+      (tool.mod === true) === (press.metaKey || press.ctrlKey),
+  )
 
 /** A tool's keycaps in the order they are pressed, with the modifiers' caps this keyboard prints. */
 export function toolCaps(
   tool: Tool,
-  caps: { readonly mod: string; readonly shift: string },
+  caps: { readonly mod: string; readonly alt: string; readonly shift: string },
 ): readonly string[] {
   const combo: ToolCombo = TOOL_SHORTCUTS[tool]
-  return [...(combo.mod ? [caps.mod] : []), ...(combo.shift ? [caps.shift] : []), combo.cap]
+  return [
+    ...(combo.mod ? [caps.mod] : []),
+    ...(combo.alt ? [caps.alt] : []),
+    ...(combo.shift ? [caps.shift] : []),
+    combo.cap,
+  ]
 }
 
 /** The clipboard's edits by letter, with Cmd or Ctrl (the platform's own copy, cut and paste). */
@@ -146,11 +162,12 @@ const isClipKey = (code: string): code is keyof typeof CLIP_EDITS => Object.hasO
 
 /**
  * The editor's shortcut for a key press in a layer, or null. The tools' keys (`TOOL_SHORTCUTS`),
- * then the caret's and the edits': arrows (Shift extending what is chosen by a note, with Alt by a
- * bar, with Cmd to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under,
+ * then the caret's and the edits': arrows (Shift extending what is chosen by a note, with Cmd by a
+ * bar, as Flat and Dorico; Home and End to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under,
  * ADR 0096; ↑ ↓ the notes a step in the key, with Shift a semitone, with Cmd an octave), Home, End,
  * Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or Ctrl with Z, Y,
- * and C, X, V (what is chosen, ADR 0114). A letter alone plays the piano, but for I, which typing
+ * and C, X, V (what is chosen, ADR 0114); Alt with 2 to 8 a note a 2nd to an octave above what is
+ * chosen or just written, with Shift below (research F7). A letter alone plays the piano, but for I, which typing
  * leaves free: on a staff it cycles the editing modes, as Dorico's I does (ADR 0114).
  */
 export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
@@ -159,9 +176,15 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
     if (press.code === 'KeyZ') return { type: press.shiftKey ? 'redo' : 'undo' }
     if (press.code === 'KeyY' && press.ctrlKey) return { type: 'redo' }
     if (isClipKey(press.code)) return { type: 'clip', edit: CLIP_EDITS[press.code] }
+    if (press.code === 'KeyA' && !press.shiftKey && !press.altKey) return { type: 'selectAll' }
+    if (press.code === 'KeyG' && !press.shiftKey && !press.altKey) return { type: 'goTo' }
   }
   const tool = toolOf(press)
   if (tool) return tool.does.type === 'mode' && layer === 'chords' ? null : tool.does
+  // Alt with 2 to 8 a note a 2nd to an octave above, with Shift below (Flat's addNoteInterval).
+  const interval = /^Digit([2-8])$/.exec(press.code)?.[1]
+  if (press.altKey && !mod && interval && layer !== 'chords')
+    return { type: 'interval', steps: (Number(interval) - 1) * (press.shiftKey ? -1 : 1) }
   const move = (by: CaretMove, direction: -1 | 1): Shortcut => ({
     type: 'move',
     by,
@@ -171,8 +194,10 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
   switch (press.key) {
     case 'ArrowLeft':
     case 'ArrowRight': {
+      // Cmd a bar, as Flat's and Dorico's; Home and End the score's ends (research F10).
+      if (press.altKey) return null
       const direction = press.key === 'ArrowLeft' ? -1 : 1
-      return move(mod ? 'end' : press.altKey ? 'bar' : 'step', direction)
+      return move(mod ? 'bar' : 'step', direction)
     }
     case 'Home':
       return move('end', -1)
@@ -183,7 +208,9 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
       const direction = press.key === 'ArrowUp' ? 1 : -1
       if (press.altKey) return { type: 'chordNote', direction }
       if (layer === 'chords') return null
-      // A step in the key, as Flat and Dorico move a note; Shift a semitone, Cmd an octave.
+      // Cmd and Shift draw the notes on the piano's other staff (Dorico's cross-staff); a step in the
+      // key, as Flat and Dorico move a note; Shift a semitone, Cmd an octave.
+      if (mod && press.shiftKey) return { type: 'cross', to: direction > 0 ? 'upper' : 'lower' }
       if (mod) return { type: 'shift', semitones: direction * 12 }
       if (press.shiftKey) return { type: 'shift', semitones: direction }
       return { type: 'step', steps: direction }
@@ -197,7 +224,7 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
       return mod ? null : { type: 'deselect' }
     // Enter goes on a line; Shift, back a line.
     case 'Enter':
-      if (mod) return null
+      if (mod || press.altKey) return null
       return { type: 'move', by: 'line', direction: press.shiftKey ? -1 : 1, extend: false }
   }
   return null

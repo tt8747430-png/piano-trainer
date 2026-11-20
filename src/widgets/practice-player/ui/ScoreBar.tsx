@@ -5,32 +5,27 @@ import { ChromeShownContext } from '../model/chrome-shown'
 const GROUP = 'flex min-w-0 items-center gap-1 sm:gap-2'
 
 /**
- * The score's bar (ADR 0115), the Player's and the score editor's one surface: Close, the title and
- * Practise · Edit at its start (`lead`), the screen's own buttons at its end (`actions`: the
- * Player's Piano keys, MIDI and gear, the editor's Play, Undo, Redo and gear, R31-E). One band of
- * the card's paper with one hairline under the whole, every button a toolbar's round one
- * (`variant="tool"`), so the two modes' bars are the same height and switching moves nothing. While
- * the music is read in Diagrams it steps aside whole (ADR 0108), its room kept.
+ * The score's bar (ADR 0115), the Player's and the score editor's one surface (loop round 61): Close
+ * at its start (`lead`), Play · Edit in its middle (`middle`), the screen's own glass group at its
+ * end (`actions`: the Player's View, MIDI and Settings; the editor's Undo, Redo and More). Glass
+ * buttons over the music, no band and no hairline, so the two modes' bars are one and switching
+ * moves nothing. While the music is read in Diagrams it steps aside whole (ADR 0108), its room kept.
  */
 export function ScoreBar({
   lead,
   middle,
   actions,
-  floating = false,
 }: {
   lead: ReactNode
-  /** The Player's views, a pill in the bar's middle (its canvas); the bar then bare over the paper. */
+  /** Play · Edit (`ModeSwitch`), or a lesson example's Done. */
   middle?: ReactNode
   actions: ReactNode
-  /** No band of paper and no hairline: the bar's glass buttons float over the music (the editor's board). */
-  floating?: boolean
 }) {
   const { bar } = use(ChromeShownContext)
   return (
     <header
       data-area="bar"
       data-hidden={bar ? undefined : true}
-      data-floating={floating ? true : undefined}
       inert={!bar}
       className="score-bar min-w-0 transition-[opacity,translate] duration-200 ease-out data-hidden:-translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none"
     >

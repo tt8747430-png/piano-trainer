@@ -1,4 +1,5 @@
 import type { RegisteredRouter, RouteIds, ValidateNavigateOptions } from '@tanstack/react-router'
+import { exerciseOf, isExerciseId, shelfOf } from '@/entities/exercise'
 import type { Up } from '@/shared/lib'
 import type { RouterContext } from '../router'
 import { readChordsSearch, readProgressionsSearch, readScalesSearch } from './explorer-search'
@@ -121,13 +122,14 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/profile/history/$runId': () => up({ to: '/profile/history' }),
   '/shell/settings/account/profile': () => up({ to: '/settings/account' }),
   '/shell/settings/account/password': () => up({ to: '/settings/account' }),
+  '/shell/settings/account/email': () => up({ to: '/settings/account' }),
   '/shell/settings/privacy': () => up({ to: '/settings/account' }),
   '/shell/settings/general': settingsPage,
+  '/shell/settings/general/layouts': () => up({ to: '/settings/general' }),
+  '/shell/settings/appearance': settingsPage,
   '/shell/settings/select-toolbar': settingsPage,
   '/shell/settings/swipe-actions': settingsPage,
   '/shell/settings/feedback': settingsPage,
-  '/shell/settings/on-screen-piano': settingsPage,
-  '/shell/settings/computer-keys': settingsPage,
   '/shell/settings/storage': settingsPage,
   '/shell/settings/account': settingsPage,
   '/shell/settings/how-to-use': settingsPage,
@@ -141,6 +143,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/connect-piano/timing': () => up({ to: '/settings/connect-piano' }),
   '/shell/admin': toSettings,
   '/shell/admin/$section': ({ wide }) => (wide ? null : up({ to: '/admin' })),
+  '/shell/admin/groups/$group': () => up({ to: '/admin/$section', params: { section: 'groups' } }),
   '/shell/legal/privacy': toAbout,
   '/shell/legal/terms': toAbout,
   '/shell/account/sign-in': accountUp,
@@ -181,6 +184,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     up({ to: '/songs/folders/$folderId/settings', params: { folderId: param(from, 'folderId') } }),
   '/shell/songs/folders/$folderId/archived': (from) =>
     up({ to: '/songs/folders/$folderId', params: { folderId: param(from, 'folderId') } }),
+  '/shell/songs/all': toSongs,
   '/shell/songs/archive': toSongs,
   '/shell/songs/trash': toSongs,
   '/shell/songs/shared': toSongs,
@@ -196,14 +200,14 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       params: { pieceId: param(from, 'pieceId') },
       search: { takes: true },
     }),
-  '/full-screen/play/walk': ({ search }) =>
+  '/shell/play/walk': ({ search }) =>
     up({
       to: '/practice/scales',
       search: readScalesSearch({ root: search.root, kind: search.kind, show: 'chords' }),
     }),
-  '/full-screen/play/chromatic': toPractice,
+  '/shell/play/chromatic': toPractice,
   // The Player of a progression: up to its page, the library's where the line is the library's.
-  '/full-screen/play/progression': async ({ search }) => {
+  '/shell/play/progression': async ({ search }) => {
     const line = readProgressionsSearch({ p: search.p, key: search.key })
     const { libraryLineId } = await import('./progression-place')
     const progressionId = libraryLineId(line.p, line.key)
@@ -215,13 +219,13 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
         })
       : up({ to: '/practice/progressions/line', search: line })
   },
-  '/full-screen/play/exercise/$exerciseId': (from) =>
+  '/shell/play/exercise/$exerciseId': (from) =>
     up({
       to: '/practice/exercises/$exerciseId',
       params: { exerciseId: param(from, 'exerciseId') },
     }),
   // The Check: up to the explorer its step is done on, the step's panel open, where it was asked.
-  '/full-screen/check': (from) => {
+  '/shell/check': (from) => {
     const { search } = from
     const of = text(search.of) ?? ''
     if (of.startsWith('scale:')) {
@@ -254,8 +258,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     return levelId ? up({ to: '/levels/$levelId', params: { levelId } }) : up({ to: '/' })
   },
   '/shell/lessons/$lessonId/settings': toLesson,
-  '/shell/lessons/$lessonId/publish': (from) =>
-    up({ to: '/lessons/$lessonId/settings', params: { lessonId: param(from, 'lessonId') } }),
   '/shell/lessons/$lessonId/edit': toLesson,
   '/full-screen/lessons/$lessonId/example': ({ params, search }) => {
     const course = text(search.course)
@@ -271,8 +273,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       : up({ to: '/courses' })
   },
   '/shell/courses/$courseId/settings': toCourse,
-  '/shell/courses/$courseId/publish': (from) =>
-    up({ to: '/courses/$courseId/settings', params: { courseId: param(from, 'courseId') } }),
   '/shell/courses/$courseId/edit': toCourse,
   '/shell/courses/$courseId/$lessonId': toCourse,
   '/shell/courses/$courseId/$lessonId/settings': toCourseLesson,
@@ -319,7 +319,12 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   },
   '/shell/practice/trainer/$trainerId': toPractice,
   '/shell/practice/exercises': toPractice,
-  '/shell/practice/exercises/$exerciseId': () => up({ to: '/practice/exercises' }),
+  // An exercise's page: up to its shelf, where it has one; a scale's or a chord's to Practice.
+  '/shell/practice/exercises/$exerciseId': (from) => {
+    const id = param(from, 'exerciseId')
+    const shelf = isExerciseId(id) ? shelfOf(exerciseOf(id).group) : undefined
+    return shelf ? up({ to: '/practice/exercises', search: { book: shelf } }) : toPractice(from)
+  },
   '/shell/practice/accompaniment': toPractice,
   '/shell/practice/accompaniment/patterns/new': toAccompaniment,
   '/shell/practice/accompaniment/patterns/$patternRef': toPatternPlace,

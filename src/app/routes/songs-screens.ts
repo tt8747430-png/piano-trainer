@@ -56,5 +56,6 @@ export {
   FolderPage,
   FolderSettingsPage,
   SongsPage,
+  AllSongsPage,
 } from '@/pages/songs'
 export { PublicSongPage } from '@/pages/public-library'

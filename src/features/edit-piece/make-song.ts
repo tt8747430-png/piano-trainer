@@ -82,9 +82,9 @@ interface SongDraft extends SongStart {
 }
 
 /** The bars a new song starts with, as a notation app's new score: four, unless asked. */
-export const START_BARS = 4
+export const START_BARS = 8
 /** Its tempo unless asked. */
-export const START_TEMPO = 90
+export const START_TEMPO = 80
 
 /**
  * Where a new song starts: a verse of empty bars (four at 90 unless asked), as a notation app's new
@@ -154,7 +154,10 @@ export function makeSong(store: PiecesStore, draft: SongDraft): OwnSongId | null
   const { songs, nextSong } = store.getState()
   const id = ownSongId(nextSong)
   store.setState({
-    songs: [...songs, { id, title, ...chartStart(draft.key, draft.meter, draft) }],
+    songs: [
+      ...songs,
+      { id, title, added: new Date().toISOString(), ...chartStart(draft.key, draft.meter, draft) },
+    ],
     nextSong: nextSong + 1,
   })
   return id
@@ -178,6 +181,7 @@ export function addSong(
       {
         id,
         title: song.title,
+        added: new Date().toISOString(),
         ...song.music,
         ...(author ? { author } : {}),
         ...(publicId ? { publicId } : {}),

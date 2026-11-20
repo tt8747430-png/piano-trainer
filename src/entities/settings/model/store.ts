@@ -15,7 +15,6 @@ import { isInversion, midi, type Midi } from '@/shared/lib/music'
 import { beatsOf, BPM_RANGE, isMetronomeMeter } from '@/shared/lib/schedule'
 import {
   CHORD_KEYS_MAX,
-  isLessonReading,
   DEFAULT_CHORD_FINDER,
   DEFAULT_METRONOME,
   METRONOME_VOLUMES,
@@ -35,7 +34,6 @@ import {
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
-  ARRANGER_PLACES,
   DEFAULT_CHORD_PLAYER,
   DEFAULT_CHORDS,
   isChordLabels,
@@ -53,13 +51,12 @@ import {
   REMEMBERED_CHORDS,
   defaultKeyboard,
   detectLocale,
-  isKeyDock,
   isDiagramsMode,
   isTextSize,
+  isGridBars,
   isOtherHandLook,
   isCountdown,
   isSpeedStep,
-  isKeySize,
   isBeatLevel,
   isMetronomeSound,
   isSubdivision,
@@ -69,7 +66,6 @@ import {
   isOctaveShift,
   isPedalWay,
   isSidebar,
-  isSwipe,
   isTheme,
   isTouch,
   type ChordFinderSettings,
@@ -101,7 +97,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 50
+export const SETTINGS_VERSION = 57
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -139,9 +135,8 @@ export function createSettingsStore({
         metronome: DEFAULT_METRONOME,
         foldedSections: [],
         welcomed: false,
-        tipsSeen: [],
         practiceRecent: [],
-        lessonReading: 'page',
+        paletteRecent: PALETTE_RECENT_START,
         progressions: DEFAULT_PROGRESSIONS,
         intervals: DEFAULT_INTERVALS,
         chordPlayer: DEFAULT_CHORD_PLAYER,
@@ -205,6 +200,23 @@ function otherHandSettings(value: unknown): OtherHandSettings {
 }
 
 /** Each place's fold as saved where it is a boolean; a place never chosen stays unset. */
+/** How many tools the palette's Recent group keeps. */
+export const PALETTE_RECENT_MAX = 8
+/**
+ * Recent before anything is used (the Editor board, Flat's recent notation): the values, marks and
+ * lines a song is written with most, by the ids the palette's keys record.
+ */
+const PALETTE_RECENT_START: readonly string[] = [
+  'quarter',
+  'eighth',
+  'articulation:staccato',
+  'articulation:accent',
+  'slur',
+  'dynamic:mf',
+  'dynamic:p',
+  'chord',
+]
+
 /** The palette's category: a name, or none chosen. */
 const paletteCategory = (value: unknown): string | null =>
   typeof value === 'string' && value !== '' ? value : null
@@ -309,8 +321,6 @@ function chordPlayerSettings(value: unknown): ChordPlayerSettings {
     names: isProgressionNames(saved.names) ? saved.names : DEFAULT_CHORD_PLAYER.names,
     voicing: isProgressionVoicing(saved.voicing) ? saved.voicing : DEFAULT_CHORD_PLAYER.voicing,
     follow: typeof saved.follow === 'boolean' ? saved.follow : DEFAULT_CHORD_PLAYER.follow,
-    arranger:
-      ARRANGER_PLACES.find((place) => place === saved.arranger) ?? DEFAULT_CHORD_PLAYER.arranger,
   }
 }
 
@@ -346,6 +356,7 @@ function scoreViewSettings(value: unknown): ScoreViewSettings {
     layout: isSheetView(saved.layout) ? saved.layout : DEFAULT_SCORE_VIEW.layout,
     music: isMusicView(saved.music) ? saved.music : DEFAULT_SCORE_VIEW.music,
     diagrams: isDiagramsMode(saved.diagrams) ? saved.diagrams : DEFAULT_SCORE_VIEW.diagrams,
+    gridBars: isGridBars(saved.gridBars) ? saved.gridBars : DEFAULT_SCORE_VIEW.gridBars,
     chordNames: switched('chordNames'),
     lyrics: switched('lyrics'),
     pinned: switched('pinned'),
@@ -431,19 +442,11 @@ function keysWindows(value: unknown): KeysWindows {
 function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSettings {
   const saved = savedObject<KeyboardSettings>(value)
   return {
-    keySize: isKeySize(saved.keySize) ? saved.keySize : current.keySize,
-    swipe: isSwipe(saved.swipe) ? saved.swipe : current.swipe,
     namedKeys: isNamedKeys(saved.namedKeys) ? saved.namedKeys : current.namedKeys,
-    markNotes: typeof saved.markNotes === 'boolean' ? saved.markNotes : current.markNotes,
-    chordNames: typeof saved.chordNames === 'boolean' ? saved.chordNames : current.chordNames,
     typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
-    autoplay: typeof saved.autoplay === 'boolean' ? saved.autoplay : current.autoplay,
-    dock: isKeyDock(saved.dock) ? saved.dock : current.dock,
     folded: typeof saved.folded === 'boolean' ? saved.folded : current.folded,
     foldedLandscape:
       typeof saved.foldedLandscape === 'boolean' ? saved.foldedLandscape : current.foldedLandscape,
-    pedals: saved.pedals === 'all' || saved.pedals === 'sustain' ? saved.pedals : current.pedals,
-    volume: isVolume(saved.volume) ? saved.volume : current.volume,
   }
 }
 
@@ -490,13 +493,11 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
           ...new Set(saved.practiceRecent.filter((id): id is string => typeof id === 'string')),
         ].slice(0, 8)
       : [],
-    tipsSeen: Array.isArray(saved.tipsSeen)
-      ? [...new Set(saved.tipsSeen.filter((id): id is string => typeof id === 'string'))].slice(
-          0,
-          64,
-        )
-      : [],
-    lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
+    paletteRecent: Array.isArray(saved.paletteRecent)
+      ? [
+          ...new Set(saved.paletteRecent.filter((id): id is string => typeof id === 'string')),
+        ].slice(0, PALETTE_RECENT_MAX)
+      : PALETTE_RECENT_START,
     progressions: progressionsSettings(saved.progressions),
     intervals: intervalSettings(saved.intervals),
     chordPlayer: chordPlayerSettings(saved.chordPlayer),

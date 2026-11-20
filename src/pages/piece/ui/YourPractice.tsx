@@ -4,19 +4,21 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Piece } from '@/entities/piece'
 import { selectPractised, useProgress } from '@/entities/progress'
+import { HANDS } from '@/shared/lib/schedule'
 import { nextStep, practiceSummary, useTakes, type NextStep } from '@/entities/take'
 import { loopParam } from '@/features/practice'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
 import { ButtonLink, SettingsGroup } from '@/shared/ui'
+import { formatLocale } from '@/shared/lib'
 
 /** A row of the card: its name, then what it says. */
 const ROW =
-  'flex min-h-12 items-center justify-between gap-4 border-t border-hairline px-4 first:border-t-0'
+  'flex min-h-13 items-center justify-between gap-4 border-t border-hairline px-4 first:border-t-0'
 
 /**
  * What the app has kept of the learner's practice of a song (R30 S4, R34): the day it was played
- * last and the takes recorded; once a take is in, its share right, the best take's, the last take bar
+ * last, its best Wait-mode pass (with both hands where played so) and the takes recorded; once a take is in, its share right, the best take's, the last take bar
  * by bar (Piano Forte's meter, in ink: a meter is never a verdict's colour), and the one next step
  * (Piano Forte's pace): the weakest bars looped slower, else the tempo climbed. Play stays the page's
  * one honey control, so the step is a quiet button. Nothing before the first time it is played.
@@ -24,7 +26,12 @@ const ROW =
 export function YourPractice({ piece, performance }: { piece: Piece; performance: Performance }) {
   const { t } = useTranslation('piece')
   const locale = useLocale()
+  const { t: common } = useTranslation('common')
   const at = useProgress((state) => selectPractised(state)[piece.id])
+  // Wait mode's best pass (research item 11): with both hands where played so, else one hand's.
+  const best = useProgress((state) => state.songs[piece.id]?.best)
+  const waitHands = HANDS.find((hands) => best?.[hands] !== undefined)
+  const waitBest = waitHands ? best?.[waitHands] : undefined
   const all = useTakes((state) => state.takes)
   const takes = useMemo(() => all.filter((take) => take.pieceId === piece.id), [all, piece.id])
   const summary = useMemo(
@@ -33,17 +40,30 @@ export function YourPractice({ piece, performance }: { piece: Piece; performance
   )
   if (!at && takes.length === 0) return null
   const day = at
-    ? new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(new Date(at))
+    ? new Intl.DateTimeFormat(formatLocale(locale), { day: 'numeric', month: 'long' }).format(
+        new Date(at),
+      )
     : null
   const step = summary ? nextStep(summary) : null
   const percent = (value: number) => formatPercent(locale, value)
   return (
-    <SettingsGroup title={t('practice.title')}>
+    <SettingsGroup flush heading title={t('practice.title')}>
       <dl className="flex flex-col">
         {day ? (
           <div className={ROW}>
             <dt className="font-medium">{t('practice.last')}</dt>
             <dd className="text-muted-foreground">{day}</dd>
+          </div>
+        ) : null}
+        {waitHands && waitBest !== undefined ? (
+          <div className={ROW}>
+            <dt className="font-medium">{t('practice.wait')}</dt>
+            <dd className="text-muted-foreground tabular-nums">
+              {t('practice.waitBest', {
+                percent: percent(waitBest),
+                hands: common(`hands.${waitHands}`),
+              })}
+            </dd>
           </div>
         ) : null}
         {takes.length > 0 ? (

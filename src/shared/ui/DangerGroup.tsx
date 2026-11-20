@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { cn } from '@/shared/lib'
 import { ActionRow } from './ActionRow'
 
 /**
@@ -7,11 +8,30 @@ import { ActionRow } from './ActionRow'
  * toast (R38) needs none, the toast naming it. Never on Settings'
  * list; never beside ordinary rows.
  */
-export function DangerGroup({ footnote, children }: { footnote?: string; children: ReactNode }) {
+export function DangerGroup({
+  footnote,
+  className,
+  children,
+}: {
+  footnote?: string
+  /** Its room above, where a page sets the losses' rhythm itself (the Account's: Sign out, then Delete 16 further). */
+  className?: string
+  children: ReactNode
+}) {
   return (
-    <section data-group="danger" className="mt-6 flex flex-col gap-2">
-      <div className="flex flex-col overflow-hidden card">{children}</div>
-      {footnote ? <p className="px-3 text-sm text-muted-foreground">{footnote}</p> : null}
+    <section
+      data-group="danger"
+      data-slot="settings-group"
+      className={cn('mt-6 flex flex-col gap-2', className)}
+    >
+      <div data-slot="settings-card" className="flex flex-col rows-line overflow-hidden card">
+        {children}
+      </div>
+      {footnote ? (
+        <p data-slot="settings-foot" className="px-4 text-sm text-muted-foreground">
+          {footnote}
+        </p>
+      ) : null}
     </section>
   )
 }

@@ -1,19 +1,32 @@
+import { Search } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { AdminAccount } from '@/shared/api/admin'
 import type { AccountRole } from '@/shared/api/auth'
 import { useLocale } from '@/shared/i18n'
 import { useAdmin } from '@/shared/lib/admin'
-import { ChoiceChips, ConfirmDialog, SearchField } from '@/shared/ui'
+import { ChoiceChips, ConfirmDialog, SearchField, SettingsGroup } from '@/shared/ui'
 import { useLoaded } from '../model/use-loaded'
 import { useChangeProblem } from '../model/use-change-problem'
 import { FailureLine, LoadedState } from './LoadedState'
+import { daySaid, formatLocale } from '@/shared/lib'
+import { Button } from '@/shared/ui/primitives/button'
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/shared/ui/primitives/empty'
+import { Face, nameOf } from './Face'
 
 const ROLES = ['learner', 'editor', 'admin'] as const satisfies readonly AccountRole[]
 
 /**
- * Administration › Accounts: found by name or email, each with when it joined and last signed in, and
- * its role chosen in place; a change that takes away an administrator's access asks first (R32).
+ * Administration › Accounts (the Admin board): found by name or email, one card of accounts, each its
+ * face, name, email, when it joined and last signed in, and its role chosen in place among three
+ * chips; a change that takes away an administrator's access asks first (R32).
  */
 export function AccountsTab() {
   const { t } = useTranslation('admin')
@@ -38,34 +51,62 @@ export function AccountsTab() {
     if (account.role === 'admin' && role !== 'admin') setDemoting({ account, role })
     else setRole(account, role)
   }
-  const date = (iso: string) =>
-    new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(iso))
+  const joined = (iso: string) =>
+    new Intl.DateTimeFormat(formatLocale(locale), { dateStyle: 'long' }).format(new Date(iso))
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
       <SearchField value={query} onChange={setQuery} label={t('accounts.search')} />
       {problem ? <FailureLine reason={problem} /> : null}
       <LoadedState loaded={loaded} reload={reload}>
         {(accounts) =>
           accounts.length === 0 ? (
-            <p className="text-muted-foreground">{t('accounts.none')}</p>
+            <Empty>
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Search />
+                </EmptyMedia>
+                <EmptyTitle>
+                  {query.trim()
+                    ? t('accounts.noneFor', { query: query.trim() })
+                    : t('accounts.none')}
+                </EmptyTitle>
+                {query.trim() ? (
+                  <EmptyDescription>{t('accounts.noneLine')}</EmptyDescription>
+                ) : null}
+              </EmptyHeader>
+              {query.trim() ? (
+                <EmptyContent>
+                  <Button variant="quiet" onClick={() => setQuery('')}>
+                    {t('accounts.clear')}
+                  </Button>
+                </EmptyContent>
+              ) : null}
+            </Empty>
           ) : (
-            <ul className="flex flex-col gap-2">
+            <SettingsGroup flush>
               {accounts.map((account) => (
-                <li key={account.id} className="flex flex-col gap-3 card p-4">
-                  <div className="min-w-0">
-                    <p className="truncate font-semibold">{account.name || account.email}</p>
-                    {account.name ? (
-                      <p className="truncate text-sm text-muted-foreground">{account.email}</p>
-                    ) : null}
-                    <p className="text-sm text-muted-foreground">
-                      {t('accounts.joined', { date: date(account.joinedAt) })} ·{' '}
-                      {account.lastSignInAt
-                        ? t('accounts.lastSeen', { date: date(account.lastSignInAt) })
-                        : t('accounts.never')}
-                    </p>
+                <div key={account.id} className="flex flex-col gap-3 py-3 ps-4 pe-3">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <Face name={nameOf(account)} size="row" />
+                    <div className="flex min-w-0 flex-col gap-0.5 leading-[normal]">
+                      <span className="truncate font-semibold">{nameOf(account)}</span>
+                      {account.name.trim() ? (
+                        <span className="truncate text-sm leading-[normal] text-muted-foreground">
+                          {account.email}
+                        </span>
+                      ) : null}
+                      <span className="text-[0.8125rem] text-muted-foreground">
+                        {t('accounts.joined', { date: joined(account.joinedAt) })} ·{' '}
+                        {account.lastSignInAt
+                          ? t('accounts.lastSeen', {
+                              date: daySaid(account.lastSignInAt, locale, Date.now(), false),
+                            })
+                          : t('accounts.never')}
+                      </span>
+                    </div>
                   </div>
                   <ChoiceChips
-                    label={t('accounts.role', { name: account.name || account.email })}
+                    label={t('accounts.role', { name: nameOf(account) })}
                     value={account.role}
                     options={ROLES.map((role) => ({
                       value: role,
@@ -73,9 +114,9 @@ export function AccountsTab() {
                     }))}
                     onChange={(role) => choose(account, role)}
                   />
-                </li>
+                </div>
               ))}
-            </ul>
+            </SettingsGroup>
           )
         }
       </LoadedState>
@@ -86,7 +127,7 @@ export function AccountsTab() {
         }}
         title={t('accounts.demoteTitle')}
         body={t('accounts.demoteBody', {
-          name: demoting ? demoting.account.name || demoting.account.email : '',
+          name: demoting ? nameOf(demoting.account) : '',
           role: demoting ? t(`accounts.roles.${demoting.role}`) : '',
         })}
         action={t('accounts.demote')}

@@ -54,7 +54,9 @@ export function PieceView({ piece }: { piece: Piece }) {
     0,
   )
   return (
-    <div className="flex flex-col gap-1 pb-24 lg:gap-6">
+    // One centred 880 column on a laptop, the bar on its edges (the SongLaptop board): the cover beside
+    // the song's name, facts and plays, then its chords, sections and details across the column.
+    <div className="flex flex-col gap-1 pb-24 lg:mx-auto lg:w-full lg:max-w-[55rem] lg:**:data-[slot=screen-bar]:mx-0 lg:**:data-[slot=screen-bar]:px-0 lg:**:data-[slot=screen-bar]:pt-0">
       <PieceHeader
         entry={piece}
         tools={
@@ -66,52 +68,64 @@ export function PieceView({ piece }: { piece: Piece }) {
         titleOnPage
         settings={<SongMore piece={piece} />}
       />
-      <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-start lg:gap-x-12 xl:grid-cols-[minmax(0,32.5rem)_minmax(0,1fr)]">
-        <section aria-label={t('piece:song')} className="flex min-w-0 flex-col gap-5">
+      <div className="flex flex-col gap-4 lg:gap-5">
+        <section
+          aria-label={t('piece:song')}
+          className="flex min-w-0 flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,23.75rem)_minmax(0,1fr)] lg:items-end lg:gap-8"
+        >
           <PieceFirstPage piece={piece} />
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-1">
-              <p
-                aria-hidden
-                className="min-w-0 font-sans text-[1.75rem]/tight font-bold tracking-[-0.01em] text-balance break-words"
-              >
-                {entryTitles(piece, locale).primary}
-              </p>
-              <ButtonLink
-                variant="ghost"
-                size="icon"
-                className="rounded-pill text-muted-foreground"
-                aria-label={t('piece:editScore')}
-                title={t('piece:editScore')}
-                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-              >
-                <Pencil aria-hidden />
-              </ButtonLink>
+          <div className="flex min-w-0 flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              {/* The title with Edit 8 after its words, a 44 glass circle with the icon in ink (the Song board's EDITB). */}
+              <div className="flex items-center gap-2">
+                <p
+                  aria-hidden
+                  className="min-w-0 font-sans text-[1.75rem]/[1.15] font-bold tracking-[-0.01em] text-balance break-words"
+                >
+                  {entryTitles(piece, locale).primary}
+                </p>
+                <ButtonLink
+                  variant="ghost"
+                  size="icon"
+                  className="shrink-0 rounded-pill glass text-foreground hover:bg-glass"
+                  // Title and credits, as the Song board's pencil: the editor opened on that page of
+                  // its gear, the one place they are typed; the score itself is the ···'s Edit score.
+                  aria-label={t('piece:editCredits')}
+                  title={t('piece:editCredits')}
+                  render={
+                    <Link
+                      to="/edit/$pieceId"
+                      params={{ pieceId: piece.id }}
+                      search={{ credits: true }}
+                    />
+                  }
+                >
+                  <Pencil aria-hidden className="size-4.5" />
+                </ButtonLink>
+              </div>
+              <PieceByline piece={piece} />
             </div>
-            <PieceByline piece={piece} />
+            {/* Key · Time · Tempo, one row; the level, genre and language are its Details'. */}
+            <PieceFactLine
+              piece={piece}
+              keyLink={(key) => <ScaleLink entry={piece}>{key}</ScaleLink>}
+            />
+            <SongPlace piece={piece} bars={writtenBars} />
+            <PieceAbout entry={piece} />
           </div>
-          {/* Key · Time · Tempo, one row; the level, genre and language are its Details'. */}
-          <PieceFactLine
-            piece={piece}
-            keyLink={(key) => <ScaleLink entry={piece}>{key}</ScaleLink>}
-          />
-          <SongPlace piece={piece} bars={writtenBars} />
-          <PieceAbout entry={piece} />
         </section>
-        <div className="flex min-w-0 flex-col gap-8">
-          {/* A song of one section has no section machinery: its chords are all it needs. */}
-          {sections.length > 1 ? (
-            <SectionRows piece={piece} headings={headings} sections={sections} />
-          ) : null}
-          <PieceChords performance={performance}>
-            <PieceProgressions piece={piece} />
-          </PieceChords>
-          {/* Your practice and Details side by side on a wide screen (canvas, row 2); Details alone,
+        <PieceChords performance={performance}>
+          <PieceProgressions piece={piece} />
+        </PieceChords>
+        {/* Its sections under its chords, as the Song board's (a song of one section too: its page is the way in). */}
+        {sections.length > 0 ? (
+          <SectionRows piece={piece} headings={headings} sections={sections} />
+        ) : null}
+        {/* Your practice and Details side by side on a wide screen (canvas, row 2); Details alone,
               before any practice, takes the whole width. */}
-          <div className="grid gap-6 xl:items-start xl:has-[>:nth-child(2)]:grid-cols-2">
-            <YourPractice piece={piece} performance={performance} />
-            {details}
-          </div>
+        <div className="grid gap-6 xl:items-start xl:has-[>:nth-child(2)]:grid-cols-2">
+          <YourPractice piece={piece} performance={performance} />
+          {details}
         </div>
       </div>
     </div>

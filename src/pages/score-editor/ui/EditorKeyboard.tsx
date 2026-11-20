@@ -49,7 +49,7 @@ export function EditorKeyboard({
   /** Under the sheet beside a docked panel: the screen's edge it reaches, past the gutter. */
   edge?: 'left' | 'right'
 }) {
-  const { actions, takes } = useScoreEditorContext()
+  const { actions } = useScoreEditorContext()
   const here = useEditorState(useShallow(caretKeys))
   const range = useEditorState(useShallow(scoreSpan))
   const hands = useEditorState(useShallow(handsHere))
@@ -77,7 +77,7 @@ export function EditorKeyboard({
         fitInView
         selected={selected}
         onKeyPress={actions.play}
-        spacePedal={takes.stage === 'idle'}
+        spacePedal={false}
       />
     </div>
   )

@@ -7,6 +7,7 @@ const course: Course = {
   shelf: 'technique',
   stage: 'intermediate',
   title: { en: 'Major Arpeggios', ru: 'Мажорные арпеджио' },
+  line: { en: 'All twelve, by the circle of fifths', ru: 'Все двенадцать по квинтовому кругу' },
   summary: {
     en: 'The major arpeggio in all twelve keys, in circle-of-fifths order. Each lesson takes one triad over two octaves, with both hands’ fingering and its inversions.',
     ru: 'Мажорные арпеджио во всех двенадцати тональностях, по квинтовому кругу. В каждом уроке одно трезвучие на две октавы: аппликатура обеих рук и обращения.',

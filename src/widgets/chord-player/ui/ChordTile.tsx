@@ -6,9 +6,9 @@ import type { ProgressionNames } from '@/entities/settings'
 import { cn } from '@/shared/lib'
 import { CHORD_BEATS } from '@/shared/lib/arrangement'
 import { chordSymbol, printedSymbol, type Chord, type Key } from '@/shared/lib/music'
+import { LeadSymbol } from '@/shared/ui'
 import { boxName } from '../model/box-name'
 import type { BoxPlace } from '../model/engine'
-import { ChordName } from './ChordName'
 
 /** What a chord's tile asks of the sheet. */
 export interface TileActs {
@@ -35,18 +35,15 @@ export function ChordFace({
 }) {
   return (
     <span className="grid min-h-[60px] min-w-16 place-items-start rounded-[6px] bg-card px-2 pt-1 text-[21px] font-medium whitespace-nowrap text-foreground elevation-3">
-      <ChordName text={boxName(chord, musicKey, names)} />
+      <LeadSymbol text={boxName(chord, musicKey, names)} />
     </span>
   )
 }
 
-/** A second tap within this many milliseconds is a double tap: the chord's sheet opens. */
-const DOUBLE_TAP_MS = 350
-
 /**
  * A chord as Musicca's box (canvas 173): as many of its row's beat columns wide as its beats, its name
  * large at its top left with its extension raised, a tick for each beat along its foot (the beat
- * sounding taller, in ink). One tap selects it (Play then starts there), a double tap opens its sheet.
+ * sounding taller, in ink). A tap selects it (Play then starts there), a tap on it chosen opens its sheet.
  * Selected or sounding it wears the honey ring, sounding on the honey wash too. Selected, its right
  * edge carries Musicca's handle: dragged, it sets its length in whole beats, nothing else retimed.
  * Held a quarter of a second by a finger, or dragged by a mouse, it lifts and lands before any chord
@@ -89,7 +86,6 @@ export function ChordTile({
     id,
   })
   const symbol = printedSymbol(chordSymbol(chord))
-  const lastTap = useRef(0)
   // Auto-scroll: the chord sounding is kept in sight as the sheet plays, clear of the bar above and
   // of the keys and what floats over them below; instant under reduced motion.
   const box = useRef<HTMLDivElement>(null)
@@ -118,16 +114,8 @@ export function ChordTile({
       acts.resize(place, beats + (event.key === 'ArrowRight' ? 1 : -1))
     }
   }
-  const onTap = () => {
-    const now = performance.now()
-    if (now - lastTap.current < DOUBLE_TAP_MS) {
-      lastTap.current = 0
-      acts.open(place)
-    } else {
-      lastTap.current = now
-      acts.select(place)
-    }
-  }
+  // A tap selects it, a tap on it chosen opens its sheet, at any pace (Numbers' and Keynote's).
+  const onTap = () => (selected ? acts.open(place) : acts.select(place))
   /** Musicca's handle: the pointer's travel in beat widths, from the box's own width. */
   const onStretch = (event: PointerEvent<HTMLSpanElement>) => {
     event.stopPropagation()
@@ -189,7 +177,7 @@ export function ChordTile({
         )}
       >
         <span className="max-w-full truncate text-[21px] leading-[1.25] font-medium text-foreground lg:text-[28px]">
-          <ChordName text={boxName(chord, musicKey, names)} />
+          <LeadSymbol text={boxName(chord, musicKey, names)} />
         </span>
         <span aria-hidden className="absolute inset-x-0 bottom-0 flex h-2.5">
           {Array.from({ length: shown }, (_, tick) => (

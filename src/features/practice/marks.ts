@@ -1,14 +1,6 @@
 import type { SongRange } from '@/shared/lib'
 import type { Performance, PerformanceNote } from '@/shared/lib/arrangement'
-import {
-  keyboardRange,
-  midi,
-  noteName,
-  pitchClass,
-  type KeyRange,
-  type Midi,
-  type PitchClass,
-} from '@/shared/lib/music'
+import { keyboardRange, midi, printedNote, type KeyRange, type Midi } from '@/shared/lib/music'
 import { isAudible, pedalSpanAt, type Audible } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
 import type { DiagramChord } from './chord-diagram'
@@ -23,7 +15,7 @@ export function practiceMarks(
   beatGroup: number,
   options: {
     readonly hands: Audible
-    readonly received?: readonly PitchClass[]
+    readonly received?: readonly Midi[]
   },
 ): Map<Midi, KeyMark> {
   const marks = new Map<Midi, KeyMark>()
@@ -33,9 +25,7 @@ export function practiceMarks(
     // A staff's first, so a hand playing the same key wins it.
     .sort((a, b) => Number(b.hand === 'staff') - Number(a.hand === 'staff'))
   for (const played of notes) {
-    const label = options.received?.includes(pitchClass(played.midi))
-      ? '✓'
-      : noteName(played.spelled)
+    const label = options.received?.includes(played.midi) ? '✓' : printedNote(played.spelled)
     marks.set(played.midi, { tone: played.hand, label })
   }
   return marks
@@ -51,7 +41,7 @@ export function diagramMarks(chord: DiagramChord): Map<Midi, KeyMark> {
     chord.keys.flatMap((key, i) => {
       const spelled = chord.notes[i]
       if (!spelled) return []
-      const mark: KeyMark = { tone: key === chord.ring ? 'lh' : 'rh', label: noteName(spelled) }
+      const mark: KeyMark = { tone: key === chord.ring ? 'lh' : 'rh', label: printedNote(spelled) }
       return [[key, mark] as const]
     }),
   )

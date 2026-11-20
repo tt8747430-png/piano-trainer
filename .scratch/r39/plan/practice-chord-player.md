@@ -5,6 +5,32 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
 
 ## The rulings as they stand
 
+- **The layout is the learner's** (owner, 2026-11-18: "i want more user customizable ui like draggable resizable,
+  hidible, minimizable toolbars dragging to the left and putting it there or draggind to the top … genos controls on
+  phone or on laptop are bad designed as on phone it occupies too much space and is not hidable, resizable,
+  minimizable, draggable … the layout should be saved and resetable in the app setitngs for teh individual page or for
+  the whole app … it correctly opens the last opened or saved scores and teh settinsg should be refactored"). Canvas
+  R76 (`r58_chordplayer.py`). Sources: Apple HIG, Toolbars (let people customize a toolbar); iPadOS's Customize
+  Toolbar; Logic Pro's Customize Control Bar; Photoshop's and Dorico's workspaces (kept per window, reset from one
+  place); WCAG 2.2, 2.5.7 Dragging movements (every drag has a single-tap way).
+  - The chart is the page and never moves. Four panels around it: **Keys** (Top or Bottom; Small, Medium, Large),
+    **Controls** (Style · Key · Tempo · Repeats · Play; Floating or at the Top; Full or Play only), **Genos** (Top,
+    Floating, Bottom, and on a laptop Left or Right; Full, Compact, Minimized) and, on a laptop, the key's **Chords**
+    (Left or Right; Narrow or Wide). Any panel but the chart can be hidden.
+  - **Edit layout**, from ··· or the gear's Layout: each panel is outlined with its tag (a grip and its name); the grip
+    drags it, or a tap on it lights the places it may go as honey zones and a tap there puts it; the tag's menu sets
+    Place, Size and Hide. Hidden panels wait in a tray under the bar (+ Keys). The bar holds Reset and Done.
+  - **The Genos never takes the phone:** Compact by default (Start/Stop and Main A–D in one row), Full one tap away,
+    Minimized to a pill ("Genos · Main A") from its own head at any time, edit or not. On a laptop it defaults to the
+    right column.
+  - **Saved and reset:** every change is saved at once for the page; the gear's Reset layout puts it back with Undo;
+    Settings › General › Layout › Page layouts lists each page changed with Reset, and Reset every page, with Undo.
+  - **The last sheet opens:** the Chord player opens on the sheet last open; its name is a menu of the recent sheets
+    (the open one checked), New sheet and All chord sheets.
+  - **Settings by how often wanted:** Sound (Piano, Bass, Drums, Volume), Playing (Count-in, Voicing), Chart (Time
+    signature, Written as), MIDI (Connect a piano, Follow a MIDI arranger, Arranger), Layout (Edit layout, Reset
+    layout, Every page's layout). ··· is the kit's menu at its button (Save and Discard draft when there is one,
+    Share…, Edit layout, Save to my progressions, Open in Progressions), no longer a sheet.
 - Next after the Chords page (owner, 2026-11-13: "after that continue with the chords player and make all of its
   features … add to instructions to continue with the chords player after you finish with the chords page"), with
   Musicca's chord player beside it (screenshots: sections of bars with beat ticks, + after the last bar, Add section,

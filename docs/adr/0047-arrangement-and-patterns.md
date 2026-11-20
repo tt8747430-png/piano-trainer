@@ -39,6 +39,15 @@ scale's chords, a chromatic walk, a progression, an exercise.
   cites; the method books are Called to Play, Called to Play 2, Боброва and Горшков. Each has its pattern group, its
   pieces (studies practised on Practice, songs on Songs) and its course on Learn (ADR 0053). Accompaniment is a
   place of the practice library (ADR 0052): a book each, the rhythm styles, Mine.
+- **The Player's Pattern sheet is the Accompaniment library** (`useAccompanimentLibrary`, arranged as the learner
+  arranged it, `useLibraryArrangement`), drawn as the PlayerApp board draws it: a search and Sort and filter (Sort by
+  Book, Name or Level; Level, each chip with its count, a page of the sheet with Reset and Show n); the places as
+  chips (All, Favourites, Recently used, each book, Mine); Close all or Open all; then the folds, Recently used and
+  Favourites open and the books closed while nothing narrows (the book holding the pattern playing opens where
+  neither shows it), a method book's rows under its groups. A row is the two hands' bar, the name, its hands in two
+  lines or what the music lacks for it (closed), its level as bars, Listen and its ♡; the one playing is washed in
+  honey (`--chosen-honey`). Choosing one puts it first in the library's Recently used, which Accompaniment shares; a
+  hidden pattern is left out but for the one playing.
 - **A printed chord the kernel does not write** plays as its nearest, and the piece's note says so.
 
 ## Consequences

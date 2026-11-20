@@ -1,3 +1,4 @@
+import type { ScoreHeader } from '@/entities/piece'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TextSize } from '@/entities/settings'
@@ -21,10 +22,11 @@ import { BackToPlayhead } from './BackToPlayhead'
 import { lyricLines, shownLines, soundingChip, type Span } from '../model/lyric-lines'
 import { foldRepeats } from '../model/repeated-lines'
 import { BeatStrip } from './BeatStrip'
+import { ViewTitle } from './ViewTitle'
 import { LyricRow } from './LyricRow'
 
 /**
- * Chords over lyrics (ADR 0108, Chordify's): the beat strip across the view,
+ * Chords over lyrics (ADR 0108, Chordify's): under the title the beat strip across the view,
  * held at the top as the song scrolls under it with, where pinned (`pinned`), the song's chords as
  * diagrams in a row under it, the one sounding outlined; then in one column in its middle the song by
  * section, each under its name in spaced capitals, each line its chords as chips over its words
@@ -35,6 +37,8 @@ import { LyricRow } from './LyricRow'
  * played at), a pinned diagram to its chord (`onSymbol`, ADR 0108): the line scrolls to it.
  */
 export function ChordsOverLyrics({
+  title,
+  credits,
   performance,
   headings,
   bars,
@@ -48,6 +52,8 @@ export function ChordsOverLyrics({
   onLoop,
   onSymbol,
 }: {
+  title: string
+  credits?: ScoreHeader | undefined
   performance: Performance
   headings: readonly string[]
   /** Every bar as played, in beats. */
@@ -93,8 +99,8 @@ export function ChordsOverLyrics({
   const follow = useFollow(scroller, playing)
   const { following, returns } = follow
   // The line playing brought into the top third of the room between the strip and the transport as
-  // the music reaches it, where it is not there already. Opening, the view stays at its top where
-  // that line is in sight there (a loop's further on is brought to).
+  // the music reaches it, where it is not there already. Opening, the view stays at its top, its
+  // title in sight, where that line is in sight there (a loop's further on is brought to).
   useEffect(() => {
     const box = scroller.current
     const line = box?.querySelector(`[data-line="${soundingLine}"]`)
@@ -119,6 +125,7 @@ export function ChordsOverLyrics({
       aria-label={t('views.lyrics')}
       className="-mx-gutter flex h-full scroll-pb-(--float-room) flex-col gap-4 overflow-y-auto overscroll-contain px-gutter text-base *:shrink-0 sm:text-lg landscape-phone:mx-0 landscape-phone:px-0"
     >
+      <ViewTitle title={title} credits={credits} />
       <div
         ref={strip}
         className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0"
@@ -141,16 +148,13 @@ export function ChordsOverLyrics({
           width; the strip above runs across the view. The width is in rem: a width in the font's own
           `ch` had Chrome restyle the whole screen at every beat played. Its text at the size chosen,
           every length in its lines in `em`. */}
-      <div
-        className="mx-auto flex w-full max-w-2xl flex-col gap-[0.75em]"
-        style={{ fontSize: `${textSize}%` }}
-      >
+      <div className="mx-auto flex w-full max-w-2xl flex-col" style={{ fontSize: `${textSize}%` }}>
         {shown.map(({ line, index, starts }) => {
           const heading = headings[line.section]
           return (
             <Fragment key={index}>
               {starts && heading ? (
-                <h2 className="pt-[0.75em] text-[0.875em] tracking-[0.3em] text-muted-foreground uppercase">
+                <h2 className="pt-[1.6667em] pb-[0.3333em] font-sans text-[0.75em] font-bold tracking-[0.04em] text-muted-foreground uppercase first:pt-[1em]">
                   {heading}
                 </h2>
               ) : null}

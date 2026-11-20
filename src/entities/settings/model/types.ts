@@ -6,25 +6,18 @@ import {
   CHORD_LABELS,
   CHORD_RANGES,
   isOneOf,
-  KEY_DOCKS,
-  KEY_SIZES,
   NAMED_KEYS,
   OCTAVE_SHIFTS,
   PEDAL_WAYS,
   SONG_RANGES,
-  SWIPES,
   type CameraAngle,
   type ChordLabels,
   type ChordRange,
-  type KeyDock,
   type SheetView,
-  type KeySize,
   type NamedKeys,
   type OctaveShift,
   type PedalWay,
-  type PedalsShown,
   type SongRange,
-  type Swipe,
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
@@ -78,10 +71,10 @@ export interface OtherHandSettings {
 export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim' }
 
 /**
- * How the Player's count-in goes (B7, the reference's Countdown): none; a bar of clicks counted down
- * on the screen; or counted down on the screen alone, unheard.
+ * How the Player's count-in goes (Flat's metronome: Off · Count-in): none, or a bar of clicks counted
+ * down on the screen. New learners start without, as Flat's.
  */
-export const COUNTDOWNS = ['none', 'audible', 'visual'] as const
+export const COUNTDOWNS = ['none', 'audible'] as const
 export type Countdown = (typeof COUNTDOWNS)[number]
 /** How much faster each pass of speed training plays, a share of the piece's tempo in percent. */
 export const SPEED_STEPS = [2, 5, 10] as const
@@ -96,9 +89,9 @@ export interface PlaybackSettings {
   readonly countdown: Countdown
   readonly speedStep: SpeedStep
 }
-/** No count-in, 5% a pass. */
+/** A bar counted in, as the Practice sheet's board starts; 5% a pass. */
 export const DEFAULT_PLAYBACK: PlaybackSettings = {
-  countdown: 'none',
+  countdown: 'audible',
   speedStep: 5,
 }
 
@@ -111,19 +104,14 @@ export interface TrainerSettings {
 /** How every lesson shows its examples. */
 /** The keyboard settings: the same on every screen, set in Settings › On-screen piano. */
 export interface KeyboardSettings {
-  readonly keySize: KeySize
-  readonly swipe: Swipe
+  /**
+   * What the keys carry (the Piano sheet's Labels, the boards' PIANO_SHEET_2D): the Cs named, or
+   * nothing. Every other choice about the keys went with the On-screen piano page (owner,
+   * 2026-11-15): the keys fit their screen, a swipe scrolls them, the sustain pedal alone.
+   */
   readonly namedKeys: NamedKeys
-  /** A key a page marks (a chord's, a scale's) names its note under its degree. */
-  readonly markNotes: boolean
-  /** The bar names the chord a hand holds. */
-  readonly chordNames: boolean
-  /** The computer keyboard plays the keys. */
+  /** The computer keyboard plays the keys (General's Computer keyboard). */
   readonly typing: boolean
-  /** A chord or a scale chosen on a Practice page plays as it is chosen. */
-  readonly autoplay: boolean
-  /** Where a page's keys stay while it scrolls. */
-  readonly dock: KeyDock
   /** A page's keys hidden from its bar's Keyboard (R34): the screen as the learner left it. */
   readonly folded: boolean
   /**
@@ -131,10 +119,6 @@ export interface KeyboardSettings {
    * apart from `folded`: the screen is too short for the page and the keys both (ADR 0062).
    */
   readonly foldedLandscape: boolean
-  /** The pedals the bar's Sustain works (R34): sustain alone, or with soft and sostenuto in its menu. */
-  readonly pedals: PedalsShown
-  /** How loud the keys a hand plays sound (the live voice), a whole percent from 0 to 100 (R33). */
-  readonly volume: number
 }
 
 /** The sizes of screen the keys' height is kept for (R34): a phone upright, on its side, a wider screen. */
@@ -249,6 +233,12 @@ export const DIAGRAMS_MODES = ['animated', 'summary'] as const
 export type DiagramsMode = (typeof DIAGRAMS_MODES)[number]
 
 /**
+ * How many bars a row of the Grid holds (PlayerViewGrid's Bars per row): two, or four.
+ */
+export const GRID_BARS = [2, 4] as const
+export type GridBars = (typeof GRID_BARS)[number]
+
+/**
  * Chords over lyrics' text sizes (ADR 0108, Chordify's font size): its words and chords as a percent
  * of their own size, smallest first, a step at a time by its − and +.
  */
@@ -266,6 +256,8 @@ export interface ScoreViewSettings {
   readonly layout: SheetView
   readonly music: MusicView
   readonly diagrams: DiagramsMode
+  /** The Grid's bars a row; none chosen, the screen's: two on a phone, four from 640px (its boards). */
+  readonly gridBars: GridBars | null
   readonly chordNames: boolean
   /** The verses under the staff they are written on, where the song has words. */
   readonly lyrics: boolean
@@ -297,6 +289,7 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   layout: 'vertical',
   music: 'sheet',
   diagrams: 'animated',
+  gridBars: null,
   chordNames: true,
   lyrics: true,
   pinned: true,
@@ -386,12 +379,13 @@ export interface SettingsState {
   foldedSections: readonly string[]
   /** Whether the welcome was seen: the app's first run shows it once. */
   welcomed: boolean
-  /** The tips put away or done (R31-P), by their ids (`coach.listen`): a tip shows until then. */
-  tipsSeen: readonly string[]
   /** Practice's pages opened from its list, the latest first (R30-4): its Continue's two. */
   practiceRecent: readonly string[]
-  /** How a lesson reads (round 26): one page of its sections, or a section at a time. */
-  lessonReading: LessonReading
+  /**
+   * The score editor's palette tools used last, the latest first (loop round 57, Flat's recent
+   * notation): its Recent group, eight at most, each still in its own category.
+   */
+  paletteRecent: readonly string[]
   /** How Progressions writes and voices every progression (A24). */
   progressions: ProgressionsSettings
   /** How Intervals plays them all, and how fast (canvas 176). */
@@ -431,12 +425,6 @@ export interface TunerSettings {
   readonly a4: number
 }
 export const DEFAULT_TUNER: TunerSettings = { a4: 440 }
-
-/** How a lesson reads: one page of its sections (the plain page), or a section at a time. */
-export const LESSON_READINGS = ['page', 'sections'] as const
-export type LessonReading = (typeof LESSON_READINGS)[number]
-export const isLessonReading = (value: unknown): value is LessonReading =>
-  LESSON_READINGS.some((reading) => reading === value)
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
   fingerNumbers: false,
@@ -538,16 +526,11 @@ export interface ChordPlayerSettings {
   readonly voicing: ProgressionVoicing
   /** Follow a MIDI arranger (a Genos): its Start, Stop and clock lead the sheet, which sends it its sections. */
   readonly follow: boolean
-  /** Where its Genos strip stands: a card over the dock, folded to its head, or in a laptop's side column. */
-  readonly arranger: ArrangerPlace
 }
-export const ARRANGER_PLACES = ['card', 'folded', 'side'] as const
-export type ArrangerPlace = (typeof ARRANGER_PLACES)[number]
 export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = {
   names: 'chords',
   voicing: 'led',
   follow: false,
-  arranger: 'card',
 }
 
 /** The Chords page's own settings, in its Piano sheet. */
@@ -577,24 +560,13 @@ export const isSongRange = isOneOf(SONG_RANGES)
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
-  keySize: 'fit',
-  swipe: 'scroll',
   namedKeys: 'c',
-  markNotes: true,
-  chordNames: true,
   typing: finePointer,
-  autoplay: true,
-  dock: 'bottom',
   folded: false,
   foldedLandscape: true,
-  pedals: 'sustain',
-  volume: 100,
 })
 
 export const isTheme = isOneOf(THEMES)
-export const isKeySize = isOneOf(KEY_SIZES)
-export const isSwipe = isOneOf(SWIPES)
-export const isKeyDock = isOneOf(KEY_DOCKS)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
 export const isSidebar = isOneOf(SIDEBARS)
 export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)
@@ -603,6 +575,7 @@ export const isPedalWay = isOneOf(PEDAL_WAYS)
 export const isMusicView = isOneOf(MUSIC_VIEWS)
 export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
 export const isTextSize = isOneOf(TEXT_SIZES)
+export const isGridBars = isOneOf(GRID_BARS)
 export const isOtherHandLook = isOneOf(OTHER_HAND_LOOKS)
 export const isCountdown = isOneOf(COUNTDOWNS)
 export const isSpeedStep = isOneOf(SPEED_STEPS)

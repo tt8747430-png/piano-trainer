@@ -396,8 +396,8 @@ const day6 = day(
         { kind: 'chords', symbols: ['F', 'Dm', 'Bbmaj7', 'Am'], melody: note('A') },
         {
           kind: 'link',
-          title: t('Harmonise A in F', 'Гармонизовать ля в фа мажоре'),
-          target: { opens: 'harmonise', key: F, note: note('A') },
+          title: t('Chords in F major', 'Аккорды фа мажора'),
+          target: { opens: 'key', key: F },
         },
       ],
       t('A melody note belongs to many chords.', 'Нота мелодии входит во многие аккорды.'),

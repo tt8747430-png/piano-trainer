@@ -2,7 +2,7 @@ import type { NamedKeys } from '@/shared/lib'
 import { VERDICT_SHAPE } from '../verdict-shape'
 import {
   isBlackKey,
-  noteName,
+  printedNote,
   pitchClass,
   plainSpelling,
   printedKeyName,
@@ -88,7 +88,7 @@ function nameOf(key: Midi, namedKeys: NamedKeys): string | undefined {
   if (namedKeys === 'none') return undefined
   const pc = pitchClass(key)
   if (pc === 0) return printedKeyName(key)
-  return namedKeys === 'all' ? noteName(plainSpelling(pc, true)) : undefined
+  return namedKeys === 'all' ? printedNote(plainSpelling(pc, true)) : undefined
 }
 
 /** A wrong key's own mark where nothing else labels it, the score's wrong shape: crimson is never its only cue. */
@@ -131,7 +131,7 @@ function atMostTwo(label: KeyLabel, lettered: boolean): KeyLabel {
 export const toneMark = (
   tone: Pick<Tone, 'role' | 'degree' | 'note'>,
   face: KeyTone = tone.role,
-): KeyMark => ({ tone: face, label: tone.degree, note: noteName(tone.note) })
+): KeyMark => ({ tone: face, label: tone.degree, note: printedNote(tone.note) })
 
 /**
  * A chord tone's key as the boards label it where a page has no Labels setting (the Chord finder, a
@@ -139,7 +139,7 @@ export const toneMark = (
  */
 export const nameMark = (tone: Pick<Tone, 'role' | 'note'>): KeyMark => ({
   tone: tone.role,
-  label: noteName(tone.note),
+  label: printedNote(tone.note),
 })
 
 /** How a key looks: a wrong key over a lit one, a lit one over a mark, a mark over a selection; down over all. */

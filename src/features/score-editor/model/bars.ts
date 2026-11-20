@@ -229,14 +229,21 @@ export function newLine(draft: Draft, index: number): Draft {
   )
 }
 
-/** Bar `index`'s line joined with the next line of its section. */
-export function joinLine(draft: Draft, index: number): Draft {
+/** Whether bar `index` starts a line of its own after another: a system break stands before it. */
+export function startsLine(draft: Draft, index: number): boolean {
+  return index > 0 && slotsOf(draft)[index]?.newLine === true
+}
+
+/**
+ * A system break at bar `index`, as Flat's: a new line from it, or, where one starts there already,
+ * its line joined to the one before. A section's first bar keeps its line.
+ */
+export function toggleLine(draft: Draft, index: number): Draft {
   const slots = slotsOf(draft)
-  const next = slots.findIndex((slot, i) => i > index && slot.newLine)
-  const slot = slots[next]
-  if (!slot || slot.newSection) return draft
+  const slot = slots[index]
+  if (!slot || index === 0 || slot.newSection) return draft
   return withSlots(
     draft,
-    slots.map((other, i) => (i === next ? { ...other, newLine: false } : other)),
+    slots.map((other, i) => (i === index ? { ...other, newLine: !slot.newLine } : other)),
   )
 }

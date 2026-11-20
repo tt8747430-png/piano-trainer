@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useNotifications, useNotificationsStoreApi, type Notice } from '@/entities/notification'
 import { isMilestoneId, localDay, type BadgeId } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { cn, formatLocale } from '@/shared/lib'
 import {
   BackButton,
   ButtonLink,
@@ -155,8 +155,8 @@ function Group({
   const locale = useLocale()
   const titleOf = useNoticeTitle()
   const navigate = useNavigate()
-  const time = new Intl.DateTimeFormat(locale, { timeStyle: 'short' })
-  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium' })
+  const time = new Intl.DateTimeFormat(formatLocale(locale), { timeStyle: 'short' })
+  const date = new Intl.DateTimeFormat(formatLocale(locale), { dateStyle: 'medium' })
   const open = (notice: Notice) => {
     onRead(notice.id)
     if (notice.kind === 'tier')

@@ -89,3 +89,24 @@ export function keepCentre(
     middle * nextWidth - clientWidth / 2,
   )
 }
+
+/**
+ * A scroll position moved to the nearest white key's left edge, so the view opens on a whole key
+ * (the boards start their keys on one, never a sliver); at the keyboard's right end it stays there.
+ */
+export function onWhiteEdge(
+  metrics: ScrollMetrics,
+  keys: readonly KeyGeometry[],
+  left: number,
+): number {
+  const end = Math.max(0, metrics.scrollWidth - metrics.clientWidth)
+  if (left >= end) return end
+  const edges = keys
+    .filter((key) => !key.black)
+    .map((key) => (key.left / 100) * metrics.scrollWidth)
+  const nearest = edges.reduce(
+    (best, edge) => (Math.abs(edge - left) < Math.abs(best - left) ? edge : best),
+    0,
+  )
+  return within(metrics, nearest)
+}

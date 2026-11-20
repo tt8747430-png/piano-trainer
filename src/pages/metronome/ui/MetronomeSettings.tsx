@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { METRONOME_VOLUMES } from '@/entities/settings'
 import type { Metronome } from '@/features/metronome'
 import {
   METRONOME_METERS,
@@ -13,6 +14,7 @@ import {
   GroupLink,
   GroupRow,
   GroupRows,
+  GroupSwitch,
   Sheet,
   SheetContent,
   Stepper,
@@ -24,10 +26,11 @@ import { SpeedTrainerField } from './SpeedTrainerField'
 type Opened = 'subdivision' | 'sound' | 'speed' | 'trainer'
 
 /**
- * The Metronome's settings in place (canvas 179's `ME_ROWS`): one group of rows on the muted fill,
- * the time signature stepped in place, then Subdivision, Sound, Speed trainer and Silent bars, each
- * its value and a chevron opening its sheet. The Player's count-in and click sound as these say: one
- * engine, one set; the Metronome page is every setting's one home.
+ * The Metronome's settings in place (canvas v407's `ME_ROWS`): one group of rows, by how often they
+ * are wanted: the time signature stepped in place, Subdivision, Sound, Volume stepped by ten, Flash on
+ * the beat, Speed trainer and Silent bars, a link row's value and chevron opening its sheet. The
+ * Player's count-in and click sound as these say: one engine, one set; the Metronome page is every
+ * setting's one home, with no gear.
  */
 export function MetronomeSettings({ metronome }: { metronome: Metronome }) {
   const { t } = useTranslation('practice')
@@ -47,9 +50,10 @@ export function MetronomeSettings({ metronome }: { metronome: Metronome }) {
     label: t(`metronome.sounds.${sound}`),
   }))
   const { speed, trainer } = metronome
+  const volume = METRONOME_VOLUMES.findIndex((each) => each === metronome.volume)
   return (
     <>
-      <GroupRows label={t('metronome.group')}>
+      <GroupRows label={t('metronome.group')} surface="sheet">
         <GroupRow label={t('metronome.meter')} setting="metronome.meter">
           <Stepper
             label={t('metronome.meter')}
@@ -76,6 +80,27 @@ export function MetronomeSettings({ metronome }: { metronome: Metronome }) {
           value={t(`metronome.sounds.${metronome.sound}`)}
           setting="metronome.sound"
           onClick={() => setOpened('sound')}
+        />
+        <GroupRow label={t('metronome.volume')} setting="metronome.volume">
+          <Stepper
+            label={t('metronome.volume')}
+            value={volume}
+            min={0}
+            max={METRONOME_VOLUMES.length - 1}
+            format={(at) => `${METRONOME_VOLUMES[at] ?? metronome.volume}%`}
+            onChange={(at) => {
+              const next = METRONOME_VOLUMES[at]
+              if (next !== undefined) metronome.setVolume(next)
+            }}
+            decrease={`${t('metronome.volume')} −`}
+            increase={`${t('metronome.volume')} +`}
+          />
+        </GroupRow>
+        <GroupSwitch
+          label={t('metronome.flash')}
+          setting="metronome.flash"
+          checked={metronome.flash}
+          onCheckedChange={metronome.setFlash}
         />
         <GroupLink
           label={t('metronome.speed.label')}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { COURSES, courseIcon, COURSE_ICON } from '@/entities/course'
+import { COURSES } from '@/entities/course'
 import { OWN_COURSE_TEMPLATES } from '@/entities/own-lessons'
 import { BUILT_IN_PATTERNS, partOfShelf, patternNeed, type PatternId } from '@/entities/pattern'
 import { pieceById, pieceFit } from '@/entities/piece'
@@ -8,18 +8,14 @@ import { readProgressionsSearch } from '@/app/routes/explorer-search'
 import { typedSearch } from '@/widgets/progression-explorer'
 import {
   C_MAJOR,
-  chordsHolding,
   chordSymbol,
-  HOLDING_GROUPS,
   keyFromParam,
-  note,
   numeralChord,
   parseChordSymbol,
   parseNoteName,
   parseNumerals,
   passingChords,
   readChordLine,
-  writtenSymbol,
 } from '@/shared/lib/music'
 import { noteLine, voicingKeys, voicingsMusic } from '@/shared/lib/schedule'
 import { isMethodBookId } from '@/entities/book'
@@ -291,20 +287,6 @@ describe('the lessons, a journey’s and a course’s', () => {
     expect(chords).toEqual(['Bm7♭5', 'E7', 'Am7'])
   })
 
-  it('reharmonise E with chords the Reharmonise tool shows under it', () => {
-    const held = chordsHolding(note('E'), C_MAJOR)
-    const shown = HOLDING_GROUPS.flatMap((group) =>
-      held[group].map((each) => writtenSymbol(each.chord)),
-    )
-    const taught = (lessonById('reharmonising-a-melody')?.sections ?? [])
-      .filter((section) => section.heading.en !== 'Try it')
-      .flatMap((section) =>
-        section.blocks.flatMap((block) => (block.kind === 'chords' ? block.symbols : [])),
-      )
-    expect(taught).toHaveLength(6)
-    for (const symbol of taught) expect(shown, symbol).toContain(symbol)
-  })
-
   it('link a row of passing chords to the tool that shows it: the row’s last chord, its chords between', () => {
     const written = (symbol: string) => chordSymbol(parseChordSymbol(symbol))
     const linked = WORKSHEETS.flatMap((lesson) =>
@@ -543,12 +525,10 @@ describe('the journeys', () => {
 })
 
 describe('the courses', () => {
-  it('have unique ids, an icon each, and say what they teach in both languages', () => {
+  it('have unique ids and say what they teach in both languages', () => {
     const ids = COURSES.map((course) => course.id)
     expect(new Set(ids).size).toBe(ids.length)
-    expect(Object.keys(COURSE_ICON).sort()).toEqual([...ids].sort())
     for (const course of COURSES) {
-      expect(courseIcon(course.id), course.id).toBeDefined()
       for (const text of [course.title, course.summary]) {
         expect(text.en.trim(), course.id).not.toBe('')
         expect(text.ru.trim(), course.id).not.toBe('')

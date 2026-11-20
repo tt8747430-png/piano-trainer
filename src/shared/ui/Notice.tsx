@@ -23,7 +23,7 @@ export function Notice({
   return (
     <div
       role="alert"
-      className="pointer-events-auto flex flex-col gap-1.5 rounded-2xl bg-alert pt-3.5 pe-3.5 pb-2.5 ps-4 text-alert-foreground shadow-(--elevation-3)"
+      className="pointer-events-auto flex flex-col gap-2 rounded-menu bg-alert px-4 pt-4 pb-3 text-alert-foreground shadow-(--elevation-3)"
     >
       <p className="font-bold text-pretty">{line}</p>
       {detail === undefined ? null : <p className="text-sm/[1.4] text-pretty">{detail}</p>}

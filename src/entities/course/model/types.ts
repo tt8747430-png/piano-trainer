@@ -20,6 +20,8 @@ export interface Course {
   readonly shelf: Shelf
   readonly stage: Stage
   readonly title: LocalText
+  /** What it is, in a few words: the line under its cover. */
+  readonly line: LocalText
   /** What the course teaches, in a sentence or two. */
   readonly summary: LocalText
   /** How long it takes at a lesson or two a week. */
@@ -40,6 +42,8 @@ export interface CourseRecord {
   readonly id: string
   readonly title: LocalText
   readonly summary: LocalText
+  /** The line under its cover; a record without one keeps the app's own. */
+  readonly line?: LocalText
   /** Its lessons in order; a record without the list keeps the app's own. */
   readonly lessons?: readonly string[]
   /** Where Courses lists it, its level and its length: the app's own where it has them. */
@@ -53,6 +57,7 @@ export interface CourseRecord {
 export const courseRecord = ({
   id,
   title,
+  line,
   summary,
   lessons,
   shelf,
@@ -62,6 +67,7 @@ export const courseRecord = ({
 }: Course): CourseRecord => ({
   id,
   title,
+  line,
   summary,
   lessons: lessons.map((lesson) => lesson.id),
   shelf,
@@ -99,6 +105,7 @@ export function isCourseRecord(id: string, body: unknown): body is CourseRecord 
     record.id === id &&
     isText(record.title) &&
     isText(record.summary) &&
+    (record.line === undefined || isText(record.line)) &&
     (record.lessons === undefined || isIdList(record.lessons)) &&
     (record.shelf === undefined || isShelf(record.shelf)) &&
     (record.stage === undefined || isStage(record.stage)) &&
@@ -109,6 +116,7 @@ export function isCourseRecord(id: string, body: unknown): body is CourseRecord 
 
 /** A record that stands as a course of its own: one an editor made, with its shelf, stage and weeks. */
 export type WholeCourseRecord = CourseRecord & {
+  readonly line: LocalText
   readonly lessons: readonly string[]
   readonly shelf: Shelf
   readonly stage: Stage
@@ -117,6 +125,7 @@ export type WholeCourseRecord = CourseRecord & {
 
 export const isWholeCourse = (record: CourseRecord): record is WholeCourseRecord =>
   record.lessons !== undefined &&
+  record.line !== undefined &&
   record.shelf !== undefined &&
   record.stage !== undefined &&
   record.weeks !== undefined
@@ -136,6 +145,7 @@ export const blankCourse = (id: string): Course => ({
   shelf: 'beginner',
   stage: 'beginner',
   title: { en: '', ru: '' },
+  line: { en: '', ru: '' },
   summary: { en: '', ru: '' },
   weeks: 4,
   lessons: [],

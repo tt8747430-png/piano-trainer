@@ -31,15 +31,8 @@ import {
   say,
   SwitchRow,
 } from '@/shared/ui'
-import {
-  CardLookProvider,
-  cardLookProps,
-  FolderRow,
-  LibraryRows,
-  SongRow,
-} from '@/widgets/song-library'
+import { CardLookProvider, FolderRow, LibraryRows, SongRow } from '@/widgets/song-library'
 import { useLibraryPage, type LibraryPage } from '../model/use-library-page'
-import { SongTable } from './SongTable'
 
 /** The presets a place's cards take (the board's four; Night is a lesson block's alone). */
 const CARD_PRESETS = ['plain', 'soft', 'bold', 'paper'] as const
@@ -116,7 +109,7 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
 
   return (
     <div className="flex flex-col gap-6 pb-8">
-      <ScreenHeader title={t('cardStyle.title')} back={<BackButton />} />
+      <ScreenHeader column title={t('cardStyle.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
         {/* The preview first (the board's): the place's own rows as a phone or a laptop draws them. */}
         <div className="flex flex-col gap-2.5 rounded-[18px] bg-muted p-4">
@@ -234,9 +227,8 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
 }
 
 /**
- * The place's first rows in the look, as `device` draws them: a phone's list or cards; a laptop's
- * right pane, its songs a table inside a card in the style for List, the style's cards for Cards and
- * Grid (R32-C). Seen, never used: they lead nowhere while the look is edited.
+ * The place's first rows in the look, as `device` draws them: a phone's column of cards, a laptop's
+ * two across (R72). Seen, never used: they lead nowhere while the look is edited.
  */
 function StylePreview({
   look,
@@ -253,32 +245,23 @@ function StylePreview({
   const folders = device === 'phone' ? page.view.folders.slice(0, 2) : []
   if (songs.length === 0 && folders.length === 0)
     return <p className="text-muted-foreground">{t('cardStyle.empty')}</p>
-  const table = device === 'laptop' && look.style.layout === 'list'
   return (
     <CardLookProvider value={look}>
       <div inert className="min-h-0 flex-1 overflow-hidden">
-        {table ? (
-          <div {...cardLookProps(look)}>
-            <div className="card overflow-hidden px-2">
-              <SongTable entries={songs.slice(0, 5)} page={page} />
-            </div>
-          </div>
-        ) : (
-          <LibraryRows look={look} className={cn(device === 'laptop' && 'grid-cols-2')}>
-            {folders.map(({ folder: each, ...holds }) => (
-              <FolderRow
-                key={each.id}
-                folder={each}
-                holds={holds}
-                actions={[]}
-                onSelect={() => undefined}
-              />
-            ))}
-            {songs.slice(0, device === 'laptop' ? 6 : 2 - folders.length).map((entry) => (
-              <SongRow key={entry.id} entry={entry} actions={[]} onSelect={() => undefined} />
-            ))}
-          </LibraryRows>
-        )}
+        <LibraryRows look={look} className={cn(device === 'laptop' && 'grid-cols-2')}>
+          {folders.map(({ folder: each, ...holds }) => (
+            <FolderRow
+              key={each.id}
+              folder={each}
+              holds={holds}
+              actions={[]}
+              onSelect={() => undefined}
+            />
+          ))}
+          {songs.slice(0, device === 'laptop' ? 6 : 2 - folders.length).map((entry) => (
+            <SongRow key={entry.id} entry={entry} actions={[]} onSelect={() => undefined} />
+          ))}
+        </LibraryRows>
       </div>
     </CardLookProvider>
   )

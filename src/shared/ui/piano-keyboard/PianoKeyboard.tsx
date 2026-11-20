@@ -27,8 +27,8 @@ const WHITES_IN_VIEW = 36
 const FIT_LENGTH = { least: 112, most: 132, perWhite: 3.6 } as const
 /** Where the keys asked to be in sight must all fit (`fitInView`), Fit narrows them to this at most. */
 const NARROWEST_FIT_PX = 26
-/** …nor wider than this: a wide screen shows the neighbouring keys instead. */
-const MAX_WHITE_PX = 48
+/** …nor wider than this (the Chord finder board's C2 to C6 across a laptop's 1462 is 50.4): a wider screen shows the neighbouring keys instead. */
+const MAX_WHITE_PX = 52
 /** Large keys: about an octave in view on a phone. */
 const LARGE_WHITE_PX = 56
 /**

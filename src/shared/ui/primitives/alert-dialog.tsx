@@ -44,7 +44,7 @@ function AlertDialogContent({
         data-size={size}
         className={cn(
           // The canvas's ASK: 372 wide on the page's paper, 20 corners, 20 in, its parts 8 apart.
-          'group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-93 max-w-[calc(100%-3rem)] -translate-x-1/2 -translate-y-1/2 gap-2 rounded-[20px] bg-background p-5 text-foreground shadow-(--elevation-3) ring-1 ring-border duration-100 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+          'group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-93 max-w-[calc(100%-3rem)] -translate-x-1/2 -translate-y-1/2 gap-2 rounded-sheet bg-background p-5 text-foreground layer-shadow duration-100 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
           className,
         )}
         {...props}
@@ -68,8 +68,9 @@ function AlertDialogFooter({ className, ...props }: React.ComponentProps<'div'>)
     <div
       data-slot="alert-dialog-footer"
       className={cn(
-        // Cancel and the act, two equal 44 pills side by side, no band under them.
-        'mt-2 flex gap-2 *:h-11 *:min-w-0 *:flex-1 *:rounded-full *:text-base *:font-bold *:data-[variant=destructive]:border-0 *:data-[variant=destructive]:bg-destructive *:data-[variant=destructive]:text-destructive-foreground *:data-[variant=destructive]:hover:brightness-95',
+        // Cancel and the act, two equal 44 pills side by side, no band under them; the act crimson
+        // for a loss, ink for one that only reaches other people (Publish), as the canvas's ASK.
+        'mt-2 flex gap-2 *:h-11 *:min-w-0 *:flex-1 *:rounded-full *:text-base *:font-bold *:data-[variant=destructive]:border-0 *:data-[variant=destructive]:bg-destructive *:data-[variant=destructive]:text-destructive-foreground *:data-[variant=destructive]:hover:brightness-95 *:data-[variant=default]:bg-foreground *:data-[variant=default]:text-background',
         className,
       )}
       {...props}

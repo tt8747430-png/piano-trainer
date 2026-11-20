@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { spellChord, type ChordQuality } from './chord'
+import { spellChord } from './chord'
+import { type ChordQuality } from './chord-quality'
 import { blockFingering, handFingers, placedFingering } from './chord-fingering'
 import { note, type SpelledNote } from './note'
 import { midi } from './pitch'

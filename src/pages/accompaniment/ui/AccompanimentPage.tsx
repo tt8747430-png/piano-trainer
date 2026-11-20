@@ -1,9 +1,15 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { Music4, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { usePatternBook } from '@/entities/pattern'
 import { BackButton, ButtonLink } from '@/shared/ui'
-import { PracticeLibrary, useArrangeMode, useLibraryNew } from '@/widgets/practice-library'
-import { useAccompanimentLibrary } from '../model/use-accompaniment-library'
+import { PatternTile } from '@/widgets/pattern-music'
+import {
+  PracticeLibrary,
+  useAccompanimentLibrary,
+  useArrangeMode,
+  useLibraryNew,
+} from '@/widgets/practice-library'
 
 /**
  * Accompaniment (R30-4, R32): the accompaniment patterns as a library, the Songs library's shape,
@@ -15,10 +21,18 @@ import { useAccompanimentLibrary } from '../model/use-accompaniment-library'
 export function AccompanimentPage() {
   const { t } = useTranslation('practice')
   const view = useSearch({ from: '/shell/practice/accompaniment' })
-  const { groups, items, mine } = useAccompanimentLibrary()
+  const { groups, items: rows, patterns, mine } = useAccompanimentLibrary()
+  const book = usePatternBook()
+  // Each pattern's row shows how it plays, its roll in small (the board's picture).
+  const items = rows.map((item) => {
+    const pattern = patterns.get(item.id)
+    return pattern
+      ? { ...item, picture: { drawn: <PatternTile pattern={pattern} book={book} /> } }
+      : item
+  })
   const { editing, edit } = useArrangeMode()
   const navigate = useNavigate()
-  const made = useLibraryNew('accompaniment', [
+  const newDial = useLibraryNew('accompaniment', [
     {
       key: 'pattern',
       label: t('patterns.new'),
@@ -34,7 +48,6 @@ export function AccompanimentPage() {
           title: t('pages.accompaniment'),
           back: <BackButton />,
           edit,
-          tools: editing ? undefined : made.menu,
         }}
         kind="accompaniment"
         view={view}
@@ -42,7 +55,11 @@ export function AccompanimentPage() {
         groups={groups}
         groupWord="book"
         levels
-        extra={t('library.table.hands')}
+        columns={{
+          name: t('library.table.pattern'),
+          second: t('library.table.hands'),
+          shares: [2, 3.4, 0.8],
+        }}
         {...(mine
           ? {
               mine: {
@@ -61,7 +78,7 @@ export function AccompanimentPage() {
         screen={t('pages.accompaniment')}
         editing={editing}
       />
-      {editing ? null : made.dial}
+      {editing ? null : newDial}
     </div>
   )
 }

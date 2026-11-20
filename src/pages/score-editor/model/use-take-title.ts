@@ -1,12 +1,16 @@
 import type { Take } from '@/entities/take'
 import { useLocale, type Locale } from '@/shared/i18n'
+import { formatLocale } from '@/shared/lib'
 
 /** One formatter a language: a take is named by the day and time it was made. */
 const formatters = new Map<Locale, Intl.DateTimeFormat>()
 function madeFormat(locale: Locale): Intl.DateTimeFormat {
   const known = formatters.get(locale)
   if (known) return known
-  const format = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' })
+  const format = new Intl.DateTimeFormat(formatLocale(locale), {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  })
   formatters.set(locale, format)
   return format
 }

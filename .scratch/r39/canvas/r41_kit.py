@@ -29,18 +29,32 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
 
 # ── the bar ──
 # one glass for every control that floats over the page (bars, floating actions, the transport): DESIGN.md, Placement
-GLASSFX = f'background: {GLASS}; -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}'
+GLASSFX = f'background: {GLASS}; -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {FLOAT}'
 GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; border-radius: 22px; border: 0; {GLASSFX}; color: {INK}; display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 0'
+# The one switch between the Player and the editor (owner, 2026-11-16: "proper way to switch from the player to editor not
+# like this two different controls in the editor and in the player"): Play · Edit in one glass capsule at the centre of
+# both bars, the same pixels in each; each half 65 wide so nothing moves when the mode changes; the mode shown is ink.
+# MODEBAR is the bar both screens share: Close leading, the switch, the screen's own glass group trailing (its column
+# held to the editor's three buttons, so the switch stands where the editor's does).
+def MODESW(on, other_href):
+    seg_ = 'width: 65px; height: 44px; padding: 0; box-sizing: border-box; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 15px; text-decoration: none; border: 0; font-family: inherit'
+    def half(label):
+        if label.lower() == on:
+            return f'<span role="radio" aria-checked="true" style="{seg_}; color: {SHEET}; font-weight: 600; background: {INK}">{label}</span>'
+        return f'<a href="{other_href}" role="radio" aria-checked="false" style="{seg_}; color: {SOFT}; font-weight: 500; background: transparent">{label}</a>'
+    return f'<div role="radiogroup" aria-label="Mode" style="display: flex; border-radius: 22px; {GLASSFX}; pointer-events: auto">{half("Play")}{half("Edit")}</div>'
+MODEBAR_P = 'height: 60px; box-sizing: border-box; padding: 8px 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px'
+MODEBAR_L = 'height: 72px; box-sizing: border-box; padding: 12px 24px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px'
 # The one bar (owner, 2026-11-15: "the headers" inconsistent; Apple HIG, Toolbars: "Use the standard Back and Close
 # buttons … consistently implement it throughout your app"; iOS 26 draws bar items as glass): every bar's buttons
 # are 44 glass circles 8 apart (IB), Back the same glass circle at the leading edge. A page under a page: 56 tall,
 # its title 17 semibold centred; a place: TITLEBAR, its large title at the leading edge.
-def TOP(back='', title='', right='', backlabel='Back', left='', n=0):
+def TOP(back='', title='', right='', backlabel='Back', left='', n=0, pad='0 12px'):
     b = left or (f'<a href="{back}" aria-label="{backlabel}" data-tip="{backlabel}" style="{GLASSST}">{CHEV_L}</a>' if back else '')
     # bars.md: a title sits after Back or Close, 8 from its glass, never centred between the bar's sides (Apple,
     # Toolbars: "keep the title under 15 characters"; a long one ends in an ellipsis)
     t = f'<span data-bar-title style="flex: 0 1 auto; min-width: 0; margin-left: {8 if b else 4}px; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</span>' if title else ''
-    return f'<header data-float style="position: relative; flex: none; height: 56px; display: flex; align-items: center; padding: 0 12px">{b}{t}<span style="flex: 1"></span><div style="display: flex; align-items: center; gap: 8px">{right}</div></header>'
+    return f'<header data-float style="position: relative; flex: none; height: 56px; display: flex; align-items: center; padding: {pad}">{b}{t}<span style="flex: 1"></span><div style="display: flex; align-items: center; gap: 8px">{right}</div></header>'
 def LPAD(h):
     """The same bar on a laptop: 40 at its leading edge, 28 at its trailing, its title the laptop's 30 bold."""
     h = h.replace('padding: 0 12px', 'padding: 0 28px 0 40px', 1)
@@ -70,13 +84,43 @@ def TITLEBAR(title, right='', back='', backlabel='Back', soft='', wrap=False):
     fs = 26 if soft else 24 if wrap else 28  # two titles side by side (My songs · Explore) take a step down so neither is cut
     # a page's own name (a course's, a lesson's Settings') takes a second line before it is ever cut
     s = f'<span style="flex: none; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; color: {LINE}; white-space: nowrap">{soft}</span>' if soft else ''
-    return (f'<header data-float style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 12px 4px 16px">{b}'
+    return (f'<header data-float style="flex: none; min-height: 60px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 12px 4px 16px">{b}'
             f'<h1 data-bar-title style="margin: 0; min-width: 0; flex: {"none" if soft else "0 1 auto"}; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; ' + ('display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-wrap: balance' if wrap else 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis') + f'">{title}</h1>{s}'
             f'<span style="flex: 1"></span><div style="flex: none; display: flex; align-items: center; gap: 8px">{right}</div></header>')
 def LTITLEBAR(title, right='', back='', backact=''):
     b = (f'<a href="{back}" aria-label="Back" data-tip="Back" style="{GLASSST}">{CHEV_L}</a>' if back else
          f'<button type="button" onClick="{{{{{backact}}}}}" aria-label="Back" data-tip="Back" style="{GLASSST}; border: 0; cursor: pointer">{CHEV_L}</button>' if backact else '')
-    return f'<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 {44 if (back or backact) else 56}px">{b}<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>'
+    # one laptop sub-page bar (2026-11-19): LPAD's 56, Back 40 in and the title 12 after it, as the app's ScreenHeader,
+    # the content 24 under it as every laptop page's
+    return f'<header style="flex: none; height: 56px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; padding: 0 28px 0 {40 if (back or backact) else 56}px">{b}<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>'
+# a place's own page (Learn, Practice) on a laptop: the 88 bar, its name 56 in at 30 bold, as Practice's board and the app's
+LPLACEBAR = lambda title, right='': f'<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 56px"><h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>'
+# One frame for every place of an area on a laptop (owner, 2026-11-17: "the pages change to much from the all songs to
+# explore … the user doesnt understand where it goes"; Jakob's law, NN/g consistency): an 88 bar, the place's name at
+# 56 in 30 bold with its count beside it, the place's acts, then the search pinned at the trailing edge (Finder, Apple
+# Music), so moving between sibling places changes the content and never the frame.
+# both ends on the place's 56 column, so its last act ends where the content ends (edges meet; owner's lines, 2026-11-18)
+def LPLACEBAR(title, count='', acts='', search=''):
+    c = f'<span style="flex: none; font-size: 17px; color: {SOFT}; font-variant-numeric: tabular-nums">{count}</span>' if count else ''
+    return (f'<header data-placebar style="flex: none; height: 88px; display: flex; align-items: center; gap: 12px; padding: 0 56px">'
+            f'<h1 style="margin: 0; min-width: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</h1>{c}<span style="flex: 1"></span>'
+            f'<div style="flex: none; display: flex; align-items: center; gap: 8px">{acts}</div>{search}</header>')
+# The keyboard each kind of field asks for (laws, A phone is not a small laptop 5): every <input> names its kind, so a
+# phone opens the right keys and the port carries them. A password keeps its type from its eye and adds its autocomplete.
+KB = {'search': 'type="search" enterkeyhint="search" autocapitalize="off"',
+      'title': 'type="text" autocapitalize="words" enterkeyhint="done"',
+      'text': 'type="text" autocapitalize="sentences" enterkeyhint="done"',
+      'name': 'type="text" autocomplete="name" autocapitalize="words"',
+      'username': 'type="text" autocomplete="username" autocapitalize="off" spellcheck="false"',
+      'email': 'type="email" autocomplete="email" autocapitalize="off" spellcheck="false"',
+      'person': 'type="text" autocapitalize="off" spellcheck="false" enterkeyhint="done"',
+      'url': 'type="url" autocapitalize="off" spellcheck="false" enterkeyhint="go"',
+      'code': 'type="text" autocapitalize="characters" autocorrect="off" spellcheck="false"',
+      'current-password': 'autocomplete="current-password"', 'new-password': 'autocomplete="new-password"'}
+# the one search box (SEARCHBOX) of a place, 320 wide, at the bar's trailing edge
+def PSEARCH(ph, val='q', act='setQ'):
+    return (SEARCHBOX().replace('flex: none;', 'flex: none; width: 320px;', 1)
+            + f'<input {KB["search"]} value="{{{{{val}}}}}" onInput="{{{{{act}}}}}" placeholder="{ph}" aria-label="{ph}" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}"></label>')
 # A laptop sub-page's column: it starts on the bar title's edge (scan-first 1), never centred under a title at the left.
 LCOL = lambda inner, w: f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex"><div style="width: min({w}px, 100%); display: flex; flex-direction: column; gap: 16px">{inner}</div></main>'
 # The ⓘ: one glyph for every explanation behind a tap.
@@ -90,23 +134,36 @@ def INFOTIP(on, close, label, body, pos='left: 0; top: 32px'):
     return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{close}}}}}" style="position: fixed; inset: 0; z-index: 60"></div>'
             f'<div role="dialog" aria-label="{label}" style="position: absolute; {pos}; z-index: 61; width: 300px; max-width: calc(100vw - 32px); box-sizing: border-box; padding: 16px; border-radius: 16px; background: {SHEET}; color: {INK}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; font-size: 15px; line-height: 1.45; text-wrap: pretty; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>')
 def SUBJECT(name, sub, size=40, align='left'):
-    return f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px; text-align: {align}"><h1 style="margin: 0; font-size: {size}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap">{name}</h1><p style="margin: 0; font-size: 15px; color: {SOFT}">{sub}</p></div>'
-H2 = lambda t, right='': f'<div style="display: flex; align-items: baseline; justify-content: space-between; margin: 0 4px"><h2 style="margin: 0; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'
-CAPS = lambda t: f'<h3 style="margin: 0 0 0 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{t}</h3>'
+    return f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px; text-align: {align}"><h1 style="margin: 0; font-size: {size}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{name}</h1><p style="margin: 0; font-size: 15px; color: {SOFT}">{sub}</p></div>'
+H2 = lambda t, right='': f'<div style="display: flex; align-items: baseline; justify-content: space-between; margin: 16px 0 -4px"><h2 style="margin: 0; font-family: {FONT}; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'
+# a group's caption stands on its rows' text (16 in); over tiles or chips that start on the column, inset=0
+# a screen's search box, as the app's SearchField: 44 tall, the control's 12 corners, sand, 12 in, the magnifier 8 before
+# the words; grow=True where it shares its row (a sort or a filter beside it)
+SEARCHBOX = lambda grow=False: f'<label style="{"flex: 1; min-width: 0" if grow else "flex: none"}; height: 44px; box-sizing: border-box; border-radius: 12px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 12px; color: {SOFT}">{SEARCH}'
+CAPS = lambda t, inset=16: f'<h3 style="margin: 0 0 0 {inset}px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{t}</h3>'
 
 # ── controls ──
-def SEGC(lst, h=32, fs=14):
-    return f'<div role="radiogroup" style="flex: none; display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: {FILL}"><sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: 9px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: {fs}px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.l}}}}</button></sc-for></div>'
-def CHIPS(lst):
-    return f'<div class="nos" role="radiogroup" style="flex: none; display: flex; gap: 8px; overflow-x: auto; margin: -5px -16px; padding: 0 16px"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{{{p.pick}}}}" style="flex: none; min-width: 44px; height: 44px; padding: 0 16px; border: solid transparent; border-width: 5px 0; background-clip: padding-box; border-radius: 22px; background-color: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 14px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>'
+def SEGC(lst, h=32, fs=14, fill=False):
+    """A segmented choice; fill=True when it takes its row's width (a mode switch across a bar)."""
+    return f'<div role="radiogroup" style="flex: {'1' if fill else 'none'}; display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: {FILL}"><sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: 9px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: {fs}px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.l}}}}</button></sc-for></div>'
+def CHIPS(lst, wrap=False, bleed=True):
+    # a row of chips scrolls to the screen's edges (bleed); in a sheet or beside a control the row wraps, never cut at its edge
+    lay = 'flex-wrap: wrap; row-gap: 0; margin: -4px 0' if wrap else 'overflow-x: auto; margin: -4px -16px; padding: 0 16px' if bleed else 'overflow-x: auto; margin: -4px 0; padding: 0'
+    return f'<div class="nos" role="radiogroup" style="flex: none; display: flex; gap: 8px; {lay}"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{{{p.pick}}}}" style="flex: none; min-width: 44px; height: 44px; padding: 0 16px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 14px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>'
 KCHIPS = CHIPS
 # In a sheet the choices wrap, never cut at its edge ("nothing is cut")
-WCHIPS = lambda lst: CHIPS(lst).replace('overflow-x: auto; margin: -5px -16px; padding: 0 16px', 'flex-wrap: wrap; row-gap: 0; margin: -5px 0', 1)
-def STEPPER(val, dn, up, w=64):
-    b = lambda a, s, l: f'<button type="button" aria-label="{l}" onClick="{{{{{a}}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 20px">{s}</button>'
-    return f'<div style="flex: none; display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{b(dn, "−", "Less")}<span style="min-width: {w}px; text-align: center; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{{val}}}}}</span>{b(up, "+", "More")}</div>'
-def TOGGLE(on):
-    return f'<span role="switch" aria-checked="{{{{{on}}}}}" style="flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{on}Bg}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.12); position: relative"><span style="position: absolute; top: 2px; left: {{{{{on}X}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)"></span></span>'
+# A caption and the control it names, 8 apart, so the sheet's 16 falls between fields, not inside one (proximity)
+LABELLED = lambda t, ctrl: f'<div style="display: flex; flex-direction: column; gap: 8px">{CAPS(t)}{ctrl}</div>'
+WCHIPS = lambda lst: CHIPS(lst, wrap=True)
+# Lucide's minus and plus at 20, stroke 2, as the app's Stepper draws them (they were the font's − and + at 20)
+STEP_MINUS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path></svg>'
+STEP_PLUS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5v14"></path></svg>'
+def STEPPER(val, dn, up, w=64, dis=False):
+    # dis: the board sets {dn}Dis and {up}Dis, and a − or + at its bound dims as the app's Stepper (muted at 50%)
+    b = lambda a, s, l: f'<button type="button" class="stp" aria-label="{l}" onClick="{{{{{a}}}}}"{f' disabled="{{{{{a}Dis}}}}"' if dis else ''} style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; font: inherit; display: inline-flex; align-items: center; justify-content: center">{s}</button>'
+    return f'<div style="flex: none; display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{b(dn, STEP_MINUS, "Less")}<span style="min-width: {w}px; text-align: center; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{{val}}}}}</span>{b(up, STEP_PLUS, "More")}</div>'
+def TOGGLE(on, face=False):  # face: the switch's picture inside a row that is itself the switch, hidden from readers
+    return f'<span {"aria-hidden=\"true\"" if face else f"role=\"switch\" aria-checked=\"{{{{{on}}}}}\""} style="flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{on}Bg}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.12); position: relative"><span style="position: absolute; top: 2px; left: {{{{{on}X}}}}px; width: 27px; height: 27px; border-radius: 14px; background: {SHEET}; box-shadow: 0 2px 4px rgba(51,41,33,.2)"></span></span>'
 def GROUP(*rows, bg=FILL):
     out = []
     for i, r in enumerate(rows):
@@ -115,36 +172,45 @@ def GROUP(*rows, bg=FILL):
         lab = f'<span style="flex: 1; min-width: 0; font-size: 16px">{r[1]}</span>'
         base = f'min-height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 6px 12px 6px 16px; {sep}'
         if k == 'link':  # label, value, href or act
-            val = f'<span style="font-size: 16px; color: {SOFT}; white-space: nowrap">{r[2]}</span>' if r[2] else ''
+            # the label whole, the value taking the rest and cut with an ellipsis at its end, as the app's GroupLink
+            lab = f'<span style="flex: none; font-size: 16px">{r[1]}</span>'
+            val = f'<span style="flex: 1; min-width: 0; font-size: 16px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right">{r[2]}</span>' if r[2] else '<span style="flex: 1"></span>'
             tgt = r[3] if len(r) > 3 else ''
             if tgt.endswith('.html') or tgt == '#':
                 out.append(f'<a href="{tgt}" style="{base} color: {INK}; text-decoration: none">{lab}{val}<span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>')
             else:
                 out.append(f'<button type="button" {("onClick=\"{{" + tgt + "}}\"") if tgt else ""} style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{val}<span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>')
         elif k == 'seg': out.append(f'<div style="{base.replace("align-items: center; gap: 12px; padding: 6px 12px 6px 16px", "flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 12px 12px 16px")}"><span style="font-size: 16px">{r[1]}</span>{SEGC(r[2], 44, 14)}</div>')
-        elif k == 'step': out.append(f'<div style="{base}">{lab}{STEPPER(*r[2:5])}</div>')
+        elif k == 'step': out.append(f'<div style="{base}">{lab}{STEPPER(*r[2:5], dis=len(r) > 6 and r[6])}</div>')
+        elif k == 'segr': out.append(f'<div style="{base.replace("padding: 6px 12px 6px 16px", "padding: 4px 12px 4px 16px")}">{lab}<div style="flex: none; width: {r[3] if len(r) > 3 else 360}px">{SEGC(r[2], 44, 14)}</div></div>')  # a laptop row: the choice at the row's end, as a stepper; its 48 control takes 4 of padding so the row is 56, the stepper row's height (similarity)
         # a switch row is one control: the row is the switch and carries its name; the drawn switch is its picture
-        elif k == 'toggle': out.append(f'<button type="button" role="switch" aria-checked="{{{{{r[2]}}}}}" onClick="{{{{{r[3]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{TOGGLE(r[2]).replace(f'role="switch" aria-checked="{{{{{r[2]}}}}}"', 'aria-hidden="true"', 1)}</button>')
+        elif k == 'toggle': out.append(f'<button type="button" role="switch" aria-checked="{{{{{r[2]}}}}}" onClick="{{{{{r[3]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{TOGGLE(r[2], face=True)}</button>')
         elif k == 'val': out.append(f'<div style="{base}">{lab}<span style="font-size: 16px; color: {SOFT}; font-variant-numeric: tabular-nums">{r[2]}</span></div>')
         elif k == 'action': out.append(f'<button type="button" onClick="{{{{{r[2]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {r[3] if len(r) > 3 else LINK}; font: inherit; font-size: 16px; text-align: left">{r[1]}</button>')
         elif k == 'raw': out.append(f'<div style="{sep}">{r[1]}</div>')
     # round 41: one card of rows. On the card paper a group is BOXG's card, 14 corners and the hairline ring, so a page
     # never draws its groups two ways; a filled group (on a sheet) keeps its fill alone.
     if bg == SHEET:
-        return f'<div style="flex: none; border-radius: 14px; background: {bg}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{"".join(out)}</div>'
-    return f'<div style="flex: none; border-radius: 12px; background: {bg}; overflow: hidden">{"".join(out)}</div>'
-def BTN(label, act='', href='', kind='primary', h=50, grow=True):
-    bg = {'primary': ACCENT, 'quiet': FILL, 'ink': INK}[kind]; fg = SHEET if kind == 'ink' else INK
-    st = f'{"flex: 1;" if grow else "flex: none;"} min-width: 0; height: {h}px; padding: 0 20px; border: 0; border-radius: {h // 2}px; background: {bg}; color: {fg}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; white-space: nowrap'
-    return f'<a href="{href}" style="{st}">{label}</a>' if href else f'<button type="button" {("onClick=\"{{" + act + "}}\"") if act else ""} style="{st}">{label}</button>'
-def PLAYBTN(size=52):
-    return f'<button type="button" aria-label="{{{{playLabel}}}}" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="flex: none; width: {size}px; height: {size}px; border: 0; border-radius: {size // 2}px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOP}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAY}</sc-if></button>'
-def DOCK(inner, bottom=34, pad=8):
-    """The floating glass bar at the foot of a phone page."""
-    return f'<div role="toolbar" style="position: absolute; left: 16px; right: 16px; bottom: {bottom}px; z-index: 40; height: 68px; box-sizing: border-box; padding: 0 {pad}px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{inner}</div>'
+        return f'<div data-group style="flex: none; border-radius: 14px; background: {bg}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{"".join(out)}</div>'
+    return f'<div data-group style="flex: none; border-radius: 12px; background: {bg}; overflow: hidden">{"".join(out)}</div>'
+def BTN(label, act='', href='', kind='primary', h=50, grow=True, fg=INK, attrs=''):
+    """A text button: honey for the screen's one act, quiet beside it. Two heights only (laws, similarity: near-miss
+    heights read as a mistake): 50 for a page's or sheet's act, 44 compact in a row; 48 and 52 are 50."""
+    h = 44 if h < 47 else 50
+    bg = {'primary': ACCENT, 'quiet': FILL, 'plain': 'transparent'}[kind]  # fg: a state's ink (a disabled Clear); attrs: extra attributes, first; plain: on glass beside the honey act (one fill per dock)
+    # min-height: in a column, flex: 1's zero basis squashed it to its text when the column was full (Copy link, 20 tall)
+    st = f'{"flex: 1;" if grow else "flex: none;"} min-width: 0; height: {h}px; min-height: {h}px; padding: 0 20px; border: 0; border-radius: {h // 2}px; background: {bg}; color: {fg}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; white-space: nowrap'
+    return f'<a href="{href}" style="{st}">{label}</a>' if href else f'<button {attrs}type="button" {("onClick=\"{{" + act + "}}\"") if act else ""} style="{st}">{label}</button>'
+def PLAYBTN(size=52, glyph=(22, 20)):  # glyph: the play and stop marks' sizes, smaller in a small button
+    return f'<button type="button" aria-label="{{{{playLabel}}}}" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="flex: none; width: {size}px; height: {size}px; border: 0; border-radius: {size // 2}px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOP.replace('"20"', f'"{glyph[1]}"')}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAY.replace('"22"', f'"{glyph[0]}"')}</sc-if></button>'
+def DOCK(inner, bottom=34, pad=8, w=None):  # bottom: px, or a state's placement ('{{dockPos}}') given whole
+    """The floating glass bar at the foot of a page: the phone's full width, or w wide and centred (a laptop's
+    selection bar, 'auto' to hug its acts); not for the laptop's dock in the flow, which is DOCK_L."""
+    place = 'left: 16px; right: 16px;' if w is None else 'left: 50%; transform: translateX(-50%);' + ('' if w == 'auto' else f' width: {w}px;')
+    return f'<div role="toolbar" style="position: absolute; {place} {bottom if isinstance(bottom, str) else f'bottom: {bottom}px'}; z-index: 40; height: 68px; box-sizing: border-box; padding: 0 {pad}px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; align-items: center; gap: 8px">{inner}</div>'
 def DOCK_L(inner, w=560):
-    return f'<div style="flex: none; display: flex; justify-content: center"><div role="toolbar" style="width: {w}px; height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{inner}</div></div>'
-def CARD(inner, pad='14px 16px', extra=''):
+    return f'<div style="flex: none; display: flex; justify-content: center"><div role="toolbar" style="width: {w}px; height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; align-items: center; gap: 8px">{inner}</div></div>'
+def CARD(inner, pad='16px', extra=''):
     return f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: {pad}; {extra}">{inner}</div>'
 def ROOTGRID(lst='roots'):
     def track(half):
@@ -153,13 +219,46 @@ def ROOTGRID(lst='roots'):
                 f'style="height: 44px; min-width: 0; padding: 0; border: 0; border-radius: 11px; background: {{{{r.bg}}}}; box-shadow: {{{{r.sh}}}}; color: {INK}; font: inherit; font-size: 18px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</button></sc-for></div>')
     return f'<div role="radiogroup" aria-label="Root" style="display: flex; flex-direction: column; gap: 8px">{track("a")}{track("b")}</div>'
 def _BSHEET(cond, title, body, done='Done'):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 16px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{closeSheet}}}}" style="position: absolute; right: 0; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
-def BSHEET(cond, title, body, done='Done'):
-    # done=None: a sheet whose foot closes it (Sort and filter's Show n) carries no second way out in its head
+    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div><section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 16px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{closeSheet}}}}" style="position: absolute; right: 0; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
+def BSHEET(cond, title, body, done='Done', tall=False, back='', maxh=''):
+    # back: a sub-page's Back before its title; maxh: a cap other than 86% (a sheet over a bar that stays in reach)
+    # done=None: a sheet whose foot closes it (Sort and filter's Show n) carries no second way out in its head;
+    # tall: a sheet that keeps its full height while its list changes (Search, a chord type's list)
     t = _BSHEET(cond, title, body, done or '')
+    if back:
+        t = t.replace(f'<span style="font-size: 17px; font-weight: 600">{title}</span>', back + f'<span style="font-size: 17px; font-weight: 600">{title}</span>', 1)
+    if maxh:
+        t = t.replace('max-height: 86%', 'max-height: ' + maxh, 1)
+    if tall:
+        t = t.replace('max-height: 86%;', 'height: 86%; box-sizing: border-box;', 1)
     return re.sub(r'<button[^>]*>' + '</button>', '', t, count=1) if done is None else t
-def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: 760px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>'
+# A row's ··· menu (owner, 2026-11-17: "what kind of nonsense is to put this delete in this cnetered popup with doen
+# button"; Apple HIG, Pull-down buttons and Menus; Material 3, Menus): a ··· opens a menu at its button, on a phone as
+# on a laptop, never a sheet or a dialog centred on the screen, never a title over it and never Done in it. Glass, 6
+# in, items 44 tall in the menu's 16; what loses something last, after a hairline, in crimson. Items are GROUP's
+# tuples: ('link', label, '', href) or ('action', label, act[, colour]). The JS sets {posvar} from ANCHOR(e, h).
+def ROWMENU(cond, label, items, posvar='menuPos', w=240):
+    out, seen_red = [], False
+    for t in items:
+        kind, l = t[0], t[1]
+        col = t[3] if kind == 'action' and len(t) > 3 and t[3] else INK
+        if col == RED and not seen_red and out:
+            out.append(f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div>')
+            seen_red = seen_red or col == RED
+        st = f'width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left; text-decoration: none'
+        out.append(f'<a role="menuitem" href="{t[3]}" style="{st}">{l}</a>' if kind == 'link' else f'<button type="button" role="menuitem" onClick="{{{{{t[2]}}}}}" style="{st}">{l}</button>')
+    return MENUSHELL(cond, label, ''.join(out), posvar, w)
+# the menu's glass shell, for a menu whose items are drawn elsewhere (New's rows with their icons)
+def MENUSHELL(cond, label, body, posvar='menuPos', w=240):
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
+            f'<div role="menu" aria-label="{label}" style="position: absolute; {{{{{posvar}}}}}; z-index: 61; width: {w}px; box-sizing: border-box; padding: 6px; border-radius: 16px; {GLASSFX}; display: flex; flex-direction: column; transform-origin: top right">{body}</div></sc-if>')
+def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380, back='', h=''):  # back: a sub-page's Back, left of its centred title; h: a fixed height for a list that changes
+    # never past the screen: its height is capped by the room left from its top or bottom on the 904-tall laptop screen
+    m = re.search(r'(?:top|bottom): (\d+)px', pos)
+    mh = min(760, 904 - int(m.group(1)) - 16) if m else 760
+    out = (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; {('height: ' + h) if h else f'max-height: {mh}px'}; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>')
+    return out.replace(f'<span style="font-size: 17px; font-weight: 600">{title}</span>', f'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 44px">{back}<span style="font-size: 17px; font-weight: 600">{title}</span></div>', 1) if back else out
+
 
 def js(body):
     return 'class Component extends DCLogic {\n  renderVals() {\n    const st = this.state || {}; const set = (o) => this.setState(o);\n' + R41PRE + '\n' + body + '\n  }\n}\n'
@@ -167,12 +266,15 @@ def js(body):
 def detail(stem, title, script, phone_body, laptop_main, laptop_aside, sheets_phone='', pops_laptop='', section='Practice'):
     phone(stem, title + ', phone', phone_body, script, sheets_phone)
     laptop(stem + 'Laptop' if stem != 'Main' else 'Laptop', title + ', laptop', laptop_main, laptop_aside, script, pops_laptop, section)
+# Edit morphs into Done in its own place (owner, 2026-11-17: "the edit should morf into the done and not into the
+# publish"): entering Edit keeps the bar (Back, the title, the gear); Edit's glass word becomes Done, and Publish, a
+# glass word that publishes in one tap with Undo in its toast, stands before it. Apple HIG, Edit buttons.
+EDITR = lambda: TB('{{pubL}}', 'publishNow') + TB('Done', 'done')
 def LTOP(back='', right='', title=''):
     return LPAD(TOP(back, title, right))  # a laptop page's bar is the phone's, its title centred
 
 # the engraved melody (Amazing Grace), shared with R40
-_s = open('/home/user/piano-trainer/.scratch/r39/canvas/calm_songs.py').read()
-exec(_s[:_s.index('LINKPILL')])
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/calm_parts.py').read())
 PEACH, SKY, SAGE, HONEY, LILAC = '#F3D2C8', '#D3E5F2', '#DCE9D6', '#F6E7C8', '#E4DCF1'
 # The app's tab bar, as Apple's HIG "Tab bars": "Include tab labels … single words"; icons "above tab labels in
 # compact views"; "Prefer filled symbols or icons"; on iOS it "floats above content … on a Liquid Glass background that
@@ -194,11 +296,16 @@ def TABBAR(cur):
         svg = f'<svg {_TI}>{TAB_ICONS[l]}</svg>'
         return (f'<a href="{h}" {("aria-current=\"page\"") if on else ""} style="flex: 1 1 0; min-width: 0; height: 52px; border-radius: 26px; '
                 f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; '
-                f'color: {INK if on else "#8A7F76"}; background: {FILL if on else "transparent"}">{svg}'
-                f'<span style="font-size: 11px; font-weight: {700 if on else 550}; line-height: 1">{l}</span></a>')
+                f'color: {INK if on else "#6B6259"}; background: {FILL if on else "transparent"}">{svg}'
+                f'<span style="font-size: 12px; font-weight: {700 if on else 500}; line-height: 1">{l}</span></a>')
     a = ''.join(one(l, h) for l, h in items)
     edge = ''  # nothing behind what floats (owner, 2026-11-15: floating buttons with a background make no sense)
-    return edge + f'<nav aria-label="Main" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; height: 64px; box-sizing: border-box; padding: 6px; border-radius: 32px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; gap: 2px">{a}</nav>'
+    # a phone on its side (under 520 high): a compact capsule, centred, each icon beside its word, as iOS's tab bar in
+    # compact height (Apple HIG, Tab bars), so the places stay together and the page keeps its room (round 66)
+    short = ('<style data-tabshort>[data-menuroot] { container-type: size } @container (max-height: 520px) { nav[aria-label="Main"] { left: 50% !important; right: auto !important; '
+             'translate: -50% 0; width: 440px; height: 52px !important; bottom: 24px !important } nav[aria-label="Main"] > a { flex-direction: row !important; height: 40px !important; gap: 6px !important } '
+             'button[aria-label="New"][aria-haspopup] { bottom: 22px !important } ul[role="menu"][aria-label="New"] { bottom: 94px !important } }</style>')
+    return edge + short + f'<nav aria-label="Main" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; height: 64px; box-sizing: border-box; padding: 6px; border-radius: 32px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; gap: 2px">{a}</nav>'
 
 # small pictures that show the content (Practice's rows and cards)
 def pic(kind, s=44):
@@ -240,6 +347,7 @@ NEWICON = {
   'Record': _LI('<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/>'),
   'New folder': _LI('<path d="M12 10v6M9 13h6"/><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>'),
   'Import': _LI('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6M15 15l-3-3-3 3"/>'),
+  'New playlist': _LI('<path d="M11 12H3"/><path d="M16 6H3"/><path d="M16 18H3"/><path d="M18 9v6"/><path d="M21 12h-6"/>'),
   'New group': _LI('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>'),
   'New lesson': _LI('<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>'),
   'New course': _LI('<path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/>'),
@@ -257,18 +365,16 @@ def NEWDIAL(items, bottom, on='dialOn', off='noDial', toggle='openDial', close='
     """The phone's floating New, at the bottom right (owner, 2026-11-15; Material 3's FAB: "the lower right corner …
     easy to reach and less likely to cover important content"), 16 in: items as (label, act or href), nearest the thumb last."""
     card = (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 29; background: rgba(247,243,238,.6)"></div>'
-            f'<ul role="menu" aria-label="New" style="position: absolute; right: 16px; bottom: {bottom + 72}px; transform-origin: bottom right; z-index: 31; min-width: 200px; margin: 0; padding: 6px; box-sizing: border-box; list-style: none; border-radius: 16px; background: {SHEET}; box-shadow: {SHADOW}, 0 0 0 1px {LINE}; display: flex; flex-direction: column; gap: 2px">'
+            f'<ul role="menu" aria-label="New" style="position: absolute; right: 16px; bottom: {bottom + 72}px; transform-origin: bottom right; z-index: 31; min-width: 200px; margin: 0; box-sizing: border-box; list-style: none; display: flex; flex-direction: column; gap: 2px; padding: 6px; border-radius: 16px; {GLASSFX}">'
             + ''.join(_newitem(l, g) for l, g in items) + '</ul></sc-if>')
-    return card + (f'<button type="button" aria-label="New" aria-haspopup="menu" aria-expanded="{{{{{on}}}}}" onClick="{{{{{toggle}}}}}" style="position: absolute; right: 16px; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; box-shadow: {SHADOW}; display: flex; align-items: center; justify-content: center">'
+    return card + (f'<button type="button" aria-label="New" data-tip="New" aria-haspopup="menu" aria-expanded="{{{{{on}}}}}" onClick="{{{{{toggle}}}}}" style="position: absolute; right: 16px; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; box-shadow: {FLOAT}; display: flex; align-items: center; justify-content: center">'
                    f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}">{_NEWX}</sc-if><sc-if value="{{{{{off}}}}}" hint-placeholder-val="{{{{true}}}}">{_NEWPLUS}</sc-if></button>')
 def NEWFAB(label, act, bottom):
     """A floating New with one thing to make: the same 56 honey + as NEWDIAL, at the bottom right, its name in its tip."""
-    return (f'<button type="button" aria-label="{label}" data-tip="{label}" onClick="{{{{{act}}}}}" style="position: absolute; right: 16px; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; box-shadow: {SHADOW}; display: flex; align-items: center; justify-content: center">{_NEWPLUS}</button>')
+    return (f'<button type="button" aria-label="{label}" data-tip="{label}" onClick="{{{{{act}}}}}" style="position: absolute; right: 16px; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; box-shadow: {FLOAT}; display: flex; align-items: center; justify-content: center">{_NEWPLUS}</button>')
 def NEWMENU(items):
-    """The same New as a menu: from a laptop's New ▾, or a row."""
+    """The same New as a menu, the floating +'s list (NEWDIAL)."""
     return f'<ul role="menu" aria-label="New" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px">' + ''.join(_newitem(l, g) for l, g in items) + '</ul>'
-NEWBTN = lambda act='openAdd': (f'<button type="button" aria-haspopup="menu" onClick="{{{{{act}}}}}" style="flex: none; height: 44px; padding: 0 12px 0 14px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px">'
-                                f'{_NEWPLUS.replace("26", "20")}New{CHEV_D}</button>')
 # A board's states for the canvas's States box: a hidden list states_tool.py lifts out of the screen (each row's
 # {l, bg, pick}; bg ink marks the one shown). The board draws each state itself.
 def SHOWSTATES(lst='states'):
@@ -285,9 +391,50 @@ EMPTYICON = {
     '⌫': _EI('<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>'),
     '✎': _EI('<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>'),
     '…': _EI('<path d="M21 12a9 9 0 1 1-6.219-8.56"/>'),
+    '⌕': _EI('<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/>'),
 }
 EMPTY_T = lambda t: t[:-1] if t.endswith('.') and not t.endswith('..') else t   # a said state's title takes no full stop
+# One empty state, every board: the honey tile with its picture, the title (18 bold), one line why (15 soft), and the
+# way out 16 below (owner-way: every empty state has one clear next action). EMPTYICON names the pictures.
+def EMPTY(cond, icon, t, b, btns=''):
+    acts = f'<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 8px">{btns}</div>' if btns else ''
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 20px; text-align: center">'
+            f'<span style="width: 72px; height: 72px; border-radius: 18px; background: {HONEY}; color: {INK}; display: flex; align-items: center; justify-content: center">{EMPTYICON.get(icon, icon)}</span>'
+            f'<span style="font-size: 18px; font-weight: 700; text-wrap: balance">{EMPTY_T(t)}</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 340px; text-wrap: pretty">{b}</span>{acts}</div></sc-if>')
 
 # Previewing as learner: one floating pill, never a band under the bar (ui-and-mockups: nothing hangs under a bar)
+# One toast, every board (owner-way, Undo instead of asking): ink capsule 52 tall, the text, then Undo at its end.
+# A phone toast spans the 16 gutters; a laptop's is 460 wide, centred. `undo` names the handler; `always` shows Undo
+# with no toastUndo condition; `hint` is the placeholder the condition shows while drawing.
+def TOAST(bottom, undo='undo', z=50, laptop=False, always=False, hint='false'):
+    pos = (f'left: 50%; transform: translateX(-50%); width: 460px; bottom: {bottom}px' if laptop
+           else f'left: 16px; right: 16px; bottom: {bottom}px')
+    btn = (f'<button type="button" onClick="{{{{{undo}}}}}" style="height: 44px; padding: 0 12px; border: 0; '
+           f'background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button>')
+    if not always:
+        btn = f'<sc-if value="{{{{toastUndo}}}}" hint-placeholder-val="{{{{{hint}}}}}">{btn}</sc-if>'
+    return (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; '
+            f'{pos}; z-index: {z}; min-height: 52px; box-sizing: border-box; border-radius: 14px; background: {INK}; '
+            f'color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px">'
+            f'<span style="flex: 1">{{{{toastT}}}}</span>{btn}</div></sc-if>')
+
+# One centred form or note over a scrim (a laptop's New song, Report, the welcome): a 22-round card, 20 in, 12 between
+# its parts, at most 48 narrower than the screen. ASK is its question form.
+DIALOGBOX = lambda inner, w=372, close='closeSheet', label='': (f'<div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="dialog" aria-modal="true"' + (f' aria-label="{label}"' if label else '') + f' style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: {w}px; max-width: calc(100% - 48px); box-sizing: border-box; border-radius: 22px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{inner}</div>')
+# One question before a loss that cannot be undone, or an act that reaches other people (CLAUDE.md, ConfirmDialog):
+# a scrim, a 372 card centred, the question (18 bold), what is lost (15 soft), an optional field, then Keep and the act
+# side by side. The act is crimson for a loss, ink when it only reaches others (Publish); `ok_bg`/`ok_ink` bind it to state.
+def ASK(cond, t, b, ok, go, danger=True, cancel='closeSheet', keep='Cancel', field='', ok_bg=None, ok_ink='#FFFFFF', ok_attrs=''):
+    bg = ok_bg or ('#B3261E' if danger else INK)
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{cancel}}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="alertdialog" aria-label="{t}" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: 372px; max-width: calc(100% - 48px); box-sizing: border-box; border-radius: 22px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 8px">'
+            f'<span style="font-size: 18px; font-weight: 700; text-wrap: balance">{t}</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}">{b}</span>{field}<div style="display: flex; gap: 8px; margin-top: 8px"><button type="button" onClick="{{{{{cancel}}}}}" style="flex: 1; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">{keep}</button>'
+            f'<button type="button" onClick="{{{{{go}}}}}"{ok_attrs} style="flex: 1; height: 44px; border: 0; border-radius: 22px; background: {bg}; color: {ok_ink}; font: inherit; font-size: 16px; font-weight: 700; white-space: nowrap">{ok}</button></div></div></sc-if>')
 PREVPILL = lambda pos, on='prevOn', ex='exitPrev': (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; {pos}; z-index: 55; height: 52px; box-sizing: border-box; padding: 0 4px 0 18px; border-radius: 26px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 12px; white-space: nowrap; font-size: 15px; font-weight: 600; box-shadow: {SHADOW}">'
                         f'Previewing as learner<button type="button" onClick="{{{{{ex}}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 700">Exit</button></div></sc-if>')
+
+# A phone on its side (852×393): a page's pinned keys scroll with the page, so the page keeps its room (round 66).
+KBPAGE_CSS = '''<style data-kbpage>[data-menuroot] { container-type: size } @container (max-height: 520px) { .kbpage { overflow-y: auto } .kbpage > main { flex: none !important; overflow: visible !important } }</style>'''
+KBPAGE_OPEN = '<div class="kbpage" style="flex: 1; min-height: 0; display: flex; flex-direction: column">'
+
+# the link glyph: one icon for a link, on every board (Groups' Join with a link, a lesson's Share link)
+LINKI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>'

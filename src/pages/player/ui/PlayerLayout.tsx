@@ -2,30 +2,26 @@ import { Download, Eye, Printer, SlidersHorizontal } from 'lucide-react'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
-import {
-  selectScoreView,
-  selectTipSeen,
-  useSettings,
-  useSettingsStoreApi,
-} from '@/entities/settings'
-import { retireTip, setScoreView } from '@/features/set-preference'
+import { selectScoreView, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { setScoreView } from '@/features/set-preference'
+import { selectDays, streak, useProgress } from '@/entities/progress'
+import { useToday } from '@/widgets/practice-days'
 import {
   isMidiConnected,
   MidiButton,
   useHeldKeys,
   useMidiConnection,
 } from '@/features/connect-midi'
-import { KeyboardStrip, KeysPlace, LiveKeyboard } from '@/features/live-keyboard'
+import { KeysPlace, LiveKeyboard } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
-import { useCreditLine, type MenuAction } from '@/shared/ui'
+import type { MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   HandsButton,
   TransportPiano,
-  BarTitle,
   CountInBeat,
   HandsSheet,
   LoopButton,
@@ -37,10 +33,13 @@ import {
   ScoreBar,
   usePlayerShortcuts,
   WaitLine,
+  PlayedThrough,
+  speedTempo,
   type PracticePlayer,
   type PracticeView,
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
+import { ModeSwitch } from '@/widgets/mode-switch'
 import { SongPrint } from '@/widgets/song-print'
 import { PianoHands } from '@/widgets/piano-hands'
 import { PlayerPlayback } from '@/widgets/player-settings'
@@ -55,7 +54,6 @@ import { PlayerExport } from './PlayerExport'
 import type { MusicXmlFormat } from '@/features/song-files'
 import { PickView, ViewMenu } from './PickView'
 import { SongHead } from './SongHead'
-import { CoachLine } from './CoachLine'
 import type { ScoreAnnotation } from '@/shared/lib/notation'
 
 /** A walk or a progression: one section, named nowhere. */
@@ -70,7 +68,7 @@ const NO_ACTS_MORE: readonly MenuAction[] = []
 const NO_PAGES: readonly SettingsPageRow[] = []
 
 /** Where the keys' window stands until moved: over the transport at the screen's foot. */
-const PLAYER_FOOT = 'calc(env(safe-area-inset-bottom) + 5.5rem)'
+const PLAYER_FOOT = 'calc(env(safe-area-inset-bottom) + 5.5rem + var(--status-room, 0px))'
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
@@ -110,7 +108,10 @@ export function PlayerLayout({
   moreActs = NO_ACTS_MORE,
   annotations,
   annotating,
+  bestBefore = null,
 }: {
+  /** A song's best Wait pass before the one just finished, said beside its score; none elsewhere. */
+  bestBefore?: number | null
   /** The learner's typed marks, written on the score (R29 B8); none for a walk. */
   annotations?: readonly ScoreAnnotation[] | undefined
   /** The Annotate bar over the score while it is on (R29 B8). */
@@ -148,7 +149,7 @@ export function PlayerLayout({
   setup: ReactNode
   /** The music's own pages of the Settings: a piece's Transpose and Version; none for a walk. */
   pages?: readonly SettingsPageRow[]
-  /** Edit score, in the Settings' head under the song (its canvas): a piece's own, none for a walk. */
+  /** The bar's Play · Edit (loop round 61): a piece's own, none for a walk. */
   onEdit?: (() => void) | undefined
   /** The music's own acts in Settings, before Print: a piece's Song information and Sections (ADR 0107). */
   more?: readonly MenuAction[] | undefined
@@ -162,8 +163,6 @@ export function PlayerLayout({
   display?: ReactNode
 }) {
   const { t } = useTranslation(['player', 'songs', 'settings', 'music', 'common'])
-  // Who wrote it, under the title in the bar (loop round 24): the sheet prints no title of its own.
-  const creditLine = useCreditLine(credits)
   const { practice } = player
   const scoreView = useSettings(selectScoreView)
   const held = useHeldKeys()
@@ -187,23 +186,24 @@ export function PlayerLayout({
   usePlayerShortcuts(player, view, onClose)
   // The Hands sheet (R36), from the foot bar's Hands.
   const [handsOpen, setHandsOpen] = useState(false)
+  // Played through (the board's PlayerDone): opened as a Wait pass reaches the song's end.
+  const finished = player.feedback?.kind === 'finished' ? player.feedback : null
+  const isFinished = finished !== null
+  const [doneOpen, setDoneOpen] = useState(false)
+  useEffect(() => {
+    if (isFinished) setDoneOpen(true)
+  }, [isFinished])
+  const days = useProgress(selectDays)
+  const today = useToday()
+  const daysInARow = useMemo(() => streak(days, today), [days, today])
   const { connection } = useMidiConnection()
   // The keys play at a tap; the hands at the keys are watched (R36).
   const playable = isMidiConnected(connection) || (player.keys && !scoreView.hands)
   // Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
   const [exporting, setExporting] = useState(false)
-  // The Settings open as a panel beside the music (a laptop): the screen ends where it starts.
-  const [panel, setPanel] = useState(false)
-  // The coach's line (R29 B8, R31-P): shown until put away by its × or done (Play pressed in
-  // Listen), remembered for good.
   const settingsStore = useSettingsStoreApi()
-  const tip = `coach.${view.mode}`
-  const coached = useSettings(selectTipSeen(tip))
   const playing = practice.state.playing
-  useEffect(() => {
-    if (playing && view.mode === 'listen') retireTip(settingsStore, tip)
-  }, [playing, view.mode, settingsStore, tip])
   // The Settings' head's ··· (its canvas): the music's acts only, in parts: the song's, practice's,
   // the tools, sharing. Every setting is the gear's; Share link is the head's own button.
   const moreMenu: MenuAction[] = (
@@ -235,7 +235,6 @@ export function PlayerLayout({
         detail={[...(about ?? []), t('music:bpm', { tempo: player.tempo })].join(' · ')}
         share={share?.onSelect}
         acts={moreMenu}
-        onEdit={onEdit}
       />
     ),
     pages: [
@@ -261,7 +260,6 @@ export function PlayerLayout({
     ],
     // Its acts are More's (R31-P): the sheet holds how the Player works, never what it does.
     acts: [],
-    onPanel: setPanel,
   }
   // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0108); a pattern
   // lesson's, each note as it sounds, whatever the view (ADR 0111).
@@ -272,12 +270,8 @@ export function PlayerLayout({
   )
   // Where the music stands: the notes awaited, or where Listen stopped.
   const cursorTick = performance.beatGroups[practice.state.beatGroup]?.tick ?? 0
-  const keys = !player.keys ? (
-    // Hidden, a thin strip where they stood brings them back at a tap (R34, Songscription's).
-    <PlayerArea area="keys" className="-mx-gutter">
-      <KeyboardStrip edge="above" onShow={() => player.setKeys(true)} />
-    </PlayerArea>
-  ) : scoreView.hands ? (
+  // Hidden from the Piano sheet, nothing stands where the keys stood, as on every page.
+  const keys = !player.keys ? null : scoreView.hands ? (
     // The hands at the keys in the keys' place (R36, flowkey's), edge to edge: watched, never tapped.
     <PlayerArea area="keys" className="-mx-gutter">
       <KeysPlace foot={PLAYER_FOOT}>
@@ -322,52 +316,42 @@ export function PlayerLayout({
   )
   return (
     // While Diagrams plays, the bar and the tools row step aside (ADR 0108).
-    <PlayerScreen
-      keys="bottom"
-      aside={shown === 'diagrams' && practice.state.playing}
-      panel={panel}
-      docked
-    >
-      {/* The score's bar, the editor's in shape (ADR 0115): Close, then Practise · Edit;
-          Piano keys, MIDI and Settings; the View and the music's tools. The loop is the transport's (ADR
+    <PlayerScreen aside={shown === 'diagrams' && practice.state.playing} docked>
+      {/* The score's bar, the editor's (ADR 0115, loop round 61): Close; Play · Edit where the
+          editor's stands; the views and Settings at the end, one glass group on a phone, the views'
+          pill beside Settings on a laptop. The title is the score's. The loop is the transport's (ADR
           0108). */}
       <ScoreBar
-        lead={
-          <>
-            <PlayerClose onClose={onClose} />
-            <BarTitle title={title} credit={creditLine} />
-          </>
-        }
-        middle={
-          <div className="max-sm:hidden">
-            <PickView shown={shown} needs={needs} />
-          </div>
-        }
+        lead={<PlayerClose onClose={onClose} />}
+        middle={onEdit ? <ModeSwitch mode="play" onSwitch={onEdit} /> : undefined}
         actions={
           <>
-            <div className="sm:hidden">
-              <ViewMenu shown={shown} needs={needs} />
+            <div className="max-sm:hidden">
+              <PickView shown={shown} needs={needs} />
             </div>
-            {/* MIDI only while a keyboard is connected or connecting (R31-P, R32); it is
-                connected from Settings › Connect a piano. */}
-            {isMidiConnected(connection) || connection.kind === 'connecting' ? (
-              <MidiButton variant="tool" />
-            ) : null}
-            <SettingsExtrasContext value={extras}>{setup}</SettingsExtrasContext>
+            <div className="flex items-center rounded-pill glass">
+              <div className="sm:hidden">
+                <ViewMenu shown={shown} needs={needs} />
+              </div>
+              {/* MIDI only while a keyboard is connected or connecting (R31-P, R32); it is
+                  connected from Settings › Connect a piano. */}
+              {isMidiConnected(connection) || connection.kind === 'connecting' ? (
+                <MidiButton variant="tool" />
+              ) : null}
+              <SettingsExtrasContext value={extras}>{setup}</SettingsExtrasContext>
+            </div>
           </>
         }
       />
       <PlayerArea area="sheet" className="relative">
-        {/* The tip floats over the music's foot, taking no row and covering no control (R32). */}
-        {!coached && !practice.state.playing && !annotating ? (
-          <CoachLine mode={view.mode} onClose={() => retireTip(settingsStore, tip)} />
-        ) : null}
         {annotating}
         {shown === 'sheet' ? (
           <SheetMusic
             view={sheetView}
             piano={piano}
             staffNames={names}
+            title={title}
+            credits={credits}
             layout={layout}
             // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
             performance={player.performance}
@@ -386,6 +370,8 @@ export function PlayerLayout({
         ) : (
           <ChordView
             view={shown}
+            title={title}
+            credits={credits}
             performance={performance}
             headings={headings}
             practice={practice}
@@ -409,25 +395,33 @@ export function PlayerLayout({
             (player.feedback !== null || Boolean(status)) && 'py-1 landscape-phone:py-0',
           )}
         >
-          {view.mode !== 'listen' ? (
-            <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
-          ) : null}
+          {view.mode !== 'listen' ? <WaitLine feedback={player.feedback} /> : null}
           {status}
         </PlayerArea>
       ) : null}
       {keys}
       {/* The transport floats over the music's foot as the board's (loop 25, PlayerApp): three
-          glass groups, no band or hairline under them, the music scrolling on beneath. */}
+          glass groups, no band or hairline under them, the music scrolling on beneath; on a laptop
+          30 above the window’s foot, as PlayerDesk; on a phone its groups 10 above the home indicator. */}
       <PlayerArea
         area="dock"
-        className="mb-[calc(env(safe-area-inset-bottom)+0.5rem)]! w-full narrow-phone:px-1 landscape-phone:mb-1!"
+        className="mb-[calc(env(safe-area-inset-bottom)+0.25rem)]! w-full narrow-phone:px-1 landscape-phone:mb-1! lg:mb-6!"
       >
         <div className="mx-auto w-full max-w-xl lg:w-fit">
           <PlayerDock
             practice={practice}
-            loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
+            loop={
+              <LoopButton
+                bars={
+                  player.loop ? { first: player.loop.first + 1, last: player.loop.last + 1 } : null
+                }
+                onToggle={player.toggleLoop}
+              />
+            }
             pace={
               <PracticeSheet
+                performance={performance}
+                practice={practice}
                 mode={view.mode}
                 tempo={player.tempo}
                 ownTempo={player.ownTempo}
@@ -438,6 +432,19 @@ export function PlayerLayout({
                 onPlay={player.listenAt}
                 onTempo={player.setTempo}
                 onClick={player.setClick}
+                loop={
+                  player.loop
+                    ? {
+                        bars: { first: player.loop.first + 1, last: player.loop.last + 1 },
+                        repeats: player.repeats,
+                        between: player.between,
+                        speedUp: player.speedTraining,
+                        onRepeats: player.setRepeats,
+                        onBetween: player.setBetween,
+                        onSpeedUp: player.setSpeedTraining,
+                      }
+                    : null
+                }
               />
             }
             hands={
@@ -465,6 +472,26 @@ export function PlayerLayout({
           />
         </div>
       </PlayerArea>
+      {finished ? (
+        <PlayedThrough
+          open={doneOpen}
+          onOpenChange={setDoneOpen}
+          pass={finished}
+          hands={t(`common:hands.${view.hands}`)}
+          bestBefore={bestBefore}
+          tempo={player.tempo}
+          ownTempo={player.ownTempo}
+          streak={daysInARow}
+          onPractise={(bars) => {
+            // The weakest bars looped at 70 % of the score's tempo, as the song page's next step.
+            player.setLoop(bars)
+            player.setTempo(speedTempo(player.ownTempo, 0.7))
+          }}
+          onLoopBars={player.setLoop}
+          onAgain={practice.play}
+          onTryPlay={() => player.listenAt(player.tempo)}
+        />
+      ) : null}
       <HandsSheet
         open={handsOpen}
         onOpenChange={setHandsOpen}

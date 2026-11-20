@@ -16,6 +16,7 @@ const course: Course = {
   shelf: 'method-books',
   stage: 'beginner',
   title: { en: 'Called to Play for Him', ru: 'Призван играть для Него' },
+  line: { en: 'Accompany songs from their chords', ru: 'Аккомпанемент песен по аккордам' },
   summary: {
     en: 'A. Savchenko’s method for accompanying a song from its chords. Learn five ways to lay out a chord, play songs by a written plan, then add one right-hand technique at a time, each on its own study.',
     ru: 'Метод А. Савченко: как аккомпанировать песне по аккордам. Вы освоите пять способов изложить аккорд, сыграете песни по готовому плану и добавите техники правой руки, по одной на каждый этюд.',

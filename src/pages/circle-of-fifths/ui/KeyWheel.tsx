@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { KeyboardEvent } from 'react'
 import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
@@ -46,10 +47,13 @@ export function KeyWheel({
   label,
   value,
   onChoose,
+  children,
 }: {
   label: string
   value: Key
   onChoose: (key: Key) => void
+  /** Set in the wheel's centre. */
+  children?: ReactNode
 }) {
   const name = useKeyName()
   const chosen = placeOf(value)
@@ -64,7 +68,7 @@ export function KeyWheel({
     return at === 'major' ? 'fill-card' : 'fill-background'
   }
   return (
-    <div className="@container relative mx-auto aspect-square w-full max-sm:-mx-2 max-sm:w-[calc(100%+1rem)] max-w-[min(38.75rem,calc(100dvh-12rem))]">
+    <div className="@container relative mx-auto aspect-square w-full max-w-[min(40rem,calc(100dvh-12rem))]">
       <svg
         viewBox="0 0 400 400"
         role="group"
@@ -131,6 +135,12 @@ export function KeyWheel({
           )
         }),
       )}
+      {/* What stands in the wheel's empty centre: the key's name and its signature. */}
+      {children ? (
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-0.5 text-center">
+          {children}
+        </div>
+      ) : null}
     </div>
   )
 }

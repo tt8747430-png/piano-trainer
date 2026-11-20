@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { printedSymbol, type RoleOf } from '@/shared/lib/music'
-import { InfoTip } from './InfoTip'
 import { PAINT, ROLE_PAINT } from './paint'
 
 /**
@@ -11,7 +10,7 @@ import { PAINT, ROLE_PAINT } from './paint'
  */
 export function RoleTiles({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <ol aria-label={label} className="grid grid-cols-4 gap-x-2 gap-y-3 px-1">
+    <ol aria-label={label} className="grid grid-cols-4 gap-x-2 gap-y-3">
       {children}
     </ol>
   )
@@ -44,7 +43,7 @@ export function RoleTile({
 }) {
   const look = PAINT[ROLE_PAINT[role.role]]
   return (
-    <li className="flex min-w-0 flex-col items-center gap-1.5">
+    <li className="flex min-w-0 flex-col items-center gap-2">
       <button
         type="button"
         aria-label={label}
@@ -57,30 +56,30 @@ export function RoleTile({
         )}
       >
         {numeral ? (
-          <span className="max-w-full truncate font-serif text-[1.625rem] leading-tight lg:text-[2.125rem]">
+          <span className="max-w-full truncate font-display text-[1.625rem]/[normal] lg:text-[2.125rem]/[normal]">
             {printedSymbol(numeral)}
           </span>
         ) : null}
-        <span className="max-w-full truncate text-[0.9375rem] font-bold">
+        <span className="max-w-full truncate text-[0.9375rem]/[normal] font-bold">
           {printedSymbol(chord)}
         </span>
       </button>
-      <span className="max-w-full truncate text-xs text-muted-foreground">{move}</span>
+      <span className="max-w-full truncate text-xs leading-3.5 text-muted-foreground">{move}</span>
     </li>
   )
 }
 
 /**
  * What the tiles' paints mean, in one line under them (Tonic, Predominant, Dominant), the terms
- * theory books use and what each move does behind its ⓘ.
+ * theory books use, with no ⓘ, as the Progression board draws it.
  */
 export function RoleLegend() {
   const { t } = useTranslation('music')
   return (
-    <div className="flex flex-wrap items-center gap-y-1 text-[0.8125rem] text-muted-foreground">
-      <span className="flex flex-wrap items-center gap-x-3.5">
+    <div className="flex flex-wrap items-center gap-y-1 text-[0.8125rem] leading-[normal] text-muted-foreground">
+      <span className="flex flex-wrap items-center gap-x-4">
         {(['home', 'away', 'tension'] as const).map((role) => (
-          <span key={role} className="flex items-center gap-1.5">
+          <span key={role} className="flex items-center gap-2">
             <span
               aria-hidden
               className={cn(
@@ -91,20 +90,6 @@ export function RoleLegend() {
             {t(`harmony.role.${role}`)}
           </span>
         ))}
-        <InfoTip name={t('harmony.legend.name')}>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5">
-            {(['home', 'away', 'tension', 'sad', 'fifth', 'third', 'second', 'back'] as const).map(
-              (term) => (
-                <div key={term} className="contents">
-                  <dt className="font-semibold whitespace-nowrap">
-                    {t(`harmony.legend.terms.${term}.name`)}
-                  </dt>
-                  <dd>{t(`harmony.legend.terms.${term}.text`)}</dd>
-                </div>
-              ),
-            )}
-          </dl>
-        </InfoTip>
       </span>
     </div>
   )

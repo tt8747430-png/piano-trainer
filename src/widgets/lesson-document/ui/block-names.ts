@@ -27,10 +27,6 @@ export function nodeName(node: Node, t: TFunction<'learn'>): string {
   }
 }
 
-/** What the Insert and slash menus call a kind. */
+/** What the Insert and slash menus call a kind: the block's own name. */
 export const insertableName = (kind: Insertable, t: TFunction<'learn'>): string =>
-  kind === 'section'
-    ? t('edit.doc.section')
-    : kind === 'takeaway'
-      ? t('edit.doc.takeaway')
-      : t(`edit.blocks.${kind}`)
+  t(`edit.blocks.${kind}`)

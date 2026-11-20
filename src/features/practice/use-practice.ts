@@ -25,7 +25,6 @@ import { loopBeatGroups, loopTicks, type BarRange, type BeatGroupRange } from '.
 import { heardIn, mixGain, partGain, type Mix } from './mix'
 import {
   accompanyingHands,
-  followTempo,
   initialPractice,
   practiceReducer,
   type PracticeEvent,
@@ -50,14 +49,16 @@ export interface PracticeSetup {
   readonly loop: BarRange | null
   readonly metronome: boolean
   readonly countIn: boolean
-  /** Whether the count-in's clicks sound, true unless said: one seen alone counts unheard (B7). */
-  readonly countInHeard?: boolean
   /** The Metronome's sound and squares the click and count-in play in (A35, A39). */
   readonly voicing?: ClickVoicing
   /** Speed training's step, a share of the piece's tempo each pass; 5% unless said (B7). */
   readonly speedStep?: number
   /** Beats of rest, each a click, before each repeat of the passage. */
   readonly rest: number
+  /** The rest's beats silent: a bar to breathe in (Between repeats: Rest). */
+  readonly restSilent?: boolean
+  /** How many times Listen plays the passage, then stops; endless without. */
+  readonly repeats?: number
   /** The piece's recording, played along in Listen in the key played; null plays none. */
   readonly recording: RecordingAlong | null
   /** How loud each part plays (ADR 0105): each staff, the recording and the click. */
@@ -91,14 +92,14 @@ export interface Practice {
   next(): void
   prev(): void
   jumpToBeatGroup(beatGroup: number): void
-  /** Back to the start (R29 B8, Restart): bar 1, or the loop's first bar. */
-  restart(): void
   /** An on-screen key: the same as a MIDI note-on. */
   press(midi: Midi): void
 }
 
 /** After a right answer in Wait mode, the app plays the other hand and moves on this much later. */
 const CORRECT_PAUSE_MS = 150
+/** A step that takes the learner longer than this many beats is a pause. */
+const PAUSE_BEATS = 2
 
 const sameLoop = (a: BeatGroupRange | null, b: BeatGroupRange | null) =>
   a === b || (a !== null && b !== null && a.first === b.first && a.last === b.last)
@@ -146,6 +147,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
 
   const { tempo, ownTempo, speedTraining, swing, metronome, countIn, mix } = setup
   const restBeats = setup.rest
+  const { restSilent, repeats } = setup
   // How loud each part plays, read as each sound comes to sound (ADR 0105): a change is heard from
   // then on, and starts nothing again. Only a part turned right down, or up from nothing, does: it
   // is then left out of the music, or brought into it, from the beat group playing.
@@ -176,7 +178,6 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   const passFrom = useEffectEvent(() => ({
     tick: state.performance.beatGroups[state.beatGroup]?.tick,
     countIn,
-    countInHeard: setup.countInHeard !== false,
     voicing: setup.voicing,
   }))
 
@@ -205,12 +206,13 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
             ? undefined
             : { step: upStep, until: upUntil },
         countIn: first && from.countIn,
-        countInHeard: from.countInHeard,
         voicing: from.voicing,
         metronome,
         clicks,
         swing,
         rest: restBeats,
+        ...(restSilent ? { restSilent } : {}),
+        ...(repeats === undefined ? {} : { passes: repeats }),
       },
       {
         reach: (beatGroup) => dispatch({ type: 'reach', beatGroup }),
@@ -219,6 +221,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
           setPassTempo(sounding)
         },
         count: setCounting,
+        end: () => dispatch({ type: 'stop' }),
       },
       { recording, mix: () => mixed.current },
     )
@@ -246,6 +249,8 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     metronome,
     clicks,
     restBeats,
+    restSilent,
+    repeats,
     recording,
     passRequest,
   ])
@@ -254,9 +259,6 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   // rest of the beat group and moves on. Through rests, each beat group is due on the audio clock
   // where the last one ends, so a run of them keeps its time.
   const waiting = waitsForNotes(state.mode) && state.playing
-  // Interpret plays the other hands and waits through rests at the learner's tempo (R29 B8).
-  const followed = state.mode === 'follow' ? followTempo(state, tempo) : null
-  const paced = followed ?? tempo
   const answered = state.outcome === 'correct'
   const rest = state.outcome === 'waiting' && state.expected.length === 0
   const due = useRef<number | null>(null)
@@ -268,17 +270,12 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       accompanyAll.current ? along : { rh: false, lh: false, staff: along.staff },
       mixed.current,
     )
-    audio.play(
-      beatGroupSounds(state.performance, state.beatGroup, { tempo: paced, hands }),
-      at,
-      gain,
-    )
+    audio.play(beatGroupSounds(state.performance, state.beatGroup, { tempo, hands }), at, gain)
     if (answered) {
       due.current = null
       return CORRECT_PAUSE_MS
     }
-    due.current =
-      at + untilNextBeatGroup(state.performance, state.beatGroup, { tempo: paced, swing })
+    due.current = at + untilNextBeatGroup(state.performance, state.beatGroup, { tempo, swing })
     return Math.max(0, (due.current - PLAY_DELAY - audio.now()) * 1000)
   })
   useEffect(() => {
@@ -290,29 +287,24 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     return () => clearTimeout(timer)
   }, [waiting, answered, rest, state.arrival, state.performance])
 
-  // Interpret: each onset that completes a beat group sounds that group's other hands at once, at the
-  // learner's tempo; the cursor has already moved on.
-  const followAlong = useEffectEvent((beatGroup: number) => {
-    const along = accompanyingHands(state.hands)
-    const hands = heardIn(
-      accompanyAll.current ? along : { rh: false, lh: false, staff: along.staff },
-      mixed.current,
-    )
-    audio.play(
-      beatGroupSounds(state.performance, beatGroup, { tempo: paced, hands }),
-      undefined,
-      gain,
-    )
-  })
-  const { matched } = state
+  // Wait mode's time per step (research item 14): from arriving at a step the learner plays, to its
+  // last key; over two beats at the chosen tempo is a pause, said beside the slips, never scored. The
+  // first step of a pass, begun by its own first key, has no arrival to count from.
+  const armed = useRef<number | null>(null)
+  const steps = waiting && state.expected.length > 0
   useEffect(() => {
-    if (matched) followAlong(matched.beatGroup)
-  }, [matched])
+    armed.current = steps ? audio.now() : null
+  }, [steps, state.arrival, audio])
+  useEffect(() => {
+    if (!answered || armed.current === null) return
+    if (audio.now() - armed.current > PAUSE_BEATS * (60 / tempo)) dispatch({ type: 'pause' })
+    armed.current = null
+  }, [answered, audio, tempo])
 
   useEffect(
     () =>
       midi?.onNote((event) => {
-        if (event.on) dispatch({ type: 'noteOn', midi: event.midi, at: audio.now() })
+        if (event.on) dispatch({ type: 'noteOn', midi: event.midi })
       }),
     [midi, audio],
   )
@@ -355,8 +347,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     next: () => move({ type: 'next' }),
     prev: () => move({ type: 'prev' }),
     jumpToBeatGroup: (beatGroup: number) => move({ type: 'jumpToBeatGroup', beatGroup }),
-    restart: () => move({ type: 'jumpToBeatGroup', beatGroup: state.loop?.first ?? 0 }),
-    press: (key: Midi) => dispatch({ type: 'noteOn', midi: key, at: audio.now() }),
+    press: (key: Midi) => dispatch({ type: 'noteOn', midi: key }),
   }
 
   const clock = useCallback(() => transport.current?.tickAt(audio.now()) ?? null, [audio])

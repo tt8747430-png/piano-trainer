@@ -69,6 +69,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
     changeTrack,
     recordingSync,
     syncRecording,
+    bestBefore,
   } = usePlayer(piece, search, setSearch)
   // The Version sheet (R29 B8): the learner's version or the app's, the voice's staves heard and
   // shown or not, at a level.
@@ -164,6 +165,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
     // Its chords drawn in the inversions chosen for them in this piece (ADR 0108).
     <PieceInversions pieceId={piece.id}>
       <PlayerLayout
+        bestBefore={bestBefore}
         title={title}
         about={[keyName({ tonic: choice.tonic, minor: pieceKey(piece).minor }), piece.meter]}
         credits={isDegreePiece(piece) ? undefined : printedHeader(piece)}

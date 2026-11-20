@@ -116,11 +116,6 @@ export function createSupabaseAdmin(backend: Backend, { online }: NetOptions = {
         )
         await note('save-switch', key, { state })
       }),
-    deleteSwitch: (key) =>
-      ask(async (client) => {
-        check(await client.from('feature_switches').delete().eq('key', key))
-        await note('delete-switch', key)
-      }),
     reports: () =>
       ask(async (client) => {
         const { data, error, status } = await client
@@ -177,11 +172,16 @@ export function createSupabaseAdmin(backend: Backend, { online }: NetOptions = {
       ask(async (client) => {
         const { data, error, status } = await client
           .from('admin_log')
-          .select('at, action, target')
+          .select('at, admin_id, action, target')
           .order('at', { ascending: false })
           .limit(100)
         if (error) throw thrown(error, status)
-        return data
+        return data.map(({ at, admin_id, action, target }) => ({
+          at,
+          adminId: admin_id,
+          action,
+          target,
+        }))
       }),
     errors: () =>
       ask(async (client) => {

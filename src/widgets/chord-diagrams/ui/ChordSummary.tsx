@@ -2,18 +2,32 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DiagramChord } from '@/features/practice'
 import { cn, useScrollMotion } from '@/shared/lib'
-import { printedSymbol } from '@/shared/lib/music'
+import { noteName, printedSymbol, symbolParts } from '@/shared/lib/music'
+import { LeadSymbol, MiniKeys } from '@/shared/ui'
 import { ChordDiagram } from './ChordDiagram'
 import { ChordSheet } from './ChordSheet'
+
+/** A symbol with its extensions raised (`G⁷`), as the Lyrics board names a pinned chord. */
+function Raised({ symbol }: { symbol: string }) {
+  const { root, letters, raised, bass } = symbolParts(printedSymbol(symbol))
+  return (
+    <>
+      {root}
+      {letters}
+      {raised ? <sup className="ms-px text-[max(12px,0.6em)]">{raised}</sup> : null}
+      {bass}
+    </>
+  )
+}
 
 /**
  * A piece's chord summary (ADR 0108): its chords in the order they first sound
  * (`chordSummary`), each its keys over its symbol as the sheet prints it (`C♯m7`), a button opening
  * its sheet; one row, scrolling sideways where it is wider than its room. Nothing for music of no
  * chord symbol. Following the music (`sounding`, Chords over lyrics' pinned row, ADR 0108), it is
- * drawn smaller, to stay pinned in little room, and the chord sounding is outlined in ink and kept
- * in sight, the others' symbols muted, and a chord tapped is the music's to go to (`onChord`, ADR
- * 0108) where its sheet would open.
+ * the Lyrics board's row: each chord's framed keys 42 tall, its name 8 under them in the sans at
+ * 500, 14, 16 apart; the chord sounding named bold and kept in sight, and a chord tapped is the
+ * music's to go to (`onChord`, ADR 0108) where its sheet would open.
  */
 export function ChordSummary({
   chords,
@@ -54,16 +68,27 @@ export function ChordSummary({
         aria-label={t('chordSummary')}
         className={cn(
           'relative flex overflow-x-auto overscroll-x-contain scrollbar-none',
-          follows ? 'gap-2' : '-mx-4 gap-2.5 px-4 pt-0.5 pb-1 sm:mx-0 sm:flex-wrap sm:px-0.5',
+          follows
+            ? 'gap-4'
+            : // the Song board's CHORDS_ROW: 8 apart, a row that scrolls on a phone, six columns on a laptop
+              '-mx-4 gap-2 px-4 pt-0.5 pb-1 sm:mx-0 sm:flex-wrap sm:px-0.5 lg:grid lg:grid-cols-6 lg:overflow-visible',
         )}
       >
         {chords.map((each) => {
           const now = each.symbol === sounding
           return (
-            <li key={each.symbol} className="shrink-0">
+            <li key={each.symbol} className="shrink-0 lg:min-w-0">
               <button
                 type="button"
                 aria-current={now ? 'true' : undefined}
+                aria-label={
+                  follows
+                    ? undefined
+                    : t('chordDiagram', {
+                        symbol: printedSymbol(each.symbol),
+                        notes: each.notes.map(noteName).join(' '),
+                      })
+                }
                 onClick={() =>
                   onChord ? onChord(each.symbol) : setShown({ symbol: each.symbol, open: true })
                 }
@@ -71,27 +96,32 @@ export function ChordSummary({
                   'flex flex-col items-center focus-visible:-outline-offset-3',
                   // Following the music, a quiet cell; on a song's page, the canvas's chord card.
                   follows
-                    ? 'gap-0.5 rounded-control border border-transparent px-1.5 py-1 transition-colors duration-200 ease-out hover:bg-muted'
-                    : 'gap-1.5 rounded-[14px] bg-card p-2.5 shadow-[0_0_0_1px_var(--color-border)] transition-[filter] duration-200 ease-out hover:brightness-[0.97]',
-                  now && 'border-foreground',
+                    ? 'gap-2 rounded-control'
+                    : 'gap-2 rounded-card bg-card p-3 lg:w-full shadow-[0_0_0_1px_var(--color-border)] transition-[filter] duration-200 ease-out hover:brightness-[0.97]',
                 )}
               >
-                {/* Every chord on the same keys, the same size. */}
-                <ChordDiagram
-                  chord={each}
-                  className={follows ? 'h-8 w-auto landscape-phone:h-6' : 'h-[2.875rem] w-auto'}
-                />
+                {/* Every chord on the same keys, the same size: following the music the Diagrams' keys,
+                    on a song's page the boards' mini keys (CHORDS_ROW). */}
+                {follows ? (
+                  <ChordDiagram chord={each} className="h-[42px] w-auto landscape-phone:h-8" />
+                ) : (
+                  <MiniKeys keys={each.keys} />
+                )}
                 <span
                   aria-hidden
                   className={cn(
                     'leading-tight',
                     follows
-                      ? 'font-display text-base font-semibold landscape-phone:text-sm'
+                      ? 'font-sans text-sm leading-6 font-medium'
                       : 'font-sans text-base font-bold',
-                    follows && !now && 'text-muted-foreground',
+                    now && 'font-bold',
                   )}
                 >
-                  {printedSymbol(each.symbol)}
+                  {follows ? (
+                    <Raised symbol={each.symbol} />
+                  ) : (
+                    <LeadSymbol text={printedSymbol(each.symbol)} />
+                  )}
                 </span>
               </button>
             </li>

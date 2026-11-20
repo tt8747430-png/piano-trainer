@@ -17,10 +17,10 @@ export function IntervalsPage() {
     <div className="flex flex-col gap-4">
       <ScreenHeader
         title={t('pages.intervals')}
-        back={<BackButton variant="glass" />}
+        back={<BackButton />}
         settings={
           <>
-            <SettingsGear page="intervals" variant="glass" />
+            <SettingsGear page="intervals" />
             <PianoButton />
           </>
         }

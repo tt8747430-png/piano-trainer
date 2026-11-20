@@ -4,7 +4,7 @@ import { useAppUpdate } from '@/shared/lib/app-update'
 import { ActionRow } from '@/shared/ui'
 
 /**
- * About's Software update (the board's): where the next version stands, a dot beside it (grass when
+ * General's Software update (the board's UPDSEC): where the next version stands, a dot beside it (grass when
  * current, honey when one waits, ochre while it works), then the one act there is: Check for
  * updates, or Install and restart when one waits, the banner's same install, so the banner put off
  * with Later is never the only way to it.

@@ -3,8 +3,9 @@ import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isMilestoneId, levelOf, useProgress } from '@/entities/progress'
 import { useProfileFigures } from '@/features/track-achievements'
-import { BackButton, ScreenHeader, SettingsGroup } from '@/shared/ui'
-import { useDayName, usePracticeTime } from '../model/format'
+import { BackButton, ScreenHeader } from '@/shared/ui'
+import { useDayName } from '../model/format'
+import { ProfileList } from './ProfileList'
 import { useMilestones } from '../model/use-milestones'
 import { MilestoneRow } from './AchievementsPreview'
 import { MilestoneMark } from './marks'
@@ -18,7 +19,6 @@ export function AchievementsPage() {
   const recordsId = useId()
   const milestonesId = useId()
   const figures = useProfileFigures()
-  const time = usePracticeTime()
   const milestones = useMilestones()
   const records = [
     [t('profile.achievements.level'), String(levelOf(figures.practiceSeconds))],
@@ -26,40 +26,40 @@ export function AchievementsPage() {
       t('profile.achievements.longestStreak'),
       t('profile.achievements.days', { count: figures.bestStreak }),
     ],
-    [t('profile.achievements.practiceTime'), time(figures.practiceSeconds)],
     [
       t('profile.achievements.bestAccuracy'),
       figures.bestAccuracy > 0
         ? t('profile.achievements.percent', { percent: figures.bestAccuracy })
         : '—',
     ],
-    [t('profile.achievements.songsLearned'), String(figures.songsLearned)],
     [t('profile.achievements.daysPractised'), String(figures.daysPractised)],
   ] as const
   return (
-    <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('profile.achievements.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <section aria-labelledby={recordsId} className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-2">
+      <ScreenHeader column title={t('profile.achievements.title')} back={<BackButton />} />
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
+        <section aria-labelledby={recordsId} className="flex flex-col gap-2">
           <h2
             id={recordsId}
-            className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
+            className="px-4 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
           >
             {t('profile.achievements.records')}
           </h2>
-          <dl className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {records.map(([label, value]) => (
-              <div key={label} className="flex min-w-0 flex-col-reverse gap-0.5 card px-3.5 py-3">
-                <dt className="text-sm text-pretty text-muted-foreground">{label}</dt>
-                <dd className="font-sans text-[1.375rem]/tight font-bold text-balance tabular-nums">
+              <div key={label} className="flex min-w-0 flex-col-reverse gap-0.5 card px-4 py-3">
+                <dt className="text-[0.8125rem] leading-[normal] text-pretty text-muted-foreground">
+                  {label}
+                </dt>
+                <dd className="font-sans text-[1.375rem] leading-[normal] font-bold text-balance tabular-nums">
                   {value}
                 </dd>
               </div>
             ))}
           </dl>
         </section>
-        <section aria-labelledby={milestonesId} className="flex flex-col gap-1.5">
-          <div className="flex items-baseline justify-between gap-3 px-1">
+        <section aria-labelledby={milestonesId} className="flex flex-col gap-1">
+          <div className="flex items-baseline justify-between gap-3">
             <h2 id={milestonesId} className="font-sans text-xl font-bold">
               {t('profile.achievements.milestones')}
             </h2>
@@ -67,11 +67,11 @@ export function AchievementsPage() {
               {t('profile.achievements.milestonesSay')}
             </p>
           </div>
-          <SettingsGroup flush>
+          <ProfileList page>
             {milestones.map((milestone) => (
               <MilestoneRow key={milestone.id} {...milestone} />
             ))}
-          </SettingsGroup>
+          </ProfileList>
         </section>
       </div>
     </div>
@@ -88,11 +88,11 @@ export function AchievementPage() {
   const day = earned[achievementId] ?? null
   const name = t(`profile.achievements.names.${achievementId}`)
   return (
-    <div className="flex flex-col gap-6">
-      <ScreenHeader title={name} back={<BackButton />} />
+    <div className="flex flex-col gap-2">
+      <ScreenHeader column title={name} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
         <section className="flex flex-col items-center gap-2 text-center">
-          <MilestoneMark id={achievementId} earned={day !== null} size="hero" />
+          <MilestoneMark earned={day !== null} size="hero" />
           <p className="font-sans text-[1.625rem]/tight font-bold text-balance">{name}</p>
           <p className="text-[0.9375rem] text-muted-foreground">
             {day
@@ -107,9 +107,7 @@ export function AchievementPage() {
           >
             {t('profile.achievements.how')}
           </h2>
-          <p className="card px-4 py-3.5 text-pretty">
-            {t(`profile.achievements.ways.${achievementId}`)}
-          </p>
+          <p className="card p-4 text-pretty">{t(`profile.achievements.ways.${achievementId}`)}</p>
         </section>
       </div>
     </div>

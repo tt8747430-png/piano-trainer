@@ -19,8 +19,8 @@ import { SectionCard } from './SectionCard'
 import { SectionLessonGroups } from './SectionLessonGroups'
 
 /**
- * A section's page (ADR 0111): "Learn the Verse", its card (the song, the section's chords,
- * its lessons done), then its lessons in order, each looping its bars in the Player; Practise, floating,
+ * A section's page (ADR 0111): "Learn the Verse", its name on the paper (its rounds, its bars and
+ * chords), then its lessons in order, each looping its bars in the Player; Practise, floating,
  * loops the whole section.
  */
 function SectionView({ piece, section }: { piece: Piece; section: number }) {
@@ -31,10 +31,17 @@ function SectionView({ piece, section }: { piece: Piece; section: number }) {
   if (!lessons) return null
   const heading = headings[section] ?? ''
   return (
-    <div className="flex flex-col gap-6 pb-4">
-      <ScreenHeader title={t('learnSection.title', { section: heading })} back={<BackButton />} />
-      {/* One column of rows, as the other detail pages' (Profile's, a folder's settings). */}
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+    <div className="flex flex-col gap-2 pb-4 lg:gap-4">
+      <ScreenHeader
+        column="until-laptop"
+        title={t('learnSection.title', { section: heading })}
+        back={<BackButton />}
+      />
+      {/* The section's name on the paper, 24 under the bar on a laptop as every page under a song (its
+          Settings), then its ways in: one column on a phone; on a laptop the
+          Section board's two, the chords and in time at the left, the changes and patterns at the
+          right, every row 56 and, there, its state beside its words with no chevron far from them. */}
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 lg:mx-0 lg:max-w-none lg:gap-5 lg:px-[calc(3.5rem-var(--gutter))] [&_.group\/row]:min-h-14 lg:[&_.group\/row>span:has([data-slot=row-title])]:flex-none lg:[&_[data-slot=row-chevron]]:hidden">
         <SectionCard heading={heading} lessons={lessons} />
         <SectionLessonGroups piece={piece} performance={performance} lessons={lessons} />
       </div>

@@ -38,7 +38,7 @@ export const BAR_LIMITS: Readonly<
 
 /** What each surface holds until the learner changes it: today's. */
 export const DEFAULT_BARS: Readonly<Record<BarSurface, readonly BarAct[]>> = {
-  'select.songs': ['favourite', 'move', 'archive', 'delete'],
+  'select.songs': ['move', 'favourite', 'archive'],
   'swipe.songs.leading': ['favourite'],
   'swipe.songs.trailing': ['move', 'archive'],
   'swipe.folders.leading': ['edit'],

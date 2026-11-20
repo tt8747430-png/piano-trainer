@@ -1,5 +1,4 @@
 import { useState, type ReactNode, type SyntheticEvent } from 'react'
-import type { KeyboardSettings } from '@/entities/settings'
 import { cn, useHiddenWhileReading } from '@/shared/lib'
 import { ChromeShownContext } from '../model/chrome-shown'
 import { dockTap } from '../model/tap-on-screen'
@@ -11,7 +10,7 @@ import { dockTap } from '../model/tap-on-screen'
  * the editor's palette) and the transport the keys, no band between them (R32).
  */
 export const SCORE_SCREEN =
-  'player-screen min-h-0 flex-1 gap-x-3 py-2 max-sm:gap-x-2 landscape-phone:gap-x-2 landscape-phone:py-0 landscape-phone:data-[keys=top]:pb-2'
+  'player-screen min-h-0 flex-1 gap-x-3 py-2 max-sm:gap-x-2 landscape-phone:gap-x-2 landscape-phone:py-0'
 
 /** Whether an event happened on the music (`data-area="sheet"`). */
 const onSheet = (event: SyntheticEvent) =>
@@ -19,7 +18,7 @@ const onSheet = (event: SyntheticEvent) =>
 
 /**
  * The Player's screen: its areas (`PlayerArea`) placed by the `player-screen` utility,
- * the keys at the foot or under the tools row as the keyboard settings dock them. The floating
+ * the keys at the foot. The floating
  * transport steps aside as the music is read (dragged, scrolled, pinched: `useHiddenWhileReading`);
  * a tap on the screen's free room shows or hides it, a tap on a note brings it back (`dockTap`).
  * While the bar and the tools row step aside (`aside`: Diagrams playing, ADR 0108, as Chordify's
@@ -27,16 +26,11 @@ const onSheet = (event: SyntheticEvent) =>
  * aside; once it is over (the music stopped), they are all back.
  */
 export function PlayerScreen({
-  keys,
   aside = false,
-  panel = false,
   docked = false,
   children,
 }: {
-  keys: KeyboardSettings['dock']
   aside?: boolean
-  /** A panel at the right is open (a laptop's Settings): the screen ends where it starts. */
-  panel?: boolean
   /**
    * The keys are a window over the music's foot (the Player's, loop round 24): the music's scroll
    * room under its last line reaches above the window, else above the floating transport.
@@ -64,11 +58,8 @@ export function PlayerScreen({
     // A tap anywhere is the transport's business only by `dockTap`: every control keeps its own. On
     // a phone held upright the bar's two groups closer, so a phone from 320px has its buttons in a row.
     <div
-      data-keys={keys}
-      data-panel={panel || undefined}
       className={cn(
         SCORE_SCREEN,
-        'data-panel:pe-[min(28rem,100vw)]',
         // The room under the music's last line clears the keys' window, else the transport; the music
         // runs on to the screen's foot under the floating transport, as the board draws it.
         docked &&

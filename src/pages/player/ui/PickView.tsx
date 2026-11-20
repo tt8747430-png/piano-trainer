@@ -39,7 +39,6 @@ export function PickView({
   const settings = useSettingsStoreApi()
   return (
     <ViewPill
-      size="views"
       label={t('views.label')}
       value={shown}
       views={PICKED.map(({ view, icon }) => {
@@ -90,6 +89,8 @@ export function ViewMenu({ shown, needs }: { shown: MusicView; needs: ViewNeeds 
               <DropdownMenuRadioItem
                 key={view}
                 value={view}
+                // A view picked closes the menu: it only shows a view.
+                closeOnClick
                 disabled={need !== undefined}
                 title={need === undefined ? undefined : t(`needs.${need}`)}
               >

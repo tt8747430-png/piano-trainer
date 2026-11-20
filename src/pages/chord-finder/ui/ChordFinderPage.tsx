@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
 import { useKeyName } from '@/shared/i18n'
 import { partsParams, useSetSearch } from '@/shared/lib'
-import { keyFromParam, keyParam, noteParam } from '@/shared/lib/music'
+import { keyFromParam, keyParam, keysAround, noteParam } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import {
@@ -30,10 +30,14 @@ import {
   ChordTrail,
   readingAt,
   readingMarks,
+  useChordNumeral,
   useKeysHolding,
 } from '@/widgets/chord-finder'
 import type { ChordFinderView } from '../model/chord-finder-view'
 import { useChordFinder } from '../model/use-chord-finder'
+
+/** The keys the boards draw: C3 to C5 across a phone, C2 to C6 across a laptop, grown when a chord reaches past them. */
+const FINDER_KEYS = keysAround(60, [12, 12], [24, 24])
 
 /** The chords an empty Chord finder offers to try (R32), as its URL writes keys: C, Am7, D7. */
 const TRY = [
@@ -62,6 +66,8 @@ export function ChordFinderPage() {
   const { keys, finding } = finder
   const reading = finding.kind === 'chord' ? readingAt(finding.readings, finder.reading) : undefined
   const holding = useKeysHolding(finder.inKeys ? reading : undefined)
+  // Imaj7 in C major: the chord's numeral leads the key it is spelled in, that key's one home.
+  const numeral = useChordNumeral(reading, finder.musicKey)
   // Chords shows a chord over its bass only to its 3rd inversion and in four notes or fewer: a chord it
   // would show over another bass (C9/E as C9) is not offered.
   const opensInChords = reading !== undefined && (!reading.bass || reading.inversion !== undefined)
@@ -84,12 +90,14 @@ export function ChordFinderPage() {
     <ToolPage
       title={t('practice:pages.chordFinder')}
       start
+      column={880}
       actions={<PianoButton screen="playing" />}
       settings={<Link to="/settings/chord-finder" search={{ from: 'chord-finder' }} />}
       keys={
         <PinnedKeyboard
           place="top"
           className="mt-2"
+          least={FINDER_KEYS}
           screen="playing"
           shown={{
             keys,
@@ -140,7 +148,7 @@ export function ChordFinderPage() {
       }
       side={
         rows ? (
-          <GroupRows>
+          <GroupRows surface="sheet">
             {finding.kind === 'chord' ? (
               <ChordReadings
                 readings={finding.readings}
@@ -171,11 +179,14 @@ export function ChordFinderPage() {
           reading={finder.reading}
           slash={finder.slash}
           keysFolded={folded}
-          musicKey={finder.musicKey}
         />
         <KeyPicker
           className="self-start"
-          label={t('practice:chordFinder.spelledIn')}
+          label={
+            numeral
+              ? t('practice:chordFinder.numeralPicker', { numeral })
+              : t('practice:chordFinder.spelledIn')
+          }
           value={keyFromParam(view.key)}
           onChange={(key) => change({ key: keyParam(key) })}
         />

@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { MilestoneId } from '@/entities/progress'
-import { RowLink, SettingsGroup } from '@/shared/ui'
-import { SectionHead } from './SectionHead'
+import { RowLink } from '@/shared/ui'
+import { ProfileList } from './ProfileList'
+import { ProfileSection } from './ProfileSection'
 import { useDayName } from '../model/format'
 import { useMilestones } from '../model/use-milestones'
 import { MilestoneMark } from './marks'
@@ -14,8 +14,14 @@ export function MilestoneRow({ id, day }: { id: MilestoneId; day: string | null 
   const dayName = useDayName()
   return (
     <RowLink
-      mark={<MilestoneMark id={id} earned={day !== null} />}
-      title={t(`profile.achievements.names.${id}`)}
+      mark={<MilestoneMark earned={day !== null} />}
+      title={
+        day ? (
+          t(`profile.achievements.names.${id}`)
+        ) : (
+          <span className="text-muted-foreground">{t(`profile.achievements.names.${id}`)}</span>
+        )
+      }
       detail={
         day
           ? t('profile.achievements.earned', { date: dayName(day) })
@@ -26,28 +32,30 @@ export function MilestoneRow({ id, day }: { id: MilestoneId; day: string | null 
   )
 }
 
-/** The Profile's achievements: the earned ones first, three, then See all; none yet, said so. */
+/**
+ * The Profile's achievements (ACH9): three, the earned first, newest first, then those still to
+ * earn, each with its lock; then See all.
+ */
 export function AchievementsPreview() {
   const { t } = useTranslation('account')
-  const headingId = useId()
   const milestones = useMilestones()
-  const earned = milestones.filter((milestone) => milestone.day !== null)
+  const shown = [
+    ...milestones
+      .filter((milestone) => milestone.day !== null)
+      .toSorted((a, b) => (b.day ?? '').localeCompare(a.day ?? '')),
+    ...milestones.filter((milestone) => milestone.day === null),
+  ].slice(0, 3)
   return (
-    <section aria-labelledby={headingId} className="flex flex-col gap-2">
-      <SectionHead
-        id={headingId}
-        title={t('profile.achievements.title')}
-        to="/profile/achievements"
-      />
-      <SettingsGroup flush>
-        {earned.length === 0 ? (
-          <p className="px-4 py-3 text-pretty text-muted-foreground">
-            {t('profile.achievements.none')}
-          </p>
-        ) : (
-          earned.slice(0, 3).map((milestone) => <MilestoneRow key={milestone.id} {...milestone} />)
-        )}
-      </SettingsGroup>
-    </section>
+    <ProfileSection
+      fold="achievements"
+      title={t('profile.achievements.title')}
+      to="/profile/achievements"
+    >
+      <ProfileList>
+        {shown.map((milestone) => (
+          <MilestoneRow key={milestone.id} {...milestone} />
+        ))}
+      </ProfileList>
+    </ProfileSection>
   )
 }

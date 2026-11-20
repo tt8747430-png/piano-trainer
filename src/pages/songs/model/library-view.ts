@@ -1,4 +1,3 @@
-import { pieceStage } from '@/entities/course'
 import {
   childFolders,
   folderPath,
@@ -6,12 +5,11 @@ import {
   type FolderId,
   type LibraryLayout,
   type LibrarySort,
+  type SortDirection,
   type ShelvedFolder,
 } from '@/entities/library'
-import { entryWords, pieceKey, type Entry, type PieceId } from '@/entities/piece'
-import { STAGES, type Stage } from '@/entities/step'
+import { entryAuthor, entryWords, type Entry, type PieceId } from '@/entities/piece'
 import { matchesQuery } from '@/shared/lib'
-import { keyFromParam, keyParam, pitchClassOf, type KeyParam } from '@/shared/lib/music'
 import type { SongsFilter } from './songs-filter'
 
 /** Songs listed together: a folder's, or Home's; while the filters look through folders, named. */
@@ -59,56 +57,53 @@ export interface ViewLookups {
   readonly home: string
   /** Every song's heading at Home, under the folders: Songs, as the laptop's table and the boards name it. */
   readonly allSongs: string
+  /** When an own song came into the library, ISO; null for the app's songs. */
+  readonly addedOf: (id: PieceId) => string | null
+  /** What a search also finds a song by in the learner's library: its tags and its genre's name. */
+  readonly detailWords: (id: PieceId) => readonly string[]
 }
 
-/** The filters that narrow, besides the search: what the Filter button counts and its chips name. */
-export const filtersOn = (filter: SongsFilter): number =>
-  Number(filter.stage !== 'any') +
-  Number(filter.key !== '') +
-  Number(filter.favourites) +
-  Number(filter.folder !== 'any') +
-  Number(filter.learned !== 'any')
-
-/** The filters the places hold (Favourites, Learning, Learned; a phone's chips, a laptop's tree), not counted again on the sheet's button. */
-export const placesOn = (filter: SongsFilter): number =>
-  Number(filter.favourites) + Number(filter.learned !== 'any')
-
-/** Whether a filter narrows anything. */
-export const isFiltering = (filter: SongsFilter): boolean =>
-  filter.q.trim() !== '' || filtersOn(filter) > 0
-
-/** A song's key as the URL writes it, and as the Key filter and sort read it. */
-export const songKeyParam = (entry: Entry): KeyParam => keyParam(pieceKey(entry))
-
-/** Keys in the order the Key sort and filter list them: the majors from C up, then the minors. */
-export function compareKeys(a: KeyParam, b: KeyParam): number {
-  const [one, two] = [keyFromParam(a), keyFromParam(b)]
-  return (
-    Number(one.minor) - Number(two.minor) ||
-    pitchClassOf(one.tonic) - pitchClassOf(two.tonic) ||
-    a.localeCompare(b, 'en')
-  )
-}
+/** Whether the search narrows anything: the library's one filter (R72). */
+export const isFiltering = (filter: SongsFilter): boolean => filter.q.trim() !== ''
 
 /**
- * The songs in the order the sort says: as dragged, by title, by key (then title), or played last
- * first (the rest after, as dragged).
+ * The songs in the order the sort says, the way it runs (R72, Flat's library): by when each was played
+ * last, by title, by who wrote it, or by when it came in. What has no date or composer stands after the
+ * rest either way, as the library holds it.
  */
 export function sortSongs(
   entries: readonly Entry[],
   sort: LibrarySort,
-  { titleOf, opened, compare }: Pick<ViewLookups, 'titleOf' | 'opened' | 'compare'>,
+  direction: SortDirection,
+  {
+    titleOf,
+    opened,
+    compare,
+    addedOf,
+  }: Pick<ViewLookups, 'titleOf' | 'opened' | 'compare' | 'addedOf'>,
 ): Entry[] {
-  if (sort === 'manual') return [...entries]
+  const way = direction === 'ascending' ? 1 : -1
   const byTitle = (a: Entry, b: Entry) => compare(titleOf(a), titleOf(b))
-  if (sort === 'name') return entries.toSorted(byTitle)
-  if (sort === 'key')
+  if (sort === 'title') return entries.toSorted((a, b) => way * byTitle(a, b))
+  if (sort === 'composer') {
+    const by = (entry: Entry) => entryAuthor(entry) ?? ''
     return entries.toSorted(
-      (a, b) => compareKeys(songKeyParam(a), songKeyParam(b)) || byTitle(a, b),
+      (a, b) =>
+        Number(by(a) === '') - Number(by(b) === '') || way * compare(by(a), by(b)) || byTitle(a, b),
     )
-  const played = new Map(opened.map((id, index) => [id, index]))
-  const rank = (entry: Entry) => played.get(entry.id) ?? Number.POSITIVE_INFINITY
-  return entries.toSorted((a, b) => rank(a) - rank(b))
+  }
+  // Played: `opened` is the latest first, so its place is newest first. Added: own songs' dates.
+  const played = new Map(opened.map((id, index) => [id, -index]))
+  const when = (entry: Entry): number | null =>
+    sort === 'played'
+      ? (played.get(entry.id) ?? null)
+      : ((date) => (date === null ? null : Date.parse(date)))(addedOf(entry.id))
+  return entries.toSorted((a, b) => {
+    const x = when(a)
+    const y = when(b)
+    if (x === null || y === null) return Number(x === null) - Number(y === null)
+    return way * (x - y)
+  })
 }
 
 /**
@@ -126,35 +121,30 @@ export function libraryView(
   place: FolderId | null,
   filter: SongsFilter,
   sort: LibrarySort,
+  direction: SortDirection,
   lookups: ViewLookups,
   {
     tree = false,
     everySong = false,
+    favouritesOnly = false,
   }: {
     tree?: boolean
     /** At Home, every song under the folders as one list, Songs (a phone's Home). */
     everySong?: boolean
+    /** Only the learner's favourites: My songs' Favourites card (R72). */
+    favouritesOnly?: boolean
   } = {},
 ): LibraryView {
-  const loose = new Set(layout.home)
-  // Learning is a song played and not yet learned; one never opened is in neither place.
-  const started = new Set(lookups.opened)
-  const learnedOrLearning = (id: PieceId) =>
-    filter.learned === 'yes' ? lookups.learned.has(id) : !lookups.learned.has(id) && started.has(id)
   const keeps = (entry: Entry) =>
-    (filter.folder === 'any' || loose.has(entry.id)) &&
-    (filter.learned === 'any' || learnedOrLearning(entry.id)) &&
-    (filter.stage === 'any' || pieceStage(entry.id) === filter.stage) &&
-    (filter.key === '' || songKeyParam(entry) === filter.key) &&
-    (!filter.favourites || lookups.favourites.has(entry.id)) &&
-    matchesQuery(entryWords(entry), filter.q)
+    (!favouritesOnly || lookups.favourites.has(entry.id)) &&
+    matchesQuery([...entryWords(entry), ...lookups.detailWords(entry.id)], filter.q)
   const entries = (ids: readonly PieceId[]) =>
     ids.flatMap((id) => {
       const entry = lookups.entryOf(id)
       return entry ? [entry] : []
     })
   const byName = (folders: readonly ShelvedFolder[]) =>
-    sort === 'name'
+    sort === 'title'
       ? folders.toSorted((a, b) => lookups.compare(lookups.folderName(a), lookups.folderName(b)))
       : folders
   const here = place === null ? null : layout.folders.find((folder) => folder.id === place)
@@ -208,7 +198,7 @@ export function libraryView(
       key: all ? 'all' : (list.folder?.id ?? 'home'),
       heading: named ? list.heading : null,
       folder: list.folder?.id ?? null,
-      entries: sortSongs(entries(list.songs).filter(keeps), sort, lookups),
+      entries: sortSongs(entries(list.songs).filter(keeps), sort, direction, lookups),
     }))
     .filter((group) => group.entries.length > 0 || !filtering || tree)
   const scope =
@@ -225,11 +215,13 @@ export function libraryView(
   })
   const searched = filter.q.trim() !== ''
   return {
-    folders: (filtering
-      ? searched
-        ? byName(nested).filter((folder) => matchesQuery([lookups.folderName(folder)], filter.q))
-        : []
-      : byName(childFolders(layout.folders, place))
+    folders: (tree
+      ? []
+      : filtering
+        ? searched
+          ? byName(nested).filter((folder) => matchesQuery([lookups.folderName(folder)], filter.q))
+          : []
+        : byName(childFolders(layout.folders, place))
     ).map(folderView),
     here: ((folder) => (folder ? folderView(folder) : null))(
       place === null ? undefined : layout.folders.find((each) => each.id === place),
@@ -237,33 +229,7 @@ export function libraryView(
     groups,
     scope,
     shown,
-    // A place alone (Favourites, Learning, Learned) is where the learner is, not a filter to clear:
-    // the notice of what is hidden speaks only for a search or the sheet's filters.
-    hidden:
-      filtering && (filter.q.trim() !== '' || filtersOn(filter) > placesOn(filter))
-        ? total - shown
-        : 0,
+    hidden: filtering ? total - shown : 0,
     filtering,
   }
-}
-
-/**
- * The levels the songs hold, in order, whatever is searched or chosen (so the choice stays put while
- * a search is typed): a level no song holds is never offered.
- */
-export function stagesIn(entries: readonly Entry[]): Stage[] {
-  const held = new Set(entries.map((entry) => pieceStage(entry.id)))
-  return STAGES.filter((stage) => held.has(stage))
-}
-
-/** The keys the songs are written in, each with how many: the majors from C up, then the minors. */
-export function keysIn(entries: readonly Entry[]): { key: KeyParam; count: number }[] {
-  const counts = new Map<KeyParam, number>()
-  for (const entry of entries) {
-    const key = songKeyParam(entry)
-    counts.set(key, (counts.get(key) ?? 0) + 1)
-  }
-  return [...counts]
-    .map(([key, count]) => ({ key, count }))
-    .toSorted((a, b) => compareKeys(a.key, b.key))
 }

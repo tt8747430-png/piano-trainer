@@ -11,9 +11,14 @@ import {
   parseChordSymbol,
 } from '@/shared/lib/music'
 import { qualityParams } from '@/shared/lib'
-import { RowLink } from '@/shared/ui'
+import { RowLink, TileMark } from '@/shared/ui'
 import { linkTile } from '../model/link-tile'
 import { typedSearch } from '@/widgets/progression-explorer'
+
+/** The tile of what a link opens, 44 on its paint's wash, as the Lesson boards' link rows. */
+function LinkTile({ target }: { target: LessonLink }) {
+  return <TileMark large {...linkTile(target)} />
+}
 
 /**
  * A row leading to what a lesson names, on the page or in the Player that shows it, with that page's
@@ -26,7 +31,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={
             <Link
               to="/practice/chords"
@@ -40,7 +45,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={
             <Link
               to="/practice/scales"
@@ -57,14 +62,13 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={
             <Link
               to="/practice/scales"
               search={{
                 root: noteParam(target.key.tonic),
                 kind: keyScale(target.key),
-                show: 'key',
               }}
             />
           }
@@ -74,7 +78,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={
             <Link
               to="/practice/intervals"
@@ -87,7 +91,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={
             <Link
               to="/practice/chords"
@@ -103,7 +107,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={<Link to="/lessons/$lessonId" params={{ lessonId: target.lesson }} />}
         />
       )
@@ -112,7 +116,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={
             <Link
               to="/practice/progressions/line"
@@ -130,36 +134,18 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={<Link to="/practice/progressions/line" search={search} />}
         />
       )
     }
-    case 'harmonise':
-      return (
-        <RowLink
-          title={title}
-          {...linkTile(target)}
-          render={
-            <Link
-              to="/practice/scales"
-              search={{
-                root: noteParam(target.key.tonic),
-                kind: keyScale(target.key),
-                show: 'key',
-                melody: noteParam(target.note),
-              }}
-            />
-          }
-        />
-      )
     case 'song-chords': {
       const search = typedSearch(target.chords, { tonic: note('C'), minor: false })
       if (!search) throw new RangeError(`A lesson's chords "${target.chords}" do not read`)
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={<Link to="/practice/progressions/line" search={search} />}
         />
       )
@@ -169,7 +155,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={
             <Link
               to="/play/progression"
@@ -192,7 +178,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={
             <Link
               to="/play/exercise/$exerciseId"
@@ -210,7 +196,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={
             <Link
               to="/practice/trainer/$trainerId"
@@ -226,7 +212,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...linkTile(target)}
+          mark={<LinkTile target={target} />}
           render={
             <Link
               to="/play/$pieceId"

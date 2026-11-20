@@ -375,6 +375,23 @@ export function steppedKey(key: Key, from: Midi, steps: number): Midi {
 }
 
 /**
+ * Chord input by interval (research F7, Flat's addNoteInterval): over each chord `where` takes, a
+ * note `steps` notes of the key above its highest (below its lowest where `steps` is negative), a
+ * 2nd to an octave; none past the piano's ends nor where the chord holds that key already.
+ */
+export function addInterval(draft: Draft, layer: NoteLayer, where: Where, steps: number): Draft {
+  const taken = notesOf(draft, layer).filter(isAt(where))
+  const starts = [...new Set(taken.map((n) => n.startTick))]
+  return starts.reduce((next, at) => {
+    const chord = taken.filter((n) => n.startTick === at).map((n) => n.midi)
+    const from = steps > 0 ? Math.max(...chord) : Math.min(...chord)
+    const key = steppedKey(keyAt(draft, at), midi(from), steps)
+    if (key === from || chord.includes(key) || key < PIANO.from || key > PIANO.to) return next
+    return addToChord(next, layer, at, key, 0)
+  }, draft)
+}
+
+/**
  * The notes `where` takes moved `steps` notes of the key up or down, as a note dragged on the staff
  * moves (ADR 0096); nothing moves past the piano's ends.
  */
@@ -493,6 +510,23 @@ export const GRACE_EDITS = {
 export const respellNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft =>
   changeAt(draft, layer, where, (n) => ({ ...n, spelled: otherSpelling(n.spelled) }))
 
+/** The piano's staff a cross-staff key draws the notes on (Dorico's ⌘⇧↑ ⌘⇧↓). */
+export type CrossTo = 'upper' | 'lower'
+
+/**
+ * A hand's notes `where` drawn on the piano's `to` staff (ADR 0114): crossed where it is not their
+ * hand's, back on their own where it is. Heard, fingered and scored as their hand's still.
+ */
+export const crossNotes = (draft: Draft, hand: HandId, where: Where, to: CrossTo): Draft =>
+  changeAt(draft, hand, where, (n) => {
+    if ((to === 'lower') === (hand === 'lh')) {
+      if (!n.cross) return n
+      const { cross: _crossed, ...home } = n
+      return home
+    }
+    return n.cross ? n : { ...n, cross: true }
+  })
+
 /**
  * The start of the first of `notes` (in order) after `tick` (1), or of the last before it (−1),
  * where the Lyrics and fingering fields go on (ADR 0096); none past the ends.
@@ -561,9 +595,29 @@ export function tieNotes(draft: Draft, layer: NoteLayer, span: Tick | TickSpan):
   return changed ? withNotes(draft, layer, notes) : draft
 }
 
+/** The notes (a note or a chord) that end where the caret stands, written just before it. */
+const endingAt = (draft: Draft, layer: NoteLayer, at: Tick): DraftNote[] =>
+  notesOf(draft, layer).filter((n) => n.startTick + n.durationTicks === at)
+
 /**
- * Whether Tie has a note to join in `span` (R32-B): a note there with the same key's note starting
- * where it ends. Where none has, the palette draws no Tie.
+ * Tie in note input (research F5, Dorico's NoteInput.Tie): the note or chord ending at the caret
+ * held on for `ticks` more, what stood there written over, as one note the engraving splits at a
+ * barline; stopping at the song's end. Nothing ends at the caret, or the song ends there: unchanged.
+ */
+export function tieOn(draft: Draft, layer: NoteLayer, at: Tick, ticks: Tick): Written {
+  const held = endingAt(draft, layer, at)
+  if (held.length === 0 || at >= totalTicks(draft)) return { draft, end: at }
+  const end = Math.min(at + ticks, totalTicks(draft))
+  const notes = clearUnder(draft, layer, at, end).map((n) =>
+    held.includes(n) ? { ...n, durationTicks: end - n.startTick } : n,
+  )
+  return { draft: withNotes(draft, layer, notes), end }
+}
+
+/**
+ * Whether Tie acts (R32-B, research F5): a note in `span` with the same key's note starting where it
+ * ends, or, at the caret, a note or chord written just before it to hold on. Where neither, it greys.
  */
 export const canTie = (draft: Draft, layer: NoteLayer, span: Tick | TickSpan): boolean =>
-  tieNotes(draft, layer, span) !== draft
+  tieNotes(draft, layer, span) !== draft ||
+  (typeof span === 'number' && endingAt(draft, layer, span).length > 0 && span < totalTicks(draft))

@@ -55,7 +55,7 @@ care shows in a hundred small things done the same way.
    unless the owner named one. An area with older specs carries their standing rulings over. Top: **The rulings as they stand**, one bullet each, the owner's words
    quoted, the decision, its references. No history below it: when a later ruling replaces a line, the old line is deleted in the
    same edit (git keeps it).
-5. **Canvas:** one canvas holds every place (owner, v15): the area is a page of The ideal Piano Trainer, built by
+5. **Canvas, in the four phases** (sketch in the spec, wireframe, mockup, prototype; `owner-way/references/ui-and-mockups.md`, Building a screen, 4)**:** one canvas holds every place (owner, v15): the area is a page of The ideal Piano Trainer, built by
    `.scratch/r39/canvas/index.py`, its rows the phone boards, their Night boards, the laptop boards and theirs (canvas
    100–101). A place drawn elsewhere is merged in. Phone and laptop, drawn from
    the screenshots of step 2 with the real songs and the exact labels, every panel and page reachable and working
@@ -65,7 +65,8 @@ care shows in a hundred small things done the same way.
 6. **Each reaction from the owner** is one turn of this loop, in this order: re-read the rulings; change the canvas;
    run its browser test and look at the screenshots at both sizes; the polish pass (below); publish; write the ruling into the spec and a
    bullet into the feedback log; commit those files by path and
-   push (docs go at once); report.
+   push (docs go at once); one line saying what changed, then the next turn of the loop in the same message (in a
+   loop nothing ends the turn but "stop", `owner-way`).
 7. **When asked what is left to port:** a table in the spec, `# | canvas ruling | app today (files) | port`. Then list
    the stale lines found, and ask about what the canvas has no place for (acts, menus, old features), each with
    your recommendation (in a loop: decide each, ask nothing). Record each answer as a ruling: kept with its home, or removed with no home elsewhere.
@@ -156,6 +157,7 @@ source; installing one is the owner's decision.
 | emilkowalski/skills `emil-design-eng`, `ui-cheatsheet` (MIT) | whether to animate by frequency, durations, origin-aware popovers |
 | benjitaylor/skills `stageshow` (MIT) | the five ways a canvas fails, the exacting designer's look |
 | benjitaylor/agentation (PolyForm Shield) | removed 2026-11-13; the owner's screenshots do its job |
+| Articles: Chawla (trends), Nurkhon (design engineer), Malewicz (UI direction), Babich (DESIGN.md) | glass bars low-key, never hidden; every width between phone and laptop holds; components handed over with every state; tokens by role with when-not; no trend textures |
 | Nine design skills the owner pasted, written for Figma (source and licence not stated) | rewritten for the canvas and installed: `product-designer`, `screen-design`, `state-expander`, `phone-from-laptop`, `ux-writing`, `interface-review`, `spacing-audit`, `design-consistency`, `board-cleanup` |
 | A Firecrawl video and its scrape skill (transcript) | search then scrape for research when the connector is attached; `proxy: "basic"`, never past a bot check; Interact not used |
 | Kevin: Matt Pocock's agent skills v1.3 (transcript) | grill the owner on the open decisions after two rejections of a part, recommendation with each; variants side by side for what talk cannot settle; retro into checks |

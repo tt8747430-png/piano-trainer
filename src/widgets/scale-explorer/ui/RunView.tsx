@@ -9,6 +9,9 @@ import {
   scaleDifferences,
   hasStandardFingering,
   noteFromParam,
+  placeMinorKeyChords,
+  placeScaleChords,
+  keysAround,
   spellScale,
   printedNote,
 } from '@/shared/lib/music'
@@ -30,10 +33,12 @@ import {
   Stepper,
   usePlayKey,
 } from '@/shared/ui'
+import { ScaleChordGrid } from '@/features/play-example'
+import { keyOfScale } from '../model/scale-key'
 import { runStaff } from '../model/run-staff'
 import { runShown, scaleRunOf } from '../model/scale-run'
 import { MAX_OCTAVES, MIN_OCTAVES, type RunOctaves, type ScaleView } from '../model/scale-view'
-import { ModeVamp } from './ModeVamp'
+import { KeyFifths } from './KeyFifths'
 import { ScaleExercises } from './ScaleExercises'
 import { ScaleLayout } from './ScaleLayout'
 import { ScaleSheet } from './ScaleSheet'
@@ -73,10 +78,31 @@ export function RunView({
     [root, kind, start, octaves, fingering, rhythm, hands, direction],
   )
   const tonic = noteFromParam(root)
+  const shown = runShown(run, hands)
+  // The boards' keys round the run's first key: a fifth under it to a twelfth over it on a phone,
+  // an octave under it to three over it on a laptop.
+  const least = keysAround(Math.min(...shown.keys), [5, 19], [12, 36])
   const tones = spellScale(tonic, kind)
   const layers = useSettings(selectScaleStaff)
+  const musicKey = keyOfScale(root, kind)
+  // Each degree's triad, a minor key's as the books write it (its harmonic V and vii° over v and VII).
+  const chords = useMemo(
+    () =>
+      kind === 'natural'
+        ? placeMinorKeyChords(tonic, 3, 0)
+        : tones.length === 7
+          ? placeScaleChords(tonic, kind, 3, 0)
+          : [],
+    [tonic, kind, tones.length],
+  )
+  // The staff engraves the scale up one octave from its start, as its board draws it (GRANDSTAFF):
+  // the run's octaves and direction are how it plays, not what is printed.
+  const engraved = useMemo(
+    () => scaleRunOf({ root, kind, start, octaves: 1, fingering, rhythm, hands, direction: 'up' }),
+    [root, kind, start, fingering, rhythm, hands],
+  )
   // The theory written on the playing hand's staff (A43), the right hand's when both play.
-  const { music, placed, down } = run
+  const { music, placed } = engraved
   const written = useMemo(() => {
     const at = characteristicDegree(kind)
     const own = spellScale(noteFromParam(root), kind)
@@ -92,7 +118,7 @@ export function RunView({
     return runStaff(
       music,
       hands === 'lh' ? 'lh' : 'rh',
-      [...placed, ...down.placed],
+      placed,
       'fingers',
       layers,
       {
@@ -108,7 +134,7 @@ export function RunView({
       at === undefined ? undefined : own[at]?.degree,
       compared,
     )
-  }, [music, placed, down, hands, layers, t, root, kind, compare])
+  }, [music, placed, hands, layers, t, root, kind, compare])
   const startTone = tones[start - 1] ?? tones[0]
   const startName = startTone ? printedNote(startTone.note) : ''
   const playback = usePlayback<'up-down'>()
@@ -116,27 +142,19 @@ export function RunView({
   usePlayKey(play)
   const [tempoOpen, setTempoOpen] = useState(false)
   const standard = hasStandardFingering(kind)
-  const handsShown = hands === 'both' ? (['rh', 'lh'] as const) : ([hands] as const)
   return (
     <ScaleLayout
-      keyboard={<PinnedKeyboard shown={runShown(run, hands)} place="top" column />}
+      keyboard={<PinnedKeyboard shown={shown} place="top" least={least} />}
       heading={choice}
       music={
-        <section className="flex flex-col gap-3 overflow-hidden rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
+        <section className="flex flex-col gap-3 overflow-hidden rounded-card bg-card px-3 py-4 ring-1 ring-border">
           <ScaleSheet music={written} hands={hands} fingers />
-          {/* Each hand's fingers in a line under the run (canvas 174), as the Chords page's. */}
-          <p className="flex min-h-11 flex-col items-center justify-center gap-1 text-sm text-muted-foreground">
-            {standard
-              ? handsShown.map((side) => (
-                  <span key={side} className="whitespace-nowrap">
-                    {t(`common:hands.${side}`)}
-                    <b className="ms-1.5 font-bold whitespace-pre text-foreground tabular-nums">
-                      {run.fingers[side].join(' ')}
-                    </b>
-                  </span>
-                ))
-              : t('practice:scales.noFingering')}
-          </p>
+          {/* The fingers stand on the staves; only a scale with none says so (the board's FING60). */}
+          {standard ? null : (
+            <p className="text-center text-[0.9375rem] text-muted-foreground">
+              {t('practice:scales.noFingering')}
+            </p>
+          )}
         </section>
       }
       fields={
@@ -282,7 +300,15 @@ export function RunView({
         </FloatingActions>
       }
     >
-      <ModeVamp root={tonic} kind={kind} />
+      {chords.length > 0 ? (
+        <section className="flex flex-col gap-2">
+          <h3 className="font-sans text-sm font-semibold">
+            {t('practice:scales.chordsInScale', { scale: scaleName(tonic, kind) })}
+          </h3>
+          <ScaleChordGrid chords={chords} />
+        </section>
+      ) : null}
+      {musicKey ? <KeyFifths value={musicKey} kind={kind} /> : null}
       <ScaleExercises root={tonic} kind={kind} />
     </ScaleLayout>
   )

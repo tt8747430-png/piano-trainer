@@ -13,7 +13,6 @@ import { renderApp } from './testing/render-app'
  */
 const PAGES: readonly (readonly [SettingsPageId, string, ...RegExp[]])[] = [
   ['general', '/settings/general'],
-  ['on-screen-piano', '/settings/on-screen-piano'],
   ['connect-piano', '/settings/connect-piano'],
   ['player', '/play/bz5', /^Score view/],
   ['player', '/play/bz5', /^Playback/],

@@ -19,14 +19,32 @@ export {
   type Tonality,
 } from './model/choice'
 export {
+  EXERCISE_SHELVES,
+  SHELF_GROUPS,
   type Exercise,
   type ExerciseGroup,
   type ExerciseId,
   type ExerciseOptions,
+  type ExerciseShelf,
 } from './model/types'
 export { exerciseChoice, type ExerciseParams } from './model/resolve'
-export { exerciseOf, exercisesIn, isExerciseId } from './model/selectors'
-export { rungAbove, rungOf, TEMPO_LADDER, tempoKey, type Rung } from './model/ladder'
+export {
+  exerciseOf,
+  exercisesIn,
+  exercisesOnShelf,
+  isExerciseId,
+  isExerciseShelf,
+  shelfOf,
+} from './model/selectors'
+export {
+  CLEAN_TO_CLIMB,
+  rungAbove,
+  rungBelow,
+  rungOf,
+  TEMPO_LADDER,
+  tempoKey,
+  type Rung,
+} from './model/ladder'
 export { EXERCISES } from './content/catalog'
 export { HANON_TRAINS } from './content/hanon'
-export { BOOK_IDS, EXERCISE_BOOKS, type ExerciseBook } from './ui/books'
+export { GROUP_PAINT, SHELF_TILES } from './ui/books'

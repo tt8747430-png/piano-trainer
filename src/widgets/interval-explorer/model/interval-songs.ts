@@ -1,4 +1,5 @@
 import type { Locale } from '@/shared/i18n'
+import type { INTERVAL_GROUPS } from '@/shared/lib/music'
 import type { RowInterval } from './interval-rows'
 
 /** Songs by title, in each language its own list: a Russian learner knows other songs. */
@@ -11,7 +12,8 @@ export interface IntervalSongs {
 }
 
 /** The intervals a song is known by: those within the octave, the tritone once. */
-type SongInterval = Exclude<RowInterval, 'A4' | 'd5' | `${string}${9 | 11 | 13}`> | 'tritone'
+type SongInterval =
+  Exclude<RowInterval, 'A4' | 'd5' | (typeof INTERVAL_GROUPS.compound)[number]> | 'tritone'
 
 const titles = (en: readonly string[], ru: readonly string[]): SongTitles => ({ en, ru })
 

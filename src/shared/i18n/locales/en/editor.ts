@@ -5,6 +5,14 @@ export const editor = {
   redo: 'Redo',
   // A change the song's music cannot be written with: nothing saved over what was.
   unsaved: 'This change couldn’t be saved. The score has been restored to its last saved version.',
+  // Under the menu's title (the boards' ED_SAVED): where the learner's own song or version is kept.
+  savedHere: 'Saved on this device',
+  savedAccount: 'Saved to your account',
+  // The menu's MIDI keyboard row with none connected, and what Export writes (the boards' values).
+  noMidi: 'None',
+  exportFormats: 'MusicXML, MIDI',
+  // ⌘G's card over the sheet's head (research F11, Flat's and Dorico's): a bar's number, out of how many.
+  goToBar: { title: 'Go to bar', bar: 'Bar', of: 'of {{count}}' },
   // The dock over the sheet's foot (ADR 0114): the tempo, ‹ Play ›, and Record.
   dock: 'Playback and recording',
   // The tools row (ADR 0115), the Player's in its place: the View, Transpose, then the edit row.
@@ -25,14 +33,7 @@ export const editor = {
     toolbar: 'Note input',
     open: 'Expand palette',
     close: 'Collapse palette',
-    hide: 'Hide palette',
-    show: 'Show palette',
     categories: 'Palette categories',
-    // In place of the tools that change notes, while none is chosen (R32-B).
-    chooseNote: 'Select a note to use these tools.',
-    // Flat's list view and grid view (R32-C).
-    asList: 'Show as list',
-    asGrid: 'Show as grid',
     keys: 'Keys',
     // A category's sections, each a titled grid (R31-E, Flat's).
     groups: {
@@ -41,12 +42,13 @@ export const editor = {
       bars: 'Bars',
     },
     category: {
+      recent: 'Recent',
       notes: 'Note',
       pitch: 'Pitch and representation',
       articulations: 'Articulations',
       ornaments: 'Ornaments',
       dynamics: 'Dynamics',
-      measures: 'Measures and brackets',
+      measures: 'Bars',
       clef: 'Clef',
       key: 'Key signature',
       time: 'Time signature',
@@ -57,6 +59,10 @@ export const editor = {
   // Why a category's tools are greyed: each greyed key's tooltip, and its section's ⓘ (ADR 0096).
   reason: {
     chooseNote: 'Select one or more notes first.',
+    noDot: 'This value can’t take a dot here.',
+    noTie: 'No note of the same pitch follows.',
+    noTuplet: 'This value is too short for this tuplet.',
+    noLine: 'Select the notes to draw it over.',
     staff: 'Available on a staff only. Select a note on a staff.',
     hand: 'Available on the piano staves only. Select a note on the upper or lower staff.',
     // The chord-symbol and Lyrics fields write what the View may hide (ADR 0096).
@@ -192,8 +198,8 @@ export const editor = {
       pages: 'Pages',
       staves: 'Staves',
       hideEmpty: 'Hide empty staves',
-      measures: 'Measures',
-      measureNumbers: 'Measure numbers',
+      measures: 'Bars',
+      measureNumbers: 'Bar numbers',
       font: 'Music font',
     },
     orientation: 'Orientation',
@@ -217,11 +223,11 @@ export const editor = {
     noteSpacing: 'Note spacing',
     compact: 'Compact',
     wide: 'Wide',
-    barsPerLine: 'Measures per system',
+    barsPerLine: 'Bars per system',
     auto: 'Auto',
-    fewerBars: 'Fewer measures per system',
-    moreBars: 'More measures per system',
-    measureNumberChoices: { every: 'Every measure', system: 'Every system', none: 'None' },
+    fewerBars: 'Fewer bars per system',
+    moreBars: 'More bars per system',
+    measureNumberChoices: { every: 'Every bar', system: 'Every system', none: 'None' },
     reset: 'Reset',
     resetTitle: 'Reset layout?',
     resetBody: 'All layout settings will return to their defaults. You can undo this.',
@@ -382,6 +388,7 @@ export const editor = {
   },
   dot: 'Dotted',
   doubleDot: 'Double dotted',
+  repeat: 'Repeat',
   grace: 'Grace note',
   acciaccatura: 'Acciaccatura',
   // A note's marks (ADR 0097), each a key that puts it on the notes at the caret or takes it off.
@@ -421,16 +428,16 @@ export const editor = {
     f: 'Forte',
     ff: 'Fortissimo',
     fff: 'Fortississimo',
-    sf: 'Sforzando',
-    sfz: 'Sforzato',
-    sffz: 'Sforzatissimo',
+    sf: 'Sforzando (sf)',
+    sfz: 'Sforzando',
+    sffz: 'Sforzando-fortissimo',
     fz: 'Forzando',
-    rf: 'Rinforzando',
-    rfz: 'Rinforzato',
-    fp: 'Forte-piano',
+    rf: 'Rinforzando (rf)',
+    rfz: 'Rinforzando',
+    fp: 'Fortepiano',
     sfp: 'Sforzando-piano',
     sfpp: 'Sforzando-pianissimo',
-    pf: 'Piano-forte',
+    pf: 'Pianoforte',
     dolce: 'Dolce',
     cantabile: 'Cantabile',
     espressivo: 'Espressivo',
@@ -477,6 +484,7 @@ export const editor = {
   },
   rest: 'Rest',
   addNote: 'Add note',
+  voice: { two: 'Voice 2', second: 'voice 2' },
   // The editing modes (ADR 0114, Flat's Melody · Insert · Chord), one chosen in the Notes section,
   // the ⓘ beside its name saying what a key played does in each (ADR 0096).
   mode: {
@@ -495,6 +503,8 @@ export const editor = {
   down: 'Semitone down',
   octaveUp: 'Octave up',
   octaveDown: 'Octave down',
+  crossUp: 'Cross to upper staff',
+  crossDown: 'Cross to lower staff',
   stepUp: 'Diatonic step up',
   stepDown: 'Diatonic step down',
   back: 'Previous note',
@@ -523,8 +533,7 @@ export const editor = {
     insert: 'Add bar after',
     insertBefore: 'Add bar before',
     delete: 'Delete bars',
-    newLine: 'Line break',
-    joinLine: 'Join lines',
+    newLine: 'System break',
     newSection: 'New section',
     repeats: 'Rests and repeats',
     repeatsInfo:
@@ -569,7 +578,17 @@ export const editor = {
     // The takes' button while the song has none: greyed, its tooltip saying why.
     full: 'Take storage is full. Delete a take to record another.',
     nothing: 'No notes were played.',
-    none: 'No takes yet.',
+    none: 'No takes yet',
+    noneLine: 'Press Record beside Play in the editor, play, then Stop: each take is kept here.',
+    // Select over the takes (the Takes board): the header's word, the title while on, the bar's acts.
+    select: 'Select',
+    cancel: 'Cancel',
+    selectTitle: 'Select takes',
+    selected: '{{count}} selected',
+    downloadAll: 'Download all',
+    deleteAll: 'Delete all',
+    deletedMany_one: 'Take deleted',
+    deletedMany_other: '{{count}} takes deleted',
     detail: '{{length}} · {{bpm}}',
     play: 'Play',
     download: 'Download',
@@ -593,12 +612,14 @@ export const editor = {
   // A take drawn as a piano roll, on its page.
   // A take's own page.
   take: {
+    title: 'Take',
+    recorded: '{{song}} · recorded {{day}}',
     name: 'Name',
     play: 'Play',
     keep: 'Keep bars',
     first: 'First bar',
     last: 'Last bar',
-    keepIt: 'Keep',
+    keepIt: 'Keep bars {{first}}–{{last}}',
     keeping: {
       title: 'Keep bars {{first}}–{{last}}?',
       body: 'All other bars will be permanently deleted.',
@@ -609,13 +630,17 @@ export const editor = {
   // The editor's keys, as the shortcuts' sheet lists them.
   shortcuts: {
     group: 'Score editor',
+    space: 'Space',
+    play: 'Play from here, or stop',
     value: 'Note value (whole to 64th)',
     dot: 'Dotted',
+    doubleDot: 'Double dotted',
     tuplet: 'Tuplet (2 to 8)',
     annotation: 'Text above the note',
     numeral: 'Roman numeral analysis',
     rest: 'Rest',
-    grace: 'Appoggiatura',
+    repeat: 'Repeat',
+    grace: 'Grace note',
     acciaccatura: 'Acciaccatura',
     accidentals: 'Natural, sharp, flat',
     respell: 'Enharmonic spelling',
@@ -625,8 +650,9 @@ export const editor = {
     octaveLines: '8va, 8vb',
     trill: 'Trill',
     pedal: 'Pedal',
-    barAfter: 'Insert bar after',
-    barDelete: 'Delete selected bars',
+    barAfter: 'Add bar after',
+    barEnd: 'Add bar at end',
+    barDelete: 'Delete bars',
     newLine: 'System break',
     repeats: 'Start repeat, end repeat',
     mode: 'Cycle input mode (Replace, Insert, Chord)',
@@ -639,10 +665,13 @@ export const editor = {
     extend: 'Extend or reduce the selection by one note',
     extendBar: 'Extend the selection to the end or start of the bar',
     extendEnds: 'Extend the selection to the start or end of the score',
+    selectAll: 'Select the whole staff',
     deselect: 'Clear the selection',
     keyStep: 'Diatonic step up or down',
     semitone: 'Semitone up or down',
     octave: 'Octave up or down',
+    intervalUp: 'Add a note a 2nd to an octave above',
+    intervalDown: 'Add a note a 2nd to an octave below',
     delete: 'Delete',
     chord: 'Enter a chord symbol',
     lyrics: 'Enter lyrics',
@@ -651,7 +680,14 @@ export const editor = {
     redo: 'Redo',
     clip: 'Copy, cut or paste the selection',
   },
-  roll: { label: 'Notes: {{notes}} · bars: {{bars}}', playFrom: 'Play from bar {{n}}' },
+  roll: {
+    label: 'Notes: {{notes}} · bars: {{bars}}',
+    playFrom: 'Play from bar {{n}}',
+    // Under a take's roll on its page: how many notes it holds, or where it plays from.
+    notes_one: '{{count}} note',
+    notes_other: '{{count}} notes',
+    playingFrom: 'Playing from bar {{n}}',
+  },
   // What is printed on the score, edited where it is (ADR 0114): the title, a click turning it into a
   // field in its place.
   printed: {
@@ -708,6 +744,7 @@ export const editor = {
   publishPage: {
     title: 'Publish',
     open: 'Publish…',
+    status: 'Status',
     why: 'Why publish here?',
     whyBody:
       'Publishing gives every learner this version the next time the app starts. Each version published is kept, so you can restore an earlier one.',
@@ -738,18 +775,27 @@ export const editor = {
   original: {
     draft: 'Publishing',
     opening: 'Opening…',
-    offline: 'You’re offline. It will open when you reconnect.',
-    failed: 'It couldn’t be opened.',
+    openingWhy:
+      'The original is fetched from the server, so this draft is the one other editors see.',
+    offline: 'You’re offline',
+    offlineWhy: 'It will open when you reconnect.',
+    failed: 'It couldn’t be opened',
+    failedWhy: 'Check your connection, then try again.',
+    gone: 'This song can’t be found',
     retry: 'Try again',
-    editorsOnly: 'Only editors can modify this.',
+    editorsOnly: 'Only editors can modify this',
     toSongs: 'Back to Songs',
     drafted: 'Not published',
     saving: 'Saving…',
+    asPublished: 'Published · no changes',
     saved: 'Saved · not published',
     notSavedOffline: 'Offline: not saved yet',
     notSaved: 'Not saved. It will retry with your next change.',
     publish: 'Publish',
     publishMore: 'Publish…',
+    publishedWord: 'Published',
+    publishChanges: 'Publish changes',
+    unpublishedChange: 'The earlier version is published again. Your changes are kept in Versions.',
     publishTitle: 'Publish {{title}}?',
     publishBody:
       'All learners will receive this version the next time they open the app. The previous version is kept and can be restored.',
@@ -773,7 +819,7 @@ export const editor = {
     discarded: 'Changes discarded',
     cancel: 'Cancel',
     actionOffline: 'You’re offline. Try again when you reconnect.',
-    actionFailed: 'Something went wrong. Try again.',
+    actionFailed: 'It didn’t go through. Try again.',
   },
   // The score's Settings (round 28, Flat's score settings): its credits, instruments, music, layout
   // and how the editor writes.
@@ -786,18 +832,15 @@ export const editor = {
       layout: 'Layout',
       input: 'Note input',
       recording: 'Recording',
-      piano: 'On-screen piano',
       midi: 'MIDI keyboard',
     },
     title: 'Score settings',
-    score: 'Score',
-    // The gear's first page (R31-E, Flat's one menu): the score's acts, then its Settings.
+    // The gear's first page (R31-E, Flat's one menu): the score's acts, then its settings, untitled.
     acts: {
       view: 'Score view',
       transpose: 'Transpose',
       record: 'Record a take',
       takes: 'Takes',
-      settings: 'Settings',
     },
     names: {
       title: 'Title',

@@ -11,11 +11,22 @@ what they changed.
 
 ## Decision
 
-- **It plays any Performance** (`usePractice` over a pure practice machine) in three modes: **Listen**, the app
+- **It plays any Performance** (`usePractice` over a pure practice machine) in two modes: **Listen**, the app
   playing passes queued on the audio clock at a speed the learner plays along at; **Wait mode**, the app waiting for
-  the chosen hands' notes from MIDI or the keys and playing the other; **Interpret**, the music following the
-  learner's tempo, the other hand sounding at each onset. Play in all; ‹ › step in any. A loop over bars, each lap
-  played in Wait mode with nothing skipped; a Wait-mode pass finished is recorded (ADR 0111).
+  the chosen hands' keys from MIDI or the keys and playing the other. Wait mode waits for the keys as written, not
+  their names (Chordio, Metronaut): an octave doubled wants both keys, and the right name in another octave is a
+  slip that says "Play it an octave higher" or "lower"; the first right key starts the music, the other hand's key
+  is no slip, one wrong key slips once a step. Play in both; ‹ › step in either. A loop over bars, each lap
+  played in Wait mode with nothing skipped; a Wait-mode pass finished is recorded (ADR 0111). A pass ends with its
+  score, the share of steps (beat groups the practised hands play in) played without a slip, full from 96 %
+  (Metronaut): Wait mode's line says "Played through · Score 82%", or "Played through without a slip", and
+  **Played through** opens (`PlayedThrough`, the board's PlayerDone, never after a loop's lap): the hands and Wait under
+  its title, Done; the score "right first time" beside New best or the best to beat (a whole pass's best is kept per
+  song and hands in the progress's `songs`), and the tempo with its word beside the score's; the bars four at a time,
+  each a button of four cells painted by their slips (none, one, two, three or more: `slip-0` to `slip-3`) that
+  loops its four, the weakest ringed in honey; Practise bars n–m where the takes' one rule (`weakestBars`) finds a bar
+  or two under 80 %, looped at 70 % of the score's tempo; Play again and Try it in Play; the days in a row, to Streak. Wait mode's line stands under the floating transport,
+  and the keys' window rises by its height (`--status-room`), so the transport never covers the keys.
 - **Pace** (R36, flowkey's Tempo menu), the transport's: **At your own pace**, Wait mode ("The music waits for the
   right notes.") and Interpret ("The music follows your tempo."), each saying "Connect a piano or show the
   Keyboard." where none is there to play ("…show the Keyboard instead of the hands." where the hands stand in the
@@ -25,7 +36,7 @@ what they changed.
   while speed training climbs), else the mode's picture, its name beside it from 640px; its name says the pace.
 - **Hands** (R36, flowkey's hands menu): the foot's Hands, where the music has both, says the hands played (Both ·
   Right · Left) and opens "Which hands do you play?": `HandsSegmented`, and with one hand chosen **Hear the other
-  hand**, its one home. The hands count in every mode: Wait mode waits for them, Interpret follows them, Listen plays
+  hand**, its one home. The hands count in every mode: Wait mode waits for them, Listen plays
   them and the other only where it is heard; the keys mark them, the music shows the other hand as Settings › Hands
   says (Show · Dim · Hide), the hands at the keys fade it (ADR 0117).
 - **Keys** (`PLAYER_KEYS`): Space Play, the arrows, R the loop, Home; Shift with ← → Home End the loop's far end;
@@ -90,7 +101,8 @@ what they changed.
   and **More**. More holds the music's acts only (Sections | Annotate | Print | Share link, Export…); every setting
   is the gear's. The
   customisable Tool bar is gone.
-- **The Settings sheet (R31-P, R32, R36)** is one list of rows ranked by what matters, each opening a subpage with
+- **The Settings sheet (R31-P, R32, R36)**, a sheet from the foot on a phone and on a laptop a 400-wide card hung 8
+  under the gear, over the music, which keeps its width (the PlayerDesk board's popover; `SheetContent` from the right), is one list of rows ranked by what matters, each opening a subpage with
   Back, its value at the row's end and no line under it: **Score view** (what the shown view shows), **Playback** (a score's
   Swing, the count-in, the Metronome's page and volume, speed training's step), **Hands** (the other
   hand Show · Dim · Hide), **Staves** (each track's Play, Show and volume together; Only

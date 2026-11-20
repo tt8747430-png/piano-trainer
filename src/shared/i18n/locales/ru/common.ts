@@ -3,7 +3,7 @@ import type { LocaleResources } from '../../types'
 export const common: LocaleResources['common'] = {
   appName: 'Тренажёр фортепиано',
   skipToContent: 'К содержимому',
-  progressGroup: 'Прогресс',
+  progressGroup: 'Ваш прогресс',
   back: 'Назад',
   editMode: { label: 'Режим', play: 'Играть', editing: 'Правка', edit: 'Изменить', done: 'Готово' },
   nav: {
@@ -17,13 +17,21 @@ export const common: LocaleResources['common'] = {
     collapse: 'Свернуть боковую панель',
     open: 'Развернуть боковую панель',
     recents: 'Недавние',
-    guest: 'Гость',
+    notSignedIn: 'Вход не выполнен',
+    // Focus (the canvas's laptop window): the sidebar and side panels hidden, Esc or Exit focus to leave.
+    focus: 'Фокус',
+    focusTip: 'Скрыть боковую панель и панели',
+    exitFocus: 'Выйти из фокуса',
+    signIn: 'Войти',
   },
   errors: {
-    title: 'Что-то пошло не так',
-    offline: 'Нет сети. Этот экран откроется, когда она появится.',
-    failed: 'Экран не открылся. Обычно помогает перезагрузка; об ошибке уже сообщено, её исправят.',
+    title: 'Этот экран не открылся',
+    failed: 'Обычно помогает перезагрузка. Об ошибке уже сообщено, её исправят.',
+    offlineTitle: 'Нет подключения к сети',
+    offline:
+      'Этот экран откроется, когда сеть появится. Ваши песни и уроки на этом устройстве открываются и без неё.',
     reload: 'Перезагрузить',
+    retry: 'Повторить',
   },
   notFound: {
     title: 'Страница не найдена',
@@ -111,11 +119,6 @@ export const common: LocaleResources['common'] = {
       name: 'Правая',
       label: 'Правая педаль — удерживайте или коснитесь, чтобы зафиксировать',
     },
-    sostenuto: {
-      name: 'Средняя',
-      label: 'Средняя педаль — продлевает только звуки, взятые вместе с ней',
-    },
-    soft: { name: 'Левая', label: 'Левая педаль (una corda) — смягчает звук, пока нажата' },
   },
   keysWindow: {
     move: 'Переместить клавиатуру',
@@ -124,57 +127,11 @@ export const common: LocaleResources['common'] = {
   keyboardTools: {
     short: { keys: '2D', hands: '3D', off: 'Выкл.' },
     keyboard: 'Клавиатура',
-    hands: 'Руки на клавишах',
-    show: 'Показать клавиатуру',
-    hide: 'Скрыть клавиатуру',
-    chord: 'Взятый аккорд',
-    morePedals: 'Левая и средняя педали',
-    latched: 'Зафиксирована',
-    resize: 'Изменить высоту клавиатуры',
   },
   keyboardSettings: {
-    pedals: {
-      label: 'Педали',
-      detail: 'Добавляет левую и среднюю педали в меню кнопки правой педали.',
-      sustain: 'Только правая',
-      all: 'Все три',
-    },
-    keySize: {
-      label: 'Размер клавиш',
-      detail: 'Все клавиши помещаются по ширине; крупные прокручиваются вслед за музыкой.',
-      fit: 'По музыке',
-      large: 'Крупные',
-      piano: 'Все клавиши',
-    },
-    namedKeys: {
-      label: 'Названия нот',
-      detail: 'На каких клавишах подписана нота.',
-      c: 'На каждом C',
-      all: 'На всех клавишах',
-      none: 'Скрыты',
-    },
-    markNotes: 'Названия нот на выделенных клавишах',
-    markNotesNote: 'Показывает ноту под звуком аккорда или ступенью гаммы.',
-    chordNames: 'Обозначение аккорда',
-    chordNamesNote: 'Называет взятый аккорд в верхней панели.',
-    dock: {
-      label: 'Расположение',
-      detail: 'Где страницы размещают клавиатуру.',
-      bottom: 'Внизу',
-      top: 'Вверху',
-    },
-    swipe: {
-      label: 'Жест проведения',
-      detail: 'Прокручивает клавиатуру или играет каждую клавишу под пальцем.',
-      scroll: 'Прокрутка',
-      glissando: 'Глиссандо',
-    },
-    volume: 'Громкость',
     typing: 'Играть на клавиатуре компьютера',
     typingNote: 'Буквенные клавиши играют на экранной клавиатуре.',
     typingHint: 'Z и X сдвигают октаву · Пробел держит правую педаль',
-    autoplay: 'Звучание при выборе',
-    autoplayNote: 'Аккорды и гаммы звучат сразу при выборе на странице практики.',
   },
   shortcuts: {
     title: 'Горячие клавиши',
@@ -317,7 +274,7 @@ export const common: LocaleResources['common'] = {
     },
     summary: {
       unavailable: 'Недоступно',
-      off: 'Выключено',
+      off: 'Не подключено',
       denied: 'Запрещено',
       connecting: 'Подключение…',
       noDevice: 'Нет устройства',

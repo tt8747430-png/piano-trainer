@@ -110,25 +110,30 @@ export function RecordReview({ take }: { take: Take }) {
         }))}
         onChange={setChosen}
       />
+      {/* Hide raw notes and Into in one group, as the board's GROUP: Into a row, its value at its end. */}
       <SettingsGroup flush>
         <SwitchRow
           label={t('review.hideRaw')}
           checked={!raw}
           onCheckedChange={(on) => setRaw(!on)}
         />
+        {intoGroups.reduce((count, group) => count + group.options.length, 0) > 1 ? (
+          <div className="flex min-h-14 items-center gap-3 py-1.5 ps-4 pe-2">
+            <span className="flex-1">{t('recorder.into.label')}</span>
+            <Dropdown
+              bare
+              label={t('recorder.into.label')}
+              value={into}
+              groups={intoGroups}
+              onChange={setInto}
+            />
+          </div>
+        ) : null}
       </SettingsGroup>
-      {intoGroups.reduce((count, group) => count + group.options.length, 0) > 1 ? (
-        <Dropdown
-          label={t('recorder.into.label')}
-          value={into}
-          groups={intoGroups}
-          onChange={setInto}
-        />
-      ) : null}
       <div className="grid grid-cols-2 gap-3">
         <Button
           size="lg"
-          variant="outline"
+          variant="quiet"
           onClick={() => {
             const undo = takes.remove(take.id)
             takes.show(TAKES_PAGE)

@@ -20,10 +20,13 @@ export {
   CHORD_SHEETS_STORAGE_KEY,
   CHORD_SHEETS_VERSION,
   createChordSheetsStore,
+  IN_HAND,
+  MOST_RECENT_SHEETS,
   NEW_ENTRY,
   readSettings,
   type ChordSheetsState,
   type ChordSheetsStore,
+  type RecentSheet,
 } from './model/store'
-export { selectEntry, selectMine, selectSaved } from './model/selectors'
+export { selectEntry, selectMine, selectRecent, selectSaved } from './model/selectors'
 export { ChordSheetsStoreProvider, useChordSheets, useChordSheetsStoreApi } from './model/context'

@@ -24,7 +24,7 @@ type Open = 'none' | 'mine' | 'library'
  * a phone, New ▾ in the bar on a laptop (canvas 169).
  */
 export function ProgressionsPage() {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'music'])
   const view = useSearch({ from: '/shell/practice/progressions' })
   const { account } = useAccount()
   const navigate = useNavigate()
@@ -43,7 +43,7 @@ export function ProgressionsPage() {
       onSelect: () => setOpen('library'),
     },
   ]
-  const made = useLibraryNew('progressions', creates)
+  const newDial = useLibraryNew('progressions', creates)
   return (
     <div className="flex flex-col gap-4 pb-4">
       <PracticeLibrary
@@ -52,7 +52,6 @@ export function ProgressionsPage() {
           title: t('pages.progressions'),
           back: <BackButton />,
           edit,
-          tools: editing ? undefined : made.menu,
         }}
         kind="progressions"
         view={view}
@@ -60,7 +59,12 @@ export function ProgressionsPage() {
         groups={groups}
         groupWord="style"
         levels={false}
-        extra={t('library.table.numerals')}
+        columns={{
+          name: t('library.table.name'),
+          second: t('library.table.numerals'),
+          third: t('music:key.label'),
+          shares: [2, 3, 0.6],
+        }}
         mine={{
           empty: (
             <Button variant="soft" onClick={newMine}>
@@ -72,7 +76,7 @@ export function ProgressionsPage() {
         screen={t('pages.progressions')}
         editing={editing}
       />
-      {editing ? null : made.dial}
+      {editing ? null : newDial}
       {open === 'mine' ? (
         <KeepProgressionSheet
           open

@@ -27,7 +27,7 @@ export const practice = {
     chordFinder: 'Chord identification',
     exercises: 'Technique, book by book',
     metronome: 'Tempo, meter and subdivision',
-    circleOfFifths: 'Keys, signatures and related keys',
+    circleOfFifths: 'Every key and its signature',
     tuner: 'Pitch measured against A4',
   },
   // A tool's tile on Practice (R32): what it is set to now.
@@ -174,47 +174,15 @@ export const practice = {
   },
   // Scales and keys: the run, the chords, the key.
   scales: {
+    chordsInScale: 'Chords in {{scale}}',
+    onCircleOfFifths: 'On the circle of fifths',
     practiseIn: 'Practise {{scale}} in the Player',
     settings: 'Scale settings',
-    // The floating bar's way into the Player with this scale (its board): the scale's first exercise.
-    practise: 'Practise this scale',
     compare: { label: 'Compare with', none: 'None' },
-    vamp: { label: 'Vamp', play: 'Play the vamp: {{chords}}' },
-    // The tabs say what is in them (A32): its notes, its key's harmony, the key itself.
-    show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
-    // Under each view's name, what it holds of the scale chosen (R29-P7): a choice visibly drives all three.
-    views: {
-      notes_one: '{{count}} note',
-      notes_other: '{{count}} notes',
-      sharps_one: '{{count}} sharp',
-      sharps_other: '{{count}} sharps',
-      flats_one: '{{count}} flat',
-      flats_other: '{{count}} flats',
-      plain: 'No sharps or flats',
-    },
     label: 'Scale',
     tonic: 'Tonic',
-    fewerOctaves: 'Fewer octaves',
-    moreOctaves: 'More octaves',
     direction: { label: 'Direction', both: 'Up and down', up: 'Up', down: 'Down' },
-    octaves: 'Octaves',
-    marks: { label: 'On the staff', fingers: 'Fingers', degrees: 'Degrees', steps: 'Steps' },
     startOn: 'Start on',
-    openChord: 'Open {{chord}} in Chords',
-    // What the run's keys carry: its notes, or a hand's fingers.
-    // The run's fingering hand by hand, each hand drawn with its fingers numbered.
-    byHand: {
-      title: 'Fingering by hand',
-      lh: 'Left hand',
-      rh: 'Right hand',
-      notes: 'Notes',
-      fingers: 'Fingers',
-      crossings:
-        'A finger in blue is a crossing: the thumb passes under to it, or a finger crosses over the thumb to it.',
-      crossing: 'crossing',
-      noStandard:
-        'No fingering is standard for this scale. These fingers group its notes from the thumb, keeping the thumb off the black keys where it can.',
-    },
     fingering: {
       label: 'Fingering',
       thumb: 'From the thumb',
@@ -229,75 +197,27 @@ export const practice = {
       'short-short-short-long': '3 short, long',
     },
     tempo: 'Tempo',
-    playUpDown: 'Play up and down',
     octaveCount_one: '{{count}} octave',
     octaveCount_other: '{{count}} octaves',
     playScale: 'Play scale',
     playHow: 'How it plays',
-    runSettings: 'Scale settings',
     noFingering: 'No standard fingering for this scale',
-    facts: {
-      formula: 'Formula',
-      gaps: 'Structure',
-      relative: 'Relative',
-      modeOf: 'Mode of',
-      altered: 'Differs from major',
-      sound: 'Its colour',
-      // A mode told by the note that sets it apart from its major or minor (A43).
-      characteristic: {
-        dorian: 'Minor with a raised 6th',
-        phrygian: 'Minor with a lowered 2nd',
-        lydian: 'Major with a raised 4th',
-        mixolydian: 'Major with a lowered 7th',
-        locrian: 'Diminished: a lowered 2nd and 5th',
-      },
-    },
-    chordsIn: 'Chords in this scale',
-    keysPlay: { label: 'Keys play', chords: 'Chords', notes: 'Notes' },
-    holds: '{{note}} is in {{chords}}',
-    holdsNone: 'No chord of the scale holds {{note}}',
     walk: { title: 'Walk the chords', played: 'Played as', block: 'Block' },
-    key: {
-      circle: 'Circle of fifths',
-      random: 'A random key',
-      signature: 'Signature',
-      sharps_one: '{{count}} sharp: {{notes}}',
-      sharps_other: '{{count}} sharps: {{notes}}',
-      flats_one: '{{count}} flat: {{notes}}',
-      flats_other: '{{count}} flats: {{notes}}',
-      noSignature: 'No sharps or flats',
-      modes: 'Modes',
-      parallel: 'Parallel',
-      enharmonic: 'Also written',
-      onCircle: 'On the circle',
-      between: 'Between {{before}} and {{after}}',
-      borrowed: 'Borrowed chords',
-      // The borrowed chords the harmony books name.
-      soundsAs: '{{name}} · sounds as {{note}}',
-      borrowedName: {
-        picardy: 'Picardy third',
-        neapolitan: 'Neapolitan',
-        minorPlagal: 'Minor plagal',
-      },
-      songs: 'Songs in this key',
-      studies: 'Studies in this key',
-      noSongs: 'No songs are in this key.',
-      harmonise: 'Harmonise a melody note',
-    },
     // A scale's page: its key's common progressions, each opening Progressions in this key.
     keyProgressions: 'Progressions in this key',
   },
   intervals: {
     from: 'From',
-    // The chosen interval: its notes, what it sounds like, and its facts behind its ⓘ (canvas 170).
-    upTo: '{{low}} up to {{high}}',
+    // The chosen interval: what it sounds like, and its facts behind its ⓘ (canvas 170).
     soundsLike: 'Sounds like',
+    // A compound interval's Sounds like: its simple interval an octave wider.
+    octaveWider: 'A {{name}}, an octave wider',
+    twoOctaves: 'The same note, two octaves apart',
     inverts: 'Inverts to',
     chosen: 'Interval',
-    size: { label: 'Intervals', simple: 'Simple', compound: 'Compound' },
+    // The musician's two groups over the tiles (r61_intervals.py, GRID61).
+    group: { simple: 'Simple', compound: 'Compound' },
     written: 'The interval written',
-    simple: 'Simple intervals',
-    compound: 'Compound intervals',
     // How every row plays its interval, as ear-training apps and exam syllabi name it (R29-P12).
     playAs: 'Play as',
     way: { together: 'Harmonic', up: 'Ascending', down: 'Descending' },
@@ -321,10 +241,17 @@ export const practice = {
       m9: 'A minor 2nd an octave higher: the ♭9 of a dominant chord.',
       M9: 'A major 2nd an octave higher: the 9th of a chord.',
       A9: 'An augmented 2nd an octave higher: the #9 of a blues dominant.',
+      m10: 'A minor 3rd an octave higher: a minor chord spread wide.',
+      M10: 'A major 3rd an octave higher: the left hand’s stride tenth.',
       P11: 'A 4th an octave higher: the 11th of a chord.',
       A11: 'An augmented 4th an octave higher: the #11 of a Lydian chord.',
+      d12: 'A diminished 5th an octave higher: the tritone spread wide.',
+      P12: 'A 5th an octave higher: the third harmonic of the bass.',
       m13: 'A minor 6th an octave higher: the ♭13 of a dominant chord.',
       M13: 'A major 6th an octave higher: the 13th of a chord.',
+      m14: 'A minor 7th an octave higher: a dominant 7th spread wide.',
+      M14: 'A major 7th an octave higher: a major 7th spread wide.',
+      P15: 'The same note two octaves higher.',
     },
 
     playAll: 'Play all',
@@ -333,40 +260,35 @@ export const practice = {
     // Interval settings (canvas 176): how Play all goes through them, and how fast every interval plays.
     order: { label: 'Play all', 'in-order': 'In order', shuffled: 'Shuffled' },
     speed: { label: 'Speed', slow: 'Slow', medium: 'Medium', fast: 'Fast' },
-    semitones_one: '{{count}} semitone',
-    semitones_other: '{{count}} semitones',
-    // The songs an interval opens, rising and falling.
-    songsUp: 'Up',
+    // The song an interval opens falling, behind its ⓘ.
     songsDown: 'Down',
     // The tritone by each of its spellings, a row each.
     tritone: {
       A4: { name: 'Augmented fourth', short: 'A4' },
       d5: { name: 'Diminished fifth', short: 'd5' },
     },
-    // The songs an interval opens, behind its row's ⓘ (the unison's one list).
-    songs: 'Songs',
   },
   progressions: {
-    practise: 'Practise',
-    // A progression's page (canvas 177): its bar's title, Play's menu, Practise's piece.
+    // A progression's page (canvas 177): its bar's title and Play's menu.
     title: 'Progression',
     plays: 'What it plays',
     chords: 'Chords',
-    inPlayer: 'Practise in the Player',
     edit: {
       open: 'Edit the progression',
       new: 'New in the library',
       bar: 'Edit progression',
+      linesInfo:
+        'The same progression written for a major and a minor key; the learner hears the one that suits the key they choose.',
       lines: 'Lines',
-      heading: 'The progression',
-      info: 'Its name and how it sounds in both languages, its style, and its numerals in a major key, a minor key or both.',
       name: 'Name',
       character: 'How it sounds',
       style: 'Style',
       major: 'In a major key',
       minor: 'In a minor key',
       back: 'Back to Progressions',
-      editorsOnly: 'Only an editor edits a progression.',
+      editorsOnly: 'Only an editor edits a progression',
+      editorsWhy:
+        'Ask an editor, or use Make your own from it at the foot of the progression’s page.',
       unreadable:
         'The name and how it sounds need words in both languages, and a line of numerals must read. Put them right, then publish.',
       create: 'Create progression',
@@ -378,7 +300,10 @@ export const practice = {
     majorLine: 'These numerals are a major key’s.',
     minorLine: 'These numerals are a minor key’s.',
     playIn: 'Play them in {{key}}',
-    throughKeys: 'Practise through the keys in the Player',
+    practiseRows: 'Practise in the Player',
+    // The first Practise row: the progression in the key shown, round and round (the board's walks).
+    inKeyRow: 'In {{key}}',
+    roundAndRound: '{{chords}}, round and round',
     inChordPlayer: 'Open in the Chord player',
     inChordPlayerLine: 'With a band, in any style',
     // The learner's own progressions, Mine (R30-4): kept from a line typed, renamed, deleted.
@@ -433,9 +358,7 @@ export const practice = {
     },
     between: {
       title: 'Passing chords',
-      line: 'Chords that lead from one chord to the next',
       none: 'Every chord here is the same: type or choose a progression that changes chords.',
-      pair: 'From chord to chord',
     },
     style: {
       pop: 'Pop',
@@ -454,8 +377,6 @@ export const practice = {
   patterns: {
     // A pattern's page (canvas 178): its bar's title, its hands, Play's menu, Practise's piece.
     title: 'Pattern',
-    hands: 'The hands',
-    builtIn: 'Built-in',
     yours: 'Your pattern',
     playOver: 'Play over',
     barOfC: 'A bar of C major',
@@ -464,8 +385,6 @@ export const practice = {
     favourite: 'Favourite',
     rightHand: 'Right hand',
     leftHand: 'Left hand',
-    overC: 'Over a bar of C major',
-    over: 'Over the first line of {{piece}}',
     usedIn: 'Used in',
     makeOwn: 'Make your own from it',
     hide: 'Hide from the Player',
@@ -483,6 +402,8 @@ export const practice = {
       mine: '{{name}} (mine)',
       save: 'Save',
       cancel: 'Cancel',
+      roll: '{{rh}} in the right hand, {{lh}} in the left',
+      howItPlays: 'How it plays',
     },
   },
   // The Chord finder (ADR 0052): a chord played or tapped, named, spelled and written.
@@ -512,7 +433,7 @@ export const practice = {
     try: { major: 'C major', minor7: 'A minor 7th', dominant7: 'D dominant 7th' },
     // The line under the name (canvas 181): "C major 7th, 1st inversion · Imaj7 in C major".
     named: '{{root}} {{quality, lowercase}}',
-    numeralIn: '{{numeral}} in {{key}}',
+    numeralPicker: '{{numeral}} in',
     spelledIn: 'Spelled in',
     spelledInInfo:
       'Accidentals follow this key: the same black key is B♭ in F major and A♯ in B major, and each chord shows its numeral in the key.',
@@ -575,8 +496,6 @@ export const practice = {
   passingChords: {
     into: '{{chords}} into {{to}}',
     inKey: 'In the key',
-    onlyInKey: 'In the key only',
-    noneInKey: 'No way between these chords stays in the key.',
     chromatic: 'Chromatic',
     category: {
       dominant: 'Dominant',
@@ -702,10 +621,13 @@ export const practice = {
     groups: {
       scales: 'Scales',
       arpeggios: 'Arpeggios',
-      technique: 'Finger technique',
       barryHarris: 'Barry Harris',
       jonny: 'Piano With Jonny',
+      virtuoso: 'The Virtuoso Pianist',
+      fiveFinger: 'Five-finger position',
     },
+    // The shelves Practice lists under Exercises, each a page of its sources.
+    shelves: { technique: 'Finger technique', jazz: 'Jazz vocabulary' },
     // A book's line on Practice: how many exercises it holds.
     count_one: '{{count}} exercise',
     count_other: '{{count}} exercises',
@@ -716,7 +638,6 @@ export const practice = {
     // New, on a phone's dial and a laptop's bar (canvas 169).
     new: 'New',
     edit: {
-      arrange: 'Arrange library',
       rename: 'Rename…',
       move: 'Move to…',
       hide: 'Hide',
@@ -773,6 +694,9 @@ export const practice = {
     empty: 'Nothing here yet.',
     table: {
       name: 'Name',
+      exercise: 'Exercise',
+      pattern: 'Pattern',
+      focus: 'Focus',
       book: 'Book',
       style: 'Style',
       level: 'Level',
@@ -782,30 +706,27 @@ export const practice = {
     },
     kinds: {
       exercises: {
-        tree: 'Exercises by book',
         search: 'Search exercises',
         noMatch: 'No exercises match “{{query}}”.',
-        favouritesHint: 'Tap ⋯ on an exercise, then Add to favourites.',
+        favouritesHint: 'Tap ⋯ on an exercise, then Add to Favourites.',
         all: 'All exercises',
         mineEmpty: 'Nothing of your own here yet.',
         show_one: 'Show {{count}} exercise',
         show_other: 'Show {{count}} exercises',
       },
       accompaniment: {
-        tree: 'Accompaniment by book',
         search: 'Search accompaniment',
         noMatch: 'No patterns match “{{query}}”.',
-        favouritesHint: 'Tap ⋯ on a pattern, then Add to favourites.',
+        favouritesHint: 'Tap ⋯ on a pattern, then Add to Favourites.',
         all: 'All accompaniment',
         mineEmpty: 'Patterns you make are kept here.',
         show_one: 'Show {{count}} pattern',
         show_other: 'Show {{count}} patterns',
       },
       progressions: {
-        tree: 'Progressions by style',
         search: 'Search progressions',
         noMatch: 'No progressions match “{{query}}”.',
-        favouritesHint: 'Tap ⋯ on a progression, then Add to favourites.',
+        favouritesHint: 'Tap ⋯ on a progression, then Add to Favourites.',
         all: 'All progressions',
         mineEmpty: 'Progressions you keep are here.',
         show_one: 'Show {{count}} progression',
@@ -823,29 +744,12 @@ export const practice = {
       sharps_other: '{{count}} sharps',
       flats_one: '{{count}} flat',
       flats_other: '{{count}} flats',
-      play: 'Play {{chord}}',
-      about: '{{signature}} · relative {{key}}',
-      chords: 'Chords in the key',
       playAll: 'Play the chords',
       open: 'Open in Scales and keys',
       openShort: 'Scales',
     },
     tuner: {
       settings: 'Reference pitch',
-    },
-    // The Tools sheet over any screen.
-    sheet: {
-      metronome: 'Metronome',
-      start: 'Start metronome',
-      stop: 'Stop metronome',
-      slower: 'Slower',
-      faster: 'Faster',
-      tempo: '{{bpm}} BPM',
-      tuner: 'Tuner',
-      off: 'Off',
-      listening: 'Listening · {{reference}}',
-      openMetronome: 'Open Metronome',
-      open: 'Tools',
     },
   },
   metronome: {
@@ -857,7 +761,6 @@ export const practice = {
     faster: 'Faster by {{step}}',
     tap: 'Tap tempo',
     tapShort: 'Tap',
-    settingsTitle: 'Metronome settings',
     flash: 'Flash on the beat',
     volume: 'Volume',
     off: 'Off',
@@ -920,10 +823,66 @@ export const practice = {
     progressions: 'Progressions',
     opened: 'Opened {{name}}',
     undo: 'Undo',
-    redo: 'Redo',
     more: 'Chord sheet',
-    newSheet: 'New',
     saveAs: 'Save as my chord sheet…',
+    sheets: {
+      menu: 'Chord sheets',
+      open: 'Chord sheet: {{name}}. Open another',
+      new: 'New sheet',
+      inHand: 'Unsaved sheet',
+      all: 'All chord sheets',
+    },
+    shareMenu: 'Share…',
+    toProgressions: 'Save to my progressions',
+    savedToProgressions: 'Saved to My progressions',
+    layout: {
+      edit: 'Edit layout',
+      reset: 'Reset',
+      done: 'Done',
+      resetLayout: 'Reset layout',
+      wasReset: 'Layout reset',
+      everyPage: 'Every page’s layout',
+      panels: { keys: 'Keys', dock: 'Controls', genos: 'Genos', chords: 'Chords' },
+      move: 'Move {{name}}',
+      moveTip: 'Drag, or tap then tap a place',
+      menu: '{{name}}: place, size or hide',
+      place: 'Place',
+      size: 'Size',
+      hide: 'Hide',
+      places: { top: 'Top', float: 'Float', bottom: 'Bottom', left: 'Left', right: 'Right' },
+      sizes: {
+        small: 'Small',
+        medium: 'Medium',
+        large: 'Large',
+        full: 'Full',
+        play: 'Play only',
+        compact: 'Compact',
+        minimized: 'Minimized',
+        narrow: 'Narrow',
+        wide: 'Wide',
+      },
+      zones: {
+        top: 'At the top',
+        float: 'Floating',
+        bottom: 'At the bottom',
+        left: 'On the left',
+        right: 'On the right',
+      },
+      putIt: 'Put it here: {{place}}',
+      tapWhere: 'Tap where {{name}} goes',
+      moved: {
+        top: '{{name}} moved to the top',
+        float: '{{name}} moved to float',
+        bottom: '{{name}} moved to the bottom',
+        left: '{{name}} moved to the left',
+        right: '{{name}} moved to the right',
+      },
+      hidden: 'Hidden',
+      wasHidden: '{{name}} hidden. Edit layout shows it again',
+      show: 'Show {{name}}',
+      resize: 'Resize the keys: {{size}}',
+      resizeTip: 'Drag to resize',
+    },
     shared: 'Link copied',
     shareFailed: 'Couldn’t share the link',
     online: {
@@ -1021,7 +980,6 @@ export const practice = {
     wrongBar_one: 'Bar {{bar}} holds {{count}} beat, not {{beats}}: tap to set its chords’ lengths',
     wrongBar_other:
       'Bar {{bar}} holds {{count}} beats, not {{beats}}: tap to set its chords’ lengths',
-    file: 'File',
     draft: {
       label: 'Draft',
       save: 'Save',
@@ -1030,11 +988,10 @@ export const practice = {
       discarded: 'Draft discarded',
     },
     dock: { key: 'Key', plays: 'Repeats', untilStop: 'Until Stop' },
-    chords: 'Chords',
     loopSection: 'Loop this section',
     keyChords: '{{key}} chords',
-    keyChordsHint: 'Drag one into a bar.',
-    keyChord: '{{chord}}: drag into a bar, or tap to add it at the end',
+    keyChord: '{{chord}}: tap or drag into a bar',
+    keyChordTip: 'Tap or drag into a bar',
     arranger: {
       title: '{{name}} on the Genos',
       tag: '{{name}} on the Genos: {{marks}}',
@@ -1059,10 +1016,11 @@ export const practice = {
       playing: '{{device}} · playing',
       playingMain: '{{device}} · playing Main {{main}}',
       style: 'Style',
-      hide: 'Hide the Genos controls',
-      show: 'Show the Genos controls',
-      toSide: 'Move to the side',
-      toDock: 'Back over the dock',
+      compact: 'Compact',
+      full: 'Full',
+      minimize: 'Minimize',
+      pill: '{{device}} · {{main}}',
+      pillLabel: '{{name}}: show its controls',
       startStop: 'Start/Stop',
       mainLabel: 'Main',
       endingRit: 'Ending/rit.',
@@ -1102,12 +1060,11 @@ export const practice = {
     transport: 'Chord player',
     play: 'Play',
     stop: 'Stop',
-    inPlayer: 'Practise in the Player',
     inProgressions: 'Open in Progressions',
     shortcuts: { group: 'Chord player', playStop: 'Play or stop', undo: 'Undo', redo: 'Redo' },
     settings: {
       title: 'Settings',
-      instruments: 'Instruments',
+      sound: 'Sound',
       piano: 'Piano',
       bass: 'Bass',
       drums: 'Drums',
@@ -1118,7 +1075,9 @@ export const practice = {
       countIns: { '0': 'Off', '1': '1 bar', '2': '2 bars' },
       levels: 'Each instrument',
       volume: 'Volume',
-      music: 'Music',
+      chart: 'Chart',
+      midi: 'MIDI',
+      layout: 'Layout',
       time: 'Time signature',
       timeInfo:
         'A chord of whole bars stays whole bars in the new time; any other keeps its beats.',
@@ -1137,7 +1096,6 @@ export const practice = {
       voicingInfo:
         'Smooth voice leading moves each chord to the nearest notes of the one before; block chords play each in root position.',
       relaid: 'Laid out in {{meter}}',
-      onScreenPiano: 'On-screen piano',
       follow: 'Follow a MIDI arranger',
       followInfo:
         'The Genos leads: its Start, Stop and clock move the sheet, which plays no sound and sends the Genos the sections you set. Chrome or Edge on a Mac or PC, connected by USB.',
