@@ -122,8 +122,8 @@ def library(stem, title, D, back='', back_l='', soft='', right_extra='', soft_hr
     rename = lambda: NEWNAME('renameOn', 'Rename', 'Name', 'rnName', 'typeRn', 'saveRn', 'rnBg', 'rnFg', 'Save')
     sheets = TOAST(184 if root else 112, hint='true') + secmenu + rowmenu + rename() + BSHEET('sortOn', 'Sort and filter', SORTSHEET_BODY, None) + (LFOLDERSHEET if add_items else '') + (BSHEET('moreOn', title, more) if more_rows else '')
     body = f'''{TITLEBAR(title, right_extra + add + (DOTS() if more_rows else ''), back, soft=(f'<a href="{soft_href}.dc.html" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px">{soft}</a>' if soft_href else soft))}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px {190 if root else (124 if add_items else 40)}px; display: flex; flex-direction: column; gap: 16px">
-{LIBSTRIP}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 16px; opacity: {{{{findDim}}}}; pointer-events: {{{{findPe}}}}">{SEARCHROW()}{CHIPS('places')}</div></sc-if>{CHOSEN}{SECTIONS(shelf_phone)}
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px {190 if root else (124 if add_items else 40)}px; display: flex; flex-direction: column; gap: 16px">
+{LIBSTRIP}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 12px; opacity: {{{{findDim}}}}; pointer-events: {{{{findPe}}}}">{SEARCHROW()}{CHIPS('places')}</div></sc-if>{CHOSEN}{SECTIONS(shelf_phone)}
 </main>{dial}{TABBAR(root) if root else ''}'''
     phone(stem, title + ', phone', body, script, sheets)
     # laptop: the tree and a table; a folder's chevron stands on its rows' hairlines' edge, the names on the header's

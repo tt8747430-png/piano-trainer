@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · PENDING · a Practice library's search 8 under its large bar, as Songs' and the app · Progressions,Accompaniment,FingerTechnique,JazzVocabulary · pending
 
 
 ## Changes
