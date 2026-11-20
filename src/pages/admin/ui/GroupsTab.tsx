@@ -172,13 +172,12 @@ export function AdminGroupPage({ id }: { id: string }) {
           const flags = flagsOf(group, switches)
           return (
             <>
-              <SettingsGroup
-                title={t('groups.membersTitle', { count: members.length })}
-                flush
-                className="[&_[data-slot=settings-card]>*]:min-h-15"
-              >
+              <SettingsGroup title={t('groups.membersTitle', { count: members.length })} flush>
                 {(all ? members : members.slice(0, FOLDED)).map((account) => (
-                  <div key={account.id} className="flex items-center gap-4 py-1.5 ps-4 pe-1">
+                  <div
+                    key={account.id}
+                    className="flex min-h-15 items-center gap-4 py-1.5 ps-4 pe-1"
+                  >
                     <Face name={nameOf(account)} size="row" />
                     <span className="flex min-w-0 flex-1 flex-col gap-0.5 leading-[normal]">
                       <span className="truncate">{nameOf(account)}</span>
