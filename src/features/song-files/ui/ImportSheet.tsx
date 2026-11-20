@@ -69,7 +69,7 @@ export function ImportSheet({
             {t('import.reading', { name: state.name })}
           </p>
           <div role="status" aria-busy className="h-1 overflow-hidden rounded-pill bg-muted">
-            <div className="h-full w-1/3 animate-pulse rounded-pill bg-primary" />
+            <div className="h-full w-1/3 rounded-pill bg-primary motion-safe:animate-pulse" />
           </div>
         </div>
       ) : state.kind === 'done' ? (

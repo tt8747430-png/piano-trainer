@@ -1,13 +1,13 @@
 import { cn } from '@/shared/lib'
-import { Loader2Icon } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 
 /** Decorative: whatever waits names itself (a status region, a button's text), in the learner's language. */
 function Spinner({ className, ...props }: React.ComponentProps<'svg'>) {
   return (
-    <Loader2Icon
+    <LoaderCircle
       data-slot="spinner"
       aria-hidden="true"
-      className={cn('size-4 animate-spin', className)}
+      className={cn('size-4 motion-safe:animate-spin', className)}
       {...props}
     />
   )
