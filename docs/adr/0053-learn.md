@@ -52,7 +52,7 @@ the courses, its title in the bar.
   `chords:<family>`, `scale:<kind>`. A mark on one track never counts for another. A whole piece's Learned is the
   learner's own; lessons never set it (ADR 0111).
 - **The learner's own lessons and courses** (R30-5, `entities/own-lessons`, `pt-own-lessons`, version 1,
-  synced as `own_lessons`): Learn's last group, **Your lessons and courses**, shows the newest four, the
+  synced as `own_lessons`): Learn's last group, **Your lessons and courses**, shows the newest three, the
   courses on their covers (a Songs folder's picture and paint) and the lessons as a level's are (learned,
   read so far); See all opens their page, `/your-lessons` (Made by you, `OwnLibrary`), the app's library shape:
   Select in the bar (Cancel while on, the title "n selected", a checkbox leading every row, the floating glass bar
