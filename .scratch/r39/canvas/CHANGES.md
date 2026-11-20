@@ -8,16 +8,15 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · 154026bd · the link to the piano's page named as the page, MIDI devices (was Connect a piano) · ChordFinder, ChordFinderLaptop, ChordPlayer, ChordPlayerLaptop · pending
-- 2026-11-20 · 01c2f524 · every laptop settings card one place by its bar: a page's at 40 in and 64 down, the Player's and the editor's at 24 and 76, all 380 wide; the Piano cards 64 down, as their settings · ScalesLaptop, IntervalsLaptop, ProgressionLaptop, ExerciseLaptop, PlayerDesk, EditorLaptop, EditorDraftLaptop · pending
-- 2026-11-20 · 1c0b39b7 · every laptop popover one shape, the kit's POPOVER: the Player's Practice, Piano, Hands, Pattern, Sort and filter, Settings and view popovers 16 in (were 12), as Played through and every other board · PlayerDesk (every Player laptop board) · pending
-- 2026-11-20 · d376d118 · the account menu leads each item with its Lucide picture (16, ink), 12 before the word, as Claude's · every laptop board (52) · pending
-- 2026-11-20 · 036a7416 · the Practice sheet: no Metronome sound row or page (the Player's click does not follow it; its home is the Metronome); Wait without a piano says "Connect a piano or show the Keyboard." · PlayerApp,PlayerDesk · pending
-- 2026-11-20 · 23dc1755 · the Player opens on Play (its Practice's default), as the app · PlayerApp,PlayerDesk (every Player board) · pending
-- 2026-11-20 · 2288af07 · the Player's credit "New Britain (American folk tune)" and its one section "Verse", as the song and the app · PlayerApp,PlayerDesk (every Player board) · pending
-
 ## Changes
 
+- 2026-11-20 · 154026bd · the link to the piano's page named as the page, MIDI devices (was Connect a piano) · ChordFinder, ChordFinderLaptop, ChordPlayer, ChordPlayerLaptop · v708
+- 2026-11-20 · 01c2f524 · every laptop settings card one place by its bar: a page's at 40 in and 64 down, the Player's and the editor's at 24 and 76, all 380 wide; the Piano cards 64 down, as their settings · ScalesLaptop, IntervalsLaptop, ProgressionLaptop, ExerciseLaptop, PlayerDesk, EditorLaptop, EditorDraftLaptop · v708
+- 2026-11-20 · 1c0b39b7 · every laptop popover one shape, the kit's POPOVER: the Player's Practice, Piano, Hands, Pattern, Sort and filter, Settings and view popovers 16 in (were 12), as Played through and every other board · PlayerDesk (every Player laptop board) · v708
+- 2026-11-20 · d376d118 · the account menu leads each item with its Lucide picture (16, ink), 12 before the word, as Claude's · every laptop board (52) · v708
+- 2026-11-20 · 036a7416 · the Practice sheet: no Metronome sound row or page (the Player's click does not follow it; its home is the Metronome); Wait without a piano says "Connect a piano or show the Keyboard." · PlayerApp,PlayerDesk · v708
+- 2026-11-20 · 23dc1755 · the Player opens on Play (its Practice's default), as the app · PlayerApp,PlayerDesk (every Player board) · v708
+- 2026-11-20 · 2288af07 · the Player's credit "New Britain (American folk tune)" and its one section "Verse", as the song and the app · PlayerApp,PlayerDesk (every Player board) · v708
 - 2026-11-20 · 730d435d · the Player's phone bar at 70 and its title at 133, where the editor's board and the app have them, the View menu with them · PlayerApp (Player, PlayerLoop, PlayerKeyboard, PlayerDone, PlayerHands, PlayerViewSheet and the Player's phone layers) · v707
 - 2026-11-20 · 5b1c73de · Explore's Loading in the loaded list's shape (the phone's card of 88 rows, the laptop's table head and 60 rows), no count or order until songs are found · Explore,ExploreLaptop · v706
 - 2026-11-20 · e3121ed9 · a song's cover as the app engraves it: the first staff 57 down, the systems 115 apart, the chord symbols 12.5 bold 28 over the staff, the words 15.5, its title and credits on the app's line heights · Song,SongLaptop · v705
