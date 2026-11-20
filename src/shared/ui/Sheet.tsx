@@ -159,10 +159,29 @@ export function SheetContent({
         rising && RISING_CARD,
       )}
     >
-      <DrawerHeader className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-2.5 pb-2 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center">
+      {/* On a laptop the card is the boards' POPOVER: its title at the start, 16 in, and no Done (a
+          click outside or Esc closes it); a page under the first keeps its Back and its title centred. */}
+      <DrawerHeader
+        className={cn(
+          'grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-2.5 pb-2 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center',
+          !back &&
+            'group-data-[swipe-axis=x]/drawer-popup:grid-cols-1 group-data-[swipe-axis=x]/drawer-popup:pt-4 group-data-[swipe-axis=x]/drawer-popup:text-start',
+        )}
+      >
         {back ? <div className="col-start-1 row-start-1 justify-self-start">{back}</div> : null}
-        <div className="col-start-2 row-start-1 flex min-w-0 flex-col items-center gap-0.5 pt-2.5">
-          <div className="flex min-w-0 flex-wrap items-center justify-center gap-x-1.5 gap-y-1">
+        <div
+          className={cn(
+            'col-start-2 row-start-1 flex min-w-0 flex-col items-center gap-0.5 pt-2.5',
+            !back &&
+              'group-data-[swipe-axis=x]/drawer-popup:col-start-1 group-data-[swipe-axis=x]/drawer-popup:items-start group-data-[swipe-axis=x]/drawer-popup:pt-0',
+          )}
+        >
+          <div
+            className={cn(
+              'flex min-w-0 flex-wrap items-center justify-center gap-x-1.5 gap-y-1',
+              !back && 'group-data-[swipe-axis=x]/drawer-popup:justify-start',
+            )}
+          >
             <DrawerTitle className="font-sans text-[1.0625rem] leading-snug font-semibold text-balance break-words">
               {title}
             </DrawerTitle>
@@ -179,7 +198,7 @@ export function SheetContent({
           render={
             <Button
               variant="ghost"
-              className="col-start-3 row-start-1 justify-self-end px-1 text-[1.0625rem] font-semibold text-link hover:bg-transparent hover:underline"
+              className="col-start-3 row-start-1 justify-self-end px-1 text-[1.0625rem] font-semibold text-link group-data-[swipe-axis=x]/drawer-popup:sr-only hover:bg-transparent hover:underline"
             />
           }
         >

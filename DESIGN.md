@@ -502,7 +502,9 @@ square at the top.
   anywhere and carries no ›; its row is picture, name, one line, ⋯.
 - **Sheet** (`Sheet`): the page's paper (its cards white on it), the sheet corner on top, a grab handle, the title
   centred (sans, 17px, semibold) with Done at its right in the link's ink (R42), an optional
-  footer. It stands on the phone's keyboard. Never a sheet over a sheet.
+  footer. It stands on the phone's keyboard. Never a sheet over a sheet. On a laptop it is the boards' POPOVER, a card
+  hung under the button that opened it: its title at the start, 16 in, and no Done (a click outside or Esc closes it);
+  a page under its first keeps Back with the title centred.
 - **Properties** (a song's Details): a `RowTrigger` per property, its name and value, the value "Not set" in soft ink
   where empty; a tap opens its editor beside it (a popover on a laptop, a sheet on a phone), titled with its name.
 - **A place's card style** (`StyleEditor`): the preview is a pinned pane on the muted fill, of fixed height, never over a
