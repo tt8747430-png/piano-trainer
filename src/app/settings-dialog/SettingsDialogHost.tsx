@@ -1,5 +1,5 @@
-import { useNavigate, useRouterState } from '@tanstack/react-router'
-import { lazy, Suspense, useEffect, type ComponentType, type ReactNode } from 'react'
+import { useNavigate, useRouter, useRouterState } from '@tanstack/react-router'
+import { lazy, Suspense, useEffect, useRef, type ComponentType, type ReactNode } from 'react'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { opensInDialog, SettingsDialog } from '@/widgets/settings-screen'
 import { backgroundHref, rememberBackground, SETTINGS_PARAM, withSettings } from './background'
@@ -70,6 +70,10 @@ const paneOf = (path: string): ReactNode =>
 export function SettingsDialogHost() {
   const location = useRouterState({ select: (state) => state.location })
   const navigate = useNavigate()
+  const { history } = useRouter()
+  // Where in history the page under the dialog stands: opening Settings and each place opened in it
+  // added an entry, so closing goes back past them all and Back then leaves the page, not Settings.
+  const under = useRef<number | null>(null)
   const wide = useMediaQuery(LAPTOP)
   useEffect(() => {
     if (!opensInDialog(location.pathname)) rememberBackground(location.href)
@@ -80,13 +84,23 @@ export function SettingsDialogHost() {
   useEffect(() => {
     if (path !== null && !wide) void navigate({ href: path, replace: true })
   }, [path, wide, navigate])
+  useEffect(() => {
+    // A place's own address passes on its way into the dialog: still in Settings.
+    if (path === null && !opensInDialog(location.pathname)) under.current = null
+    else if (path !== null) under.current ??= history.location.state.__TSR_index - 1
+  }, [path, history, location.pathname])
   if (path === null || !wide) return null
   const pane = paneOf(path)
   if (pane === null) return null
   return (
     <SettingsDialog
       path={path}
-      onClose={() => void navigate({ href: withSettings(backgroundHref(), null), replace: true })}
+      onClose={() => {
+        const steps = history.location.state.__TSR_index - (under.current ?? -1)
+        // Opened from a page in the app: back to it. Opened cold at a Settings address: the page.
+        if (under.current !== null && under.current >= 0 && steps > 0) history.go(-steps)
+        else void navigate({ href: withSettings(backgroundHref(), null), replace: true })
+      }}
     >
       <Suspense fallback={null}>{pane}</Suspense>
     </SettingsDialog>
