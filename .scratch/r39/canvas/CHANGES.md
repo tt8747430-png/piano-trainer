@@ -8,11 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · (this commit) · the Chord player's keys light the hands as the app (bass G2–F♯3 lilac, tones above it brick, F2–A4 fixed, C names), its + Lucide's · ChordPlayer,ChordPlayerLaptop · pending
 
 
 ## Changes
 
+- 2026-11-20 · dfb004f5 · the Chord player's keys light the hands as the app (bass G2–F♯3 lilac, tones above it brick, F2–A4 fixed, C names), its + Lucide's · ChordPlayer,ChordPlayerLaptop · v688
 - 2026-11-20 · e8414d08 · Scales' left hand an octave under as the app engraves it; Bravura's sharp, flat, natural and 4/4 on the scale's staff · Scales,ScalesLaptop · v687
 - 2026-11-20 · 7e59669f · the 3D hands rebuilt from the app's stage (R37's one clay hand; Angle as the stage's input) · Chords,ChordsLaptop,ChordPlayer,ChordPlayerLaptop · v686
 - 2026-11-20 · 5bfa8a07 · engraved clefs on every board (four spaces, on the bottom line), the Intervals staff as the engine lays it out · Chords,ChordsLaptop,Editor,EditorDraft,EditorDraftLaptop,EditorLaptop,Exercise,ExerciseLaptop,Intervals,IntervalsLaptop,Lesson,LessonLaptop,Pattern,PatternLaptop,PlayChord,PlayChordLaptop,PlayChromatic,PlayChromaticLaptop,PlayExercise,PlayExerciseLaptop,PlayProgression,PlayProgressionLaptop,PlayWalk,PlayWalkLaptop,PracticeResult,PracticeResultLaptop,Progression,ProgressionLaptop,Scales,ScalesLaptop,Song,SongLaptop,Songs,Takes,TakesLaptop · v685
