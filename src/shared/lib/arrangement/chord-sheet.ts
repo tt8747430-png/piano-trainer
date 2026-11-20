@@ -2,6 +2,8 @@ import {
   beatsPerBar,
   beatsToTicks,
   C_MAJOR,
+  numeralChord,
+  randomProgression,
   transposedKey,
   type Chord,
   type Key,
@@ -334,6 +336,22 @@ export const withSection = (
 ): ChordSheet => ({
   ...sheet,
   sections: sheet.sections.map((section, i) => (i === index ? change(section) : section)),
+})
+
+/**
+ * Every section given a new progression in the sheet's key, as long as it was (4 bars where it was
+ * empty), one triad a bar: the Chord player's Random.
+ */
+export const randomSheet = (sheet: ChordSheet, random: () => number): ChordSheet => ({
+  ...sheet,
+  sections: sheet.sections.map((section) => ({
+    ...section,
+    bars: randomProgression(sheet.key, barCount(section) || 4, random).map((numeral) => ({
+      chords: [
+        { chord: numeralChord(numeral, sheet.key, 'triads'), beats: beatsPerBar(sheet.meter) },
+      ],
+    })),
+  })),
 })
 
 /** A Verse after the last section; none past 12. */

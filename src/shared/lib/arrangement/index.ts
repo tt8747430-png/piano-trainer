@@ -47,6 +47,7 @@ export {
   type Main,
   type SectionMarks,
   withSection,
+  randomSheet,
   type BarPiece,
   type ChordPlace,
   type ChordSheet,

@@ -32,7 +32,6 @@ import {
   WIDE,
 } from '@/shared/lib'
 import {
-  barCount,
   duplicateSection,
   duplicateChord,
   insertChord,
@@ -49,19 +48,17 @@ import {
   setChord,
   withSection,
   addSection,
+  randomSheet,
   type ChordSheet,
   type SheetSection as Section,
 } from '@/shared/lib/arrangement'
 import {
-  beatsPerBar,
   keyParam,
-  numeralChord,
   numeralOf,
   numeralsParam,
   parseNumerals,
   printedChord,
   printedNote,
-  randomProgression,
   type Numeral,
 } from '@/shared/lib/music'
 import { useShortcuts } from '@/shared/lib/shortcuts'
@@ -280,10 +277,7 @@ export function ChordPlayer({
       inSection(place.section, (section) => removeChord(section, place.index))
       setDialog(null)
       setPicked(null)
-      say(t('chordPlayer.deleted', { chord: printedChord(gone.chord) }), {
-        label: t('chordPlayer.undo'),
-        onClick: hand.undo,
-      })
+      undoable(t('chordPlayer.deleted', { chord: printedChord(gone.chord) }))
     },
     resize: (place, beats) =>
       inSection(place.section, (section) => resizeChord(section, place.index, beats)),
@@ -299,28 +293,12 @@ export function ChordPlayer({
     },
   }
 
+  /** A change made at once, said in its toast with Undo (a loss that can be undone, CLAUDE.md). */
+  const undoable = (message: string) =>
+    say(message, { label: t('chordPlayer.undo'), onClick: hand.undo })
   const randomize = () => {
-    hand.edit((sheet) => ({
-      ...sheet,
-      sections: sheet.sections.map((section) => {
-        const bars = barCount(section) || 4
-        return {
-          ...section,
-          bars: randomProgression(sheet.key, bars, Math.random).map((numeral) => ({
-            chords: [
-              {
-                chord: numeralChord(numeral, sheet.key, 'triads'),
-                beats: beatsPerBar(sheet.meter),
-              },
-            ],
-          })),
-        }
-      }),
-    }))
-    say(t('chordPlayer.randomized', { key: keyName(shown.key) }), {
-      label: t('chordPlayer.undo'),
-      onClick: hand.undo,
-    })
+    hand.edit((sheet) => randomSheet(sheet, Math.random))
+    undoable(t('chordPlayer.randomized', { key: keyName(shown.key) }))
   }
 
   const numerals = sheetNumerals(shown)
@@ -350,10 +328,7 @@ export function ChordPlayer({
     hand.setEntry({ style: chosen.id, tempo: chosen.tempo })
     if (chosen.meter !== hand.sheet.meter) {
       hand.edit((sheet) => relayMeter(sheet, chosen.meter))
-      say(t('chordPlayer.laidOut', { meter: chosen.meter }), {
-        label: t('chordPlayer.undo'),
-        onClick: hand.undo,
-      })
+      undoable(t('chordPlayer.laidOut', { meter: chosen.meter }))
     }
   }
   const onDrop = ({ active, over }: DragEndEvent) => {
@@ -381,10 +356,7 @@ export function ChordPlayer({
     if (!section) return
     setOpened(null)
     hand.edit((sheet) => removeSection(sheet, index))
-    say(t('chordPlayer.sectionDeleted', { name: t(`chordPlayer.sections.${section.kind}`) }), {
-      label: t('chordPlayer.undo'),
-      onClick: hand.undo,
-    })
+    undoable(t('chordPlayer.sectionDeleted', { name: t(`chordPlayer.sections.${section.kind}`) }))
   }
   const openedSection = opened === null ? undefined : shown.sections[opened]
   const dialogChord = dialog ? chordAt(dialog.place) : undefined
