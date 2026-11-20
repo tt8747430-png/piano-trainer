@@ -34,7 +34,7 @@ TKS_SRC = r'''
       discard: () => drop(at.id), save: () => S({ page: null, toast: 'Written into bars 3–10', toastUndo: false }) };'''
 
 PLAYMINI = (f'<button type="button" aria-label="Play" onClick="{{{{r.play}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {{{{r.pbg}}}}; color: {INK}; display: flex; align-items: center; justify-content: center">'
-            f'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"></path></svg></button>')
+            + PLAY.replace('width="22" height="22"', 'width="20" height="20"') + '</button>')
 TKROW = (f'<div style="min-height: 64px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 12px; box-shadow: inset 0 -1px 0 {FILL}">{PLAYMINI}'
          f'<a href="Take.dc.html" style="flex: 1; min-width: 0; min-height: 44px; display: flex; flex-direction: column; justify-content: center; color: {INK}; text-decoration: none"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.n}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.d}}}}</span></a>'
          f'<button type="button" aria-label="Take actions" onClick="{{{{r.more}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')

@@ -79,7 +79,7 @@ VIEW60 = lambda cols: (CARD(GRANDSTAFF("The scale up one octave, each hand on it
     + f'<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 14px; font-weight: 600; color: {INK}">{{{{chordsT}}}}</h3>' + SCCARDS(cols) + '</section></sc-if>'
     + (KEYG60 if cols < 7 else ''))
 
-PLAYM = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
+PLAYM = PLAY.replace('width="22" height="22"', 'width="14" height="14"')
 PRACT60 = (f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 14px; font-weight: 600; color: {INK}">{{{{practiseT}}}}</h3>'
            f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{practise}}}}" as="p" hint-placeholder-count="6"><a href="Exercise.dc.html" style="min-height: 60px; padding: 8px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">'
            f'<span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAYM}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{p.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{p.s}}}}</span></span>{CHEV_RS}</a></sc-for></div></section>')

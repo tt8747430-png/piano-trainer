@@ -746,7 +746,7 @@ GLASSBTN = lambda label, svg, act='', href='': (f'<a href="{href}" aria-label="{
 
 def PRACTISE(player, cols=1):
     # Practise in the Player, on the page: three ways to drill this chord, each opening the Player
-    PLAYMINI = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
+    PLAYMINI = PLAY.replace('width="22" height="22"', 'width="14" height="14"')
     r = f'<sc-for list="{{{{practise}}}}" as="p" hint-placeholder-count="7"><a href="{player}" style="min-height: 60px; padding: 8px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}{", inset -1px 0 0 "+LINE if cols>1 else ""}"><span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAYMINI}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{p.a}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{p.b}}}}</span></span>{CHEV_R if cols == 1 else ""}</a></sc-for>'
     return f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 14px; font-weight: 600; color: {INK}">{{{{practiseT}}}}</h3><div style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; overflow: hidden{"; display: grid; grid-template-columns: repeat(%d, minmax(0,1fr))" % cols if cols>1 else ""}">{r}</div></section>'
 
@@ -777,7 +777,7 @@ PLUSI = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="cur
 # beside the noteheads, no "Right hand 1 2 3 5" under it
 STAFFHEAD = ''  # R42 v103: Transpose is the key over the clef, Add a chord the empty place on the staff
 STOPI = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>'
-PLAYI = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
+PLAYI = PLAY.replace('width="22" height="22"', 'width="18" height="18"')
 # Apple's toolbars (iOS 26): items sit on glass in groups; only the one primary action is prominent, tinted glass,
 # in its own group on the trailing side. So three shapes, no capsule around them: the keyboard (what the page
 # shows) · the chord (what is chosen) · Play (what you hear), the last one tinted honey.
