@@ -37,11 +37,11 @@ const CLICKS: readonly Click[] = ['off', 'countIn', 'on']
 
 /** A loop's repeats (its board's Repeats): endless, then a few. */
 const REPEATS: readonly (number | null)[] = [null, 3, 5, 10]
-const BETWEEN_WORD: Readonly<Record<Between, string>> = {
+const BETWEEN_WORD = {
   none: 'betweenNone',
   countIn: 'betweenCountIn',
   rest: 'betweenRest',
-}
+} as const satisfies Record<Between, string>
 
 /** What a loop plays as, once bars are looped: its bars as printed, from 1, and its three rows. */
 export interface LoopRows {
@@ -264,7 +264,7 @@ export function PracticeSheet({
           title={
             loop.bars.first === loop.bars.last
               ? t('practiceSheet.loopBar', { first: loop.bars.first })
-              : t('practiceSheet.loopBars', loop.bars)
+              : t('practiceSheet.loopBars', { first: loop.bars.first, last: loop.bars.last })
           }
         >
           <GroupRows surface="sheet" label={t('loop')}>

@@ -1,4 +1,4 @@
-import { printedNote, type Midi } from '@/shared/lib/music'
+import { printedNote, type Midi, type Tick } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
 import type { KeyMark, ShownKeys } from '@/shared/ui'
 

@@ -37,7 +37,7 @@ const WHOLE = {
   range: { from: 0, to: 16 * B },
   fromTick: 0,
 }
-const IGNORED = { reach: () => {}, tempo: () => {}, count: () => {} }
+const IGNORED = { reach: () => {}, tempo: () => {}, count: () => {}, end: () => {} }
 const FULL = () => FULL_MIX
 
 describe('startTransport', () => {

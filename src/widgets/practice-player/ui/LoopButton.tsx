@@ -24,7 +24,7 @@ export function LoopButton({
   const named = bars
     ? bars.first === bars.last
       ? t('loopOn.bar', { first: bars.first })
-      : t('loopOn.bars', bars)
+      : t('loopOn.bars', { first: bars.first, last: bars.last })
     : null
   const label = named ? t('loopOn.remove', { bars: named }) : t('loop')
   return (
