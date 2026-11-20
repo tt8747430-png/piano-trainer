@@ -781,6 +781,7 @@ export const editor = {
     offlineWhy: 'It will open when you reconnect.',
     failed: 'It couldn’t be opened',
     failedWhy: 'Check your connection, then try again.',
+    gone: 'This song can’t be found',
     retry: 'Try again',
     editorsOnly: 'Only editors can modify this',
     toSongs: 'Back to Songs',

@@ -26,6 +26,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { editorTarget, originalTarget } from '../model/editor-target'
 import { NotOpen } from '@/widgets/content-editor'
 import { ScoreEditor } from './ScoreEditor'
+import { EditorGate } from './EditorGate'
 
 function Editing({ id }: { id: string }) {
   const { t } = useTranslation('common')
@@ -61,19 +62,26 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
     const opened = load.value
     return originalTarget(piece, musicOf(opened), (music) => save(draftWithMusic(opened, music)))
   }, [load, piece, save])
-  if (load.state === 'loading') return <NotOpen kind="opening" line={t('original.opening')} />
+  if (load.state === 'loading')
+    return (
+      <EditorGate>
+        <NotOpen kind="opening" line={t('original.opening')} />
+      </EditorGate>
+    )
   if (load.state === 'failed' || !target)
     return (
-      <NotOpen
-        kind={load.state === 'failed' && load.reason === 'offline' ? 'offline' : 'failed'}
-        line={t(
-          load.state === 'failed' && load.reason === 'offline'
-            ? 'original.offline'
-            : 'original.failed',
-        )}
-      >
-        <Button onClick={draft.reopen}>{t('original.retry')}</Button>
-      </NotOpen>
+      <EditorGate>
+        <NotOpen
+          kind={load.state === 'failed' && load.reason === 'offline' ? 'offline' : 'failed'}
+          line={t(
+            load.state === 'failed' && load.reason === 'offline'
+              ? 'original.offline'
+              : 'original.failed',
+          )}
+        >
+          <Button onClick={draft.reopen}>{t('original.retry')}</Button>
+        </NotOpen>
+      </EditorGate>
     )
   return (
     <ScoreEditor
@@ -131,19 +139,28 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
 function MadeOriginal({ id }: { id: string }) {
   const { t } = useTranslation('editor')
   const load = useMadeSong(id)
-  if (load.state === 'loading') return <NotOpen kind="opening" line={t('original.opening')} />
+  if (load.state === 'loading')
+    return (
+      <EditorGate>
+        <NotOpen kind="opening" line={t('original.opening')} />
+      </EditorGate>
+    )
   if (load.state === 'failed')
     return (
-      <NotOpen
-        kind={load.reason === 'offline' ? 'offline' : 'failed'}
-        line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')}
-      />
+      <EditorGate>
+        <NotOpen
+          kind={load.reason === 'offline' ? 'offline' : 'failed'}
+          line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')}
+        />
+      </EditorGate>
     )
   if (load.state === 'none')
     return (
-      <NotOpen kind="failed" line={t('original.failed')}>
-        <ButtonLink render={<Link to="/songs" />}>{t('original.toSongs')}</ButtonLink>
-      </NotOpen>
+      <EditorGate>
+        <NotOpen kind="missing" line={t('original.gone')}>
+          <ButtonLink render={<Link to="/songs" />}>{t('original.toSongs')}</ButtonLink>
+        </NotOpen>
+      </EditorGate>
     )
   return <EditingOriginal piece={load.song} />
 }
