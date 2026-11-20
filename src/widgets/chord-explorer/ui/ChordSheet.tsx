@@ -98,7 +98,7 @@ export function ChordSheet({
     const place = () => {
       setRoom(box.clientWidth - 2 * INSET * unit)
       const measures = [...staff.querySelectorAll<SVGGElement>('g.measure')]
-      measures.forEach((measure, i) => measure.toggleAttribute('data-chosen', several && i === at))
+      measures.forEach((measure, i) => measure.toggleAttribute('data-chosen', i === at))
       measures.forEach((measure) => centred(measure, CLEF * unit))
       setEmpty(emptyBar(staff, measures[measures.length - 1]))
       setBars(measures.map((measure) => barPlace(staff, measure)))
@@ -122,7 +122,7 @@ export function ChordSheet({
       watch.disconnect()
       resize.disconnect()
     }
-  }, [chords, at, several, unit])
+  }, [chords, at, unit])
   // The chosen bar kept in view as chords are added or chosen.
   const chosen = bars[at]
   useLayoutEffect(() => {

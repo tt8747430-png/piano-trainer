@@ -117,12 +117,10 @@ STAGE_VARS = ("--key-white: #fefdfb; --key-black: #332c28; --key-bed: #cbc2b9; -
               + ''.join(f"--role-{n}: {c}; --role-{n}-wash: color-mix(in oklab, {c} 62%, #fefdfb); " for n, c in (('root', '#E19E8C'), ('3rd', '#85B8DC'), ('5th', '#9BC093'), ('7th', '#E8C67D'), ('9th', '#B8A8D8'), ('11th', '#D3AC8A'), ('13th', '#82C2C1'))))
 HANDS3D = r'''
   _hands3d() {
-    const cv = this._cv, d = this._handsIn; if (!cv || !d) { if (this._stage && !cv) { this._stage.dispose(); this._stage = null; this._stageCv = null; } return; }
+    const cv = this._cv, d = this._handsIn; if (d) d.angle = this.state.kbAngle === 'above' ? 'above' : 'seat'; if (!cv || !d) { if (this._stage && !cv) { this._stage.dispose(); this._stage = null; this._stageCv = null; } return; }
     try {
       if (!window.PTHands) (0, eval)(PT_BUNDLE);
-      const ang = this.state.kbAngle === 'above' ? 'above' : 'seat';
-      if (!this._stage || this._stageCv !== cv || this._ang !== ang) {
-        window.PTHands.setPitch(ang === 'above' ? 78 : 62); this._ang = ang;
+      if (!this._stage || this._stageCv !== cv) {
         if (this._stage) this._stage.dispose(); if (this._ro) this._ro.disconnect();
         cv.__ptAfter = (proj) => { const box = this._lb; if (!box) return; const L = this._labels3d || [], W = box.clientWidth, H = box.clientHeight;
           while (box.children.length > L.length) box.lastChild.remove();

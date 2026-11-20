@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · the 3D hands rebuilt from the app's stage (R37's one clay hand; Angle as the stage's input) · Chords,ChordsLaptop,ChordPlayer,ChordPlayerLaptop · pending
+
 
 ## Changes
 
