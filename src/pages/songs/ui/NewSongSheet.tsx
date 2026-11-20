@@ -13,7 +13,6 @@ import {
 } from '@/features/edit-piece'
 import { moveTo } from '@/features/manage-library'
 import { useKeyName } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
 import {
   beatUnit,
   C_MAJOR,
@@ -23,7 +22,7 @@ import {
   type Key,
   type Meter,
 } from '@/shared/lib/music'
-import { GroupRow, GroupRows, MakeSheet, Stepper } from '@/shared/ui'
+import { ChoiceTiles, GroupRow, GroupRows, MakeSheet, Stepper } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** The staves a song starts with, as Flat's new score offers them (R72's SONGFORM). */
@@ -40,10 +39,6 @@ const FLATS = [-1, -2, -3, -4, -5, -6, -7] as const
 
 /** The time signatures a song most often starts in. */
 const METERS = ['2/4', '3/4', '4/4', '6/8', '3/8', '12/8'] as const satisfies readonly Meter[]
-
-/** One choice of a few side by side (the board's `_TILE`): white on a hairline, ink once chosen. */
-const TILE =
-  'min-w-0 rounded-[12px] ring-1 ring-border transition-colors duration-150 aria-checked:bg-foreground aria-checked:text-background bg-card text-foreground'
 
 /** A part's name over its control, its value at its right where it has one (the board's `_SLAB`). */
 function Part({ label, value, children }: { label: string; value?: string; children: ReactNode }) {
@@ -135,31 +130,6 @@ export function NewSongSheet({
     if (builtIn) void makeBuiltIn(builtIn)
     else make()
   }
-  const keyRow = (counts: readonly number[]) => (
-    <div className="grid grid-cols-7 gap-1">
-      {counts.map((count) => {
-        const each = signatureKey(count, false)
-        const on = signature === count
-        return (
-          <button
-            key={count}
-            type="button"
-            role="radio"
-            aria-checked={on}
-            aria-label={keyName(each)}
-            onClick={() => setKey(on ? C_MAJOR : each)}
-            className={cn(TILE, 'flex h-14 flex-col items-center justify-center gap-0.5')}
-          >
-            <span className="text-base/[1.1] font-semibold">{printedNote(each.tonic)}</span>
-            <span className="text-xs/none opacity-70">
-              {Math.abs(count)}
-              {count > 0 ? '♯' : '♭'}
-            </span>
-          </button>
-        )
-      })}
-    </div>
-  )
   return (
     <MakeSheet
       open={open}
@@ -201,26 +171,22 @@ export function NewSongSheet({
           />
         </label>
         <Part label={t('making.staves')}>
-          <div role="radiogroup" aria-label={t('making.staves')} className="grid grid-cols-3 gap-2">
-            {STAVES.map(({ id }) => (
-              <button
-                key={id}
-                type="button"
-                role="radio"
-                aria-checked={stavesId === id}
-                onClick={() => setStavesId(id)}
-                className={cn(
-                  TILE,
-                  'group flex min-h-16 flex-col items-start justify-center gap-0.5 px-3 py-2 text-start',
-                )}
-              >
+          <ChoiceTiles
+            label={t('making.staves')}
+            value={stavesId}
+            options={STAVES.map(({ id }) => id)}
+            onChange={setStavesId}
+            className="grid grid-cols-3 gap-2"
+            tileClassName="group flex min-h-16 flex-col items-start justify-center gap-0.5 px-3 py-2 text-start"
+            tile={(id) => (
+              <>
                 <span className="text-[0.9375rem] font-semibold">{t(`making.stavesOf.${id}`)}</span>
                 <span className="text-[0.8125rem] text-muted-foreground group-aria-checked:text-background/75">
                   {t(`making.stavesLine.${id}`)}
                 </span>
-              </button>
-            ))}
-          </div>
+              </>
+            )}
+          />
         </Part>
         <GroupRows surface="sheet">
           <GroupRow label={t('making.tempo')}>
@@ -256,34 +222,43 @@ export function NewSongSheet({
               : keyName(signatureKey(signature, false))
           }
         >
-          <div role="radiogroup" aria-label={t('making.key')} className="flex flex-col gap-1">
-            {keyRow(SHARPS)}
-            {keyRow(FLATS)}
-          </div>
+          <ChoiceTiles
+            label={t('making.key')}
+            value={signature === 0 ? null : signature}
+            options={[...SHARPS, ...FLATS]}
+            onChange={(count) => setKey(signature === count ? C_MAJOR : signatureKey(count, false))}
+            name={(count) => keyName(signatureKey(count, false))}
+            className="grid grid-cols-7 gap-1"
+            tileClassName="flex h-14 flex-col items-center justify-center gap-0.5"
+            tile={(count) => (
+              <>
+                <span className="text-base/[1.1] font-semibold">
+                  {printedNote(signatureKey(count, false).tonic)}
+                </span>
+                <span className="text-xs/none opacity-70">
+                  {Math.abs(count)}
+                  {count > 0 ? '♯' : '♭'}
+                </span>
+              </>
+            )}
+          />
         </Part>
         <Part label={t('making.meter')}>
-          <div role="radiogroup" aria-label={t('making.meter')} className="grid grid-cols-6 gap-1">
-            {METERS.map((each) => {
-              const [count, unit] = each.split('/')
-              return (
-                <button
-                  key={each}
-                  type="button"
-                  role="radio"
-                  aria-checked={meter === each}
-                  aria-label={each}
-                  onClick={() => setMeter(each)}
-                  className={cn(
-                    TILE,
-                    'flex h-15 flex-col items-center justify-center font-display text-[1.1875rem]/[0.95] font-bold',
-                  )}
-                >
-                  <span>{count}</span>
-                  <span>{unit}</span>
-                </button>
-              )
-            })}
-          </div>
+          <ChoiceTiles
+            label={t('making.meter')}
+            value={meter}
+            options={METERS}
+            onChange={setMeter}
+            name={(each) => each}
+            className="grid grid-cols-6 gap-1"
+            tileClassName="flex h-15 flex-col items-center justify-center font-display text-[1.1875rem]/[0.95] font-bold"
+            tile={(each) => (
+              <>
+                <span>{each.split('/')[0]}</span>
+                <span>{each.split('/')[1]}</span>
+              </>
+            )}
+          />
         </Part>
       </form>
     </MakeSheet>

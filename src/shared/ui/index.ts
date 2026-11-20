@@ -71,6 +71,7 @@ export {
 export { PlayRow, PractiseRow, PractiseRows } from './PractiseRows'
 export { RankMark } from './RankMark'
 export { Listbox } from './Listbox'
+export { ChoiceTiles } from './ChoiceTiles'
 export { LoopGrip } from './LoopGrip'
 export { MultiDropdown } from './MultiDropdown'
 export { NameField } from './NameField'
