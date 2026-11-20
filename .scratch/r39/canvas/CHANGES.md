@@ -8,10 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · pending · one grass ink (#44684A) on the grass paint on every board; the Check's keyboard names its Cs as the kit's keys do · Check,CheckLaptop,Course,CourseLaptop,Learn,LearnCourses,LearnCoursesLaptop,LearnLaptop,LearnLevel,LearnLevelLaptop,LearnYours,LearnYoursLaptop,Lesson,LessonLaptop,PlayChord,PlayChordLaptop,PracticeResult,PracticeResultLaptop,Profile,ProfileLaptop,Settings,SettingsLaptop,Song,SongLaptop,YourLessonSettings,YourLessonSettingsLaptop · pending
-
 ## Changes
 
+- 2026-11-20 · 4f21a0ec · one grass ink (#44684A) on the grass paint on every board; the Check's keyboard names its Cs as the kit's keys do · Check,CheckLaptop,Course,CourseLaptop,Learn,LearnCourses,LearnCoursesLaptop,LearnLaptop,LearnLevel,LearnLevelLaptop,LearnYours,LearnYoursLaptop,Lesson,LessonLaptop,PlayChord,PlayChordLaptop,PracticeResult,PracticeResultLaptop,Profile,ProfileLaptop,Settings,SettingsLaptop,Song,SongLaptop,YourLessonSettings,YourLessonSettingsLaptop · v677
 - 2026-11-20 · 185c9ac5 · the boards' fields 48 as their code says (an input's default padding drew them 50) · SignIn,SignInLaptop,Settings,SettingsLaptop,Section,SectionLaptop,SongSettings,SongSettingsLaptop · v676
 - 2026-11-20 · 9559b173 · a run is named as its Player bar names it (Inversions: Cmaj7) on its results and in Practice history · PlayChord,PlayChordLaptop,PracticeResult,PracticeResultLaptop,Profile,ProfileLaptop · v675
 - 2026-11-20 · 10d932a4 · Profile's achievements earned-latest-first with true ways to earn them, records Level · Longest streak · Best accuracy · Days practised, the first-run flame unlit · Profile,ProfileLaptop · v674
