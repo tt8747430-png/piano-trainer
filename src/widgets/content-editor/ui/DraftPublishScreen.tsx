@@ -7,7 +7,15 @@ import type { ContentKind } from '@/shared/api/content'
 import type { NetResult } from '@/shared/api/network'
 import { useAccount, editsContent } from '@/shared/lib/account'
 import { useContentEditing } from '@/shared/lib/content-editing'
-import { ButtonLink, ConfirmDialog, InfoTip, OpensMark, say, ScreenHeader } from '@/shared/ui'
+import {
+  ButtonLink,
+  ConfirmDialog,
+  InfoTip,
+  MenuSection,
+  OpensMark,
+  say,
+  ScreenHeader,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useStanding } from '../model/use-standing'
 import { DraftGate, NotOpen } from './DraftScreen'
@@ -105,27 +113,18 @@ export function DraftPublishScreen<T>({
         ) : (
           <>
             <StandingLine standing={standing} />
-            <section className="flex flex-col gap-2">
-              <h2 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
-                {t('publishPage.changes')}
-              </h2>
+            <MenuSection title={t('publishPage.changes')} inset>
               <p className="px-1 text-pretty">
                 {draft.drafted || !published
                   ? t('publishPage.changesDrafted')
                   : t('publishPage.changesNone')}
               </p>
-            </section>
-            <section className="flex flex-col gap-2">
-              <h2 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
-                {t('publishPage.preview')}
-              </h2>
+            </MenuSection>
+            <MenuSection title={t('publishPage.preview')} inset>
               {preview}
-            </section>
+            </MenuSection>
             {published ? (
-              <section className="flex flex-col gap-3">
-                <h2 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
-                  {t('publishPage.link')}
-                </h2>
+              <MenuSection title={t('publishPage.link')} inset className="gap-3">
                 <CopyLinkField url={`${window.location.origin}${path}`} />
                 <ButtonLink variant="outline" size="lg" render={view}>
                   {t('publishPage.view')}
@@ -142,7 +141,7 @@ export function DraftPublishScreen<T>({
                   </span>
                   <OpensMark />
                 </Button>
-              </section>
+              </MenuSection>
             ) : null}
             <div className="mt-auto flex flex-col gap-3 pt-4">
               <RightsCheck checked={rights} onChange={setRights} />

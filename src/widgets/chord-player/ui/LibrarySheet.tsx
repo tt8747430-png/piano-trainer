@@ -18,7 +18,15 @@ import {
 import { deleteSheet, duplicateSheet, renameSheet } from '@/features/manage-chord-sheets'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { ActionMenu, ChoiceChips, confirm, NewSheet, Sheet, SheetContent } from '@/shared/ui'
+import {
+  ActionMenu,
+  ChoiceChips,
+  confirm,
+  MenuSection,
+  NewSheet,
+  Sheet,
+  SheetContent,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
@@ -65,10 +73,7 @@ export function LibrarySheet({
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent title={t('chordPlayer.library')} tall>
           <div className="flex flex-col gap-6">
-            <section className="flex flex-col gap-1">
-              <h3 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
-                {t('chordPlayer.mine')}
-              </h3>
+            <MenuSection title={t('chordPlayer.mine')} inset className="gap-1">
               {mine.length === 0 ? (
                 <p className="px-1 text-muted-foreground">{t('chordPlayer.noneMine')}</p>
               ) : (
@@ -136,11 +141,8 @@ export function LibrarySheet({
                   })}
                 </ul>
               )}
-            </section>
-            <section className="flex flex-col gap-3">
-              <h3 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
-                {t('chordPlayer.progressions')}
-              </h3>
+            </MenuSection>
+            <MenuSection title={t('chordPlayer.progressions')} inset className="gap-3">
               <ChoiceChips
                 label={t('chordPlayer.progressions')}
                 value={style}
@@ -171,7 +173,7 @@ export function LibrarySheet({
                   )
                 })}
               </ul>
-            </section>
+            </MenuSection>
           </div>
         </SheetContent>
       </Sheet>

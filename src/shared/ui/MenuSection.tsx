@@ -11,18 +11,21 @@ import { InfoTip } from './InfoTip'
 export function MenuSection({
   title,
   info,
+  inset = false,
   className,
   children,
 }: {
   title: string
   /** What the group is for, opened from the ⓘ beside its heading. */
   info?: ReactNode
+  /** Its heading 4 in, on the words of the rows under it (a sheet's list of patterns or sheets). */
+  inset?: boolean
   className?: string
   children: ReactNode
 }) {
   return (
     <section aria-label={title} className={cn('flex flex-col gap-2', className)}>
-      <div className="flex items-center gap-1.5">
+      <div className={cn('flex items-center gap-1.5', inset && 'px-1')}>
         <h2 className="font-sans text-sm font-semibold text-muted-foreground">{title}</h2>
         {info ? <InfoTip name={title}>{info}</InfoTip> : null}
       </div>

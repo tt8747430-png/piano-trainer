@@ -5,7 +5,7 @@ import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import type { DrumGrid } from '@/shared/lib/arrangement'
 import { usePlayback } from '@/shared/lib/services'
-import { Sheet, SheetContent } from '@/shared/ui'
+import { MenuSection, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { styleBar } from '../model/engine'
 
@@ -61,10 +61,12 @@ function StyleList({
   return (
     <div className="flex flex-col gap-5">
       {book.families.map(({ family, styles }) => (
-        <section key={family} className="flex flex-col gap-1">
-          <h3 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
-            {t(`chordPlayer.families.${family}`)}
-          </h3>
+        <MenuSection
+          key={family}
+          title={t(`chordPlayer.families.${family}`)}
+          inset
+          className="gap-1"
+        >
           <ul className="flex flex-col">
             {styles.map((style) => {
               const name = localText(style.name, locale)
@@ -111,7 +113,7 @@ function StyleList({
               )
             })}
           </ul>
-        </section>
+        </MenuSection>
       ))}
     </div>
   )
