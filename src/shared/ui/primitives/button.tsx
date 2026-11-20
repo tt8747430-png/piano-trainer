@@ -46,7 +46,11 @@ const buttonVariants = cva(
       },
     },
     // A bar's 44 glass circle: a run of them side by side shares one capsule (theme.css, `.bar-round`).
-    compoundVariants: [{ variant: 'bar', size: 'icon', class: 'bar-round' }],
+    // A bar's word (Select, Edit, Done) is 16 a side, as the boards' bar pills.
+    compoundVariants: [
+      { variant: 'bar', size: 'icon', class: 'bar-round' },
+      { variant: 'bar', size: 'default', class: 'px-4' },
+    ],
     defaultVariants: {
       variant: 'default',
       size: 'default',
