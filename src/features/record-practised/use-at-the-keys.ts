@@ -8,15 +8,12 @@ import { SILENCE_COUNTED_S } from '@/entities/progress'
  * learner who walks away from Wait mode adds no minutes.
  */
 export function useAtTheKeys(running: boolean, waiting: boolean, touched: string): boolean {
-  const [awake, setAwake] = useState(false)
+  // The key after which the silence ran out: until another is touched, the learner is away.
+  const [quietAfter, setQuietAfter] = useState<string | null>(null)
   useEffect(() => {
-    if (!waiting) {
-      setAwake(false)
-      return
-    }
-    setAwake(true)
-    const timer = setTimeout(() => setAwake(false), SILENCE_COUNTED_S * 1000)
+    if (!waiting) return
+    const timer = setTimeout(() => setQuietAfter(touched), SILENCE_COUNTED_S * 1000)
     return () => clearTimeout(timer)
   }, [waiting, touched])
-  return running || awake
+  return running || (waiting && quietAfter !== touched)
 }

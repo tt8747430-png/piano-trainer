@@ -131,17 +131,22 @@ export function ChordExplorer({
   const several = chordSteps(chord).length > 1
   const all = several && !only
   // While Play all plays, the chord sounding is shown chosen and the staff follows it.
-  const [sounding, setSounding] = useState<number | null>(null)
+  // What sounds is shown only while Play plays, so a stopped Play shows the chosen chord again.
+  const [turnAt, setSounding] = useState<number | null>(null)
+  const sounding = playback.playing === null ? null : turnAt
   const turns = useRef<ReturnType<typeof setTimeout>[]>([])
-  const stopTurns = () => {
+  const clearTurns = () => {
     turns.current.forEach(clearTimeout)
     turns.current = []
+  }
+  const stopTurns = () => {
+    clearTurns()
     setSounding(null)
   }
   useEffect(() => {
-    if (playback.playing === null) stopTurns()
+    if (playback.playing === null) clearTurns()
   }, [playback.playing])
-  useEffect(() => stopTurns, [])
+  useEffect(() => clearTurns, [])
   const sound = (id: 'chord' | 'arpeggio') => {
     const keys = chordViews(chord).map(chordKeys)
     const arpeggio = id === 'arpeggio'

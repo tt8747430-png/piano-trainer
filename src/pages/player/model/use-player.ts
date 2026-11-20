@@ -10,7 +10,7 @@ import {
   usePiecesStoreApi,
   type Piece,
 } from '@/entities/piece'
-import { useProgressStoreApi, withWaitScore } from '@/entities/progress'
+import { useProgress, useProgressStoreApi, withWaitScore } from '@/entities/progress'
 import { WEAK } from '@/entities/take'
 import {
   arrangePiece,
@@ -170,7 +170,15 @@ export function usePlayer(
   // A pass's score (research items 2, 4): a lesson is done from a good one, 80 % as the takes'
   // weak bar (ADR 0111, research item 15); a whole pass's kept as the song's best with these hands,
   // the best before it said beside the score, so the line can say New best.
-  const [bestBefore, setBestBefore] = useState<number | null>(null)
+  // The best before it is read as the pass ends, in the render before the pass is written.
+  const bestNow = useProgress((now) => now.songs[piece.id]?.best[state.hands] ?? null)
+  const [before, setBefore] = useState<{ passes: number; best: number | null }>({
+    passes,
+    best: null,
+  })
+  if (before.passes !== passes)
+    setBefore({ passes, best: state.loop || state.lastPassSlips === null ? before.best : bestNow })
+  const bestBefore = before.best
   const recordFinished = useEffectEvent(() => {
     const { lastPassSlips, loop, hands } = state
     if (lastPassSlips === null) return
@@ -179,7 +187,6 @@ export function usePlayer(
     if (score >= GOOD_PASS) recordPass(progress, piece.id, player.loop ?? whole, new Date())
     if (loop) return
     const { songs } = progress.getState()
-    setBestBefore(songs[piece.id]?.best[hands] ?? null)
     const next = withWaitScore(songs, piece.id, hands, score, lastBar + 1, new Date())
     if (next !== songs) progress.setState({ songs: next })
   })

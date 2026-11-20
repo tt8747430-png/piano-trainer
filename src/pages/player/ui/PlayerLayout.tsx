@@ -190,9 +190,11 @@ export function PlayerLayout({
   const finished = player.feedback?.kind === 'finished' ? player.feedback : null
   const isFinished = finished !== null
   const [doneOpen, setDoneOpen] = useState(false)
-  useEffect(() => {
+  const [wasFinished, setWasFinished] = useState(isFinished)
+  if (wasFinished !== isFinished) {
+    setWasFinished(isFinished)
     if (isFinished) setDoneOpen(true)
-  }, [isFinished])
+  }
   const days = useProgress(selectDays)
   const today = useToday()
   const daysInARow = useMemo(() => streak(days, today), [days, today])
