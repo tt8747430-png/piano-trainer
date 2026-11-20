@@ -10,36 +10,64 @@ LESSON = {
   'place': 'Lesson 7 of 11', 'title': 'How major scales work', 'titleRu': 'Как устроена мажорная гамма',
   'summary': 'Build a major scale on any note from one pattern of steps, number its degrees and finger C major.',
   'summaryRu': 'Строить мажорную гамму от любой ноты по одной схеме, нумеровать её ступени и играть до мажор с аппликатурой.',
+  # the board reads the app's lesson (major-scales.ts) block for block: a board untrue to the real data is fixed
   'secs': [
-    {'h': 'One pattern for every key', 'hRu': 'Одна схема для всех тональностей',
-     'p': 'Every major scale climbs by the same pattern of whole and half steps. Start on C and only white keys fit it.',
-     'pRu': 'Любая мажорная гамма поднимается одинаково: тон, тон, полутон, тон, тон, тон, полутон. От до схеме подходят только белые клавиши.',
-     'ex': 'scale', 'take': 'W W H W W W H, from any key.'},
-    {'h': 'Building D major', 'hRu': 'Строим ре мажор',
-     'steps': ['Start on D.', 'Whole step to E, whole step to F♯.', 'Half step to G, then whole steps to A, B and C♯.', 'Half step home to D.'],
-     'ex': 'question', 'take': 'D major has two sharps: F♯ and C♯.'}]}
+    {'h': 'One pattern of steps', 'hRu': 'Одна схема шагов', 'blocks': [
+      ('text', 'A major scale', 'climbs from its tonic, the first note, by whole, whole, half, whole, whole, whole, half. From C: the white keys.',
+       'Мажорная гамма', 'поднимается от тоники, первой ноты, так: тон, тон, полутон, тон, тон, тон, полутон. От до — белые клавиши.'),
+      ('scale', 'C'),
+      ('text', '', 'The half steps are E to F and B to C.', '', 'Полутоны здесь: ми–фа и си–до.')]},
+    {'h': 'The same pattern from G and F', 'hRu': 'Та же схема от соль и от фа', 'blocks': [
+      ('text', '', 'From G, the 7th note must be F♯. From F, the 4th note must be B♭. Each letter appears once, so G major has F♯, not G♭.',
+       '', 'От соль седьмой нотой должен быть фа-диез. От фа четвёртой нотой должен быть си-бемоль. Каждая буква встречается один раз, поэтому в соль мажоре фа-диез, а не соль-бемоль.'),
+      ('scale', 'G'), ('scale', 'F')]},
+    {'h': 'Each note has a degree', 'hRu': 'У каждой ноты своя ступень', 'blocks': [
+      ('text', 'Scale degrees', 'number the notes 1 to 7 from the tonic. 1 is the tonic, 4 the subdominant, 5 the dominant.',
+       'Ступени', 'нумеруют ноты от 1 до 7 начиная с тоники. 1 — тоника, 4 — субдоминанта, 5 — доминанта.'),
+      ('notes', 'C4 D4 E4 F4 G4 A4 B4 C5', ''),
+      ('note', 'Degree 7, the leading note, pulls up to the tonic.', 'Седьмая ступень, вводный тон, тянется вверх к тонике.')]},
+    {'h': 'Fingering C major', 'hRu': 'Аппликатура до мажора', 'blocks': [
+      ('steps', ['Right hand: 1 2 3, thumb under to F, then 1 2 3 4 5.', 'Left hand: 5 4 3 2 1, 3rd finger over to A, then 3 2 1.', 'Coming down, reverse it.'],
+       ['Правая рука: 1 2 3, большой палец под руку на фа, затем 1 2 3 4 5.', 'Левая рука: 5 4 3 2 1, третий палец через большой на ля, затем 3 2 1.', 'Вниз — в обратном порядке.']),
+      ('notes', 'C4 D4 E4 F4 G4 A4 B4 C5', 'C3 D3 E3 F3 G3 A3 B3 C4')]},
+    {'h': 'Try it', 'hRu': 'Попробуйте', 'blocks': [
+      ('question', 'Play the notes of D major.', 'Сыграйте ноты ре мажора.'),
+      ('link', 'Any scale in the Player', 'Любая гамма в плеере', 'exercise'),
+      ('link', 'Build scales', 'Построение гамм', 'quiz')]}]}
 INSERT = [('Text', ['Text', 'Steps', 'Note', 'Rule']), ('Music', ['Chords', 'One chord on every root', 'Scale', 'Interval', 'Notes', 'Voicings', 'Pattern', 'Progression', 'Versions']), ('Ask and link', ['Question', 'Link', 'Picture'])]
 LESSON_JS = js('const LS = ' + json.dumps(LESSON, ensure_ascii=False) + ', INS = ' + json.dumps(INSERT) + ';\n' + r'''
     const editing = !!st.editing, ru = st.lang === 'RU', preview = !!st.preview, sheet = st.sheet ?? null, pub = st.pub ?? 'changed';
     const T = (o, k) => ru ? o[k + 'Ru'] || o[k] : o[k];
     const goSec = (k) => { const h = document.querySelectorAll('[data-sec]')[k]; const m = h && h.closest('main'); if (m) m.scrollTo({ top: m.scrollTop + h.getBoundingClientRect().top - m.getBoundingClientRect().top - 16, behavior: 'smooth' }); set({ secAt: k, sheet: null }); };
-    const secs = LS.secs.map((s, i) => ({ n: String(i + 1), menu: () => set({ sheet: 'block', blk: i }), navBg: i === (st.secAt ?? 0) ? '#EEE9E2' : 'transparent', navFw: i === (st.secAt ?? 0) ? 600 : 400, navDot: i === (st.secAt ?? 0) ? '#FEFDFB' : '#EEE9E2', go: (e) => { e && e.preventDefault && e.preventDefault(); goSec(i); }, h: T(s, 'h'), p: T(s, 'p') || '', hasP: !!s.p, steps: (s.steps || []).map((x) => ({ x })), hasSteps: !!s.steps,
-      isScale: s.ex === 'scale', isQ: s.ex === 'question', take: s.take, sel: st.sel === i, pick: () => editing && set({ sel: i }), ring: editing && st.sel === i ? '#C9932E' : 'transparent' }));
-    const ver = st.ver ?? 'C major', VER = { 'C major': [60, ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C']], 'G major': [55, ['G', 'A', 'B', 'C', 'D', 'E', 'F♯', 'G']], 'F major': [53, ['F', 'G', 'A', 'B♭', 'C', 'D', 'E', 'F']] }[ver];
-    const D = [62, 64, 66, 67, 69, 71, 73, 74], root = VER[0], marks = {}, qm = {};
-    [0, 2, 4, 5, 7, 9, 11, 12].forEach((o, i) => { marks[root + o] = [i === 2 || i === 6 ? '#E8C67D' : '#9BC093', VER[1][i]]; });
+    const secs = LS.secs.map((s, i) => ({ n: String(i + 1), menu: () => set({ sheet: 'block', blk: i }), navBg: i === (st.secAt ?? 0) ? '#EEE9E2' : 'transparent', navFw: i === (st.secAt ?? 0) ? 600 : 400, navDot: i === (st.secAt ?? 0) ? '#FEFDFB' : '#EEE9E2', go: (e) => { e && e.preventDefault && e.preventDefault(); goSec(i); }, h: T(s, 'h') }));
+    // each section's blocks as the lesson writes them: words, a scale on its keys, a line of notes, a note, steps, the question, links
+    const SCALES = { C: [60, ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'], 'До мажор'], G: [55, ['G', 'A', 'B', 'C', 'D', 'E', 'F♯', 'G'], 'Соль мажор'], F: [53, ['F', 'G', 'A', 'B♭', 'C', 'D', 'E', 'F'], 'Фа мажор'] };
+    const marksOf = (r) => { const [root, names] = SCALES[r], m = {}; [0, 2, 4, 5, 7, 9, 11, 12].forEach((o, k) => { m[root + o] = [k === 2 || k === 6 ? '#E8C67D' : '#9BC093', names[k]]; }); return m; };
+    const BL = {};
+    LS.secs.forEach((s, i) => {
+      const o = { h: T(s, 'h'), pick: () => editing && set({ sel: i }), ring: editing && st.sel === i ? '#C9932E' : 'transparent' };
+      s.blocks.forEach((b, j) => {
+        if (b[0] === 'text') { o['l' + j] = ru ? b[3] : b[1]; o['t' + j] = ru ? b[4] : b[2]; }
+        else if (b[0] === 'scale') { const root = SCALES[b[1]][0], m = marksOf(b[1]), lk = 'lg' + i + '_' + j; o['n' + j] = ru ? SCALES[b[1]][2] : b[1] + ' major'; o['k' + j] = calmKeys(root, root + 16, m, 370, 96); o['kL' + j] = calmKeys(root - 12, root + 23, m, 1382, 150); o['g' + j] = !!st[lk]; o['tg' + j] = () => set({ [lk]: !st[lk] }); }
+        else if (b[0] === 'steps') o['s' + j] = (ru ? b[2] : b[1]).map((x) => ({ x }));
+        else if (b[0] === 'note' || b[0] === 'question' || b[0] === 'link') o['t' + j] = ru ? b[2] : b[1];
+      });
+      BL['S' + i] = o;
+    });
+    // the question: D major's seven notes, in any octave
+    const D = [62, 64, 66, 67, 69, 71, 73], qm = {};
     (st.chosen || []).forEach((m) => { qm[m] = ['#85B8DC', '']; });
-    const chosen = st.chosen || [], right = chosen.length === 8 && D.every((m) => chosen.includes(m));
+    const chosen = st.chosen || [], pcs = new Set(chosen.map((m) => m % 12)), found = D.filter((m) => pcs.has(m % 12)).length, right = found === 7;
     const states = [['Edited by an editor', editing, { editing: true, sel: 0, preview: false }, { editing: false }], ['The lesson’s Russian text', ru, { lang: 'RU' }, { lang: 'EN' }],
       ['Previewed as a learner', preview, { preview: true, editing: false }, { preview: false }], ['The question answered', right, { chosen: D }, { chosen: [] }]]
       .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => { set(on ? off : o); if (!on && o.chosen) setTimeout(() => document.querySelector('[data-q]')?.scrollIntoView({ block: 'start', behavior: 'smooth' }), 60); } }));
 __INSJS__    return { ...common(st, set), added, states, editing, reading: !editing, canEdit: !preview, previewing: preview, exitPreview: () => set({ preview: false }),
       edit: () => set({ editing: true, sel: 0 }), done: () => set({ editing: false, sheet: null }), langs: seg(['EN', 'RU'], ru ? 'RU' : 'EN', (l) => set({ lang: l })),
       place: LS.place, title: T(LS, 'title'), summary: T(LS, 'summary'), secs, status: st.saving ? 'Saving…' : 'Saved · not published',
-      kb: calmKeys(root, root + 16, marks, 370, 96), kbL: calmKeys(root - 12, root + 23, marks, 1382, 150), verName: ver, qkb: calmKeys(60, 76, qm, 370, 96), qkbL: calmKeys(48, 83, qm, 1382, 150),
-      notRight: !right, qLine: right ? 'Correct' : (chosen.length + ' of 8 notes'), qInk: right ? '#44684A' : '#685E56', showAns: () => set({ chosen: D }), resetQ: () => set({ chosen: [] }),
+      ...BL, qkb: calmKeys(60, 76, qm, 370, 96), qkbL: calmKeys(48, 83, qm, 1382, 150),
+      notRight: !right, qLine: right ? 'Correct' : (found + ' of 7 notes'), qInk: right ? '#44684A' : '#685E56', showAns: () => set({ chosen: D }), resetQ: () => set({ chosen: [] }),
       insOn: sheet === 'insert', openIns: () => set({ sheet: 'insert' }), ins: ins2, insOld: INS.map(([g, ks]) => ({ g, ks: ks.map((k) => ({ k, add: () => set({ sheet: null, toast: k + ' added' }) })) })),
-      legendOn: !!st.legend, toggleLegend: () => set({ legend: !st.legend }), exOn: sheet === 'example', openEx: () => set({ sheet: 'example' }), tocOn: sheet === 'toc', openToc: () => set({ sheet: 'toc' }), menuOn: sheet === 'block', openBlock: () => set({ sheet: 'block' }), blkT: T(LS.secs[st.blk ?? 0], 'h'),
+      exOn: sheet === 'example', openEx: () => set({ sheet: 'example' }), tocOn: sheet === 'toc', openToc: () => set({ sheet: 'toc' }), menuOn: sheet === 'block', openBlock: () => set({ sheet: 'block' }), blkT: T(LS.secs[st.blk ?? 0], 'h'),
       pubOn: sheet === 'publish', openPub: () => set({ sheet: 'publish' }), moreOn: sheet === 'more', openMore: () => set({ sheet: 'more' }),
       isChanged: pub === 'changed', isPublished: pub === 'published', publish: () => set({ pub: 'published', sheet: null, toast: 'Published. Learners will receive it the next time they open the app.' }),
       unpublish: () => set({ pub: 'changed', sheet: null, toast: 'Unpublished' }), standing: pub === 'published' ? 'Published 8 November' : 'Changes not published', verN: '4',
@@ -53,8 +81,7 @@ __INSJS__    return { ...common(st, set), added, states, editing, reading: !edit
       styleOn: sheet === 'style', openStyle: () => set({ sheet: 'style' }), discard: () => set({ sheet: null, toast: 'Changes discarded' }), restore: () => set({ sheet: null, pub: 'published', toast: 'Restored. Learners will receive it the next time they open the app.' }),
       resetOn: sheet === 'reset', askReset: () => set({ sheet: 'reset' }), doReset: () => set({ sheet: null, toast: 'Progress reset' }), delOn: sheet === 'delete', askDel: () => set({ sheet: 'delete' }),
       secAt: String((st.secAt ?? 0) + 1), prevSec: () => goSec(Math.max(0, (st.secAt ?? 0) - 1)), nextSec: () => goSec(Math.min(LS.secs.length - 1, (st.secAt ?? 0) + 1)),
-      secName: T(LS.secs[st.secAt ?? 0], 'h'), nextBg: (st.secAt ?? 0) >= LS.secs.length - 1 ? '#EEE9E2' : '#EDC684', secScroll: (e) => { const m = e.currentTarget, top = m.getBoundingClientRect().top; let k = 0; m.querySelectorAll('[data-sec]').forEach((h, i) => { if (h.getBoundingClientRect().top - top < m.clientHeight * 0.4) k = i; }); if (m.scrollTop + m.clientHeight >= m.scrollHeight - 4) k = LS.secs.length - 1; if (k !== (st.secAt ?? 0)) set({ secAt: k }); },
-      vChips: ['C major', 'G major', 'F major'].map((v) => ({ v, bg: v === (st.ver ?? 'C major') ? '#332921' : '#EEE9E2', fg: v === (st.ver ?? 'C major') ? '#FEFDFB' : '#332921', pick: () => set({ ver: v }) })) };''')
+      secName: T(LS.secs[st.secAt ?? 0], 'h'), nextBg: (st.secAt ?? 0) >= LS.secs.length - 1 ? '#EEE9E2' : '#EDC684', secScroll: (e) => { const m = e.currentTarget, top = m.getBoundingClientRect().top; let k = 0; m.querySelectorAll('[data-sec]').forEach((h, i) => { if (h.getBoundingClientRect().top - top < m.clientHeight * 0.4) k = i; }); if (m.scrollTop + m.clientHeight >= m.scrollHeight - 4) k = LS.secs.length - 1; if (k !== (st.secAt ?? 0)) set({ secAt: k }); } };''')
 LESSON_JS = LESSON_JS.replace('__INSJS__', INS_JS)
 PILL = lambda t, bg=ACCENT: f'<span style="flex: none; height: 26px; padding: 0 12px; border-radius: 13px; background: {bg}; font-size: 13px; font-weight: 700; display: flex; align-items: center">{t}</span>'
 GRIP = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg>'
@@ -64,7 +91,32 @@ UNDO = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="curr
 REDO = UNDO.replace('<path d="M9 14 4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 0 10h-3"></path>', '<path d="m15 14 5-5-5-5"></path><path d="M20 9H9a5 5 0 0 0 0 10h3"></path>')
 def KEYSOF(lst, h):
     return PKEYS(lst, h)
-_SHORT = (f'<aside style="align-self: flex-start; max-width: 65ch; box-sizing: border-box; padding: 12px 16px; border-radius: 12px; background: {HONEY}; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #8A5A1C">In short</span><span contenteditable="{{{{editing}}}}" style="font-size: 16px; font-weight: 600; outline: none">{{{{s.take}}}}</span></aside>')
+# Lucide's layers and list-checks, the tiles of a link to an exercise and to a quiz (link-tile.ts)
+LAYERSI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"></path><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"></path><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"></path></svg>'
+CHECKSI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>'
+_STEP = {'C': 0, 'D': 1, 'E': 2, 'F': 3, 'G': 4, 'A': 5, 'B': 6}
+def NOTESVG(treble, bass=''):
+    """A line of notes on its staff, a grand staff where the bass is written: quarters in Bravura's heads (HEADG),
+    stems up below the middle line and down from it, ledger lines where a note leaves the staff."""
+    def staff(notes, top, clef):
+        ref = 30 if clef == 'treble' else 18          # the bottom line: E4, G2, as diatonic steps from C0
+        bottom, mid = top + 32, top + 16
+        g = ''.join(f'<line x1="0" x2="370" y1="{top + 8 * k}" y2="{top + 8 * k}" stroke="#332921" stroke-width="1"></line>' for k in range(5))
+        g += (f'<text x="2" y="{top + 26}" font-size="34" fill="#332921" style="font-family: Noto Music, serif">𝄞</text>' if clef == 'treble'
+              else f'<text x="4" y="{top + 16}" font-size="30" fill="#332921" style="font-family: Noto Music, serif">𝄢</text>')
+        for n, name in enumerate(notes.split()):
+            step = _STEP[name[0]] + 7 * int(name[-1]) - ref
+            x, y = 64 + n * 38, bottom - 4 * step
+            g += HEADG('black', x, y, 8, '#332921')
+            g += (f'<line x1="{x + 5.4}" x2="{x + 5.4}" y1="{y - 1}" y2="{y - 28}" stroke="#332921" stroke-width="1.3"></line>' if y > mid
+                  else f'<line x1="{x - 5.4}" x2="{x - 5.4}" y1="{y + 1}" y2="{y + 28}" stroke="#332921" stroke-width="1.3"></line>')
+            for ly in range(bottom + 8, y + 1, 8): g += f'<line x1="{x - 10}" x2="{x + 10}" y1="{ly}" y2="{ly}" stroke="#332921" stroke-width="1"></line>'
+            for ly in range(top - 8, y - 1, -8): g += f'<line x1="{x - 10}" x2="{x + 10}" y1="{ly}" y2="{ly}" stroke="#332921" stroke-width="1"></line>'
+        return g
+    h = 168 if bass else 96
+    body = staff(treble, 24, 'treble') + (staff(bass, 104, 'bass') + '<line x1="0.5" x2="0.5" y1="24" y2="136" stroke="#332921" stroke-width="1"></line>' if bass else '')
+    label = ' '.join(n[0] for n in treble.split())
+    return f'<svg viewBox="0 0 370 {h}" preserveAspectRatio="xMinYMid meet" role="img" aria-label="{label} on the staff" style="width: 100%; max-width: 370px; height: {h}px">{body}</svg>'
 def DOC(lap=False):
     kbn, qn, kh = ('kbL', 'qkbL', 150) if lap else ('kb', 'qkb', 96)
     handle = ''
@@ -86,15 +138,43 @@ def DOC(lap=False):
     # the steps are a numbered list as a writing app sets one (owner, 2026-11-18: "the text of the lessons should be correctly
     # structured and formatted", over Obsidian's note): the numbers muted and hung in their own column, the words indented after them
     secst = 'display: flex; flex-direction: column; gap: 12px'
-    sec = (f'<sc-for list="{{{{secs}}}}" as="s" hint-placeholder-count="2"><section onClick="{{{{s.pick}}}}" style="position: relative; {secst}; border-radius: 8px; outline: 2px solid {{{{s.ring}}}}; outline-offset: 6px">' +
-           f'<h2 data-sec contenteditable="{{{{editing}}}}" style="margin: 0; scroll-margin-top: 16px; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; outline: none">{{{{s.h}}}}</h2>'
-           f'<sc-if value="{{{{s.hasP}}}}" hint-placeholder-val="{{{{true}}}}"><p contenteditable="{{{{editing}}}}" style="margin: 0; max-width: 65ch; font-size: 17px; line-height: 1.55; text-wrap: pretty; outline: none">{{{{s.p}}}}</p></sc-if>'
-           f'<sc-if value="{{{{s.hasSteps}}}}" hint-placeholder-val="{{{{false}}}}"><style data-steps>.steps {{ list-style: none; counter-reset: st }} .steps li {{ counter-increment: st; display: grid; grid-template-columns: 28px minmax(0, 1fr); max-width: 65ch; text-wrap: pretty }} .steps li::before {{ content: counter(st) "."; padding-right: 8px; text-align: right; color: {SOFT}; font-variant-numeric: tabular-nums }}</style><ol class="steps" style="margin: 0; padding: 0 0 0 8px; font-size: 17px; line-height: 1.55; display: flex; flex-direction: column; gap: 8px"><sc-for list="{{{{s.steps}}}}" as="x" hint-placeholder-count="4"><li contenteditable="{{{{editing}}}}" style="outline: none">{{{{x.x}}}}</li></sc-for></ol></sc-if>'
-           + f'{ex}' + _SHORT + '</section></sc-for>')
+    # the example and the question as drawn above, each block of the lesson in its own shape (r47_blocks' BLOCKS)
+    sc0 = ex.index('<sc-if value="{{s.isScale}}"'); q0 = ex.index('<sc-if value="{{s.isQ}}"')
+    SCALEX, QX = ex[sc0:q0], ex[q0:]
+    STEPSCSS = (f'<style data-steps>.steps {{ list-style: none; counter-reset: st }} .steps li {{ counter-increment: st; display: grid; grid-template-columns: 28px minmax(0, 1fr); max-width: 65ch; text-wrap: pretty }} .steps li::before {{ content: counter(st) "."; padding-right: 8px; text-align: right; color: {SOFT}; font-variant-numeric: tabular-nums }}</style>')
+    out = STEPSCSS
+    for i, sd in enumerate(LESSON['secs']):
+        S = f'S{i}'
+        body = f'<h2 data-sec contenteditable="{{{{editing}}}}" style="margin: 0; scroll-margin-top: 16px; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; outline: none">{{{{{S}.h}}}}</h2>'
+        for j, b in enumerate(sd['blocks']):
+            k = b[0]
+            if k == 'text':
+                lead = f'<strong style="font-weight: 700">{{{{{S}.l{j}}}}}</strong> ' if b[1] else ''
+                body += f'<p contenteditable="{{{{editing}}}}" style="margin: 0; max-width: 65ch; font-size: 17px; line-height: 1.55; text-wrap: pretty; outline: none">{lead}{{{{{S}.t{j}}}}}</p>'
+            elif k == 'scale':
+                body += (SCALEX.replace('<sc-if value="{{s.isScale}}" hint-placeholder-val="{{true}}">', '', 1)[:-len('</sc-if>')]
+                         .replace('{{verName}}', f'{{{{{S}.n{j}}}}}').replace('{{legendOn}}', f'{{{{{S}.g{j}}}}}').replace('{{toggleLegend}}', f'{{{{{S}.tg{j}}}}}')
+                         .replace('{{' + kbn + '.', f'{{{{{S}.{"kL" if lap else "k"}{j}.'))
+            elif k == 'notes':
+                letters = ' '.join(n[0] for n in b[1].split())
+                body += f'<figure style="margin: 8px 0 0; display: flex; flex-direction: column; gap: 4px">' + _B['BHEAD'](letters) + NOTESVG(b[1], b[2]) + '</figure>'
+            elif k == 'note':
+                body += (f'<aside style="align-self: flex-start; max-width: 65ch; box-sizing: border-box; padding: 12px 16px; border-radius: 12px; background: {FILL}; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">Note</span>'
+                         f'<span contenteditable="{{{{editing}}}}" style="font-size: 16px; line-height: 1.45; outline: none">{{{{{S}.t{j}}}}}</span></aside>')
+            elif k == 'steps':
+                body += f'<ol class="steps" style="margin: 0; padding: 0 0 0 8px; font-size: 17px; line-height: 1.55; display: flex; flex-direction: column; gap: 8px"><sc-for list="{{{{{S}.s{j}}}}}" as="x" hint-placeholder-count="3"><li contenteditable="{{{{editing}}}}" style="outline: none">{{{{x.x}}}}</li></sc-for></ol>'
+            elif k == 'question':
+                body += QX.replace('<sc-if value="{{s.isQ}}" hint-placeholder-val="{{false}}">', '', 1)[:-len('</sc-if>')].replace('Play the D major scale', f'{{{{{S}.t{j}}}}}')
+            elif k == 'link':
+                bg, ic = (SKY, LAYERSI) if b[3] == 'exercise' else (LILAC, CHECKSI)
+                body += (f'<a href="{("Exercise" if b[3] == "exercise" else "Check") + ("Laptop" if lap else "")}.dc.html" style="min-height: 60px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none">'
+                         f'<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {bg}; color: {INK}; display: flex; align-items: center; justify-content: center">{ic}</span>'
+                         f'<span style="flex: 1; min-width: 0; font-size: 16px">{{{{{S}.t{j}}}}}</span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>')
+        out += f'<section onClick="{{{{{S}.pick}}}}" style="position: relative; {secst}; border-radius: 8px; outline: 2px solid {{{{{S}.ring}}}}; outline-offset: 6px">{body}</section>'
+    sec = out
     head = (f'<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600; color: #A8551F">{{{{place}}}} · Foundations</span>'
             f'<h1 contenteditable="{{{{editing}}}}" style="margin: 0; font-family: {SERIF}; font-size: {36 if lap else 30}px; line-height: 1.15; font-weight: 600; outline: none; text-wrap: balance">{{{{title}}}}</h1>'
             f'<p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 17px; line-height: 1.5; color: {SOFT}; outline: none">{{{{summary}}}}</p>'
-            f'<span style="font-size: 14px; color: {SOFT}">After: <a href="{'LessonLaptop' if lap else 'Lesson'}.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; color: {LINK}; font-weight: 600; text-decoration: none">6 · Half steps, whole steps, sharps and flats</a></span>'
             + '</div>')
     end = (f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openIns}}}}" style="height: 48px; border: 0; border-radius: 12px; background: transparent; box-shadow: inset 0 0 0 1.5px {LINE}; color: {SOFT}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 8px; padding: 0 16px">{PLUS}Type / to insert music, a note and more</button></sc-if>')
     return head + sec + ADDED + end
@@ -149,7 +229,7 @@ llm = llm.replace(EDITBTN + IB("More", DOTS, "openMore"), RBAR).replace(DSTATUS 
 # go to the next lesson": the foot's glass bar holds where the learner is (it opens the contents) and Next lesson, in
 # reach from the first screen; going on marks the lesson learned, with Undo in its toast. No Learned in the bar, no
 # Previous and Next at the lesson's end (the head's After: link is the way back).
-SECBAR = DOCK(f'<button type="button" onClick="{{{{openToc}}}}" style="flex: 1; min-width: 0; height: 50px; border: 0; border-radius: 25px; background: transparent; font: inherit; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 0 12px; color: {INK}"><span style="font-size: 13px; color: {SOFT}">Section {{{{secAt}}}} of 2</span><span style="max-width: 100%; font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{secName}}}}</span></button>'
+SECBAR = DOCK(f'<button type="button" onClick="{{{{openToc}}}}" style="flex: 1; min-width: 0; height: 50px; border: 0; border-radius: 25px; background: transparent; font: inherit; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 0 12px; color: {INK}"><span style="font-size: 13px; color: {SOFT}">Section {{{{secAt}}}} of {len(LESSON["secs"])}</span><span style="max-width: 100%; font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{secName}}}}</span></button>'
               f'<button type="button" onClick="{{{{nextLesson}}}}" style="flex: none; height: 50px; padding: 0 16px 0 20px; border: 0; border-radius: 25px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 4px">Next lesson{CHEV_R}</button>')
 TOCBODY = GROUP(('raw', CONTENTS.split('</div>', 0)[0].split(CAPS("In this lesson"), 1)[1].replace('</nav>', '').replace('padding: 0 8px; border-radius: 10px', 'min-height: 52px; padding: 0 12px; border-radius: 0')), bg=SHEET)
 lsh = lsh + BSHEET('tocOn', 'In this lesson', TOCBODY)
@@ -159,11 +239,6 @@ SECBAR_L = SECBAR.replace('left: 16px; right: 16px; bottom: 34px', 'left: 50%; w
 llm = llm.replace('</main>', '</main><sc-if value="{{reading}}" hint-placeholder-val="{{true}}">' + SECBAR_L + '</sc-if>', 1)
 lpops = lpops + POPOVER('tocOn', 'In this lesson', TOCBODY, 'left: calc(50% - 260px); bottom: 112px', 520)
 lph = lph.replace(f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(FMT)}</sc-if>', f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(FMT)}</sc-if><sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{SECBAR}</sc-if>')
-# the example's versions
-VCH = f'<div role="group" aria-label="Versions" style="display: flex; gap: 8px"><sc-for list="{{{{vChips}}}}" as="v" hint-placeholder-count="3"><button type="button" onClick="{{{{v.pick}}}}" style="height: 44px; padding: 0 16px; border: solid transparent; border-width: 2px 0; background-clip: padding-box; border-radius: 22px; background-color: {{{{v.bg}}}}; color: {{{{v.fg}}}}; font: inherit; font-size: 14px; font-weight: 600">{{{{v.v}}}}</button></sc-for></div>'
-for nm in ('lph', 'llm'):
-    assert '<div role="dialog" aria-label="The colours"' in globals()[nm]
-    globals()[nm] = globals()[nm].replace('<sc-if value="{{legendOn}}" hint-placeholder-val="{{false}}"><div role="dialog" aria-label="The colours"', VCH + '<sc-if value="{{legendOn}}" hint-placeholder-val="{{false}}"><div role="dialog" aria-label="The colours"', 1)
 # the pages: Settings and Publish, over the lesson, Back to it
 # owner, 2026-11-18: "i dont like the structure of these settings": the lesson, then Publishing (its state a value,
 # Versions; Publish changes and Discard changes only while there are changes), then the learner's progress, the loss of
