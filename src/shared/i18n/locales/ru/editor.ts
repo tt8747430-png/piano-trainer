@@ -751,7 +751,7 @@ export const editor: LocaleResources['editor'] = {
     discarded: 'Изменения отменены',
     cancel: 'Отмена',
     actionOffline: 'Нет подключения к сети. Повторите, когда подключение восстановится.',
-    actionFailed: 'Произошла ошибка. Повторите попытку.',
+    actionFailed: 'Не получилось. Попробуйте ещё раз.',
   },
   scoreSettings: {
     credits: 'Название и авторы',

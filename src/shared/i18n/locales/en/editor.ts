@@ -817,7 +817,7 @@ export const editor = {
     discarded: 'Changes discarded',
     cancel: 'Cancel',
     actionOffline: 'You’re offline. Try again when you reconnect.',
-    actionFailed: 'Something went wrong. Try again.',
+    actionFailed: 'It didn’t go through. Try again.',
   },
   // The score's Settings (round 28, Flat's score settings): its credits, instruments, music, layout
   // and how the editor writes.

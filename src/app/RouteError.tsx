@@ -27,13 +27,13 @@ export function RouteError({ error, reload = () => window.location.reload() }: R
     <RouteState
       alert
       mark={online ? 'failed' : 'offline'}
-      title={t('errors.title')}
+      title={online ? t('errors.title') : t('errors.offlineTitle')}
       line={online ? t('errors.failed') : t('errors.offline')}
     >
       <Button variant="soft" onClick={back}>
         {t('back')}
       </Button>
-      <Button onClick={reload}>{t('errors.reload')}</Button>
+      <Button onClick={reload}>{online ? t('errors.reload') : t('errors.retry')}</Button>
     </RouteState>
   )
 }

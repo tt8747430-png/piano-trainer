@@ -24,11 +24,13 @@ export const common = {
     signIn: 'Sign in',
   },
   errors: {
-    title: 'Something went wrong',
-    offline: 'You’re offline. This screen opens once you’re back online.',
-    failed:
-      'The screen could not open. Reloading usually fixes it; the error has been sent so it can be fixed.',
+    title: 'This screen could not open',
+    failed: 'Reloading usually fixes it. The error has been sent so it can be fixed.',
+    offlineTitle: 'You’re offline',
+    offline:
+      'This screen opens once you’re back online. Your songs and lessons on this device still open.',
     reload: 'Reload',
+    retry: 'Try again',
   },
   notFound: {
     title: 'Page not found',
