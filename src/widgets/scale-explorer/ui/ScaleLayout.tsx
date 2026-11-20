@@ -1,16 +1,17 @@
-import { useNavigate } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectScaleStaff, useSettings } from '@/entities/settings'
-import { GroupLink, GroupRows, Sheet, SheetContent } from '@/shared/ui'
+import { selectScaleStaff, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { setScaleStaff } from '@/features/set-preference'
+import { BackButton, GroupLink, GroupRows, GroupSwitch, Sheet, SheetContent } from '@/shared/ui'
 import { useScaleSettingsSheet } from '../model/settings-sheet'
 
 /**
  * A scale's page, as the Scales board reads (`r60_scales.py`): the keys at the top, edge to edge; then
  * its name, its music and its sections, one column. On a laptop the column is centred, 880 wide at most,
  * the music 640 inside it, the keys 28 above it. The view's
- * choices are Scale settings, the gear's sheet (canvas 196), over a link to what the staff writes,
- * whose one home is Settings. The view's floating bar is its own.
+ * choices are Scale settings, the gear's sheet (canvas 196), over On the staff, a page inside the
+ * card (its Back to Scale settings) where the staff's writing is switched: the tonic, the
+ * tetrachords. The view's floating bar is its own.
  */
 export function ScaleLayout({
   keyboard,
@@ -32,8 +33,10 @@ export function ScaleLayout({
 }) {
   const { t } = useTranslation('practice')
   const sheet = useScaleSettingsSheet()
-  const navigate = useNavigate()
+  const store = useSettingsStoreApi()
   const staff = useSettings(selectScaleStaff)
+  // Scale settings' first page, or On the staff inside it; the card opens on its first page.
+  const [onStaff, setOnStaff] = useState(false)
   const written = (['tonic', 'tetrachords'] as const).filter((layer) => staff[layer])
   return (
     <div className="flex flex-col gap-4 lg:gap-7">
@@ -44,22 +47,52 @@ export function ScaleLayout({
         {children}
       </div>
       {bar}
-      <Sheet hung="header" open={sheet.open} onOpenChange={sheet.onOpenChange}>
-        <SheetContent title={t('scales.settings')}>
-          {fields}
-          <GroupRows>
-            <GroupLink
-              label={t('scaleStaff.group')}
-              aria-haspopup={undefined}
-              value={
-                written.length
-                  ? written.map((layer) => t(`scaleStaff.${layer}`)).join(', ')
-                  : t('scaleStaff.none')
-              }
-              onClick={() => void navigate({ to: '/settings/scales', search: { from: 'scales' } })}
-            />
-          </GroupRows>
-        </SheetContent>
+      <Sheet
+        hung="header"
+        open={sheet.open}
+        onOpenChange={(open) => {
+          if (!open) setOnStaff(false)
+          sheet.onOpenChange(open)
+        }}
+      >
+        {onStaff ? (
+          <SheetContent
+            title={t('scaleStaff.group')}
+            back={<BackButton onClick={() => setOnStaff(false)} />}
+          >
+            <GroupRows>
+              <GroupSwitch
+                setting="scaleStaff.tonic"
+                label={t('scaleStaff.tonic')}
+                checked={staff.tonic}
+                onCheckedChange={(tonic) => setScaleStaff(store, { tonic })}
+              />
+              <GroupSwitch
+                setting="scaleStaff.tetrachords"
+                label={t('scaleStaff.tetrachords')}
+                info={t('scaleStaff.tetrachordsDetail')}
+                checked={staff.tetrachords}
+                onCheckedChange={(tetrachords) => setScaleStaff(store, { tetrachords })}
+              />
+            </GroupRows>
+          </SheetContent>
+        ) : (
+          <SheetContent title={t('scales.settings')}>
+            {fields}
+            <GroupRows>
+              <GroupLink
+                label={t('scaleStaff.group')}
+                aria-haspopup={undefined}
+                value={
+                  written.length
+                    ? written.map((layer) => t(`scaleStaff.${layer}`)).join(', ')
+                    : t('scaleStaff.none')
+                }
+                onClick={() => setOnStaff(true)}
+              />
+            </GroupRows>
+          </SheetContent>
+        )}
       </Sheet>
     </div>
   )

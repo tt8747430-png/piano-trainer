@@ -25,7 +25,7 @@ const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
   ],
   metronome: ['pages/metronome/', 'features/metronome/'],
   tuner: ['pages/tuner/'],
-  scales: ['pages/practice-settings/ui/ScalesSettingsPage.tsx'],
+  scales: ['widgets/scale-explorer/ui/ScaleLayout.tsx'],
   progressions: ['pages/progression/ui/ProgressionSettings.tsx'],
   intervals: ['pages/intervals/ui/IntervalSettings.tsx'],
   'chord-player': ['pages/chord-player/ui/ChordPlayerSettings.tsx'],

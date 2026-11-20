@@ -76,7 +76,6 @@ import {
   readTrainerSearch,
   trainerSearch,
   validateCheckSearch,
-  validatePracticeSettingsSearch,
 } from './routes/practice-search'
 import { searchSearch } from './routes/search-search'
 import {
@@ -391,14 +390,6 @@ const midiSettingsRoute = createRoute({
   path: '/settings/connect-piano',
   ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'MidiSettingsPage'),
-})
-// Scales and keys' staff layers (A24, R18), reached from Scale settings' On the staff (`from`
-// naming the page, for Back) and from Settings.
-const scalesSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/scales',
-  validateSearch: validatePracticeSettingsSearch,
-  component: lazyRouteComponent(settingsScreens, 'ScalesSettingsPage'),
 })
 const midiLogRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1119,7 +1110,6 @@ const routeTree = rootRoute.addChildren([
     midiSettingsRoute,
     midiLogRoute,
     timingRoute,
-    scalesSettingsRoute,
     signInRoute,
     signUpRoute,
     forgotPasswordRoute,

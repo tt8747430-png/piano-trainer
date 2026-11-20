@@ -3,7 +3,6 @@ import { exerciseOf, isExerciseId, shelfOf } from '@/entities/exercise'
 import { isRecord, type Up } from '@/shared/lib'
 import type { RouterContext } from '../router'
 import { readChordsSearch, readProgressionsSearch, readScalesSearch } from './explorer-search'
-import { isPracticeSettingsFrom, type PracticeSettingsFrom } from './practice-search'
 
 // Back means up (rule 26, ADR 0052): each route names its parent here, and Back goes there (`useUp`).
 // A place has none. The table is keyed by every route the router has, so a new route can't be added
@@ -59,15 +58,6 @@ const toSettings: Parent = () => up({ to: '/settings' })
 const settingsPage: Parent = ({ wide }) => (wide ? null : up({ to: '/settings' }))
 /** A legal page: up to About, where Settings opens it (R32). */
 const toAbout: Parent = () => up({ to: '/settings/about' })
-/** The Practice page whose settings open the staff layers' page. */
-const SETTINGS_OPENERS: Readonly<Record<PracticeSettingsFrom, Up>> = {
-  scales: up({ to: '/practice/scales' }),
-}
-/** Scales and keys' staff layers (A24): up to the page they were opened from, else to Practice. */
-const practiceSettings: Parent = (from) =>
-  isPracticeSettingsFrom(from.search.from)
-    ? SETTINGS_OPENERS[from.search.from]
-    : up({ to: '/practice' })
 const toSongs: Parent = () => up({ to: '/songs' })
 const toLearn: Parent = () => up({ to: '/' })
 const toLesson: Parent = (from) =>
@@ -131,7 +121,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/how-to-use': settingsPage,
   '/shell/settings/about': settingsPage,
   '/shell/settings/connect-piano': settingsPage,
-  '/shell/settings/scales': practiceSettings,
   '/shell/settings/connect-piano/log': () => up({ to: '/settings/connect-piano' }),
   '/shell/settings/connect-piano/timing': () => up({ to: '/settings/connect-piano' }),
   '/shell/admin': toSettings,

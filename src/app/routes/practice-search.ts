@@ -69,21 +69,6 @@ export function readTrainerSearch(raw: Raw): TrainerView {
 }
 export const trainerSearch = routeSearch(readTrainerSearch, TRAINER_DEFAULTS)
 
-// Scales and keys' staff layers (A24): the page they were opened from, kept only for Back.
-const PRACTICE_SETTINGS_FROM = ['scales'] as const
-export type PracticeSettingsFrom = (typeof PRACTICE_SETTINGS_FROM)[number]
-export const isPracticeSettingsFrom = (value: unknown): value is PracticeSettingsFrom =>
-  PRACTICE_SETTINGS_FROM.some((page) => page === value)
-interface PracticeSettingsSearch {
-  readonly from?: PracticeSettingsFrom
-}
-export function validatePracticeSettingsSearch(
-  input: Input<PracticeSettingsSearch>,
-): PracticeSettingsSearch {
-  const raw: Raw = input
-  return { from: isPracticeSettingsFrom(raw.from) ? raw.from : undefined }
-}
-
 // An exercise's page (A41): the key, hands, octaves and tempo it is set to start at, each absent for
 // the exercise's own.
 const EXERCISE_PAGE_DEFAULTS: ExercisePageSearch = {}
