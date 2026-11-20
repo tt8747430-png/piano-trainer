@@ -8,11 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · (this commit) · Scales' run engraved as the app: the engine's staff gap and spread, Bravura heads, Verovio's stems and fingers, the app's room; the laptop's 640 cap restored · Scales,ScalesLaptop · pending
 
 
 ## Changes
 
+- 2026-11-20 · bdc814d9 · Scales' run engraved as the app: the engine's staff gap and spread, Bravura heads, Verovio's stems and fingers, the app's room; the laptop's 640 cap restored · Scales,ScalesLaptop · v694
 - 2026-11-20 · 8a761dd4 · Hanon's bars engraved as the app (sloped beams, bar 4's high group down, Bravura heads); the first position C E F G A; the heart off as the app · Exercise,ExerciseLaptop · v693
 - 2026-11-20 · a4091fdc · a pattern's bar engraved as the app (brace, Bravura 4/4, Verovio's spacing, the band's C); Bravura's black and whole noteheads on the pattern and progression staves · Pattern,PatternLaptop,Progression,ProgressionLaptop · v692
 - 2026-11-20 · d7fdfb33 · a progression's staff engraved as the app (voice-led voicing, brace, Bravura 4/4, Verovio's spacing, no symbols); opens on I, F→C "5th up" · Progression,ProgressionLaptop · v691
