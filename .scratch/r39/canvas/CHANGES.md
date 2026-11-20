@@ -8,10 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · pending · Profile's achievements earned-latest-first with true ways to earn them, records Level · Longest streak · Best accuracy · Days practised, the first-run flame unlit · Profile,ProfileLaptop · pending
-
 ## Changes
 
+- 2026-11-20 · 10d932a4 · Profile's achievements earned-latest-first with true ways to earn them, records Level · Longest streak · Best accuracy · Days practised, the first-run flame unlit · Profile,ProfileLaptop · v674
 - 2026-11-20 · 4e13b0fc · the editor boards' chord names bold in the book serif, as the Player boards' · Editor,EditorLaptop,EditorDraft,EditorDraftLaptop · v673
 - 2026-11-20 · 40da8ebd · the editor's score is the song's Melody over the Piano's grand staff, as the app engraves it; the key's sharp on F · Editor,EditorLaptop,EditorDraft,EditorDraftLaptop,Song,SongLaptop · v672
 - 2026-11-20 · 70fa07aa, 5c9b3c95 · PlayChord's run is the Inversions exercise on the grand staff, Key 1 of 12, as the app and PlayExercise · PlayChord,PlayChordLaptop,PracticeResult,PracticeResultLaptop · v671
