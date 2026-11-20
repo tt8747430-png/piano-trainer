@@ -1,5 +1,5 @@
 import { useNavigate, useRouter, useRouterState } from '@tanstack/react-router'
-import { lazy, Suspense, useEffect, useRef, type ComponentType, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { opensInDialog, SettingsDialog } from '@/widgets/settings-screen'
 import { backgroundHref, rememberBackground, SETTINGS_PARAM, withSettings } from './background'
@@ -31,35 +31,20 @@ const PAGES: Readonly<Record<string, (loaded: Screens) => ComponentType>> = {
   '/settings/privacy': (loaded) => loaded.ProfilePrivacyPage,
 }
 
-/**
- * The places' pages, loaded once as one: moving between them never suspends again, so a place
- * opened for the first time draws at once instead of leaving the pane blank for a few frames.
- */
-const SettingsPane = lazy(() =>
-  screens().then((loaded) => ({
-    default: function SettingsPane({ path }: { path: string }) {
-      const Page = PAGES[path]?.(loaded)
-      return Page ? <Page /> : null
-    },
-  })),
-)
+/** Settings' and Administration's pages, each chunk once loaded: what the dialog draws from. */
+type Loaded = { readonly screens?: Screens; readonly admin?: AdminScreens }
 
-/** Administration's overview and its sections, loaded once as one, as Settings' places are. */
-const AdminPane = lazy(() =>
-  adminScreens().then((loaded: AdminScreens) => ({
-    default: function AdminPane({ path }: { path: string }) {
-      const Page = path === '/admin' ? loaded.AdminPage : loaded.AdminSectionPage
-      return <Page />
-    },
-  })),
-)
+const isAdminPath = (path: string) => path === '/admin' || path.startsWith('/admin/')
 
-const paneOf = (path: string): ReactNode =>
-  path in PAGES ? (
-    <SettingsPane path={path} />
-  ) : path === '/admin' || path.startsWith('/admin/') ? (
-    <AdminPane path={path} />
-  ) : null
+/** The page a place shows, once its chunk is in; `undefined` while it is loading, `null` for none. */
+function pageOf(path: string, loaded: Loaded): ComponentType | null | undefined {
+  if (path in PAGES) return loaded.screens && PAGES[path]?.(loaded.screens)
+  if (isAdminPath(path))
+    return (
+      loaded.admin && (path === '/admin' ? loaded.admin.AdminPage : loaded.admin.AdminSectionPage)
+    )
+  return null
+}
 
 /**
  * The laptop's Settings dialog over the page it was opened from (claude.ai's, the board's SETDLG):
@@ -97,12 +82,29 @@ export function SettingsDialogHost() {
     if (path === null && !opensInDialog(location.pathname)) under.current = null
     else if (path !== null) under.current ??= history.location.state.__TSR_index - 1
   }, [path, history, location.pathname])
-  if (path === null || !wide) return null
-  const pane = paneOf(path)
-  if (pane === null) return null
+  // Settings' pages load with the laptop's first page, so the dialog opens with its place drawn,
+  // never an empty shell that fills a few frames later; Administration's load once it is opened.
+  const [loaded, setLoaded] = useState<Loaded>({})
+  const wantsAdmin = path !== null && isAdminPath(path)
+  useEffect(() => {
+    if (wide && !loaded.screens)
+      void screens().then((chunk) => setLoaded((was) => ({ ...was, screens: chunk })))
+  }, [wide, loaded.screens])
+  useEffect(() => {
+    if (wantsAdmin && !loaded.admin)
+      void adminScreens().then((chunk) => setLoaded((was) => ({ ...was, admin: chunk })))
+  }, [wantsAdmin, loaded.admin])
+  // While a place's chunk loads, the place shown before stays: the pane never goes blank.
+  const [shown, setShown] = useState<{ path: string; Page: ComponentType } | null>(null)
+  const Page = path === null || !wide ? null : pageOf(path, loaded)
+  if (Page === null && shown !== null) setShown(null)
+  if (path !== null && Page && (shown?.path !== path || shown.Page !== Page))
+    setShown({ path, Page })
+  if (Page === null || shown === null) return null
+  const Pane = shown.Page
   return (
     <SettingsDialog
-      path={path}
+      path={shown.path}
       onClose={() => {
         const steps = history.location.state.__TSR_index - (under.current ?? -1)
         // Opened from a page in the app: back to it. Opened cold at a Settings address: the page.
@@ -110,7 +112,7 @@ export function SettingsDialogHost() {
         else void navigate({ href: withSettings(backgroundHref(), null), replace: true })
       }}
     >
-      <Suspense fallback={null}>{pane}</Suspense>
+      <Pane />
     </SettingsDialog>
   )
 }

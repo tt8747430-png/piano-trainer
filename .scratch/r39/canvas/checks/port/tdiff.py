@@ -5,7 +5,7 @@ js=open(f'{SP}/text-measure.js').read()
 app=subprocess.run(['node',f'{SP}/app-eval.mjs',route,f'{SP}/text-measure.js',str(w),str(h)],capture_output=True,text=True).stdout.strip().splitlines()[-1]
 bw,bh=(450,920) if w<900 else (1760,1050)
 env=dict(os.environ)
-out=subprocess.run(['node','checks/run.mjs',board,str(bw),str(bh),json.dumps([{'eval':js}]),f'{SP}/tdb'],cwd='/home/user/piano-trainer/.scratch/r39/canvas',capture_output=True,text=True,env=env).stdout.strip().splitlines()
+out=subprocess.run(['node','checks/run.mjs',board,str(bw),str(bh),json.dumps(json.loads(os.environ.get('STEPS','[]'))+[{'eval':js}]),f'{SP}/tdb'],cwd='/home/user/piano-trainer/.scratch/r39/canvas',capture_output=True,text=True,env=env).stdout.strip().splitlines()
 bd=next((l for l in reversed(out) if l.startswith('[')),'[]')
 A={r[0]:r for r in json.loads(app)}; B={r[0]:r for r in json.loads(bd)}
 common=[k for k in B if k in A]
