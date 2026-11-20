@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · pending · a person's face on the kit's PEACH (#F3D2C8, the app's paint-sand) on every board, the laptop sidebar's too (was #E9D8C4, no token) ·  M .scratch/r39/canvas/player/base/PlayerApp, M .scratch/r39/canvas/player/base/PlayerDesk,AccompanimentLaptop,Admin,AdminLaptop,AllSongsLaptop,AppLayersLaptop,ArchiveLaptop,CheckLaptop,ChordFinderLaptop,ChordPlayerLaptop,ChordsLaptop,CircleOfFifthsLaptop,CourseLaptop,ExerciseLaptop,Explore,ExploreLaptop,FingerTechniqueLaptop,FolderLaptop,Groups,GroupsLaptop,IntervalsLaptop,JazzVocabularyLaptop,Laptop,LearnCoursesLaptop,LearnLaptop,LearnLevelLaptop,LearnYoursLaptop,LegalLaptop,LessonLaptop,MetronomeLaptop,PatternLaptop,PatternNewLaptop,PlayChordLaptop,PlayChromaticLaptop,PlayExerciseLaptop,PlayProgressionLaptop,PlayWalkLaptop,PlayerApp,PlayerDesk,PracticeResultLaptop,Profile,ProfileLaptop,ProgressionEditLaptop,ProgressionLaptop,ProgressionsLaptop,ScalesLaptop,SectionLaptop,Settings,SettingsLaptop,SharedFolder,SharedFolderLaptop,SignInLaptop,SongLaptop,SongSettingsLaptop,Songs,SongsLaptop,TakeLaptop,TakesLaptop,TrashLaptop,TunerLaptop,YourCourseSettingsLaptop,YourLessonSettingsLaptop · pending
+
 ## Changes
 
 - 2026-11-20 · e06f1764 · the editor's gates' Close the bar's glass Close · EditorDraft,EditorDraftLaptop · v680

@@ -11,6 +11,7 @@ lap = open(OUT + 'Laptop.dc.html').read()
 # inset), the board's bar under it as the app's
 STATUS = re.sub(r'height: \d+px;', 'height: 62px;', re.search(r'(<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: \d+px;.*?</span></div>)', src, re.S).group(1), count=1)
 SIDE = re.search(r'(<nav aria-label="Main" style="background: #FBF8F3.*?</nav>)', lap, re.S).group(1)
+SIDE = SIDE.replace('#E9D8C4', '#F3D2C8')  # the learner's face on the kit's PEACH, the app's paint-sand
 # the sidebar as drawn, before index.py's lapwin.py gives it the rail and Focus buttons
 SIDE = re.sub(r'<div data-sidehead.*?</button></div></div>', '<div style="height: 44px; display: flex; align-items: center; padding: 0 12px; font-family: \'Instrument Serif\', Georgia, serif; font-size: 27px">Piano Trainer</div>', SIDE, count=1, flags=re.S)
 LAPFRAME_TOP = lap.split('<div style="position: absolute; left: 217.7px; top: 124.6px;')[0].split('</helmet>', 1)[1].lstrip('\n')

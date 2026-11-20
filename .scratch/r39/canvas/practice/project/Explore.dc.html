@@ -82,10 +82,10 @@ const PUB = [["Amazing Grace", "John Newton", "Hymns", "#F6E7C8", "4.8", "312"],
     const demoOf = (L, cur, key) => L.map((l) => ({ l, bg: cur === l ? '#332921' : '#EEE9E2', fg: cur === l ? '#FEFDFB' : '#332921', pick: () => S({ [key]: cur === l ? null : l }) }));
     const pick = PUB.filter(([t, by, c]) => (cat === 'All' || c === cat) && (!q || (t + ' ' + by).toLowerCase().includes(q)));
     const CH = ['G', 'D', 'Em', 'C', 'C', 'C', 'E♭', 'Gmaj7'];
-    const AU = [['Maria Ionescu', '#E9D8C4'], ['Daniel Rusu', '#D3E5F2'], ['Elena Popa', '#DCE9D6'], ['Ana Popescu', '#F3D2C8'], ['Daniel Rusu', '#D3E5F2'], ['Ana Popescu', '#F3D2C8'], ['Maria Ionescu', '#E9D8C4'], ['Elena Popa', '#DCE9D6']];
+    const AU = [['Maria Ionescu', '#F3D2C8'], ['Daniel Rusu', '#D3E5F2'], ['Elena Popa', '#DCE9D6'], ['Ana Popescu', '#F3D2C8'], ['Daniel Rusu', '#D3E5F2'], ['Ana Popescu', '#F3D2C8'], ['Maria Ionescu', '#F3D2C8'], ['Elena Popa', '#DCE9D6']];
     const ARR = [true, true, true, true, false, false, true, true], LV = ['Beginner', 'Intermediate', 'Beginner', 'Beginner', 'Beginner', 'Intermediate', 'Beginner', 'Intermediate'];
     const card = ([t, by, c, col, r, s]) => { const i = PUB.findIndex((p) => p[0] === t), [au, av] = AU[i]; return { t, by, c, col, r, s, au, av, ch: CH[i], chs: CH[i].length > 3 ? '12px' : '14px', ini: au[0], lv: LV[i], type: ARR[i] ? 'Arrangement' : 'Original', typeBg: ARR[i] ? '#E4DCF1' : '#D3E5F2', typeFg: ARR[i] ? '#5B4A86' : '#2E5A7A', pic: INC[i], open: () => S({ page: 'song', song: t, from: page === 'person' ? 'person' : null }) }; };
-    const kind = st.kind ?? 'Songs', PEOPLE = [['Maria Ionescu', '#E9D8C4', 'hymns and arrangements'], ['Daniel Rusu', '#D3E5F2', 'classical studies'], ['Elena Popa', '#DCE9D6', 'folk songs'], ['Ana Popescu', '#F3D2C8', 'patterns']];
+    const kind = st.kind ?? 'Songs', PEOPLE = [['Maria Ionescu', '#F3D2C8', 'hymns and arrangements'], ['Daniel Rusu', '#D3E5F2', 'classical studies'], ['Elena Popa', '#DCE9D6', 'folk songs'], ['Ana Popescu', '#F3D2C8', 'patterns']];
     const songsOf = (n) => PUB.filter((p, i) => AU[i][0] === n), nSongs = (n) => { const k = songsOf(n).length; return k + (k === 1 ? ' song' : ' songs'); };
     const who = PEOPLE.find(([n]) => n === (st.who ?? 'Maria Ionescu'));
     const shelf = (order) => order.map((i) => PUB[i]).filter((p) => pick.includes(p)).map(card);

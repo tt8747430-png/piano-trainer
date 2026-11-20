@@ -92,7 +92,7 @@ def ADDROW(label, act, node=36, pad='0 16px', gap=12):
 ADDCARD = lambda label, act: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{ADDROW(label, act)}</div>'
 # The one picture of a group (owner 2026-11-16: "the groups dont look like groups"): up to three of its members'
 # avatars overlapping, each the app's one avatar (the person's initial on sand), ringed in the card's paper
-AVBG = '#E9D8C4'
+AVBG = '#F3D2C8'  # a person's face: the kit's PEACH, the app's paint-sand
 FACES = lambda ls: ('<span aria-hidden="true" style="flex: none; width: 84px; display: flex">' + ''.join(f'<span style="flex: none; width: 32px; height: 32px; margin-right: -6px; border-radius: 16px; background: {AVBG}; box-shadow: 0 0 0 2px {SHEET}; color: {INK}; font-size: 14px; display: flex; align-items: center; justify-content: center">{x}</span>' for x in ls[:3]) + '</span>')
 # A phone sheet as the laptop's centred dialog: the sheet's 22 all round, the kit's ring and shadow, no home-indicator foot.
 LAPSHEET = lambda s, w=440: s.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', f'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: {w}px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 22px; box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)').replace('padding: 6px 16px 40px', 'padding: 20px')

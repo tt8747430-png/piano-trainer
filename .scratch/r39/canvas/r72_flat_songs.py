@@ -97,7 +97,7 @@ def FOLDERCARDS(href):
                    f'<span style="display: flex; flex-direction: column; gap: 2px; padding: 0 2px"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{s}</span></span></a>' for t, s, c, k in FOLDERS_ALL)
 # Shared with me, apart from the learner's own and louder (Google Drive's own place; Flat's Collaborations): each
 # folder a group shared, as a card with who shared it and the group's faces, so it is never taken for one's own.
-SHAREDF = [('Choir hymns', 'St Mary’s choir', 'Shared by Maria Ionescu · 12 songs', [('M', '#E9D8C4'), ('D', '#D3E5F2'), ('E', '#DCE9D6')], '+9'),
+SHAREDF = [('Choir hymns', 'St Mary’s choir', 'Shared by Maria Ionescu · 12 songs', [('M', '#F3D2C8'), ('D', '#D3E5F2'), ('E', '#DCE9D6')], '+9'),
            ('Grade 3 pieces', 'Ms Rusu’s class', 'Shared by Daniel Rusu · 8 songs', [('D', '#D3E5F2'), ('A', '#F3D2C8')], '+14')]
 def SHAREDCARDS(href):
     face = lambda i, c, n: f'<span style="width: 32px; height: 32px; margin-left: {0 if n == 0 else -10}px; border-radius: 16px; background: {c}; box-shadow: 0 0 0 2px {SHEET}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">{i}</span>'
@@ -128,7 +128,7 @@ def PLCOVER(c, heart, songs, face, w=64):
     else:
         body = ''
     fs = max(20, w // 3)
-    badge = (f'<span style="position: absolute; right: -4px; bottom: -4px; width: {fs}px; height: {fs}px; border-radius: 50%; background: #E9D8C4; box-shadow: 0 0 0 2px {SHEET}; display: flex; align-items: center; justify-content: center; font-size: {max(12, fs // 2)}px; font-weight: 700; color: {INK}">{face}</span>' if face else '')
+    badge = (f'<span style="position: absolute; right: -4px; bottom: -4px; width: {fs}px; height: {fs}px; border-radius: 50%; background: #F3D2C8; box-shadow: 0 0 0 2px {SHEET}; display: flex; align-items: center; justify-content: center; font-size: {max(12, fs // 2)}px; font-weight: 700; color: {INK}">{face}</span>' if face else '')
     return f'<span aria-hidden="true" style="position: relative; flex: none; display: block; width: {w}px; height: {w}px; border-radius: {max(8, w // 6)}px; background: {c}">{body}{badge}</span>'
 def PLAYLISTROWS(href, shared_href, w=64, card=True):
     listed = card == 'list'
