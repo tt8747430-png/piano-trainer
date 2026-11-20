@@ -45,7 +45,6 @@ type Sort = 'recent' | 'name'
 /** What Select holds: a lesson's or a course's id, kept apart by kind. */
 type Pick = `${'lesson' | 'course'}:${string}`
 
-/** Select's mark, the canvas's YCHECK: a 24 circle leading the row, ink and ticked once picked. */
 /** A row's shape, phone and laptop (the canvas's LROW and TROW_L): the laptop's columns follow its name. */
 function Row({
   picking,

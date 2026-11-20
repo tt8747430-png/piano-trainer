@@ -112,7 +112,7 @@ export function LessonLayout({
             {after.length > 0 ? (
               // The lessons to read first (the board's "After: 6 · …"): each its own 44px link, a row of
               // them wrapping whole, never a title broken over two lines with a gap between.
-              <p className="flex flex-wrap items-center gap-x-3 text-[0.875rem] text-muted-foreground print:hidden">
+              <p className="flex flex-wrap items-center gap-x-3 text-sm text-muted-foreground print:hidden">
                 <span>{t('afterLinks')}</span>
                 {after.map(({ title, n, link }) => (
                   <Link

@@ -43,7 +43,7 @@ export function Takeaway({ text, style }: { text: LocalText; style?: BlockStyle 
       className={
         style
           ? undefined
-          : 'max-w-[65ch] self-start rounded-[12px] bg-honey-wash px-4 py-3 text-foreground'
+          : 'max-w-[65ch] self-start rounded-control bg-honey-wash px-4 py-3 text-foreground'
       }
     >
       {style ? <StyledBlock style={style}>{words}</StyledBlock> : words}

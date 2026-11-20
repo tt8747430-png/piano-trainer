@@ -571,7 +571,7 @@ export function ExampleView({
                 label={t('edit.doc.ask')}
                 value={block.ask}
                 placeholder={words('edit.doc.ask')}
-                className="h-auto min-h-11 rounded-control border-transparent bg-transparent px-0 font-sans text-[1.0625rem] font-bold shadow-none md:text-[1.0625rem] dark:bg-transparent"
+                className="h-auto min-h-11 rounded-control border-transparent bg-transparent px-0 font-sans text-lg font-bold shadow-none md:text-lg dark:bg-transparent"
                 onChange={(ask) => change({ ...block, ask })}
               />
               <span

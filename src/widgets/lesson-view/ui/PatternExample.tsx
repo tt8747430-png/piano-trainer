@@ -29,7 +29,7 @@ export function PatternExample({
   const { name, description } = BUILT_IN_PATTERNS.require(pattern)
   return (
     <article aria-labelledby={titleId} className="flex flex-col gap-2">
-      <h3 id={titleId} className="font-sans text-[1.0625rem] font-bold">
+      <h3 id={titleId} className="font-sans text-lg font-bold">
         {localText(name, locale)}
       </h3>
       {description ? <p className="text-base">{localText(description, locale)}</p> : null}

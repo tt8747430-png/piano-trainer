@@ -65,7 +65,7 @@ export function QuestionBlock({
   return (
     <figure role="group" aria-labelledby={id} className="mt-2 flex flex-col gap-3">
       <div className="-mb-2 flex flex-col">
-        <p id={id} className="flex min-h-11 items-center text-[1.0625rem] font-bold text-pretty">
+        <p id={id} className="flex min-h-11 items-center text-lg font-bold text-pretty">
           {localText(ask, locale)}
         </p>
         <p className="text-sm text-muted-foreground">{t('question.onKeys')}</p>
