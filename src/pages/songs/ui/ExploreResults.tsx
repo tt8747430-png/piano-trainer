@@ -1,16 +1,9 @@
-import { ArrowUpDown, SearchX } from 'lucide-react'
+import { SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { PublicSort } from '@/shared/api/public-library'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
-import { Said } from '@/shared/ui'
+import { Said, SortMenu } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from '@/shared/ui/primitives/dropdown-menu'
 import { EXPLORE_COLUMNS, ExploreFeedCard } from '@/widgets/song-preview'
 import { EXPLORE_SHELVES, type SongsHome } from '../model/explore-view'
 import { useExploreBrowse } from '../model/use-explore-browse'
@@ -65,29 +58,15 @@ export function ExploreSort({
           })}
         </span>
       ) : null}
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          aria-label={`${t('explore.sort')}: ${t(`explore.shelves.${sort}`)}`}
-          className="flex min-h-11 items-center gap-2 rounded-control text-base font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
-        >
-          {t(`explore.shelves.${sort}`)}
-          <ArrowUpDown aria-hidden className="size-4.5" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-55">
-          <DropdownMenuRadioGroup value={sort} onValueChange={(next: PublicSort) => onSort(next)}>
-            {EXPLORE_SHELVES.map((value) => (
-              <DropdownMenuRadioItem
-                key={value}
-                value={value}
-                closeOnClick
-                className="min-h-11 text-base"
-              >
-                {t(`explore.shelves.${value}`)}
-              </DropdownMenuRadioItem>
-            ))}
-          </DropdownMenuRadioGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <SortMenu<PublicSort>
+        label={t('explore.sort')}
+        sort={sort}
+        sorts={EXPLORE_SHELVES.map((value) => ({
+          value,
+          label: t(`explore.shelves.${value}`),
+        }))}
+        onSort={onSort}
+      />
     </div>
   )
 }
