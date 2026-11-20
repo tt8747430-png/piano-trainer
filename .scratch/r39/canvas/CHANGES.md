@@ -8,11 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · (this commit) · Chords' heads Bravura's filled whole head with the app's outlines; a lone staff without its opening line · Chords,ChordsLaptop · pending
 
 
 ## Changes
 
+- 2026-11-20 · 3ac866e5 · Chords' heads Bravura's filled whole head with the app's outlines; a lone staff without its opening line · Chords,ChordsLaptop · v696
 - 2026-11-20 · 44f1395b · the run boards' noteheads Bravura's whole and black heads (RS_HEAD), as the engine and the page boards · PlayChord,PlayChordLaptop,PlayChromatic,PlayChromaticLaptop,PlayExercise,PlayExerciseLaptop,PlayProgression,PlayProgressionLaptop,PlayWalk,PlayWalkLaptop,PracticeResult,PracticeResultLaptop · v695
 - 2026-11-20 · bdc814d9 · Scales' run engraved as the app: the engine's staff gap and spread, Bravura heads, Verovio's stems and fingers, the app's room; the laptop's 640 cap restored · Scales,ScalesLaptop · v694
 - 2026-11-20 · 8a761dd4 · Hanon's bars engraved as the app (sloped beams, bar 4's high group down, Bravura heads); the first position C E F G A; the heart off as the app · Exercise,ExerciseLaptop · v693
