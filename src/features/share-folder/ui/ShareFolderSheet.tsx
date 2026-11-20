@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FolderShare } from '@/shared/api/groups'
 import { useGroups } from '@/shared/lib/groups'
-import { ButtonLink, Dropdown, RowsLoading, Said, Sheet, SheetContent } from '@/shared/ui'
+import { ButtonLink, Dropdown, Problem, RowsLoading, Said, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Checkbox } from '@/shared/ui/primitives/checkbox'
 import { useGroupsData } from '../model/use-groups-data'
@@ -91,9 +91,7 @@ function ShareForm({ folder, onDone }: { folder: FolderShare; onDone: () => void
       ) : data.kind === 'loading' ? (
         <RowsLoading label={t('groups.loading')} rows={2} />
       ) : data.kind === 'failed' ? (
-        <p role="alert" className="text-destructive">
-          {t(data.reason === 'offline' ? 'groups.offline' : 'groups.failed')}
-        </p>
+        <Problem>{t(data.reason === 'offline' ? 'groups.offline' : 'groups.failed')}</Problem>
       ) : data.groups.length === 0 ? (
         <p className="text-pretty text-muted-foreground">{t('groups.noneToShare')}</p>
       ) : (
@@ -128,11 +126,7 @@ function ShareForm({ folder, onDone }: { folder: FolderShare; onDone: () => void
           })}
         </ul>
       )}
-      {problem ? (
-        <p role="alert" className="text-sm text-destructive">
-          {problem}
-        </p>
-      ) : null}
+      {problem ? <Problem>{problem}</Problem> : null}
     </SheetContent>
   )
 }

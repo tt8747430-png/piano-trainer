@@ -19,6 +19,7 @@ import {
   ConfirmDialog,
   DangerGroup,
   DangerRow,
+  Problem,
   RowButton,
   RowLink,
   RowsLoading,
@@ -169,11 +170,7 @@ export function SharedFolderPage() {
     <div className={cn('flex flex-col gap-6 pb-8', PLACE_COLUMN)}>
       <PlaceBar title={folder.name} count={t('folder.songCount', { count: entries.length })} />
       {head}
-      {failed ? (
-        <p role="alert" className="text-sm text-destructive">
-          {t('groups.failed')}
-        </p>
-      ) : null}
+      {failed ? <Problem>{t('groups.failed')}</Problem> : null}
       <SongTable label={folder.name} entries={pieces} actionsOf={viewerActions} sort={null} />
       {stopping}
       <MoveSheet
@@ -186,11 +183,7 @@ export function SharedFolderPage() {
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 pb-8">
       <ScreenHeader title={folder.name} large back={<BackButton />} />
       {head}
-      {failed ? (
-        <p role="alert" className="text-sm text-destructive">
-          {t('groups.failed')}
-        </p>
-      ) : null}
+      {failed ? <Problem>{t('groups.failed')}</Problem> : null}
       <SettingsGroup flush title={t('folder.songCount', { count: entries.length })}>
         {entries.map((entry, index) => {
           if (entry.kind === 'built-in') {

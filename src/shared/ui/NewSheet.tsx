@@ -1,6 +1,7 @@
 import { useId, type ReactNode } from 'react'
 import { NameField } from './NameField'
 import { Button } from './primitives/button'
+import { Problem } from './Problem'
 import { MakeSheet } from './MakeSheet'
 
 /**
@@ -93,11 +94,7 @@ export function NewSheet({
             {createIcon}
             {creating && creatingLabel ? creatingLabel : createLabel}
           </Button>
-          {failed ? (
-            <p role="alert" className="text-sm text-destructive">
-              {failed}
-            </p>
-          ) : null}
+          {failed ? <Problem>{failed}</Problem> : null}
         </div>
       }
     >

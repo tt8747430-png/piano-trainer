@@ -3,6 +3,7 @@ import { useId, useState, type ComponentProps, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { InfoTip } from './InfoTip'
+import { Problem } from './Problem'
 import {
   InputGroup,
   InputGroupAddon,
@@ -72,9 +73,9 @@ export function FormField({
       </InputGroup>
       {note ? <p className="mx-4 text-[0.8125rem] text-muted-foreground">{note}</p> : null}
       {error === undefined ? null : (
-        <p id={`${id}-error`} role="alert" className="mx-4 text-sm text-destructive">
+        <Problem id={`${id}-error`} className="mx-4">
           {error}
-        </p>
+        </Problem>
       )}
     </div>
   )

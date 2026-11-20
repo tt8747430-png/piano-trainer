@@ -12,7 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
-import { ActionRow } from '@/shared/ui'
+import { ActionRow, Problem } from '@/shared/ui'
 import {
   backupName,
   hasOtherVersions,
@@ -110,11 +110,7 @@ export function BackupFields({
           event.target.value = ''
         }}
       />
-      {failed ? (
-        <p role="alert" className="px-4 pb-3 text-destructive">
-          {t(`backup.${failed}`)}
-        </p>
-      ) : null}
+      {failed ? <Problem className="px-4 pb-3">{t(`backup.${failed}`)}</Problem> : null}
       <AlertDialog
         open={found !== null}
         onOpenChange={(opened) => (opened ? null : setFound(null))}

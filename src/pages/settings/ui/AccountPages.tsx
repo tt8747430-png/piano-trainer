@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useOnline } from '@/shared/lib'
 import { useAccount, useLearnerProfile } from '@/shared/lib/account'
-import { FormField, say, SettingsGroup as Group, SwitchRow } from '@/shared/ui'
+import { FormField, Problem, say, SettingsGroup as Group, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
@@ -82,11 +82,7 @@ export function ChangePasswordPage() {
             onChange={(event) => setAgain(event.target.value)}
           />
         </Group>
-        {problem === 'failed' ? (
-          <p role="alert" className="text-sm text-destructive">
-            {t('changePassword.failed')}
-          </p>
-        ) : null}
+        {problem === 'failed' ? <Problem>{t('changePassword.failed')}</Problem> : null}
         {online ? null : (
           <p role="status" className="text-sm text-muted-foreground">
             {t('editProfile.offline')}

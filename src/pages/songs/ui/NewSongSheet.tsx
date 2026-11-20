@@ -22,7 +22,7 @@ import {
   type Key,
   type Meter,
 } from '@/shared/lib/music'
-import { ChoiceTiles, GroupRow, GroupRows, MakeSheet, Stepper } from '@/shared/ui'
+import { ChoiceTiles, GroupRow, GroupRows, MakeSheet, Problem, Stepper } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** The staves a song starts with, as Flat's new score offers them (R72's SONGFORM). */
@@ -147,11 +147,7 @@ export function NewSongSheet({
           >
             {making ? t('making.making') : t('making.create')}
           </Button>
-          {failed ? (
-            <p role="alert" className="text-sm text-destructive">
-              {t('making.failed')}
-            </p>
-          ) : null}
+          {failed ? <Problem>{t('making.failed')}</Problem> : null}
         </div>
       }
     >

@@ -6,7 +6,7 @@ import { useChordSheetsStoreApi, type SavedChordSheet } from '@/entities/chord-s
 import { shareLink } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { useChordShare } from '@/shared/lib/chord-share'
-import { ButtonLink, Said, say, Segmented, Sheet, SheetContent } from '@/shared/ui'
+import { ButtonLink, Problem, Said, say, Segmented, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { setSheetAccess, shareSheet } from '../model/online-sheet'
 
@@ -78,11 +78,7 @@ function ShareForm({ sheet, onDone }: { sheet: SavedChordSheet; onDone: () => vo
       footer={
         guest ? null : (
           <div className="flex flex-col gap-2">
-            {problem ? (
-              <p role="alert" className="text-pretty text-sm text-destructive">
-                {problem}
-              </p>
-            ) : null}
+            {problem ? <Problem>{problem}</Problem> : null}
             <Button
               size="lg"
               className="h-[50px] w-full"

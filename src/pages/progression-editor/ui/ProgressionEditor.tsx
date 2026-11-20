@@ -7,7 +7,15 @@ import { useProgressionDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { parseNumerals } from '@/shared/lib/music'
 import { cn } from '@/shared/lib'
-import { ChoiceChips, FormField, Labelled, NameField, RoundLink, SettingsGroup } from '@/shared/ui'
+import {
+  ChoiceChips,
+  FormField,
+  Labelled,
+  NameField,
+  Problem,
+  RoundLink,
+  SettingsGroup,
+} from '@/shared/ui'
 import { DraftScreen } from '@/widgets/content-editor'
 
 /** A line of numerals as the field holds it: none where it is empty. */
@@ -99,11 +107,7 @@ function ProgressionDocument({
           onChange={(line) => setLines(major, line)}
         />
       </SettingsGroup>
-      {wrong ? (
-        <p role="alert" className="-mt-4 mx-4 text-sm text-destructive">
-          {t('progressions.unread')}
-        </p>
-      ) : null}
+      {wrong ? <Problem className="-mt-4 mx-4">{t('progressions.unread')}</Problem> : null}
     </div>
   )
 }

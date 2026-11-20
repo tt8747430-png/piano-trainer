@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { AuthProblem } from '@/shared/lib/account'
-import { BackButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, Problem, ScreenHeader } from '@/shared/ui'
 
 /**
  * An account page, as the SignIn board: Close in the bar (a step aside, back where it was opened
@@ -34,9 +34,7 @@ export const ACCOUNT_LINK =
 export function ProblemLine({ problem }: { problem: AuthProblem | null }) {
   const { t } = useTranslation('account')
   return (
-    <p role="alert" className="text-sm text-destructive empty:hidden">
-      {problem === null ? '' : t(`problem.${problem}`)}
-    </p>
+    <Problem className="empty:hidden">{problem === null ? '' : t(`problem.${problem}`)}</Problem>
   )
 }
 

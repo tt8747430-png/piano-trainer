@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { inviteCodeOf } from '@/features/share-folder'
-import { NameField, Sheet, SheetContent } from '@/shared/ui'
+import { NameField, Problem, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
@@ -59,11 +59,7 @@ export function JoinLinkSheet({
               setWrong(false)
             }}
           />
-          {wrong ? (
-            <p role="alert" className="text-sm text-destructive">
-              {t('groups.joinLinkWrong')}
-            </p>
-          ) : null}
+          {wrong ? <Problem>{t('groups.joinLinkWrong')}</Problem> : null}
         </form>
       </SheetContent>
     </Sheet>

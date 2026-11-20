@@ -9,6 +9,7 @@ import {
   ConfirmDialog,
   MoreMenu,
   NameField,
+  Problem,
   RowsLoading,
   ScreenHeader,
 } from '@/shared/ui'
@@ -130,11 +131,7 @@ function GroupView({
             : undefined
         }
       />
-      {said ? (
-        <p role="alert" className="text-sm text-destructive">
-          {said}
-        </p>
-      ) : null}
+      {said ? <Problem>{said}</Problem> : null}
       <div className="flex flex-col gap-7 lg:grid lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:items-start lg:gap-x-12">
         <div className="flex flex-col gap-6">
           {editing !== null ? (

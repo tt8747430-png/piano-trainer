@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GROUP_NAME_MAX, type LearnerGroup } from '@/shared/api/groups'
 import { useGroups } from '@/shared/lib/groups'
-import { MakeSheet, NameField } from '@/shared/ui'
+import { MakeSheet, NameField, Problem } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
@@ -73,11 +73,7 @@ function NewGroupForm({
           maxLength={GROUP_NAME_MAX}
           onChange={(event) => setName(event.target.value)}
         />
-        {problem ? (
-          <p role="alert" className="text-sm text-destructive">
-            {problem}
-          </p>
-        ) : null}
+        {problem ? <Problem>{problem}</Problem> : null}
       </form>
     </MakeSheet>
   )
