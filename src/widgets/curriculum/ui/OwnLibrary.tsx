@@ -28,15 +28,16 @@ import {
   BackButton,
   ChoiceChips,
   FloatingActions,
-  PAINT,
   LessonIcon,
   NewDial,
+  PAINT,
   RowMore,
   Said,
   say,
   ScreenHeader,
   SearchField,
   SortMenu,
+  Toolbar,
   type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -655,9 +656,8 @@ export function OwnLibrary() {
       </div>
       {selecting ? (
         <FloatingActions className="justify-center">
-          <div
-            role="toolbar"
-            aria-label={title}
+          <Toolbar
+            label={title}
             className="glass flex h-17 w-[calc(100vw-2rem)] items-center gap-2 rounded-pill px-2 lg:w-110"
           >
             <SelectAct icon={Copy} onClick={duplicateChosen}>
@@ -666,7 +666,7 @@ export function OwnLibrary() {
             <SelectAct icon={Trash2} destructive onClick={deleteChosen}>
               {picks.size > 0 ? t('own.delete') : t('own.deleteAll')}
             </SelectAct>
-          </div>
+          </Toolbar>
         </FloatingActions>
       ) : (
         <NewDial label={t('own.new')} actions={newActions} />

@@ -1,3 +1,4 @@
+import { Toolbar } from './Toolbar'
 import type { useRender } from '@base-ui/react/use-render'
 import { Play, Square, type LucideIcon } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
@@ -44,10 +45,9 @@ export function FloatingBar({
   children?: ReactNode
 }) {
   return (
-    <div
-      role="toolbar"
-      aria-label={label}
-      aria-orientation={orientation === 'column' ? 'vertical' : 'horizontal'}
+    <Toolbar
+      label={label}
+      vertical={orientation === 'column'}
       className={cn(
         'flex items-center gap-2',
         docked
@@ -58,7 +58,7 @@ export function FloatingBar({
       )}
     >
       {children}
-    </div>
+    </Toolbar>
   )
 }
 

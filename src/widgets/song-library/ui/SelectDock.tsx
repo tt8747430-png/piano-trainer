@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib'
-import { FloatingActions } from '@/shared/ui'
+import { FloatingActions, Toolbar } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
@@ -56,9 +56,8 @@ export function SelectDock({
   children: ReactNode
 }) {
   const bar = (
-    <div
-      role="toolbar"
-      aria-label={label}
+    <Toolbar
+      label={label}
       data-takes-tab-bar=""
       className={cn(
         'glass flex h-17 items-center gap-2 rounded-pill px-2',
@@ -66,7 +65,7 @@ export function SelectDock({
       )}
     >
       {children}
-    </div>
+    </Toolbar>
   )
   return inSheet ? (
     <div className="sticky bottom-4 z-10">{bar}</div>

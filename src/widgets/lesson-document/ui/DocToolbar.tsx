@@ -11,6 +11,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { selectedBlock } from '../model/doc-blocks'
 import { DOC } from '../model/lesson-doc'
 import { InsertSheet } from './InsertSheet'
+import { Toolbar } from '@/shared/ui'
 
 function ToolButton({
   label,
@@ -68,9 +69,8 @@ export function DocToolbar({
   })
   const chain = () => editor.chain().focus()
   return (
-    <div
-      role="toolbar"
-      aria-label={t('edit.doc.toolbar')}
+    <Toolbar
+      label={t('edit.doc.toolbar')}
       className={cn('flex items-center gap-0.5 overflow-x-auto overscroll-x-contain', className)}
     >
       {/* Insert, the toolbar's one accent: its sheet of every kind of block, grouped. */}
@@ -90,7 +90,7 @@ export function DocToolbar({
       >
         <Redo2 aria-hidden />
       </ToolButton>
-    </div>
+    </Toolbar>
   )
 }
 

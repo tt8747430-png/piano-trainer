@@ -26,11 +26,12 @@ import {
   Dropdown,
   InfoTip,
   KeyPicker,
+  KeysIcon,
   NotePicker,
   OpensMark,
   Segmented,
   TileMark,
-  KeysIcon,
+  Toolbar,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
@@ -517,9 +518,8 @@ export function ExampleView({
       )}
     >
       {working ? (
-        <div
-          role="toolbar"
-          aria-label={name}
+        <Toolbar
+          label={name}
           className="absolute -top-7 right-3 z-10 flex items-center gap-0.5 rounded-control border border-border bg-raised p-0.5 elevation-2"
         >
           {editable ? (
@@ -561,7 +561,7 @@ export function ExampleView({
                 {action.key === 'duplicate' ? <Copy aria-hidden /> : <Trash2 aria-hidden />}
               </Tool>
             ))}
-        </div>
+        </Toolbar>
       ) : null}
       {block.kind === 'question' || block.kind === 'link' ? (
         <InStyle style={style}>

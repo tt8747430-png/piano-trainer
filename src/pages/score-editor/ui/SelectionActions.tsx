@@ -6,6 +6,7 @@ import { copyTarget, whyNoPaste, type ClipEdit } from '@/features/score-editor'
 import { Button } from '@/shared/ui/primitives/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { Toolbar } from '@/shared/ui'
 
 /**
  * One of the row's commands: its icon, named for a screen reader and in a tooltip, which adds `hint`,
@@ -94,9 +95,8 @@ export function SelectionActions() {
   if (!shown || takes.stage !== 'idle') return null
   const clip = (edit: ClipEdit) => () => dispatch({ type: 'clip', edit })
   return (
-    <div
-      role="toolbar"
-      aria-label={t('selection')}
+    <Toolbar
+      label={t('selection')}
       className="pointer-events-auto flex items-center gap-0.5 rounded-pill border border-border bg-raised px-1.5 py-0.5 elevation-float motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1"
     >
       <EditButton label={t('copy')} hint={copySaid} onClick={clip('copy')}>
@@ -108,6 +108,6 @@ export function SelectionActions() {
       <EditButton label={t('paste')} {...paste} onClick={clip('paste')}>
         <ClipboardPaste aria-hidden />
       </EditButton>
-    </div>
+    </Toolbar>
   )
 }

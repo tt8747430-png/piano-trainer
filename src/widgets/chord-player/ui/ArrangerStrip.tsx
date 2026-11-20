@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { ARRANGER_NUMBERS, MAINS, mainOf, SECTION } from '@/shared/lib/arrangement'
 import { cn } from '@/shared/lib'
 import type { ArrangerFollow } from '../model/use-arranger-follow'
+import { Toolbar } from '@/shared/ui'
 
 const ROMAN = { 1: 'I', 2: 'II', 3: 'III' } as const
 
@@ -191,9 +192,8 @@ export function ArrangerStrip({
   }
   if (size === 'compact')
     return (
-      <div
-        role="toolbar"
-        aria-label={t('chordPlayer.arranger.strip', { device })}
+      <Toolbar
+        label={t('chordPlayer.arranger.strip', { device })}
         className={cn(
           'relative flex h-16 w-full min-w-0 items-center gap-2 pr-2 pl-3',
           flat ? FLAT_CARD : CARD,
@@ -222,7 +222,7 @@ export function ArrangerStrip({
           {minimize}
         </div>
         {children}
-      </div>
+      </Toolbar>
     )
   const intro = (
     <Group label={t('chordPlayer.arranger.introLabel')} columns={3} grow={3}>
@@ -264,9 +264,8 @@ export function ArrangerStrip({
     </Group>
   )
   return (
-    <div
-      role="toolbar"
-      aria-label={t('chordPlayer.arranger.strip', { device })}
+    <Toolbar
+      label={t('chordPlayer.arranger.strip', { device })}
       className={cn(
         'relative flex w-full min-w-0 flex-col gap-2 px-3 pt-2 pb-3',
         flat ? FLAT_CARD : CARD,
@@ -302,7 +301,7 @@ export function ArrangerStrip({
         </>
       )}
       {children}
-    </div>
+    </Toolbar>
   )
 }
 

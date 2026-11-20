@@ -1,3 +1,4 @@
+import { Toolbar } from './Toolbar'
 import { ChevronDown, Play, Square, type LucideIcon } from 'lucide-react'
 import type { ComponentProps, ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -24,9 +25,8 @@ export function FloatingPieces({
   children: ReactNode
 }) {
   return (
-    <div
-      role="toolbar"
-      aria-label={label}
+    <Toolbar
+      label={label}
       className={
         tool
           ? 'mx-auto flex items-center justify-center gap-3 lg:-mb-2'
@@ -34,7 +34,7 @@ export function FloatingPieces({
       }
     >
       {children}
-    </div>
+    </Toolbar>
   )
 }
 

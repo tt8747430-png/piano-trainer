@@ -15,14 +15,15 @@ import {
   GroupRow,
   GroupRows,
   InfoTip,
+  Labelled,
   nameMark,
   RoundButton,
   ScreenHeader,
-  Labelled,
   Segmented,
   Sheet,
   SheetContent,
   Stepper,
+  Toolbar,
   type KeyMark,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -283,9 +284,8 @@ export function RunLayout({
       />
       {/* The floating Setup · Play · Tempo (`RUNBAR`), hugging its acts on the column's centre, 12 over
           the keys on a phone and 16 on a laptop, reserving no space. */}
-      <div
-        role="toolbar"
-        aria-label={t('player:run.transport')}
+      <Toolbar
+        label={t('player:run.transport')}
         className="pointer-events-none fixed inset-x-3 bottom-[calc(var(--nav-bar)+var(--docked,0px)+0.75rem)] z-20 flex items-center justify-center gap-3 *:pointer-events-auto print:hidden lg:right-0 lg:left-sidebar lg:bottom-[calc(var(--nav-bar)+var(--docked,0px)+1rem)] lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed lg:group-data-[sidebar=focus]/main:left-0"
       >
         <FloatingPiece
@@ -311,7 +311,7 @@ export function RunLayout({
         >
           <Gauge aria-hidden />
         </FloatingPiece>
-      </div>
+      </Toolbar>
       <Sheet hung="header" open={setupOpen} onOpenChange={setSetupOpen}>
         <SheetContent title={t('player:setup')} rising dismiss="close">
           <div className="flex flex-col gap-6">

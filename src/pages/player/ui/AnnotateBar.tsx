@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ANNOTATION_TEXT_MAX, type Annotation, type AnnotationKind } from '@/entities/piece'
 import type { StaffId } from '@/shared/lib/notation'
-import { Segmented } from '@/shared/ui'
+import { Segmented, Toolbar } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
@@ -110,9 +110,8 @@ export function AnnotateBar({
     </Popover>
   )
   return (
-    <div
-      role="toolbar"
-      aria-label={t('annotate.bar')}
+    <Toolbar
+      label={t('annotate.bar')}
       className="card absolute inset-x-0 top-2 z-20 mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-1 p-1 elevation-float"
     >
       {staves.length > 1 ? (
@@ -153,6 +152,6 @@ export function AnnotateBar({
         <Check data-icon="inline-start" />
         {t('annotate.done')}
       </Button>
-    </div>
+    </Toolbar>
   )
 }
