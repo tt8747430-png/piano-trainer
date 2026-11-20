@@ -209,7 +209,7 @@ export const learn: LocaleResources['learn'] = {
     previous: 'Предыдущий урок',
     next: 'Следующий урок',
     toCourseLessons: 'Курс',
-    toJourney: 'Вернуться к урокам',
+    toJourney: 'Вернуться к уровню',
     toCourse: 'Перейти к песням курса',
     courseDone: 'Вернуться к курсу',
   },

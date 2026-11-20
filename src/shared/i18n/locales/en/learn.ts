@@ -208,7 +208,7 @@ export const learn = {
     previous: 'Previous lesson',
     next: 'Next lesson',
     toCourseLessons: 'The course',
-    toJourney: 'Back to the Lessons',
+    toJourney: 'Back to the level',
     toCourse: 'On to the guided songs',
     courseDone: 'Back to the course',
   },
