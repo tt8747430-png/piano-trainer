@@ -1,8 +1,10 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
+import { ListMusic } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   blankProgression,
   libraryNumerals,
+  libraryLine,
   progressionById,
   progressionMode,
   shipsWithApp,
@@ -19,6 +21,7 @@ import {
   say,
   ScreenHeader,
   SettingsGroup,
+  ThingHead,
 } from '@/shared/ui'
 import { DraftPublishScreen, NotOpen, PublishRow } from '@/widgets/content-editor'
 
@@ -62,12 +65,20 @@ function ProgressionSettings({ progression }: { progression: LibraryProgression 
     if (shared === 'failed') say(t('editor:publishPage.shareFailed'))
   }
   return (
-    <div className="flex flex-col gap-6 pb-8">
-      <ScreenHeader column title={t('learn:settings.title')} back={<BackButton />} />
-      <div className="page-column flex flex-col gap-7">
+    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
+      <ScreenHeader column="until-laptop" title={t('learn:settings.title')} back={<BackButton />} />
+      <div className="page-column flex flex-col gap-6 lg:max-w-295">
+        <ThingHead
+          mark={
+            <span className="grid size-16 shrink-0 place-items-center rounded-pill bg-card ring-1 ring-border ring-inset">
+              <ListMusic aria-hidden className="size-6" />
+            </span>
+          }
+          name={title}
+          line={libraryLine(written, progressionMode(written, false))}
+        />
         {editsContent(account) ? (
           <>
-            <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>
             <SettingsGroup flush title={t('learn:settings.share')}>
               <PublishRow
                 kind="progression"
