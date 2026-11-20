@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · a level's and a course's lesson grids and a course's guided songs take a least cell of 304 (were 220 and 200): the same 3 and 4 across at 1710, two at 1024 where names wrapped to three lines beside Next · LearnLevelLaptop, CourseLaptop · **pending**
 - 2026-11-20 · d5f7d246 · the editor palette's sections in Flat's names, as the app: Note, Pitch and representation, Key signature, Time signature, Barlines and repeats (were Notes, Pitch, Key, Time, Repeats), the tab tooltips too · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · **pending**
 - 2026-11-20 · a15644a6 · the song's tune credited as the app holds it, New Britain (American folk tune), in a song's Title and credits and the editor's Title sheet, as the Player boards · Song, SongLaptop, Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · **pending**
 - 2026-11-20 · d9becbb5 · one soft ink: the sidebar's Search, Ctrl K, Playlists, counts and the account chevron, and the keys' quiet names, in the kit's SOFT #685E56 (a near-duplicate #6B6259 had drifted in) · every laptop board, Chords, Scales, ChordPlayer, Lesson (the keys) · **pending**

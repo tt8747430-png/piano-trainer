@@ -114,8 +114,8 @@ export function LessonLine({ across, children }: { across: 3 | 4; children: Reac
       className={cn(
         'flex flex-col lg:grid',
         across === 3
-          ? 'lg:grid-cols-[repeat(auto-fill,minmax(max(13.75rem,calc((100%-4rem)/3)),1fr))] lg:gap-x-8'
-          : 'lg:grid-cols-[repeat(auto-fill,minmax(max(12.5rem,calc((100%-4.5rem)/4)),1fr))] lg:gap-x-6',
+          ? 'lg:grid-cols-[repeat(auto-fill,minmax(max(19rem,calc((100%-4rem)/3)),1fr))] lg:gap-x-8'
+          : 'lg:grid-cols-[repeat(auto-fill,minmax(max(19rem,calc((100%-4.5rem)/4)),1fr))] lg:gap-x-6',
       )}
     >
       {children}

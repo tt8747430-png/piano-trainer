@@ -37,7 +37,7 @@ export function GuidedSongs({ course }: { course: Course }) {
       <h2 id={id} className="font-sans text-xl leading-[normal] font-bold">
         {t('course.songs')}
       </h2>
-      <ul className="flex flex-col rows-hairline overflow-hidden card lg:grid lg:grid-cols-[repeat(auto-fill,minmax(max(12.5rem,calc((100%-4.5rem)/4)),1fr))] lg:gap-x-6 lg:overflow-visible lg:rounded-none lg:ring-0 lg:bg-transparent lg:[&>li]:after:hidden lg:[&_[data-slot=row-chevron]]:hidden [&_a]:min-h-19 [&_a]:py-2 [&_a]:pl-3 lg:[&_a]:px-0 [&_[data-slot=row-tile]]:size-10 lg:[&_[data-slot=row-tile]]:size-11">
+      <ul className="flex flex-col rows-hairline overflow-hidden card lg:grid lg:grid-cols-[repeat(auto-fill,minmax(max(19rem,calc((100%-4.5rem)/4)),1fr))] lg:gap-x-6 lg:overflow-visible lg:rounded-none lg:ring-0 lg:bg-transparent lg:[&>li]:after:hidden lg:[&_[data-slot=row-chevron]]:hidden [&_a]:min-h-19 [&_a]:py-2 [&_a]:pl-3 lg:[&_a]:px-0 [&_[data-slot=row-tile]]:size-10 lg:[&_[data-slot=row-tile]]:size-11">
         {songs.map((piece) => (
           <GuidedSong key={piece.id} entry={piece} />
         ))}

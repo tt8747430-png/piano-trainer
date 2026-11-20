@@ -59,7 +59,7 @@ def CBODY(lap):
         # Continue), its lessons flow in two balanced columns under it and its songs in a row of three; no side
         # column that runs out (lines.mjs: a bare band under a column)
         lrows = (LROWS.replace('<span aria-hidden="true" style="position: absolute; left: 21px; top: 32px; bottom: 32px; width: 2px; background: #B9CDB3"></span>', '', 1)
-                 .replace('<div style="position: relative; margin-top: -12px">', '<div style="margin-top: -12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(200px, calc((100% - 72px) / 4)), 1fr)); column-gap: 24px">', 1)
+                 .replace('<div style="position: relative; margin-top: -12px">', '<div style="margin-top: -12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(304px, calc((100% - 72px) / 4)), 1fr)); column-gap: 24px">', 1)
                  .replace('<a href="Lesson.dc.html" style="position: relative;', '<a href="Lesson.dc.html" style="break-inside: avoid; position: relative;', 1)
                  # a row ends where its words end (owner, 2026-11-17, the rows marked: "why don't you flag such
                  # things"): the title takes its own width, Next stands beside it, and the far chevron goes; the whole
@@ -68,7 +68,7 @@ def CBODY(lap):
                  .replace(f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><span style="color: {SOFT}; display: flex; padding-right: 4px">{CHEV_R}</span></sc-if>', '', 1))
         # loop round 67: the songs stand bare on the lessons' grid, as the lessons do (one kind of list, one shape;
         # a box round a homogeneous list is common region overused, NN/g)
-        songs = (SONGROWS.replace(f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">', '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(max(200px, calc((100% - 72px) / 4)), 1fr)); column-gap: 24px">', 1)
+        songs = (SONGROWS.replace(f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">', '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(max(304px, calc((100% - 72px) / 4)), 1fr)); column-gap: 24px">', 1)
                  .replace(f'padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL};', 'padding: 8px 0;', 1)
                  .replace('width: 40px; height: 40px; border-radius: 8px;', 'width: 44px; height: 44px; border-radius: 8px;', 1))
         songs = re.sub(r'<span style="color: [^"]*; display: flex[^"]*">' + re.escape(CHEV_R) + '</span>', '', songs)
