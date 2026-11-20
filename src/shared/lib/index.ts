@@ -1,6 +1,14 @@
 export { chordLabels, chordLabelWidth, type ChordLabel } from './chord-label'
 export { cn } from './cn'
-export { clockSaid, dateSaid, daySaid } from './day-said'
+export {
+  clockSaid,
+  dateSaid,
+  daySaid,
+  momentSaid,
+  monthDaySaid,
+  shortDateSaid,
+  weekdaySaid,
+} from './day-said'
 export { formatLocale } from './format-locale'
 export {
   partsFromParams,

@@ -14,7 +14,7 @@ import {
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
 import { Problem, RowsLoading } from '@/shared/ui'
-import { formatLocale } from '@/shared/lib'
+import { momentSaid } from '@/shared/lib'
 
 type Listed =
   | { readonly state: 'loading' }
@@ -56,10 +56,6 @@ export function VersionsDialog({
       setListed({ state: 'loading' })
     }
   }, [open, versions])
-  const date = new Intl.DateTimeFormat(formatLocale(locale), {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  })
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
@@ -80,7 +76,7 @@ export function VersionsDialog({
             {listed.versions.map((kept, index) => (
               <li key={kept.version} className="flex min-h-14 items-center gap-3 py-1.5">
                 <span className="min-w-0 flex-1 text-sm">
-                  {t('original.publishedOn', { date: date.format(new Date(kept.publishedAt)) })}
+                  {t('original.publishedOn', { date: momentSaid(kept.publishedAt, locale) })}
                 </span>
                 {index === 0 ? (
                   <span className="text-sm text-muted-foreground">{t('original.latest')}</span>

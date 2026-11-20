@@ -14,7 +14,7 @@ import {
   sayUndo,
   ScreenHeader,
 } from '@/shared/ui'
-import { useLocale, type Locale } from '@/shared/i18n'
+import { useLocale } from '@/shared/i18n'
 import { Button } from '@/shared/ui/primitives/button'
 import { TakeRoll } from '@/widgets/take-roll'
 import { clockTime } from '../model/clock-time'
@@ -24,18 +24,9 @@ import { useSongTitle } from '../model/use-song-title'
 import { useTakePlay } from '../model/use-take-play'
 import { KeepBars } from './KeepBars'
 import { TakeNameField } from './TakeNameField'
-import { formatLocale } from '@/shared/lib'
+import { monthDaySaid } from '@/shared/lib'
 
 /** One formatter a language: the day a take was recorded, as its page says it ("9 November"). */
-const days = new Map<Locale, Intl.DateTimeFormat>()
-function dayFormat(locale: Locale): Intl.DateTimeFormat {
-  const known = days.get(locale)
-  if (known) return known
-  const format = new Intl.DateTimeFormat(formatLocale(locale), { day: 'numeric', month: 'long' })
-  days.set(locale, format)
-  return format
-}
-
 /**
  * A take on its own page (ADR 0061), as the Take board draws it: "Take" in the bar with Download, the
  * page's own act; its name; Play, the page's honey circle, beside its length and tempo over its song
@@ -96,7 +87,7 @@ function TakeView({ take }: { take: Take }) {
               })}
             </p>
             <p className="truncate text-sm text-muted-foreground">
-              {t('take.recorded', { song, day: dayFormat(locale).format(take.made) })}
+              {t('take.recorded', { song, day: monthDaySaid(take.made, locale) })}
             </p>
           </div>
         </div>

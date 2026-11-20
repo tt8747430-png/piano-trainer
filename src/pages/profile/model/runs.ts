@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { dateOfDay, localDay, type PracticeRun } from '@/entities/progress'
 import { useRunName } from '@/features/trainer'
 import { useLocale } from '@/shared/i18n'
-import { clockSaid, formatLocale } from '@/shared/lib'
+import { clockSaid, weekdaySaid } from '@/shared/lib'
 
 /** A run as Practice history shows it: its name, its time and count, its accuracy. */
 export interface RunLine {
@@ -48,18 +48,13 @@ export function useRunLines(): (runs: readonly PracticeRun[]) => readonly RunLin
 export function useHistoryDay(today: string): (day: string) => string {
   const { t } = useTranslation('account')
   const locale = useLocale()
-  const format = new Intl.DateTimeFormat(formatLocale(locale), {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  })
   const yesterday = localDay(dateOfDay(today, -1))
   return (day) =>
     day === today
       ? t('profile.history.today')
       : day === yesterday
         ? t('profile.history.yesterday')
-        : format.format(dateOfDay(day))
+        : weekdaySaid(dateOfDay(day), locale)
 }
 
 /** The runs by the day each was played on, newest first. */

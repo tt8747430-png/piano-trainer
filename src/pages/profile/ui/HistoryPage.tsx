@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { dateOfDay, localDay, selectHistory, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { cn, formatLocale } from '@/shared/lib'
+import { cn, shortDateSaid, weekdaySaid } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { BackButton, ScreenHeader, SettingsGroup } from '@/shared/ui'
 import { useToday } from '@/widgets/practice-days'
@@ -35,12 +35,6 @@ function MonthChart() {
   const most = Math.max(...month.map((day) => day.seconds))
   // The scale's top: the next whole half hour above the most practised day, at least 30 minutes.
   const top = Math.max(30, Math.ceil(most / 60 / 30) * 30)
-  const short = new Intl.DateTimeFormat(formatLocale(locale), { day: 'numeric', month: 'short' })
-  const named = new Intl.DateTimeFormat(formatLocale(locale), {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  })
   return (
     <div className="flex flex-col gap-3 card px-4 py-4">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
@@ -78,8 +72,8 @@ function MonthChart() {
             return (
               <li
                 key={day}
-                aria-label={`${named.format(dateOfDay(day))}: ${time(played)}`}
-                title={`${short.format(dateOfDay(day))} · ${time(played)}`}
+                aria-label={`${weekdaySaid(dateOfDay(day), locale)}: ${time(played)}`}
+                title={`${shortDateSaid(dateOfDay(day), locale)} · ${time(played)}`}
                 className={cn(
                   'relative min-w-0 flex-1',
                   day === today ? 'bg-paint-full-sand' : 'bg-paint-full-sand/45',
@@ -94,8 +88,8 @@ function MonthChart() {
         aria-hidden
         className="flex justify-between pl-11 text-[0.6875rem] text-muted-foreground"
       >
-        <span>{short.format(dateOfDay(month[0]?.day ?? today))}</span>
-        <span>{short.format(dateOfDay(month[DAYS / 2]?.day ?? today))}</span>
+        <span>{shortDateSaid(dateOfDay(month[0]?.day ?? today), locale)}</span>
+        <span>{shortDateSaid(dateOfDay(month[DAYS / 2]?.day ?? today), locale)}</span>
         <span>{t('profile.history.today')}</span>
       </div>
     </div>

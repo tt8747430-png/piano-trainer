@@ -10,7 +10,7 @@ import { loopParam } from '@/features/practice'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
 import { ButtonLink, ProgressBar, SettingsGroup } from '@/shared/ui'
-import { formatLocale } from '@/shared/lib'
+import { monthDaySaid } from '@/shared/lib'
 
 /** A row of the card: its name, then what it says. */
 const ROW =
@@ -39,11 +39,7 @@ export function YourPractice({ piece, performance }: { piece: Piece; performance
     [performance, takes, piece.tempo],
   )
   if (!at && takes.length === 0) return null
-  const day = at
-    ? new Intl.DateTimeFormat(formatLocale(locale), { day: 'numeric', month: 'long' }).format(
-        new Date(at),
-      )
-    : null
+  const day = at ? monthDaySaid(at, locale) : null
   const step = summary ? nextStep(summary) : null
   const percent = (value: number) => formatPercent(locale, value)
   return (
