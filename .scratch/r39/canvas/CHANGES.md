@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · PENDINGSHA · the Player opens on Play (its Practice's default), as the app · PlayerApp,PlayerDesk (every Player board) · pending
 - 2026-11-20 · 2288af07 · the Player's credit "New Britain (American folk tune)" and its one section "Verse", as the song and the app · PlayerApp,PlayerDesk (every Player board) · pending
 
 ## Changes

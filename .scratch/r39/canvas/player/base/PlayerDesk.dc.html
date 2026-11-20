@@ -476,7 +476,7 @@ const flip = (key, first) => () => this.setState({ [key]: !(s[key] ?? first) });
 const HOURGLASS = 'M5 22h14M5 2h14M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2';
 const WAVES = 'M2 5q2.5 2 5 0t5 0 5 0 5 0M2 12q2.5 2 5 0t5 0 5 0 5 0M2 19q2.5 2 5 0t5 0 5 0 5 0';
 const GAUGE = 'm12 14 4-4M3.34 19a10 10 0 1 1 17.32 0';
-const mode = s.mode ?? 'wait';
+const mode = s.mode ?? 'play';
 const speed = s.speed ?? 100;
 const hands = (s.showR ?? 'show') === 'hide' ? ((s.showL ?? 'show') === 'hide' ? 'both' : 'lh') : (s.showL ?? 'show') === 'hide' ? 'rh' : 'both';
 const bar = s.bar ?? 1;
