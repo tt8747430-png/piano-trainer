@@ -139,7 +139,7 @@ if (typeof document !== 'undefined') {
 /** What opens a sheet: the drawer's own trigger, or the popover's on a laptop, named for the sheet. */
 export function SheetTrigger(props: Parameters<typeof DrawerTrigger>[0]) {
   return use(PoppedContext) ? (
-    <PopoverTrigger render={props.render} />
+    <PopoverTrigger render={props.render}>{props.children}</PopoverTrigger>
   ) : (
     <DrawerTrigger {...props} />
   )
