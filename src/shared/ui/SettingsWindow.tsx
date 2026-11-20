@@ -4,7 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { Button } from './primitives/button'
 import { Dialog, DialogClose, DialogContent, DialogTitle } from './primitives/dialog'
+import { holdTallestUnder } from './hold-tallest'
 import { Sheet, SheetContent } from './Sheet'
+
+/** The window's held height (Publish back to Settings), never past its room. */
+const holdWindow = holdTallestUnder('calc(100dvh - 6rem)')
 
 /**
  * A thing's Settings over its page, never a page of its own (the SongSettings boards' SETWIN): on a
@@ -39,6 +43,7 @@ export function SettingsWindow({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
+        ref={holdWindow}
         showCloseButton={false}
         className="top-12 flex max-h-[calc(100dvh-6rem)] w-180 max-w-none translate-y-0 flex-col gap-0 overflow-hidden rounded-sheet bg-card p-0 text-base text-foreground shadow-[0_0_0_1px_var(--color-border),0_24px_64px_rgb(51_41_33/0.28)] sm:max-w-none"
       >

@@ -204,7 +204,7 @@ export function ProgressionEditor({
           />
         )}
       </DraftScreen>
-      <ProgressionSettingsWindow progression={opened} {...settingsWindow} />
+      <ProgressionSettingsWindow progression={opened} draft={draft} {...settingsWindow} />
     </>
   )
 }

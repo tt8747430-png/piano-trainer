@@ -18,7 +18,7 @@
    course's and a progression's Settings. On a laptop it is the app Settings' window (a centred dialog over the page,
    its places in a nav where it has more than one); on a phone it is a tall sheet with its pages inside, Back at the
    top. Its route goes, and a link to it opens the window.
-3. **A sheet keeps its height between its pages** (done, `Sheet`'s `holdTallest`, 2026-11-20).
+3. **A sheet keeps its height between its pages** (done, `Sheet`'s `holdTallest`, 2026-11-20; a thing's laptop window too, `holdTallestUnder`).
 
 ## The index
 

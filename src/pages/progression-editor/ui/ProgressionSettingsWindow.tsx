@@ -8,7 +8,7 @@ import {
   shipsWithApp,
   type LibraryProgression,
 } from '@/entities/progression-library'
-import { RemoveGroup, useProgressionDraft } from '@/features/edit-original'
+import { RemoveGroup, type ContentDraft } from '@/features/edit-original'
 import { localText, useLocale } from '@/shared/i18n'
 import { shareLink, useForgetScreens, type SettingsWindowState } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
@@ -34,11 +34,16 @@ const progressionPath = (progression: LibraryProgression): string =>
  */
 export function ProgressionSettingsWindow({
   progression,
+  draft,
   open,
   onOpenChange,
   page,
   onPage,
-}: { progression: LibraryProgression } & SettingsWindowState) {
+}: {
+  progression: LibraryProgression
+  /** The editor's own draft: the window reads it as it stands, never afresh. */
+  draft: ContentDraft<LibraryProgression>
+} & SettingsWindowState) {
   const { t } = useTranslation('learn')
   return (
     <SettingsWindow
@@ -52,9 +57,13 @@ export function ProgressionSettingsWindow({
       }
     >
       {page === 'publish' ? (
-        <ProgressionPublish progression={progression} />
+        <ProgressionPublish progression={progression} draft={draft} />
       ) : (
-        <ProgressionSettings progression={progression} onPublish={() => onPage('publish')} />
+        <ProgressionSettings
+          progression={progression}
+          draft={draft}
+          onPublish={() => onPage('publish')}
+        />
       )}
     </SettingsWindow>
   )
@@ -62,9 +71,11 @@ export function ProgressionSettingsWindow({
 
 function ProgressionSettings({
   progression,
+  draft,
   onPublish,
 }: {
   progression: LibraryProgression
+  draft: ContentDraft<LibraryProgression>
   onPublish: () => void
 }) {
   const { t } = useTranslation(['practice', 'learn', 'editor'])
@@ -72,7 +83,6 @@ function ProgressionSettings({
   const { account } = useAccount()
   const navigate = useNavigate()
   const forget = useForgetScreens()
-  const draft = useProgressionDraft(progression)
   const written = draft.load.state === 'ready' ? draft.load.value : progression
   const title = localText(written.name, locale) || written.id
   const share = async () => {
@@ -125,10 +135,15 @@ function ProgressionSettings({
 }
 
 /** A progression's Publish, a page in its Settings' window, the window's bar its bar. */
-function ProgressionPublish({ progression }: { progression: LibraryProgression }) {
+function ProgressionPublish({
+  progression,
+  draft,
+}: {
+  progression: LibraryProgression
+  draft: ContentDraft<LibraryProgression>
+}) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
-  const draft = useProgressionDraft(progression)
   const written = draft.load.state === 'ready' ? draft.load.value : progression
   const title = localText(written.name, locale) || written.id
   const path = progressionPath(written)

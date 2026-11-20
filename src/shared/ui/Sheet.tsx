@@ -15,6 +15,7 @@ import {
   DrawerTitle,
 } from './primitives/drawer'
 import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
+import { holdTallestUnder } from './hold-tallest'
 
 /**
  * A sheet from the right as the boards' laptop popover. Each class names the right edge as well as
@@ -145,23 +146,8 @@ export function SheetTrigger(props: Parameters<typeof DrawerTrigger>[0]) {
   )
 }
 
-/**
- * A sheet keeps the tallest height it has had while it stays open, as an iOS sheet keeps its detent:
- * turning to a shorter page (Count-in under the settings) or back never snaps it down for a frame and
- * up again. Set in the resize observer's callback, before paint, so no frame shows the shorter sheet;
- * never past the room the sheet may take (the phone's keyboard up).
- */
-function holdTallest(popup: HTMLElement | null) {
-  if (popup === null) return
-  let tallest = 0
-  const observer = new ResizeObserver(() => {
-    if (popup.offsetHeight <= tallest) return
-    tallest = popup.offsetHeight
-    popup.style.minHeight = `min(${tallest}px, var(--drawer-content-max-height, 100dvh))`
-  })
-  observer.observe(popup)
-  return () => observer.disconnect()
-}
+/** A sheet's held height, never past the room it may take. */
+const holdTallest = holdTallestUnder('var(--drawer-content-max-height, 100dvh)')
 
 /**
  * The app's bottom sheet: a drawer from the bottom that always shows its swipe handle. Every sheet
