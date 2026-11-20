@@ -413,6 +413,8 @@ export function PlayerLayout({
             loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
             pace={
               <PracticeSheet
+                performance={performance}
+                practice={practice}
                 mode={view.mode}
                 tempo={player.tempo}
                 ownTempo={player.ownTempo}

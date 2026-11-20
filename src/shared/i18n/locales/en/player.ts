@@ -376,6 +376,7 @@ export const player = {
   },
   practiceSheet: {
     tempo: 'Tempo',
+    tap: 'Tap',
     title: 'Practice',
     of: 'Practice: {{mode}}',
     wait: 'Wait',

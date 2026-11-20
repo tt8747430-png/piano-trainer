@@ -89,9 +89,9 @@ export interface PlaybackSettings {
   readonly countdown: Countdown
   readonly speedStep: SpeedStep
 }
-/** No count-in, 5% a pass. */
+/** A bar counted in, as the Practice sheet's board starts; 5% a pass. */
 export const DEFAULT_PLAYBACK: PlaybackSettings = {
-  countdown: 'none',
+  countdown: 'audible',
   speedStep: 5,
 }
 

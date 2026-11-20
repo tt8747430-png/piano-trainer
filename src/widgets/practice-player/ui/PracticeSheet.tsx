@@ -3,21 +3,22 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectPlayback, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useTapTempo } from '@/features/metronome'
-import type { PracticeMode } from '@/features/practice'
+import { useBeat, type Practice, type PracticeMode } from '@/features/practice'
 import { setPlayback } from '@/features/set-preference'
 import {
   FloatingBarButton,
   GroupField,
   GroupRows,
-  GroupSegmented,
+  GroupRow,
   RadioCards,
+  Segmented,
   SettingsGroup,
   Sheet,
   SheetContent,
-  TempoSteps,
 } from '@/shared/ui'
-import { tempoWord } from '@/shared/lib/music'
-import { Button } from '@/shared/ui/primitives/button'
+import { cn } from '@/shared/lib'
+import type { Performance } from '@/shared/lib/arrangement'
+import { beatsPerBar, tempoWord } from '@/shared/lib/music'
 import { PlayAlongIcon } from './PlayAlongIcon'
 import { DOCK_CAPTIONED } from './dock-sizes'
 
@@ -31,13 +32,57 @@ const wayOf = (mode: PracticeMode): Way => (mode === 'listen' ? 'play' : 'wait')
 type Click = 'off' | 'countIn' | 'on'
 const CLICKS: readonly Click[] = ['off', 'countIn', 'on']
 
+/** A filled pill of the tempo's, its colour alone changing on a press (`DESIGN.md`). */
+const PILL =
+  'flex-none rounded-full font-semibold text-foreground transition-colors hover:bg-muted-foreground/15 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none'
+/** The tempo's − and +: 44 round, the sign 20. */
+const STEP = cn(PILL, 'size-11 bg-muted text-xl font-normal')
+
+/**
+ * The bar's beats as PlayerApp's Practice sheet draws them: the meter, then a dot a beat, the first
+ * 16 and the rest 12, the one sounding lit in honey while the music plays.
+ */
+function BeatLights({
+  performance,
+  practice,
+}: {
+  performance: Performance
+  practice: Pick<Practice, 'state' | 'clock'>
+}) {
+  const now = useBeat(performance, practice)
+  const lit = practice.state.playing ? now.beat : null
+  const beats = beatsPerBar(performance.meter)
+  return (
+    <div className="flex items-center justify-center gap-2">
+      <span className="min-w-8 text-[0.8125rem]/[normal] font-bold text-muted-foreground tabular-nums">
+        {performance.meter}
+      </span>
+      {Array.from({ length: beats }, (_, beat) => (
+        <span
+          key={beat}
+          aria-hidden
+          className={cn(
+            'rounded-full',
+            beat === 0 ? 'size-4' : 'size-3',
+            beat === lit ? 'bg-honey-ring' : beat === 0 ? 'bg-muted-foreground/40' : 'bg-border',
+          )}
+        />
+      ))}
+      <span aria-hidden className="min-w-8" />
+    </div>
+  )
+}
+
 /**
  * The transport's Practice (its canvas's Practice sheet, R37): its button wears the way chosen, its
- * picture over its name. The sheet holds Wait and Play as two cards, then the tempo (the Metronome's
- * face: −10 −1, the BPM, +1 +10; the score's tempo to go back to where it differs) and the metronome,
- * Off · Count-in · On. Each works in both ways; nothing disables another.
+ * picture over its name. The sheet holds Wait and Play as two cards, then the tempo as PlayerApp
+ * draws it (the meter and its beats; − the BPM and its mark +, then Tap; the score's tempo to go back
+ * to where it differs) and the metronome, Off · Count-in · On. Each works in both ways; nothing
+ * disables another.
  */
 export function PracticeSheet({
+  performance,
+  practice,
   mode,
   tempo,
   ownTempo,
@@ -49,6 +94,9 @@ export function PracticeSheet({
   onTempo,
   onClick,
 }: {
+  performance: Performance
+  /** Where the music is, for the beat sounding. */
+  practice: Pick<Practice, 'state' | 'clock'>
   mode: PracticeMode
   tempo: number
   ownTempo: number
@@ -111,44 +159,76 @@ export function PracticeSheet({
           ) : null}
           <SettingsGroup bare title={t('practiceSheet.tempo')}>
             <GroupRows surface="sheet" label={t('practiceSheet.tempo')}>
-              <GroupField className="px-2">
-                <div className="flex flex-col items-center gap-3">
-                  <TempoSteps
-                    bpm={tempo}
-                    mark={tMusic(`tempoWord.${tempoWord(tempo)}.name`)}
-                    onStep={(by) => onTempo(tempo + by)}
-                  />
-                  {/* The tempo is the metronome's, with − + Tap and its marking (R37 ruling). */}
-                  <div className="flex flex-wrap justify-center gap-2">
-                    <Button
-                      variant="soft"
-                      onClick={() => {
-                        const bpm = taps.tap()
-                        if (bpm !== null) onTempo(bpm)
-                      }}
+              <GroupField className="flex-col items-stretch gap-3 p-4">
+                <BeatLights performance={performance} practice={practice} />
+                <div className="flex items-center justify-center gap-4">
+                  <button
+                    type="button"
+                    aria-label={tPractice('metronome.slower', { step: 1 })}
+                    title={tPractice('metronome.slower', { step: 1 })}
+                    onClick={() => onTempo(tempo - 1)}
+                    className={STEP}
+                  >
+                    −
+                  </button>
+                  <p className="flex min-w-25 flex-col items-center">
+                    <span className="sr-only">{tPractice('metronome.tempo', { bpm: tempo })}</span>
+                    <span aria-hidden className="text-[2.5rem]/none font-bold tabular-nums">
+                      {tempo}
+                    </span>
+                    <span
+                      aria-hidden
+                      className="mt-1 text-xs/[normal] font-semibold text-muted-foreground"
                     >
-                      {tPractice('metronome.tap')}
-                    </Button>
-                    {tempo === ownTempo ? null : (
-                      <Button variant="soft" onClick={() => onTempo(ownTempo)}>
-                        {t('practiceSheet.scoreTempo', { tempo: ownTempo })}
-                      </Button>
-                    )}
-                  </div>
+                      {`${tPractice('metronome.bpm')} · ${tMusic(`tempoWord.${tempoWord(tempo)}.name`)}`}
+                    </span>
+                  </p>
+                  <button
+                    type="button"
+                    aria-label={tPractice('metronome.faster', { step: 1 })}
+                    title={tPractice('metronome.faster', { step: 1 })}
+                    onClick={() => onTempo(tempo + 1)}
+                    className={STEP}
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={tPractice('metronome.tap')}
+                    onClick={() => {
+                      const bpm = taps.tap()
+                      if (bpm !== null) onTempo(bpm)
+                    }}
+                    className={cn(PILL, 'h-11 bg-hairline px-4 text-sm')}
+                  >
+                    {t('practiceSheet.tap')}
+                  </button>
                 </div>
+                {tempo === ownTempo ? null : (
+                  <button
+                    type="button"
+                    onClick={() => onTempo(ownTempo)}
+                    className={cn(PILL, 'h-7.5 self-center bg-muted px-4 text-[0.8125rem]')}
+                  >
+                    {t('practiceSheet.scoreTempo', { tempo: ownTempo })}
+                  </button>
+                )}
               </GroupField>
-              <GroupSegmented
-                setting="playback.countdown"
-                label={t('practiceSheet.metronome')}
-                value={metronome}
-                options={CLICKS.map((each) => ({
-                  value: each,
-                  label: t(
-                    `practiceSheet.metronome${each === 'off' ? 'Off' : each === 'on' ? 'On' : 'CountIn'}`,
-                  ),
-                }))}
-                onChange={setMetronome}
-              />
+              <GroupRow label={t('practiceSheet.metronome')} setting="playback.countdown">
+                <span className="w-59 shrink-0">
+                  <Segmented
+                    label={t('practiceSheet.metronome')}
+                    value={metronome}
+                    options={CLICKS.map((each) => ({
+                      value: each,
+                      label: t(
+                        `practiceSheet.metronome${each === 'off' ? 'Off' : each === 'on' ? 'On' : 'CountIn'}`,
+                      ),
+                    }))}
+                    onChange={setMetronome}
+                  />
+                </span>
+              </GroupRow>
             </GroupRows>
           </SettingsGroup>
         </div>
