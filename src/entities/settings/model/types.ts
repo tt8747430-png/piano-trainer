@@ -42,8 +42,7 @@ export type Theme = (typeof THEMES)[number]
  * The Player's saved switches: the View menu's chord positions, finger numbers and named notes, and
  * the click (`metronome`, the transport's quick toggle, ADR 0105).
  */
-export const PRACTICE_TOGGLES = ['fingerNumbers', 'namedNotes', 'positions', 'metronome'] as const
-export type PracticeToggle = (typeof PRACTICE_TOGGLES)[number]
+export type PracticeToggle = 'fingerNumbers' | 'namedNotes' | 'positions' | 'metronome'
 export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
 
 /**
@@ -122,8 +121,7 @@ export interface KeyboardSettings {
 }
 
 /** The sizes of screen the keys' height is kept for (R34): a phone upright, on its side, a wider screen. */
-export const KEYS_SCREEN_SIZES = ['phone', 'side', 'wide'] as const
-export type KeysScreenSize = (typeof KEYS_SCREEN_SIZES)[number]
+export type KeysScreenSize = 'phone' | 'side' | 'wide'
 /**
  * The keys' window where the learner left it (loop round 24): px from the screen's left and its foot,
  * its width and height.
@@ -302,13 +300,13 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
 }
 
 /** The bar trainer as left: on or off, its counts kept either way. */
-export interface BarTrainerSettings extends BarTrainer {
+interface BarTrainerSettings extends BarTrainer {
   readonly on: boolean
 }
 
 /** The Metronome as the learner left it (ADR 0052): its tempo, meter, sound and bar trainer. */
 /** The speed trainer (A39): from one tempo toward another by a step every so many bars. */
-export interface SpeedTrainerSettings extends SpeedTrainer {
+interface SpeedTrainerSettings extends SpeedTrainer {
   readonly on: boolean
 }
 

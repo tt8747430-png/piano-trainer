@@ -39,7 +39,7 @@ export function openingScore(piece: Piece, bars: number): Score {
 }
 
 /** The heads a song's small cover draws: its first notes, enough to know the tune by. */
-export const MARK_NOTES = 5
+const MARK_NOTES = 5
 
 /** The step of a clef's middle line, counted in letters from C0: B4 on a treble staff, D3 on a bass. */
 const MIDDLE_LINE = { treble: 4 * 7 + 6, bass: 3 * 7 + 1 } as const

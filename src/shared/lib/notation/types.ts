@@ -184,7 +184,7 @@ export const clefOf = (staff: StaffId): Clef => (staff === 'bass' ? 'bass' : 'tr
 export const clefIn = (measure: Pick<Measure, 'clefs'>, staff: StaffId): Clef =>
   measure.clefs?.[staff] ?? clefOf(staff)
 
-export interface ChordMark {
+interface ChordMark {
   readonly tick: Tick
   readonly symbol: string
 }

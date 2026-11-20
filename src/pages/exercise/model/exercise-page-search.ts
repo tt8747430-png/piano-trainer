@@ -21,4 +21,4 @@ export interface ExercisePageSearch {
 }
 
 /** The orders Next key takes, the circle of fifths absent. */
-export type KeyOrder = 'chromatic'
+type KeyOrder = 'chromatic'

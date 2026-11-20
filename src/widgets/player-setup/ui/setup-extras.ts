@@ -19,7 +19,7 @@ export interface SettingsPageRow extends SettingsRow {
  * A row leading to a page that is a setting's home elsewhere (R32: the On-screen piano's page, the
  * home of every on-screen piano's settings): `render` is its router `Link`.
  */
-export interface SettingsLinkRow extends SettingsRow {
+interface SettingsLinkRow extends SettingsRow {
   readonly render: ReactElement
 }
 

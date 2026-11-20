@@ -47,7 +47,7 @@ import { resolveChoice, searchPatch, type PlayerSearch } from './player-search'
 import type { WalkingPlayerOf } from './player-of'
 
 /** A piece's Player: a walking Player's, and its tools row's Simplify (ADR 0105). */
-export interface PiecePlayerOf extends WalkingPlayerOf<PracticeChoice, SetupChange> {
+interface PiecePlayerOf extends WalkingPlayerOf<PracticeChoice, SetupChange> {
   /** What this piece is offered: a score's or a chord chart's controls (A35). */
   readonly controls: ReadonlySet<PlayerControl>
   /** Which tracks play and show (A35). */

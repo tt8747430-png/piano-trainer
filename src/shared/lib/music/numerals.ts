@@ -40,8 +40,8 @@ export interface Numeral {
 }
 
 /** The chord tones a numeral writes in its bass, after a slash: `/3`, `/5`, `/7`. */
-export const NUMERAL_BASSES = ['3rd', '5th', '7th'] as const
-export type NumeralBass = (typeof NUMERAL_BASSES)[number]
+const NUMERAL_BASSES = ['3rd', '5th', '7th'] as const
+type NumeralBass = (typeof NUMERAL_BASSES)[number]
 /** A bass's tone as a numeral writes it, and back. */
 const BASS_DIGITS: ReadonlyMap<NumeralBass, string> = new Map(
   NUMERAL_BASSES.map((role) => [role, role.charAt(0)] as const),
@@ -52,7 +52,7 @@ const DIGIT_BASSES = new Map([...BASS_DIGITS].map(([role, digit]) => [digit, rol
  * The degree an applied numeral is read from, after its slash: its index and shift, and its key's mode,
  * minor under lower case (`/ii`, D minor in C), major under upper (`/IV`).
  */
-export interface AppliedDegree {
+interface AppliedDegree {
   readonly degree: number
   readonly shift: -1 | 0 | 1
   readonly minor: boolean

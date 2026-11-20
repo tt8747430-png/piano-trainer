@@ -9,7 +9,7 @@ type MorePlurals<K> = K extends `${infer Base}_other`
  * The same keys as English, every leaf a string: a missing or extra Russian key fails tsc, but for
  * the plural forms English has no word for, beside a key English counts with `_one` and `_other`.
  */
-export type DeepStrings<T> = {
+type DeepStrings<T> = {
   readonly [K in keyof T]: T[K] extends string ? string : DeepStrings<T[K]>
 } & { readonly [K in MorePlurals<keyof T>]?: string }
 

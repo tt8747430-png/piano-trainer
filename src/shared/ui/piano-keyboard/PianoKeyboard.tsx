@@ -35,7 +35,7 @@ const LARGE_WHITE_PX = 56
  * A key is this many times as long as a white key is wide, on every screen and in a chord's diagram:
  * a piano's proportion…
  */
-export const KEY_LENGTH = 4.4
+const KEY_LENGTH = 4.4
 /** …never shorter than this (All keys on a phone: Songscription's slim keys), unless the screen's share is less… */
 export const MIN_KEYS_PX = 56
 /** …nor taller than this share of the screen's height (`--keys-most`: less on a phone on its side). */

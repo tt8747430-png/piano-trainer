@@ -6,7 +6,7 @@ import { createContext, use } from 'react'
  * section as Flat's, its signs bare in a table; `row`, its signs alone in one row, as the editor's
  * folded palette shows them (Flat's).
  */
-export type PickerLayout = 'grid' | 'palette' | 'row'
+type PickerLayout = 'grid' | 'palette' | 'row'
 
 export const PickerLayoutContext = createContext<PickerLayout>('grid')
 

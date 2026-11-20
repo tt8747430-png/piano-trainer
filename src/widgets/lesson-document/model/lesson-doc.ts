@@ -4,7 +4,7 @@ import type { BlockStyle } from '@/shared/lib/style'
 import { carriedBlockOf, carriedStyleOf, inStyle } from './carried'
 
 /** A mark on a run of text: bold, a text block's lead. */
-export interface DocMark {
+interface DocMark {
   readonly type: string
 }
 

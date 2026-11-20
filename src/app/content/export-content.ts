@@ -5,7 +5,7 @@ import type { ContentKind } from '@/shared/api/content'
 import { contentHash } from '@/shared/lib'
 
 /** One content item as the database holds it (ADR 0116): what lists show in `meta`, the whole item in `body`. */
-export interface ContentRecord {
+interface ContentRecord {
   readonly kind: ContentKind
   readonly id: string
   readonly version: string
@@ -26,7 +26,7 @@ const lessonMeta = (lesson: Lesson) => ({ title: lesson.title })
  * Every body the app carries, as the database keys it: a course's lesson as `<course>/<lesson>`, a
  * course's own as its record, a journey whole.
  */
-export function bundledBodies(): readonly Omit<ContentRecord, 'version' | 'meta'>[] {
+function bundledBodies(): readonly Omit<ContentRecord, 'version' | 'meta'>[] {
   return [
     ...PIECES.map((piece) => ({
       kind: 'piece' as const,

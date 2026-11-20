@@ -15,7 +15,7 @@ export type StaffMarks = (typeof STAFF_MARKS)[number]
 
 /** A run's octaves on the Scales page: one to four, as the scale books practise them (R29-P9). */
 export const RUN_OCTAVES = [1, 2, 3, 4] as const
-export type RunOctaves = (typeof RUN_OCTAVES)[number]
+type RunOctaves = (typeof RUN_OCTAVES)[number]
 
 /** What the Scales explorer shows: the scale, what its keys carry, and how it is practised. */
 export interface ScaleView {

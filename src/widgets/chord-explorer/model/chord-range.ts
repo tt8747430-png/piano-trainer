@@ -10,7 +10,7 @@ export const RANGE_WHITES: Record<Exclude<ChordRange, 'chord'>, number> = { two:
  * highest; or two or four octaves of white keys from `from` (where the learner dragged the strip),
  * else from the C under the chord (an octave lower for four), moved in from the piano's ends.
  */
-export function chordRange(
+function chordRange(
   midis: readonly Midi[],
   range: ChordRange,
   from: Midi | null = null,

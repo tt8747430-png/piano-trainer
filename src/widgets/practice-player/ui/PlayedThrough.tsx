@@ -13,7 +13,7 @@ const GROUP = 4
 const SLIP_PAINT = ['bg-slip-0', 'bg-slip-1', 'bg-slip-2', 'bg-slip-3'] as const
 
 /** What a Wait pass played through to its end says (the board's PlayerDone). */
-export interface PassDone {
+interface PassDone {
   /** The pass's score, a whole percent of steps played right first time. */
   readonly score: number
   /** The weakest bar or two, where they are under the takes' weak share; none, all were strong. */

@@ -5,7 +5,7 @@ import { usePlayhead, useServices } from '@/shared/lib/services'
 import type { Heard } from './editor-context'
 
 /** The playhead as the sheet draws it: where it stands, and the clock it follows while it plays. */
-export interface SheetPlayhead {
+interface SheetPlayhead {
   readonly tick: Tick
   readonly clock: () => Tick | null
 }

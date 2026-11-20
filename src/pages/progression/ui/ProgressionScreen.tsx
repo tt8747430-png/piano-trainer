@@ -22,7 +22,7 @@ import {
 import { ProgressionSettings } from './ProgressionSettings'
 
 /** What a progression's page shows: the library's, the learner's own, or a line typed. */
-export type ShownProgression =
+type ShownProgression =
   | { readonly kind: 'library'; readonly progression: LibraryProgression }
   | { readonly kind: 'own'; readonly progression: OwnProgression }
   | { readonly kind: 'line'; readonly title: string; readonly named?: LibraryProgression }

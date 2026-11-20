@@ -38,7 +38,7 @@ import {
   type Insertable,
 } from './commands'
 
-export const INSERT_ICONS: Record<Insertable, LucideIcon> = {
+const INSERT_ICONS: Record<Insertable, LucideIcon> = {
   text: Pilcrow,
   steps: ListOrdered,
   note: StickyNote,

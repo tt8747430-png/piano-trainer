@@ -8,7 +8,7 @@ import { Sheet, SheetContent, SheetTrigger } from '../Sheet'
 const SHEET_WIDTH = '(max-width: 29.99rem)'
 
 /** What a picker's panel is handed: how to close it, and where the focus lands as it opens. */
-export interface PickerPanel {
+interface PickerPanel {
   close(): void
   /** Spread on what takes the focus as the panel opens: the value chosen. */
   start: { readonly 'data-picker-start': string }

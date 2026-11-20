@@ -14,7 +14,7 @@ import type { SheetField } from '@/widgets/score-sheet'
  * hides what it writes, the words go on another staff (ADR 0097: a single staff, or the upper staff),
  * the staff has no note to sing, fingers go on the piano's staves (ADR 0114), on a note.
  */
-export type FieldReason =
+type FieldReason =
   | 'chordsHidden'
   | 'lyricsHidden'
   | 'fingersHidden'

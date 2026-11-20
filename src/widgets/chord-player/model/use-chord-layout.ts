@@ -17,7 +17,7 @@ import { resetPageLayout, restoreLayouts, setPanel } from '@/features/arrange-pa
 import { sayUndo } from '@/shared/ui'
 
 /** The Chord player's page in the layouts. */
-export const CHORD_PLAYER_PAGE = 'chord-player'
+const CHORD_PLAYER_PAGE = 'chord-player'
 /** One of its panels: the keys, the controls (the dock), the Genos, a laptop's key chords. */
 export type ChordPanel = PanelOf<typeof CHORD_PLAYER_PAGE>
 

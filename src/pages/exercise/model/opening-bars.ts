@@ -30,7 +30,7 @@ function barsBetween(performance: Performance, from: number, to: number): TimedM
 }
 
 /** One system of an exercise's opening: its music and the number of its first bar. */
-export interface OpeningSystem {
+interface OpeningSystem {
   readonly music: TimedMusic
   readonly from: number
 }

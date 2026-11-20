@@ -16,7 +16,7 @@ interface Where {
  * the playlist open, `folder`, or at Home) and each only where it may be done here: a built-in
  * playlist takes no new one. It adds, and only adds: Explore is a place, and a group is made on Groups.
  */
-export function useNewActions({ page, folder, onImport }: Where): readonly MenuAction[] {
+function useNewActions({ page, folder, onImport }: Where): readonly MenuAction[] {
   const { t } = useTranslation('songs')
   return [
     ...(page.may('addSong')

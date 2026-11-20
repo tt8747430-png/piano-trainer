@@ -150,7 +150,7 @@ function CourseDocument({
 }
 
 /** Where the course editor writes: an editor's draft of one of the app's courses, or the learner's own. */
-export type CourseSource =
+type CourseSource =
   | { readonly kind: 'draft'; readonly course: Course }
   | { readonly kind: 'own'; readonly course: OwnCourse }
 

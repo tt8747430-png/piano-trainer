@@ -5,7 +5,7 @@ import { CLEFS } from '@/shared/lib/music'
 import { useEditorState } from './editor-context'
 
 /** A single staff without its notes: what its name prints and its switch in the View show. */
-export type StaffHead = Pick<DraftStaff, 'name' | 'clef'>
+type StaffHead = Pick<DraftStaff, 'name' | 'clef'>
 
 const isClef = isOneOf(CLEFS)
 

@@ -58,7 +58,7 @@ export function chartBar(performance: Performance, written: number): ChartBar | 
 }
 
 /** A section's bars: the first and the last, by index. */
-export interface SectionBars {
+interface SectionBars {
   readonly first: number
   readonly last: number
 }

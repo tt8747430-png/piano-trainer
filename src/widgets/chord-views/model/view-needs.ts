@@ -2,7 +2,7 @@ import type { MusicView } from '@/entities/settings'
 import type { Performance } from '@/shared/lib/arrangement'
 
 /** What a view of the music needs that the music may not have: words, or chord symbols. */
-export type ViewNeed = 'words' | 'chords'
+type ViewNeed = 'words' | 'chords'
 
 /**
  * The Player's views the music cannot show, each with what it needs (ADR 0108); a view left out can

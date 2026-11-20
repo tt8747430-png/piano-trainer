@@ -12,7 +12,7 @@ export type DraftLoad<T> =
   | { readonly state: 'ready'; readonly value: T }
 
 /** The last save of the draft: none yet, on its way, kept, or not kept (and why). */
-export type DraftSaved = 'idle' | 'saving' | 'saved' | 'offline' | 'failed'
+type DraftSaved = 'idle' | 'saving' | 'saved' | 'offline' | 'failed'
 
 /** A publish refused before it is sent: the draft does not read as the item. */
 export type Unreadable = { readonly ok: false; readonly reason: 'unreadable' }

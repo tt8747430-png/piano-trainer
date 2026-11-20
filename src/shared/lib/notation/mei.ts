@@ -38,7 +38,7 @@ import { ticksOf } from './values'
 export const pedalId = (tick: number): string => `ped-${tick}`
 
 /** What a Score is written as besides its music. */
-export interface MeiOptions {
+interface MeiOptions {
   /** Its title, in the header (a page's). */
   readonly title?: string
   /** The staves drawn, of those it writes, top down: every one by default. */

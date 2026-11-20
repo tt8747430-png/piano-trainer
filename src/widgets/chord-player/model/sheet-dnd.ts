@@ -6,7 +6,7 @@ import type { ChordPlace } from '@/shared/lib/arrangement'
  * a chord `chord-2-5` (its section, its place there), a section's end (its + after the last bar)
  * `end-2`, one of the key's chords beside the sheet on a laptop `key-3` (its place in the row).
  */
-export type SheetDragId =
+type SheetDragId =
   `section-${number}` | `chord-${number}-${number}` | `end-${number}` | `key-${number}`
 
 /** What a drag id names: a section, a chord in its section, or the end of a section. */

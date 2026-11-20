@@ -12,7 +12,7 @@ export type Browse =
   | { readonly kind: 'failed'; readonly reason: NetFailure }
 
 /** What one browse of Explore asks for: a chip's songs or patterns, in one order, searched. */
-export interface BrowseAsk {
+interface BrowseAsk {
   readonly cat: ExploreCategory
   readonly sort: PublicSort
   readonly q: string
@@ -22,7 +22,7 @@ export interface BrowseAsk {
 const SETTLE_MS = 300
 
 /** A chip's kind and tag: Patterns the patterns, All every song, the rest the songs tagged so. */
-export function askOf(cat: ExploreCategory): { kind: PublicKind; tag?: string } {
+function askOf(cat: ExploreCategory): { kind: PublicKind; tag?: string } {
   if (cat === 'patterns') return { kind: 'pattern' }
   if (cat === 'all') return { kind: 'song' }
   return { kind: 'song', tag: EXPLORE_TAGS[cat] }

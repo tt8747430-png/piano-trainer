@@ -22,7 +22,7 @@ import { LibraryTile } from './LibraryTile'
 const LEADING = ['favourite'] as const
 
 /** A row in Edit (the board's): its handle where its heart stood, its face as it reads, no link. */
-export interface RowArranging {
+interface RowArranging {
   readonly handle: ReactNode
   readonly node: Ref<HTMLLIElement>
   readonly style: CSSProperties

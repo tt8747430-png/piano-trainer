@@ -6,7 +6,7 @@ import type { FigureEntry } from './types'
 
 /** What a pattern or figure may need that not all music has, in the order a closed one names it. */
 const FIGURE_NEEDS = ['tune', 'key', 'simpleTime'] as const
-export type FigureNeed = (typeof FIGURE_NEEDS)[number]
+type FigureNeed = (typeof FIGURE_NEEDS)[number]
 
 /**
  * What the music the Player plays has for its patterns and figures: a chart that names its own

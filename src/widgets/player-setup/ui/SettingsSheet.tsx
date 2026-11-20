@@ -44,7 +44,7 @@ const rank = (row: SettingsRow) => {
 }
 
 /** A page the screen's own Settings open inside the sheet: its title and what it shows. */
-export interface InnerPage {
+interface InnerPage {
   readonly title: string
   readonly content: ReactNode
   /** Its Back, in the sheet's header. */

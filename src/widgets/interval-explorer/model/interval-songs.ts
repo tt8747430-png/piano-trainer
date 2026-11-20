@@ -3,10 +3,10 @@ import type { INTERVAL_GROUPS } from '@/shared/lib/music'
 import type { RowInterval } from './interval-rows'
 
 /** Songs by title, in each language its own list: a Russian learner knows other songs. */
-export type SongTitles = Readonly<Record<Locale, readonly string[]>>
+type SongTitles = Readonly<Record<Locale, readonly string[]>>
 
 /** The songs that open with an interval, rising and falling; the unison has one list. */
-export interface IntervalSongs {
+interface IntervalSongs {
   readonly up: SongTitles
   readonly down?: SongTitles
 }

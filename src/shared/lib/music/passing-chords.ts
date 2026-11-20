@@ -19,7 +19,7 @@ export const PASSING_CATEGORIES = [
   'diatonic',
   'cadence',
 ] as const
-export type PassingCategory = (typeof PASSING_CATEGORIES)[number]
+type PassingCategory = (typeof PASSING_CATEGORIES)[number]
 
 /** The ways to get from one chord to another, each a rule from the target's root. */
 const PASSING_KINDS = [
@@ -40,7 +40,7 @@ const PASSING_KINDS = [
   'minorPlagal',
   'gospelWalkUp',
 ] as const
-export type PassingKind = (typeof PASSING_KINDS)[number]
+type PassingKind = (typeof PASSING_KINDS)[number]
 
 const CATEGORY_OF: Readonly<Record<PassingKind, PassingCategory>> = {
   secondaryDominant: 'dominant',

@@ -24,7 +24,7 @@ export type ArrangeSheet =
   | { readonly kind: 'newFolder' }
 
 /** A library as the learner arranged it. */
-export interface ArrangedLibraryView {
+interface ArrangedLibraryView {
   /** Every place, in the learner's order, hidden ones too: Edit and Move to list them. */
   readonly places: readonly ArrangedPlace[]
   /** The places shown: the tree's and the phone's runs. */

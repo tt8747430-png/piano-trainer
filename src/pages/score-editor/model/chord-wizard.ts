@@ -11,7 +11,7 @@ import {
 
 /** The accidentals the wizard writes a root with: ♭, none, ♯. */
 export const WIZARD_ACCIDENTALS = [-1, 0, 1] as const
-export type WizardAccidental = (typeof WIZARD_ACCIDENTALS)[number]
+type WizardAccidental = (typeof WIZARD_ACCIDENTALS)[number]
 
 /** A chord as Flat's wizard builds it: a root's letter and accidental, a quality, an inversion. */
 export interface WizardChoice {

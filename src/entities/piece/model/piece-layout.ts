@@ -12,7 +12,7 @@ interface Range {
 export const PAGE_SIZES = ['a4', 'a3', 'letter'] as const
 export type PageSize = (typeof PAGE_SIZES)[number]
 /** Each page size's width and height in millimetres, upright. */
-export const PAGE_MM: Readonly<Record<PageSize, { width: number; height: number }>> = {
+const PAGE_MM: Readonly<Record<PageSize, { width: number; height: number }>> = {
   a4: { width: 210, height: 297 },
   a3: { width: 297, height: 420 },
   letter: { width: 215.9, height: 279.4 },

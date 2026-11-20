@@ -1,7 +1,7 @@
 import type { ParseKeys } from 'i18next'
 
 /** A step of the guide: its words. */
-export interface GuideStep {
+interface GuideStep {
   readonly key: ParseKeys<'settings'>
 }
 

@@ -70,11 +70,11 @@ export function readTrainerSearch(raw: Raw): TrainerView {
 export const trainerSearch = routeSearch(readTrainerSearch, TRAINER_DEFAULTS)
 
 // Scales and keys' staff layers (A24): the page they were opened from, kept only for Back.
-export const PRACTICE_SETTINGS_FROM = ['scales'] as const
+const PRACTICE_SETTINGS_FROM = ['scales'] as const
 export type PracticeSettingsFrom = (typeof PRACTICE_SETTINGS_FROM)[number]
 export const isPracticeSettingsFrom = (value: unknown): value is PracticeSettingsFrom =>
   PRACTICE_SETTINGS_FROM.some((page) => page === value)
-export interface PracticeSettingsSearch {
+interface PracticeSettingsSearch {
   readonly from?: PracticeSettingsFrom
 }
 export function validatePracticeSettingsSearch(
@@ -87,7 +87,7 @@ export function validatePracticeSettingsSearch(
 // An exercise's page (A41): the key, hands, octaves and tempo it is set to start at, each absent for
 // the exercise's own.
 const EXERCISE_PAGE_DEFAULTS: ExercisePageSearch = {}
-export function readExercisePageSearch(raw: Raw): ExercisePageSearch {
+function readExercisePageSearch(raw: Raw): ExercisePageSearch {
   const root = readNote(raw.root)
   return {
     root: root ? noteParam(root) : undefined,
@@ -106,7 +106,7 @@ export const exercisePageSearch = routeSearch(readExercisePageSearch, EXERCISE_P
 // A library of Practice's (R30-4: Exercises, Accompaniment, Progressions), as Songs' holds its
 // filters: what is searched, the sort, the place open in its tree, the one level shown. A place is a
 // word the page reads against its own books; one it does not have shows All.
-export const PRACTICE_LIBRARY_DEFAULTS: PracticeLibraryView = {
+const PRACTICE_LIBRARY_DEFAULTS: PracticeLibraryView = {
   q: '',
   sort: 'group',
   place: 'all',
@@ -141,10 +141,10 @@ export const practiceLibrarySearch = routeSearch(
 )
 
 /** The Exercises route: a library's view and the shelf it shows (`book`) (Finger technique by default). */
-export interface ExercisesSearch extends PracticeLibraryView {
+interface ExercisesSearch extends PracticeLibraryView {
   readonly book: ExerciseShelf
 }
-export const EXERCISES_DEFAULTS: ExercisesSearch = {
+const EXERCISES_DEFAULTS: ExercisesSearch = {
   ...PRACTICE_LIBRARY_DEFAULTS,
   book: 'technique',
 }

@@ -12,7 +12,7 @@ import { RoundLink, sayUndo, ScreenHeader, type EditAction } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
 
 /** A lesson either side of this one, or the way on past the last: a router `Link`, named. */
-export interface WayLink {
+interface WayLink {
   readonly link: ReactElement
   /** Which way it is: Next lesson, Back to the journey. */
   readonly label: string

@@ -11,7 +11,7 @@ import { useSetup } from '@/widgets/player-setup'
 const LEVELS: readonly SongVersion[] = ['easy', 'simple', 'original']
 
 /** A group of the song's music: whose it is, and with or without the song's voice. */
-export type VersionGroup = 'own' | 'solo' | 'voice'
+type VersionGroup = 'own' | 'solo' | 'voice'
 
 /** What the Arrangement card chooses at once: a group's music at a level. */
 export interface VersionChoice {

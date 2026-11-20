@@ -105,7 +105,7 @@ export function isCourseRecord(id: string, body: unknown): body is CourseRecord 
 }
 
 /** A record that stands as a course of its own: one an editor made, with its shelf, stage and weeks. */
-export type WholeCourseRecord = CourseRecord & {
+type WholeCourseRecord = CourseRecord & {
   readonly line: LocalText
   readonly lessons: readonly string[]
   readonly shelf: Shelf

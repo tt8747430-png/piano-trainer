@@ -2,7 +2,7 @@ import { Fragment, type ReactNode } from 'react'
 import { PAGE, PAGE_STRETCH } from '@/shared/lib'
 
 /** What a page holds, top down: a system, or a heading with the system under it, kept together. */
-export interface PageBlock {
+interface PageBlock {
   readonly key: string
   readonly content: ReactNode
 }

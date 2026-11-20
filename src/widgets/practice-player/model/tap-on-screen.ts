@@ -1,5 +1,5 @@
 /** What a tap on the Player's screen does to its floating transport. */
-export type DockTap = 'show' | 'toggle' | 'none'
+type DockTap = 'show' | 'toggle' | 'none'
 
 /** The controls a tap works itself: a tap on one leaves the transport as it is. */
 const CONTROL =

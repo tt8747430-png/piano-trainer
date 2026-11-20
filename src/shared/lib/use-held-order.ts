@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { reconcileHeldOrder } from './order'
 
 /** An order a drop asked for, kept on screen until the list it was dropped on says the same. */
-export interface HeldOrder<T> {
+interface HeldOrder<T> {
   /** The order to draw: the one dropped, until the list says the same. */
   readonly order: readonly T[]
   /** Holds the order a drop made. */

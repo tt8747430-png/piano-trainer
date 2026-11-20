@@ -237,7 +237,7 @@ export const progressionsSearch = {
 // A library's or the learner's own progression's page (R30-4): the key it is shown in, its chord size
 // (its own where left out) and what leads into each chord.
 const PROGRESSION_DEFAULTS: ProgressionSearch = { key: C_MAJOR_PARAM }
-export function readProgressionSearch(raw: Raw): ProgressionSearch {
+function readProgressionSearch(raw: Raw): ProgressionSearch {
   const line = readProgressionsSearch(raw)
   return {
     key: line.key,

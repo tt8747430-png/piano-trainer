@@ -5,7 +5,7 @@ import { say } from '@/shared/ui'
 import type { ChordLayout, ChordPanel } from './use-chord-layout'
 
 /** A panel in hand by its grip: where the finger or the pointer is, and the place under it. */
-export interface PanelDrag {
+interface PanelDrag {
   readonly panel: ChordPanel
   readonly x: number
   readonly y: number
@@ -17,7 +17,7 @@ export interface PanelDrag {
  * (its places lit as honey zones, WCAG 2.2's 2.5.7: every drag has a single-tap way), the panel in
  * hand while dragged, and the acts that move or hide one, each said in a toast.
  */
-export interface LayoutEdit {
+interface LayoutEdit {
   readonly on: boolean
   readonly laptop: boolean
   readonly layout: ChordLayout

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { createPianoDownload, type PianoDownload } from '@/shared/api/audio'
 
 /** The grand piano's files on this device, as On-screen piano's Sound shows them (A27). */
-export type PianoSound =
+type PianoSound =
   | { readonly state: 'reading' }
   /** The browser keeps no caches, or the manifest cannot be had: nothing to show. */
   | { readonly state: 'none' }

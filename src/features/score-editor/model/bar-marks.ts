@@ -26,17 +26,11 @@ export const BARLINE_CHOICES = [
 ] as const
 /** The signs and jumps beside them (ADR 0097). */
 export const JUMP_CHOICES = ['segno', 'coda', 'toCoda', 'fine', ...JUMPS] as const
-/** The page break before a bar (ADR 0097, Flat's Measure): its line starts a new page. */
-export const LAYOUT_CHOICES = ['pageBreak'] as const
 /** Flat's Measure's bar repeats, of one bar and two, and its multi-bar rest (ADR 0097). */
 export const REPEAT_BAR_CHOICES = ['barRepeat1', 'barRepeat2', 'multiRest'] as const
-export const BAR_MARK_CHOICES = [
-  ...BARLINE_CHOICES,
-  ...JUMP_CHOICES,
-  ...LAYOUT_CHOICES,
-  ...REPEAT_BAR_CHOICES,
-] as const
-export type BarMarkChoice = (typeof BAR_MARK_CHOICES)[number]
+/** Every mark a bar takes; `pageBreak`, the break before a bar (ADR 0097, Flat's Measure), starts a new page. */
+export type BarMarkChoice =
+  (typeof BARLINE_CHOICES | typeof JUMP_CHOICES | typeof REPEAT_BAR_CHOICES)[number] | 'pageBreak'
 
 const BARLINE_OF: Partial<Record<BarMarkChoice, Barline>> = {
   repeatEnd: 'repeat',

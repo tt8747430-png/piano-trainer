@@ -17,7 +17,7 @@ import {
 } from '@/widgets/practice-library'
 
 /** The Accompaniment library as the Pattern sheet reads it. */
-export interface PatternLibrary {
+interface PatternLibrary {
   /** The library's books, styles and the learner's folders, as arranged. */
   readonly groups: readonly LibraryGroup[]
   /** What `view` shows. */

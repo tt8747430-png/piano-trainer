@@ -1,7 +1,7 @@
 import type { Question } from '@/features/trainer'
 
 /** The page a missed round's thing is learned on: Chords, Intervals, Scales or Progressions. */
-export type ReviewPage = 'chords' | 'intervals' | 'scales' | 'progressions'
+type ReviewPage = 'chords' | 'intervals' | 'scales' | 'progressions'
 
 /** Where a missed round opens to review it: its page, or none (a note read has no page of its own). */
 export function reviewPage(question: Question): ReviewPage | null {

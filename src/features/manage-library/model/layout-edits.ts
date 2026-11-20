@@ -22,7 +22,7 @@ import { mergeVisibleOrder } from '@/shared/lib'
  */
 
 /** A song's place after every other: where a song restored to its collection's folder stands. */
-export const LAST = Number.MAX_SAFE_INTEGER
+const LAST = Number.MAX_SAFE_INTEGER
 
 /** A song moved, and where it stood: what an Undo puts back. */
 export interface Moved {

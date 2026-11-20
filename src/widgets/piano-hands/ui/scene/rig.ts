@@ -37,7 +37,7 @@ const basis = (x: Vector3, y: Vector3, z: Vector3) =>
  * The models point their fingers down −y, the right palm toward −x, the left (its mirror) toward +x.
  * Each is turned palm down with its fingers into the keys.
  */
-export const MOUNT: Readonly<Record<Side, Quaternion>> = {
+const MOUNT: Readonly<Record<Side, Quaternion>> = {
   rh: basis(new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 0, 0)),
   lh: basis(new Vector3(0, -1, 0), new Vector3(0, 0, 1), new Vector3(-1, 0, 0)),
 }
@@ -59,7 +59,7 @@ export interface Rest {
 }
 
 /** A finger's joints and the axes it turns about, in the model's frame. */
-export interface FingerRig {
+interface FingerRig {
   readonly chain: readonly string[]
   /** The bend; the spread across the hand; the thumb's swing out from the palm. */
   readonly axes: { readonly flex: Vector3; readonly spread: Vector3; readonly abduct: Vector3 }
@@ -296,7 +296,7 @@ export const worldMatrix = (hand: HandRig, place: { p: Vector3; q: Quaternion })
     .multiply(new Matrix4().makeRotationFromQuaternion(MOUNT[hand.side]))
 
 /** A finger's pad: the vertices its last phalanx and its tip carry most, in the model's frame. */
-export function padOf(hand: HandRig, finger: FingerName): Vector3[] {
+function padOf(hand: HandRig, finger: FingerName): Vector3[] {
   const rig = hand.fingers[finger]
   const ends = [rig.chain[rig.distal], rig.chain[rig.distal + 1]]
   const position = attribute(hand.mesh.geometry, 'position')

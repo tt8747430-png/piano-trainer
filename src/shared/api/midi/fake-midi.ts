@@ -32,7 +32,7 @@ export interface FakeMidi extends MidiPort {
 }
 
 /** A note message the fake's speaker was sent. */
-export type SentNote =
+type SentNote =
   | { readonly kind: 'on'; readonly midi: Midi; readonly velocity: number; readonly at: number }
   | { readonly kind: 'off'; readonly midi: Midi; readonly at: number }
   | { readonly kind: 'pedal'; readonly down: boolean; readonly at: number }

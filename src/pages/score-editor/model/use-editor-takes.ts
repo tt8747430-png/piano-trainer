@@ -43,7 +43,7 @@ import { arrangeDraft } from './arrange-draft'
 import { hasTune, tuneOf } from './tune'
 
 /** How a take is written into the score: where, split at which key, and snapped to which value. */
-export interface WriteChoice {
+interface WriteChoice {
   readonly into: TakeInto
   readonly split: Midi
   readonly grid: Duration

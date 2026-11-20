@@ -15,7 +15,7 @@ export const PATTERN_VIEW: PracticeLibraryView = { q: '', sort: 'group', place: 
 export type FoldIcon = 'recent' | 'favourites' | 'book' | 'list'
 
 /** A run of rows under a sub-heading inside a fold (a method book's group); untitled, the fold's own. */
-export interface FoldPart {
+interface FoldPart {
   readonly title: string | null
   readonly rows: readonly LibraryItem[]
 }

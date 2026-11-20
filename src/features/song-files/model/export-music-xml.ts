@@ -11,7 +11,7 @@ const MXL_TYPE = 'application/vnd.recordare.musicxml'
 const UNSAFE = /[/\\:*?"<>|]/g
 
 /** A MusicXML file's name: its title, with nothing a file system refuses, as `.musicxml`. */
-export const musicXmlFileName = (title: string, format: MusicXmlFormat = 'musicxml'): string =>
+const musicXmlFileName = (title: string, format: MusicXmlFormat = 'musicxml'): string =>
   `${title.replace(UNSAFE, '-')}.${format}`
 
 /** MusicXML as text (.musicxml), or compressed (.mxl, R29 A29) as most notation apps save it. */

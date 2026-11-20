@@ -7,7 +7,7 @@ const STEP = 28
 const WHEEL_STEP = 40
 
 /** One figure of a time signature as a wheel: its name, its values in order, the one chosen. */
-export interface WheelFigure {
+interface WheelFigure {
   readonly label: string
   readonly values: readonly number[]
   readonly value: number

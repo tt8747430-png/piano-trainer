@@ -1,7 +1,7 @@
 import { useMemo, useSyncExternalStore } from 'react'
 
 /** Room on each side of the screen, in CSS pixels. */
-export interface Edges {
+interface Edges {
   readonly top: number
   readonly right: number
   readonly bottom: number

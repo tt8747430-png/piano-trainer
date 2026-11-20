@@ -5,7 +5,7 @@ import type { Paint } from './paint'
 import { TileMark } from './TileMark'
 
 /** A row's tile on its paint's wash: an icon, or the row's number where the rows are a sequence; or none. */
-export type RowTile =
+type RowTile =
   | { icon: LucideIcon; numeral?: undefined; paint: Paint }
   | { icon?: undefined; numeral: number; paint: Paint }
   | { icon?: undefined; numeral?: undefined; paint?: undefined }

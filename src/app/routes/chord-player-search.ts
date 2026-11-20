@@ -24,7 +24,7 @@ export function readChordPlayerSearch(raw: Raw): ChordPlayerView {
 }
 export const chordPlayerSearch = routeSearch(readChordPlayerSearch, {})
 
-export const readChordPlayerSettingsSearch = (raw: Raw): ChordPlayerSettingsView => ({
+const readChordPlayerSettingsSearch = (raw: Raw): ChordPlayerSettingsView => ({
   sheet: sheetOf(raw.sheet),
 })
 export const chordPlayerSettingsSearch = routeSearch(readChordPlayerSettingsSearch, {})

@@ -183,7 +183,7 @@ export const numberAt = (element: XmlElement, ...path: string[]): number | undef
 }
 
 /** Text as XML writes it, inside an element or an attribute. */
-export const escapeXml = (text: string): string =>
+const escapeXml = (text: string): string =>
   text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')

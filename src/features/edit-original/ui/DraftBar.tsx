@@ -181,7 +181,7 @@ export function DraftActions({
  * version stands to restore (the version before published again, the changes kept among the
  * Versions). The bar's Publish and Settings' Publish changes both act through it.
  */
-export function usePublishNow(draft: DraftActing, unreadable: string, onReset: () => void) {
+function usePublishNow(draft: DraftActing, unreadable: string, onReset: () => void) {
   const { t } = useTranslation('editor')
   const [busy, setBusy] = useState(false)
   const failed = (reason: string) =>

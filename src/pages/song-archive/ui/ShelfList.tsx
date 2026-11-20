@@ -178,7 +178,7 @@ function ShelfRow({
 }
 
 /** Select's two acts: on what is picked, or on all while nothing is (Apple Photos' Recently Deleted). */
-export interface ShelfActs {
+interface ShelfActs {
   readonly restore: (keys: readonly string[]) => void
   /** The second act, its loss in crimson: Move to Trash, or Delete; none where nothing can be lost. */
   readonly loss?: {

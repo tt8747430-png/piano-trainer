@@ -11,7 +11,7 @@ const VERSION = 1
  * What a song's MusicXML keeps for the app alone (ADR 0107), which the music cannot say: the
  * pattern it plays, each section's heading and its lines' bars, and each chord's method code.
  */
-export interface SongFileData {
+interface SongFileData {
   readonly pattern: PatternId
   readonly sections: readonly {
     readonly heading: DraftHeading

@@ -24,7 +24,7 @@ export interface MidiPart {
   readonly pedals: readonly { readonly down: number; readonly up: number }[]
 }
 
-export interface MidiFile {
+interface MidiFile {
   /** Ticks a quarter note. */
   readonly division: number
   /** The first track's name: the music's title, by custom. */

@@ -19,7 +19,7 @@ const KIND_TILE: Readonly<Record<Entry['kind'], { icon: LucideIcon; paint: Paint
 }
 
 /** What a song's row shows, wherever it is listed: its `RowFace`'s, and its kind's tile. */
-export interface EntryFace {
+interface EntryFace {
   readonly face: {
     readonly title: string
     readonly detail: string | undefined

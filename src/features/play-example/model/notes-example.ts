@@ -17,7 +17,7 @@ export const lineLetters = (line: TimedMusic): string =>
     .join(' ')
 
 /** A row of a line's bars, by their places: from its first bar up to the one after its last. */
-export interface BarRow {
+interface BarRow {
   readonly from: number
   readonly to: number
 }

@@ -30,7 +30,7 @@ export const withDay = (state: ProgressState, day: string): ProgressState =>
   state.days.includes(day) ? state : { ...state, days: keptDays([...state.days, day]) }
 
 /** Every so many days practised in a row earn a rest day (ruled 2026-11-07; Scale Runner's weekly freeze). */
-export const REST_EVERY = 7
+const REST_EVERY = 7
 /** How many rest days are kept for later at most. */
 export const RESTS_KEPT = 2
 

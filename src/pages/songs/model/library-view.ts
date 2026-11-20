@@ -13,7 +13,7 @@ import { matchesQuery } from '@/shared/lib'
 import type { SongsFilter } from './songs-filter'
 
 /** Songs listed together: a folder's, or Home's; while the filters look through folders, named. */
-export interface SongGroup {
+interface SongGroup {
   readonly key: string
   /** The folder's path from the place open (`A › B`), while the filters look through its folders. */
   readonly heading: string | null
@@ -22,7 +22,7 @@ export interface SongGroup {
 }
 
 /** A folder as a row shows it: the folders and songs in it counted, and how many of its songs are learned. */
-export interface FolderView {
+interface FolderView {
   readonly folder: ShelvedFolder
   readonly folders: number
   readonly songs: number
@@ -30,7 +30,7 @@ export interface FolderView {
 }
 
 /** What a place of the library shows: its folders, its songs, how many the filters hide. */
-export interface LibraryView {
+interface LibraryView {
   readonly folders: readonly FolderView[]
   /** The place itself, a folder counted as its row shows it: its head (canvas 133); none at Home. */
   readonly here: FolderView | null
@@ -64,7 +64,7 @@ export interface ViewLookups {
 }
 
 /** Whether the search narrows anything: the library's one filter (R72). */
-export const isFiltering = (filter: SongsFilter): boolean => filter.q.trim() !== ''
+const isFiltering = (filter: SongsFilter): boolean => filter.q.trim() !== ''
 
 /**
  * The songs in the order the sort says, the way it runs (R72, Flat's library): by when each was played

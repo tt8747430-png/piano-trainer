@@ -44,7 +44,7 @@ const ANY_ROW: readonly PaletteCategory[] = [
  * a staff every one does, a single staff's clef its whole staff's (ADR 0097); in the chord row only
  * the values and what acts on bars.
  */
-export const categoryOpen = (category: PaletteCategory, layer: Layer): boolean =>
+const categoryOpen = (category: PaletteCategory, layer: Layer): boolean =>
   ANY_ROW.includes(category) || layer !== 'chords'
 
 /**
@@ -92,7 +92,7 @@ export const JUMP_WORDS = {
   'ds-fine': 'D.S. al Fine',
   'ds-coda': 'D.S. al Coda',
 } as const satisfies Partial<Readonly<Record<BarMarkChoice, string>>>
-export type JumpWords = keyof typeof JUMP_WORDS
+type JumpWords = keyof typeof JUMP_WORDS
 /** Whether a choice is a jump printed as words. */
 export const isJumpWords = (value: unknown): value is JumpWords =>
   typeof value === 'string' && Object.hasOwn(JUMP_WORDS, value)

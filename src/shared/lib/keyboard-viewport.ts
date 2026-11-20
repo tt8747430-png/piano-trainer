@@ -22,7 +22,7 @@ import { createSavedStore } from './saved-store'
  */
 
 /** The least a keyboard measures: anything shorter is an accessory bar or a predictive strip. */
-export const KEYBOARD_MIN = 120
+const KEYBOARD_MIN = 120
 
 /** The room left between a field lifted clear of the keyboard and the keyboard. */
 export const REVEAL_GAP = 24
@@ -108,7 +108,7 @@ export function keyboardOpen(): boolean {
 }
 
 /** The layout viewport's foot, in the coordinates `getBoundingClientRect` gives. */
-export function layoutBottom(): number {
+function layoutBottom(): number {
   const root = document.documentElement
   return root.getBoundingClientRect().top + (appHeight || root.clientHeight)
 }

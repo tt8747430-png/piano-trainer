@@ -30,7 +30,7 @@ export interface PlayPlan {
 }
 
 /** Starts a clock that calls `onTick` every so often, even in a hidden tab; returns what stops it. */
-export type Ticker = (onTick: () => void) => () => void
+type Ticker = (onTick: () => void) => () => void
 
 /** A box: its section and its index there. */
 export interface BoxPlace {

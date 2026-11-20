@@ -281,7 +281,7 @@ const readEditSearch = (raw: Raw): EditSearch => ({
 export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)
 
 // A lesson's example of notes on the score: its place among the lesson's, and its course.
-export const EXAMPLE_DEFAULTS: ExampleSearch = { n: 0 }
+const EXAMPLE_DEFAULTS: ExampleSearch = { n: 0 }
 const readExampleSearch = (raw: Raw): ExampleSearch => ({
   n: wholeIn(raw.n, 0, 999, 0),
   ...(typeof raw.course === 'string' && raw.course !== '' ? { course: raw.course } : {}),

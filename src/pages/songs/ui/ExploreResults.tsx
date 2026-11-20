@@ -26,7 +26,7 @@ export function useExploreFeed(home: SongsHome) {
         : browse.entries
   return { browse, retry, entries }
 }
-export type ExploreFeed = ReturnType<typeof useExploreFeed>
+type ExploreFeed = ReturnType<typeof useExploreFeed>
 
 /**
  * The count and the order of Explore's songs (the board's EXSORTB): "8 songs", then New ⇅ in the link

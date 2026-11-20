@@ -12,7 +12,7 @@ export function centreSquare(
 }
 
 /** The qualities a picture is tried at, best first, until it is light enough. */
-export const AVATAR_QUALITIES = [0.9, 0.8, 0.7, 0.55, 0.4] as const
+const AVATAR_QUALITIES = [0.9, 0.8, 0.7, 0.55, 0.4] as const
 
 /**
  * A picture the learner chose, as a profile keeps it (B1): its middle square, 256 by 256, a WebP of

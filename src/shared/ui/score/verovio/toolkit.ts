@@ -36,7 +36,7 @@ const PER_MM = 10
  */
 const LINES = { staffLineWidth: 0.26, ledgerLineThickness: 0.29 } as const
 
-export function pageOptions(page: PageSetup): Record<string, unknown> {
+function pageOptions(page: PageSetup): Record<string, unknown> {
   const mm = (value: number) => Math.round(value * PER_MM)
   // Verovio's unit is half a staff space; a staff is four spaces high.
   const unit = (page.staffMm * PER_MM) / 8
@@ -91,7 +91,7 @@ const BRACE_ROOM = 60
 const UNBOUNDED = 60_000
 
 /** Verovio's options for what is asked: our page and its units agree, a CSS px a unit at its scale. */
-export function verovioOptions({
+function verovioOptions({
   width,
   scale,
   pageHeight,

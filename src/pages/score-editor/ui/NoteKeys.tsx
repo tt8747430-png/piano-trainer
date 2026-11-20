@@ -281,7 +281,7 @@ function AddNoteIcon() {
  * accidentals ♮ ♯ ♭ and Respell. The note-entry toolbar over the sheet on a laptop, the phone's
  * folded row, and the Notes' grid.
  */
-export function NoteBar() {
+function NoteBar() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const dispatch = actions.dispatch

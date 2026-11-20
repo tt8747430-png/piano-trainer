@@ -108,7 +108,7 @@ export function addLineAfter(editor: Editor, index: number): void {
 }
 
 /** What the block menu does to block `index`. */
-export type BlockAct = 'up' | 'down' | 'duplicate' | 'remove'
+type BlockAct = 'up' | 'down' | 'duplicate' | 'remove'
 
 /** Moves, copies or takes out block `index`; false where it cannot. */
 export function actOnBlock(editor: Editor, index: number, act: BlockAct): boolean {

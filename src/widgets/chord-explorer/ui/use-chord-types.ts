@@ -10,7 +10,7 @@ import {
 } from '@/shared/lib/music'
 
 /** A group of chord types: its family's name, and each type by its symbol on the root and its full name. */
-export interface ChordTypeGroup {
+interface ChordTypeGroup {
   readonly label: string
   readonly options: readonly {
     readonly value: ChordQuality

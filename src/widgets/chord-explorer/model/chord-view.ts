@@ -156,8 +156,7 @@ export function chordKeys(view: ChordView): Midi[] {
 }
 
 /** A suspended triad: its 3rd's place taken by a 2nd or 4th. */
-export const isSuspended = (triad: Triad): triad is 'sus2' | 'sus4' =>
-  triad === 'sus2' || triad === 'sus4'
+const isSuspended = (triad: Triad): triad is 'sus2' | 'sus4' => triad === 'sus2' || triad === 'sus4'
 
 /**
  * A view changed: its parts made to fit one another (a size the triad has, a 7th, added tones and

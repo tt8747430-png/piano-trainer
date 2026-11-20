@@ -50,7 +50,7 @@ import {
 } from './trainer-view'
 
 /** Custom's choices a trainer has: each a row of its setup. */
-export type CustomField =
+type CustomField =
   | 'chords'
   | 'roots'
   | 'inversions'

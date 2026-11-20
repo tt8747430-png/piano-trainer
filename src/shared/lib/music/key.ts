@@ -125,7 +125,7 @@ export function transposeNote(
 export type KeyParam = string & { readonly __brand: 'KeyParam' }
 
 /** Whether text is a key as keyParam writes it: a tonic's `NoteParam`, then `m` for minor. */
-export const isKeyParam = (text: string): text is KeyParam => /^[A-G](b{0,2}|#{0,2})m?$/.test(text)
+const isKeyParam = (text: string): text is KeyParam => /^[A-G](b{0,2}|#{0,2})m?$/.test(text)
 
 export function keyParam(key: Key): KeyParam {
   const param = noteParam(key.tonic) + (key.minor ? 'm' : '')

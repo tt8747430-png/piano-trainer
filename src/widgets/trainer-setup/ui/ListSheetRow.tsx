@@ -5,7 +5,7 @@ import { CheckMark, OpensMark, Sheet, SheetContent, SheetTrigger } from '@/share
 import { Button } from '@/shared/ui/primitives/button'
 
 /** One choice of a list sheet: its value, its name, and what it is on C where it shows (Cm7, m3). */
-export interface ListOption {
+interface ListOption {
   readonly value: string
   readonly label: string
   /** An example in the musician's notation, printed at the row's end. */
@@ -13,7 +13,7 @@ export interface ListOption {
 }
 
 /** A list sheet's group: its heading (none for a list of one group) and its choices. */
-export interface ListGroup {
+interface ListGroup {
   readonly label?: string
   readonly options: readonly ListOption[]
 }

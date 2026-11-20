@@ -44,7 +44,7 @@ const BETWEEN_WORD = {
 } as const satisfies Record<Between, string>
 
 /** What a loop plays as, once bars are looped: its bars as printed, from 1, and its three rows. */
-export interface LoopRows {
+interface LoopRows {
   readonly bars: BarRange
   readonly repeats: number | null
   readonly between: Between

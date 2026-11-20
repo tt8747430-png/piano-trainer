@@ -165,7 +165,7 @@ export function questionReducer(state: QuestionState, event: QuestionEvent): Que
 }
 
 /** What a question's keys show. */
-export interface QuestionKeys {
+interface QuestionKeys {
   readonly keys: readonly Midi[]
   readonly marks: ReadonlyMap<Midi, KeyMark>
   readonly selected?: ReadonlySet<Midi>

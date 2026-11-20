@@ -3,7 +3,7 @@ import type { Tick } from '@/shared/lib/music'
 import type { Span } from './lyric-lines'
 
 /** The chord sounding in a beat and the change after it, indexes into the performance's chords. */
-export interface ChordsFrom {
+interface ChordsFrom {
   /** None in a bar of no chord, or before the first. */
   readonly now: number | null
   /** None past the music's last chord. */
@@ -59,7 +59,7 @@ export function chordNear(performance: Performance, symbol: string, tick: Tick):
 }
 
 /** A chord of the song, as the summary's In this song lists it (R29 A37). */
-export interface SongChord {
+interface SongChord {
   readonly symbol: string
   /** How many times the music changes to it. */
   readonly count: number
@@ -68,7 +68,7 @@ export interface SongChord {
 }
 
 /** A change of chord, as the summary's In order lists it: the chord it starts with, and its bar. */
-export interface OrderCard {
+interface OrderCard {
   /** Index into the performance's chords: where a tap takes the cursor. */
   readonly chord: number
   readonly symbol: string

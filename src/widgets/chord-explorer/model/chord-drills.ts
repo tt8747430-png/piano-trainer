@@ -63,7 +63,7 @@ const lined = (drill: ChordDrill | null, line: string): ChordDrill | null =>
   drill ? { ...drill, line } : null
 
 /** The chord over its root: the left hand on the root, the right the whole chord (LH C · RH C E G B). */
-export const overTheRoot = (chord: Chord): string => {
+const overTheRoot = (chord: Chord): string => {
   const names = spellChord(chord.root, chord.quality).map((tone) => printedNote(tone.note))
   return `LH ${names[0] ?? ''} · RH ${names.join(' ')}`
 }

@@ -74,7 +74,7 @@ export function TextEditor({
 }
 
 /** One choice of a list property: its value, its name and what is drawn before it (a level's mark). */
-export interface PropertyChoice<V extends string> {
+interface PropertyChoice<V extends string> {
   readonly value: V
   readonly label: string
   readonly mark?: ReactNode

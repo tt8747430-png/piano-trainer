@@ -4,7 +4,7 @@ import { pitchClass, type PitchClass } from './pitch'
 import { relativeKey } from './scale'
 
 /** One place on the circle of fifths: a major key outside, its relative minor inside. */
-export interface CirclePlace {
+interface CirclePlace {
   readonly major: Key
   readonly minor: Key
 }

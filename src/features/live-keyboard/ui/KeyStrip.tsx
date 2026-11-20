@@ -11,7 +11,7 @@ const WHITE = WIDTH / WHITE_KEYS.length
 const across = (key: Midi): number => WHITE_KEYS.filter((white) => white < key).length * WHITE
 
 /** Moving the stretch along the 88: how many white keys it spans, and where it goes. */
-export interface KeyStripMove {
+interface KeyStripMove {
   readonly whites: number
   readonly onMove: (from: Midi) => void
 }

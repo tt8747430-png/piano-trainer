@@ -9,7 +9,7 @@ export interface Span {
 }
 
 /** A stretch of a bar written as a tuplet: its notes `num` in the time of `numbase`. */
-export interface TupletSpan extends Span {
+interface TupletSpan extends Span {
   readonly tuplet: Tuplet
 }
 

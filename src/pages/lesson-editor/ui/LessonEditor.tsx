@@ -16,7 +16,7 @@ import { inBothLanguages, LessonDocument, OpenScore } from '@/widgets/lesson-doc
  * `id` (a course's as `<course>/<lesson>`, ADR 0116), or the learner's own lesson on their device
  * (R30-5).
  */
-export type LessonSource =
+type LessonSource =
   | { readonly kind: 'draft'; readonly id: string; readonly course?: string }
   | { readonly kind: 'own'; readonly lesson: OwnLesson }
 

@@ -57,7 +57,7 @@ export type ExerciseId = (typeof EXERCISE_IDS)[number]
  * plays its own way. Its root is always a choice, spelled by its rule: as its scale, its chord, or its
  * key.
  */
-export interface ExerciseFields {
+interface ExerciseFields {
   readonly root: 'scale' | 'chord' | 'key'
   readonly kind?: readonly ScaleKind[]
   readonly octaves?: readonly Octaves[]

@@ -34,7 +34,7 @@ export function optionName(option: Option<OptionValue>): string | undefined {
 }
 
 /** Options under a name: a pop-up button's group (a chord family). */
-export interface OptionGroup<V extends OptionValue> {
+interface OptionGroup<V extends OptionValue> {
   readonly label: string
   readonly options: readonly Option<V>[]
 }

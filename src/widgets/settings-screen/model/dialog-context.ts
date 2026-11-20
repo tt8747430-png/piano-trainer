@@ -9,7 +9,7 @@ export type AdminCounts = Partial<Readonly<Record<AdminSection, number>>>
  * What the laptop's Settings dialog holds open: the Settings path it shows over the page behind, and
  * where a pane hands its nav Administration's counts.
  */
-export interface SettingsDialogPlace {
+interface SettingsDialogPlace {
   readonly path: string
   readonly showCounts: (counts: AdminCounts) => void
 }

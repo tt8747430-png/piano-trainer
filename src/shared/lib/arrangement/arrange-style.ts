@@ -46,7 +46,7 @@ export type StepVelocities = readonly number[]
 export type DrumGrid = Partial<Readonly<Record<DrumVoice, StepVelocities>>>
 
 /** What a bass note plays of the chord sounding: its root (its bass, over a slash), 5th, octave, 3rd, or a semitone to the next chord's root. */
-export type BassDegree = 'root' | 'fifth' | 'octave' | 'third' | 'approach'
+type BassDegree = 'root' | 'fifth' | 'octave' | 'third' | 'approach'
 export interface BassStep {
   readonly step: number
   readonly degree: BassDegree

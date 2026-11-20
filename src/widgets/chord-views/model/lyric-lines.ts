@@ -21,7 +21,7 @@ export interface SungWords {
 }
 
 /** A chord over the words sung up to the next. */
-export interface LyricSegment extends Span {
+interface LyricSegment extends Span {
   /**
    * The chord shown, an index into the performance's chords: where it starts, and the same chord
    * held on over bar lines, from its start to its last bar's end. None for the words before a
@@ -33,7 +33,7 @@ export interface LyricSegment extends Span {
 }
 
 /** A word of a line as sung: its syllables joined, from the tick its first is sung at. */
-export interface SungWord {
+interface SungWord {
   /** A word the next line goes on with ends in a hyphen. */
   readonly text: string
   readonly at: Tick

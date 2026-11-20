@@ -27,7 +27,7 @@ export const INTERVAL_LEVELS = [
   'together',
   'compound',
 ] as const
-export type IntervalLevel = (typeof INTERVAL_LEVELS)[number]
+type IntervalLevel = (typeof INTERVAL_LEVELS)[number]
 
 export const INTERVAL_LEVEL: Readonly<
   Record<
@@ -56,7 +56,7 @@ export const EAR_SCALES: readonly ScaleKind[] = [
 ]
 
 export const SCALE_EAR_LEVELS = ['major-minor', 'harmonic', 'modes', 'descending'] as const
-export type ScaleEarLevel = (typeof SCALE_EAR_LEVELS)[number]
+type ScaleEarLevel = (typeof SCALE_EAR_LEVELS)[number]
 
 export const SCALE_EAR_LEVEL: Readonly<
   Record<ScaleEarLevel, { readonly kinds: readonly ScaleKind[]; readonly descending: boolean }>

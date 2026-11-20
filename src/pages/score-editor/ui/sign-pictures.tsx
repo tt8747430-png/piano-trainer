@@ -107,7 +107,7 @@ const BARLINES = {
   ending4: ending('4.'),
 } as const satisfies Partial<Record<BarMarkChoice, ReactNode>>
 
-export type BarlinePictured = keyof typeof BARLINES
+type BarlinePictured = keyof typeof BARLINES
 
 /** A barline or an ending drawn on its staff (ADR 0115). */
 export function BarlinePicture({ choice }: { choice: BarlinePictured }) {

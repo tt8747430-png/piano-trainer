@@ -212,7 +212,7 @@ export function scaleFingering(
  * black key, the thumb on a white one, and 2 on a white key beside another white key, the right
  * hand's on the upper of the two (F, C) and the left hand's on the lower (E, B).
  */
-export function chromaticFingering(keys: readonly Midi[], hand: Hand): Finger[] {
+function chromaticFingering(keys: readonly Midi[], hand: Hand): Finger[] {
   const white = (key: Midi | undefined) => key !== undefined && !isBlackKey(key)
   return keys.map((key, i) => {
     if (isBlackKey(key)) return 3

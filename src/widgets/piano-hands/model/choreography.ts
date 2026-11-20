@@ -12,7 +12,7 @@ import { handIn, KEY, keyX } from './keys'
 import type { FingerAim } from './poses'
 
 /** A note at the keys: its key, the finger that plays it, and when, in ticks. */
-export interface FingeredNote {
+interface FingeredNote {
   readonly key: Midi
   readonly finger: Finger
   readonly start: Tick
@@ -23,7 +23,7 @@ export interface FingeredNote {
  * Where a hand stands for an onset: `x` across the keys (where its middle finger rests, in metres
  * from middle C), and `depth` into the keys (0 or less: moved in for a short finger's black key).
  */
-export interface HandPlace {
+interface HandPlace {
   readonly tick: Tick
   readonly x: number
   readonly depth: number
@@ -158,7 +158,7 @@ export function handsApart({ rh, lh }: Choreography): number {
 }
 
 /** A finger's aim, and the key it plays or is about to: none while it rests. */
-export interface FingerAt extends FingerAim {
+interface FingerAt extends FingerAim {
   readonly key: Midi | null
 }
 

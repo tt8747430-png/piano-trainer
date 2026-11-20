@@ -11,7 +11,7 @@ import { leftAt, xAtTick, type Extent, type ScoreLayout } from './layout'
 export const MARK = { reach: 0.5, pad: 0.3, lead: 0.5, inset: 0.4 } as const
 
 /** How far round a head a click still lands on it, in staff spaces (ADR 0096). */
-export const GRAB = 0.35
+const GRAB = 0.35
 
 /**
  * The marks' look (ADR 0096): what is chosen is coloured (the notes themselves, ScoreView's

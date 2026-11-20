@@ -62,7 +62,7 @@ export const CHORD_LEVELS = [
   'sevenths',
   'diminished-augmented',
 ] as const
-export type ChordLevel = (typeof CHORD_LEVELS)[number]
+type ChordLevel = (typeof CHORD_LEVELS)[number]
 
 /** Each level's chords. */
 export function chordLevel(level: ChordLevel): ChordItem[] {

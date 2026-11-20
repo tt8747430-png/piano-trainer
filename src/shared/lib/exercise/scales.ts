@@ -118,7 +118,7 @@ export function scaleExercise(run: FingeredRun): Performance {
 }
 
 /** A run as a scale exercise takes it: from where, fingered how, each hand starting where. */
-export type FingeredRun = StartedRun & {
+type FingeredRun = StartedRun & {
   readonly fingering: Fingering
   /** The octave each hand starts in, where asked and its run fits on the keys; else its own. */
   readonly startOctaves?: Partial<HandOctaves>

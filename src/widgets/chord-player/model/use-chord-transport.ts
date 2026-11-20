@@ -9,7 +9,7 @@ import {
 } from './engine'
 
 /** The Chord player's transport over the sheet in hand (R29 CP4): its state, Play, Stop and Loop. */
-export interface ChordTransport extends TransportState {
+interface ChordTransport extends TransportState {
   play(loop?: number | null, from?: BoxPlace): void
   stop(): void
   /** The section looped, or none: the whole sheet repeats. */

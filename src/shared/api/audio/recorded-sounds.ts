@@ -4,7 +4,7 @@
  * full scale, as WAV so they start on their sample with no encoder's delay. They are in the app's
  * offline cache; each is fetched and decoded once for an audio context.
  */
-export const RECORDED_SOUNDS = {
+const RECORDED_SOUNDS = {
   click: '/sounds/woodblock.wav',
   kick: '/sounds/kick.wav',
   snare: '/sounds/snare.wav',
@@ -29,7 +29,7 @@ export const fetchSound: LoadSound = async (context, url) => {
 }
 
 /** The recorded sounds of each audio context: loading once, then each buffer, or none had. */
-export interface RecordedSounds {
+interface RecordedSounds {
   /** Starts loading for `context` (once); resolves when every sound is in or has failed. */
   ready(context: AudioContext): Promise<void>
   /** A loaded sound's buffer; null while it loads or where it failed. */

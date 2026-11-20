@@ -33,7 +33,7 @@ export const ROW_INTERVALS: readonly RowInterval[] = INTERVAL_GROUP_IDS.flatMap(
 )
 
 /** How long each speed takes over an interval, as a share of Medium's (Interval settings, canvas 176). */
-export const INTERVAL_PACE: Readonly<Record<IntervalSpeed, number>> = {
+const INTERVAL_PACE: Readonly<Record<IntervalSpeed, number>> = {
   slow: 1.5,
   medium: 1,
   fast: 0.6,

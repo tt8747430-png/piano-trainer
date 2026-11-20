@@ -45,7 +45,7 @@ function RhythmPicture({ grid }: { grid: DrumGrid }) {
  * The styles by family, each with its rhythm drawn and a one-bar Listen; the chosen ticked. The
  * Style sheet's body on a phone, the laptop's side column under the key's chords.
  */
-export function StyleList({
+function StyleList({
   book,
   value,
   onChoose,

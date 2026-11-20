@@ -160,7 +160,7 @@ const FAB = `size-14 rounded-pill elevation-float [&_svg:not([class*=size-])]:si
 /** The main action with its name beside its icon (an extended FAB). */
 const FAB_EXTENDED = `h-14 gap-2 rounded-pill px-5 pl-4 elevation-float [&_svg:not([class*=size-])]:size-6 ${PRESS}`
 /** A second action: 48px, the raised paper with its soft line, a lower shade. */
-export const MINI_FAB = `size-12 rounded-pill border-border bg-raised elevation-float hover:bg-muted [&_svg:not([class*=size-])]:size-5 ${PRESS}`
+const MINI_FAB = `size-12 rounded-pill border-border bg-raised elevation-float hover:bg-muted [&_svg:not([class*=size-])]:size-5 ${PRESS}`
 /** A second action with its words: a 48px pill of the same paper. */
 
 /**

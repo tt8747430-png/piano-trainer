@@ -3,7 +3,7 @@ import type { SampleLoader } from './sample-loader'
 import { layerFor, type SampleFile, type SampleLayer, type SampleManifest } from './sample-manifest'
 
 /** A key of a pitched instrument, or a kit's piece by its name. */
-export type SamplerKey = Midi | string
+type SamplerKey = Midi | string
 
 /** A sound a sampler started: its source and the gain it leaves by. */
 export interface SamplerVoice {

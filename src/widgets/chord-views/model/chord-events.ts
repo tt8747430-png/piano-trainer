@@ -2,7 +2,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 
 /** A change on the Diagrams view's row: a chord (an index into the performance's chords) or none. */
-export interface ChordEvent {
+interface ChordEvent {
   /** None where the music has no chord: before the first, or a bar of none. */
   readonly chord: number | null
   /** The tick it starts at, as played. */

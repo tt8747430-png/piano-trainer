@@ -51,7 +51,7 @@ export interface SettingsPageEntry {
 }
 
 /** A group of Settings' pages under its heading. */
-export interface SettingsGroupEntry {
+interface SettingsGroupEntry {
   readonly title:
     'groups.general.label' | 'groups.piano.label' | 'groups.library.label' | 'groups.support.label'
   readonly pages: readonly SettingsPageEntry[]

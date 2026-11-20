@@ -20,7 +20,7 @@ export interface BadgeFigures {
 export const TIERS = ['bronze', 'silver', 'gold', 'platinum'] as const
 export type Tier = (typeof TIERS)[number]
 
-export interface BadgeDef {
+interface BadgeDef {
   readonly id: 'streak' | 'repertoire' | 'lessons' | 'scales' | 'devotion' | 'library'
   readonly figure: keyof BadgeFigures
   /** Each tier's goal, bronze to platinum. */

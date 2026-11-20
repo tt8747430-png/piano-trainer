@@ -143,7 +143,7 @@ export async function drawPage(
  * Each head with its note's key, from the score (ADR 0096): what a head clicked chooses. Two voices'
  * chords at one tick share their ids; they come in the voices' order, as the engraving draws them.
  */
-export function withKeys(layout: ScoreLayout, score: Score): ScoreLayout {
+function withKeys(layout: ScoreLayout, score: Score): ScoreLayout {
   const keys = new Map<string, Midi[]>()
   for (const measure of score.measures)
     for (const staff of score.staves)

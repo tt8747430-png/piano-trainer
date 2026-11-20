@@ -40,7 +40,7 @@ const sameValue = (a: TimeSignatureValue, b: TimeSignatureValue) =>
   a.meter === b.meter && (a.symbol && meterSymbol(a.meter) !== null) === b.symbol
 
 /** A time signature drawn as it prints, its figures Bravura's, for a tile. */
-export function TimeSignatureTile({ value }: { value: TimeSignatureValue }) {
+function TimeSignatureTile({ value }: { value: TimeSignatureValue }) {
   const { count, unit } = meterParts(value.meter)
   const symbol = value.symbol ? meterSymbol(value.meter) : null
   return (

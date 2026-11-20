@@ -56,7 +56,7 @@ const GRACE = 0.06
 /** An articulated note never sounds shorter than this. */
 const SHORTEST = 0.06
 
-export interface MarkTiming {
+interface MarkTiming {
   /** The key the note is in, whose notes a trill, mordent and turn take. */
   readonly key: Key
   /** A 32nd's seconds at the pass's tempo: an ornament's stroke. */

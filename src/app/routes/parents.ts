@@ -24,7 +24,7 @@ export interface UpFrom {
 type Parent = (from: UpFrom) => Up | null | Promise<Up | null>
 
 /** The routes Back can be on: every route but the root and the two layouts. */
-export type ScreenRouteId = Exclude<
+type ScreenRouteId = Exclude<
   RouteIds<RegisteredRouter['routeTree']>,
   '__root__' | '/shell' | '/full-screen'
 >
@@ -335,7 +335,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
 }
 
 /** The route Back is on and what it was opened with. */
-export interface UpMatch {
+interface UpMatch {
   readonly routeId: string
   readonly params: Readonly<Record<string, string>>
   /** The route's search as its validator read it. */

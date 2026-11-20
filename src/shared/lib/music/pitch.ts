@@ -5,7 +5,7 @@ export type PitchClass = number & { readonly __brand: 'PitchClass' }
 export type Midi = number & { readonly __brand: 'Midi' }
 
 /** Whether a number is a pitch class: a whole number 0–11. */
-export const isPitchClass = (n: number): n is PitchClass => Number.isInteger(n) && n >= 0 && n < 12
+const isPitchClass = (n: number): n is PitchClass => Number.isInteger(n) && n >= 0 && n < 12
 
 /** Whether a number is a MIDI key: a whole number 0–127. */
 export const isMidi = (n: number): n is Midi => Number.isInteger(n) && n >= 0 && n <= 127

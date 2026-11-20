@@ -1,7 +1,7 @@
 import { isCard, type Question } from './round-machine'
 
 /** A round answered: what it asked, whether it was right, and how long the answer took. */
-export interface AnsweredRound {
+interface AnsweredRound {
   readonly question: Question
   readonly correct: boolean
   readonly ms: number

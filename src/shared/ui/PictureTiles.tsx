@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 
 /** A tile: its picture over its name; greyed where it cannot be chosen, `reason` its tooltip. */
-export interface PictureTile<V extends string> {
+interface PictureTile<V extends string> {
   readonly value: V
   readonly label: string
   readonly picture: ReactNode

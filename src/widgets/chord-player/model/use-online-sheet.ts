@@ -9,7 +9,7 @@ import type { BoxPlace } from './engine'
 const SILENT_MS = 4000
 
 /** A shared sheet's live side (R39-10): whether it is shared, and the chord another copy plays now. */
-export interface OnlineSheetState {
+interface OnlineSheetState {
   /** Whether the sheet in hand is shared live. */
   readonly live: boolean
   /** The chord another open copy plays now: its box and beat; none while nobody else plays. */

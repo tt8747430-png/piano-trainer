@@ -21,7 +21,7 @@ export function blockStart(doc: Node, index: number): number {
 export const selectedBlock = (state: EditorState): number => state.selection.$from.index(0)
 
 /** Whether block `index` may move by `by`: a block of the lesson's, onto another of them. */
-export function canMoveBlock(doc: Node, index: number, by: -1 | 1): boolean {
+function canMoveBlock(doc: Node, index: number, by: -1 | 1): boolean {
   const to = index + by
   const fixed = fixedBlocks(doc)
   return index >= fixed && to >= fixed && to < doc.childCount

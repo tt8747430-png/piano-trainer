@@ -194,7 +194,7 @@ export const sameNote = (a: SpelledNote, b: SpelledNote): boolean =>
 export type NoteParam = string & { readonly __brand: 'NoteParam' }
 
 /** Whether text is a note as noteParam writes it: a letter, then up to two `b`s or `#`s. */
-export const isNoteParam = (text: string): text is NoteParam => /^[A-G](b{0,2}|#{0,2})$/.test(text)
+const isNoteParam = (text: string): text is NoteParam => /^[A-G](b{0,2}|#{0,2})$/.test(text)
 
 export function noteParam(spelled: SpelledNote): NoteParam {
   const param =

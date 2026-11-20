@@ -4,7 +4,7 @@ import { audibleHands, type Audible, type Hands } from '@/shared/lib/schedule'
 import type { BeatGroupRange } from './loop'
 import { waitsForNotes, type PracticeMode } from './practice-mode'
 
-export type Outcome = 'waiting' | 'correct' | 'wrong' | 'finished'
+type Outcome = 'waiting' | 'correct' | 'wrong' | 'finished'
 
 export interface PracticeState {
   readonly performance: Performance

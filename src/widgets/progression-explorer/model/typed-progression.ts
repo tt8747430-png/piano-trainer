@@ -12,7 +12,7 @@ import {
 } from '@/shared/lib/music'
 
 /** A typed line as Progressions plays it: its numerals, in the key they are read in. */
-export interface TypedProgression {
+interface TypedProgression {
   readonly numerals: readonly Numeral[]
   readonly key: Key
 }

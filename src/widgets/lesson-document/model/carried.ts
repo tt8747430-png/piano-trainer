@@ -3,7 +3,7 @@ import { isRecord } from '@/shared/lib'
 import { sanitiseStyle, type BlockStyle } from '@/shared/lib/style'
 
 /** Whether what a node carries is a lesson's block: an object of a kind, as `readAbout` reads one. */
-export const isCarriedBlock = (value: unknown): value is LessonBlock =>
+const isCarriedBlock = (value: unknown): value is LessonBlock =>
   isRecord(value) && typeof value['kind'] === 'string'
 
 /** The block a node carries; none where it carries none. */

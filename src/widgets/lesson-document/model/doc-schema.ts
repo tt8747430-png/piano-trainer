@@ -19,7 +19,7 @@ const LessonDoc = Node.create({
 const AboutDoc = LessonDoc.extend({ content: 'block*' })
 
 /** The custom properties a style sets, as an element's `style` (only `--block-*`, from a short list). */
-export const styleCss = (style: unknown): string =>
+const styleCss = (style: unknown): string =>
   Object.entries(styleVars(sanitiseStyle(style)))
     .map(([name, value]) => `${name}: ${value}`)
     .join('; ')

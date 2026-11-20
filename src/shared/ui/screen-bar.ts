@@ -4,7 +4,7 @@ import { createContext, use } from 'react'
 export const SCREEN_BAR_VAR = '--screen-bar'
 
 /** The bar measured: its rows, which pinned content sits under, and its whole box, clear of the notch. */
-export interface ScreenBarSize {
+interface ScreenBarSize {
   readonly rows: number
   readonly box: number
 }

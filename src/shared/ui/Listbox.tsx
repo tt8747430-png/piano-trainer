@@ -3,7 +3,7 @@ import { useId, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 
 /** One choice of a list: what it shows, whether it is the one chosen, and what choosing it does. */
-export interface ListboxOption {
+interface ListboxOption {
   readonly key: string
   readonly selected: boolean
   /** Closed to what is shown: it stays in the list, reachable, and choosing it does nothing. */

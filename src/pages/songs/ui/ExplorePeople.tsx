@@ -12,7 +12,7 @@ interface Person {
 }
 
 /** The people behind the songs, the most published first: those whose profile names them. */
-export function peopleOf(entries: readonly PublicEntry[]): readonly Person[] {
+function peopleOf(entries: readonly PublicEntry[]): readonly Person[] {
   const people = new Map<string, Person>()
   for (const entry of entries) {
     if (!entry.authorName) continue

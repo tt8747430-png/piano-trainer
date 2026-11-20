@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { PracticePageId } from '../model/practice-pages'
 
 /** A page of Practice in words: its name, and what it says of itself in a line. */
-export interface PageWords {
+interface PageWords {
   readonly title: string
   readonly about: string
 }
