@@ -4,8 +4,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/
 import { Archive, Ellipsis, Folder, FolderOutput, Heart, Trash2, Upload } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
-import { FloatingActions } from '@/shared/ui'
-import { DropZone, SelectAct, SelectDock, useCarrying } from '@/widgets/song-library'
+import { FloatingActions, SelectAct, SelectDock } from '@/shared/ui'
+import { DropZone, useCarrying } from '@/widgets/song-library'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
 

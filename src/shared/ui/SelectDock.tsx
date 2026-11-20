@@ -1,14 +1,15 @@
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib'
-import { FloatingActions, Toolbar } from '@/shared/ui'
+import { FloatingActions } from './FloatingActions'
+import { Toolbar } from './Toolbar'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
  * One act of a selection bar (the boards' SELACT; owner, 2026-11-17: "make the toolbar icons not just
  * text. the selection toolbar"): its glyph 20 over its word at 12, 52 tall, sharing the bar's width;
  * a loss in crimson, glyph and word alike; greyed while nothing chosen can take it. Every selection
- * bar of Songs (All songs, a playlist, Archive, Trash, a song's takes) is drawn with it.
+ * bar (All songs, a playlist, Archive, Trash, a song's takes, Your lessons) is drawn with it.
  */
 export function SelectAct({
   label,
@@ -49,10 +50,13 @@ export function SelectAct({
 export function SelectDock({
   label,
   inSheet = false,
+  className,
   children,
 }: {
   label: string
   inSheet?: boolean
+  /** Its laptop width where the board draws another (Your lessons' 440, centred on its table). */
+  className?: string
   children: ReactNode
 }) {
   const bar = (
@@ -62,6 +66,7 @@ export function SelectDock({
       className={cn(
         'glass flex h-17 items-center gap-2 rounded-pill px-2',
         inSheet ? 'mx-auto w-full max-w-110' : 'w-[min(32.5rem,calc(100vw-2rem))]',
+        className,
       )}
     >
       {children}

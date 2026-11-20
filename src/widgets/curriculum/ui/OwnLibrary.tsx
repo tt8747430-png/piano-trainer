@@ -20,18 +20,18 @@ import {
   BackButton,
   CheckMark,
   ChoiceChips,
-  FloatingActions,
   LessonIcon,
   NewDial,
   PAINT,
   RowMore,
   Said,
+  SelectAct,
+  SelectDock,
   say,
   sayUndo,
   ScreenHeader,
   SearchField,
   SortMenu,
-  Toolbar,
   type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -608,50 +608,23 @@ export function OwnLibrary({
         )}
       </div>
       {selecting ? (
-        <FloatingActions className="justify-center">
-          <Toolbar
-            label={title}
-            className="glass flex h-17 w-[calc(100vw-2rem)] items-center gap-2 rounded-pill px-2 lg:w-110"
-          >
-            <SelectAct icon={Copy} onClick={duplicateChosen}>
-              {picks.size > 0 ? t('own.duplicate') : t('own.duplicateAll')}
-            </SelectAct>
-            <SelectAct icon={Trash2} destructive onClick={deleteChosen}>
-              {picks.size > 0 ? t('own.delete') : t('own.deleteAll')}
-            </SelectAct>
-          </Toolbar>
-        </FloatingActions>
+        <SelectDock label={title} className="lg:w-110">
+          <SelectAct
+            icon={Copy}
+            label={picks.size > 0 ? t('own.duplicate') : t('own.duplicateAll')}
+            onClick={duplicateChosen}
+          />
+          <SelectAct
+            icon={Trash2}
+            destructive
+            label={picks.size > 0 ? t('own.delete') : t('own.deleteAll')}
+            onClick={deleteChosen}
+          />
+        </SelectDock>
       ) : (
         <NewDial label={t('own.new')} actions={newActions} />
       )}
       <NewOwnSheet kind={making} onClose={() => setMaking(null)} />
     </div>
-  )
-}
-
-/** One of Select's acts, the canvas's SELACT: its 20 icon over its 12 name, in a 52 pill of the bar. */
-function SelectAct({
-  icon: Icon,
-  destructive,
-  onClick,
-  children,
-}: {
-  icon: typeof Copy
-  destructive?: boolean
-  onClick: () => void
-  children: string
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        'flex h-13 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-pill transition-colors duration-200 ease-out hover:bg-foreground/5',
-        destructive && 'text-destructive',
-      )}
-    >
-      <Icon aria-hidden className="size-5" />
-      <span className="text-xs font-semibold whitespace-nowrap">{children}</span>
-    </button>
   )
 }

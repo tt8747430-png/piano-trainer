@@ -14,11 +14,13 @@ import {
   ScreenHeader,
   SearchField,
   type MenuAction,
+  SelectAct,
+  SelectDock,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { PieceMark } from '@/widgets/piece-cover'
 import { useEntryFace } from '@/widgets/piece-list'
-import { PLACE_COLUMN, PlaceBar, SelectAct, SelectDock } from '@/widgets/song-library'
+import { PLACE_COLUMN, PlaceBar } from '@/widgets/song-library'
 
 /** One row of the Archive or the Trash: what it is, when it went there, and its ··· acts. */
 export interface ShelfItem {
