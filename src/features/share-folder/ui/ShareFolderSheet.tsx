@@ -1,16 +1,10 @@
+import { UserRound } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FolderShare } from '@/shared/api/groups'
 import { useGroups } from '@/shared/lib/groups'
-import { ButtonLink, Dropdown, Sheet, SheetContent } from '@/shared/ui'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
+import { ButtonLink, Dropdown, Said, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Checkbox } from '@/shared/ui/primitives/checkbox'
 import { useGroupsData } from '../model/use-groups-data'
@@ -85,15 +79,15 @@ function ShareForm({ folder, onDone }: { folder: FolderShare; onDone: () => void
       }
     >
       {data.kind === 'guest' ? (
-        <Empty>
-          <EmptyHeader>
-            <EmptyTitle>{t('groups.guestTitle')}</EmptyTitle>
-            <EmptyDescription>{t('groups.guestLine')}</EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
+        <Said
+          icon={UserRound}
+          title={t('groups.guestTitle')}
+          description={t('groups.guestLine')}
+          primary
+          action={
             <ButtonLink render={<Link to="/account/sign-in" />}>{t('groups.signIn')}</ButtonLink>
-          </EmptyContent>
-        </Empty>
+          }
+        />
       ) : data.kind === 'loading' ? (
         <p className="text-muted-foreground">{t('groups.loading')}</p>
       ) : data.kind === 'failed' ? (

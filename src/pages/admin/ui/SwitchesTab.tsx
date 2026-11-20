@@ -4,15 +4,16 @@ import { useTranslation } from 'react-i18next'
 import type { FeatureSwitch, Group, SwitchState } from '@/shared/api/admin'
 import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { useAdmin } from '@/shared/lib/admin'
-import { Fab, FloatingActions, NewSheet, Segmented, SettingsGroup, SheetPart } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import {
-  Empty,
-  EmptyContent,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
+  Fab,
+  FloatingActions,
+  NewSheet,
+  Said,
+  Segmented,
+  SettingsGroup,
+  SheetPart,
+} from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { SettingsScreen } from '@/widgets/settings-screen'
 import { useChangeProblem } from '../model/use-change-problem'
@@ -78,17 +79,12 @@ export function SwitchesTab() {
       <LoadedState loaded={loaded} reload={reload}>
         {({ switches, groups }) =>
           switches.length === 0 ? (
-            <Empty>
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <Flag />
-                </EmptyMedia>
-                <EmptyTitle>{t('switches.none')}</EmptyTitle>
-              </EmptyHeader>
-              <EmptyContent>
-                <Button onClick={open}>{t('switches.new')}</Button>
-              </EmptyContent>
-            </Empty>
+            <Said
+              icon={Flag}
+              title={t('switches.none')}
+              primary
+              action={<Button onClick={open}>{t('switches.new')}</Button>}
+            />
           ) : (
             <SettingsGroup flush>
               {switches.map((feature) => (

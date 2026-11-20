@@ -4,14 +4,7 @@ import { useTranslation } from 'react-i18next'
 import type { Report } from '@/shared/api/admin'
 import { isOneOf } from '@/shared/lib'
 import { useAdmin } from '@/shared/lib/admin'
-import { ConfirmDialog, say, SettingsGroup } from '@/shared/ui'
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
+import { ConfirmDialog, Said, say, SettingsGroup } from '@/shared/ui'
 import { useLoaded } from '../model/use-loaded'
 import { useChangeProblem } from '../model/use-change-problem'
 import { FailureLine, LoadedState } from './LoadedState'
@@ -39,15 +32,7 @@ export function ReportsTab() {
       <LoadedState loaded={loaded} reload={reload}>
         {(reports) =>
           reports.length === 0 ? (
-            <Empty>
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <Check />
-                </EmptyMedia>
-                <EmptyTitle>{t('reports.none')}</EmptyTitle>
-                <EmptyDescription>{t('reports.noneLine')}</EmptyDescription>
-              </EmptyHeader>
-            </Empty>
+            <Said icon={Check} title={t('reports.none')} description={t('reports.noneLine')} />
           ) : (
             <SettingsGroup flush>
               {reports.map((report) => (

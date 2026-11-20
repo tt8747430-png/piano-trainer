@@ -1,3 +1,4 @@
+import { UserRound } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -5,15 +6,8 @@ import { useChordSheetsStoreApi, type SavedChordSheet } from '@/entities/chord-s
 import { shareLink } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { useChordShare } from '@/shared/lib/chord-share'
-import { ButtonLink, Segmented, Sheet, SheetContent, say } from '@/shared/ui'
+import { ButtonLink, Said, say, Segmented, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
 import { setSheetAccess, shareSheet } from '../model/online-sheet'
 
 type Access = 'view' | 'edit'
@@ -102,17 +96,17 @@ function ShareForm({ sheet, onDone }: { sheet: SavedChordSheet; onDone: () => vo
       }
     >
       {guest ? (
-        <Empty>
-          <EmptyHeader>
-            <EmptyTitle>{t('chordPlayer.online.guestTitle')}</EmptyTitle>
-            <EmptyDescription>{t('chordPlayer.online.guestLine')}</EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
+        <Said
+          icon={UserRound}
+          title={t('chordPlayer.online.guestTitle')}
+          description={t('chordPlayer.online.guestLine')}
+          primary
+          action={
             <ButtonLink render={<Link to="/account/sign-in" />}>
               {t('chordPlayer.online.signIn')}
             </ButtonLink>
-          </EmptyContent>
-        </Empty>
+          }
+        />
       ) : (
         <div className="flex flex-col gap-4">
           <p className="mx-1 text-pretty text-[15px] text-muted-foreground">

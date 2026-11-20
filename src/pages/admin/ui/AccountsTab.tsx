@@ -1,24 +1,16 @@
-import { Search } from 'lucide-react'
+import { SearchX, Users } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { AdminAccount } from '@/shared/api/admin'
 import type { AccountRole } from '@/shared/api/auth'
 import { useLocale } from '@/shared/i18n'
 import { useAdmin } from '@/shared/lib/admin'
-import { ChoiceChips, ConfirmDialog, SearchField, SettingsGroup } from '@/shared/ui'
+import { ChoiceChips, ConfirmDialog, Said, SearchField, SettingsGroup } from '@/shared/ui'
 import { useLoaded } from '../model/use-loaded'
 import { useChangeProblem } from '../model/use-change-problem'
 import { FailureLine, LoadedState } from './LoadedState'
 import { daySaid, formatLocale, useNow } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
 import { Face, nameOf } from './Face'
 
 const ROLES = ['learner', 'editor', 'admin'] as const satisfies readonly AccountRole[]
@@ -61,28 +53,17 @@ export function AccountsTab() {
       <LoadedState loaded={loaded} reload={reload}>
         {(accounts) =>
           accounts.length === 0 ? (
-            <Empty>
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <Search />
-                </EmptyMedia>
-                <EmptyTitle>
-                  {query.trim()
-                    ? t('accounts.noneFor', { query: query.trim() })
-                    : t('accounts.none')}
-                </EmptyTitle>
-                {query.trim() ? (
-                  <EmptyDescription>{t('accounts.noneLine')}</EmptyDescription>
-                ) : null}
-              </EmptyHeader>
-              {query.trim() ? (
-                <EmptyContent>
-                  <Button variant="quiet" onClick={() => setQuery('')}>
-                    {t('accounts.clear')}
-                  </Button>
-                </EmptyContent>
-              ) : null}
-            </Empty>
+            query.trim() ? (
+              <Said
+                icon={SearchX}
+                title={t('accounts.noneFor', { query: query.trim() })}
+                description={t('accounts.noneLine')}
+                quiet
+                action={<Button onClick={() => setQuery('')}>{t('accounts.clear')}</Button>}
+              />
+            ) : (
+              <Said icon={Users} title={t('accounts.none')} />
+            )
           ) : (
             <SettingsGroup flush>
               {accounts.map((account) => (

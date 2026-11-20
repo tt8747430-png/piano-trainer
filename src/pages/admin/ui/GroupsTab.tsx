@@ -13,17 +13,10 @@ import {
   NewSheet,
   RowButton,
   RowLink,
+  Said,
   SettingsGroup,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
 import { AddRow } from '@/widgets/content-editor'
 import { SettingsScreen } from '@/widgets/settings-screen'
 import { useChangeProblem } from '../model/use-change-problem'
@@ -88,18 +81,13 @@ export function GroupsTab() {
       <LoadedState loaded={loaded} reload={reload}>
         {({ groups, accounts }) =>
           groups.length === 0 ? (
-            <Empty>
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <Users />
-                </EmptyMedia>
-                <EmptyTitle>{t('groups.none')}</EmptyTitle>
-                <EmptyDescription>{t('groups.noneLine')}</EmptyDescription>
-              </EmptyHeader>
-              <EmptyContent>
-                <Button onClick={() => setNaming('')}>{t('groups.new')}</Button>
-              </EmptyContent>
-            </Empty>
+            <Said
+              icon={Users}
+              title={t('groups.none')}
+              description={t('groups.noneLine')}
+              primary
+              action={<Button onClick={() => setNaming('')}>{t('groups.new')}</Button>}
+            />
           ) : (
             <SettingsGroup flush className="[&_[data-slot=settings-card]>*]:min-h-16">
               {groups.map((group) => {

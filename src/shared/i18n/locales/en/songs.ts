@@ -569,7 +569,8 @@ export const songs = {
     title: 'A shared song',
     reading: 'Reading the song…',
     add: 'Add to the library',
-    none: 'This link holds no song: it may be cut short.',
+    none: 'This link holds no song',
+    noneLine: 'It may have been cut short when it was copied.',
     toSongs: 'To Songs',
   },
   // Export… (ADR 0107): a song's ways out, each with what it is for.

@@ -1,13 +1,12 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
-import { Plus } from 'lucide-react'
+import { Music, Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePiecesStoreApi, type SharedSong } from '@/entities/piece'
 import { addSong } from '@/features/edit-piece'
 import { readSongLink } from '@/features/share-song'
-import { BackButton, ButtonLink, Fab, FloatingActions, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink, Fab, FloatingActions, Said, ScreenHeader } from '@/shared/ui'
 import { SongPreview } from '@/widgets/song-preview'
-import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 
 type Reading =
   | { readonly kind: 'reading' }
@@ -52,16 +51,13 @@ export function SharedSongPage() {
           {t('shared.reading')}
         </p>
       ) : reading.kind === 'none' ? (
-        <Empty>
-          <EmptyHeader>
-            <EmptyTitle>{t('shared.none')}</EmptyTitle>
-          </EmptyHeader>
-          <EmptyContent>
-            <ButtonLink variant="outline" render={<Link to="/songs" />}>
-              {t('shared.toSongs')}
-            </ButtonLink>
-          </EmptyContent>
-        </Empty>
+        <Said
+          icon={Music}
+          title={t('shared.none')}
+          description={t('shared.noneLine')}
+          quiet
+          action={<ButtonLink render={<Link to="/songs" />}>{t('shared.toSongs')}</ButtonLink>}
+        />
       ) : (
         <>
           <SongPreview song={reading.song} />
