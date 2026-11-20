@@ -29,7 +29,7 @@ function SongTableRow({
   actions: readonly RowAction[]
   select: TableSelect | undefined
 }) {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation(['common', 'songs'])
   const { face } = useEntryFace(entry, { key: true, chords: false, progress: false })
   const { status, when } = useSongStanding(entry)
   return (
@@ -69,7 +69,10 @@ function SongTableRow({
         {status}
       </span>
       <span role="cell" className="truncate text-[0.9375rem] text-muted-foreground">
-        {when}
+        {when ?? (
+          // A cell with no date says so quietly, as a table does: a dash, read out in words.
+          <span aria-label={t('songs:row.notPlayed')}>—</span>
+        )}
       </span>
       <span role="cell" className="flex justify-end">
         {select ? null : (

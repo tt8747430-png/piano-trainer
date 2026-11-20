@@ -42,7 +42,12 @@ export const songs = {
     seeAll_other: 'All {{count}} songs',
   },
   // A song's row (R72): where it stands, when nothing has been played.
-  row: { notStarted: 'Not started', learning: 'Learning', added: 'Added {{when}}' },
+  row: {
+    notStarted: 'Not started',
+    learning: 'Learning',
+    added: 'Added {{when}}',
+    notPlayed: 'Not played yet',
+  },
   // All songs (R72, Flat's library): every song in one list.
   all: { title: 'All songs', search: 'Search your songs', seeAll: 'See all', learned: 'Learned' },
   // Groups and the folders shared with them (R30 S6).

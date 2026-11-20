@@ -47,7 +47,12 @@ export const songs: LocaleResources['songs'] = {
     seeAll_many: 'Все песни: {{count}}',
     seeAll_other: 'Все песни: {{count}}',
   },
-  row: { notStarted: 'Не начата', learning: 'Учу', added: 'Добавлена {{when}}' },
+  row: {
+    notStarted: 'Не начата',
+    learning: 'Учу',
+    added: 'Добавлена {{when}}',
+    notPlayed: 'Ещё не играли',
+  },
   all: { title: 'Все песни', search: 'Поиск по вашим песням', seeAll: 'Все', learned: 'Выучена' },
   groups: {
     title: 'Группы',
