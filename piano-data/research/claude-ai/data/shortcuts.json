@@ -1,0 +1,1019 @@
+{
+ "source": "claude.ai shortcut registry, build 0d4c697ee9 (exact ids and default bindings)",
+ "count": 95,
+ "shortcuts": [
+  {
+   "id": "command_palette",
+   "group": "other",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "search_palette",
+   "group": "other",
+   "bindings": [],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "quick_chat",
+   "group": "other",
+   "bindings": [
+    {
+     "combo": "cmd,ctrl+k",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,alt+k",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "chats",
+   "group": "navigation",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "projects",
+   "group": "navigation",
+   "bindings": [],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "ask_your_org",
+   "group": "navigation",
+   "bindings": [],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "artifacts",
+   "group": "navigation",
+   "bindings": [],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "claude_code",
+   "group": "navigation",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "new_task_nav",
+   "group": "navigation",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "new_conversation",
+   "group": "navigation",
+   "bindings": [
+    {
+     "combo": "cmd,shift+o",
+     "platform": "mac/web"
+    },
+    {
+     "combo": "ctrl,shift+o",
+     "platform": "non-mac/web"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "settings",
+   "group": "settings",
+   "bindings": [
+    {
+     "combo": "cmd,shift+,",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,shift+,",
+     "platform": "non-mac"
+    },
+    {
+     "combo": "ctrl,shift+<",
+     "platform": "non-mac/web"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "incognito",
+   "group": "chat",
+   "bindings": [
+    {
+     "combo": "cmd,shift+i",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,shift+i",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "new_incognito_chat",
+   "group": "chat",
+   "bindings": [
+    {
+     "combo": "cmd,shift+n",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl,shift+n",
+     "platform": "non-mac/desktop"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "share_chat",
+   "group": "chat",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "delete_chat",
+   "group": "chat",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "file_upload",
+   "group": "chat",
+   "bindings": [
+    {
+     "combo": "cmd+u",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl+u",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "extended_thinking",
+   "group": "chat",
+   "bindings": [
+    {
+     "combo": "cmd,shift+e",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,shift+e",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "model_selector",
+   "group": "chat",
+   "bindings": [
+    {
+     "combo": "cmd,shift+.",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,shift+.",
+     "platform": "non-mac"
+    },
+    {
+     "combo": "cmd,shift+.",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,shift+>",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "toggle_dictation",
+   "group": "chat",
+   "bindings": [
+    {
+     "combo": "cmd+d",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl+d",
+     "platform": "non-mac/desktop"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "btw_side_chat",
+   "group": "chat",
+   "bindings": [
+    {
+     "combo": "cmd+;",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl+;",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "archive_project",
+   "group": "project",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "delete_project",
+   "group": "project",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "unarchive_project",
+   "group": "project",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "copy_project_link",
+   "group": "project",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "amber_tributary_lantern_overview_toggle",
+   "group": "project",
+   "bindings": [
+    {
+     "combo": "cmd,alt+k",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "cmd,alt+n",
+     "platform": "mac/web"
+    },
+    {
+     "combo": "ctrl,alt+n",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "cai_cheeky_fountain_pane_toggle",
+   "group": "chat",
+   "bindings": [
+    {
+     "combo": "cmd,alt+.",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,alt+.",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "cai_cheeky_fountain_pane_first",
+   "group": "chat",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "cai_cheeky_fountain_pane_second",
+   "group": "chat",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "cai_rosy_feather_toggle",
+   "group": "chat",
+   "bindings": [
+    {
+     "combo": "cmd+.",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl+.",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "toggle_sidebar_and_chat",
+   "group": "chat",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "cai_dreamy_mountain_bar_toggle",
+   "group": "chat",
+   "bindings": [
+    {
+     "combo": "cmd,alt+.",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,alt+h",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "cai_goofy_tome_comment_mode",
+   "group": "chat",
+   "bindings": [
+    {
+     "combo": "alt+c",
+     "platform": "mac"
+    },
+    {
+     "combo": "alt+c",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "archive_space",
+   "group": "project",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "archive_task",
+   "group": "task",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "delete_task",
+   "group": "task",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "pin_code_session",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,alt+p",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl,alt+p",
+     "platform": "non-mac/desktop"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "unpin_code_session",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,alt+p",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl,alt+p",
+     "platform": "non-mac/desktop"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "rename_code_session",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,alt+r",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,alt+r",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "fork_code_session",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,alt+o",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,alt+o",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "hide_nested_sessions",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "show_nested_sessions",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "hide_all_nested_sessions",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "show_all_nested_sessions",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "share_code_session",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "copy_code_session_link",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "move_code_session_to_group",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "detach_code_session",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "new_code_session_from_current",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,shift+n",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl,shift+n",
+     "platform": "non-mac/desktop"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "import_cli_sessions",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "archive_code_session",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "unarchive_code_session",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "delete_code_session",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "toggle_terminal_pane",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd+j",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl+`",
+     "platform": "mac/web"
+    },
+    {
+     "combo": "ctrl+`",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "toggle_diff_pane",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,shift+d",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl,shift+d",
+     "platform": "mac/web"
+    },
+    {
+     "combo": "ctrl,shift+d",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "toggle_preview_pane",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,shift+p",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl,shift+p",
+     "platform": "non-mac/desktop"
+    },
+    {
+     "combo": "cmd,alt+p",
+     "platform": "mac/web"
+    },
+    {
+     "combo": "ctrl,alt+p",
+     "platform": "non-mac/web"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "toggle_browser_pane",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,shift+b",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl,shift+b",
+     "platform": "non-mac/desktop"
+    },
+    {
+     "combo": "cmd,alt+p",
+     "platform": "mac/web"
+    },
+    {
+     "combo": "ctrl,alt+p",
+     "platform": "non-mac/web"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "toggle_files_pane",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,shift+f",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,shift+f",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "toggle_side_chat",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd+;",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl+;",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "new_side_chat",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "new_terminal",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "close_side_pane",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd+\\\\",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl+\\\\",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "expand_side_pane",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "collapse_side_pane",
+   "group": "session",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_prev_prompt",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,alt+up",
+     "platform": "mac"
+    },
+    {
+     "combo": "alt+up",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_next_prompt",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,alt+down",
+     "platform": "mac"
+    },
+    {
+     "combo": "alt+down",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "toggle_read_code_session",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,alt+u",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,alt+u",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "open_code_session_pr",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,alt+g",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,alt+g",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "archive_code_session_chord",
+   "group": "session",
+   "bindings": [
+    {
+     "combo": "cmd,alt+a",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,alt+a",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "toggle_sidebar",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "shortcuts_modal",
+   "group": "general",
+   "bindings": [
+    {
+     "combo": "cmd+/",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl+/",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "switch_organization",
+   "group": "general",
+   "bindings": [
+    {
+     "combo": "cmd,ctrl+s",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,alt+s",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "ant_tools",
+   "group": "general",
+   "bindings": [
+    {
+     "combo": "cmd,alt+t",
+     "platform": "mac"
+    },
+    {
+     "combo": "ctrl,alt+t",
+     "platform": "non-mac"
+    }
+   ],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_navigation",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_main_content",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_last_message",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_question",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_input",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_side_panel",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_artifact",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "amber_tributary_lantern_jump_to_overview",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_session_activity",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_session_details",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_preview",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_terminal",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_pane",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "jump_to_project_knowledge",
+   "group": "general",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  },
+  {
+   "id": "focus_next_region",
+   "group": "general",
+   "bindings": [
+    {
+     "combo": "f6",
+     "platform": "mac"
+    },
+    {
+     "combo": "f6",
+     "platform": "non-mac"
+    },
+    {
+     "combo": "ctrl+f6",
+     "platform": "non-mac"
+    },
+    {
+     "combo": "cmd+f6",
+     "platform": "mac/web"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "focus_previous_region",
+   "group": "general",
+   "bindings": [
+    {
+     "combo": "shift+f6",
+     "platform": "mac"
+    },
+    {
+     "combo": "shift+f6",
+     "platform": "non-mac"
+    },
+    {
+     "combo": "ctrl,shift+f6",
+     "platform": "non-mac"
+    },
+    {
+     "combo": "cmd,shift+f6",
+     "platform": "mac/web"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "focus_next_pane",
+   "group": "other",
+   "bindings": [
+    {
+     "combo": "ctrl+]",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl+]",
+     "platform": "non-mac/desktop"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "focus_previous_pane",
+   "group": "other",
+   "bindings": [
+    {
+     "combo": "ctrl+[",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl+[",
+     "platform": "non-mac/desktop"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "new_session_pane_right",
+   "group": "other",
+   "bindings": [
+    {
+     "combo": "cmd,ctrl+\\\\",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl,alt+\\\\",
+     "platform": "non-mac/desktop"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "new_session_pane_below",
+   "group": "other",
+   "bindings": [
+    {
+     "combo": "cmd,ctrl+-",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl,alt+-",
+     "platform": "non-mac/desktop"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "chorus_surface_prev",
+   "group": "other",
+   "bindings": [
+    {
+     "combo": "cmd,alt+arrowleft",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl,alt+arrowleft",
+     "platform": "non-mac/desktop"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "chorus_surface_next",
+   "group": "other",
+   "bindings": [
+    {
+     "combo": "cmd,alt+arrowright",
+     "platform": "mac/desktop"
+    },
+    {
+     "combo": "ctrl,alt+arrowright",
+     "platform": "non-mac/desktop"
+    }
+   ],
+   "hiddenFromCommandPalette": true
+  },
+  {
+   "id": "cai_jazzy_tower_list",
+   "group": "chat",
+   "bindings": [],
+   "hiddenFromCommandPalette": false
+  }
+ ]
+}

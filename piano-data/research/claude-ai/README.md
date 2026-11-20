@@ -24,3 +24,13 @@ The site's build is `0d4c697ee9`, git hash `0d4c697ee92cd073dd85742c468e4621a738
 - **Server-side behaviour:** server logic (limits, memory, search ranking on the server) is visible only as API calls.
 - **Feature-gated flows:** flows behind feature flags or other plans may be missing.
 - **No exports:** nothing was exported. Anthropic's fonts and brand are proprietary. Use the patterns, not the look.
+
+## Data (`data/`)
+Facts extracted from the code. Values only, no code.
+| File | Content |
+|---|---|
+| `shortcuts.json` | 95 shortcut ids with group and default Mac / non-Mac bindings |
+| `motion-and-timings.json` | durations, easings, menu, hover, toast, sidebar and search timings |
+| `settings-model.json` | storage keys, values, defaults, effects, save endpoints and rollback, settings search ranking, usage thresholds |
+
+Deliberately not in the repo (public): claude.ai's JS, CSS, HTML, SVG icons, translation strings and fonts. They are Anthropic's copyrighted work; local copies are in `~/Downloads/claude-ai-site/` and `~/Downloads/claude-ai-formatted/`.
