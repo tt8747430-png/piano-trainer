@@ -339,14 +339,20 @@ CP_PIANO_JS = r'''
     const parse = (sym) => { const [m, bass] = sym.split('/'), acc = m[1] === '♯' || m[1] === '♭', q = m.slice(acc ? 2 : 1), r = pcOf(m);
       const iv = { m: [0, 3, 7], '7': [0, 4, 7, 10], m7: [0, 3, 7, 10], maj7: [0, 4, 7, 11], '°': [0, 3, 6], dim: [0, 3, 6], sus4: [0, 5, 7] }[q] || [0, 4, 7];
       const roles = iv.map((v, i) => [1, 3, 5, 7][i]), b = bass ? pcOf(bass) : r, bi = iv.indexOf((b - r + 12) % 12);
-      // the left hand plays the bass in the third octave, the right hand the chord in root position from middle C's octave
-      return [{ m: 48 + b, role: bi >= 0 ? roles[bi] : 1, iv: bi >= 0 ? iv[bi] : 0, hand: 'lh' }, ...iv.map((v, i) => ({ m: 60 + r + v, role: roles[i], iv: v, hand: 'rh' }))]; };
+      // as the app lights it (litKeys): the root or slash bass in the left hand, G2 to F♯3, the chord's tones in the right
+      // in the octave just above it, so a chord spans an octave and both hands stay in view on a phone
+      const low = 43 + ((b - 7) % 12 + 12) % 12, up1 = (pc) => low + 1 + ((pc - low - 1) % 12 + 12) % 12;
+      return [{ m: low, role: bi >= 0 ? roles[bi] : 1, iv: bi >= 0 ? iv[bi] : 0, hand: 'lh' }, ...iv.map((v, i) => ({ m: up1((r + v) % 12), role: roles[i], iv: v, hand: 'rh' }))]; };
+    // the keys show the hands (the brief: "left hand violet, right hand orange"): the right hand's brick, the left's lilac
+    // ringed, each a wash while it waits and full while it sounds (the app's Key: hand-rh, hand-lh at half with its ring)
+    const HANDC = (n) => n.hand === 'lh' ? (st.playing ? '#DBD3EB' : '#E5DFEF') : (st.playing ? '#E19E8C' : '#F5DCD3'), HANDO = (n) => n && n.hand === 'lh' ? (st.playing ? '2px' : '1px') + ' solid #B8A8D8' : 'none', HANDOO = (n) => n && n.hand === 'lh' ? (st.playing ? '-2px' : '-1px') : '0';
     const SLOTS = SECS.flatMap(([, , , bars], si) => bars.flatMap((cs, bi) => (cs.length === 1 ? [cs[0], cs[0]] : cs).map((c) => ({ si, bi, c }))));
     const sel = st.sel, slot = st.playing ? SLOTS[(st.pos ?? 4) % SLOTS.length] : (sel ? SLOTS.find((x) => x.si === sel[0] && x.bi === sel[1]) : SLOTS[0]) || null;
     // a sheet with no chord yet (a new sheet's empty Verse) lights nothing over C3 to C5
     const notes = slot ? parse(slot.c) : [], all = SLOTS.length ? SLOTS.flatMap((x) => parse(x.c).map((n) => n.m)) : [48, 72];
     const isW = (m) => [0, 2, 4, 5, 7, 9, 11].includes(m % 12), dn = (m) => { while (!isW(m)) m--; return m; }, up = (m) => { while (!isW(m)) m++; return m; };
-    const [lo, hi] = kbRange === '4' ? [36, 83] : kbRange === '88' ? [21, 108] : [dn(Math.min(...all)), up(Math.max(...all))];
+    // the app's keys, F2 to A4, never moving while the sheet plays (CHORD_PLAYER_KEYS)
+    const [lo, hi] = kbRange === '4' ? [36, 83] : kbRange === '88' ? [21, 108] : [41, 69];
     const labOf = (n) => kbLabel === 'names' ? NM[n.m % 12] : kbLabel === 'degrees' ? DEG[n.m % 12] : kbLabel === 'intervals' ? ['1', '♭2', '2', '♭3', '3', '4', '♭5', '5', '♯5', '6', '♭7', '7'][n.iv] : '';
     const lit = new Map(notes.map((n) => [n.m, n]));
     const nW = Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).filter(isW).length, kw = 100 / nW;
@@ -354,14 +360,14 @@ CP_PIANO_JS = r'''
     const mkKeys = (lo, hi) => { const nW = Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).filter(isW).length, kw = 100 / nW;
       let wi = 0; const whites = [], blacks = [];
       for (let m = lo; m <= hi; m++) { const n = lit.get(m), l = n ? labOf(n) : '';
-        if (isW(m)) { whites.push({ left: (wi * kw).toFixed(3) + '%', w: kw.toFixed(3) + '%', bg: n ? ROLEC[n.role] : '#FEFDFB', l: nW <= 36 ? l : '' }); wi++; }
-        else blacks.push({ left: (wi * kw - kw * 0.3).toFixed(3) + '%', w: (kw * 0.6).toFixed(3) + '%', bg: n ? ROLEC[n.role] : '#332C28', l: nW <= 22 ? l : '' }); }
+        if (isW(m)) { whites.push({ left: (wi * kw).toFixed(3) + '%', w: kw.toFixed(3) + '%', bg: n ? HANDC(n) : '#FEFDFB', ol: HANDO(n), olo: HANDOO(n), l: nW <= 36 ? (n ? l : m % 12 === 0 ? 'C' + (Math.floor(m / 12) - 1) : '') : '', ink: n ? '#332921' : '#6B6259', fw: n ? 700 : 500 }); wi++; }
+        else blacks.push({ left: (wi * kw - kw * 0.3).toFixed(3) + '%', w: (kw * 0.6).toFixed(3) + '%', bg: n ? HANDC(n) : '#332C28', ol: HANDO(n), olo: HANDOO(n), l: nW <= 22 ? l : '' }); }
       return { whites, blacks }; };
     const { whites, blacks } = mkKeys(lo, hi), wide = mkKeys(Math.min(lo, 36), Math.max(hi, 96));
     const is3d = kbOnS && kbView !== '2d';
     this._handsIn = !is3d ? null : { notes: kbHands ? notes.map((n) => ({ midi: n.m, spelled: {}, hand: n.hand, finger: undefined, startTick: 0, durationTicks: 1920, velocity: 80 })) : [],
       perSecond: 960, now: () => 1, playing: false, held: new Set(notes.map((n) => n.m)), marks: new Map(notes.map((n) => [n.m, { tone: ROLEN[n.role] }])), wrong: undefined, faded: null, skin: 'light', range: { low: lo, high: hi } };
-    this._labels3d = is3d && kbLabel !== 'none' ? notes.map((n) => ({ m: n.m, black: !isW(n.m), t: labOf(n), c: ROLEC[n.role] })) : [];
+    this._labels3d = is3d && kbLabel !== 'none' ? notes.map((n) => ({ m: n.m, black: !isW(n.m), t: labOf(n), c: HANDC(n) })) : [];
     const SEGP = ''' + PS.SEG_JS + r''';
     const strip = (() => { const W = 340, w = W / 52; let i = 0, x0 = null, x1 = 0, bl = '';
       for (let m = 21; m <= 108; m++) { if (isW(m)) { if (m >= lo && x0 === null) x0 = i * w; if (m <= hi) x1 = (i + 1) * w; i++; } else bl += 'M' + (i * w - w * 0.3).toFixed(2) + ' 0h' + (w * 0.6).toFixed(2) + 'v15h-' + (w * 0.6).toFixed(2) + 'z'; }
@@ -388,8 +394,8 @@ PT_BUNDLE_CP = open('/home/user/piano-trainer/.scratch/r39/canvas/pthands.bundle
 def CP_KEYS(h):
     """The chord's keys: 2D, or the live 3D stage with the hands."""
     k2 = (f'<sc-if value="{{{{cpKb2}}}}" hint-placeholder-val="{{{{true}}}}"><div role="img" aria-label="The keys of {{{{nowChord}}}}" style="position: relative; height: {h}px; background: #CBC2B9">'
-          f'<sc-for list="{{{{kbw}}}}" as="k" hint-placeholder-count="19"><span style="position: absolute; top: 0; bottom: 0; left: {{{{k.left}}}}; width: {{{{k.w}}}}; box-sizing: border-box; border-right: 1px solid rgba(51,41,33,.16); border-radius: 0 0 4px 4px; background: {{{{k.bg}}}}; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px; font-size: 12px; font-weight: 700; color: {INK}">{{{{k.l}}}}</span></sc-for>'
-          f'<sc-for list="{{{{kbb}}}}" as="k" hint-placeholder-count="13"><span style="position: absolute; top: 0; height: 60%; left: {{{{k.left}}}}; width: {{{{k.w}}}}; border-radius: 0 0 3px 3px; background: {{{{k.bg}}}}; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; box-sizing: border-box; font-size: 12px; font-weight: 700; color: {INK}">{{{{k.l}}}}</span></sc-for></div></sc-if>')
+          f'<sc-for list="{{{{kbw}}}}" as="k" hint-placeholder-count="19"><span style="position: absolute; top: 0; bottom: 0; left: {{{{k.left}}}}; width: {{{{k.w}}}}; box-sizing: border-box; border-right: 1px solid rgba(51,41,33,.16); border-radius: 0 0 4px 4px; background: {{{{k.bg}}}}; outline: {{{{k.ol}}}}; outline-offset: {{{{k.olo}}}}; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px; font-size: 12px; font-weight: {{{{k.fw}}}}; color: {{{{k.ink}}}}">{{{{k.l}}}}</span></sc-for>'
+          f'<sc-for list="{{{{kbb}}}}" as="k" hint-placeholder-count="13"><span style="position: absolute; top: 0; height: 60%; left: {{{{k.left}}}}; width: {{{{k.w}}}}; border-radius: 0 0 3px 3px; background: {{{{k.bg}}}}; outline: {{{{k.ol}}}}; outline-offset: {{{{k.olo}}}}; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; box-sizing: border-box; font-size: 12px; font-weight: 700; color: {INK}">{{{{k.l}}}}</span></sc-for></div></sc-if>')
     k3 = (f'<sc-if value="{{{{cpKb3}}}}" hint-placeholder-val="{{{{false}}}}"><figure aria-label="The hands at the keys, playing {{{{nowChord}}}}" style="position: relative; margin: 0; height: {h}px; overflow: hidden; background: #EDE6DC; {PS.STAGE_VARS}">'
           f'<canvas ref="{{{{handsRef}}}}" style="display: block; width: 100%; height: 100%"></canvas><div ref="{{{{labelsRef}}}}" aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none"></div></figure></sc-if>')
     return k2 + k3

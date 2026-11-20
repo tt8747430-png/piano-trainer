@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · the Chord player's keys light the hands as the app (bass G2–F♯3 lilac, tones above it brick, F2–A4 fixed, C names), its + Lucide's · ChordPlayer,ChordPlayerLaptop · pending
 
 
 ## Changes
