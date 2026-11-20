@@ -289,6 +289,18 @@
   body {
     @apply bg-background font-sans text-foreground antialiased;
   }
+  /* Under reduced motion every transition and animation is instant (craft-details, Motion): a layer
+     still opens and closes, at once; 0.01ms, not 0, so Base UI's end events still fire. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
   /* Titles are typeset in the book's serif, semibold; reading text and controls stay in the sans. */
   h1,
   h2,
