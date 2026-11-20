@@ -32,10 +32,7 @@ export function IntervalTiles({
             aria-labelledby={`interval-group-${group}`}
             className="flex flex-col gap-2"
           >
-            <h3
-              id={`interval-group-${group}`}
-              className="font-sans text-[0.8125rem]/[normal] font-semibold tracking-[0.04em] text-muted-foreground uppercase"
-            >
+            <h3 id={`interval-group-${group}`} className="caps">
               {t(`intervals.group.${group}`)}
             </h3>
             <div className="grid grid-cols-7 gap-2">
