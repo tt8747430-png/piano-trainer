@@ -1,4 +1,4 @@
-import { isCompound, TICKS_PER_BEAT, type Meter, type Tick } from '@/shared/lib/music'
+import { eighthTicks, TICKS_PER_BEAT, type Meter, type Tick } from '@/shared/lib/music'
 import type { Duration, NoteValue, Tuplet } from './types'
 
 /** Every value written, longest first: a whole to a 64th. */
@@ -7,10 +7,6 @@ export const NOTE_VALUES: readonly NoteValue[] = [1, 2, 4, 8, 16, 32, 64]
 /** The tuplets a score writes (ADR 0097): two to nine notes in the time of others, as Flat's ⇧2–⇧9. */
 export const TUPLET_COUNTS = [2, 3, 4, 5, 6, 7, 8, 9] as const
 export type TupletCount = (typeof TUPLET_COUNTS)[number]
-
-/** Ticks in an eighth: half a beat when a quarter is the beat, a third when a dotted quarter is (x/8). */
-const eighthTicks = (meter: Meter): Tick =>
-  isCompound(meter) ? TICKS_PER_BEAT / 3 : TICKS_PER_BEAT / 2
 
 /** A value's length in quarters of it, with its dots: plain, dotted, double dotted. */
 const DOTTED = [4, 6, 7] as const

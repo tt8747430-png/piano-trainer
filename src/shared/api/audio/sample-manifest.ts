@@ -1,3 +1,5 @@
+import { isRecord } from '@/shared/lib'
+
 /**
  * A recorded instrument's manifest (R29 SND, A27): `public/samples/<instrument>/manifest.json`, made by
  * its script under `scripts/samples/`. It names the set and its licence, the velocity layers from the
@@ -28,9 +30,6 @@ export interface SampleManifest {
   readonly layers: readonly SampleLayer[]
   readonly samples: readonly SampleFile[]
 }
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
 
 function layerOf(value: unknown): SampleLayer | null {
   if (!isRecord(value) || typeof value.name !== 'string' || typeof value.upTo !== 'number')

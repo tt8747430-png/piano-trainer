@@ -174,7 +174,7 @@ export {
 export { nameChords, type FoundChord, type LeftOut } from './chord-finder'
 export { alteredSymbol, voicingKind, VOICING_KINDS, type VoicingKind } from './voicing-kind'
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
-export { voiceLead, type RowPosition } from './voice-lead'
+export { middleOf, voiceLead, type RowPosition } from './voice-lead'
 export {
   chordRole,
   KEY_ROLES,

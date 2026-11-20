@@ -1,4 +1,4 @@
-import { contentHash } from '@/shared/lib'
+import { contentHash, isRecord } from '@/shared/lib'
 import { isContentKind } from '../content'
 import { netResult, type NetOptions } from '../network'
 import { toJson, type Backend, type PianoClient } from '../supabase'
@@ -7,9 +7,6 @@ import type { ContentEditingPort } from './types'
 // `publish_content`'s own refusals come back as 4xx: editors only a 403, nothing to publish a 404.
 const thrown = (error: { message: string }, status: number) =>
   Object.assign(new Error(error.message), { status })
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value)
 
 /** Editing the built-in content on Supabase (ADR 0116, round 6): the drafts table and `publish_content`. */
 export function createSupabaseContentEditing(
