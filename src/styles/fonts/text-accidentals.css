@@ -12,3 +12,18 @@
   src: url('./text-accidentals.woff2') format('woff2');
   unicode-range: U+266D-266F, U+1D12A-1D12B;
 }
+
+/*
+ * The other music signs a line of text may carry (♩ ♪ ♫ ♬, the staff signs 𝄞 𝄢), from Noto Music, for
+ * text and nothing else: limited to the signs, so where the stack's own face is missing (Iowan Old
+ * Style off Apple's systems) Noto Music, which has the space, is never the line's first face and
+ * never sets its baseline, its tall metrics pushing a title's letters 4 pixels down.
+ */
+@font-face {
+  font-family: 'Text Music Signs';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource/noto-music/files/noto-music-music-400-normal.woff2') format('woff2');
+  unicode-range: U+2669-266C, U+1D000-1D24F;
+}

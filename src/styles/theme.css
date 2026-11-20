@@ -142,12 +142,14 @@
    * The canvas's two faces (r41_kit FONT and SERIF): Instrument Sans for reading and acting, Iowan
    * Old Style, the book serif Apple ships, for titles and chord symbols. Instrument Sans has no
    * Cyrillic, so Russian reads in the system's sans after it, as the boards set it. Neither face
-   * has ♭ ♮ ♯: both take them from Text Accidentals, set for text (fonts/), not a staff.
+   * has ♭ ♮ ♯: both take them from Text Accidentals, set for text (fonts/), not a staff, and the
+   * other music signs from Text Music Signs, Noto Music limited to them.
    */
   --font-sans:
-    'Instrument Sans Variable', 'Text Accidentals', 'Noto Music', -apple-system, 'Helvetica Neue',
-    system-ui, sans-serif;
-  --font-display: 'Iowan Old Style', 'Text Accidentals', 'Noto Music', 'Palatino', Georgia, serif;
+    'Instrument Sans Variable', 'Text Accidentals', 'Text Music Signs', -apple-system,
+    'Helvetica Neue', system-ui, sans-serif;
+  --font-display:
+    'Iowan Old Style', 'Text Accidentals', 'Text Music Signs', 'Palatino', Georgia, serif;
   /* A music sign that stands alone: set by the music font's own metrics. */
   --font-music: 'Noto Music', serif;
 
