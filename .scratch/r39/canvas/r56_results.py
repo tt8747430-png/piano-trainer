@@ -9,6 +9,9 @@
 
 RS_SAGE, RS_SAGE_INK, RS_RED, RS_OCHRE = '#DCE9D6', '#44684A', '#A1352B', '#8A5D16'
 RS_LET = 'CDEFGAB'
+from bravura_glyphs import BRAVURA
+# a notehead as the engine engraves it: Bravura's whole or black head at the staff's space, centred on its note
+RS_HEAD = lambda kind, x, y, sp, c=INK: f'<path transform="translate({x - BRAVURA[kind][1] * sp / 500:.2f} {y}) scale({sp / 250:.4f} {-sp / 250:.4f})" d="{BRAVURA[kind][0]}" fill="{c}"></path>'
 # the run: Cmaj7 through its inversions, three times (root position, 1st, 2nd, 3rd)
 RS_INV = [[('C', 4), ('E', 4), ('G', 4), ('B', 4)], [('E', 4), ('G', 4), ('B', 4), ('C', 5)],
           [('G', 4), ('B', 4), ('C', 5), ('E', 5)], [('B', 3), ('C', 4), ('E', 4), ('G', 4)]]
@@ -56,7 +59,7 @@ def RS_CELL(notes, w, red=None, last=False, clef=False):
         if s <= 0:
             out += f'<path d="M{cx - 9} 56H{cx + 9 + (10 if shifted else 0)}" stroke="{INK}" stroke-width="1"></path>'
         c = RS_RED if red and RS_STEP(*red) == s else INK
-        out += f'<ellipse cx="{x:.1f}" cy="{y(s)}" rx="5.4" ry="3.9" transform="rotate(-24 {x:.1f} {y(s)})" fill="none" stroke="{c}" stroke-width="{2.4 if c == RS_RED else 1.7}"></ellipse>'
+        out += RS_HEAD('whole', x, y(s), 8, c)
         prev = s
     return f'<svg viewBox="0 -6 {w} 82" width="{w}" height="82" aria-hidden="true" style="display: block; flex: none">{lines}{out}</svg>'
 
@@ -200,7 +203,7 @@ def PV_INV(w, bars, first):
             second = (up and i > 0 and st - steps[i - 1] == 1) or (not up and i < len(steps) - 1 and steps[i + 1] - st == 1)
             hx = x + (9.6 if up else -9.6) if second else x
             g += ''.join(f'<path d="M{hx - 7:.1f} {ly}H{hx + 7:.1f}" stroke="{INK}" stroke-width="1"></path>' for ly in ledgers(yy))
-            g += f'<ellipse cx="{hx:.1f}" cy="{yy}" rx="5.4" ry="3.9" transform="rotate(-24 {hx:.1f} {yy})" fill="none" stroke="{INK}" stroke-width="1.7"></ellipse>'
+            g += RS_HEAD('whole', hx, yy, 8)
         sx = x + 4.8 if up else x - 4.8
         g += f'<path d="M{sx:.1f} {max(ys) if up else min(ys)}V{min(ys) - 28 if up else max(ys) + 28}" stroke="{INK}" stroke-width="1.1"></path>'
         return g
@@ -297,7 +300,7 @@ def PV_HANON(w, bars, first):
             for staff, yf, off, up in ((0, tre, 0, True), (1, bas, 0, True)):
                 ys = [yf(st) for st in steps[g * 4:g * 4 + 4]]
                 for x, y, st in zip(xs, ys, steps[g * 4:g * 4 + 4]):
-                    out += f'<ellipse cx="{x:.1f}" cy="{y}" rx="4.6" ry="3.4" transform="rotate(-24 {x:.1f} {y})" fill="{INK}"></ellipse>'
+                    out += RS_HEAD('black', x, y, 8)
                     if staff == 0 and st <= 0:
                         out += f'<path d="M{x - 7:.1f} 56H{x + 7:.1f}" stroke="{INK}" stroke-width="1"></path>'
                     if staff == 1:
