@@ -2,23 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DiagramChord } from '@/features/practice'
 import { cn, useScrollMotion } from '@/shared/lib'
-import { noteName, printedSymbol, symbolParts } from '@/shared/lib/music'
-import { LeadSymbol, MiniKeys } from '@/shared/ui'
+import { noteName, printedSymbol } from '@/shared/lib/music'
+import { LeadSymbol, MiniKeys, RaisedSymbol } from '@/shared/ui'
 import { ChordDiagram } from './ChordDiagram'
 import { ChordSheet } from './ChordSheet'
-
-/** A symbol with its extensions raised (`G⁷`), as the Lyrics board names a pinned chord. */
-function Raised({ symbol }: { symbol: string }) {
-  const { root, letters, raised, bass } = symbolParts(printedSymbol(symbol))
-  return (
-    <>
-      {root}
-      {letters}
-      {raised ? <sup className="ms-px text-[max(12px,0.6em)]">{raised}</sup> : null}
-      {bass}
-    </>
-  )
-}
 
 /**
  * A piece's chord summary (ADR 0108): its chords in the order they first sound
@@ -118,7 +105,7 @@ export function ChordSummary({
                   )}
                 >
                   {follows ? (
-                    <Raised symbol={each.symbol} />
+                    <RaisedSymbol symbol={each.symbol} />
                   ) : (
                     <LeadSymbol text={printedSymbol(each.symbol)} />
                   )}

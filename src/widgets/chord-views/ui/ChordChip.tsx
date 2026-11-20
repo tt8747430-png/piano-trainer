@@ -1,20 +1,7 @@
 import type { ReactNode } from 'react'
 import { cn, useMediaQuery } from '@/shared/lib'
-import { printedSymbol, symbolParts } from '@/shared/lib/music'
+import { RaisedSymbol } from '@/shared/ui'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
-
-/** A symbol as the chip prints it: its root and letters, its extensions raised. */
-function Printed({ symbol }: { symbol: string }) {
-  const { root, letters, raised, bass } = symbolParts(printedSymbol(symbol))
-  return (
-    <>
-      {root}
-      {letters}
-      {raised ? <sup className="ms-px text-[max(12px,0.6em)]">{raised}</sup> : null}
-      {bass}
-    </>
-  )
-}
 
 /** A device whose pointer rests on what it points at: a mouse or a trackpad, as the theme's hover. */
 const HOVERS = '(hover: hover) and (pointer: fine)'
@@ -53,7 +40,7 @@ export function ChordChip({
         sounding ? 'bg-foreground text-background' : 'bg-muted hover:bg-hairline',
       )}
     >
-      <Printed symbol={symbol} />
+      <RaisedSymbol symbol={symbol} />
     </button>
   )
   if (!hovers) return chip

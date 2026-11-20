@@ -1,5 +1,6 @@
 import { chordLabelWidth, cn } from '@/shared/lib'
-import { printedSymbol, symbolParts } from '@/shared/lib/music'
+import { printedSymbol } from '@/shared/lib/music'
+import { RaisedSymbol } from '@/shared/ui'
 
 /** A later chord starting in the same beat, as a share of the first's size: a size down. */
 const LATER = 0.8
@@ -61,13 +62,9 @@ export function CellChords({
       }}
     >
       {printed.map((symbol, i) => {
-        const { root, letters, raised, bass } = symbolParts(symbol)
         return (
           <span key={i} style={i > 0 ? { fontSize: `${LATER}em` } : undefined}>
-            {root}
-            {letters}
-            {raised ? <sup className="text-[max(12px,0.6em)]">{raised}</sup> : null}
-            {bass}
+            <RaisedSymbol symbol={symbol} />
           </span>
         )
       })}
