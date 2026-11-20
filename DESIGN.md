@@ -514,7 +514,7 @@ square at the top.
 - **Toast** (`say`): ink, 14 round, over the screen's foot and above every sheet, clear of all that floats there (on a
   laptop centred on its pane, 460 wide and 28 up, beside the floating actions at the corner; over a floating bar, a
   lesson's, 116 up); its
-  line in the sheet's colour, Undo in honey (deep honey by Night, when the toast is light), no ✕; gone in five seconds
+  line in the sheet's colour, Undo in honey (deep honey by Night, when the toast is light), no ✕; gone in six seconds, paused under the pointer,
   or by a swipe. A loss that can be undone happens at once and toasts with Undo instead of asking; only what can't be undone,
   or reaches other people, asks first in the dialog, naming what goes.
 - **Marks:** learned a grass disc with a check (`LearnedBadge`); a gap a 10px ochre dot; progress a 6px grass bar on a
@@ -612,9 +612,14 @@ appears under a finger; the layout's one control.
 
 - **One curve,** `ease-out` (`cubic-bezier(0.22, 1, 0.36, 1)`): 200ms for colour, 80ms for keys. Sheets rise on the iOS
   sheet curve in 450ms and follow the finger.
+- **Layers grow from where they were opened,** on the one curve, closing faster than they open (claude.ai's measured
+  values): a dialog from 0.98 in 200ms, a popover, menu or select from 0.97 in 200ms, each closing in 150ms; a tooltip
+  from 0.98 in 120ms, closing in 100ms. Menus stand 6 from their button. A toast stays 6 seconds, paused under the
+  pointer.
 - **Only `transform` and `opacity` move.** Buttons and chips animate colour alone, and pressing one never moves it; the
   floating actions keep their press.
-- **Strips and diagrams move on their own;** the page does not. Under reduced motion every transition is instant.
+- **Strips and diagrams move on their own;** the page does not. Under reduced motion every transition and animation
+  is instant, app-wide (`theme.css`).
 
 ## Do's and Don'ts
 
