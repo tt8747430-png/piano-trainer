@@ -1,6 +1,7 @@
 import { Plus, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { matchesQuery } from '@/shared/lib'
 import { NewSheet, SheetPart } from '@/shared/ui'
 
 /** An item that may be added by its name: a lesson the course had, or one to add by reference. */
@@ -58,10 +59,10 @@ export function AddRow({
   const [name, setName] = useState('')
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState(false)
-  const typed = name.trim().toLowerCase()
+  const typed = name.trim()
   const groups = found.flatMap((group) => {
     if (group.typed && typed === '') return []
-    const items = group.items.filter((item) => item.title.toLowerCase().includes(typed))
+    const items = group.items.filter((item) => matchesQuery([item.title], typed))
     return items.length > 0 ? [{ ...group, items }] : []
   })
   const close = (next: boolean) => {

@@ -3,7 +3,7 @@ import { Plus, SearchX } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Locale } from '@/shared/i18n'
-import { LAPTOP, useMediaQuery } from '@/shared/lib'
+import { LAPTOP, matchesQuery, useMediaQuery } from '@/shared/lib'
 import { KindTile, Said, SearchField, Sheet, SheetContent, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { insertActions } from './menus'
@@ -21,10 +21,9 @@ export function InsertSheet({ editor, locale }: { editor: Editor; locale: Locale
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const search = useRef<HTMLDivElement>(null)
-  const found = query.trim().toLocaleLowerCase(locale)
   const groups: { name: string; actions: MenuAction[] }[] = []
   for (const action of insertActions(editor, locale, t)) {
-    if (!action.label.toLocaleLowerCase(locale).includes(found)) continue
+    if (!matchesQuery([action.label], query)) continue
     const name = action.group ?? ''
     const last = groups.at(-1)
     if (last?.name === name) last.actions.push(action)

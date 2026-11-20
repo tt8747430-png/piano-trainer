@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { FolderTile, useFolderName, type ShelvedEntry } from '@/entities/library'
 import { entryTitles, PieceLink, useRepertoire, type Entry } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
-import { cn, daySaid, flipped, useMediaQuery, useNow } from '@/shared/lib'
+import { cn, daySaid, flipped, matchesQuery, useMediaQuery, useNow } from '@/shared/lib'
 import {
   BackButton,
   CheckMark,
@@ -237,10 +237,7 @@ export function ShelfList({
     const song = repertoire.entry(entry.id)
     return song ? entryTitles(song, locale).primary : ''
   }
-  const needle = query.trim().toLocaleLowerCase(locale)
-  const shown = needle
-    ? items.filter((item) => nameOfEntry(item.entry).toLocaleLowerCase(locale).includes(needle))
-    : items
+  const shown = items.filter((item) => matchesQuery([nameOfEntry(item.entry)], query))
   const picked = [...chosen].filter((key) => items.some((item) => item.key === key))
   const target = picked.length > 0 ? picked : items.map((item) => item.key)
   const stop = () => {

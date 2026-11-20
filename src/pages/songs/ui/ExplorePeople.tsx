@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { ChevronRight, SearchX, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { PublicEntry } from '@/shared/api/public-library'
+import { matchesQuery } from '@/shared/lib'
 import { Avatar, Said } from '@/shared/ui'
 
 /** One person who publishes: their name, picture and how many songs Explore holds of theirs. */
@@ -41,10 +42,8 @@ export function ExplorePeople({
   onClear: () => void
 }) {
   const { t } = useTranslation('songs')
-  const wanted = query.trim().toLocaleLowerCase()
-  const people = peopleOf(entries).filter(
-    (person) => !wanted || person.name.toLocaleLowerCase().includes(wanted),
-  )
+  const wanted = query.trim()
+  const people = peopleOf(entries).filter((person) => matchesQuery([person.name], wanted))
   if (people.length === 0)
     return (
       <Said

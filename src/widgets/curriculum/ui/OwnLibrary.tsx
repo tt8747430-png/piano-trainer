@@ -23,7 +23,7 @@ import {
 } from '@/features/manage-own-lessons'
 import { resetSteps, restoreSteps } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { cn, flipped } from '@/shared/lib'
+import { cn, flipped, matchesQuery } from '@/shared/lib'
 import {
   BackButton,
   CheckMark,
@@ -369,8 +369,8 @@ export function OwnLibrary() {
   const [picks, setPicks] = useState<ReadonlySet<Pick>>(new Set())
   const [making, setMaking] = useState<OwnKind | null>(null)
   const newActions = useNewOwnActions(setMaking)
-  const needle = query.trim().toLocaleLowerCase(locale)
-  const matches = (name: string) => needle === '' || name.toLocaleLowerCase(locale).includes(needle)
+  const searching = query.trim() !== ''
+  const matches = (name: string) => matchesQuery([name], query)
   const order = <T,>(items: readonly T[], name: (item: T) => string): readonly T[] =>
     sort === 'name'
       ? items.toSorted((a, b) => name(a).localeCompare(name(b), locale))
@@ -578,9 +578,9 @@ export function OwnLibrary() {
             </div>
             <ul className="flex flex-col rows-hairline overflow-hidden card ps-2 lg:overflow-visible lg:rounded-none lg:ring-0 lg:bg-transparent lg:ps-0">
               {shownCourses.map((course) => {
-                const open = (opened.has(course.id) || needle !== '') && kind !== 'courses'
+                const open = (opened.has(course.id) || searching) && kind !== 'courses'
                 const inside = lessonsOf(course).filter(
-                  (lesson) => needle === '' || matches(course.title) || matches(lessonName(lesson)),
+                  (lesson) => !searching || matches(course.title) || matches(lessonName(lesson)),
                 )
                 return [
                   <li key={course.id}>

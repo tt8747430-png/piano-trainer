@@ -5,7 +5,7 @@ import type { AdminCounts } from '../model/dialog-context'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from '@/shared/lib/account'
 import { useAppUpdate } from '@/shared/lib/app-update'
-import { cn } from '@/shared/lib'
+import { cn, matchesQuery } from '@/shared/lib'
 import {
   ADMIN_PICTURES,
   ADMIN_SECTIONS,
@@ -72,12 +72,10 @@ export function SettingsNav({
         </section>
       </>
     )
-  const wanted = query.trim().toLocaleLowerCase()
+  const wanted = query.trim()
   const groups = SETTINGS_GROUPS.map((group) => ({
     ...group,
-    pages: group.pages.filter(
-      (page) => !wanted || t(`settings:${page.title}`).toLocaleLowerCase().includes(wanted),
-    ),
+    pages: group.pages.filter((page) => matchesQuery([t(`settings:${page.title}`)], query)),
   })).filter((group) => group.pages.length > 0)
   return (
     <>
