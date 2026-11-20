@@ -237,7 +237,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
                 className={cn(
                   'text-balance hyphens-auto wrap-break-word outline-none',
                   building
-                    ? 'text-[2.75rem] leading-tight landscape-phone:text-3xl'
+                    ? 'text-[2.75rem] leading-[3.1875rem] landscape-phone:text-3xl'
                     : 'text-3xl sm:text-4xl landscape-phone:text-2xl',
                 )}
               >
@@ -324,7 +324,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
           on a laptop the acts in the 760 column over the keys. Next takes the acts' slot at their
           height, so the keys never move. A round answered by its buttons has no primary until it is
           answered, its buttons being its act. */}
-      <div className="mt-auto flex flex-col gap-3 pt-2 lg:flex-col-reverse lg:gap-4">
+      <div className="mt-auto flex flex-col gap-3 lg:flex-col-reverse lg:gap-4 lg:pt-2">
         {/* The keys run edge to edge, across the screen's gutter. */}
         <div className="-mx-gutter">
           <LiveKeyboard

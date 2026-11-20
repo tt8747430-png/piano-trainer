@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · pending · one grass ink (#44684A) on the grass paint on every board; the Check's keyboard names its Cs as the kit's keys do · Check,CheckLaptop,Course,CourseLaptop,Learn,LearnCourses,LearnCoursesLaptop,LearnLaptop,LearnLevel,LearnLevelLaptop,LearnYours,LearnYoursLaptop,Lesson,LessonLaptop,PlayChord,PlayChordLaptop,PracticeResult,PracticeResultLaptop,Profile,ProfileLaptop,Settings,SettingsLaptop,Song,SongLaptop,YourLessonSettings,YourLessonSettingsLaptop · pending
+
 ## Changes
 
 - 2026-11-20 · 185c9ac5 · the boards' fields 48 as their code says (an input's default padding drew them 50) · SignIn,SignInLaptop,Settings,SettingsLaptop,Section,SectionLaptop,SongSettings,SongSettingsLaptop · v676

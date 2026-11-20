@@ -33,7 +33,7 @@ function CheckFlow({ plan, again }: { plan: CheckPlan; again: () => void }) {
   // The screen the shell's main leaves, beside the sidebar on a laptop (CheckLaptop): its acts 6 over
   // the home indicator on a phone (main's foot padding less 18), the keys down to a laptop window's foot.
   return (
-    <div className="flex min-h-screen-free flex-col gap-3 [--foot-pad:--spacing(1.5)]! -mb-4.5 landscape-phone:gap-3 lg:[--foot-pad:0px]! lg:-mb-12">
+    <div className="flex min-h-screen-free flex-col gap-3 [--foot-pad:--spacing(1.5)]! -mb-4.5 landscape-phone:gap-3 lg:gap-4 lg:[--foot-pad:0px]! lg:-mb-12">
       {/* As the Check board: the kit's bar, Close and the check's name (the laptop's 30 bold),
           then the rounds' bar and where it stands. */}
       <ScreenHeader
@@ -42,7 +42,7 @@ function CheckFlow({ plan, again }: { plan: CheckPlan; again: () => void }) {
       />
       {/* The results keep the bar alone, as the board's. */}
       {trainer.summary ? null : (
-        <div className="mx-auto -mt-2 flex w-full max-w-190 items-center gap-3 px-1">
+        <div className="mx-auto -mt-2 flex w-full max-w-190 items-center gap-3">
           <Progress
             value={answered}
             max={plan.length}
@@ -61,8 +61,8 @@ function CheckFlow({ plan, again }: { plan: CheckPlan; again: () => void }) {
       )}
       {/* What it has come to so far, as the Check board's two chips: right in grass, wrong quiet. */}
       {trainer.summary ? null : (
-        <p className="mx-auto flex w-full max-w-190 gap-2 px-1 text-sm/[normal] font-semibold tabular-nums">
-          <span className="rounded-xl bg-learned/15 px-3 py-1 text-learned">
+        <p className="mx-auto flex w-full max-w-190 gap-2 text-sm/[normal] font-semibold tabular-nums">
+          <span className="rounded-xl bg-paint-grass px-3 py-1 text-on-paint-grass">
             {t('quiz:tally.right', { count: right })}
           </span>
           <span className="rounded-xl bg-muted px-3 py-1 text-muted-foreground">

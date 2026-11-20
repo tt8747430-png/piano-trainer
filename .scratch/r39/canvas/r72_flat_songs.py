@@ -55,7 +55,7 @@ def FLJS(rows, bare_l='A new learner', guest=False):
     return js('    const GUEST = ' + ('true' if guest else 'false') + '; const ROWS = ' + json.dumps(rows, ensure_ascii=False) + '; const FOLD = ' + json.dumps([[t, n, c] for t, n, c, k in FOLDERS_ALL if k != 'shared'], ensure_ascii=False) + '; const BARE_L = ' + json.dumps(bare_l) + ';' + FL_JS)
 
 HEART_T = '<svg viewBox="0 0 24 24" width="24" height="24" fill="#B84A3E" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"></path></svg>'
-SHARED_T = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#2F5A35" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"></path></svg>'
+SHARED_T = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#44684A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"></path></svg>'
 
 def TILE56(pic, w=56):
     return f'<span aria-hidden="true" style="flex: none; width: {w}px; height: {w}px; border-radius: 12px; background: {pic} center / cover; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span>'
@@ -103,7 +103,7 @@ def SHAREDCARDS(href):
     face = lambda i, c, n: f'<span style="width: 32px; height: 32px; margin-left: {0 if n == 0 else -10}px; border-radius: 16px; background: {c}; box-shadow: 0 0 0 2px {SHEET}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">{i}</span>'
     return ''.join(f'<a href="{href}" style="{CARDROW}; min-width: 0; box-sizing: border-box; padding: 14px 12px 14px 14px; display: flex; align-items: center; gap: 16px; color: {INK}; text-decoration: none">'
                    f'<span style="flex: none; width: 64px">{FOLDERSVG(SAGE)}</span>'
-                   f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13px; font-weight: 600; color: #2F5A35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{g}</span><span style="font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{w}</span>'
+                   f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13px; font-weight: 600; color: #44684A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{g}</span><span style="font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{w}</span>'
                    f'<span style="display: flex; align-items: center; gap: 8px; margin-top: 6px"><span style="display: flex">{"".join(face(i, c, n) for n, (i, c) in enumerate(fs))}</span><span style="font-size: 13px; color: {SOFT}">{more}</span></span></span>'
                    f'<span style="flex: none; color: {SOFT}; display: flex">{CHEV_R}</span></a>' for t, g, w, fs, more in SHAREDF)
 

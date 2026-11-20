@@ -96,7 +96,7 @@ const COURSES = [["Beginner", [["Introduction to the Piano", "The keys, posture 
     const L = LV[Math.min(lv, 3)]; let idx = 0;
     const chapters = L.ch.filter((c) => !gone['ch:' + c.t]).map((c, ci) => { const rows = c.rows.filter((r) => !gone[r.t]).map((r, ri) => { const i = idx++; const done = i < L.done, next = i === L.done;
         return { ...r, done, next, todo: !done && !next && !r.check, tScale: !done && !next && !!r.check && !!r.scale, tChord: !done && !next && !!r.check && !r.scale, num: String(i + 1), first: i === 0, last: i === L.n - 1,
-          tileBg: done ? '#DCE9D6' : '#FEFDFB', tileRing: next ? '0 0 0 2.5px #EDC684' : (done ? 'none' : '0 0 0 1px #DAD1C8'), tileFg: done ? '#2F5A35' : '#685E56', rad: r.check ? '11px' : '22px',
+          tileBg: done ? '#DCE9D6' : '#FEFDFB', tileRing: next ? '0 0 0 2.5px #EDC684' : (done ? 'none' : '0 0 0 1px #DAD1C8'), tileFg: done ? '#44684A' : '#685E56', rad: r.check ? '11px' : '22px',
           spineTop: i === 0 ? 'transparent' : (i <= L.done ? '#9BC093' : '#DAD1C8'), spineBot: i === L.n - 1 ? 'transparent' : (i < L.done ? '#9BC093' : '#DAD1C8'), weight: next ? 700 : 600, remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [r.t]: true }, toast: r.t + ' removed from ' + L.t }); } }; });
       const got = rows.filter((r) => r.done).length; return { t: (ci + 1) + ' · ' + c.t, rows, count: got + ' of ' + rows.length, add: () => set({ toast: 'New lesson added' }), menu: () => set({ sheet: 'chap', chap: c.t }) }; });
     const nxt = chapters.flatMap((c) => c.rows).find((r) => r.next);

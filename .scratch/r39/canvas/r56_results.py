@@ -7,7 +7,7 @@
 # a pause (Wait mode waits, so it has no early or late); your best beside this score. Exec'd by r41.py after r55_editor_draft; uses
 # r53_songs_more's IF and r50_profile's pieces. Helpers carry the RS_ prefix.
 
-RS_SAGE, RS_SAGE_INK, RS_RED, RS_OCHRE = '#DCE9D6', '#2F5A35', '#A1352B', '#8A5D16'
+RS_SAGE, RS_SAGE_INK, RS_RED, RS_OCHRE = '#DCE9D6', '#44684A', '#A1352B', '#8A5D16'
 RS_LET = 'CDEFGAB'
 # the run: Cmaj7 through its inversions, three times (root position, 1st, 2nd, 3rd)
 RS_INV = [[('C', 4), ('E', 4), ('G', 4), ('B', 4)], [('E', 4), ('G', 4), ('B', 4), ('C', 5)],
