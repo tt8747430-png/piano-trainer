@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · (this commit) · a song's cover as the app engraves it: the first staff 57 down, the systems 115 apart, the chord symbols 12.5 bold 28 over the staff, the words 15.5, its title and credits on the app's line heights · Song,SongLaptop · pending
 
 ## Changes
 
+- 2026-11-20 · e3121ed9 · a song's cover as the app engraves it: the first staff 57 down, the systems 115 apart, the chord symbols 12.5 bold 28 over the staff, the words 15.5, its title and credits on the app's line heights · Song,SongLaptop · v705
 - 2026-11-20 · 7ab59c59 · the Courses' and a level's laptop bar is the one sub-page bar (LTITLEBAR: 56, Back 40 in, the title 12 after it, content 24 under), as Your lessons', a course's and a lesson's; it was an 88 head with Back 44 in · LearnCoursesLaptop,LearnLevelLaptop · v704
 - 2026-11-20 · 1c41d4e2 · a lesson's line of notes as the app engraves it: 4/4 after the clef, a barline between its two bars and at its end, the bar numbers over it · Lesson,LessonLaptop · v704
 - 2026-11-20 · 1c41d4e2 · a lesson's scale keys in the Scales page's colours (the tonic its own, the rest the scale's wash); the W/H ⓘ legend gone, as the app · Lesson,LessonLaptop · v704
