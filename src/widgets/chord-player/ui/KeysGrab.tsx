@@ -4,11 +4,6 @@ import type { PanelSize } from '@/entities/page-layout'
 import { cn } from '@/shared/lib'
 import { LayoutEditContext } from '../model/use-layout-edit'
 
-/** The keys' three heights (canvas R76's KH and KHL): a phone's, and a laptop's from 64rem. */
-export const KEYS_PX: Readonly<Record<'phone' | 'laptop', Readonly<Record<string, number>>>> = {
-  phone: { small: 72, medium: 112, large: 168 },
-  laptop: { small: 110, medium: 170, large: 240 },
-}
 const KEY_SIZES: readonly PanelSize[] = ['small', 'medium', 'large']
 
 /**
@@ -24,7 +19,7 @@ export function KeysGrab({
   top: boolean
   size: PanelSize
   /** The keys' heights at this size, by size. */
-  heights: Readonly<Record<string, number>>
+  heights: Readonly<Partial<Record<PanelSize, number>>>
 }) {
   const { t } = useTranslation('practice')
   const edit = use(LayoutEditContext)
