@@ -8,10 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · pending · the boards' fields 48 as their code says (an input's default padding drew them 50) · SignIn,SignInLaptop,Settings,SettingsLaptop,Section,SectionLaptop,SongSettings,SongSettingsLaptop · pending
-
 ## Changes
 
+- 2026-11-20 · 185c9ac5 · the boards' fields 48 as their code says (an input's default padding drew them 50) · SignIn,SignInLaptop,Settings,SettingsLaptop,Section,SectionLaptop,SongSettings,SongSettingsLaptop · v676
 - 2026-11-20 · 9559b173 · a run is named as its Player bar names it (Inversions: Cmaj7) on its results and in Practice history · PlayChord,PlayChordLaptop,PracticeResult,PracticeResultLaptop,Profile,ProfileLaptop · v675
 - 2026-11-20 · 10d932a4 · Profile's achievements earned-latest-first with true ways to earn them, records Level · Longest streak · Best accuracy · Days practised, the first-run flame unlit · Profile,ProfileLaptop · v674
 - 2026-11-20 · 4e13b0fc · the editor boards' chord names bold in the book serif, as the Player boards' · Editor,EditorLaptop,EditorDraft,EditorDraftLaptop · v673
