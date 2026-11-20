@@ -194,7 +194,6 @@ export {
 } from './library-row-class'
 export { menuOf, swipeOf, type RowAction } from './row-actions'
 export { RowMore } from './RowMore'
-export { SortChoice, type SortOption } from './SortChoice'
 export { TempoSteps } from './TempoSteps'
 export { RadioCards, type RadioCard } from './RadioCards'
 export { Piano2DPicture, Piano3DPicture } from './PianoPictures'

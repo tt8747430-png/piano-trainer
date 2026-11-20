@@ -1,4 +1,4 @@
-import { ArrowUpDown } from 'lucide-react'
+import { ArrowUpDown, ChevronDown } from 'lucide-react'
 import { cn } from '@/shared/lib'
 import {
   DropdownMenu,
@@ -27,7 +27,8 @@ interface SortProps<Sort extends string, Way extends string> {
  * A list's sort (the R72 board's COUNTROW and its table's head): the sort it is in, in the link's
  * colour with ⇅, opening a menu of the sorts, the one in use ticked, and under a line which way it
  * runs where the list offers both. A choice made closes the menu. In a table's head (`head`) it takes
- * the head's small type.
+ * the head's small type; joined to a search's end (`field`, the LearnYours boards' SORTB) it is the
+ * sort's word in ink by a chevron, 14 semibold on the field's sand.
  */
 export function SortMenu<Sort extends string, Way extends string = never>({
   label,
@@ -36,19 +37,27 @@ export function SortMenu<Sort extends string, Way extends string = never>({
   onSort,
   ways,
   head = false,
-}: SortProps<Sort, Way> & { readonly head?: boolean }) {
+  field = false,
+}: SortProps<Sort, Way> & { readonly head?: boolean; readonly field?: boolean }) {
   const current = sorts.find((each) => each.value === sort)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={`${label}: ${current?.label ?? ''}`}
         className={cn(
-          'flex min-h-11 items-center rounded-control font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
-          head ? 'gap-1.5 text-[0.8125rem]' : 'gap-2 text-base',
+          'flex min-h-11 items-center font-semibold focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
+          field
+            ? 'h-full gap-1 rounded-pill px-3 text-sm text-foreground hover:bg-(--hairline)'
+            : 'rounded-control text-link',
+          field ? null : head ? 'gap-1.5 text-[0.8125rem]' : 'gap-2 text-base',
         )}
       >
         {current?.label}
-        <ArrowUpDown aria-hidden className={head ? 'size-3.5' : 'size-4.5'} />
+        {field ? (
+          <ChevronDown aria-hidden className="size-4" />
+        ) : (
+          <ArrowUpDown aria-hidden className={head ? 'size-3.5' : 'size-4.5'} />
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-57.5">
         <DropdownMenuRadioGroup value={sort} onValueChange={(next: Sort) => onSort(next)}>

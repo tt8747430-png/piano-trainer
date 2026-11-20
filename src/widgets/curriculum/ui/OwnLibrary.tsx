@@ -36,7 +36,7 @@ import {
   say,
   ScreenHeader,
   SearchField,
-  SortChoice,
+  SortMenu,
   type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -73,7 +73,7 @@ function Row({
   link,
   columns,
   more,
-  tall,
+  fold,
 }: {
   picking: boolean
   picked: boolean
@@ -85,13 +85,14 @@ function Row({
   /** Length and Progress, the laptop's table columns. */
   columns: readonly [string, string]
   more: ReactNode
-  tall?: boolean
+  /** A course's row: its fold at the row's edge, its tile right after it (the canvas's course row). */
+  fold?: boolean
 }) {
   return (
     <div
       className={cn(
-        'relative flex items-center gap-3 py-1.5 ps-1 pe-1 lg:gap-4 lg:px-0',
-        tall ? 'min-h-16' : 'min-h-15',
+        'relative flex min-h-18 items-center py-1.5 pe-1 lg:px-0',
+        fold ? 'gap-0 lg:min-h-19 lg:gap-4' : 'gap-3 ps-1 lg:gap-4',
       )}
     >
       {picking ? (
@@ -104,7 +105,12 @@ function Row({
           className="absolute inset-0 z-1 focus-visible:-outline-offset-3"
         />
       ) : null}
-      <div className="flex min-w-0 flex-1 items-center gap-3 lg:flex-[2.4]">
+      <div
+        className={cn(
+          'flex min-w-0 flex-1 items-center lg:flex-[2.4]',
+          fold ? 'gap-0 lg:gap-2' : 'gap-3',
+        )}
+      >
         {picking ? <PickMark on={picked} /> : null}
         {indent}
         {link}
@@ -309,7 +315,7 @@ function OwnCourseItem({
   ]
   return (
     <Row
-      tall
+      fold
       picking={picking}
       picked={picked}
       onPick={onPick}
@@ -323,7 +329,7 @@ function OwnCourseItem({
           onClick={onToggle}
           disabled={own.length === 0}
           className={cn(
-            '-me-3 grid size-11 shrink-0 place-items-center rounded-pill text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground disabled:invisible lg:-me-2',
+            'grid size-11 shrink-0 place-items-center rounded-pill text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground disabled:invisible',
             picking && 'ms-2',
           )}
         >
@@ -337,7 +343,7 @@ function OwnCourseItem({
         <Link
           to="/courses/$courseId"
           params={{ courseId: course.id }}
-          className="ms-3 flex min-w-0 flex-1 items-center gap-3 rounded-card focus-visible:-outline-offset-3"
+          className="flex min-w-0 flex-1 items-center gap-3 rounded-card focus-visible:-outline-offset-3"
         >
           <span
             aria-hidden
@@ -511,13 +517,15 @@ export function OwnLibrary() {
       label={t('own.search')}
       hint={t('own.searchHint')}
       end={
-        <SortChoice<Sort>
-          value={sort}
-          options={[
-            { value: 'recent', label: t('own.sortRecent'), short: t('own.sortRecent') },
-            { value: 'name', label: t('own.sortName'), short: t('own.sortName') },
+        <SortMenu<Sort>
+          field
+          label={t('common:library.sort')}
+          sort={sort}
+          sorts={[
+            { value: 'recent', label: t('own.sortRecent') },
+            { value: 'name', label: t('own.sortName') },
           ]}
-          onChange={setSort}
+          onSort={setSort}
         />
       }
     />
@@ -544,8 +552,8 @@ export function OwnLibrary() {
           </>
         }
       />
-      {/* The column starts 8 under the bar, flush under the laptop's title, as the board's. */}
-      <div className="mt-2 flex flex-col gap-3 lg:mt-4">
+      {/* The column starts 8 under the bar, 24 under the laptop's, as the boards' (LTITLEBAR). */}
+      <div className="mt-2 flex flex-col gap-3 lg:mt-6 lg:gap-4">
         {none ? null : (
           <>
             <div className="lg:hidden">{search}</div>
@@ -589,7 +597,7 @@ export function OwnLibrary() {
         ) : (
           <div className="flex flex-col">
             {/* The laptop's table head: Name over the names, wherever Select's mark and the fold put them. */}
-            <div className="hidden gap-4 pb-2 text-[0.8125rem] font-semibold text-muted-foreground shadow-[inset_0_-1px_0_var(--color-border)] lg:flex">
+            <div className="hidden gap-4 pb-2 text-[0.8125rem]/[normal] font-semibold text-muted-foreground shadow-[inset_0_-1px_0_var(--color-border)] lg:flex">
               <span className={cn('min-w-0 flex-[2.4]', selecting ? 'ps-41' : 'ps-27')}>
                 {t('own.columnName')}
               </span>

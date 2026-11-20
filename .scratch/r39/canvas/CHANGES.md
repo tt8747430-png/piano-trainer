@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · the Courses' and a level's laptop bar is the one sub-page bar (LTITLEBAR: 56, Back 40 in, the title 12 after it, content 24 under), as Your lessons', a course's and a lesson's; it was an 88 head with Back 44 in · LearnCoursesLaptop,LearnLevelLaptop · pending
 - 2026-11-20 · (this commit) · a lesson's line of notes as the app engraves it: 4/4 after the clef, a barline between its two bars and at its end, the bar numbers over it · Lesson,LessonLaptop · pending
 - 2026-11-20 · (this commit) · a lesson's scale keys in the Scales page's colours (the tonic its own, the rest the scale's wash); the W/H ⓘ legend gone, as the app · Lesson,LessonLaptop · pending
 - 2026-11-20 · (this commit) · the Lesson boards read the app's real lesson (major-scales.ts): its five sections block for block, each scale on its own keys, a line of notes and the fingering's grand staff in Bravura, a Note, the question on D major's seven notes, the two links; no invented In short, After or versions · Lesson,LessonLaptop · pending

@@ -32,11 +32,19 @@ interface Place {
   readonly tab: ComponentType<{ className?: string }>
   readonly exact: boolean
   /**
-   * Where else the place is the current one: Learn's lessons and courses (ADR 0053); the Profile's
+   * Where else the place is the current one: Learn's lessons, courses, levels and the learner's own
+   * (ADR 0053); the Profile's
    * Settings and account pages, opened from it.
    */
   readonly also?: readonly (
-    '/lessons' | '/courses' | '/settings' | '/account' | '/admin' | '/legal'
+    | '/lessons'
+    | '/courses'
+    | '/levels'
+    | '/your-lessons'
+    | '/settings'
+    | '/account'
+    | '/admin'
+    | '/legal'
   )[]
   /**
    * Where it is current only while the sidebar is not shown: Settings and its pages (Administration,
@@ -103,7 +111,7 @@ const PLACES: readonly Place[] = [
     icon: GraduationCap,
     tab: LearnTabIcon,
     exact: true,
-    also: ['/lessons', '/courses'],
+    also: ['/lessons', '/courses', '/levels', '/your-lessons'],
     key: { code: 'Digit1', alt: true },
   },
   {

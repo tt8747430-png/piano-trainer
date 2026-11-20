@@ -192,12 +192,13 @@ LVHEAD = (f'<div style="display: flex; flex-direction: column; gap: 8px"><p cont
           f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; margin-top: 4px">{BTN("{{levelGo}}", "", "Lesson.dc.html", "primary", 52)}</div></sc-if></div>')
 vph = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TOP("Learn.dc.html", "", TB("Edit", "editOn"), "Learn")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("Learn.dc.html", "", EDITR(), "Learn")}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 48px; display: flex; flex-direction: column; gap: 16px"><h1 contenteditable="{{{{editing}}}}" style="margin: 0; outline: none; font-family: {SERIF}; font-size: 30px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance">{{{{jt}}}}</h1>{LVHEAD}{PATHF(False)}</main>{TOAST(40, hint='true')}')
-LBACK = lambda back, label, title, right: (f'<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 44px"><a href="{back}" aria-label="{label}" data-tip="{label}" style="{GLASSST}">{CHEV_L}</a>'
-                                           f'<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>')
+# a level's and the Courses' laptop bar is the kit's one sub-page bar (LTITLEBAR: 56, Back 40 in, the title 12 after it,
+# the content 24 under), as Your lessons', a course's and a lesson's; it was an 88 head with Back 44 in
+LBACK = lambda back, label, title, right: LTITLEBAR(title, right, back)
 vlm = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "{{jt}}", TB("Edit", "editOn"))}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "{{jt}}", EDITR())}</sc-if>'
        # one centred column, as the phone (owner, 2026-11-16: "the page has one focus"): the side column's Continue repeated the
        # lesson marked Next in the path, and its Levels repeated Learn's, one Back away
-       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 56px 40px 96px">'
+       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px 96px">'
        # the page starts on its title's edge, the head as wide as a line of reading, the chapters' rows across the page
        f'<div style="display: flex; flex-direction: column; gap: 24px"><div style="width: min(640px, 100%)">{LVHEAD}</div>{PATHF(True)}</div></main>'
        f'{TOAST(28, laptop=True, hint='true')}')
@@ -228,7 +229,7 @@ clm2 = (SHOWSTATES('crStates') + f'<sc-if value="{{{{reading}}}}" hint-placehold
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 20px"><div style="display: flex; flex-direction: column; gap: 20px">{cl2}</div></main>'
         f'{TOAST(28, laptop=True, hint='true')}')
 detail('LearnCourses', 'Courses', LEARN_JS, cph2, clm2, '', BSHEET('moreOn', 'Courses', MOREC) + BSHEET('infoOn', 'About the courses', INFOBODY) + BSHEET('ncOn', 'New course', NCBODY, 'Cancel'),
-       POPOVER('moreOn', 'Courses', MOREC, 'right: 40px; top: 72px', 300) + POPOVER('infoOn', 'About the courses', INFOBODY, 'right: 90px; top: 72px', 380) + LAPSHEET(BSHEET('ncOn', 'New course', NCBODY, 'Cancel'), 480), 'Learn')
+       POPOVER('moreOn', 'Courses', MOREC, 'right: 28px; top: 56px', 300) + POPOVER('infoOn', 'About the courses', INFOBODY, 'right: 98px; top: 56px', 380) + LAPSHEET(BSHEET('ncOn', 'New course', NCBODY, 'Cancel'), 480), 'Learn')
 
 
 # ── Profile ──

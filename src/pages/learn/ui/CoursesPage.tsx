@@ -42,7 +42,7 @@ export function CoursesPage() {
       ) : (
         <>
           {bar(null)}
-          <div className="mt-2 lg:mt-4">
+          <div className="mt-2 lg:mt-6">
             <CourseShelves />
           </div>
         </>

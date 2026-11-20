@@ -77,7 +77,7 @@ export function LessonLayout({
     })
   }
   return (
-    <div className="flex w-full flex-col gap-2 pb-36 lg:gap-4 lg:pt-2">
+    <div className="flex w-full flex-col gap-2 pb-36 lg:gap-6">
       <ScreenHeader
         title={title}
         back={back}
