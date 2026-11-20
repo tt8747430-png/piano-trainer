@@ -46,8 +46,8 @@ export function RootLayout() {
           <Outlet />
         </Parents>
         {/* The app's notices, stacked, never over each other, where the AppLayers board puts them: on a
-            phone at the top, under the status bar; on a laptop at the foot's right, 440 wide. */}
-        <div className="pointer-events-none fixed inset-x-3 top-[calc(env(safe-area-inset-top)+0.5rem)] z-40 flex flex-col gap-2 lg:inset-x-auto lg:top-auto lg:right-7 lg:bottom-7 lg:w-110">
+            phone at the top, under the status bar; on a laptop centred at the foot, 460 wide. */}
+        <div className="pointer-events-none fixed inset-x-3 top-[calc(env(safe-area-inset-top)+0.5rem)] z-40 flex flex-col gap-2 lg:inset-x-auto lg:top-auto lg:left-1/2 lg:bottom-7 lg:w-115 lg:-translate-x-1/2">
           <LearnerViewNotice />
           <StorageFullNotice />
           <UpdatePrompt offer={!fullScreen} />

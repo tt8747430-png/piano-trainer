@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · the layers open over the bare page, the notice under the 62 status bar, a route state's line wraps pretty · AppLayers,AppLayersLaptop · pending
+
 
 
 

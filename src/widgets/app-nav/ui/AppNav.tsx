@@ -209,7 +209,8 @@ function PlaceLink({
  * collapses to a rail of icons and remembers it. From the computer's keys, Alt and a place's number
  * goes there, the modifier with K opens Search, with a comma Settings, with B collapses or opens it.
  */
-export function AppNav() {
+/** `keep`: the tab bar stays on a phone though the screen is not a place's (a screen that cannot open). */
+export function AppNav({ keep = false }: { keep?: boolean }) {
   const { t } = useTranslation('common')
   const store = useSettingsStoreApi()
   const chosen = useSettings(selectSidebar)
@@ -253,7 +254,7 @@ export function AppNav() {
   const exploring = useRouterState({
     select: (state) => new URLSearchParams(state.location.searchStr).get('view') === 'explore',
   })
-  const away = exploring || !PLACES.some(({ to }) => to === pathname)
+  const away = !keep && (exploring || !PLACES.some(({ to }) => to === pathname))
   // A laptop's sidebar puts the learner at its foot, under Search and Settings; a phone's bar keeps
   // the Profile as its last tab.
   const sidebarShown = useMediaQuery(SIDEBAR_SHOWN)

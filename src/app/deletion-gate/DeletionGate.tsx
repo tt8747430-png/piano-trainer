@@ -7,7 +7,6 @@ import {
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
@@ -47,18 +46,19 @@ export function DeletionGate() {
         )
   return (
     <AlertDialog open={account !== null && purgeAfter !== null}>
-      {/* The AppLayers board's gate, the welcome's box: 22 corners, 24 above and 20 about, a 20 title. */}
-      <AlertDialogContent className="gap-3 rounded-[22px] px-5 pt-6 pb-5">
+      {/* The AppLayers board's gate, the welcome's box: 22 corners, 20 about, a 20 title, then Sign out
+          and Keep account side by side, Keep account the screen's one honey act. */}
+      <AlertDialogContent className="gap-3 rounded-sheet p-5">
         <AlertDialogHeader className="gap-3">
           <AlertDialogTitle className="text-xl">{t('deletionGate.title')}</AlertDialogTitle>
           <AlertDialogDescription>{t('deletionGate.body', { date })}</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="mt-1.5">
+        <div className="mt-1.5 flex gap-2 *:h-11 *:min-w-0 *:flex-1 *:rounded-full *:text-base *:font-bold">
           <AlertDialogCancel onClick={() => void auth.signOut()}>
             {t('deletionGate.signOut')}
           </AlertDialogCancel>
           <Button onClick={() => void keep()}>{t('deletionGate.keep')}</Button>
-        </AlertDialogFooter>
+        </div>
       </AlertDialogContent>
     </AlertDialog>
   )
