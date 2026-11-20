@@ -12,9 +12,10 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /**
  * The editor's bar's lead (its canvas): Close, the one way out; on a laptop, where the learner's own
- * song is saved beside it (the EditorLaptop board); a phone's bar has no room, so its ··· says it.
+ * song is saved, or where an editor's draft stands (`said`), beside it (the EditorLaptop boards); a
+ * phone's bar has no room, so its ··· says it.
  */
-export function EditorLead({ own }: { own: boolean }) {
+export function EditorLead({ own, said }: { own: boolean; said?: ReactNode }) {
   const { t } = useTranslation('common')
   const { t: te } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
@@ -32,9 +33,9 @@ export function EditorLead({ own }: { own: boolean }) {
       >
         <X aria-hidden />
       </Button>
-      {own && laptop ? (
-        <p role="status" className="ms-1 truncate text-[0.8125rem] text-muted-foreground">
-          {te(account ? 'savedAccount' : 'savedHere')}
+      {laptop && (said || own) ? (
+        <p className="ms-1 truncate text-[0.8125rem] text-muted-foreground">
+          {said ?? <span role="status">{te(account ? 'savedAccount' : 'savedHere')}</span>}
         </p>
       ) : null}
     </>

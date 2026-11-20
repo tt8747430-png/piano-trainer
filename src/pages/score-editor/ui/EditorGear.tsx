@@ -1,18 +1,4 @@
-import {
-  ArrowUpDown,
-  Cable,
-  Download,
-  Circle,
-  Eye,
-  ListMusic,
-  Mic,
-  Music2,
-  Printer,
-  Heading,
-  Keyboard,
-  Ruler,
-  TextCursorInput,
-} from 'lucide-react'
+import { Circle } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -48,9 +34,11 @@ import { ScorePageBody } from './ScoreSettingsPages'
 
 /** An original's draft in the gear (ADR 0116, R31-E): where it stands, and its acts' rows. */
 export interface EditorDraft {
-  /** Saved, saving or not saved: beside the gear's title. */
+  /** Where it stands: the line under the menu's title on a phone, beside Close on a laptop. */
   readonly status: ReactNode
-  /** Publish…, Versions, Discard changes: the gear's last group. */
+  /** Versions: the first group's last row. */
+  readonly versions: ReactNode
+  /** Publish…, Discard changes: the gear's last group. */
   readonly rows: ReactNode
 }
 
@@ -155,33 +143,25 @@ function MainPage({
         {example ? null : (
           <RowTrigger
             title={t('scoreSettings.pages.credits')}
-            icon={Heading}
-            paint="sand"
             value={meta.title}
             onClick={() => view.setGear('credits')}
           />
         )}
         <RowTrigger
           title={t('scoreSettings.acts.view')}
-          icon={Eye}
-          paint="sky"
           value={t(`music:sheet.layout.${layout}`)}
           onClick={() => view.setGear('view')}
         />
         <RowTrigger
           title={t('scoreSettings.acts.transpose')}
-          icon={ArrowUpDown}
-          paint="lilac"
           value={keyName(key)}
           onClick={() => view.setGear('transpose')}
         />
         {example ? null : (
           <>
             {count > 0 ? (
-              <RowButton
+              <RowTrigger
                 title={t('scoreSettings.acts.takes')}
-                icon={ListMusic}
-                paint="yellow"
                 value={String(count)}
                 onClick={() => {
                   view.setGear(null)
@@ -191,48 +171,37 @@ function MainPage({
             ) : null}
           </>
         )}
+        {draft?.versions}
       </SettingsGroup>
       {example ? null : (
         <SettingsGroup flush>
           <RowTrigger
             title={t('scoreSettings.pages.instruments')}
-            icon={Music2}
-            paint="lilac"
             value={String(staffCount)}
             onClick={() => view.setGear('instruments')}
           />
           <RowTrigger
             title={t('scoreSettings.pages.layout')}
-            icon={Ruler}
-            paint="grass"
             onClick={() => view.setGear('layout')}
           />
           <RowTrigger
             title={t('scoreSettings.pages.input')}
-            icon={TextCursorInput}
-            paint="yellow"
             onClick={() => view.setGear('input')}
           />
           <RowTrigger
             title={t('scoreSettings.pages.recording')}
-            icon={Mic}
-            paint="sand"
             onClick={() => view.setGear('recording')}
           />
           {/* A MIDI keyboard has one home too, Settings › Connect a piano (its canvas's row). */}
           <RowLink
             title={t('scoreSettings.pages.midi')}
-            icon={Cable}
-            paint="grass"
             value={midi}
             render={<Link to="/settings/connect-piano" />}
           />
           {/* Its shortcuts, where keys type them (F23, Flat's rail ending with Shortcuts). */}
           {hasFinePointer() ? (
-            <RowButton
+            <RowTrigger
               title={t('common:shortcuts.title')}
-              icon={Keyboard}
-              paint="lilac"
               value="?"
               onClick={() => {
                 view.setGear(null)
@@ -245,15 +214,13 @@ function MainPage({
       {example ? null : (
         <SettingsGroup flush>
           {own ? (
-            <RowButton
+            <RowTrigger
               title={t('songs:export.action')}
-              icon={Download}
-              paint="sky"
               value={t('exportFormats')}
               onClick={onExport}
             />
           ) : null}
-          <RowButton title={t('player:print')} icon={Printer} paint="sand" onClick={onPrint} />
+          <RowButton title={t('player:print')} onClick={onPrint} />
         </SettingsGroup>
       )}
       {draft ? <SettingsGroup flush>{draft.rows}</SettingsGroup> : null}
@@ -313,12 +280,15 @@ export function EditorGear({
       >
         <SheetContent
           title={title}
-          status={page === 'main' ? draft?.status : undefined}
           description={
             // On a laptop the bar says it beside Close (the EditorLaptop board), so the menu does not.
-            page === 'main' && own && !laptop
-              ? t(account ? 'savedAccount' : 'savedHere')
-              : undefined
+            page !== 'main' || laptop
+              ? undefined
+              : draft
+                ? draft.status
+                : own
+                  ? t(account ? 'savedAccount' : 'savedHere')
+                  : undefined
           }
           back={
             page === 'main' || gearBack(page) === null ? undefined : (

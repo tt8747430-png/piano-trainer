@@ -20,15 +20,13 @@ DJS = ED4.replace("    return { ...common(st, set),", DS_JS + "\n    return { ..
 assert DJS != ED4
 
 SAVET = f'<span role="status" style="min-width: 0; font-size: 13px; color: {{{{saveC}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{saveT}}}}</span>'
-PUBCARD = f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 12px">'
 def DMENU(sfx):
     # nothing hangs under the bar (loop round 60): the draft's status and its publishing acts live in the bar's ··· menu
-    m = ED_MENU(sfx, ('3', 'openVers')); i = m.index(PUBCARD)  # one row for the versions: Version history opens the published ones
-    return m[:i] + GROUP(('link', 'Publish…', '', 'askPub'), ('action', 'Discard changes', 'askDisc', RED), bg=SHEET)
+    return ED_MENU(sfx, 'openVers') + GROUP(('link', 'Publish…', '', 'askPub'), ('action', 'Discard changes', 'askDisc', RED), bg=SHEET)
 DSAVED = f'<p role="status" style="margin: -8px 0 0; text-align: center; font-size: 13px; color: {{{{saveC}}}}">{{{{saveT}}}}</p>'
 ASKP = lambda c, t, b, ok, go: ASK(c, t, b, ok, go, danger=False)
 VROW = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{vers}}}}" as="v" hint-placeholder-count="3"><div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 6px 6px 6px 16px; box-shadow: inset 0 -1px 0 {FILL}">'
-        f'<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-variant-numeric: tabular-nums">{{{{v.t}}}}</span>{IF("v.newest", f"<span style=\"font-size: 13px; font-weight: 600; color: {SOFT}\">Newest · what learners have</span>")}</span>'
+        f'<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-variant-numeric: tabular-nums">{{{{v.t}}}}</span>{IF("v.newest", f"<span style=\"font-size: 13px; font-weight: 600; color: {SOFT}\">Newest</span>")}</span>'
         + IF('v.older', f'<button type="button" onClick="{{{{v.restore}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 15px; font-weight: 600; color: {INK}">Restore</button>') + '</div></sc-for></div>')
 VERSBODY = f'' + VROW
 DASKS = (ASKP('pubAskOn', 'Publish Amazing Grace?', 'All learners will receive this version the next time they open the app. The previous version is kept and can be restored.', 'Publish', 'doPub')
@@ -50,8 +48,8 @@ assert LTITLE in elm4
 edlm = (IF('isLive', elm4.replace(LTITLE, SAVET, 1), 'true')
         + IF('notLive', GHEAD('SongLaptop.dc.html').replace('padding: 8px 16px', 'padding: 12px 24px') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("SongsLaptop.dc.html")}</main>')
         + f'<div style="position: absolute; left: 24px; bottom: 148px; z-index: 40; width: 760px; padding-top: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 4px 14px -6px rgba(51,41,33,.25)">{STRIP("dsDemo")}{STRIP("states")}</div>' + TOASTL)
-DSH = (BSHEET('moreOn', 'Amazing Grace', DSAVED + DMENU('.dc.html')) + BSHEET('creditsOn', 'Credits', ED_CREDITS, 'Cancel') + BSHEET('instOn', 'Instruments', ED_INST) + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel')).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1) + BSHEET('versOn', 'Version history', VERSBODY) + DASKS
-DSL = POPOVER('moreOn', 'Amazing Grace', DMENU('Laptop.dc.html'), 'right: 24px; top: 76px', 400) + POPOVER('creditsOn', 'Credits', ED_CREDITS, 'right: 24px; top: 76px', 420) + POPOVER('instOn', 'Instruments', ED_INST, 'right: 24px; top: 76px', 420) + POPOVER('pickInstOn', 'Add an instrument', ED_PICK, 'right: 24px; top: 76px', 420) + LAPSHEET(BSHEET('versOn', 'Version history', VERSBODY), 480) + DASKS
+DSH = (BSHEET('moreOn', 'Amazing Grace', DSAVED + DMENU('.dc.html')) + BSHEET('creditsOn', 'Credits', ED_CREDITS, 'Cancel') + BSHEET('instOn', 'Instruments', ED_INST) + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel')).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1) + BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY) + DASKS
+DSL = POPOVER('moreOn', 'Amazing Grace', DMENU('Laptop.dc.html'), 'right: 24px; top: 76px', 400) + POPOVER('creditsOn', 'Credits', ED_CREDITS, 'right: 24px; top: 76px', 420) + POPOVER('instOn', 'Instruments', ED_INST, 'right: 24px; top: 76px', 420) + POPOVER('pickInstOn', 'Add an instrument', ED_PICK, 'right: 24px; top: 76px', 420) + LAPSHEET(BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY), 480) + DASKS
 phone('EditorDraft', 'Score editor, a built-in song’s draft (editors)', edph, DJS, DSH)
 full_laptop('EditorDraftLaptop', 'Score editor, a built-in song’s draft (editors), laptop', edlm, DJS, DSL)
 print('r55 editor draft ok')

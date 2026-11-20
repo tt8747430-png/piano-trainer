@@ -66,7 +66,7 @@ ED4 = js(r'''
       redo: () => { const u = st.undone ?? []; if (!u.length) return; const x = u[u.length - 1]; set(x.r ? { rest: true, undone: u.slice(0, -1) } : { marks: [...marks, x.m], undone: u.slice(0, -1) }); },
       delNote: () => set({ rest: true, undone: [] }),
       doneOn: !!st.done, doneL: st.done ? st.done + ': tap the score where it goes' : '', clearDone: () => set({ done: null }),
-      moreOn: st.sheet === 'more', tipPubOn: !!st.tipPub, tipPub: () => set({ tipPub: !st.tipPub }), openMore: () => set({ sheet: 'more' }),
+      moreOn: st.sheet === 'more', openMore: () => set({ sheet: 'more' }),
       states: [['The palette open', open, { open: true }, { open: false }], ['A rest chosen', rest, { rest: true }, { rest: false }], ['Crossed to the lower staff', marks.includes('xdn'), { marks: [...marks, 'xdn'] }, { marks: marks.filter((m) => m !== 'xdn') }], ['Voice 2 on', voice, { voice: true }, { voice: false }],
         ['A clef waiting for its place', st.done === 'Treble clef', { done: 'Treble clef' }, { done: null }], ['The piano hidden', !keys, { keys: false }, { keys: true }],
         ['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]].map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => set(on2 ? off : o) })),
@@ -149,14 +149,13 @@ EYEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M2 12s3.5-
 SOLOI = '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.6"></circle><text x="12" y="16.4" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">S</text></svg>'
 MENUCARD = lambda *rows: GROUP(*rows, bg=SHEET)
 # The menu as the app holds it (loop round 61): the score's acts, then its settings each by name, then its files.
-ED_MENU = lambda sfx, vh=('Today', ''): (MENUCARD(('link', 'Title and credits', 'Amazing Grace', 'openCredits'), ('link', 'Score view', 'Pages', ''), ('link', 'Transpose', 'G major', ''), ('link', 'Takes', '3', 'Takes' + sfx), ('link', 'Version history', vh[0], vh[1]))
-                       + MENUCARD(('link', 'Instruments', 'Piano', 'openInst'), ('link', 'Layout', '', ''), ('link', 'Note input', '', ''), ('link', 'Recording', '', ''), ('link', 'On-screen piano', '', ''), ('link', 'MIDI keyboard', 'None', ''), *((('link', 'Shortcuts', '?', ''),) if 'Laptop' in sfx else ()))
-                       + MENUCARD(('link', 'Export', 'MusicXML, MIDI', ''), ('link', 'Print', '', ''))
-                       + f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 12px">'
-                       # what publishing means sits behind its ⓘ, never under the control (loop round 60)
-                       f'<div style="position: relative; display: flex; align-items: center; justify-content: space-between; padding-right: 12px"><span style="font-size: 17px; font-weight: 700">Publish in Explore</span>' + INFOB('About publishing', 'tipPub', 'tipPubOn')
-                       + INFOTIP('tipPubOn', 'tipPub', 'About publishing', 'Anyone can find, play and save it. You can take it down at any time.', 'right: 0; top: 32px') + '</div>'
-                       f'<div style="display: flex">{BTN("Publish", href="SongSettings" + sfx, h=48)}</div></div>')
+# Publishing is the song's Settings' (one way to each act), never a card in this menu.
+# Versions only on an editor's draft of a built-in song (the published versions it restores), and Export only on the
+# learner's own song or version, which it writes; a learner's song has no versions,
+# and the on-screen piano has no settings page to open, so neither row is drawn where it would open nothing.
+ED_MENU = lambda sfx, vh=None: (MENUCARD(('link', 'Title and credits', 'Amazing Grace', 'openCredits'), ('link', 'Score view', 'Pages', ''), ('link', 'Transpose', 'G major', ''), ('link', 'Takes', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
+                       + MENUCARD(('link', 'Instruments', '2', 'openInst'), ('link', 'Layout', '', ''), ('link', 'Note input', '', ''), ('link', 'Recording', '', ''), ('link', 'MIDI keyboard', 'None', ''), *((('link', 'Shortcuts', '?', ''),) if 'Laptop' in sfx else ()))
+                       + MENUCARD(*(() if vh else (('link', 'Export…', 'MusicXML, MIDI', ''),)), ('action', 'Print', 'closeSheet', INK)))
 FIELD = lambda label, val: (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
                             f'<input {KB["title"]} value="{val}" placeholder="{label}" style="height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
 ED_CREDITS = (FIELD('Title', 'Amazing Grace') + FIELD('Subtitle', '') + FIELD('Words', 'John Newton') + FIELD('Music', 'New Britain') + FIELD('Arranged by', 'Ana Popescu') + FIELD('Copyright', 'Public domain')

@@ -14,7 +14,7 @@ import {
 } from '@/entities/piece'
 import {
   DraftRows,
-  DraftStatus,
+  DraftSaid,
   draftWithMusic,
   useMadeSong,
   useOriginalDraft,
@@ -83,9 +83,29 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
       // Where the draft stands, beside the gear's title, and its acts, the gear's last group (R31-E):
       // never over the music, never beside Done.
       draft={{
-        status: <DraftStatus draft={draft} compact={false} />,
+        status: <DraftSaid draft={draft} />,
+        versions: (
+          <DraftRows
+            part="versions"
+            draft={draft}
+            title={entryTitles(piece, locale).primary}
+            unreadable={t('original.unreadable')}
+            onReset={draft.reopen}
+            // Its Publish page (R29 B6), the rights ticked there each time.
+            publishPage={{
+              link: <Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />,
+              open: () =>
+                void draft
+                  .flush()
+                  .then(() =>
+                    navigate({ to: '/songs/$pieceId/publish', params: { pieceId: piece.id } }),
+                  ),
+            }}
+          />
+        ),
         rows: (
           <DraftRows
+            part="publishing"
             draft={draft}
             title={entryTitles(piece, locale).primary}
             unreadable={t('original.unreadable')}

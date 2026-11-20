@@ -187,7 +187,7 @@ function EditorScreen({
         )}
       >
         <ScoreBar
-          lead={<EditorLead own={own !== undefined} />}
+          lead={<EditorLead own={own !== undefined} said={draft?.status} />}
           middle={<EditorMode done={done} />}
           actions={<EditorActions />}
         />

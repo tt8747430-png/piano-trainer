@@ -109,7 +109,7 @@ export function SheetContent({
   dismiss = 'done',
 }: {
   title: string
-  description?: string
+  description?: ReactNode
   /** What the sheet's tools do, where their names alone do not say: an ⓘ after the title (ADR 0096). */
   info?: ReactNode
   /** Where what the sheet acts on stands, beside its title (a draft's saved state, R31-E). */

@@ -786,6 +786,7 @@ export const editor = {
     toSongs: 'Back to Songs',
     drafted: 'Not published',
     saving: 'Saving…',
+    asPublished: 'Published · no changes',
     saved: 'Saved · not published',
     notSavedOffline: 'Offline: not saved yet',
     notSaved: 'Not saved. It will retry with your next change.',

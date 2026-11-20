@@ -1,4 +1,4 @@
-import { CloudCheck, CloudOff, Ellipsis, History, LoaderCircle, Trash2, Upload } from 'lucide-react'
+import { CloudCheck, CloudOff, Ellipsis, History, LoaderCircle, Trash2 } from 'lucide-react'
 import { useState, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
@@ -8,6 +8,7 @@ import {
   ButtonLink,
   GroupRow,
   RowButton,
+  RowTrigger,
   say,
   SettingsGroup,
   type MenuAction,
@@ -67,6 +68,21 @@ export function DraftStatus({
       />
       <span className={cn('truncate', compact && 'max-sm:sr-only')}>{said}</span>
     </p>
+  )
+}
+
+/**
+ * Where the score editor's draft stands, as its line under the menu's title on a phone and beside
+ * Close on a laptop (the EditorDraft boards' status): saved, saving or not saved, and while it is as
+ * published, Published · no changes. Not saved is said in crimson.
+ */
+export function DraftSaid({ draft }: { draft: DraftState }) {
+  const { t } = useTranslation('editor')
+  const unsaved = draft.saved === 'offline' || draft.saved === 'failed'
+  return (
+    <span role="status" className={unsaved ? 'text-destructive' : undefined}>
+      {t(statusKey(draft) ?? 'original.asPublished')}
+    </span>
   )
 }
 
@@ -282,17 +298,20 @@ export function DraftPublishing({
 }
 
 /**
- * The draft's acts as rows (R31-E), the score editor's gear's last group, Flat's one menu: Publish…
- * (its page, the rights ticked there), Versions, and Discard changes, asked first as the bar's menu
- * asks (`DraftDialogs`).
+ * The draft's acts as rows (R31-E), in the score editor's menu as the EditorDraft board draws them:
+ * `versions`, the first group's last row, opens the published versions to restore one; `publishing`,
+ * the last group, is Publish… (its page, the rights ticked there) and Discard changes, asked first as
+ * the bar's menu asks (`DraftDialogs`).
  */
 export function DraftRows({
+  part,
   draft,
   title,
   unreadable,
   onReset,
   publishPage,
 }: {
+  part: 'versions' | 'publishing'
   draft: DraftActing
   title: string
   unreadable: string
@@ -303,27 +322,20 @@ export function DraftRows({
   const ask = useDraftAsk()
   return (
     <>
-      <RowButton
-        title={t('original.publishMore')}
-        icon={Upload}
-        paint="sky"
-        onClick={publishPage.open}
-      />
-      <RowButton
-        title={t('original.versions')}
-        icon={History}
-        paint="sand"
-        onClick={() => ask.setAsked('versions')}
-      />
-      <RowButton
-        title={t('original.discard')}
-        icon={Trash2}
-        paint="sand"
-        destructive
-        disabled={!draft.drafted}
-        reason={t('original.nothingToDiscard')}
-        onClick={() => ask.setAsked('discard')}
-      />
+      {part === 'versions' ? (
+        <RowTrigger title={t('original.versions')} onClick={() => ask.setAsked('versions')} />
+      ) : (
+        <>
+          <RowTrigger title={t('original.publishMore')} onClick={publishPage.open} />
+          <RowButton
+            title={t('original.discard')}
+            destructive
+            disabled={!draft.drafted}
+            reason={t('original.nothingToDiscard')}
+            onClick={() => ask.setAsked('discard')}
+          />
+        </>
+      )}
       <DraftDialogs
         ask={ask}
         draft={draft}

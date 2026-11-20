@@ -15,6 +15,13 @@ export { useLessonDraft } from './model/use-lesson-draft'
 export { useMadeSong, type MadeSongLoad } from './model/use-made-song'
 export { draftWithMusic, useOriginalDraft } from './model/use-original-draft'
 export { useProgressionDraft } from './model/use-progression-draft'
-export { DraftActions, DraftPublishing, DraftRows, DraftStatus, PublishWord } from './ui/DraftBar'
+export {
+  DraftActions,
+  DraftPublishing,
+  DraftRows,
+  DraftSaid,
+  DraftStatus,
+  PublishWord,
+} from './ui/DraftBar'
 export { RemoveGroup } from './ui/RemoveGroup'
 export { VersionsDialog } from './ui/VersionsDialog'

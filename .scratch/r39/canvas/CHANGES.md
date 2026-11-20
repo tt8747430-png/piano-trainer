@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · pending · the editor's ··· as the app holds it: no rows that open nothing (On-screen piano, a learner's Version history), Versions only on a draft, Export only on the learner's own, Print an act, Instruments 2, no Publish card (Publish is the song Settings'); the draft's Versions sheet in the app's words · Editor,EditorLaptop,EditorDraft,EditorDraftLaptop · pending
+
 ## Changes
 
 - 2026-11-20 · 378a0438 · the boards' score covers set chord names and words in the engine's serif, a word's syllables hyphenated · Editor,EditorLaptop,EditorDraft,EditorDraftLaptop,Song,SongLaptop · v678

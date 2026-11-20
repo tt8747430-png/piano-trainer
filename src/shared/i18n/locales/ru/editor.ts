@@ -720,6 +720,7 @@ export const editor: LocaleResources['editor'] = {
     toSongs: 'К песням',
     drafted: 'Не опубликовано',
     saving: 'Сохраняем…',
+    asPublished: 'Опубликовано · без изменений',
     saved: 'Сохранено · не опубликовано',
     notSavedOffline: 'Нет сети: пока не сохранено',
     notSaved: 'Не сохранено. Повторная попытка будет при следующем изменении.',
