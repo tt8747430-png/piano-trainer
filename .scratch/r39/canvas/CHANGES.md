@@ -12,6 +12,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-20 · 44acb58f · every board's noteheads Bravura's (the kit's HEADG; the half head added): song page, editor, Hanon figure, lesson staff, takes · Song,SongLaptop,Editor,EditorLaptop,EditorDraft,EditorDraftLaptop,Lesson,LessonLaptop,Takes,TakesLaptop · v697
 - 2026-11-20 · 3ac866e5 · Chords' heads Bravura's filled whole head with the app's outlines; a lone staff without its opening line · Chords,ChordsLaptop · v696
 - 2026-11-20 · 44f1395b · the run boards' noteheads Bravura's whole and black heads (RS_HEAD), as the engine and the page boards · PlayChord,PlayChordLaptop,PlayChromatic,PlayChromaticLaptop,PlayExercise,PlayExerciseLaptop,PlayProgression,PlayProgressionLaptop,PlayWalk,PlayWalkLaptop,PracticeResult,PracticeResultLaptop · v695
 - 2026-11-20 · bdc814d9 · Scales' run engraved as the app: the engine's staff gap and spread, Bravura heads, Verovio's stems and fingers, the app's room; the laptop's 640 cap restored · Scales,ScalesLaptop · v694
