@@ -32,7 +32,7 @@ function Tile({
       <dt className="order-3 pt-1.5 text-[0.8125rem] leading-[normal] font-semibold text-muted-foreground">
         {label}
       </dt>
-      <dd className="order-1 text-2xl leading-[normal] font-bold tracking-[-0.01em] whitespace-nowrap tabular-nums">
+      <dd className="order-1 text-[1.5rem] leading-[normal] font-bold tracking-[-0.01em] whitespace-nowrap tabular-nums">
         {figure}
         {unit ? (
           <span className="text-[0.9375rem] font-semibold tracking-normal text-muted-foreground">
@@ -190,7 +190,7 @@ export function RunResults({
         >
           <Verdict strokeWidth={2.4} className={perfect ? 'fill-current' : undefined} />
         </span>
-        <h1 className="mt-2 font-sans text-[1.625rem] leading-tight font-bold tracking-[-0.01em] text-balance">
+        <h1 className="mt-2 font-sans text-[1.625rem] leading-[normal] font-bold tracking-[-0.01em] text-balance">
           {run.title}
         </h1>
       </div>
@@ -214,7 +214,7 @@ export function RunResults({
       </dl>
       {chords.length > 0 ? (
         <section aria-label={t(`${r}.run`)} className="flex flex-col gap-2">
-          <h2 className="font-sans text-sm font-semibold">{t(`${r}.run`)}</h2>
+          <h2 className="font-sans text-sm leading-[normal] font-semibold">{t(`${r}.run`)}</h2>
           <div className="flex flex-col gap-1">
             {lines.map((start) => (
               <RunStaff

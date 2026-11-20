@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · pending · a run is named as its Player bar names it (Inversions: Cmaj7) on its results and in Practice history · PlayChord,PlayChordLaptop,PracticeResult,PracticeResultLaptop,Profile,ProfileLaptop · pending
+
 ## Changes
 
 - 2026-11-20 · 10d932a4 · Profile's achievements earned-latest-first with true ways to earn them, records Level · Longest streak · Best accuracy · Days practised, the first-run flame unlit · Profile,ProfileLaptop · v674

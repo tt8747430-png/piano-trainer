@@ -1,5 +1,5 @@
 # R56 (canvas 160): a chord practice run's results, and Practice history in Profile.
-#   PlayChord      — the Player in a Chords practice run (Cmaj7 · Inversions), ending in its results, full screen
+#   PlayChord      — the Player in a Chords practice run (Inversions: Cmaj7), ending in its results, full screen
 #   PracticeResult — the same results opened from Profile › Practice history
 #   Profile        — gains Practice history: a 30-day chart, the runs by day, "Stored on this device"
 # The results follow memory-palaces' ResultScreen (an icon circle, the title, one line, a row of stat tiles, the actions
@@ -109,7 +109,7 @@ def RS_BODY(per_row, cw, perfect, from_profile, lap=False, parts=False):
     icon = (f'<span class="rs-pop" style="width: 96px; height: 96px; border-radius: 48px; background: {"#F6E3BC" if perfect else RS_SAGE}; color: {"#8A5D16" if perfect else RS_SAGE_INK}; '
             f'display: flex; align-items: center; justify-content: center">{RS_STAR if perfect else RS_CHECK}</span>')
     head = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">{icon}'
-            f'<h1 class="rs-rise rs-d1" style="margin: 8px 0 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em"><span style="font-family: {SERIF}">Cmaj7</span> · Inversions</h1></div>')
+            f'<h1 class="rs-rise rs-d1" style="margin: 8px 0 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em">Inversions: Cmaj7</h1></div>')
     tiles = (f'<div class="rs-rise rs-d2" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: {16 if lap else 12}px">'
              + RS_TILE('100%' if perfect else '92%', '', '12 of 12' if perfect else '11 of 12', 'Accuracy')
              + RS_TILE('0' if perfect else '2', '', 'of 12 chords', 'Pauses')

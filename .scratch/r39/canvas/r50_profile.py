@@ -37,7 +37,7 @@ P9_JS = js('const BADGES = ' + json.dumps(BADGES9, ensure_ascii=False) + ', MILE
     const groups = cleared ? [] : NOTES.map(([h, rs]) => ({ h, rs: rs.filter(([t]) => !gone.includes(t)).map(([t, w, k, u]) => ({ t, w, unread: u && !read, fw: u && !read ? 700 : 500, ic: { lvl: '★', acc: '◎', badge: '★', mile: '✓', streak: '♨' }[k], icbg: k === 'badge' ? MEDC[t.split(' ')[0]] : { lvl: '#F6E7C8', acc: '#D3E5F2', mile: '#DCE9D6', streak: '#F3D2C8' }[k], icfg: k === 'badge' ? '#FFFFFF' : '#332921', rm: () => S({ gone: [...gone, t] }) })) })).filter((g) => g.rs.length);
     const unread = read || cleared ? 0 : 2;
     const titles = { streak: 'Streak', badges: 'Badges', ach: 'Achievements', notes: 'Notifications', history: 'Practice history' };
-    const runRow = ([c, e, a, t, w]) => ({ c, e, a, sub: t + ' · ' + w, aria: c + ' · ' + e + ', ' + a });
+    const runRow = ([c, e, a, t, w]) => ({ c, e, a, sub: t + ' · ' + w, aria: e + ': ' + c + ', ' + a });
     const runDays = RUNS.map(([h, rs]) => ({ h, rs: rs.map(runRow) })), runLatest = RUNS[0][1].concat(RUNS[1][1]).slice(0, 3).map(runRow);
     const bars30 = MIN30.map((m, i) => ({ h: (m / 60 * 100).toFixed(1) + '%', bg: i === 29 ? '#C26A2E' : '#E8B48F', a: (i === 29 ? 'Today' : (30 - i - 1) + ' days ago') + ': ' + m + ' min' }));
     const back = page && (BADGES.some((b) => b[0] === page) ? 'badges' : MILES.some((m) => m[0] === page) ? 'ach' : null);
@@ -71,7 +71,7 @@ ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW('First recording', 'Earne
 # ── Practice history (canvas 160): Profile is where every practice run is kept; each row opens its results ──
 RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style="box-sizing: border-box; min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">'
            f'<span style="flex: none; width: 52px; height: 44px; border-radius: 12px; background: {FILL}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{r.a}}}}</span>'
-           f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><span style="font-family: {SERIF}">{{{{r.c}}}}</span> · {{{{r.e}}}}</span>'
+           f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.e}}}}: {{{{r.c}}}}</span>'
            f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.sub}}}}</span></span>'
            f'<span style="flex: none; display: flex; color: {SOFT}">{CHEV_R}</span></a>')
 HIST9H = H2('Practice history', SEEALL9('goHistory')) + BOX(f'<sc-for list="{{{{runLatest}}}}" as="r" hint-placeholder-count="3">{RUNROW9}</sc-for>')
