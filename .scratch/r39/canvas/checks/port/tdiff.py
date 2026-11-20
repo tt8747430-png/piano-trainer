@@ -1,8 +1,8 @@
 import json,subprocess,sys,os
 route,board,w,h=sys.argv[1],sys.argv[2],int(sys.argv[3]),int(sys.argv[4])
 SP=os.path.dirname(os.path.abspath(__file__))
-js=open(f'{SP}/tm.js').read()
-app=subprocess.run(['node',f'{SP}/appmeas.mjs',route,f'{SP}/tm.js',str(w),str(h)],capture_output=True,text=True).stdout.strip().splitlines()[-1]
+js=open(f'{SP}/text-measure.js').read()
+app=subprocess.run(['node',f'{SP}/app-eval.mjs',route,f'{SP}/text-measure.js',str(w),str(h)],capture_output=True,text=True).stdout.strip().splitlines()[-1]
 bw,bh=(450,920) if w<900 else (1760,1050)
 env=dict(os.environ)
 out=subprocess.run(['node','checks/run.mjs',board,str(bw),str(bh),json.dumps([{'eval':js}]),f'{SP}/tdb'],cwd='/home/user/piano-trainer/.scratch/r39/canvas',capture_output=True,text=True,env=env).stdout.strip().splitlines()

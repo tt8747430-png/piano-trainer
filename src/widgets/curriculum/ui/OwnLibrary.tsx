@@ -550,8 +550,8 @@ export function OwnLibrary({
           <div className="flex flex-col">
             {/* The laptop's table head: Name over the names, wherever Select's mark and the fold put them. */}
             <div className="hidden gap-4 pb-2 text-[0.8125rem]/[normal] font-semibold text-muted-foreground shadow-[inset_0_-1px_0_var(--color-border)] lg:flex">
-              <span className={cn('min-w-0 flex-[2.4]', selecting ? 'ps-41' : 'ps-27')}>
-                {t('own.columnName')}
+              <span className="min-w-0 flex-[2.4]">
+                <span className={selecting ? 'ps-41' : 'ps-27'}>{t('own.columnName')}</span>
               </span>
               <span className="min-w-0 flex-1">{t('own.columnLength')}</span>
               <span className="min-w-0 flex-[1.2]">{t('own.columnProgress')}</span>
