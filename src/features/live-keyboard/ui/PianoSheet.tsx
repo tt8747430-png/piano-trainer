@@ -226,7 +226,7 @@ export function PianoSheet<R extends string>({
       </TransportPopover>
     )
   return (
-    <Sheet open={open} onOpenChange={setOpen} swipeDirection={laptop ? 'right' : 'down'}>
+    <Sheet open={open} onOpenChange={setOpen} hung>
       <SheetTrigger render={trigger} />
       <SheetContent title={t('pianoSheet.title')}>{body}</SheetContent>
     </Sheet>
