@@ -51,13 +51,13 @@ credits opens as a dialog.
 - Song Settings (loop round 10, built to canvas 133): its head as drawn, the cover (its picture chosen with a tap, moved here from the song page) beside the title in sans and "its other name or who wrote it · Your song". Kept against the board: the rows' tiles (canvas 128's settings rows) and no Favourite switch, since the heart in the song's bar is its one way.
 - Section (loop round 10, built to canvas 133): In time, One change at a time and Patterns open with their rows, as drawn, never folded heads with nothing under them; the song page's Sections head in sans like Chords.
 
-## Open finding (2026-11-19, the board-to-app port)
+## Findings of the board-to-app port (2026-11-19; both fixed 2026-11-20)
 
-- **A pickup is numbered bar 1.** Amazing Grace now opens with its pickup (`_@1`), and every printed bar number
+- **A pickup is numbered bar 1** (fixed 2026-11-20: `barNumber`, the pickup goes with bar 1). Amazing Grace now opens with its pickup (`_@1`), and every printed bar number
   counts it: the Verse row reads "bars 1–17", the song's place "Bar n of 17", the Player's labels and loop
   params (`features/practice/loop.ts` `loopParam`, `shared/ui/LoopGrip.tsx`, `shared/ui/score/bar-labels.ts`,
   `pages/piece/ui/SectionRows.tsx`, `SectionCard.tsx`, `widgets/chord-chart`, `widgets/progression-explorer`).
   A musician numbers the pickup 0 and the first full bar 1: one pure helper from `shared/lib/arrangement`
   (the layout's `pickup` ticks) turns a bar's index into its printed number, used everywhere a number prints,
   the URL's loop param included. Romashki (`gorshkov/romashki.ts`) has a pickup too.
-- **The takes, ported (2026-11-19):** a page over the editor, held by the URL's `takes` (a review writes into the live draft, so it stays inside the editor): on a phone Back, Takes, Select, the rows 64, Review your recording a page of it; on a laptop the takes a row of three cards, the picked one filled, its review under them on the title's edge. Left: the laptop board draws it in the shell (the sidebar, the 88 head), where the full-screen page has neither; the board takes the editor's frame when the editor's laptop boards are next ported.
+- **The takes, ported (2026-11-19):** a page over the editor, held by the URL's `takes` (a review writes into the live draft, so it stays inside the editor): on a phone Back, Takes, Select, the rows 64, Review your recording a page of it; on a laptop the takes a row of three cards, the picked one filled, its review under them on the title's edge. The laptop board drew it in the shell (the sidebar), where the full-screen page has none; it takes the editor's full-screen frame now, as the app (2026-11-20).

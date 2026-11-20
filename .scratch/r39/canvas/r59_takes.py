@@ -91,7 +91,8 @@ tkslm = (LTITLEBAR('{{pageT}}', TKSEL, 'EditorLaptop.dc.html') + SHOWSTATES()  #
          + IF('none', WIDE(EMPTY('none', MUSICN, 'No takes yet', 'Press Record beside Play in the editor, play, then Stop: each take is kept here.'), 720))
          + TKSELBAR_L + TOASTL)
 TKS_MOREL = ROWMENU('moreOn', '{{moreT}}', [('action', 'Download', 'download'), ('action', 'Delete', 'del', RED)])
-detail('Takes', 'The takes and Review your recording', js(TKS_SRC), tksph, tkslm, '',
-       TKS_MORE + BSHEET('intoOn', 'Into', TKS_INTO),
-       TKS_MOREL + POPOVER('intoOn', 'Into', TKS_INTO, 'right: 520px; bottom: 140px', 300), 'Songs')
+phone('Takes', 'The takes and Review your recording, phone', tksph, js(TKS_SRC), TKS_MORE + BSHEET('intoOn', 'Into', TKS_INTO))
+# on a laptop the takes are a page over the full-screen editor, as the app's: the editor's frame, no sidebar
+full_laptop('TakesLaptop', 'The takes and Review your recording, laptop', tkslm, js(TKS_SRC),
+            TKS_MOREL + POPOVER('intoOn', 'Into', TKS_INTO, 'right: 520px; bottom: 140px', 300))
 print('r59 takes ok')
