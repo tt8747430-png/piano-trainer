@@ -302,12 +302,12 @@
   --key-cast: color-mix(in oklab, var(--p-ink) 22%, transparent);
   --on-key-white: var(--p-ink);
   --on-key-black: var(--p-white);
-  /* A chord tone, a key's tonic or its other notes wear their full paint, at rest and sounding (the board's keys,
-     canvas 197); a key down sinks under the felt, and a plain key down turns sky. A key's tonic is rose and its
-     other notes honey sand, as the root among a chord's tones (canvas, Scales). */
+  /* A chord tone and a key's tonic wear their full paint, at rest and sounding (the board's keys, canvas 197); a
+     key down sinks under the felt, and a plain key down turns sky. A key's tonic is rose and its other notes the
+     boards' honey sand, #F3D9A8 by Day (Scales, an exercise's first position), the honey 70% into the ivory. */
   --key-down: var(--p-sky);
   --on-key-down: var(--p-ink);
-  --key-scale: var(--p-yellow);
+  --key-scale: color-mix(in oklab, var(--primary) 70%, var(--key-white));
   --on-key-scale: var(--p-ink);
   --key-tonic: var(--p-brick);
   /* A chord's keys on a small picture of the keys (the boards' MINIKEYS, #E9C4B8): brick washed into the ivory. */

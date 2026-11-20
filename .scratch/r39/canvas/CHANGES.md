@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · pending · Hanon's bars engraved as the app (sloped beams, bar 4's high group down, Bravura heads); the first position C E F G A; the heart off as the app · Exercise,ExerciseLaptop · pending
+
 
 
 ## Changes

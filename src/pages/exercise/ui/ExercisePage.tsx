@@ -163,6 +163,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
                         fill={width}
                         firstBar={system.from + 1}
                         continues={system.from > 0}
+                        bands={false}
                         tempo={tempo}
                       />
                     </div>
