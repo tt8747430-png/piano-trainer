@@ -24,7 +24,7 @@ export function ScaleExample({ root, kind }: { root: NoteParam; kind: ScaleKind 
   const tonic = useMemo(() => noteFromParam(root), [root])
   const example = useMemo(() => scaleExample(tonic, kind), [tonic, kind])
   return (
-    <figure aria-labelledby={captionId} className="flex flex-col gap-2">
+    <figure aria-labelledby={captionId} className="mt-2 flex flex-col gap-1">
       <div className="flex min-h-11 items-center justify-between gap-2">
         <figcaption id={captionId} className="font-sans text-[1.0625rem] font-bold">
           {scaleName(tonic, kind)}

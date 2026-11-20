@@ -110,9 +110,7 @@ export function LessonLayout({
               {title}
             </p>
             {summary ? (
-              <p className="max-w-[65ch] text-[1.0625rem]/normal text-pretty text-muted-foreground">
-                {summary}
-              </p>
+              <p className="text-[1.0625rem]/normal text-pretty text-muted-foreground">{summary}</p>
             ) : null}
             {after.length > 0 ? (
               // The lessons to read first (the board's "After: 6 · …"): each its own 44px link, a row of

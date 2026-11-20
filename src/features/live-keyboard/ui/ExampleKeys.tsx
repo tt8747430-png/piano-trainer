@@ -8,8 +8,8 @@ const MIDDLE_C = 60
 
 /**
  * An example's own keys, under its name (the Lesson boards' PKEYS): from its lowest key shown (else
- * middle C) up a tenth and more on a phone (17 keys, 96 tall), three octaves around it on a laptop
- * (36 keys, 150 tall); in the boards' dark frame, its corners 20. Its marks hold still while the
+ * middle C) up a tenth and more on a phone (17 keys, 101 tall with the felt), three octaves around it on a laptop
+ * (36 keys, 155 tall); in the boards' dark frame, its corners 20. Its marks hold still while the
  * example sounds, so one example's run never moves another's keys; a tap sounds its key; the
  * computer's letters play none of a page's many examples.
  */
@@ -40,7 +40,7 @@ export function ExampleKeys({
         showsSound={false}
         typable={false}
         spacePedal={false}
-        height={laptop ? 150 : 96}
+        height={laptop ? 155 : 101}
       />
     </div>
   )

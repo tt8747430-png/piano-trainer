@@ -8,7 +8,7 @@ import { StyledBlock } from './LessonBlock'
 export function SectionHeading({ text, style }: { text: LocalText; style?: BlockStyle }) {
   const locale = useLocale()
   const heading = (
-    <h2 className="font-sans text-[1.375rem]/tight font-bold tracking-[-0.01em] text-balance">
+    <h2 className="font-sans text-[1.375rem]/[normal] font-bold tracking-[-0.01em] text-balance">
       {localText(text, locale)}
     </h2>
   )
