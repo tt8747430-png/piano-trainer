@@ -448,6 +448,8 @@ export const practice: LocaleResources['practice'] = {
     },
     bassDegree: '{{degree}} · бас',
     forget: 'Забыть сыгранные аккорды',
+    forgotten: 'Сыгранные аккорды забыты',
+    undo: 'Отменить',
     played: 'Сыграно',
     remember: 'Запоминать сыгранные аккорды',
     rememberDetail:

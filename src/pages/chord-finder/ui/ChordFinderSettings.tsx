@@ -3,27 +3,28 @@ import { useTranslation } from 'react-i18next'
 import { selectChordFinder, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useMidiSummary } from '@/features/connect-midi'
 import { setChordFinder } from '@/features/set-preference'
-import { GroupAction, GroupLink, GroupRows, GroupSwitch } from '@/shared/ui'
+import { GroupAction, GroupLink, GroupRows, GroupSwitch, say } from '@/shared/ui'
 
 /**
  * Chord finder settings, as ChordFinderLaptop draws them (`CF_SET66`): one group of what each
  * reading shows (an inversion as a slash chord, the keys that hold the chord, the key's scale on the
- * keyboard), whether the chords played are kept, and Forget them; then Connect a piano, its home's
- * link. Forget is dimmed while nothing is kept.
+ * keyboard), whether the chords played are kept, and Forget them, at once with Undo in its toast;
+ * then MIDI devices, its home's link. Forget is dimmed while nothing is kept.
  */
 export function ChordFinderSettings({
   canForget,
   onForget,
 }: {
   canForget: boolean
-  onForget: () => void
+  /** Forgets the chords played and returns what brings them back. */
+  onForget: () => () => void
 }) {
   const { t } = useTranslation(['practice', 'settings'])
   const store = useSettingsStoreApi()
   const finder = useSettings(selectChordFinder)
   const midi = useMidiSummary()
   return (
-    <div className="flex flex-col gap-4">
+    <>
       <GroupRows label={t('practice:chordFinder.settings')}>
         <GroupSwitch
           setting="chordFinder.slash"
@@ -52,7 +53,13 @@ export function ChordFinderSettings({
         <GroupAction
           label={t('practice:chordFinder.forget')}
           disabled={!canForget}
-          onClick={onForget}
+          onClick={() => {
+            const undo = onForget()
+            say(t('practice:chordFinder.forgotten'), {
+              label: t('practice:chordFinder.undo'),
+              onClick: undo,
+            })
+          }}
         />
       </GroupRows>
       <GroupRows>
@@ -62,6 +69,6 @@ export function ChordFinderSettings({
           render={<Link to="/settings/connect-piano" />}
         />
       </GroupRows>
-    </div>
+    </>
   )
 }

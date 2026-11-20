@@ -245,7 +245,7 @@ export function SheetContent({
               : t('done')}
         </DrawerClose>
       </DrawerHeader>
-      <div className="flex min-h-0 flex-1 flex-col gap-1 scroll-pt-9 overflow-y-auto px-4 pt-1 pb-6 group-data-[swipe-axis=y]/drawer-popup:pb-10 *:shrink-0">
+      <div className="flex min-h-0 flex-1 flex-col gap-4 scroll-pt-9 group-data-[swipe-axis=x]/drawer-popup:gap-3 overflow-y-auto px-4 pt-1 pb-6 group-data-[swipe-axis=y]/drawer-popup:pb-10 *:shrink-0">
         {children}
       </div>
       {footer ? (

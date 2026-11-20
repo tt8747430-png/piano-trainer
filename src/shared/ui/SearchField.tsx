@@ -1,5 +1,5 @@
 import { Search, X } from 'lucide-react'
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { useShortcuts } from '@/shared/lib/shortcuts'
@@ -53,18 +53,19 @@ export function SearchField({
   const { t } = useTranslation('common')
   const input = useRef<HTMLInputElement>(null)
   const [text, setText] = useState(value)
-  // What was typed and not yet seen back from the URL, oldest first.
-  const pending = useRef<string[]>([])
-  useEffect(() => {
-    const seen = pending.current.indexOf(value)
-    if (seen >= 0) pending.current.splice(0, seen + 1)
-    else {
-      pending.current = []
-      setText(value)
-    }
-  }, [value])
+  // The value last seen from the URL, and what was typed and not yet seen back from it, oldest first:
+  // a value coming back from typing leaves the box as it is; any other value replaces its text.
+  const [synced, setSynced] = useState<{ value: string; pending: readonly string[] }>({
+    value,
+    pending: [],
+  })
+  if (synced.value !== value) {
+    const seen = synced.pending.indexOf(value)
+    setSynced({ value, pending: seen >= 0 ? synced.pending.slice(seen + 1) : [] })
+    if (seen < 0) setText(value)
+  }
   const type = (next: string) => {
-    pending.current.push(next)
+    setSynced((current) => ({ ...current, pending: [...current.pending, next] }))
     setText(next)
     onChange(next)
   }

@@ -1,11 +1,10 @@
 import { useSearch } from '@tanstack/react-router'
-import { Settings } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
-import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, ScreenHeader } from '@/shared/ui'
 import { ScaleExplorer, type ScaleView } from '@/widgets/scale-explorer'
-import { PianoButton } from '@/widgets/practice-pages'
+import { GearButton, PianoButton } from '@/widgets/practice-pages'
 import { StepPanel } from '@/widgets/step-panel'
 
 /**
@@ -24,11 +23,10 @@ export function ScalesPage() {
         back={<BackButton />}
         settings={
           <>
-            <RoundButton
-              label={t('scales.settings')}
-              icon={Settings}
-              aria-haspopup="dialog"
-              onClick={() => setSettingsOpen(true)}
+            <GearButton
+              title={t('scales.settings')}
+              open={settingsOpen}
+              onOpen={() => setSettingsOpen(true)}
             />
             <PianoButton />
           </>

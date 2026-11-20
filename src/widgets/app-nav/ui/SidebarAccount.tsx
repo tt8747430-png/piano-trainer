@@ -77,12 +77,7 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
     <div className="mt-auto flex">
       <DropdownMenu>
         {collapsed ? <Tipped label={name}>{trigger}</Tipped> : trigger}
-        <DropdownMenuContent
-          side="top"
-          align="start"
-          sideOffset={8}
-          className="w-(--anchor-width) gap-0.5"
-        >
+        <DropdownMenuContent side="top" align="start" className="w-(--anchor-width) gap-0.5">
           <div className="truncate px-3 py-2 text-[0.8125rem] text-muted-foreground">
             {account ? account.email : t('nav.notSignedIn')}
           </div>

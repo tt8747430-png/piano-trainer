@@ -46,23 +46,19 @@ export function ScaleLayout({
       {bar}
       <Sheet hung="header" open={sheet.open} onOpenChange={sheet.onOpenChange}>
         <SheetContent title={t('scales.settings')}>
-          <div className="flex flex-col gap-4">
-            {fields}
-            <GroupRows>
-              <GroupLink
-                label={t('scaleStaff.group')}
-                aria-haspopup={undefined}
-                value={
-                  written.length
-                    ? written.map((layer) => t(`scaleStaff.${layer}`)).join(', ')
-                    : t('scaleStaff.none')
-                }
-                onClick={() =>
-                  void navigate({ to: '/settings/scales', search: { from: 'scales' } })
-                }
-              />
-            </GroupRows>
-          </div>
+          {fields}
+          <GroupRows>
+            <GroupLink
+              label={t('scaleStaff.group')}
+              aria-haspopup={undefined}
+              value={
+                written.length
+                  ? written.map((layer) => t(`scaleStaff.${layer}`)).join(', ')
+                  : t('scaleStaff.none')
+              }
+              onClick={() => void navigate({ to: '/settings/scales', search: { from: 'scales' } })}
+            />
+          </GroupRows>
         </SheetContent>
       </Sheet>
     </div>

@@ -4,7 +4,7 @@ import { OpensMark } from './NavMarks'
 import { RowFace, type RowFaceProps } from './RowFace'
 import { ROW_CLASS } from './row-class'
 
-type FaceProps = Omit<RowFaceProps, 'children' | 'mark'>
+type FaceProps = Pick<RowFaceProps, 'title' | 'detail' | 'count' | 'trailing' | 'value'>
 
 /**
  * A list row that opens a picker over its page (a popover on a laptop, a sheet on a phone): a
@@ -15,22 +15,11 @@ export function RowTrigger({
   title,
   detail,
   count,
-  icon,
-  numeral,
-  paint,
   trailing,
   value,
   className,
   ...button
 }: FaceProps & Omit<ComponentProps<'button'>, 'title' | 'children'>) {
-  const face = {
-    title,
-    detail,
-    count,
-    trailing,
-    value,
-    ...{ icon, numeral, paint },
-  } as RowFaceProps
   return (
     <button
       type="button"
@@ -41,7 +30,14 @@ export function RowTrigger({
         className,
       )}
     >
-      <RowFace {...face} end={<OpensMark />} />
+      <RowFace
+        title={title}
+        detail={detail}
+        count={count}
+        trailing={trailing}
+        value={value}
+        end={<OpensMark />}
+      />
     </button>
   )
 }

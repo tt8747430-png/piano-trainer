@@ -1,20 +1,25 @@
-import { Anchor, Brackets } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { Anchor, Brackets, Plug } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectScaleStaff, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { useMidiSummary } from '@/features/connect-midi'
 import { setScaleStaff } from '@/features/set-preference'
-import { SettingRows, SettingsGroup, SwitchRow } from '@/shared/ui'
-import { PracticeSettingsScreen } from './PracticeSettingsScreen'
+import { RowLink, SettingRows, SettingsGroup, SwitchRow } from '@/shared/ui'
+import { SettingsScreen } from '@/widgets/settings-screen'
 
 /**
- * Scales and keys' Settings (A24, A43): the theory written on its staff besides its one layer of
- * labels, which the page chooses in place (R34).
+ * What Scales and keys writes on its staff (A24, A43), opened from Scale settings' Staff row: the
+ * theory besides its one layer of labels, which the page chooses in place (R34), then a row to a
+ * connected piano's page, its one home. Opened from the page it keeps Back to that page on a laptop
+ * too.
  */
 export function ScalesSettingsPage() {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'settings'])
   const store = useSettingsStoreApi()
   const layers = useSettings(selectScaleStaff)
+  const midi = useMidiSummary()
   return (
-    <PracticeSettingsScreen title={t('pages.scales')}>
+    <SettingsScreen title={t('pages.scales')}>
       <SettingsGroup title={t('scaleStaff.group')}>
         <SettingRows>
           <SwitchRow
@@ -34,6 +39,15 @@ export function ScalesSettingsPage() {
           />
         </SettingRows>
       </SettingsGroup>
-    </PracticeSettingsScreen>
+      <SettingsGroup flush title={t('settings:groups.piano.label')}>
+        <RowLink
+          title={t('settings:pages.connectPiano')}
+          icon={Plug}
+          paint="sky"
+          value={midi}
+          render={<Link to="/settings/connect-piano" />}
+        />
+      </SettingsGroup>
+    </SettingsScreen>
   )
 }

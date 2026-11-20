@@ -60,13 +60,13 @@ const settingsPage: Parent = ({ wide }) => (wide ? null : up({ to: '/settings' }
 /** A legal page: up to About, where Settings opens it (R32). */
 const toAbout: Parent = () => up({ to: '/settings/about' })
 /** The Practice page whose settings open the staff layers' page. */
-const PRACTICE_PAGES: Readonly<Record<PracticeSettingsFrom, Up>> = {
+const SETTINGS_OPENERS: Readonly<Record<PracticeSettingsFrom, Up>> = {
   scales: up({ to: '/practice/scales' }),
 }
 /** Scales and keys' staff layers (A24): up to the page they were opened from, else to Practice. */
 const practiceSettings: Parent = (from) =>
   isPracticeSettingsFrom(from.search.from)
-    ? PRACTICE_PAGES[from.search.from]
+    ? SETTINGS_OPENERS[from.search.from]
     : up({ to: '/practice' })
 const toSongs: Parent = () => up({ to: '/songs' })
 const toLearn: Parent = () => up({ to: '/' })

@@ -13,10 +13,6 @@ import { PractiseRow, PractiseRows } from '@/shared/ui'
 
 const SCALE_EXERCISES = exercisesIn('scales')
 
-/** The scale's own first exercise, the one the floating bar's Practise this scale opens. */
-export const firstScaleExercise = (kind: ScaleKind) =>
-  SCALE_EXERCISES.find((exercise) => exercise.fields.kind?.includes(kind) !== false)
-
 /** A drill's opening, as the music it plays (the canvas's PRACTISE line): its first notes, then "…". */
 function opening(id: Exercise['id'], names: readonly string[]): string {
   const at = (step: number) => names[((step % names.length) + names.length) % names.length] ?? ''

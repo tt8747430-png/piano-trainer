@@ -21,7 +21,7 @@ function AlertDialogOverlay({ className, ...props }: AlertDialogPrimitive.Backdr
     <AlertDialogPrimitive.Backdrop
       data-slot="alert-dialog-overlay"
       className={cn(
-        'fixed inset-0 isolate z-50 bg-scrim duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0',
+        'fixed inset-0 isolate z-50 bg-scrim duration-200 data-closed:duration-150 ease-(--ease-out) motion-reduce:animate-none data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0',
         className,
       )}
       {...props}
@@ -44,7 +44,7 @@ function AlertDialogContent({
         data-size={size}
         className={cn(
           // The canvas's ASK: 372 wide on the page's paper, 20 corners, 20 in, its parts 8 apart.
-          'group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-93 max-w-[calc(100%-3rem)] -translate-x-1/2 -translate-y-1/2 gap-2 rounded-sheet bg-background p-5 text-foreground layer-shadow duration-100 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+          'group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-93 max-w-[calc(100%-3rem)] -translate-x-1/2 -translate-y-1/2 gap-2 rounded-sheet bg-background p-5 text-foreground layer-shadow duration-200 data-closed:duration-150 ease-(--ease-out) motion-reduce:animate-none outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-[0.98] data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-[0.98]',
           className,
         )}
         {...props}

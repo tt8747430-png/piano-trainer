@@ -1,7 +1,7 @@
 import { toast } from './primitives/toast'
 
 /** How long a toast stays: long enough to reach its Undo, short enough to be gone by the next act. */
-export const TOAST_MS = 5000
+export const TOAST_MS = 6000
 
 /**
  * Says what was just done in a toast (Mindscape's, ADR 0106: "Moved to Hymns"), with what undoes it

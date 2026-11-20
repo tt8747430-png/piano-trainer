@@ -471,6 +471,8 @@ export const practice = {
     },
     bassDegree: '{{degree}} · bass',
     forget: 'Forget the chords played',
+    forgotten: 'Chords played forgotten',
+    undo: 'Undo',
     played: 'Played',
     remember: 'Remember the chords played',
     rememberDetail:
