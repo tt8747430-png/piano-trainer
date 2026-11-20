@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · 154026bd · the link to the piano's page named as the page, MIDI devices (was Connect a piano) · ChordFinder, ChordFinderLaptop, ChordPlayer, ChordPlayerLaptop · pending
 - 2026-11-20 · 01c2f524 · every laptop settings card one place by its bar: a page's at 40 in and 64 down, the Player's and the editor's at 24 and 76, all 380 wide; the Piano cards 64 down, as their settings · ScalesLaptop, IntervalsLaptop, ProgressionLaptop, ExerciseLaptop, PlayerDesk, EditorLaptop, EditorDraftLaptop · pending
 - 2026-11-20 · 1c0b39b7 · every laptop popover one shape, the kit's POPOVER: the Player's Practice, Piano, Hands, Pattern, Sort and filter, Settings and view popovers 16 in (were 12), as Played through and every other board · PlayerDesk (every Player laptop board) · pending
 - 2026-11-20 · d376d118 · the account menu leads each item with its Lucide picture (16, ink), 12 before the word, as Claude's · every laptop board (52) · pending
