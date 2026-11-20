@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · pending · the boards' fields 48 as their code says (an input's default padding drew them 50) · SignIn,SignInLaptop,Settings,SettingsLaptop,Section,SectionLaptop,SongSettings,SongSettingsLaptop · pending
+
 ## Changes
 
 - 2026-11-20 · 9559b173 · a run is named as its Player bar names it (Inversions: Cmaj7) on its results and in Practice history · PlayChord,PlayChordLaptop,PracticeResult,PracticeResultLaptop,Profile,ProfileLaptop · v675

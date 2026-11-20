@@ -18,7 +18,7 @@ SEC = lambda *parts: f'<section style="position: relative; display: flex; flex-d
 FOOT = lambda t: f'<p style="margin: 0 16px; font-size: 13px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">{t}</p>'
 def FIELD(label, val, key='', kb='text', note='', noteC=SOFT, eye=False):
     inp = f'<input type="{{{{{key}Type}}}}" {KB[kb]} ' if eye else f'<input {KB[kb]} '
-    inp += f'value="{val}" aria-label="{label}" style="flex: 1; min-width: 0; height: 48px; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none">'
+    inp += f'value="{val}" aria-label="{label}" style="flex: 1; min-width: 0; height: 48px; box-sizing: border-box; padding: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none">'
     e = f'<button type="button" aria-label="{{{{{key}EyeL}}}}" onClick="{{{{{key}Eye}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{EYE}</button>' if eye else ''
     n = f'<span style="margin: 0 16px; font-size: 13px; color: {noteC}">{note}</span>' if note else ''
     return (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'

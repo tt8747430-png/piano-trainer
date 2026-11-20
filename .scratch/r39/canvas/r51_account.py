@@ -34,7 +34,7 @@ SI_JS = js(r'''
 _KBI = lambda kb, eye: ('type="{{pwType}}" ' + KB[kb]) if eye else KB[kb]
 INP = lambda label, val, on, ring, err_cond, err, kb='text', eye=False, note='': (
     f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
-    f'<span style="display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: {{{{{ring}}}}}; padding: 0 4px 0 16px"><input {_KBI(kb, eye)} value="{{{{{val}}}}}" onInput="{{{{{on}}}}}" aria-label="{label}" style="flex: 1; min-width: 0; height: 48px; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none">'
+    f'<span style="display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: {{{{{ring}}}}}; padding: 0 4px 0 16px"><input {_KBI(kb, eye)} value="{{{{{val}}}}}" onInput="{{{{{on}}}}}" aria-label="{label}" style="flex: 1; min-width: 0; height: 48px; box-sizing: border-box; padding: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none">'
     + (f'<button type="button" aria-label="{{{{eyeL}}}}" onClick="{{{{eye}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{EYE}</button>' if eye else '') + '</span>'
     + (f'<span style="margin: 0 16px; font-size: 13px; color: {SOFT}">{note}</span>' if note else '')
     + f'<sc-if value="{{{{{err_cond}}}}}" hint-placeholder-val="{{{{false}}}}"><span role="alert" style="margin: 0 16px; font-size: 14px; color: {RED}">{err}</span></sc-if></label>')

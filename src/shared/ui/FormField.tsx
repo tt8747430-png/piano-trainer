@@ -12,7 +12,7 @@ import {
 
 /**
  * A form's field (an email, a password, a name), the kit's one field: its caption in the soft caps
- * 16 in, 8 over a 48 field whose words start 16 in; what it asks for in the ⓘ beside the caption
+ * 16 in, 8 over a 48 field ringed in the hairline line, whose words start 16 in; what it asks for in the ⓘ beside the caption
  * where the caption does not say, a note and what is wrong with it under it on the same 16 edge.
  * A password field has Show beside it. Each kind names its keyboard (the kit's KB): an email opens
  * the email keys with no capitals or correction; a password says whether it is current or new
@@ -47,7 +47,7 @@ export function FormField({
         </label>
         {info === undefined ? null : <InfoTip name={label}>{info}</InfoTip>}
       </div>
-      <InputGroup className="h-12 rounded-control bg-card">
+      <InputGroup className="h-12 rounded-control border-border bg-card">
         <InputGroupInput
           id={id}
           type={password && shown ? 'text' : type}
