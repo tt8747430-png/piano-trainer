@@ -80,7 +80,7 @@ function TakeView({ take }: { take: Take }) {
             title={playing ? t('common:stop') : t('take.play')}
             aria-pressed={playing}
             onClick={() => (playing ? play.stop() : play.playFrom(0))}
-            className="size-13 shrink-0 rounded-pill hover:brightness-95 [&_svg]:size-5 [&_svg]:fill-current"
+            className="size-13 shrink-0 hover:brightness-95 [&_svg]:size-5 [&_svg]:fill-current"
           >
             {playing ? (
               <Square aria-hidden className="fill-current" />

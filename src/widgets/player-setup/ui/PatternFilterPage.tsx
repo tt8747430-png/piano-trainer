@@ -70,7 +70,7 @@ export function PatternFilterPage({
         <Button
           variant="soft"
           onClick={() => onView({ stage: 'any', sort: 'group' })}
-          className="h-11 rounded-control border-transparent px-4 text-[0.9375rem]"
+          className="rounded-control border-transparent px-4 text-[0.9375rem]"
         >
           {t('player:patternSheet.reset')}
         </Button>

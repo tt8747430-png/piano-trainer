@@ -87,7 +87,7 @@ export function PieceView({ piece }: { piece: Piece }) {
                 <ButtonLink
                   variant="ghost"
                   size="icon"
-                  className="shrink-0 rounded-pill glass text-foreground hover:bg-glass"
+                  className="shrink-0 glass text-foreground hover:bg-glass"
                   // Title and credits, as the Song board's pencil: the editor opened on that page of
                   // its gear, the one place they are typed; the score itself is the ···'s Edit score.
                   aria-label={t('piece:editCredits')}
