@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · every laptop window stands centred on the window both ways and one size high, as claude.ai's Settings: the app's Settings 960×720 (was 1200 wide, the window less 96 high), a thing's Settings 720×720 (was 48 under the top, as tall as its page) · SettingsLaptop, AdminLaptop, SongSettingsLaptop, LessonLaptop, CourseLaptop, ProgressionEditLaptop, YourLessonSettingsLaptop, YourCourseSettingsLaptop · pending
+
 
 ## Changes
 
