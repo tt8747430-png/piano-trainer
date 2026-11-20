@@ -510,11 +510,11 @@ def onebar(t, phone):
     t, n = re.subn(r'<button type="button" style="flex: 1 1 100%; order: 1;[^"]*"><svg[^>]*><path d="M12 20h9M16\.5[^"]*"></path></svg>Edit score</button>', '', t)
     assert n == 1, 'edit score'
     # the other views print the score's head, and start under it
-    h2 = re.search(r'<h2 style="position: absolute; left: 0; right: 0; top: \d+px; ([^"]*)">Amazing Grace</h2><p style="position: absolute; left: 0; right: 0; top: \d+px; ([^"]*)">Words: John Newton · Music: New Britain</p>', t)
+    h2 = re.search(r'<h2 style="position: absolute; left: 0; right: 0; top: \d+px; ([^"]*)">Amazing Grace</h2><p style="position: absolute; left: 0; right: 0; top: \d+px; ([^"]*)">Words: John Newton · Music: New Britain (American folk tune)</p>', t)
     assert h2, 'title'
     headH = 52 if phone else 72
     head = (f'<sc-if value="{{{{notSheet}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; left: 16px; right: 16px; top: {{{{viewHeadTop}}}}px; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none">'
-            f'<h2 style="{h2.group(1)}">Amazing Grace</h2><p style="{h2.group(2)}">Words: John Newton · Music: New Britain</p></div></sc-if>\n')
+            f'<h2 style="{h2.group(1)}">Amazing Grace</h2><p style="{h2.group(2)}">Words: John Newton · Music: New Britain (American folk tune)</p></div></sc-if>\n')
     t = t.replace('<sc-if value="{{isDiagrams}}"', head + '<sc-if value="{{isDiagrams}}"', 1)
     old = 'viewTop: keys ? DEV.topKeys : DEV.top,'
     assert old in t, 'viewTop'
