@@ -8,12 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · pending · a progression's staff engraved as the app (voice-led voicing, brace, Bravura 4/4, Verovio's spacing, no symbols); opens on I, F→C "5th up" · Progression,ProgressionLaptop · pending
-
 
 
 ## Changes
 
+- 2026-11-20 · d7fdfb33 · a progression's staff engraved as the app (voice-led voicing, brace, Bravura 4/4, Verovio's spacing, no symbols); opens on I, F→C "5th up" · Progression,ProgressionLaptop · v691
 - 2026-11-20 · f0763037 · Chords' laptop board opens on Cmaj7 as the app; its staff's lines, barlines and ledgers at an engraver's thickness (1.3, 1.4, 1.4 in its 10-unit space) · Chords,ChordsLaptop · v690
 - 2026-11-20 · 8dbdb8af · rows border-box with min-height raised by their padding (no visible change) · Accompaniment,AllSongs,AllSongsLaptop,AppLayers,AppLayersLaptop,Archive,ArchiveLaptop,Chords,ChordsLaptop,Course,CourseLaptop,EditorDraft,EditorDraftLaptop,FingerTechnique,Folder,FolderLaptop,Groups,GroupsLaptop,JazzVocabulary,Learn,LearnCourses,LearnCoursesLaptop,LearnLaptop,LearnYours,LearnYoursLaptop,Lesson,LessonLaptop,Main,Pattern,PatternLaptop,Profile,ProfileLaptop,Progression,ProgressionLaptop,Progressions,Scales,ScalesLaptop,Songs,SongsLaptop,Trash,TrashLaptop · v689
 - 2026-11-20 · dfb004f5 · the Chord player's keys light the hands as the app (bass G2–F♯3 lilac, tones above it brick, F2–A4 fixed, C names), its + Lucide's · ChordPlayer,ChordPlayerLaptop · v688
