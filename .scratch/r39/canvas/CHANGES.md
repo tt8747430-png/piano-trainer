@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · (this commit) · a lesson's reading bar: Edit and the gear to its Settings, as the app and its Edit bar (the ··· sheet of Settings ›, Share link, Reset progress repeated what Settings holds) · Lesson, LessonLaptop · **pending**
+- 2026-11-20 · 302b3e3b · a lesson's reading bar: Edit and the gear to its Settings, as the app and its Edit bar (the ··· sheet of Settings ›, Share link, Reset progress repeated what Settings holds) · Lesson, LessonLaptop · **pending**
 
 ## Changes
 
