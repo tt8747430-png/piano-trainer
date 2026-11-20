@@ -1,37 +1,25 @@
-import { Link } from '@tanstack/react-router'
 import { Settings } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
-import { RoundLink } from '@/shared/ui'
+import { useState, type ReactNode } from 'react'
+import { RoundButton, Sheet, SheetContent } from '@/shared/ui'
 
 /**
- * Each Practice page with a gear, and the Settings page it opens (R32): only a page whose Settings hold
- * several things of its own. A page with one setting keeps it in place, and the piano's are the
- * keyboard strip's ⚙, so Chords, Exercises and the Quiz have no gear.
+ * A Practice page's gear in its bar and the settings it opens in place, as each page's board draws
+ * them (`setOn`): a bottom sheet on a phone, on a laptop the card hung under the gear with nothing
+ * dimmed behind it. `title` heads the sheet and names the gear ("Interval settings").
  */
-const SETTINGS_OF = {
-  intervals: '/settings/intervals',
-  progressions: '/settings/progressions',
-  'chord-finder': '/settings/chord-finder',
-} as const
-export type GearPage = keyof typeof SETTINGS_OF
-
-const PAGE_NAME = {
-  intervals: 'intervals',
-  progressions: 'progressions',
-  'chord-finder': 'chordFinder',
-} as const satisfies Record<GearPage, string>
-
-/**
- * A Practice page's gear (A24, R18), in its bar: its Settings page, the same one Settings lists,
- * opened with the page named so Back returns to it.
- */
-export function SettingsGear({ page }: { page: GearPage }) {
-  const { t } = useTranslation('practice')
+export function SettingsGear({ title, children }: { title: string; children: ReactNode }) {
+  const [open, setOpen] = useState(false)
   return (
-    <RoundLink
-      label={t('settings.open', { page: t(`pages.${PAGE_NAME[page]}`) })}
-      icon={Settings}
-      render={<Link to={SETTINGS_OF[page]} search={{ from: page }} />}
-    />
+    <>
+      <RoundButton
+        label={title}
+        icon={Settings}
+        aria-haspopup="dialog"
+        onClick={() => setOpen(true)}
+      />
+      <Sheet hung="header" open={open} onOpenChange={setOpen}>
+        <SheetContent title={title}>{children}</SheetContent>
+      </Sheet>
+    </>
   )
 }

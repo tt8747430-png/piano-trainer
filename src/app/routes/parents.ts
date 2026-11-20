@@ -59,15 +59,11 @@ const toSettings: Parent = () => up({ to: '/settings' })
 const settingsPage: Parent = ({ wide }) => (wide ? null : up({ to: '/settings' }))
 /** A legal page: up to About, where Settings opens it (R32). */
 const toAbout: Parent = () => up({ to: '/settings/about' })
-/** Each Practice page, where its gear opens its Settings from. */
+/** The Practice page whose settings open the staff layers' page. */
 const PRACTICE_PAGES: Readonly<Record<PracticeSettingsFrom, Up>> = {
   scales: up({ to: '/practice/scales' }),
-  intervals: up({ to: '/practice/intervals' }),
-  progressions: up({ to: '/practice/progressions' }),
-  'chord-finder': up({ to: '/practice/chord-finder' }),
 }
-/** A Practice page's Settings (A24): up to the page its gear was pressed on, else to Practice (R29:
- * Settings no longer lists them). */
+/** Scales and keys' staff layers (A24): up to the page they were opened from, else to Practice. */
 const practiceSettings: Parent = (from) =>
   isPracticeSettingsFrom(from.search.from)
     ? PRACTICE_PAGES[from.search.from]
@@ -136,9 +132,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/about': settingsPage,
   '/shell/settings/connect-piano': settingsPage,
   '/shell/settings/scales': practiceSettings,
-  '/shell/settings/intervals': practiceSettings,
-  '/shell/settings/progressions': practiceSettings,
-  '/shell/settings/chord-finder': practiceSettings,
   '/shell/settings/connect-piano/log': () => up({ to: '/settings/connect-piano' }),
   '/shell/settings/connect-piano/timing': () => up({ to: '/settings/connect-piano' }),
   '/shell/admin': toSettings,

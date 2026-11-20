@@ -195,6 +195,7 @@ export const practice: LocaleResources['practice'] = {
     keyProgressions: 'Последовательности в этой тональности',
   },
   intervals: {
+    settings: 'Настройки интервалов',
     from: 'От ноты',
     soundsLike: 'Звучит как',
     // Составной интервал звучит как простой, октавой шире.
@@ -250,6 +251,7 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   progressions: {
+    settings: 'Настройки прогрессий',
     // A progression's page (canvas 177): its bar's title and Play's menu.
     title: 'Последовательность',
     plays: 'Что играть',
@@ -400,6 +402,7 @@ export const practice: LocaleResources['practice'] = {
     upper: 'Верхний тетрахорд',
   },
   chordFinder: {
+    settings: 'Настройки определителя аккордов',
     promptTitle: 'Сыграйте аккорд',
     prompt: 'Зажмите три клавиши или больше, здесь или на своём пианино',
     promptFolded: 'Сыграйте его на подключённом инструменте или откройте клавиатуру.',
@@ -446,7 +449,7 @@ export const practice: LocaleResources['practice'] = {
     bassDegree: '{{degree}} · бас',
     forget: 'Забыть сыгранные аккорды',
     played: 'Сыграно',
-    remember: 'История аккордов',
+    remember: 'Запоминать сыгранные аккорды',
     rememberDetail:
       'Нотный стан хранит последние {{count}} сыгранных аккордов на этом устройстве, пока вы их не очистите.',
     slash: 'Слэш-аккорды для обращений',
@@ -1096,7 +1099,6 @@ export const practice: LocaleResources['practice'] = {
         unsupported: 'Нужен Chrome или Edge',
         off: 'Выключено',
       },
-      connectPiano: 'Подключить пианино',
     },
   },
 }

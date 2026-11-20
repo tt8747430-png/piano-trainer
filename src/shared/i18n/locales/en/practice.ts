@@ -207,6 +207,7 @@ export const practice = {
     keyProgressions: 'Progressions in this key',
   },
   intervals: {
+    settings: 'Interval settings',
     from: 'From',
     // The chosen interval: what it sounds like, and its facts behind its ⓘ (canvas 170).
     soundsLike: 'Sounds like',
@@ -269,6 +270,7 @@ export const practice = {
     },
   },
   progressions: {
+    settings: 'Progression settings',
     // A progression's page (canvas 177): its bar's title and Play's menu.
     title: 'Progression',
     plays: 'What it plays',
@@ -425,6 +427,7 @@ export const practice = {
     upper: 'Upper tetrachord',
   },
   chordFinder: {
+    settings: 'Chord finder settings',
     promptTitle: 'Play a chord',
     prompt: 'Hold three or more keys, here or on your piano',
     promptFolded: 'Play it on a connected piano, or show the keyboard to tap one.',
@@ -469,7 +472,7 @@ export const practice = {
     bassDegree: '{{degree}} · bass',
     forget: 'Forget the chords played',
     played: 'Played',
-    remember: 'Keep chord history',
+    remember: 'Remember the chords played',
     rememberDetail:
       'The staff keeps the last {{count}} chords you played, on this device, until you clear them.',
     inKeysShown: 'Keys that contain the chord',
@@ -1107,7 +1110,6 @@ export const practice = {
         unsupported: 'Needs Chrome or Edge',
         off: 'Off',
       },
-      connectPiano: 'Connect a piano',
     },
   },
 } as const

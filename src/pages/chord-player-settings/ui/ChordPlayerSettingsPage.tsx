@@ -95,7 +95,7 @@ type Opened = 'countIn' | 'volume' | 'time'
  * belong to the sheet open, saved with it.
  */
 export function ChordPlayerSettingsPage() {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'settings'])
   const locale = useLocale()
   const { sheet: sheetId } = useSearch({ from: '/shell/practice/chord-player/settings' })
   const hand = useChordSheet(sheetId)
@@ -203,7 +203,7 @@ export function ChordPlayerSettingsPage() {
         <div className="flex flex-col gap-4">
           <SettingsGroup flush title={t('chordPlayer.settings.midi')}>
             <RowLink
-              title={t('chordPlayer.settings.connectPiano')}
+              title={t('settings:pages.connectPiano')}
               value={midi}
               render={<Link to="/settings/connect-piano" />}
             />

@@ -19,6 +19,7 @@ import {
   ProgressionExplorer,
   type ProgressionsView,
 } from '@/widgets/progression-explorer'
+import { ProgressionSettings } from './ProgressionSettings'
 
 /** What a progression's page shows: the library's, the learner's own, or a line typed. */
 export type ShownProgression =
@@ -123,7 +124,9 @@ export function ProgressionScreen({
           : {})}
         settings={
           <>
-            <SettingsGear page="progressions" />
+            <SettingsGear title={t('progressions.settings')}>
+              <ProgressionSettings />
+            </SettingsGear>
             <PianoButton />
           </>
         }

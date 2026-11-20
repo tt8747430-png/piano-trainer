@@ -25,7 +25,7 @@ export function ScalesPage() {
         settings={
           <>
             <RoundButton
-              label={t('settings.open', { page: t('pages.scales') })}
+              label={t('scales.settings')}
               icon={Settings}
               aria-haspopup="dialog"
               onClick={() => setSettingsOpen(true)}

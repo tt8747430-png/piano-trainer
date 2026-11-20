@@ -4,6 +4,7 @@ import { useSetSearch } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { IntervalExplorer, type IntervalView } from '@/widgets/interval-explorer'
 import { PianoButton, SettingsGear } from '@/widgets/practice-pages'
+import { IntervalSettings } from './IntervalSettings'
 
 /**
  * The Intervals explorer (canvas 176, in the Chords page's shape): every interval over a chosen root,
@@ -20,7 +21,9 @@ export function IntervalsPage() {
         back={<BackButton />}
         settings={
           <>
-            <SettingsGear page="intervals" />
+            <SettingsGear title={t('intervals.settings')}>
+              <IntervalSettings />
+            </SettingsGear>
             <PianoButton />
           </>
         }

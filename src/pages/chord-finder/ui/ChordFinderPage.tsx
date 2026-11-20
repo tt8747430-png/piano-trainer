@@ -11,7 +11,6 @@ import { usePlayback } from '@/shared/lib/services'
 import {
   FloatingPiece,
   FloatingPieceLink,
-  GroupAction,
   GroupLink,
   GroupRows,
   KeyPicker,
@@ -19,7 +18,7 @@ import {
   SheetContent,
   usePlayKey,
 } from '@/shared/ui'
-import { PianoButton } from '@/widgets/practice-pages'
+import { PianoButton, SettingsGear } from '@/widgets/practice-pages'
 import { ToolPage } from '@/widgets/tool-page'
 import { scaleOverlay } from '../model/scale-overlay'
 import {
@@ -35,6 +34,7 @@ import {
 } from '@/widgets/chord-finder'
 import type { ChordFinderView } from '../model/chord-finder-view'
 import { useChordFinder } from '../model/use-chord-finder'
+import { ChordFinderSettings } from './ChordFinderSettings'
 
 /** The keys the boards draw: C3 to C5 across a phone, C2 to C6 across a laptop, grown when a chord reaches past them. */
 const FINDER_KEYS = keysAround(60, [12, 12], [24, 24])
@@ -82,17 +82,18 @@ export function ChordFinderPage() {
       chosen={{ keys, at: finder.reading }}
     />
   ) : null
-  const rows =
-    (finding.kind === 'chord' && finding.readings.length > 1) ||
-    holding.length > 0 ||
-    finder.canForget
+  const rows = (finding.kind === 'chord' && finding.readings.length > 1) || holding.length > 0
   return (
     <ToolPage
       title={t('practice:pages.chordFinder')}
       start
       column={880}
       actions={<PianoButton screen="playing" />}
-      settings={<Link to="/settings/chord-finder" search={{ from: 'chord-finder' }} />}
+      settings={
+        <SettingsGear title={t('practice:chordFinder.settings')}>
+          <ChordFinderSettings canForget={finder.canForget} onForget={finder.forget} />
+        </SettingsGear>
+      }
       keys={
         <PinnedKeyboard
           place="top"
@@ -164,9 +165,6 @@ export function ChordFinderPage() {
                 value={holding.map(({ key }) => keyName(key)).join(', ')}
                 onClick={() => setKeysOpen(true)}
               />
-            ) : null}
-            {finder.canForget ? (
-              <GroupAction label={t('practice:chordFinder.forget')} onClick={finder.forget} />
             ) : null}
           </GroupRows>
         ) : null

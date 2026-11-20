@@ -396,31 +396,13 @@ const midiSettingsRoute = createRoute({
   ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'MidiSettingsPage'),
 })
-// Each Practice page's Settings (A24, R18): how it sounds and looks every time, reached from the
-// page's gear (`from` naming it, for Back) and from Settings.
+// Scales and keys' staff layers (A24, R18), reached from Scale settings' On the staff (`from`
+// naming the page, for Back) and from Settings.
 const scalesSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/scales',
   validateSearch: validatePracticeSettingsSearch,
   component: lazyRouteComponent(settingsScreens, 'ScalesSettingsPage'),
-})
-const intervalsSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/intervals',
-  validateSearch: validatePracticeSettingsSearch,
-  component: lazyRouteComponent(settingsScreens, 'IntervalsSettingsPage'),
-})
-const progressionsSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/progressions',
-  validateSearch: validatePracticeSettingsSearch,
-  component: lazyRouteComponent(settingsScreens, 'ProgressionsSettingsPage'),
-})
-const chordFinderSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/chord-finder',
-  validateSearch: validatePracticeSettingsSearch,
-  component: lazyRouteComponent(settingsScreens, 'ChordFinderSettingsPage'),
 })
 const midiLogRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1148,9 +1130,6 @@ const routeTree = rootRoute.addChildren([
     midiLogRoute,
     timingRoute,
     scalesSettingsRoute,
-    intervalsSettingsRoute,
-    progressionsSettingsRoute,
-    chordFinderSettingsRoute,
     signInRoute,
     signUpRoute,
     forgotPasswordRoute,

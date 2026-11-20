@@ -1,14 +1,11 @@
-import type { useRender } from '@base-ui/react/use-render'
-import { Settings, type LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import {
   BackButton,
   FloatingActions,
   FloatingPieces,
   FloatingPlayPiece,
-  RoundLink,
   ScreenHeader,
 } from '@/shared/ui'
 
@@ -37,7 +34,7 @@ type Column = keyof typeof COLUMNS
 
 /**
  * One tool's page (R29 B11), the same for every tool on Practice's Tools: the bar (Back, the tool's
- * name, its own act and ⚙ to its Settings page where it has several settings, A24); the readout or
+ * name, its own act and ⚙ opening its settings in place where it has several, A24); the readout or
  * picture in the middle, filling the height the page has (rule 28); what sets it under it, or beside
  * it from a laptop's width (`side`, R32: the Metronome's settings in place, as Chordify's); and the
  * tool's floating pieces at the foot (canvas 179): its acts (`bar`), then Start, the honey one.
@@ -58,8 +55,8 @@ export function ToolPage({
   children,
 }: {
   title: string
-  /** The tool's Settings page, a router `Link`; none where the tool has nothing to set. */
-  settings?: useRender.RenderProp
+  /** The tool's gear and its settings in place (`SettingsGear`); none where it has nothing to set. */
+  settings?: ReactNode
   /**
    * The tool's one centred column on a laptop, as its board draws it (the Tuner's 720, the
    * Metronome's 760, the Chord finder's 880): the readout first and what sets it under it, never
@@ -86,7 +83,6 @@ export function ToolPage({
   /** The readout or the picture. */
   children: ReactNode
 }) {
-  const { t } = useTranslation(['practice', 'common'])
   return (
     <div className="flex min-h-screen-free flex-col">
       <ScreenHeader
@@ -95,13 +91,7 @@ export function ToolPage({
         settings={
           settings || actions ? (
             <>
-              {settings ? (
-                <RoundLink
-                  label={t('practice:settings.open', { page: title })}
-                  icon={Settings}
-                  render={settings}
-                />
-              ) : null}
+              {settings}
               {actions}
             </>
           ) : undefined
