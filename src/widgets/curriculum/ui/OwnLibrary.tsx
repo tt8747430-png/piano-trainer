@@ -299,7 +299,8 @@ function OwnCourseItem({
           disabled={own.length === 0}
           className={cn(
             'grid size-11 shrink-0 place-items-center rounded-pill text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground disabled:invisible',
-            picking && 'ms-2',
+            // in Select its row moves as a lesson's does, 56 on both sizes, so their names stay aligned
+            picking && 'ms-3 lg:ms-1',
           )}
         >
           <ChevronRight
