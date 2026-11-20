@@ -23,7 +23,7 @@ import {
 } from '@/features/manage-own-lessons'
 import { resetSteps, restoreSteps } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { cn, flipped } from '@/shared/lib'
 import {
   BackButton,
   CheckMark,
@@ -404,18 +404,8 @@ export function OwnLibrary() {
   const none = lessons.length === 0 && courses.length === 0
   const any = shownCourses.length + shownLessons.length > 0
   const selecting = picking && any
-  const toggle = (id: string) =>
-    setOpened((was) => {
-      const next = new Set(was)
-      if (!next.delete(id)) next.add(id)
-      return next
-    })
-  const pick = (key: Pick) =>
-    setPicks((was) => {
-      const next = new Set(was)
-      if (!next.delete(key)) next.add(key)
-      return next
-    })
+  const toggle = (id: string) => setOpened((was) => flipped(was, id))
+  const pick = (key: Pick) => setPicks((was) => flipped(was, key))
   const stopPicking = () => {
     setPicking(false)
     setPicks(new Set())

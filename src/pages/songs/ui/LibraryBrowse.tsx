@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DEFAULT_CARD_LOOK, useFolderName, useLibrary, type CardPlace } from '@/entities/library'
+import { flipped } from '@/shared/lib'
 import { CardLookProvider, FolderRow, LibraryRows, SongRow } from '@/widgets/song-library'
 import { folderKey, songKey, type LibraryPage } from '../model/use-library-page'
 import { folderActions, songActions } from './row-actions'
@@ -44,12 +45,7 @@ export function LibraryBrowse({
   const [folded, setFolded] = useState<ReadonlySet<string>>(new Set())
   const fold = (key: string): Fold => ({
     open: !folded.has(key),
-    toggle: () =>
-      setFolded((now) => {
-        const next = new Set(now)
-        if (!next.delete(key)) next.add(key)
-        return next
-      }),
+    toggle: () => setFolded((now) => flipped(now, key)),
   })
   const folderRows = (
     <LibraryRows look={look}>

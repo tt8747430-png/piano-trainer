@@ -18,6 +18,7 @@ import {
   type PieceLayout,
 } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
+import { flipped } from '@/shared/lib'
 import { singleStaff, type StaffId } from '@/shared/lib/notation'
 import { ChoiceCard, ConfirmDialog, FoldSection, Segmented, Stepper } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -177,12 +178,7 @@ export function LayoutPanel() {
     if (next.barsPerLine === undefined) delete next.barsPerLine
     actions.dispatch({ type: 'layout', layout: next })
   }
-  const toggle = (group: Group) =>
-    setOpen((was) => {
-      const next = new Set(was)
-      if (!next.delete(group)) next.add(group)
-      return next
-    })
+  const toggle = (group: Group) => setOpen((was) => flipped(was, group))
   const fold = (group: Group, children: ReactNode) => (
     <Group key={group} group={group} open={open.has(group)} onToggle={() => toggle(group)}>
       {children}

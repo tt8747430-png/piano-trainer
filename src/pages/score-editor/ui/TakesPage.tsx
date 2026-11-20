@@ -1,9 +1,9 @@
 import { Download, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { useMediaQuery } from '@/shared/lib/use-media-query'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { selectRoomLeft, selectTake, selectTakesOf, useTakes, type TakeId } from '@/entities/take'
+import { flipped, useMediaQuery } from '@/shared/lib'
 import { BackButton, sayUndo, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { SelectAct, SelectDock } from '@/widgets/song-library'
@@ -45,12 +45,7 @@ export function TakesPage() {
   const chosen = picked ? list.filter((take) => picked.has(take.id)) : []
   const acting = chosen.length > 0 ? chosen : list
   const selecting = picked !== null && (!writing || laptop) && list.length > 0
-  const choose = (id: TakeId) =>
-    setPicked((now) => {
-      const next = new Set(now)
-      if (!next.delete(id)) next.add(id)
-      return next
-    })
+  const choose = (id: TakeId) => setPicked((now) => flipped(now ?? new Set(), id))
   const download = () => {
     for (const take of acting) takes.download(take)
     setPicked(null)

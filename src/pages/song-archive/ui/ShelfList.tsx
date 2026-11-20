@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { FolderTile, useFolderName, type ShelvedEntry } from '@/entities/library'
 import { entryTitles, PieceLink, useRepertoire, type Entry } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
-import { cn, daySaid, useMediaQuery, useNow } from '@/shared/lib'
+import { cn, daySaid, flipped, useMediaQuery, useNow } from '@/shared/lib'
 import {
   BackButton,
   CheckMark,
@@ -247,12 +247,7 @@ export function ShelfList({
     setSelecting(false)
     setChosen(new Set())
   }
-  const toggle = (key: string) =>
-    setChosen((was) => {
-      const next = new Set(was)
-      if (!next.delete(key)) next.add(key)
-      return next
-    })
+  const toggle = (key: string) => setChosen((was) => flipped(was, key))
   const heading = selecting
     ? picked.length > 0
       ? t('select.count', { count: picked.length })
