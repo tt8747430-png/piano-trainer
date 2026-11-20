@@ -2,7 +2,8 @@
 # Pattern boards r54 writes; PatternNew stays). The keys edge to edge under a bar of glass buttons (Back · Pattern ·
 # Piano · More); the pattern's name in the serif with its ♡, its book and level; one card of its bar on the staff and
 # what it is; the two hands; where it is used; and one floating bar as a progression's: Loop · Play ⌄ (Over: a bar of
-# C major, Amazing Grace) · Practise (the Player). The editor and Publish stay r54's.
+# C major, Amazing Grace) · Practise (the Player). The editor stays r54's; Publish is a window over
+# the pattern (THINGWIN), with no address of its own, as a song's and a progression's.
 PA63 = PA_SRC.replace("return { ...common(st, set), isPattern:", r'''const loop = !!st.loop, over = st.over63 ?? 'A bar of C major';
     const marks = { 36: [ROLE[1], 'C'], 48: [ROLE[1], 'C'], 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] };
     return { ...common(st, set), kbE: calmKeys(43, 67, marks, 402, 150), kbLE: calmKeys(29, 84, marks, 1462, 180),
@@ -12,6 +13,7 @@ PA63 = PA_SRC.replace("return { ...common(st, set), isPattern:", r'''const loop 
       overs: ['A bar of C major', 'Amazing Grace'].map((d) => ({ d, on: d === over, mark: d === over ? '✓' : '', pick: () => S({ over63: d, menu: null }) })),
       descOn: st.sheet === 'desc', openDesc: () => S({ sheet: 'desc' }), keysOn: st.sheet === 'keys', openKeys: () => S({ sheet: 'keys' }), openMore: () => S({ sheet: 'more' }), moreOn: st.sheet === 'more', isPattern:''')
 assert PA63 != PA_SRC, 'PA return not found'
+PA63 = PA63.replace("goPub: () => S({ page: 'publish', sheet: null })", "goPub: () => S({ pubWin: true, sheet: null }), pubWin: !!st.pubWin, closePub: () => S({ pubWin: false })")
 PA63 = PA63.replace("favOn: fav, heartFill: fav ? '#B3261E' : 'none'", "favOn: fav, favFill: fav ? '#C2554A' : 'none', heartFill: fav ? '#B3261E' : 'none'")
 TOP63 = TOP60.replace('Scales and keys</span>', 'Pattern</span>').replace('href="Main.dc.html" aria-label="Back to Practice"', 'href="Accompaniment.dc.html" aria-label="Back to Accompaniment"').replace(ROUND60("Settings", COG, "openSet"), '') + ''
 TOP63 = TOP63.replace('</div></header>', ROUND60('More', MORE, 'openMore') + '</div></header>')
@@ -73,12 +75,12 @@ def PMENU63(pos):
     item = f'<sc-for list="{{{{overs}}}}" as="o" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="height: 44px; padding: 0 12px; border: 0; border-radius: 12px; background: transparent; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; text-align: left"><span style="flex: 1">{{{{o.d}}}}</span><span style="font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span></button></sc-for>'
     return (f'<sc-if value="{{{{playMenu}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeMenu}}}}" style="position: absolute; inset: 0; z-index: 50"></div><div role="menu" aria-label="Play over" style="position: absolute; {pos}; z-index: 51; width: 240px; display: flex; flex-direction: column; padding: 6px; border-radius: 16px; {GLASSFX}">'
             f'<p style="margin: 6px 12px 4px; font-size: 13px; font-weight: 600; color: {SOFT}">Play over</p>' + item + '</div></sc-if>')
-SHEETS63 = BSHEET('moreOn', '{{name}}', PA_MORE) + BSHEET('keysOn', 'Piano', SC_KEYS60)
-POPS63 = POPOVER('moreOn', '{{name}}', LPA(PA_MORE), 'right: 40px; top: 64px', 320) + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 90px; top: 64px')
+SHEETS63 = THINGWIN(False, 'pubWin', 'closePub', 'Publish', PATPUB, shown='false') + BSHEET('moreOn', '{{name}}', PA_MORE) + BSHEET('keysOn', 'Piano', SC_KEYS60)
+POPS63 = THINGWIN(True, 'pubWin', 'closePub', 'Publish', LPA(PATPUB), shown='false') + POPOVER('moreOn', '{{name}}', LPA(PA_MORE), 'right: 40px; top: 64px', 320) + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 90px; top: 64px')
 DELETED63 = IF('deleted', EMPTY('deleted', '♪', 'Pattern deleted', 'It left your patterns and the Player’s list. Undo brings it back.'))
 ph63 = (IF('isPattern', TOP63 + DELETED63 + IF('notDeleted', f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 8px -16px 0">{KB60("kbE", 150)}</div>'
         + TITLE63 + HIDDEN63 + MUSIC63 + PRACT63 + USED63 + '</main>' + BAR63('left: 12px; right: 12px; bottom: 34px') + PMENU63('left: 50%; translate: -50% 0; bottom: 104px')), 'true')
-        + IF('notPattern', TOP('', '{{pageT}}', '', 'Back', IB('Back', CHEV_L, 'back')) + NARROW(IF('isEditor', PATED) + IF('isPublish', PATPUB))) + TOASTS)
+        + IF('notPattern', TOP('', '{{pageT}}', '', 'Back', IB('Back', CHEV_L, 'back')) + NARROW(IF('isEditor', PATED))) + TOASTS)
 lm63 = (IF('isPattern', f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP63).replace('Accompaniment.dc.html', 'AccompanimentLaptop.dc.html')
         + DELETED63 + IF('notDeleted', f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'
         + f'<div style="flex: none; margin: 0 -40px 0 -40px">{KB60("kbLE", 180)}</div>'
@@ -86,7 +88,7 @@ lm63 = (IF('isPattern', f'<div style="flex: 1; min-height: 0; position: relative
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE63}{HIDDEN63}{MUSIC63}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{LPA(PRACT63)}{LPA(USED63)}</div></div></div>'
         + BAR63('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + PMENU63('left: 50%; translate: -50% 0; bottom: 100px')) + '</div>', 'true')
-        + IF('notPattern', LTITLEBAR('{{pageT}}', backact='back') + LCOL(LPA(IF('isEditor', PATED) + IF('isPublish', PATPUB)), 640)) + TOASTL)
+        + IF('notPattern', LTITLEBAR('{{pageT}}', backact='back') + LCOL(LPA(IF('isEditor', PATED)), 640)) + TOASTL)
 phone('Pattern', 'A pattern, phone', ph63, js(PA63.replace('__ROOT__', "'pattern'")), SHEETS63)
 laptop('PatternLaptop', 'A pattern, laptop', lm63, '', js(PA63.replace('__ROOT__', "'pattern'")), POPS63, 'Practice')
 print('r63 pattern ok')
