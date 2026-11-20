@@ -13,7 +13,7 @@ import { chosenNotes } from '@/features/score-editor'
 import { setPaletteCategory, setSectionFolded } from '@/features/set-preference'
 import { cn, useRovingFocus, useScrollMotion } from '@/shared/lib'
 import { PickerLayoutContext } from '@/shared/ui/pickers/picker-layout'
-import { KeysWait } from '@/shared/ui'
+import { KeysWait, Toolbar } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { gripRelease } from '../model/grip'
 import {
@@ -455,22 +455,15 @@ function Grip({
 /** The folded palette's row of its category's tools, scrolling sideways in its own box. */
 function ToolRow({ category }: { category: PaletteCategory }) {
   const { t } = useTranslation('editor')
-  const row = useRef<HTMLDivElement>(null)
-  const roving = useRovingFocus(row)
   return (
-    <div
-      ref={row}
-      role="toolbar"
-      aria-label={t('palette.toolbar')}
-      {...roving}
-      className={cn(
-        'flex min-w-0 shrink-0 items-center gap-1 overflow-x-auto overscroll-x-contain pb-2 scrollbar-none',
-      )}
+    <Toolbar
+      label={t('palette.toolbar')}
+      className="flex min-w-0 shrink-0 items-center gap-1 overflow-x-auto overscroll-x-contain pb-2 scrollbar-none"
     >
       <Laid form="bar">
         <Category category={category} />
       </Laid>
-    </div>
+    </Toolbar>
   )
 }
 
