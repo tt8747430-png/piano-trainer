@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { shareLink } from '@/shared/lib'
 import type { SharedSong } from '@/entities/piece'
 import { pieceLink, type PlayedAs } from './piece-link'
 import { SHARED_SONG_PATH, songLinkData } from './song-link'
@@ -34,25 +35,20 @@ export function useShareSong(): { share: (what: SongToShare) => void; said: Shar
   const [said, setSaid] = useState<ShareSaid>(null)
   const send = async (what: SongToShare) => {
     setSaid(null)
-    try {
-      const link = await linkOf(what)
-      if (link === null) {
-        setSaid('tooLong')
-        return
-      }
-      const url = new URL(link, window.location.origin)
-      const title = what.kind === 'own' ? what.song.title : what.title
-      if (navigator.share) {
-        await navigator.share({ title, url: url.href })
-        return
-      }
-      await navigator.clipboard.writeText(url.href)
-      setSaid(what.kind === 'own' ? 'copied' : 'linked')
-    } catch (error) {
-      // Closing the share sheet is no failure.
-      if (error instanceof DOMException && error.name === 'AbortError') return
+    const link = await linkOf(what).catch(() => undefined)
+    if (link === undefined) {
       setSaid('failed')
+      return
     }
+    if (link === null) {
+      setSaid('tooLong')
+      return
+    }
+    const title = what.kind === 'own' ? what.song.title : what.title
+    // Closing the share sheet is no failure, and the sheet says what it did.
+    const shared = await shareLink({ title, path: link })
+    if (shared === 'copied') setSaid(what.kind === 'own' ? 'copied' : 'linked')
+    else if (shared === 'failed') setSaid('failed')
   }
   return { share: (what) => void send(what), said }
 }

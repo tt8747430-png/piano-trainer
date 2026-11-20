@@ -11,7 +11,7 @@ import {
   type PublicEntry,
   type PublicKind,
 } from '@/shared/api/public-library'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn, copyText, useMediaQuery } from '@/shared/lib'
 import {
   ButtonLink,
   ChoiceList,
@@ -180,10 +180,9 @@ function Published({
         <GroupAction
           label={t('public.copyLink')}
           onClick={() =>
-            void navigator.clipboard
-              ?.writeText(url)
-              .then(() => say(t('public.linkCopied')))
-              .catch(() => say(t('public.linkNotCopied')))
+            void copyText(url).then((copied) =>
+              say(t(copied ? 'public.linkCopied' : 'public.linkNotCopied')),
+            )
           }
         />
         <GroupLink
