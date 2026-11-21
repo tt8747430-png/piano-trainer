@@ -15,6 +15,9 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   `app/composition-root.ts` builds the browser adapters once (`createServices()`), with `midi: null` where Web MIDI
   is missing; code reaches them only through `useServices()`, and tests pass `FakeAudio` and `FakeMidi`. Scheduling
   is pure (`shared/lib/schedule` turns ticks into seconds); an adapter only plays. Audio unlocks on the first gesture.
+- **One way out, through a limiter.** Every sound of a context (the piano, the basses, the kit, the clicks, a recording)
+  goes out through one limiter (−3 dB, 20:1, 2 ms attack) to the speakers, so a band and a full chord under the pedal
+  never pass full scale and distort.
 - **Music keeps time in a hidden tab.** Everything that schedules sound ticks on `steadyTicker` (`shared/lib/ticker`),
   a timer in a Worker, which a hidden tab never slows: the adapter's lookahead, the Metronome, the Player's transport
   and the Chord player's engine. Where there are no workers (a test's document) it is the page's timer.

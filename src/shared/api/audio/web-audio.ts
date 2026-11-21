@@ -39,6 +39,29 @@ const SILENT = 0.0001
 const frequencyOf = (key: Midi) => 440 * 2 ** ((key - 69) / 12)
 
 /**
+ * The limiter every sound goes out through: a band's piano, bass and drums together, or a full chord
+ * under the pedal, could go past full scale and distort; held just under it instead, its attack quick
+ * enough to catch a strike.
+ */
+const LIMITER = { threshold: -3, knee: 0, ratio: 20, attack: 0.002, release: 0.2 } as const
+
+/** Each context's way out, made once: through the limiter to the speakers. */
+const outputs = new WeakMap<BaseAudioContext, AudioNode>()
+function outputOf(context: BaseAudioContext): AudioNode {
+  const made = outputs.get(context)
+  if (made) return made
+  const limiter = context.createDynamicsCompressor()
+  limiter.threshold.value = LIMITER.threshold
+  limiter.knee.value = LIMITER.knee
+  limiter.ratio.value = LIMITER.ratio
+  limiter.attack.value = LIMITER.attack
+  limiter.release.value = LIMITER.release
+  limiter.connect(context.destination)
+  outputs.set(context, limiter)
+  return limiter
+}
+
+/**
  * A sound's nodes: the sources that make it and the gain it leaves by; a recorded voice's own damper
  * (`release`), where it has one.
  */
@@ -112,7 +135,7 @@ const playNote: Render<NoteSound> = (context, note, at, gain, ended) => {
   const sources = partials(context, frequency, filter, at)
   for (const source of sources) source.stop(end + DAMPED)
   if (sources[0]) sources[0].onended = ended
-  filter.connect(envelope).connect(context.destination)
+  filter.connect(envelope).connect(outputOf(context))
   return { sources, output: envelope }
 }
 
@@ -126,7 +149,7 @@ function dampedAt({ sources, output }: Voice, at: number) {
 /**
  * The soft pedal's tone for a key struck under it (una corda): fewer strings struck, by a softer
  * part of the hammer, so the upper partials fall away. A low-pass about two and a half octaves over
- * the key, into `destination`; what the voice sounds goes through it.
+ * the key, into the way out; what the voice sounds goes through it.
  */
 function softTone(context: AudioContext, key: Midi): BiquadFilterNode {
   const filter = context.createBiquadFilter()
@@ -136,7 +159,7 @@ function softTone(context: AudioContext, key: Midi): BiquadFilterNode {
     Math.max(SOFT_TONE.lowest, frequencyOf(key) * SOFT_TONE.over),
   )
   filter.Q.value = SOFT_TONE.q
-  filter.connect(context.destination)
+  filter.connect(outputOf(context))
   return filter
 }
 
@@ -196,7 +219,7 @@ function tone(
   envelope.gain.setValueAtTime(SILENT, at)
   envelope.gain.exponentialRampToValueAtTime(Math.max(SILENT, peak), at + 0.002)
   envelope.gain.exponentialRampToValueAtTime(SILENT, at + length)
-  oscillator.connect(envelope).connect(context.destination)
+  oscillator.connect(envelope).connect(outputOf(context))
   oscillator.start(at)
   oscillator.stop(at + length + 0.01)
   oscillator.onended = ended
@@ -237,7 +260,7 @@ function noise(
   envelope.gain.setValueAtTime(SILENT, at)
   envelope.gain.exponentialRampToValueAtTime(Math.max(SILENT, peak), at + 0.001)
   envelope.gain.exponentialRampToValueAtTime(SILENT, at + length)
-  source.connect(filter).connect(envelope).connect(context.destination)
+  source.connect(filter).connect(envelope).connect(outputOf(context))
   // Each strike from its own place in the noise, so no two hats are the same.
   source.start(at, Math.random() * 0.5)
   source.stop(at + length + 0.01)
@@ -338,7 +361,7 @@ function playRecorded(
   if (click.accent) source.playbackRate.value = rate
   const output = context.createGain()
   output.gain.value = (click.accent ? accent : beat) * gain
-  source.connect(output).connect(context.destination)
+  source.connect(output).connect(outputOf(context))
   source.start(at)
   source.onended = ended
   return { sources: [source], output }
@@ -480,7 +503,7 @@ export async function stretchVoice(
     Array.from({ length: file.numberOfChannels }, (_, channel) => file.getChannelData(channel)),
   )
   const gain = context.createGain()
-  node.connect(gain).connect(context.destination)
+  node.connect(gain).connect(outputOf(context))
   return {
     play: ({ output, input, rate, semitones }) =>
       void node.schedule({ output, input, rate, semitones, active: true }),
@@ -559,7 +582,7 @@ export function createWebAudioOutput({
       if (context) {
         context.onstatechange = wake
         void recorded.ready(context)
-        instruments = createInstruments(context, loadSamples(context), context.destination)
+        instruments = createInstruments(context, loadSamples(context), outputOf(context))
       }
     }
     return context
@@ -730,7 +753,7 @@ export function createWebAudioOutput({
       if (heldBack(audio)) void audio.resume().catch(none)
       // Under the soft pedal two thirds as loud and darker; every key as loud as the piano's Volume.
       const level = soft ? SOFT_GAIN : 1
-      const out = soft ? softTone(audio, key) : audio.destination
+      const out = soft ? softTone(audio, key) : outputOf(audio)
       const sampled = instruments?.piano(key, gain, audio.currentTime, level, out)
       held.set(
         key,
