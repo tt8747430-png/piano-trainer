@@ -316,7 +316,7 @@ export function AppNav({ keep = false }: { keep?: boolean }) {
           <SidebarSearch collapsed={collapsed} combo={SEARCH_KEY} />
         </div>
       ) : null}
-      <ul className="pointer-events-auto mx-auto flex h-16 max-w-md gap-0.5 rounded-pill p-1.5 glass landscape-phone:h-13 landscape-phone:w-110 landscape-phone:p-1 landscape-phone:rounded-pill lg:h-auto lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-filter-none lg:mx-0 lg:max-w-none lg:flex-col lg:gap-1.5 lg:px-4 lg:pt-0">
+      <ul className="pointer-events-auto mx-auto flex h-16 max-w-md gap-0.5 rounded-pill p-1.5 glass landscape-phone:h-13 landscape-phone:w-110 landscape-phone:p-1 landscape-phone:rounded-pill lg:h-auto lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-filter-none lg:mx-0 lg:max-w-none lg:flex-col lg:gap-1.5 lg:px-4 lg:pt-0 lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain">
         {(sidebarShown ? PLACES.filter((place) => place !== PROFILE) : PLACES).map((place) => {
           // Songs' places under Songs while it is current (the board's SONGS_SUB); the one shown
           // wears the wash, Songs then only bold.
@@ -336,7 +336,9 @@ export function AppNav({ keep = false }: { keep?: boolean }) {
         })}
       </ul>
       {sidebarShown ? (
-        <div className="flex min-h-0 flex-1 flex-col justify-between gap-3 px-4 pb-6">
+        // The foot keeps its room (recents, five at most, and the account); a window too short for all
+        // the places scrolls them instead (Songs' playlists open under Songs).
+        <div className="flex flex-[1_0_auto] flex-col justify-between gap-3 px-4 pb-6">
           {collapsed ? <span /> : <SidebarRecents />}
           <SidebarAccount collapsed={collapsed} />
         </div>
