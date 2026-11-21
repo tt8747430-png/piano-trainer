@@ -1012,7 +1012,10 @@ export const practice: LocaleResources['practice'] = {
     chordsOf: 'Аккорды: {{name}}',
     tile: 'Аккорд',
     addChord: 'Добавить аккорд в «{{name}}»',
-    box: '{{chord}}, долей: {{count}}',
+    box_one: '{{chord}}, долей: {{count}}',
+    box_few: '{{chord}}, долей: {{count}}',
+    box_many: '{{chord}}, долей: {{count}}',
+    box_other: '{{chord}}, долей: {{count}}',
     boxHint:
       'Нажмите, чтобы выбрать, дважды — чтобы изменить; потяните за правый край, чтобы изменить длительность; удерживайте или перетащите, чтобы переместить. Клавиши: Enter — изменить, буква — ввести новый аккорд, Shift+стрелки — длительность, пробел — переместить, Backspace — удалить.',
     unread: '«{{text}}» — не аккорд',
