@@ -48,7 +48,7 @@ export function TempoSteps({
         {STEPS.slice(0, 2).map(step)}
         <p
           className={cn(
-            'min-w-[1.75em] shrink-0 text-center font-bold tracking-[-0.03em] tabular-nums',
+            'min-w-[1.75em] shrink-0 text-center font-bold tracking-figures tabular-nums',
             // The board's number keeps the font's own line height, 2 under its tempo's word.
             large ? 'text-[4.5rem]/[normal] lg:text-[7.5rem]/[normal]' : 'text-[4.5rem]/[normal]',
           )}

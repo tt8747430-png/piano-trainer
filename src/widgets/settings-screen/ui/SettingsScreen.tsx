@@ -81,7 +81,7 @@ export function SettingsScreen({
         {lead === undefined ? null : (
           <>
             {lead}
-            <h1 className="font-sans text-[1.875rem]/tight font-bold tracking-[-0.01em] text-balance">
+            <h1 className="font-sans text-[1.875rem]/tight font-bold tracking-title text-balance">
               {title}
             </h1>
           </>

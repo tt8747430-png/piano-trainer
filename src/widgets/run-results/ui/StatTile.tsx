@@ -19,7 +19,7 @@ export function StatTile({
       <dt className="order-3 pt-1.5 text-footnote leading-[normal] font-semibold text-muted-foreground">
         {label}
       </dt>
-      <dd className="order-1 text-[1.5rem] leading-[normal] font-bold tracking-[-0.01em] whitespace-nowrap tabular-nums">
+      <dd className="order-1 text-[1.5rem] leading-[normal] font-bold tracking-title whitespace-nowrap tabular-nums">
         {figure}
         {unit ? (
           <span className="text-subhead font-semibold tracking-normal text-muted-foreground">

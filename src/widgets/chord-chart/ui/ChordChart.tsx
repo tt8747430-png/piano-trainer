@@ -176,7 +176,7 @@ export function ChordChart({
             <h2
               id={`${sectionAnchor(section)}-heading`}
               className={cn(
-                'ms-[22px] mb-1 font-sans sm:ms-8 sm:mb-1.5 text-xs font-bold tracking-[0.04em] text-muted-foreground uppercase',
+                'ms-[22px] mb-1 font-sans sm:ms-8 sm:mb-1.5 text-xs font-bold tracking-caps text-muted-foreground uppercase',
                 section > 0 && 'mt-6',
               )}
             >

@@ -193,7 +193,7 @@ export function ChordDialog({
             </DialogRow>
           </div>
           <section className="flex flex-col gap-2">
-            <h3 className="px-1 font-sans text-footnote font-semibold tracking-[.04em] text-muted-foreground uppercase">
+            <h3 className="px-1 font-sans text-footnote font-semibold tracking-caps text-muted-foreground uppercase">
               {t('chordPlayer.chord.suggested')}
             </h3>
             <ul className="grid grid-cols-4 gap-2">

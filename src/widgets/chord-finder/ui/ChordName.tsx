@@ -15,7 +15,7 @@ function Named({ name, line, quiet = false }: { name: ReactNode; line?: string; 
     <div className="flex flex-col gap-1">
       <h2
         className={cn(
-          'font-display text-5xl leading-[1.05] font-bold tracking-[-0.01em] text-balance',
+          'font-display text-5xl leading-[1.05] font-bold tracking-title text-balance',
           quiet && 'text-[2.25rem]',
         )}
       >

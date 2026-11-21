@@ -101,7 +101,7 @@ export function PlayedThrough({
         <div className="flex flex-col gap-3">
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 card px-4 py-3">
-              <span className="text-[1.875rem] leading-tight font-bold tracking-[-0.02em] tabular-nums">
+              <span className="text-[1.875rem] leading-tight font-bold tracking-figures tabular-nums">
                 {t('done.percent', { score: pass.score })}
               </span>
               <span className="text-sm text-foreground/80">{t('done.scoreLabel')}</span>
@@ -110,7 +110,7 @@ export function PlayedThrough({
               ) : null}
             </div>
             <div className="flex flex-col gap-1 card px-4 py-3">
-              <span className="text-[1.875rem] leading-tight font-bold tracking-[-0.02em] tabular-nums">
+              <span className="text-[1.875rem] leading-tight font-bold tracking-figures tabular-nums">
                 {tempo}
               </span>
               <span className="text-sm text-foreground/80">
@@ -123,7 +123,7 @@ export function PlayedThrough({
               </span>
             </div>
           </div>
-          <p className="mx-1 mt-2 -mb-1 text-sm font-semibold tracking-[0.04em] text-muted-foreground uppercase">
+          <p className="mx-1 mt-2 -mb-1 text-sm font-semibold tracking-caps text-muted-foreground uppercase">
             {t('done.bars')}
           </p>
           <div role="group" aria-label={t('done.barsLabel')} className="grid grid-cols-4 gap-3">

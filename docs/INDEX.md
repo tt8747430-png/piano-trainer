@@ -810,6 +810,9 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--text-xl` | `src/styles/theme.css` | 39 |
 | `--thumb` | `src/styles/tokens.css` | 1 |
 | `--toast-action` | `src/styles/tokens.css` | 1 |
+| `--tracking-caps` | `src/styles/theme.css` | 1 |
+| `--tracking-figures` | `src/styles/theme.css` | **0** |
+| `--tracking-title` | `src/styles/theme.css` | 1 |
 | `--wheel-near` | `src/styles/tokens.css` | 1 |
 | `--wheel-near-inner` | `src/styles/tokens.css` | 1 |
 | `--wheel-relative` | `src/styles/tokens.css` | 1 |

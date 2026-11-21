@@ -154,7 +154,7 @@ export function ChordsOverLyrics({
           return (
             <Fragment key={index}>
               {starts && heading ? (
-                <h2 className="pt-[1.6667em] pb-[0.3333em] font-sans text-[0.75em] font-bold tracking-[0.04em] text-muted-foreground uppercase first:pt-[1em]">
+                <h2 className="pt-[1.6667em] pb-[0.3333em] font-sans text-[0.75em] font-bold tracking-caps text-muted-foreground uppercase first:pt-[1em]">
                   {heading}
                 </h2>
               ) : null}

@@ -196,6 +196,14 @@
   --radius-3xl: var(--radius-card);
   --radius-4xl: var(--radius-sheet);
 
+  /*
+   * Three letter-spacings only (edge-lines laws, Type anatomy 10): a title of 34px and above, a chord's
+   * or a figure's large digits, and small capitals. Everything else 0.
+   */
+  --tracking-title: -0.01em;
+  --tracking-figures: -0.03em;
+  --tracking-caps: 0.04em;
+
   /* Apple's Subheadline and Footnote: a row's detail and second line (15), a caption under it (13). */
   --text-footnote: 0.8125rem;
   --text-subhead: 0.9375rem;
@@ -404,7 +412,7 @@
   font-size: 0.8125rem;
   line-height: 1rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   color: var(--color-muted-foreground);
 }
@@ -415,7 +423,7 @@
   font-size: 2.25rem;
   line-height: 1.1;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-title);
   text-wrap: balance;
 }
 

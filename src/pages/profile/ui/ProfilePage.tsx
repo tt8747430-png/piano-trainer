@@ -175,7 +175,7 @@ function Hero() {
           </div>
         ) : (
           <div className="flex min-w-0 flex-col gap-0.5">
-            <p className="text-3xl leading-tight font-bold tracking-[-0.01em] text-balance break-words">
+            <p className="text-3xl leading-tight font-bold tracking-title text-balance break-words">
               {name}
             </p>
             {year ? (
@@ -270,7 +270,7 @@ function TileFace({
   return (
     <>
       <span className="flex items-center justify-between gap-1">
-        <span className="text-2xl leading-tight font-bold tracking-[-0.01em] tabular-nums whitespace-nowrap">
+        <span className="text-2xl leading-tight font-bold tracking-title tabular-nums whitespace-nowrap">
           {value}
         </span>
         <Icon aria-hidden className={cn('size-4.5 shrink-0', tone)} />

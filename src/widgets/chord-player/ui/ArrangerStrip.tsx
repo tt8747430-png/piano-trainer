@@ -74,7 +74,7 @@ function Group({
     >
       <span
         aria-hidden
-        className="text-xs font-semibold tracking-[.04em] text-muted-foreground uppercase"
+        className="text-xs font-semibold tracking-caps text-muted-foreground uppercase"
       >
         {label}
       </span>

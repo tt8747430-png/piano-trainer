@@ -8,7 +8,7 @@ import { StyledBlock } from './LessonBlock'
 export function SectionHeading({ text, style }: { text: LocalText; style?: BlockStyle }) {
   const locale = useLocale()
   const heading = (
-    <h2 className="font-sans text-2xl/[normal] font-bold tracking-[-0.01em] text-balance">
+    <h2 className="font-sans text-2xl/[normal] font-bold tracking-title text-balance">
       {localText(text, locale)}
     </h2>
   )
@@ -28,7 +28,7 @@ export function Takeaway({ text, style }: { text: LocalText; style?: BlockStyle 
       <span
         aria-hidden
         className={cn(
-          'text-xs font-bold tracking-[0.04em] uppercase',
+          'text-xs font-bold tracking-caps uppercase',
           style ? 'opacity-80' : 'text-honey-ink',
         )}
       >

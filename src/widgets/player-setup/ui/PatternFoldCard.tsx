@@ -60,7 +60,7 @@ export function PatternFoldCard({
           {fold.parts.map((part) => (
             <div key={part.title ?? ''} className="flex flex-col">
               {part.title ? (
-                <h3 className="border-t border-hairline bg-card px-3.5 font-sans pt-3 pb-1 text-xs font-semibold tracking-[0.04em] text-muted-foreground uppercase">
+                <h3 className="border-t border-hairline bg-card px-3.5 font-sans pt-3 pb-1 text-xs font-semibold tracking-caps text-muted-foreground uppercase">
                   {part.title}
                 </h3>
               ) : null}
