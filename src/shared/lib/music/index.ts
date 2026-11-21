@@ -168,6 +168,7 @@ export {
   parseChordSymbol,
   readChordLine,
   readChordSymbol,
+  rootsInCapitals,
   type ChordLine,
   printedChord,
   printedNote,

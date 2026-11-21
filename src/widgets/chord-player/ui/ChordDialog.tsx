@@ -12,6 +12,7 @@ import {
   printedSymbol,
   qualitySuffix,
   readChordSymbol,
+  rootsInCapitals,
   sameNote,
   spellChord,
   type Chord,
@@ -85,7 +86,7 @@ export function ChordDialog({
 }) {
   const { t } = useTranslation('practice')
   const [typed, setTyped] = useState<string | null>(started ?? null)
-  const read = typed === null ? chord : readChordSymbol(typed)
+  const read = typed === null ? chord : readChordSymbol(rootsInCapitals(typed))
   const tones = spellChord(chord.root, chord.quality)
   const bassRole =
     chord.bass === undefined
@@ -114,7 +115,7 @@ export function ChordDialog({
               error={read ? null : t('chordPlayer.unread', { text: typed })}
               onChange={(text) => {
                 setTyped(text)
-                const chosen = readChordSymbol(text)
+                const chosen = readChordSymbol(rootsInCapitals(text))
                 if (chosen) onChord(chosen)
               }}
             />

@@ -24,6 +24,7 @@ import {
   printedSymbol,
   qualitySpellings,
   readChordSymbol,
+  rootsInCapitals,
   SCALE_KINDS,
   scaleIntervals,
   spellAbove,
@@ -282,17 +283,6 @@ export function indexEntries({
       target: { opens: 'exercise', exercise: exercise.id },
     })),
   ]
-}
-
-/**
- * A search typed in lower case (`dm7 g7`) read as the chords it names: each word's leading a–g in
- * capitals. Only the palette reads loosely so; a chord sheet's lyrics keep their words.
- */
-function rootsInCapitals(query: string): string {
-  return query.replace(
-    /(^|[\s,|])([a-g])/g,
-    (_, before: string, letter: string) => before + letter.toUpperCase(),
-  )
 }
 
 /**

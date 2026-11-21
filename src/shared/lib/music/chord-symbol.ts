@@ -97,6 +97,18 @@ export function parseChordSymbol(symbol: string): Chord {
   throw new ChordSymbolError(symbol)
 }
 
+/**
+ * Chords a learner types in lower case (`dm7`, `c/e`, `dm7 g7 c`) as they are written: a word's
+ * leading a–g, and a bass's after its slash, in capitals. For a field or search that holds only
+ * chords; a chord sheet's lyrics keep their words.
+ */
+export function rootsInCapitals(typed: string): string {
+  return typed.replace(
+    /(^|[\s,|/])([a-g])/g,
+    (_, before: string, letter: string) => before + letter.toUpperCase(),
+  )
+}
+
 /** A chord as a learner types it, spaces around it left out; null while it cannot be read (mid-word, a chord the builder does not make). */
 export function readChordSymbol(typed: string): Chord | null {
   try {
