@@ -109,6 +109,10 @@ export function useChordPlayerPage() {
       )
       hold({ ...hand.entry, text: sheetToText(sheet) }, said)
     },
+    openSong(song) {
+      if (!hand) return
+      hold({ ...hand.entry, text: song.text, draft: null, tempo: song.tempo }, song.name)
+    },
   }
 
   const hasChords = hand?.sheet.sections.some((section) => section.bars.length > 0) ?? false

@@ -817,6 +817,7 @@ export const practice = {
     library: 'Chord sheets',
     mine: 'My chord sheets',
     noneMine: 'None saved yet. Save the sheet in hand from the ⋯ menu.',
+    songs: 'Songs',
     progressions: 'Progressions',
     opened: 'Opened {{name}}',
     undo: 'Undo',

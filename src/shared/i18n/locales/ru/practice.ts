@@ -790,6 +790,7 @@ export const practice: LocaleResources['practice'] = {
     library: 'Гармонические сетки',
     mine: 'Мои сетки',
     noneMine: 'Пока ничего не сохранено. Сохраните сетку из меню ⋯.',
+    songs: 'Песни',
     progressions: 'Последовательности',
     opened: 'Открыто: {{name}}',
     undo: 'Отменить',

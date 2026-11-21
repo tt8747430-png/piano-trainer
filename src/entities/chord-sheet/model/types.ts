@@ -77,6 +77,15 @@ export interface SavedChordSheet extends ChordSheetEntry {
   readonly online: OnlineLink | null
 }
 
+/** A song the Chord player's library holds: its name, who it is by, its sheet's text and tempo. */
+export interface ChordSheetSong {
+  readonly id: string
+  readonly name: string
+  readonly by: string
+  readonly text: string
+  readonly tempo: number
+}
+
 /** At most this many of the learner's own sheets are kept. */
 export const MOST_SHEETS = 100
 /** A sheet's name: 1 to 60 characters. */

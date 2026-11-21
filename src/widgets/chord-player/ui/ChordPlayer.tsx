@@ -78,7 +78,12 @@ import {
   type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { SHEET_PLAYS, SHEET_TEMPO, TRANSPOSE_RANGE } from '@/entities/chord-sheet'
+import {
+  SHEET_PLAYS,
+  SHEET_TEMPO,
+  TRANSPOSE_RANGE,
+  type ChordSheetSong,
+} from '@/entities/chord-sheet'
 import type { BoxPlace } from '../model/engine'
 import type { ChordSheetInHand } from '../model/use-chord-sheet'
 import { keyChords } from '../model/key-chords'
@@ -134,6 +139,8 @@ export interface ChordPlayerRoutes {
   openSheet(id: string | undefined): void
   /** A progression from the library put in hand as one Verse: its numerals, in a major or minor key. */
   openLine(numerals: readonly Numeral[], minor: boolean, name: string): void
+  /** A song from the library put in hand, its sheet and tempo. */
+  openSong(song: ChordSheetSong): void
 }
 
 /** Every chord of the sheet as a numeral in its key, or null where one is not (the Player's line). */
@@ -918,6 +925,10 @@ export function ChordPlayer({
           onOpenSaved={(sheet) => {
             setLibrary(false)
             routes.openSheet(sheet.id)
+          }}
+          onOpenSong={(song) => {
+            setLibrary(false)
+            routes.openSong(song)
           }}
           onOpenProgression={(progression) => {
             setLibrary(false)

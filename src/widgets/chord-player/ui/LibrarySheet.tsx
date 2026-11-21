@@ -2,10 +2,12 @@ import { Copy, Ellipsis, PencilLine, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  CHORD_SHEET_SONGS,
   selectMine,
   SHEET_NAME_MAX,
   useChordSheets,
   useChordSheetsStoreApi,
+  type ChordSheetSong,
   type SavedChordSheet,
 } from '@/entities/chord-sheet'
 import {
@@ -31,7 +33,7 @@ import { Button } from '@/shared/ui/primitives/button'
 
 /**
  * The Library (R29 CP4, P13), opened from the sheet's name: My chord sheets first (each row's menu
- * Rename, Duplicate, Delete), then the app's progressions by style; a tap opens one in place of the
+ * Rename, Duplicate, Delete), then the songs the app holds as sheets, then its progressions by style; a tap opens one in place of the
  * sheet in hand.
  */
 export function LibrarySheet({
@@ -40,6 +42,7 @@ export function LibrarySheet({
   current,
   minor,
   onOpenSaved,
+  onOpenSong,
   onOpenProgression,
 }: {
   open: boolean
@@ -49,6 +52,7 @@ export function LibrarySheet({
   /** The key's mode a progression opens in. */
   minor: boolean
   onOpenSaved(sheet: SavedChordSheet): void
+  onOpenSong(song: ChordSheetSong): void
   onOpenProgression(progression: LibraryProgression): void
 }) {
   const { t } = useTranslation('practice')
@@ -135,6 +139,22 @@ export function LibrarySheet({
                   })}
                 </ul>
               )}
+            </MenuSection>
+            <MenuSection title={t('chordPlayer.songs')} inset className="gap-1">
+              <ul className="flex flex-col">
+                {CHORD_SHEET_SONGS.map((song) => (
+                  <li key={song.id}>
+                    <button
+                      type="button"
+                      onClick={() => onOpenSong(song)}
+                      className="flex min-h-12 w-full min-w-0 flex-col justify-center rounded-control px-2 py-1 text-left hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
+                    >
+                      <span className="font-semibold text-pretty">{song.name}</span>
+                      <span className="text-muted-foreground">{song.by}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </MenuSection>
             <MenuSection title={t('chordPlayer.progressions')} inset className="gap-3">
               <ChoiceChips

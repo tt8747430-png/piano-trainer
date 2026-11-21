@@ -10,6 +10,7 @@ export {
   TRANSPOSE_RANGE,
   type ChordSheetEntry,
   type ChordSheetSettings,
+  type ChordSheetSong,
   type CountIn,
   type OnlineLink,
   type PartLevel,
@@ -29,3 +30,4 @@ export {
 } from './model/store'
 export { selectEntry, selectMine, selectRecent, selectSaved } from './model/selectors'
 export { ChordSheetsStoreProvider, useChordSheets, useChordSheetsStoreApi } from './model/context'
+export { CHORD_SHEET_SONGS } from './content/songs'
