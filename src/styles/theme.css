@@ -1238,13 +1238,11 @@
     grid-area: middle;
     justify-self: center;
   }
-  @variant max-sm {
-    column-gap: --spacing(1);
-  }
   /* A 320px phone, or one with Display Zoom (round 28, R31-E): Close, Done and the end's buttons keep
      one row with their gaps closed, each icon button 40px wide (still 44px tall) and Done's padding
-     tighter, so none covers another. */
+     tighter, so none covers another. Above it the columns stand 8 apart, as the Editor board's. */
   @media (width < 360px) {
+    column-gap: --spacing(1);
     & > [data-area='actions'] {
       gap: 0;
     }
