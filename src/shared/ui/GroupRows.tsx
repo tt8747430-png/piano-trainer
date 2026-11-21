@@ -53,7 +53,7 @@ export function GroupRows({
  * after the label) in the group's row, the group drawing the hairline between rows.
  */
 export function GroupSwitch(props: Omit<ComponentProps<typeof SwitchRow>, 'className' | 'icon'>) {
-  return <SwitchRow {...props} className={cn(ROW, 'gap-4 border-b-0')} />
+  return <SwitchRow {...props} className={cn(ROW, 'gap-4')} />
 }
 
 /** A row whose control stands at its end: a stepper, a picker. */

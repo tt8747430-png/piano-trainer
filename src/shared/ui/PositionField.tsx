@@ -89,7 +89,6 @@ export function PositionField({
         />
       </Labelled>
       <SwitchRow
-        className="border-b-0"
         label={t('position.nearest')}
         info={t('position.nearestInfo')}
         checked={position.nearest}

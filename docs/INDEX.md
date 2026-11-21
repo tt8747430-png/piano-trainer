@@ -461,7 +461,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-alert-foreground` | `src/styles/theme.css` | 2 |
 | `--color-attention` | `src/styles/theme.css` | 2 |
 | `--color-background` | `src/styles/theme.css` | 43 |
-| `--color-border` | `src/styles/theme.css` | 89 |
+| `--color-border` | `src/styles/theme.css` | 88 |
 | `--color-card` | `src/styles/theme.css` | 131 |
 | `--color-card-foreground` | `src/styles/theme.css` | 4 |
 | `--color-chosen` | `src/styles/theme.css` | 20 |
@@ -471,7 +471,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-eyebrow` | `src/styles/theme.css` | 4 |
 | `--color-foreground` | `src/styles/theme.css` | 359 |
 | `--color-glass` | `src/styles/theme.css` | 2 |
-| `--color-hairline` | `src/styles/theme.css` | 65 |
+| `--color-hairline` | `src/styles/theme.css` | 66 |
 | `--color-hand-lh` | `src/styles/theme.css` | 3 |
 | `--color-hand-lh-wash` | `src/styles/theme.css` | 3 |
 | `--color-hand-rh` | `src/styles/theme.css` | 3 |
@@ -826,7 +826,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `section-head` | The head over a card of rows on a page (Practise, Options, How to play): | 2 |
 | `settings-pane` | DESIGN's card: | 1 |
 | `rows-line` | The card's ring is a shadow: | 3 |
-| `rows-hairline` |  | 21 |
+| `rows-hairline` |  | 24 |
 | `px-gutter` | * A block's or a place's look (R29 B9, `shared/lib/style`): | 15 |
 | `-mx-gutter` |  | 16 |
 | `scroll-px-gutter` | A row that scrolls sideways snaps its first item to the gutter, not to the screen's edge. | 5 |

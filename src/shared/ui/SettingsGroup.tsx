@@ -69,13 +69,12 @@ export function SettingsGroup({
         <div
           data-slot="settings-card"
           className={cn(
-            // A switch row draws its line beneath it; the card's edge stands for the last one's.
-            'flex flex-col card [&>[data-slot=switch-row]:last-child]:border-b-0',
+            'flex flex-col card',
             // A row's hover fills the card to its edges (R23), square between rows; a switch row, which
             // has no inset of its own, sits 16 in, as the canvas's GROUP rows; every row is parted from
-            // the one above by a hairline, as GROUP draws them (a switch row draws its own beneath it).
+            // the next by a hairline that takes no room, as GROUP draws them.
             flush
-              ? 'overflow-hidden [&>[data-slot=switch-row]]:px-4 [&>:not([data-slot=switch-row])+*]:border-t [&>:not([data-slot=switch-row])+*]:border-hairline [&>*]:rounded-none [&>*:first-child]:rounded-t-card [&>*:last-child]:rounded-b-card'
+              ? 'overflow-hidden rows-hairline [&>[data-slot=switch-row]]:px-4 [&>*]:rounded-none [&>*:first-child]:rounded-t-card [&>*:last-child]:rounded-b-card'
               : 'gap-3 px-5 py-4',
           )}
         >

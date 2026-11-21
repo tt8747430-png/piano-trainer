@@ -78,7 +78,7 @@ export function HandsSheet({
                   setting="otherHand.look"
                   checked={dim}
                   onCheckedChange={(on) => setOtherHand(settings, { look: on ? 'dim' : 'show' })}
-                  className="min-h-12 border-t border-b-0 border-hairline px-3 py-0"
+                  className="min-h-12 border-t border-hairline px-3 py-0"
                 />
               )}
             </div>

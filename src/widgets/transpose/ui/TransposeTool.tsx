@@ -81,7 +81,7 @@ export function TransposeFields({
         <RotateCcw data-icon="inline-start" aria-hidden />
         {t('transpose.reset')}
       </Button>
-      <div className="flex flex-col border-t border-hairline pt-2">
+      <div className="flex flex-col rows-hairline border-t border-hairline pt-2">
         <SwitchRow
           label={t('transpose.signature')}
           info={t('transpose.signatureInfo')}
@@ -93,7 +93,6 @@ export function TransposeFields({
           info={t('transpose.chordSymbolsInfo')}
           checked={chordSymbols}
           onCheckedChange={onChordSymbols}
-          className="border-b-0"
         />
       </div>
     </MenuSection>
