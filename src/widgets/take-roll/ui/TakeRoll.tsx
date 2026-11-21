@@ -86,7 +86,7 @@ function SplitHandle({
       style={{ top: `${top * 100}%` }}
     >
       <span className="h-0.5 w-full bg-destructive group-focus-visible:h-1" />
-      <span className="absolute left-2 flex h-6 items-center rounded-pill bg-destructive px-2 text-footnote font-semibold whitespace-nowrap text-white">
+      <span className="absolute left-2 flex h-6 items-center rounded-pill bg-destructive px-2 text-footnote font-semibold whitespace-nowrap text-destructive-foreground">
         {t('review.splitAt', { key: name })}
       </span>
     </div>

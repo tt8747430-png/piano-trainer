@@ -61,7 +61,7 @@ export function ProfilePage() {
               {unread > 0 ? (
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute top-1.5 right-1.25 grid h-4.5 min-w-4.5 place-items-center rounded-pill bg-destructive px-1 text-xs leading-none font-bold text-white tabular-nums"
+                  className="pointer-events-none absolute top-1.5 right-1.25 grid h-4.5 min-w-4.5 place-items-center rounded-pill bg-destructive px-1 text-xs leading-none font-bold text-destructive-foreground tabular-nums"
                 >
                   {unread > 99 ? '99+' : unread}
                 </span>
