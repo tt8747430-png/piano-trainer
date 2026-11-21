@@ -121,7 +121,7 @@ function ShelfRow({
     </>
   )
   const lead = cn(
-    'flex min-w-0 flex-1 items-center rounded-control text-left text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
+    'flex min-w-0 flex-1 items-center rounded-control text-left text-foreground',
     // The boards' ATABLE on a laptop (a 40 cover 16 from its title) and ARCHROW on a phone (a 44 cover
     // with 8 corners, 12 from its title over its line, each at its normal height).
     laptop

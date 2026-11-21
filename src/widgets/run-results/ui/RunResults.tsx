@@ -199,7 +199,7 @@ export function AllPractice() {
   return (
     <Link
       to="/profile/history"
-      className="flex h-11 items-center gap-1 rounded-control text-subhead font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+      className="flex h-11 items-center gap-1 rounded-control text-subhead font-semibold text-link"
     >
       {t('profile.history.result.allPractice')}
       <ChevronRight aria-hidden className="size-4" />

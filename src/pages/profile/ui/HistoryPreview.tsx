@@ -35,7 +35,7 @@ export function NoHistory() {
       </p>
       <Link
         to="/practice"
-        className="flex h-11 items-center rounded-control text-subhead font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+        className="flex h-11 items-center rounded-control text-subhead font-semibold text-link"
       >
         {t('profile.history.open')}
       </Link>

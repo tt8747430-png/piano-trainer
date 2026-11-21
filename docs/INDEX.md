@@ -202,7 +202,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `SheetPill` | `src/shared/ui/SheetPill.tsx` | The sheet's one small floating control (R34, Songscription's view pill): | 2 |
 | `SheetTitle` | `src/shared/ui/SheetTitle.tsx` | A score's title printed at the head of its sheet (ADR 0114), as a printed score has it: | 6 |
 | `SheetToolsContext` | `src/shared/ui/sheet-tools.ts` | The sheet's own tools for its one pill (the layout's choice): | 2 |
-| `SheetTrigger` | `src/shared/ui/Sheet.tsx` | What opens a sheet: | 7 |
+| `SheetTrigger` | `src/shared/ui/Sheet.tsx` |  | 7 |
 | `ShowAll` | `src/shared/ui/ShowAll.tsx` | A folded list's way to the rest, the boards' quiet link under its card (owner, 2026-11-16: | 3 |
 | `ShownKeys` | `src/shared/ui/piano-keyboard/index.ts` |  | 29 |
 | `SortMenu` | `src/shared/ui/CountSort.tsx` | A list's sort (the R72 board's COUNTROW and its table's head): | 4 |
@@ -219,7 +219,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `TileMark` | `src/shared/ui/TileMark.tsx` | A row's tile, its paint solid (canvas 128, iOS Settings' squares): | 12 |
 | `TitlePlace` | `src/shared/ui/SheetTitle.tsx` |  | 3 |
 | `Toaster` | `src/shared/ui/Toaster.tsx` | Where toasts stand, mounted once by the app: | 2 |
-| `ToggleChips` | `src/shared/ui/ToggleChips.tsx` | Several on-or-offs of a few, every one in sight: | 1 |
+| `ToggleChips` | `src/shared/ui/ToggleChips.tsx` | Several on-or-offs of a few, every one in sight: | 2 |
 | `toneMark` | `src/shared/ui/piano-keyboard/index.ts` |  | 4 |
 | `Toolbar` | `src/shared/ui/Toolbar.tsx` | A row of controls that acts on one thing (a selection's acts, the Player's transport, a block's tools), as WAI-ARIA's toolbar: | 10 |
 | `ToolKey` | `src/shared/ui/ToolKey.tsx` | A palette's key: | 1 |
@@ -463,7 +463,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-attention` | `src/styles/theme.css` | 2 |
 | `--color-background` | `src/styles/theme.css` | 43 |
 | `--color-border` | `src/styles/theme.css` | 89 |
-| `--color-card` | `src/styles/theme.css` | 133 |
+| `--color-card` | `src/styles/theme.css` | 132 |
 | `--color-card-foreground` | `src/styles/theme.css` | 4 |
 | `--color-chosen` | `src/styles/theme.css` | 20 |
 | `--color-chosen-honey` | `src/styles/theme.css` | 6 |
@@ -498,13 +498,13 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-layout-zone` | `src/styles/theme.css` | 1 |
 | `--color-learned` | `src/styles/theme.css` | 25 |
 | `--color-learned-foreground` | `src/styles/theme.css` | 2 |
-| `--color-link` | `src/styles/theme.css` | 43 |
+| `--color-link` | `src/styles/theme.css` | 42 |
 | `--color-medal-bronze` | `src/styles/theme.css` | 1 |
 | `--color-medal-gold` | `src/styles/theme.css` | 1 |
 | `--color-medal-none` | `src/styles/theme.css` | 1 |
 | `--color-medal-platinum` | `src/styles/theme.css` | 1 |
 | `--color-medal-silver` | `src/styles/theme.css` | 1 |
-| `--color-muted` | `src/styles/theme.css` | 158 |
+| `--color-muted` | `src/styles/theme.css` | 157 |
 | `--color-muted-foreground` | `src/styles/theme.css` | 300 |
 | `--color-nav-current` | `src/styles/theme.css` | 2 |
 | `--color-nav-current-foreground` | `src/styles/theme.css` | 3 |
@@ -542,7 +542,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-primary` | `src/styles/theme.css` | 31 |
 | `--color-primary-foreground` | `src/styles/theme.css` | 9 |
 | `--color-raised` | `src/styles/theme.css` | 6 |
-| `--color-ring` | `src/styles/theme.css` | 43 |
+| `--color-ring` | `src/styles/theme.css` | 23 |
 | `--color-role-11th` | `src/styles/theme.css` | 1 |
 | `--color-role-13th` | `src/styles/theme.css` | 1 |
 | `--color-role-3rd` | `src/styles/theme.css` | 1 |
@@ -570,7 +570,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-wheel-relative` | `src/styles/theme.css` | 1 |
 | `--destructive` | `src/styles/tokens.css` | 3 |
 | `--destructive-foreground` | `src/styles/tokens.css` | 1 |
-| `--ease-out` | `src/styles/theme.css` | 114 |
+| `--ease-out` | `src/styles/theme.css` | 113 |
 | `--elevation-1` | `src/styles/tokens.css` | 1 |
 | `--elevation-2` | `src/styles/tokens.css` | 4 |
 | `--elevation-3` | `src/styles/tokens.css` | 5 |
@@ -767,7 +767,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--radius-mark` | `src/styles/theme.css` | 11 |
 | `--radius-md` | `src/styles/theme.css` | 7 |
 | `--radius-menu` | `src/styles/theme.css` | 8 |
-| `--radius-pill` | `src/styles/theme.css` | 110 |
+| `--radius-pill` | `src/styles/theme.css` | 109 |
 | `--radius-sheet` | `src/styles/theme.css` | 14 |
 | `--radius-sm` | `src/styles/theme.css` | 1 |
 | `--radius-thumb` | `src/styles/theme.css` | 34 |

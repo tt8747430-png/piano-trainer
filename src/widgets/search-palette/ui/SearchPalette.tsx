@@ -243,7 +243,7 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
               <Caps>{t('recent')}</Caps>
               <button
                 type="button"
-                className="h-11 rounded-control px-1 text-subhead font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                className="h-11 rounded-control px-1 text-subhead font-semibold text-link"
                 onClick={() => forgetSearches(views)}
               >
                 {t('clearRecent')}

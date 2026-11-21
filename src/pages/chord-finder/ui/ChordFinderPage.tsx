@@ -196,7 +196,7 @@ export function ChordFinderPage() {
               <button
                 type="button"
                 onClick={() => change({ keys: chord })}
-                className="h-11 rounded-pill bg-muted px-4 text-subhead font-semibold transition-colors hover:bg-muted-foreground/15 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                className="h-11 rounded-pill bg-muted px-4 text-subhead font-semibold transition-colors hover:bg-muted-foreground/15"
               >
                 {t(`practice:chordFinder.try.${name}`)}
               </button>

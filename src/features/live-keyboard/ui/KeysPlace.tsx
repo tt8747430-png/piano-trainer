@@ -210,7 +210,7 @@ export function KeysPlace({
         onPointerDown={(event) => hold(MOVE, event)}
         onDoubleClick={() => kept.set(null)}
         onKeyDown={nudge}
-        className="absolute top-0 left-1/2 z-10 flex h-6 w-24 -translate-x-1/2 cursor-grab touch-none items-center justify-center outline-none before:absolute before:inset-x-0 before:-inset-y-2.5 before:content-[''] focus-visible:ring-2 focus-visible:ring-ring active:cursor-grabbing"
+        className="absolute top-0 left-1/2 z-10 flex h-6 w-24 -translate-x-1/2 cursor-grab touch-none items-center justify-center outline-none before:absolute before:inset-x-0 before:-inset-y-2.5 before:content-[''] active:cursor-grabbing"
       >
         <span
           aria-hidden

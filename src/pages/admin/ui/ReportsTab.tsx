@@ -112,7 +112,7 @@ function Act({
       type="button"
       onClick={onClick}
       className={cn(
-        'h-11 rounded-control px-2 text-subhead font-semibold transition-colors duration-150 ease-out hover:bg-muted/60 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
+        'h-11 rounded-control px-2 text-subhead font-semibold transition-colors duration-150 ease-out hover:bg-muted/60',
         destructive ? 'text-destructive' : 'text-link',
       )}
     >

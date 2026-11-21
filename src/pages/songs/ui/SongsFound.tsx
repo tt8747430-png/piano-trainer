@@ -14,7 +14,7 @@ import { SelectionBar } from './SelectionBar'
 import { FRESH } from './songs-fresh'
 
 const ROW =
-  'card flex min-h-14 min-w-0 items-center gap-3 py-2 pr-3 pl-4 text-foreground transition-colors duration-200 ease-out hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none'
+  'card flex min-h-14 min-w-0 items-center gap-3 py-2 pr-3 pl-4 text-foreground transition-colors duration-200 ease-out hover:bg-muted'
 
 /**
  * What Songs' search found, on Songs itself (the Songs board's RESULTS; Apple Music's Library, Files:

@@ -110,7 +110,7 @@ export function ChordRow({
             aria-current={now || undefined}
             onClick={() => onGo(event.at)}
             className={cn(
-              'flex shrink-0 basis-1/2 snap-start snap-always flex-col items-center gap-2 rounded-control py-1 transition-opacity duration-300 ease-out focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none motion-reduce:transition-none lg:gap-3',
+              'flex shrink-0 basis-1/2 snap-start snap-always flex-col items-center gap-2 rounded-control py-1 transition-opacity duration-300 ease-out motion-reduce:transition-none lg:gap-3',
               now ? 'opacity-100' : 'opacity-[0.38]',
             )}
           >

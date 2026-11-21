@@ -269,7 +269,7 @@ function PublishForm({
           maxLength={120}
           onChange={(event) => set({ title: event.target.value })}
           aria-label={t('public.titleField')}
-          className="h-12 rounded-xl bg-card px-4 text-base ring-1 ring-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-12 rounded-xl bg-card px-4 text-base ring-1 ring-border outline-none"
         />
       </Field>
       {song ? (
@@ -279,7 +279,7 @@ function PublishForm({
             maxLength={TAG_MAX * 4}
             onChange={(event) => set({ composer: event.target.value })}
             aria-label={t('public.composer')}
-            className="h-12 rounded-xl bg-card px-4 text-base ring-1 ring-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-12 rounded-xl bg-card px-4 text-base ring-1 ring-border outline-none"
           />
         </Field>
       ) : null}

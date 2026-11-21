@@ -63,7 +63,7 @@ export function NextChordSheet({
             <button
               type="button"
               onClick={() => setAll(false)}
-              className="-ms-2 flex min-h-11 items-center gap-1 self-start rounded-control px-2 text-base font-semibold text-link outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="-ms-2 flex min-h-11 items-center gap-1 self-start rounded-control px-2 text-base font-semibold text-link outline-none"
             >
               <ChevronLeft aria-hidden className="size-5" />
               {changing
@@ -119,7 +119,7 @@ export function NextChordSheet({
                 <button
                   type="button"
                   onClick={() => setWay(way === 'diatonic' ? 'chromatic' : 'diatonic')}
-                  className="h-11 rounded-pill bg-muted px-4.5 text-subhead font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="h-11 rounded-pill bg-muted px-4.5 text-subhead font-semibold text-foreground outline-none"
                 >
                   {way === 'diatonic' ? t('chords.next.toChromatic') : t('chords.next.toDiatonic')}
                 </button>
@@ -141,7 +141,7 @@ export function NextChordSheet({
                         what: what(each),
                       })}
                       onClick={() => onPick(each.step)}
-                      className="flex h-18 flex-col items-center justify-center gap-0.5 card text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex h-18 flex-col items-center justify-center gap-0.5 card text-foreground outline-none"
                     >
                       <span
                         className={`font-display font-bold whitespace-nowrap ${way === 'diatonic' ? 'text-2xl' : 'text-xl'}`}
@@ -157,7 +157,7 @@ export function NextChordSheet({
             <button
               type="button"
               onClick={() => setAll(true)}
-              className="flex min-h-12 items-center justify-between gap-3 card px-4 text-base text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="flex min-h-12 items-center justify-between gap-3 card px-4 text-base text-foreground outline-none"
             >
               {t('chords.next.all')}
               <ChevronRight aria-hidden className="size-4.5 text-muted-foreground" />
@@ -166,7 +166,7 @@ export function NextChordSheet({
               <button
                 type="button"
                 onClick={onRemove}
-                className="flex h-12 items-center gap-2.5 card px-4 text-base font-semibold text-destructive outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="flex h-12 items-center gap-2.5 card px-4 text-base font-semibold text-destructive outline-none"
               >
                 <Trash2 aria-hidden className="size-5" />
                 {t('chords.next.remove', { chord: symbolOf(changing) })}

@@ -56,7 +56,7 @@ interface LoopRows {
 
 /** A filled pill of the tempo's, its colour alone changing on a press (`DESIGN.md`). */
 const PILL =
-  'flex-none rounded-full font-semibold text-foreground transition-colors hover:bg-muted-foreground/15 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none'
+  'flex-none rounded-full font-semibold text-foreground transition-colors hover:bg-muted-foreground/15'
 /** The tempo's − and +: 44 round, the sign 20. */
 const STEP = cn(PILL, 'size-11 bg-muted text-xl font-normal')
 

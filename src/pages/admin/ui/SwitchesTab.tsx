@@ -2,7 +2,7 @@ import { Flag, Plus } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FeatureSwitch, Group, SwitchState } from '@/shared/api/admin'
-import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { useAdmin } from '@/shared/lib/admin'
 import {
   Fab,
@@ -12,6 +12,7 @@ import {
   Segmented,
   SettingsGroup,
   SheetPart,
+  ToggleChips,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
@@ -143,7 +144,7 @@ export function SwitchesTab() {
   )
 }
 
-/** The groups a flag is on for, as chips: the chosen filled in ink, a tap toggling each (the board). */
+/** The groups a flag is on for, as the kit's toggle chips, a tap toggling each. */
 function GroupChips({
   feature,
   groups,
@@ -157,31 +158,11 @@ function GroupChips({
   if (groups.length === 0)
     return <p className="text-sm text-muted-foreground">{t('switches.noGroups')}</p>
   return (
-    <div role="group" aria-label={t('switches.groups')} className="flex flex-wrap gap-2">
-      {groups.map((group) => {
-        const on = feature.groups.includes(group.id)
-        return (
-          <button
-            key={group.id}
-            type="button"
-            aria-pressed={on}
-            className={cn(
-              'relative flex h-9 items-center rounded-pill px-3 text-sm font-semibold transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-1 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
-              on ? 'bg-foreground text-card' : 'bg-muted text-foreground',
-            )}
-            onClick={() =>
-              onChange({
-                ...feature,
-                groups: on
-                  ? feature.groups.filter((id) => id !== group.id)
-                  : [...feature.groups, group.id],
-              })
-            }
-          >
-            {group.name}
-          </button>
-        )
-      })}
-    </div>
+    <ToggleChips
+      label={t('switches.groups')}
+      value={feature.groups}
+      options={groups.map((group) => ({ value: group.id, label: group.name }))}
+      onChange={(ids) => onChange({ ...feature, groups: ids })}
+    />
   )
 }

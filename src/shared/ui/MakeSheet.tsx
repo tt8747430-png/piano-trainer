@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { cn, useMediaQuery, LAPTOP } from '@/shared/lib'
 import { Button } from './primitives/button'
 import { Dialog, DialogClose, DialogContent, DialogTitle } from './primitives/dialog'
-import { Sheet, SheetContent } from './Sheet'
+import { Sheet, SheetContent, SHEET_DISMISS, SHEET_HEAD } from './Sheet'
 
 /**
  * What makes something new (the canvas's NEWNAME and its New song, Record and Import sheets): on a
@@ -59,18 +59,11 @@ export function MakeSheet({
           wide ? 'w-120' : 'w-110',
         )}
       >
-        <div className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-center gap-2 px-5 pt-3 pb-2">
+        <div className={cn(SHEET_HEAD, 'items-center px-5 pt-3 pb-2')}>
           <DialogTitle className="col-start-2 text-center font-sans text-lg leading-snug font-semibold text-balance">
             {title}
           </DialogTitle>
-          <DialogClose
-            render={
-              <Button
-                variant="ghost"
-                className="col-start-3 justify-self-end px-1 text-lg font-semibold text-link hover:bg-transparent hover:underline"
-              />
-            }
-          >
+          <DialogClose render={<Button variant="ghost" className={SHEET_DISMISS} />}>
             {dismiss === 'close' ? t('close') : t('confirm.cancel')}
           </DialogClose>
         </div>

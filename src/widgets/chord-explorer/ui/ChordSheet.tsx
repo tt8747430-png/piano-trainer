@@ -195,7 +195,7 @@ export function ChordSheet({
                   aria-label={t('practice:chords.next.add')}
                   title={t('practice:chords.next.add')}
                   onClick={onAdd}
-                  className="absolute flex size-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-honey-ink outline-none focus-visible:rounded-full focus-visible:ring-2 focus-visible:ring-ring"
+                  className="absolute flex size-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-honey-ink outline-none focus-visible:rounded-full"
                   style={{
                     left: ADD_AT * unit,
                     top: middleOf(empty.staves),
@@ -223,7 +223,7 @@ export function ChordSheet({
                   aria-label={t('practice:chords.next.change', { chord: name })}
                   title={t('practice:chords.next.change', { chord: name })}
                   onClick={() => onName(i)}
-                  className={`absolute top-0 flex h-11 items-center justify-center rounded-thumb font-display text-lg whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                  className={`absolute top-0 flex h-11 items-center justify-center rounded-thumb font-display text-lg whitespace-nowrap outline-none ${
                     i === at || !several
                       ? 'font-bold text-link'
                       : 'font-semibold text-muted-foreground'
@@ -238,7 +238,7 @@ export function ChordSheet({
                     aria-pressed={i === at}
                     aria-label={t(i === at ? 'sheet.play' : 'sheet.pick', { chord: name })}
                     onClick={() => onPick(i)}
-                    className="absolute inset-x-0 top-11 bottom-0 rounded-thumb outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="absolute inset-x-0 top-11 bottom-0 rounded-thumb outline-none"
                   />
                 ) : null}
               </div>

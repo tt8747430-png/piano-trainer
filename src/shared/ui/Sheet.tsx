@@ -138,6 +138,13 @@ if (typeof document !== 'undefined') {
 }
 
 /** What opens a sheet: the drawer's own trigger, or the popover's on a laptop, named for the sheet. */
+/** A sheet's head: Back, the title centred, its way out (Done, Cancel, Close), one column each. */
+export const SHEET_HEAD = 'grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] gap-2'
+
+/** A sheet's way out at its head's end, in the link's ink. */
+export const SHEET_DISMISS =
+  'col-start-3 row-start-1 justify-self-end px-1 text-lg font-semibold text-link hover:bg-transparent hover:underline'
+
 export function SheetTrigger(props: Parameters<typeof DrawerTrigger>[0]) {
   return use(PoppedContext) ? (
     <PopoverTrigger render={props.render}>{props.children}</PopoverTrigger>
@@ -330,7 +337,8 @@ export function SheetContent({
           click outside or Esc closes it); a page under the first keeps its Back and its title centred. */}
       <DrawerHeader
         className={cn(
-          'grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-2.5 pb-2 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center',
+          SHEET_HEAD,
+          'items-start px-4 pt-2.5 pb-2 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center',
           !back &&
             'group-data-[swipe-axis=x]/drawer-popup:grid-cols-1 group-data-[swipe-axis=x]/drawer-popup:pt-4 group-data-[swipe-axis=x]/drawer-popup:text-start',
         )}
@@ -365,7 +373,7 @@ export function SheetContent({
           render={
             <Button
               variant="ghost"
-              className="col-start-3 row-start-1 justify-self-end px-1 text-lg font-semibold text-link group-data-[swipe-axis=x]/drawer-popup:sr-only hover:bg-transparent hover:underline"
+              className={cn(SHEET_DISMISS, 'group-data-[swipe-axis=x]/drawer-popup:sr-only')}
             />
           }
         >

@@ -88,7 +88,7 @@ export function Playlists({ page }: { page: LibraryPage }) {
   const { data } = useGroupsData()
   const shared = data.kind === 'ready' ? data.shared.filter((folder) => !folder.mine) : []
   const row = cn(
-    'flex min-w-0 flex-1 items-center text-foreground transition-colors duration-150 ease-out focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
+    'flex min-w-0 flex-1 items-center text-foreground transition-colors duration-150 ease-out',
     ROW,
   )
   const cover = 'size-14'

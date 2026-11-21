@@ -89,7 +89,7 @@ follow, not a trend to note; `DESIGN.md` and the rulings still win.
    phone on its side) and 1024: nothing cut, overlapping or stranded in an empty band. A passport foldable opened
    is a short, wide tablet and falls in this range. Check these widths in Pass 2 (`testing.md`).
 6. **A component is handed over with all its states.** A kit part made or changed in `shared/ui` (and its board helper)
-   carries, in the same commit: default, hover (pointer only), pressed, `focus-visible` (3px ring at 50% `ring`),
+   carries, in the same commit: default, hover (pointer only), pressed, `focus-visible` (the app's one outline, 3px of `ring` 2px out, from `theme.css`; never restated),
    disabled (50% opacity, no pointer), and loading where the act waits (a spinner in place of its icon, the label
    kept). `DESIGN.md`'s Components entry names each state's token.
 7. **A token is a decision.** A new or changed token in `DESIGN.md`'s frontmatter is named by its role (`surface`,

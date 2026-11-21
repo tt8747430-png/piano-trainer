@@ -48,7 +48,7 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
       aria-label={collapsed ? name : undefined}
       aria-current={current ? 'page' : undefined}
       className={cn(
-        'flex min-h-13 min-w-0 items-center gap-3 rounded-thumb text-nav-current-foreground transition-colors duration-150 ease-out hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none data-popup-open:bg-nav-current',
+        'flex min-h-13 min-w-0 items-center gap-3 rounded-thumb text-nav-current-foreground transition-colors duration-150 ease-out hover:bg-muted data-popup-open:bg-nav-current',
         current && 'bg-nav-current',
         collapsed ? 'size-11 justify-center' : 'w-full px-3',
       )}

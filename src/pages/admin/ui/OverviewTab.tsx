@@ -15,7 +15,7 @@ function Tile({ value, label, compare }: { value: string; label: string; compare
     <Link
       to="/admin/$section"
       params={{ section: 'accounts' }}
-      className="flex min-w-0 flex-col justify-center gap-0.5 card px-4 py-3 leading-[normal] lg:items-center lg:text-center transition-colors duration-200 ease-out hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+      className="flex min-w-0 flex-col justify-center gap-0.5 card px-4 py-3 leading-[normal] lg:items-center lg:text-center transition-colors duration-200 ease-out hover:bg-muted"
     >
       <span className="text-[1.625rem] font-bold tabular-nums">{value}</span>
       <span className="text-sm text-muted-foreground">{label}</span>

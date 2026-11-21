@@ -165,7 +165,7 @@ export function ChordReadings({
           type="button"
           aria-label={t('chordFinder.reading', { symbol: printedSymbol(label) })}
           onClick={() => onReading(at)}
-          className="transition-[filter] before:absolute before:inset-x-0 before:-inset-y-1.5 hover:brightness-95 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+          className="transition-[filter] before:absolute before:inset-x-0 before:-inset-y-1.5 hover:brightness-95"
         >
           {printedSymbol(label)}
         </button>

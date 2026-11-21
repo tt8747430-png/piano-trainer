@@ -64,10 +64,7 @@ export function ExploreFeedCard({ entry, table = false }: { entry: PublicEntry; 
     <Link
       to="/songs/public/$itemId"
       params={{ itemId: entry.id }}
-      className={cn(
-        'flex min-w-0 items-center text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
-        className,
-      )}
+      className={cn('flex min-w-0 items-center text-foreground', className)}
     >
       {children}
     </Link>
