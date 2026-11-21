@@ -9,7 +9,7 @@ import { Segmented } from './Segmented'
 import { SwitchRow } from './SwitchRow'
 
 /** A row's room, as the canvas's `GROUP` draws it: 48 high, its name in the body's size. */
-const ROW = 'flex min-h-12 w-full items-center gap-2.5 py-1.5 ps-4 pe-3 text-base'
+const ROW = 'flex min-h-12 w-full items-center gap-3 py-1.5 ps-4 pe-3 text-base'
 
 /**
  * A group of settings' rows on the muted fill, as the canvas's `GROUP` draws them (canvas 179): one
@@ -53,7 +53,7 @@ export function GroupRows({
  * after the label) in the group's row, the group drawing the hairline between rows.
  */
 export function GroupSwitch(props: Omit<ComponentProps<typeof SwitchRow>, 'className' | 'icon'>) {
-  return <SwitchRow {...props} className={cn(ROW, 'gap-4')} />
+  return <SwitchRow {...props} className={ROW} />
 }
 
 /** A row whose control stands at its end: a stepper, a picker. */

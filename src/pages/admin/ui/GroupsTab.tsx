@@ -242,8 +242,8 @@ export function AdminGroupPage({ id }: { id: string }) {
                 <p
                   className={
                     flags.length > 0
-                      ? 'flex min-h-13 items-center px-4'
-                      : 'flex min-h-13 items-center px-4 text-muted-foreground'
+                      ? 'flex min-h-12 items-center py-1.5 ps-4 pe-3'
+                      : 'flex min-h-12 items-center py-1.5 ps-4 pe-3 text-muted-foreground'
                   }
                 >
                   {flags.length > 0

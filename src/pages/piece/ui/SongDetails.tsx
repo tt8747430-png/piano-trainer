@@ -272,7 +272,7 @@ function DetailsCard({ piece, writes }: { piece: Piece; writes: SongWrites | nul
  */
 function ReadRow({ title, value, info }: { title: string; value: string; info?: string }) {
   return (
-    <div className="flex min-h-12 min-w-0 items-center gap-3 border-hairline py-1.5 pr-3 pl-4 not-first:border-t [&+:is(a,button)]:border-t [&+:is(a,button)]:border-hairline">
+    <div className="flex min-h-12 min-w-0 items-center gap-3 py-1.5 pr-3 pl-4">
       <RowFace
         title={title}
         value={value}

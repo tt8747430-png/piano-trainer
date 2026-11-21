@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 
 import { useTranslation } from 'react-i18next'
 import { APP_BUILD, APP_VERSION } from '@/shared/config'
-import { GroupLink, SettingsGroup } from '@/shared/ui'
+import { GroupLink, GroupRow, SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /** What the app is made with, each under its own licence (R29 B9): who made it and where it is from. */
@@ -57,10 +57,9 @@ export function AboutPage() {
         </div>
       </div>
       <SettingsGroup flush>
-        <dl className="flex min-h-13 items-center justify-between gap-4 px-4 py-2">
-          <dt>{t('aboutPage.licence')}</dt>
-          <dd className="text-end text-muted-foreground">{t('aboutPage.allRights')}</dd>
-        </dl>
+        <GroupRow label={t('aboutPage.licence')}>
+          <span className="text-end text-muted-foreground">{t('aboutPage.allRights')}</span>
+        </GroupRow>
       </SettingsGroup>
       <SettingsGroup flush title={t('aboutPage.legal')}>
         <GroupLink label={t('help.privacy')} render={<Link to="/legal/privacy" />} />

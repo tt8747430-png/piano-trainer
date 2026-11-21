@@ -74,7 +74,7 @@ export function SettingsGroup({
             // has no inset of its own, sits 16 in, as the canvas's GROUP rows; every row is parted from
             // the next by a hairline that takes no room, as GROUP draws them.
             flush
-              ? 'overflow-hidden rows-hairline [&>[data-slot=switch-row]]:px-4 [&>*]:rounded-none [&>*:first-child]:rounded-t-card [&>*:last-child]:rounded-b-card'
+              ? 'overflow-hidden rows-hairline [&>[data-slot=switch-row]]:ps-4 [&>[data-slot=switch-row]]:pe-3 [&>*]:rounded-none [&>*:first-child]:rounded-t-card [&>*:last-child]:rounded-b-card'
               : 'gap-3 px-5 py-4',
           )}
         >

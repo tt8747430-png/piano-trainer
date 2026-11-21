@@ -20,6 +20,7 @@ import { useServices } from '@/shared/lib/services'
 import {
   BackButton,
   GroupAction,
+  GroupRow,
   RowButton,
   RowLink,
   sayUndo,
@@ -258,7 +259,7 @@ function SettingsBody({
           opens
           onClick={() => setOpened('countIn')}
         />
-        <div className="border-t border-hairline px-4 py-3">
+        <div className="py-3 ps-4 pe-3">
           <SettingField
             label={t('chordPlayer.settings.voicing')}
             info={t('chordPlayer.settings.voicingInfo')}
@@ -283,7 +284,7 @@ function SettingsBody({
           opens
           onClick={() => setOpened('time')}
         />
-        <div className="border-t border-hairline px-4 py-3">
+        <div className="py-3 ps-4 pe-3">
           <SettingField label={t('chordPlayer.settings.writtenAs')} setting="chordPlayer.names">
             <Segmented
               label={t('chordPlayer.settings.writtenAs')}
@@ -310,12 +311,11 @@ function SettingsBody({
           checked={prefs.follow}
           onCheckedChange={(follow) => setChordPlayer(settingsStore, { follow })}
         />
-        <div className="flex min-h-13 items-center justify-between gap-3 border-t border-hairline py-2 pr-4 pl-4 text-base">
-          <span>{t('chordPlayer.settings.arranger')}</span>
+        <GroupRow label={t('chordPlayer.settings.arranger')}>
           <span className="truncate text-muted-foreground" aria-live="polite">
             {arrangerValue}
           </span>
-        </div>
+        </GroupRow>
       </SettingsGroup>
       <SettingsGroup flush title={t('chordPlayer.settings.layout')}>
         <GroupAction label={t('chordPlayer.layout.edit')} onClick={onEditLayout} />

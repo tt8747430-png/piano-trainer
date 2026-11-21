@@ -14,8 +14,7 @@ import { ButtonLink, ProgressBar, SettingsGroup } from '@/shared/ui'
 import { monthDaySaid } from '@/shared/lib'
 
 /** A row of the card: its name, then what it says. */
-const ROW =
-  'flex min-h-13 items-center justify-between gap-4 border-t border-hairline px-4 first:border-t-0'
+const ROW = 'flex min-h-12 items-center justify-between gap-3 py-1.5 ps-4 pe-3'
 
 /**
  * What the app has kept of the learner's practice of a song (R30 S4, R34): the day it was played
@@ -46,7 +45,7 @@ export function YourPractice({ piece, performance }: { piece: Piece; performance
   const percent = (value: number) => formatPercent(locale, value)
   return (
     <SettingsGroup flush heading title={t('practice.title')}>
-      <dl className="flex flex-col">
+      <dl className="flex flex-col rows-hairline">
         {day ? (
           <div className={ROW}>
             <dt className="font-medium">{t('practice.last')}</dt>
@@ -76,7 +75,7 @@ export function YourPractice({ piece, performance }: { piece: Piece; performance
           <>
             <ShareRow label={t('practice.lastTake')} value={summary.last} said={percent} solid />
             <ShareRow label={t('practice.bestTake')} value={summary.best} said={percent} />
-            <div className="flex flex-col gap-2 border-t border-hairline px-4 py-3">
+            <div className="flex flex-col gap-2 py-3 ps-4 pe-3">
               <dt className="font-medium">{t('practice.bars')}</dt>
               <dd>
                 <ol className="flex h-9 items-end gap-0.5">
@@ -160,7 +159,7 @@ function StepLink({ piece, step, pickup }: { piece: Piece; step: NextStep; picku
             speed,
           })
   return (
-    <div className="border-t border-hairline p-3">
+    <div className="p-3">
       <ButtonLink
         variant="outline"
         className="min-h-11 w-full"
