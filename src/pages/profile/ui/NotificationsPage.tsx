@@ -96,16 +96,19 @@ export function NotificationsPage() {
       />
       <div className="page-column flex flex-col gap-6">
         {notices.length === 0 ? (
-          <Said
-            icon={BellOff}
-            title={t('profile.notifications.emptyTitle')}
-            description={t('profile.notifications.empty')}
-            action={
-              <ButtonLink size="lg" render={<Link to="/practice" />}>
-                {t('profile.notifications.practiseNow')}
-              </ButtonLink>
-            }
-          />
+          // 8 under the bar on a phone, as Archive's and Trash's empty states
+          <div className="max-lg:-mt-4">
+            <Said
+              icon={BellOff}
+              title={t('profile.notifications.emptyTitle')}
+              description={t('profile.notifications.empty')}
+              action={
+                <ButtonLink size="lg" render={<Link to="/practice" />}>
+                  {t('profile.notifications.practiseNow')}
+                </ButtonLink>
+              }
+            />
+          </div>
         ) : (
           GROUPS.map((group) => {
             const shown = notices.filter((notice) => groupOf(notice, now) === group)
