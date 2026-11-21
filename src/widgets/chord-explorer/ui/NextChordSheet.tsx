@@ -144,7 +144,7 @@ export function NextChordSheet({
                       className="flex h-18 flex-col items-center justify-center gap-0.5 card text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       <span
-                        className={`font-display font-bold whitespace-nowrap ${way === 'diatonic' ? 'text-[1.375rem]' : 'text-xl'}`}
+                        className={`font-display font-bold whitespace-nowrap ${way === 'diatonic' ? 'text-2xl' : 'text-xl'}`}
                       >
                         {symbol}
                       </span>

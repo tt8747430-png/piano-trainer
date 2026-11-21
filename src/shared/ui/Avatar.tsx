@@ -17,9 +17,9 @@ const SIZE = {
   /** A row's: its tile's size. */
   row: 'size-13 text-2xl',
   /** The Profile's, at its top (HERO_P). */
-  hero: 'size-19 text-[2.125rem]',
+  hero: 'size-19 text-4xl',
   /** The Account's, at its top (ACC_IN's AVA 64). */
-  account: 'size-16 text-[1.75rem]',
+  account: 'size-16 text-3xl',
   /** The laptop Settings dialog's account row (LACCT's AVA 36). */
   nav: 'size-9 text-base',
 } as const

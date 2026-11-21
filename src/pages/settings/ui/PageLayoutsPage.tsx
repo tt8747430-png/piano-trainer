@@ -63,7 +63,7 @@ export function PageLayoutsPage() {
               <span className="shrink-0">{name}</span>
               <span
                 title={changes.map(said).join(', ')}
-                className="min-w-0 flex-1 truncate text-right text-[15px] text-muted-foreground"
+                className="min-w-0 flex-1 truncate text-right text-subhead text-muted-foreground"
               >
                 {changes.length === 0
                   ? t('layouts.asCame')

@@ -772,13 +772,13 @@ export function ChordPlayer({
                     onAll={() => setLibrary(true)}
                   />
                   {hand.draft ? (
-                    <span className="shrink-0 text-[13px] font-semibold text-honey-ink">
+                    <span className="shrink-0 text-footnote font-semibold text-honey-ink">
                       {t('chordPlayer.draft.label')}
                     </span>
                   ) : null}
                   {online.live ? (
                     <span
-                      className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-muted-foreground"
+                      className="inline-flex shrink-0 items-center gap-1.5 text-footnote font-semibold text-muted-foreground"
                       title={t('chordPlayer.online.liveLabel')}
                     >
                       <span

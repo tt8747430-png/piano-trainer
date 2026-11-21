@@ -186,7 +186,7 @@ export const ChordTile = memo(function ChordTile({
             : 'shadow-[0_0_0_1px_var(--color-border)]',
         )}
       >
-        <span className="max-w-full truncate text-[21px] leading-tight font-medium text-foreground lg:text-[28px]">
+        <span className="max-w-full truncate text-[21px] leading-tight font-medium text-foreground lg:text-3xl">
           <LeadSymbol text={boxName(chord, musicKey, names)} />
         </span>
         <span aria-hidden className="absolute inset-x-0 bottom-0 flex h-2.5">

@@ -50,7 +50,7 @@ export function KeyFifths({ value, kind }: { value: Key; kind: ScaleKind }) {
         className={cn(
           'relative grid place-items-center font-display text-foreground transition-colors duration-150 ease-out hover:bg-muted/50',
           size === 'major'
-            ? 'h-15 border-b border-border text-[1.375rem] font-bold'
+            ? 'h-15 border-b border-border text-2xl font-bold'
             : 'h-12 text-lg font-semibold',
           own && 'bg-primary/35 hover:bg-primary/35',
         )}

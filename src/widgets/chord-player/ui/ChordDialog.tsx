@@ -193,7 +193,7 @@ export function ChordDialog({
             </DialogRow>
           </div>
           <section className="flex flex-col gap-2">
-            <h3 className="px-1 font-sans text-[13px] font-semibold tracking-[.04em] text-muted-foreground uppercase">
+            <h3 className="px-1 font-sans text-footnote font-semibold tracking-[.04em] text-muted-foreground uppercase">
               {t('chordPlayer.chord.suggested')}
             </h3>
             <ul className="grid grid-cols-4 gap-2">
@@ -202,7 +202,7 @@ export function ChordDialog({
                   <button
                     type="button"
                     onClick={() => take(each)}
-                    className="h-11 min-w-0 flex-1 rounded-control bg-card text-[17px] font-medium shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out hover:bg-muted"
+                    className="h-11 min-w-0 flex-1 rounded-control bg-card text-lg font-medium shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out hover:bg-muted"
                   >
                     <LeadSymbol text={printedChord(each)} />
                   </button>
@@ -264,7 +264,7 @@ function SheetAct({
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 min-w-0 flex-[1_1_auto] items-center justify-center gap-2 rounded-control bg-muted px-3 text-[15px] font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:brightness-95"
+      className="flex h-11 min-w-0 flex-[1_1_auto] items-center justify-center gap-2 rounded-control bg-muted px-3 text-subhead font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:brightness-95"
     >
       {icon}
       <span className="truncate">{children}</span>

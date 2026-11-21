@@ -103,7 +103,7 @@ function ShareForm({ sheet, onDone }: { sheet: SavedChordSheet; onDone: () => vo
         />
       ) : (
         <div className="flex flex-col gap-4">
-          <p className="mx-1 text-pretty text-[15px] text-muted-foreground">
+          <p className="mx-1 text-pretty text-subhead text-muted-foreground">
             {t('chordPlayer.online.line')}
           </p>
           {theirs ? null : (

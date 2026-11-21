@@ -26,7 +26,7 @@ const VARIATIONS = [1, 2, 3, 4] as const
 
 /** One of the head's values (canvas 173): its fill 36 tall in a 44 target. */
 const PILL =
-  'relative flex h-9 min-w-0 shrink-0 items-center rounded-tile bg-muted px-3 text-[15px] whitespace-nowrap tabular-nums transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-1 before:content-[""] hover:brightness-95 focus-visible:outline-3 focus-visible:outline-ring'
+  'relative flex h-9 min-w-0 shrink-0 items-center rounded-tile bg-muted px-3 text-subhead whitespace-nowrap tabular-nums transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-1 before:content-[""] hover:brightness-95 focus-visible:outline-3 focus-visible:outline-ring'
 
 /**
  * A section of the chord sheet as Musicca's (canvas 173): its head (its name, opening its sheet;
@@ -178,7 +178,7 @@ export const SheetSection = memo(function SheetSection({
             marks: tag || t('chordPlayer.arranger.unset'),
           })}
           className={cn(
-            'relative -mt-1.5 h-[30px] max-w-full self-start truncate rounded-tile px-2.5 text-[13px] font-semibold shadow-[inset_0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-[7px] before:content-[""] hover:bg-muted',
+            'relative -mt-1.5 h-[30px] max-w-full self-start truncate rounded-tile px-2.5 text-footnote font-semibold shadow-[inset_0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-[7px] before:content-[""] hover:bg-muted',
             !tag && 'text-muted-foreground',
           )}
         >

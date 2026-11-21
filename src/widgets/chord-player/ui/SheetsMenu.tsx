@@ -63,7 +63,7 @@ export function SheetsMenu({
       }
       trigger={
         <>
-          <span className="min-w-0 truncate font-sans text-[22px] font-semibold">{name}</span>
+          <span className="min-w-0 truncate font-sans text-2xl font-semibold">{name}</span>
           <ChevronDown aria-hidden className="size-5 shrink-0 text-muted-foreground" />
         </>
       }

@@ -56,7 +56,7 @@ export function RoleTile({
         )}
       >
         {numeral ? (
-          <span className="max-w-full truncate font-display text-[1.625rem]/[normal] lg:text-[2.125rem]/[normal]">
+          <span className="max-w-full truncate font-display text-[1.625rem]/[normal] lg:text-4xl/[normal]">
             {printedSymbol(numeral)}
           </span>
         ) : null}
