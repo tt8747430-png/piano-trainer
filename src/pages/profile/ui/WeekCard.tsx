@@ -66,10 +66,11 @@ export function WeekCard() {
             <span className="absolute right-0 -bottom-1.5">0</span>
           </div>
           <div className="relative flex min-w-0 flex-1 flex-col gap-2">
-            {/* A week with no day practised says what fills it, over the flat days' plot. */}
+            {/* A week with no day practised says what fills it, centred on the flat days' plot. */}
             {played === 0 ? (
-              <p className="absolute inset-x-0 top-1 text-center text-sm text-pretty text-muted-foreground">
-                {t('profile.week.empty')}
+              <p className="absolute inset-x-0 top-0 z-1 grid h-(--chart-h) place-items-center text-center text-sm text-pretty text-muted-foreground">
+                {/* On the card's paper, so no grid line runs through its words. */}
+                <span className="bg-card px-2">{t('profile.week.empty')}</span>
               </p>
             ) : null}
             <ol className="relative flex h-(--chart-h) items-end gap-2 shadow-[inset_0_-1px_0_var(--color-border)]">
