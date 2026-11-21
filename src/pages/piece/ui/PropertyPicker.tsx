@@ -1,6 +1,6 @@
 import { useState, type ComponentProps, type ReactElement, type ReactNode } from 'react'
 import { useMediaQuery, LAPTOP } from '@/shared/lib'
-import { PanelPopover, RowTrigger, Sheet, SheetContent } from '@/shared/ui'
+import { PanelPopover, RowButton, Sheet, SheetContent } from '@/shared/ui'
 
 /** What an editor is given: how to close its picker, and the ref of the field it focuses as it opens. */
 export interface PickerTools {
@@ -73,7 +73,7 @@ export function PropertyRow({
   return (
     <Picker
       title={title}
-      trigger={(props) => <RowTrigger {...props} title={title} value={value || empty} />}
+      trigger={(props) => <RowButton opens trigger={props} title={title} value={value || empty} />}
     >
       {children}
     </Picker>

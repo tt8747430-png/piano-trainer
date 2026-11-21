@@ -8,7 +8,6 @@ import {
   ButtonLink,
   GroupRow,
   RowButton,
-  RowTrigger,
   say,
   SettingsGroup,
   type MenuAction,
@@ -274,7 +273,7 @@ export function DraftPublishing({
         <GroupRow label={t('publishPage.status')}>
           <span className="text-muted-foreground">{status}</span>
         </GroupRow>
-        <RowButton title={t('original.versions')} onClick={() => ask.setAsked('versions')} />
+        <RowButton opens title={t('original.versions')} onClick={() => ask.setAsked('versions')} />
       </SettingsGroup>
       {draft.drafted ? (
         <SettingsGroup flush>
@@ -323,10 +322,10 @@ export function DraftRows({
   return (
     <>
       {part === 'versions' ? (
-        <RowTrigger title={t('original.versions')} onClick={() => ask.setAsked('versions')} />
+        <RowButton opens title={t('original.versions')} onClick={() => ask.setAsked('versions')} />
       ) : (
         <>
-          <RowTrigger title={t('original.publishMore')} onClick={toPublish.open} />
+          <RowButton opens title={t('original.publishMore')} onClick={toPublish.open} />
           <RowButton
             title={t('original.discard')}
             destructive

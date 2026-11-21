@@ -1,4 +1,4 @@
-import { useId, type Ref } from 'react'
+import { useId, type ComponentProps, type Ref } from 'react'
 import { cn } from '@/shared/lib'
 import { OpensMark } from './NavMarks'
 import { RowFace, type RowFaceProps } from './RowFace'
@@ -18,16 +18,19 @@ export function RowButton({
   current = false,
   destructive = false,
   opens = false,
+  trigger,
   ref,
   ...face
 }: RowFaceProps & {
-  onClick: () => void
+  onClick?: () => void
   disabled?: boolean
   reason?: string | undefined
   current?: boolean
   destructive?: boolean
-  /** It opens a sheet of its own choices (Count-in › 1 bar): a chevron at its end, as a link row's. */
+  /** It opens a sheet or popover of its own choices (Count-in › 1 bar): a chevron at its end, as a link row's. */
   opens?: boolean
+  /** The props a picker gives its trigger (a popover on a laptop, a sheet on a phone), so it opens by the row. */
+  trigger?: ComponentProps<'button'>
   ref?: Ref<HTMLButtonElement>
 }) {
   const id = useId()
@@ -36,7 +39,8 @@ export function RowButton({
     <button
       ref={ref}
       type="button"
-      onClick={onClick}
+      {...trigger}
+      {...(onClick ? { onClick } : {})}
       disabled={disabled}
       title={why}
       aria-describedby={why ? id : undefined}
@@ -46,6 +50,7 @@ export function RowButton({
         'w-full text-left disabled:opacity-50 disabled:hover:bg-transparent aria-[current=true]:bg-muted',
         destructive &&
           'text-destructive [&_[data-slot=row-tile]]:bg-destructive/10 [&_[data-slot=row-tile]]:text-destructive',
+        trigger?.className,
       )}
     >
       <RowFace {...face} end={opens ? <OpensMark /> : undefined} />

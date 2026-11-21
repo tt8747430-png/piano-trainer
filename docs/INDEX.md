@@ -118,7 +118,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `NotePicker` | `src/shared/ui/pickers/NotePicker.tsx` | A root as it is written (Chords' root, a scale's, a walk's): | 7 |
 | `NotFound` | `src/shared/ui/NotFound.tsx` | A page that is not there, or no longer (deleted in another tab): | 11 |
 | `Notice` | `src/shared/ui/Notice.tsx` | A notice floating over the screen, as the app says a save went wrong (an alert), as the AppLayers board's Storage full: | 7 |
-| `OpensMark` | `src/shared/ui/NavMarks.tsx` | The navigation marks (R23), drawn here alone so every one is the same size, stroke and muted ink on the same right edge: | 23 |
+| `OpensMark` | `src/shared/ui/NavMarks.tsx` | The navigation marks (R23), drawn here alone so every one is the same size, stroke and muted ink on the same right edge: | 22 |
 | `PAGE_PICTURES` | `src/shared/ui/page-pictures.ts` | The pictures Practice's rows and cards wear (the canvas's `pic`): | 2 |
 | `PAGE_TILES` | `src/shared/ui/page-tiles.ts` | The tile each page wears on every row that leads to it, so a lesson's link, the Player's Setup, Practice's own lists and Search show a page alike. | 6 |
 | `PageCanvas` | `src/shared/ui/PageCanvas.tsx` | Pages floating on a canvas (ADR 0096), as a notation app's page view: | 3 |
@@ -161,18 +161,17 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `RouteState` | `src/shared/ui/RouteState.tsx` | A screen that cannot show what it was opened for (the canvas's route states, `r52_global.py`): | 3 |
 | `ROW_BODY` | `src/shared/ui/library-row-class.ts` | The row's own part: | 5 |
 | `ROW_CARD` | `src/shared/ui/library-row-class.ts` | The row's card. | 1 |
-| `ROW_CLASS` | `src/shared/ui/row-class.ts` | A list row's look, a link's or a button's alike (`RowLink`, `RowButton`), as the board's GROUP rows: | 8 |
+| `ROW_CLASS` | `src/shared/ui/row-class.ts` | A list row's look, a link's or a button's alike (`RowLink`, `RowButton`), as the board's GROUP rows: | 7 |
 | `ROW_CONTROL` | `src/shared/ui/library-row-class.ts` | A control at its end (More) or its start (the handle, the check): | 3 |
 | `ROW_FLAT` | `src/shared/ui/library-row-class.ts` | A row of a grouped list (canvas 133: | 5 |
 | `ROW_LIBRARY_FACE` | `src/shared/ui/library-row-class.ts` | A library row's face (canvas 133): | 5 |
 | `RowAction` | `src/shared/ui/row-actions.ts` | One of a row's actions: | 8 |
 | `RowButton` | `src/shared/ui/RowButton.tsx` | A list row that acts in place, over its page (a chord's sheet, a lesson played in the Player): | 21 |
 | `RowCheck` | `src/shared/ui/RowCheck.tsx` | A list row that is on or off (a song ticked to move into a folder, Apple Music's Add Music): | 2 |
-| `RowFace` | `src/shared/ui/RowFace.tsx` | What a list row shows (`RowLink`, `RowButton`): | 12 |
+| `RowFace` | `src/shared/ui/RowFace.tsx` | What a list row shows (`RowLink`, `RowButton`): | 11 |
 | `RowGroup` | `src/shared/ui/RowGroup.tsx` | A titled group of rows in one card (a grouped list, as Settings' and Practice's), in as many columns as the width holds: | 3 |
 | `RowLink` | `src/shared/ui/RowLink.tsx` | A list row that leads to a page: | 34 |
 | `RowsLoading` | `src/shared/ui/RowsLoading.tsx` | A list of rows being read, drawn as their outlines (one 64 card a row, 8 apart), pulsing where motion is allowed and named once for a screen reader. | 7 |
-| `RowTrigger` | `src/shared/ui/RowTrigger.tsx` | A list row that opens a picker over its page (a popover on a laptop, a sheet on a phone): | 3 |
 | `Said` | `src/shared/ui/Said.tsx` | A state with nothing to list, the kit's one empty state (the canvas's EMPTY, r53): | 39 |
 | `say` | `src/shared/ui/say.ts` | Says what was just done in a toast (Mindscape's, ADR 0106: | 124 |
 | `sayUndo` | `src/shared/ui/say.ts` | Says what was just done, with Undo, the one word every such toast carries, taking it back. | 23 |

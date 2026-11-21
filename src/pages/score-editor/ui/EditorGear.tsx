@@ -11,15 +11,7 @@ import { SongExportSheet } from '@/features/song-files'
 import { useKeyName } from '@/shared/i18n'
 import { hasFinePointer, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
-import {
-  BackButton,
-  RowButton,
-  RowLink,
-  RowTrigger,
-  SettingsGroup,
-  Sheet,
-  SheetContent,
-} from '@/shared/ui'
+import { BackButton, RowButton, RowLink, SettingsGroup, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { PRINTED_PARTS, SheetLayoutTools, SheetViewFields } from '@/widgets/score-view-menu'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -141,18 +133,21 @@ function MainPage({
     <div className="flex flex-col gap-5">
       <SettingsGroup flush>
         {example ? null : (
-          <RowTrigger
+          <RowButton
+            opens
             title={t('scoreSettings.pages.credits')}
             value={meta.title}
             onClick={() => view.setGear('credits')}
           />
         )}
-        <RowTrigger
+        <RowButton
+          opens
           title={t('scoreSettings.acts.view')}
           value={t(`music:sheet.layout.${layout}`)}
           onClick={() => view.setGear('view')}
         />
-        <RowTrigger
+        <RowButton
+          opens
           title={t('scoreSettings.acts.transpose')}
           value={keyName(key)}
           onClick={() => view.setGear('transpose')}
@@ -160,7 +155,8 @@ function MainPage({
         {example ? null : (
           <>
             {count > 0 ? (
-              <RowTrigger
+              <RowButton
+                opens
                 title={t('scoreSettings.acts.takes')}
                 value={String(count)}
                 onClick={() => {
@@ -175,20 +171,24 @@ function MainPage({
       </SettingsGroup>
       {example ? null : (
         <SettingsGroup flush>
-          <RowTrigger
+          <RowButton
+            opens
             title={t('scoreSettings.pages.instruments')}
             value={String(staffCount)}
             onClick={() => view.setGear('instruments')}
           />
-          <RowTrigger
+          <RowButton
+            opens
             title={t('scoreSettings.pages.layout')}
             onClick={() => view.setGear('layout')}
           />
-          <RowTrigger
+          <RowButton
+            opens
             title={t('scoreSettings.pages.input')}
             onClick={() => view.setGear('input')}
           />
-          <RowTrigger
+          <RowButton
+            opens
             title={t('scoreSettings.pages.recording')}
             onClick={() => view.setGear('recording')}
           />
@@ -200,7 +200,8 @@ function MainPage({
           />
           {/* Its shortcuts, where keys type them (F23, Flat's rail ending with Shortcuts). */}
           {hasFinePointer() ? (
-            <RowTrigger
+            <RowButton
+              opens
               title={t('common:shortcuts.title')}
               value="?"
               onClick={() => {
@@ -214,7 +215,8 @@ function MainPage({
       {example ? null : (
         <SettingsGroup flush>
           {own ? (
-            <RowTrigger
+            <RowButton
+              opens
               title={t('songs:export.action')}
               value={t('exportFormats')}
               onClick={onExport}
