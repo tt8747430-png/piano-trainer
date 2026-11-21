@@ -10,7 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
-- 2026-11-21 · (this commit) · the Player's Accompaniment card holds First chord’s inversion (Root · 1st · 2nd) and Voicing (Voice-led · Block) under Pattern, as a progression's; the app's Player reads First chord’s inversion too (was Inversion) · PlayerApp, PlayerDesk · v717
+- 2026-11-21 · (this commit) · the Player's Accompaniment card holds First chord’s inversion (Root · 1st · 2nd · 3rd) and Voicing (Voice-led · Block) under Pattern, as a progression's; the app's Player reads First chord’s inversion too (was Inversion) · PlayerApp, PlayerDesk · v718
 - 2026-11-21 · 9600181d · the Chord player's ··· gains Import chart…, before Export MIDI · ChordPlayer, ChordPlayerLaptop · v716
 - 2026-11-21 · 68a29427 · the Chord player's ··· gains Export MIDI and Export chart, after Share… · ChordPlayer, ChordPlayerLaptop · v716
 - 2026-11-20 · (this commit) · Written as reads Chords · Numerals · Nashville everywhere (a progression read Numerals first); the Chord player's Voicing reads Voice-led · Block as a progression's (was Smooth voice leading · Block chords) · Progression, ProgressionLaptop, ChordPlayer, ChordPlayerLaptop · v716
