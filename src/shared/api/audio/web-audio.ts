@@ -434,6 +434,16 @@ const browserPage: AudioPage = {
   },
 }
 
+/**
+ * The audio session as the app first sounds: playback, as a music app's, which plays through the
+ * phone's silent switch and is given back after a call (Safari's default for Web Audio is muted by
+ * the switch). Left alone while a microphone records, and before anything sounds, so the learner's
+ * other music plays on until they play something here.
+ */
+const playbackSession = () => {
+  if (navigator.audioSession?.type === 'auto') navigator.audioSession.type = 'playback'
+}
+
 /** How often, in milliseconds, the clock is watched while something sounds. */
 const WATCH_MS = 1000
 /**
@@ -569,6 +579,11 @@ export function createWebAudioOutput({
    * at the next start (an unlock, a key), never under a transport already counting on its clock.
    */
   let stalled = false
+  /**
+   * Whether the context has run. Before, any gesture resumes it, so the first sound is not late;
+   * after, only a sound does: a tap on a menu never takes the output back from another app.
+   */
+  let ran = false
   /** The clock at the last watch, and how many watches in a row it stood still. */
   let watched: { readonly audio: number; readonly page: number } | null = null
   let stillWatches = 0
@@ -610,6 +625,7 @@ export function createWebAudioOutput({
     context = undefined
     instruments = null
     stalled = false
+    ran = false
     watched = null
     stillWatches = 0
   }
@@ -659,6 +675,7 @@ export function createWebAudioOutput({
   }
   /** Looks now, and goes on watching while something sounds. */
   function wake() {
+    if (context?.state === 'running') ran = true
     look()
     if (!unwatch && context && busy()) unwatch = every(look, WATCH_MS)
   }
@@ -750,6 +767,7 @@ export function createWebAudioOutput({
     strike(key, gain, soft) {
       const audio = startContext()
       if (!audio) return
+      playbackSession()
       if (heldBack(audio)) void audio.resume().catch(none)
       // Under the soft pedal two thirds as loud and darker; every key as loud as the piano's Volume.
       const level = soft ? SOFT_GAIN : 1
@@ -776,7 +794,8 @@ export function createWebAudioOutput({
       const audio = startContext()
       // With no gesture behind it (a sound as a screen opens), resuming could only fail; a refusal
       // (iOS while a call holds the output) leaves it held, taken back at the next gesture or watch.
-      if (audio && heldBack(audio) && activated()) await audio.resume().catch(none)
+      if (audio && heldBack(audio) && activated() && (!ran || busy()))
+        await audio.resume().catch(none)
       // The light piano and the grand's middle are loaded as the audio opens, in the background.
       void instruments?.warm()
       // The recorded clicks and drums are in before the first beat, or given up on soon.
@@ -791,6 +810,7 @@ export function createWebAudioOutput({
         if (!activated()) return NOTHING_PLAYED
         void audio.resume().catch(none)
       }
+      playbackSession()
       const start = at ?? audio.currentTime + PLAY_DELAY
       // What the sounds strike is fetched as they are scheduled: in by the time they sound.
       instruments?.need(sounds)
@@ -832,7 +852,10 @@ export function createWebAudioOutput({
         : null
     },
     loadRecording: (src) => void fetchRecording(src),
-    playRecording: (src, play, volume) => recordings.play(src, play, volume),
+    playRecording(src, play, volume) {
+      playbackSession()
+      recordings.play(src, play, volume)
+    },
     now,
     // What is heard now, moved by how long before or after now the page's moment was.
     audioTimeAt: (pageTime) => {

@@ -21,6 +21,11 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
 - **Music keeps time in a hidden tab.** Everything that schedules sound ticks on `steadyTicker` (`shared/lib/ticker`),
   a timer in a Worker, which a hidden tab never slows: the adapter's lookahead, the Metronome, the Player's transport
   and the Chord player's engine. Where there are no workers (a test's document) it is the page's timer.
+- **The playback session, from the first sound.** As the app first sounds (a play, a key, a recording) the audio session
+  (`navigator.audioSession`, Safari) becomes playback, as a music app's: it plays through the phone's silent switch,
+  which mutes Safari's default for Web Audio. Before that, a gesture only readies the context; after the context has
+  run, a gesture resumes it only while something sounds, so a tap on a menu never takes the output back from another
+  app.
 - **The microphone records only while it listens.** The Tuner's microphone sets the audio session (`navigator.audioSession`,
   Safari) to play-and-record while any microphone is open and back to auto when the last closes, so the app's sound
   does not stay at the earpiece's level after the Tuner.
