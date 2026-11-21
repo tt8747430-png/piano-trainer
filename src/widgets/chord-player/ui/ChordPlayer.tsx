@@ -36,7 +36,10 @@ import {
   WIDE,
 } from '@/shared/lib'
 import {
+  readChart,
   sheetChart,
+  SECTION_KINDS,
+  type ReadChart,
   duplicateSection,
   duplicateChord,
   insertChord,
@@ -148,6 +151,8 @@ export interface ChordPlayerRoutes {
   openLine(numerals: readonly Numeral[], minor: boolean, name: string): void
   /** A song from the library put in hand, its sheet and tempo. */
   openSong(song: ChordSheetSong): void
+  /** A chart read from a file put in hand, under its title (else the file's name), at its tempo. */
+  openChart(chart: ReadChart, name: string): void
 }
 
 /** Every chord of the sheet as a numeral in its key, or null where one is not (the Player's line). */
@@ -388,6 +393,8 @@ export function ChordPlayer({
   const dialogChord = dialog ? chordAt(dialog.place) : undefined
 
   /** The sheet's column, measured: the laptop's dock floats centred over it. */
+  /** Import chart's file picker, the system's. */
+  const chartPicker = useRef<HTMLInputElement>(null)
   const column = useRef<HTMLDivElement>(null)
   /** What floats over the keys (the dock, the Genos strip): its height is `--over-foot`, which the
       chord sounding keeps clear of as the sheet follows it. */
@@ -598,6 +605,13 @@ export function ChordPlayer({
     },
     ...more,
     {
+      key: 'import-chart',
+      group: 'export',
+      unnamed: true,
+      label: t('chordPlayer.import.action'),
+      onSelect: () => chartPicker.current?.click(),
+    },
+    {
       key: 'export-midi',
       group: 'export',
       unnamed: true,
@@ -666,8 +680,33 @@ export function ChordPlayer({
     },
     { key: 'randomize', label: t('chordPlayer.randomize'), onSelect: randomize },
   ]
+  /** A chart file chosen: read, put in hand, or said to have no chords. */
+  const importChart = async (file: File) => {
+    const chart = readChart(
+      await file.text(),
+      (named) =>
+        SECTION_KINDS.find(
+          (kind) => t(`chordPlayer.sections.${kind}`).toLowerCase() === named.toLowerCase(),
+        ) ?? null,
+    )
+    if (!chart) return say(t('chordPlayer.import.failed', { name: file.name }))
+    routes.openChart(chart, chart.title ?? file.name.replace(/\.[^.]+$/, ''))
+  }
   return (
     <LayoutEditContext value={layoutEdit}>
+      <input
+        ref={chartPicker}
+        type="file"
+        accept=".txt,text/plain"
+        hidden
+        tabIndex={-1}
+        onChange={(event) => {
+          const [file] = event.target.files ?? []
+          // Cleared, so the same file chosen again is read again.
+          event.target.value = ''
+          if (file) void importChart(file)
+        }}
+      />
       <div className="flex flex-col gap-4">
         <ScreenHeader
           title={t('pages.chordPlayer')}

@@ -1039,6 +1039,7 @@ export const practice: LocaleResources['practice'] = {
     },
     randomize: 'Случайные аккорды',
     export: { midi: 'Экспорт в MIDI', chart: 'Экспорт аккордов' },
+    import: { action: 'Импорт аккордов…', failed: 'В файле {{name}} не нашлось аккордов' },
     randomized: 'Новые аккорды в {{key}}',
     transport: 'Плеер аккордов',
     play: 'Играть',

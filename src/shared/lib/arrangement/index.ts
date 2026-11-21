@@ -62,7 +62,7 @@ export {
   type Variation,
 } from './chord-sheet'
 export { mergeSheets, mergeSheetTexts } from './merge-sheets'
-export { sheetChart, sheetToText, textToSheet } from './chord-sheet-text'
+export { readChart, sheetChart, sheetToText, textToSheet, type ReadChart } from './chord-sheet-text'
 export {
   arrangeStyle,
   barSteps,

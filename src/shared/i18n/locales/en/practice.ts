@@ -1055,6 +1055,7 @@ export const practice = {
     },
     randomize: 'Randomize chords',
     export: { midi: 'Export MIDI', chart: 'Export chart' },
+    import: { action: 'Import chart…', failed: 'No chords could be read from {{name}}' },
     randomized: 'New chords in {{key}}',
     transport: 'Chord player',
     play: 'Play',

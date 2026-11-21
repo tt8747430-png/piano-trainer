@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-21 · (this commit) · the Chord player's ··· gains Import chart…, before Export MIDI · ChordPlayer, ChordPlayerLaptop · pending
 - 2026-11-21 · 68a29427 · the Chord player's ··· gains Export MIDI and Export chart, after Share… · ChordPlayer, ChordPlayerLaptop · pending
 - 2026-11-20 · (this commit) · Written as reads Chords · Numerals · Nashville everywhere (a progression read Numerals first); the Chord player's Voicing reads Voice-led · Block as a progression's (was Smooth voice leading · Block chords) · Progression, ProgressionLaptop, ChordPlayer, ChordPlayerLaptop · pending
 

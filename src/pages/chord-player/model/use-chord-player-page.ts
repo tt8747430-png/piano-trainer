@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   selectSaved,
+  SHEET_TEMPO,
   selectScratchName,
   useChordSheets,
   useChordSheetsStoreApi,
@@ -110,6 +111,21 @@ export function useChordPlayerPage() {
         hand.sheet.meter,
       )
       hold({ ...hand.entry, text: sheetToText(sheet) }, said)
+    },
+    openChart(chart, named) {
+      if (!hand) return
+      hold(
+        {
+          ...hand.entry,
+          text: sheetToText(chart.sheet),
+          draft: null,
+          tempo: Math.min(
+            SHEET_TEMPO.max,
+            Math.max(SHEET_TEMPO.min, chart.tempo ?? hand.entry.tempo),
+          ),
+        },
+        named,
+      )
     },
     openSong(song) {
       if (!hand) return

@@ -73,6 +73,80 @@ export function sheetChart(
   return [heading.title, head, ...sections].join('\n\n') + '\n'
 }
 
+/** A chart's line of key, time and tempo: `F · 4/4 · 130 BPM`, the tempo optional. */
+const CHART_HEAD = /^(\S+)\s*·\s*(\d+\/\d+)(?:\s*·\s*(\d+)\s*BPM)?$/i
+/** A section's times through after its name: `×2` or `x2`. */
+const CHART_TIMES = /\s*[×x]\s*(\d+)$/i
+
+/** A chart read: its sheet, and the title and tempo it gives where it gives them. */
+export interface ReadChart {
+  readonly sheet: ChordSheet
+  readonly title: string | null
+  readonly tempo: number | null
+}
+
+/**
+ * A chart as text read back (`sheetChart`'s, or the one line `sheetToText` writes): its title, the key,
+ * time and tempo, each section under its name (`sectionKind` reads the names in the learner's language;
+ * the kinds' own names read too, an unknown name is a Verse), its bars between bar lines. Null where no
+ * chord reads.
+ */
+export function readChart(
+  text: string,
+  sectionKind: (name: string) => SectionKind | null,
+): ReadChart | null {
+  // A chart prints ♭ and ♯; a sheet keeps b and #, as typed.
+  const plain = text.replaceAll('♭', 'b').replaceAll('♯', '#')
+  const line = plain.trim()
+  if (!line.includes('\n') && line.includes(';')) {
+    const sheet = textToSheet(line)
+    return sheet ? { sheet, title: null, tempo: null } : null
+  }
+  let title: string | null = null
+  let head: { key: string; meter: string; tempo: number | null } | null = null
+  const sections: { kind: SectionKind; repeats: number; bars: string[] }[] = []
+  for (const raw of plain.split(/\r?\n/)) {
+    const each = raw.trim()
+    if (each === '') continue
+    const said = CHART_HEAD.exec(each)
+    if (said && !head) {
+      head = {
+        key: said[1] ?? 'C',
+        meter: said[2] ?? '4/4',
+        tempo: said[3] ? Number(said[3]) : null,
+      }
+    } else if (each.startsWith('|')) {
+      if (sections.length === 0) sections.push({ kind: 'verse', repeats: 1, bars: [] })
+      sections.at(-1)?.bars.push(
+        ...each
+          .split('|')
+          .map((bar) => bar.trim())
+          .filter(Boolean),
+      )
+    } else if (!head && title === null && sections.length === 0) {
+      title = each
+    } else {
+      const times = CHART_TIMES.exec(each)
+      const name = times ? each.slice(0, times.index).trim() : each
+      sections.push({
+        kind:
+          sectionKind(name) ?? KINDS.get(name.toLowerCase().replaceAll(/[\s-]/g, '')) ?? 'verse',
+        repeats: times ? Number(times[1]) : 1,
+        bars: [],
+      })
+    }
+  }
+  const written = sections
+    .filter((section) => section.bars.length > 0)
+    .map(
+      (section) =>
+        `${section.kind}${section.repeats === 1 ? '' : ` x${section.repeats}`}: ${section.bars.join(' | ')}`,
+    )
+  if (written.length === 0) return null
+  const sheet = textToSheet([`${head?.key ?? 'C'} ${head?.meter ?? '4/4'}`, ...written].join('; '))
+  return sheet ? { sheet, title, tempo: head?.tempo ?? null } : null
+}
+
 /** A section's arranger marks as head words: none for what is unset. */
 function marksText(marks: SheetSection['marks']): string[] {
   const mains = marks.mains.map((main) => main ?? '-').join('')

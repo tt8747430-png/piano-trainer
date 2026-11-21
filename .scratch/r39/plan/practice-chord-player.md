@@ -28,7 +28,8 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
   - **The last sheet opens:** the Chord player opens on the sheet last open; its name is a menu of the recent sheets
     (the open one checked), New sheet and All chord sheets.
   - **Export** (owner, 2026-11-21: "make me export"): ··· holds Export MIDI (the band once through, a track a part)
-    and Export chart (the chart as text), after Share…. A song or progression put in hand keeps its name, so the last
+    and Export chart (the chart as text), after Share…; Import chart… before them reads such a chart back
+    (owner, 2026-11-21: "and import"). A song or progression put in hand keeps its name, so the last
     sheet reopens by its name (owner, 2026-11-21: "that it opens in the last opened").
   - **Settings by how often wanted:** Sound (Piano, Bass, Drums, Volume), Playing (Count-in, Voicing), Chart (Time
     signature, Written as), MIDI (Connect a piano, Follow a MIDI arranger, Arranger), Layout (Edit layout, Reset
