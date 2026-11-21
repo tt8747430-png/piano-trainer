@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
+
 import { useTranslation } from 'react-i18next'
 import {
   BluetoothPairing,
@@ -9,7 +9,7 @@ import {
   useMidiLog,
 } from '@/features/connect-midi'
 import { selectMidi, useSettings } from '@/entities/settings'
-import { SettingsGroup } from '@/shared/ui'
+import { OpensMark, SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /** A row that opens a page under this one (the board's link row): its name, its value, a chevron. */
@@ -31,7 +31,7 @@ function GroupLink({
       <span className="min-w-0 flex-1 truncate text-end text-muted-foreground tabular-nums">
         {value}
       </span>
-      <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+      <OpensMark />
     </Link>
   )
 }

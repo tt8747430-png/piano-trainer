@@ -31,7 +31,7 @@ export function Said({
 }) {
   return (
     <div className="flex flex-col items-center gap-2 px-5 py-14 text-center">
-      <span className="flex size-18 items-center justify-center rounded-[18px] bg-paint-yellow text-foreground">
+      <span className="flex size-18 items-center justify-center rounded-card bg-paint-yellow text-foreground">
         <Icon aria-hidden className="size-6.5" />
       </span>
       {/* A long query breaks rather than run off the screen. */}

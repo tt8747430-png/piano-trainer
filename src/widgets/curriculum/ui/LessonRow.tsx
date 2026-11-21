@@ -52,7 +52,7 @@ export function LessonRow({
           aria-hidden
           className={cn(
             'relative z-1 grid size-11 shrink-0 place-items-center font-sans text-subhead font-bold [&_svg]:size-5',
-            square ? 'rounded-[11px]' : 'rounded-pill',
+            square ? 'rounded-thumb' : 'rounded-pill',
             done
               ? cn(PAINT.grass.fill, PAINT.grass.ink)
               : current

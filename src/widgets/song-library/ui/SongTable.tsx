@@ -46,7 +46,7 @@ function SongTableRow({
             aria-checked={select.chosen(entry.id)}
             aria-label={face.title}
             onClick={() => select.toggle(entry.id)}
-            className="flex min-h-10 w-full min-w-0 items-center gap-4 rounded-control text-left text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none [&_[data-slot=row-tile]]:size-10 [&_[data-slot=row-tile]]:rounded-[9px]"
+            className="flex min-h-10 w-full min-w-0 items-center gap-4 rounded-control text-left text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none [&_[data-slot=row-tile]]:size-10 [&_[data-slot=row-tile]]:rounded-thumb"
           >
             <CheckMark checked={select.chosen(entry.id)} />
             <PieceMark entry={entry} />
@@ -55,7 +55,7 @@ function SongTableRow({
         ) : (
           <PieceLink
             entry={entry}
-            className="flex min-h-10 min-w-0 items-center gap-4 rounded-control text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none [&_[data-slot=row-tile]]:size-10 [&_[data-slot=row-tile]]:rounded-[9px]"
+            className="flex min-h-10 min-w-0 items-center gap-4 rounded-control text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none [&_[data-slot=row-tile]]:size-10 [&_[data-slot=row-tile]]:rounded-thumb"
           >
             <PieceMark entry={entry} />
             <span className="truncate text-subhead/[normal] font-semibold">{face.title}</span>

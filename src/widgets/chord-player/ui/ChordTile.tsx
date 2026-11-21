@@ -34,7 +34,7 @@ export function ChordFace({
   names: ProgressionNames
 }) {
   return (
-    <span className="grid min-h-[60px] min-w-16 place-items-start rounded-[6px] bg-card px-2 pt-1 text-[21px] font-medium whitespace-nowrap text-foreground elevation-3">
+    <span className="grid min-h-[60px] min-w-16 place-items-start rounded-tile bg-card px-2 pt-1 text-[21px] font-medium whitespace-nowrap text-foreground elevation-3">
       <LeadSymbol text={boxName(chord, musicKey, names)} />
     </span>
   )
@@ -179,14 +179,14 @@ export const ChordTile = memo(function ChordTile({
         onClick={onTap}
         onKeyDown={onKeyDown}
         className={cn(
-          'relative flex h-[60px] min-w-0 flex-1 scroll-mt-[calc(env(safe-area-inset-top)+5rem)] scroll-mb-[calc(var(--nav-bar)+var(--docked,0px)+var(--over-foot,0px)+1.5rem)] cursor-grab touch-manipulation items-start overflow-hidden rounded-[6px] px-2 pt-1 select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing lg:h-[76px]',
+          'relative flex h-[60px] min-w-0 flex-1 scroll-mt-[calc(env(safe-area-inset-top)+5rem)] scroll-mb-[calc(var(--nav-bar)+var(--docked,0px)+var(--over-foot,0px)+1.5rem)] cursor-grab touch-manipulation items-start overflow-hidden rounded-tile px-2 pt-1 select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing lg:h-[76px]',
           lit ? 'bg-primary/35' : 'bg-card',
           lit || selected
             ? 'shadow-[0_0_0_2px_var(--color-honey-ring)]'
             : 'shadow-[0_0_0_1px_var(--color-border)]',
         )}
       >
-        <span className="max-w-full truncate text-[21px] leading-[1.25] font-medium text-foreground lg:text-[28px]">
+        <span className="max-w-full truncate text-[21px] leading-tight font-medium text-foreground lg:text-[28px]">
           <LeadSymbol text={boxName(chord, musicKey, names)} />
         </span>
         <span aria-hidden className="absolute inset-x-0 bottom-0 flex h-2.5">

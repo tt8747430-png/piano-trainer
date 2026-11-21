@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
+
 import { useTranslation } from 'react-i18next'
 import { APP_BUILD, APP_VERSION } from '@/shared/config'
-import { SettingsGroup } from '@/shared/ui'
+import { OpensMark, SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /** What the app is made with, each under its own licence (R29 B9): who made it and where it is from. */
@@ -38,7 +38,7 @@ function GroupLink({ title, to }: { title: string; to: '/legal/privacy' | '/lega
       className="flex min-h-13 items-center gap-3 px-4 py-2 transition-colors hover:bg-foreground/[0.04]"
     >
       <span className="flex-1">{title}</span>
-      <ChevronRight aria-hidden className="size-5 text-muted-foreground" />
+      <OpensMark />
     </Link>
   )
 }

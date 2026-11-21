@@ -58,7 +58,7 @@ export function RouteState({
       >
         <span
           aria-hidden
-          className="flex size-18 items-center justify-center rounded-[18px] bg-paint-yellow text-foreground"
+          className="flex size-18 items-center justify-center rounded-card bg-paint-yellow text-foreground"
         >
           {glyph}
         </span>

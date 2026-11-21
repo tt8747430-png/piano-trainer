@@ -57,7 +57,7 @@ export function LayoutZones() {
       ))}
       <div
         role="status"
-        className="absolute top-[calc(var(--screen-bar,0px)-0.5rem)] left-1/2 flex h-9 -translate-x-1/2 items-center rounded-[18px] bg-foreground px-3.5 text-sm font-semibold whitespace-nowrap text-background"
+        className="absolute top-[calc(var(--screen-bar,0px)-0.5rem)] left-1/2 flex h-9 -translate-x-1/2 items-center rounded-pill bg-foreground px-3.5 text-sm font-semibold whitespace-nowrap text-background"
       >
         {t('chordPlayer.layout.tapWhere', { name })}
       </div>

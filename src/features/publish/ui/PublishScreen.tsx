@@ -76,7 +76,7 @@ function Tile({ id, kind, size }: { id: string; kind: PublicKind; size: 'head' |
       aria-hidden
       className={cn(
         'flex shrink-0 items-center justify-center',
-        size === 'head' ? 'size-16 rounded-2xl' : 'size-18 rounded-[18px]',
+        size === 'head' ? 'size-16 rounded-2xl' : 'size-18 rounded-card',
         paint.fill,
         paint.ink,
       )}

@@ -2,9 +2,10 @@ import { Radio } from '@base-ui/react/radio'
 import { RadioGroup } from '@base-ui/react/radio-group'
 import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
-import { Check, ChevronRight } from 'lucide-react'
+import { Check } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
+import { OpensMark } from './NavMarks'
 import type { OptionValue } from './option'
 import { Segmented } from './Segmented'
 import { SwitchRow } from './SwitchRow'
@@ -164,7 +165,7 @@ export function GroupLink({
                 {value}
               </span>
             )}
-            <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+            <OpensMark />
           </>
         ),
       },

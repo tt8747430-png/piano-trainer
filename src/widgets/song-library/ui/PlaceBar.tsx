@@ -42,7 +42,7 @@ export function PlaceBar({
           {title}
         </h1>
         {count ? (
-          <span className="shrink-0 text-[1.0625rem] whitespace-nowrap text-muted-foreground tabular-nums">
+          <span className="shrink-0 text-lg whitespace-nowrap text-muted-foreground tabular-nums">
             {count}
           </span>
         ) : null}

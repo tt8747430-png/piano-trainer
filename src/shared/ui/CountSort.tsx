@@ -45,7 +45,7 @@ export function SortMenu<Sort extends string, Way extends string = never>({
       <DropdownMenuTrigger
         aria-label={`${label}: ${current?.label ?? ''}`}
         className={cn(
-          'flex min-h-11 items-center font-semibold focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
+          'flex min-h-11 items-center font-semibold',
           field
             ? 'h-full gap-1 rounded-pill px-3 text-sm text-foreground hover:bg-(--hairline)'
             : 'rounded-control text-link',
@@ -110,9 +110,7 @@ export function CountSort<Sort extends string, Way extends string = never>({
 }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <span className="text-subhead font-semibold text-muted-foreground tabular-nums">
-        {count}
-      </span>
+      <span className="text-subhead font-semibold text-muted-foreground tabular-nums">{count}</span>
       <SortMenu {...sort} />
     </div>
   )

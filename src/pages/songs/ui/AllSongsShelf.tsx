@@ -28,7 +28,7 @@ export function AllSongsShelf({ songs }: { songs: readonly Entry[] }) {
       <SectionHead id="songs-all" title={t('all.title')}>
         <SeeAll label={t('all.seeAll')} render={<Link to="/songs/all" />} />
       </SectionHead>
-      <ul className="-mx-gutter -mt-1 flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pt-1 pb-0.5 [scrollbar-width:none]">
+      <ul className="-mx-gutter -mt-1 flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pt-1 pb-0.5 scrollbar-none">
         {songs.slice(0, SHOWN).map((entry) => {
           const play = plays[entry.id]
           const done = isLearned(learned, pieceStepId(entry.id))
@@ -40,7 +40,7 @@ export function AllSongsShelf({ songs }: { songs: readonly Entry[] }) {
                 className="flex flex-col gap-2 rounded-thumb text-foreground focus-visible:outline-offset-2"
               >
                 <PieceShelfCover entry={entry} />
-                <span className="line-clamp-2 text-subhead leading-[1.25] font-semibold">
+                <span className="line-clamp-2 text-subhead leading-tight font-semibold">
                   {entryTitles(entry, locale).primary}
                 </span>
                 {partway ? (

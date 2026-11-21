@@ -1,5 +1,5 @@
 import { useRouter } from '@tanstack/react-router'
-import { ChevronRight, Search, X } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import {
   useDeferredValue,
   useId,
@@ -19,7 +19,8 @@ import { stepLink } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn, LAPTOP, useMediaQuery, type Up } from '@/shared/lib'
 import { printedSymbol } from '@/shared/lib/music'
-import { LessonIcon, PAGE_TILES, Said, Sheet, SheetContent, TileMark } from '@/shared/ui'
+import { LessonIcon, OpensMark, PAGE_TILES, Said, Sheet, SheetContent, TileMark } from '@/shared/ui'
+import { Kbd } from '@/shared/ui/primitives/kbd'
 import {
   Dialog,
   DialogContent,
@@ -330,15 +331,6 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
   )
 }
 
-/** A key the palette answers to, as the board's footer draws it. */
-function Kbd({ children }: { children: ReactNode }) {
-  return (
-    <kbd className="grid h-6 min-w-6 place-items-center rounded-md bg-muted px-1.5 font-sans text-xs font-semibold text-foreground shadow-[inset_0_-1px_0_var(--color-border)]">
-      {children}
-    </kbd>
-  )
-}
-
 /** A group's name over its card, in small capitals as every group's in the app. */
 function Caps({ id, children }: { id?: string; children: ReactNode }) {
   return (
@@ -411,7 +403,7 @@ function PaletteSection({
                 {t('archived')}
               </span>
             ) : null}
-            <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+            <OpensMark />
           </div>
         ))}
       </div>

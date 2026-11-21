@@ -32,7 +32,7 @@ export function TempoSteps({
         aria-label={name}
         title={name}
         onClick={() => onStep(by)}
-        className="h-11 w-13 min-w-11 shrink rounded-pill bg-muted text-subhead font-semibold tabular-nums transition-colors hover:bg-muted-foreground/15 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+        className="h-11 w-13 min-w-11 shrink rounded-pill bg-muted text-subhead font-semibold tabular-nums transition-colors hover:bg-muted-foreground/15"
       >
         {by < 0 ? `−${-by}` : `+${by}`}
       </button>

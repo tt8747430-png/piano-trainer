@@ -81,7 +81,7 @@ export function AccountCardFace({
           <span
             className={cn(
               'truncate',
-              plain ? 'text-subhead font-semibold' : 'text-[1.0625rem] font-bold',
+              plain ? 'text-subhead font-semibold' : 'text-lg font-bold',
               !account && !plain && 'text-link',
             )}
           >

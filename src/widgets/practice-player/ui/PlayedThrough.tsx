@@ -158,7 +158,7 @@ export function PlayedThrough({
                       <span
                         key={k}
                         className={cn(
-                          'h-3 rounded-[3px]',
+                          'h-3 rounded-mark',
                           SLIP_PAINT[Math.min(count, SLIP_PAINT.length - 1)],
                         )}
                       />

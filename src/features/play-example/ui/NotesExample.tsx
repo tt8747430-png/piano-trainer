@@ -73,7 +73,7 @@ export function NotesExample({
   return (
     <figure ref={space} className="mt-2 flex w-full flex-col gap-1">
       <div className="flex min-h-11 items-center gap-2">
-        <figcaption className="flex-1 text-[1.0625rem] font-bold">{letters}</figcaption>
+        <figcaption className="flex-1 text-lg font-bold">{letters}</figcaption>
         <PlayButton
           label={t('play')}
           playing={playback.playing === 'line'}

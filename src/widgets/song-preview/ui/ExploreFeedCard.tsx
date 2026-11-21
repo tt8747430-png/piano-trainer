@@ -82,7 +82,7 @@ export function ExploreFeedCard({ entry, table = false }: { entry: PublicEntry; 
           {link(
             'gap-3.5 rounded-control',
             <>
-              <PublicCover entry={entry} tile cell className="w-10 shrink-0 rounded-[9px]" />
+              <PublicCover entry={entry} tile cell className="w-10 shrink-0 rounded-thumb" />
               <span className="truncate text-subhead font-semibold">{entry.title}</span>
             </>,
           )}
@@ -109,10 +109,7 @@ export function ExploreFeedCard({ entry, table = false }: { entry: PublicEntry; 
           <Avatar name={entry.authorName || null} picture={entry.authorAvatar} size="feed" />
           <span className="min-w-0 truncate">{author}</span>
         </span>
-        <span
-          role="cell"
-          className="flex items-center gap-1.5 text-subhead text-muted-foreground"
-        >
+        <span role="cell" className="flex items-center gap-1.5 text-subhead text-muted-foreground">
           {saves}
         </span>
         <span role="cell" className="flex justify-end">

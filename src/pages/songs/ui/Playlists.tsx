@@ -1,11 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FOLDER_PAINTS, useFolderName, useLibrary, type ShelvedFolder } from '@/entities/library'
 import { useRepertoire, type Entry, type PieceId } from '@/entities/piece'
 import { readSharedEntries, useGroupsData } from '@/features/share-folder'
 import { cn, isOneOf } from '@/shared/lib'
+import { OpensMark } from '@/shared/ui'
 import { PlaylistCover } from '@/widgets/piece-cover'
 import { useHoldsLine, type FolderHolds } from '@/widgets/song-library'
 import type { LibraryPage } from '../model/use-library-page'
@@ -28,7 +28,7 @@ function Face({ cover, name, line }: { cover: ReactNode; name: string; line: str
         <span className="truncate text-base/[normal] font-semibold">{name}</span>
         <span className="truncate text-sm/[normal] text-muted-foreground">{line}</span>
       </span>
-      <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+      <OpensMark />
     </>
   )
 }

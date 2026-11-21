@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight, SearchX, Users } from 'lucide-react'
+import { SearchX, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { PublicEntry } from '@/shared/api/public-library'
 import { matchesQuery } from '@/shared/lib'
-import { Avatar, Said } from '@/shared/ui'
+import { Avatar, OpensMark, Said } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** One person who publishes: their name, picture and how many songs Explore holds of theirs. */
@@ -67,12 +67,12 @@ export function ExplorePeople({
           >
             <Avatar name={person.name} picture={person.picture} size="person" />
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="truncate text-[1.0625rem] font-semibold">{person.name}</span>
+              <span className="truncate text-lg font-semibold">{person.name}</span>
               <span className="text-sm text-muted-foreground">
                 {t('explore.songCount', { count: person.songs })}
               </span>
             </span>
-            <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+            <OpensMark />
           </Link>
         </li>
       ))}

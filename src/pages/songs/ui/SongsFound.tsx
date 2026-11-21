@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight, Search, SearchX } from 'lucide-react'
+import { Search, SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName } from '@/entities/library'
 import { useSetSearch } from '@/shared/lib'
-import { Said, SectionHead } from '@/shared/ui'
+import { OpensMark, Said, SectionHead } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { FolderFace } from '@/widgets/song-library'
 import type { SongsHome } from '../model/explore-view'
@@ -74,7 +74,7 @@ export function SongsFound({
                   className={`${ROW} flex-1`}
                 >
                   <FolderFace folder={folder} holds={holds} />
-                  <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+                  <OpensMark />
                 </Link>
               </li>
             ))}
@@ -92,7 +92,7 @@ export function SongsFound({
           <span className="min-w-0 flex-1 truncate text-base font-semibold">
             {t('found.searchExplore', { query })}
           </span>
-          <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+          <OpensMark />
         </button>
       </section>
     </div>

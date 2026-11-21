@@ -101,7 +101,7 @@ export function SongPlace({
             <span
               key={bar}
               className={cn(
-                'h-3.5 min-w-0 flex-1 rounded-[3px]',
+                'h-3.5 min-w-0 flex-1 rounded-mark',
                 goesOn && bar === Math.max(play.at, first)
                   ? 'bg-card shadow-[inset_0_0_0_2px_var(--color-played)]'
                   : played.has(bar)

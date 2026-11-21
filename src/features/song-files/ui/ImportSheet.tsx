@@ -78,7 +78,7 @@ export function ImportSheet({
             <span className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-paint-yellow text-foreground">
               <Music aria-hidden className="size-6" />
             </span>
-            <span className="min-w-0 text-[1.0625rem] font-bold text-balance break-words">
+            <span className="min-w-0 text-lg font-bold text-balance break-words">
               {state.title}
             </span>
           </div>

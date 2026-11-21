@@ -37,7 +37,7 @@ function EditMark({
       title={title}
       disabled={disabled}
       onClick={onClick}
-      className="grid size-11 flex-none place-items-center disabled:opacity-40"
+      className="grid size-11 flex-none place-items-center disabled:opacity-50"
     >
       <span
         aria-hidden

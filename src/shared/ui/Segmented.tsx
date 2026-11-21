@@ -50,7 +50,7 @@ export function Segmented<V extends OptionValue>({
           ? 'grid grid-cols-6 *:col-span-2 *:nth-last-[-n+2]:col-span-3'
           : // Each as wide as its words at least, never wrapped, the room left shared (the canvas's SEG).
             'grid auto-cols-[minmax(max-content,1fr)] grid-flow-col',
-        compact ? 'rounded-pill' : 'rounded-[11px]',
+        compact ? 'rounded-pill' : 'rounded-thumb',
       )}
     >
       {options.map((option, index) => {
@@ -71,10 +71,10 @@ export function Segmented<V extends OptionValue>({
             className={cn(
               // Each 44 high, 9 round, 8 in, its word 14px and medium in ink; the chosen on the sheet,
               // semibold, under a hairline shadow.
-              'inline-flex min-h-11 min-w-11 flex-1 cursor-default flex-col items-center justify-center gap-1 px-2 py-1 text-center text-sm leading-tight font-medium whitespace-nowrap text-foreground select-none transition-colors duration-200 ease-out focus-visible:-outline-offset-3 data-checked:bg-card data-checked:font-semibold data-checked:shadow-[0_1px_2px_rgb(51_41_33/0.18),0_0_0_0.5px_rgb(51_41_33/0.08)] data-disabled:opacity-50',
+              'inline-flex min-h-11 min-w-11 flex-1 cursor-default flex-col items-center justify-center gap-1 px-2 py-1 text-center text-sm leading-tight font-medium whitespace-nowrap text-foreground select-none transition-colors duration-200 ease-out focus-visible:-outline-offset-3 data-checked:bg-card data-checked:font-semibold data-checked:elevation-thumb data-disabled:opacity-50',
               // Crowded on a phone's width: closer to the edges, to fit.
               crowded && 'max-sm:px-1',
-              compact ? 'rounded-pill' : 'rounded-[9px]',
+              compact ? 'rounded-pill' : 'rounded-thumb',
               compact &&
                 'relative min-h-8 py-0.5 text-sm whitespace-nowrap before:absolute before:-inset-y-1.5 before:inset-x-0 before:content-[""]',
             )}

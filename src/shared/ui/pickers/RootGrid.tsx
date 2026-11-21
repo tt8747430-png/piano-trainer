@@ -50,7 +50,7 @@ export function RootGrid({
             <Radio.Root
               key={printedNote(root)}
               value={printedNote(root)}
-              className="inline-flex h-11 min-w-0 cursor-default items-center justify-center rounded-[11px] text-lg font-medium text-foreground select-none focus-visible:-outline-offset-3 data-checked:bg-card data-checked:font-bold data-checked:shadow-[0_1px_3px_rgb(51_41_33/0.18),0_0_0_0.5px_rgb(51_41_33/0.12)]"
+              className="inline-flex h-11 min-w-0 cursor-default items-center justify-center rounded-thumb text-lg font-medium text-foreground select-none focus-visible:-outline-offset-3 data-checked:bg-card data-checked:font-bold data-checked:elevation-thumb"
             >
               {printedNote(root)}
             </Radio.Root>

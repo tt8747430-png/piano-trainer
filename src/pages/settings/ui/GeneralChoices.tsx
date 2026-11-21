@@ -80,7 +80,7 @@ export function AppearanceChoice({
             <span
               className={cn(
                 'flex-1 opacity-90',
-                row ? 'mx-1.75 mt-1.25 rounded-[5px]' : 'mx-2.5 mt-2 rounded-control',
+                row ? 'mx-1.75 mt-1.25 rounded-mark' : 'mx-2.5 mt-2 rounded-control',
                 CARD[option.value],
               )}
             />

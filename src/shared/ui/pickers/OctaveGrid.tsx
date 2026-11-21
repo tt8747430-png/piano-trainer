@@ -114,7 +114,7 @@ export function OctaveGrid({
                 data-half={half}
                 onClick={() => onChoose(spelled)}
                 className={cn(
-                  'flex min-w-0 flex-1 items-center justify-center font-semibold whitespace-nowrap transition-colors duration-150 outline-none select-none focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring',
+                  'flex min-w-0 flex-1 items-center justify-center font-semibold whitespace-nowrap transition-colors duration-150 select-none focus-visible:-outline-offset-3',
                   spellings.length > 1 ? 'text-sm' : 'text-base',
                   on
                     ? 'bg-selected text-selected-foreground'

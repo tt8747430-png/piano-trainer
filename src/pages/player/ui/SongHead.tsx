@@ -6,8 +6,7 @@ import { ActionMenu, RoundButton, TileMark, type MenuAction } from '@/shared/ui'
  * Share link and ··· as the PlayerApp board draws them: white circles on the sheet's paper, a 6% ring
  * and a 1px shade (by Night, the hairline alone).
  */
-const RAISED =
-  'bg-card shadow-[0_0_0_1px_rgb(26_22_18/0.06),0_1px_2px_rgb(26_22_18/0.08)] hover:bg-card dark:shadow-[0_0_0_1px_var(--color-border)]'
+const RAISED = 'bg-card elevation-thumb hover:bg-card dark:shadow-[0_0_0_1px_var(--color-border)]'
 
 /**
  * The head of the Player's Settings (its canvas's Song settings): the song, its name over what it

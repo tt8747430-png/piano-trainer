@@ -186,6 +186,8 @@
   --radius-tile: calc(var(--radius) - 4px);
   /* A small picture, a cover, a sidebar's row: 10, a step in from the control's 12. */
   --radius-thumb: calc(var(--radius) - 2px);
+  /* The smallest marks: a checkbox, a bar in a strip, a cover's staff card: 4. */
+  --radius-mark: calc(var(--radius) - 8px);
   --radius-xs: var(--radius-control);
   --radius-sm: var(--radius-control);
   --radius-md: var(--radius-control);
@@ -857,6 +859,9 @@
 @utility elevation-float {
   box-shadow: var(--elevation-float);
 }
+@utility elevation-thumb {
+  box-shadow: var(--elevation-thumb);
+}
 @utility elevation-1 {
   box-shadow: var(--elevation-1);
 }
@@ -1345,5 +1350,13 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* A row that scrolls sideways under the finger with no bar drawn: shelves, chips, the chords' row. */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

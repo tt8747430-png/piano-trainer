@@ -237,7 +237,7 @@ export const SheetSection = memo(function SheetSection({
               title={t('chordPlayer.addChord', { name })}
               onClick={() => acts.add(index)}
               className={cn(
-                'grid h-[60px] flex-1 place-items-center rounded-[6px] text-muted-foreground shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-200 ease-out hover:bg-muted lg:h-[76px]',
+                'grid h-[60px] flex-1 place-items-center rounded-tile text-muted-foreground shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-200 ease-out hover:bg-muted lg:h-[76px]',
                 overEnd && 'bg-primary/35',
               )}
             >

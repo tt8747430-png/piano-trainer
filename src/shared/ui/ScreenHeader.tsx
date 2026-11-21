@@ -132,7 +132,7 @@ export function ScreenHeader({
                 'bar-title min-w-0 font-sans outline-none',
                 large
                   ? 'line-clamp-2 text-3xl lg:text-[1.875rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
-                  : 'truncate text-[1.0625rem] font-semibold',
+                  : 'truncate text-lg font-semibold',
                 // A name that may wrap takes a step down on a phone, as the boards' TITLEBAR (24 to 28).
                 large && named && 'max-sm:text-2xl',
                 titleOnPage === true && 'sr-only',
@@ -176,7 +176,7 @@ export function ScreenHeader({
                 'bar-title min-w-0 font-sans outline-none lg:text-[1.875rem] lg:leading-[1.15] lg:font-bold lg:tracking-[-0.01em]',
                 large
                   ? 'line-clamp-2 text-3xl lg:text-[1.875rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
-                  : 'truncate text-[1.0625rem] font-semibold',
+                  : 'truncate text-lg font-semibold',
                 // A name that may wrap takes a step down on a phone, as the boards' TITLEBAR (24 to 28).
                 large && named && 'max-sm:text-2xl',
                 titleOnPage === true && 'sr-only',

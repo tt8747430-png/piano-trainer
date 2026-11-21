@@ -30,7 +30,7 @@ function Face({ label, count, swatch }: { label: string; count?: number; swatch?
         <span
           aria-hidden
           className={cn(
-            '-ml-7 size-5 shrink-0 rounded-[5px] ring-1 ring-foreground/8 ring-inset',
+            '-ml-7 size-5 shrink-0 rounded-mark ring-1 ring-foreground/8 ring-inset',
             swatch,
           )}
         />

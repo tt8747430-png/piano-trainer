@@ -39,7 +39,7 @@ export function PlaylistCover({
             <IncipitStaff
               key={`${entry.id}-${index}`}
               entry={entry}
-              className="size-full rounded-[4px]"
+              className="size-full rounded-mark"
             />
           ))}
         </span>

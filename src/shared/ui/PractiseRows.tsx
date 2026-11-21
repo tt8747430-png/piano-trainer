@@ -1,6 +1,6 @@
 import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
-import { ChevronRight, Play } from 'lucide-react'
+import { Play } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 /**
@@ -53,7 +53,7 @@ export function PlayRow({
     props: mergeProps<'a'>(
       {
         className:
-          'flex min-h-19 w-full items-center gap-3 px-4 py-2 text-start text-foreground no-underline shadow-[inset_0_-1px_0_var(--color-border)] hover:bg-muted/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring',
+          'flex min-h-19 w-full items-center gap-3 px-4 py-2 text-start text-foreground no-underline shadow-[inset_0_-1px_0_var(--color-border)] hover:bg-muted/50 focus-visible:-outline-offset-3',
       },
       {
         children: (
@@ -73,9 +73,7 @@ export function PlayRow({
                 {detail}
               </span>
             </span>
-            {here ? null : (
-              <ChevronRight aria-hidden className="size-5 flex-none text-muted-foreground" />
-            )}
+            {here ? null : <OpensMark />}
           </>
         ),
       },

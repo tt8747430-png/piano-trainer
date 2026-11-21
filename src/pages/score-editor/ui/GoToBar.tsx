@@ -43,7 +43,7 @@ export function GoToBar() {
             enterKeyHint="go"
             aria-label={t('goToBar.bar')}
             onFocus={(event) => event.currentTarget.select()}
-            className="h-12 w-24 rounded-xl px-4 text-[1.0625rem] tabular-nums md:text-[1.0625rem]"
+            className="h-12 w-24 rounded-xl px-4 text-lg tabular-nums"
           />
           <span className="text-subhead text-muted-foreground tabular-nums">
             {t('goToBar.of', { count })}

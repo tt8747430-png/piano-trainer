@@ -54,7 +54,7 @@ export function PracticeCalendar({ title }: { title: string }) {
         >
           <ChevronLeft aria-hidden className="size-5.5" />
         </button>
-        <p aria-live="polite" className="text-[1.0625rem] font-bold first-letter:uppercase">
+        <p aria-live="polite" className="text-lg font-bold first-letter:uppercase">
           {month}
         </p>
         <button

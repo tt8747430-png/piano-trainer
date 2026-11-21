@@ -10,7 +10,7 @@ export function ShowAll({ label, onClick }: { label: string; onClick: () => void
     <button
       type="button"
       onClick={onClick}
-      className="ms-1 -mt-1 flex min-h-11 items-center gap-1 self-start rounded-control px-1 text-subhead font-semibold text-link tabular-nums focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+      className="ms-1 -mt-1 flex min-h-11 items-center gap-1 self-start rounded-control px-1 text-subhead font-semibold text-link tabular-nums"
     >
       {label}
       <ChevronRight aria-hidden className="size-4.5" />

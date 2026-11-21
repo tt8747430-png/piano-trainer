@@ -98,7 +98,7 @@ export { usualName } from './pickers/usual-name'
 
 export { PAINT, ROLE_PAINT, type Paint } from './paint'
 export { ProgressionTiles } from './ProgressionTiles'
-export { RoleLegend, RoleTile, RoleTiles } from './RoleChips'
+export { RoleLegend, RoleTile, RoleTiles } from './RoleTiles'
 export { Docked } from './Docked'
 export { Pinned } from './Pinned'
 export { VERDICT_INK, VERDICT_SHAPE, type VerdictMark } from './verdict-shape'

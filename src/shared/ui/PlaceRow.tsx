@@ -1,6 +1,7 @@
 import { useRender } from '@base-ui/react/use-render'
-import { ChevronRight, type LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/shared/lib'
+import { OpensMark } from './NavMarks'
 import { ROW_BODY, ROW_FLAT, ROW_LIBRARY_FACE } from './library-row-class'
 import type { Paint } from './paint'
 import { RowFace } from './RowFace'
@@ -45,7 +46,7 @@ export function PlaceRow({
         <>
           <TileMark large icon={icon} picture={picture} paint={paint} />
           <RowFace title={title} detail={detail} />
-          <ChevronRight aria-hidden className="mr-3 size-5 shrink-0 text-muted-foreground" />
+          <OpensMark className="mr-3" />
         </>
       ),
     },

@@ -48,8 +48,7 @@ export function ViewPill<V extends string>({
           disabled={reason !== undefined}
           className={cn(
             'inline-flex h-11 min-w-11 cursor-default items-center justify-center gap-2 rounded-pill px-3.5 text-subhead font-medium whitespace-nowrap text-muted-foreground transition-colors duration-200 ease-out select-none',
-            'hover:not-data-checked:text-foreground data-checked:bg-foreground data-checked:font-semibold data-checked:text-background data-disabled:opacity-40',
-            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+            'hover:not-data-checked:text-foreground data-checked:bg-foreground data-checked:font-semibold data-checked:text-background data-disabled:opacity-50',
             // A view's word from 640px: 18 a side, at least 76 (PlayerDesk's Grid and Lyrics).
             Icon && 'sm:min-w-19 sm:px-4.5',
           )}

@@ -16,7 +16,7 @@ export function LibraryTile({
   /** In a laptop's table: 40 with a 9 corner, as the board's rows (r41_lib's table). */
   small?: boolean
 }) {
-  const size = small ? 'size-10 rounded-[9px]' : 'size-11'
+  const size = small ? 'size-10 rounded-thumb' : 'size-11'
   if ('icon' in picture)
     return (
       <TileMark
@@ -29,7 +29,7 @@ export function LibraryTile({
   if ('drawn' in picture)
     return small ? (
       // a drawn picture (a pattern's roll) at the table's 40 too, its 44 viewBox scaled
-      <span className="contents [&>[data-slot=row-tile]]:size-10 [&>[data-slot=row-tile]]:rounded-[9px]">
+      <span className="contents [&>[data-slot=row-tile]]:size-10 [&>[data-slot=row-tile]]:rounded-thumb">
         {picture.drawn}
       </span>
     ) : (
@@ -49,7 +49,7 @@ export function LibraryTile({
           <span
             key={i}
             className={cn(
-              'min-w-0 flex-1 rounded-[3px] ring-1 ring-foreground/15 ring-inset',
+              'min-w-0 flex-1 rounded-mark ring-1 ring-foreground/15 ring-inset',
               PAINT[ROLE_PAINT[chordRole(numeral, picture.minor).role]].fill,
             )}
           />

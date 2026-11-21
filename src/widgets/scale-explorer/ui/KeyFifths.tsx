@@ -51,7 +51,7 @@ export function KeyFifths({ value, kind }: { value: Key; kind: ScaleKind }) {
           'relative grid place-items-center font-display text-foreground transition-colors duration-150 ease-out hover:bg-muted/50',
           size === 'major'
             ? 'h-15 border-b border-border text-[1.375rem] font-bold'
-            : 'h-12 text-[1.0625rem] font-semibold',
+            : 'h-12 text-lg font-semibold',
           own && 'bg-primary/35 hover:bg-primary/35',
         )}
       >

@@ -151,7 +151,7 @@ const SEARCH_KEY: Combo = { code: 'KeyK', mod: true }
 const SETTINGS_KEY: Combo = { code: 'Comma', mod: true }
 
 const PLACE_LINK =
-  'flex h-13 flex-col items-center justify-center gap-[3px] rounded-[1.625rem] text-xs font-medium text-muted-foreground choice aria-[current=page]:font-bold landscape-phone:h-11 landscape-phone:flex-row landscape-phone:gap-1.5 landscape-phone:rounded-pill lg:rounded-menu-item lg:font-medium lg:text-nav-foreground lg:aria-[current=page]:font-semibold lg:aria-[current=page]:text-nav-current-foreground focus-visible:-outline-offset-3 lg:h-11 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-base lg:group-data-[sidebar=collapsed]/nav:justify-center lg:group-data-[sidebar=collapsed]/nav:px-0'
+  'flex h-13 flex-col items-center justify-center gap-[3px] rounded-pill text-xs font-medium text-muted-foreground choice aria-[current=page]:font-bold landscape-phone:h-11 landscape-phone:flex-row landscape-phone:gap-1.5 landscape-phone:rounded-pill lg:rounded-menu-item lg:font-medium lg:text-nav-foreground lg:aria-[current=page]:font-semibold lg:aria-[current=page]:text-nav-current-foreground focus-visible:-outline-offset-3 lg:h-11 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-base lg:group-data-[sidebar=collapsed]/nav:justify-center lg:group-data-[sidebar=collapsed]/nav:px-0'
 
 /**
  * A place in the navigation: its icon over its name in the phone's bar, beside it in the sidebar,
@@ -316,7 +316,7 @@ export function AppNav({ keep = false }: { keep?: boolean }) {
           <SidebarSearch collapsed={collapsed} combo={SEARCH_KEY} />
         </div>
       ) : null}
-      <ul className="pointer-events-auto mx-auto flex h-16 max-w-md gap-0.5 rounded-[2rem] p-1.5 glass landscape-phone:h-13 landscape-phone:w-110 landscape-phone:p-1 landscape-phone:rounded-[1.625rem] lg:h-auto lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-filter-none lg:mx-0 lg:max-w-none lg:flex-col lg:gap-1.5 lg:px-4 lg:pt-0">
+      <ul className="pointer-events-auto mx-auto flex h-16 max-w-md gap-0.5 rounded-pill p-1.5 glass landscape-phone:h-13 landscape-phone:w-110 landscape-phone:p-1 landscape-phone:rounded-pill lg:h-auto lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-filter-none lg:mx-0 lg:max-w-none lg:flex-col lg:gap-1.5 lg:px-4 lg:pt-0">
         {(sidebarShown ? PLACES.filter((place) => place !== PROFILE) : PLACES).map((place) => {
           // Songs' places under Songs while it is current (the board's SONGS_SUB); the one shown
           // wears the wash, Songs then only bold.

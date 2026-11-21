@@ -97,7 +97,7 @@ export function ChordRow({
       onPointerDown={takeOver}
       onWheel={takeOver}
       onTouchStart={takeOver}
-      className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter overflow-x-auto overflow-y-hidden overscroll-x-contain px-gutter [scrollbar-width:none] landscape-phone:mx-0 landscape-phone:scroll-px-0 landscape-phone:px-0 [&::-webkit-scrollbar]:hidden"
+      className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter overflow-x-auto overflow-y-hidden overscroll-x-contain px-gutter scrollbar-none landscape-phone:mx-0 landscape-phone:scroll-px-0 landscape-phone:px-0"
     >
       {events.map((event, index) => {
         const chord = drawn[index] ?? null

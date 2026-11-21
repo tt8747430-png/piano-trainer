@@ -74,7 +74,7 @@ export function KeysGrab({
         top ? '-bottom-[22px]' : '-top-[22px]',
       )}
     >
-      <span aria-hidden className="h-1.5 w-11 rounded-[3px] bg-foreground" />
+      <span aria-hidden className="h-1.5 w-11 rounded-mark bg-foreground" />
     </button>
   )
 }

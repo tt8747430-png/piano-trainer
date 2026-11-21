@@ -70,7 +70,7 @@ export function BeatStrip({
       aria-hidden
       data-slot="beat-strip"
       className={cn(
-        'overflow-x-auto overflow-y-hidden overscroll-x-contain px-gutter select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+        'overflow-x-auto overflow-y-hidden overscroll-x-contain px-gutter select-none scrollbar-none',
         className,
       )}
     >
@@ -93,7 +93,7 @@ export function BeatStrip({
                     data-looped={looped ? '' : undefined}
                     onClick={() => onBeat(ticks[cell] ?? 0)}
                     className={cn(
-                      'relative size-11 shrink-0 rounded-[3px] lg:size-13',
+                      'relative size-11 shrink-0 rounded-mark lg:size-13',
                       at === 0 && 'border-l-3 border-foreground',
                       now
                         ? 'bg-foreground text-background'

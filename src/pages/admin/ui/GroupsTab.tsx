@@ -15,6 +15,7 @@ import {
   RowLink,
   Said,
   SettingsGroup,
+  ShowAll,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { AddRow } from '@/widgets/content-editor'
@@ -232,14 +233,10 @@ export function AdminGroupPage({ id }: { id: string }) {
                 />
               </SettingsGroup>
               {!all && members.length > FOLDED ? (
-                <button
-                  type="button"
-                  className="-mt-2 ms-1 flex min-h-11 items-center gap-1 self-start rounded-control px-1 text-subhead font-semibold text-link tabular-nums focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                <ShowAll
+                  label={t('groups.showAll', { count: members.length })}
                   onClick={() => setAll(true)}
-                >
-                  {t('groups.showAll', { count: members.length })}
-                  <ChevronRight aria-hidden className="size-4" />
-                </button>
+                />
               ) : null}
               <SettingsGroup title={t('sections.flags')} flush>
                 <p

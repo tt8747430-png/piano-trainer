@@ -27,7 +27,7 @@ function OwnTile({ kind }: { kind: 'course' | 'lesson' | 'learned' }) {
         className={cn(
           'grid place-items-center [&_svg]:size-5',
           kind === 'course'
-            ? cn('size-11 rounded-[11px] text-foreground', PAINT.grass.fill)
+            ? cn('size-11 rounded-thumb text-foreground', PAINT.grass.fill)
             : kind === 'learned'
               ? cn('size-10 rounded-pill', PAINT.grass.fill, PAINT.grass.ink)
               : 'size-10 rounded-pill bg-card text-foreground ring-1 ring-border ring-inset',

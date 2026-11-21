@@ -108,7 +108,6 @@ export function NewSheet({
         {lead}
         <NameField
           id={nameId}
-          autoFocus
           label={nameLabel}
           value={name}
           maxLength={maxLength}

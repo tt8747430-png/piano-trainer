@@ -400,6 +400,8 @@ with sand, as the boards' `CARD` and `GROUP` draw them (a 1px ring that takes no
   the mini actions) and the floating bars of the Practice pages, a tight lift of two layers (0 1px 2px and 0 2px 6px
   -2px, ink at 10%) with no shade pooled under it (owner, 2026-11-19: "i dont like this dimm under the floatign
   actions"; the canvas's `FLOAT`). It does not deepen under a pointer; a press shows by colour.
+- **Thumb** (`elevation-thumb`): a control's moving part over its track: a segmented control's thumb, a switch's knob, a
+  slider's handle, a loop grip, the chosen root.
 - **Elevation 1** (`elevation-1`): a row lifted while it is dragged, a resting second action inside content.
 - **Elevation 2** (`elevation-2`): dialogs and sheets that stand above the page (the canvas's `SHADOW`).
 - **Elevation 3** (`elevation-3`): a dragged card, an open dial.
@@ -421,8 +423,9 @@ lip and a black key's slope draw a piano and appear nowhere else.
 
 ## Shapes
 
-One scale of four corners, and a corner is never written any other way (`src/styles/shapes.test.ts`): a control 12px, a
-card 14px, a sheet 22px, a pill round. Every line is 1px; only focus rings and the keys' rings are wider.
+One scale of corners, and a corner is never written any other way (`src/styles/shapes.test.ts`): a control 12px, a
+card 14px, a sheet 22px, a pill round; inside a control, a cover or a sidebar row 10px (`thumb`) and a paint's tile or a
+tooltip 8px (`tile`); the smallest marks, a checkbox or a bar in a strip, 4px (`mark`). Every line is 1px; only focus rings and the keys' rings are wider.
 
 Something inside a shape takes its holder's shape, so a fill reaches the edges: an item in a capsule is a pill, the first
 row of a card takes the card's corner. The keys are drawings, not controls: a black key's foot 6px, a white key's 9px,
@@ -497,7 +500,7 @@ square at the top.
   drawn as keys. A key is the key-signature grid (`KeyPicker`, `KeySignaturePicker`): Major · Minor, sharps over flats,
   the same grid as the score editor's and New song's. Time and tempo are one control each. _Drawn on canvas 111, not
   yet built: one Key drawer for every key and root (− +, the letters, ♭ ♮ ♯), replacing the grid here when ported._
-- **Picture choice** (`PictureChoice`): a setting that changes how something looks is drawn, a line drawing over a short
+- **Picture choice** (`PictureTiles`): a setting that changes how something looks is drawn, a line drawing over a short
   name. A choice with no honest picture stays text.
 - **Only what applies is offered.** A row that nothing applies to stays in place, greyed, its tooltip saying why, so
   nothing under it moves. The score editor's palette is the exception: a key that cannot act is not drawn (ADR 0114).
@@ -506,7 +509,7 @@ square at the top.
 
 - **Card** (`card`): card paper, the card corner, the soft line. A group's rows part by hairlines.
 - **Five row kinds, one component each:** opens a page (`RowLink`: label, value, ›); picks a value (`ChoiceRow`,
-  `ChoiceCard`, `PictureChoice`); on or off (`SwitchRow`); does something (`ActionRow`, link ink, no chevron); ends or
+  `ChoiceCard`, `PictureTiles`); on or off (`SwitchRow`); does something (`ActionRow`, link ink, no chevron); ends or
   destroys (`DangerRow`, red, in a `DangerGroup`, last on its page and alone). A row that opens a sheet is a `RowButton`.
 - **Navigation marks** (`NavMarks` alone): ‹ for Back, › at a row's edge, ⌃⌄ by a picker's value, ⌄ on a fold. Arrows
   only for movement.

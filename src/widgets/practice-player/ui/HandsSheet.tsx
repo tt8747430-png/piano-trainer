@@ -48,7 +48,7 @@ export function HandsSheet({
                 <span
                   aria-hidden
                   className={cn(
-                    'grid size-10 shrink-0 place-items-center rounded-[4px]',
+                    'grid size-10 shrink-0 place-items-center rounded-mark',
                     hand === 'rh'
                       ? 'bg-hand-rh-wash text-(--p-brick-deep)'
                       : 'bg-hand-lh-wash text-(--p-lilac-deep)',

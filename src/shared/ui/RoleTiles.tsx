@@ -50,7 +50,7 @@ export function RoleTile({
         aria-pressed={sounding}
         onClick={onClick}
         className={cn(
-          'flex h-24 w-full flex-col items-center justify-center gap-0.5 rounded-card px-1 text-foreground focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring lg:h-30',
+          'flex h-24 w-full flex-col items-center justify-center gap-0.5 rounded-card px-1 text-foreground lg:h-30',
           look.fill,
           sounding && 'ring-2 ring-foreground ring-inset',
         )}

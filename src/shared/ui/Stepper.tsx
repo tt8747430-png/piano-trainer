@@ -53,7 +53,7 @@ export function Stepper({
         title={name}
         disabled={next < min || next > max}
         onClick={() => onChange(Math.min(max, Math.max(min, next)))}
-        className="flex size-11 shrink-0 items-center justify-center rounded-xl text-foreground transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none disabled:text-muted-foreground/50 disabled:hover:bg-transparent [&_svg]:size-5"
+        className="flex size-11 shrink-0 items-center justify-center rounded-xl text-foreground transition-colors hover:bg-muted disabled:text-muted-foreground/50 disabled:hover:bg-transparent [&_svg]:size-5"
       >
         <Icon aria-hidden />
       </button>

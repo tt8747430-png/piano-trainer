@@ -245,7 +245,7 @@ function OwnCourseItem({
         >
           <span
             aria-hidden
-            className={cn('grid size-11 shrink-0 place-items-center rounded-[11px]', paint)}
+            className={cn('grid size-11 shrink-0 place-items-center rounded-thumb', paint)}
           >
             <Library className="size-5" />
           </span>
