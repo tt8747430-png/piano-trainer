@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { downloadFile, formatLocale, keepsSaves, safeLocalStorage } from '@/shared/lib'
+import { dateSaid, downloadFile, keepsSaves, safeLocalStorage } from '@/shared/lib'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -85,14 +85,7 @@ export function BackupFields({
     onRestored()
   }
   const made = found?.made ? new Date(found.made) : null
-  const madeText =
-    made && !Number.isNaN(made.getTime())
-      ? made.toLocaleDateString(formatLocale(locale), {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        })
-      : null
+  const madeText = made && !Number.isNaN(made.getTime()) ? dateSaid(made, locale) : null
 
   return (
     <>
