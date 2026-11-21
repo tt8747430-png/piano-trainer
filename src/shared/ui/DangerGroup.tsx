@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 import { ActionRow } from './ActionRow'
+import { SettingsGroup } from './SettingsGroup'
 
 /**
  * What ends or destroys (R25): a page's last group, alone, with room above it, its rows in red and,
@@ -19,20 +20,9 @@ export function DangerGroup({
   children: ReactNode
 }) {
   return (
-    <section
-      data-group="danger"
-      data-slot="settings-group"
-      className={cn('mt-6 flex flex-col gap-2', className)}
-    >
-      <div data-slot="settings-card" className="flex flex-col rows-line overflow-hidden card">
-        {children}
-      </div>
-      {footnote ? (
-        <p data-slot="settings-foot" className="px-4 text-sm text-muted-foreground">
-          {footnote}
-        </p>
-      ) : null}
-    </section>
+    <SettingsGroup danger flush footnote={footnote} className={cn('mt-6', className)}>
+      {children}
+    </SettingsGroup>
   )
 }
 

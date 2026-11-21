@@ -29,7 +29,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `confirmQueue` | `src/shared/ui/confirm.ts` | The question waiting, for `Confirmer`. | 2 |
 | `CountSort` | `src/shared/ui/CountSort.tsx` | A list's count and its sort (the R72 board's COUNTROW, Flat's library): | 1 |
 | `creditsRoom` | `src/shared/ui/sheet-credits.ts` | The room a score's credits take under its title (a page's, dealing its lines): | 2 |
-| `DangerGroup` | `src/shared/ui/DangerGroup.tsx` | What ends or destroys (R25): | 8 |
+| `DangerGroup` | `src/shared/ui/DangerGroup.tsx` | What ends or destroys (R25): | 9 |
 | `DangerRow` | `src/shared/ui/DangerGroup.tsx` | A row that ends or destroys (R24): | 9 |
 | `Docked` | `src/shared/ui/Docked.tsx` | Keeps its content at the foot of the screen, over the phone's tab bar, the screen's width beside a rail or a sidebar, while the page scrolls above it. | 8 |
 | `DragHandle` | `src/shared/ui/DragHandle.tsx` | The one thing a drag starts from, by mouse, held finger or keyboard: | 6 |
@@ -189,7 +189,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `SelectionBarIcon` | `src/shared/ui/icons/SelectionBarIcon.ts` | The selection toolbar (the canvas's Settings picture): | 1 |
 | `SettingField` | `src/shared/ui/SettingField.tsx` | One choice in Settings: | 3 |
 | `SettingRows` | `src/shared/ui/SettingRows.tsx` | Settings' rows, one under the other as an app's settings list has them (ADR 0096): | 2 |
-| `SettingsGroup` | `src/shared/ui/SettingsGroup.tsx` | A group of settings, as an app's settings read (iOS's grouped list, memory-palaces' `SettingsSection`): | 64 |
+| `SettingsGroup` | `src/shared/ui/SettingsGroup.tsx` | A group of settings, as an app's settings read (iOS's grouped list, memory-palaces' `SettingsSection`): | 65 |
 | `SettingsWindow` | `src/shared/ui/SettingsWindow.tsx` | A thing's Settings over its page, never a page of its own (the SongSettings boards' SETWIN): | 8 |
 | `Sheet` | `src/shared/ui/Sheet.tsx` | The app's bottom sheet: | 50 |
 | `SheetContent` | `src/shared/ui/Sheet.tsx` | The sheet's panel (R42, the canvas's one sheet): | 45 |
@@ -463,14 +463,14 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-attention` | `src/styles/theme.css` | 2 |
 | `--color-background` | `src/styles/theme.css` | 43 |
 | `--color-border` | `src/styles/theme.css` | 89 |
-| `--color-card` | `src/styles/theme.css` | 132 |
+| `--color-card` | `src/styles/theme.css` | 131 |
 | `--color-card-foreground` | `src/styles/theme.css` | 4 |
 | `--color-chosen` | `src/styles/theme.css` | 20 |
 | `--color-chosen-honey` | `src/styles/theme.css` | 6 |
 | `--color-destructive` | `src/styles/theme.css` | 47 |
 | `--color-destructive-foreground` | `src/styles/theme.css` | 3 |
 | `--color-eyebrow` | `src/styles/theme.css` | 4 |
-| `--color-foreground` | `src/styles/theme.css` | 360 |
+| `--color-foreground` | `src/styles/theme.css` | 359 |
 | `--color-glass` | `src/styles/theme.css` | 2 |
 | `--color-hairline` | `src/styles/theme.css` | 65 |
 | `--color-hand-lh` | `src/styles/theme.css` | 3 |
@@ -505,7 +505,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-medal-platinum` | `src/styles/theme.css` | 1 |
 | `--color-medal-silver` | `src/styles/theme.css` | 1 |
 | `--color-muted` | `src/styles/theme.css` | 157 |
-| `--color-muted-foreground` | `src/styles/theme.css` | 300 |
+| `--color-muted-foreground` | `src/styles/theme.css` | 299 |
 | `--color-nav-current` | `src/styles/theme.css` | 2 |
 | `--color-nav-current-foreground` | `src/styles/theme.css` | 3 |
 | `--color-nav-foreground` | `src/styles/theme.css` | 2 |
@@ -826,7 +826,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `subject-title` | A Practice page's subject (the interval, the progression, the pattern, the exercise): | 4 |
 | `section-head` | The head over a card of rows on a page (Practise, Options, How to play): | 2 |
 | `settings-pane` | DESIGN's card: | 1 |
-| `rows-line` | The card's ring is a shadow: | 4 |
+| `rows-line` | The card's ring is a shadow: | 3 |
 | `rows-hairline` |  | 21 |
 | `px-gutter` | * A block's or a place's look (R29 B9, `shared/lib/style`): | 15 |
 | `-mx-gutter` |  | 16 |

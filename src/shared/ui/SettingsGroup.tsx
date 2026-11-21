@@ -17,6 +17,7 @@ export function SettingsGroup({
   flush = false,
   bare = false,
   heading = false,
+  danger = false,
   children,
   className,
 }: {
@@ -28,6 +29,8 @@ export function SettingsGroup({
   bare?: boolean
   /** Its name as a page's section title (a song's Details, beside its Chords and Sections). */
   heading?: boolean
+  /** What ends or destroys: the page's last group, set apart (`DangerGroup`). */
+  danger?: boolean
   children: ReactNode
   className?: string
 }) {
@@ -36,6 +39,7 @@ export function SettingsGroup({
     <section
       aria-labelledby={title ? id : undefined}
       data-slot="settings-group"
+      data-group={danger ? 'danger' : undefined}
       className={cn(heading ? HEADED_SECTION : 'flex flex-col gap-2', className)}
     >
       {title ? (
