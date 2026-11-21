@@ -25,8 +25,9 @@ the courses, its title in the bar.
   everything is learned, when it opens the first journey's first lesson again.
 - **A level's page** (`/levels/$levelId`, Back to Learn): its name the page's serif heading on a phone (the laptop's
   bar names it), its goal, its count over its meter and its one way in (Start, Continue or Review and the lesson
-  it opens, the honey 50), then its chapters 32 apart; its lessons on one timeline (a dot until reached, the book
-  ringed in honey where Continue leads, a check once learned; the spine grass where passed), on a laptop three
+  it opens, the honey 50), then its chapters 32 apart; each chapter's steps on a timeline of their own, the spine
+  starting at its first row and ending at its last (a dot until reached, the book ringed in honey where Continue
+  leads, a check once learned; the spine grass where passed), on a laptop three
   across with no spine. No side column.
   **The Courses' page** (`/courses`, Back to Learn): the shelves, each its name 14 semibold over its courses; a
   course is its row (the course's one glyph, Lucide's library, on its shelf's paint, a check once complete, its

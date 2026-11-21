@@ -167,12 +167,16 @@ export function LevelLessons({ journey }: { journey: Journey }) {
       .filter((step) => step.kind === 'lesson')
       .map((step, i): [StepId, number] => [stepIdOf(step), i + 1]),
   )
-  const order = steps.map(stepIdOf)
   const isDone = (id: StepId) => isLearned(learned, id)
   const go = steps.find((step) => !isDone(stepIdOf(step))) ?? steps[0]
   const goWord =
     progress.done === 0 ? 'start' : progress.done === progress.total ? 'review' : 'continue'
+  // Each chapter is its own line, as the board's: no spine above its first row or below its last.
   const placeOf = (id: StepId): Place => {
+    const order = (
+      journey.chapters.find((chapter) => chapter.steps.some((step) => stepIdOf(step) === id))
+        ?.steps ?? []
+    ).map(stepIdOf)
     const at = order.indexOf(id)
     return {
       reached: isDone(id) || id === next,
