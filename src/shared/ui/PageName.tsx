@@ -11,7 +11,7 @@ export function PageName({ children, className }: { children: ReactNode; classNa
     <p
       aria-hidden
       className={cn(
-        'font-display text-[1.875rem]/[1.15] font-semibold tracking-title text-balance lg:text-[2.25rem]/[1.15]',
+        'font-display text-place/[1.15] font-semibold tracking-title text-balance lg:text-[2.25rem]/[1.15]',
         className,
       )}
     >

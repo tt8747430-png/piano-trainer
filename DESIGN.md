@@ -324,6 +324,10 @@ Sizes are in rem, so they follow the reader's text size. A screen's title steps 
 - **Display** (600, 44px, 1.1): a screen's title from 1024px.
 - **Large title** (600, 34px, 1.15): a screen's title from 640px.
 - **Title 1** (600, 28px, 1.2): a screen's title on a phone.
+- **Place** (`text-place`, the sans bold, 30px): a place's title on a laptop (Songs, Settings, a bar's title from
+  1024px), as the boards set it; its line's height is the caller's.
+- **Name** (`text-name`, the sans bold, 26px): a thing's name heading its own page (a badge, an achievement, a run's
+  result, a role's tile).
 - **Title 2** (600, 22px, 1.3): section and sheet titles; a screen's title on a phone on its side.
 - **Title 3** (600, 20px, 1.25): a group's title, a card's name.
 - **Headline** (Instrument Sans 600, 17px, 1.375): a row's title, the pill button.

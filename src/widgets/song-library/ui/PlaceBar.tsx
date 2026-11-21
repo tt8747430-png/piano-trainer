@@ -38,7 +38,7 @@ export function PlaceBar({
     >
       <div className="flex h-14 items-center gap-3">
         <ExitFocus className="me-0 ms-0" />
-        <h1 className="min-w-0 truncate font-sans text-[1.875rem] leading-tight font-bold tracking-title">
+        <h1 className="min-w-0 truncate font-sans text-place leading-tight font-bold tracking-title">
           {title}
         </h1>
         {count ? (

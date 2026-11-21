@@ -28,7 +28,7 @@ export function RunHero({
       >
         <Verdict strokeWidth={2.4} className={perfect ? 'fill-current' : undefined} />
       </span>
-      <h1 className="mt-2 font-sans text-[1.625rem] leading-[normal] font-bold tracking-title text-balance">
+      <h1 className="mt-2 font-sans text-name leading-[normal] font-bold tracking-title text-balance">
         {title}
       </h1>
       {children}

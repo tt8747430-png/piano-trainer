@@ -221,6 +221,11 @@
   --text-4xl--line-height: 1.15;
   --text-5xl: 2.75rem;
   --text-5xl--line-height: 1.1;
+  /* By role, as the boards set them: a place's title on a laptop (Songs, Settings, a bar's title from
+     lg), and a thing's name heading its own page (a badge, an achievement, a run's result). Each line's
+     height is the caller's. */
+  --text-place: 1.875rem;
+  --text-name: 1.625rem;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 

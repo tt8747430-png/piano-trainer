@@ -807,6 +807,8 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--text-5xl` | `src/styles/theme.css` | 3 |
 | `--text-footnote` | `src/styles/theme.css` | 64 |
 | `--text-lg` | `src/styles/theme.css` | 70 |
+| `--text-name` | `src/styles/theme.css` | 4 |
+| `--text-place` | `src/styles/theme.css` | 4 |
 | `--text-subhead` | `src/styles/theme.css` | 85 |
 | `--text-xl` | `src/styles/theme.css` | 39 |
 | `--thumb` | `src/styles/tokens.css` | 1 |

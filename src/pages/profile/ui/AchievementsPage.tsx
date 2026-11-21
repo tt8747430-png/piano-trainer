@@ -90,7 +90,7 @@ export function AchievementPage() {
       <div className="page-column flex flex-col gap-5">
         <section className="flex flex-col items-center gap-2 text-center">
           <MilestoneMark earned={day !== null} size="hero" />
-          <p className="font-sans text-[1.625rem]/tight font-bold text-balance">{name}</p>
+          <p className="font-sans text-name/tight font-bold text-balance">{name}</p>
           <p className="text-subhead text-muted-foreground">
             {day
               ? t('profile.achievements.earned', { date: dayName(day) })
