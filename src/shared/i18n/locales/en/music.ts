@@ -24,7 +24,7 @@ export const music = {
       '13th': 'From the 13th',
     },
     // The position a row's chords start in, and how they move from it (ADR 0115).
-    first: 'Inversion',
+    first: 'First chord’s inversion',
     startAbout: 'Which note of the first chord sits lowest. Here is C major in each inversion:',
     // As a progression's Voicing (Voice-led · Block), one word for one choice across the app.
     voicing: {
