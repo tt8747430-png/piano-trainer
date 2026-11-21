@@ -2,6 +2,7 @@ import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
 import { Play } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { OpensMark } from './NavMarks'
 
 /**
  * A page's ways into the Player, the canvas's PRACTISE value for value: a 14px heading, then one card
