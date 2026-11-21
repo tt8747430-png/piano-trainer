@@ -21,16 +21,16 @@ import {
   CheckMark,
   ChoiceChips,
   LessonIcon,
+  MoreMenu,
   NewDial,
   PAINT,
-  RowMore,
   Said,
-  SelectAct,
-  SelectDock,
   say,
   sayUndo,
   ScreenHeader,
   SearchField,
+  SelectAct,
+  SelectDock,
   SortMenu,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -172,7 +172,7 @@ function OwnLessonItem({
         </Link>
       }
       columns={[length, done ? t('own.learned') : '—']}
-      more={<RowMore label={t('own.more', { title })} actions={actions} />}
+      more={<MoreMenu on="row" label={t('own.more', { title })} actions={actions} />}
     />
   )
 }
@@ -256,7 +256,7 @@ function OwnCourseItem({
         </Link>
       }
       columns={[length, t('own.learnedOf', { done, total: listed.length })]}
-      more={<RowMore label={t('own.more', { title: course.title })} actions={actions} />}
+      more={<MoreMenu on="row" label={t('own.more', { title: course.title })} actions={actions} />}
     />
   )
 }

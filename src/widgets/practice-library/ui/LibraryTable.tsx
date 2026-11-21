@@ -4,7 +4,7 @@ import { useFold } from '@/features/fold-section'
 import { useRef, type CSSProperties, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, useElementSize } from '@/shared/lib'
-import { HeartToggle, menuOf, RowMore } from '@/shared/ui'
+import { HeartToggle, menuOf, MoreMenu } from '@/shared/ui'
 import type { LibraryItem, ShownSection } from '../model/library-view'
 import { libraryFoldId, type LibraryKind } from '../model/library-words'
 import { LevelMark } from './LevelMark'
@@ -191,7 +191,8 @@ function SectionRows({
                 <>
                   {item.trailing}
                   <FavouriteHeart item={item} />
-                  <RowMore
+                  <MoreMenu
+                    on="row"
                     label={t('common:library.moreOf', { name: item.name })}
                     actions={menuOf(item.actions)}
                   />

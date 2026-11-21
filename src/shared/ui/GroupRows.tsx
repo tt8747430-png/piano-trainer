@@ -1,10 +1,8 @@
-import { Radio } from '@base-ui/react/radio'
-import { RadioGroup } from '@base-ui/react/radio-group'
 import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
-import { Check } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
+import { Listbox } from './Listbox'
 import { OpensMark } from './NavMarks'
 import type { OptionValue } from './option'
 import { Segmented } from './Segmented'
@@ -174,8 +172,8 @@ export function GroupLink({
 }
 
 /**
- * One choice of several in a sheet, as the canvas's lists draw them (its Subdivision): rows 48 high
- * in one white card, a hairline between them, the chosen one ticked in the link's colour.
+ * One choice of several in a sheet, as the canvas's lists draw them (its Subdivision): the kit's
+ * `Listbox` as rows 48 high in one white card, a hairline between them, the chosen one ticked.
  */
 export function ChoiceList<T extends string>({
   label,
@@ -189,28 +187,21 @@ export function ChoiceList<T extends string>({
   onChange: (value: T) => void
 }) {
   return (
-    <RadioGroup
-      aria-label={label}
-      value={value}
-      onValueChange={(next) => {
-        const picked = options.find((option) => option.value === next)
-        if (picked) onChange(picked.value)
-      }}
-      className="flex flex-col rows-line overflow-hidden rounded-xl bg-card"
-    >
-      {options.map((option) => (
-        <Radio.Root
-          key={option.value}
-          value={option.value}
-          className="flex min-h-12 items-center px-4 text-left text-base transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
-        >
-          <span className="min-w-0 flex-1">{option.label}</span>
-          {option.value === value ? (
-            <Check aria-hidden className="size-5 shrink-0 text-link" strokeWidth={2.5} />
-          ) : null}
-        </Radio.Root>
-      ))}
-    </RadioGroup>
+    <Listbox
+      label={label}
+      className="overflow-hidden rounded-xl bg-card *:rows-line"
+      optionClassName="min-h-12 px-4 text-base"
+      groups={[
+        {
+          options: options.map((option) => ({
+            key: option.value,
+            content: option.label,
+            selected: option.value === value,
+            onChoose: () => onChange(option.value),
+          })),
+        },
+      ]}
+    />
   )
 }
 

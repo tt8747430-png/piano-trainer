@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMediaQuery, LAPTOP } from '@/shared/lib'
-import { FoldGroup } from './FoldGroup'
+import { FoldSection } from './FoldSection'
 import { FilterIcon } from './icons/FilterIcon'
 import { Button } from './primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
@@ -97,14 +97,9 @@ export function FilterGroup({
 }) {
   const [open, setOpen] = useState(true)
   return (
-    <FoldGroup
-      title={title}
-      open={open}
-      onToggle={() => setOpen((was) => !was)}
-      listClassName={list ? 'flex flex-wrap gap-2' : 'flex flex-col'}
-    >
-      {children}
-    </FoldGroup>
+    <FoldSection title={title} fold={{ open, toggle: () => setOpen((was) => !was) }}>
+      <ul className={list ? 'flex flex-wrap gap-2' : 'flex flex-col'}>{children}</ul>
+    </FoldSection>
   )
 }
 

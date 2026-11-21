@@ -5,12 +5,12 @@ import { cn } from '@/shared/lib'
 import {
   HeartToggle,
   menuOf,
+  MoreMenu,
   POINTER_ONLY,
   ROW_BODY,
   ROW_FLAT,
   ROW_LIBRARY_FACE,
   RowFace,
-  RowMore,
   swipeOf,
   SwipeRow,
 } from '@/shared/ui'
@@ -86,7 +86,8 @@ export function LibraryRow({ item, arrange }: { item: LibraryItem; arrange?: Row
               onToggle={() => favourite.onSelect()}
             />
           ) : null}
-          <RowMore
+          <MoreMenu
+            on="row"
             label={t('library.moreOf', { name: item.name })}
             actions={menuOf(item.actions)}
             className={POINTER_ONLY}

@@ -4,11 +4,11 @@ import { PieceLink, type Entry } from '@/entities/piece'
 import { cn, useLongPress } from '@/shared/lib'
 import {
   menuOf,
+  MoreMenu,
   ROW_BODY,
   ROW_FLAT,
   ROW_LIBRARY_FACE,
   RowFace,
-  RowMore,
   swipeOf,
   SwipeRow,
   type RowAction,
@@ -83,7 +83,11 @@ export function SongRow({
           <PieceLink entry={entry} className={cn(ROW_BODY, ROW_LIBRARY_FACE, SONG_FACE)} {...press}>
             <SongCardFace entry={entry} />
           </PieceLink>
-          <RowMore label={t('library.moreOf', { name: face.title })} actions={menuOf(actions)} />
+          <MoreMenu
+            on="row"
+            label={t('library.moreOf', { name: face.title })}
+            actions={menuOf(actions)}
+          />
         </div>
       </SwipeRow>
     </li>

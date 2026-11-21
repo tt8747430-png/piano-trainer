@@ -7,7 +7,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 
 | Part | File | What it is | Used by |
 | --- | --- | --- | --- |
-| `ActionMenu` | `src/shared/ui/ActionMenu.tsx` | A pull-down button (Apple's), a real menu (Base UI's Menu, memory-palaces' `FlyoutMenu`): | 28 |
+| `ActionMenu` | `src/shared/ui/ActionMenu.tsx` | A pull-down button (Apple's), a real menu (Base UI's Menu, memory-palaces' `FlyoutMenu`): | 27 |
 | `ActionRow` | `src/shared/ui/ActionRow.tsx` | A row that does something (R24), as iOS's "Sign Out" and Settings' "Sync now" read: | 14 |
 | `Asking` | `src/shared/ui/confirm.ts` | What `confirm` asks: | 2 |
 | `Avatar` | `src/shared/ui/Avatar.tsx` | The learner's picture: | 11 |
@@ -58,9 +58,8 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `FloatingPlayPiece` | `src/shared/ui/FloatingPieces.tsx` | The floating primary of a tool with nothing to choose about how it plays (the Metronome's Start), tinted honey glass, 176 wide: | 2 |
 | `FloatingPlaySplit` | `src/shared/ui/FloatingPieces.tsx` | The floating primary that plays, tinted honey glass, 176 wide: | 5 |
 | `Fold` | `src/shared/ui/FoldSection.tsx` | Whether a section shows its body, and how its heading changes that. | 3 |
-| `FoldBody` | `src/shared/ui/FoldBody.tsx` | What a heading folds away: | 2 |
-| `FoldGroup` | `src/shared/ui/FoldGroup.tsx` | A titled group that folds under its heading: | 1 |
-| `FoldSection` | `src/shared/ui/FoldSection.tsx` | A titled section of a page; given a `fold`, its heading is the button that folds its body away, a chevron saying which way it is, the heading itself staying in sight. | 11 |
+| `FoldBody` | `src/shared/ui/FoldBody.tsx` | What a heading folds away: | 1 |
+| `FoldSection` | `src/shared/ui/FoldSection.tsx` | A titled section of a page; given a `fold`, its heading is the button that folds its body away, a chevron saying which way it is, the heading itself staying in sight. | 12 |
 | `FormField` | `src/shared/ui/FormField.tsx` | A form's field (an email, a password, a name), the kit's one field: | 8 |
 | `Glyph` | `src/shared/ui/Glyph.tsx` | Text drawn for the eye alone (CSS `content`): | 3 |
 | `GroupAction` | `src/shared/ui/GroupRows.tsx` | A row that does something at once, in the link's colour, as the canvas's `GROUP` action rows; a loss (Unpublish, Delete) in crimson, in a group of its own. | 4 |
@@ -96,17 +95,17 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `LearnedBadge` | `src/shared/ui/LearnedBadge.tsx` | Learned, on a row: | 1 |
 | `LessonIcon` | `src/shared/ui/icons/LessonIcon.ts` | A lesson, Lucide's `book` (the canvas's BOOKI, its spine curled): | 8 |
 | `LINES_HEAD` | `src/shared/ui/SheetTitle.tsx` | The head of lines down the screen, the Player's and the editor's alike (their boards): | 2 |
-| `Listbox` | `src/shared/ui/Listbox.tsx` | One choice of several, in a list (a Setup page's patterns, the tempo and hands popovers): | 5 |
+| `Listbox` | `src/shared/ui/Listbox.tsx` | One choice of several, in a list (a Setup page's patterns, the tempo and hands popovers): | 6 |
 | `loadScoreView` | `src/shared/ui/score/load.ts` | The score view's module, loaded on its own the first time a staff is shown, its engraver warming as it loads. | 2 |
 | `LoopGrip` | `src/shared/ui/LoopGrip.tsx` | One end of the loop (ADR 0096, R37: | 3 |
 | `MakeSheet` | `src/shared/ui/MakeSheet.tsx` | What makes something new (the canvas's NEWNAME and its New song, Record and Import sheets): | 7 |
-| `MenuAction` | `src/shared/ui/ActionMenu.tsx` | One command of a menu: | 25 |
+| `MenuAction` | `src/shared/ui/ActionMenu.tsx` | One command of a menu: | 24 |
 | `menuOf` | `src/shared/ui/row-actions.ts` | A row's actions as its More lists them. | 5 |
 | `MenuPicker` | `src/shared/ui/pickers/MenuPicker.tsx` | One choice of many in a plain list (a chord's quality, its voicing, a scale's kind, a tempo's rung): | 9 |
 | `MenuSection` | `src/shared/ui/MenuSection.tsx` | One group of a menu or sheet under its heading (ADR 0115): | 8 |
 | `MIN_KEYS_PX` | `src/shared/ui/piano-keyboard/index.ts` |  | 2 |
 | `MiniKeys` | `src/shared/ui/MiniKeys.tsx` | A chord as a picture of the keys (the boards' MINIKEYS, on Scales' chord cards and a song's chords): | 2 |
-| `MoreMenu` | `src/shared/ui/MoreMenu.tsx` | A screen bar's More: | 6 |
+| `MoreMenu` | `src/shared/ui/MoreMenu.tsx` | More (⋯), the one for every place: | 13 |
 | `MultiDropdown` | `src/shared/ui/MultiDropdown.tsx` | Several choices of many behind a pop-up button: | 1 |
 | `NameField` | `src/shared/ui/NameField.tsx` | A name the learner gives (a song's title, a pattern's or a take's name), the kit's NAMEFIELD: | 10 |
 | `NameHeart` | `src/shared/ui/NameHeart.tsx` | The ♡ beside a page's name (the boards' Favourite on a progression, a pattern, an exercise): | 2 |
@@ -171,7 +170,6 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `RowFace` | `src/shared/ui/RowFace.tsx` | What a list row shows (`RowLink`, `RowButton`): | 12 |
 | `RowGroup` | `src/shared/ui/RowGroup.tsx` | A titled group of rows in one card (a grouped list, as Settings' and Practice's), in as many columns as the width holds: | 3 |
 | `RowLink` | `src/shared/ui/RowLink.tsx` | A list row that leads to a page: | 34 |
-| `RowMore` | `src/shared/ui/RowMore.tsx` | A row's More (⋯): | 7 |
 | `RowsLoading` | `src/shared/ui/RowsLoading.tsx` | A list of rows being read, drawn as their outlines (one 64 card a row, 8 apart), pulsing where motion is allowed and named once for a screen reader. | 7 |
 | `RowTrigger` | `src/shared/ui/RowTrigger.tsx` | A list row that opens a picker over its page (a popover on a laptop, a sheet on a phone): | 3 |
 | `Said` | `src/shared/ui/Said.tsx` | A state with nothing to list, the kit's one empty state (the canvas's EMPTY, r53): | 39 |
@@ -244,7 +242,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | Primitive | Exports | Used by |
 | --- | --- | --- |
 | `alert-dialog` | AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger | 9 |
-| `button` | Button, buttonVariants | 155 |
+| `button` | Button, buttonVariants | 154 |
 | `checkbox` | Checkbox | 2 |
 | `dialog` | Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger | 4 |
 | `drawer` | Drawer, DrawerPortal, DrawerOverlay, DrawerSwipeHandle, DrawerTrigger, DrawerClose, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerDescription | 1 |
@@ -471,7 +469,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-destructive` | `src/styles/theme.css` | 47 |
 | `--color-destructive-foreground` | `src/styles/theme.css` | 3 |
 | `--color-eyebrow` | `src/styles/theme.css` | 4 |
-| `--color-foreground` | `src/styles/theme.css` | 361 |
+| `--color-foreground` | `src/styles/theme.css` | 360 |
 | `--color-glass` | `src/styles/theme.css` | 2 |
 | `--color-hairline` | `src/styles/theme.css` | 65 |
 | `--color-hand-lh` | `src/styles/theme.css` | 3 |
@@ -505,8 +503,8 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-medal-none` | `src/styles/theme.css` | 1 |
 | `--color-medal-platinum` | `src/styles/theme.css` | 1 |
 | `--color-medal-silver` | `src/styles/theme.css` | 1 |
-| `--color-muted` | `src/styles/theme.css` | 160 |
-| `--color-muted-foreground` | `src/styles/theme.css` | 301 |
+| `--color-muted` | `src/styles/theme.css` | 159 |
+| `--color-muted-foreground` | `src/styles/theme.css` | 300 |
 | `--color-nav-current` | `src/styles/theme.css` | 2 |
 | `--color-nav-current-foreground` | `src/styles/theme.css` | 3 |
 | `--color-nav-foreground` | `src/styles/theme.css` | 2 |
@@ -540,7 +538,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-popover` | `src/styles/theme.css` | 5 |
 | `--color-popover-foreground` | `src/styles/theme.css` | 8 |
 | `--color-practised-day` | `src/styles/theme.css` | 2 |
-| `--color-primary` | `src/styles/theme.css` | 30 |
+| `--color-primary` | `src/styles/theme.css` | 29 |
 | `--color-primary-foreground` | `src/styles/theme.css` | 9 |
 | `--color-raised` | `src/styles/theme.css` | 6 |
 | `--color-ring` | `src/styles/theme.css` | 43 |
@@ -556,7 +554,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-scrim` | `src/styles/theme.css` | 3 |
 | `--color-secondary` | `src/styles/theme.css` | 5 |
 | `--color-secondary-foreground` | `src/styles/theme.css` | 4 |
-| `--color-selected` | `src/styles/theme.css` | 9 |
+| `--color-selected` | `src/styles/theme.css` | 11 |
 | `--color-selected-foreground` | `src/styles/theme.css` | 4 |
 | `--color-slip-0` | `src/styles/theme.css` | 1 |
 | `--color-slip-1` | `src/styles/theme.css` | 1 |
@@ -571,7 +569,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-wheel-relative` | `src/styles/theme.css` | 1 |
 | `--destructive` | `src/styles/tokens.css` | 3 |
 | `--destructive-foreground` | `src/styles/tokens.css` | 1 |
-| `--ease-out` | `src/styles/theme.css` | 115 |
+| `--ease-out` | `src/styles/theme.css` | 114 |
 | `--elevation-1` | `src/styles/tokens.css` | 1 |
 | `--elevation-2` | `src/styles/tokens.css` | 4 |
 | `--elevation-3` | `src/styles/tokens.css` | 5 |
@@ -586,7 +584,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--floating-right` | `src/styles/theme.css` | 1 |
 | `--font-display` | `src/styles/theme.css` | 56 |
 | `--font-music` | `src/styles/theme.css` | 8 |
-| `--font-sans` | `src/styles/theme.css` | 79 |
+| `--font-sans` | `src/styles/theme.css` | 78 |
 | `--foot-pad` | `src/styles/theme.css` | 1 |
 | `--foreground` | `src/styles/tokens.css` | 3 |
 | `--glass` | `src/styles/tokens.css` | 1 |
@@ -758,7 +756,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--radius-3xl` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
 | `--radius-4xl` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
 | `--radius-card` | `src/styles/theme.css` | 46 |
-| `--radius-control` | `src/styles/theme.css` | 104 |
+| `--radius-control` | `src/styles/theme.css` | 103 |
 | `--radius-key-black` | `src/styles/theme.css` | 2 |
 | `--radius-key-white` | `src/styles/theme.css` | 1 |
 | `--radius-lg` | `src/styles/theme.css` | 8 |
@@ -766,7 +764,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--radius-md` | `src/styles/theme.css` | 7 |
 | `--radius-menu` | `src/styles/theme.css` | 8 |
 | `--radius-menu-item` | `src/styles/theme.css` | 6 |
-| `--radius-pill` | `src/styles/theme.css` | 111 |
+| `--radius-pill` | `src/styles/theme.css` | 110 |
 | `--radius-sheet` | `src/styles/theme.css` | 14 |
 | `--radius-sm` | `src/styles/theme.css` | 1 |
 | `--radius-thumb` | `src/styles/theme.css` | 27 |
@@ -807,7 +805,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--text-footnote` | `src/styles/theme.css` | 61 |
 | `--text-lg` | `src/styles/theme.css` | 70 |
 | `--text-subhead` | `src/styles/theme.css` | 79 |
-| `--text-xl` | `src/styles/theme.css` | 40 |
+| `--text-xl` | `src/styles/theme.css` | 39 |
 | `--thumb` | `src/styles/tokens.css` | 1 |
 | `--toast-action` | `src/styles/tokens.css` | 1 |
 | `--wheel-near` | `src/styles/tokens.css` | 1 |
@@ -834,7 +832,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `pr-gutter-safe` | The right edge alone, where the left is a rail's or a sidebar's, which clear the notch themselves. | 2 |
 | `pr-floating` | The screen's right edge, clear of the floating actions where they stand at its right. | 2 |
 | `page-column` | The page's reading column, 672 wide and centred (DESIGN.md, Placement): | 16 |
-| `grid-cards` | A grid of cards that takes the width it is given: | 3 |
+| `grid-cards` | A grid of cards that takes the width it is given: | 2 |
 | `grid-fields` | A page's choices, each a labelled field: | 2 |
 | `pt-safe` | Clear the notch and the home indicator: | 5 |
 | `-mt-safe` | The screen's bar takes the place of its page's top padding: | 2 |

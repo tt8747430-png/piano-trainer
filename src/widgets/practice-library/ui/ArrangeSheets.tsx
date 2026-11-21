@@ -89,7 +89,7 @@ function MoveSheet({
                   </span>
                 ) : null}
                 {place.id === current ? (
-                  <Check aria-hidden className="size-5 shrink-0" strokeWidth={3} />
+                  <Check aria-hidden className="size-5 shrink-0 text-selected" />
                 ) : null}
               </button>
             </li>

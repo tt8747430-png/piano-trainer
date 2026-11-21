@@ -111,7 +111,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     and plays. Then From (the root) and Play as, **Ascending · Descending · Harmonic** (`way=`), in a column beside
     the interval on a laptop; **Play all** floats. The cards with a staff are the lessons';
   - **Exercises, Accompaniment and Progressions are one library** (`widgets/practice-library`, R30-4), the Songs
-    library's shape and its own parts (the kit's `FilterSheet`, `FilterChips`, `SortChoice`, `RowMore`,
+    library's shape and its own parts (the kit's `FilterSheet`, `FilterChips`, `SortChoice`, `MoreMenu`,
     `SortHeading`): the search with Sort (Book or Style, Name, Level) and Filter (Level; Style for
     Progressions), and under it the places as chips on both sizes (All, Favourites, the books or styles, Mine,
     Hidden); on a phone Favourites while there are some, each book (or style) a run of rows folded after five with

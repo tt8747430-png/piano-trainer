@@ -6,11 +6,11 @@ import { useFolderName, type ShelvedFolder } from '@/entities/library'
 import { cn, useLongPress } from '@/shared/lib'
 import {
   menuOf,
+  MoreMenu,
   POINTER_ONLY,
   ROW_BODY,
   ROW_FLAT,
   ROW_LIBRARY_FACE,
-  RowMore,
   swipeOf,
   SwipeRow,
   type RowAction,
@@ -62,7 +62,8 @@ export function FolderRow({
               className="mr-3 size-5 shrink-0 text-muted-foreground pointer-fine:hidden"
             />
           </Link>
-          <RowMore
+          <MoreMenu
+            on="row"
             label={t('library.moreOf', { name: nameOf(folder) })}
             actions={menuOf(actions)}
             className={POINTER_ONLY}

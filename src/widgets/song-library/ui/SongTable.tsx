@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PieceLink, type Entry } from '@/entities/piece'
-import { CheckMark, menuOf, RowMore, type RowAction } from '@/shared/ui'
+import { CheckMark, menuOf, MoreMenu, type RowAction } from '@/shared/ui'
 import { PieceMark } from '@/widgets/piece-cover'
 import { useEntryFace } from '@/widgets/piece-list'
 import { useSongStanding } from './use-song-status'
@@ -76,7 +76,11 @@ function SongTableRow({
       </span>
       <span role="cell" className="flex justify-end">
         {select ? null : (
-          <RowMore label={t('library.moreOf', { name: face.title })} actions={menuOf(actions)} />
+          <MoreMenu
+            on="row"
+            label={t('library.moreOf', { name: face.title })}
+            actions={menuOf(actions)}
+          />
         )}
       </span>
     </div>

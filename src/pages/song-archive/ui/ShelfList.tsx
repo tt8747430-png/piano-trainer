@@ -8,13 +8,13 @@ import { cn, daySaid, flipped, matchesQuery, useMediaQuery, useNow, LAPTOP } fro
 import {
   BackButton,
   CheckMark,
+  MoreMenu,
   RowFace,
-  RowMore,
   ScreenHeader,
   SearchField,
-  type MenuAction,
   SelectAct,
   SelectDock,
+  type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { PieceMark } from '@/widgets/piece-cover'
@@ -151,7 +151,7 @@ function ShelfRow({
     )
   const more =
     chosen !== null ? null : (
-      <RowMore label={t('library.moreOf', { name: title })} actions={item.actions} />
+      <MoreMenu on="row" label={t('library.moreOf', { name: title })} actions={item.actions} />
     )
   if (laptop)
     return (

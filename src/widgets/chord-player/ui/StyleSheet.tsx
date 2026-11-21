@@ -82,7 +82,10 @@ function StyleList({
                   >
                     <Check
                       aria-hidden
-                      className={cn('size-5 shrink-0', chosen ? 'opacity-100' : 'opacity-0')}
+                      className={cn(
+                        'size-5 shrink-0 text-selected',
+                        chosen ? 'opacity-100' : 'opacity-0',
+                      )}
                     />
                     <span className="flex min-w-0 flex-1 flex-col">
                       <span className="font-semibold text-pretty">{name}</span>
