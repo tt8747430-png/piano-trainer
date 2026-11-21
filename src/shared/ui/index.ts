@@ -108,7 +108,6 @@ export { VERDICT_INK, VERDICT_SHAPE, type VerdictMark } from './verdict-shape'
 export { PlayLabel } from './PlayLabel'
 export { PlayButton } from './PlayButton'
 export { SheetOption } from './SheetOption'
-export { FoldBody } from './FoldBody'
 export { PlayToggle } from './PlayToggle'
 export { usePlayKey } from './use-play-key'
 export {

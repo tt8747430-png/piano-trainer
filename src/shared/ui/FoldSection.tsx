@@ -1,7 +1,6 @@
 import { ChevronDown } from 'lucide-react'
-import { useId, type ReactNode } from 'react'
+import { useId, useState, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
-import { FoldBody } from './FoldBody'
 import { InfoTip } from './InfoTip'
 
 /** Whether a section shows its body, and how its heading changes that. */
@@ -53,6 +52,8 @@ export function FoldSection({
   const headingId = useId()
   const bodyId = useId()
   const open = fold?.open ?? true
+  // Only a body the learner unfolds fades in; on the page's first paint it stands, as everything.
+  const [folded, setFolded] = useState(false)
   const Heading = HEADINGS[level]
   const heading = (
     <Heading
@@ -70,7 +71,10 @@ export function FoldSection({
           type="button"
           aria-expanded={open}
           aria-controls={bodyId}
-          onClick={fold.toggle}
+          onClick={() => {
+            setFolded(true)
+            fold.toggle()
+          }}
           // Its reach is 44px tall, grown over the room round the heading, which stays put.
           className="-my-2.5 flex min-h-11 w-full items-center gap-2 rounded-control py-2.5 text-left"
         >
@@ -112,10 +116,21 @@ export function FoldSection({
       ) : (
         heading
       )}
-      <FoldBody id={bodyId} open={open} className="flex flex-col gap-3">
+      {/* Folded, the body is gone at once, out of reach of the keyboard and a screen reader; unfolded,
+          it stands at once and fades in from 4 above, as the editor's palette (only opacity and
+          transform move, never its height); at once under reduced motion. */}
+      <div
+        id={bodyId}
+        hidden={!open}
+        className={cn(
+          'flex flex-col gap-3',
+          folded &&
+            'transition-[opacity,translate] duration-200 ease-out starting:-translate-y-1 starting:opacity-0 motion-reduce:transition-none',
+        )}
+      >
         {detail}
         {children}
-      </FoldBody>
+      </div>
     </section>
   )
 }

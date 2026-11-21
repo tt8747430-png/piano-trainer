@@ -68,7 +68,7 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
 - **The same at every size.** A control has the same name and does the same thing on a phone and a laptop. A size
   changes where it stands, never what it is or says. An icon button is named by its tooltip and its accessible name. A control with words is named by
   them: an `aria-label` only adds to its visible text, never replaces it (WCAG 2.5.3, axe in the e2e).
-- **Secondary sections fold** from their headings (`FoldSection` over `FoldBody`, sliding, inert while folded); what
+- **Secondary sections fold** from their headings (`FoldSection`: folded, the body is gone at once; unfolded, it fades in from 4 above, only opacity and transform moving); what
   is folded is saved by section id (`foldedSections`) and stays folded on every visit.
 - **The screen's bar** (`ScreenHeader`) is a child of the page's root, one row with no tabs under it; it hides
   while reading down and comes back on a scroll up. `src/app/screen-bar.test.tsx` holds every screen to it.

@@ -59,7 +59,6 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `FloatingPlayPiece` | `src/shared/ui/FloatingPieces.tsx` | The floating primary of a tool with nothing to choose about how it plays (the Metronome's Start), tinted honey glass, 176 wide: | 2 |
 | `FloatingPlaySplit` | `src/shared/ui/FloatingPieces.tsx` | The floating primary that plays, tinted honey glass, 176 wide: | 5 |
 | `Fold` | `src/shared/ui/FoldSection.tsx` | Whether a section shows its body, and how its heading changes that. | 3 |
-| `FoldBody` | `src/shared/ui/FoldBody.tsx` | What a heading folds away: | 1 |
 | `FoldSection` | `src/shared/ui/FoldSection.tsx` | A titled section of a page; given a `fold`, its heading is the button that folds its body away, a chevron saying which way it is, the heading itself staying in sight. | 12 |
 | `FormField` | `src/shared/ui/FormField.tsx` | A form's field (an email, a password, a name), the kit's one field: | 8 |
 | `Glyph` | `src/shared/ui/Glyph.tsx` | Text drawn for the eye alone (CSS `content`): | 3 |
@@ -571,7 +570,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-wheel-relative` | `src/styles/theme.css` | 1 |
 | `--destructive` | `src/styles/tokens.css` | 3 |
 | `--destructive-foreground` | `src/styles/tokens.css` | 1 |
-| `--ease-out` | `src/styles/theme.css` | 113 |
+| `--ease-out` | `src/styles/theme.css` | 112 |
 | `--elevation-1` | `src/styles/tokens.css` | 1 |
 | `--elevation-2` | `src/styles/tokens.css` | 4 |
 | `--elevation-3` | `src/styles/tokens.css` | 5 |
@@ -831,7 +830,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `section-head` | The head over a card of rows on a page (Practise, Options, How to play): | 2 |
 | `settings-pane` | DESIGN's card: | 1 |
 | `picture-edge` | The card's ring is a shadow: | 6 |
-| `card` |  | 217 |
+| `card` |  | 216 |
 | `rows-line` | * Rows parted by a line that takes no room, as the boards' GROUP draws them (an inset line under each * row but the last, not a border): | 3 |
 | `rows-hairline` |  | 26 |
 | `px-gutter` | * A block's or a place's look (R29 B9, `shared/lib/style`): | 15 |
