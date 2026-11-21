@@ -29,10 +29,7 @@ export function IncipitStaff({
       data-slot={slot}
       aria-hidden
       viewBox="0 0 44 44"
-      className={cn(
-        'bg-(--print-paper) text-(--print-ink) shadow-[0_0_0_1px_--alpha(var(--color-foreground)/10%)]',
-        className,
-      )}
+      className={cn('bg-(--print-paper) text-(--print-ink) picture-edge', className)}
     >
       {LINES.map((y) => (
         <path key={y} d={`M5 ${y}H39`} stroke="currentColor" strokeWidth={0.7} opacity={0.55} />

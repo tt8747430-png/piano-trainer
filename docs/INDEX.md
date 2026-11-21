@@ -465,11 +465,11 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-card` | `src/styles/theme.css` | 131 |
 | `--color-card-foreground` | `src/styles/theme.css` | 4 |
 | `--color-chosen` | `src/styles/theme.css` | 20 |
-| `--color-chosen-honey` | `src/styles/theme.css` | 7 |
+| `--color-chosen-honey` | `src/styles/theme.css` | 8 |
 | `--color-destructive` | `src/styles/theme.css` | 47 |
 | `--color-destructive-foreground` | `src/styles/theme.css` | 3 |
 | `--color-eyebrow` | `src/styles/theme.css` | 4 |
-| `--color-foreground` | `src/styles/theme.css` | 359 |
+| `--color-foreground` | `src/styles/theme.css` | 357 |
 | `--color-glass` | `src/styles/theme.css` | 2 |
 | `--color-hairline` | `src/styles/theme.css` | 66 |
 | `--color-hand-lh` | `src/styles/theme.css` | 3 |
@@ -482,7 +482,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-heart-rest` | `src/styles/theme.css` | 1 |
 | `--color-honey-ink` | `src/styles/theme.css` | 4 |
 | `--color-honey-ring` | `src/styles/theme.css` | 9 |
-| `--color-honey-wash` | `src/styles/theme.css` | 2 |
+| `--color-honey-wash` | `src/styles/theme.css` | 1 |
 | `--color-input` | `src/styles/theme.css` | 22 |
 | `--color-key-bed` | `src/styles/theme.css` | 3 |
 | `--color-key-black` | `src/styles/theme.css` | 6 |
@@ -825,7 +825,9 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `subject-title` | A Practice page's subject (the interval, the progression, the pattern, the exercise): | 4 |
 | `section-head` | The head over a card of rows on a page (Practise, Options, How to play): | 2 |
 | `settings-pane` | DESIGN's card: | 1 |
-| `rows-line` | The card's ring is a shadow: | 3 |
+| `picture-edge` | The card's ring is a shadow: | 6 |
+| `card` |  | 216 |
+| `rows-line` | * Rows parted by a line that takes no room, as the boards' GROUP draws them (an inset line under each * row but the last, not a border): | 3 |
 | `rows-hairline` |  | 26 |
 | `px-gutter` | * A block's or a place's look (R29 B9, `shared/lib/style`): | 15 |
 | `-mx-gutter` |  | 16 |

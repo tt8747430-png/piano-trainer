@@ -49,7 +49,7 @@ export function LibraryTile({
           <span
             key={i}
             className={cn(
-              'min-w-0 flex-1 rounded-mark ring-1 ring-foreground/15 ring-inset',
+              'min-w-0 flex-1 rounded-mark picture-edge',
               PAINT[ROLE_PAINT[chordRole(numeral, picture.minor).role]].fill,
             )}
           />

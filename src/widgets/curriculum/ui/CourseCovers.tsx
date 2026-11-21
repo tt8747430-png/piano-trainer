@@ -49,7 +49,7 @@ function CourseCover({
     >
       <span
         className={cn(
-          'flex h-32 flex-col justify-between rounded-card px-4 py-3 ring-1 ring-black/6 transition-[filter] duration-200 ease-out ring-inset group-hover:brightness-[0.97] dark:ring-white/5',
+          'flex h-32 flex-col justify-between rounded-card px-4 py-3 picture-edge transition-[filter] duration-200 ease-out group-hover:brightness-[0.97]',
           paint.fill,
         )}
       >

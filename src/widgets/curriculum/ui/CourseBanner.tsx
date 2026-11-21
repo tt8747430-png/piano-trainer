@@ -8,14 +8,7 @@ const NOTES = [0, 1, 2, 3, 4, 5, 6] as const
  */
 export function CourseBanner({ fill, ink }: { fill: string; ink: string }) {
   return (
-    <div
-      aria-hidden
-      className={cn(
-        'h-33 overflow-hidden rounded-card ring-1 ring-black/5 ring-inset dark:ring-white/5',
-        fill,
-        ink,
-      )}
-    >
+    <div aria-hidden className={cn('h-33 overflow-hidden rounded-card picture-edge', fill, ink)}>
       <svg viewBox="0 0 400 132" preserveAspectRatio="xMidYMid slice" className="size-full">
         <g className="stroke-current opacity-45" strokeWidth={1.6}>
           {[0, 1, 2, 3, 4].map((i) => (

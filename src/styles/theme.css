@@ -475,6 +475,14 @@
     padding-inline: 0;
   }
 }
+/*
+ * A picture's edge (craft-details, Images): a cover, a paint tile, a course's banner. 1px inside it at
+ * 10% of the ink, black by day and white by night, so a light picture keeps its edge on the paper.
+ */
+@utility picture-edge {
+  @apply ring-1 ring-foreground/10 ring-inset;
+}
+
 @utility card {
   @apply rounded-card bg-card ring-1 ring-border;
 }
