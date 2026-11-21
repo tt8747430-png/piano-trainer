@@ -107,10 +107,15 @@ export function FoldSection({
   return (
     <section aria-labelledby={headingId} className={cn('flex flex-col gap-3', className)}>
       {info || action ? (
-        // Beside the heading, not in it: the section is named by its title alone.
-        <div className="flex items-center gap-2">
+        // Beside the heading, not in it: the section is named by its title alone. See all stands on
+        // the name's baseline; the ⓘ, a picture, is centred on its line.
+        <div className="flex items-baseline gap-2">
           {heading}
-          {info ? <InfoTip name={title}>{info}</InfoTip> : null}
+          {info ? (
+            <InfoTip name={title} className="self-center">
+              {info}
+            </InfoTip>
+          ) : null}
           {action}
         </div>
       ) : (

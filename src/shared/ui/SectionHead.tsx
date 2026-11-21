@@ -35,7 +35,8 @@ export function SectionHead({
 
 /**
  * A section head's See all: the link's word in the link colour, reaching 44 for a finger without
- * making its row taller than the name beside it. `render` is the router `Link`, or a button.
+ * making its row taller than the name beside it, the reach upward so it never lands on what the
+ * section shows under it. `render` is the router `Link`, or a button.
  */
 export function SeeAll({
   label,
@@ -53,7 +54,7 @@ export function SeeAll({
       type: render ? undefined : 'button',
       onClick,
       className:
-        '-my-3 -mr-1 inline-flex min-h-11 min-w-11 items-center justify-end px-1 text-subhead font-semibold text-link hover:underline',
+        '-mt-4 -mb-2 -mr-1 inline-flex min-h-11 min-w-11 items-end justify-end px-1 pb-2 text-subhead font-semibold text-link hover:underline',
       children: label,
     },
   })
