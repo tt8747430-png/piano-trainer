@@ -1,8 +1,7 @@
-import { X } from 'lucide-react'
 import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@/shared/ui/primitives/button'
-import { Dialog, DialogClose, DialogContent, DialogTitle } from '@/shared/ui/primitives/dialog'
+import { WindowHeader } from '@/shared/ui'
+import { Dialog, DialogContent } from '@/shared/ui/primitives/dialog'
 import { SettingsDialogContext, type AdminCounts } from '../model/dialog-context'
 import { settingsPlaceOf } from '../model/sections'
 import { SettingsNav } from './SettingsNav'
@@ -35,23 +34,7 @@ export function SettingsDialog({
         showCloseButton={false}
         className="flex h-(--window-height) w-[min(60rem,calc(100vw-10rem))] max-w-none flex-col gap-0 overflow-hidden rounded-sheet bg-card p-0 text-base text-foreground window-shadow sm:max-w-none"
       >
-        <header className="flex h-14 shrink-0 items-center border-b border-border pr-2 pl-6">
-          <DialogTitle className="flex-1 font-sans text-lg leading-normal font-semibold">
-            {t('title')}
-          </DialogTitle>
-          <DialogClose
-            render={
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={t('dialog.close')}
-                title={t('dialog.close')}
-              />
-            }
-          >
-            <X aria-hidden />
-          </DialogClose>
-        </header>
+        <WindowHeader inset="app" title={t('title')} closeLabel={t('dialog.close')} />
         <div className="grid min-h-0 flex-1 grid-cols-[16.5rem_minmax(0,1fr)]">
           <nav
             aria-label={t('title')}

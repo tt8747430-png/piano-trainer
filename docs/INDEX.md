@@ -237,15 +237,16 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `VerdictMark` | `src/shared/ui/verdict-shape.ts` | How a written note was played: | 7 |
 | `ViewPill` | `src/shared/ui/ViewPill.tsx` | A screen's views as one pill in its bar's middle (the Player's canvas: | 2 |
 | `VolumeSlider` | `src/shared/ui/VolumeSlider.tsx` | One volume, 0 to 100 %: | 3 |
+| `WindowHeader` | `src/shared/ui/WindowHeader.tsx` | A laptop window's bar, as the boards' Settings and THINGWIN draw it: | 2 |
 
 ## Primitives (`src/shared/ui/primitives`, shadcn)
 
 | Primitive | Exports | Used by |
 | --- | --- | --- |
 | `alert-dialog` | AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger | 9 |
-| `button` | Button, buttonVariants | 154 |
+| `button` | Button, buttonVariants | 153 |
 | `checkbox` | Checkbox | 2 |
-| `dialog` | Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger | 4 |
+| `dialog` | Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger | 5 |
 | `drawer` | Drawer, DrawerPortal, DrawerOverlay, DrawerSwipeHandle, DrawerTrigger, DrawerClose, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerDescription | 1 |
 | `dropdown-menu` | DropdownMenu, DropdownMenuPortal, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent | 4 |
 | `input-group` | InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupInput, InputGroupTextarea | 4 |
@@ -585,7 +586,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--floating-right` | `src/styles/theme.css` | 1 |
 | `--font-display` | `src/styles/theme.css` | 56 |
 | `--font-music` | `src/styles/theme.css` | 8 |
-| `--font-sans` | `src/styles/theme.css` | 78 |
+| `--font-sans` | `src/styles/theme.css` | 77 |
 | `--foot-pad` | `src/styles/theme.css` | 1 |
 | `--foreground` | `src/styles/tokens.css` | 3 |
 | `--glass` | `src/styles/tokens.css` | 1 |
@@ -806,7 +807,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--text-4xl` | `src/styles/theme.css` | 7 |
 | `--text-5xl` | `src/styles/theme.css` | 3 |
 | `--text-footnote` | `src/styles/theme.css` | 64 |
-| `--text-lg` | `src/styles/theme.css` | 71 |
+| `--text-lg` | `src/styles/theme.css` | 70 |
 | `--text-subhead` | `src/styles/theme.css` | 85 |
 | `--text-xl` | `src/styles/theme.css` | 39 |
 | `--thumb` | `src/styles/tokens.css` | 1 |

@@ -1,11 +1,10 @@
-import { X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { BackButton } from './BackButton'
-import { Button } from './primitives/button'
-import { Dialog, DialogClose, DialogContent, DialogTitle } from './primitives/dialog'
+import { Dialog, DialogContent } from './primitives/dialog'
 import { Sheet, SheetContent } from './Sheet'
+import { WindowHeader } from './WindowHeader'
 
 /**
  * A thing's Settings over its page, never a page of its own (the SongSettings boards' SETWIN): on a
@@ -49,24 +48,7 @@ export function SettingsWindow({
         showCloseButton={false}
         className="flex h-(--window-height) w-180 max-w-none flex-col gap-0 overflow-hidden rounded-sheet bg-card p-0 text-base text-foreground window-shadow sm:max-w-none"
       >
-        <header
-          className={cn(
-            'flex h-14 shrink-0 items-center gap-1 border-b border-border pr-2',
-            back ? 'pl-3' : 'pl-8',
-          )}
-        >
-          {back}
-          <DialogTitle className="flex-1 font-sans text-lg leading-normal font-semibold">
-            {title}
-          </DialogTitle>
-          <DialogClose
-            render={
-              <Button variant="ghost" size="icon" aria-label={t('close')} title={t('close')} />
-            }
-          >
-            <X aria-hidden />
-          </DialogClose>
-        </header>
+        <WindowHeader title={title} back={back} closeLabel={t('close')} />
         <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-8 pt-5 pb-8">
           {children}
         </div>
