@@ -207,7 +207,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
               <h2 className="subject-title">{name}</h2>
               <FavouriteButton pattern={pattern} />
             </div>
-            <p className="ms-0.5 text-[0.9375rem]/[normal] text-muted-foreground">
+            <p className="ms-0.5 text-subhead/[normal] text-muted-foreground">
               {own ? t('patterns.yours') : partName(partOfShelf(pattern.group))}
             </p>
           </div>
@@ -216,7 +216,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
               a caption, no card (canvas, "A pattern's grand staff at reading size"). */}
           <section className="flex flex-col gap-3">
             <PatternStaff sample={sample} />
-            <p className="mx-1 max-w-[65ch] text-[0.9375rem] leading-[1.4] text-pretty text-muted-foreground">
+            <p className="mx-1 max-w-[65ch] text-subhead leading-[1.4] text-pretty text-muted-foreground">
               {localText(pattern.idea, locale)}
             </p>
           </section>

@@ -66,7 +66,7 @@ export function SelectionStrip({ className }: { className?: string }) {
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="truncate text-base leading-tight font-semibold tabular-nums">{what}</span>
         {where ? (
-          <span className="truncate text-[0.8125rem] leading-tight text-muted-foreground tabular-nums">
+          <span className="truncate text-footnote leading-tight text-muted-foreground tabular-nums">
             {where}
           </span>
         ) : null}

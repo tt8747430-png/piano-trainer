@@ -64,7 +64,7 @@ export function AboutPage() {
         />
         <div className="flex min-w-0 flex-col gap-0.5">
           <p className="text-xl font-bold">Piano Trainer</p>
-          <p className="text-[0.9375rem] text-muted-foreground tabular-nums">
+          <p className="text-subhead text-muted-foreground tabular-nums">
             {t('aboutPage.version', { version: APP_VERSION, build: APP_BUILD })}
           </p>
         </div>

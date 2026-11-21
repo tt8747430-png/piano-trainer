@@ -104,7 +104,7 @@ export function SignUpPage() {
           .
         </p>
       </form>
-      <p className="flex flex-wrap items-center justify-center gap-0.5 text-[0.9375rem] text-muted-foreground">
+      <p className="flex flex-wrap items-center justify-center gap-0.5 text-subhead text-muted-foreground">
         {t('signUp.haveAccount')}
         <Link to="/account/sign-in" replace className={ACCOUNT_LINK}>
           {t('signUp.signIn')}

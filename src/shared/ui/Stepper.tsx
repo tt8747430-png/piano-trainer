@@ -81,12 +81,12 @@ export function Stepper({
               commit()
             }
           }}
-          className="h-11 w-16 rounded-none border-0 bg-transparent px-0 text-center text-[0.9375rem] font-semibold tabular-nums shadow-none"
+          className="h-11 w-16 rounded-none border-0 bg-transparent px-0 text-center text-subhead font-semibold tabular-nums shadow-none"
         />
       ) : (
         <output
           aria-live="polite"
-          className="min-w-16 px-1 text-center text-[0.9375rem] font-semibold whitespace-nowrap tabular-nums"
+          className="min-w-16 px-1 text-center text-subhead font-semibold whitespace-nowrap tabular-nums"
         >
           {format(value)}
         </output>

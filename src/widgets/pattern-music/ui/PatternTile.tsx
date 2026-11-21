@@ -41,7 +41,7 @@ export function PatternTile({ pattern, book }: { pattern: BookPattern; book: Pat
       aria-hidden
       data-slot="row-tile"
       className={cn(
-        'size-11 shrink-0 rounded-[10px] ring-1 ring-border',
+        'size-11 shrink-0 rounded-thumb ring-1 ring-border',
         PAINT.lilac.fill,
         PAINT.lilac.ink,
       )}

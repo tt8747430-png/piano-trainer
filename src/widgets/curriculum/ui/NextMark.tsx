@@ -12,7 +12,7 @@ export function NextMark({ size }: { size?: 'row' }) {
     <span
       className={cn(
         'flex shrink-0 items-center rounded-pill px-3 font-bold text-honey-ink ring-[1.5px] ring-primary ring-inset',
-        size === 'row' ? 'h-6.5 text-[0.8125rem]' : 'h-6 text-xs',
+        size === 'row' ? 'h-6.5 text-footnote' : 'h-6 text-xs',
       )}
     >
       {t('upNext')}

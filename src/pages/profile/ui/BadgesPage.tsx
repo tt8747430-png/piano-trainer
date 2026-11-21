@@ -55,7 +55,7 @@ export function BadgePage() {
         <section className="flex flex-col items-center gap-2 text-center">
           <BadgeMark tier={badge.tier} size="hero" />
           <p className="font-sans text-[1.625rem]/tight font-bold text-balance">{name}</p>
-          <p className="text-[0.9375rem] text-muted-foreground">
+          <p className="text-subhead text-muted-foreground">
             {badge.tier
               ? `${t(`profile.badges.tiers.${badge.tier}`)} · ${t('profile.badges.tierOf', { tier: badge.earned })}`
               : `${t('profile.badges.notStarted')} · ${standing(badge)}`}
@@ -72,7 +72,7 @@ export function BadgePage() {
             <h2 id="badge-tiers" className="font-sans text-xl font-bold">
               {t('profile.badges.tiersTitle')}
             </h2>
-            <p className="text-[0.9375rem] text-muted-foreground tabular-nums">
+            <p className="text-subhead text-muted-foreground tabular-nums">
               {t('profile.badges.you', { have: badge.have })}
             </p>
           </div>

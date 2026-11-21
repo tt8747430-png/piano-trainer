@@ -91,7 +91,7 @@ export function PracticeCalendar({ title }: { title: string }) {
                   {cell ? (
                     <span
                       className={cn(
-                        'mx-auto grid aspect-square w-full max-w-13 place-items-center rounded-pill text-[0.9375rem] tabular-nums',
+                        'mx-auto grid aspect-square w-full max-w-13 place-items-center rounded-pill text-subhead tabular-nums',
                         cell.practised && 'bg-practised-day',
                         cell.rested && 'ring-2 ring-practised-day ring-inset',
                         cell.today && 'ring-2 ring-played',

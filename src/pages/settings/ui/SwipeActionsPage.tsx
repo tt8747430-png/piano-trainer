@@ -99,7 +99,7 @@ function SwipePreview({ kind }: { kind: Kind }) {
       )}
     >
       {first && Icon ? (
-        <span className="absolute inset-y-0 start-0 flex w-24 flex-col items-center justify-center gap-1 px-1 text-center text-[0.8125rem] font-bold text-white">
+        <span className="absolute inset-y-0 start-0 flex w-24 flex-col items-center justify-center gap-1 px-1 text-center text-footnote font-bold text-white">
           <Icon aria-hidden className="size-5" />
           {t(`bars.act.${first}`)}
         </span>
@@ -114,7 +114,7 @@ function SwipePreview({ kind }: { kind: Kind }) {
           <span className="truncate font-semibold">
             {t(kind === 'songs' ? 'bars.previewSong' : 'bars.previewFolder')}
           </span>
-          <span className="truncate text-[0.8125rem] text-muted-foreground">
+          <span className="truncate text-footnote text-muted-foreground">
             {t(kind === 'songs' ? 'bars.previewComposer' : 'bars.previewHolds')}
           </span>
         </span>

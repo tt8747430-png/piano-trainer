@@ -34,7 +34,7 @@ export function EditorLead({ own, said }: { own: boolean; said?: ReactNode }) {
         <X aria-hidden />
       </Button>
       {laptop && (said || own) ? (
-        <p className="ms-1 truncate text-[0.8125rem] text-muted-foreground">
+        <p className="ms-1 truncate text-footnote text-muted-foreground">
           {said ?? <span role="status">{te(account ? 'savedAccount' : 'savedHere')}</span>}
         </p>
       ) : null}

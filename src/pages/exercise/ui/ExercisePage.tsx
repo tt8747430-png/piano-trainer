@@ -144,7 +144,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
               <h2 className="subject-title">{name}</h2>
               <PracticeFavouriteButton kind="exercises" id={exercise.id} />
             </div>
-            <p className="ms-0.5 text-[0.9375rem]/[normal] text-muted-foreground">{source}</p>
+            <p className="ms-0.5 text-subhead/[normal] text-muted-foreground">{source}</p>
           </div>
           <figure className="mt-1 flex flex-col gap-2">
             {/* Each system spans the column, its staff the board's size (12.3 a space at 370, 13 at 880). */}
@@ -168,7 +168,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
                   ))
                 : null}
             </div>
-            <figcaption className="text-[0.8125rem] leading-[normal] text-muted-foreground tabular-nums">
+            <figcaption className="text-footnote leading-[normal] text-muted-foreground tabular-nums">
               {t('practice:exercisePage.bars', {
                 last: shownBars,
                 count: performance.bars.length,
@@ -287,7 +287,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
           </section>
           <section className="flex flex-col gap-2">
             <h3 className="section-head">{t('practice:exercisePage.how')}</h3>
-            <p className="card p-4 text-[0.9375rem] leading-[1.45] text-pretty">
+            <p className="card p-4 text-subhead leading-[1.45] text-pretty">
               {localText(exercise.how, locale)}
             </p>
           </section>

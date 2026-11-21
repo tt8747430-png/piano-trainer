@@ -146,7 +146,7 @@ export function RunView({
           <ScaleSheet music={written} hands={hands} fingers />
           {/* The fingers stand on the staves; only a scale with none says so (the board's FING60). */}
           {standard ? null : (
-            <p className="text-center text-[0.9375rem] text-muted-foreground">
+            <p className="text-center text-subhead text-muted-foreground">
               {t('practice:scales.noFingering')}
             </p>
           )}

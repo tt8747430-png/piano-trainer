@@ -75,7 +75,7 @@ export function AccountsTab() {
                           {account.email}
                         </span>
                       ) : null}
-                      <span className="text-[0.8125rem] text-muted-foreground">
+                      <span className="text-footnote text-muted-foreground">
                         {t('accounts.joined', { date: dateSaid(account.joinedAt, locale) })} ·{' '}
                         {account.lastSignInAt
                           ? t('accounts.lastSeen', {

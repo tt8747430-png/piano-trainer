@@ -145,7 +145,7 @@ export function PatternPage({
           aria-pressed={value === 'chart'}
           data-chosen={value === 'chart' ? '' : undefined}
           onClick={() => choose('chart')}
-          className="flex min-h-15 items-center rounded-control bg-card px-3 text-left text-[0.9375rem] font-medium transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3 aria-pressed:bg-chosen-honey aria-pressed:font-bold"
+          className="flex min-h-15 items-center rounded-control bg-card px-3 text-left text-subhead font-medium transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3 aria-pressed:bg-chosen-honey aria-pressed:font-bold"
         >
           {t('player:fromChart')}
         </button>
@@ -160,14 +160,14 @@ export function PatternPage({
                 ...Object.fromEntries(folds.map((fold) => [key(fold.id), !anyOpen])),
               })
             }
-            className="min-h-11 rounded-control text-[0.8125rem] font-semibold text-eyebrow transition-colors duration-200 ease-out hover:text-foreground"
+            className="min-h-11 rounded-control text-footnote font-semibold text-eyebrow transition-colors duration-200 ease-out hover:text-foreground"
           >
             {t(anyOpen ? 'player:patternSheet.closeAll' : 'player:patternSheet.openAll')}
           </button>
         </div>
       ) : null}
       {folds.length === 0 ? (
-        <p className="px-4 py-7 text-center text-[0.9375rem] text-muted-foreground">
+        <p className="px-4 py-7 text-center text-subhead text-muted-foreground">
           {t('player:patternSheet.noMatch')}
         </p>
       ) : (

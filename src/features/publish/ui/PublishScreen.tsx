@@ -357,7 +357,7 @@ function PublishForm({
         <p
           id={`${id}-count`}
           aria-live="polite"
-          className="mx-1 flex justify-between gap-3 text-[0.8125rem] text-muted-foreground tabular-nums"
+          className="mx-1 flex justify-between gap-3 text-footnote text-muted-foreground tabular-nums"
         >
           <span>
             {length < DESCRIPTION_MIN
@@ -403,15 +403,15 @@ function PublishForm({
             <span className="font-bold text-balance break-words">
               {face.title.trim() || item.title}
             </span>
-            <span className="text-[0.8125rem] text-muted-foreground">
+            <span className="text-footnote text-muted-foreground">
               {[face.composer.trim(), publishing.authorName].filter(Boolean).join(' · ')}
             </span>
             {descriptionOf(face.description) ? (
-              <span className="line-clamp-2 text-[0.8125rem] text-muted-foreground">
+              <span className="line-clamp-2 text-footnote text-muted-foreground">
                 {descriptionOf(face.description)}
               </span>
             ) : null}
-            <span className="text-[0.8125rem] font-semibold">
+            <span className="text-footnote font-semibold">
               {[song ? t(`public.types.${face.type}`) : '', ...face.tags]
                 .filter(Boolean)
                 .join(' · ')}

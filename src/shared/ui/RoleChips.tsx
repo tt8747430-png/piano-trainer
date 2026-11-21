@@ -60,7 +60,7 @@ export function RoleTile({
             {printedSymbol(numeral)}
           </span>
         ) : null}
-        <span className="max-w-full truncate text-[0.9375rem]/[normal] font-bold">
+        <span className="max-w-full truncate text-subhead/[normal] font-bold">
           {printedSymbol(chord)}
         </span>
       </button>
@@ -76,7 +76,7 @@ export function RoleTile({
 export function RoleLegend() {
   const { t } = useTranslation('music')
   return (
-    <div className="flex flex-wrap items-center gap-y-1 text-[0.8125rem] leading-[normal] text-muted-foreground">
+    <div className="flex flex-wrap items-center gap-y-1 text-footnote leading-[normal] text-muted-foreground">
       <span className="flex flex-wrap items-center gap-x-4">
         {(['home', 'away', 'tension'] as const).map((role) => (
           <span key={role} className="flex items-center gap-2">

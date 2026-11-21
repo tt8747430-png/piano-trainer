@@ -244,7 +244,7 @@ export function PublicSongPage() {
     <button
       type="button"
       onClick={() => setReporting(true)}
-      className="flex h-11 items-center gap-2.5 self-start rounded-control px-1 text-[0.9375rem] font-semibold text-muted-foreground hover:text-foreground"
+      className="flex h-11 items-center gap-2.5 self-start rounded-control px-1 text-subhead font-semibold text-muted-foreground hover:text-foreground"
     >
       <Flag aria-hidden className="size-5" />
       {t(reading.kind === 'song' ? 'public.reportSong' : 'public.reportPattern')}

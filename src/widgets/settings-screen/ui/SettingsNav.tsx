@@ -16,11 +16,11 @@ import { AccountCard } from './AccountCard'
 
 /** A place's row in the dialog's nav (LNAVROW): 40 tall, its glyph in Soft Ink, the open one washed. */
 const ROW =
-  'flex h-10 w-full items-center gap-3 rounded-[10px] px-3 text-[0.9375rem] choice focus-visible:-outline-offset-3 data-active:font-semibold'
+  'flex h-10 w-full items-center gap-3 rounded-thumb px-3 text-subhead choice focus-visible:-outline-offset-3 data-active:font-semibold'
 
 /** A group's small heading over its rows (LNAV's h3): 13 semibold in Soft Ink. */
 const HEAD =
-  'px-3 pb-1 font-sans text-[0.8125rem] leading-[normal] font-semibold text-muted-foreground'
+  'px-3 pb-1 font-sans text-footnote leading-[normal] font-semibold text-muted-foreground'
 
 /**
  * The laptop Settings dialog's nav (the board's LSEARCH, LACCT, LNAV, LADMIN; claude.ai's): a search
@@ -62,7 +62,7 @@ export function SettingsNav({
                 <Icon aria-hidden className="size-4.5 shrink-0 text-muted-foreground" />
                 <span className="min-w-0 flex-1">{t(`admin:sections.${section}`)}</span>
                 {counts[section] ? (
-                  <span className="text-[0.8125rem] text-muted-foreground tabular-nums">
+                  <span className="text-footnote text-muted-foreground tabular-nums">
                     {counts[section]}
                   </span>
                 ) : null}
@@ -79,7 +79,7 @@ export function SettingsNav({
   })).filter((group) => group.pages.length > 0)
   return (
     <>
-      <label className="flex h-10 shrink-0 items-center gap-2 rounded-[10px] bg-muted px-3 text-muted-foreground">
+      <label className="flex h-10 shrink-0 items-center gap-2 rounded-thumb bg-muted px-3 text-muted-foreground">
         <Search aria-hidden className="size-4.5 shrink-0" />
         <input
           type="search"
@@ -89,7 +89,7 @@ export function SettingsNav({
           placeholder={t('settings:dialog.search')}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          className="min-w-0 flex-1 bg-transparent text-[0.9375rem] text-foreground placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-subhead text-foreground placeholder:text-muted-foreground"
         />
       </label>
       {wanted ? null : <AccountCard current={place?.kind === 'account'} plain />}
@@ -108,7 +108,7 @@ export function SettingsNav({
                 <Icon aria-hidden className="size-4.5 shrink-0 text-muted-foreground" />
                 <span className="min-w-0 flex-1 truncate">{t(`settings:${page.title}`)}</span>
                 {page.to === '/settings/general' && status === 'ready' ? (
-                  <span className="text-[0.8125rem] text-muted-foreground">
+                  <span className="text-footnote text-muted-foreground">
                     {t('settings:about.update.ready')}
                   </span>
                 ) : null}
@@ -118,7 +118,7 @@ export function SettingsNav({
         </section>
       ))}
       {wanted && groups.length === 0 ? (
-        <p role="status" className="px-3 text-[0.9375rem] text-muted-foreground">
+        <p role="status" className="px-3 text-subhead text-muted-foreground">
           {t('settings:dialog.none')}
         </p>
       ) : null}

@@ -71,7 +71,7 @@ function ChordHint({ tones }: { tones: readonly Tone[] }) {
   return (
     <Button
       variant="link"
-      className="min-h-11 px-2 text-[0.9375rem] font-semibold"
+      className="min-h-11 px-2 text-subhead font-semibold"
       aria-expanded={shown}
       onClick={() => setShown((was) => !was)}
     >

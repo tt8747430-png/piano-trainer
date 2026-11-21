@@ -63,7 +63,7 @@ export function SignInPage() {
           {t('signIn.submit')}
         </Button>
       </form>
-      <p className="flex flex-wrap items-center justify-center gap-0.5 text-[0.9375rem] text-muted-foreground">
+      <p className="flex flex-wrap items-center justify-center gap-0.5 text-subhead text-muted-foreground">
         {t('signIn.noAccount')}
         <Link to="/account/create" replace className={ACCOUNT_LINK}>
           {t('signIn.create')}

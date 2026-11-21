@@ -50,7 +50,7 @@ function SongTableRow({
           >
             <CheckMark checked={select.chosen(entry.id)} />
             <PieceMark entry={entry} />
-            <span className="truncate text-[0.9375rem]/[normal] font-semibold">{face.title}</span>
+            <span className="truncate text-subhead/[normal] font-semibold">{face.title}</span>
           </button>
         ) : (
           <PieceLink
@@ -58,17 +58,17 @@ function SongTableRow({
             className="flex min-h-10 min-w-0 items-center gap-4 rounded-control text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none [&_[data-slot=row-tile]]:size-10 [&_[data-slot=row-tile]]:rounded-[9px]"
           >
             <PieceMark entry={entry} />
-            <span className="truncate text-[0.9375rem]/[normal] font-semibold">{face.title}</span>
+            <span className="truncate text-subhead/[normal] font-semibold">{face.title}</span>
           </PieceLink>
         )}
       </span>
-      <span role="cell" className={`${COMPOSER} truncate text-[0.9375rem] text-muted-foreground`}>
+      <span role="cell" className={`${COMPOSER} truncate text-subhead text-muted-foreground`}>
         {face.detail}
       </span>
-      <span role="cell" className="truncate text-[0.9375rem] text-muted-foreground tabular-nums">
+      <span role="cell" className="truncate text-subhead text-muted-foreground tabular-nums">
         {status}
       </span>
-      <span role="cell" className="truncate text-[0.9375rem] text-muted-foreground">
+      <span role="cell" className="truncate text-subhead text-muted-foreground">
         {when ?? (
           // A cell with no date says so quietly, as a table does: a dash, read out in words.
           <span aria-label={t('songs:row.notPlayed')}>—</span>
@@ -106,7 +106,7 @@ export function SongTable({
   select?: TableSelect | undefined
 }) {
   const { t } = useTranslation('songs')
-  const head = 'text-[0.8125rem] font-semibold text-muted-foreground'
+  const head = 'text-footnote font-semibold text-muted-foreground'
   return (
     <div role="table" aria-label={label} className="border-t border-border">
       <div role="row" className={`${COLUMNS} h-10 border-b border-border`}>

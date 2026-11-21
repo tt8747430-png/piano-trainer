@@ -49,7 +49,7 @@ export function SortMenu<Sort extends string, Way extends string = never>({
           field
             ? 'h-full gap-1 rounded-pill px-3 text-sm text-foreground hover:bg-(--hairline)'
             : 'rounded-control text-link',
-          field ? null : head ? 'gap-1.5 text-[0.8125rem]' : 'gap-2 text-base',
+          field ? null : head ? 'gap-1.5 text-footnote' : 'gap-2 text-base',
         )}
       >
         {current?.label}
@@ -110,7 +110,7 @@ export function CountSort<Sort extends string, Way extends string = never>({
 }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <span className="text-[0.9375rem] font-semibold text-muted-foreground tabular-nums">
+      <span className="text-subhead font-semibold text-muted-foreground tabular-nums">
         {count}
       </span>
       <SortMenu {...sort} />

@@ -29,7 +29,7 @@ export function PlaylistCover({
   return (
     <span
       aria-hidden
-      className={cn('relative block shrink-0 rounded-[10px]', playlistPaint(paint), className)}
+      className={cn('relative block shrink-0 rounded-thumb', playlistPaint(paint), className)}
     >
       {heart ? (
         <Heart className="absolute top-1/2 left-1/2 size-1/2 -translate-1/2 fill-heart text-heart" />

@@ -39,7 +39,7 @@ export function ProgressionBetween({
           ))}
         </ul>
       ) : (
-        <p className="text-[0.9375rem] text-muted-foreground">{t('progressions.between.none')}</p>
+        <p className="text-subhead text-muted-foreground">{t('progressions.between.none')}</p>
       )}
     </section>
   )

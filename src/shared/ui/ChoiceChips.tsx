@@ -16,7 +16,7 @@ const TONES = {
   },
   honey: {
     group: '-my-1 gap-x-2 gap-y-0',
-    chip: 'gap-1 border-y-4 whitespace-nowrap bg-card px-4 text-[0.8125rem] text-foreground shadow-[inset_0_0_0_1px_var(--color-border)] transition-colors duration-200 ease-out hover:bg-muted data-checked:bg-chosen-honey data-checked:shadow-[inset_0_0_0_1px_var(--color-honey-ring)] data-[empty]:not-data-checked:opacity-45',
+    chip: 'gap-1 border-y-4 whitespace-nowrap bg-card px-4 text-footnote text-foreground shadow-[inset_0_0_0_1px_var(--color-border)] transition-colors duration-200 ease-out hover:bg-muted data-checked:bg-chosen-honey data-checked:shadow-[inset_0_0_0_1px_var(--color-honey-ring)] data-[empty]:not-data-checked:opacity-45',
   },
 } as const
 

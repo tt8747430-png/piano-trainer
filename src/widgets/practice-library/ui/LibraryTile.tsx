@@ -41,7 +41,7 @@ export function LibraryTile({
         data-slot="row-tile"
         aria-hidden
         className={cn(
-          'flex shrink-0 gap-0.5 overflow-hidden rounded-[10px] bg-card px-1 py-2 ring-1 ring-border',
+          'flex shrink-0 gap-0.5 overflow-hidden rounded-thumb bg-card px-1 py-2 ring-1 ring-border',
           size,
         )}
       >
@@ -63,7 +63,7 @@ export function LibraryTile({
       className={cn(
         // its mark in ink at 700 on its paint's wash (the boards' rows: 14, 13 on a laptop's 40)
         'grid shrink-0 place-items-center rounded-control px-1 text-center leading-none font-bold whitespace-nowrap text-foreground',
-        small ? 'text-[0.8125rem]' : 'text-sm',
+        small ? 'text-footnote' : 'text-sm',
         size,
         PAINT[picture.paint].fill,
       )}

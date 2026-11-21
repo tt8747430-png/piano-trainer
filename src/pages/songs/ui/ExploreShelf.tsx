@@ -17,16 +17,16 @@ function ShelfCard({ entry }: { entry: PublicEntry }) {
     <Link
       to="/songs/public/$itemId"
       params={{ itemId: entry.id }}
-      className="flex flex-col gap-1.5 rounded-[10px] text-foreground focus-visible:outline-offset-2"
+      className="flex flex-col gap-1.5 rounded-thumb text-foreground focus-visible:outline-offset-2"
     >
       <PublicCover
         entry={entry}
-        className="rounded-[10px] shadow-[0_0_0_1px_var(--color-hairline)]"
+        className="rounded-thumb shadow-[0_0_0_1px_var(--color-hairline)]"
       />
-      <span className="line-clamp-2 text-[0.9375rem] leading-tight font-semibold">
+      <span className="line-clamp-2 text-subhead leading-tight font-semibold">
         {entry.title}
       </span>
-      <span className="truncate text-[0.8125rem] text-muted-foreground">{author}</span>
+      <span className="truncate text-footnote text-muted-foreground">{author}</span>
     </Link>
   )
 }

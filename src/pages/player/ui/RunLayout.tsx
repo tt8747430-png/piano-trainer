@@ -226,7 +226,7 @@ export function RunLayout({
           <div className="flex items-center gap-2">
             {/* Wait mode said in the bar while it is on (the chord run's board, `RS_RUNVIEW`). */}
             {waits ? (
-              <span className="flex h-8 items-center rounded-pill bg-muted px-3 text-[0.8125rem] font-semibold whitespace-nowrap">
+              <span className="flex h-8 items-center rounded-pill bg-muted px-3 text-footnote font-semibold whitespace-nowrap">
                 {t('player:modes.wait.name')}
               </span>
             ) : null}

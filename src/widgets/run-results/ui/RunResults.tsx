@@ -112,7 +112,7 @@ export function RunResults({
   )
   const foot = (
     <div className="flex flex-col items-center">
-      <p className="text-[0.9375rem] text-muted-foreground tabular-nums">
+      <p className="text-subhead text-muted-foreground tabular-nums">
         {best !== null && best > run.accuracy
           ? t(`${r}.bestAt`, { percent: best, attempt })
           : t(`${r}.newBestAt`, { attempt })}
@@ -164,7 +164,7 @@ export function RunResults({
             ))}
           </div>
           {perfect ? null : (
-            <p className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[0.8125rem] leading-[normal] text-muted-foreground">
+            <p className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-footnote leading-[normal] text-muted-foreground">
               <span>
                 <b className="text-on-paint-grass">✓</b> {t(`${r}.clean`)}
               </span>
@@ -199,7 +199,7 @@ export function AllPractice() {
   return (
     <Link
       to="/profile/history"
-      className="flex h-11 items-center gap-1 rounded-control text-[0.9375rem] font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+      className="flex h-11 items-center gap-1 rounded-control text-subhead font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
     >
       {t('profile.history.result.allPractice')}
       <ChevronRight aria-hidden className="size-4" />

@@ -62,11 +62,11 @@ function SectionLinks({
             activeOptions={{ includeHash: true }}
             data-reading={reading === sectionId(s) || undefined}
             onClick={onGo}
-            className="flex min-h-11 items-center gap-2.5 rounded-menu-item px-2 text-[0.9375rem] transition-colors hover:bg-muted data-reading:bg-muted data-reading:font-semibold"
+            className="flex min-h-11 items-center gap-2.5 rounded-menu-item px-2 text-subhead transition-colors hover:bg-muted data-reading:bg-muted data-reading:font-semibold"
           >
             <span
               aria-hidden
-              className="flex size-6 shrink-0 items-center justify-center rounded-pill bg-muted text-[0.8125rem] font-bold tabular-nums in-data-reading:bg-card"
+              className="flex size-6 shrink-0 items-center justify-center rounded-pill bg-muted text-footnote font-bold tabular-nums in-data-reading:bg-card"
             >
               {s + 1}
             </span>
@@ -141,10 +141,10 @@ function LessonBar({
             />
           }
         >
-          <span className="text-[0.8125rem] font-normal text-muted-foreground">
+          <span className="text-footnote font-normal text-muted-foreground">
             {t('sectionOf', { at: at + 1, of })}
           </span>
-          <span className="max-w-full truncate text-[0.9375rem] font-bold">{name}</span>
+          <span className="max-w-full truncate text-subhead font-bold">{name}</span>
         </SheetTrigger>
         <SheetContent title={t('contents')} footer={<UpRow up={up} onGo={() => setOpen(false)} />}>
           <nav aria-label={t('contents')}>

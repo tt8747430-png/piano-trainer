@@ -56,7 +56,7 @@ export function StreakPage() {
             <span className="font-sans text-3xl/tight font-bold tracking-[-0.01em]">
               {t('profile.streakPage.days', { count: run })}
             </span>
-            <span className="text-[0.9375rem]/snug text-pretty text-muted-foreground">{line}</span>
+            <span className="text-subhead/snug text-pretty text-muted-foreground">{line}</span>
           </span>
         </section>
         <PracticeCalendar title={t('profile.streakPage.calendar')} />

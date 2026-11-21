@@ -71,7 +71,7 @@ export function ActivityTab() {
                     {[entry.who, entry.target].filter(Boolean).join(' · ')}
                   </span>
                 </span>
-                <span className="text-[0.8125rem] whitespace-nowrap text-muted-foreground tabular-nums">
+                <span className="text-footnote whitespace-nowrap text-muted-foreground tabular-nums">
                   {when(entry.at, locale, now)}
                 </span>
               </div>

@@ -37,10 +37,10 @@ export function AllSongsShelf({ songs }: { songs: readonly Entry[] }) {
             <li key={entry.id} className="w-33 flex-none snap-start">
               <PieceLink
                 entry={entry}
-                className="flex flex-col gap-2 rounded-[10px] text-foreground focus-visible:outline-offset-2"
+                className="flex flex-col gap-2 rounded-thumb text-foreground focus-visible:outline-offset-2"
               >
                 <PieceShelfCover entry={entry} />
-                <span className="line-clamp-2 text-[0.9375rem] leading-[1.25] font-semibold">
+                <span className="line-clamp-2 text-subhead leading-[1.25] font-semibold">
                   {entryTitles(entry, locale).primary}
                 </span>
                 {partway ? (
@@ -51,7 +51,7 @@ export function AllSongsShelf({ songs }: { songs: readonly Entry[] }) {
                     />
                   </span>
                 ) : null}
-                <span className="-mt-0.5 text-[0.8125rem] text-muted-foreground">
+                <span className="-mt-0.5 text-footnote text-muted-foreground">
                   {done
                     ? t('all.learned')
                     : partway

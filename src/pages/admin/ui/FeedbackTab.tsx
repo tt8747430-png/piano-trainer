@@ -36,14 +36,14 @@ export function FeedbackTab() {
                   key={`${each.at} ${each.text}`}
                   className="flex min-w-0 flex-col gap-1 px-4 py-3 leading-[normal]"
                 >
-                  <span className="text-[0.8125rem] text-muted-foreground">
+                  <span className="text-footnote text-muted-foreground">
                     {daySaid(each.at, locale, now)}
                   </span>
                   <p className="leading-[1.4] wrap-break-word whitespace-pre-line">{each.text}</p>
                 </div>
               ))}
             </SettingsGroup>
-            <p className="mx-1 text-[0.8125rem] text-muted-foreground">{t('feedback.footnote')}</p>
+            <p className="mx-1 text-footnote text-muted-foreground">{t('feedback.footnote')}</p>
           </section>
         )
       }

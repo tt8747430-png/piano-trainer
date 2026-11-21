@@ -211,7 +211,7 @@ function Group({
                       >
                         {titleOf(notice)}
                       </span>
-                      <span className="text-[0.8125rem] text-muted-foreground">
+                      <span className="text-footnote text-muted-foreground">
                         {groupOf(notice, new Date(now)) === 'earlier'
                           ? daySaid(at.getTime(), locale, now)
                           : clockSaid(at, locale)}

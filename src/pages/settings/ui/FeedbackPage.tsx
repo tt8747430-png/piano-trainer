@@ -36,7 +36,7 @@ export function FeedbackPage() {
           if (online && text.trim() !== '') send()
         }}
       >
-        <label htmlFor={id} className="px-1 text-[0.8125rem] font-semibold text-muted-foreground">
+        <label htmlFor={id} className="px-1 text-footnote font-semibold text-muted-foreground">
           {t('report.label')}
         </label>
         <Textarea
@@ -49,7 +49,7 @@ export function FeedbackPage() {
           onChange={(event) => setText(event.target.value)}
           className="min-h-46 resize-none rounded-xl border-border bg-card p-3 dark:bg-card text-base/[1.45] md:text-base/[1.45]"
         />
-        <p id={hint} className="px-1 text-[0.8125rem] text-pretty text-muted-foreground">
+        <p id={hint} className="px-1 text-footnote text-pretty text-muted-foreground">
           {online ? t('report.footnote') : t('report.offline')}
         </p>
         <Button

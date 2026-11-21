@@ -39,7 +39,7 @@ export function Said({
         {title}
       </p>
       {description ? (
-        <p className="max-w-85 text-[0.9375rem]/[1.45] text-pretty text-muted-foreground">
+        <p className="max-w-85 text-subhead/[1.45] text-pretty text-muted-foreground">
           {description}
         </p>
       ) : null}

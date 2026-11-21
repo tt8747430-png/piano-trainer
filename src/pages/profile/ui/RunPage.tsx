@@ -143,7 +143,7 @@ function QuizResult({
           />
         </dl>
         {record ? (
-          <p className="text-center text-[0.9375rem] text-muted-foreground tabular-nums">
+          <p className="text-center text-subhead text-muted-foreground tabular-nums">
             {best
               ? t('profile.history.result.best', { percent: record.best })
               : t('profile.history.result.newBest')}

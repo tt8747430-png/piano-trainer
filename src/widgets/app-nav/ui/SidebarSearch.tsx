@@ -29,7 +29,7 @@ export function SidebarSearch({ collapsed, combo }: { collapsed: boolean; combo:
       <Search aria-hidden className="size-5 shrink-0" />
       {collapsed ? null : (
         <>
-          <span className="flex-1 text-left text-[0.9375rem]">{label}</span>
+          <span className="flex-1 text-left text-subhead">{label}</span>
           <kbd className="rounded-[6px] bg-muted px-1.5 py-0.5 font-sans text-xs font-medium text-muted-foreground">
             {hint}
           </kbd>

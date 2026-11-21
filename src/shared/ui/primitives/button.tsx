@@ -25,7 +25,7 @@ const buttonVariants = cva(
           'rounded-full border-input bg-card text-foreground hover:bg-muted aria-expanded:bg-muted',
         // Every bar's button, the canvas's IB and GLASSST: a 44 circle of glass (the line ring, the
         // float's shade, blurred 24 behind), its 22px icon in ink; Done and Edit the same glass as a capsule.
-        bar: 'glass rounded-full border-0 text-[0.9375rem] font-semibold text-foreground hover:brightness-97 aria-expanded:brightness-97 aria-pressed:bg-chosen [&_svg:not([class*=size-])]:size-5.5',
+        bar: 'glass rounded-full border-0 text-subhead font-semibold text-foreground hover:brightness-97 aria-expanded:brightness-97 aria-pressed:bg-chosen [&_svg:not([class*=size-])]:size-5.5',
         link: 'rounded-none text-base font-semibold text-link underline-offset-4 hover:underline',
         // A toolbar's round button, the score's bar's every one (ADR 0115, R31-E): no frame of its own on the
         // bar's band, the muted fill while it is hovered, open or pressed.

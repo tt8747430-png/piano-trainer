@@ -71,7 +71,7 @@ export function FormField({
           </InputGroupAddon>
         ) : null}
       </InputGroup>
-      {note ? <p className="mx-4 text-[0.8125rem] text-muted-foreground">{note}</p> : null}
+      {note ? <p className="mx-4 text-footnote text-muted-foreground">{note}</p> : null}
       {error === undefined ? null : (
         <Problem id={`${id}-error`} className="mx-4">
           {error}

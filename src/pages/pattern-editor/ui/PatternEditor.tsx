@@ -71,7 +71,7 @@ export function PatternEditor({
           </div>
           <div className="card flex flex-col gap-3 p-4">
             {wide ? (
-              <span className="text-[0.8125rem] leading-[normal] font-semibold text-muted-foreground">
+              <span className="text-footnote leading-[normal] font-semibold text-muted-foreground">
                 {t('practice:patterns.editor.howItPlays')}
               </span>
             ) : null}
@@ -138,7 +138,7 @@ function FigureGroup<V extends string>({
     <div className="flex flex-col gap-2">
       <span
         aria-hidden
-        className="mx-4 text-[0.8125rem] leading-[normal] font-semibold text-muted-foreground"
+        className="mx-4 text-footnote leading-[normal] font-semibold text-muted-foreground"
       >
         {label}
       </span>

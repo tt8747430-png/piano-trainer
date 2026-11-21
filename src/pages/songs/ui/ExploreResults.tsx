@@ -36,7 +36,7 @@ export function ExploreSort({
   return (
     <div className="flex shrink-0 items-center justify-end gap-4 px-1">
       {counted ? (
-        <span className="text-[0.9375rem] font-semibold text-muted-foreground tabular-nums">
+        <span className="text-subhead font-semibold text-muted-foreground tabular-nums">
           {t(patterns ? 'explore.patternCount' : 'explore.songCount', {
             count: feed.entries.length,
           })}
@@ -82,7 +82,7 @@ export function ExploreResults({
         <span
           key={column}
           role="columnheader"
-          className="text-[0.8125rem] font-semibold text-muted-foreground"
+          className="text-footnote font-semibold text-muted-foreground"
         >
           {t(`table.${column}`)}
         </span>

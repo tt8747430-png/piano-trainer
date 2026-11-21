@@ -16,20 +16,20 @@ export function StatTile({
 }) {
   return (
     <div className="flex min-w-0 flex-col gap-0.5 card p-4">
-      <dt className="order-3 pt-1.5 text-[0.8125rem] leading-[normal] font-semibold text-muted-foreground">
+      <dt className="order-3 pt-1.5 text-footnote leading-[normal] font-semibold text-muted-foreground">
         {label}
       </dt>
       <dd className="order-1 text-[1.5rem] leading-[normal] font-bold tracking-[-0.01em] whitespace-nowrap tabular-nums">
         {figure}
         {unit ? (
-          <span className="text-[0.9375rem] font-semibold tracking-normal text-muted-foreground">
+          <span className="text-subhead font-semibold tracking-normal text-muted-foreground">
             {' '}
             {unit}
           </span>
         ) : null}
       </dd>
       {sub ? (
-        <dd className="order-2 truncate text-[0.8125rem] leading-[normal] text-muted-foreground tabular-nums">
+        <dd className="order-2 truncate text-footnote leading-[normal] text-muted-foreground tabular-nums">
           {sub}
         </dd>
       ) : null}

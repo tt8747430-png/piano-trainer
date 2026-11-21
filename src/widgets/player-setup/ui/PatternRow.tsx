@@ -55,7 +55,7 @@ export function PatternRow({
       >
         <PatternRoll pattern={pattern} />
         <span className="flex min-w-0 flex-1 flex-col gap-1">
-          <span className={cn('truncate text-[0.9375rem]', chosen ? 'font-bold' : 'font-medium')}>
+          <span className={cn('truncate text-subhead', chosen ? 'font-bold' : 'font-medium')}>
             {item.name}
           </span>
           <span className="line-clamp-2 text-xs leading-4 text-muted-foreground">

@@ -59,14 +59,14 @@ export function AppearanceChoice({
           aria-label={option.label}
           className={cn(
             'group/screen flex min-w-0 cursor-default flex-col items-center gap-2 text-center font-semibold select-none',
-            row ? 'text-[0.8125rem]' : 'text-[0.9375rem]',
+            row ? 'text-footnote' : 'text-subhead',
           )}
         >
           <span
             aria-hidden
             className={cn(
               'flex flex-col overflow-hidden',
-              row ? 'h-14 w-20 rounded-[10px]' : 'aspect-[0.72] w-full rounded-card',
+              row ? 'h-14 w-20 rounded-thumb' : 'aspect-[0.72] w-full rounded-card',
               SCREEN_RING,
               SCREEN[option.value],
             )}

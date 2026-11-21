@@ -32,7 +32,7 @@ export function TempoSteps({
         aria-label={name}
         title={name}
         onClick={() => onStep(by)}
-        className="h-11 w-13 min-w-11 shrink rounded-pill bg-muted text-[0.9375rem] font-semibold tabular-nums transition-colors hover:bg-muted-foreground/15 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+        className="h-11 w-13 min-w-11 shrink rounded-pill bg-muted text-subhead font-semibold tabular-nums transition-colors hover:bg-muted-foreground/15 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
       >
         {by < 0 ? `−${-by}` : `+${by}`}
       </button>
@@ -41,7 +41,7 @@ export function TempoSteps({
   return (
     // On its own page, 14 under the bar's buttons as the Metronome board sets it.
     <div className="flex w-full flex-col items-center gap-0.5">
-      <p aria-hidden className="text-[0.9375rem]/[normal] text-muted-foreground">
+      <p aria-hidden className="text-subhead/[normal] text-muted-foreground">
         {mark ? `${mark} · ${t('metronome.bpm')}` : t('metronome.bpm')}
       </p>
       <div className="flex w-full items-center justify-between gap-1.5 min-[25rem]:gap-2">

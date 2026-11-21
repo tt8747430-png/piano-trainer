@@ -61,7 +61,7 @@ function CourseCover({
           {localText(course.title, locale)}
         </span>
       </span>
-      <span className="line-clamp-2 text-[0.8125rem]/[1.35] text-pretty text-muted-foreground">
+      <span className="line-clamp-2 text-footnote/[1.35] text-pretty text-muted-foreground">
         {localText(course.line, locale)}
       </span>
     </Link>

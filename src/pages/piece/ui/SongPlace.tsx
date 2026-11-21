@@ -111,7 +111,7 @@ export function SongPlace({
             />
           ))}
         </div>
-        <p className="flex justify-between gap-2 text-[0.8125rem] text-muted-foreground tabular-nums">
+        <p className="flex justify-between gap-2 text-footnote text-muted-foreground tabular-nums">
           <span>{t('place.first')}</span>
           <span className="truncate">
             {[

@@ -47,7 +47,7 @@ export function ViewPill<V extends string>({
           title={reason ?? name}
           disabled={reason !== undefined}
           className={cn(
-            'inline-flex h-11 min-w-11 cursor-default items-center justify-center gap-2 rounded-pill px-3.5 text-[0.9375rem] font-medium whitespace-nowrap text-muted-foreground transition-colors duration-200 ease-out select-none',
+            'inline-flex h-11 min-w-11 cursor-default items-center justify-center gap-2 rounded-pill px-3.5 text-subhead font-medium whitespace-nowrap text-muted-foreground transition-colors duration-200 ease-out select-none',
             'hover:not-data-checked:text-foreground data-checked:bg-foreground data-checked:font-semibold data-checked:text-background data-disabled:opacity-40',
             'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
             // A view's word from 640px: 18 a side, at least 76 (PlayerDesk's Grid and Lyrics).

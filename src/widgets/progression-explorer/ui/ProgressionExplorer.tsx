@@ -89,7 +89,7 @@ export function ProgressionExplorer({
                 {favourite}
               </div>
               {about ? (
-                <p className="ms-0.5 text-[0.9375rem]/[normal] text-pretty text-muted-foreground">
+                <p className="ms-0.5 text-subhead/[normal] text-pretty text-muted-foreground">
                   {about}
                 </p>
               ) : null}

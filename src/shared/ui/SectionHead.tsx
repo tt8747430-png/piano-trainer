@@ -53,7 +53,7 @@ export function SeeAll({
       type: render ? undefined : 'button',
       onClick,
       className:
-        '-my-3 -mr-1 inline-flex min-h-11 min-w-11 items-center justify-end px-1 text-[0.9375rem] font-semibold text-link hover:underline',
+        '-my-3 -mr-1 inline-flex min-h-11 min-w-11 items-center justify-end px-1 text-subhead font-semibold text-link hover:underline',
       children: label,
     },
   })

@@ -131,7 +131,7 @@ function Guest({ scheduled }: { scheduled: string | null }) {
       <div className="flex flex-col items-center gap-2 px-4 pt-6 pb-2 text-center">
         <Avatar name={null} size="account" />
         <p className="text-lg font-bold">{t('accountPage.signedOut')}</p>
-        <p role="status" className="max-w-75 text-[0.9375rem] text-pretty text-muted-foreground">
+        <p role="status" className="max-w-75 text-subhead text-pretty text-muted-foreground">
           {scheduled === null
             ? t('accountPage.signedOutWhy')
             : t('accountPage.delete.scheduled', {

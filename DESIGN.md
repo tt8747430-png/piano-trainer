@@ -328,7 +328,9 @@ Sizes are in rem, so they follow the reader's text size. A screen's title steps 
 - **Headline** (Instrument Sans 600, 17px, 1.375): a row's title, the pill button.
 - **Control** (Instrument Sans 600, 16px, 1.5): buttons, values, segments.
 - **Body** (Instrument Sans 400, 16px, 1.5): everything else; prose at most 65ch.
+- **Subhead** (`text-subhead`, 15px, Apple's Subheadline): a row's detail and second line.
 - **Label** (Instrument Sans 500, 14px or 12px): row details, a field's name in soft ink, bar numbers.
+- **Footnote** (`text-footnote`, 13px, Apple's Footnote): a caption under a row or a figure.
 - **Key label** (Instrument Sans 700, 14px or 12px): a mark's degree or finger; a note name, tabular.
 - **Subject** (`subject-title`: display face 700, 36px, 1.1, -0.01em): the one thing a Practice page is about (the
   interval, the progression, the pattern, the exercise).

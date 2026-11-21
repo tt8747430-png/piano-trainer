@@ -179,7 +179,7 @@ function Hero() {
               {name}
             </p>
             {year ? (
-              <p className="text-[0.9375rem] text-muted-foreground">
+              <p className="text-subhead text-muted-foreground">
                 {profile?.handle
                   ? t('profile.handleJoined', { handle: profile.handle, year })
                   : t('profile.joined', { year })}
@@ -275,7 +275,7 @@ function TileFace({
         </span>
         <Icon aria-hidden className={cn('size-4.5 shrink-0', tone)} />
       </span>
-      <span className="truncate text-[0.8125rem]/[1.375] text-muted-foreground">{label}</span>
+      <span className="truncate text-footnote/[1.375] text-muted-foreground">{label}</span>
     </>
   )
 }

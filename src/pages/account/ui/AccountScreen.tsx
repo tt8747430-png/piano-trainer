@@ -28,7 +28,7 @@ export function AccountScreen({ title, children }: { title: string; children: Re
 
 /** A link of the account pages, as the board's: the link colour, 15 semibold, reaching 44. */
 export const ACCOUNT_LINK =
-  'inline-flex min-h-11 items-center px-1 text-[0.9375rem] font-semibold text-link hover:underline'
+  'inline-flex min-h-11 items-center px-1 text-subhead font-semibold text-link hover:underline'
 
 /** What the server's answer came to, said where the form's button is. */
 export function ProblemLine({ problem }: { problem: AuthProblem | null }) {

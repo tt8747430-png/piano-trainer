@@ -32,7 +32,7 @@ export function SongPublish({
         meta: item.meta,
         // The song's library tile at the head's 64, as its Settings' (SongCover).
         mark: (
-          <span className="block shrink-0 [&_[data-slot=row-tile]]:size-16 [&_[data-slot=row-tile]]:rounded-[10px]">
+          <span className="block shrink-0 [&_[data-slot=row-tile]]:size-16 [&_[data-slot=row-tile]]:rounded-thumb">
             <PieceMark entry={piece} />
           </span>
         ),

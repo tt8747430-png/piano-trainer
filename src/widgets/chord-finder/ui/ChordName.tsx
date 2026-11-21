@@ -22,7 +22,7 @@ function Named({ name, line, quiet = false }: { name: ReactNode; line?: string; 
         {name}
       </h2>
       {line ? (
-        <p className="ms-0.5 text-[0.9375rem] leading-[normal] text-pretty text-muted-foreground">
+        <p className="ms-0.5 text-subhead leading-[normal] text-pretty text-muted-foreground">
           {line}
         </p>
       ) : null}

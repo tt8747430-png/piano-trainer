@@ -184,6 +184,8 @@
   --radius-key-black: calc(var(--radius) - 6px);
   --radius-key-white: calc(var(--radius) - 3px);
   --radius-tile: calc(var(--radius) - 4px);
+  /* A small picture, a cover, a sidebar's row: 10, a step in from the control's 12. */
+  --radius-thumb: calc(var(--radius) - 2px);
   --radius-xs: var(--radius-control);
   --radius-sm: var(--radius-control);
   --radius-md: var(--radius-control);
@@ -193,6 +195,9 @@
   --radius-3xl: var(--radius-card);
   --radius-4xl: var(--radius-sheet);
 
+  /* Apple's Subheadline and Footnote: a row's detail and second line (15), a caption under it (13). */
+  --text-footnote: 0.8125rem;
+  --text-subhead: 0.9375rem;
   --text-lg: 1.0625rem;
   --text-lg--line-height: 1.375;
   --text-xl: 1.25rem;

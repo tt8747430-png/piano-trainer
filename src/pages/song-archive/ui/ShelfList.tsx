@@ -112,7 +112,7 @@ function ShelfRow({
   const face = laptop ? (
     <>
       {mark}
-      <span className="truncate text-[0.9375rem] font-semibold">{title}</span>
+      <span className="truncate text-subhead font-semibold">{title}</span>
     </>
   ) : (
     <>
@@ -159,10 +159,10 @@ function ShelfRow({
         <span role="cell" className="min-w-0">
           {body}
         </span>
-        <span role="cell" className="truncate text-[0.9375rem] text-muted-foreground">
+        <span role="cell" className="truncate text-subhead text-muted-foreground">
           {line}
         </span>
-        <span role="cell" className="truncate text-[0.9375rem] text-muted-foreground tabular-nums">
+        <span role="cell" className="truncate text-subhead text-muted-foreground tabular-nums">
           {day}
         </span>
         <span role="cell" className="flex justify-end">
@@ -296,7 +296,7 @@ export function ShelfList({
                 key={name}
                 role="columnheader"
                 className={cn(
-                  'text-[0.8125rem] font-semibold text-muted-foreground',
+                  'text-footnote font-semibold text-muted-foreground',
                   index === 0 && selecting && 'pl-10',
                 )}
               >

@@ -111,7 +111,7 @@ export function NextChordSheet({
             </p>
             {offered.length === 0 ? (
               <div className="flex min-h-58 flex-col items-center justify-center gap-3 text-center">
-                <p className="text-[0.9375rem] text-muted-foreground">
+                <p className="text-subhead text-muted-foreground">
                   {way === 'diatonic'
                     ? t('chords.next.allInKey', { key })
                     : t('chords.next.allMoves')}
@@ -119,7 +119,7 @@ export function NextChordSheet({
                 <button
                   type="button"
                   onClick={() => setWay(way === 'diatonic' ? 'chromatic' : 'diatonic')}
-                  className="h-11 rounded-pill bg-muted px-4.5 text-[0.9375rem] font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="h-11 rounded-pill bg-muted px-4.5 text-subhead font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   {way === 'diatonic' ? t('chords.next.toChromatic') : t('chords.next.toDiatonic')}
                 </button>

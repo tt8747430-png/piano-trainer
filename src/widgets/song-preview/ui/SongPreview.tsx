@@ -37,14 +37,14 @@ export function SongPreview({ song }: { song: SharedSong }) {
   return (
     <div className="flex min-w-0 flex-col gap-4">
       <div className="flex min-h-11 items-center justify-between gap-3">
-        <span className="text-[0.9375rem] text-muted-foreground tabular-nums">
+        <span className="text-subhead text-muted-foreground tabular-nums">
           {keyName(pieceKey(piece))} · {piece.meter} · {tempo}
         </span>
         <button
           type="button"
           aria-pressed={whole}
           onClick={toggleAll}
-          className="flex h-11 shrink-0 items-center gap-2 rounded-pill bg-muted pr-[1.125rem] pl-3.5 text-[0.9375rem] font-bold transition-colors duration-150 ease-out hover:bg-accent"
+          className="flex h-11 shrink-0 items-center gap-2 rounded-pill bg-muted pr-[1.125rem] pl-3.5 text-subhead font-bold transition-colors duration-150 ease-out hover:bg-accent"
         >
           {whole ? (
             <Square aria-hidden className="size-3 fill-current" />

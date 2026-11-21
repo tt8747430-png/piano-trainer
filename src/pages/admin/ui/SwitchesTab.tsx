@@ -91,7 +91,7 @@ export function SwitchesTab() {
                 <div key={feature.key} className="flex flex-col gap-3 py-3 ps-4 pe-3">
                   <div className="flex min-w-0 flex-col gap-0.5 leading-[normal]">
                     <span className="truncate font-semibold">{feature.label}</span>
-                    <span className="truncate font-mono text-[0.8125rem] text-muted-foreground">
+                    <span className="truncate font-mono text-footnote text-muted-foreground">
                       {feature.key}
                     </span>
                   </div>

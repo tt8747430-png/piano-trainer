@@ -223,7 +223,7 @@ export function ChordSheet({
                   aria-label={t('practice:chords.next.change', { chord: name })}
                   title={t('practice:chords.next.change', { chord: name })}
                   onClick={() => onName(i)}
-                  className={`absolute top-0 flex h-11 items-center justify-center rounded-[10px] font-display text-[1.0625rem] whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                  className={`absolute top-0 flex h-11 items-center justify-center rounded-thumb font-display text-[1.0625rem] whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                     i === at || !several
                       ? 'font-bold text-link'
                       : 'font-semibold text-muted-foreground'
@@ -238,7 +238,7 @@ export function ChordSheet({
                     aria-pressed={i === at}
                     aria-label={t(i === at ? 'sheet.play' : 'sheet.pick', { chord: name })}
                     onClick={() => onPick(i)}
-                    className="absolute inset-x-0 top-11 bottom-0 rounded-[10px] outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="absolute inset-x-0 top-11 bottom-0 rounded-thumb outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   />
                 ) : null}
               </div>

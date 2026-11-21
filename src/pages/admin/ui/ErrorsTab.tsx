@@ -38,7 +38,7 @@ export function ErrorsTab() {
                   <span className="text-sm font-semibold text-destructive">
                     {t('errors.count', { count, places })}
                   </span>
-                  <span className="truncate text-[0.8125rem] text-muted-foreground">
+                  <span className="truncate text-footnote text-muted-foreground">
                     {t('errors.where', {
                       date: daySaid(latest.at, locale, now),
                       path: latest.path,
@@ -50,7 +50,7 @@ export function ErrorsTab() {
                   ) : null}
                 </summary>
                 {latest.stack ? (
-                  <pre className="mx-4 mb-3 overflow-x-auto rounded-[10px] bg-muted p-3 text-xs leading-normal whitespace-pre">
+                  <pre className="mx-4 mb-3 overflow-x-auto rounded-thumb bg-muted p-3 text-xs leading-normal whitespace-pre">
                     {latest.stack}
                   </pre>
                 ) : null}

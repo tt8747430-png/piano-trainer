@@ -34,7 +34,7 @@ export function PieceShelfCover({ entry }: { entry: Entry }) {
     <svg
       aria-hidden
       viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
-      className="block w-full rounded-[10px] bg-(--p-paper-card) text-(--p-ink) shadow-[0_0_0_1px_var(--color-border),0_6px_14px_-8px_rgb(51_41_33/0.25)]"
+      className="block w-full rounded-thumb bg-(--p-paper-card) text-(--p-ink) shadow-[0_0_0_1px_var(--color-border),0_6px_14px_-8px_rgb(51_41_33/0.25)]"
     >
       <text
         x={WIDTH / 2}

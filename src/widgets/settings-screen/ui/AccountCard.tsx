@@ -69,7 +69,7 @@ export function AccountCardFace({
         className={cn(
           'flex items-center focus-visible:-outline-offset-3',
           plain
-            ? 'gap-3 rounded-[10px] px-3 py-1.5 choice'
+            ? 'gap-3 rounded-thumb px-3 py-1.5 choice'
             : 'min-h-19 gap-4 py-3 pr-3 pl-4 transition-colors duration-200 ease-out hover:bg-muted data-current:bg-muted',
         )}
       >
@@ -81,7 +81,7 @@ export function AccountCardFace({
           <span
             className={cn(
               'truncate',
-              plain ? 'text-[0.9375rem] font-semibold' : 'text-[1.0625rem] font-bold',
+              plain ? 'text-subhead font-semibold' : 'text-[1.0625rem] font-bold',
               !account && !plain && 'text-link',
             )}
           >
@@ -90,7 +90,7 @@ export function AccountCardFace({
           <span
             className={cn(
               'line-clamp-2 text-pretty text-muted-foreground',
-              plain ? 'text-[0.8125rem]' : 'text-sm',
+              plain ? 'text-footnote' : 'text-sm',
             )}
           >
             {account ? account.email : t('account.why')}
@@ -99,7 +99,7 @@ export function AccountCardFace({
             <span
               data-slot="sync-line"
               className={cn(
-                'flex items-center gap-1 text-[0.8125rem]',
+                'flex items-center gap-1 text-footnote',
                 line.kind === 'failed'
                   ? 'text-destructive'
                   : synced

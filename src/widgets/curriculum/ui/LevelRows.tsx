@@ -18,7 +18,7 @@ function LevelRing({ n, share }: { n: number; share: number }) {
         background: `conic-gradient(var(--color-learned) ${Math.round(share * 100)}%, var(--color-hairline) 0)`,
       }}
     >
-      <span className="grid size-9 place-items-center rounded-pill bg-card text-[0.9375rem] font-bold tabular-nums">
+      <span className="grid size-9 place-items-center rounded-pill bg-card text-subhead font-bold tabular-nums">
         {n}
       </span>
     </span>

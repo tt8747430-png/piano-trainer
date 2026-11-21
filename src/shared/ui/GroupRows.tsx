@@ -253,7 +253,7 @@ export function GroupChips({ label, children }: { label: string; children: React
   return (
     <section aria-label={label} className="flex flex-col gap-2 px-4 py-3">
       <h3 className="font-sans text-sm font-normal text-muted-foreground">{label}</h3>
-      <div className="flex flex-wrap gap-2 *:relative *:flex *:h-8 *:items-center *:rounded-pill *:bg-muted *:px-3 *:text-[0.9375rem] *:font-semibold">
+      <div className="flex flex-wrap gap-2 *:relative *:flex *:h-8 *:items-center *:rounded-pill *:bg-muted *:px-3 *:text-subhead *:font-semibold">
         {children}
       </div>
     </section>

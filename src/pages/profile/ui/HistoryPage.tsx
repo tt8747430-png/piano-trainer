@@ -127,7 +127,7 @@ export function HistoryPage() {
             </SettingsGroup>
           ))
         )}
-        <p className="text-center text-[0.8125rem] text-pretty text-muted-foreground">
+        <p className="text-center text-footnote text-pretty text-muted-foreground">
           {t(account ? 'profile.history.keptEverywhere' : 'profile.history.kept')}
         </p>
       </div>

@@ -71,7 +71,7 @@ export function RouteState({
             {title}
           </h1>
         )}
-        <p className="mt-1 max-w-[340px] text-[0.9375rem]/[1.45] text-pretty text-muted-foreground">
+        <p className="mt-1 max-w-[340px] text-subhead/[1.45] text-pretty text-muted-foreground">
           {line}
         </p>
         {/* The ways on are the board's pills, 50 tall and bold, whatever button each page passes. */}

@@ -56,7 +56,7 @@ export function GroupName({ name, info }: { name: string; info?: ReactNode }) {
   if (usePaletteForm() === 'bar' || recent) return null
   return (
     <div className="flex min-h-6 items-center gap-1.5 pt-1">
-      <h3 className="font-sans text-[0.9375rem] leading-tight font-semibold">{name}</h3>
+      <h3 className="font-sans text-subhead leading-tight font-semibold">{name}</h3>
       {info ? <InfoTip name={name}>{info}</InfoTip> : null}
     </div>
   )

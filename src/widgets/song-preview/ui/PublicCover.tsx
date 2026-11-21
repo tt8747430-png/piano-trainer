@@ -43,7 +43,7 @@ export function PublicCover({
           symbol={first}
           className={cn(
             '[&_*]:text-current',
-            cell ? 'font-display text-[0.8125rem] font-bold' : 'text-xl font-semibold',
+            cell ? 'font-display text-footnote font-bold' : 'text-xl font-semibold',
           )}
         />
       ) : (

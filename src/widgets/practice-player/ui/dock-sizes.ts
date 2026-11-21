@@ -16,4 +16,4 @@ export const DOCK_STEP = `${DOCK_BUTTON} w-11 small-phone:w-8 narrow-phone:w-7`
  * wide as its word; on a laptop its word beside its picture, 15px, as the board's PlayerDesk.
  */
 export const DOCK_CAPTIONED =
-  'small-phone:h-10 lg:flex-row lg:gap-2 lg:ps-3 lg:pe-4 lg:text-[0.9375rem] lg:leading-normal'
+  'small-phone:h-10 lg:flex-row lg:gap-2 lg:ps-3 lg:pe-4 lg:text-subhead lg:leading-normal'

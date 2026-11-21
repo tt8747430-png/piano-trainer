@@ -51,7 +51,7 @@ function NameCell({ item, still }: { item: LibraryItem; still: boolean }) {
       children: (
         <>
           <LibraryTile small picture={item.picture} />
-          <span className="min-w-0 truncate text-[0.9375rem] font-semibold text-foreground">
+          <span className="min-w-0 truncate text-subhead font-semibold text-foreground">
             {item.name}
           </span>
         </>
@@ -259,7 +259,7 @@ export function TableFrame({
         {/* the ♡ and the ··· (44, 4, 44) */}
         <col className="w-23" />
       </colgroup>
-      <thead className="text-[0.8125rem] text-muted-foreground">
+      <thead className="text-footnote text-muted-foreground">
         <tr>
           {/* the board's header: its words 13/600, 8 over its line, the name's on its words' edge */}
           <th scope="col" className={cn(HEAD_CELL, 'ps-[4.25rem]')}>

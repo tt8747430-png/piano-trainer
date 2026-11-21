@@ -76,7 +76,7 @@ function BeatLights({
   const beats = beatsPerBar(performance.meter)
   return (
     <div className="flex items-center justify-center gap-2">
-      <span className="min-w-8 text-[0.8125rem]/[normal] font-bold text-muted-foreground tabular-nums">
+      <span className="min-w-8 text-footnote/[normal] font-bold text-muted-foreground tabular-nums">
         {performance.meter}
       </span>
       {Array.from({ length: beats }, (_, beat) => (
@@ -235,7 +235,7 @@ export function PracticeSheet({
               <button
                 type="button"
                 onClick={() => onTempo(ownTempo)}
-                className={cn(PILL, 'h-7.5 self-center bg-muted px-4 text-[0.8125rem]')}
+                className={cn(PILL, 'h-7.5 self-center bg-muted px-4 text-footnote')}
               >
                 {t('practiceSheet.scoreTempo', { tempo: ownTempo })}
               </button>

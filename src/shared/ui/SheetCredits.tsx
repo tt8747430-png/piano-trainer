@@ -37,8 +37,8 @@ export function SheetCredits({
           className={cn(
             'font-sans text-pretty wrap-break-word text-muted-foreground',
             align === 'center'
-              ? 'text-center text-[0.8125rem]/[normal] sm:text-[0.9375rem]/[normal]'
-              : 'text-end text-[0.8125rem] leading-snug',
+              ? 'text-center text-footnote/[normal] sm:text-subhead/[normal]'
+              : 'text-end text-footnote leading-snug',
           )}
         >
           {line}

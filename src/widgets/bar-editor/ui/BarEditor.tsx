@@ -65,7 +65,7 @@ function ActFace({ act, label, muted = false }: { act: BarAct; label: string; mu
       <span
         aria-hidden
         className={cn(
-          'grid size-9 flex-none place-items-center rounded-[10px] bg-muted',
+          'grid size-9 flex-none place-items-center rounded-thumb bg-muted',
           muted && 'opacity-50',
         )}
       >
@@ -221,7 +221,7 @@ export function BarPreview({ bar }: { bar: readonly BarAct[] }) {
   return (
     <div role="img" aria-label={t('bars.previewToolbar')} className="flex py-2">
       <div className="flex h-17 min-w-0 flex-1 items-center gap-1 rounded-pill bg-card px-2 layer-shadow">
-        <span className="px-3 text-[0.9375rem] font-bold whitespace-nowrap">
+        <span className="px-3 text-subhead font-bold whitespace-nowrap">
           {t('bars.previewSelected')}
         </span>
         {bar.map((act) => {

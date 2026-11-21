@@ -50,8 +50,8 @@ export function PatternFoldCard({
           )}
         />
         <Icon aria-hidden className="size-4.5 shrink-0 text-muted-foreground" />
-        <span className="min-w-0 flex-1 truncate text-[0.9375rem] font-bold">{fold.title}</span>
-        <span className="shrink-0 text-[0.8125rem] text-muted-foreground tabular-nums">
+        <span className="min-w-0 flex-1 truncate text-subhead font-bold">{fold.title}</span>
+        <span className="shrink-0 text-footnote text-muted-foreground tabular-nums">
           {fold.count}
         </span>
       </button>

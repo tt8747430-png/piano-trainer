@@ -27,7 +27,7 @@ export function SongCoverPicker({ piece, className }: { piece: Piece; className?
             {...props}
             aria-label={t('changeCover')}
             title={t('changeCover')}
-            className="block rounded-[10px] transition-transform duration-200 ease-out active:scale-[0.98] focus-visible:outline-offset-2 [&_[data-slot=row-tile]]:size-16 [&_[data-slot=row-tile]]:rounded-[10px]"
+            className="block rounded-thumb transition-transform duration-200 ease-out active:scale-[0.98] focus-visible:outline-offset-2 [&_[data-slot=row-tile]]:size-16 [&_[data-slot=row-tile]]:rounded-thumb"
           >
             {/* The library's own tile, as every row wears it (THINGHEAD's COV, 64 with 10 corners). */}
             <PieceMark entry={piece} />

@@ -564,7 +564,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-slip-3`                 | `src/styles/theme.css`  | 1                                                 |
 | `--color-switch-knob`            | `src/styles/theme.css`  | 1                                                 |
 | `--color-switch-on`              | `src/styles/theme.css`  | 1                                                 |
-| `--color-thumb`                  | `src/styles/theme.css`  | 2                                                 |
+| `--color-thumb`                  | `src/styles/theme.css`  | 19                                                |
 | `--color-toast-action`           | `src/styles/theme.css`  | 1                                                 |
 | `--color-wheel-near`             | `src/styles/theme.css`  | 1                                                 |
 | `--color-wheel-near-inner`       | `src/styles/theme.css`  | 1                                                 |
@@ -767,6 +767,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--radius-pill`                  | `src/styles/theme.css`  | 111                                               |
 | `--radius-sheet`                 | `src/styles/theme.css`  | 14                                                |
 | `--radius-sm`                    | `src/styles/theme.css`  | 2                                                 |
+| `--radius-thumb`                 | `src/styles/theme.css`  | 17                                                |
 | `--radius-tile`                  | `src/styles/theme.css`  | 9                                                 |
 | `--radius-xl`                    | `src/styles/theme.css`  | 23                                                |
 | `--radius-xs`                    | `src/styles/theme.css`  | 0, kept: a primitive's size mapped onto the scale |
@@ -801,7 +802,9 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--text-3xl`                     | `src/styles/theme.css`  | 12                                                |
 | `--text-4xl`                     | `src/styles/theme.css`  | 5                                                 |
 | `--text-5xl`                     | `src/styles/theme.css`  | 3                                                 |
+| `--text-footnote`                | `src/styles/theme.css`  | 61                                                |
 | `--text-lg`                      | `src/styles/theme.css`  | 54                                                |
+| `--text-subhead`                 | `src/styles/theme.css`  | 80                                                |
 | `--text-xl`                      | `src/styles/theme.css`  | 40                                                |
 | `--thumb`                        | `src/styles/tokens.css` | 1                                                 |
 | `--toast-action`                 | `src/styles/tokens.css` | 1                                                 |

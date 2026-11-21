@@ -111,7 +111,7 @@ export function CircleOfFifthsPage() {
         >
           {name(key)}
         </h2>
-        <p className="text-[0.8125rem] leading-[normal] text-muted-foreground lg:text-[0.9375rem]">
+        <p className="text-footnote leading-[normal] text-muted-foreground lg:text-subhead">
           {signature}
         </p>
       </KeyWheel>

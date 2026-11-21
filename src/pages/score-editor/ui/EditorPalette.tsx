@@ -86,7 +86,7 @@ function Category({ category }: { category: PaletteCategory }) {
             type="button"
             aria-expanded={!shut}
             onClick={() => setSectionFolded(settings, fold, !shut)}
-            className="flex min-h-11 w-full items-center justify-between font-sans text-[0.9375rem] leading-tight font-semibold text-foreground"
+            className="flex min-h-11 w-full items-center justify-between font-sans text-subhead leading-tight font-semibold text-foreground"
           >
             {title}
             <ChevronDown
@@ -294,7 +294,7 @@ const FACE = {
   music: 'font-music text-[1.625rem]',
   term: 'font-display text-lg font-bold italic',
   serif: 'font-display text-lg font-bold',
-  sans: 'font-sans text-[0.9375rem] font-semibold',
+  sans: 'font-sans text-subhead font-semibold',
 } as const
 
 /**

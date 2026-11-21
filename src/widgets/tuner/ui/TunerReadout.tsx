@@ -146,7 +146,7 @@ export function TunerReadout({
         {/* Kept while nothing is heard, so the gauge never jumps when a note comes. */}
         <p
           className={cn(
-            'text-[0.9375rem]/[normal] text-muted-foreground tabular-nums',
+            'text-subhead/[normal] text-muted-foreground tabular-nums',
             !pitch && 'invisible',
           )}
         >
@@ -199,7 +199,7 @@ export function TunerReadout({
         </text>
       </svg>
       {/* Kept while a note is heard, so nothing below the arc moves. */}
-      <p className={cn('text-[0.9375rem]/[normal] text-muted-foreground', pitch && 'invisible')}>
+      <p className={cn('text-subhead/[normal] text-muted-foreground', pitch && 'invisible')}>
         {t('tuner.listening')}
       </p>
     </div>

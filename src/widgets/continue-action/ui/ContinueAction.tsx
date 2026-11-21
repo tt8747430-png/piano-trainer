@@ -58,19 +58,19 @@ export function ContinueAction() {
   const face = (
     <>
       <span className="flex min-w-0 flex-1 flex-col gap-1 lg:flex-none">
-        <span className="text-[0.8125rem]/4 font-semibold text-eyebrow">
+        <span className="text-footnote/4 font-semibold text-eyebrow">
           {t(verb)} · {localText(track.title, locale)}
         </span>
         <h2 id={id} className="font-display text-2xl/[1.2] font-normal text-balance">
           {title}
         </h2>
         <span className="flex flex-col gap-2.5 lg:hidden">
-          <span className="text-[0.8125rem]/4 text-muted-foreground tabular-nums">{count}</span>
+          <span className="text-footnote/4 text-muted-foreground tabular-nums">{count}</span>
           {bar}
         </span>
       </span>
       <span className="hidden min-w-40 flex-1 flex-col gap-2 pr-4 pl-8 lg:flex">
-        <span className="self-end text-[0.8125rem]/4 text-muted-foreground tabular-nums">
+        <span className="self-end text-footnote/4 text-muted-foreground tabular-nums">
           {count}
         </span>
         {bar}

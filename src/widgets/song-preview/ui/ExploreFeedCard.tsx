@@ -83,18 +83,18 @@ export function ExploreFeedCard({ entry, table = false }: { entry: PublicEntry; 
             'gap-3.5 rounded-control',
             <>
               <PublicCover entry={entry} tile cell className="w-10 shrink-0 rounded-[9px]" />
-              <span className="truncate text-[0.9375rem] font-semibold">{entry.title}</span>
+              <span className="truncate text-subhead font-semibold">{entry.title}</span>
             </>,
           )}
         </span>
-        <span role="cell" className="truncate text-[0.9375rem] text-muted-foreground">
+        <span role="cell" className="truncate text-subhead text-muted-foreground">
           {entry.meta.composer}
         </span>
         <span role="cell">
           {type ? (
             <span
               className={cn(
-                'inline-flex h-7 items-center rounded-tile px-2.5 text-[0.8125rem] font-semibold',
+                'inline-flex h-7 items-center rounded-tile px-2.5 text-footnote font-semibold',
                 TYPE_BADGE[type],
               )}
             >
@@ -104,14 +104,14 @@ export function ExploreFeedCard({ entry, table = false }: { entry: PublicEntry; 
         </span>
         <span
           role="cell"
-          className="flex min-w-0 items-center gap-2 text-[0.9375rem] text-muted-foreground"
+          className="flex min-w-0 items-center gap-2 text-subhead text-muted-foreground"
         >
           <Avatar name={entry.authorName || null} picture={entry.authorAvatar} size="feed" />
           <span className="min-w-0 truncate">{author}</span>
         </span>
         <span
           role="cell"
-          className="flex items-center gap-1.5 text-[0.9375rem] text-muted-foreground"
+          className="flex items-center gap-1.5 text-subhead text-muted-foreground"
         >
           {saves}
         </span>
@@ -131,7 +131,7 @@ export function ExploreFeedCard({ entry, table = false }: { entry: PublicEntry; 
               {entry.title}
             </span>
             <span className="truncate text-sm text-muted-foreground">{what}</span>
-            <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[0.8125rem] text-muted-foreground">
+            <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-footnote text-muted-foreground">
               <Avatar name={entry.authorName || null} picture={entry.authorAvatar} size="feed" />
               <span className="min-w-0 truncate">{author}</span>
               <span aria-hidden>·</span>

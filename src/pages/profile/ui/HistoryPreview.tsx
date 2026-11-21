@@ -14,7 +14,7 @@ export function RunRow({ id, name, detail, accuracy }: RunLine) {
   return (
     <RowLink
       mark={
-        <span className="grid h-11 w-13 shrink-0 place-items-center rounded-xl bg-muted text-[0.9375rem] font-bold tabular-nums">
+        <span className="grid h-11 w-13 shrink-0 place-items-center rounded-xl bg-muted text-subhead font-bold tabular-nums">
           {accuracy}
         </span>
       }
@@ -30,12 +30,12 @@ export function NoHistory() {
   const { t } = useTranslation('account')
   return (
     <div className="flex flex-col items-start gap-1 px-4 pt-4 pb-2">
-      <p className="text-[0.9375rem] leading-[1.45] text-pretty text-muted-foreground">
+      <p className="text-subhead leading-[1.45] text-pretty text-muted-foreground">
         {t('profile.history.none')}
       </p>
       <Link
         to="/practice"
-        className="flex h-11 items-center rounded-control text-[0.9375rem] font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+        className="flex h-11 items-center rounded-control text-subhead font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
       >
         {t('profile.history.open')}
       </Link>

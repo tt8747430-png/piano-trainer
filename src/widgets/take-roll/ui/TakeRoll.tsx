@@ -86,7 +86,7 @@ function SplitHandle({
       style={{ top: `${top * 100}%` }}
     >
       <span className="h-0.5 w-full bg-destructive group-focus-visible:h-1" />
-      <span className="absolute left-2 flex h-6 items-center rounded-pill bg-destructive px-2 text-[0.8125rem] font-semibold whitespace-nowrap text-white">
+      <span className="absolute left-2 flex h-6 items-center rounded-pill bg-destructive px-2 text-footnote font-semibold whitespace-nowrap text-white">
         {t('review.splitAt', { key: name })}
       </span>
     </div>
@@ -250,7 +250,7 @@ export function TakeRoll({
         </div>
       </div>
       {bars ? (
-        <p role="status" className="text-[0.8125rem]/4 text-muted-foreground tabular-nums">
+        <p role="status" className="text-footnote/4 text-muted-foreground tabular-nums">
           {playingBar === null
             ? t('roll.notes', { count: take.notes.length })
             : t('roll.playingFrom', { n: playingBar })}

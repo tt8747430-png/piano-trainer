@@ -242,7 +242,7 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
               <Caps>{t('recent')}</Caps>
               <button
                 type="button"
-                className="h-11 rounded-control px-1 text-[0.9375rem] font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                className="h-11 rounded-control px-1 text-subhead font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
                 onClick={() => forgetSearches(views)}
               >
                 {t('clearRecent')}
@@ -286,7 +286,7 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
       {wide ? (
         <div
           aria-label={t('keys.label')}
-          className="-mx-4 flex shrink-0 gap-4 px-5 pt-3 text-[0.8125rem] text-muted-foreground shadow-[inset_0_1px_0_var(--color-muted)]"
+          className="-mx-4 flex shrink-0 gap-4 px-5 pt-3 text-footnote text-muted-foreground shadow-[inset_0_1px_0_var(--color-muted)]"
         >
           <span className="flex items-center gap-1">
             <Kbd>↑</Kbd>
@@ -354,7 +354,7 @@ function Chip({ onClick, children }: { onClick: () => void; children: ReactNode 
     <button
       type="button"
       onClick={onClick}
-      className="h-11 rounded-pill bg-muted px-4 text-[0.9375rem] transition-colors duration-200 ease-out hover:bg-accent"
+      className="h-11 rounded-pill bg-muted px-4 text-subhead transition-colors duration-200 ease-out hover:bg-accent"
     >
       {children}
     </button>
@@ -401,7 +401,7 @@ function PaletteSection({
                 {option.title}
               </span>
               {option.detail ? (
-                <span className="line-clamp-1 text-[0.8125rem]/[normal] text-muted-foreground">
+                <span className="line-clamp-1 text-footnote/[normal] text-muted-foreground">
                   {option.detail}
                 </span>
               ) : null}

@@ -19,7 +19,7 @@ export function UpdateBanner({
   return (
     <div
       role="status"
-      className="pointer-events-auto flex min-h-13 items-center gap-2 rounded-card bg-foreground py-1.5 ps-4 pe-1.5 text-[0.9375rem] text-background shadow-(--elevation-3)"
+      className="pointer-events-auto flex min-h-13 items-center gap-2 rounded-card bg-foreground py-1.5 ps-4 pe-1.5 text-subhead text-background shadow-(--elevation-3)"
     >
       <p className="flex-1 font-semibold">
         {t(installing ? 'update.restarting' : 'update.available')}
@@ -28,12 +28,12 @@ export function UpdateBanner({
         <>
           <Button
             variant="ghost"
-            className="px-3 text-[0.9375rem] font-normal text-background hover:bg-background/10 hover:text-background"
+            className="px-3 text-subhead font-normal text-background hover:bg-background/10 hover:text-background"
             onClick={onLater}
           >
             {t('update.later')}
           </Button>
-          <Button className="px-4 text-[0.9375rem]" onClick={onUpdate}>
+          <Button className="px-4 text-subhead" onClick={onUpdate}>
             {t('update.update')}
           </Button>
         </>

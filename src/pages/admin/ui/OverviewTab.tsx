@@ -19,7 +19,7 @@ function Tile({ value, label, compare }: { value: string; label: string; compare
     >
       <span className="text-[1.625rem] font-bold tabular-nums">{value}</span>
       <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="min-h-[1lh] text-[0.8125rem] text-muted-foreground tabular-nums">
+      <span className="min-h-[1lh] text-footnote text-muted-foreground tabular-nums">
         {compare}
       </span>
     </Link>

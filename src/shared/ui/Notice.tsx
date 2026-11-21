@@ -27,7 +27,7 @@ export function Notice({
     >
       <p className="font-bold text-pretty">{line}</p>
       {detail === undefined ? null : <p className="text-sm/[1.4] text-pretty">{detail}</p>}
-      <div className="flex justify-end gap-1 *:h-11 *:text-[0.9375rem]">
+      <div className="flex justify-end gap-1 *:h-11 *:text-subhead">
         <Button
           variant="ghost"
           aria-label={t('notice.close')}

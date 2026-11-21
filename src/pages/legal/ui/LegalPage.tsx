@@ -55,7 +55,7 @@ export function LegalPage({ page }: { page: 'privacy' | 'terms' }) {
           aria-label={t('contents')}
           className="flex flex-wrap items-center gap-x-2 gap-y-1 max-lg:hidden"
         >
-          <span className="pe-1 text-[0.8125rem] font-semibold text-muted-foreground">
+          <span className="pe-1 text-footnote font-semibold text-muted-foreground">
             {t('contents')}
           </span>
           {sections.map(({ key, heading }) => (

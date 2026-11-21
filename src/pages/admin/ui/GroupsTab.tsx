@@ -234,7 +234,7 @@ export function AdminGroupPage({ id }: { id: string }) {
               {!all && members.length > FOLDED ? (
                 <button
                   type="button"
-                  className="-mt-2 ms-1 flex min-h-11 items-center gap-1 self-start rounded-control px-1 text-[0.9375rem] font-semibold text-link tabular-nums focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                  className="-mt-2 ms-1 flex min-h-11 items-center gap-1 self-start rounded-control px-1 text-subhead font-semibold text-link tabular-nums focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
                   onClick={() => setAll(true)}
                 >
                   {t('groups.showAll', { count: members.length })}

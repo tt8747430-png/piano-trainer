@@ -45,7 +45,7 @@ export function AchievementsPage() {
           <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {records.map(([label, value]) => (
               <div key={label} className="flex min-w-0 flex-col-reverse gap-0.5 card px-4 py-3">
-                <dt className="text-[0.8125rem] leading-[normal] text-pretty text-muted-foreground">
+                <dt className="text-footnote leading-[normal] text-pretty text-muted-foreground">
                   {label}
                 </dt>
                 <dd className="font-sans text-2xl leading-[normal] font-bold text-balance tabular-nums">
@@ -91,7 +91,7 @@ export function AchievementPage() {
         <section className="flex flex-col items-center gap-2 text-center">
           <MilestoneMark earned={day !== null} size="hero" />
           <p className="font-sans text-[1.625rem]/tight font-bold text-balance">{name}</p>
-          <p className="text-[0.9375rem] text-muted-foreground">
+          <p className="text-subhead text-muted-foreground">
             {day
               ? t('profile.achievements.earned', { date: dayName(day) })
               : t('profile.achievements.notEarned')}

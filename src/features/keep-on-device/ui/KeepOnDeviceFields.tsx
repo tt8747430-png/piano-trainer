@@ -36,7 +36,7 @@ export function KeepOnDeviceFields({
         <div aria-busy className="flex flex-col gap-2 p-4">
           <p className="font-semibold text-muted-foreground">{t('storage.reading')}</p>
           <span aria-hidden className="h-1.5 rounded-pill bg-muted" />
-          <p aria-hidden className="text-[0.8125rem]">
+          <p aria-hidden className="text-footnote">
             &nbsp;
           </p>
         </div>
@@ -69,7 +69,7 @@ export function KeepOnDeviceFields({
             <span className="h-full bg-paint-tile-sky" style={{ width: share(songs) }} />
             <span className="h-full bg-learned" style={{ width: share(pianoPart) }} />
           </span>
-          <p className="flex flex-wrap gap-x-4 gap-y-1 text-[0.8125rem] text-muted-foreground tabular-nums">
+          <p className="flex flex-wrap gap-x-4 gap-y-1 text-footnote text-muted-foreground tabular-nums">
             <span className="flex items-center gap-1.5">
               <span aria-hidden className="size-2 rounded-pill bg-paint-tile-sky" />
               {t('storage.songs', { size: megabytes(songs, locale) })}

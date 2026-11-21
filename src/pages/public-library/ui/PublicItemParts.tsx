@@ -75,7 +75,7 @@ export function Facts({
 }) {
   return (
     <>
-      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2.5 text-[0.9375rem]">
+      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2.5 text-subhead">
         {facts.map((fact) => (
           <div key={fact.name} className={fact.phoneOnly ? 'contents sm:hidden' : 'contents'}>
             <dt className="text-muted-foreground">{fact.name}</dt>

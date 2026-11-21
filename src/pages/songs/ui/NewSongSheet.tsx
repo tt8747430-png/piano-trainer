@@ -45,8 +45,8 @@ function Part({ label, value, children }: { label: string; value?: string; child
   return (
     <div className="flex flex-col gap-2">
       <div className="mx-1 flex items-baseline justify-between gap-3">
-        <span className="text-[0.8125rem] font-semibold text-muted-foreground">{label}</span>
-        {value ? <span className="text-[0.8125rem] text-foreground">{value}</span> : null}
+        <span className="text-footnote font-semibold text-muted-foreground">{label}</span>
+        {value ? <span className="text-footnote text-foreground">{value}</span> : null}
       </div>
       {children}
     </div>
@@ -174,8 +174,8 @@ export function NewSongSheet({
             tileClassName="group flex min-h-16 flex-col items-start justify-center gap-0.5 px-3 py-2 text-start"
             tile={(id) => (
               <>
-                <span className="text-[0.9375rem] font-semibold">{t(`making.stavesOf.${id}`)}</span>
-                <span className="text-[0.8125rem] text-muted-foreground group-aria-checked:text-background/75">
+                <span className="text-subhead font-semibold">{t(`making.stavesOf.${id}`)}</span>
+                <span className="text-footnote text-muted-foreground group-aria-checked:text-background/75">
                   {t(`making.stavesLine.${id}`)}
                 </span>
               </>

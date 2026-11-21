@@ -18,7 +18,7 @@ import { Tipped } from './Tipped'
  * A row of the account menu (lapwin.py's _MI): 40 tall, 12 in, the board's 15px ink, led by its
  * Lucide picture (16, ink) 12 before its word, as Claude's account menu.
  */
-const ITEM = 'min-h-10 pointer-coarse:min-h-11 gap-3 rounded-tile px-3 text-[0.9375rem]'
+const ITEM = 'min-h-10 pointer-coarse:min-h-11 gap-3 rounded-tile px-3 text-subhead'
 const ICON = 'size-4 text-foreground'
 
 /**
@@ -48,7 +48,7 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
       aria-label={collapsed ? name : undefined}
       aria-current={current ? 'page' : undefined}
       className={cn(
-        'flex min-h-13 min-w-0 items-center gap-3 rounded-[10px] text-nav-current-foreground transition-colors duration-150 ease-out hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none data-popup-open:bg-nav-current',
+        'flex min-h-13 min-w-0 items-center gap-3 rounded-thumb text-nav-current-foreground transition-colors duration-150 ease-out hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none data-popup-open:bg-nav-current',
         current && 'bg-nav-current',
         collapsed ? 'size-11 justify-center' : 'w-full px-3',
       )}
@@ -65,7 +65,7 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
       )}
       {collapsed ? null : (
         <>
-          <span className="min-w-0 flex-1 truncate text-left text-[0.9375rem] font-semibold">
+          <span className="min-w-0 flex-1 truncate text-left text-subhead font-semibold">
             {name}
           </span>
           <ChevronsUpDown aria-hidden className="size-4 shrink-0 text-muted-foreground" />
@@ -78,7 +78,7 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
       <DropdownMenu>
         {collapsed ? <Tipped label={name}>{trigger}</Tipped> : trigger}
         <DropdownMenuContent side="top" align="start" className="w-(--anchor-width) gap-0.5">
-          <div className="truncate px-3 py-2 text-[0.8125rem] text-muted-foreground">
+          <div className="truncate px-3 py-2 text-footnote text-muted-foreground">
             {account ? account.email : t('nav.notSignedIn')}
           </div>
           {account ? (

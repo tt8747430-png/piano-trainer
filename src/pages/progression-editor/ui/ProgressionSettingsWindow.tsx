@@ -90,7 +90,7 @@ function ProgressionSettings({
       <ThingHead
         // Its list picture, the library row's chord columns, at the head's 64 as a song's tile.
         mark={
-          <span className="block shrink-0 [&_[data-slot=row-tile]]:size-16 [&_[data-slot=row-tile]]:rounded-[10px]">
+          <span className="block shrink-0 [&_[data-slot=row-tile]]:size-16 [&_[data-slot=row-tile]]:rounded-thumb">
             <LibraryTile
               picture={{
                 chords: libraryNumerals(written, progressionMode(written, false)),

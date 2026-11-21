@@ -46,7 +46,7 @@ export function WeekCard() {
       fold="week"
       title={t('profile.week.title')}
       aside={
-        <span className="text-[0.9375rem] text-muted-foreground tabular-nums">
+        <span className="text-subhead text-muted-foreground tabular-nums">
           {t('profile.week.summary', { time: time(total), days: played })}
         </span>
       }

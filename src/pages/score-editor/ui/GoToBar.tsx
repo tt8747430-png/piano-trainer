@@ -45,7 +45,7 @@ export function GoToBar() {
             onFocus={(event) => event.currentTarget.select()}
             className="h-12 w-24 rounded-xl px-4 text-[1.0625rem] tabular-nums md:text-[1.0625rem]"
           />
-          <span className="text-[0.9375rem] text-muted-foreground tabular-nums">
+          <span className="text-subhead text-muted-foreground tabular-nums">
             {t('goToBar.of', { count })}
           </span>
         </form>

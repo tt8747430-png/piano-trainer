@@ -41,7 +41,7 @@ export function CheckResult({
   return (
     <section className="mx-auto -mt-1 flex w-full max-w-140 flex-col gap-4 lg:-mt-3">
       <div className="flex flex-col items-center gap-1 py-3">
-        <span className="text-[0.8125rem] leading-[normal] font-bold tracking-[0.04em] text-muted-foreground uppercase">
+        <span className="text-footnote leading-[normal] font-bold tracking-[0.04em] text-muted-foreground uppercase">
           {t('results')}
         </span>
         <p

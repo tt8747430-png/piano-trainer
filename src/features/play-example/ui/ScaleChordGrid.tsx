@@ -49,7 +49,7 @@ export function ScaleChordGrid({ chords }: { chords: readonly PlacedScaleChord[]
                   <span className="text-base font-bold">
                     <LeadSymbol text={symbol} />
                   </span>
-                  <span className="-mt-0.5 text-[0.8125rem] text-muted-foreground">
+                  <span className="-mt-0.5 text-footnote text-muted-foreground">
                     {placed.numeral}
                   </span>
                 </span>
