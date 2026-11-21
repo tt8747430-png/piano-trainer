@@ -96,8 +96,6 @@ def _acct(m):
 
 
 def lapwin(h):
-    # Help opened Legal (a misleading link); the User guide's home is Settings › Support (one home)
-    h = re.sub(r'<a role="menuitem" href="LegalLaptop\.dc\.html" style="[^"]*">Help</a>', '', h)
     if 'data-lapwin' in h or _LAPHEAD_OLD not in h:
         return h
     m = re.search(r'<div (style="[^"]*grid-template-columns: 248px minmax\(0, 1fr\)[^"]*")>', h)

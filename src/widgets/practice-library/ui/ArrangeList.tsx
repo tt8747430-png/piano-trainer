@@ -136,7 +136,7 @@ function SortablePlace({
         count={count}
         mark={mark}
         fold={fold}
-        className="gap-3.5 pt-1.5"
+        className="gap-3 pt-1.5"
         action={
           <span className="-my-2.5 me-1 flex items-center">
             {menu}

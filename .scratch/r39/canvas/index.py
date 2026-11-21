@@ -92,10 +92,6 @@ for b in boards:
             h1 = re.sub(r'<style data-floatcss>.*?</style>', lambda m: FL, h1, count=1, flags=re.S) if 'data-floatcss' in h1 else h1.replace('</head>', FL + '</head>', 1)
         else:
             h1 = re.sub(r'<style data-floatcss>.*?</style>', '', h1, flags=re.S)
-        # the bar stays while the page scrolls under it (craft-details, the owner's articles 1, 2026-11-17: "never hidden by
-        # scrolling"); the hide-on-scroll of 2026-11-15 is stripped from every board
-        h1 = re.sub(r'<style data-barhide>.*?</style>', '', h1, flags=re.S)
-        h1 = re.sub(r'<script data-barhide>.*?</script>', '', h1, flags=re.S)
         # a sheet or popover keeps its own scroll: reaching its end never scrolls the page under it (Apple HIG, Sheets;
         # Web Interface Guidelines, overscroll-behavior: contain); a tap never waits on double-tap zoom (touch-action)
         if 'data-sheetcss' not in h1:

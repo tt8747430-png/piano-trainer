@@ -1,4 +1,4 @@
-"""Find .replace() patches that never match: a patch on a helper's output whose search text has gone away silently
+"""Find .replace() and re.sub() patches that never match: a patch on a helper's output whose search text has gone away silently
 drops a ruled value (the laptop take's roll stood at 340x120 for rounds). Builds a copy of the canvas in a scratch
 folder with every .replace(a, b) call wrapped, runs r41.py and index.py there, and prints each call whose a was never
 found. It names suspects only: remove one, rebuild, and `diff -rq practice/project <copy made before>` is the proof.
@@ -15,6 +15,8 @@ LOG = os.path.join(R, 'rchk.txt')
 HDR = ("import builtins, atexit\nif not hasattr(builtins, '_RCHK'):\n def _RCHK(o, loc, a, b, *r):\n"
        "  if isinstance(o, str) and isinstance(a, str): (builtins._MISS if a not in o else builtins._HIT).add(loc)\n"
        "  return o.replace(a, b, *r)\n builtins._RCHK = _RCHK; builtins._MISS = set(); builtins._HIT = set()\n"
+       " import re as _re\n def _RSUB(loc, *a, **k):\n  o, n = _re.subn(*a, **k)\n  (builtins._HIT if n else builtins._MISS).add(loc)\n  return o\n"
+       " builtins._RSUB = _RSUB\n"
        f" atexit.register(lambda: open({LOG!r}, 'a').write(repr((sorted(builtins._MISS), sorted(builtins._HIT))) + '\\n'))\n")
 for f in glob.glob(R + '/*.py'):
     name = os.path.basename(f)
@@ -24,6 +26,8 @@ for f in glob.glob(R + '/*.py'):
             self.generic_visit(n)
             if isinstance(n.func, ast.Attribute) and n.func.attr == 'replace' and len(n.args) >= 2 and not n.keywords:
                 return ast.Call(ast.Name('_RCHK', ast.Load()), [n.func.value, ast.Constant(f'{name}:{n.lineno}')] + n.args, [])
+            if isinstance(n.func, ast.Attribute) and n.func.attr == 'sub' and isinstance(n.func.value, ast.Name) and n.func.value.id == 're':
+                return ast.Call(ast.Name('_RSUB', ast.Load()), [ast.Constant(f'{name}:{n.lineno}')] + n.args, n.keywords)
             return n
     open(f, 'w').write(HDR + ast.unparse(ast.fix_missing_locations(T().visit(tree))))
 for s in ('r41.py', 'index.py'): subprocess.run([sys.executable, s], cwd=R, capture_output=True)

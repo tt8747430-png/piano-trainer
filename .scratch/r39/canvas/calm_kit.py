@@ -11,7 +11,6 @@ lap = open(OUT + 'Laptop.dc.html').read()
 # inset), the board's bar under it as the app's
 STATUS = re.sub(r'height: \d+px;', 'height: 62px;', re.search(r'(<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: \d+px;.*?</span></div>)', src, re.S).group(1), count=1)
 SIDE = re.search(r'(<nav aria-label="Main" style="background: #FBF8F3.*?</nav>)', lap, re.S).group(1)
-SIDE = SIDE.replace('#E9D8C4', '#F3D2C8')  # the learner's face on the kit's PEACH, the app's paint-sand
 # the sidebar as drawn, before index.py's lapwin.py gives it the rail and Focus buttons
 SIDE = re.sub(r'<div data-sidehead.*?</button></div></div>', '<div style="height: 44px; display: flex; align-items: center; padding: 0 12px; font-family: \'Instrument Serif\', Georgia, serif; font-size: 27px">Piano Trainer</div>', SIDE, count=1, flags=re.S)
 LAPFRAME_TOP = lap.split('<div style="position: absolute; left: 217.7px; top: 124.6px;')[0].split('</helmet>', 1)[1].lstrip('\n')
@@ -156,7 +155,7 @@ def phone(fname, title, body, js, sheets='', bg=PAGE):
 
 def SIDEBAR(section):
     """The app's laptop sidebar with its place current: one drawing for every laptop board."""
-    side = re.sub(r'<a href="[^"]*"(?: aria-current="page")? style="min-height: 52px; border-radius: 10px', lambda m: '<a href="ProfileLaptop.dc.html"' + (' aria-current="page"' if section == 'Profile' else '') + ' style="min-height: 52px; border-radius: 10px' + ('; background: #EAE2D7' if section == 'Profile' else ''), SIDE, count=1)
+    side = SIDE
     for word, href in (('Learn', 'LearnLaptop.dc.html'), ('Songs', 'SongsLaptop.dc.html'), ('Practice', 'Laptop.dc.html')):
         on = word == section
         st = ('background: #EAE2D7; color: #1A1612; text-decoration: none; font-size: 16px; font-weight: 600' if on else 'background: transparent; color: #4A433C; text-decoration: none; font-size: 16px; font-weight: 500')

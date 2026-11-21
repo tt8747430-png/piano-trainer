@@ -1000,8 +1000,7 @@ for f in ('Chords', 'ChordsLaptop'):
     # larger text (canvas 95): the reading and the layers scale with the learner's text size, as rem does in the app
     h = h.replace('<main class="nos" style="', '<main class="nos" style="zoom: {{textZoom}}; ')
     h = h.replace('aria-label="Back to Practice"', 'aria-label="Back to Practice" data-tip-start')
-    for lab, tip, up in (('Back to Practice', 'Back to Practice', False), ('Settings', 'Settings', False),
-                         ('Play as: block chord or arpeggio', 'Play as', True), ('Remove {{k.s}}', 'Remove {{k.s}}', True)):
+    for lab, tip, up in (('Back to Practice', 'Back to Practice', False),):
         # a control that already carries its tip (the kit's Back) keeps the one
         h = re.sub(r'aria-label="%s"(?![^>]*data-tip=)' % re.escape(lab), lambda m: 'aria-label="%s" data-tip="%s"%s' % (lab, tip, ' data-tip-up' if up else ''), h)
     h = re.sub(r'(<(?:section|div) role="dialog"[^>]*?style=")', r'\1zoom: {{textZoom}}; ', h)

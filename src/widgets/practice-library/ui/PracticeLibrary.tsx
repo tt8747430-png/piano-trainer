@@ -55,8 +55,8 @@ function Section({
       title={section.name}
       count={section.items.length}
       fold={fold}
-      // the board's head: 44 with its words centred (6 under the section's top), the card 8 under it
-      className="gap-3.5 pt-1.5"
+      // the board's head: 44 with its words centred (6 under the section's top), the card 12 under its line, as every head
+      className="gap-3 pt-1.5"
     >
       <ul className={GROUPED_LIST}>
         {(folded ? section.items.slice(0, FOLDED) : section.items).map((item) => (
