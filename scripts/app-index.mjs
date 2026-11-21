@@ -167,6 +167,7 @@ const TAILWIND = {
   text: 'text-',
   ease: 'ease-',
   animate: 'animate-',
+  tracking: 'tracking-',
   'inset-shadow': 'inset-shadow-',
   breakpoint: '',
   container: '',

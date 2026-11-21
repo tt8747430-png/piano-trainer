@@ -30,7 +30,7 @@ export function ExampleKeys({
   const from = midi(laptop ? low - 12 : low)
   const to = midi(laptop ? low + 23 : low + 16)
   return (
-    <div className="overflow-hidden rounded-[20px] bg-key-black elevation-1">
+    <div className="overflow-hidden rounded-keys bg-key-black elevation-1">
       <LiveKeyboard
         range={{ from, to }}
         marks={shown.marks}

@@ -170,7 +170,7 @@ function Hero() {
             <span aria-hidden className="h-6 rounded-tile bg-muted motion-safe:animate-pulse" />
             <span
               aria-hidden
-              className="h-3.5 w-1/2 rounded-[7px] bg-muted motion-safe:animate-pulse"
+              className="h-3.5 w-1/2 rounded-pill bg-muted motion-safe:animate-pulse"
             />
           </div>
         ) : (

@@ -44,9 +44,9 @@ export function AllSongsShelf({ songs }: { songs: readonly Entry[] }) {
                   {entryTitles(entry, locale).primary}
                 </span>
                 {partway ? (
-                  <span aria-hidden className="block h-0.75 rounded-[2px] bg-muted">
+                  <span aria-hidden className="block h-0.75 rounded-pill bg-muted">
                     <span
-                      className="block h-full rounded-[2px] bg-played"
+                      className="block h-full rounded-pill bg-played"
                       style={{ width: `${Math.round((play.at / play.bars) * 100)}%` }}
                     />
                   </span>

@@ -462,7 +462,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-attention` | `src/styles/theme.css` | 2 |
 | `--color-background` | `src/styles/theme.css` | 43 |
 | `--color-border` | `src/styles/theme.css` | 87 |
-| `--color-card` | `src/styles/theme.css` | 131 |
+| `--color-card` | `src/styles/theme.css` | 132 |
 | `--color-card-foreground` | `src/styles/theme.css` | 4 |
 | `--color-chosen` | `src/styles/theme.css` | 20 |
 | `--color-chosen-honey` | `src/styles/theme.css` | 8 |
@@ -562,7 +562,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-slip-3` | `src/styles/theme.css` | 1 |
 | `--color-switch-knob` | `src/styles/theme.css` | 1 |
 | `--color-switch-on` | `src/styles/theme.css` | 1 |
-| `--color-thumb` | `src/styles/theme.css` | 39 |
+| `--color-thumb` | `src/styles/theme.css` | 40 |
 | `--color-toast-action` | `src/styles/theme.css` | 1 |
 | `--color-wheel-near` | `src/styles/theme.css` | 1 |
 | `--color-wheel-near-inner` | `src/styles/theme.css` | 1 |
@@ -758,18 +758,19 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--radius-2xl` | `src/styles/theme.css` | 5 |
 | `--radius-3xl` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
 | `--radius-4xl` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
-| `--radius-card` | `src/styles/theme.css` | 46 |
+| `--radius-card` | `src/styles/theme.css` | 47 |
 | `--radius-control` | `src/styles/theme.css` | 103 |
 | `--radius-key-black` | `src/styles/theme.css` | 2 |
 | `--radius-key-white` | `src/styles/theme.css` | 1 |
+| `--radius-keys` | `src/styles/theme.css` | 2 |
 | `--radius-lg` | `src/styles/theme.css` | 8 |
 | `--radius-mark` | `src/styles/theme.css` | 11 |
 | `--radius-md` | `src/styles/theme.css` | 7 |
 | `--radius-menu` | `src/styles/theme.css` | 8 |
-| `--radius-pill` | `src/styles/theme.css` | 109 |
-| `--radius-sheet` | `src/styles/theme.css` | 14 |
+| `--radius-pill` | `src/styles/theme.css` | 110 |
+| `--radius-sheet` | `src/styles/theme.css` | 16 |
 | `--radius-sm` | `src/styles/theme.css` | 1 |
-| `--radius-thumb` | `src/styles/theme.css` | 34 |
+| `--radius-thumb` | `src/styles/theme.css` | 35 |
 | `--radius-tile` | `src/styles/theme.css` | 10 |
 | `--radius-xl` | `src/styles/theme.css` | 23 |
 | `--radius-xs` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
@@ -810,9 +811,9 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--text-xl` | `src/styles/theme.css` | 39 |
 | `--thumb` | `src/styles/tokens.css` | 1 |
 | `--toast-action` | `src/styles/tokens.css` | 1 |
-| `--tracking-caps` | `src/styles/theme.css` | 1 |
-| `--tracking-figures` | `src/styles/theme.css` | **0** |
-| `--tracking-title` | `src/styles/theme.css` | 1 |
+| `--tracking-caps` | `src/styles/theme.css` | 11 |
+| `--tracking-figures` | `src/styles/theme.css` | 2 |
+| `--tracking-title` | `src/styles/theme.css` | 13 |
 | `--wheel-near` | `src/styles/tokens.css` | 1 |
 | `--wheel-near-inner` | `src/styles/tokens.css` | 1 |
 | `--wheel-relative` | `src/styles/tokens.css` | 1 |

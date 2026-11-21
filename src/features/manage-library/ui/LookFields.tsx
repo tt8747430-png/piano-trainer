@@ -90,7 +90,7 @@ export function LookFields({
               title={t(`folder.paints.${each}`)}
               className={cn(
                 CHOICE,
-                covers ? 'size-13 rounded-[13px] text-foreground [&_svg]:size-5' : 'rounded-pill',
+                covers ? 'size-13 rounded-card text-foreground [&_svg]:size-5' : 'rounded-pill',
                 PAINT[each].fill,
               )}
             >

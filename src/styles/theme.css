@@ -185,6 +185,8 @@
   --radius-tile: calc(var(--radius) - 4px);
   /* A small picture, a cover, a sidebar's row: 10, a step in from the control's 12. */
   --radius-thumb: calc(var(--radius) - 2px);
+  /* The keys' frame, the canvas's FRAME (r47_blocks): a keyboard on its own, fixed or in a lesson: 20. */
+  --radius-keys: calc(var(--radius) + 8px);
   /* The smallest marks: a checkbox, a bar in a strip, a cover's staff card: 4. */
   --radius-mark: calc(var(--radius) - 8px);
   --radius-xs: var(--radius-control);

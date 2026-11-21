@@ -16,6 +16,7 @@ const SCALE = [
   'menu',
   'tile',
   'mark',
+  'keys',
   'none',
   '[inherit]',
 ]

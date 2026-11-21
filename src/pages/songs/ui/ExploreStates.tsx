@@ -65,7 +65,7 @@ export function ExploreLoading({ head, rows }: { head?: ReactNode; rows: number 
           {Array.from({ length: rows }, (_, i) => (
             <div key={i} className={`${EXPLORE_COLUMNS} h-15 border-b border-border`}>
               <span className="flex items-center gap-4">
-                <span className="size-10 shrink-0 rounded-[0.5625rem] bg-muted" />
+                <span className="size-10 shrink-0 rounded-thumb bg-muted" />
                 <span className={`h-3.5 w-1/2 ${bar}`} />
               </span>
               <span className={`h-3.5 w-3/5 ${bar}`} />

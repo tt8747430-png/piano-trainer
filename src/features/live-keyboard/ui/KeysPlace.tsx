@@ -188,7 +188,7 @@ export function KeysPlace({
     <div
       ref={box}
       data-slot="keys-window"
-      className="fixed z-30 rounded-[20px] bg-card shadow-(--elevation-3) ring-1 ring-foreground/10"
+      className="fixed z-30 rounded-keys bg-card shadow-(--elevation-3) ring-1 ring-foreground/10"
       style={
         shown === null
           ? // Until moved, centred over the transport, 1100 wide at most (the laptop board's).
@@ -202,7 +202,7 @@ export function KeysPlace({
           : { left: shown.left, bottom: shown.bottom, width: shown.width, height: shown.height }
       }
     >
-      <div className="size-full overflow-hidden rounded-[20px]">{children(shown?.height)}</div>
+      <div className="size-full overflow-hidden rounded-keys">{children(shown?.height)}</div>
       <button
         type="button"
         aria-label={t('keysWindow.move')}

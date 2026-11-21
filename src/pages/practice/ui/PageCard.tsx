@@ -29,7 +29,7 @@ export function PageCard({
           <span
             aria-hidden
             className={cn(
-              'grid size-24 place-items-center overflow-hidden rounded-[22px]',
+              'grid size-24 place-items-center overflow-hidden rounded-sheet',
               PAINT[tile.paint].fill,
               PAINT[tile.paint].ink,
             )}
