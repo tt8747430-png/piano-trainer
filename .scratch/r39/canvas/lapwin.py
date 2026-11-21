@@ -76,6 +76,7 @@ _I_USER = _mic('<circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>'
 _I_GEAR = _mic('<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>')
 _I_GLOBE = _mic('<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>')
 _I_OUT = _mic('<path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>')
+_I_IN = _mic('<path d="m10 17 5-5-5-5"/><path d="M15 12H3"/><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>')
 def _acct(m):
     cur, pic, name = m.group(1) or '', m.group(2), m.group(3)
     row = ('<button type="button" data-acct aria-haspopup="menu" aria-expanded="{{lapAcctAria}}" onClick="{{lapAcctT}}" style="width: 100%; min-height: 52px; border: 0; border-radius: 10px; '
@@ -131,7 +132,7 @@ def lapwin(h):
         h = re.sub(r'(<button type="button" data-acct[^>]*>)<span aria-hidden="true" style="([^"]*)">A</span><span data-sidetext style="([^"]*)">Ana Popescu</span>',
                    lambda m: m.group(1) + '<span aria-hidden="true" style="' + m.group(2) + '; background: #EEE9E2; color: #685E56"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span data-sidetext style="' + m.group(3) + '">Sign in</span>', h, count=1)
         h = h.replace('aria-label="Ana Popescu"', 'aria-label="Account"', 1)
-        h = re.sub(r'(<div role="menu" aria-label="Account"[^>]*>)<div style="([^"]*)">ana@example\.com</div><a role="menuitem" href="ProfileLaptop\.dc\.html" style="[^"]*">Profile</a>', r'\1<div style="\2">Not signed in</div>', h, count=1)
-        h = re.sub(r'(<a role="menuitem" href="SignInLaptop\.dc\.html" style="[^"]*">)Sign out</a>', r'\1Sign in</a>', h, count=1)
+        h = re.sub(r'(<div role="menu" aria-label="Account"[^>]*>)<div style="([^"]*)">ana@example\.com</div><a role="menuitem" href="ProfileLaptop\.dc\.html" style="[^"]*">(?:<svg.*?</svg>)?Profile</a>', r'\1<div style="\2">Not signed in</div>', h, count=1, flags=re.S)
+        h = h.replace(_I_OUT + 'Sign out</a>', _I_IN + 'Sign in</a>', 1)
     k = h.rindex('</script>')
     return h[:k] + _LAPJS + h[k:]

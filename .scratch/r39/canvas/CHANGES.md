@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-21 · (this commit) · a streak's flame stands on the cards' edge (the hero was 4 in from it, 20 against 16); the Sign in board's signed-out account menu holds again (Not signed in, Settings, Language, Sign in with its picture: its patch had stopped applying once the items gained pictures) · Profile, ProfileLaptop, SignInLaptop · v719
 - 2026-11-21 · (this commit) · the Player's Accompaniment card holds First chord’s inversion (Root · 1st · 2nd · 3rd) and Voicing (Voice-led · Block) under Pattern, as a progression's; the app's Player reads First chord’s inversion too (was Inversion) · PlayerApp, PlayerDesk · v718
 - 2026-11-21 · 9600181d · the Chord player's ··· gains Import chart…, before Export MIDI · ChordPlayer, ChordPlayerLaptop · v716
 - 2026-11-21 · 68a29427 · the Chord player's ··· gains Export MIDI and Export chart, after Share… · ChordPlayer, ChordPlayerLaptop · v716
