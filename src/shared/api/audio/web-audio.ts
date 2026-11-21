@@ -83,6 +83,8 @@ function partials(context: AudioContext, frequency: number, filter: AudioNode, a
 
 /** How fast a damper silences a string: the level's time constant, in seconds. */
 const DAMPING = 0.04
+/** How long Stop takes to fade what sounds, in seconds. */
+const STOP_FADE = 0.015
 /** How long after its damper falls a voice's oscillators stop. */
 const DAMPED = 0.25
 /** The soft pedal's low-pass: this many times the key's pitch, kept between these (Hz), gently. */
@@ -778,9 +780,13 @@ export function createWebAudioOutput({
       lookahead.clear()
       keys.clear()
       if (!context) return
+      // Faded out in a moment, not cut: a sound cut mid-wave clicks.
+      const at = context.currentTime
       for (const { sources, output } of voices) {
-        output.disconnect()
-        for (const source of sources) source.stop(context.currentTime)
+        output.gain.cancelScheduledValues(at)
+        output.gain.setValueAtTime(output.gain.value, at)
+        output.gain.linearRampToValueAtTime(0, at + STOP_FADE)
+        for (const source of sources) source.stop(at + STOP_FADE)
       }
       voices.clear()
       strings.clear()
