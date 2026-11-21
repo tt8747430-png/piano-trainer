@@ -68,7 +68,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `GROUPED_LIST` | `src/shared/ui/library-row-class.ts` | A grouped list's card (canvas 133): | 6 |
 | `GroupField` | `src/shared/ui/GroupRows.tsx` | A row whose control stands under its name, across the group's width, as the canvas's `GROUP` seg rows draw it (canvas 127): | 3 |
 | `GroupLink` | `src/shared/ui/GroupRows.tsx` | A row that opens what it names, its value in Soft Ink and a chevron at its end: | 16 |
-| `GroupRow` | `src/shared/ui/GroupRows.tsx` | A row whose control stands at its end: | 24 |
+| `GroupRow` | `src/shared/ui/GroupRows.tsx` | A row whose control stands at its end: | 25 |
 | `GroupRows` | `src/shared/ui/GroupRows.tsx` | A group of settings' rows on the muted fill, as the canvas's `GROUP` draws them (canvas 179): | 24 |
 | `GroupSegmented` | `src/shared/ui/GroupRows.tsx` | A row of two or three choices: | 8 |
 | `GroupSwitch` | `src/shared/ui/GroupRows.tsx` | On or off as a row of the group: | 8 |
@@ -118,7 +118,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `NotePicker` | `src/shared/ui/pickers/NotePicker.tsx` | A root as it is written (Chords' root, a scale's, a walk's): | 7 |
 | `NotFound` | `src/shared/ui/NotFound.tsx` | A page that is not there, or no longer (deleted in another tab): | 11 |
 | `Notice` | `src/shared/ui/Notice.tsx` | A notice floating over the screen, as the app says a save went wrong (an alert), as the AppLayers board's Storage full: | 7 |
-| `OpensMark` | `src/shared/ui/NavMarks.tsx` | The navigation marks (R23), drawn here alone so every one is the same size, stroke and muted ink on the same right edge: | 22 |
+| `OpensMark` | `src/shared/ui/NavMarks.tsx` | The navigation marks (R23), drawn here alone so every one is the same size, stroke and muted ink on the same right edge: | 23 |
 | `PAGE_PICTURES` | `src/shared/ui/page-pictures.ts` | The pictures Practice's rows and cards wear (the canvas's `pic`): | 2 |
 | `PAGE_TILES` | `src/shared/ui/page-tiles.ts` | The tile each page wears on every row that leads to it, so a lesson's link, the Player's Setup, Practice's own lists and Search show a page alike. | 6 |
 | `PageCanvas` | `src/shared/ui/PageCanvas.tsx` | Pages floating on a canvas (ADR 0096), as a notation app's page view: | 3 |
@@ -461,17 +461,17 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-alert-foreground` | `src/styles/theme.css` | 2 |
 | `--color-attention` | `src/styles/theme.css` | 2 |
 | `--color-background` | `src/styles/theme.css` | 43 |
-| `--color-border` | `src/styles/theme.css` | 88 |
+| `--color-border` | `src/styles/theme.css` | 87 |
 | `--color-card` | `src/styles/theme.css` | 131 |
 | `--color-card-foreground` | `src/styles/theme.css` | 4 |
 | `--color-chosen` | `src/styles/theme.css` | 20 |
-| `--color-chosen-honey` | `src/styles/theme.css` | 6 |
+| `--color-chosen-honey` | `src/styles/theme.css` | 7 |
 | `--color-destructive` | `src/styles/theme.css` | 47 |
 | `--color-destructive-foreground` | `src/styles/theme.css` | 3 |
 | `--color-eyebrow` | `src/styles/theme.css` | 4 |
 | `--color-foreground` | `src/styles/theme.css` | 359 |
 | `--color-glass` | `src/styles/theme.css` | 2 |
-| `--color-hairline` | `src/styles/theme.css` | 64 |
+| `--color-hairline` | `src/styles/theme.css` | 66 |
 | `--color-hand-lh` | `src/styles/theme.css` | 3 |
 | `--color-hand-lh-wash` | `src/styles/theme.css` | 3 |
 | `--color-hand-rh` | `src/styles/theme.css` | 3 |
@@ -503,7 +503,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-medal-none` | `src/styles/theme.css` | 1 |
 | `--color-medal-platinum` | `src/styles/theme.css` | 1 |
 | `--color-medal-silver` | `src/styles/theme.css` | 1 |
-| `--color-muted` | `src/styles/theme.css` | 157 |
+| `--color-muted` | `src/styles/theme.css` | 158 |
 | `--color-muted-foreground` | `src/styles/theme.css` | 299 |
 | `--color-nav-current` | `src/styles/theme.css` | 2 |
 | `--color-nav-current-foreground` | `src/styles/theme.css` | 3 |
@@ -538,7 +538,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-popover` | `src/styles/theme.css` | 5 |
 | `--color-popover-foreground` | `src/styles/theme.css` | 8 |
 | `--color-practised-day` | `src/styles/theme.css` | 2 |
-| `--color-primary` | `src/styles/theme.css` | 31 |
+| `--color-primary` | `src/styles/theme.css` | 30 |
 | `--color-primary-foreground` | `src/styles/theme.css` | 9 |
 | `--color-raised` | `src/styles/theme.css` | 6 |
 | `--color-ring` | `src/styles/theme.css` | 23 |
@@ -826,7 +826,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `section-head` | The head over a card of rows on a page (Practise, Options, How to play): | 2 |
 | `settings-pane` | DESIGN's card: | 1 |
 | `rows-line` | The card's ring is a shadow: | 3 |
-| `rows-hairline` |  | 25 |
+| `rows-hairline` |  | 26 |
 | `px-gutter` | * A block's or a place's look (R29 B9, `shared/lib/style`): | 15 |
 | `-mx-gutter` |  | 16 |
 | `scroll-px-gutter` | A row that scrolls sideways snaps its first item to the gutter, not to the screen's edge. | 5 |

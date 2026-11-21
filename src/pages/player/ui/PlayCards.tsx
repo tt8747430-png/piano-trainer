@@ -1,10 +1,9 @@
-import { ChevronRight } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePatternBook, type PatternChoice } from '@/entities/pattern'
 import { type SongVersion } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
-import { RadioCards, Segmented } from '@/shared/ui'
+import { OpensMark, RadioCards, Segmented } from '@/shared/ui'
 import { useSetup } from '@/widgets/player-setup'
 
 /** The levels easiest first, as the board's Level reads (Beginner · Intermediate · Advanced). */
@@ -101,12 +100,12 @@ export function PlayCards({
                     type="button"
                     data-setup-page={page}
                     onClick={() => openPage(page)}
-                    className="flex min-h-12 w-full items-center justify-between gap-3 border-t border-border/70 px-4 py-2 text-left text-base transition-colors duration-200 ease-out hover:bg-foreground/4 focus-visible:-outline-offset-2"
+                    className="flex min-h-12 w-full items-center justify-between gap-3 py-1.5 ps-4 pe-3 text-left text-base transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
                   >
                     <span>{t('pattern')}</span>
                     <span className="flex min-w-0 items-center gap-2 text-muted-foreground">
                       <span className="truncate">{name}</span>
-                      <ChevronRight aria-hidden className="size-4.5 shrink-0" />
+                      <OpensMark />
                     </span>
                   </button>
                 ),
@@ -127,7 +126,7 @@ function ArrangementRows({ chosen, own, voice, simplifies, onChoose }: Arrangeme
     ...(voice ? ['voice' as const] : []),
   ]
   return (
-    <div className="flex flex-col">
+    <>
       {groups.length > 1 ? (
         <Row label={t('version.scoring')}>
           <Segmented
@@ -150,14 +149,14 @@ function ArrangementRows({ chosen, own, voice, simplifies, onChoose }: Arrangeme
           onChange={(version) => onChoose({ group: chosen.group, version })}
         />
       </Row>
-    </div>
+    </>
   )
 }
 
 /** A row of a card, as the board's: its name at the start, its choice taking the rest, 48 tall. */
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex min-h-12 items-center gap-3 border-t border-border/70 py-2 ps-4 pe-2 max-sm:flex-wrap">
+    <div className="flex min-h-12 items-center gap-3 py-1.5 ps-4 pe-3 max-sm:flex-wrap">
       <span className="shrink-0 text-base">{label}</span>
       <div className="min-w-0 flex-1">{children}</div>
     </div>

@@ -22,7 +22,8 @@ export interface RadioCard<V extends string> {
  * and its tick, the others white with a hairline and a ringed dot. Cards holding rows of their own
  * (the 3D piano's Angle) stack, their picture in a 64 by 48 tile; cards holding none stand
  * side by side, both in the card corner, their picture in a 44 by 40 tile. A radio group: the arrows move to a
- * card and choose it.
+ * card and choose it. Its rows (the card's `children`) are parted by a hairline, the card's own, under its
+ * head: a caller draws no line.
  */
 export function RadioCards<V extends string>({
   label,
@@ -62,9 +63,10 @@ export function RadioCards<V extends string>({
             className={cn(
               'overflow-hidden',
               'rounded-card',
+              // The chosen card's rows are parted by its own hairline, the honey ring at 30%.
               chosen
-                ? 'bg-[color-mix(in_oklab,var(--color-primary)_22%,var(--color-card))] ring-2 ring-honey-ring'
-                : 'bg-card ring-1 ring-foreground/7',
+                ? 'bg-chosen-honey ring-2 ring-honey-ring [--color-hairline:color-mix(in_oklab,var(--color-honey-ring)_30%,transparent)]'
+                : 'bg-card ring-1 ring-hairline',
             )}
           >
             <Radio.Root
@@ -101,7 +103,11 @@ export function RadioCards<V extends string>({
                 {chosen ? <Check className="size-3.5" strokeWidth={3} /> : null}
               </span>
             </Radio.Root>
-            {(chosen || card.open) && card.children ? card.children : null}
+            {(chosen || card.open) && card.children ? (
+              <div className="flex flex-col rows-hairline border-t border-hairline">
+                {card.children}
+              </div>
+            ) : null}
           </div>
         )
       })}

@@ -15,6 +15,7 @@ import { printedKeyName, type Midi } from '@/shared/lib/music'
 import { KeyStrip } from './KeyStrip'
 import { useTranslation } from 'react-i18next'
 import {
+  GroupRow,
   Piano2DPicture,
   Piano3DPicture,
   RadioCards,
@@ -29,7 +30,7 @@ import {
 } from '@/shared/ui'
 
 /** The canvas's BLOCK: a card, 12 round, 12 16 16 inside, its name over its choice, 8 apart. */
-const BLOCK = 'flex flex-col gap-2 rounded-xl bg-card px-4 pt-3 pb-4 ring-1 ring-foreground/7'
+const BLOCK = 'flex flex-col gap-2 rounded-xl bg-card px-4 pt-3 pb-4 ring-1 ring-hairline'
 
 /** What stands in the keys' place, shown: the hands at the keys (3D) or the keys (2D). */
 export type PianoShown = 'hands' | 'keys'
@@ -114,9 +115,7 @@ export function PianoSheet<R extends string>({
               picture: <Piano3DPicture />,
               children: stage ? (
                 <>
-                  {/* The canvas's rows in the chosen card, a honey hairline over each. */}
-                  <div className="flex min-h-12 items-center justify-between gap-3 px-4 py-2 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]">
-                    <span className="text-base text-foreground">{t('pianoSheet.angle')}</span>
+                  <GroupRow label={t('pianoSheet.angle')}>
                     <div className="w-42 flex-none">
                       <Segmented
                         label={t('pianoSheet.angle')}
@@ -128,12 +127,12 @@ export function PianoSheet<R extends string>({
                         onChange={stage.onAngle}
                       />
                     </div>
-                  </div>
+                  </GroupRow>
                   <SwitchRow
                     label={t('pianoSheet.handsOnKeys')}
                     checked={stage.handsOnKeys}
                     onCheckedChange={stage.onHandsOnKeys}
-                    className="px-4 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]"
+                    className="ps-4 pe-3"
                   />
                 </>
               ) : undefined,
