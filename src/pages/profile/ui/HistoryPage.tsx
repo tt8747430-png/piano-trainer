@@ -53,7 +53,7 @@ function MonthChart() {
       <div className="flex gap-2">
         <div
           aria-hidden
-          className="flex h-30 flex-none flex-col justify-between text-right text-[0.6875rem] text-muted-foreground tabular-nums"
+          className="flex h-30 flex-none flex-col justify-between text-right text-xs text-muted-foreground tabular-nums"
         >
           <span>{t('profile.history.minutes', { m: top })}</span>
           <span>{top / 2}</span>
@@ -84,10 +84,7 @@ function MonthChart() {
           })}
         </ol>
       </div>
-      <div
-        aria-hidden
-        className="flex justify-between pl-11 text-[0.6875rem] text-muted-foreground"
-      >
+      <div aria-hidden className="flex justify-between pl-11 text-xs text-muted-foreground">
         <span>{shortDateSaid(dateOfDay(month[0]?.day ?? today), locale)}</span>
         <span>{shortDateSaid(dateOfDay(month[DAYS / 2]?.day ?? today), locale)}</span>
         <span>{t('profile.history.today')}</span>

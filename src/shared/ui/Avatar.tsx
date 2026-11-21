@@ -11,7 +11,7 @@ const SIZE = {
   /** A byline's: beside a name. */
   byline: 'size-11 text-lg',
   /** A feed card's foot (the Explore board's FEEDCARD): beside who shared it. */
-  feed: 'size-6 text-[0.6875rem] font-bold',
+  feed: 'size-6 text-xs font-bold',
   /** Explore's People (R72's PERSON): a person's row. */
   person: 'size-12 text-[1.1875rem] font-bold',
   /** A row's: its tile's size. */

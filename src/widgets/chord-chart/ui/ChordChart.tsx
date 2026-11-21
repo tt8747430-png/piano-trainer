@@ -264,7 +264,7 @@ export function ChordChart({
               <div key={index} className="flex gap-2 break-inside-avoid">
                 <span
                   aria-hidden
-                  className="w-4 shrink-0 pt-[5px] sm:w-[26px] text-right text-[10px] text-muted-foreground/60 tabular-nums"
+                  className="w-5 shrink-0 pt-[5px] text-right text-xs text-muted-foreground tabular-nums sm:w-6.5"
                 >
                   {first ? printedBar(first.written, pickup) : null}
                 </span>
