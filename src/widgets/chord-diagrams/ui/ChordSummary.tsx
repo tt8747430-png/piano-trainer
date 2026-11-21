@@ -58,7 +58,7 @@ export function ChordSummary({
           follows
             ? 'gap-4'
             : // the Song board's CHORDS_ROW: 8 apart, a row that scrolls on a phone, six columns on a laptop
-              '-mx-4 gap-2 px-4 pt-0.5 pb-1 sm:mx-0 sm:flex-wrap sm:px-0.5 lg:grid lg:grid-cols-6 lg:overflow-visible',
+              '-mx-4 gap-2 px-4 sm:mx-0 sm:flex-wrap sm:px-0 lg:grid lg:grid-cols-6 lg:overflow-visible',
         )}
       >
         {chords.map((each) => {
@@ -84,7 +84,7 @@ export function ChordSummary({
                   // Following the music, a quiet cell; on a song's page, the canvas's chord card.
                   follows
                     ? 'gap-2 rounded-control'
-                    : 'gap-2 rounded-card bg-card p-3 lg:w-full shadow-[0_0_0_1px_var(--color-border)] transition-[filter] duration-200 ease-out hover:brightness-[0.97]',
+                    : 'gap-2 rounded-card bg-card p-3 lg:w-full shadow-[inset_0_0_0_1px_var(--color-border)] transition-[filter] duration-200 ease-out hover:brightness-[0.97]',
                 )}
               >
                 {/* Every chord on the same keys, the same size: following the music the Diagrams' keys,

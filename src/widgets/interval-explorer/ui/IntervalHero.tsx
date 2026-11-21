@@ -69,7 +69,7 @@ export function IntervalHero({
         <h2 id="interval-chosen" className="subject-title">
           {title}
         </h2>
-        <InfoTip name={title} className="ms-2 [&_svg]:size-5">
+        <InfoTip name={title} className="ms-1.5 [&_svg]:size-5">
           <div className="flex flex-col gap-3">
             <p className="text-pretty">{t(`intervals.meaning.${name}`)}</p>
             <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1.5">
