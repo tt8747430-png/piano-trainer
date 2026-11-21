@@ -12,11 +12,33 @@ export interface Microphone {
 /** Opens the microphone: what the browser grants, or a refusal (no microphone, or not allowed). */
 export type OpenMicrophone = () => Promise<Microphone>
 
+/**
+ * The audio session while a microphone listens, and after: recording, then the browser's own choice
+ * again once none does. Left recording (iOS), the app's sound would go on at the earpiece's quiet
+ * level after the Tuner closes.
+ */
+let listening = 0
+const listen = () => {
+  listening += 1
+  if (navigator.audioSession) navigator.audioSession.type = 'play-and-record'
+}
+/** A microphone let go: the session goes back once none listens. */
+const stopListening = () => {
+  listening -= 1
+  if (listening === 0 && navigator.audioSession) navigator.audioSession.type = 'auto'
+}
+
 /** The browser's microphone through Web Audio's analyser; its echo and noise cancelling off. */
 export const openBrowserMicrophone: OpenMicrophone = async () => {
-  const stream = await navigator.mediaDevices.getUserMedia({
-    audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
-  })
+  listen()
+  const stream = await navigator.mediaDevices
+    .getUserMedia({
+      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+    })
+    .catch((refused: unknown) => {
+      stopListening()
+      throw refused
+    })
   const context = new AudioContext()
   const source = context.createMediaStreamSource(stream)
   const analyser = context.createAnalyser()
@@ -29,6 +51,7 @@ export const openBrowserMicrophone: OpenMicrophone = async () => {
       source.disconnect()
       for (const track of stream.getTracks()) track.stop()
       void context.close()
+      stopListening()
     },
   }
 }

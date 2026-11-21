@@ -18,6 +18,9 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
 - **Music keeps time in a hidden tab.** Everything that schedules sound ticks on `steadyTicker` (`shared/lib/ticker`),
   a timer in a Worker, which a hidden tab never slows: the adapter's lookahead, the Metronome, the Player's transport
   and the Chord player's engine. Where there are no workers (a test's document) it is the page's timer.
+- **The microphone records only while it listens.** The Tuner's microphone sets the audio session (`navigator.audioSession`,
+  Safari) to play-and-record while any microphone is open and back to auto when the last closes, so the app's sound
+  does not stay at the earpiece's level after the Tuner.
 - **Audio taken away is taken back while something sounds.** Another app's audio, a call or a locked phone suspends
   or interrupts the context, and iOS can hand it back running with its clock stopped. The Web Audio adapter takes it
   back only while something sounds or is due (a voice, a held key, the lookahead's queue, a recording) and the page is
