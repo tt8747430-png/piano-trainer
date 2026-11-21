@@ -86,7 +86,6 @@
   --color-paint-tile-grass: var(--paint-tile-grass);
   --color-paint-tile-sky: var(--paint-tile-sky);
   --color-paint-tile-lilac: var(--paint-tile-lilac);
-  --color-on-paint-full: var(--on-paint-full);
   --color-thumb: var(--thumb);
   --color-raised: var(--raised);
   --color-glass: var(--glass);
@@ -126,8 +125,6 @@
   --color-scrim: var(--scrim);
   --color-key-bed: var(--key-bed);
   --color-key-shade: var(--key-shade);
-  --color-key-sheen: var(--key-sheen);
-  --color-key-felt: var(--key-felt);
   --color-on-key-white: var(--on-key-white);
   --color-on-key-black: var(--on-key-black);
   --color-key-down: var(--key-down);
@@ -638,10 +635,6 @@
 @utility pr-floating {
   padding-right: calc(max(var(--gutter), env(safe-area-inset-right)) + var(--floating-right));
 }
-/* What floats at the screen's side, in from its edge by a gutter. */
-@utility right-gutter {
-  right: max(var(--gutter), env(safe-area-inset-right));
-}
 /* The page's reading column, 672 wide and centred (DESIGN.md, Placement): a page's content, its bar's row
    (`ScreenHeader column`) and a phone's sheet stand on it, so their edges meet at every width. */
 @utility page-column {
@@ -659,17 +652,6 @@
 @utility grid-fields {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
-}
-/* Chord buttons, as many across as fit, each at least 4.5rem. */
-@utility grid-chords {
-  display: grid;
-  /* Wide enough for a slash chord (Cm6/G, G♭m/B♭) on one line: four to a phone's row. */
-  grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
-}
-/* The same for small tiles, at least 9rem. */
-@utility grid-tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(9rem, 100%), 1fr));
 }
 
 /* Clear the notch and the home indicator: named utilities, not arbitrary values in markup. */
@@ -778,10 +760,6 @@
    actions where they stand at its left. */
 @utility pl-safe-left {
   padding-left: calc(env(safe-area-inset-left) + var(--gutter) + var(--floating-left));
-}
-/* No narrower than its longest word, nor wider than its line: a title that wraps between words only. */
-@utility min-w-longest-word {
-  min-width: min(100%, min-content);
 }
 /* Drawn only in sight (R32): a long score's lines out of view cost no style, layout, paint or hit
    test. Its height while skipped is the screen's to give (`contain-intrinsic-size` in `style`). */
@@ -1106,9 +1084,6 @@
 }
 @utility left-sidebar-collapsed {
   left: --spacing(18);
-}
-@utility bottom-safe {
-  bottom: max(--spacing(4), env(safe-area-inset-bottom));
 }
 
 /* The Player's screen, and the score editor's (widgets/practice-player, ADR 0061, 0115):

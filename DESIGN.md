@@ -350,8 +350,8 @@ fakes a bold.
 Phone first, and every screen takes the width it is given; no screen is capped. The gutter grows with the width: 16px
 on a phone, 24px from 640px, 40px beside the sidebar.
 
-- **Grids, not columns:** row cards in as many 18rem columns as fit (`grid-cards`), fields in 20rem (`grid-fields`),
-  chord buttons in `grid-chords`, tiles in `grid-tiles`. Rows and grids stay even on wide screens.
+- **Grids, not columns:** row cards in as many 18rem columns as fit (`grid-cards`), fields in 20rem (`grid-fields`).
+  Rows and grids stay even on wide screens.
 - **Rhythm:** 24px between a screen's parts, 32px between sections, 16–20px inside a group, with `gap`. A section's
   heading sits on the content's edge, 32 below what comes before and 12 above what it heads, so it reads with its own
   group (proximity). A group's small-capital label starts on its rows' 16 inset, 8 above the group. Sibling tiles stand

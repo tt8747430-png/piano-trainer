@@ -21,6 +21,7 @@ Vercel.
 | [DESIGN.md](DESIGN.md)                                       | the look, before any screen                            |
 | [docs/CODE_STYLE.md](docs/CODE_STYLE.md)                     | how code is written, before any code                   |
 | [docs/CONTENT.md](docs/CONTENT.md)                           | a piece, pattern, lesson or course                     |
+| [docs/INDEX.md](docs/INDEX.md)                               | every kit part, slice, token, utility, and who uses it |
 | [docs/adr/](docs/adr/README.md)                              | why an area is the way it is                           |
 
 Design work on the canvas loads these, each when its moment comes ([`redesigning-a-screen`](.claude/skills/redesigning-a-screen/SKILL.md) runs the loop):

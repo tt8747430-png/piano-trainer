@@ -197,7 +197,6 @@
   --paint-tile-grass: #5f8f62;
   --paint-tile-sky: #5b8db8;
   --paint-tile-lilac: #8c7ab8;
-  --on-paint-full: var(--p-ink);
   /* Learned, known, on, connected: the book's grass. */
   --learned: var(--p-grass-deep);
   --learned-foreground: var(--p-white);

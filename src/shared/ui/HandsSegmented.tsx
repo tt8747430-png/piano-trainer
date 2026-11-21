@@ -12,7 +12,7 @@ const ORDER: readonly Hands[] = ['lh', 'both', 'rh']
  * A hand's colour as the keys wear it (DESIGN.md, the Player's hands; R35): the right hand a brick
  * dot, the left a lilac one outlined, so they differ by fill as well as hue.
  */
-export function HandSwatch({ hand, className }: { hand: Hand; className?: string }) {
+function HandSwatch({ hand, className }: { hand: Hand; className?: string }) {
   return (
     <span
       aria-hidden
