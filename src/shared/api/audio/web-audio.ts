@@ -420,6 +420,8 @@ const browserActivated = () => navigator.userActivation?.hasBeenActive ?? true
 export interface AudioPage {
   visible(): boolean
   onShown(shown: () => void): void
+  /** Calls `rerouted` when the outputs change: headphones in or out, a Bluetooth speaker joined. */
+  onRerouted(rerouted: () => void): void
 }
 
 const browserPage: AudioPage = {
@@ -431,6 +433,9 @@ const browserPage: AudioPage = {
     })
     window.addEventListener('pageshow', shown)
     window.addEventListener('focus', shown)
+  },
+  onRerouted(rerouted) {
+    navigator.mediaDevices?.addEventListener('devicechange', rerouted)
   },
 }
 
@@ -695,6 +700,16 @@ export function createWebAudioOutput({
     watch()
   }
   page.onShown(wake)
+  // A new output can leave the context running into nothing (iOS): while something sounds, it is
+  // suspended and resumed onto the new route.
+  page.onRerouted(() => {
+    const audio = context
+    if (!audio || audio.state !== 'running' || !busy()) return
+    void audio
+      .suspend()
+      .then(() => audio.resume())
+      .catch(none)
+  })
 
   const render = (sound: Sound, at: number, gain: number) => {
     // A sound turned right down is not played at all.

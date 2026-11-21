@@ -37,7 +37,7 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   in sight: as the page comes back into sight (`AudioPage`), on the context's state change, and every second while it
   sounds. A held context resumes; a clock that stands still two watches while its context says it runs is suspended and
   resumed, and after four is replaced at the next start once nothing counts on its clock (after Stop), never under a
-  running transport. A closed context is replaced at its next use. Nothing sounding, nothing is taken back, so the
+  running transport. A change of outputs (headphones, a Bluetooth speaker) suspends and resumes it onto the new route while something sounds. A closed context is replaced at its next use. Nothing sounding, nothing is taken back, so the
   learner's other music plays on: `unlock()` belongs to a gesture about to sound (Play, a key, a recording), while
   `AudioUnlock`'s `prime()` on every other gesture only readies audio that has never run.
 - **The audio port knows what it sounds.** Every note played is a window on the audio clock: `sounding()`,
