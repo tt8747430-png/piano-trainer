@@ -229,7 +229,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 - **Search** (`/search?q=`) lists every named thing by kind, each a row to its page: Practice's pages, songs and
   folders, lessons, chord qualities, scale kinds, progressions, patterns, and exercises. It is one projection
   of the registries, held to each by a test. Every name is found in either language (a Russian learner typing
-  "tuner" finds the Тюнер), the app's own pages as much as content. A chord symbol typed is read as the chord, and a scale typed with its tonic, by letter or as a Russian musician says it ("D minor", "F♯ dorian", "ре минор", "фа-диез мажор"), opens
+  "tuner" finds the Тюнер), the app's own pages as much as content. A chord symbol typed is read as the chord, its root in either case (dm7 is Dm7, dm7 g7 c a line of chords), and a scale typed with its tonic, by letter or as a Russian musician says it ("D minor", "F♯ dorian", "ре минор", "фа-диез мажор"), opens
   that scale's page on it; symbols print engraved (♯, ♭). A chord quality's row shows its symbol on C, a scale kind's its notes on C (Major blues: C D E♭ E G A), shown but never searched. Printed accidentals fold to typed ones (C7#9 finds C7♯9, Bb finds B♭). Nothing found is no dead
   end: it names what was missed, says how to search instead, and lists the Suggestions to go on from.
 - **Words:** a Place is the nav's; Practice has pages in groups; a thing's page is an Explorer; a Tool works something

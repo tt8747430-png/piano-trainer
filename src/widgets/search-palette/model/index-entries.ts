@@ -285,12 +285,24 @@ export function indexEntries({
 }
 
 /**
+ * A search typed in lower case (`dm7 g7`) read as the chords it names: each word's leading a–g in
+ * capitals. Only the palette reads loosely so; a chord sheet's lyrics keep their words.
+ */
+function rootsInCapitals(query: string): string {
+  return query.replace(
+    /(^|[\s,|])([a-g])/g,
+    (_, before: string, letter: string) => before + letter.toUpperCase(),
+  )
+}
+
+/**
  * What a typed query names besides the index's own entries: a chord symbol (`F#m7b5`), as an entry
  * that opens it, none for a chord on C, which the index already shows; or a line of chords (`Dm7 Gm9
  * Asus4`), on Progressions in the key it is read in (ADR 0052); none for anything else.
  */
 export function typedEntry(query: string, names: IndexNames): IndexEntry | undefined {
-  const chord = readChordSymbol(query)
+  const typed = rootsInCapitals(query)
+  const chord = readChordSymbol(typed)
   if (chord) {
     const { root, quality } = chord
     if (pitchClassOf(root) === pitchClassOf(C) && isTableQuality(quality)) return undefined
@@ -310,8 +322,8 @@ export function typedEntry(query: string, names: IndexNames): IndexEntry | undef
   }
   const scale = typedScale(query, names)
   if (scale) return scale
-  const line = chordsOfLine(query)
-  const search = line ? typedSearch(query, { tonic: C, minor: false }) : null
+  const line = chordsOfLine(typed)
+  const search = line ? typedSearch(typed, { tonic: C, minor: false }) : null
   if (!line || !search) return undefined
   return {
     id: 'progressions:typed',
