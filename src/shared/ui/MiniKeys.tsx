@@ -35,7 +35,7 @@ export function MiniKeys({
   className?: string
 }) {
   const held = placed(keys)
-  const fill = sounding ? 'bg-[var(--p-honey)]' : 'bg-[var(--key-chord)]'
+  const fill = sounding ? 'bg-primary' : 'bg-[var(--key-chord)]'
   return (
     <div
       aria-hidden

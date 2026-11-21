@@ -13,6 +13,7 @@ const SCALE = [
   'key-black',
   'key-white',
   'thumb',
+  'menu',
   'tile',
   'mark',
   'none',

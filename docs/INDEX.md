@@ -462,7 +462,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-attention` | `src/styles/theme.css` | 2 |
 | `--color-background` | `src/styles/theme.css` | 43 |
 | `--color-border` | `src/styles/theme.css` | 89 |
-| `--color-card` | `src/styles/theme.css` | 135 |
+| `--color-card` | `src/styles/theme.css` | 133 |
 | `--color-card-foreground` | `src/styles/theme.css` | 4 |
 | `--color-chosen` | `src/styles/theme.css` | 20 |
 | `--color-chosen-honey` | `src/styles/theme.css` | 6 |
@@ -524,7 +524,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-paint-full-sand` | `src/styles/theme.css` | 3 |
 | `--color-paint-full-sky` | `src/styles/theme.css` | 1 |
 | `--color-paint-full-yellow` | `src/styles/theme.css` | 1 |
-| `--color-paint-grass` | `src/styles/theme.css` | 12 |
+| `--color-paint-grass` | `src/styles/theme.css` | 13 |
 | `--color-paint-lilac` | `src/styles/theme.css` | 4 |
 | `--color-paint-sand` | `src/styles/theme.css` | 6 |
 | `--color-paint-sky` | `src/styles/theme.css` | 4 |
@@ -538,7 +538,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-popover` | `src/styles/theme.css` | 5 |
 | `--color-popover-foreground` | `src/styles/theme.css` | 8 |
 | `--color-practised-day` | `src/styles/theme.css` | 2 |
-| `--color-primary` | `src/styles/theme.css` | 29 |
+| `--color-primary` | `src/styles/theme.css` | 31 |
 | `--color-primary-foreground` | `src/styles/theme.css` | 9 |
 | `--color-raised` | `src/styles/theme.css` | 6 |
 | `--color-ring` | `src/styles/theme.css` | 43 |
@@ -562,7 +562,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-slip-3` | `src/styles/theme.css` | 1 |
 | `--color-switch-knob` | `src/styles/theme.css` | 1 |
 | `--color-switch-on` | `src/styles/theme.css` | 1 |
-| `--color-thumb` | `src/styles/theme.css` | 33 |
+| `--color-thumb` | `src/styles/theme.css` | 39 |
 | `--color-toast-action` | `src/styles/theme.css` | 1 |
 | `--color-wheel-near` | `src/styles/theme.css` | 1 |
 | `--color-wheel-near-inner` | `src/styles/theme.css` | 1 |
@@ -593,10 +593,10 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--gutter` | `src/styles/theme.css` | 12 |
 | `--hairline` | `src/styles/tokens.css` | 4 |
 | `--hand-lh` | `src/styles/tokens.css` | 2 |
-| `--hand-lh-ink` | `src/styles/tokens.css` | 1 |
+| `--hand-lh-ink` | `src/styles/tokens.css` | 2 |
 | `--hand-lh-wash` | `src/styles/tokens.css` | 2 |
 | `--hand-rh` | `src/styles/tokens.css` | 2 |
-| `--hand-rh-ink` | `src/styles/tokens.css` | 1 |
+| `--hand-rh-ink` | `src/styles/tokens.css` | 2 |
 | `--hand-rh-wash` | `src/styles/tokens.css` | 3 |
 | `--hand-staff` | `src/styles/tokens.css` | 2 |
 | `--hand-staff-ink` | `src/styles/tokens.css` | 1 |
@@ -611,7 +611,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--key-black` | `src/styles/tokens.css` | 3 |
 | `--key-cast` | `src/styles/tokens.css` | 1 |
 | `--key-chord` | `src/styles/tokens.css` | 1 |
-| `--key-down` | `src/styles/tokens.css` | 2 |
+| `--key-down` | `src/styles/tokens.css` | 3 |
 | `--key-edge-light` | `src/styles/tokens.css` | 1 |
 | `--key-edge-shade` | `src/styles/tokens.css` | 1 |
 | `--key-far` | `src/styles/tokens.css` | 1 |
@@ -656,7 +656,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--p-bed` | `src/styles/tokens.css` | 2 |
 | `--p-black-key` | `src/styles/tokens.css` | 1 |
 | `--p-brick` | `src/styles/tokens.css` | 1 |
-| `--p-brick-deep` | `src/styles/tokens.css` | 2 |
+| `--p-brick-deep` | `src/styles/tokens.css` | 1 |
 | `--p-control` | `src/styles/tokens.css` | 1 |
 | `--p-copper` | `src/styles/tokens.css` | 2 |
 | `--p-copper-night` | `src/styles/tokens.css` | 1 |
@@ -683,15 +683,15 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--p-grass` | `src/styles/tokens.css` | 1 |
 | `--p-grass-deep` | `src/styles/tokens.css` | 1 |
 | `--p-grass-light` | `src/styles/tokens.css` | 1 |
-| `--p-grass-wash` | `src/styles/tokens.css` | 2 |
-| `--p-honey` | `src/styles/tokens.css` | 5 |
+| `--p-grass-wash` | `src/styles/tokens.css` | 1 |
+| `--p-honey` | `src/styles/tokens.css` | 3 |
 | `--p-honey-deep` | `src/styles/tokens.css` | 1 |
 | `--p-honey-ink` | `src/styles/tokens.css` | 1 |
 | `--p-honey-night` | `src/styles/tokens.css` | 1 |
-| `--p-ink` | `src/styles/tokens.css` | 4 |
+| `--p-ink` | `src/styles/tokens.css` | 2 |
 | `--p-ink-soft` | `src/styles/tokens.css` | 1 |
 | `--p-lilac` | `src/styles/tokens.css` | 1 |
-| `--p-lilac-deep` | `src/styles/tokens.css` | 2 |
+| `--p-lilac-deep` | `src/styles/tokens.css` | 1 |
 | `--p-lilac-light` | `src/styles/tokens.css` | 1 |
 | `--p-lilac-wash` | `src/styles/tokens.css` | 1 |
 | `--p-line` | `src/styles/tokens.css` | 1 |
@@ -704,9 +704,9 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--p-ochre` | `src/styles/tokens.css` | 1 |
 | `--p-ochre-light` | `src/styles/tokens.css` | 1 |
 | `--p-paper` | `src/styles/tokens.css` | 2 |
-| `--p-paper-card` | `src/styles/tokens.css` | 4 |
-| `--p-roll-amber` | `src/styles/tokens.css` | 2 |
-| `--p-roll-blue` | `src/styles/tokens.css` | 2 |
+| `--p-paper-card` | `src/styles/tokens.css` | 2 |
+| `--p-roll-amber` | `src/styles/tokens.css` | 1 |
+| `--p-roll-blue` | `src/styles/tokens.css` | 1 |
 | `--p-rust` | `src/styles/tokens.css` | 1 |
 | `--p-rust-night` | `src/styles/tokens.css` | 1 |
 | `--p-sand` | `src/styles/tokens.css` | 1 |
@@ -715,7 +715,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--p-sand-deep` | `src/styles/tokens.css` | 1 |
 | `--p-sand-light` | `src/styles/tokens.css` | 1 |
 | `--p-sand-wash` | `src/styles/tokens.css` | 1 |
-| `--p-sky` | `src/styles/tokens.css` | 2 |
+| `--p-sky` | `src/styles/tokens.css` | 1 |
 | `--p-sky-deep` | `src/styles/tokens.css` | 1 |
 | `--p-sky-light` | `src/styles/tokens.css` | 1 |
 | `--p-sky-mist` | `src/styles/tokens.css` | 1 |
@@ -724,7 +724,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--p-sky-night-ink` | `src/styles/tokens.css` | 1 |
 | `--p-sky-wash` | `src/styles/tokens.css` | 1 |
 | `--p-teal` | `src/styles/tokens.css` | 1 |
-| `--p-umber` | `src/styles/tokens.css` | 2 |
+| `--p-umber` | `src/styles/tokens.css` | 1 |
 | `--p-white` | `src/styles/tokens.css` | 1 |
 | `--p-yellow` | `src/styles/tokens.css` | 1 |
 | `--p-yellow-deep` | `src/styles/tokens.css` | 1 |
@@ -751,6 +751,9 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--practised-day` | `src/styles/tokens.css` | 1 |
 | `--primary` | `src/styles/tokens.css` | 4 |
 | `--primary-foreground` | `src/styles/tokens.css` | 1 |
+| `--print-ink` | `src/styles/tokens.css` | 2 |
+| `--print-paper` | `src/styles/tokens.css` | 2 |
+| `--print-soft` | `src/styles/tokens.css` | 1 |
 | `--radius` | `src/styles/tokens.css` | 2 |
 | `--radius-2xl` | `src/styles/theme.css` | 5 |
 | `--radius-3xl` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
@@ -763,11 +766,10 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--radius-mark` | `src/styles/theme.css` | 11 |
 | `--radius-md` | `src/styles/theme.css` | 7 |
 | `--radius-menu` | `src/styles/theme.css` | 8 |
-| `--radius-menu-item` | `src/styles/theme.css` | 6 |
 | `--radius-pill` | `src/styles/theme.css` | 110 |
 | `--radius-sheet` | `src/styles/theme.css` | 14 |
 | `--radius-sm` | `src/styles/theme.css` | 1 |
-| `--radius-thumb` | `src/styles/theme.css` | 28 |
+| `--radius-thumb` | `src/styles/theme.css` | 34 |
 | `--radius-tile` | `src/styles/theme.css` | 10 |
 | `--radius-xl` | `src/styles/theme.css` | 23 |
 | `--radius-xs` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
@@ -780,8 +782,8 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--role-7th` | `src/styles/tokens.css` | 4 |
 | `--role-9th` | `src/styles/tokens.css` | 4 |
 | `--role-root` | `src/styles/tokens.css` | 4 |
-| `--roll-lower` | `src/styles/tokens.css` | 1 |
-| `--roll-upper` | `src/styles/tokens.css` | 1 |
+| `--roll-lower` | `src/styles/tokens.css` | 2 |
+| `--roll-upper` | `src/styles/tokens.css` | 2 |
 | `--row-min` | `src/styles/theme.css` | 2 |
 | `--scrim` | `src/styles/tokens.css` | 1 |
 | `--secondary` | `src/styles/tokens.css` | 1 |

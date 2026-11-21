@@ -50,8 +50,8 @@ export function HandsSheet({
                   className={cn(
                     'grid size-10 shrink-0 place-items-center rounded-mark',
                     hand === 'rh'
-                      ? 'bg-hand-rh-wash text-(--p-brick-deep)'
-                      : 'bg-hand-lh-wash text-(--p-lilac-deep)',
+                      ? 'bg-hand-rh-wash text-(--hand-rh-ink)'
+                      : 'bg-hand-lh-wash text-(--hand-lh-ink)',
                   )}
                 >
                   <HandIcon className={cn('size-6', hand === 'lh' && '-scale-x-100')} />

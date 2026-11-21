@@ -9,7 +9,7 @@ export function KindTile({ icon: Icon }: { icon: LucideIcon }) {
     <span
       aria-hidden
       data-slot="kind-tile"
-      className="grid size-9 shrink-0 place-items-center rounded-menu-item bg-muted text-foreground [&_svg]:size-5"
+      className="grid size-9 shrink-0 place-items-center rounded-thumb bg-muted text-foreground [&_svg]:size-5"
     >
       <Icon />
     </span>

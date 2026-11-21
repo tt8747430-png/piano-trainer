@@ -62,7 +62,7 @@ export function PatternRoll({
           width={Math.max(x(note.duration) - 4, 3)}
           height={NOTE}
           rx={3}
-          fill={note.part === 'rh' ? 'var(--p-roll-amber)' : 'var(--p-roll-blue)'}
+          fill={note.part === 'rh' ? 'var(--roll-upper)' : 'var(--roll-lower)'}
         />
       ))}
     </svg>

@@ -34,7 +34,7 @@ export function PieceShelfCover({ entry }: { entry: Entry }) {
     <svg
       aria-hidden
       viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
-      className="block w-full rounded-thumb bg-(--p-paper-card) text-(--p-ink) shadow-[0_0_0_1px_var(--color-border),0_6px_14px_-8px_color-mix(in_oklab,var(--shade)_25%,transparent)]"
+      className="block w-full rounded-thumb bg-(--print-paper) text-(--print-ink) shadow-[0_0_0_1px_var(--color-border),0_6px_14px_-8px_color-mix(in_oklab,var(--shade)_25%,transparent)]"
     >
       <text
         x={WIDTH / 2}
@@ -47,7 +47,7 @@ export function PieceShelfCover({ entry }: { entry: Entry }) {
         {title}
       </text>
       {writer && 'names' in writer ? (
-        <text x={WIDTH / 2} y={32} textAnchor="middle" fontSize={7} className="fill-(--p-umber)">
+        <text x={WIDTH / 2} y={32} textAnchor="middle" fontSize={7} className="fill-(--print-soft)">
           {writer.names}
         </text>
       ) : null}

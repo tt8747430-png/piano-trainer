@@ -34,7 +34,7 @@ export function CourseCard({ course, current }: { course: Course; current: boole
         className={cn(
           'grid size-11 shrink-0 place-items-center rounded-thumb text-foreground',
           paint.fill,
-          current && 'shadow-[0_0_0_2.5px_var(--p-honey)]',
+          current && 'shadow-[0_0_0_2.5px_var(--color-primary)]',
         )}
       >
         {complete ? (

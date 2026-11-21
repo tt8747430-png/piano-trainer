@@ -179,7 +179,6 @@
   --radius-card: calc(var(--radius) + 2px);
   --radius-sheet: calc(var(--radius) + 10px);
   --radius-menu: calc(var(--radius) + 4px);
-  --radius-menu-item: calc(var(--radius) - 2px);
   --radius-pill: calc(infinity * 1px);
   --radius-key-black: calc(var(--radius) - 6px);
   --radius-key-white: calc(var(--radius) - 3px);

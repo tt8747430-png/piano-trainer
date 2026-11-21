@@ -424,7 +424,7 @@ lip and a black key's slope draw a piano and appear nowhere else.
 ## Shapes
 
 One scale of corners, and a corner is never written any other way (`src/styles/shapes.test.ts`): a control 12px, a
-card 14px, a sheet 22px, a pill round; inside a control, a cover or a sidebar row 10px (`thumb`) and a paint's tile or a
+card 14px, a sheet 22px, a pill round, a menu or popover 16px (`menu`); inside a control, a cover or a sidebar row 10px (`thumb`) and a paint's tile or a
 tooltip 8px (`tile`); the smallest marks, a checkbox or a bar in a strip, 4px (`mark`). Every line is 1px; only focus rings and the keys' rings are wider.
 
 Something inside a shape takes its holder's shape, so a fill reaches the edges: an item in a capsule is a pill, the first

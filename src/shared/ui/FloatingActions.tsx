@@ -354,7 +354,7 @@ export function SpeedDialAction({
   // Named by its label; its line says what it does, as its description.
   const named = { 'aria-label': label, 'aria-describedby': detail ? detailId : undefined }
   const look = cn(
-    'w-full justify-start gap-3 rounded-menu-item pr-4 pl-2 text-left text-base font-medium text-foreground transition-colors active:bg-muted',
+    'w-full justify-start gap-3 rounded-thumb pr-4 pl-2 text-left text-base font-medium text-foreground transition-colors active:bg-muted',
     detail ? 'h-auto min-h-14 py-2' : 'h-12',
   )
   const choose = () => {

@@ -30,7 +30,7 @@ export function IncipitStaff({
       aria-hidden
       viewBox="0 0 44 44"
       className={cn(
-        'bg-(--p-paper-card) text-(--p-ink) shadow-[0_0_0_1px_--alpha(var(--color-foreground)/10%)]',
+        'bg-(--print-paper) text-(--print-ink) shadow-[0_0_0_1px_--alpha(var(--color-foreground)/10%)]',
         className,
       )}
     >

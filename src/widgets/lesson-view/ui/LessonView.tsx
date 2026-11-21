@@ -62,7 +62,7 @@ function SectionLinks({
             activeOptions={{ includeHash: true }}
             data-reading={reading === sectionId(s) || undefined}
             onClick={onGo}
-            className="flex min-h-11 items-center gap-2.5 rounded-menu-item px-2 text-subhead transition-colors hover:bg-muted data-reading:bg-muted data-reading:font-semibold"
+            className="flex min-h-11 items-center gap-2.5 rounded-thumb px-2 text-subhead transition-colors hover:bg-muted data-reading:bg-muted data-reading:font-semibold"
           >
             <span
               aria-hidden

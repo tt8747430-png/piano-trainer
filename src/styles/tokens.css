@@ -278,6 +278,10 @@
   --on-role: var(--p-ink);
 
   /* The Player's hands; never in the explorers. */
+  /* A printed page (a song's cover, its first lines): paper and ink, the same by Night, as print is. */
+  --print-paper: var(--p-paper-card);
+  --print-ink: var(--p-ink);
+  --print-soft: var(--p-umber);
   --hand-rh: var(--p-brick);
   --hand-lh: var(--p-lilac);
   --hand-staff: var(--p-grass);

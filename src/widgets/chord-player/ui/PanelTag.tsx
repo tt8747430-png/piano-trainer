@@ -139,7 +139,7 @@ export function PanelTag({ panel, className }: { panel: ChordPanel; className: s
                 setMenu(false)
                 edit.hide(panel)
               }}
-              className="flex h-11 w-full items-center rounded-menu-item px-3 text-left text-base transition-colors duration-150 ease-out hover:bg-muted"
+              className="flex h-11 w-full items-center rounded-thumb px-3 text-left text-base transition-colors duration-150 ease-out hover:bg-muted"
             >
               {t('chordPlayer.layout.hide')}
             </button>
