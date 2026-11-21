@@ -12,7 +12,7 @@ import {
 import { InversionChoice } from './InversionChoice'
 import { KeyDiagram } from './KeyDiagram'
 import { Labelled } from './Labelled'
-import { SwitchRow } from './SwitchRow'
+import { Segmented } from './Segmented'
 
 /** The keys the positions are drawn on: C4 to E5, a hand's reach over middle C. */
 const REACH: KeyRange = { from: midi(60), to: midi(76) }
@@ -55,9 +55,9 @@ function PositionsAbout() {
 
 /**
  * Where a row's hand stands (ADR 0047, 0115): the position its first chord starts in, each drawn as
- * its stack of `notes` notes, what a position is drawn on the keys in the ⓘ beside its name; and Move
- * smoothly: on, each chord after the first moves to the position nearest the one before; off, every
- * one stays in the first one's position. Where it is greyed, `info` says why beside its name (ADR
+ * its stack of `notes` notes, what a position is drawn on the keys in the ⓘ beside its name; and its
+ * Voicing, as a progression's: Voice-led, each chord after the first moves to the position nearest
+ * the one before; Block, every one stays in the first one's position. Where it is greyed, `info` says why beside its name (ADR
  * 0096), in place of the picture.
  */
 export function PositionField({
@@ -76,7 +76,8 @@ export function PositionField({
 }) {
   const { t } = useTranslation('music')
   return (
-    <div className="flex min-w-0 flex-col gap-2">
+    // Two sections of the card it stands in, spaced as its others.
+    <>
       <Labelled label={t('position.first')} info={info ?? <PositionsAbout />}>
         <InversionChoice
           notes={notes}
@@ -88,13 +89,18 @@ export function PositionField({
           }}
         />
       </Labelled>
-      <SwitchRow
-        label={t('position.nearest')}
-        info={t('position.nearestInfo')}
-        checked={position.nearest}
-        disabled={disabled}
-        onCheckedChange={(nearest) => onChange({ nearest })}
-      />
-    </div>
+      <Labelled label={t('position.voicing.label')} info={t('position.voicing.info')}>
+        <Segmented
+          label={t('position.voicing.label')}
+          value={position.nearest ? 'led' : 'block'}
+          disabled={disabled}
+          options={(['led', 'block'] as const).map((voicing) => ({
+            value: voicing,
+            label: t(`position.voicing.${voicing}`),
+          }))}
+          onChange={(voicing) => onChange({ nearest: voicing === 'led' })}
+        />
+      </Labelled>
+    </>
   )
 }

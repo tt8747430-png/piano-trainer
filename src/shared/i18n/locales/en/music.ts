@@ -23,12 +23,16 @@ export const music = {
       '11th': 'From the 11th',
       '13th': 'From the 13th',
     },
-    // The position a row's chords start in, and whether they move smoothly from it (ADR 0115).
+    // The position a row's chords start in, and how they move from it (ADR 0115).
     first: 'Inversion',
     startAbout: 'Which note of the first chord sits lowest. Here is C major in each inversion:',
-    nearest: 'Smooth voice leading',
-    nearestInfo:
-      'On, each chord after the first takes the inversion nearest the one before, so the voices move the least. Off, every chord keeps the first chord’s inversion.',
+    // As a progression's Voicing (Voice-led · Block), one word for one choice across the app.
+    voicing: {
+      label: 'Voicing',
+      led: 'Voice-led',
+      block: 'Block',
+      info: 'Voice-led, each chord after the first takes the inversion nearest the one before, so the voices move the least. Block, every chord keeps the first chord’s inversion.',
+    },
   },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {

@@ -20,9 +20,9 @@ scale's chords, a chromatic walk, a progression, an exercise.
 - **A written bar plays as written.** A bar whose hands are written plays them in place of the pattern. An edited
   piece has every bar written (ADR 0114), so the pattern and the Setup's pattern card apply only to a piece no one
   has edited.
-- **Inversion and Smooth voice leading.** The first chord's position is Root to 3rd (root by default); Smooth voice
-  leading (on by default) takes each later chord to the voicing nearest the last, and off, every chord stays in the
-  first's inversion. A chord of up to four notes plays whole; a bigger one leaves out its root and 5th, down to four,
+- **Inversion and Voicing.** The first chord's position is Root to 3rd (root by default); Voicing, Voice-led · Block
+  as a progression's (Voice-led by default), takes each later chord to the voicing nearest the last, or, Block, keeps
+  every chord in the first's inversion. A chord of up to four notes plays whole; a bigger one leaves out its root and 5th, down to four,
   its first tension where the root was (Dm9 from the 3rd is 3-5-7-9). A figure that plays the chord as voiced follows
   the position; a pattern that plays its own shapes keeps them (`followsInversion`).
 - **A pattern is a named pair of figures**, a right hand and a left, each a bar of tokens over any chord. A figure may
