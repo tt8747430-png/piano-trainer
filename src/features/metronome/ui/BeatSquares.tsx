@@ -5,18 +5,18 @@ import { cn } from '@/shared/lib'
 
 /** How full a square stands for its level: a downbeat and an accent full, a beat half, silence empty. */
 const FILL: Readonly<Record<BeatLevel, string>> = {
-  downbeat: 'h-full',
-  accent: 'h-full',
-  normal: 'h-1/2',
-  silent: 'h-0',
+  downbeat: 'scale-y-100',
+  accent: 'scale-y-100',
+  normal: 'scale-y-50',
+  silent: 'scale-y-0',
 }
 
 /** How high a tall tile fills for its level: a downbeat and an accent full, a beat 58%, silence empty. */
 const TALL: Readonly<Record<BeatLevel, string>> = {
-  downbeat: 'h-full',
-  accent: 'h-full',
-  normal: 'h-[58%]',
-  silent: 'h-0',
+  downbeat: 'scale-y-100',
+  accent: 'scale-y-100',
+  normal: 'scale-y-[0.58]',
+  silent: 'scale-y-0',
 }
 
 /**
@@ -67,7 +67,7 @@ export function BeatSquares({
                 <span
                   aria-hidden
                   className={cn(
-                    'w-full transition-[height] duration-100',
+                    'h-full w-full origin-bottom transition-transform duration-100 ease-out motion-reduce:transition-none',
                     TALL[level],
                     level === 'normal' ? 'bg-muted-foreground/60' : 'bg-foreground',
                   )}
@@ -145,7 +145,7 @@ export function BeatSquares({
               <span
                 aria-hidden
                 className={cn(
-                  'w-full transition-[height] duration-100',
+                  'h-full w-full origin-bottom transition-transform duration-100 ease-out motion-reduce:transition-none',
                   FILL[level],
                   beat === sounding && !muted ? 'bg-primary' : 'bg-primary/40',
                 )}
