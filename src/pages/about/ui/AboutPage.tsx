@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 
 import { useTranslation } from 'react-i18next'
 import { APP_BUILD, APP_VERSION } from '@/shared/config'
-import { OpensMark, SettingsGroup } from '@/shared/ui'
+import { GroupLink, SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /** What the app is made with, each under its own licence (R29 B9): who made it and where it is from. */
@@ -29,19 +29,6 @@ const CREDITS = [
   { name: '«Боже, спасибо»', what: 'lessons', by: 'Надежда Боброва' },
   { name: 'Called to Play for Him', what: 'studies', by: 'A. Savchenko' },
 ] as const
-
-/** A Legal row (the board's link row): its name and a chevron, opening the page. */
-function GroupLink({ title, to }: { title: string; to: '/legal/privacy' | '/legal/terms' }) {
-  return (
-    <Link
-      to={to}
-      className="flex min-h-13 items-center gap-3 px-4 py-2 transition-colors hover:bg-foreground/[0.04]"
-    >
-      <span className="flex-1">{title}</span>
-      <OpensMark />
-    </Link>
-  )
-}
 
 /**
  * Settings › Support › About (R29 B9, R32; iOS's About, memory-palaces'): a Settings page like the
@@ -76,8 +63,8 @@ export function AboutPage() {
         </dl>
       </SettingsGroup>
       <SettingsGroup flush title={t('aboutPage.legal')}>
-        <GroupLink title={t('help.privacy')} to="/legal/privacy" />
-        <GroupLink title={t('help.terms')} to="/legal/terms" />
+        <GroupLink label={t('help.privacy')} render={<Link to="/legal/privacy" />} />
+        <GroupLink label={t('help.terms')} render={<Link to="/legal/terms" />} />
       </SettingsGroup>
       <SettingsGroup flush title={t('aboutPage.credits')}>
         <ul className="flex flex-col rows-hairline">

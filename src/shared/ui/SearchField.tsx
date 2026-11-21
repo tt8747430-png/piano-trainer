@@ -12,11 +12,13 @@ import {
 
 /**
  * Where the box stands: on a page, in the muted fill; on a sheet of the paper's colour (the Player's
- * Pattern sheet), the card's, 40 tall.
+ * Pattern sheet), the card's, 40 tall; at the head of a sidebar's list (the Settings window's), 40
+ * tall in the sidebar row's corner and size.
  */
 const SURFACES = {
   page: 'h-11 bg-muted dark:bg-muted',
   sheet: 'h-10 bg-card dark:bg-card',
+  sidebar: 'h-10 rounded-thumb bg-muted dark:bg-muted [&_input]:text-subhead [&_svg]:size-4.5',
 } as const
 
 /**

@@ -9,32 +9,8 @@ import {
   useMidiLog,
 } from '@/features/connect-midi'
 import { selectMidi, useSettings } from '@/entities/settings'
-import { OpensMark, SettingsGroup } from '@/shared/ui'
+import { GroupLink, SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
-
-/** A row that opens a page under this one (the board's link row): its name, its value, a chevron. */
-function GroupLink({
-  label,
-  value,
-  to,
-}: {
-  label: string
-  value: string
-  to: '/settings/connect-piano/timing' | '/settings/connect-piano/log'
-}) {
-  return (
-    <Link
-      to={to}
-      className="flex min-h-13 items-center gap-2.5 py-1.5 ps-4 pe-3 transition-colors hover:bg-foreground/[0.04]"
-    >
-      <span className="shrink-0">{label}</span>
-      <span className="min-w-0 flex-1 truncate text-end text-muted-foreground tabular-nums">
-        {value}
-      </span>
-      <OpensMark />
-    </Link>
-  )
-}
 
 /**
  * Settings › Connect a piano (ADR 0034, R22): MIDI input, output and input plays sound; the devices
@@ -60,7 +36,7 @@ export function MidiSettingsPage() {
         <GroupLink
           label={t('midiSettings.timing.label')}
           value={t('midiSettings.timing.value', { latency })}
-          to="/settings/connect-piano/timing"
+          render={<Link to="/settings/connect-piano/timing" />}
         />
       </SettingsGroup>
       <SettingsGroup title={t('midiSettings.bluetooth.label')} flush>
@@ -70,7 +46,7 @@ export function MidiSettingsPage() {
         <GroupLink
           label={t('midiSettings.log.label')}
           value={t('midiSettings.log.count', { count: entries.length })}
-          to="/settings/connect-piano/log"
+          render={<Link to="/settings/connect-piano/log" />}
         />
       </SettingsGroup>
     </SettingsScreen>

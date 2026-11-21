@@ -117,7 +117,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `NotePicker` | `src/shared/ui/pickers/NotePicker.tsx` | A root as it is written (Chords' root, a scale's, a walk's): | 7 |
 | `NotFound` | `src/shared/ui/NotFound.tsx` | A page that is not there, or no longer (deleted in another tab): | 11 |
 | `Notice` | `src/shared/ui/Notice.tsx` | A notice floating over the screen, as the app says a save went wrong (an alert), as the AppLayers board's Storage full: | 7 |
-| `OpensMark` | `src/shared/ui/NavMarks.tsx` | The navigation marks (R23), drawn here alone so every one is the same size, stroke and muted ink on the same right edge: | 25 |
+| `OpensMark` | `src/shared/ui/NavMarks.tsx` | The navigation marks (R23), drawn here alone so every one is the same size, stroke and muted ink on the same right edge: | 23 |
 | `PAGE_PICTURES` | `src/shared/ui/page-pictures.ts` | The pictures Practice's rows and cards wear (the canvas's `pic`): | 2 |
 | `PAGE_TILES` | `src/shared/ui/page-tiles.ts` | The tile each page wears on every row that leads to it, so a lesson's link, the Player's Setup, Practice's own lists and Search show a page alike. | 6 |
 | `PageCanvas` | `src/shared/ui/PageCanvas.tsx` | Pages floating on a canvas (ADR 0096), as a notation app's page view: | 3 |
@@ -179,7 +179,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `ScreenBarProvider` | `src/shared/ui/ScreenBarProvider.tsx` | A screen's bar: | 3 |
 | `ScreenHeader` | `src/shared/ui/ScreenHeader.tsx` | A screen's bar: | 51 |
 | `ScreenHeaderProps` | `src/shared/ui/ScreenHeader.tsx` |  | 1 |
-| `SearchField` | `src/shared/ui/SearchField.tsx` | A screen's search box, with a clear button while it holds text and, joined to its end, what sorts what it finds (`end`); `/` puts the cursor in it (a sheet's box, of no `screen`, l | 9 |
+| `SearchField` | `src/shared/ui/SearchField.tsx` | A screen's search box, with a clear button while it holds text and, joined to its end, what sorts what it finds (`end`); `/` puts the cursor in it (a sheet's box, of no `screen`, l | 10 |
 | `SectionHead` | `src/shared/ui/SectionHead.tsx` | A section's head (the boards' `H2`): | 7 |
 | `SeeAll` | `src/shared/ui/SectionHead.tsx` | A section head's See all: | 6 |
 | `Segmented` | `src/shared/ui/Segmented.tsx` | One choice of a few: | 40 |
@@ -405,7 +405,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `lesson-editor` | A course in the course editor (`/courses/$courseId/edit`): | 1 |
 | `metronome` | The Metronome (canvas 179), a tool on Practice, on the tools' one layout, every setting in place as Chordify's: | 1 |
 | `midi-log` | Settings › Connect a piano › MIDI log (ADR 0034): | 1 |
-| `midi-settings` | A row that opens a page under this one (the board's link row): | 1 |
+| `midi-settings` | Settings › Connect a piano (ADR 0034, R22): | 1 |
 | `not-found` | The place a page that is not there belongs to, and the way back to it. | 1 |
 | `pattern` | How many songs and lessons Used in shows before Show all. | 1 |
 | `pattern-editor` | One of the learner's own patterns changed: | 1 |
@@ -469,7 +469,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-destructive` | `src/styles/theme.css` | 47 |
 | `--color-destructive-foreground` | `src/styles/theme.css` | 3 |
 | `--color-eyebrow` | `src/styles/theme.css` | 4 |
-| `--color-foreground` | `src/styles/theme.css` | 360 |
+| `--color-foreground` | `src/styles/theme.css` | 359 |
 | `--color-glass` | `src/styles/theme.css` | 2 |
 | `--color-hairline` | `src/styles/theme.css` | 65 |
 | `--color-hand-lh` | `src/styles/theme.css` | 3 |
@@ -503,8 +503,8 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-medal-none` | `src/styles/theme.css` | 1 |
 | `--color-medal-platinum` | `src/styles/theme.css` | 1 |
 | `--color-medal-silver` | `src/styles/theme.css` | 1 |
-| `--color-muted` | `src/styles/theme.css` | 159 |
-| `--color-muted-foreground` | `src/styles/theme.css` | 300 |
+| `--color-muted` | `src/styles/theme.css` | 158 |
+| `--color-muted-foreground` | `src/styles/theme.css` | 299 |
 | `--color-nav-current` | `src/styles/theme.css` | 2 |
 | `--color-nav-current-foreground` | `src/styles/theme.css` | 3 |
 | `--color-nav-foreground` | `src/styles/theme.css` | 2 |
@@ -562,7 +562,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-slip-3` | `src/styles/theme.css` | 1 |
 | `--color-switch-knob` | `src/styles/theme.css` | 1 |
 | `--color-switch-on` | `src/styles/theme.css` | 1 |
-| `--color-thumb` | `src/styles/theme.css` | 32 |
+| `--color-thumb` | `src/styles/theme.css` | 33 |
 | `--color-toast-action` | `src/styles/theme.css` | 1 |
 | `--color-wheel-near` | `src/styles/theme.css` | 1 |
 | `--color-wheel-near-inner` | `src/styles/theme.css` | 1 |
@@ -767,7 +767,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--radius-pill` | `src/styles/theme.css` | 110 |
 | `--radius-sheet` | `src/styles/theme.css` | 14 |
 | `--radius-sm` | `src/styles/theme.css` | 1 |
-| `--radius-thumb` | `src/styles/theme.css` | 27 |
+| `--radius-thumb` | `src/styles/theme.css` | 28 |
 | `--radius-tile` | `src/styles/theme.css` | 10 |
 | `--radius-xl` | `src/styles/theme.css` | 23 |
 | `--radius-xs` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
@@ -804,7 +804,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--text-5xl` | `src/styles/theme.css` | 3 |
 | `--text-footnote` | `src/styles/theme.css` | 61 |
 | `--text-lg` | `src/styles/theme.css` | 70 |
-| `--text-subhead` | `src/styles/theme.css` | 79 |
+| `--text-subhead` | `src/styles/theme.css` | 80 |
 | `--text-xl` | `src/styles/theme.css` | 39 |
 | `--thumb` | `src/styles/tokens.css` | 1 |
 | `--toast-action` | `src/styles/tokens.css` | 1 |

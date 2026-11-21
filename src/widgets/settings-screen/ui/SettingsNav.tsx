@@ -1,11 +1,12 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronLeft, Search, ShieldUser } from 'lucide-react'
+import { ChevronLeft, ShieldUser } from 'lucide-react'
 import { useState } from 'react'
 import type { AdminCounts } from '../model/dialog-context'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from '@/shared/lib/account'
 import { useAppUpdate } from '@/shared/lib/app-update'
 import { cn, matchesQuery } from '@/shared/lib'
+import { SearchField } from '@/shared/ui'
 import {
   ADMIN_PICTURES,
   ADMIN_SECTIONS,
@@ -79,19 +80,13 @@ export function SettingsNav({
   })).filter((group) => group.pages.length > 0)
   return (
     <>
-      <label className="flex h-10 shrink-0 items-center gap-2 rounded-thumb bg-muted px-3 text-muted-foreground">
-        <Search aria-hidden className="size-4.5 shrink-0" />
-        <input
-          type="search"
-          inputMode="search"
-          enterKeyHint="search"
-          aria-label={t('settings:dialog.searchLabel')}
-          placeholder={t('settings:dialog.search')}
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          className="min-w-0 flex-1 bg-transparent text-subhead text-foreground placeholder:text-muted-foreground"
-        />
-      </label>
+      <SearchField
+        label={t('settings:dialog.searchLabel')}
+        hint={t('settings:dialog.search')}
+        value={query}
+        onChange={setQuery}
+        surface="sidebar"
+      />
       {wanted ? null : <AccountCard current={place?.kind === 'account'} plain />}
       {groups.map((group) => (
         <section key={group.title} className="flex flex-col gap-0.5">
