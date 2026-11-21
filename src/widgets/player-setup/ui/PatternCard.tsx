@@ -110,10 +110,13 @@ const changedHands = ({ lh, rh }: { lh: unknown; rh: unknown }) =>
  */
 export function PatternCard({
   headed = true,
+  inversion = true,
   children,
 }: {
   /** False on a page of its own (a song's Accompaniment), whose title already names it. */
   headed?: boolean
+  /** False where the inversion's rows stand on the Accompaniment card (a song's). */
+  inversion?: boolean
   children?: ReactNode
 }) {
   const { t } = useTranslation('player')
@@ -191,7 +194,7 @@ export function PatternCard({
           ) : null}
         </Labelled>
       </section>
-      <InversionField />
+      {inversion ? <InversionField /> : null}
       {children}
     </>
   )

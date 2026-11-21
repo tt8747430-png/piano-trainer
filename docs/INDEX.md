@@ -65,10 +65,10 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `GroupAction` | `src/shared/ui/GroupRows.tsx` | A row that does something at once, in the link's colour, as the canvas's `GROUP` action rows; a loss (Unpublish, Delete) in crimson, in a group of its own. | 4 |
 | `GroupChips` | `src/shared/ui/GroupRows.tsx` | A row of values under a quiet heading (Also read as, Played), as the canvas's `GROUP` raw rows and its `CHIPL`: | 3 |
 | `GROUPED_LIST` | `src/shared/ui/library-row-class.ts` | A grouped list's card (canvas 133): | 6 |
-| `GroupField` | `src/shared/ui/GroupRows.tsx` | A row whose control stands under its name, across the group's width, as the canvas's `GROUP` seg rows draw it (canvas 127): | 3 |
+| `GroupField` | `src/shared/ui/GroupRows.tsx` | A row whose control stands under its name, across the group's width, as the canvas's `GROUP` seg rows draw it (canvas 127): | 4 |
 | `GroupLink` | `src/shared/ui/GroupRows.tsx` | A row that opens what it names, its value in Soft Ink and a chevron at its end: | 16 |
 | `GroupRow` | `src/shared/ui/GroupRows.tsx` | A row whose control stands at its end: | 25 |
-| `GroupRows` | `src/shared/ui/GroupRows.tsx` | A group of settings' rows on the muted fill, as the canvas's `GROUP` draws them (canvas 179): | 24 |
+| `GroupRows` | `src/shared/ui/GroupRows.tsx` | A group of settings' rows on the muted fill, as the canvas's `GROUP` draws them (canvas 179): | 25 |
 | `GroupSegmented` | `src/shared/ui/GroupRows.tsx` | A row of two or three choices: | 8 |
 | `GroupSwitch` | `src/shared/ui/GroupRows.tsx` | On or off as a row of the group: | 8 |
 | `HandsPicture` | `src/shared/ui/HandsSegmented.tsx` | Hands as a picture, as the canvas draws them: | 3 |
@@ -76,7 +76,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `hasCredits` | `src/shared/ui/sheet-credits.ts` | Whether a score prints any credits under its title. | 4 |
 | `HEADED_SECTION` | `src/shared/ui/SectionHead.tsx` | A page's section under a `SectionHead` as the boards' `H2` stands in its section (`r41_kit.py`): | 3 |
 | `HeartToggle` | `src/shared/ui/HeartToggle.tsx` | The ♡ at a library row's end (canvas 133, Songs' and Practice's alike): | 3 |
-| `InfoTip` | `src/shared/ui/InfoTip.tsx` | A control's explanation, out of the way until asked for (ADR 0096): | 26 |
+| `InfoTip` | `src/shared/ui/InfoTip.tsx` | A control's explanation, out of the way until asked for (ADR 0096): | 27 |
 | `INVERSION_NAMES` | `src/shared/ui/inversion-names.ts` | Each inversion's name on screen, root position first: | 5 |
 | `InversionChoice` | `src/shared/ui/InversionChoice.tsx` | A chord of `notes` notes in root position or one of its inversions, at most the third: | 4 |
 | `isBuiltInAvatar` | `src/shared/ui/avatars.ts` |  | 2 |
@@ -181,7 +181,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `SearchField` | `src/shared/ui/SearchField.tsx` | A screen's search box, with a clear button while it holds text and, joined to its end, what sorts what it finds (`end`); `/` puts the cursor in it (a sheet's box, of no `screen`, l | 10 |
 | `SectionHead` | `src/shared/ui/SectionHead.tsx` | A section's head (the boards' `H2`): | 7 |
 | `SeeAll` | `src/shared/ui/SectionHead.tsx` | A section head's See all: | 6 |
-| `Segmented` | `src/shared/ui/Segmented.tsx` | One choice of a few: | 40 |
+| `Segmented` | `src/shared/ui/Segmented.tsx` | One choice of a few: | 41 |
 | `SelectAct` | `src/shared/ui/SelectDock.tsx` | One act of a selection bar (the boards' SELACT; owner, 2026-11-17: | 4 |
 | `SelectDock` | `src/shared/ui/SelectDock.tsx` | The selection bar at the foot (the boards' SELBAR, a glass DOCK in New's place): | 4 |
 | `SelectionBarIcon` | `src/shared/ui/icons/SelectionBarIcon.ts` | The selection toolbar (the canvas's Settings picture): | 1 |
@@ -211,7 +211,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `SwipeAction` | `src/shared/ui/SwipeRow.tsx` | One action a swipe reveals: | 1 |
 | `swipeOf` | `src/shared/ui/row-actions.ts` | The actions a swipe shows, those of `keys` in that order: | 3 |
 | `SwipeRow` | `src/shared/ui/SwipeRow.tsx` | A row a finger swipes sideways (Mindscape's `SwipeRow`, ADR 0106): | 5 |
-| `SwitchRow` | `src/shared/ui/SwitchRow.tsx` | On or off in its row of a list: | 25 |
+| `SwitchRow` | `src/shared/ui/SwitchRow.tsx` | On or off in its row of a list: | 24 |
 | `TempoSteps` | `src/shared/ui/TempoSteps.tsx` | The tempo as the Metronome's board draws it (canvas 179): | 1 |
 | `ThingHead` | `src/shared/ui/ThingHead.tsx` | A thing's head on its own Settings page (the board's THINGHEAD, one shape for a lesson's, a course's and the account's): | 8 |
 | `Tile` | `src/shared/ui/page-tiles.ts` | A row's tile: | 8 |
@@ -463,12 +463,12 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-attention` | `src/styles/theme.css` | 2 |
 | `--color-background` | `src/styles/theme.css` | 43 |
 | `--color-border` | `src/styles/theme.css` | 87 |
-| `--color-card` | `src/styles/theme.css` | 132 |
+| `--color-card` | `src/styles/theme.css` | 133 |
 | `--color-card-foreground` | `src/styles/theme.css` | 4 |
 | `--color-chosen` | `src/styles/theme.css` | 20 |
 | `--color-chosen-honey` | `src/styles/theme.css` | 8 |
 | `--color-destructive` | `src/styles/theme.css` | 47 |
-| `--color-destructive-foreground` | `src/styles/theme.css` | 3 |
+| `--color-destructive-foreground` | `src/styles/theme.css` | 5 |
 | `--color-eyebrow` | `src/styles/theme.css` | 4 |
 | `--color-foreground` | `src/styles/theme.css` | 357 |
 | `--color-glass` | `src/styles/theme.css` | 2 |
@@ -832,7 +832,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `section-head` | The head over a card of rows on a page (Practise, Options, How to play): | 2 |
 | `settings-pane` | DESIGN's card: | 1 |
 | `picture-edge` | The card's ring is a shadow: | 6 |
-| `card` |  | 216 |
+| `card` |  | 218 |
 | `rows-line` | * Rows parted by a line that takes no room, as the boards' GROUP draws them (an inset line under each * row but the last, not a border): | 3 |
 | `rows-hairline` |  | 26 |
 | `px-gutter` | * A block's or a place's look (R29 B9, `shared/lib/style`): | 15 |

@@ -52,8 +52,10 @@ what they changed.
     all on until switched off, in the URL (`staves=u1s0,l0s1`, kept per piece). The last staff in sight keeps Show;
     the recording's Play is greyed, with why, in another key. Melody is gone: staves are staves (ADR 0097).
   - **Accompaniment from the chords**, a chart's alone: the pattern over its two hands, each hand's figure drawn as
-    a small piano roll (changing a hand makes it the learner's mix, with Back to the pattern), the first chord's
-    **Inversion** and **Voicing**, Voice-led · Block (ADR 0047), and **Swing**, four feels as tiles. A score's Swing stands alone
+    a small piano roll (changing a hand makes it the learner's mix, with Back to the pattern), and **Swing**, four
+    feels as tiles. The **First chord's inversion** (Root · 1st · 2nd · 3rd) and **Voicing** (Voice-led · Block,
+    ADR 0047) stand on a song's Accompaniment card under Pattern, each its name over its choice (the PlayerApp
+    board); a run's setup, with no card, keeps them on its Accompaniment. A score's Swing stands alone
     under How it plays (the schedule swings its written 8ths too).
   - The song's key is not in the Setup: it is Transpose.
   - **A scale run's practice** (the Scale exercise, `ScalePracticeFields`), as the reference app's Practice Scale

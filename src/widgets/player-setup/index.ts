@@ -5,6 +5,7 @@ export {
   type SetupChange,
   type SetupParams,
 } from './model/setup-params'
+export { InversionField } from './ui/InversionField'
 export { PatternCard } from './ui/PatternCard'
 export { PlayerSetup, type MusicPage } from './ui/PlayerSetup'
 export {

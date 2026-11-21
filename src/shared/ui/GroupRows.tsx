@@ -2,6 +2,7 @@ import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
 import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
+import { InfoTip } from './InfoTip'
 import { Listbox } from './Listbox'
 import { OpensMark } from './NavMarks'
 import { ROW_ROOM } from './row-class'
@@ -88,6 +89,7 @@ export function GroupField({
   label,
   setting,
   className,
+  info,
   children,
 }: {
   /** Its name over the control, hidden from a screen reader where the control says it. */
@@ -95,13 +97,18 @@ export function GroupField({
   setting?: string
   /** A wide control (the tempo's steps) takes more of the row. */
   className?: string
+  /** Why the choice is as it is, opened from the ⓘ beside its name (ADR 0096). */
+  info?: ReactNode
   children: ReactNode
 }) {
   return (
     <div data-setting={setting} className={cn('flex flex-col gap-2 py-3 ps-4 pe-3', className)}>
       {label ? (
-        <span aria-hidden className="text-base leading-[normal]">
-          {label}
+        <span className="flex min-w-0 items-center gap-1.5">
+          <span aria-hidden className="text-base leading-[normal]">
+            {label}
+          </span>
+          {label && info ? <InfoTip name={label}>{info}</InfoTip> : null}
         </span>
       ) : null}
       {children}

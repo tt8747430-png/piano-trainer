@@ -4,7 +4,7 @@ import { usePatternBook, type PatternChoice } from '@/entities/pattern'
 import { type SongVersion } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
 import { OpensMark, RadioCards, Segmented } from '@/shared/ui'
-import { useSetup } from '@/widgets/player-setup'
+import { InversionField, useSetup } from '@/widgets/player-setup'
 
 /** The levels easiest first, as the board's Level reads (Beginner · Intermediate · Advanced). */
 const LEVELS: readonly SongVersion[] = ['easy', 'simple', 'original']
@@ -95,19 +95,23 @@ export function PlayCards({
                 value: 'accompaniment' as const,
                 label: t('settingsPage.accompaniment'),
                 open: true,
+                // Pattern, then where the chord stands, as the PlayerApp board's card holds them.
                 children: (
-                  <button
-                    type="button"
-                    data-setup-page={page}
-                    onClick={() => openPage(page)}
-                    className="flex min-h-12 w-full items-center justify-between gap-3 py-1.5 ps-4 pe-3 text-left text-base transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
-                  >
-                    <span>{t('pattern')}</span>
-                    <span className="flex min-w-0 items-center gap-2 text-muted-foreground">
-                      <span className="truncate">{name}</span>
-                      <OpensMark />
-                    </span>
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      data-setup-page={page}
+                      onClick={() => openPage(page)}
+                      className="flex min-h-12 w-full items-center justify-between gap-3 py-1.5 ps-4 pe-3 text-left text-base transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
+                    >
+                      <span>{t('pattern')}</span>
+                      <span className="flex min-w-0 items-center gap-2 text-muted-foreground">
+                        <span className="truncate">{name}</span>
+                        <OpensMark />
+                      </span>
+                    </button>
+                    <InversionField rows />
+                  </>
                 ),
               },
             ]

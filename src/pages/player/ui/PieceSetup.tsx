@@ -138,7 +138,7 @@ function Accompaniment({
           />
         </Labelled>
       ) : null}
-      <PatternCard headed={false}>
+      <PatternCard headed={false} inversion={false}>
         {swing === null ? null : <SwingField swing={swing} onSwing={onSwing} />}
       </PatternCard>
     </>

@@ -9,6 +9,7 @@ import {
   type Midi,
   type RowPosition,
 } from '@/shared/lib/music'
+import { GroupField } from './GroupRows'
 import { InversionChoice } from './InversionChoice'
 import { KeyDiagram } from './KeyDiagram'
 import { Labelled } from './Labelled'
@@ -58,13 +59,15 @@ function PositionsAbout() {
  * its stack of `notes` notes, what a position is drawn on the keys in the ⓘ beside its name; and its
  * Voicing, as a progression's: Voice-led, each chord after the first moves to the position nearest
  * the one before; Block, every one stays in the first one's position. Where it is greyed, `info` says why beside its name (ADR
- * 0096), in place of the picture.
+ * 0096), in place of the picture. As `rows` they are two rows of the card they stand in (the PlayerApp board's
+ * Accompaniment card), each its name over its choice.
  */
 export function PositionField({
   notes,
   position,
   disabled = false,
   info,
+  rows = false,
   onChange,
 }: {
   notes: number
@@ -72,13 +75,16 @@ export function PositionField({
   disabled?: boolean
   /** Why it is greyed, opened from the ⓘ beside its name. */
   info?: ReactNode
+  /** Rows of a card (`GroupField`) in place of a page's fields (`Labelled`). */
+  rows?: boolean
   onChange: (change: { inversion?: Inversion; nearest?: boolean }) => void
 }) {
   const { t } = useTranslation('music')
+  const Field = rows ? GroupField : Labelled
   return (
     // Two sections of the card it stands in, spaced as its others.
     <>
-      <Labelled label={t('position.first')} info={info ?? <PositionsAbout />}>
+      <Field label={t('position.first')} info={info ?? <PositionsAbout />}>
         <InversionChoice
           notes={notes}
           label={t('position.first')}
@@ -88,8 +94,8 @@ export function PositionField({
             if (isInversion(inversion)) onChange({ inversion })
           }}
         />
-      </Labelled>
-      <Labelled label={t('position.voicing.label')} info={t('position.voicing.info')}>
+      </Field>
+      <Field label={t('position.voicing.label')} info={t('position.voicing.info')}>
         <Segmented
           label={t('position.voicing.label')}
           value={position.nearest ? 'led' : 'block'}
@@ -100,7 +106,7 @@ export function PositionField({
           }))}
           onChange={(voicing) => onChange({ nearest: voicing === 'led' })}
         />
-      </Labelled>
+      </Field>
     </>
   )
 }
