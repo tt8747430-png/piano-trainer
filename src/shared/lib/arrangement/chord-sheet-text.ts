@@ -42,6 +42,37 @@ export function sheetToText(sheet: ChordSheet): string {
   return [`${keySymbol(sheet.key)} ${sheet.meter}`, ...sections].join('; ')
 }
 
+/** Bars on a line of a written chart, as a lead sheet sets them. */
+const CHART_BARS = 4
+
+/**
+ * A chord sheet as a chart a musician reads and prints: its title, key, time and tempo, then each
+ * section under its name (`Verse ×2`), its bars four to a line between bar lines, a chord's beats
+ * after it where it does not last the bar (`| Bb:2 C:2 |`).
+ */
+export function sheetChart(
+  sheet: ChordSheet,
+  heading: { readonly title: string; readonly tempo: number },
+  sectionName: (kind: SectionKind) => string,
+): string {
+  const bar = beatsPerBar(sheet.meter)
+  const sections = sheet.sections.map((section) => {
+    const bars = section.bars.map((each) =>
+      each.chords
+        .map(({ chord, beats }) => chordSymbol(chord) + (beats === bar ? '' : `:${beats}`))
+        .join(' '),
+    )
+    const lines = Array.from(
+      { length: Math.ceil(bars.length / CHART_BARS) },
+      (_, line) => `| ${bars.slice(line * CHART_BARS, (line + 1) * CHART_BARS).join(' | ')} |`,
+    )
+    const name = sectionName(section.kind) + (section.repeats === 1 ? '' : ` ×${section.repeats}`)
+    return [name, ...lines].join('\n')
+  })
+  const head = `${keySymbol(sheet.key)} · ${sheet.meter} · ${heading.tempo} BPM`
+  return [heading.title, head, ...sections].join('\n\n') + '\n'
+}
+
 /** A section's arranger marks as head words: none for what is unset. */
 function marksText(marks: SheetSection['marks']): string[] {
   const mains = marks.mains.map((main) => main ?? '-').join('')

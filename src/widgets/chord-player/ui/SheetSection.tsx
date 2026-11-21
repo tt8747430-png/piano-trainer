@@ -2,6 +2,7 @@ import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, Plus, Trash2 } from 'lucide-react'
+import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ProgressionNames } from '@/entities/settings'
 import { cn, useMediaQuery, LAPTOP } from '@/shared/lib'
@@ -13,7 +14,6 @@ import {
   type SheetSection as Section,
 } from '@/shared/lib/arrangement'
 import { beatsPerBar, type Key } from '@/shared/lib/music'
-import type { BoxPlace } from '../model/engine'
 import { chordDragId, endDragId, sectionDragId } from '../model/sheet-dnd'
 import { ChordTile, type TileActs } from './ChordTile'
 
@@ -34,7 +34,7 @@ const PILL =
  * beats, two bars a row on a phone and four on a laptop, a + box after the last that adds a chord
  * and takes one dropped at the end.
  */
-export function SheetSection({
+export const SheetSection = memo(function SheetSection({
   section,
   index,
   musicKey,
@@ -56,30 +56,35 @@ export function SheetSection({
   musicKey: Key
   meter: SheetMeter
   names: ProgressionNames
-  lit: BoxPlace | null
+  /** Its chord sounding, by its index, while it plays one. */
+  lit: number | null
   /** The beat of the lit chord's bar sounding now. */
   beat: number | null
-  /** The chord selected: Play starts from it. */
-  selected: BoxPlace | null
+  /** Its chord selected, by its index: Play starts from it. */
+  selected: number | null
   /** How many variations its style has: none shown but one. */
   variations: number
+  /**
+   * The acts and handlers below are held for good by the sheet, each told the section's index: a
+   * section renders again only for what it shows, so a beat redraws the lit chord's alone.
+   */
   acts: TileActs & { add(section: number): void }
   /** Its sheet opened: name, times, variation, loop, duplicate, delete. */
-  onOpen(): void
-  onChange(change: Partial<Pick<Section, 'repeats' | 'variation'>>): void
-  onDelete(): void
+  onOpen(index: number): void
+  onChange(index: number, change: Partial<Pick<Section, 'repeats' | 'variation'>>): void
+  onDelete(index: number): void
   /** What it has a followed arranger play, in a line (empty: nothing set), or null when none is followed. */
   tag: string | null
   /** Its arranger sheet opened. */
-  onTag(): void
+  onTag(index: number): void
 }) {
   const { t } = useTranslation('practice')
   const name = t(`chordPlayer.sections.${section.kind}`)
-  const bars = sectionBars(section, meter)
+  const bars = useMemo(() => sectionBars(section, meter), [section, meter])
   const perBar = beatsPerBar(meter)
   const wide = useMediaQuery(LAPTOP)
   const columns = perBar * (wide ? 4 : 2)
-  const chords = sectionChords(section)
+  const chords = useMemo(() => sectionChords(section), [section])
   const {
     attributes,
     listeners,
@@ -90,9 +95,11 @@ export function SheetSection({
     isDragging,
   } = useSortable({ id: sectionDragId(index) })
   const { setNodeRef: endDrop, isOver: overEnd } = useDroppable({ id: endDragId(index) })
-  const ids = chords.map((_, at) => chordDragId(index, at))
-  const same = (place: BoxPlace | null, at: number) =>
-    place !== null && place.section === index && place.index === at
+  // One list while the chords stay: a new one would redraw every chord of the section.
+  const ids = useMemo(
+    () => Array.from({ length: chords.length }, (_, at) => chordDragId(index, at)),
+    [chords.length, index],
+  )
   return (
     <section
       ref={setNodeRef}
@@ -103,7 +110,7 @@ export function SheetSection({
       <div className="flex min-h-11 items-center gap-2">
         <button
           type="button"
-          onClick={onOpen}
+          onClick={() => onOpen(index)}
           aria-label={t('chordPlayer.sectionOpen', { name, count: section.repeats })}
           title={t('chordPlayer.sectionOpen', { name, count: section.repeats })}
           className={cn(PILL, 'max-w-40 flex-[0_1_10rem] justify-start font-semibold')}
@@ -113,7 +120,7 @@ export function SheetSection({
         <button
           type="button"
           onClick={() =>
-            onChange({
+            onChange(index, {
               repeats:
                 section.repeats >= SECTION_REPEATS.max ? SECTION_REPEATS.min : section.repeats + 1,
             })
@@ -130,7 +137,7 @@ export function SheetSection({
             onClick={() => {
               const order = VARIATIONS.filter((each) => each <= variations)
               const next = order[(order.indexOf(section.variation) + 1) % order.length]
-              if (next !== undefined) onChange({ variation: next })
+              if (next !== undefined) onChange(index, { variation: next })
             }}
             aria-label={t('chordPlayer.variation')}
             title={t('chordPlayer.variation')}
@@ -141,7 +148,7 @@ export function SheetSection({
         ) : null}
         <button
           type="button"
-          onClick={onDelete}
+          onClick={() => onDelete(index)}
           aria-label={t('chordPlayer.deleteSection')}
           title={t('chordPlayer.deleteSection')}
           className="grid size-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted"
@@ -165,7 +172,7 @@ export function SheetSection({
       {tag !== null ? (
         <button
           type="button"
-          onClick={onTag}
+          onClick={() => onTag(index)}
           aria-label={t('chordPlayer.arranger.tag', {
             name,
             marks: tag || t('chordPlayer.arranger.unset'),
@@ -192,7 +199,7 @@ export function SheetSection({
             bar.pieces.map((piece, p) => {
               const chord = chords[piece.chord]
               if (!chord) return null
-              const now = same(lit, piece.chord)
+              const now = lit === piece.chord
               const first = bar.pieces[0]
               return (
                 <ChordTile
@@ -205,20 +212,15 @@ export function SheetSection({
                   names={names}
                   lit={now}
                   litBeat={now && beat !== null ? beat - piece.from : null}
-                  selected={same(selected, piece.chord)}
+                  selected={selected === piece.chord}
                   wrong={
                     bar.wrong && p === bar.pieces.length - 1 && first
-                      ? {
-                          label: t('chordPlayer.wrongBar', {
-                            bar: at + 1,
-                            count: bar.beats,
-                            beats: perBar,
-                          }),
-                          open: { section: index, index: first.chord },
-                        }
+                      ? t('chordPlayer.wrongBar', { bar: at + 1, count: bar.beats, beats: perBar })
                       : null
                   }
-                  place={{ section: index, index: piece.chord }}
+                  wrongAt={first?.chord ?? 0}
+                  section={index}
+                  index={piece.chord}
                   acts={acts}
                 />
               )
@@ -246,4 +248,4 @@ export function SheetSection({
       </SortableContext>
     </section>
   )
-}
+})

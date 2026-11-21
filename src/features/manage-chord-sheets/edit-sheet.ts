@@ -18,9 +18,15 @@ export function editSheet(
   }))
 }
 
-/** A sheet put in hand (a Share link, a progression opened from Progressions): the one it replaces, for Undo. */
-export function holdSheet(store: ChordSheetsStore, entry: ChordSheetEntry): ChordSheetEntry {
-  const before = store.getState().scratch
-  store.setState({ scratch: entry })
-  return before
+/** The sheet in hand and its name, where it came named. */
+export interface HeldSheet {
+  readonly entry: ChordSheetEntry
+  readonly name: string | null
+}
+
+/** A sheet put in hand (a song, a progression opened from Progressions): the one it replaces, for Undo. */
+export function holdSheet(store: ChordSheetsStore, held: HeldSheet): HeldSheet {
+  const { scratch, scratchName } = store.getState()
+  store.setState({ scratch: held.entry, scratchName: held.name })
+  return { entry: scratch, name: scratchName }
 }

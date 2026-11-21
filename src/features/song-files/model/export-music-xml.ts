@@ -1,5 +1,5 @@
 import type { PieceMusic } from '@/entities/piece'
-import { downloadFile } from '@/shared/lib'
+import { downloadFile, fileTitle } from '@/shared/lib'
 import { writeMxl } from '@/shared/lib/musicxml'
 import { musicXmlOf, type SongFileNames } from './music-xml-of'
 
@@ -7,12 +7,10 @@ import { musicXmlOf, type SongFileNames } from './music-xml-of'
 const MUSIC_XML_TYPE = 'application/vnd.recordare.musicxml+xml'
 /** Compressed MusicXML's. */
 const MXL_TYPE = 'application/vnd.recordare.musicxml'
-/** What a file system refuses in a name. */
-const UNSAFE = /[/\\:*?"<>|]/g
 
 /** A MusicXML file's name: its title, with nothing a file system refuses, as `.musicxml`. */
 const musicXmlFileName = (title: string, format: MusicXmlFormat = 'musicxml'): string =>
-  `${title.replace(UNSAFE, '-')}.${format}`
+  `${fileTitle(title)}.${format}`
 
 /** MusicXML as text (.musicxml), or compressed (.mxl, R29 A29) as most notation apps save it. */
 export type MusicXmlFormat = 'musicxml' | 'mxl'

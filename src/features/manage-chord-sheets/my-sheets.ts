@@ -80,5 +80,5 @@ export function markOpened(store: ChordSheetsStore, id: string | undefined): voi
 
 /** New (R29 CP5): an empty Verse in hand, in Pop 1 at 100. */
 export function startNew(store: ChordSheetsStore): void {
-  store.setState({ scratch: NEW_ENTRY })
+  store.setState({ scratch: NEW_ENTRY, scratchName: null })
 }

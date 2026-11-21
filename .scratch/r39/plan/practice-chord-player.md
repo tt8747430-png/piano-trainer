@@ -27,6 +27,9 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     Settings › General › Layout › Page layouts lists each page changed with Reset, and Reset every page, with Undo.
   - **The last sheet opens:** the Chord player opens on the sheet last open; its name is a menu of the recent sheets
     (the open one checked), New sheet and All chord sheets.
+  - **Export** (owner, 2026-11-21: "make me export"): ··· holds Export MIDI (the band once through, a track a part)
+    and Export chart (the chart as text), after Share…. A song or progression put in hand keeps its name, so the last
+    sheet reopens by its name (owner, 2026-11-21: "that it opens in the last opened").
   - **Settings by how often wanted:** Sound (Piano, Bass, Drums, Volume), Playing (Count-in, Voicing), Chart (Time
     signature, Written as), MIDI (Connect a piano, Follow a MIDI arranger, Arranger), Layout (Edit layout, Reset
     layout, Every page's layout). ··· is the kit's menu at its button (Save and Discard draft when there is one,

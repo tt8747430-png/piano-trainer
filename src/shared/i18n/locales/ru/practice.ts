@@ -1038,6 +1038,7 @@ export const practice: LocaleResources['practice'] = {
       duplicate: 'Дублировать',
     },
     randomize: 'Случайные аккорды',
+    export: { midi: 'Экспорт в MIDI', chart: 'Экспорт аккордов' },
     randomized: 'Новые аккорды в {{key}}',
     transport: 'Плеер аккордов',
     play: 'Играть',

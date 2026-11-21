@@ -83,7 +83,7 @@ export {
 } from './safe-storage'
 export { isCount, isRecord, savedObject } from './saved'
 export { createSavedStore, type SavingOptions } from './saved-store'
-export { downloadFile } from './download-file'
+export { downloadFile, fileTitle } from './download-file'
 export {
   MIDI_DIVISION,
   midiFileName,

@@ -34,7 +34,7 @@ export function ChordPlayerPage() {
               label: t('chordPlayer.saveAs'),
               // The sheet in hand is kept by naming it; one of mine saves its draft.
               hidden: page.sheetId !== undefined,
-              onSelect: () => page.setSaving(''),
+              onSelect: page.startSaving,
             },
             { key: 'share', label: t('chordPlayer.shareMenu'), onSelect: page.share },
           ]}
@@ -51,7 +51,7 @@ export function ChordPlayerPage() {
       ) : null}
       <NewSheet
         open={page.saving !== null}
-        onOpenChange={(open) => (open ? page.setSaving('') : page.closeSaving())}
+        onOpenChange={(open) => (open ? page.startSaving() : page.closeSaving())}
         title={t('chordPlayer.save.title')}
         nameLabel={t('chordPlayer.save.name')}
         name={page.saving ?? ''}

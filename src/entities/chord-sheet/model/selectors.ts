@@ -13,6 +13,9 @@ export const selectSaved =
   (state: ChordSheetsState): SavedChordSheet | undefined =>
     id === undefined ? undefined : state.mine.find((sheet) => sheet.id === id)
 
+/** The sheet in hand's name, where it came named. */
+export const selectScratchName = (state: ChordSheetsState): string | null => state.scratchName
+
 /** The sheets opened last, the latest first: one value until one is opened. */
 export const selectRecent = (state: ChordSheetsState): ChordSheetsState['recent'] => state.recent
 

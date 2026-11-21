@@ -28,6 +28,12 @@ export {
   type ChordSheetsStore,
   type RecentSheet,
 } from './model/store'
-export { selectEntry, selectMine, selectRecent, selectSaved } from './model/selectors'
+export {
+  selectEntry,
+  selectMine,
+  selectRecent,
+  selectSaved,
+  selectScratchName,
+} from './model/selectors'
 export { ChordSheetsStoreProvider, useChordSheets, useChordSheetsStoreApi } from './model/context'
 export { CHORD_SHEET_SONGS } from './content/songs'

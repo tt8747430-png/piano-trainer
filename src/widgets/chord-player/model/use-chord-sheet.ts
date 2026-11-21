@@ -18,6 +18,7 @@ import {
   type ChordSheet,
 } from '@/shared/lib/arrangement'
 import type { Chord } from '@/shared/lib/music'
+import { shareSections } from './shared-sheet'
 
 /** Each sheet's edits to undo and redo, by its id (`''` the sheet in hand): kept while the app runs. */
 interface History {
@@ -78,7 +79,7 @@ export function useChordSheet(id: string | undefined): ChordSheetInHand | null {
   const text = entry?.draft ?? entry?.text ?? NEW_ENTRY.text
   const sheet = useMemo(() => textToSheet(text) ?? emptySheet(), [text])
   const transpose = entry?.settings.transpose ?? 0
-  const shown = useMemo(() => transposeSheet(sheet, transpose), [sheet, transpose])
+  const shown = useMemo(() => shareSections(transposeSheet(sheet, transpose)), [sheet, transpose])
   // The latest sheet, for edits made one after another before a render.
   const latest = useRef(sheet)
   useLayoutEffect(() => {

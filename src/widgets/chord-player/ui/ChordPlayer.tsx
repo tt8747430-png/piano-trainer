@@ -24,14 +24,19 @@ import { PinnedKeyboard } from '@/features/live-keyboard'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
 import {
   cn,
+  downloadFile,
+  fileTitle,
   LAPTOP,
+  midiFileName,
   REDUCED_MOTION,
   useDragSensors,
+  useLatestCallback,
   useMediaQuery,
   useRootSize,
   WIDE,
 } from '@/shared/lib'
 import {
+  sheetChart,
   duplicateSection,
   duplicateChord,
   insertChord,
@@ -84,7 +89,7 @@ import {
   TRANSPOSE_RANGE,
   type ChordSheetSong,
 } from '@/entities/chord-sheet'
-import type { BoxPlace } from '../model/engine'
+import { bandMidi, type BoxPlace } from '../model/engine'
 import type { ChordSheetInHand } from '../model/use-chord-sheet'
 import { keyChords } from '../model/key-chords'
 import { CHORD_PLAYER_KEYS, CHORD_PLAYER_LAPTOP_KEYS, litKeys } from '../model/lit-keys'
@@ -110,6 +115,8 @@ import { SheetsMenu } from './SheetsMenu'
 import { KeyChords } from './KeyChords'
 import { StyleSheet } from './StyleSheet'
 
+/** The keys that lift and drop a chord or a section: Space, as a list's, and Enter to drop. */
+const SHEET_KEYS = { start: ['Space'], cancel: ['Escape'], end: ['Space', 'Enter'] }
 /** How a dropped tile settles into its place: the app's one ease-out (DESIGN.md, Motion). */
 const DROP_ANIMATION = { duration: 200, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
 /** The height of what floats over the keys, which the chord sounding keeps clear of. */
@@ -275,36 +282,43 @@ export function ChordPlayer({
     const section = shown.sections[place.section]
     return section ? sectionChords(section)[place.index] : undefined
   }
-  const acts: TileActs & { add(section: number): void } = {
-    open: (place, typed) => {
-      setPicked(place)
-      setDialog(typed === undefined ? { place } : { place, typed })
-    },
-    select: setPicked,
-    remove(place) {
-      const gone = chordAt(place)
-      if (!gone) return
-      inSection(place.section, (section) => removeChord(section, place.index))
-      setDialog(null)
-      setPicked(null)
-      undoable(t('chordPlayer.deleted', { chord: printedChord(gone.chord) }))
-    },
-    resize: (place, beats) =>
-      inSection(place.section, (section) => resizeChord(section, place.index, beats)),
-    add(section) {
-      const held = shown.sections[section]
-      const chords = held ? sectionChords(held) : []
-      const last = chords.at(-1)?.chord ?? {
-        root: shown.key.tonic,
-        quality: shown.key.minor ? 'min' : 'maj',
-      }
-      inSection(section, (each) => insertChord(each, sectionChords(each).length, last, meter))
-      setDialog({ place: { section, index: chords.length } })
-    },
-  }
-
   /** A change made at once, said in its toast with Undo (a loss that can be undone, CLAUDE.md). */
   const undoable = (message: string) => sayUndo(message, hand.undo)
+  const openAt = useLatestCallback((place: BoxPlace, typed?: string) => {
+    setPicked(place)
+    setDialog(typed === undefined ? { place } : { place, typed })
+  })
+  const removeAt = useLatestCallback((place: BoxPlace) => {
+    const gone = chordAt(place)
+    if (!gone) return
+    inSection(place.section, (section) => removeChord(section, place.index))
+    setDialog(null)
+    setPicked(null)
+    undoable(t('chordPlayer.deleted', { chord: printedChord(gone.chord) }))
+  })
+  const resizeAt = useLatestCallback((place: BoxPlace, beats: number) =>
+    inSection(place.section, (section) => resizeChord(section, place.index, beats)),
+  )
+  const addTo = useLatestCallback((section: number) => {
+    const held = shown.sections[section]
+    const chords = held ? sectionChords(held) : []
+    const last = chords.at(-1)?.chord ?? {
+      root: shown.key.tonic,
+      quality: shown.key.minor ? 'min' : 'maj',
+    }
+    inSection(section, (each) => insertChord(each, sectionChords(each).length, last, meter))
+    setDialog({ place: { section, index: chords.length } })
+  })
+  // Held for good, so the sheet's sections and chords render again only for what they show.
+  const acts = useMemo<TileActs & { add(section: number): void }>(
+    () => ({ open: openAt, select: setPicked, remove: removeAt, resize: resizeAt, add: addTo }),
+    [openAt, setPicked, removeAt, resizeAt, addTo],
+  )
+  const changeSection = useLatestCallback(
+    (index: number, change: Partial<Pick<Section, 'repeats' | 'variation'>>) =>
+      inSection(index, (each) => ({ ...each, ...change })),
+  )
+
   const randomize = () => {
     hand.edit((sheet) => randomSheet(sheet, Math.random))
     undoable(t('chordPlayer.randomized', { key: keyName(shown.key) }))
@@ -329,8 +343,11 @@ export function ChordPlayer({
     },
   ])
 
-  const sensors = useDragSensors({ start: ['Space'], cancel: ['Escape'], end: ['Space', 'Enter'] })
-  const sectionIds = shown.sections.map((_, i) => sectionDragId(i))
+  const sensors = useDragSensors(SHEET_KEYS)
+  const sectionIds = useMemo(
+    () => Array.from({ length: shown.sections.length }, (_, i) => sectionDragId(i)),
+    [shown.sections.length],
+  )
   const tiles = keyChords(shown.key)
   /** A style chosen: its tempo with it, the sheet laid out again in its time where that differs. */
   const chooseStyle = (chosen: Style) => {
@@ -360,13 +377,13 @@ export function ChordPlayer({
   const heldSection = held?.kind === 'section' ? shown.sections[held.section] : undefined
   const heldKey = held?.kind === 'key' ? tiles[held.index] : undefined
   /** A section deleted at once, Undo in its toast (a loss that can be undone, CLAUDE.md). */
-  const deleteSection = (index: number) => {
+  const deleteSection = useLatestCallback((index: number) => {
     const section = shown.sections[index]
     if (!section) return
     setOpened(null)
     hand.edit((sheet) => removeSection(sheet, index))
     undoable(t('chordPlayer.sectionDeleted', { name: t(`chordPlayer.sections.${section.kind}`) }))
-  }
+  })
   const openedSection = opened === null ? undefined : shown.sections[opened]
   const dialogChord = dialog ? chordAt(dialog.place) : undefined
 
@@ -580,6 +597,48 @@ export function ChordPlayer({
       },
     },
     ...more,
+    {
+      key: 'export-midi',
+      group: 'export',
+      unnamed: true,
+      label: t('chordPlayer.export.midi'),
+      onSelect: () =>
+        downloadFile(
+          bandMidi(
+            {
+              sheet: shown,
+              style,
+              tempo: entry.tempo,
+              settings: entry.settings,
+              block: prefs.voicing === 'block',
+            },
+            name,
+            {
+              piano: t('chordPlayer.settings.piano'),
+              bass: t('chordPlayer.settings.bass'),
+              drums: t('chordPlayer.settings.drums'),
+            },
+          ),
+          midiFileName(name, entry.tempo),
+          'audio/midi',
+        ),
+    },
+    {
+      key: 'export-chart',
+      group: 'export',
+      unnamed: true,
+      label: t('chordPlayer.export.chart'),
+      onSelect: () =>
+        downloadFile(
+          new TextEncoder().encode(
+            sheetChart(shown, { title: name, tempo: entry.tempo }, (kind) =>
+              t(`chordPlayer.sections.${kind}`),
+            ),
+          ),
+          `${fileTitle(name)}.txt`,
+          'text/plain;charset=utf-8',
+        ),
+    },
     { key: 'layout', label: t('chordPlayer.layout.edit'), onSelect: () => onEditing(true) },
     {
       key: 'to-progressions',
@@ -703,17 +762,17 @@ export function ChordPlayer({
                       musicKey={shown.key}
                       meter={meter}
                       names={prefs.names}
-                      lit={lit}
-                      beat={beat}
+                      lit={lit?.section === index ? lit.index : null}
+                      beat={lit?.section === index ? beat : null}
                       tag={prefs.follow ? marksLine(section.marks, t) : null}
-                      onTag={() => setTagged(index)}
+                      onTag={setTagged}
                       // While a chord sounds, its ring is the only one.
-                      selected={lit ? null : picked}
+                      selected={!lit && picked?.section === index ? picked.index : null}
                       variations={variations.length}
                       acts={acts}
-                      onOpen={() => setOpened(index)}
-                      onChange={(change) => inSection(index, (each) => ({ ...each, ...change }))}
-                      onDelete={() => deleteSection(index)}
+                      onOpen={setOpened}
+                      onChange={changeSection}
+                      onDelete={deleteSection}
                     />
                   ))}
                 </SortableContext>

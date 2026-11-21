@@ -19,7 +19,7 @@ import {
 } from './types'
 
 export const CHORD_SHEETS_STORAGE_KEY = 'pt-chord-sheets'
-export const CHORD_SHEETS_VERSION = 2
+export const CHORD_SHEETS_VERSION = 3
 export { DEFAULT_SHEET_SETTINGS }
 
 /** The style a sheet plays in when none it names is known: the Chord player's first, Pop 1. */
@@ -29,6 +29,8 @@ const DEFAULT_STYLE = 'pop-1'
 export interface ChordSheetsState {
   /** The sheet in hand when none of My chord sheets is open. */
   readonly scratch: ChordSheetEntry
+  /** The sheet in hand's name where it came named: the song or the progression it was opened from. */
+  readonly scratchName: string | null
   /** Newest first. */
   readonly mine: readonly SavedChordSheet[]
   /** The next sheet's number: a deleted id is never reused. */
@@ -56,7 +58,13 @@ export const NEW_ENTRY: ChordSheetEntry = {
   settings: DEFAULT_SHEET_SETTINGS,
 }
 
-const INITIAL: ChordSheetsState = { scratch: NEW_ENTRY, mine: [], nextId: 1, recent: [] }
+const INITIAL: ChordSheetsState = {
+  scratch: NEW_ENTRY,
+  scratchName: null,
+  mine: [],
+  nextId: 1,
+  recent: [],
+}
 
 export const createChordSheetsStore = (saving: SavingOptions = {}): ChordSheetsStore =>
   createSavedStore(
@@ -149,6 +157,7 @@ function sanitize(persisted: unknown): ChordSheetsState {
   const past = Math.max(0, ...mine.map(({ id }) => Number(SHEET_ID.exec(id)?.[1] ?? 0))) + 1
   return {
     scratch: readEntry(saved.scratch) ?? NEW_ENTRY,
+    scratchName: typeof saved.scratchName === 'string' ? sheetName(saved.scratchName) : null,
     mine: mine.slice(0, MOST_SHEETS),
     nextId: Math.max(between(saved.nextId, 1, Number.MAX_SAFE_INTEGER, 1), past),
     recent: (Array.isArray(saved.recent) ? saved.recent : [])

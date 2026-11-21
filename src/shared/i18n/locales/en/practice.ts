@@ -1054,6 +1054,7 @@ export const practice = {
       duplicate: 'Duplicate',
     },
     randomize: 'Randomize chords',
+    export: { midi: 'Export MIDI', chart: 'Export chart' },
     randomized: 'New chords in {{key}}',
     transport: 'Chord player',
     play: 'Play',

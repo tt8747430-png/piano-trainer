@@ -1,4 +1,4 @@
-export { editSheet, holdSheet } from './edit-sheet'
+export { editSheet, holdSheet, type HeldSheet } from './edit-sheet'
 export {
   deleteSheet,
   duplicateSheet,

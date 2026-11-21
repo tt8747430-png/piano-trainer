@@ -1,6 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
+import { memo, useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ProgressionNames } from '@/entities/settings'
 import { cn, motionReduced } from '@/shared/lib'
@@ -51,7 +51,7 @@ export function ChordFace({
  * Enter opens it, a letter starts a new symbol in its sheet, Backspace deletes it, Shift and the
  * arrows change its length. The last chord of a bar whose beats are not the meter's carries the !.
  */
-export function ChordTile({
+export const ChordTile = memo(function ChordTile({
   id,
   chord,
   beats,
@@ -62,7 +62,9 @@ export function ChordTile({
   litBeat,
   selected,
   wrong,
-  place,
+  wrongAt,
+  section,
+  index,
   acts,
 }: {
   id: string
@@ -76,11 +78,17 @@ export function ChordTile({
   /** The beat of it sounding now, from 0, while it sounds. */
   litBeat: number | null
   selected: boolean
-  /** Its bar's !: what it says, and the chord it opens; null where the bar adds up. */
-  wrong: { label: string; open: BoxPlace } | null
-  place: BoxPlace
+  /** Its bar's !: what it says; null where the bar adds up. */
+  wrong: string | null
+  /** The chord of its section the ! opens: its bar's first. */
+  wrongAt: number
+  /** Its section, and its index there. */
+  section: number
+  index: number
+  /** Held for good by the sheet: a tile renders again only for what it shows. */
   acts: TileActs
 }) {
+  const place: BoxPlace = { section, index }
   const { t } = useTranslation('practice')
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,
@@ -211,9 +219,9 @@ export function ChordTile({
       {wrong ? (
         <button
           type="button"
-          aria-label={wrong.label}
-          title={wrong.label}
-          onClick={() => acts.open(wrong.open)}
+          aria-label={wrong}
+          title={wrong}
+          onClick={() => acts.open({ section, index: wrongAt })}
           className="absolute -top-5 -right-5 z-10 grid size-11 place-items-center"
         >
           <svg viewBox="0 0 24 24" className="size-3.5" aria-hidden>
@@ -229,4 +237,4 @@ export function ChordTile({
       ) : null}
     </li>
   )
-}
+})

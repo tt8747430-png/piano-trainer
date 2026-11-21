@@ -1,11 +1,17 @@
 import { ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { IN_HAND, selectMine, selectRecent, useChordSheets } from '@/entities/chord-sheet'
+import {
+  IN_HAND,
+  selectMine,
+  selectRecent,
+  selectScratchName,
+  useChordSheets,
+} from '@/entities/chord-sheet'
 import { ActionMenu, type MenuAction } from '@/shared/ui'
 
 /**
  * The sheet's name over the chart, a menu of the recent sheets (canvas R76's SHEETS76): those opened
- * last, the latest first, the one open checked, the sheet in hand as Unsaved sheet; then New sheet and All
+ * last, the latest first, the one open checked, the sheet in hand by the name it came with, else as Unsaved sheet; then New sheet and All
  * chord sheets. The Chord player opens on the sheet last open, so the first is where it was left.
  */
 export function SheetsMenu({
@@ -26,13 +32,14 @@ export function SheetsMenu({
   const { t } = useTranslation('practice')
   const recent = useChordSheets(selectRecent)
   const mine = useChordSheets(selectMine)
+  const scratchName = useChordSheets(selectScratchName)
   const open = sheetId ?? IN_HAND
   // The open sheet leads until it is marked opened; a recent sheet since deleted is left out.
   const listed = [open, ...recent.filter((each) => each !== open)].flatMap((each): MenuAction[] => {
     // The sheet in hand is named for what it is, so it never reads as New sheet beside it.
     const named =
       each === IN_HAND
-        ? t('chordPlayer.sheets.inHand')
+        ? (scratchName ?? t('chordPlayer.sheets.inHand'))
         : mine.find((sheet) => sheet.id === each)?.name
     if (named === undefined) return []
     return [

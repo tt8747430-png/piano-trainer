@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   selectSaved,
+  selectScratchName,
   useChordSheets,
   useChordSheetsStoreApi,
   type ChordSheetEntry,
@@ -41,7 +42,8 @@ export function useChordPlayerPage() {
   const [sharing, setSharing] = useState(false)
   const [shareAfterSave, setShareAfterSave] = useState(false)
   const chordShare = useChordShare()
-  const name = saved?.name ?? t('chordPlayer.untitled')
+  const scratchName = useChordSheets(selectScratchName)
+  const name = saved?.name ?? scratchName ?? t('chordPlayer.untitled')
 
   const openSheet = (sheet: string | undefined) =>
     void navigate({
@@ -50,11 +52,11 @@ export function useChordPlayerPage() {
       replace: true,
     })
 
-  /** A sheet put in hand, the one it replaced back with Undo. */
-  const hold = (entry: ChordSheetEntry, said: string) => {
-    const before = holdSheet(store, entry)
+  /** A sheet put in hand under its name, the one it replaced back with Undo. */
+  const hold = (entry: ChordSheetEntry, named: string) => {
+    const before = holdSheet(store, { entry, name: named })
     openSheet(undefined)
-    sayUndo(t('chordPlayer.opened', { name: said }), () => void holdSheet(store, before))
+    sayUndo(t('chordPlayer.opened', { name: named }), () => void holdSheet(store, before))
   }
 
   // A progression in the URL is put in hand once; a shared sheet's link opens it among My chord sheets.
@@ -126,6 +128,8 @@ export function useChordPlayerPage() {
     setEditing: (on: boolean) => setSearch({ layout: on ? 'edit' : undefined }),
     saving,
     setSaving,
+    /** Save as my chord sheet, its name the sheet in hand's where it came named. */
+    startSaving: () => setSaving(scratchName ?? ''),
     async startNew() {
       // A saved sheet keeps its edits; the sheet in hand's are lost, asked first.
       const yes =
@@ -157,7 +161,7 @@ export function useChordPlayerPage() {
     share() {
       if (saved) return setSharing(true)
       setShareAfterSave(true)
-      setSaving('')
+      setSaving(scratchName ?? '')
     },
     saved,
     sharing,

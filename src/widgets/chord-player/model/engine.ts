@@ -2,6 +2,14 @@ import { DEFAULT_SHEET_SETTINGS, type ChordSheetSettings } from '@/entities/chor
 import { variationParts, type Style } from '@/entities/pattern'
 import { PLAY_DELAY, type AudioOutput, type PlayHandle } from '@/shared/api/audio'
 import {
+  MIDI_DIVISION,
+  noteEvents,
+  standardMidiFile,
+  type MidiNote,
+  type MidiTrack,
+  type TimedMidiEvent,
+} from '@/shared/lib'
+import {
   arrangeStyle,
   NO_MARKS,
   type Band,
@@ -14,10 +22,12 @@ import {
   beatsPerBar,
   beatsToTicks,
   C_MAJOR,
+  isCompound,
+  meterParts,
   TICKS_PER_BEAT,
   type Tick,
 } from '@/shared/lib/music'
-import { SWING_SHARE, type KitPiece, type Sound } from '@/shared/lib/schedule'
+import { gainVelocity, SWING_SHARE, type KitPiece, type Sound } from '@/shared/lib/schedule'
 
 /** What the transport plays, read again before each chord: an edit lands at the next one. */
 export interface PlayPlan {
@@ -176,6 +186,105 @@ function arranged(plan: PlayPlan, last: Arranged | null): Arranged {
     band: { ...band, bassInstrument: plan.style.bass },
     windows: windowsOf(band.bars),
   }
+}
+
+/** General MIDI's drum keys (channel 10), voice for voice. */
+const DRUM_KEYS: Readonly<Record<DrumVoice, number>> = {
+  kick: 36,
+  snare: 38,
+  rim: 37,
+  hatClosed: 42,
+  hatOpen: 46,
+  hatPedal: 44,
+  ride: 51,
+  rideBell: 53,
+  crash: 49,
+  tomHigh: 50,
+  tomMid: 47,
+  tomFloor: 43,
+}
+/** General MIDI's programs (from 0) for the band's bass. */
+const BASS_PROGRAMS: Readonly<Record<Style['bass'], number>> = {
+  bassUpright: 32,
+  bassElectric: 33,
+}
+/** The band's channels: the piano, the bass, and General MIDI's drums (channel 10: 9 from 0). */
+const PIANO_CHANNEL = 0
+const BASS_CHANNEL = 1
+const DRUM_CHANNEL = 9
+/** A drum hit's length in the file: a 16th. */
+const HIT_TICKS = MIDI_DIVISION / 4
+
+/** The tracks' names in the learner's language. */
+export interface BandNames {
+  readonly piano: string
+  readonly bass: string
+  readonly drums: string
+}
+
+/**
+ * The sheet once through as the band plays it, a Standard MIDI File: the meter and tempo's track,
+ * then the piano, the bass and the drums each on its own, a part turned off in Settings left out.
+ * The piano's swing is written in, as the transport plays it.
+ */
+export function bandMidi(plan: PlayPlan, title: string, names: BandNames): Uint8Array<ArrayBuffer> {
+  const { band, style } = arranged(plan, null)
+  const compound = isCompound(plan.sheet.meter)
+  // A compound meter's beat is a dotted quarter.
+  const click = compound ? 1.5 : 1
+  const fileTick = (tick: number) => Math.round((tick * MIDI_DIVISION * click) / TICKS_PER_BEAT)
+  const end = fileTick(band.totalTicks)
+  const { count, unit } = meterParts(plan.sheet.meter)
+  const playing = (part: keyof Pick<ChordSheetSettings, 'piano' | 'bass' | 'drums'>) =>
+    plan.settings[part].on && plan.settings[part].level > 0
+  const track = (name: string, events: readonly TimedMidiEvent[]): MidiTrack => ({
+    events: [{ tick: 0, kind: 'name', text: name }, ...events],
+    end,
+  })
+  // Swing works beat by beat, and every bar starts on a beat.
+  const pianoTick = (tick: Tick) => (style.swing ? swung(tick) : tick)
+  const piano: MidiNote[] = (band.piano?.notes ?? []).flatMap((note) =>
+    note.silent === true
+      ? []
+      : [
+          {
+            key: note.midi,
+            on: fileTick(pianoTick(note.startTick)),
+            off: fileTick(
+              pianoTick(Math.min(note.startTick + note.durationTicks, band.totalTicks)),
+            ),
+            velocity: gainVelocity(note.velocity),
+          },
+        ],
+  )
+  const bass: MidiNote[] = band.bass.map((note) => ({
+    key: note.midi,
+    on: fileTick(note.startTick),
+    off: fileTick(Math.min(note.startTick + note.durationTicks, band.totalTicks)),
+    velocity: gainVelocity(note.velocity),
+  }))
+  const drums: MidiNote[] = band.drums.map((hit) => ({
+    key: DRUM_KEYS[hit.voice],
+    on: fileTick(hit.tick),
+    off: fileTick(hit.tick) + HIT_TICKS,
+    velocity: Math.min(127, Math.max(1, Math.round(127 * hit.velocity))),
+  }))
+  return standardMidiFile([
+    track(title, [
+      { tick: 0, kind: 'time', count, unit, click },
+      { tick: 0, kind: 'tempo', quarters: plan.tempo * click },
+    ]),
+    ...(playing('piano') ? [track(names.piano, noteEvents(piano, PIANO_CHANNEL))] : []),
+    ...(playing('bass')
+      ? [
+          track(names.bass, [
+            { tick: 0, kind: 'program', channel: BASS_CHANNEL, program: BASS_PROGRAMS[style.bass] },
+            ...noteEvents(bass, BASS_CHANNEL),
+          ]),
+        ]
+      : []),
+    ...(playing('drums') ? [track(names.drums, noteEvents(drums, DRUM_CHANNEL))] : []),
+  ])
 }
 
 /** How loud a sound is in the plan's mix: its part's level, or none where the part is off, times the volume. */
