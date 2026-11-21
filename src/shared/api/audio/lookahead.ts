@@ -1,5 +1,5 @@
 import type { Sound } from '@/shared/lib/schedule'
-import { pageTicker, type Ticker } from '@/shared/lib/ticker'
+import type { Ticker } from '@/shared/lib/ticker'
 import type { SoundGain } from './types'
 
 interface Lookahead {
@@ -30,13 +30,13 @@ export function createLookahead({
   now,
   render,
   horizon = 0.25,
-  ticker = pageTicker(25),
+  ticker,
 }: {
   now: () => number
   render: (sound: Sound, at: number, gain: number) => void
   horizon?: number
-  /** The clock it renders by: every 25 ms. */
-  ticker?: Ticker
+  /** The clock it renders by, every few tens of milliseconds. */
+  ticker: Ticker
 }): Lookahead {
   let queue: readonly Queued[] = []
   let stopTicking: (() => void) | null = null

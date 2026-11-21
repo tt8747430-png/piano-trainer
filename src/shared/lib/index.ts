@@ -109,7 +109,6 @@ export { UpProvider } from './up-provider'
 export type { FindUp, Up } from './up-context'
 export { READ_DISTANCE, useHiddenWhileReading } from './use-hidden-while-reading'
 export { hasFinePointer } from './fine-pointer'
-export { pageTicker, steadyTicker, workerTicker, type Ticker } from './ticker'
 export {
   LANDSCAPE_PHONE,
   LAPTOP,

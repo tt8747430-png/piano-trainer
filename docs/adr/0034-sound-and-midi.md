@@ -25,10 +25,9 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   a timer in a Worker, which a hidden tab never slows: the adapter's lookahead, the Metronome, the Player's transport
   and the Chord player's engine. Where there are no workers (a test's document) it is the page's timer.
 - **The playback session, from the first sound.** As the app first sounds (a play, a key, a recording) the audio session
-  (`navigator.audioSession`, Safari) becomes playback, as a music app's: it plays through the phone's silent switch,
-  which mutes Safari's default for Web Audio. Before that, a gesture only readies the context; after the context has
-  run, a gesture resumes it only while something sounds, so a tap on a menu never takes the output back from another
-  app.
+  (`navigator.audioSession`, Safari) becomes playback, set before the context resumes, as a music app's: it plays
+  through the phone's silent switch, which mutes Safari's default for Web Audio, and pauses other apps' music as any
+  music app's Play does.
 - **The microphone records only while it listens.** The Tuner's microphone sets the audio session (`navigator.audioSession`,
   Safari) to play-and-record while any microphone is open and back to auto when the last closes, so the app's sound
   does not stay at the earpiece's level after the Tuner.
@@ -37,9 +36,10 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   back only while something sounds or is due (a voice, a held key, the lookahead's queue, a recording) and the page is
   in sight: as the page comes back into sight (`AudioPage`), on the context's state change, and every second while it
   sounds. A held context resumes; a clock that stands still two watches while its context says it runs is suspended and
-  resumed, and after four is replaced at the next start (an unlock or a key), never under a transport counting on its
-  clock. A closed context is replaced at its next use. Nothing sounding, nothing is taken back, so the learner's other
-  music plays on.
+  resumed, and after four is replaced at the next start once nothing counts on its clock (after Stop), never under a
+  running transport. A closed context is replaced at its next use. Nothing sounding, nothing is taken back, so the
+  learner's other music plays on: `unlock()` belongs to a gesture about to sound (Play, a key, a recording), while
+  `AudioUnlock`'s `prime()` on every other gesture only readies audio that has never run.
 - **The audio port knows what it sounds.** Every note played is a window on the audio clock: `sounding()`,
   `onSounding()`, `struck()` (the keys struck last) and `isPlaying()` read one log. The adapter follows the clock each
   frame only while something sounds and someone listens. `LiveKeyboard` puts those keys down on every keyboard; a

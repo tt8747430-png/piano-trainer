@@ -51,6 +51,7 @@ export function createFakeAudio(): FakeAudio {
     async unlock() {
       unlocks++
     },
+    prime() {},
     play(sounds, at, gain) {
       const start = at ?? clock + PLAY_DELAY
       played.push(gain ? { sounds, at: start, gain } : { sounds, at: start })

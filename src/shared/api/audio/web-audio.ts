@@ -1,6 +1,6 @@
 import { hasFinePointer } from '@/shared/lib/fine-pointer'
 import type { Midi } from '@/shared/lib/music'
-import { steadyTicker } from '@/shared/lib/ticker'
+import { pageTicker, steadyTicker, type Ticker } from '@/shared/lib/ticker'
 import {
   SOFT_GAIN,
   type ClickSound,
@@ -451,8 +451,12 @@ const WATCH_MS = 1000
  * the output was taken (another app's audio, a call) and given back dead, as iOS does.
  */
 const STILL = 0.05
-/** After this many still watches the context is woken by suspending and resuming it; after twice as many it is replaced. */
+/** After this many still watches the context is woken by suspending and resuming it. */
 const STILL_WATCHES = 2
+/** After this many it is replaced, once nothing counts on its clock. */
+const RENEW_WATCHES = 4
+/** A watch counts once this share of its time has gone by on the page. */
+const WATCH_FULL = 0.75
 
 /** How long a first sound waits for the recordings, in milliseconds, before it plays without them. */
 const SOUNDS_WAIT = 1500
@@ -545,10 +549,7 @@ export function createWebAudioOutput({
   loadSound = fetchSound,
   loadSamples = (context) => createSampleLoader({ context }),
   page = browserPage,
-  every = (look, ms) => {
-    const timer = setInterval(look, ms)
-    return () => clearInterval(timer)
-  },
+  watcher = pageTicker(WATCH_MS),
 }: {
   createContext?: () => AudioContext | null
   frame?: (look: () => void) => void
@@ -564,8 +565,8 @@ export function createWebAudioOutput({
   loadSamples?: (context: AudioContext) => SampleLoader
   /** Whether the page is in sight, and when it comes back. */
   page?: AudioPage
-  /** Calls `look` every `ms` milliseconds until the returned stop is called. */
-  every?: (look: () => void, ms: number) => () => void
+  /** The clock the output is watched by while something sounds: every second. */
+  watcher?: Ticker
 } = {}): AudioOutput {
   let context: AudioContext | null | undefined
   /** The recorded instruments: the grand, the light piano, the basses and the kit. */
@@ -610,9 +611,12 @@ export function createWebAudioOutput({
     return context
   }
 
-  /** A context fit to start on: a stalled one replaced first. */
+  /**
+   * A context fit to start on: a stalled one replaced first, once nothing counts on its clock (a
+   * transport stopped; its sounds never end on a dead clock, so Stop is what lets it go).
+   */
   const startContext = (): AudioContext | null => {
-    if (stalled) renew()
+    if (stalled && !busy()) renew()
     return openContext()
   }
 
@@ -661,30 +665,34 @@ export function createWebAudioOutput({
       return
     }
     if (heldBack(audio)) {
+      // The count of still watches is kept: a clock woken and still dead goes on to be replaced.
       watched = null
       if (activated()) void audio.resume().catch(none)
       return
     }
     if (audio.state !== 'running') return
     const moment = { audio: audio.currentTime, page: pageNow() }
-    const still =
-      watched !== null &&
-      moment.page - watched.page >= WATCH_MS * 0.75 &&
-      moment.audio - watched.audio < STILL
+    const before = watched
     watched = moment
-    stillWatches = still ? stillWatches + 1 : 0
+    // A first watch, or one that came early (a state change), says nothing.
+    if (!before || moment.page - before.page < WATCH_MS * WATCH_FULL) return
+    stillWatches = moment.audio - before.audio < STILL ? stillWatches + 1 : 0
     if (stillWatches === STILL_WATCHES)
       void audio
         .suspend()
         .then(() => audio.resume())
         .catch(none)
-    else if (stillWatches >= STILL_WATCHES * 2) stalled = true
+    else if (stillWatches >= RENEW_WATCHES) stalled = true
+  }
+  /** Watches the clock from now while something sounds; `look` stops it once nothing does. */
+  function watch() {
+    if (!unwatch && context && busy()) unwatch = watcher(look)
   }
   /** Looks now, and goes on watching while something sounds. */
   function wake() {
     if (context?.state === 'running') ran = true
     look()
-    if (!unwatch && context && busy()) unwatch = every(look, WATCH_MS)
+    watch()
   }
   page.onShown(wake)
 
@@ -738,7 +746,7 @@ export function createWebAudioOutput({
           : CLICK_VOICES[name](context, sound, at, gain * (sound.gain ?? 1), ended)
     }
     voices.add(voice)
-    unwatch ??= every(look, WATCH_MS)
+    watch()
   }
 
   const now = () => context?.currentTime ?? 0
@@ -784,7 +792,7 @@ export function createWebAudioOutput({
         key,
         sampled ? recordedVoice(sampled, none) : holdNote(audio, key, gain * level, out),
       )
-      unwatch ??= every(look, WATCH_MS)
+      watch()
     },
     silence(key) {
       const sound = held.get(key)
@@ -801,12 +809,18 @@ export function createWebAudioOutput({
       const audio = startContext()
       // With no gesture behind it (a sound as a screen opens), resuming could only fail; a refusal
       // (iOS while a call holds the output) leaves it held, taken back at the next gesture or watch.
-      if (audio && heldBack(audio) && activated() && (!ran || busy()))
+      if (audio && heldBack(audio) && activated()) {
+        playbackSession()
         await audio.resume().catch(none)
+      }
       // The light piano and the grand's middle are loaded as the audio opens, in the background.
       void instruments?.warm()
       // The recorded clicks and drums are in before the first beat, or given up on soon.
       if (audio) await within(recorded.ready(audio), SOUNDS_WAIT)
+    },
+    prime() {
+      const audio = startContext()
+      if (audio && !ran && heldBack(audio) && activated()) void audio.resume().catch(none)
     },
     play(sounds, at, gain) {
       const audio = openContext()
@@ -815,9 +829,10 @@ export function createWebAudioOutput({
         // Audio held back with no gesture to start it (a round sounded as its trainer opens) is let
         // go, not queued to burst out at the first tap; where the browser lets it run, it plays.
         if (!activated()) return NOTHING_PLAYED
-        void audio.resume().catch(none)
       }
+      // The session first: changed under a running context, iOS would interrupt it.
       playbackSession()
+      if (heldBack(audio)) void audio.resume().catch(none)
       const start = at ?? audio.currentTime + PLAY_DELAY
       // What the sounds strike is fetched as they are scheduled: in by the time they sound.
       instruments?.need(sounds)
@@ -860,8 +875,11 @@ export function createWebAudioOutput({
     },
     loadRecording: (src) => void fetchRecording(src),
     playRecording(src, play, volume) {
+      const audio = openContext()
       playbackSession()
+      if (audio && heldBack(audio) && activated()) void audio.resume().catch(none)
       recordings.play(src, play, volume)
+      watch()
     },
     now,
     // What is heard now, moved by how long before or after now the page's moment was.

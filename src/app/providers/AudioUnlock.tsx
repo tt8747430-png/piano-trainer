@@ -14,15 +14,16 @@ const GESTURES = ['pointerdown', 'pointerup', 'touchend', 'keydown'] as const
 const activated = () => navigator.userActivation?.isActive ?? true
 
 /**
- * Browsers start audio suspended, and some suspend it again (iOS after a call): every gesture anywhere
- * unlocks it, which does nothing once it runs. Renders nothing.
+ * Browsers start audio suspended: every gesture anywhere readies it until it first runs, so the first
+ * sound is not late. Audio taken later by another app comes back with a sound, never a stray tap.
+ * Renders nothing.
  */
 export function AudioUnlock() {
   const { audio } = useServices()
 
   useEffect(() => {
     const unlock = () => {
-      if (activated()) void audio.unlock()
+      if (activated()) audio.prime()
     }
     for (const gesture of GESTURES) window.addEventListener(gesture, unlock, true)
     return () => {

@@ -34,10 +34,15 @@ export interface NoteOutput {
 /** Where the app's sound goes. Built once in app/composition-root.ts, reached through useServices(). */
 export interface AudioOutput {
   /**
-   * On a user gesture: resumes audio a browser started or put back in suspension (iOS after a call).
-   * Does nothing once audio runs.
+   * On a gesture that is about to sound (Play, a key): resumes audio a browser started or put back in
+   * suspension (iOS after a call), inside the gesture as iOS asks. Does nothing once audio runs.
    */
   unlock(): Promise<void>
+  /**
+   * On any gesture: readies audio before it has ever run, so the first sound is not late. Once it has
+   * run, does nothing: a tap on a menu never takes the output back from another app.
+   */
+  prime(): void
   /**
    * Plays sounds whose `at` counts from `at` on the audio clock (by default just after now); returns
    * their play. Each sounds as loud as `gain` says as it comes to sound, so a change is heard from

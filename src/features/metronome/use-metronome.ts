@@ -3,7 +3,7 @@ import { selectMetronome, useSettings, useSettingsStoreApi } from '@/entities/se
 import type { MetronomeSettings } from '@/entities/settings'
 import { setMetronome } from '@/features/set-preference'
 import { PLAY_DELAY } from '@/shared/api/audio'
-import { steadyTicker, useWakeLock } from '@/shared/lib'
+import { useWakeLock } from '@/shared/lib'
 import {
   beatHeard,
   beatSounds,
@@ -20,6 +20,7 @@ import {
   type MetronomeTime,
 } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
+import { steadyTicker } from '@/shared/lib/ticker'
 import { useTapTempo } from './use-tap-tempo'
 
 /** How far ahead of the audio clock the beats are queued, in seconds: past a hidden page's timer. */

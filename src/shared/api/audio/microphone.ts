@@ -44,10 +44,14 @@ export const openBrowserMicrophone: OpenMicrophone = async () => {
   const analyser = context.createAnalyser()
   analyser.fftSize = 8192
   source.connect(analyser)
+  // Closed once: a second close would let the session go while another microphone listens.
+  let closed = false
   return {
     sampleRate: context.sampleRate,
     read: (into) => analyser.getFloatTimeDomainData(into),
     close: () => {
+      if (closed) return
+      closed = true
       source.disconnect()
       for (const track of stream.getTracks()) track.stop()
       void context.close()
