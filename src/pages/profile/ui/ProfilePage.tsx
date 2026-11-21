@@ -8,7 +8,7 @@ import { useProfileFigures } from '@/features/track-achievements'
 import { cn } from '@/shared/lib'
 import { useAccount, useLearnerProfile } from '@/shared/lib/account'
 import { useAppUpdate } from '@/shared/lib/app-update'
-import { Avatar, ButtonLink, ScreenHeader } from '@/shared/ui'
+import { Avatar, ButtonLink, ScreenHeader, Skeleton } from '@/shared/ui'
 import { useToday } from '@/widgets/practice-days'
 import { usePracticeTime } from '../model/format'
 import { AchievementsPreview } from './AchievementsPreview'
@@ -167,11 +167,8 @@ function Hero() {
             <p role="status" className="sr-only">
               {t('profile.loading')}
             </p>
-            <span aria-hidden className="h-6 rounded-tile bg-muted motion-safe:animate-pulse" />
-            <span
-              aria-hidden
-              className="h-3.5 w-1/2 rounded-pill bg-muted motion-safe:animate-pulse"
-            />
+            <Skeleton className="h-6 rounded-tile" />
+            <Skeleton className="h-3.5 w-1/2 rounded-pill" />
           </div>
         ) : (
           <div className="flex min-w-0 flex-col gap-0.5">

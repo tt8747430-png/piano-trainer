@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { PublicEntry } from '@/shared/api/public-library'
-import { Avatar } from '@/shared/ui'
+import { Avatar, Skeleton } from '@/shared/ui'
 import { SavesCount, useAuthorName } from '@/widgets/song-preview'
 
 /**
@@ -47,17 +47,17 @@ export function ReadingItem({ label }: { label: string }) {
         {label}
       </p>
       <div aria-hidden className="card flex flex-col gap-4 p-4">
-        <span className="h-4 w-48 rounded-pill bg-muted motion-safe:animate-pulse" />
+        <Skeleton className="h-4 w-48 rounded-pill" />
         <div className="flex items-center gap-3">
-          <span className="size-11 rounded-pill bg-muted motion-safe:animate-pulse" />
+          <Skeleton className="size-11 rounded-pill" />
           <span className="flex flex-col gap-2">
-            <span className="h-3 w-16 rounded-pill bg-muted motion-safe:animate-pulse" />
-            <span className="h-4 w-28 rounded-pill bg-muted motion-safe:animate-pulse" />
+            <Skeleton className="h-3 w-16 rounded-pill" />
+            <Skeleton className="h-4 w-28 rounded-pill" />
           </span>
         </div>
-        <span className="h-8 w-40 rounded-pill bg-muted motion-safe:animate-pulse" />
+        <Skeleton className="h-8 w-40 rounded-pill" />
       </div>
-      <div aria-hidden className="h-48 rounded-card bg-muted motion-safe:animate-pulse" />
+      <Skeleton className="h-48 rounded-card" />
     </div>
   )
 }

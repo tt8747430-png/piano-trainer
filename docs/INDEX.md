@@ -204,6 +204,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `SheetTrigger` | `src/shared/ui/Sheet.tsx` |  | 7 |
 | `ShowAll` | `src/shared/ui/ShowAll.tsx` | A folded list's way to the rest, the boards' quiet link under its card (owner, 2026-11-16: | 3 |
 | `ShownKeys` | `src/shared/ui/piano-keyboard/index.ts` |  | 29 |
+| `Skeleton` | `src/shared/ui/Skeleton.tsx` | The outline of something being read: | 3 |
 | `SortMenu` | `src/shared/ui/CountSort.tsx` | A list's sort (the R72 board's COUNTROW and its table's head): | 4 |
 | `SpeedDial` | `src/shared/ui/FloatingActions.tsx` | The screen's other actions, folded into one round button: | 2 |
 | `SpeedDialAction` | `src/shared/ui/FloatingActions.tsx` | One of a dial's actions: | 1 |
@@ -829,7 +830,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `section-head` | The head over a card of rows on a page (Practise, Options, How to play): | 2 |
 | `settings-pane` | DESIGN's card: | 1 |
 | `picture-edge` | The card's ring is a shadow: | 6 |
-| `card` |  | 216 |
+| `card` |  | 217 |
 | `rows-line` | * Rows parted by a line that takes no room, as the boards' GROUP draws them (an inset line under each * row but the last, not a border): | 3 |
 | `rows-hairline` |  | 26 |
 | `px-gutter` | * A block's or a place's look (R29 B9, `shared/lib/style`): | 15 |
