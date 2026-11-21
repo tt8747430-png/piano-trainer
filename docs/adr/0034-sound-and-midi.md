@@ -15,6 +15,14 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   `app/composition-root.ts` builds the browser adapters once (`createServices()`), with `midi: null` where Web MIDI
   is missing; code reaches them only through `useServices()`, and tests pass `FakeAudio` and `FakeMidi`. Scheduling
   is pure (`shared/lib/schedule` turns ticks into seconds); an adapter only plays. Audio unlocks on the first gesture.
+- **Audio taken away is taken back while something sounds.** Another app's audio, a call or a locked phone suspends
+  or interrupts the context, and iOS can hand it back running with its clock stopped. The Web Audio adapter takes it
+  back only while something sounds or is due (a voice, a held key, the lookahead's queue, a recording) and the page is
+  in sight: as the page comes back into sight (`AudioPage`), on the context's state change, and every second while it
+  sounds. A held context resumes; a clock that stands still two watches while its context says it runs is suspended and
+  resumed, and after four is replaced at the next start (an unlock or a key), never under a transport counting on its
+  clock. A closed context is replaced at its next use. Nothing sounding, nothing is taken back, so the learner's other
+  music plays on.
 - **The audio port knows what it sounds.** Every note played is a window on the audio clock: `sounding()`,
   `onSounding()`, `struck()` (the keys struck last) and `isPlaying()` read one log. The adapter follows the clock each
   frame only while something sounds and someone listens. `LiveKeyboard` puts those keys down on every keyboard; a

@@ -26,6 +26,8 @@ interface RecordingPlayer {
   play(src: string, play: RecordingPlay, volume?: () => number): void
   /** Silences every recording now and forgets what is queued. */
   stop(): void
+  /** Whether a recording is playing or queued to. */
+  readonly playing: boolean
 }
 
 /** How often the player looks at the clock: a play's volume, and its end. */
@@ -113,6 +115,9 @@ export function createRecordingPlayer({
       for (const target of ready.values()) target.pause(time)
       if (timer !== null) clearInterval(timer)
       timer = null
+    },
+    get playing() {
+      return latest !== null
     },
   }
 }
