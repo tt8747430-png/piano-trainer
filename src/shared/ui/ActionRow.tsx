@@ -1,5 +1,5 @@
-import { useId } from 'react'
 import { cn } from '@/shared/lib'
+import { useDisabledReason } from './disabled-reason'
 import { ROW_CLASS } from './row-class'
 
 /**
@@ -24,8 +24,7 @@ export function ActionRow({
   reason?: string | undefined
   danger?: boolean
 }) {
-  const id = useId()
-  const why = disabled ? reason : undefined
+  const greyed = useDisabledReason(disabled, reason)
   return (
     <button
       type="button"
@@ -33,8 +32,7 @@ export function ActionRow({
       data-danger={danger ? '' : undefined}
       onClick={onClick}
       disabled={disabled}
-      title={why}
-      aria-describedby={why ? id : undefined}
+      {...greyed.props}
       className={cn(
         ROW_CLASS,
         'w-full text-left disabled:opacity-50 disabled:hover:bg-transparent',
@@ -53,11 +51,7 @@ export function ActionRow({
           {status}
         </span>
       ) : null}
-      {why ? (
-        <span id={id} hidden>
-          {why}
-        </span>
-      ) : null}
+      {greyed.note}
     </button>
   )
 }

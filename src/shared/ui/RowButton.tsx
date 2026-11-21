@@ -1,5 +1,6 @@
-import { useId, type ComponentProps, type Ref } from 'react'
+import type { ComponentProps, Ref } from 'react'
 import { cn } from '@/shared/lib'
+import { useDisabledReason } from './disabled-reason'
 import { OpensMark } from './NavMarks'
 import { RowFace, type RowFaceProps } from './RowFace'
 import { ROW_CLASS } from './row-class'
@@ -33,8 +34,7 @@ export function RowButton({
   trigger?: ComponentProps<'button'>
   ref?: Ref<HTMLButtonElement>
 }) {
-  const id = useId()
-  const why = disabled ? reason : undefined
+  const greyed = useDisabledReason(disabled, reason)
   return (
     <button
       ref={ref}
@@ -42,8 +42,7 @@ export function RowButton({
       {...trigger}
       {...(onClick ? { onClick } : {})}
       disabled={disabled}
-      title={why}
-      aria-describedby={why ? id : undefined}
+      {...greyed.props}
       aria-current={current ? 'true' : undefined}
       className={cn(
         ROW_CLASS,
@@ -54,11 +53,7 @@ export function RowButton({
       )}
     >
       <RowFace {...face} end={opens ? <OpensMark /> : undefined} />
-      {why ? (
-        <span id={id} hidden>
-          {why}
-        </span>
-      ) : null}
+      {greyed.note}
     </button>
   )
 }
