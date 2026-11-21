@@ -107,7 +107,7 @@
   --primary-foreground: var(--p-ink);
   /* A honey wash's edge: the Range strip's ring round the keys shown. */
   --honey-ring: var(--p-honey-deep);
-  /* The chosen among equals on a card (Played through's weakest bars): honey's wash under its ring. */
+  /* A lesson's takeaway: a quiet honey fill under its words. The chosen among equals is `chosen-honey`. */
   --honey-wash: #fbf1dd;
   /* Edit layout (R76): a panel's dashed outline, and the honey zones a panel may be put in. */
   --layout-edge: #b98a32;
