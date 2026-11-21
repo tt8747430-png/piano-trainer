@@ -1,11 +1,12 @@
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { GripVertical, Plus, Trash2 } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ProgressionNames } from '@/entities/settings'
 import { cn, useMediaQuery, LAPTOP } from '@/shared/lib'
+import { DragHandle } from '@/shared/ui'
 import {
   sectionBars,
   sectionChords,
@@ -157,17 +158,12 @@ export const SheetSection = memo(function SheetSection({
         </button>
         {/* A spacer, then the grip on the row's edge, as the board's head: the name shrinks before the grip moves. */}
         <span aria-hidden className="flex-1" />
-        <button
+        <DragHandle
+          label={t('chordPlayer.drag', { name })}
           ref={setActivatorNodeRef}
-          type="button"
-          aria-label={t('chordPlayer.drag', { name })}
-          title={t('chordPlayer.drag', { name })}
-          className="grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted active:cursor-grabbing"
           {...attributes}
           {...listeners}
-        >
-          <GripVertical aria-hidden className="size-[18px]" />
-        </button>
+        />
       </div>
       {tag !== null ? (
         <button

@@ -2,7 +2,7 @@ import { DndContext } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { GripVertical, Minus, Plus } from 'lucide-react'
+import { Minus, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   barAvailable,
@@ -13,7 +13,7 @@ import {
 } from '@/entities/settings'
 import { cn, useSortableList } from '@/shared/lib'
 import { BAR_ICONS } from '../model/bar-icons'
-import { ActionRow, SettingsGroup } from '@/shared/ui'
+import { ActionRow, DragHandle, SettingsGroup } from '@/shared/ui'
 
 /** The round mark at a row's start: a red − takes the act off, a green + puts it on (iOS's edit list). */
 function EditMark({
@@ -111,15 +111,7 @@ function OnRow({
         onClick={onRemove}
       />
       <ActFace act={act} label={label} />
-      <button
-        type="button"
-        aria-label={t('bars.move', { act: label })}
-        className="grid size-11 flex-none touch-none place-items-center text-muted-foreground"
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical aria-hidden className="size-5" />
-      </button>
+      <DragHandle label={t('bars.move', { act: label })} {...attributes} {...listeners} />
     </li>
   )
 }

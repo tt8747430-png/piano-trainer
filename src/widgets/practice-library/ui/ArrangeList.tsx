@@ -11,7 +11,7 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Ellipsis, Eye, EyeOff, GripVertical, PencilLine, Trash2 } from 'lucide-react'
+import { Ellipsis, Eye, EyeOff, PencilLine, Trash2 } from 'lucide-react'
 import { createContext, useContext, useState, type ReactNode } from 'react'
 import { useFold } from '@/features/fold-section'
 import { useTranslation } from 'react-i18next'
@@ -26,7 +26,7 @@ import {
 } from '@/entities/practice-library'
 import { arrangeLibrary } from '@/features/manage-practice-library'
 import { cn, REDUCED_MOTION, useDragSensors, useMediaQuery } from '@/shared/lib'
-import { ActionMenu, confirm, FoldSection, GROUPED_LIST } from '@/shared/ui'
+import { ActionMenu, confirm, DragHandle, FoldSection, GROUPED_LIST } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   arrangeDrop,
@@ -56,34 +56,6 @@ const scoped: CollisionDetection = (args) => {
   }
   const under = pointerWithin(within)
   return under.length > 0 ? under : closestCenter(within)
-}
-
-const HANDLE =
-  'grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted active:cursor-grabbing'
-
-/** A handle: the one thing a drag starts from, by mouse, held finger or keyboard. */
-function Handle({
-  label,
-  activator,
-  attributes,
-  listeners,
-}: Pick<ReturnType<typeof useSortable>, 'attributes' | 'listeners'> & {
-  label: string
-  activator: ReturnType<typeof useSortable>['setActivatorNodeRef']
-}) {
-  return (
-    <button
-      ref={activator}
-      type="button"
-      aria-label={label}
-      title={label}
-      className={HANDLE}
-      {...attributes}
-      {...listeners}
-    >
-      <GripVertical aria-hidden className="size-4.5" />
-    </button>
-  )
 }
 
 /**
@@ -141,12 +113,7 @@ function SortablePlace({
           action={
             <>
               {menu}
-              <Handle
-                label={label}
-                activator={setActivatorNodeRef}
-                attributes={attributes}
-                listeners={listeners}
-              />
+              <DragHandle label={label} ref={setActivatorNodeRef} {...attributes} {...listeners} />
               {/* over the rows' handles, the More's room kept */}
               <span aria-hidden className="w-12" />
             </>
@@ -173,12 +140,7 @@ function SortablePlace({
         action={
           <span className="-my-2.5 me-1 flex items-center">
             {menu}
-            <Handle
-              label={label}
-              activator={setActivatorNodeRef}
-              attributes={attributes}
-              listeners={listeners}
-            />
+            <DragHandle label={label} ref={setActivatorNodeRef} {...attributes} {...listeners} />
           </span>
         }
       >
@@ -202,11 +164,11 @@ function SortableRow({ id, item }: { id: string; item: LibraryItem }) {
   } = useSortable({ id })
   const table = useContext(TableOf)
   const handle = (
-    <Handle
+    <DragHandle
       label={t('library.edit.moveRow', { name: item.name })}
-      activator={setActivatorNodeRef}
-      attributes={attributes}
-      listeners={listeners}
+      ref={setActivatorNodeRef}
+      {...attributes}
+      {...listeners}
     />
   )
   if (table)
@@ -243,11 +205,11 @@ function SortableRow({ id, item }: { id: string; item: LibraryItem }) {
         },
         lifted: isDragging,
         handle: (
-          <Handle
+          <DragHandle
             label={t('library.edit.moveRow', { name: item.name })}
-            activator={setActivatorNodeRef}
-            attributes={attributes}
-            listeners={listeners}
+            ref={setActivatorNodeRef}
+            {...attributes}
+            {...listeners}
           />
         ),
       }}

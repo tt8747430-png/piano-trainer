@@ -1,12 +1,19 @@
 import { useDraggable, useDroppable } from '@dnd-kit/core'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { GripVertical } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { CARRY, INTO, useLibraryDnd } from '../model/library-dnd'
-import { CheckMark, ROW_BODY, ROW_CARD, ROW_CONTROL, ROW_FLAT, ROW_LIBRARY_FACE } from '@/shared/ui'
+import {
+  CheckMark,
+  DragHandle,
+  ROW_BODY,
+  ROW_CARD,
+  ROW_CONTROL,
+  ROW_FLAT,
+  ROW_LIBRARY_FACE,
+} from '@/shared/ui'
 
 /**
  * A row while Select is on (R72's SONGROW in Select, Flat's): the same card, a tap choosing it or
@@ -109,17 +116,7 @@ export function SelectRow({
           {children}
         </div>
         {sortable ? (
-          <button
-            ref={setActivatorNodeRef}
-            type="button"
-            {...attributes}
-            {...listeners}
-            aria-label={move}
-            title={move}
-            className={cn(ROW_CONTROL, 'cursor-grab touch-none active:cursor-grabbing')}
-          >
-            <GripVertical aria-hidden />
-          </button>
+          <DragHandle label={move} ref={setActivatorNodeRef} {...attributes} {...listeners} />
         ) : null}
       </div>
     </li>

@@ -2,11 +2,11 @@ import { DndContext } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Ellipsis, Eye, EyeOff, GripVertical, PencilLine, Plus } from 'lucide-react'
+import { Ellipsis, Eye, EyeOff, PencilLine, Plus } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, useSortableList } from '@/shared/lib'
-import { ActionMenu, type MenuAction } from '@/shared/ui'
+import { ActionMenu, DragHandle, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Switch } from '@/shared/ui/primitives/switch'
@@ -134,16 +134,11 @@ function SortableRow({ row, children }: { row: StaffRow; children: ReactNode }) 
       style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn(ROW, 'bg-card', isDragging && 'relative z-10 shadow-md')}
     >
-      <button
-        type="button"
-        aria-label={t('instruments.move', { staff: row.name })}
-        title={t('instruments.move', { staff: row.name })}
-        className="grid size-11 shrink-0 cursor-grab touch-none place-items-center text-muted-foreground"
+      <DragHandle
+        label={t('instruments.move', { staff: row.name })}
         {...attributes}
         {...listeners}
-      >
-        <GripVertical aria-hidden className="size-5" />
-      </button>
+      />
       {children}
     </li>
   )

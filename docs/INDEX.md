@@ -32,6 +32,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `DangerGroup` | `src/shared/ui/DangerGroup.tsx` | What ends or destroys (R25): | 8 |
 | `DangerRow` | `src/shared/ui/DangerGroup.tsx` | A row that ends or destroys (R24): | 9 |
 | `Docked` | `src/shared/ui/Docked.tsx` | Keeps its content at the foot of the screen, over the phone's tab bar, the screen's width beside a rail or a sidebar, while the page scrolls above it. | 8 |
+| `DragHandle` | `src/shared/ui/DragHandle.tsx` | The one thing a drag starts from, by mouse, held finger or keyboard: | 6 |
 | `Dropdown` | `src/shared/ui/Dropdown.tsx` | One choice of many behind a pop-up button (Apple's): | 12 |
 | `EditAction` | `src/shared/ui/ScreenHeader.tsx` | A screen's Edit (the canvas's EDITR; Apple HIG, Edit buttons): | 10 |
 | `ExitFocus` | `src/shared/ui/ScreenHeader.tsx` | While Focus is on, the bar's first button (canvas v398): | 1 |
@@ -469,7 +470,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-destructive` | `src/styles/theme.css` | 47 |
 | `--color-destructive-foreground` | `src/styles/theme.css` | 3 |
 | `--color-eyebrow` | `src/styles/theme.css` | 4 |
-| `--color-foreground` | `src/styles/theme.css` | 359 |
+| `--color-foreground` | `src/styles/theme.css` | 360 |
 | `--color-glass` | `src/styles/theme.css` | 2 |
 | `--color-hairline` | `src/styles/theme.css` | 65 |
 | `--color-hand-lh` | `src/styles/theme.css` | 3 |
@@ -504,7 +505,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-medal-platinum` | `src/styles/theme.css` | 1 |
 | `--color-medal-silver` | `src/styles/theme.css` | 1 |
 | `--color-muted` | `src/styles/theme.css` | 158 |
-| `--color-muted-foreground` | `src/styles/theme.css` | 299 |
+| `--color-muted-foreground` | `src/styles/theme.css` | 300 |
 | `--color-nav-current` | `src/styles/theme.css` | 2 |
 | `--color-nav-current-foreground` | `src/styles/theme.css` | 3 |
 | `--color-nav-foreground` | `src/styles/theme.css` | 2 |

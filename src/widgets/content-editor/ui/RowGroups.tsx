@@ -9,12 +9,12 @@ import {
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { CSS } from '@dnd-kit/utilities'
-import { Ellipsis, GripVertical, Trash2, type LucideIcon } from 'lucide-react'
+import { Ellipsis, Trash2, type LucideIcon } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useRender } from '@base-ui/react/use-render'
 import { useTranslation } from 'react-i18next'
 import { cn, useDragSensors } from '@/shared/lib'
-import { ActionMenu, sayUndo } from '@/shared/ui'
+import { ActionMenu, DragHandle, sayUndo } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { rowPlace, withGroupAt, withRowAt, withRowRemoved, type RowOrder } from '../model/row-order'
 
@@ -73,19 +73,7 @@ function Handle({
   handle: Pick<ReturnType<typeof useSortable>, 'attributes' | 'listeners' | 'setActivatorNodeRef'>
 }) {
   const { attributes, listeners, setActivatorNodeRef } = handle
-  return (
-    <button
-      ref={setActivatorNodeRef}
-      type="button"
-      aria-label={label}
-      title={label}
-      className="grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted active:cursor-grabbing"
-      {...attributes}
-      {...listeners}
-    >
-      <GripVertical aria-hidden className="size-4" />
-    </button>
-  )
+  return <DragHandle label={label} ref={setActivatorNodeRef} {...attributes} {...listeners} />
 }
 
 /** A row's menu, named for the row: what is not done by dragging it (Remove). */
