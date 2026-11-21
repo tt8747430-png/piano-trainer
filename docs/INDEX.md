@@ -292,7 +292,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `practice-days` | The month's arrows, the board's CAL: | 6 |
 | `practice-library` | How a practice library sorts: | 13 |
 | `practice-pages` | Practice's pages (ADR 0052), each where it is and the tile it wears: | 13 |
-| `practice-player` | What the Player plays (A35): | 23 |
+| `practice-player` | What the Player plays (A35): | 24 |
 | `progression-explorer` | What a progression's page shows (A23, R30-4): | 8 |
 | `run-results` | The bars with a slip, to loop: | 2 |
 | `scale-explorer` | The key a major or minor scale is the scale of, as the circle of fifths spells it; null for any other scale. | 2 |

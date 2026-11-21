@@ -4,12 +4,17 @@ import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 import { Listbox } from './Listbox'
 import { OpensMark } from './NavMarks'
+import { ROW_ROOM } from './row-class'
 import type { OptionValue } from './option'
 import { Segmented } from './Segmented'
 import { SwitchRow } from './SwitchRow'
 
-/** A row's room, as the canvas's `GROUP` draws it: 48 high, its name in the body's size. */
-const ROW = 'flex min-h-12 w-full items-center gap-3 py-1.5 ps-4 pe-3 text-base'
+/** A group's row: the kit's one row room, the group's width, its name in the body's size. */
+const ROW = `${ROW_ROOM} w-full text-base`
+
+/** A row that acts, on the group's fill: its hover a shade over the fill (the fill is the Row family's hover). */
+const ROW_PRESS =
+  'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none'
 
 /**
  * A group of settings' rows on the muted fill, as the canvas's `GROUP` draws them (canvas 179): one
@@ -143,11 +148,7 @@ export function GroupLink({
     props: mergeProps<'button'>(
       {
         ...button,
-        className: cn(
-          ROW,
-          'text-left text-foreground no-underline transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
-          className,
-        ),
+        className: cn(ROW, ROW_PRESS, 'text-foreground no-underline', className),
       },
       {
         children: (
@@ -228,7 +229,8 @@ export function GroupAction({
       onClick={onClick}
       className={cn(
         ROW,
-        'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
+        ROW_PRESS,
+        'disabled:pointer-events-none disabled:opacity-50',
         destructive ? 'text-destructive' : 'text-link',
       )}
     >
