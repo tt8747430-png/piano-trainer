@@ -12,7 +12,6 @@
   --p-paper: #f7f3ee;
   --p-paper-card: #fefdfb;
   --p-sand-100: #eee9e2;
-  --p-sand-200: #e5dfd6;
   --p-line: #dad1c8;
   --p-control: #908479;
   --p-ink: #332921;
@@ -212,7 +211,7 @@
   /* The book's line: soft round a card, firm enough round a control to find it (3:1). */
   --border: var(--p-line);
   --input: var(--p-control);
-  --hairline: var(--p-sand-200);
+  --hairline: var(--p-sand-100);
   --ring: var(--p-sky-deep);
   /* A slider's thumb: white by day, near-white by night, on the muted track in both. */
   --thumb: var(--p-white);

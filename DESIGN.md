@@ -5,7 +5,6 @@ colors:
   paper: '#F7F3EE'
   paper-card: '#FEFDFB'
   sand-sunken: '#EEE9E2'
-  sand-hairline: '#E5DFD6'
   soft-line: '#DAD1C8'
   control-line: '#908479'
   ink: '#332921'
@@ -270,7 +269,7 @@ Warm neutrals and seven quiet paints. Each role has a day value, a night value a
   2px dashed outline in deep honey, and the honey wash of a place a panel may be put in. Never a focus ring, a
   selection or a card's line; outside Edit layout nothing wears them.
 - **Control Line** (`input`): 1px round a control, firm enough to find it (3:1).
-- **Hairline** (`hairline`): a divider inside a card.
+- **Hairline** (`hairline`): a divider inside a card, the canvas's FILL (#EEE9E2 by day), as its GROUP parts rows.
 - **Ink, Soft Ink** (`foreground`, `muted-foreground`): text, secondary text, the navigation's icons.
 - **Umber** (`selected`): the check on a chosen item; never an action.
 

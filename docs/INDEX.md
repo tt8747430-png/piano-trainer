@@ -711,7 +711,6 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--p-rust-night` | `src/styles/tokens.css` | 1 |
 | `--p-sand` | `src/styles/tokens.css` | 1 |
 | `--p-sand-100` | `src/styles/tokens.css` | 1 |
-| `--p-sand-200` | `src/styles/tokens.css` | 1 |
 | `--p-sand-deep` | `src/styles/tokens.css` | 1 |
 | `--p-sand-light` | `src/styles/tokens.css` | 1 |
 | `--p-sand-wash` | `src/styles/tokens.css` | 1 |
