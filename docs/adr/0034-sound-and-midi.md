@@ -15,6 +15,9 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   `app/composition-root.ts` builds the browser adapters once (`createServices()`), with `midi: null` where Web MIDI
   is missing; code reaches them only through `useServices()`, and tests pass `FakeAudio` and `FakeMidi`. Scheduling
   is pure (`shared/lib/schedule` turns ticks into seconds); an adapter only plays. Audio unlocks on the first gesture.
+- **Music keeps time in a hidden tab.** Everything that schedules sound ticks on `steadyTicker` (`shared/lib/ticker`),
+  a timer in a Worker, which a hidden tab never slows: the adapter's lookahead, the Metronome, the Player's transport
+  and the Chord player's engine. Where there are no workers (a test's document) it is the page's timer.
 - **Audio taken away is taken back while something sounds.** Another app's audio, a call or a locked phone suspends
   or interrupts the context, and iOS can hand it back running with its clock stopped. The Web Audio adapter takes it
   back only while something sounds or is due (a voice, a held key, the lookahead's queue, a recording) and the page is

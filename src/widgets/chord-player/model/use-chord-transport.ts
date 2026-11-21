@@ -1,12 +1,7 @@
 import { useEffect, useLayoutEffect, useState, useSyncExternalStore } from 'react'
 import { useServices } from '@/shared/lib/services'
-import {
-  createChordEngine,
-  workerTicker,
-  type BoxPlace,
-  type PlayPlan,
-  type TransportState,
-} from './engine'
+import { steadyTicker } from '@/shared/lib/ticker'
+import { createChordEngine, type BoxPlace, type PlayPlan, type TransportState } from './engine'
 
 /** The Chord player's transport over the sheet in hand (R29 CP4): its state, Play, Stop and Loop. */
 interface ChordTransport extends TransportState {
@@ -25,7 +20,7 @@ export function useChordTransport(plan: PlayPlan): ChordTransport {
     const listeners = new Set<() => void>()
     const engine = createChordEngine({
       audio,
-      ticker: workerTicker,
+      ticker: steadyTicker(50),
       plan: () => current,
       onChange: () => listeners.forEach((listener) => listener()),
     })

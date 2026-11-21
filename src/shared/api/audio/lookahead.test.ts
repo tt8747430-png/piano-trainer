@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
+import { pageTicker } from '@/shared/lib/ticker'
 import { createLookahead } from './lookahead'
 
 const note = (at: number): Sound => ({
@@ -19,7 +20,7 @@ describe('createLookahead', () => {
       now: () => clock,
       render: (_sound, at) => rendered.push(at),
       horizon: 0.25,
-      interval: 25,
+      ticker: pageTicker(25),
     })
 
   beforeEach(() => {

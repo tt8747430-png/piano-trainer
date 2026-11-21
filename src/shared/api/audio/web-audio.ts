@@ -1,5 +1,6 @@
 import { hasFinePointer } from '@/shared/lib/fine-pointer'
 import type { Midi } from '@/shared/lib/music'
+import { steadyTicker } from '@/shared/lib/ticker'
 import {
   SOFT_GAIN,
   type ClickSound,
@@ -709,7 +710,7 @@ export function createWebAudioOutput({
       return { audio: stamp.contextTime, page: stamp.performanceTime }
     return { audio: heard(), page: pageNow() }
   }
-  const lookahead = createLookahead({ now, render })
+  const lookahead = createLookahead({ now, render, ticker: steadyTicker(25) })
   const keys = createSoundingKeys({ now, frame })
   const makeRecordings = () =>
     createRecordingPlayer({

@@ -1,6 +1,7 @@
 import { PLAY_DELAY, type AudioOutput } from '@/shared/api/audio'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
+import { steadyTicker } from '@/shared/lib/ticker'
 import {
   advanceLoop,
   loopOver,
@@ -91,7 +92,7 @@ export function startTransport(
       on.tempo(sounding)
     }
     if (loopOver(loop)) {
-      clearInterval(timer)
+      stopTicking()
       on.end()
       return
     }
@@ -101,11 +102,11 @@ export function startTransport(
       on.count(left)
     }
   }
-  const timer = setInterval(follow, FOLLOW_INTERVAL_MS)
+  const stopTicking = steadyTicker(FOLLOW_INTERVAL_MS)(follow)
 
   return {
     stop() {
-      clearInterval(timer)
+      stopTicking()
       audio.stop()
     },
     tickAt: (time) => tickAt(loop, time),

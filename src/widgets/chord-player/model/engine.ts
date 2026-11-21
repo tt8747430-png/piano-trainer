@@ -28,6 +28,7 @@ import {
   type Tick,
 } from '@/shared/lib/music'
 import { gainVelocity, SWING_SHARE, type KitPiece, type Sound } from '@/shared/lib/schedule'
+import type { Ticker } from '@/shared/lib/ticker'
 
 /** What the transport plays, read again before each chord: an edit lands at the next one. */
 export interface PlayPlan {
@@ -38,9 +39,6 @@ export interface PlayPlan {
   /** The piano's chords in root position, not voice-led (Settings' Voicing). */
   readonly block?: boolean
 }
-
-/** Starts a clock that calls `onTick` every so often, even in a hidden tab; returns what stops it. */
-type Ticker = (onTick: () => void) => () => void
 
 /** A box: its section and its index there. */
 export interface BoxPlace {
@@ -537,16 +535,4 @@ export function styleBar(style: Style): Sound[] {
       at: sound.at + seconds(window.from),
     })),
   )
-}
-
-/** A clock in a Worker, ticking every 50 ms: a hidden tab throttles a page's timers, not a worker's. */
-export const workerTicker: Ticker = (onTick) => {
-  const source = 'setInterval(() => postMessage(0), 50)'
-  const url = URL.createObjectURL(new Blob([source], { type: 'text/javascript' }))
-  const worker = new Worker(url)
-  worker.onmessage = () => onTick()
-  return () => {
-    worker.terminate()
-    URL.revokeObjectURL(url)
-  }
 }

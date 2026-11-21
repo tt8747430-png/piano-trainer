@@ -3,7 +3,7 @@ import { selectMetronome, useSettings, useSettingsStoreApi } from '@/entities/se
 import type { MetronomeSettings } from '@/entities/settings'
 import { setMetronome } from '@/features/set-preference'
 import { PLAY_DELAY } from '@/shared/api/audio'
-import { useWakeLock } from '@/shared/lib'
+import { steadyTicker, useWakeLock } from '@/shared/lib'
 import {
   beatHeard,
   beatSounds,
@@ -47,7 +47,7 @@ const trainerOf = ({ on, play, mute }: MetronomeSettings['trainer']) => (on ? { 
 interface Run {
   next: MetronomeBeat
   planned: readonly MetronomeBeat[]
-  timer: ReturnType<typeof setInterval>
+  stopTicking: () => void
 }
 
 export interface Metronome extends MetronomeSettings {
@@ -134,7 +134,7 @@ export function useMetronome(): Metronome {
   const stop = useCallback(() => {
     const current = run.current
     if (!current) return
-    clearInterval(current.timer)
+    current.stopTicking()
     run.current = null
     audio.stop()
     setPlaying(false)
@@ -147,7 +147,7 @@ export function useMetronome(): Metronome {
     run.current = {
       next: { at: audio.now() + PLAY_DELAY, beat: 0, bar: 0 },
       planned: [],
-      timer: setInterval(queue, TOP_UP),
+      stopTicking: steadyTicker(TOP_UP)(queue),
     }
     queue()
     setPlaying(true)

@@ -1,4 +1,5 @@
 import type { Sound } from '@/shared/lib/schedule'
+import { pageTicker, type Ticker } from '@/shared/lib/ticker'
 import type { SoundGain } from './types'
 
 interface Lookahead {
@@ -21,28 +22,28 @@ interface Queued {
 /**
  * Hands sounds to `render` only shortly before they are due, so a long piece never builds thousands
  * of audio nodes at once, each with its gain asked then (a change of loudness is heard from the next
- * sound rendered). What falls within `horizon` seconds renders at once; a timer every `interval` ms
- * renders the rest as the clock reaches them, in time order; what it reaches long after they were
+ * sound rendered). What falls within `horizon` seconds renders at once; `ticker` renders the rest as
+ * the clock reaches them, in time order; what it reaches long after they were
  * due (a sleeping page's timers) is dropped, not played all at once.
  */
 export function createLookahead({
   now,
   render,
   horizon = 0.25,
-  interval = 25,
+  ticker = pageTicker(25),
 }: {
   now: () => number
   render: (sound: Sound, at: number, gain: number) => void
   horizon?: number
-  interval?: number
+  /** The clock it renders by: every 25 ms. */
+  ticker?: Ticker
 }): Lookahead {
   let queue: readonly Queued[] = []
-  let timer: ReturnType<typeof setInterval> | null = null
+  let stopTicking: (() => void) | null = null
 
   const stopTimer = () => {
-    if (timer === null) return
-    clearInterval(timer)
-    timer = null
+    stopTicking?.()
+    stopTicking = null
   }
 
   const renderDue = () => {
@@ -63,7 +64,7 @@ export function createLookahead({
       const added = sounds.map((sound) => ({ sound, at: at + sound.at, gain }))
       queue = [...queue, ...added].sort((a, b) => a.at - b.at)
       renderDue()
-      if (queue.length > 0 && timer === null) timer = setInterval(renderDue, interval)
+      if (queue.length > 0 && stopTicking === null) stopTicking = ticker(renderDue)
     },
     clear() {
       queue = []
