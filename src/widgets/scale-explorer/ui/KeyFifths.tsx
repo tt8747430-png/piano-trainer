@@ -66,10 +66,11 @@ export function KeyFifths({ value, kind }: { value: Key; kind: ScaleKind }) {
   }
   return (
     <section className="flex flex-col gap-2">
+      {/* Its 44 reaches up, ending on the card's edge 8 under the words, so no tap lands on two things. */}
       <Link
         to="/practice/circle-of-fifths"
         search={{ key: keyParam(value) }}
-        className="-my-3 flex min-h-11 items-center gap-0.5 self-start text-sm font-semibold text-foreground"
+        className="-mt-4 -mb-2 flex min-h-11 items-end gap-0.5 self-start pb-2 text-sm font-semibold text-foreground"
       >
         {t('scales.onCircleOfFifths')}
         <ChevronRight aria-hidden className="size-4" />
