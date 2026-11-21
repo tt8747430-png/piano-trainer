@@ -61,7 +61,7 @@ export function QuestionBlock({
         ? t('question.wrong')
         : state.stage === 'answer'
           ? t('question.shown')
-          : t('question.chosen', count)
+          : t('question.chosen', { ...count, count: count.total })
   return (
     <figure role="group" aria-labelledby={id} className="mt-2 flex flex-col gap-3">
       <div className="-mb-2 flex flex-col">

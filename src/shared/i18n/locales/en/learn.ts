@@ -216,7 +216,9 @@ export const learn = {
   question: {
     answer: 'Answer',
     onKeys: 'Choose on the keys',
-    chosen: '{{chosen}} of {{total}} notes',
+    // Counted by the answer's notes: 0 of 1 note, 2 of 3 notes.
+    chosen_one: '{{chosen}} of {{total}} note',
+    chosen_other: '{{chosen}} of {{total}} notes',
     right: 'Correct',
     wrong: 'Not quite',
     show: 'Show the answer',

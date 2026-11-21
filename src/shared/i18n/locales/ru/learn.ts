@@ -216,7 +216,10 @@ export const learn: LocaleResources['learn'] = {
   question: {
     answer: 'Ответить',
     onKeys: 'Выберите на клавишах',
-    chosen: 'Нот: {{chosen}} из {{total}}',
+    chosen_one: 'Нот: {{chosen}} из {{total}}',
+    chosen_few: 'Нот: {{chosen}} из {{total}}',
+    chosen_many: 'Нот: {{chosen}} из {{total}}',
+    chosen_other: 'Нот: {{chosen}} из {{total}}',
     right: 'Верно',
     wrong: 'Не совсем',
     show: 'Показать ответ',
