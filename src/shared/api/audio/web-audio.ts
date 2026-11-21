@@ -470,7 +470,10 @@ function within(promise: Promise<void>, ms: number): Promise<void> {
 const heldBack = (context: AudioContext) =>
   context.state === 'suspended' || context.state === 'interrupted'
 
-/** A recording's file, fetched once: its bytes, or null where it cannot be had (it stays silent). */
+/**
+ * A recording's file, fetched once: its bytes, or null where it cannot be had (silent this time,
+ * asked again next time: offline now, online later).
+ */
 const recordingFiles = new Map<string, Promise<ArrayBuffer | null>>()
 const fetchRecording = (src: string): Promise<ArrayBuffer | null> => {
   const known = recordingFiles.get(src)
@@ -478,6 +481,10 @@ const fetchRecording = (src: string): Promise<ArrayBuffer | null> => {
   const fetched = fetch(src)
     .then((response) => (response.ok ? response.arrayBuffer() : null))
     .catch(() => null)
+    .then((bytes) => {
+      if (!bytes) recordingFiles.delete(src)
+      return bytes
+    })
   recordingFiles.set(src, fetched)
   return fetched
 }
