@@ -31,6 +31,11 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
 - **The microphone records only while it listens.** The Tuner's microphone sets the audio session (`navigator.audioSession`,
   Safari) to play-and-record while any microphone is open and back to auto when the last closes, so the app's sound
   does not stay at the earpiece's level after the Tuner.
+- **Playing goes on until Stop, in sight or not.** Nothing in the app stops a transport when its tab is hidden, and the
+  worker clock keeps it on time there (checked with page timers held to once a second). iOS is the one exception it
+  cannot overrule: WebKit suspends every page's AudioContext when the app goes to the background or the screen locks,
+  and routing it through an `<audio>` element does not exempt it (WebKit bug 231105). There the music waits where it
+  was and goes on as the app comes back into sight (below).
 - **Audio taken away is taken back while something sounds.** Another app's audio, a call or a locked phone suspends
   or interrupts the context, and iOS can hand it back running with its clock stopped. The Web Audio adapter takes it
   back only while something sounds or is due (a voice, a held key, the lookahead's queue, a recording) and the page is
