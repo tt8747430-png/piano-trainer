@@ -130,7 +130,7 @@ function KeyButton({
       <span
         aria-hidden
         className={cn(
-          'absolute inset-x-0 bottom-0 origin-bottom transition duration-80 ease-out',
+          'absolute inset-x-0 bottom-0 origin-bottom transition-transform duration-80 ease-out',
           black ? 'h-2 key-front-black' : 'h-1.5 key-lip-white',
           look.down ? 'scale-y-33' : null,
         )}
