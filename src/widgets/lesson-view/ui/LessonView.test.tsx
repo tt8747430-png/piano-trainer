@@ -32,6 +32,16 @@ function firstLesson(): Lesson {
   return lesson
 }
 
+/** The keys under an example (the Lesson boards' PKEYS): the first keys after it on the page. */
+function keysUnder(element: HTMLElement): HTMLElement {
+  return found(
+    screen
+      .getAllByRole('group', { name: 'Keyboard' })
+      .find((keys) => element.compareDocumentPosition(keys) & Node.DOCUMENT_POSITION_FOLLOWING),
+    'keys under the example',
+  )
+}
+
 const UP: UpLink = { link: <Link to="/" />, label: 'Back to the journey', title: 'Foundations' }
 const ONWARD: Onward = { link: <Link to="/" />, label: 'Next lesson', onGo: () => {} }
 
@@ -60,7 +70,7 @@ async function renderLesson(lesson: Lesson = firstLesson()) {
       </ServicesProvider>
     </SettingsStoreProvider>,
   )
-  await screen.findByRole('group', { name: 'Keyboard' })
+  await screen.findAllByRole('heading', { level: 2 })
   return { audio }
 }
 
@@ -87,7 +97,10 @@ describe('LessonView', () => {
   it('marks the section being read in its contents', async () => {
     const user = userEvent.setup()
     await renderLesson()
-    await user.click(screen.getByRole('button', { name: /^In this lesson: section \d+ of 10$/ }))
+    // The bar floats on a phone and over the keys on a laptop: the first is the phone's.
+    await user.click(
+      screen.getAllByRole('button', { name: /^In this lesson: section \d+ of 10$/ })[0]!,
+    )
     const contents = await screen.findByRole('navigation', { name: 'In this lesson' })
     const [first, second] = within(contents).getAllByRole('link')
     await waitFor(() => expect(first).toHaveAttribute('data-reading'))
@@ -99,7 +112,10 @@ describe('LessonView', () => {
   it('opens its contents in a sheet off its bar, with what it is part of, which a link followed closes', async () => {
     const user = userEvent.setup()
     await renderLesson()
-    await user.click(screen.getByRole('button', { name: /^In this lesson: section \d+ of 10$/ }))
+    // The bar floats on a phone and over the keys on a laptop: the first is the phone's.
+    await user.click(
+      screen.getAllByRole('button', { name: /^In this lesson: section \d+ of 10$/ })[0]!,
+    )
     const sheet = await screen.findByRole('dialog', { name: 'In this lesson' })
     expect(within(sheet).getByRole('link', { name: /^Back to the journey/ })).toBeInTheDocument()
     await user.click(within(sheet).getByRole('link', { name: 'Numbers and 7ths' }))
@@ -108,25 +124,22 @@ describe('LessonView', () => {
     )
   })
 
-  it('steps through its sections from its floating bar, the first’s ‹ off', async () => {
+  it('says on its floating bar the section being read, and goes on to the next lesson', async () => {
     await renderLesson()
-    const stepper = screen.getByRole('toolbar', { name: 'Lesson' })
-    expect(within(stepper).getByRole('button', { name: 'Previous section' })).toBeDisabled()
-    expect(within(stepper).getByRole('link', { name: 'Next section' })).toHaveAttribute(
-      'href',
-      expect.stringMatching(/#section-2$/),
+    const bar = screen.getAllByRole('toolbar', { name: 'Lesson' })[0]!
+    expect(within(bar).getByRole('button', { name: /^In this lesson/ })).toHaveTextContent(
+      'Section 1 of 10Reading chord symbols',
     )
+    expect(within(bar).getByRole('link', { name: 'Next lesson' })).toBeInTheDocument()
   })
 
-  it('plays a chord example and marks its tones on the keys', async () => {
+  it('plays a chord example, its row its picture with no keys of its own', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson()
     const cm = await screen.findByRole('button', { name: /^Play bar \d+, Cm$/ }, { timeout: 5000 })
     await user.click(cm)
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([60, 63, 67])
     expect(cm).toHaveAttribute('aria-pressed', 'true')
-    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
-    expect(within(keyboard).getByRole('button', { name: 'D sharp 4' })).toHaveTextContent('♭3')
   })
 
   it('names four voices on the keys, the key a voice left faint as the row plays on', async () => {
@@ -149,8 +162,8 @@ describe('LessonView', () => {
         },
       ],
     })
-    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     const chords = screen.getByRole('list', { name: 'Chords' })
+    const keyboard = keysUnder(chords)
     await user.click(found(within(chords).getAllByRole('button')[0], 'the first chord'))
     expect(within(keyboard).getByRole('button', { name: 'C5' })).toHaveTextContent('S')
     expect(within(keyboard).getByRole('button', { name: 'C3' })).toHaveTextContent('B')
@@ -293,8 +306,8 @@ describe('LessonView’s worksheet', () => {
     const dorian = screen.getByRole('figure', { name: 'D Dorian' })
     await user.click(within(dorian).getByRole('button', { name: 'Play' }))
     expect(notes(audio.played.at(-1)?.sounds ?? []).slice(0, 3)).toEqual([62, 64, 65])
-    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
-    expect(within(keyboard).getByRole('button', { name: 'F4' })).toHaveTextContent('♭3')
+    const keyboard = keysUnder(dorian)
+    expect(within(keyboard).getByRole('button', { name: 'F4' })).toHaveTextContent('F')
     const figures = screen.getAllByRole('figure')
     await user.click(
       within(found(figures.at(-1), 'the line')).getByRole('button', { name: 'Play' }),
@@ -326,7 +339,6 @@ describe('LessonView’s worksheet', () => {
     await user.click(within(line).getByRole('button', { name: 'Play' }))
     const started = audio.played.at(-1)
     const question = screen.getByRole('group', { name: 'Play E minor.' })
-    await user.click(within(question).getByRole('button', { name: 'Answer' }))
     expect(within(question).getByRole('status')).toHaveTextContent('0 of 3 notes')
     act(() => audio.setNow((started?.at ?? 0) + (started?.sounds.at(-1)?.at ?? 0)))
     await waitFor(() => expect(line.querySelector('g.note-chosen')).not.toBeNull())
@@ -337,8 +349,7 @@ describe('LessonView’s worksheet', () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
     const question = screen.getByRole('group', { name: 'Play E minor.' })
-    await user.click(within(question).getByRole('button', { name: 'Answer' }))
-    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    const keyboard = within(question).getByRole('group', { name: 'Keyboard' })
     expect(within(question).getByRole('status')).toHaveTextContent('0 of 3 notes')
     await user.click(within(keyboard).getByRole('button', { name: 'E4' }))
     await user.click(within(keyboard).getByRole('button', { name: 'G sharp 4' }))
@@ -359,25 +370,23 @@ describe('LessonView’s worksheet', () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
     const question = screen.getByRole('group', { name: 'Play a major third above F.' })
-    await user.click(within(question).getByRole('button', { name: 'Answer' }))
     await user.click(within(question).getByRole('button', { name: 'Show the answer' }))
     const sounds = audio.played.at(-1)?.sounds ?? []
     expect(new Set(sounds.map((sound) => (sound.kind === 'note' ? sound.at : null))).size).toBe(2)
   })
 
-  it('shows a question’s answer, and opening another question closes the first', async () => {
+  it('shows a question’s answer on its own keys, and Again starts it afresh', async () => {
     const user = userEvent.setup()
     await renderLesson(WORKSHEET)
     const first = screen.getByRole('group', { name: 'Play E minor.' })
-    await user.click(within(first).getByRole('button', { name: 'Answer' }))
-    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    const keyboard = within(first).getByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
     await user.click(within(first).getByRole('button', { name: 'Show the answer' }))
     expect(within(keyboard).getByRole('button', { name: 'G4' })).toHaveTextContent('♭3')
-    const second = screen.getByRole('group', { name: 'Play a major third above F.' })
-    await user.click(within(second).getByRole('button', { name: 'Answer' }))
-    expect(within(first).getByRole('button', { name: 'Answer' })).toBeInTheDocument()
+    expect(within(first).getByRole('status')).toHaveTextContent('The answer is on the keys')
+    await user.click(within(first).getByRole('button', { name: 'Again' }))
     expect(within(keyboard).getByRole('button', { name: 'G4' })).not.toHaveTextContent('♭3')
+    expect(within(first).getByRole('status')).toHaveTextContent('0 of 3 notes')
   })
 
   it('links into the references on what it names', async () => {
@@ -472,7 +481,7 @@ describe('LessonView’s accompaniment', () => {
           within(row)
             .getAllByRole('button', { name: /^Play bar \d+, / })
             .map((button) => button.textContent),
-        ).toEqual(['Dm7ii', 'G7V', 'CMaj7I']),
+        ).toEqual(['Dm7ii', 'G7V', 'Cmaj7I']),
       { timeout: 5000 },
     )
     const tool = screen.getByRole('link', { name: 'Open in Progressions' }).getAttribute('href')
@@ -488,23 +497,24 @@ describe('LessonView’s accompaniment', () => {
     const chips = screen.getByRole('list', { name: 'What each chord does' })
     const chords = () => within(chips).getAllByRole('button', { name: /^(ii|V|I), / })
     expect(chords().map((chip) => chip.ariaLabel)).toEqual([
-      'ii, away, soft',
-      'V, tension',
-      'I, home',
+      'ii, Predominant, soft',
+      'V, Dominant',
+      'I, Tonic',
     ])
-    expect(chords().map((chip) => shownText(chip))).toEqual(['iiawaysoft', 'Vtension', 'Ihome'])
-    await user.click(within(chips).getByRole('button', { name: 'V, tension' }))
+    // Each tile its numeral over its chord.
+    expect(chords().map((chip) => shownText(chip))).toEqual(['iiDm7', 'VG7', 'ICmaj7'])
+    await user.click(within(chips).getByRole('button', { name: 'V, Dominant' }))
     // G7 alone, as the row voices it: its bass under the hand.
     expect(new Set(notes(audio.played.at(-1)?.sounds ?? []).map((key) => key % 12))).toEqual(
       new Set([7, 11, 2, 5]),
     )
-    expect(within(chips).getByRole('button', { name: 'V, tension' })).toHaveAttribute(
+    expect(within(chips).getByRole('button', { name: 'V, Dominant' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
   })
 
-  it('shows a progression’s root movement on its arrows, played as a chain', async () => {
+  it('shows a progression’s root movement under its chords, played as a chain', async () => {
     await renderLesson({
       ...ACCOMPANIMENT,
       sections: [
@@ -517,11 +527,8 @@ describe('LessonView’s accompaniment', () => {
       ],
     })
     const chips = screen.getByRole('list', { name: 'What each chord does' })
-    expect(
-      within(chips)
-        .getAllByRole('button', { name: /^Play / })
-        .map((arrow) => shownText(arrow)),
-    ).toEqual(['↓5→', '↓5→', '↓5→'])
+    const tiles = within(chips).getAllByRole('listitem')
+    for (const tile of tiles.slice(0, 3)) expect(tile).toHaveTextContent('5th down →')
     expect(screen.getByRole('button', { name: 'Play the chain' })).toBeInTheDocument()
   })
 
@@ -555,14 +562,14 @@ describe('LessonView’s accompaniment', () => {
       ],
     })
     const chips = () => screen.getByRole('list', { name: 'What each chord does' })
-    expect(within(chips()).getAllByRole('button', { name: /, away/ })[0]).toHaveAccessibleName(
-      'ii/3, away, soft',
-    )
+    expect(
+      within(chips()).getAllByRole('button', { name: /, Predominant/ })[0],
+    ).toHaveAccessibleName('ii/3, Predominant, soft')
     expect(screen.getByText('The plain subdominant')).toBeInTheDocument()
     await user.click(screen.getByRole('radio', { name: '♭II6' }))
-    expect(within(chips()).getAllByRole('button', { name: /, away/ })[0]).toHaveAccessibleName(
-      '♭II/3, away',
-    )
+    expect(
+      within(chips()).getAllByRole('button', { name: /, Predominant/ })[0],
+    ).toHaveAccessibleName('♭II/3, Predominant')
     expect(screen.getByText('The Neapolitan')).toBeInTheDocument()
     expect(screen.getByText('One note lower.')).toBeInTheDocument()
     expect(screen.getByRole('complementary', { name: 'In short' })).toHaveTextContent(
