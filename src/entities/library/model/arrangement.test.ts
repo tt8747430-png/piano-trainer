@@ -102,6 +102,7 @@ describe('arrangeLibrary', () => {
         },
         subfolders: [],
         index: 1,
+        at: 0,
       },
     ])
   })

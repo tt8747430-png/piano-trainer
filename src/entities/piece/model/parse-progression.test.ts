@@ -26,7 +26,7 @@ describe('parseProgression', () => {
     ['V:dom:4', ['G', 'G7', 'G9']],
     ['V:domb9:4', ['G', 'G7', 'G7♭9']],
     ['vii:hd:4', ['B°', 'Bm7♭5', 'Bm7♭5']],
-    ['I:maj:4', ['C', 'CMaj7', 'CMaj9']],
+    ['I:maj:4', ['C', 'Cmaj7', 'Cmaj9']],
     ['V:=b9:4', ['G7♭9', 'G7♭9', 'G7♭9']],
   ])('grows %s with the chord size', (progression, expected) => {
     expect(CHORD_SIZES.map((size) => symbols(progression, size)[0])).toEqual(expected)
@@ -50,7 +50,7 @@ describe('parseProgression', () => {
   it('puts a chord tone in the bass', () => {
     expect(symbols('i:min:2/3', 'triads', 'Dm')[0]).toBe('Dm/F')
     expect(symbols('I:maj:4/5', 'triads')[0]).toBe('C/G')
-    expect(symbols('I:maj:4/7', 'sevenths')[0]).toBe('CMaj7/B')
+    expect(symbols('I:maj:4/7', 'sevenths')[0]).toBe('Cmaj7/B')
   })
 
   it('packs chords into bars of the meter, tying them across bar lines', () => {
@@ -105,7 +105,7 @@ describe('parseProgression in sections', () => {
       [2, 1],
       [2],
     ])
-    expect(bars(chart)).toEqual(['CMaj7 4', 'FMaj7 2', 'G7 4', 'Am7 2 | FMaj7 2', 'CMaj7 4'])
+    expect(bars(chart)).toEqual(['Cmaj7 4', 'Fmaj7 2', 'G7 4', 'Am7 2 | Fmaj7 2', 'Cmaj7 4'])
   })
 
   it('names the section, line and chord it cannot read', () => {
