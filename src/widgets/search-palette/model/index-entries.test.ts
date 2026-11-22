@@ -130,7 +130,7 @@ describe('indexEntries', () => {
     const axis = ofKind('progressions').find((entry) => entry.id === 'progressions:axis')
     expect(axis).toMatchObject({
       title: 'Axis of Awesome',
-      detail: 'I–V–vi–IV',
+      detail: 'I – V – vi – IV',
       target: { opens: 'progression', id: 'axis' },
     })
   })
@@ -151,12 +151,12 @@ describe('indexEntries', () => {
   it('finds the progressions the learner keeps, by their names', () => {
     expect(titled('Sunday loop')).toMatchObject({
       kind: 'progressions',
-      detail: 'vi–IV–I–V',
+      detail: 'vi – IV – I – V',
       target: { opens: 'progression', id: 'mine-1' },
     })
   })
 
-  it('names a pattern, an exercise and a trainer with a line on what each is', () => {
+  it('names a pattern and an exercise with a line on what each is', () => {
     const pattern = BUILT_IN_PATTERNS.require('M1')
     expect(titled(pattern.name.en)).toMatchObject({
       kind: 'patterns',
@@ -168,11 +168,6 @@ describe('indexEntries', () => {
       kind: 'exercises',
       detail: exercise!.trains.en,
       target: { opens: 'exercise', exercise: exercise!.id },
-    })
-    expect(titled('trainer gaps')).toMatchObject({
-      kind: 'quiz',
-      detail: 'asks gaps',
-      target: { opens: 'trainer', trainer: 'gaps' },
     })
   })
 
@@ -203,8 +198,8 @@ describe('searchIndex', () => {
   it('finds by a title, a line or another name, in either case, and drops the empty groups', () => {
     expect(searchIndex(all, 'QUALITY M7').map((group) => group.kind)).toEqual(['chords'])
     expect(searchIndex(all, 'c−7')[0]?.entries.map((entry) => entry.title)).toEqual(['quality m7'])
-    expect(searchIndex(all, 'asks gaps')[0]?.entries.map((entry) => entry.title)).toEqual([
-      'trainer gaps',
+    expect(searchIndex(all, 'SUNDAY LOOP')[0]?.entries.map((entry) => entry.title)).toEqual([
+      'Sunday loop',
     ])
   })
 

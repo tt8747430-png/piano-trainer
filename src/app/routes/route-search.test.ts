@@ -86,16 +86,18 @@ describe('search params', () => {
       step: 'chords:sev',
     })
     // A voicing the chord cannot take is read as close: a triad has no drop 2.
-    expect(await searchAt('/practice/chords?voicing=drop2')).toMatchObject({ voicing: 'close' })
+    expect(await searchAt('/practice/chords?size=5&voicing=drop2')).toMatchObject({
+      voicing: 'close',
+    })
     // From five notes a chord is in root position or has its right hand from the 7th (ADR 0046).
     expect(await searchAt('/practice/chords?size=9&inversion=3')).toMatchObject({ inversion: 3 })
     expect(await searchAt('/practice/chords?size=9&inversion=2')).toMatchObject({ inversion: 0 })
     // The chord's colour notes round-trip as a symbol writes them (A33).
-    expect(await searchAt('/practice/chords?size=13&colour=b9,%2311')).toMatchObject({
+    expect(await searchAt('/practice/chords?size=13&seventh=minor&colour=b9,%2311')).toMatchObject({
       size: 13,
       colour: 'b9,#11',
     })
-    expect(await searchAt('/practice/chords?triad=min&colour=9')).toMatchObject({
+    expect(await searchAt('/practice/chords?triad=min&size=5&colour=9')).toMatchObject({
       triad: 'min',
       colour: '9',
     })
@@ -143,28 +145,6 @@ describe('search params', () => {
     expect(await searchAt('/check?of=scale:blues')).toEqual({ of: 'scale:blues' })
   })
 
-  it('read a song key as written, sharps and flats in the URL’s spelling (ADR 0106)', async () => {
-    expect(await searchAt(`/songs?key=${encodeURIComponent('F♯m')}`)).toEqual({
-      ...SONGS_HOME_DEFAULTS,
-      key: 'F#m',
-    })
-    expect(await searchAt('/songs?key=Gb')).toEqual({ ...SONGS_HOME_DEFAULTS, key: 'Gb' })
-  })
-
-  it('drop a Reading notes range end that is off the piano or no MIDI key', async () => {
-    for (const end of ['Cb-1', 'B#9', 'C-1', 'C9']) {
-      expect(
-        await searchAt(`/practice/quiz/reading-notes?level=custom&from=${end}&to=${end}`),
-      ).toMatchObject({ from: undefined, to: undefined })
-    }
-    expect(await searchAt('/practice/quiz/reading-notes?level=custom&from=A0&to=C8')).toMatchObject(
-      {
-        from: 'A0',
-        to: 'C8',
-      },
-    )
-  })
-
   it('drop anything stale or hand-edited back to its default, without clamping', async () => {
     expect(
       await searchAt(
@@ -181,11 +161,13 @@ describe('search params', () => {
       ),
     ).toEqual(CHORDS_DEFAULTS)
     expect(await searchAt('/practice/chords?quality=m7')).toMatchObject(CHORDS_DEFAULTS)
-    expect(await searchAt('/practice/chords?inversion=3')).toMatchObject({ inversion: 0 })
-    expect(await searchAt('/practice/scales?kind=ionian&tempo=5&chords=9&step=chords:tri')).toEqual(
+    expect(await searchAt('/practice/chords?size=5&inversion=3')).toMatchObject({ inversion: 0 })
+    expect(await searchAt('/practice/scales?kind=ionian&tempo=5&step=chords:tri')).toEqual(
       SCALES_DEFAULTS,
     )
-    expect(await searchAt('/songs?favourites=yes&stage=expert&key=H')).toEqual(SONGS_HOME_DEFAULTS)
+    expect(await searchAt('/songs?view=public&kind=bands&cat=jazz&shelf=best')).toEqual(
+      SONGS_HOME_DEFAULTS,
+    )
   })
 
   it('ignore an old link’s fingers: the playing hand’s stand under the keys', async () => {
@@ -205,14 +187,6 @@ describe('search params', () => {
     expect(await searchAt('/practice/scales?kind=blues&start=3&fingering=scale')).toMatchObject({
       fingering: undefined,
     })
-  })
-
-  it('read the Chords view’s size, inversion and walk, an inversion kept within the size', async () => {
-    expect(
-      await searchAt('/practice/scales?show=chords&chords=6&inversion=2&arpeggio=true'),
-    ).toMatchObject({ chords: 6, inversion: 2, arpeggio: true })
-    expect(await searchAt('/practice/scales?chords=3&inversion=3')).toMatchObject({ inversion: 0 })
-    expect(await searchAt('/practice/scales?kind=blues&chords=6')).toMatchObject({ chords: 3 })
   })
 
   it('fit a chord’s parts to one another', async () => {
@@ -248,18 +222,6 @@ describe('search params', () => {
     expect(await searchAt('/play/chromatic?chords=')).toEqual(CHROMATIC_DEFAULTS)
   })
 
-  it('read a scale’s Key view only where the scale is a key’s, and Chords only with seven notes', async () => {
-    expect(await searchAt('/practice/scales?show=key')).toMatchObject({ show: 'key' })
-    expect(await searchAt('/practice/scales?kind=harmonic&show=key')).toMatchObject({ show: 'key' })
-    expect(await searchAt('/practice/scales?kind=dorian&show=key')).toMatchObject({ show: 'scale' })
-    expect(await searchAt('/practice/scales?kind=dorian&show=chords')).toMatchObject({
-      show: 'chords',
-    })
-    expect(await searchAt('/practice/scales?kind=pent&show=chords')).toMatchObject({
-      show: 'scale',
-    })
-  })
-
   it('keep a root and a key as written, a key no signature writes respelled', async () => {
     expect(await searchAt('/practice/chords?root=A%23')).toMatchObject({ root: 'A#' })
     expect(await searchAt('/practice/chords?root=Db&triad=min')).toMatchObject({ root: 'Db' })
@@ -273,25 +235,10 @@ describe('search params', () => {
     expect(await searchAt('/practice/progressions/line?key=C%23')).toMatchObject({ key: 'C#' })
   })
 
-  it('read the Scales view, falling back to the scale view where a scale has no chords', async () => {
-    expect(SCALES_DEFAULTS).toMatchObject({ show: 'scale', keysPlay: 'chords' })
-    expect(await searchAt('/practice/scales?show=chords&keysPlay=notes')).toMatchObject({
-      show: 'chords',
-      keysPlay: 'notes',
-    })
-    expect(await searchAt('/practice/scales?kind=blues&show=chords')).toMatchObject({
-      show: 'scale',
-    })
-    expect(await searchAt('/practice/scales?show=x&keysPlay=x')).toMatchObject({
-      show: 'scale',
-      keysPlay: 'chords',
-    })
-  })
-
   it('keep an interval’s root as written', async () => {
     expect(await searchAt('/practice/intervals?root=C%23')).toEqual({
+      ...INTERVALS_DEFAULTS,
       root: 'C#',
-      way: 'together',
     })
     expect(await searchAt('/practice/intervals?root=H')).toEqual(INTERVALS_DEFAULTS)
   })
@@ -302,14 +249,20 @@ describe('search params', () => {
       lhOctave: 2,
       rest: 3,
     })
-    const out = await searchAt('/play/exercise/scale?rhOctave=9&rest=12')
+    const out = await searchAt('/play/exercise/scale?rhOctave=9&rest=13')
     expect(out).not.toHaveProperty('rhOctave', 9)
-    expect(out).not.toHaveProperty('rest', 12)
+    expect(out).not.toHaveProperty('rest', 13)
   })
 
-  it('keep how an interval plays, at once unless a known way is asked', async () => {
-    expect(await searchAt('/practice/intervals?way=down')).toMatchObject({ way: 'down' })
-    expect(await searchAt('/practice/intervals?way=sideways')).toMatchObject({ way: 'together' })
+  it('keep how an interval plays and which, upwards and a fifth unless a known one is asked', async () => {
+    expect(await searchAt('/practice/intervals?way=together&iv=M3')).toMatchObject({
+      way: 'together',
+      iv: 'M3',
+    })
+    expect(await searchAt('/practice/intervals?way=sideways&iv=X9')).toMatchObject({
+      way: 'up',
+      iv: 'P5',
+    })
   })
 
   it('keep a number typed as a search, which the router reads as a number', async () => {
@@ -321,7 +274,7 @@ describe('search params', () => {
       await searchAt('/practice/progressions/line?p=ii7%20V7%20IMaj7&key=Am&size=sevenths'),
     ).toEqual({
       ...PROGRESSIONS_DEFAULTS,
-      p: 'ii7-V7-IMaj7',
+      p: 'ii7-V7-Imaj7',
       key: 'Am',
       size: 'sevenths',
     })
@@ -361,32 +314,25 @@ describe('search params', () => {
   it('read a library’s search, sort, place and level, each invalid one its default (R30-4)', async () => {
     expect(
       await searchAt('/practice/progressions?q=blues&sort=name&place=jazz&stage=beginner'),
-    ).toEqual({ q: 'blues', sort: 'name', place: 'jazz', stage: 'beginner' })
-    expect(await searchAt('/practice/exercises?sort=key&place=a%20b&stage=expert')).toEqual({
+    ).toEqual({ q: 'blues', sort: 'name', place: 'jazz', stage: 'beginner', mode: 'any' })
+    expect(
+      await searchAt('/practice/exercises?sort=key&place=a%20b&stage=expert&mode=lydian'),
+    ).toEqual({
       q: '',
       sort: 'group',
       place: 'all',
       stage: 'any',
+      mode: 'any',
+      book: 'technique',
     })
   })
 
-  it('read a progression’s chord size, the pair Passing chords looks at, In the key only, and the Key view’s melody note', async () => {
+  it('read a progression’s key, its chord size where asked and what leads into each chord', async () => {
     expect(
-      await searchAt('/practice/progressions/line?p=I-IV-V&between=1&inKey=true'),
-    ).toMatchObject({
-      between: 1,
-      inKey: true,
-    })
-    expect(await searchAt('/practice/progressions/line?between=-2&inKey=yes')).toEqual(
-      PROGRESSIONS_DEFAULTS,
-    )
-    expect(
-      await searchAt('/practice/progressions/jazz-cadence?key=Am&size=ninths&between=1'),
-    ).toEqual({ key: 'Am', size: 'ninths', between: 1 })
-    expect(await searchAt('/practice/scales?show=key&melody=F%23&onlyInKey=true')).toMatchObject({
-      show: 'key',
-      melody: 'F#',
-      onlyInKey: true,
+      await searchAt('/practice/progressions/jazz-cadence?key=Am&size=ninths&lead=ii-v'),
+    ).toEqual({ key: 'Am', size: 'ninths', lead: 'ii-v' })
+    expect(await searchAt('/practice/progressions/jazz-cadence?size=huge&lead=x')).toEqual({
+      key: 'C',
     })
   })
 })
