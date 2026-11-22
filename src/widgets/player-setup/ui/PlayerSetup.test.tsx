@@ -3,13 +3,22 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderRouted } from '@/app/testing/render-routed'
 import {
+  createPracticeLibraryStore,
+  PracticeLibraryStoreProvider,
+} from '@/entities/practice-library'
+import {
   BUILT_IN_PATTERNS,
   LEFT_FIGURES,
   RIGHT_FIGURES,
   type AccompanimentChoice,
   type PatternFit,
+  type PatternRef,
 } from '@/entities/pattern'
 import { withTrack, type PlayerStaves } from '@/features/practice'
+import { createFakeAudio } from '@/shared/api/audio'
+import { createFakeArranger } from '@/shared/api/midi'
+import { createMemoryStorage } from '@/shared/lib'
+import { ServicesProvider } from '@/shared/lib/services'
 import type { ScoreTrack } from '@/widgets/practice-player'
 import { PatternCard } from './PatternCard'
 import { PlayerSetup } from './PlayerSetup'
@@ -34,19 +43,54 @@ async function renderSetup(
   const user = userEvent.setup()
   const onFigures = vi.fn()
   const onStaves = vi.fn()
+  const library = createPracticeLibraryStore({
+    storage: createMemoryStorage(),
+    otherTabs: new EventTarget(),
+  })
   const view = await renderRouted(
-    <PlayerSetup
-      figures={{ pattern: 'block', rh: null, lh: null, inversion: null, nearest: true, ...figures }}
-      fit={{ ...SONG, ...fit }}
-      onFigures={onFigures}
+    <ServicesProvider
+      services={{ audio: createFakeAudio(), arranger: createFakeArranger(), midi: null }}
     >
-      <p>The music’s own choices</p>
-      <StavesSection tracks={TRACKS} staves={staves} onChange={onStaves} />
-      <PatternCard />
-    </PlayerSetup>,
+      <PracticeLibraryStoreProvider store={library}>
+        <PlayerSetup
+          figures={{
+            pattern: 'block',
+            rh: null,
+            lh: null,
+            inversion: null,
+            nearest: true,
+            ...figures,
+          }}
+          fit={{ ...SONG, ...fit }}
+          onFigures={onFigures}
+        >
+          <p>The music’s own choices</p>
+          <StavesSection tracks={TRACKS} staves={staves} onChange={onStaves} />
+          <PatternCard />
+        </PlayerSetup>
+      </PracticeLibraryStoreProvider>
+    </ServicesProvider>,
   )
   await user.click(screen.getByRole('button', { name: 'Player settings' }))
   return { user, onFigures, onStaves, ...view }
+}
+
+/** The Pattern page, opened from the Pattern row. */
+const openPatterns = (user: ReturnType<typeof userEvent.setup>) =>
+  user.click(screen.getByRole('button', { name: /^Pattern/ }))
+
+/** A pattern's row on the Pattern page, by its name; its book's fold must be open. */
+const patternRow = (id: PatternRef) =>
+  screen.getByRole('button', {
+    name: (name) => name.startsWith(BUILT_IN_PATTERNS.require(id).name.en),
+  })
+
+/** A pattern's row, found by searching its name: the search opens every fold it narrows to. */
+async function findPattern(user: ReturnType<typeof userEvent.setup>, id: PatternRef) {
+  const search = screen.getByRole('searchbox', { name: 'Search patterns' })
+  await user.clear(search)
+  await user.type(search, BUILT_IN_PATTERNS.require(id).name.en)
+  return patternRow(id)
 }
 
 describe('PlayerSetup', () => {
@@ -118,20 +162,20 @@ describe('PlayerSetup', () => {
     ).toBeInTheDocument()
   })
 
-  it('starts the first chord in root position, moving smoothly after it, by default', async () => {
+  it('starts the first chord in root position, voice-led after it, by default', async () => {
     const { user, onFigures } = await renderSetup()
     expect(screen.getByRole('radio', { name: 'Root' })).toBeChecked()
-    expect(screen.getByRole('switch', { name: /Smooth voice leading/ })).toBeChecked()
+    expect(screen.getByRole('radio', { name: 'Voice-led' })).toBeChecked()
     await user.click(screen.getByRole('radio', { name: '1st' }))
     expect(onFigures).toHaveBeenCalledWith({ inversion: 1 })
-    await user.click(screen.getByRole('switch', { name: /Smooth voice leading/ }))
+    await user.click(screen.getByRole('radio', { name: 'Block' }))
     expect(onFigures).toHaveBeenCalledWith({ nearest: false })
   })
 
   it('draws each inversion on the keys beside its name (ADR 0115)', async () => {
     const { user } = await renderSetup()
-    await user.click(screen.getByRole('button', { name: 'About Inversion' }))
-    const about = await screen.findByRole('dialog', { name: 'Inversion' })
+    await user.click(screen.getByRole('button', { name: 'About First chord’s inversion' }))
+    const about = await screen.findByRole('dialog', { name: 'First chord’s inversion' })
     expect(about).toHaveTextContent('Which note of the first chord sits lowest')
     for (const name of ['Root position: C E G', '1st inversion: E G C', '2nd inversion: G C E'])
       expect(screen.getByRole('img', { name })).toBeInTheDocument()
@@ -140,45 +184,44 @@ describe('PlayerSetup', () => {
   it('fades the position From the chart only where no pattern the chart plays follows it, saying why beside it', async () => {
     const fromChart = { pattern: 'chart' } as const
     const { user, unmount } = await renderSetup({ methodCodes: true, chart: ['flow'] }, fromChart)
-    expect(screen.getByRole('switch', { name: 'Smooth voice leading' })).toHaveAttribute(
+    expect(screen.getByRole('radio', { name: 'Voice-led' })).toHaveAttribute(
       'aria-disabled',
       'true',
     )
-    await user.click(screen.getByRole('button', { name: 'About Inversion' }))
-    expect(await screen.findByRole('dialog', { name: 'Inversion' })).toHaveTextContent(
-      'This pattern plays its own shapes.',
-    )
+    await user.click(screen.getByRole('button', { name: 'About First chord’s inversion' }))
+    expect(
+      await screen.findByRole('dialog', { name: 'First chord’s inversion' }),
+    ).toHaveTextContent('This pattern plays its own shapes.')
     unmount()
     await renderSetup({ methodCodes: true, chart: ['flow', 'block'] }, fromChart)
-    expect(screen.getByRole('switch', { name: 'Smooth voice leading' })).not.toHaveAttribute(
-      'aria-disabled',
-    )
+    expect(screen.getByRole('radio', { name: 'Voice-led' })).not.toHaveAttribute('aria-disabled')
   })
 
-  it('turns Smooth voice leading back on, the URL’s own', async () => {
+  it('turns Voice-led back on, the URL’s own', async () => {
     const { user, onFigures } = await renderSetup({}, { inversion: 2, nearest: false })
     expect(screen.getByRole('radio', { name: '2nd' })).toBeChecked()
-    expect(screen.getByRole('switch', { name: 'Smooth voice leading' })).not.toBeChecked()
-    await user.click(screen.getByRole('switch', { name: /Smooth voice leading/ }))
+    expect(screen.getByRole('radio', { name: 'Block' })).toBeChecked()
+    await user.click(screen.getByRole('radio', { name: 'Voice-led' }))
     expect(onFigures).toHaveBeenCalledWith({ nearest: undefined })
   })
 
-  it('chooses a pattern from its group, keeping tune patterns from music without a tune', async () => {
+  it('chooses a pattern found by its name, keeping tune patterns from music without a tune', async () => {
     const { user, onFigures } = await renderSetup()
-    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
-    expect(
-      screen.getByRole('option', { name: new RegExp(BUILT_IN_PATTERNS.require('r5').name.en) }),
-    ).toHaveAttribute('aria-disabled', 'true')
-    await user.click(
-      screen.getByRole('option', { name: new RegExp(BUILT_IN_PATTERNS.require('ballad').name.en) }),
-    )
+    await openPatterns(user)
+    expect(await findPattern(user, 'r5')).toBeDisabled()
+    expect(screen.getByText('Needs a melody staff')).toBeInTheDocument()
+    await user.click(await findPattern(user, 'ballad'))
     expect(onFigures).toHaveBeenCalledWith({ pattern: 'ballad' })
   })
 
   it('offers From the chart only where the chart names its methods', async () => {
-    const { user } = await renderSetup({ methodCodes: true })
-    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
-    expect(screen.getByRole('option', { name: /From the chart/ })).toBeInTheDocument()
+    const { user, unmount } = await renderSetup({ methodCodes: true })
+    await openPatterns(user)
+    expect(screen.getByRole('button', { name: 'From the chart' })).toBeInTheDocument()
+    unmount()
+    const again = await renderSetup()
+    await openPatterns(again.user)
+    expect(screen.queryByRole('button', { name: 'From the chart' })).not.toBeInTheDocument()
   })
 
   it('goes back to the pattern’s own figure', async () => {
@@ -208,61 +251,43 @@ describe('PlayerSetup', () => {
 
   it('closes what plays the key’s triads to music without a key', async () => {
     const { user } = await renderSetup({ key: false })
-    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
-    expect(
-      screen.getByRole('option', {
-        name: (name) => name.includes(BUILT_IN_PATTERNS.require('flow').name.en),
-      }),
-    ).toHaveAttribute('aria-disabled', 'true')
+    await openPatterns(user)
+    expect(await findPattern(user, 'flow')).toBeDisabled()
     expect(screen.getByText('Needs a key')).toBeInTheDocument()
   })
 
   it('keeps the Chord flow for music in a key', async () => {
     const { user } = await renderSetup()
-    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
-    expect(
-      screen.getByRole('option', {
-        name: (name) => name.includes(BUILT_IN_PATTERNS.require('flow').name.en),
-      }),
-    ).not.toHaveAttribute('aria-disabled')
+    await openPatterns(user)
+    expect(await findPattern(user, 'flow')).toBeEnabled()
   })
 
   it('closes what plays inside a beat to a piece in 6/8 or 12/8, keeping what plays on it', async () => {
     const { user } = await renderSetup({ simpleTime: false })
-    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
-    expect(
-      screen.getByRole('option', {
-        name: (name) => name.includes(BUILT_IN_PATTERNS.require('ballad').name.en),
-      }),
-    ).toHaveAttribute('aria-disabled', 'true')
-    expect(
-      screen.getByRole('option', {
-        name: (name) => name.includes(BUILT_IN_PATTERNS.require('r1').name.en),
-      }),
-    ).not.toHaveAttribute('aria-disabled')
-    expect(screen.getAllByText('Needs simple time').length).toBeGreaterThan(0)
+    await openPatterns(user)
+    expect(await findPattern(user, 'ballad')).toBeDisabled()
+    expect(screen.getByText('Needs simple time')).toBeInTheDocument()
+    expect(await findPattern(user, 'r1')).toBeEnabled()
   })
 
   it('opens on its first page again after it closes on a list', async () => {
     const { user } = await renderSetup()
-    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
+    await openPatterns(user)
     await user.keyboard('{Escape}')
     await user.click(screen.getByRole('button', { name: 'Player settings' }))
     expect(screen.getByText('The music’s own choices')).toBeInTheDocument()
   })
 
-  it('closes from a Close a screen reader reaches', async () => {
+  it('closes from its Done', async () => {
     const { user } = await renderSetup()
-    await user.click(screen.getByRole('button', { name: 'Close' }))
+    await user.click(screen.getByRole('button', { name: 'Done' }))
     expect(screen.queryByText('The music’s own choices')).not.toBeInTheDocument()
   })
 
   it('opens a list on its choice, and goes back to the row that opened it', async () => {
     const { user } = await renderSetup()
-    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
-    expect(
-      screen.getByRole('option', { name: new RegExp(BUILT_IN_PATTERNS.require('block').name.en) }),
-    ).toHaveFocus()
+    await openPatterns(user)
+    expect(patternRow('block')).toHaveFocus()
     await user.keyboard('{Enter}')
     expect(screen.getByRole('button', { name: /^Pattern/ })).toHaveFocus()
     await user.click(screen.getByRole('button', { name: /^Right hand/ }))

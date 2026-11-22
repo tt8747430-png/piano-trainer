@@ -121,7 +121,7 @@ describe('LiveKeyboard', () => {
     expect(g).toHaveAttribute('data-down')
     for (const key of [c, e]) {
       expect(key).not.toHaveAttribute('data-down')
-      expect(key).toHaveClass('bg-role-root-wash')
+      expect(key).toHaveClass('bg-role-root')
     }
   })
 
