@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { ChevronRight, Ellipsis, Plus, Users } from 'lucide-react'
+import { Ellipsis, Plus, Users } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FeatureSwitch, Group } from '@/shared/api/admin'
