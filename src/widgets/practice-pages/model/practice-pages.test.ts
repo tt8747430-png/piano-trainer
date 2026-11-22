@@ -9,15 +9,10 @@ import {
 
 describe('Practice’s pages', () => {
   it('lists learning before training and the tools last, by relevance (R32)', () => {
-    expect(PRACTICE_GROUPS.map((group) => group.id)).toEqual([
-      'theory',
-      'playing',
-      'training',
-      'tools',
-    ])
+    expect(PRACTICE_GROUPS.map((group) => group.id)).toEqual(['theory', 'exercises', 'tools'])
     expect(PRACTICE_GROUPS.at(-1)).toEqual({
       id: 'tools',
-      pages: ['metronome', 'tuner', 'chordFinder', 'circleOfFifths'],
+      pages: ['chordPlayer', 'metronome', 'tuner', 'chordFinder', 'circleOfFifths'],
     })
   })
 
@@ -34,7 +29,7 @@ describe('Practice’s pages', () => {
   it('finds the page a path is on, its own or one under it, and none off Practice (R32)', () => {
     expect(practicePageAt('/practice/metronome')).toBe('metronome')
     expect(practicePageAt('/practice/progressions/axis')).toBe('progressions')
-    expect(practicePageAt('/practice/quiz/chords')).toBe('quiz')
+    expect(practicePageAt('/practice/exercises/hanon')).toBe('exercises')
     expect(practicePageAt('/practice/chords-and-more')).toBeNull()
     expect(practicePageAt('/practice')).toBeNull()
     expect(practicePageAt('/songs')).toBeNull()

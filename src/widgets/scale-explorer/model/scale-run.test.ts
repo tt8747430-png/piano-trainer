@@ -74,18 +74,20 @@ describe('scaleRunOf', () => {
 })
 
 describe('runShown', () => {
-  it('marks the playing hand’s keys with their degrees, no fingers on them (R34)', () => {
+  it('lights one octave of the playing hand’s keys, each named, no fingers on them (R34)', () => {
     for (const hands of ['rh', 'lh', 'both'] as const) {
       const run = scaleRunOf({ ...view, hands })
       const shown = runShown(run, hands)
       const played = new Set(run.music.notes.map((n) => n.midi))
-      expect(new Set(shown.keys)).toEqual(played)
-      expect([...shown.marks.keys()].every((key) => played.has(key))).toBe(true)
+      expect(shown.keys).toEqual([...shown.marks.keys()])
+      expect(shown.keys).toHaveLength(8)
+      expect(shown.keys.every((key) => played.has(key))).toBe(true)
     }
     const lh = runShown(scaleRunOf({ ...view, hands: 'lh' }), 'lh')
-    expect(lh.marks.get(midi(48))).toMatchObject({ label: '1' })
-    expect(runShown(scaleRunOf(view), 'rh').marks.get(midi(60))).toEqual(
-      expect.not.objectContaining({ finger: expect.anything() }),
-    )
+    expect(lh.marks.get(midi(48))).toEqual({ tone: 'tonic', label: 'C' })
+    expect(runShown(scaleRunOf(view), 'rh').marks.get(midi(60))).toEqual({
+      tone: 'tonic',
+      label: 'C',
+    })
   })
 })

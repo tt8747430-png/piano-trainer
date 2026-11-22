@@ -6,16 +6,16 @@ import { intervalMusic } from './interval-music'
 const example = intervalExample(note('C'), 'M3')
 
 describe('an interval on a staff (A22)', () => {
-  it('writes the way it is played: up, down, or together', () => {
+  it('writes the way it is played in whole notes: up, down, or together', () => {
     const at = (way: 'up' | 'down' | 'together') =>
       intervalMusic(example.music, way).notes.map((each) => [each.midi, each.startTick])
     expect(at('up')).toEqual([
       [example.low, 0],
-      [example.high, 2 * TICKS_PER_BEAT],
+      [example.high, 4 * TICKS_PER_BEAT],
     ])
     expect(at('down')).toEqual([
       [example.high, 0],
-      [example.low, 2 * TICKS_PER_BEAT],
+      [example.low, 4 * TICKS_PER_BEAT],
     ])
     expect(at('together')).toEqual([
       [example.low, 0],
