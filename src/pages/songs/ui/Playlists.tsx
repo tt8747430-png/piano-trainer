@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FOLDER_PAINTS, useFolderName, useLibrary, type ShelvedFolder } from '@/entities/library'
 import { useRepertoire, type Entry, type PieceId } from '@/entities/piece'
-import { readSharedEntries, useGroupsData } from '@/features/share-folder'
+import { readSharedEntries, useGroupsData, useKeepSharesCurrent } from '@/features/share-folder'
 import { cn, isOneOf } from '@/shared/lib'
 import { OpensMark } from '@/shared/ui'
 import { PlaylistCover } from '@/widgets/piece-cover'
@@ -85,7 +85,9 @@ export function Playlists({ page }: { page: LibraryPage }) {
   const repertoire = useRepertoire()
   const favourites = useLibrary((state) => state.favourites)
   const favouritesLine = useHoldsLine({ folders: 0, songs: favourites.length })
-  const { data } = useGroupsData()
+  const { data, reload } = useGroupsData()
+  // While the library is open the learner's shared folders follow their folders (R30 S6).
+  useKeepSharesCurrent(data, reload)
   const shared = data.kind === 'ready' ? data.shared.filter((folder) => !folder.mine) : []
   const row = cn(
     'flex min-w-0 flex-1 items-center text-foreground transition-colors duration-150 ease-out',
