@@ -23,34 +23,46 @@ const kept = (state: object) => {
   )
   return storage
 }
+const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+/** A run of rows, named by its place and its count. */
+const run = (name: string) =>
+  screen.getByRole('region', { name: new RegExp(`^${escaped(name)}\\d+$`) })
+/** The runs' names, without their counts. */
+const runs = () =>
+  screen.getAllByRole('heading', { level: 2 }).map((each) =>
+    [...(each.querySelector('button')?.childNodes ?? [])]
+      .filter((node) => node.nodeType === Node.TEXT_NODE)
+      .map((node) => node.textContent)
+      .join(''),
+  )
 const SAD = { id: 'mine-1', name: 'Sunday loop', line: 'vi-IV-I-V', minor: false }
 
 describe('Practice → Progressions, the library (R30-4)', () => {
-  it('opens on the library: each style a run of rows, each its line and its chords as tiles, no tabs (R34)', async () => {
+  it('opens on the library: each style a run of rows, each its numerals and its key, no tabs (R34)', async () => {
     await renderApp('/practice/progressions')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Progressions' }),
     ).toBeInTheDocument()
     expect(screen.queryByRole('radiogroup', { name: 'Progressions' })).not.toBeInTheDocument()
-    const jazz = screen.getByRole('region', { name: 'Jazz' })
-    expect(
-      within(jazz).getByRole('link', {
-        name: 'Jazz cadence Smooth and certain, jazz’s way home ii–V–I',
-      }),
-    ).toHaveAttribute('href', '/practice/progressions/jazz-cadence')
-    expect(screen.getAllByRole('link', { name: /^Jazz cadence / })).toHaveLength(1)
+    expect(runs().slice(0, 3)).toEqual(['Pop', 'Rock', 'Jazz'])
+    const cadence = within(run('Jazz')).getByRole('link', { name: /^Jazz cadence/ })
+    expect(cadence).toHaveAttribute('href', '/practice/progressions/jazz-cadence')
+    expect(cadence).toHaveTextContent('ii – V – I')
+    expect(cadence).toHaveTextContent('Major')
+    expect(screen.getAllByRole('link', { name: /^Jazz cadence/ })).toHaveLength(1)
   })
 
-  it('narrows to one style from its Filter, the tree’s own place', async () => {
+  it('narrows to one style from Sort and filter, said as a chip that takes it off', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions')
-    await user.click(await screen.findByRole('button', { name: 'Filters' }))
-    await user.click(await screen.findByRole('button', { name: 'Jazz' }))
+    await user.click(await screen.findByRole('button', { name: 'Sort and filter' }))
+    const style = await screen.findByRole('region', { name: 'Style' })
+    await user.click(within(style).getByRole('button', { name: 'Jazz' }))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ place: 'jazz' }))
     await user.click(screen.getByRole('button', { name: /^Show / }))
-    await waitFor(() =>
-      expect(screen.queryByRole('region', { name: 'Pop' })).not.toBeInTheDocument(),
-    )
+    await waitFor(() => expect(runs()).toEqual(['Jazz']))
+    await user.click(screen.getByRole('button', { name: 'Remove Jazz' }))
+    await waitFor(() => expect(runs()).toContain('Pop'))
   })
 
   it('makes a progression a favourite from its More, first under Favourites, kept', async () => {
@@ -58,7 +70,8 @@ describe('Practice → Progressions, the library (R30-4)', () => {
     const { practiceLibraryStore } = await renderApp('/practice/progressions')
     await user.click(await screen.findByRole('button', { name: 'More for Jazz cadence' }))
     await user.click(await screen.findByRole('menuitem', { name: 'Add to Favourites' }))
-    const favourites = await screen.findByRole('region', { name: 'Favourites' })
+    await waitFor(() => expect(runs()[0]).toBe('Favourites'))
+    const favourites = run('Favourites')
     expect(within(favourites).getByRole('link', { name: /^Jazz cadence/ })).toBeInTheDocument()
     expect(practiceLibraryStore.getState().favourites.progressions).toEqual(['jazz-cadence'])
   })
@@ -68,23 +81,20 @@ describe('Practice → Progressions, the library (R30-4)', () => {
       storage: kept({ progressions: [SAD], nextOwn: 2 }),
     })
     await screen.findByRole('heading', { level: 1, name: 'Progressions' })
-    const headings = screen.getAllByRole('heading', { level: 2 }).map((each) => each.textContent)
-    expect(headings.at(-1)).toBe('Mine')
+    expect(runs().at(-1)).toBe('Mine')
     expect(
-      within(screen.getByRole('region', { name: 'Mine' })).getByRole('link', {
+      within(run('Mine')).getByRole('link', {
         name: /^Sunday loop/,
       }),
     ).toHaveAttribute('href', '/practice/progressions/mine-1')
   })
 
-  it('keeps a new progression typed from the floating +, and opens its page', async () => {
+  it('keeps a new progression typed from the floating New, and opens its page', async () => {
     const user = userEvent.setup()
     const { router, practiceLibraryStore } = await renderApp('/practice/progressions')
     await screen.findByRole('heading', { level: 1, name: 'Progressions' })
-    const floating = document.querySelector<HTMLElement>('[data-slot="floating-actions"]')
-    await user.click(
-      within(floating ?? document.body).getByRole('button', { name: 'New progression' }),
-    )
+    await user.click(screen.getByRole('button', { name: 'New' }))
+    await user.click(await screen.findByRole('button', { name: 'New progression' }))
     const sheet = await screen.findByRole('dialog', { name: 'New progression' })
     await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Sunday loop')
     const field = within(sheet).getByRole('textbox', { name: 'Numerals or chords' })
@@ -98,7 +108,7 @@ describe('Practice → Progressions, the library (R30-4)', () => {
       { id: 'mine-1', name: 'Sunday loop', line: 'vi-IV-I-V', minor: false },
     ])
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Sunday loop' }),
+      await screen.findByRole('heading', { level: 2, name: 'Sunday loop' }),
     ).toBeInTheDocument()
   })
 
@@ -116,16 +126,20 @@ describe('Practice → Progressions, the library (R30-4)', () => {
     expect(untranslated(document.body).filter((text) => text !== 'Yesterday')).toEqual([])
   })
 
-  it('shows the styles in the tree on a laptop, and a table of Name, Style and Numerals', async () => {
+  it('shows a table of Name, Numerals and Key on a laptop, each style its fold', async () => {
     stubMatchMedia({ dark: true })
     await renderApp('/practice/progressions')
-    const tree = await screen.findByRole('navigation', { name: 'Progressions by style' })
-    expect(within(tree).getByRole('button', { name: /^Jazz\s*\d+$/ })).toBeInTheDocument()
+    const table = await screen.findByRole('table', { name: 'The library' })
+    const [head] = within(table).getAllByRole('rowgroup')
     expect(
-      within(screen.getByRole('table'))
+      within(head ?? table)
         .getAllByRole('columnheader')
         .map((cell) => cell.textContent),
-    ).toEqual(['Name', 'Style', 'Numerals', 'Actions'])
+    ).toEqual(['Name', 'Numerals', 'Key', 'Actions'])
+    expect(within(table).getByRole('button', { name: /^Jazz\s*\d+$/ })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    )
   })
 })
 
@@ -139,9 +153,8 @@ describe('A progression’s own page (R30-4)', () => {
 
   it('opens the Chord player on its chords', async () => {
     await renderApp('/practice/progressions/axis?key=G')
-    const row = await screen.findByRole('link', { name: /^Play it in the Chord player/ })
-    expect(row.getAttribute('href')).toMatch(/^\/practice\/chord-player\?/)
-    expect(decodeURIComponent(row.getAttribute('href') ?? '')).toMatch(/key=G/)
+    const row = await screen.findByRole('link', { name: 'Open in the Chord player' })
+    expect(row).toHaveAttribute('href', '/practice/chord-player?p=I-V-vi-IV&key=G')
   })
 
   it('keeps a line typed in Mine from its bar', async () => {
@@ -157,7 +170,7 @@ describe('A progression’s own page (R30-4)', () => {
     expect(practiceLibraryStore.getState().progressions[0]).toMatchObject({ line: 'I-I-IV' })
   })
 
-  it('keeps its own line changed on its page, and deletes it, asked first', async () => {
+  it('keeps its own line changed on its page, and deletes it at once, with Undo', async () => {
     const user = userEvent.setup()
     const { router, practiceLibraryStore } = await renderApp('/practice/progressions/mine-1', {
       storage: kept({ progressions: [SAD], nextOwn: 2 }),
@@ -166,11 +179,15 @@ describe('A progression’s own page (R30-4)', () => {
     await user.clear(field)
     await user.type(field, 'I IV')
     await waitFor(() => expect(practiceLibraryStore.getState().progressions[0]?.line).toBe('I-IV'))
-    await user.click(screen.getByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Delete' }))
-    await user.click(await screen.findByRole('button', { name: 'Delete' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/progressions'))
+    // Its More's one action stands in the bar itself.
+    await user.click(screen.getByRole('button', { name: 'Delete' }))
+    await waitFor(() =>
+      expect(router.state.location.href).toBe('/practice/progressions?place=mine'),
+    )
     expect(practiceLibraryStore.getState().progressions).toEqual([])
+    expect(await screen.findByText('“Sunday loop” deleted')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    expect(practiceLibraryStore.getState().progressions).toHaveLength(1)
   })
 
   it('is not found for a progression there is not', async () => {
