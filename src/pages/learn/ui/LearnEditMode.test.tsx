@@ -10,7 +10,6 @@ import { stubTextLayout } from '@/shared/test/layout'
 import { JOURNEYS, type Journey } from '@/entities/lesson'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
 import { createFakeContentEditing } from '@/shared/api/content-editing'
-import { confirmAsked } from '@/shared/test/confirm'
 
 const JOURNEY = JOURNEYS[0]!
 const [FIRST, SECOND] = JOURNEY.chapters
@@ -27,21 +26,37 @@ const editing = () =>
     items: [{ kind: 'journey', id: JOURNEY.id, body: JOURNEY, meta: {} }],
   })
 
-async function publish(user: ReturnType<typeof userEvent.setup>) {
-  await screen.findByText('Saved · not published', {}, { timeout: 3000 })
-  await user.click(screen.getByRole('button', { name: 'Publish' }))
-  await user.click(
-    within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
-  )
-  await screen.findByText('Published. Learners will receive it the next time they open the app.')
+/** The level's page, its Edit mode on where `editing`. */
+const LEVEL = `/levels/${JOURNEY.id}`
+const EDITING = `${LEVEL}?edit=1`
+
+/** Publish in Edit's bar, and what its toast says, in each language. */
+const PUBLISH = {
+  en: {
+    word: 'Publish',
+    said: 'Published. Learners will receive it the next time they open the app.',
+  },
+  ru: {
+    word: 'Опубликовать',
+    said: 'Опубликовано. Ученики получат версию при следующем запуске приложения.',
+  },
 }
 
-describe('a level’s Edit mode, in place on the Lessons (R29 B4)', () => {
+/** Publish in Edit's bar: one tap, once the draft holds a change. */
+async function publish(user: ReturnType<typeof userEvent.setup>, locale: 'en' | 'ru' = 'en') {
+  const { word, said } = PUBLISH[locale]
+  const button = await screen.findByRole('button', { name: word })
+  await waitFor(() => expect(button).toBeEnabled(), { timeout: 3000 })
+  await user.click(button)
+  await screen.findByText(said)
+}
+
+describe('a level’s Edit mode, in place on its page (R29 B4)', () => {
   if (!FIRST || !SECOND) throw new Error('a journey of two chapters at least')
 
   it('shows an editor handles, rename, remove and + in place; Done leaves', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/', {
+    const { router } = await renderApp(LEVEL, {
       auth: await signedInAs('editor'),
       contentEditing: editing(),
     })
@@ -70,7 +85,7 @@ describe('a level’s Edit mode, in place on the Lessons (R29 B4)', () => {
   it('removes a step from its menu and publishes the level', async () => {
     const user = userEvent.setup()
     const content = editing()
-    await renderApp('/?edit=1', { auth: await signedInAs('editor'), contentEditing: content })
+    await renderApp(EDITING, { auth: await signedInAs('editor'), contentEditing: content })
     const steps = await screen.findByRole('list', { name: `Steps: ${FIRST.title.en}` })
     const [first] = within(steps).getAllByRole('listitem')
     if (!first) throw new Error('a chapter of a step at least')
@@ -81,30 +96,32 @@ describe('a level’s Edit mode, in place on the Lessons (R29 B4)', () => {
     expect(body.chapters[0]?.steps).toEqual(FIRST.steps.slice(1))
   })
 
-  it('removes a chapter once asked', async () => {
+  it('removes a chapter at once, Undo in its toast', async () => {
     const user = userEvent.setup()
     const content = editing()
-    await renderApp('/?edit=1', { auth: await signedInAs('editor'), contentEditing: content })
+    await renderApp(EDITING, { auth: await signedInAs('editor'), contentEditing: content })
     await user.click(await screen.findByRole('button', { name: `Chapter: ${SECOND.title.en}` }))
     await user.click(await screen.findByRole('menuitem', { name: 'Remove chapter' }))
-    await confirmAsked(user, 'Remove', `Remove “${SECOND.title.en}”?`)
+    expect(await screen.findByRole('button', { name: 'Undo' })).toBeInTheDocument()
     await publish(user)
     const body = content.body('journey', JOURNEY.id) as Journey
     expect(body.chapters.map((chapter) => chapter.id)).not.toContain(SECOND.id)
   })
 
-  it('renames a chapter in place, in the language the draft’s menu says', async () => {
+  it('renames a chapter in place, in the language the app is in', async () => {
     const user = userEvent.setup()
     const content = editing()
-    await renderApp('/?edit=1', { auth: await signedInAs('editor'), contentEditing: content })
-    await user.click(await screen.findByRole('button', { name: 'Publishing' }))
-    await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
-    const name = within(screen.getByRole('region', { name: FIRST.title.en })).getByRole('textbox', {
-      name: 'Chapter name',
+    await renderApp(EDITING, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+      locale: 'ru',
     })
+    const name = within(await screen.findByRole('region', { name: FIRST.title.ru })).getByRole(
+      'textbox',
+    )
     expect(name).toHaveValue(FIRST.title.ru)
     await user.type(name, '!')
-    await publish(user)
+    await publish(user, 'ru')
     const body = content.body('journey', JOURNEY.id) as Journey
     expect(body.chapters[0]?.title).toEqual({ en: FIRST.title.en, ru: `${FIRST.title.ru}!` })
   })
@@ -112,7 +129,7 @@ describe('a level’s Edit mode, in place on the Lessons (R29 B4)', () => {
   it('adds a chapter, and a new lesson to it that opens in the lesson editor', async () => {
     const user = userEvent.setup()
     const content = editing()
-    const { router } = await renderApp('/?edit=1', {
+    const { router } = await renderApp(EDITING, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
@@ -133,25 +150,9 @@ describe('a level’s Edit mode, in place on the Lessons (R29 B4)', () => {
     })
   })
 
-  it('opens another level from its chips, still in Edit mode', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/?edit=1', {
-      auth: await signedInAs('editor'),
-      contentEditing: editing(),
-    })
-    const levels = await screen.findByRole('radiogroup', { name: 'Level' })
-    await user.click(within(levels).getByRole('radio', { name: 'Intermediate' }))
-    await waitFor(() =>
-      expect(router.state.location.search).toMatchObject({
-        journey: JOURNEYS[1]!.id,
-        edit: true,
-      }),
-    )
-  })
-
   it('is not a learner’s: no Edit, and an Edit link opens the page they see', async () => {
-    await renderApp('/?edit=1', { auth: await signedInAs('learner') })
-    await screen.findByRole('heading', { level: 1, name: 'Learn' })
+    await renderApp(EDITING, { auth: await signedInAs('learner') })
+    await screen.findByRole('heading', { level: 1, name: 'Foundations' })
     expect(screen.queryByRole('button', { name: 'Edit' })).toBeNull()
     expect(screen.queryByRole('button', { name: 'Add chapter' })).toBeNull()
   })
@@ -160,20 +161,19 @@ describe('a level’s Edit mode, in place on the Lessons (R29 B4)', () => {
 describe('the Courses’ shelves in Edit mode, in place (R29 B4)', () => {
   it('lists each shelf’s courses, each dragged by its handle, New course at its end', async () => {
     const user = userEvent.setup()
-    await renderApp('/?view=courses', {
+    await renderApp('/courses', {
       auth: await signedInAs('editor'),
       contentEditing: createFakeContentEditing(),
     })
-    // No shelf's New course outside Edit mode: an editor sees the page a learner sees, Your courses'
-    // own New course (R30-5) with it.
-    await screen.findByRole('heading', { level: 1, name: 'Learn' })
+    // No shelf's New course outside Edit mode: an editor sees the page a learner sees.
+    await screen.findByRole('heading', { level: 1, name: 'Courses' })
     expect(
-      within(screen.getByRole('region', { name: 'Beginner courses' })).queryByRole('button', {
+      within(screen.getByRole('region', { name: 'Beginner' })).queryByRole('button', {
         name: 'New course',
       }),
     ).toBeNull()
     await user.click(screen.getByRole('button', { name: 'Edit' }))
-    const beginner = await screen.findByRole('region', { name: 'Beginner courses' })
+    const beginner = await screen.findByRole('region', { name: 'Beginner' })
     const rows = within(within(beginner).getByRole('list')).getAllByRole('listitem')
     const courses = coursesOn('beginner')
     expect(rows).toHaveLength(courses.length)
@@ -186,8 +186,8 @@ describe('the Courses’ shelves in Edit mode, in place (R29 B4)', () => {
   })
 
   it('has no Edit for a learner', async () => {
-    await renderApp('/?view=courses&edit=1', { auth: await signedInAs('learner') })
-    await screen.findByRole('heading', { level: 1, name: 'Learn' })
+    await renderApp('/courses?edit=1', { auth: await signedInAs('learner') })
+    await screen.findByRole('heading', { level: 1, name: 'Courses' })
     expect(screen.queryByRole('button', { name: 'Edit' })).toBeNull()
     expect(screen.queryByRole('button', { name: /^Move: / })).toBeNull()
   })
@@ -200,7 +200,7 @@ describe('the Courses’ About (R29 B9)', () => {
     stubTextLayout()
     const user = userEvent.setup()
     const content = createFakeContentEditing()
-    await renderApp('/?view=courses&edit=1', {
+    await renderApp('/courses?edit=1', {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
@@ -208,21 +208,31 @@ describe('the Courses’ About (R29 B9)', () => {
     const editor = (doc as HTMLElement & { editor: Editor }).editor
     act(() => void editor.commands.focus('end'))
     await waitFor(() => expect(editor.view.dom).toHaveFocus())
-    await user.keyboard('/section')
-    await screen.findByRole('listbox', { name: 'Insert' })
-    await user.keyboard('{Enter}Where to begin')
+    await user.keyboard('/note')
+    await within(await screen.findByRole('listbox', { name: 'Insert' })).findByRole('option', {
+      name: 'Note',
+    })
+    await user.keyboard('{Enter}')
+    await waitFor(() => expect(editor.getText()).not.toContain('/note'))
+    await user.keyboard('Begin with the beginner’s shelf.')
     await waitFor(
       async () => {
         const draft = await content.draft('catalog', 'courses')
         const body = draft.ok ? (draft.value?.body as CourseOrder | undefined) : undefined
-        expect(body?.about).toEqual([{ heading: { en: 'Where to begin', ru: '' }, blocks: [] }])
+        expect(body?.about?.[0]?.blocks).toContainEqual(
+          expect.objectContaining({
+            kind: 'note',
+            text: { en: 'Begin with the beginner’s shelf.', ru: '' },
+          }),
+        )
         expect(body?.courses.length).toBeGreaterThan(0)
       },
       { timeout: 3000 },
     )
   })
 
-  it('is read over the shelves, each block in its style', async () => {
+  it('is read in the Courses’ ⓘ, each block in its style', async () => {
+    const user = userEvent.setup()
     keepContent([
       {
         kind: 'catalog',
@@ -248,7 +258,8 @@ describe('the Courses’ About (R29 B9)', () => {
         },
       },
     ])
-    await renderApp('/?view=courses')
+    await renderApp('/courses')
+    await user.click(await screen.findByRole('button', { name: 'About Courses' }))
     const about = await screen.findByRole('region', { name: 'About the courses' })
     const words = within(about).getByText('Begin with the beginner’s shelf.')
     expect(
