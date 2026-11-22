@@ -19,7 +19,10 @@ describe('locales', () => {
         .map(([key]) => key)
         .sort()
     const english = keys(en)
-    const counted = english.flatMap((key) => (key.endsWith('_other') ? [key.slice(0, -6)] : []))
+    // An ordinal (1st, 2nd, 3rd) is keyed as English's, whose forms are its own.
+    const counted = english.flatMap((key) =>
+      key.endsWith('_other') && !key.endsWith('_ordinal_other') ? [key.slice(0, -6)] : [],
+    )
     // Russian counts in one, few, many and other: those beyond English's are its own.
     const more = counted.flatMap((base) => [`${base}_few`, `${base}_many`])
     expect(keys(ru).filter((key) => !more.includes(key))).toEqual(english)

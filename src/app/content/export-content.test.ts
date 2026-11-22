@@ -27,6 +27,7 @@ describe('exportContent', () => {
       id: course?.id,
       title: course?.title,
       summary: course?.summary,
+      line: course?.line,
       lessons: course?.lessons.map((lesson) => lesson.id),
       shelf: course?.shelf,
       stage: course?.stage,

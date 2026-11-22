@@ -2,6 +2,7 @@
 import type { AnyRoute } from '@tanstack/react-router'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { FOLDER_PAINTS, FOLDER_PICTURES, libraryCatalog } from '@/entities/library'
+import { lessonPlace } from '@/entities/lesson'
 import { makeFolder } from '@/features/manage-library'
 import { stubMatchMedia } from '@/shared/test/match-media'
 import { testContext, testRouter } from '../testing/test-context'
@@ -128,16 +129,17 @@ describe('parents', () => {
     const at = (routeId: string, params: Record<string, string>, search = {}) =>
       parentOf({ routeId, params, search }, learners[0]!)
     expect(await at('/shell/lessons/$lessonId', { lessonId: 'triads' })).toMatchObject({
+      to: '/levels/$levelId',
+      params: { levelId: lessonPlace('triads')?.journey.id },
+    })
+    expect(await at('/shell/lessons/$lessonId', { lessonId: 'no-such-lesson' })).toMatchObject({
       to: '/',
-      search: { view: 'lessons' },
     })
     const lesson = { courseId: 'gorshkov', lessonId: 'chord-pulse' }
     expect(await at('/shell/courses/$courseId/$lessonId', lesson)).toMatchObject({
       to: '/courses/$courseId',
     })
-    expect(await at('/shell/courses/$courseId', lesson)).toMatchObject({
-      search: { view: 'courses' },
-    })
+    expect(await at('/shell/courses/$courseId', lesson)).toMatchObject({ to: '/courses' })
     expect(
       await at('/full-screen/lessons/$lessonId/example', lesson, { course: 'gorshkov' }),
     ).toMatchObject({ to: '/courses/$courseId/$lessonId/edit' })
