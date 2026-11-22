@@ -111,11 +111,8 @@ describe('Diagrams, its summary (ADR 0108)', () => {
   })
 })
 
-/**
- * Diagrams' pair, the cursor at a bar's first beat, under reduced motion so it settles at once.
- * jsdom lays nothing out: each diagram is 300px wide.
- */
-function renderPair(bar: number) {
+/** Diagrams' row, the cursor at a bar's first beat, under reduced motion so it moves at once. */
+function renderRow(bar: number) {
   vi.stubGlobal('matchMedia', (media: string) => ({
     matches: media.includes('prefers-reduced-motion'),
     media,
@@ -126,16 +123,13 @@ function renderPair(bar: number) {
     onchange: null,
     dispatchEvent: () => false,
   }))
-  vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(
-    DOMRect.fromRect({ width: 300, height: 300 }),
-  )
   const practice = {
     state: { ...initialPractice(performance, 'listen', 'both'), beatGroup: barGroup(bar) },
     clock: null,
     jumpToBeatGroup: vi.fn(),
     restart: vi.fn(),
   }
-  const { container, unmount } = renderWithSettings(
+  const { unmount } = renderWithSettings(
     <ServicesProvider
       services={{
         audio: createFakeAudio(),
@@ -158,83 +152,43 @@ function renderPair(bar: number) {
       />
     </ServicesProvider>,
   )
-  const pair = container.querySelector<HTMLElement>('[data-area="chords"]')!
-  /** The diagram of the chord sounding. */
-  const sounding = () => pair.querySelector<HTMLElement>('[data-diagram]:not([inert])')!
-  return { practice, pair, sounding, unmount }
+  const row = screen.getByRole('group', { name: 'Chords, one at a time' })
+  /** The row's slots, the one sounding marked `*`. */
+  const slots = () =>
+    within(row)
+      .getAllByRole('button')
+      .map((slot) => `${slot.textContent}${slot.getAttribute('aria-current') ? '*' : ''}`)
+  return { practice, row, slots, unmount }
 }
 
-const finger = { pointerId: 1, pointerType: 'touch', isPrimary: true }
-
-/**
- * A finger down on a diagram, along by `by` px, slowly (a tenth of a second a step: no flick) or
- * as quick as a flick, then up unless it stays.
- */
-function swipe(on: HTMLElement, by: number, { lift = true, ms = 100 } = {}) {
-  vi.useFakeTimers({ toFake: ['Date'] })
-  onTestFinished(() => void vi.useRealTimers())
-  const step = () => vi.setSystemTime(Date.now() + ms)
-  fireEvent.pointerDown(on, { ...finger, buttons: 1, clientX: 400, clientY: 100 })
-  step()
-  fireEvent.pointerMove(on, { ...finger, buttons: 1, clientX: 400 + by / 2, clientY: 100 })
-  step()
-  fireEvent.pointerMove(on, { ...finger, buttons: 1, clientX: 400 + by, clientY: 100 })
-  step()
-  if (lift) fireEvent.pointerUp(on, { ...finger, buttons: 0, clientX: 400 + by, clientY: 100 })
-}
-
-describe('Diagrams, its pair swiped (ADR 0108)', () => {
-  it('follows the finger, the next drawn in as it goes', () => {
-    const { pair, sounding } = renderPair(0)
-    swipe(sounding(), -150, { lift: false })
-    // 150px less the 3px a touch moves before it is a drag, of a 300px diagram.
-    expect(Number(pair.style.getPropertyValue('--swipe'))).toBeCloseTo(0.49)
+describe('Diagrams, its row of chords (ADR 0108, the Diagrams board)', () => {
+  it('holds every change of chord in played order, the one sounding marked', () => {
+    // C held over two bars is one change.
+    expect(renderRow(0).slots()).toEqual(['C*', 'G', 'Am'])
   })
 
-  it('goes on to the next chord swiped left, back to the one before swiped right', () => {
-    // C held over two bars, then G: on is G.
-    const on = renderPair(0)
-    swipe(on.sounding(), -150)
-    expect(on.practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
-    on.unmount()
-    // From Am, back is G.
-    const back = renderPair(3)
-    swipe(back.sounding(), 150)
-    expect(back.practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
+  it('marks the chord sounding as the music moves on', () => {
+    expect(renderRow(3).slots()).toEqual(['C', 'G', 'Am*'])
   })
 
-  it('springs back short of a third of a diagram, the tap at its end no tap', () => {
-    const { practice, pair, sounding } = renderPair(0)
-    swipe(sounding(), -60)
-    fireEvent.click(sounding())
-    expect(practice.jumpToBeatGroup).not.toHaveBeenCalled()
-    expect(pair.style.getPropertyValue('--swipe')).toBe('0')
-  })
-
-  it('goes on with a flick, however short', () => {
-    const { practice, sounding } = renderPair(0)
-    swipe(sounding(), -40, { ms: 10 })
+  it('takes the music to a chord tapped', async () => {
+    const user = userEvent.setup()
+    const { practice, row } = renderRow(0)
+    await user.click(within(row).getAllByRole('button')[1]!)
     expect(practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
   })
 
-  it('springs back at the song’s ends', () => {
-    const { practice, sounding } = renderPair(0)
-    swipe(sounding(), 200)
+  it('takes the music to the chord a hand’s scroll rests on, once it settles', () => {
+    vi.useFakeTimers()
+    onTestFinished(() => void vi.useRealTimers())
+    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(150)
+    const { practice, row } = renderRow(0)
+    fireEvent.pointerDown(row)
+    row.scrollLeft = 300
+    fireEvent.scroll(row)
     expect(practice.jumpToBeatGroup).not.toHaveBeenCalled()
-  })
-
-  it('goes one chord on with a trackpad’s sideways scroll, the page kept still', () => {
-    const { practice, pair } = renderPair(0)
-    expect(fireEvent.wheel(pair, { deltaX: 150, deltaY: 0 })).toBe(false)
-    fireEvent.wheel(pair, { deltaX: 150, deltaY: 0 })
-    expect(practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
-  })
-
-  it('leaves up and down to the page', () => {
-    const { practice, pair } = renderPair(0)
-    expect(pair).toHaveClass('touch-pan-y')
-    expect(fireEvent.wheel(pair, { deltaX: 0, deltaY: 150 })).toBe(true)
-    expect(practice.jumpToBeatGroup).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(140)
+    expect(practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(3))
   })
 })
 
