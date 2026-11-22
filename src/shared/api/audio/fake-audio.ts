@@ -16,6 +16,8 @@ import {
  */
 export interface FakeAudio extends AudioOutput {
   readonly unlocks: number
+  /** Each gesture that readied audio that has never run (`prime`). */
+  readonly primes: number
   /** Each play: its sounds, when, and how loud each, where it was told (ADR 0105). */
   readonly played: readonly {
     readonly sounds: readonly Sound[]
@@ -39,6 +41,7 @@ export interface FakeAudio extends AudioOutput {
 export function createFakeAudio(): FakeAudio {
   let clock = 0
   let unlocks = 0
+  let primes = 0
   let stops = 0
   const played: { sounds: readonly Sound[]; at: number; gain?: SoundGain }[] = []
   const loadedRecordings: string[] = []
@@ -51,7 +54,9 @@ export function createFakeAudio(): FakeAudio {
     async unlock() {
       unlocks++
     },
-    prime() {},
+    prime() {
+      primes++
+    },
     play(sounds, at, gain) {
       const start = at ?? clock + PLAY_DELAY
       played.push(gain ? { sounds, at: start, gain } : { sounds, at: start })
@@ -96,6 +101,9 @@ export function createFakeAudio(): FakeAudio {
     },
     get unlocks() {
       return unlocks
+    },
+    get primes() {
+      return primes
     },
     get played() {
       return played

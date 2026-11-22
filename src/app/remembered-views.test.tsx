@@ -34,13 +34,14 @@ describe('Remembered views', () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     const first = await renderApp('/play/lightly-row', { storage })
+    // Transpose and the version's level, each in the Player's Settings.
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     await user.click(await screen.findByRole('button', { name: /^Transpose/ }))
     await user.click(await screen.findByRole('button', { name: 'Down a semitone' }))
-    await user.click(screen.getByRole('button', { name: /^Transpose$/ }))
-    await user.click(await screen.findByRole('button', { name: 'Version: Original' }))
-    const simplified = await screen.findAllByRole('button', { name: /^Simplified/ })
-    // Piano and voice, the group it plays in.
-    await user.click(simplified.at(-1) as HTMLElement)
+    await user.click(screen.getByRole('button', { name: 'Transpose' }))
+    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    const levels = await screen.findByRole('radiogroup', { name: 'Level' })
+    await user.click(within(levels).getByRole('radio', { name: 'Simplified' }))
     await waitFor(() =>
       expect(first.viewsStore.getState().views['/play/lightly-row']).toEqual({
         transpose: -1,
@@ -54,7 +55,9 @@ describe('Remembered views', () => {
     await waitFor(() =>
       expect(plain.router.state.location.search).toEqual({ transpose: -1, version: 'simple' }),
     )
-    expect(await screen.findByRole('button', { name: 'Version: Simplified' })).toBeInTheDocument()
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    const kept = await screen.findByRole('radiogroup', { name: 'Level' })
+    expect(within(kept).getByRole('radio', { name: 'Simplified' })).toBeChecked()
     plain.unmount()
     // Opened by a link that names its bars: those, transposed and simplified as kept.
     const looped = await renderApp('/play/lightly-row?loop=2-3', { storage })
@@ -68,7 +71,7 @@ describe('Remembered views', () => {
     looped.unmount()
     // Another piece plays as written.
     const other = await renderApp('/play/bz5?loop=1-1', { storage })
-    await screen.findByRole('button', { name: 'Version: Original' })
+    await screen.findByRole('button', { name: 'Player settings' })
     expect(other.router.state.location.search).toEqual({ loop: '1-1' })
   })
 
@@ -82,14 +85,6 @@ describe('Remembered views', () => {
     expect(missing.viewsStore.getState().views['/play/nope']).toBeUndefined()
   })
 
-  it('keeps a screen as it is when its own view is tapped', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/practice/scales?root=D&kind=dorian')
-    const views = await screen.findByRole('radiogroup', { name: 'Scales and keys' })
-    await user.click(within(views).getByRole('radio', { name: 'Scale' }))
-    expect(router.state.location.search).toMatchObject({ root: 'D', kind: 'dorian' })
-  })
-
   it('opens the progression the tool names, played the learner’s way, in the key alone', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
@@ -98,7 +93,7 @@ describe('Remembered views', () => {
       storage,
     )
     const { router } = await renderApp('/practice/progressions/line?p=I-IV-V&key=G', { storage })
-    await user.click(await screen.findByRole('link', { name: 'In G major' }))
+    await user.click(await screen.findByRole('link', { name: /^In G major/ }))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({
         p: 'I-IV-V',

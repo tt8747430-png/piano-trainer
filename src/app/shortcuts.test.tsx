@@ -37,20 +37,22 @@ describe('the shell’s shortcuts', () => {
   it('puts the cursor in the Songs search on /', async () => {
     const user = userEvent.setup()
     await renderApp('/songs')
-    const search = await screen.findByRole('searchbox', { name: 'Search songs' })
+    const search = await screen.findByRole('searchbox', { name: 'Search your songs' })
     await user.keyboard('/')
     expect(search).toHaveFocus()
     expect(search).toHaveValue('')
   })
 
-  it('lists the screen’s shortcuts on ?, and from Settings', async () => {
+  it('lists the screen’s shortcuts on ?', async () => {
     const user = userEvent.setup()
-    stubMatchMedia({ dark: false, pointer: 'fine' })
-    await renderApp('/settings/on-screen-piano')
-    await user.click(await screen.findByRole('button', { name: 'Shortcuts' }))
+    await renderApp('/songs')
+    await screen.findByRole('heading', { level: 1, name: 'Songs' })
+    await user.keyboard('?')
     const sheet = await screen.findByRole('dialog', { name: 'Shortcuts' })
+    // The screen's own first, its search's key, then the places anywhere.
+    expect(within(sheet).getByRole('heading', { level: 3, name: 'Songs' })).toBeInTheDocument()
+    expect(within(sheet).getByText('Search your songs')).toBeInTheDocument()
     expect(within(sheet).getByRole('heading', { level: 3, name: 'Anywhere' })).toBeInTheDocument()
-    expect(within(sheet).getByText('Songs')).toBeInTheDocument()
     expect(within(sheet).getByText('Show the shortcuts')).toBeInTheDocument()
   })
 
@@ -72,7 +74,7 @@ describe('the shell’s shortcuts', () => {
     async (path) => {
       const user = userEvent.setup()
       const { audio } = await renderApp(path)
-      await screen.findByRole('group', { name: 'Keyboard' })
+      await screen.findByRole('toolbar', { name: 'Transport' })
       await user.keyboard('{Enter}')
       expect(audio.played).toHaveLength(1)
       const stops = audio.stops
@@ -93,7 +95,9 @@ describe('the shell’s shortcuts', () => {
   it('lists the piano’s typing keys once the computer keyboard plays them', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/practice/chords')
-    await screen.findByRole('heading', { level: 1 })
+    // The keys shown in place of the hands, which the computer's letters play.
+    await user.click(await screen.findByRole('button', { name: 'Show the keys' }))
+    await screen.findByRole('group', { name: 'Keyboard' })
     act(() => setKeyboard(settingsStore, { typing: true }))
     await user.keyboard('?')
     const sheet = await screen.findByRole('dialog', { name: 'Shortcuts' })

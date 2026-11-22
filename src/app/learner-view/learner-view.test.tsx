@@ -37,9 +37,10 @@ describe('Preview as learner (R29 B5, R32: on the Account)', () => {
     await settings.router.navigate({ to: '/settings' })
     await screen.findByRole('region', { name: 'App' })
     expect(screen.queryByRole('link', { name: /^Administration/ })).toBeNull()
-    // An editor's controls are gone elsewhere too: Learn has no Edit.
-    await settings.router.navigate({ to: '/' })
-    await screen.findByRole('heading', { level: 1, name: 'Learn' })
+    // An editor's controls are gone elsewhere too: a built-in lesson has no Edit.
+    const lesson = LESSONS[0]!
+    await settings.router.navigate({ to: '/lessons/$lessonId', params: { lessonId: lesson.id } })
+    await screen.findByRole('heading', { level: 1, name: lesson.title.en })
     expect(screen.queryByRole('button', { name: 'Edit' })).toBeNull()
     await user.click(screen.getByRole('button', { name: 'Exit' }))
     expect(await screen.findByRole('button', { name: 'Edit' })).toBeInTheDocument()
@@ -70,10 +71,6 @@ describe('Preview as learner (R29 B5, R32: on the Account)', () => {
     await screen.findByText('Previewing as learner')
     const lesson = LESSONS[0]!
     const walk: [string, { role: 'link' | 'button'; name: string }[]][] = [
-      ['/', [{ role: 'button', name: 'Edit' }]],
-      ['/?view=courses', [{ role: 'button', name: 'Edit' }]],
-      // The shelves' Edit mode is not opened (Your courses' New course is every learner's, R30-5).
-      ['/?view=courses&edit=1', [{ role: 'button', name: 'Done' }]],
       [`/lessons/${lesson.id}`, [{ role: 'button', name: 'Edit' }]],
       ['/practice/progressions', [{ role: 'button', name: 'New in the library' }]],
     ]

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { LESSONS } from '@/entities/lesson'
 import { createFakeContent } from '@/shared/api/content'
@@ -16,9 +16,9 @@ describe('a screen whose content is not on the device', () => {
     vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
     const content = createFakeContent({ away: [['piece', 'bz5']], online: () => false })
     await renderApp('/play/bz5', { content })
-    expect(await screen.findByRole('alert')).toHaveTextContent(
-      'You’re offline. This screen opens once you’re back online.',
-    )
+    const alert = await screen.findByRole('alert')
+    expect(within(alert).getByRole('heading', { name: 'You’re offline' })).toBeInTheDocument()
+    expect(alert).toHaveTextContent('This screen opens once you’re back online.')
   })
 
   it('is not found where the server will not give it', async () => {
