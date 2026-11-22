@@ -32,7 +32,7 @@ const ROUTES = [
   ['/practice/progressions', '/practice/progressions'],
   ['/play/progression', '/play/progression'],
   ['/lessons/reading-chord-symbols', '/lessons/$lessonId'],
-  ['/practice/quiz/chords', '/practice/quiz/$trainerId'],
+  ['/practice/trainer/chords', '/practice/trainer/$trainerId'],
   ['/settings', '/settings'],
   ['/search?q=dorian', '/search'],
   ['/check?of=chords:tri', '/check'],
@@ -141,7 +141,7 @@ describe('the app shell', () => {
   it('puts the focus on a screen’s heading as a link opens it', async () => {
     const user = userEvent.setup()
     await renderApp('/practice')
-    await user.click(await screen.findByRole('link', { name: /^Chords Triads/ }))
+    await user.click(await screen.findByRole('link', { name: /^Chords / }))
     const heading = await screen.findByRole('heading', { level: 1, name: 'Chords' })
     await waitFor(() => expect(heading).toHaveFocus())
   })
@@ -189,7 +189,7 @@ describe('the app shell', () => {
     ['/lessons/reading-chord-symbols', 'Learn'],
     ['/courses/gorshkov', 'Learn'],
     ['/courses/gorshkov/chord-pulse', 'Learn'],
-    ['/practice/quiz/gaps', 'Practice'],
+    ['/practice/trainer/chords', 'Practice'],
     ['/settings', 'Profile'],
     ['/settings/account', 'Profile'],
     ['/account/sign-in', 'Profile'],
@@ -218,7 +218,7 @@ describe('the app shell', () => {
     ['/lessons/nothing', 'Go to Learn', '/'],
     ['/courses/nothing', 'Go to Learn', '/'],
     ['/courses/gorshkov/nothing', 'Go to Learn', '/'],
-    ['/practice/quiz/nothing', 'Go to Quiz', '/practice/quiz'],
+    ['/practice/trainer/nothing', 'Go to Learn', '/'],
     ['/practice/accompaniment/patterns/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
     [
       '/practice/accompaniment/patterns/my-9/edit',
@@ -236,17 +236,17 @@ describe('the app shell', () => {
     ['/play/walk?kind=blues', 'Go to Scales and keys', '/practice/scales'],
     ['/check?of=nothing', 'Go to Learn', '/'],
     ['/edit/bz1/takes/nothing', 'Go to the takes', '/edit/bz1?takes=true'],
-    ['/edit/nothing/takes/nothing', 'Go to Songs', '/songs'],
+    ['/edit/nothing/takes/nothing', 'Go to Learn', '/'],
   ])('shows not found at %s with the way back to its place', async (path, way, href) => {
     await renderApp(path)
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: way })).toHaveAttribute('href', href)
   })
 
-  it('shows a not-found screen for an unknown address', async () => {
+  it('shows a not-found screen for an unknown address, the way on to Learn', async () => {
     await renderApp('/nowhere')
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Go to Songs' })).toHaveAttribute('href', '/songs')
+    expect(screen.getByRole('link', { name: 'Go to Learn' })).toHaveAttribute('href', '/')
   })
 
   it('speaks Russian when the learner chose it', async () => {
@@ -273,7 +273,7 @@ describe('the app shell', () => {
 
   it('repaints the app as soon as the learner picks a theme', async () => {
     const user = userEvent.setup()
-    await renderApp('/settings/general')
+    await renderApp('/settings/appearance')
     await user.click(await screen.findByRole('radio', { name: 'Dark' }))
     expect(document.documentElement.dataset.theme).toBe('dark')
   })
@@ -422,6 +422,8 @@ describe('the learner’s pieces', () => {
     tempo: 90,
     pattern: 'r1',
     sections: [{ kind: 'verse', lines: ['G C D G'] }],
+    // When it came into the library: an own song is kept only with it.
+    added: '2026-11-01T10:00:00Z',
   }
 
   it('plays a song in the learner’s version', async () => {
