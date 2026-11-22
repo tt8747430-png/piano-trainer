@@ -64,10 +64,10 @@ describe('keyChords', () => {
       'D',
       'Em',
       'F#°',
-      'GMaj7',
+      'Gmaj7',
       'Am7',
       'Bm7',
-      'CMaj7',
+      'Cmaj7',
       'D7',
       'Em7',
       'F#m7♭5',
@@ -82,10 +82,10 @@ describe('keyChords', () => {
       'G',
       'Am7',
       'Bm7♭5',
-      'CMaj7',
+      'Cmaj7',
       'Dm7',
       'E7',
-      'FMaj7',
+      'Fmaj7',
       'G7',
     ])
   })
@@ -104,7 +104,7 @@ describe('chordSuggestions', () => {
   it('offers the key’s chords, then the song’s own it lacks, each once', () => {
     expect(symbols(song, 0, '')).toEqual([
       ...['G', 'Am', 'Bm', 'C', 'D', 'Em', 'F#°'],
-      ...['GMaj7', 'Am7', 'Bm7', 'CMaj7', 'D7', 'Em7', 'F#m7♭5'],
+      ...['Gmaj7', 'Am7', 'Bm7', 'Cmaj7', 'D7', 'Em7', 'F#m7♭5'],
       'B♭7',
     ])
   })

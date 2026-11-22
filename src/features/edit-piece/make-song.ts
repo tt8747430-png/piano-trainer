@@ -81,13 +81,13 @@ interface SongDraft extends SongStart {
   readonly meter: Meter
 }
 
-/** The bars a new song starts with, as a notation app's new score: four, unless asked. */
+/** The bars a new song starts with, as a notation app's new score: eight, unless asked. */
 export const START_BARS = 8
 /** Its tempo unless asked. */
 export const START_TEMPO = 80
 
 /**
- * Where a new song starts: a verse of empty bars (four at 90 unless asked), as a notation app's new
+ * Where a new song starts: a verse of empty bars (eight at 80 unless asked), as a notation app's new
  * score (ADR 0114): no chord symbol, both hands written silent, so the editor opens on empty bars
  * rather than the pattern's notes; its staves as chosen, a voice's staff named for it with nothing on it yet a rest
  * (ADR 0114, 0097), the piano hidden only under one voice alone (a lead sheet).

@@ -20,6 +20,17 @@ const written = (music: PieceMusic) =>
 
 const chartOf = (id: string) => versionableEntry(id) as ChartPiece
 
+/** The names a song's file is given, as the export gives them: the score's own credits. */
+const namesOf = ({ header }: PieceMusic): SongFileNames => ({
+  ...NAMES,
+  ...(header?.composer ? { composer: header.composer } : {}),
+  ...(header?.lyricist ? { lyricist: header.lyricist } : {}),
+  ...(header?.arranger ? { arranger: header.arranger } : {}),
+  ...(header?.translator ? { translator: header.translator } : {}),
+  ...(header?.copyright ? { rights: header.copyright } : {}),
+  ...(header?.source ? { source: header.source } : {}),
+})
+
 /** A song with every mark, barline, change and staff a song's music holds. */
 const RICH: PieceMusic = {
   key: 'F',
@@ -185,7 +196,7 @@ describe('a song’s MusicXML, exported then imported', () => {
     const differ: string[] = []
     for (const piece of PIECES) {
       const music = musicOf(isDegreePiece(piece) ? chartOf(piece.id) : piece)
-      const back = songOfMusicXml(musicXmlOf(music, NAMES), 'x.musicxml').song.music
+      const back = songOfMusicXml(musicXmlOf(music, namesOf(music)), 'x.musicxml').song.music
       try {
         expect(back).toEqual(written(music))
       } catch {

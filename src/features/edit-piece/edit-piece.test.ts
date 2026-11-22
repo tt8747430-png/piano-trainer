@@ -55,7 +55,9 @@ describe('saveMusic', () => {
     })
     if (!id) throw new Error('made')
     saveMusic(store, { kind: 'song', id }, CHANGED)
-    expect(store.getState().songs).toEqual([{ id, title: 'Morning', ...CHANGED }])
+    expect(store.getState().songs).toEqual([
+      { id, title: 'Morning', added: expect.any(String), ...CHANGED },
+    ])
   })
 
   it('saves the title with the music, an own song’s and a version’s alike (ADR 0114)', () => {
@@ -67,7 +69,9 @@ describe('saveMusic', () => {
     })
     if (!id) throw new Error('made')
     saveMusic(store, { kind: 'song', id }, { ...CHANGED, title: 'Evening' })
-    expect(store.getState().songs).toEqual([{ id, ...CHANGED, title: 'Evening' }])
+    expect(store.getState().songs).toEqual([
+      { id, added: expect.any(String), ...CHANGED, title: 'Evening' },
+    ])
     // A version whose title alone changed is a version; Reset takes it away with the music.
     const target = { kind: 'version', id: 'amazing', original: ORIGINAL } as const
     saveMusic(store, target, { ...ORIGINAL, title: 'Grace' })
@@ -153,7 +157,7 @@ describe('the learner’s songs', () => {
     expect(readMusic(song!).staves).toMatchObject([{ clef: 'treble', notes: [] }])
   })
 
-  it('makes a song of four bars of no chord, as a notation app’s new score, under the next number (ADR 0114)', () => {
+  it('makes a song of eight bars of no chord, as a notation app’s new score, under the next number (ADR 0114)', () => {
     const store = fresh()
     const minor = { tonic: note('E', -1), minor: true }
     expect(makeSong(store, { title: '  Evening  ', key: minor, meter: '6/8' })).toBe('my-1')
@@ -164,9 +168,9 @@ describe('the learner’s songs', () => {
           title: 'Evening',
           key: 'Ebm',
           meter: '6/8',
-          tempo: 90,
+          tempo: 80,
           pattern: 'r1',
-          sections: [{ kind: 'verse', lines: ['_ _ _ _'] }],
+          sections: [{ kind: 'verse', lines: ['_ _ _ _ _ _ _ _'] }],
         },
       ],
       nextSong: 2,
@@ -175,11 +179,11 @@ describe('the learner’s songs', () => {
 
   it('starts a song empty: both hands written silent, so the editor opens on empty bars (ADR 0114)', () => {
     const key = { tonic: note('C'), minor: false }
-    const silent = 'r/4 | r/4 | r/4 | r/4'
+    const silent = Array(8).fill('r/4').join(' | ')
     expect(chartStart(key, '4/4')).toMatchObject({ hands: { rh: silent, lh: silent } })
     // In any meter, each bar's rest the bar's length, as an empty single staff is written.
     const waltz = chartStart(key, '3/4', { staves: { piano: true, voices: ['voice'] } })
-    expect(waltz.hands?.rh).toBe(Array(4).fill(waltz.staves?.[0]?.notes).join(' | '))
+    expect(waltz.hands?.rh).toBe(Array(8).fill(waltz.staves?.[0]?.notes).join(' | '))
     const { chart } = readMusic(waltz)
     expect(chart.sections[0]?.lines[0]?.every((bar) => bar.hands?.rh?.length === 0)).toBe(true)
   })

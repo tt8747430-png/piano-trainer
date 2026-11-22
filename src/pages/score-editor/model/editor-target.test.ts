@@ -76,7 +76,7 @@ describe('editorTarget', () => {
     expect(target?.music).toMatchObject({
       key: 'Cm',
       meter: '3/4',
-      sections: [{ kind: 'verse', lines: ['_ _ _ _'] }],
+      sections: [{ kind: 'verse', lines: ['_ _ _ _ _ _ _ _'] }],
     })
     expect(target?.kind === 'version' && target.original).toEqual(target?.music)
   })
