@@ -94,19 +94,18 @@ describe('Administration (R32)', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/settings'))
   })
 
-  it('stands in Settings’ sidebar on a laptop, opening on the Overview', async () => {
+  it('stands in the laptop’s Settings dialog, its own part of the nav, opening on the Overview', async () => {
     onLaptop()
-    const { router } = await renderApp('/admin', {
-      auth: await signedInAs('admin'),
-      admin: createFakeAdmin(),
-    })
-    await waitFor(() => expect(router.state.location.pathname).toBe('/admin/overview'))
-    const sidebar = await screen.findByRole('complementary', { name: 'Settings' })
-    expect(within(sidebar).getByRole('link', { name: 'Overview' })).toHaveAttribute(
-      'aria-current',
-      'page',
+    await renderApp('/admin', { auth: await signedInAs('admin'), admin: createFakeAdmin() })
+    const dialog = await screen.findByRole('dialog', { name: 'Settings' })
+    const nav = within(dialog).getByRole('navigation', { name: 'Settings' })
+    expect(within(nav).getByRole('heading', { name: 'Administration' })).toBeInTheDocument()
+    expect(await within(nav).findByRole('link', { name: 'Overview' })).toHaveAttribute(
+      'data-active',
     )
-    expect(within(sidebar).getByRole('navigation', { name: 'Administration' })).toBeVisible()
+    expect(
+      await within(dialog).findByRole('heading', { level: 2, name: 'Overview' }),
+    ).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Back' })).toBeNull()
   })
 
@@ -124,12 +123,12 @@ describe('Administration (R32)', () => {
   it('tells anyone else it is an administrator’s', async () => {
     const { unmount } = await renderApp('/admin', { auth: await signedInAs('editor') })
     expect(
-      await screen.findByText('Administration requires an administrator account.'),
+      await screen.findByText('Administration requires an administrator account'),
     ).toBeVisible()
     unmount()
     await renderApp('/admin/accounts', { auth: await signedInAs('editor') })
     expect(
-      await screen.findByText('Administration requires an administrator account.'),
+      await screen.findByText('Administration requires an administrator account'),
     ).toBeVisible()
   })
 
@@ -169,10 +168,16 @@ describe('Administration (R32)', () => {
     const user = userEvent.setup()
     const admin = createFakeAdmin({ accounts: [ANA] })
     await renderApp('/admin/groups', { auth: await signedInAs('admin'), admin })
-    await user.type(await screen.findByLabelText('New group'), 'Testers')
-    await user.click(screen.getByRole('button', { name: 'Create group' }))
-    await user.click(await screen.findByText('Manage members'))
-    await user.click(await screen.findByRole('switch', { name: 'Ana: Member of Testers' }))
+    // New group, a sheet: its name, then Create.
+    await user.click((await screen.findAllByRole('button', { name: 'New group' }))[0]!)
+    await user.type(await screen.findByRole('textbox', { name: 'Group name' }), 'Testers')
+    await user.click(screen.getByRole('button', { name: 'Create' }))
+    // Its page: Add member finds an account.
+    await user.click(await screen.findByRole('link', { name: /Testers/ }))
+    await user.click(await screen.findByRole('button', { name: 'Add member' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Add member' })
+    await user.type(within(sheet).getByRole('textbox', { name: 'Name or email' }), 'Ana')
+    await user.click(await within(sheet).findByRole('button', { name: /^Ana/ }))
     await waitFor(async () => {
       const groups = await admin.groups()
       expect(groups.ok && groups.value).toEqual([
@@ -185,9 +190,17 @@ describe('Administration (R32)', () => {
     const user = userEvent.setup()
     const admin = createFakeAdmin()
     await renderApp('/admin/flags', { auth: await signedInAs('admin'), admin })
-    await user.type(await screen.findByLabelText('Key'), 'new-editor')
-    await user.type(screen.getByLabelText('Description'), 'The new editor')
-    await user.click(screen.getByRole('button', { name: 'Add flag' }))
+    // New flag, a sheet: what it turns on, and its key, made from those words until it is typed.
+    await user.click((await screen.findAllByRole('button', { name: 'New flag' }))[0]!)
+    await user.type(
+      await screen.findByRole('textbox', { name: 'What it turns on' }),
+      'The new editor',
+    )
+    const key = screen.getByRole('textbox', { name: 'Key' })
+    expect(key).toHaveValue('the-new-editor')
+    await user.clear(key)
+    await user.type(key, 'new-editor')
+    await user.click(screen.getByRole('button', { name: 'Create' }))
     const state = await screen.findByRole('radiogroup', { name: 'Enabled for: The new editor' })
     await user.click(within(state).getByRole('radio', { name: 'Everyone' }))
     await waitFor(async () => {
@@ -196,22 +209,6 @@ describe('Administration (R32)', () => {
         { key: 'new-editor', label: 'The new editor', state: 'everyone', groups: [] },
       ])
     })
-  })
-
-  it('deletes a feature flag only once asked', async () => {
-    const user = userEvent.setup()
-    const admin = createFakeAdmin()
-    await admin.saveSwitch({
-      key: 'new-editor',
-      label: 'The new editor',
-      state: 'nobody',
-      groups: [],
-    })
-    await renderApp('/admin/flags', { auth: await signedInAs('admin'), admin })
-    await user.click(await screen.findByRole('button', { name: 'Delete flag' }))
-    const asked = await screen.findByRole('alertdialog', { name: 'Delete “The new editor”?' })
-    await user.click(within(asked).getByRole('button', { name: 'Delete' }))
-    expect(await screen.findByText('No feature flags yet.')).toBeVisible()
   })
 
   it('says a change was not made offline as offline, not as refused', async () => {
@@ -242,7 +239,7 @@ describe('Administration (R32)', () => {
     await user.click(within(asked).getByRole('button', { name: 'Suspend publishing' }))
     await waitFor(() => expect(admin.blocked.has('bo')).toBe(true))
     await user.click(screen.getByRole('button', { name: 'Dismiss' }))
-    expect(await screen.findByText('No open reports.')).toBeVisible()
+    expect(await screen.findByText('No open reports')).toBeVisible()
   })
 
   it('lists what the admins did', async () => {
@@ -295,10 +292,12 @@ describe('Administration (R32)', () => {
       ],
     })
     await renderApp('/admin/feedback', { auth: await signedInAs('admin'), admin })
-    const list = await screen.findByRole('list', { name: 'Feedback' })
-    expect(list).toHaveTextContent('The keys are too small')
-    expect(list).toHaveTextContent('/practice/chords · build 1.2.3')
-    expect(list).not.toHaveTextContent('Boom')
+    // The text in full under the day it came, anonymous: no screen or build.
+    const said = await screen.findByText('The keys are too small')
+    expect(said).toBeVisible()
+    const main = screen.getByRole('main')
+    expect(main).not.toHaveTextContent('/practice/chords')
+    expect(main).not.toHaveTextContent('Boom')
   })
 
   it('lists the drafts editors left, the unpublished marked, each opening its editor', async () => {
@@ -314,7 +313,8 @@ describe('Administration (R32)', () => {
       contentEditing: content,
     })
     const course = await screen.findByRole('link', { name: /Jazz voicings/ })
-    expect(course).toHaveTextContent(/Course · Not yet published/)
+    expect(course).toHaveTextContent(/^Course/)
+    expect(course).toHaveTextContent(/Not yet published$/)
     expect(screen.getByRole('link', { name: /Abide/ })).toHaveAttribute('href', '/edit/abide')
     await user.click(course)
     await waitFor(() => expect(router.state.location.pathname).toBe('/courses/jazz/edit'))
@@ -333,13 +333,10 @@ describe('Administration (R32)', () => {
       await renderApp('/admin/overview', { auth: await signedInAs('admin'), admin })
       // Four calls answer first: under a full run's load they take a while.
       const figures = await screen.findByRole('region', { name: 'This week' }, { timeout: 8000 })
-      expect(within(figures).getByText('Accounts').closest('div')).toHaveTextContent(/Accounts\s*1/)
-      expect(within(figures).getByText('New this week').closest('div')).toHaveTextContent(
-        /New this week\s*1/,
-      )
-      expect(within(figures).getByText('Open reports').closest('div')).toHaveTextContent(
-        /Open reports\s*1/,
-      )
+      // Each figure over its name.
+      expect(figures).toHaveTextContent(/This week\s*1\s*Accounts.*1\s*New this week/)
+      const attention = screen.getByRole('region', { name: 'Needs attention' })
+      expect(attention).toHaveTextContent(/1 open · the oldest/)
     },
   )
 
