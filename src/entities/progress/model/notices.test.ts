@@ -32,7 +32,6 @@ describe('noticesOf', () => {
       'tier:streak:1',
       'tier:repertoire:1',
       'tier:repertoire:2',
-      'milestone:first-song',
       'streak:3',
       'accuracy:96',
     ])
@@ -40,7 +39,7 @@ describe('noticesOf', () => {
     expect(noticesOf(after, after, AT)).toEqual([])
     // The same crossing heard twice is kept once.
     const kept = withNotices(noticesOf(NONE, after, AT), noticesOf(NONE, after, AT))
-    expect(kept).toHaveLength(7)
+    expect(kept).toHaveLength(6)
   })
 
   it('says no streak of a single day', () => {

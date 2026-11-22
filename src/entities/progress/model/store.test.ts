@@ -42,10 +42,34 @@ describe('createProgressStore', () => {
       tempos: { 'hanon:5:C': 84, 'scale:G': 96 },
       seconds: { '2026-10-10': 600, '2026-10-11': 95 },
       keys: { G: '2026-10-10', Ebm: '2026-10-11' },
-      earned: { 'streak:1': '2026-10-11', 'first-song': '2026-10-10' },
+      earned: { 'streak:1': '2026-10-11', 'first-recording': '2026-10-10' },
       firsts: { published: '2026-10-11' },
       bestTake: 96,
       exercised: { 'scale-routine': '2026-10-11' },
+      history: [
+        {
+          kind: 'quiz',
+          id: `build-chord:1@${DAY}`,
+          key: 'build-chord:1',
+          accuracy: 90,
+          answered: 10,
+          streak: 8,
+          averageMs: 1200,
+          at: DAY,
+        },
+      ],
+      songs: {
+        bz5: {
+          played: [0, 1, 2],
+          at: 2,
+          times: 1,
+          seconds: 95,
+          bars: 17,
+          pickup: true,
+          last: DAY,
+          best: { both: 80 },
+        },
+      },
     }
     writeSaved(storage, saved)
     expect(createProgressStore({ storage }).getState()).toEqual(saved)
@@ -103,6 +127,8 @@ describe('createProgressStore', () => {
       firsts: { midi: '2026-10-11', cake: '2026-10-11' },
       bestTake: 140,
       exercised: { 'scale-routine': '2026-10-11', 'Bad Id': '2026-10-11', hanon: 'today' },
+      history: [{ kind: 'quiz', key: 'chords by ear', accuracy: 50, at: DAY }, 'run'],
+      songs: { bz5: { played: 'all', at: 2 }, ode: 7 },
       extra: true,
     })
     expect(createProgressStore({ storage }).getState()).toEqual({
@@ -127,6 +153,8 @@ describe('createProgressStore', () => {
       firsts: { midi: '2026-10-11' },
       bestTake: 0,
       exercised: { 'scale-routine': '2026-10-11' },
+      history: [],
+      songs: {},
     })
   })
 

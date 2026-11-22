@@ -383,6 +383,28 @@ export const EXERCISES: readonly Exercise[] = [
     swing: 'medium',
   },
   {
+    id: 'hanon',
+    mark: '1–20',
+    group: 'virtuoso',
+    stage: 'intermediate',
+    name: { en: 'Hanon', ru: 'Ганон' },
+    focus: { en: 'Finger independence', ru: 'Независимость пальцев' },
+    trains: {
+      en: 'Nos. 1 to 20 of The Virtuoso Pianist: a figure climbs two octaves and comes back, for even, independent fingers',
+      ru: '№ 1–20 из «Пианиста-виртуоза»: фигура поднимается на две октавы и возвращается, для ровных и независимых пальцев',
+    },
+    how: {
+      en: 'Keep the hand in its five-finger shape and lift each finger well; play evenly, every note as loud as the next, as the figure climbs two octaves and comes back.',
+      ru: 'Держите руку в позиции пяти пальцев и хорошо поднимайте каждый палец; играйте ровно, все ноты одинаково громко, пока фигура поднимается на две октавы и возвращается.',
+    },
+    options: {},
+    fields: { root: 'key', hanon: true, rhythm: true },
+    own: { hanon: 1 },
+    // The book's Part I runs from ♩ = 60 to 108: start at the bottom and climb.
+    tempo: 60,
+    swing: 'straight',
+  },
+  {
     id: 'five-finger',
     mark: '1–5',
     group: 'fiveFinger',
@@ -404,28 +426,6 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key', tonality: true },
     own: { tonality: 'major' },
     tempo: 80,
-    swing: 'straight',
-  },
-  {
-    id: 'hanon',
-    mark: '1–20',
-    group: 'virtuoso',
-    stage: 'intermediate',
-    name: { en: 'Hanon', ru: 'Ганон' },
-    focus: { en: 'Finger independence', ru: 'Независимость пальцев' },
-    trains: {
-      en: 'Nos. 1 to 20 of The Virtuoso Pianist: a figure climbs two octaves and comes back, for even, independent fingers',
-      ru: '№ 1–20 из «Пианиста-виртуоза»: фигура поднимается на две октавы и возвращается, для ровных и независимых пальцев',
-    },
-    how: {
-      en: 'Keep the hand in its five-finger shape and lift each finger well; play evenly, every note as loud as the next, as the figure climbs two octaves and comes back.',
-      ru: 'Держите руку в позиции пяти пальцев и хорошо поднимайте каждый палец; играйте ровно, все ноты одинаково громко, пока фигура поднимается на две октавы и возвращается.',
-    },
-    options: {},
-    fields: { root: 'key', hanon: true, rhythm: true },
-    own: { hanon: 1 },
-    // The book's Part I runs from ♩ = 60 to 108: start at the bottom and climb.
-    tempo: 60,
     swing: 'straight',
   },
 ]
