@@ -39,12 +39,15 @@ function savedMetronome(metronome: object): Storage {
 }
 
 describe('Practice → Metronome', () => {
-  it('is listed first among the Tools on Practice (R29 B11)', async () => {
+  it('is listed among the Tools on Practice, after the Chord player (R29 B11)', async () => {
     const user = userEvent.setup()
     await renderApp('/practice')
-    const tools = await screen.findByRole('region', { name: 'Tools' })
-    expect(within(tools).getAllByRole('link')[0]).toHaveTextContent(/^Metronome/)
-    await user.click(within(tools).getByRole('link', { name: /Metronome/ }))
+    const tools = (await screen.findByRole('button', { name: 'Tools' })).closest('section')
+    if (!tools) throw new Error('the Tools section')
+    const [, second] = within(tools).getAllByRole('link')
+    expect(second).toHaveTextContent(/^Metronome/)
+    if (!second) throw new Error('the Metronome row')
+    await user.click(second)
     expect(await screen.findByRole('heading', { level: 1, name: 'Metronome' })).toBeInTheDocument()
   })
 
@@ -55,12 +58,8 @@ describe('Practice → Metronome', () => {
     await user.click(screen.getByRole('button', { name: 'Faster by 10' }))
     await user.click(screen.getByRole('button', { name: 'Slower by 1' }))
     expect(tempo()).toBe('Tempo: 129 BPM')
-    // Named by its tempo word, what it asks and its range behind the ⓘ.
-    expect(screen.getByText('Allegro')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'About Allegro' }))
-    expect(await screen.findByRole('dialog', { name: 'Allegro' })).toHaveTextContent(
-      'Fast and bright120–156 BPM',
-    )
+    // Named by its tempo word over its number.
+    expect(screen.getByText('Allegro · BPM')).toBeInTheDocument()
     expect(saved(storage)).toMatchObject({ bpm: 129, meter: '4/4', sound: 'click' })
   })
 
@@ -107,19 +106,30 @@ describe('Practice → Metronome', () => {
     expect(after[0]).toEqual({ at: 1.145, voices: ['click'] })
   })
 
-  it('sets its sound, subdivision and practice aids in place, as Chordify’s (R32)', async () => {
+  it('sets its sound, subdivision and practice aids in place, each row opening its sheet (R32)', async () => {
     const user = userEvent.setup()
     const { storage } = await open()
     expect(screen.queryByRole('link', { name: 'Metronome settings' })).toBeNull()
-    await user.click(screen.getByRole('combobox', { name: 'Sound' }))
+    const rhythm = screen.getByRole('group', { name: 'Rhythm' })
+    await user.click(within(rhythm).getByRole('button', { name: /^Sound/ }))
     await user.click(await screen.findByRole('option', { name: 'Drum kit' }))
-    await user.click(screen.getByRole('combobox', { name: 'Subdivision' }))
+    await user.keyboard('{Escape}')
+    expect(await within(rhythm).findByRole('button', { name: /^Sound/ })).toHaveTextContent(
+      'Drum kit',
+    )
+    await user.click(within(rhythm).getByRole('button', { name: /^Subdivision/ }))
     await user.click(await screen.findByRole('option', { name: 'Triplets' }))
-    expect(screen.queryByText('Start tempo')).toBeNull()
-    await user.click(screen.getByRole('switch', { name: /Speed trainer/ }))
+    await user.keyboard('{Escape}')
+    await user.click(within(rhythm).getByRole('button', { name: /^Speed trainer/ }))
+    const speed = await screen.findByRole('dialog', { name: 'Speed trainer' })
     for (const name of ['Start tempo', 'Target tempo', 'Increase by', 'Every'])
-      expect(screen.getByText(name)).toBeVisible()
-    await user.click(screen.getByRole('switch', { name: /Silent bars/ }))
+      expect(within(speed).getByText(name)).toBeInTheDocument()
+    await user.click(within(speed).getByRole('switch', { name: /Speed trainer/ }))
+    await user.keyboard('{Escape}')
+    await user.click(within(rhythm).getByRole('button', { name: /^Silent bars/ }))
+    const silent = await screen.findByRole('dialog', { name: 'Silent bars' })
+    await user.click(within(silent).getByRole('switch', { name: /Silent bars/ }))
+    await user.keyboard('{Escape}')
     expect(saved(storage)).toMatchObject({
       sound: 'drum',
       subdivision: 'triplets',
@@ -135,8 +145,10 @@ describe('Practice → Metronome', () => {
   it('plays a drum beat in the time signature chosen, both saved', async () => {
     const user = userEvent.setup()
     const { audio, storage } = await open(savedMetronome({ sound: 'drum' }))
-    await user.click(screen.getByRole('combobox', { name: 'Time signature' }))
-    await user.click(await screen.findByRole('option', { name: '3/4' }))
+    const meter = screen.getByRole('group', { name: 'Time signature' })
+    expect(meter).toHaveTextContent('4/4')
+    await user.click(within(meter).getByRole('button', { name: 'Time signature −' }))
+    expect(meter).toHaveTextContent('3/4')
     expect(saved(storage)).toMatchObject({ bpm: 120, meter: '3/4', sound: 'drum' })
     expect(within(screen.getByRole('list', { name: 'Beats' })).getAllByRole('button')).toHaveLength(
       3,
@@ -211,7 +223,7 @@ describe('Practice → Metronome', () => {
     )
     await open(storage)
     expect(tempo()).toBe('Tempo: 66 BPM')
-    expect(screen.getByRole('combobox', { name: 'Time signature' })).toHaveTextContent('6/8')
+    expect(screen.getByRole('group', { name: 'Time signature' })).toHaveTextContent('6/8')
     // 6/8 is counted in two dotted beats, as players count it (A39).
     expect(within(screen.getByRole('list', { name: 'Beats' })).getAllByRole('button')).toHaveLength(
       2,
