@@ -11,15 +11,13 @@ describe('keeping achievements', () => {
     await waitFor(() =>
       expect(progressStore.getState().earned).toEqual({
         'repertoire:1': localDay(new Date()),
-        'first-song': localDay(new Date()),
       }),
     )
     expect(notificationsStore.getState().notices.map((notice) => notice.id)).toEqual([
-      'milestone:first-song',
       'tier:repertoire:1',
     ])
     // The same figures again: nothing new.
     act(() => progressStore.setState({ tempos: { scale: 90 } }))
-    expect(notificationsStore.getState().notices).toHaveLength(2)
+    expect(notificationsStore.getState().notices).toHaveLength(1)
   })
 })

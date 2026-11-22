@@ -50,7 +50,7 @@ describe('BackupFields', () => {
         saves: { 'pt-settings': SETTINGS },
       }),
     )
-    expect(await screen.findByRole('alertdialog')).toHaveTextContent('October 11, 2026')
+    expect(await screen.findByRole('alertdialog')).toHaveTextContent('11 October 2026')
     await user.click(screen.getByRole('button', { name: 'Restore' }))
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual(SETTINGS)
     expect(onRestored).toHaveBeenCalledOnce()

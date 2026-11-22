@@ -15,7 +15,7 @@ describe('a tool’s page (R29 B11)', () => {
     await screen.findByRole('heading', { level: 1, name: 'Metronome' })
     expect(screen.getByRole('region', { name: 'Metronome' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Start' })).toHaveAttribute('aria-pressed', 'false')
-    expect(screen.getByRole('combobox', { name: 'Subdivision' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^Subdivision/ })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Metronome settings' })).toBeNull()
   })
 })

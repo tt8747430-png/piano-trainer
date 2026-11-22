@@ -23,19 +23,24 @@ describe('Settings › Support › User guide', () => {
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
     ).toEqual(PARTS)
-    const keepTime = screen.getByRole('region', { name: 'Keep time' })
-    expect(within(keepTime).getAllByRole('listitem')).toHaveLength(3)
-    expect(keepTime).toHaveTextContent('Space starts and stops it')
+    // One part open at a time, the first to begin with; another opened closes it.
+    const first = screen.getByRole('button', { name: 'Organise your library' })
+    expect(first).toHaveAttribute('aria-expanded', 'true')
+    const keepTime = screen.getByRole('button', { name: 'Keep time' })
+    await user.click(keepTime)
+    expect(keepTime).toHaveAttribute('aria-expanded', 'true')
+    expect(first).toHaveAttribute('aria-expanded', 'false')
+    expect(screen.getByText('Space starts and stops it; ↑ and ↓ change the tempo.')).toBeVisible()
   })
 
-  it('folds a part away, and keeps it folded', async () => {
+  it('folds the part open away', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/how-to-use')
-    const fold = await screen.findByRole('button', { name: 'Play a song' })
-    expect(fold).toHaveAttribute('aria-expanded', 'true')
+    await renderApp('/settings/how-to-use')
+    const fold = await screen.findByRole('button', { name: 'Organise your library' })
     await user.click(fold)
     expect(fold).toHaveAttribute('aria-expanded', 'false')
-    expect(settingsStore.getState().foldedSections).toContain('howToUse.player')
+    for (const part of PARTS)
+      expect(screen.getByRole('button', { name: part })).toHaveAttribute('aria-expanded', 'false')
   })
 
   it('reads in Russian', async () => {
