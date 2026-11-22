@@ -69,7 +69,10 @@ describe('TrainerBoard', () => {
     expect(check).toHaveAccessibleDescription('Choose the keys on the on-screen piano, then Check.')
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
-    expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-primary')
+    expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
     for (const name of ['E4', 'G4'])
       await user.click(within(keyboard).getByRole('button', { name }))
     await user.click(check)
@@ -103,12 +106,12 @@ describe('TrainerBoard', () => {
     expect(screen.queryByText('Chord held:')).not.toBeInTheDocument()
   })
 
-  it('names the answer after a wrong build', async () => {
+  it('names the answer’s notes after a wrong build', async () => {
     const user = userEvent.setup()
     renderBoard(skills('chord:min'))
     await user.click(screen.getByRole('button', { name: 'C4' }))
     await user.click(screen.getByRole('button', { name: 'Check' }))
-    expect(screen.getByText('Not quite: it’s Cm · Minor triad')).toBeInTheDocument()
+    expect(screen.getByText('Not quite: it’s C E♭ G')).toBeInTheDocument()
   })
 
   it('says which note must be lowest when an inversion is built in root position', async () => {
@@ -121,7 +124,7 @@ describe('TrainerBoard', () => {
     expect(screen.getByRole('heading', { name: 'Build C/E, 1st inversion' })).toBeInTheDocument()
     for (const name of ['C4', 'E4', 'G4']) await user.click(screen.getByRole('button', { name }))
     await user.click(screen.getByRole('button', { name: 'Check' }))
-    expect(screen.getByText('Not quite: it’s C/E · Major triad, with E lowest')).toBeInTheDocument()
+    expect(screen.getByText('Not quite: it’s C E G, with E lowest')).toBeInTheDocument()
   })
 
   it('prints the chord it asks for and names with ♯ and ♭, as the sheets print them', async () => {
@@ -130,7 +133,7 @@ describe('TrainerBoard', () => {
     expect(screen.getByRole('heading', { name: 'Build C♯m' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'C4' }))
     await user.click(screen.getByRole('button', { name: 'Check' }))
-    expect(screen.getByText('Not quite: it’s C♯m · Minor triad')).toBeInTheDocument()
+    expect(screen.getByText('Not quite: it’s C♯ E G♯')).toBeInTheDocument()
   })
 
   it('prints a chord to name among its answers as the sheets print it', async () => {
@@ -299,7 +302,7 @@ describe('TrainerBoard', () => {
     const user = userEvent.setup()
     renderBoard(skills('chord:maj'))
     await user.click(screen.getByRole('button', { name: 'Show answer' }))
-    expect(screen.getByText('The answer: C · Major triad')).toBeInTheDocument()
+    expect(screen.getByText('The answer: C E G')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled()
   })
 
@@ -333,25 +336,29 @@ describe('TrainerBoard', () => {
     expect(screen.getByText('Right')).toBeInTheDocument()
   })
 
-  it('Check is the capsule’s primary', () => {
+  it('puts Show answer, Clear and Check in the foot’s row, Check last', () => {
     renderBoard(skills('chord:maj'))
-    const capsule = document.querySelector<HTMLElement>('[data-slot=floating-actions]')
-    expect(capsule).not.toBeNull()
-    expect(within(capsule!).getByRole('button', { name: 'Check' })).toBeInTheDocument()
+    const check = screen.getByRole('button', { name: 'Check' })
+    const row = check.parentElement
+    if (!row) throw new Error('the foot’s row')
+    expect(
+      within(row)
+        .getAllByRole('button')
+        .map((button) => button.textContent),
+    ).toEqual(['Show answer', 'Clear', 'Check'])
   })
 
   it('Hint shows C E G', async () => {
     const user = userEvent.setup()
     renderBoard(skills('chord:maj'))
     expect(screen.getByRole('heading', { name: 'Build C' })).toBeInTheDocument()
-    expect(screen.getByText('Major triad')).toBeInTheDocument()
-    expect(screen.queryByRole('list', { name: 'Its notes' })).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Hint' }))
-    expect(
-      within(screen.getByRole('list', { name: 'Its notes' }))
-        .getAllByRole('listitem')
-        .map((chip) => chip.textContent),
-    ).toEqual(['C', 'E', 'G'])
+    const hint = screen.getByRole('button', { name: 'Hint' })
+    expect(hint).toHaveAttribute('aria-expanded', 'false')
+    await user.click(hint)
+    expect(hint).toHaveTextContent('Its notes: C E G')
+    expect(hint).toHaveAttribute('aria-expanded', 'true')
+    await user.click(hint)
+    expect(hint).toHaveTextContent('Hint')
   })
 
   it('Note reading shows no note names on the keys', () => {
