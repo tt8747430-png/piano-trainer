@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import type { Performance } from '@/shared/lib/arrangement'
-import { note, noteName } from '@/shared/lib/music'
+import { note, noteName, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { HANON_NUMBERS, hanon, hanonDegrees } from './hanon'
-import { BAR } from './time'
 
 const C = note('C')
+/** The book's bar: 2/4, a figure of eight 16ths. */
+const BAR = 2 * TICKS_PER_BEAT
 const notesOf = (performance: Performance, side: 'rh' | 'lh') =>
   performance.notes.filter((n) => n.hand === side)
 const names = (performance: Performance, side: 'rh' | 'lh', from: number, count = 8) =>
@@ -62,7 +63,7 @@ describe('hanon', () => {
     expect(fingers(thirteen, 'rh', 0)).toBe('31425345')
   })
 
-  it('plays a figure dotted, long-short, each pair still a quarter, and the bar kept', () => {
+  it('plays a figure dotted, long-short, each pair still an 8th, and the bar kept', () => {
     const even = notesOf(hanon({ root: C, number: 1 }), 'rh')
     const dotted = notesOf(hanon({ root: C, number: 1, rhythm: 'dotted' }), 'rh')
     const reverse = notesOf(hanon({ root: C, number: 1, rhythm: 'reverse' }), 'rh')
