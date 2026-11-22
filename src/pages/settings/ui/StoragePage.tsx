@@ -27,9 +27,9 @@ export function StoragePage() {
       <Group flush title={t('backup.label')}>
         <BackupFields />
       </Group>
-      <PianoSoundGroup />
+      <PianoSoundGroup piano={piano} />
       <DangerGroup className="mt-4">
-        <RemovePianoRow />
+        <RemovePianoRow piano={piano} />
         <DangerRow title={t('progress.reset')} onClick={() => setConfirming(true)} />
         <ConfirmDialog
           open={confirming}

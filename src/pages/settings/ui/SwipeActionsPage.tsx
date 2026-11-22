@@ -69,6 +69,7 @@ function Side({ surface, title, info }: { surface: BarSurface; title: string; in
                   label={label}
                   value={name(value)}
                   mark={glyph(value, 'size-4.5 shrink-0')}
+                  setting={`bars.${surface}`}
                 />
               }
             />

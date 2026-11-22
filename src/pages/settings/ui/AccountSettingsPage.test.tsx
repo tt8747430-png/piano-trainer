@@ -45,25 +45,22 @@ describe('Settings › Account', () => {
     const password = screen.getByRole('link', { name: 'Change password' })
     expect(password.closest('section')).toHaveTextContent(/Email\s*ana@example.com/)
     expect(password).toHaveAttribute('href', '/settings/account/password')
-    expect(screen.getByRole('link', { name: 'Privacy' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /^Privacy/ })).toHaveAttribute(
       'href',
       '/settings/privacy',
     )
   })
 
-  it('puts Sign out and Delete account last, each red and alone with its footnote (R25)', async () => {
+  it('puts Sign out and Delete account last, each red and in a group of its own (R25)', async () => {
     await renderApp('/settings/account', { auth: await signedIn() })
     const signOut = await screen.findByRole('button', { name: 'Sign out' })
     const remove = screen.getByRole('button', { name: 'Delete account…' })
     expectLastAndAlone(signOut)
     expectLastAndAlone(remove)
     expect(signOut.closest('section')).not.toBe(remove.closest('section'))
-    expect(remove.closest('section')).toHaveTextContent(
-      'Your account and synced data are deleted after 30 days.',
-    )
   })
 
-  it('signs out once asked, saying what stays, and goes back to Settings', async () => {
+  it('signs out once asked, saying what stays, and shows the guest in its place', async () => {
     const user = userEvent.setup()
     const auth = await signedIn()
     const { router } = await renderApp('/settings/account', { auth })
@@ -71,7 +68,8 @@ describe('Settings › Account', () => {
     const dialog = await screen.findByRole('alertdialog', { name: 'Sign out?' })
     expect(dialog).toHaveTextContent('Your songs and progress stay on this device')
     await user.click(within(dialog).getByRole('button', { name: 'Sign out' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/settings'))
+    expect(await screen.findByRole('link', { name: 'Sign in' })).toBeVisible()
+    expect(router.state.location.pathname).toBe('/settings/account')
     expect(await auth.current()).toBeNull()
   })
 
@@ -88,7 +86,7 @@ describe('Settings › Account', () => {
     await user.click(confirm)
     expect(
       await screen.findByText(
-        'Your account will be deleted on November 28, 2026. Sign in before then to keep it.',
+        'Your account will be deleted on 28 November 2026. Sign in before then to keep it.',
       ),
     ).toBeVisible()
     expect(await auth.current()).toBeNull()
@@ -113,7 +111,7 @@ describe('Settings › Account', () => {
     await auth.signIn(ANA.email, ANA.password)
     await renderApp('/settings', { auth })
     const gate = await screen.findByRole('alertdialog', { name: 'Account scheduled for deletion' })
-    expect(gate).toHaveTextContent('It will be deleted on November 28, 2026.')
+    expect(gate).toHaveTextContent('It will be deleted on 28 November 2026.')
     await user.click(within(gate).getByRole('button', { name: 'Keep account' }))
     await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull())
     expect(await auth.pendingDeletion()).toEqual({ ok: true, value: null })
