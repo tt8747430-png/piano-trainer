@@ -45,7 +45,7 @@ describe('LabelRow', () => {
       />,
     )
     expect(labelsOf(container).map((label) => label.textContent)).toEqual([
-      '1 · Verse 1 · \u{1D15F}= 84',
+      '1 · Verse 1 · \u{1D15F} = 84',
       'Chorus',
     ])
   })
@@ -98,7 +98,7 @@ describe('LabelRow', () => {
       />,
     )
     expect(screen.queryByText('G')).not.toBeInTheDocument()
-    expect(container).toHaveTextContent('\u{1D15F}\u{1D16D}= 58')
+    expect(container).toHaveTextContent('\u{1D15F}\u{1D16D} = 58')
   })
 
   it('prints a section’s name and a tempo as a sheet that edits them prints them: its own buttons', () => {
@@ -119,12 +119,12 @@ describe('LabelRow', () => {
     )
     expect(screen.getByRole('button', { name: 'Verse 1' })).toHaveTextContent('Verse 1')
     expect(screen.getByRole('button', { name: 'Chorus' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Tempo' })).toHaveTextContent('\u{1D15F}= 84')
+    expect(screen.getByRole('button', { name: 'Tempo' })).toHaveTextContent('\u{1D15F} = 84')
     // The number is a bar's, which the bar's own button says.
     expect(screen.getAllByRole('button')).toHaveLength(3)
   })
 
-  it('draws its labels at the line’s size, the row as tall as it is given', () => {
+  it('draws its labels at the line’s size, never under 12px, the row as tall as it is given', () => {
     const { container } = render(
       <LabelRow
         layout={layout}
@@ -137,6 +137,7 @@ describe('LabelRow', () => {
       />,
     )
     expect(container.querySelector('[data-slot="line-labels"]')).toHaveStyle({ height: '31px' })
-    expect(labelsOf(container)[0]).toHaveStyle({ fontSize: '0.375rem' })
+    // Never under 12px, however small the line.
+    expect(labelsOf(container)[0]).toHaveStyle({ fontSize: '0.75rem' })
   })
 })

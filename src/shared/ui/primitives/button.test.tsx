@@ -34,6 +34,6 @@ describe('Button', () => {
     )
     expect(screen.getByRole('button', { name: 'Settings' })).toHaveClass('rounded-full', 'size-11')
     expect(screen.getByRole('button', { name: 'Arpeggio' })).toHaveClass('bg-card', 'h-11')
-    expect(screen.getByRole('button', { name: 'Next' })).toHaveClass('h-14', 'rounded-2xl')
+    expect(screen.getByRole('button', { name: 'Next' })).toHaveClass('h-12.5', 'rounded-pill')
   })
 })

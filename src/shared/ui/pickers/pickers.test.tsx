@@ -131,7 +131,7 @@ describe('KeyPicker', () => {
 })
 
 describe('KeySignaturePicker in the score editor’s palette (R32-C, Flat’s)', () => {
-  it('shows the signatures bare, sharps over flats, no mode, and Switch to natural while sharps or flats stand', async () => {
+  it('shows the signatures bare, sharps over flats, no mode, and No key signature while sharps or flats stand', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     const { rerender } = render(
@@ -149,14 +149,14 @@ describe('KeySignaturePicker in the score editor’s palette (R32-C, Flat’s)',
     expect(three).toHaveAttribute('aria-pressed', 'true')
     expect(three).toHaveTextContent('')
     expect(screen.queryByRole('radiogroup')).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Switch to natural' }))
+    await user.click(screen.getByRole('button', { name: 'No key signature' }))
     expect(onChange).toHaveBeenLastCalledWith({ tonic: note('C'), minor: false })
     rerender(
       <PickerLayoutContext value="palette">
         <KeySignaturePicker value={{ tonic: note('C'), minor: false }} onChange={onChange} />
       </PickerLayoutContext>,
     )
-    expect(screen.queryByRole('button', { name: 'Switch to natural' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'No key signature' })).not.toBeInTheDocument()
   })
 })
 
