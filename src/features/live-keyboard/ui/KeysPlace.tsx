@@ -13,43 +13,43 @@ const HANDLES: readonly { sides: Sides; place: string; cursor: string; mark: str
     sides: { n: true, w: true },
     place: 'left-0 top-0 size-7',
     cursor: 'cursor-nwse-resize',
-    mark: 'left-1.5 top-1.5 border-t-4 border-l-4 rounded-tl-md',
+    mark: 'left-1.5 top-1.5 border-t-4 border-l-4 rounded-tl-control',
   },
   {
     sides: { n: true, e: true },
     place: 'right-0 top-0 size-7',
     cursor: 'cursor-nesw-resize',
-    mark: 'right-1.5 top-1.5 border-t-4 border-r-4 rounded-tr-md',
+    mark: 'right-1.5 top-1.5 border-t-4 border-r-4 rounded-tr-control',
   },
   {
     sides: { s: true, w: true },
     place: 'bottom-0 left-0 size-7',
     cursor: 'cursor-nesw-resize',
-    mark: 'bottom-1.5 left-1.5 border-b-4 border-l-4 rounded-bl-md',
+    mark: 'bottom-1.5 left-1.5 border-b-4 border-l-4 rounded-bl-control',
   },
   {
     sides: { s: true, e: true },
     place: 'right-0 bottom-0 size-7',
     cursor: 'cursor-nwse-resize',
-    mark: 'right-1.5 bottom-1.5 border-r-4 border-b-4 rounded-br-md',
+    mark: 'right-1.5 bottom-1.5 border-r-4 border-b-4 rounded-br-control',
   },
   {
     sides: { w: true },
     place: 'inset-y-7 left-0 w-3',
     cursor: 'cursor-ew-resize',
-    mark: 'top-1/2 left-0.5 h-7 -translate-y-1/2 border-l-4 rounded-full',
+    mark: 'top-1/2 left-0.5 h-7 -translate-y-1/2 border-l-4 rounded-pill',
   },
   {
     sides: { e: true },
     place: 'inset-y-7 right-0 w-3',
     cursor: 'cursor-ew-resize',
-    mark: 'top-1/2 right-0.5 h-7 -translate-y-1/2 border-r-4 rounded-full',
+    mark: 'top-1/2 right-0.5 h-7 -translate-y-1/2 border-r-4 rounded-pill',
   },
   {
     sides: { s: true },
     place: 'inset-x-7 bottom-0 h-3',
     cursor: 'cursor-ns-resize',
-    mark: 'bottom-0.5 left-1/2 w-7 -translate-x-1/2 border-b-4 rounded-full',
+    mark: 'bottom-0.5 left-1/2 w-7 -translate-x-1/2 border-b-4 rounded-pill',
   },
 ]
 /** The narrowest a window is sized: two octaves' keys still pressable. */
@@ -214,7 +214,7 @@ export function KeysPlace({
       >
         <span
           aria-hidden
-          className="h-1.5 w-11 rounded-full bg-card/90 ring-1 ring-foreground/25"
+          className="h-1.5 w-11 rounded-pill bg-card/90 ring-1 ring-foreground/25"
         />
       </button>
       {HANDLES.map(({ sides, place, cursor, mark }) => (

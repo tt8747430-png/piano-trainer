@@ -59,7 +59,7 @@ export function PlayRow({
       {
         children: (
           <>
-            <span className="grid size-9 flex-none place-items-center rounded-full bg-muted text-foreground">
+            <span className="grid size-9 flex-none place-items-center rounded-pill bg-muted text-foreground">
               <Play aria-hidden className="size-3.5 fill-current" />
             </span>
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">

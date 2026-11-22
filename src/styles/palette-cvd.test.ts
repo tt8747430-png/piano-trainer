@@ -46,13 +46,13 @@ const PAIRS: readonly (readonly [string, string, string])[] = [
   ['right, missed', 'grass', 'ink-soft'],
   ['wrong, early or late', 'crimson', 'yellow'],
   ['early or late, missed', 'yellow', 'ink-soft'],
+  ['wrong, missed', 'crimson', 'ink-soft'],
 ]
 
 /** Pairs that merge for some eyes, and the cue besides colour that parts them. */
 const SHAPED: readonly (readonly [string, string, string, string])[] = [
   ['home, away', 'grass', 'sand', 'the numeral, and the legend that names each role'],
   ['right, early or late', 'grass', 'yellow', 'the verdict shapes ● ◂ ▸'],
-  ['wrong, missed', 'crimson', 'ink-soft', 'the verdict shapes × ○'],
 ]
 
 describe('the palette for colour-blind eyes', () => {

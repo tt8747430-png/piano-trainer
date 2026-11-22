@@ -195,13 +195,13 @@ export function ChordSheet({
                   aria-label={t('practice:chords.next.add')}
                   title={t('practice:chords.next.add')}
                   onClick={onAdd}
-                  className="absolute flex size-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-honey-ink outline-none focus-visible:rounded-full"
+                  className="absolute flex size-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-honey-ink outline-none focus-visible:rounded-pill"
                   style={{
                     left: ADD_AT * unit,
                     top: middleOf(empty.staves),
                   }}
                 >
-                  <span className="flex size-9 items-center justify-center rounded-full border-[1.5px] border-dashed border-honey-ink/55 bg-card">
+                  <span className="flex size-9 items-center justify-center rounded-pill border-[1.5px] border-dashed border-honey-ink/55 bg-card">
                     <Plus aria-hidden className="size-4.5" />
                   </span>
                 </button>

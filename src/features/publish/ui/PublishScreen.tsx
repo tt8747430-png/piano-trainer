@@ -76,7 +76,7 @@ function Tile({ id, kind, size }: { id: string; kind: PublicKind; size: 'head' |
       aria-hidden
       className={cn(
         'flex shrink-0 items-center justify-center',
-        size === 'head' ? 'size-16 rounded-2xl' : 'size-18 rounded-card',
+        size === 'head' ? 'size-16 rounded-control' : 'size-18 rounded-card',
         paint.fill,
         paint.ink,
       )}
@@ -162,7 +162,7 @@ function Published({
   return (
     <div className="flex w-full max-w-130 flex-col gap-4">
       <div className="flex items-center gap-3 card p-4">
-        <span aria-hidden className="size-2.5 shrink-0 rounded-full bg-paint-tile-grass" />
+        <span aria-hidden className="size-2.5 shrink-0 rounded-pill bg-paint-tile-grass" />
         <span className="flex-1 font-semibold">{t('public.inLibrary')}</span>
         <span className="text-sm text-muted-foreground">
           {publishing.saves > 0
@@ -269,7 +269,7 @@ function PublishForm({
           maxLength={120}
           onChange={(event) => set({ title: event.target.value })}
           aria-label={t('public.titleField')}
-          className="h-12 rounded-xl bg-card px-4 text-base ring-1 ring-border outline-none"
+          className="h-12 rounded-control bg-card px-4 text-base ring-1 ring-border outline-none"
         />
       </Field>
       {song ? (
@@ -279,7 +279,7 @@ function PublishForm({
             maxLength={TAG_MAX * 4}
             onChange={(event) => set({ composer: event.target.value })}
             aria-label={t('public.composer')}
-            className="h-12 rounded-xl bg-card px-4 text-base ring-1 ring-border outline-none"
+            className="h-12 rounded-control bg-card px-4 text-base ring-1 ring-border outline-none"
           />
         </Field>
       ) : null}
@@ -294,7 +294,7 @@ function PublishForm({
         </Field>
       ) : null}
       <Field label={t('public.tags')}>
-        <div className="flex flex-wrap items-center gap-x-1.5 rounded-xl bg-card px-2 ring-1 ring-border">
+        <div className="flex flex-wrap items-center gap-x-1.5 rounded-control bg-card px-2 ring-1 ring-border">
           {face.tags.map((each) => (
             <button
               key={each}
@@ -352,7 +352,7 @@ function PublishForm({
           placeholder={t(song ? 'public.aboutSong' : 'public.aboutPattern')}
           aria-describedby={`${id}-count`}
           onChange={(event) => set({ description: event.target.value })}
-          className="min-h-28 rounded-xl bg-card px-3 py-3 text-base ring-1 ring-border md:text-base"
+          className="min-h-28 rounded-control bg-card px-3 py-3 text-base ring-1 ring-border md:text-base"
         />
         <p
           id={`${id}-count`}

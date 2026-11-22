@@ -48,7 +48,7 @@ export function IntervalTiles({
                     title={title}
                     onClick={() => onPick(name)}
                     className={cn(
-                      'flex h-13 w-full flex-col items-center justify-center gap-px rounded-xl bg-card leading-[normal] ring-1 ring-border transition-colors hover:bg-muted',
+                      'flex h-13 w-full flex-col items-center justify-center gap-px rounded-control bg-card leading-[normal] ring-1 ring-border transition-colors hover:bg-muted',
                       on && 'bg-selected text-selected-foreground hover:bg-selected',
                     )}
                   >

@@ -137,7 +137,7 @@ export function ArrangerStrip({
     <span
       aria-hidden
       className={cn(
-        'size-2 shrink-0 rounded-full',
+        'size-2 shrink-0 rounded-pill',
         follow.running ? 'bg-learned' : 'bg-muted-foreground',
       )}
     />
@@ -320,7 +320,7 @@ function HeadButton({
       aria-label={label}
       title={label}
       onClick={onClick}
-      className="-my-0.5 grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted hover:text-foreground [&_svg]:size-5"
+      className="-my-0.5 grid size-11 shrink-0 place-items-center rounded-pill text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted hover:text-foreground [&_svg]:size-5"
     >
       {children}
     </button>

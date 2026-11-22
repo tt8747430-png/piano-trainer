@@ -22,7 +22,7 @@ import { useSongStatus } from './use-song-status'
  * title on a 20 line and its two lines at their normal height, 2 apart.
  */
 export const SONG_FACE =
-  'gap-4 py-3 pl-3 [&_[data-slot=row-tile]]:size-14 [&_[data-slot=row-tile]]:rounded-xl **:data-[slot=row-title]:leading-5 **:data-[slot=row-detail]:mt-0.5 **:data-[slot=row-detail]:leading-[normal] **:data-[slot=row-status]:mt-0.5 **:data-[slot=row-status]:leading-[normal]'
+  'gap-4 py-3 pl-3 [&_[data-slot=row-tile]]:size-14 [&_[data-slot=row-tile]]:rounded-control **:data-[slot=row-title]:leading-5 **:data-[slot=row-detail]:mt-0.5 **:data-[slot=row-detail]:leading-[normal] **:data-[slot=row-status]:mt-0.5 **:data-[slot=row-status]:leading-[normal]'
 
 /** A song's row shows its key under its title; where it stands is its own line. */
 const SONG_SHOWS = { key: true, chords: false, progress: false } as const

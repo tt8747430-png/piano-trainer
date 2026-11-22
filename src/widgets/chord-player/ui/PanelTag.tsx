@@ -67,7 +67,7 @@ export function PanelTag({ panel, className }: { panel: ChordPanel; className: s
     <>
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0.5 z-40 rounded-xl outline-2 -outline-offset-2 outline-layout-edge outline-dashed"
+        className="pointer-events-none absolute inset-0.5 z-40 rounded-control outline-2 -outline-offset-2 outline-layout-edge outline-dashed"
       />
       <div
         className={cn(
@@ -93,7 +93,7 @@ export function PanelTag({ panel, className }: { panel: ChordPanel; className: s
             edit.pick(panel)
           }}
           className={cn(
-            'grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-full transition-colors duration-150 ease-out hover:bg-muted active:cursor-grabbing [&_svg]:size-[18px]',
+            'grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-pill transition-colors duration-150 ease-out hover:bg-muted active:cursor-grabbing [&_svg]:size-[18px]',
             edit.picked === panel && 'bg-chosen-honey',
           )}
         >

@@ -61,10 +61,10 @@ function CheckFlow({ plan, again }: { plan: CheckPlan; again: () => void }) {
       {/* What it has come to so far, as the Check board's two chips: right in grass, wrong quiet. */}
       {trainer.summary ? null : (
         <p className="mx-auto flex w-full max-w-190 gap-2 text-sm/[normal] font-semibold tabular-nums">
-          <span className="rounded-xl bg-paint-grass px-3 py-1 text-on-paint-grass">
+          <span className="rounded-control bg-paint-grass px-3 py-1 text-on-paint-grass">
             {t('quiz:tally.right', { count: right })}
           </span>
-          <span className="rounded-xl bg-muted px-3 py-1 text-muted-foreground">
+          <span className="rounded-control bg-muted px-3 py-1 text-muted-foreground">
             {t('quiz:tally.wrong', { count: answered - right })}
           </span>
         </p>

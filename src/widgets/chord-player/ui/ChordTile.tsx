@@ -213,7 +213,7 @@ export const ChordTile = memo(function ChordTile({
           onTouchStart={(event) => event.stopPropagation()}
           className="absolute inset-y-0 -right-2.5 z-10 flex w-6 cursor-ew-resize touch-none items-center justify-center"
         >
-          <span className="h-[55%] w-1 rounded-full bg-foreground" />
+          <span className="h-[55%] w-1 rounded-pill bg-foreground" />
         </span>
       ) : null}
       {wrong ? (

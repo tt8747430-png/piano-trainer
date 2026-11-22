@@ -23,7 +23,7 @@ const SIZE = {
 
 /** A milestone's tile is a rounded square (AROW, P9_MILE): 12 in a row, 24 at the head of its page. */
 const TILE = {
-  row: 'size-11 rounded-xl [&_svg]:size-5',
+  row: 'size-11 rounded-control [&_svg]:size-5',
   hero: 'size-22 rounded-sheet [&_svg]:size-10',
 } as const
 

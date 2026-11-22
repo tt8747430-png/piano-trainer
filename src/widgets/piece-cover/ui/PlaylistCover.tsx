@@ -45,7 +45,7 @@ export function PlaylistCover({
         </span>
       ) : null}
       {face ? (
-        <span className="absolute -right-1 -bottom-1 rounded-full ring-2 ring-card">
+        <span className="absolute -right-1 -bottom-1 rounded-pill ring-2 ring-card">
           <Avatar name={face} picture={null} size="feed" />
         </span>
       ) : null}

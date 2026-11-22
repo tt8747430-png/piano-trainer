@@ -31,7 +31,7 @@ import { useRoundWords } from './use-round-words'
 /** A pill of the round's foot, as the Check board's: 50 tall, sharing the row, 15 bold. */
 /** The foot's pills as the Check board's BTN: 50 tall at 16 bold, 20 a side, shared from a zero basis. */
 const FOOT =
-  'h-12.5 min-w-0 flex-1 basis-0 rounded-full px-5 text-base leading-tight font-bold whitespace-nowrap'
+  'h-12.5 min-w-0 flex-1 basis-0 rounded-pill px-5 text-base leading-tight font-bold whitespace-nowrap'
 /** The foot's quiet pills, on the sand. */
 const QUIET =
   'bg-muted text-foreground hover:bg-foreground/10 disabled:text-foreground/45 disabled:opacity-100'

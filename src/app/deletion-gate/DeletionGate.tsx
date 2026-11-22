@@ -48,7 +48,7 @@ export function DeletionGate() {
           <AlertDialogTitle className="text-xl">{t('deletionGate.title')}</AlertDialogTitle>
           <AlertDialogDescription>{t('deletionGate.body', { date })}</AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="mt-1.5 flex gap-2 *:h-11 *:min-w-0 *:flex-1 *:rounded-full *:text-base *:font-bold">
+        <div className="mt-1.5 flex gap-2 *:h-11 *:min-w-0 *:flex-1 *:rounded-pill *:text-base *:font-bold">
           <AlertDialogCancel onClick={() => void auth.signOut()}>
             {t('deletionGate.signOut')}
           </AlertDialogCancel>

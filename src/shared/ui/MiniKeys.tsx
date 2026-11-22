@@ -40,7 +40,7 @@ export function MiniKeys({
     <div
       aria-hidden
       className={cn(
-        'relative isolate h-11.5 w-26 shrink-0 overflow-hidden rounded-md bg-border',
+        'relative isolate h-11.5 w-26 shrink-0 overflow-hidden rounded-control bg-border',
         className,
       )}
     >
