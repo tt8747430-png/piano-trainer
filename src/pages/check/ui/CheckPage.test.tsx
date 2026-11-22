@@ -13,7 +13,7 @@ describe('Check', () => {
     const { router } = await renderApp('/practice/scales')
     await screen.findByRole('heading', { level: 1 })
     await act(() => router.navigate({ to: '/check', search: { of: 'scale:blues' } }))
-    await screen.findByRole('progressbar')
+    await screen.findByRole('meter')
     await user.keyboard('?')
     const sheet = await screen.findByRole('dialog')
     expect(within(sheet).getByText('Close the check')).toBeInTheDocument()
@@ -29,7 +29,7 @@ describe('Check', () => {
     for (let i = 0; i < 4; i++)
       recordAnswer(progressStore, { skill: scaleSkill('blues'), correct: true }, new Date())
     await renderApp('/check?of=scale:blues', { storage })
-    expect(await screen.findByRole('progressbar')).toHaveAttribute('aria-valuemax', '1')
+    expect(await screen.findByRole('meter')).toHaveAttribute('aria-valuemax', '1')
   })
 
   it('shows the score and each skill’s rating at the end', async () => {
@@ -45,13 +45,18 @@ describe('Check', () => {
     // The score takes the focus from the Results that ended the check, so a screen reader reads it.
     expect(screen.getByText('0 of 4')).toHaveFocus()
     expect(screen.getAllByRole('button', { name: 'Done' })).toHaveLength(1)
-    expect(screen.getByRole('link', { name: 'Open in Scales' })).toBeInTheDocument()
+    // Each skill a row, opening where it is practised.
+    expect(
+      within(screen.getByRole('region', { name: 'Skills' })).getByRole('link', {
+        name: 'Minor bluesOpen in Scales',
+      }),
+    ).toBeInTheDocument()
   })
 
   it('says when the check marked its step learned', async () => {
     const user = userEvent.setup()
     const { progressStore } = await renderApp('/check?of=scale:blues')
-    await screen.findByRole('progressbar')
+    await screen.findByRole('meter')
     act(() => {
       for (let i = 0; i < 4; i++)
         recordAnswer(progressStore, { skill: scaleSkill('blues'), correct: true }, new Date())
