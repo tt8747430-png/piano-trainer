@@ -379,13 +379,14 @@ def _newitem(label, go):
     if go.endswith('.dc.html') or go == '#':
         return f'<li><a role="menuitem" href="{go}" style="{st}">{face}</a></li>'
     return f'<li><button type="button" role="menuitem" onClick="{{{{{go}}}}}" style="{st}">{face}</button></li>'
-def NEWDIAL(items, bottom, on='dialOn', off='noDial', toggle='openDial', close='closeSheet'):
+def NEWDIAL(items, bottom, on='dialOn', off='noDial', toggle='openDial', close='closeSheet', bg=None, ring=''):
     """The phone's floating New, at the bottom right (owner, 2026-11-15; Material 3's FAB: "the lower right corner …
-    easy to reach and less likely to cover important content"), 16 in: items as (label, act or href), nearest the thumb last."""
+    easy to reach and less likely to cover important content"), 16 in: items as (label, act or href), nearest the thumb last.
+    `bg` and `ring` bind its paint where the screen's honey act is elsewhere for a state (Learn's first visit: Start)."""
     card = (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 29; background: rgba(247,243,238,.6)"></div>'
             f'<ul role="menu" aria-label="New" style="position: absolute; right: 16px; bottom: {bottom + 72}px; transform-origin: bottom right; z-index: 31; min-width: 200px; margin: 0; box-sizing: border-box; list-style: none; display: flex; flex-direction: column; gap: 2px; padding: 6px; border-radius: 16px; {GLASSFX}">'
             + ''.join(_newitem(l, g) for l, g in items) + '</ul></sc-if>')
-    return card + (f'<button type="button" aria-label="New" data-tip="New" aria-haspopup="menu" aria-expanded="{{{{{on}}}}}" onClick="{{{{{toggle}}}}}" style="position: absolute; right: 16px; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; box-shadow: {FLOAT}; display: flex; align-items: center; justify-content: center">'
+    return card + (f'<button type="button" aria-label="New" data-tip="New" aria-haspopup="menu" aria-expanded="{{{{{on}}}}}" onClick="{{{{{toggle}}}}}" style="position: absolute; right: 16px; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {bg or ACCENT}; color: {INK}; box-shadow: {FLOAT}{ring}; display: flex; align-items: center; justify-content: center">'
                    f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}">{_NEWX}</sc-if><sc-if value="{{{{{off}}}}}" hint-placeholder-val="{{{{true}}}}">{_NEWPLUS}</sc-if></button>')
 def NEWFAB(label, act, bottom):
     """A floating New with one thing to make: the same 56 honey + as NEWDIAL, at the bottom right, its name in its tip."""
