@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -37,11 +37,14 @@ describe('the Player’s shortcuts', () => {
   it('takes the tempo 5% down and up, and loops the bar on R', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
-    await screen.findByRole('button', { name: /^Pace: 100%/ })
+    await screen.findByRole('button', { name: 'Play' })
     // The song goes at 72: 90% is 65, 95% is 68.
     await user.keyboard('{ArrowDown}{ArrowDown}')
-    expect(screen.getByRole('button', { name: /^Pace: 90%/ })).toBeInTheDocument()
     expect(router.state.location.search).toMatchObject({ tempo: 65 })
+    await user.click(screen.getByRole('button', { name: /^Practice:/ }))
+    const practice = await screen.findByRole('dialog', { name: 'Practice' })
+    expect(within(practice).getByText('Tempo: 65 BPM')).toBeInTheDocument()
+    await user.keyboard('{Escape}')
     await user.keyboard('{ArrowUp}')
     expect(router.state.location.search).toMatchObject({ tempo: 68 })
     await user.keyboard('r')
@@ -88,6 +91,9 @@ describe('the Player’s shortcuts', () => {
       'Play (Space)',
     )
     expect(screen.getByRole('button', { name: 'Loop' })).toHaveAttribute('title', 'Loop (R)')
-    expect(screen.getByRole('button', { name: 'Next' })).toHaveAttribute('title', 'Next (→)')
+    expect(screen.getByRole('button', { name: 'Next note' })).toHaveAttribute(
+      'title',
+      'Next note (→)',
+    )
   })
 })
