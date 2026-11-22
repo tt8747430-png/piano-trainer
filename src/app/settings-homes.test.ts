@@ -8,11 +8,7 @@ const SRC = resolve(import.meta.dirname, '..')
 
 /** Where each page's controls are drawn: its page and the parts it is made of. */
 const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
-  general: [
-    'pages/settings/ui/GeneralPage.tsx',
-    'widgets/welcome/',
-    'features/live-keyboard/ui/TypingSwitch.tsx',
-  ],
+  general: ['pages/settings/ui/GeneralPage.tsx', 'features/live-keyboard/ui/TypingSwitch.tsx'],
   'piano-sheet': ['features/live-keyboard/ui/PianoSheet.tsx'],
   'connect-piano': ['pages/midi-settings/', 'features/connect-midi/', 'features/live-keyboard/'],
   'score-editor': ['pages/score-editor/ui/ScoreSettingsPages.tsx', 'features/record-take/ui/'],

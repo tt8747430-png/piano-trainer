@@ -48,7 +48,6 @@ describe('settings selectors', () => {
       recorder: DEFAULT_RECORDER,
       editing: DEFAULT_EDITING,
       foldedSections: ['chords.tensions'],
-      welcomed: true,
       practiceRecent: [],
       paletteRecent: [],
       sidebar: 'collapsed',

@@ -311,7 +311,6 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `trainer-setup` | Each drill as its picture: | 1 |
 | `transpose` | What a sheet only shown prints as it is: | 2 |
 | `tuner` | Each key's name, sharps for the black keys, as a tuner reads them. | 1 |
-| `welcome` | The welcome, once, on the app's first run: | 1 |
 
 ## Features (`src/features`)
 

@@ -41,7 +41,7 @@ export function DeletionGate() {
   const date = purgeAfter === null ? '' : dateSaid(purgeAfter, locale)
   return (
     <AlertDialog open={account !== null && purgeAfter !== null}>
-      {/* The AppLayers board's gate, the welcome's box: 22 corners, 20 about, a 20 title, then Sign out
+      {/* The AppLayers board's gate, its dialog box: 22 corners, 20 about, a 20 title, then Sign out
           and Keep account side by side, Keep account the screen's one honey act. */}
       <AlertDialogContent className="gap-3 rounded-sheet p-5">
         <AlertDialogHeader className="gap-3">

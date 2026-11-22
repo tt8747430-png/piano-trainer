@@ -58,8 +58,6 @@ export const selectOtherHand = (state: SettingsState): OtherHandSettings => stat
 export const selectPlayback = (state: SettingsState): PlaybackSettings => state.playback
 export const selectMetronome = (state: SettingsState): MetronomeSettings => state.metronome
 
-export const selectWelcomed = (state: SettingsState): boolean => state.welcomed
-
 /** How every progression is written and voiced (A24). */
 export const selectProgressions = (state: SettingsState): ProgressionsSettings => state.progressions
 export const selectIntervals = (state: SettingsState): IntervalSettings => state.intervals

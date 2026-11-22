@@ -98,7 +98,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 57
+export const SETTINGS_VERSION = 58
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -135,7 +135,6 @@ export function createSettingsStore({
         playback: DEFAULT_PLAYBACK,
         metronome: DEFAULT_METRONOME,
         foldedSections: [],
-        welcomed: false,
         practiceRecent: [],
         paletteRecent: PALETTE_RECENT_START,
         progressions: DEFAULT_PROGRESSIONS,
@@ -490,7 +489,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     playback: playbackSettings(saved.playback),
     metronome: metronomeSettings(saved.metronome),
     foldedSections: foldedSections(saved.foldedSections),
-    welcomed: saved.welcomed === true,
     practiceRecent: Array.isArray(saved.practiceRecent)
       ? [
           ...new Set(saved.practiceRecent.filter((id): id is string => typeof id === 'string')),

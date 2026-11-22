@@ -6,8 +6,7 @@ export const account: LocaleResources['account'] = {
   name: 'Ваше имя',
   or: 'или',
   google: 'Войти через Google',
-  apple: 'Войти через Apple',
-  soon: 'Скоро',
+  why: 'Сохраняйте песни и прогресс на всех своих устройствах.',
   offline: 'Нет подключения к интернету. Для работы с аккаунтом нужна сеть.',
   profile: {
     badges: {
@@ -307,13 +306,6 @@ export const account: LocaleResources['account'] = {
     says: 'Ваше имя и фото на опубликованных песнях и ваш профиль в обзоре. Если выключено, на песнях будет «Ученик Piano Trainer».',
     shown: 'Профиль виден',
     hidden: 'Профиль скрыт',
-  },
-  welcome: {
-    title: 'Добро пожаловать в Тренажёр фортепиано',
-    says: 'Учите песни, аккорды и гаммы за фортепиано в своём темпе.',
-    language: 'Язык',
-    start: 'Начать',
-    signIn: 'Войти',
   },
   signIn: {
     title: 'Вход',

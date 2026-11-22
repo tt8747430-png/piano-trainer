@@ -7,7 +7,7 @@ import { FormField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { emailProblem, passwordProblem } from '../model/fields'
 import { useAuthSubmit } from '../model/use-auth-submit'
-import { ACCOUNT_LINK, AccountScreen, OfflineLine, ProblemLine } from './AccountScreen'
+import { ACCOUNT_LINK, AccountHead, AccountScreen, OfflineLine, ProblemLine } from './AccountScreen'
 import { SocialButtons } from './SocialButtons'
 
 type Field = 'name' | 'email' | 'password'
@@ -53,6 +53,7 @@ export function SignUpPage() {
   return (
     <AccountScreen title={t('signUp.title')}>
       <OfflineLine online={online} />
+      <AccountHead />
       <SocialButtons online={online} onProblem={setProblem} />
       <form noValidate onSubmit={(event) => void submit(event)} className="flex flex-col gap-4">
         <>

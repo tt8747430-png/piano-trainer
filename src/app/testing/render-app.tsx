@@ -30,7 +30,7 @@ import { createAppRouter } from '../router'
  * language, with fake audio and MIDI it hands back for the test to drive; `webMidi: false` is a
  * browser without it; `content` is where songs' music and lessons come from (all on the device unless
  * a test says otherwise); `auth` and `cloud` are fakes, signed out unless the test signs in;
- * `welcomed: false` is the app's first run, with its welcome; `publicLibrary`, `profile`, `admin`, `features`, `contentEditing` and `errors` fakes, empty unless given.
+ * `publicLibrary`, `profile`, `admin`, `features`, `contentEditing` and `errors` fakes, empty unless given.
  * Every screen's code is loaded first, and the score's engraver, so a test waits on the app and
  * never on the runner importing a lazy chunk.
  * What the app hears on the window and the document (its stores another tab's saves, its router the
@@ -45,7 +45,6 @@ export async function renderApp(
     content = filesContent(),
     auth = createFakeAuth(),
     cloud = createFakeCloud(),
-    welcomed = true,
     publicLibrary = createFakePublicLibrary(),
     profile = createFakeProfile(),
     groups = createFakeGroups(),
@@ -60,7 +59,6 @@ export async function renderApp(
     content?: ContentPort
     auth?: AuthGateway
     cloud?: ReturnType<typeof createFakeCloud>
-    welcomed?: boolean
     publicLibrary?: PublicLibrary
     profile?: ProfilePort
     groups?: GroupsPort
@@ -76,7 +74,6 @@ export async function renderApp(
     { storage: sync.storage, signal: testOver },
     { languages: [locale], finePointer: false },
   )
-  if (welcomed && !stores.settings.getState().welcomed) stores.settings.setState({ welcomed })
   const router = heardUntil(testOver, () =>
     createAppRouter({
       ...stores,

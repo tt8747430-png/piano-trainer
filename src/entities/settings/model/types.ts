@@ -375,8 +375,6 @@ export interface SettingsState {
   metronome: MetronomeSettings
   /** The sections folded away, by their ids (`chords.tensions`): the same on every visit. */
   foldedSections: readonly string[]
-  /** Whether the welcome was seen: the app's first run shows it once. */
-  welcomed: boolean
   /** Practice's pages opened from its list, the latest first (R30-4): its Continue's two. */
   practiceRecent: readonly string[]
   /**

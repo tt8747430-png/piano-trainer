@@ -86,7 +86,7 @@ for (const size of SIZES) {
         ([version, standalone, saved]) => {
           for (const [key, value] of Object.entries(saved)) if (!localStorage.getItem(key)) localStorage.setItem(key, value)
           if (!localStorage.getItem('pt-settings'))
-            localStorage.setItem('pt-settings', JSON.stringify({ state: { welcomed: true }, version }))
+            localStorage.setItem('pt-settings', JSON.stringify({ state: {}, version }))
           if (standalone) Object.defineProperty(navigator, 'standalone', { get: () => true })
         },
         [settingsVersion, Boolean(size.standalone), seed],
