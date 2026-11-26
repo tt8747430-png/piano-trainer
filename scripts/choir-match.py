@@ -193,7 +193,15 @@ def layout_mscx(score, spec):
                     tx = t.find('text')
                     for c in list(tx):
                         tx.remove(c)
-                    tx.text = spec['title']
+                    # The song's number in bold before its name, as the sheets print it.
+                    num, _, name = spec['title'].partition(' ')
+                    if num.isdigit():
+                        tx.text = None
+                        b = ET.SubElement(tx, 'b')
+                        b.text = num
+                        b.tail = ' ' + name
+                    else:
+                        tx.text = spec['title']
             break
     staffs = [s for s in score.findall('Staff') if s.find('Measure') is not None]
     first = staffs[0]
@@ -258,6 +266,12 @@ def style_mss(data, spec):
         values[f'lyrics{side}FontFace'] = 'Arial'
         values[f'lyrics{side}FontSize'] = spec.get('lyrics_size') or '11'
         values[f'lyrics{side}FontSpatiumDependent'] = '0'
+    # A bar number only at the start of each line; the title and names in the sheets' sans type.
+    values['showMeasureNumber'] = '1'
+    values['measureNumberSystem'] = '1'
+    values['measureNumberInterval'] = '1000'
+    for el in ('title', 'subTitle', 'composer', 'lyricist'):
+        values[f'{el}FontFace'] = 'Arial'
     # Staves and lines as close as the printed sheets set them.
     values['staffDistance'] = spec.get('staff_distance') or '5'
     values['akkoladeDistance'] = spec.get('staff_distance') or '5'

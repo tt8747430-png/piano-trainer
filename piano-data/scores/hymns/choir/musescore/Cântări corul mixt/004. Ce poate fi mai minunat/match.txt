@@ -1,0 +1,20 @@
+# From 004. Ce poate fi mai minunat.pdf (1 page) and the choir book, page 9.
+title: 4 Ce poate fi mai minunat?
+spatium: 1.75
+systems: 1 5 9 13
+hide-tempo
+hide-names
+
+[Soprano]
+1: @1 1.Ce poa -- te fi mai mi -- nu -- nat Ca ha -- rul sfânt ce 'ni s'a dat
+1: @5 Prin jert -- fa Dom -- nu -- lui I -- sus, Mie -- lul tri -- mis de sus?
+1: @9 fi -- e prea -- mă -- rit căci pe noi ne'a mân -- tu -- it, Și ne'a
+1: @13 dat ier -- ta -- re'n dar, Sus pe cru -- ce, la Cal -- var.
+2: @1 2.El ne'a a -- les din lu -- mea rea Să fim păr -- tași la sla -- va Sa;
+2: @5 Cu pre -- țul vie -- ții ne'a sal -- vat Din ma -- rea de pă -- cat. El să
+3: @1 3.O, cât mă simt de fe -- ri -- cit Căci mân -- tu -- i -- re am pri -- mit,
+3: @5 Și Îl iu -- besc ne -- în -- ce -- tat Pe Cel ce m'a sal -- vat!
+
+[Tenor italic]
+1: @9 El să fi -- e prea -- mă -- rit căci pe noi ne'a mân -- tu -- it,
+1: @13 Și ne'a dat ier -- ta -- re'n dar
