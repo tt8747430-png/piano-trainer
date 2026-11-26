@@ -98,7 +98,7 @@ GBARS = [
 def _step(p, clef):  # staff steps above the bottom line: E4 in the treble, G2 in the bass
     n = 'CDEFGAB'.index(p[0]) + 7 * int(p[1])
     return n - (('CDEFGAB'.index('E') + 28) if clef == 't' else ('CDEFGAB'.index('G') + 14))
-def score_grand(w, systems, sel=None, size=1.0):
+def score_grand(w, systems, sel=None, size=1.0, natural=False):
     """The song's systems, each Melody over the Piano's grand staff. systems: lists of bar indexes; sel: (bar, event)."""
     s = size; sp = 8 * s; out = []; gy = 0; H = 0
     ln = lambda d, sw=0.9, c=INK: out.append(f'<path d="{d}" stroke="{c}" stroke-width="{sw}" fill="none"></path>')
@@ -113,7 +113,6 @@ def score_grand(w, systems, sel=None, size=1.0):
         first = si == 0
         mtop = gy + 34 * s; mbase = mtop + 4 * sp; ttop = mbase + 46 * s; tbase = ttop + 4 * sp; btop = tbase + 36 * s; bbase = btop + 4 * sp
         x0 = (66 if first else 14) * s; x1 = w - 4
-        for t in (mtop, ttop, btop): staff(t, x0, x1)
         ln(f'M{x0:.1f} {mtop:.1f}V{bbase:.1f}', 1.1)
         # the brace before the piano's two staves
         bx = x0 - 9 * s; my = (ttop + bbase) / 2
@@ -132,13 +131,33 @@ def score_grand(w, systems, sel=None, size=1.0):
                 out.append(f'<text x="{x + 46 * s:.1f}" y="{top + 2 * sp - 1:.1f}" font-size="{19 * s:.0f}" font-weight="700" font-family="Georgia, serif" fill="{INK}">3</text><text x="{x + 46 * s:.1f}" y="{top + 4 * sp - 1:.1f}" font-size="{19 * s:.0f}" font-weight="700" font-family="Georgia, serif" fill="{INK}">4</text>')
         x += (68 if first else 46) * s
         # each bar's width: its beats, widened where its words need the room
-        beats = [sum(e[1] for e in GBARS[b][1]) for b in bars]
-        need = [sum(max(len(e[2]) * 7.4 * s + 12 * s, e[1] * 26 * s) for e in GBARS[b][1]) + 26 * s for b in bars]
-        unit = (x1 - x) / sum(beats); widths = [max(beats[i] * unit, need[i]) for i in range(len(bars))]
-        k = (x1 - x) / sum(widths); widths = [v * k for v in widths]
+        # note spacing as Dorico's and Gould's: each onset's space grows by the square root of the time to the next
+        # (a half note 1.41 times a quarter's 3.5 spaces), never under 1.5 spaces, widened where a syllable needs room
+        def slots(b):
+            ch_, mel_, pno_ = GBARS[b]; nb_ = sum(e[1] for e in mel_); on = {}; t_ = 0
+            for e in mel_: on[t_] = max(on.get(t_, 0), (len(e[2].strip('-_')) * 7.4 + 10) * s if e[2].strip('-_') else 0); t_ += e[1]
+            if pno_:
+                for tt in (0, 1, 2): on.setdefault(tt, 0)
+            ts = sorted(on); sp_ = []
+            for i_, t0 in enumerate(ts):
+                g = (ts[i_ + 1] if i_ + 1 < len(ts) else nb_) - t0
+                sp_.append(max(28 * s * g ** 0.5, 12 * s, on[t0]))
+            return ts, sp_, nb_
+        lead = 16 * s; trail = 10 * s
+        SL = [slots(b) for b in bars]
+        nat = [lead + sum(v[1]) + trail for v in SL]
+        if natural: x1 = x + sum(nat); w = x1 + 4
+        k = (x1 - x - len(bars) * (lead + trail)) / sum(sum(v[1]) for v in SL)  # justified: the room shared by the notes' spaces
+        widths = [lead + sum(v[1]) * k + trail for v in SL]
         for bi, b in enumerate(bars):
-            ch, mel, pno = GBARS[b]; bw = widths[bi]; nb = beats[bi]; lead = 16 * s; span = bw - lead - 10 * s
-            at = lambda t: x + lead + t / nb * span
+            ch, mel, pno = GBARS[b]; bw = widths[bi]; ts_, sps, nb = SL[bi]
+            cum = [0]
+            for v in sps: cum.append(cum[-1] + v * k)
+            pts = list(ts_) + [nb]
+            def at(t, x=x, pts=pts, cum=cum, lead=lead):
+                for j in range(len(pts) - 1):
+                    if pts[j] <= t <= pts[j + 1]: return x + lead + cum[j] + (t - pts[j]) / (pts[j + 1] - pts[j]) * (cum[j + 1] - cum[j])
+                return x + lead + cum[-1]
             if ch: out.append(f'<text x="{at(0) - 5 * s:.1f}" y="{mtop - 10 * s:.1f}" font-size="{15 * s:.0f}" font-weight="700" font-family="{SERIF}" fill="{INK}">{ch}</text>')
             t = 0; evx = []
             for ei, e in enumerate(mel):
@@ -201,8 +220,9 @@ def score_grand(w, systems, sel=None, size=1.0):
             x += bw
             end = bi == len(bars) - 1
             ln(f'M{x:.1f} {mtop:.1f}V{mbase:.1f}M{x:.1f} {ttop:.1f}V{bbase:.1f}', 1.1 if end else 0.9)
+        for t in (mtop, ttop, btop): staff(t, x0, x)  # the staves run to the system's last barline
         gy = bbase + 3.6 * sp + 22 * s; H = gy
-    return f'<svg viewBox="0 0 {w} {H:.0f}" width="100%" role="img" aria-label="Amazing Grace, Melody and Piano" style="display: block">' + ''.join(out) + '</svg>'
+    return f'<svg viewBox="0 0 {w:.0f} {H:.0f}" width="{"%.0f" % (w * natural) if natural else "100%"}" role="img" aria-label="Amazing Grace, Melody and Piano" style="display: block">' + ''.join(out) + '</svg>'
 
 # --- hanon
 def hanon(w, shift=0):  # shift: the figure's start a step higher, as Hanon's next two bars climb

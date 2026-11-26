@@ -7,6 +7,37 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
 
 ## Rulings (feedback-log "Score editor")
 
+- **R74, the editor as Flat's: a toolbar, panes that resize, Page and Panorama only** (owner, 2026-11-26: "reserach
+  the flat editor workflow and its ui … we need real toolbar like on the laptop, real resizable interactions … remove
+  the vertical scroll and leave only the page and panorama view and make proper layout for the sheet. reserach how a
+  professional editor does all the spacing"). Sources: `piano-data/research/flat/FLAT_UI_SHELL_AND_MOTION.md` §1.1–1.4
+  (the 56 toolbar row; `essentials` at its start: durations, dot, tie, tuplets, rest, ♮ ♯ ♭; `actions` at its end:
+  delete, copy, cut, paste, zoom in and out, the display mode; the 352 notation panel at the left that collapses; the
+  fit zoom told of every panel width), `FLAT_SETTINGS_TOOLS_FLOWS.md` (A4, margins 17.2 mm, staff size, measures per
+  system; view modes Page / Horizontal / Vertical), `flat-score-editor` 017, 021, 099, 131, 134; Dorico 045 (a
+  quarter 3½ spaces, the √2 ratio per doubled value, short notes at least 1½ spaces, the last system justified only
+  past 50 % full), Dorico's Page and Galley views; Donemus' rastral table (rastral 3 = 7 mm, single-stave and piano
+  music); Metronaut's SCORE_RENDERING (Page and Continuous, pinch and ⌘± zoom).
+  - **Laptop:** the bar (✕ and the save state · Play | Edit · Undo, Redo, ···), then a 56 toolbar: the Palette switch,
+    the note-input pill (rest, whole to 16th, dot, tie, triplet | ♮ ♯ ♭), and at the end Delete | Copy, Cut, Paste |
+    − 100 % + | Page · Panorama | Piano keys. The palette is a panel at the left, 352 by default, dragged by its edge
+    from 280 to 520 (Arrow keys on its focused grip), hidden by the Palette switch; the keys under the score are
+    dragged by their top edge from 96 to 260. The tools the toolbar holds leave the palette (one way to each act);
+    Delete and the keys' switch leave the selection strip, which keeps the note, Record and Play from here.
+  - **Phone:** the bar, then Flat's second row: the same note-input pill and Delete, Copy, Cut, Paste scroll
+    sideways; Piano keys and the view switch stay at its end. The palette sheet and the keys as before.
+  - **Two views:** Page (the laptop's first) lays the song on A4 on a grey desk: 17.2 mm margins, a 7 mm staff, the
+    title centred, Words at the left margin and Music at the right over the first system, the tempo mark over the
+    first bar, Public domain at the foot, no number on page 1; systems justified to the measure, five bars on the
+    first (the pickup with four), four after. Panorama (the phone's first) runs the song as one system with its
+    natural spacing, scrolled sideways, as Dorico's galley. The continuous vertical view is gone; the menu's
+    "Score view" row went with it (the toolbar holds the view).
+  - **Note spacing everywhere the kit engraves** (`calm_parts.score_grand`): each onset's space is 3½ spaces × √(time
+    to the next onset in quarters), at least 1½ spaces, widened where its syllable needs room; a justified system
+    shares the spare room among the notes' spaces, the bar's lead and tail fixed.
+  - Replaces "Laptop: no sidebar; the palette docked at the right (380)" (canvas 123) and the palette's place at the
+    right in round 34.
+
 - **The editor's ··· is Flat's ≡ menu** (owner, 2026-11-16: "new completely new design"; `flat-score-editor` 083–090):
   headed by the song's name and its save status; one card of Credits, Instruments, Version history, Layout, Playback
   sound, MIDI keyboard and Takes, each with its value; one of Export and Print; then Publish in Explore as its own card

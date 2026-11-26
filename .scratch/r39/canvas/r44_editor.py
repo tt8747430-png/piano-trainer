@@ -50,8 +50,9 @@ ED4 = js(r'''
     const fill = (ts) => { const n = ts.reduce((a, t) => a + t.span, 0) % 8; return n ? ts.concat(Array.from({ length: 8 - n }, () => ({ g: '', name: '', isSvg: false, isTxt: true, tip: '', on: 'false', gbg: '#FEFDFB', bg: 'transparent', fg: '#685E56', span: 1, hid: 'true', ti: '-1' }))) : ts; };
     // Recent first, as Flat's palette (flat-score-editor 017): the marks used last, each where it lives too
     const ALLT = Object.fromEntries(PAL.flatMap(([, ts]) => ts.map((t) => [t[0], t])));
-    const REC = (st.recent ?? ['q', 'e', 'stacc', 'acc', 'slur', 'mf', 'p', 'chord']).filter((id) => ALLT[id]).slice(0, 8).map((id) => ALLT[id]);
-    const PALR = [['Recent', REC], ...PAL];
+    const TBIDS = ['rest', 'w', 'h', 'q', 'e', 's', 'dot', 'tie', 'tup', 'n', 'sh', 'b'];
+    const REC = (st.recent ?? ['stacc', 'acc', 'slur', 'mf', 'p', 'chord', 'ped', '8va']).filter((id) => ALLT[id]).slice(0, 8).map((id) => ALLT[id]);
+    const PALR = [['Recent', REC], ...PAL.map(([c, ts]) => [c, ts.filter((t) => !TBIDS.includes(t[0]))])];
     // each section titled by Flat's name, as the app (Flat's laptop panel, flat-score-editor 099, 121–125)
     const TITLE = { Notes: 'Note', Pitch: 'Pitch and representation', Key: 'Key signature', Time: 'Time signature', Repeats: 'Barlines and repeats' };
     // each group folds by its heading, as Dorico's panels (dorico 142: Immediate Dynamics ⌄)
@@ -59,7 +60,23 @@ ED4 = js(r'''
     const sections = PALR.map(([c, ts]) => ({ c, t: TITLE[c] ?? c, tools: fill(ts.map(tile)), isOpen: !shut.includes(c), rot: shut.includes(c) ? '-90deg' : '0deg', fold: () => set({ shut: shut.includes(c) ? shut.filter((x) => x !== c) : [...shut, c] }) }));
     const NAME = Object.fromEntries(PAL.flatMap(([, ts]) => ts.map((t) => [t[0], t[3].toLowerCase()])));
     const noteL = rest ? DUR[dur].replace('note', 'rest') : 'G' + ACC[acc] + '4 · ' + DUR[dur].toLowerCase();
+    const view = st.view ?? VIEW0, zoom = st.zoom ?? 100, pw = st.pw ?? 352, kh = st.kh ?? 150, pal = st.pal ?? true;
+    const ZS = [50, 75, 100, 125, 150, 200], zi = ZS.indexOf(zoom);
+    const drag = (fn) => (e) => { if (e.type === 'pointermove' && !e.buttons) return; if (e.type === 'pointerdown') { if (e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId); return; }
+      const g = e.currentTarget.closest('[data-edgrid]'); if (!g) return; const r = g.getBoundingClientRect(), k = r.width / g.offsetWidth; fn(r, k, e); };
+    const tb = (ids) => ids.map((id) => tile(ALLT[id]));
     return { ...common(st, set),
+      tbDur: tb(['rest', 'w', 'h', 'q', 'e', 's', 'dot', 'tie', 'tup']), tbAcc: tb(['n', 'sh', 'b']),
+      pageOn: view === 'page', panoOn: view === 'pano', viewL: view === 'page' ? 'Panorama' : 'Page view', toggleView: () => set({ view: view === 'page' ? 'pano' : 'page' }),
+      views: seg(['Page', 'Panorama'], view === 'page' ? 'Page' : 'Panorama', (l) => set({ view: l === 'Page' ? 'page' : 'pano' })),
+      zoomL: zoom + '%', zf: (view === 'page' ? FIT : 1) * zoom / 100, zoomIn: () => set({ zoom: ZS[Math.min(ZS.length - 1, zi + 1)] }), zoomOut: () => set({ zoom: ZS[Math.max(0, zi - 1)] }), zoomReset: () => set({ zoom: 100 }),
+      zinDis: zi === ZS.length - 1 ? 'true' : 'false', zoutDis: zi === 0 ? 'true' : 'false',
+      pw, kh, palOn: pal, palPressed: pal ? 'true' : 'false', togglePal: () => set({ pal: !pal }),
+      dragPanel: drag((r, k, e) => set({ pw: Math.round(Math.max(280, Math.min(520, (e.clientX - r.left) / k))) })),
+      keyPanel: (e) => { const d = { ArrowLeft: -16, ArrowRight: 16 }[e.key]; if (d) set({ pw: Math.max(280, Math.min(520, pw + d)) }); },
+      dragKeys: drag((r, k, e) => set({ kh: Math.round(Math.max(96, Math.min(260, (r.bottom - e.clientY) / k))) })),
+      keyKeys: (e) => { const d = { ArrowUp: 16, ArrowDown: -16 }[e.key]; if (d) set({ kh: Math.max(96, Math.min(260, kh + d)) }); },
+      copied: () => set({ toast: 'Copied' }), cut: () => set({ toast: 'Cut · Undo' }), pasted: () => set({ toast: 'Pasted' }),
       cats: seg(PALR.map((p) => p[0]), cat, (l) => set({ cat: l })), catsI: PALR.map(([c]) => { const [g, f] = CATI[c]; return { c, t: TITLE[c] ?? c, g, ff: FF[f], fs: f === 'music' ? 22 : f === 'serif' ? 18 : 15, fst: f === 'serif' ? 'italic' : 'normal', fw: f === 'serif' ? 700 : 600, on: c === cat ? 'true' : 'false', bg: c === cat ? '#FEFDFB' : 'transparent', sh: c === cat ? '0 1px 2px rgba(51,41,33,.12)' : 'none', fg: c === cat ? '#332921' : '#685E56', pick: () => set({ cat: c }) }; }), tools: sections.find((s) => s.c === cat).tools, sections,
       open, folded: !open, toggleOpen: () => set({ open: !open }), openLabel: open ? 'Fold the palette' : 'Open the palette', openRot: open ? '180deg' : '0deg',
       noteL, whereL: 'Bar 4 · beat 1 · “sweet”' + (voice ? ' · voice 2' : '') + (marks.length ? ' · ' + marks.map((m) => NAME[m]).join(', ') : ''),
@@ -70,9 +87,9 @@ ED4 = js(r'''
       doneOn: !!st.done, doneL: st.done ? st.done + ': tap the score where it goes' : '', clearDone: () => set({ done: null }),
       moreOn: st.sheet === 'more', openMore: () => set({ sheet: 'more' }),
       states: [['The palette open', open, { open: true }, { open: false }], ['A rest chosen', rest, { rest: true }, { rest: false }], ['Crossed to the lower staff', marks.includes('xdn'), { marks: [...marks, 'xdn'] }, { marks: marks.filter((m) => m !== 'xdn') }], ['Voice 2 on', voice, { voice: true }, { voice: false }],
-        ['A clef waiting for its place', st.done === 'Treble clef', { done: 'Treble clef' }, { done: null }], ['The piano hidden', !keys, { keys: false }, { keys: true }],
+        ['A clef waiting for its place', st.done === 'Treble clef', { done: 'Treble clef' }, { done: null }], ['The piano hidden', !keys, { keys: false }, { keys: true }], [VIEW0 === 'page' ? 'Panorama' : 'Page view', view !== VIEW0, { view: VIEW0 === 'page' ? 'pano' : 'page' }, { view: VIEW0 }], ['Zoom 150%', zoom === 150, { zoom: 150 }, { zoom: 100 }],
         ['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]].map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => set(on2 ? off : o) })),
-      kb: calmKeys(50, 76, { 67: ['#85B8DC', ''] }, 402, 112), kbL: calmKeys(36, 96, { 67: ['#85B8DC', ''] }, 1330, 170) };''')
+      kb: calmKeys(50, 76, { 67: ['#85B8DC', ''] }, 402, 112), kbL: calmKeys(36, 96, { 67: ['#85B8DC', ''] }, 1330, kh) };''')
 
 # the bar: ✕, the Play · Edit switch (the kit's MODESW), Undo · Redo · ··· (the Player's glass, CLAUDE.md "sharing its bar")
 def GBTN(label, svg, act='', href='', tip=''):
@@ -95,8 +112,6 @@ def STRIP(play=True):
     return (f'<div role="toolbar" aria-label="The chosen note" style="flex: none; min-height: 60px; box-sizing: border-box; padding: 8px 8px 8px 16px; display: flex; align-items: center; gap: 4px">'
             f'<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap">{{{{noteL}}}}</span>'
             f'<span style="font-size: 13px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{whereL}}}}</span></div>'
-            f'{GBTN("Delete the note", DELI, "delNote", tip="Delete · ⌫")}'
-            f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-pressed="{{{{keysPressed}}}}" onClick="{{{{toggleKeys}}}}" style="flex: none; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 22px; background: {{{{keysBg}}}}; color: {{{{keysFg}}}}; display: flex; align-items: center; justify-content: center; position: relative">{KEYSI}</button>'
             f'<button type="button" aria-label="Record a take" data-tip="Record a take" style="flex: none; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 22px; background: transparent; display: flex; align-items: center; justify-content: center; position: relative"><span aria-hidden="true" style="width: 16px; height: 16px; border-radius: 8px; background: #B84A3E; box-shadow: 0 0 0 3px #FEFDFB, 0 0 0 4.5px #B84A3E"></span></button>'
             f'{pb}</div>'
             f'<sc-if value="{{{{doneOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="flex: none; margin: 0 16px 8px; min-height: 44px; box-sizing: border-box; padding: 4px 4px 4px 12px; border-radius: 12px; background: #FBF1DD; display: flex; align-items: center; gap: 8px; font-size: 14px"><span style="flex: 1; min-width: 0">{{{{doneL}}}}</span><button type="button" onClick="{{{{clearDone}}}}" style="height: 36px; padding: 0 8px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">Cancel</button></div></sc-if>')
@@ -131,19 +146,78 @@ ED4 = ED4.replace("keysOn: keys,", "keysOn: keys, keysShown: keys && !open, notK
 # over it (CLAUDE.md, the score editor; round 66: at 852×393 the sheet and keys left no score at all).
 EDLAY_CSS = ('<style data-edlay>[data-menuroot] { container-type: size } @container (min-width: 768px) { .edlay { display: grid !important; grid-template-columns: minmax(0, 1fr) 380px } '
              '.edlay > section[data-strip] { min-height: 0; overflow-y: auto; border-radius: 0 !important; box-shadow: -1px 0 0 ' + LINE + ' !important } .edlay .edgrab { display: none !important } .edlay > section[data-strip] > * { flex-shrink: 0 } }</style>')
-eph4 = (TIP_CSS + EBAR('Song.dc.html', 'Player.dc.html')
-        + '<div class="edlay" style="flex: 1; min-height: 0; display: flex; flex-direction: column">'
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 12px 16px">{SCOREPAGE(360, 0.95, "7px 12px 8px")}</div>' + SHEETP + '</div>' + EDLAY_CSS)
+# ── R74 (owner, 2026-11-26: "we need real toolbar like on the laptop, real resizable interactions … remove the
+# vertical scroll and leave only the page and panorama view and make proper layout for the sheet"). Flat's editor
+# (piano-data/research/flat/FLAT_UI_SHELL_AND_MOTION.md §1.4): a 56 toolbar under the bar, the note-entry essentials
+# in a pill at its start (durations, dot, tie, triplet, rest; ♮ ♯ ♭), the acts flat at its end (delete; copy, cut,
+# paste; zoom; the display mode); the palette a 352 panel at the left that collapses and here also resizes; the
+# keys' height dragged. Two views only, as Flat's Page and Horizontal and Dorico's Page and Galley: Page lays the song
+# on A4 as an engraver does (17.2 mm margins, Flat's default; a 7 mm staff, rastral 3; title centred, Words left and
+# Music right over the first system; Public domain at the foot; no number on page 1), Panorama runs one system on.
+COPYI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></svg>'
+CUTI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"></path></svg>'
+PASTEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>'
+ZOUTI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M5 12h14"></path></svg>'
+ZINI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M5 12h14M12 5v14"></path></svg>'
+PANELI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path></svg>'
+PAGEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"></path><path d="M8 11h8M8 14h8M8 17h8"></path></svg>'
+PANOI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M2 8h20M2 11h20M2 14h20M2 17h20"></path></svg>'
+TBTN = lambda lab, svg, act, tip, dis=None: (f'<button type="button" aria-label="{lab}" data-tip="{tip}"' + (f' aria-disabled="{{{{{dis}}}}}"' if dis else '') +
+    f' onClick="{{{{{act}}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{svg}</button>')
+TSEP = f'<span aria-hidden="true" style="flex: none; width: 1px; height: 24px; margin: 0 4px; background: {LINE}"></span>'
+# a toolbar tool: the palette's TOOL, 44 square, in the essentials pill
+TTOOL = TOOL.replace('min-width: 48px; height: 48px; box-sizing: border-box; padding: 0 8px', 'min-width: 44px; height: 44px; box-sizing: border-box; padding: 0 6px')
+ESSENTIALS = (f'<div role="group" aria-label="Note input" style="flex: none; display: flex; align-items: center; padding: 2px; border-radius: 14px; background: {FILL}">'
+              f'<sc-for list="{{{{tbDur}}}}" as="t" hint-placeholder-count="9">{TTOOL}</sc-for>{TSEP}<sc-for list="{{{{tbAcc}}}}" as="t" hint-placeholder-count="3">{TTOOL}</sc-for></div>')
+KEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-pressed="{{{{keysPressed}}}}" onClick="{{{{toggleKeys}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: {{{{keysBg}}}}; color: {{{{keysFg}}}}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>')
+CLIP = TBTN('Delete', DELI, 'delNote', 'Delete · ⌫') + TSEP + TBTN('Copy', COPYI, 'copied', 'Copy · ⌘C') + TBTN('Cut', CUTI, 'cut', 'Cut · ⌘X') + TBTN('Paste', PASTEI, 'pasted', 'Paste · ⌘V')
+ZOOMG = (TBTN('Zoom out', ZOUTI, 'zoomOut', 'Zoom out · ⌘−', 'zoutDis') + f'<button type="button" aria-label="Reset the zoom" data-tip="Actual size · ⌘0" onClick="{{{{zoomReset}}}}" style="flex: none; position: relative; min-width: 56px; height: 44px; border: 0; padding: 0 4px; border-radius: 12px; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{zoomL}}}}</button>'
+         + TBTN('Zoom in', ZINI, 'zoomIn', 'Zoom in · ⌘=', 'zinDis'))
+TOOLBAR_L = (f'<div role="toolbar" aria-label="Notation" style="flex: none; height: 56px; box-sizing: border-box; padding: 0 24px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
+             f'<button type="button" aria-label="Palette" data-tip="Palette · ⌘\\" aria-pressed="{{{{palPressed}}}}" onClick="{{{{togglePal}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{PANELI}</button>'
+             + ESSENTIALS + '<span style="flex: 1"></span>' + CLIP + TSEP + ZOOMG + TSEP
+             + f'<div style="flex: none; width: 216px">{SEGC("views", 40, 14)}</div>' + TSEP + KEYSBTN + '</div>')
+# the phone's toolbar, as Flat's second row (flat-score-editor 017): the essentials scroll sideways; the keys and the view stay at its end
+TOOLBAR_P = (f'<div role="toolbar" aria-label="Notation" style="flex: none; height: 52px; display: flex; align-items: center; gap: 4px; padding: 0 8px 0 0">'
+             f'<div class="nos" style="flex: 1; min-width: 0; overflow-x: auto; display: flex; align-items: center; gap: 4px; padding: 0 0 0 16px">{ESSENTIALS}{CLIP}</div>'
+             + TSEP + KEYSBTN + f'<button type="button" aria-label="{{{{viewL}}}}" data-tip="{{{{viewL}}}}" onClick="{{{{toggleView}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{pageOn}}}}" hint-placeholder-val="{{{{false}}}}">{PANOI}</sc-if><sc-if value="{{{{panoOn}}}}" hint-placeholder-val="{{{{true}}}}">{PAGEI}</sc-if></button></div>')
 
-# the laptop: full screen as the Player; the score, the keys under it; the palette docked at the right
-elm4 = (TIP_CSS + EBAR('SongLaptop.dc.html', 'PlayerLaptop.dc.html', title=True).replace(MODEBAR_P, MODEBAR_L)
-        + f'<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 380px">'
-        f'<div style="min-width: 0; min-height: 0; display: flex; flex-direction: column">'
-        f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 48px 24px; display: flex; justify-content: center"><div style="width: 1000px">{SCOREPAGE(960, 1.3, "10px 40px 16px")}</div></div>'
-        f'<sc-if value="{{{{keysOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{KEYS(170, "kbL", edge=True)}</div></sc-if></div>'
-        f'<aside aria-label="Palette" data-strip style="min-height: 0; display: flex; flex-direction: column; background: {SHEET}; box-shadow: -1px 0 0 {LINE}">'
-        + STRIP() + f'<div style="height: 1px; margin: 0 16px; background: {LINE}"></div>'
-        f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 20px">{ED_SECTIONS()}</div></aside></div>')
+# the page: A4 at 96 dpi (794 × 1123), 17.2 mm margins (65), a 7 mm staff (26.5 px: the kit's 32 units × 0.828)
+PG_W, PG_H, PG_M, PG_K = 794, 1123, 65, 26.5 / 32
+def A4PAGE():
+    cw = PG_W - 2 * PG_M
+    return (f'<article aria-label="Page 1" style="flex: none; position: relative; width: {PG_W}px; height: {PG_H}px; box-sizing: border-box; padding: {PG_M}px {PG_M}px 0; background: {SHEET}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28); display: flex; flex-direction: column">'
+            f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: 30px; font-weight: 400; line-height: 1.1; color: {INK}">Amazing Grace</h2>'
+            f'<div style="margin: 20px 0 0; display: flex; justify-content: space-between; gap: 24px; font-family: {SERIF}; font-size: 13px; color: {INK}"><span>Words: John Newton</span><span style="text-align: right">Music: New Britain (American folk tune)</span></div>'
+            f'<div style="margin: 16px 0 0; font-family: {SERIF}; font-size: 13px; font-weight: 700; color: {INK}">Verse <span style="font-weight: 400">♩ = 80</span></div>'
+            f'<div style="margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=(3, 0), size=1.0).replace(ACCENT, '#85B8DC') + '</div>'
+            f'<p style="position: absolute; left: 0; right: 0; bottom: 32px; margin: 0; text-align: center; font-family: {SERIF}; font-size: 11px; color: {SOFT}">Public domain</p></article>')
+# the desk the page lies on, as Flat's and Dorico's: a grey ground; the page scaled by the zoom (fit to the width on a phone)
+DESK = lambda pad: (f'<sc-if value="{{{{pageOn}}}}" hint-placeholder-val="{{{{true}}}}"><div class="nos" aria-label="Page view" style="position: absolute; inset: 0; overflow: auto; background: {FILL}"><div style="min-width: min-content; box-sizing: border-box; padding: {pad}; display: flex; justify-content: center">'
+                    f'<div style="zoom: {{{{zf}}}}; display: flex; flex-direction: column; gap: 24px">{A4PAGE()}</div></div></div></sc-if>')
+# Panorama (Dorico's galley, Flat's horizontal): one system as long as the song, its natural spacing, never justified
+PANO = lambda sc, pad: (f'<sc-if value="{{{{panoOn}}}}" hint-placeholder-val="{{{{false}}}}"><div class="nos" aria-label="Panorama" style="position: absolute; inset: 0; overflow-x: auto; overflow-y: hidden; background: {PAGE}; display: flex; align-items: center">'
+                        f'<div style="flex: none; padding: {pad}; zoom: {{{{zf}}}}">' + score_grand(0, [list(range(13))], sel=(3, 0), size=1.0, natural=sc).replace(ACCENT, '#85B8DC') + '</div></div></sc-if>')
+SCOREAREA = lambda inner: f'<div data-score style="flex: 1; min-height: 0; position: relative">{inner}</div>'
+# the grips: a hairline with a pill, the whole band draggable and focusable (Arrow keys), as Flat's and Dorico's panes
+VGRIP = (f'<div role="separator" aria-orientation="vertical" aria-label="Palette width" aria-valuenow="{{{{pw}}}}" aria-valuemin="280" aria-valuemax="520" tabindex="0" data-tip="Drag to resize" onPointerDown="{{{{dragPanel}}}}" onPointerMove="{{{{dragPanel}}}}" onKeyDown="{{{{keyPanel}}}}" '
+         f'style="flex: none; position: relative; z-index: 5; width: 9px; margin: 0 -4px; cursor: col-resize; touch-action: none; display: flex; align-items: center; justify-content: center"><span aria-hidden="true" style="position: absolute; top: 0; bottom: 0; left: 4px; width: 1px; background: {LINE}"></span><span aria-hidden="true" style="position: relative; width: 5px; height: 36px; border-radius: 3px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}"></span></div>')
+HGRIP = (f'<div role="separator" aria-orientation="horizontal" aria-label="Keyboard height" aria-valuenow="{{{{kh}}}}" aria-valuemin="96" aria-valuemax="260" tabindex="0" data-tip="Drag to resize" onPointerDown="{{{{dragKeys}}}}" onPointerMove="{{{{dragKeys}}}}" onKeyDown="{{{{keyKeys}}}}" '
+         f'style="flex: none; position: relative; z-index: 5; height: 13px; margin: -6px 0; cursor: row-resize; touch-action: none; display: flex; align-items: center; justify-content: center"><span aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 6px; height: 1px; background: {LINE}"></span><span aria-hidden="true" style="position: relative; width: 36px; height: 5px; border-radius: 3px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}"></span></div>')
+
+eph4 = (TIP_CSS + EBAR('Songs.dc.html', 'Player.dc.html') + TOOLBAR_P
+        + '<div class="edlay" style="flex: 1; min-height: 0; display: flex; flex-direction: column">'
+        + SCOREAREA(DESK('12px') + PANO(0.95, '16px 16px 16px 12px')) + SHEETP + '</div>' + EDLAY_CSS)
+
+# the laptop: the bar, the toolbar, then the palette at the left (resizable, collapsible), the score, the keys under it
+_PANEL = (f'<sc-if value="{{{{palOn}}}}" hint-placeholder-val="{{{{true}}}}"><aside aria-label="Palette" data-strip style="flex: none; width: {{{{pw}}}}px; min-height: 0; display: flex; flex-direction: column; background: {SHEET}">'
+          + STRIP() + f'<div style="height: 1px; margin: 0 16px; background: {LINE}"></div>'
+          f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 20px">{ED_SECTIONS()}</div></aside>{VGRIP}</sc-if>')
+elm4 = (TIP_CSS + EBAR('SongsLaptop.dc.html', 'PlayerLaptop.dc.html', title=True).replace(MODEBAR_P, MODEBAR_L) + TOOLBAR_L
+        + f'<div data-edgrid style="flex: 1; min-height: 0; display: flex">' + _PANEL
+        + f'<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">'
+        + SCOREAREA(DESK('32px') + PANO(1.15, '24px 32px'))
+        + f'<sc-if value="{{{{keysOn}}}}" hint-placeholder-val="{{{{true}}}}">{HGRIP}<div style="flex: none">{KEYS("{{kh}}", "kbL", edge=True, ring=False)}</div></sc-if></div></div>')
 
 # ··· the score's menu, as Flat's ≡ (owner, 2026-11-16: "new completely new design"; flat-score-editor 083–090): what
 # the score does not print, one row each, then Publish as its own card. Credits and Instruments open their sheets.
@@ -155,7 +229,7 @@ MENUCARD = lambda *rows: GROUP(*rows, bg=SHEET)
 # Versions only on an editor's draft of a built-in song (the published versions it restores), and Export only on the
 # learner's own song or version, which it writes; a learner's song has no versions,
 # and the on-screen piano has no settings page to open, so neither row is drawn where it would open nothing.
-ED_MENU = lambda sfx, vh=None: (MENUCARD(('link', 'Title and credits', 'Amazing Grace', 'openCredits'), ('link', 'Score view', 'Pages', ''), ('link', 'Transpose', 'G major', ''), ('link', 'Takes', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
+ED_MENU = lambda sfx, vh=None: (MENUCARD(('link', 'Title and credits', 'Amazing Grace', 'openCredits'), ('link', 'Transpose', 'G major', ''), ('link', 'Takes', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
                        + MENUCARD(('link', 'Instruments', '2', 'openInst'), ('link', 'Layout', '', ''), ('link', 'Note input', '', ''), ('link', 'Recording', '', ''), ('link', 'MIDI keyboard', 'None', ''), *((('link', 'Shortcuts', '?', ''),) if 'Laptop' in sfx else ()))
                        + MENUCARD(*(() if vh else (('link', 'Export…', 'MusicXML, MIDI', ''),)), ('action', 'Print', 'closeSheet', INK)))
 FIELD = lambda label, val: (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
@@ -189,9 +263,9 @@ def full_laptop(fname, title, main, js_, pops=''):
 """
     open(OUT + fname + '.dc.html', 'w').write(html)
 
-phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, ED4, BSHEET('moreOn', 'Amazing Grace', ED_SAVED + ED_MENU('.dc.html'), maxh='calc(100% - 124px)') + BSHEET('creditsOn', 'Credits', ED_CREDITS, 'Cancel', maxh='calc(100% - 124px)') + BSHEET('instOn', 'Instruments', ED_INST, maxh='calc(100% - 124px)') + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel', maxh='calc(100% - 124px)'))
+phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, ED4.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1), BSHEET('moreOn', 'Amazing Grace', ED_SAVED + ED_MENU('.dc.html'), maxh='calc(100% - 124px)') + BSHEET('creditsOn', 'Credits', ED_CREDITS, 'Cancel', maxh='calc(100% - 124px)') + BSHEET('instOn', 'Instruments', ED_INST, maxh='calc(100% - 124px)') + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel', maxh='calc(100% - 124px)'))
 # Go to bar (research F11, Flat's and Dorico's ⌘G): a small card over the sheet's head, the bar's number and its count
 GOTO_FIELD = '<div style="display: flex; align-items: center; gap: 12px"><input value="9" aria-label="Bar" type="text" inputmode="numeric" enterkeyhint="go" style="width: 96px; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: 0 0 0 2px #332921; font: inherit; font-size: 17px; font-variant-numeric: tabular-nums; color: #332921; outline: none"><span style="font-size: 15px; color: #7A6E64; font-variant-numeric: tabular-nums">of 16</span></div>'
 ED4L = ED4.replace("['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]]", "['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }], ['Go to bar (⌘G)', st.sheet === 'goto', { sheet: 'goto' }, { sheet: null }]]").replace("moreOn: st.sheet === 'more',", "moreOn: st.sheet === 'more', gotoOn: st.sheet === 'goto',", 1)
-full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + elm4, ED4L, POPOVER('moreOn', 'Amazing Grace', ED_MENU('Laptop.dc.html'), 'right: 24px; top: 76px') + POPOVER('gotoOn', 'Go to bar', GOTO_FIELD, 'left: 665px; top: 76px; transform: translateX(-50%)', 260) + POPOVER('creditsOn', 'Credits', ED_CREDITS, 'right: 24px; top: 76px') + POPOVER('instOn', 'Instruments', ED_INST, 'right: 24px; top: 76px') + POPOVER('pickInstOn', 'Add an instrument', ED_PICK, 'right: 24px; top: 76px'))
+full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + elm4, ED4L.replace("const M = 'music'", "const VIEW0 = 'page', FIT = 1; const M = 'music'", 1), POPOVER('moreOn', 'Amazing Grace', ED_MENU('Laptop.dc.html'), 'right: 24px; top: 76px') + POPOVER('gotoOn', 'Go to bar', GOTO_FIELD, 'left: 665px; top: 76px; transform: translateX(-50%)', 260) + POPOVER('creditsOn', 'Credits', ED_CREDITS, 'right: 24px; top: 76px') + POPOVER('instOn', 'Instruments', ED_INST, 'right: 24px; top: 76px') + POPOVER('pickInstOn', 'Add an instrument', ED_PICK, 'right: 24px; top: 76px'))
 print('r44 editor ok')
