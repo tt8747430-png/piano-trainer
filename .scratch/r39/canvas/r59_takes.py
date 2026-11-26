@@ -66,7 +66,8 @@ def RESULT(w):
             f'<path d="M8 10V110M{w - 8} 10V110" stroke="#685E56" stroke-width="1.2"></path><text x="16" y="42" font-family="Noto Music, serif" font-size="32" fill="{INK}">𝄞</text><text x="16" y="110" font-family="Noto Music, serif" font-size="36" fill="{INK}">𝄢</text>{heads}'
             f'<rect x="110" y="94" width="14" height="4" fill="{INK}"></rect>' + (f'<path d="M{(70 + w - 30) // 2 - 8} 10V110" stroke="#685E56" stroke-width="1"></path><rect x="{(70 + w - 30) // 2 + 40}" y="94" width="14" height="4" fill="{INK}"></rect>' if w > 500 else '') + '</svg>')
 SPLIT = lambda w: f'<div style="position: relative">{PROLL(w, 90)}<div style="position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: #B3261E"></div><span style="position: absolute; left: 8px; top: calc(50% - 12px); height: 24px; padding: 0 8px; border-radius: 12px; background: #B3261E; color: #FFFFFF; font-size: 13px; font-weight: 600; display: flex; align-items: center">Split point: C4</span></div>'
-REVIEW = lambda w: (f'<div style="display: flex; flex-direction: column"><span style="font-size: 17px; font-weight: 700">{{{{atN}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{atD}}}}</span></div>'
+# on a laptop the chosen take is the lit card in the row above, so the review names it only on a phone (clean, owner 2026-11-26)
+REVIEW = lambda w, head=True: ((f'<div style="display: flex; flex-direction: column"><span style="font-size: 17px; font-weight: 700">{{{{atN}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{atD}}}}</span></div>' if head else '')
                     + CARD(RESULT(w), '8px 12px') + CARD(SPLIT(w), '8px 12px')
                     + f'<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Quantize</span><div style="display: grid">{SEGC("grids", 44, 14)}</div></div>'
                     + GROUP(('toggle', 'Hide raw notes', 'rawOn', 'toggleRaw'), ('link', 'Into', '{{intoV}}', 'openInto'), bg=SHEET)
@@ -87,7 +88,7 @@ tkslm = (LTITLEBAR('{{pageT}}', TKSEL, 'EditorLaptop.dc.html') + SHOWSTATES()  #
               f'<div class="nos" style="display: flex; flex-direction: column; gap: 16px">{TKLISTL}</div>'
               # the review stands on the paper beside the list, never a card holding cards (scan-first 6; edge-lines 3)
               f'<section aria-label="Review your recording" style="display: flex; flex-direction: column; gap: 16px">'
-              f'{REVIEW(900)}</section></main>', 'true')
+              f'{REVIEW(900, False)}</section></main>', 'true')
          + IF('none', WIDE(EMPTY('none', MUSICN, 'No takes yet', 'Press Record beside Play in the editor, play, then Stop: each take is kept here.'), 720))
          + TKSELBAR_L + TOASTL)
 TKS_MOREL = ROWMENU('moreOn', '{{moreT}}', [('action', 'Download', 'download'), ('action', 'Delete', 'del', RED)])
