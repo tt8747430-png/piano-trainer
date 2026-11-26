@@ -232,7 +232,7 @@ def phone_band(t):
               ('View', 'View', '{{viewName}}', VIEWPANEL(inset=False), None),
               ('Tr', 'Transpose', '{{hdKeyL}}', TRROWS(True), None),
               ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
-    t = t.replace('</main>', '</main>' + HDRPOPS(True, 0, 0, 0, keys_right=0, phone=True) + PHMENU(places, 'Takes.dc.html', PHMODE('play', 'Player.dc.html', 'Editor.dc.html')), 1)
+    t = t.replace('</main>', '</main>' + HDRPOPS(True, 0, 0, 0, keys_right=0, phone=True) + PHMENU(places, 'Takes.dc.html', PHMODE('play', 'Player.dc.html', 'Editor.dc.html'), song=(('Tr', 'Transpose', '{{hdKeyL}}', 'phTr'),)), 1)
     st_ = '(o) => this.setState(o)'
     vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
           "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', ...viewPress(id) }; }), "

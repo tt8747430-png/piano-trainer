@@ -846,9 +846,14 @@ def FRADIO(name):
             f'<button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 52px; box-sizing: border-box; width: 100%; padding: 0 16px; border: 0; box-shadow: inset 0 1px 0 {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 17px; text-align: left; display: flex; align-items: center; gap: 12px; cursor: pointer">'
             f'<span style="flex: 1">{{{{o.l}}}}</span><span aria-hidden="true" style="display: flex; color: {INK}"><sc-if value="{{{{o.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK.replace("width=\"16\" height=\"16\"", "width=\"22\" height=\"22\"")}</sc-if></span></button></sc-for></div>')
 EXPROWS = lambda: GROUP(*(('action', l, a, INK) for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))), bg=SHEET)
-def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=None, title='Amazing Grace'):
-    items = [(pid, lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places]
-    items += [('Rec', 'Recordings', '3', takes_href), ('Share', 'Share link', '', 'phShare'), ('Exp', 'Export', '', 'phExp'), ('Print', 'Print', '', 'phPrint')] + list(rows)
+def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=None, title='Amazing Grace', song=(), hide=('Tr', 'Cred')):
+    """song: rows the Song page adds before the song's acts (Transpose, Credits); hide: places reached from Song, not ☰"""
+    # Song is the song's own page (owner, 2026-11-26: "the song option really has only the versions and no the other
+    # things"): its versions (the laptop rail's Song panel), then the song's things as rows: the key it sounds in, its
+    # credits, its recordings, and sharing, exporting and printing it (the laptop's name menu); ☰ keeps the places
+    acts = list(song) + [('Rec', 'Recordings', '3', takes_href), ('Share', 'Share link', '', 'phShare'), ('Exp', 'Export', '', 'phExp'), ('Print', 'Print', '', 'phPrint')]
+    places = [(pid, lab, val, (body + f'<div style="{_CARD}; overflow: hidden">{FROWS(acts)}</div>') if pid == 'Song' else body, act) for pid, lab, val, body, act in places]
+    items = [(pid, lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places if pid not in hide] + list(rows)
     panel = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{phClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
              f'<nav aria-label="{title}" class="nos" style="position: absolute; z-index: 61; top: 120px; right: 8px; left: 24px; max-height: calc(100% - 170px); overflow-y: auto; box-sizing: border-box; padding: 12px 8px; border-radius: 22px; background: {PAGE}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 18px 48px -12px rgba(51,41,33,.38); display: flex; flex-direction: column; gap: 8px">'
              + head + (f'<div style="padding: 0 4px 4px">{mode_html}</div>' if mode_html else '') + FROWS(items, lines=False) + foot + '</nav></sc-if>')
@@ -857,6 +862,15 @@ def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=Non
         if not act:
             out += FSHEET(f'ph{pid}On', lab, body, close='phClose')
     return out + FSHEET('phExpOn', 'Export', EXPROWS(), close='phClose') + PARTSHEET(inst)
+# the version history on a phone (Flat's menu: Version history): a page of the saved moments, the chosen one's Restore
+# at its foot; the laptop's History view's rows and state (HISTKEYS), one implementation
+def PHHIST():
+    row = (f'<button type="button" role="option" aria-selected="{{{{h.on}}}}" onClick="{{{{h.pick}}}}" style="width: 100%; box-sizing: border-box; padding: 12px 16px; border: 0; box-shadow: inset 0 1px 0 {LINE}; background: {{{{h.bg}}}}; color: {INK}; font: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px; cursor: pointer">'
+           f'<span style="display: flex; align-items: baseline; gap: 8px"><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{h.t}}}}</span><sc-if value="{{{{h.cur}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; color: {SOFT}">Current</span></sc-if></span>'
+           f'<span style="display: flex; flex-wrap: wrap; gap: 4px"><sc-for list="{{{{h.what}}}}" as="w" hint-placeholder-count="1"><span style="height: 24px; padding: 0 8px; border-radius: 12px; background: {FILL}; font-size: 13px; display: flex; align-items: center; font-variant-numeric: tabular-nums">{{{{w}}}}</span></sc-for></span></button>')
+    body = (f'<div role="listbox" aria-label="Saved moments" style="display: flex; flex-direction: column; overflow: hidden; {_CARD}"><sc-for list="{{{{histRows}}}}" as="h" hint-placeholder-count="4">{row}</sc-for></div>'
+            f'<sc-if value="{{{{histOld}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{histRestore}}}}" style="height: 48px; border: 0; border-radius: 24px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">Restore this version</button></sc-if>')
+    return FSHEET('histOn', 'Version history', body, close='closeHist')
 # the act rows close the menu and do what the title menu's rows do; SET a setter expression, shut what closes the menu
 def PHACTS(SET, shut, TOAST):
     t = lambda m, u=False: TOAST(m, u)
@@ -1002,12 +1016,16 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=Fals
         # Flat's Playback options (005; owner, 2026-11-26: "refactor the hands setting and the metronome and other
         # settings"): a page of rows, each its glyph, name, value and arrow, each opening its own page of choices with ←
         # (iOS Settings, Flat's Audio playback, Metronome, Playback speed); a pick shows at once and stays on the page
-        items = ([('Mode', 'Mode', '{{selModeV}}', 'hdGoMode'), ('Hands', 'Hands', '{{selHandsV}}', 'hdGoHands')] if practice else []) + [('Met', 'Metronome', '{{selMetV}}', 'hdGoMet'), ('Speed', 'Playback speed', '{{hdSpeedL}}', 'hdGoSpeed')]
+        items = ([('Mode', 'Mode', '{{selModeV}}', 'hdGoMode'), ('Hands', 'Hands', '{{selHandsV}}', 'hdGoHands')] if practice else []) + [('Aud', 'Audio playback', '{{hdRoomL}}', 'hdGoAud'), ('Met', 'Metronome', '{{selMetV}}', 'hdGoMet'), ('Speed', 'Playback speed', '{{hdSpeedL}}', 'hdGoSpeed')]
         out = FSHEET('hdOptsMain', 'Playback options', FROWS(items), close='hdClose')
         sp = speed.replace(f' border-top: 1px solid {LINE}', '').replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px').replace('padding: 0 4px 0 12px', 'padding: 0 6px 0 16px').replace('Playback speed', 'Speed')
         if practice:
             out += FSHEET('hdSubModeOn', 'Mode', FRADIO('selMode'), close='hdClose', back='hdSubBack')
             out += FSHEET('hdSubHandsOn', 'Hands', FRADIO('selHands'), close='hdClose', back='hdSubBack')
+        # Audio playback is the first of Flat's Playback options (005): the room and the levels, the laptop's Audio panel
+        # (one implementation); never a row of ☰ (owner, 2026-11-26: "i dont like that we have the audio in the menu and
+        # not in the playback options")
+        out += FSHEET('hdSubAudOn', 'Audio playback', AUDPANEL(phone=True), close='hdClose', back='hdSubBack')
         out += FSHEET('hdSubMetOn', 'Metronome', FRADIO('selMet'), close='hdClose', back='hdSubBack')
         out += FSHEET('hdSubSpeedOn', 'Playback speed', f'<div style="display: flex; flex-direction: column; overflow: hidden; {_CARD}">{sp}</div>' + FRADIO('selSpeed'), close='hdClose', back='hdSubBack')
     else:
@@ -1048,8 +1066,10 @@ _ACARD = f'box-sizing: border-box; border-radius: 14px; background: {SHEET}; box
 def _ALEVEL(lab, val, setv):
     return (f'<div style="display: flex; align-items: center; gap: 12px; padding-right: 8px"><input type="range" min="0" max="100" step="5" value="{{{{{val}}}}}" onChange="{{{{{setv}}}}}" aria-label="{lab} volume" style="flex: 1; min-width: 0; height: 40px; margin: 0; accent-color: {INK}">'
             f'<span style="flex: none; width: 40px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">{{{{{val}}}}}%</span></div>')
-def AUDPANEL():
-    ib = lambda lab, act, on, svg: f'<button type="button" aria-label="{lab} {{{{p.name}}}}" data-tip="{lab}" aria-pressed="{{{{p.{on}}}}}" onClick="{{{{p.{act}}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: {{{{p.{on}Bg}}}}; color: {{{{p.{on}Fg}}}}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
+def AUDPANEL(phone=False):
+    # phone: a finger's 44 for solo and mute, the page's own 4 under its head
+    d = 44 if phone else 40
+    ib = lambda lab, act, on, svg: f'<button type="button" aria-label="{lab} {{{{p.name}}}}" data-tip="{lab}" aria-pressed="{{{{p.{on}}}}}" onClick="{{{{p.{act}}}}}" style="flex: none; width: {d}px; height: {d}px; border: 0; border-radius: {d // 2}px; background: {{{{p.{on}Bg}}}}; color: {{{{p.{on}Fg}}}}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
     room = f'<section aria-label="Room" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Room</h3>{SEGC("hdRooms", 36, 14, True)}</section>'
     master = (f'<div style="{_ACARD}"><div style="min-height: 44px; display: flex; align-items: center"><span style="flex: 1; font-size: 15px; font-weight: 600">Master volume</span></div>'
               + _ALEVEL('Master', 'hdVolM', 'hdSetVolM') + '</div>')
@@ -1057,7 +1077,7 @@ def AUDPANEL():
             f'<span style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{p.name}}}}</span>'
             + ib('Solo', 'doSolo', 'solo', HEADPHI) + ib('Mute', 'doMute', 'mute', MUTEI) + '</div>' + _ALEVEL('{{p.name}}', 'p.v', 'p.setV') + '</div>')
     parts = f'<section aria-label="Volume" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Volume</h3>{master}<sc-for list="{{{{hdParts}}}}" as="p" hint-placeholder-count="2">{part}</sc-for></section>'
-    return f'<div style="display: flex; flex-direction: column; gap: 24px; padding: 16px 0 0">{room}{parts}</div>'
+    return f'<div style="display: flex; flex-direction: column; gap: 24px; padding: {4 if phone else 16}px 0 0">{room}{parts}</div>'
 HDRKEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-haspopup="dialog" aria-expanded="{{{{hdKeysOn}}}}" onClick="{{{{hdKeys}}}}" style="{_HB}">'
               + KEYSI.replace('width="22" height="22"', 'width="20" height="20"') + '</button>').replace(f'style="{_HB}"', f'style="{_HB}; background: {{{{hdKeysBg}}}}; color: {ONB}"', 1)
 def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
@@ -1065,7 +1085,7 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
     play, loop: the board's own acts; playing, loop_on, loop_tip: its expressions; parts: [(id, name)]."""
     P = repr([list(x) for x in parts])
     return ('...(() => { const S = ' + S + ', SET = ' + SET + '; const pop = S.hdPop ?? null; const sub = pop ? (S.hdSub ?? null) : null; const shut = { hdPop: null, hdSub: null };'
-            " const tg = (k) => () => SET({ hdPop: pop === k ? null : k, hdSub: null }); const SUBS = {}; for (const k of ['Mode', 'Hands', 'Met', 'Speed', 'Kb', 'Lab']) { SUBS['hdSub' + k + 'On'] = sub === k; SUBS['hdGo' + k] = () => SET({ hdSub: k }); }"
+            " const tg = (k) => () => SET({ hdPop: pop === k ? null : k, hdSub: null }); const SUBS = {}; for (const k of ['Mode', 'Hands', 'Aud', 'Met', 'Speed', 'Kb', 'Lab']) { SUBS['hdSub' + k + 'On'] = sub === k; SUBS['hdGo' + k] = () => SET({ hdSub: k }); }"
             " const sg = (list, cur, pick) => list.map(([id, l]) => ({ l, on: id === cur ? 'true' : 'false', bg: id === cur ? '#FEFDFB' : 'transparent', sh: id === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: id === cur ? 600 : 500, pick: () => pick(id) }));"
             " const sp = S.speed ?? 100; const met = S.metro ? 'on' : (S.countBars ?? 1) ? 'count' : 'off'; const NEXT = { count: 'on', on: 'off', off: 'count' }; const MN = { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' };"
             " const hands = (S.showR ?? 'show') === 'hide' ? 'lh' : (S.showL ?? 'show') === 'hide' ? 'rh' : 'both'; const rec = !!S.rec; const solo = S.solo ?? null; const mute = S.mute ?? [];"
@@ -1079,7 +1099,7 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
             " hdRooms: ['Off', 'Studio', 'Hall', 'Cathedral'].map((l) => { const on = (S.room ?? 'Off') === l; return { l, on: on ? 'true' : 'false', bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: on ? 600 : 500, pick: () => SET({ room: l }) }; }),"
             " hdRec: () => SET({ rec: !rec, " + TOAST("rec ? 'Recording stopped · Recording 4 kept' : 'Recording · play on your keyboard'") + " }), hdRecOn: rec ? 'true' : 'false', hdRecL: rec ? 'Stop recording' : 'Record', hdRecR: rec ? '2px' : '6px',"
             " hdSpeedL: (sp / 100).toFixed(1) + '×', hdSlower: () => SET({ speed: Math.max(20, sp - 10) }), hdFaster: () => SET({ speed: Math.min(200, sp + 10) }), hdSlowerDis: sp <= 20, hdFasterDis: sp >= 200,"
-            " hdVolM: S.volM ?? 100, hdSetVolM: (e) => SET({ volM: Number(e.target.value) }),"
+            " hdVolM: S.volM ?? 100, hdRoomL: (S.volM ?? 100) + '%', hdSetVolM: (e) => SET({ volM: Number(e.target.value) }),"
             " hdParts: " + P + ".map(([id, name]) => { const so = solo === id, mu = mute.includes(id); const v = S['vol' + id] ?? 100; return { name, isVoice: id === 'V', isKeys: id !== 'V', v, setV: (e) => SET({ ['vol' + id]: Number(e.target.value) }),"
             " solo: so ? 'true' : 'false', soloBg: so ? '#332921' : 'transparent', soloFg: so ? '#FEFDFB' : '#332921', mute: mu ? 'true' : 'false', muteBg: mu ? '#332921' : 'transparent', muteFg: mu ? '#FEFDFB' : '#332921',"
             " doSolo: () => SET({ solo: so ? null : id }), doMute: () => SET({ mute: mu ? mute.filter((m) => m !== id) : [...mute, id] }) }; }) }; })(), "
