@@ -9,6 +9,7 @@ import { createMemoryStorage } from '@/shared/lib'
 const SONG = {
   id: 'my-1',
   title: 'Morning',
+  added: '2026-11-01T09:00:00.000Z',
   key: 'G',
   meter: '4/4',
   tempo: 90,
@@ -27,32 +28,32 @@ const withSong = (song: object = SONG) => {
 }
 
 describe('the editor’s gear (R32-B, Flat’s document menu)', () => {
-  it('holds the score’s acts, then each setting one tap away, nothing the score prints', async () => {
+  it('holds the score’s pages under its title, then each setting one tap away, then Export and Print', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
     const sheet = await openGear(user)
-    expect(within(sheet).getByRole('heading', { name: 'Score' })).toBeInTheDocument()
+    expect(within(sheet).getByRole('heading', { name: 'Morning' })).toBeInTheDocument()
     const rows = within(sheet)
       .getAllByRole('button')
       .map((row) => row.textContent)
     for (const name of [
-      'View',
+      'Title and credits',
+      'Score view',
       'Transpose',
-      'Record a take',
-      'Takes',
       'Instruments',
       'Layout',
       'Note input',
       'Recording',
+      'Export…',
+      'Print',
     ])
       expect(rows.some((row) => row?.startsWith(name))).toBe(true)
-    // What the score prints is set where it prints: no title, key, time, tempo or bars here.
-    for (const gone of ['Title and credits', 'Music', 'Key signature', 'Time signature', 'Tempo'])
+    // What the score prints otherwise is set where it prints: no key, time or tempo here.
+    for (const gone of ['Music', 'Key signature', 'Time signature', 'Tempo'])
       expect(rows.some((row) => row?.startsWith(gone))).toBe(false)
-    // Each setting says what it does under its name.
-    expect(within(sheet).getByRole('button', { name: /^Instruments/ })).toHaveTextContent(
-      'Add, remove and reorder staves',
-    )
+    // Takes only once there are some; Record a take is the note band's.
+    expect(within(sheet).queryByRole('button', { name: /^Takes/ })).not.toBeInTheDocument()
+    expect(within(sheet).queryByRole('button', { name: /^Record a take/ })).not.toBeInTheDocument()
     // An own song has no draft to publish.
     expect(within(sheet).queryByRole('button', { name: /^Publish/ })).not.toBeInTheDocument()
     await user.click(within(sheet).getByRole('button', { name: /^Layout/ }))
@@ -63,18 +64,18 @@ describe('the editor’s gear (R32-B, Flat’s document menu)', () => {
       within(await screen.findByRole('dialog')).getByRole('button', { name: 'Back' }),
     )
     expect(
-      within(await screen.findByRole('dialog')).getByRole('heading', { name: 'Score' }),
+      within(await screen.findByRole('dialog')).getByRole('heading', { name: 'Morning' }),
     ).toBeInTheDocument()
   })
 
-  it('leads to the on-screen piano’s one home, Settings › On-screen piano (2026-11-12)', async () => {
+  it('leads to the MIDI keyboard’s one home, Settings › MIDI devices', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/edit/my-1', { storage: withSong() })
     const sheet = await openGear(user)
     // A row to its home, never the fields themselves.
     expect(within(sheet).queryByRole('radiogroup', { name: 'Key size' })).not.toBeInTheDocument()
-    await user.click(within(sheet).getByRole('link', { name: /^On-screen piano/ }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/settings/on-screen-piano'))
+    await user.click(within(sheet).getByRole('link', { name: /^MIDI keyboard/ }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/settings/connect-piano'))
   })
 
   it('opens Title and credits from the title printed on the score, the one place it is typed', async () => {
@@ -83,8 +84,8 @@ describe('the editor’s gear (R32-B, Flat’s document menu)', () => {
     await user.click(await screen.findByRole('button', { name: 'Morning' }))
     const sheet = await screen.findByRole('dialog')
     expect(within(sheet).getByRole('heading', { name: 'Title and credits' })).toBeInTheDocument()
-    // Opened from the score, it stands alone: no Back to a first page it did not come from.
-    expect(within(sheet).queryByRole('button', { name: 'Back' })).not.toBeInTheDocument()
+    // Back goes to the gear's first page, whose first row it is, however it was opened.
+    expect(within(sheet).getByRole('button', { name: 'Back' })).toBeInTheDocument()
     await user.type(
       within(sheet).getByRole('textbox', { name: 'Composer' }),
       'Clara Schumann{Enter}',
@@ -92,8 +93,8 @@ describe('the editor’s gear (R32-B, Flat’s document menu)', () => {
     await waitFor(() =>
       expect(piecesStore.getState().songs[0]?.header).toEqual({ composer: 'Clara Schumann' }),
     )
-    await user.click(within(sheet).getByRole('button', { name: 'Close' }))
-    expect(await screen.findByText('Clara Schumann')).toBeInTheDocument()
+    await user.click(within(sheet).getByRole('button', { name: 'Done' }))
+    expect(await screen.findByRole('button', { name: /Clara Schumann/ })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Undo' }))
     await waitFor(() => expect(piecesStore.getState().songs[0]?.header).toBeUndefined())
   })
@@ -146,9 +147,9 @@ describe('the editor’s gear (R32-B, Flat’s document menu)', () => {
       storage: withSong(),
     })
     await openGear(user, /^Layout/)
-    await user.click(await screen.findByRole('button', { name: 'Measures' }))
-    await user.click(screen.getByRole('button', { name: 'More measures per system' }))
-    await user.click(screen.getByRole('button', { name: 'More measures per system' }))
+    await user.click(await screen.findByRole('button', { name: 'Bars' }))
+    await user.click(screen.getByRole('button', { name: 'More bars per system' }))
+    await user.click(screen.getByRole('button', { name: 'More bars per system' }))
     await waitFor(() => expect(piecesStore.getState().songs[0]?.layout).toEqual({ barsPerLine: 2 }))
     await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Back' }))
     await user.click(
@@ -205,10 +206,9 @@ describe('the editor’s gear (R32-B, Flat’s document menu)', () => {
     await renderApp('/edit/my-1', { storage })
     const palette = await screen.findByRole('region', { name: 'Editor panel' })
     expect(palette.closest('aside')).toHaveAttribute('data-side', 'right')
-    const modes = within(palette).getByRole('group', { name: 'Input mode' })
-    expect(within(modes).getByRole('button', { name: 'Insert' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    )
+    // Insert pressed wherever its key stands (its category, and Recent).
+    const inserts = within(palette).getAllByRole('button', { name: 'Insert' })
+    expect(inserts.length).toBeGreaterThan(0)
+    for (const insert of inserts) expect(insert).toHaveAttribute('aria-pressed', 'true')
   })
 })
