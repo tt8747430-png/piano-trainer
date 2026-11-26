@@ -153,6 +153,7 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **Played through stands beside the shipped end screens (loop, 2026-11-26, Mobbin):** Quizlet's end of a game (https://mobbin.com/screens/22670919-b826-45b1-94f7-0f29d33a45ef) is two figure cards side by side, the score and the best, then Play again and one primary act; Played through is that shape with the bars between, and with its streak line gone it ends on its acts as Quizlet's does. No change.
 - **A laptop view's settings hang under the views (loop, 2026-11-26; "A laptop's settings hang where their bar is"):** Sheet, Diagrams, Grid and Lyrics settings opened at offsets from the window's centre, kept from when the views pill stood there, so the card hung under nothing; it hangs on the bar's 24 edge at the right, 76 down, under the views and the gear.
 - **Played through ends on its acts (owner, 2026-11-26: "remove all the thigns that i didnt asked for"):** the line under Play again, "4 min added to today’s practice · 23 days in a row ›", was our own (loop round 61) and said again what the Profile's streak says; it goes, on both sizes.
 - **The account menu leads each item with its picture, as Claude's (the owner's saved claude.ai, 2026-11-20):** Profile, Settings, Language, Sign out and Sign in each lead with their Lucide picture (16, ink), 12 before the word; Language keeps its value at the end. `lapwin.py` and `SidebarAccount`.
