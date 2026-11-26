@@ -8,11 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-26 · (this commit) · R74 phone: View beside ← (Parts a section of its page, View left ☰); every settings page a full page with ← Back to where it came from (☰, Song, the parent), under the status bar; view cards 12 apart · Editor, EditorDraft, PlayerApp, EditorLaptop, EditorDraftLaptop · pending
 
 
 ## Changes
 
+- 2026-11-26 · 61454867 · R74 phone: View beside ← (Parts a section of its page, View left ☰); every settings page a full page with ← Back to where it came from (☰, Song, the parent), under the status bar; view cards 12 apart · Editor, EditorDraft, PlayerApp, EditorLaptop, EditorDraftLaptop · v773
 - 2026-11-26 · bf794d6f · R74 phone: Audio playback in Playback options (the laptop Audio panel, 44 targets), the editor's old Audio sheet gone; Song the song's page (versions, Transpose, Credits, Recordings, Share link, Export, Print); Version history in the editor's ☰ (a page of saved moments with Restore) · Editor, EditorDraft, PlayerApp (laptop boards gain unused keys) · v772
 - 2026-11-26 · 99260dbe · R74 ☰ as Flat's panel, the settings pages as Flat's (✕ left, title centred), Playback options and Piano keys as pages of rows with sub-pages (Mode, Hands, Metronome, Speed, Piano, Labels), Duplicate and Archive gone from the song's menu · Editor, EditorDraft, PlayerApp, EditorLaptop, EditorDraftLaptop, PlayerDesk · v771
 - 2026-11-26 · a4084661 · R74 the phone palette's folded row as Flat's (017, 018): the durations bare on the sheet, no grey ground; the expand button a round filled button beside the category pill · Editor, EditorDraft · v770
