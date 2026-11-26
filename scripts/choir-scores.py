@@ -340,6 +340,9 @@ def compose(s, dst, imported):
                               match.bar_numbers(staffs[0].findall('Measure'), spec.get('count_pickup')),
                               clear=block['voice'] not in done_voices)
             done_voices.add(block['voice'])
+        for name in spec.get('italic', []):
+            p = next(x for x in info if x['name'] == name.strip())
+            match.italicize(staffs[p['mstaff']], (int(p['voice']) - 1) % 4)
         match.layout_mscx(score, spec)
         files['score_style.mss'] = match.style_mss(files['score_style.mss'], spec)
     files[mname] = b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root, encoding='utf-8')

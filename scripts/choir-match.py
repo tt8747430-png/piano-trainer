@@ -20,6 +20,8 @@ Each song may hold a `match.txt` beside its files, written from the song's PDF a
     tempo: 105                         the tempo as printed
     footer: Corul ...                  a line of text at the foot of each page
     brace                              the staves joined by a brace, as a sheet exported from MuseScore draws them
+    italic: Tenor                      a voice's words already in the file, set in italics as printed
+    hide-chords                        chord symbols the file has are left off, as the sheet prints none
     segno: 54                          the segno stands at this bar
     text: 81 above bold italic D.S.% al Coda   printed text at a bar, above or below the top staff (% is the segno)
 
@@ -97,6 +99,10 @@ def parse(path):
             spec['footer'] = value.strip()
         elif key == 'brace':
             spec['brace'] = True
+        elif key == 'hide-chords':
+            spec['hide_chords'] = True
+        elif key == 'italic':
+            spec['italic'] = value.split(',')
         elif key == 'beams':
             spec['beams'] = True
         elif key == 'dashed':
@@ -421,6 +427,11 @@ def layout_mscx(score, spec):
             for b in d.findall('bracket'):
                 d.remove(b)
         ET.SubElement(defs[0], 'bracket', type='1', span=str(len(defs)), col='0', visible='1')
+    if spec.get('hide_chords'):
+        for st in staffs:
+            for parent in st.iter():
+                for h in parent.findall('Harmony'):
+                    parent.remove(h)
     if spec['hide_names']:
         for part in score.findall('Part'):
             for ins in part.findall('Instrument'):
@@ -712,3 +723,21 @@ def notes(path, staff, voice):
 if __name__ == '__main__':
     if sys.argv[1] == 'notes':
         notes(sys.argv[2], int(sys.argv[3]), int(sys.argv[4]))
+
+
+def italicize(staff, voice):
+    """A voice's words, as the file has them, set in italics."""
+    for m in staff.findall('Measure'):
+        vs = m.findall('voice')
+        if voice >= len(vs):
+            continue
+        for ly in vs[voice].iter('Lyrics'):
+            tx = ly.find('text')
+            if tx is None or tx.find('i') is not None:
+                continue
+            words = ''.join(tx.itertext())
+            for c in list(tx):
+                tx.remove(c)
+            tx.text = None
+            i = ET.SubElement(tx, 'i')
+            i.text = words

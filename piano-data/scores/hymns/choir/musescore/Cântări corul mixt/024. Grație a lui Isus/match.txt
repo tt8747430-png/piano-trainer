@@ -1,0 +1,22 @@
+# From 024. Grație a lui Isus.pdf (2 pages) and the choir book, page 51. The words are the owner's corrected score's
+# (Gratie a lui Isus.mscz), checked against the sheet.
+title: 24 Grație a lui Isus
+composer: Haldor Lillenas
+spatium: 1.75
+systems: 1 5 9 13 18 | 20 23 25 27 29
+hide-tempo
+hide-names
+italic: Tenor
+hide-chords
+
+[Soprano]
+1: @1 1.Gra -- ți -- e a lui I -- sus, cum pot să te des -- criu, Am fost mort în pă -- ca -- te dar azi prin har sunt viu.
+1: @9 Tu mi'ai lu -- at po -- va -- ra și m'ai e -- li -- be -- rat, _ Mi -- nu -- nă iu -- bi -- re I -- sus mi'a -- ră -- tat.
+1: @17 Mi -- nu -- na -- tă'i gra -- ți -- a Lui, gra -- ți -- a lui I -- sus, Mai a -- dân -- că de -- cât ma -- rea
+1: @20 de -- cât ma -- rea ești. Gra -- ți -- e, tu ai ve -- nit din cer pen -- tru'a mă sal -- va.
+1: @25 Mai cu -- prin -- ză -- toa -- re de -- cât min -- tea, Ești mai ma -- re ca pă -- ca -- tul meu O,
+1: @29 lau -- dă mi -- nu -- na -- tul Nu -- me I -- sus, Sla -- vă Lui!
+2: @1 2.Gra -- ți -- e a lui I -- sus, fost -- am prin ea ier -- tat, Lan -- țu -- ri -- le'au fost rup -- te iar eu e -- li -- be -- rat.
+2: @9 Dra -- gos -- tea Ta nes -- pu -- să mul -- te co -- mori mi'a dat,
+3: @1 3.Gra -- ți -- e a lui I -- sus, iar -- tă pe în -- ti -- nat, Cer cu pă -- mânt u -- neș -- te, prin ha -- rul Său bo -- gat.
+3: @9 Ce -- rul drept moș -- te -- ni -- re pen -- tru ve -- cii ne'a dat,
