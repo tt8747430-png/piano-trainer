@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-26 · (this commit) · R74: the laptop Player's name menu holds the song's acts (Share link, Export › formats, Print | Duplicate, Archive), each with its toast; Settings and its window gone from the Player · PlayerDesk · pending
 
 ## Changes
 
+- 2026-11-26 · (this commit) · R74: the laptop Player's name menu holds the song's acts (Share link, Export › formats, Print | Duplicate, Archive), each with its toast; Settings and its window gone from the Player · PlayerDesk · v753
 - 2026-11-26 · (this commit) · a song's Settings window stands over the Player as it is now (rail, Song panel, version beside the name); its backdrop was a picture of the old Player (capsule, gear, view switch at the right) · SongSettings, SongSettingsLaptop · v752
 - 2026-11-26 · (this commit) · the laptop Player's keys centre in the room beside the panel; Diagrams, Grid and Lyrics end 16 above the keys when they show (the lyrics ran under them) · PlayerDesk · v751
 - 2026-11-26 · (this commit) · R74: versions Accompaniment and Score, Edit only beside Score, Your arrangement and Edit the original gone, the accompaniment's settings and credit only with it; the view switch heads the View panel; every view sits beside the panel · PlayerDesk, PlayerApp, Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · v750
