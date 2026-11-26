@@ -535,7 +535,7 @@ export function PaletteSheet({
               title={t(unfolded ? 'palette.close' : 'palette.open')}
               aria-expanded={unfolded}
               onClick={() => unfold(!unfolded)}
-              className="-me-1.5 grid size-11 shrink-0 place-items-center rounded-full text-foreground transition-colors duration-150 ease-out hover:bg-accent [&_svg]:size-5"
+              className="-me-1.5 grid size-11 shrink-0 place-items-center rounded-pill text-foreground transition-colors duration-150 ease-out hover:bg-accent [&_svg]:size-5"
             >
               <ChevronUp
                 aria-hidden

@@ -2,7 +2,6 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { SETTING_HOMES, type SettingKey, type SettingsPageId } from '@/entities/settings'
-import { LESSONS } from '@/entities/lesson'
 import { openGear } from './testing/editor-gear'
 import { openPlayerGear } from './testing/player-gear'
 import { renderApp } from './testing/render-app'
@@ -26,10 +25,9 @@ const PAGES: readonly (readonly [SettingsPageId, string, ...RegExp[]])[] = [
   ['metronome', '/practice/metronome'],
   ['tuner', '/practice/tuner'],
   ['chord-finder', '/practice/chord-finder', /^Chord finder settings$/],
-  ['trainers', '/practice/quiz/chords'],
+  ['trainers', '/practice/trainer/chords'],
   ['select-toolbar', '/settings/select-toolbar'],
   ['swipe-actions', '/settings/swipe-actions'],
-  ['lessons', `/lessons/${LESSONS[0]!.id}/settings`],
 ]
 
 /** A Practice page's settings, opened in place from the gear its bar names by them. */

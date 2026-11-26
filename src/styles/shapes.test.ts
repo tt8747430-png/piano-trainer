@@ -28,11 +28,22 @@ const SCALE = [
 const ALLOWED_PATHS = ['shared/ui/primitives/']
 
 /**
- * Files another change owns for now. The settings rows are being rebuilt alongside this change;
- * their `rounded-xl` already resolves to the control's 12px. Take an entry out once its file is on
- * the scale.
+ * Files another change owns for now. The sign-in page is being redrawn alongside this change; its
+ * buttons' `rounded-full` already resolves to the pill. Take an entry out once its file is on the
+ * scale.
  */
-const PENDING: readonly string[] = []
+const PENDING: readonly string[] = ['pages/account/ui/SocialButtons.tsx']
+
+/**
+ * Drawings whose corners scale with what they draw rather than stand on the scale: the small keys'
+ * feet (DESIGN.md: the keys are drawings, not controls), a chord chip's corner in its own em so it
+ * grows with the chord's name, and the week's bars' 2px tops.
+ */
+const DRAWINGS: Readonly<Record<string, readonly string[]>> = {
+  'shared/ui/MiniKeys.tsx': ['rounded-b-[5px]', 'rounded-b-[3px]'],
+  'widgets/chord-views/ui/ChordChip.tsx': ['rounded-[0.3125em]'],
+  'pages/profile/ui/WeekCard.tsx': ['rounded-t-[2px]'],
+}
 
 /** A Tailwind corner class, with any side and variant prefix: `first:rounded-t-card`. */
 const CORNER =
@@ -69,6 +80,7 @@ describe('the shape scale', () => {
         [...text.matchAll(CORNER)]
           // Prose ("a rounded foot") is not a class: a class names a size or stands alone in quotes.
           .filter((match) => match[1] !== undefined && !SCALE.includes(match[1]))
+          .filter((match) => !DRAWINGS[path]?.includes(match[0]))
           .map((match) => `${path}: ${match[0]}`),
       )
     expect(oneOffs).toEqual([])

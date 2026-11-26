@@ -57,7 +57,7 @@ describe('keyLook', () => {
     expect(name(midi(62), 'c')).toBeUndefined()
     expect([name(C4, 'all'), name(CS4, 'all')]).toEqual([
       { kind: 'name', text: 'C4' },
-      { kind: 'name', text: 'C#' },
+      { kind: 'name', text: 'C♯' },
     ])
     expect(name(C4, 'none')).toBeUndefined()
     expect(keyLook(C4, { marks: root }, { namedKeys: 'all', markNotes: false }).label).toEqual({

@@ -45,10 +45,10 @@ function renderThrowing(initialEntries: string[], reload = vi.fn()) {
 }
 
 describe('RouteError', () => {
-  it('says something went wrong and offers a reload', async () => {
+  it('says the screen could not open and offers a reload', async () => {
     const user = userEvent.setup()
     const { reload } = renderThrowing(['/play/broken'])
-    expect(await screen.findByRole('alert')).toHaveTextContent('Something went wrong')
+    expect(await screen.findByRole('alert')).toHaveTextContent('This screen could not open')
     await user.click(screen.getByRole('button', { name: 'Reload' }))
     expect(reload).toHaveBeenCalledOnce()
   })
@@ -66,9 +66,9 @@ describe('RouteError', () => {
   it('says when the learner is offline: the screen opens once they are back online', async () => {
     vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
     renderThrowing(['/play/broken'])
-    expect(await screen.findByRole('alert')).toHaveTextContent(
-      'You’re offline. This screen opens once you’re back online.',
-    )
+    const alert = await screen.findByRole('alert')
+    expect(alert).toHaveTextContent('You’re offline')
+    expect(alert).toHaveTextContent('This screen opens once you’re back online.')
   })
 
   it('leaves a screen that throws up to its parent: Learn, outside the app’s parents table', async () => {

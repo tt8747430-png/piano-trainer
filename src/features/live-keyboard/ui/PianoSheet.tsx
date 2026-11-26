@@ -30,7 +30,7 @@ import {
 } from '@/shared/ui'
 
 /** The canvas's BLOCK: a card, 12 round, 12 16 16 inside, its name over its choice, 8 apart. */
-const BLOCK = 'flex flex-col gap-2 rounded-xl bg-card px-4 pt-3 pb-4 ring-1 ring-hairline'
+const BLOCK = 'flex flex-col gap-2 rounded-control bg-card px-4 pt-3 pb-4 ring-1 ring-hairline'
 
 /** What stands in the keys' place, shown: the hands at the keys (3D) or the keys (2D). */
 export type PianoShown = 'hands' | 'keys'

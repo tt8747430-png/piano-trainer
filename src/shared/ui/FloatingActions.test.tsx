@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Play, Plus, Printer, Share } from 'lucide-react'
 import { beforeEach, describe, expect, it } from 'vitest'
@@ -36,6 +36,10 @@ function renderActions(path = '/') {
 
 const host = () => document.querySelector('[data-slot=floating-host]')
 
+/** A finger's tap, which folds the actions where a mouse's click does not. */
+const tap = (target: Element) =>
+  fireEvent(target, new PointerEvent('click', { bubbles: true, pointerType: 'touch' }))
+
 describe('FloatingHost', () => {
   // The actions laid out 56px tall and 124px wide; the page keeps a gap of 12px clear of them.
   beforeEach(() => stubResizeObserver({ height: 56, width: 124 }))
@@ -55,26 +59,30 @@ describe('FloatingHost', () => {
     expect(root().getPropertyValue('--floating-inline')).toBe('')
   })
 
-  it('folds away at a tap on the page and comes back at the next', async () => {
+  it('folds away at a finger’s tap on the page and comes back at the next', async () => {
+    renderActions()
+    tap(screen.getByText('The page'))
+    expect(host()).toHaveAttribute('data-hidden')
+    tap(screen.getByText('The page'))
+    expect(host()).not.toHaveAttribute('data-hidden')
+  })
+
+  it('stays at a mouse’s click on the page, a reader’s', async () => {
     const user = userEvent.setup()
     renderActions()
-    await user.click(screen.getByText('The page'))
-    expect(host()).toHaveAttribute('data-hidden')
     await user.click(screen.getByText('The page'))
     expect(host()).not.toHaveAttribute('data-hidden')
   })
 
   it('stays at a tap on a control of the page, its bars too', async () => {
-    const user = userEvent.setup()
     renderActions()
-    await user.click(screen.getByText('Its padding'))
+    tap(screen.getByText('Its padding'))
     expect(host()).not.toHaveAttribute('data-hidden')
   })
 
   it('comes back on another screen, and stays back on returning to the one it left', async () => {
-    const user = userEvent.setup()
     const { rerender } = renderActions('/a')
-    await user.click(screen.getByText('The page'))
+    tap(screen.getByText('The page'))
     expect(host()).toHaveAttribute('data-hidden')
     rerender(page('/b'))
     expect(host()).not.toHaveAttribute('data-hidden')
@@ -100,7 +108,7 @@ describe('Fab', () => {
       'size-14',
       'rounded-pill',
       'bg-primary',
-      'elevation-2',
+      'elevation-float',
       'active:scale-96',
     )
   })
@@ -133,7 +141,7 @@ describe('SpeedDial', () => {
     const user = userEvent.setup()
     renderDial()
     const more = await screen.findByRole('button', { name: 'More actions' })
-    expect(more).toHaveClass('size-12', 'bg-raised', 'elevation-1')
+    expect(more).toHaveClass('size-12', 'bg-raised', 'elevation-float')
     await user.click(more)
     expect(more).toHaveAttribute('aria-expanded', 'true')
     // Names are chips in sight even where the floating buttons say no names.

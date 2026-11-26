@@ -9,11 +9,13 @@ import { JOURNEYS } from '@/entities/lesson'
 const at = '2026-10-01T10:00:00Z'
 
 describe('Learn', () => {
-  it('floats Continue onto the first lesson on a first run', async () => {
+  it('floats Start onto the first lesson on a first run', async () => {
     await renderApp('/')
     expect(await screen.findByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
     expect(
-      await screen.findByRole('link', { name: /^Continue.*Finding your way on the keys/ }),
+      await screen.findByRole('link', {
+        name: /^Start · Foundations.*Finding your way on the keys/,
+      }),
     ).toHaveAttribute('href', '/lessons/finding-home')
   })
 
@@ -60,12 +62,37 @@ describe('Learn', () => {
     expect(screen.queryByRole('region', { name: 'Practice' })).not.toBeInTheDocument()
   })
 
-  describe('its Lessons', () => {
-    it('show the current journey’s chapters as groups of rows, Continue’s marked Next', async () => {
-      await renderApp('/')
+  it('lists the four levels, each opening its page, the steps learned under its name', async () => {
+    await renderApp('/')
+    const levels = await screen.findByRole('region', { name: 'Levels' })
+    const rows = within(levels).getAllByRole('link')
+    expect(rows.map((row) => row.getAttribute('href'))).toEqual(
+      JOURNEYS.map((journey) => `/levels/${journey.id}`),
+    )
+    const steps = JOURNEYS[0]!.chapters.flatMap((chapter) => chapter.steps).length
+    expect(rows[0]).toHaveTextContent(/Beginner.*Foundations/)
+    expect(rows[0]).toHaveTextContent(`0 of ${steps}`)
+  })
+
+  it('opens a level from its row', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/')
+    const levels = await screen.findByRole('region', { name: 'Levels' })
+    await user.click(within(levels).getByRole('link', { name: /Intermediate/ }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Fluency' })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/levels/fluency')
+    const chapter = JOURNEYS[1]!.chapters[0]!
+    expect(
+      screen.getByRole('region', { name: `Chapter 1: ${chapter.title.en}` }),
+    ).toHaveTextContent(`0 of ${chapter.steps.length}`)
+  })
+
+  describe('a level’s page', () => {
+    it('shows its chapters as lines of steps, Continue’s marked Next', async () => {
+      await renderApp(`/levels/${JOURNEYS[0]!.id}`)
       const journey = JOURNEYS[0]!
       expect(
-        await screen.findByRole('heading', { level: 2, name: 'Foundations' }),
+        await screen.findByRole('heading', { level: 1, name: 'Foundations' }),
       ).toBeInTheDocument()
       const chapters = journey.chapters.map((chapter, i) =>
         screen.getByRole('region', { name: `Chapter ${i + 1}: ${chapter.title.en}` }),
@@ -79,24 +106,9 @@ describe('Learn', () => {
       )
     })
 
-    it('offer the four levels as chips, then Your lessons, the level’s steps learned under its name', async () => {
-      await renderApp('/')
-      const levels = await screen.findByRole('radiogroup', { name: 'Level' })
-      expect(
-        within(levels)
-          .getAllByRole('radio')
-          .map((chip) => chip.textContent),
-      ).toEqual(['Beginner', 'Intermediate', 'Advanced', 'Professional', 'Your lessons'])
-      expect(within(levels).getByRole('radio', { name: 'Beginner' })).toBeChecked()
-      const steps = JOURNEYS[0]!.chapters.flatMap((chapter) => chapter.steps).length
-      expect(screen.getByRole('region', { name: 'Foundations' })).toHaveTextContent(
-        `0 of ${steps} learned`,
-      )
-    })
-
-    it('say a learned step is learned', async () => {
-      const { progressStore } = await renderApp('/')
-      await screen.findByRole('heading', { level: 2, name: 'Foundations' })
+    it('says a learned step is learned', async () => {
+      const { progressStore } = await renderApp(`/levels/${JOURNEYS[0]!.id}`)
+      await screen.findByRole('heading', { level: 1, name: 'Foundations' })
       act(() => progressStore.setState({ learned: { 'lesson:finding-home': at } }))
       const chapter = screen.getByRole('region', { name: /^Chapter 1:/ })
       expect(
@@ -106,32 +118,16 @@ describe('Learn', () => {
         within(chapter).getByRole('link', { name: /^The staff and the treble clef/ }),
       ).not.toHaveAccessibleName(/learned/)
     })
-
-    it('switch levels from the chips', async () => {
-      const user = userEvent.setup()
-      const { router } = await renderApp('/')
-      const levels = await screen.findByRole('radiogroup', { name: 'Level' })
-      await user.click(within(levels).getByRole('radio', { name: 'Intermediate' }))
-      expect(await screen.findByRole('heading', { level: 2, name: 'Fluency' })).toBeInTheDocument()
-      expect(router.state.location.search).toMatchObject({ journey: 'fluency' })
-      const chapter = JOURNEYS[1]!.chapters[0]!
-      expect(
-        screen.getByRole('region', { name: `Chapter 1: ${chapter.title.en}` }),
-      ).toHaveTextContent(`0/${chapter.steps.length}`)
-    })
   })
 
-  describe('its Courses', () => {
-    it('come up from the header’s toggle, shelf by shelf', async () => {
+  describe('the Courses', () => {
+    it('open from Learn’s See all, shelf by shelf', async () => {
       const user = userEvent.setup()
       const { router } = await renderApp('/')
-      // Its views are the bar's title (R31-S): Lessons · Courses where the title stands.
-      const toggle = await screen.findByRole('radiogroup', { name: 'What Learn shows' })
-      expect(screen.getByRole('banner')).toContainElement(toggle)
-      expect(within(toggle).getByRole('radio', { name: 'Lessons' })).toBeChecked()
-      await user.click(within(toggle).getByRole('radio', { name: 'Courses' }))
-      expect(router.state.location.search).toMatchObject({ view: 'courses' })
-      const shelf = await screen.findByRole('region', { name: 'Beginner courses' })
+      const courses = await screen.findByRole('region', { name: 'Courses' })
+      await user.click(within(courses).getByRole('link', { name: 'See all' }))
+      expect(router.state.location.pathname).toBe('/courses')
+      const shelf = await screen.findByRole('region', { name: 'Beginner' })
       expect(
         within(shelf)
           .getAllByRole('link')
@@ -144,21 +140,8 @@ describe('Learn', () => {
       expect(screen.getByRole('region', { name: 'Method books' })).toBeInTheDocument()
     })
 
-    it('stay up when Learn is opened again from the navigation', async () => {
-      const user = userEvent.setup()
-      const { router, viewsStore } = await renderApp('/?view=courses')
-      await screen.findByRole('region', { name: 'Method books' })
-      expect(viewsStore.getState().views['/']).toEqual({ view: 'courses' })
-      const nav = screen.getAllByRole('navigation', { name: 'Main navigation' })[0]
-      if (!nav) throw new Error('no navigation')
-      await user.click(within(nav).getByRole('link', { name: 'Learn' }))
-      expect(router.state.location.search).toEqual({ view: 'courses' })
-      expect(viewsStore.getState().views['/']).toEqual({ view: 'courses' })
-      expect(await screen.findByRole('region', { name: 'Method books' })).toBeInTheDocument()
-    })
-
     it('ring the course Continue is in', async () => {
-      const { progressStore } = await renderApp('/?view=courses')
+      const { progressStore } = await renderApp('/courses')
       await screen.findByRole('region', { name: 'Method books' })
       act(() => progressStore.setState({ learned: { 'course:gorshkov/sevenths-in-a-song': at } }))
       const card = screen
@@ -168,10 +151,14 @@ describe('Learn', () => {
     })
   })
 
-  it('reads in Russian, with nothing left in English, either way it shows', async () => {
-    await renderApp('/', { locale: 'ru' })
+  it('reads in Russian, with nothing left in English, on Learn and a level’s page', async () => {
+    const { unmount } = await renderApp('/', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Обучение' })).toBeInTheDocument()
-    await screen.findByRole('heading', { level: 2, name: 'Основы' })
+    await screen.findByRole('region', { name: 'Уровни' })
+    expect(untranslated(document.body)).toEqual([])
+    unmount()
+    await renderApp(`/levels/${JOURNEYS[0]!.id}`, { locale: 'ru' })
+    await screen.findByRole('heading', { level: 1, name: 'Основы' })
     expect(untranslated(document.body)).toEqual([])
   })
 })

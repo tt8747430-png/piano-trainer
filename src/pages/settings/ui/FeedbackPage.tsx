@@ -47,7 +47,7 @@ export function FeedbackPage() {
           placeholder={t('report.placeholder')}
           aria-describedby={hint}
           onChange={(event) => setText(event.target.value)}
-          className="min-h-46 resize-none rounded-xl border-border bg-card p-3 dark:bg-card text-base/[1.45] md:text-base/[1.45]"
+          className="min-h-46 resize-none rounded-control border-border bg-card p-3 dark:bg-card text-base/[1.45] md:text-base/[1.45]"
         />
         <p id={hint} className="px-1 text-footnote text-pretty text-muted-foreground">
           {online ? t('report.footnote') : t('report.offline')}

@@ -179,7 +179,7 @@ function BlockBody({ block }: { block: Exclude<Block, { kind: 'question' }> }) {
         </div>
       ) : (
         // The boards' aside: on its wash, sized to its words, "Note" in the soft caps over them.
-        <aside className="flex max-w-[65ch] flex-col gap-0.5 self-start rounded-xl bg-muted px-4 py-3">
+        <aside className="flex max-w-[65ch] flex-col gap-0.5 self-start rounded-control bg-muted px-4 py-3">
           <span className="text-xs font-bold tracking-caps text-muted-foreground uppercase">
             {t('example.note')}
           </span>

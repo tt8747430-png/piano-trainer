@@ -239,7 +239,7 @@ export function TakeRoll({
                     onClick={() => onPlayFrom(bar)}
                     className="flex h-11 w-full items-center justify-center py-1.5 text-xs text-muted-foreground tabular-nums focus-visible:-outline-offset-3 data-kept:[&>span]:bg-paint-yellow"
                   >
-                    <span className="flex size-full items-center justify-center rounded-md transition-colors duration-200 ease-out hover:bg-muted">
+                    <span className="flex size-full items-center justify-center rounded-control transition-colors duration-200 ease-out hover:bg-muted">
                       {said(number)}
                     </span>
                   </button>

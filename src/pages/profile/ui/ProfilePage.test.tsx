@@ -44,8 +44,8 @@ describe('the Profile', () => {
       'href',
       '/account/sign-in',
     )
-    // The device's figures still show.
-    expect(within(guest).getByRole('list', { name: 'Your practice' })).toHaveTextContent(
+    // The device's figures still show, under it.
+    expect(screen.getByRole('list', { name: 'Your practice' })).toHaveTextContent(
       /0\s*Day streak.*0\s*Songs learned.*0 min\s*Practice time/,
     )
   })
@@ -60,9 +60,8 @@ describe('the Profile', () => {
     await user.click(await screen.findByRole('link', { name: /2\s*Day streak/ }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/profile/streak'))
     expect(await screen.findByText('2 day streak')).toBeVisible()
-    expect(
-      screen.getByText('Keep the flame alive: practise today to extend your streak.'),
-    ).toBeVisible()
+    // Today counted, the days to the streak badge's next tier said.
+    expect(screen.getByText('Today counts. 1 more day to the Bronze badge.')).toBeVisible()
   })
 
   it('See all opens Badges', async () => {
@@ -76,12 +75,12 @@ describe('the Profile', () => {
     expect(await screen.findByRole('link', { name: /Scale Master/ })).toBeVisible()
   })
 
-  it("names a locked badge's goal over its meter, the count said once", async () => {
+  it("says a locked badge's distance to its next tier over its meter, once", async () => {
     await renderApp('/profile')
     const badges = await screen.findByRole('region', { name: 'Badges' })
     const streak = within(badges).getByRole('link', { name: /Streak Keeper/ })
-    expect(streak).toHaveTextContent('3 days in a row')
-    expect(streak.textContent?.match(/0 of 3/g)).toHaveLength(1)
+    expect(streak).toHaveTextContent('3 more days to Bronze')
+    expect(streak.textContent?.match(/3 more days/g)).toHaveLength(1)
   })
 
   it('opens the bell with its unread count', async () => {
@@ -97,18 +96,6 @@ describe('the Profile', () => {
       'href',
       '/profile/notifications',
     )
-  })
-
-  it('says the nearest badge still to earn, a link to its page', async () => {
-    const { progressStore } = await renderApp('/profile')
-    act(() =>
-      progressStore.setState({
-        learned: { 'piece:bz5': '2026-11-01', 'piece:ode': '2026-11-02' },
-      }),
-    )
-    const almost = await screen.findByRole('link', { name: /Almost there/ })
-    expect(almost).toHaveTextContent('3 more to your next Repertoire badge')
-    expect(almost).toHaveAttribute('href', '/profile/badges/repertoire')
   })
 
   it('reads in Russian', async () => {

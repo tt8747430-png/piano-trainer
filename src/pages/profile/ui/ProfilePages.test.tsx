@@ -13,7 +13,7 @@ describe('Streak', () => {
     const user = userEvent.setup()
     await renderApp('/profile/streak')
     expect(await screen.findByText('Practise today to start a streak.')).toBeVisible()
-    const month = screen.getByRole('region', { name: 'This month' })
+    const month = screen.getByRole('region', { name: 'Days practised' })
     const now = within(month).getByText(/\d{4}/).textContent
     expect(within(month).getByRole('button', { name: 'Next month' })).toBeDisabled()
     await user.click(within(month).getByRole('button', { name: 'Previous month' }))
@@ -42,8 +42,8 @@ describe('a badge', () => {
     expect(screen.getByText(/Tier 1 of 4/)).toBeVisible()
     expect(screen.getByText('Mark a song Learned on its page in Songs.')).toBeVisible()
     const rows = within(screen.getByRole('region', { name: /Tiers/ })).getAllByRole('listitem')
-    expect(rows[0]).toHaveTextContent(/Bronze.*1 song learned.*Reached Nov 3, 2026/)
-    expect(rows[1]).toHaveTextContent(/Silver.*5 songs learned.*3 to go/)
+    expect(rows[0]).toHaveTextContent(/Bronze.*Learn 1 song.*Reached 3 Nov 2026/)
+    expect(rows[1]).toHaveTextContent(/Silver.*Learn 5 songs.*3 to go/)
     expect(rows[2]).toHaveTextContent('Locked')
     expect(screen.getByText('You: 2')).toBeVisible()
   })
@@ -61,12 +61,14 @@ describe('Achievements', () => {
     act(() =>
       progressStore.setState({
         seconds: { [today()]: 2 * 3600 + 15 * 60 },
+        days: [today()],
         earned: { 'first-lesson': '2026-11-02' },
       }),
     )
     const records = await screen.findByRole('region', { name: 'Personal records' })
-    expect(records).toHaveTextContent('Level 3')
-    expect(records).toHaveTextContent('2 h 15 min')
+    expect(records).toHaveTextContent(/Level\s*3/)
+    expect(records).toHaveTextContent(/Longest streak\s*1 day/)
+    expect(records).toHaveTextContent(/Days practised\s*1/)
     const milestones = screen.getByRole('region', { name: 'Milestones' })
     const rows = within(milestones).getAllByRole('link')
     expect(rows[0]).toHaveTextContent(/First lesson done.*Earned/)
@@ -77,7 +79,7 @@ describe('Achievements', () => {
     await renderApp('/profile/achievements/first-recording')
     await screen.findByRole('heading', { level: 1, name: 'First recording' })
     expect(screen.getByText('Not earned yet')).toBeVisible()
-    expect(screen.getByText('Record a take in the Player.')).toBeVisible()
+    expect(screen.getByText('Record a take in the score editor.')).toBeVisible()
   })
 })
 

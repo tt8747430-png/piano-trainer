@@ -8,16 +8,29 @@ const SRC = resolve(import.meta.dirname, '..')
 
 /** Where each page's controls are drawn: its page and the parts it is made of. */
 const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
-  general: ['pages/settings/ui/GeneralPage.tsx', 'features/live-keyboard/ui/TypingSwitch.tsx'],
+  general: [
+    'pages/settings/ui/GeneralPage.tsx',
+    // The theme, General's, on its own Appearance page as Apple's Display & Brightness.
+    'pages/settings/ui/AppearancePage.tsx',
+    'features/live-keyboard/ui/TypingSwitch.tsx',
+  ],
   'piano-sheet': ['features/live-keyboard/ui/PianoSheet.tsx'],
   'connect-piano': ['pages/midi-settings/', 'features/connect-midi/', 'features/live-keyboard/'],
-  'score-editor': ['pages/score-editor/ui/ScoreSettingsPages.tsx', 'features/record-take/ui/'],
+  'score-editor': [
+    'pages/score-editor/ui/ScoreSettingsPages.tsx',
+    'features/record-take/ui/',
+    // The recorder's click and count-in, set as a take is set up in Songs' Record sheet.
+    'pages/songs/ui/RecordSheet.tsx',
+  ],
   player: [
     'pages/player/',
     'widgets/player-settings/',
     'widgets/practice-player/',
     'widgets/score-view-menu/',
     'widgets/player-setup/',
+    // The hands at the keys, one choice wherever the keys are: the Chords stage's too.
+    'pages/chords/ui/ChordsPage.tsx',
+    'widgets/chord-explorer/ui/ChordStage.tsx',
   ],
   metronome: ['pages/metronome/', 'features/metronome/'],
   tuner: ['pages/tuner/'],
@@ -59,12 +72,14 @@ const COMMANDS: Readonly<Record<string, readonly (keyof typeof SETTING_HOMES)[]>
 }
 
 /**
- * Writers that stay outside their setting's home for now, each with the round that moves it. The
- * list only shrinks: a new entry is a second home, which R18 refuses.
+ * Writers outside their setting's home, each with why: the round that moves it, or a command called
+ * for a field that is no preference. A new entry for a preference is a second home, which R18 refuses.
  */
 const NOT_YET_HOME: Readonly<Record<string, string>> = {
   'setSound features/metronome/use-metronome.ts':
     "round 2 (A39): the click's volume moves to the Metronome's one set",
+  'setKeyboard features/live-keyboard/model/use-fold-keys.ts':
+    'writes only the keys’ fold, which is the screen as left and not a preference',
 }
 
 function sources(dir: string): string[] {

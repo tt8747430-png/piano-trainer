@@ -56,17 +56,18 @@ describe('the Search palette', () => {
     expect(await palette()).toBeInTheDocument()
   })
 
-  it('suggests Practice’s pages before anything is typed', async () => {
+  it('suggests Continue, then Practice’s pages, before anything is typed', async () => {
     const user = userEvent.setup()
     await renderApp('/')
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
     await user.keyboard('{Control>}k{/Control}')
     const suggested = await rowsOf('Suggestions')
-    expect(suggested[0]).toHaveTextContent(/^Chords/)
+    expect(suggested[0]).toHaveTextContent('Continue · Lesson 1 of 11')
+    expect(suggested[1]).toHaveTextContent(/^Chords/)
     expect(screen.queryByRole('group', { name: 'Recent searches' })).toBeNull()
   })
 
-  it('filters as it is typed, grouped Practice · Songs · Folders · Lessons', async () => {
+  it('filters as it is typed, grouped Practice · Songs · Playlists · Lessons', async () => {
     const user = userEvent.setup()
     await renderApp('/')
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
@@ -77,7 +78,7 @@ describe('the Search palette', () => {
         within(await screen.findByRole('listbox'))
           .getAllByRole('group')
           .map((group) => group.firstElementChild?.textContent),
-      ).toEqual(['Practice', 'Songs', 'Folders', 'Lessons']),
+      ).toEqual(['Practice', 'Songs', 'Playlists', 'Lessons']),
     )
   })
 
@@ -90,7 +91,9 @@ describe('the Search palette', () => {
     const [song] = await rowsOf('Songs')
     expect(song).toHaveTextContent(/Still, my soul/)
     // The first row is chosen as the list is shown; the arrows move from it.
-    await waitFor(() => expect(song).toHaveAttribute('aria-selected', 'true'))
+    await waitFor(async () =>
+      expect(await field()).toHaveAttribute('aria-activedescendant', song!.id),
+    )
     await user.keyboard('{ArrowDown}{ArrowUp}{Enter}')
     await waitFor(() => expect(at(router)).toEqual({ path: '/songs/bz5', entry: 1 }))
     expect(screen.queryByRole('dialog')).toBeNull()
@@ -107,9 +110,9 @@ describe('the Search palette', () => {
     await user.click((await rowsOf('Practice'))[0]!)
     expect(viewsStore.getState().searchRecent).toEqual(['dorian'])
     await user.keyboard('{Control>}k{/Control}')
-    const [recent] = await rowsOf('Recent searches')
-    expect(recent).toHaveTextContent('dorian')
-    await user.click(recent!)
+    // Over the suggestions, a chip each.
+    expect(await screen.findByText('Recent searches')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'dorian' }))
     expect(await field()).toHaveValue('dorian')
   })
 
@@ -149,7 +152,7 @@ describe('the Search palette', () => {
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
     await user.keyboard('{Control>}k{/Control}')
     await user.type(await field(), 'sunday')
-    expect((await rowsOf('Folders'))[0]).toHaveTextContent(/Sunday service.*1 song/)
+    expect((await rowsOf('Playlists'))[0]).toHaveTextContent(/Sunday service.*1 song/)
     await user.clear(await field())
     await user.type(await field(), 'still my soul')
     expect((await rowsOf('Songs'))[0]).toHaveTextContent('Archived')
@@ -170,9 +173,9 @@ describe('the Search palette', () => {
     await waitFor(() => expect(at(router)).toEqual({ path: '/', entry: 0 }))
   })
 
-  it('opens from Songs’ own search on what was typed there', async () => {
+  it('opens from All songs’ own search on what was typed there', async () => {
     const user = userEvent.setup()
-    await renderApp('/songs?q=grace')
+    await renderApp('/songs/all?q=grace')
     await user.click(await screen.findByRole('button', { name: 'Search everywhere' }))
     expect(await field()).toHaveValue('grace')
   })

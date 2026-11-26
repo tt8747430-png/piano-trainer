@@ -2,10 +2,16 @@ import { vi } from 'vitest'
 
 /**
  * A controllable `IntersectionObserver` for jsdom, which has none and lays nothing out. With
- * `visible`, every element observed is on screen at once; otherwise none is until `show` brings all
- * the observed ones into view, as a scroll would.
+ * `visible`, every element observed is on screen at once (or those `where` picks, as a page scrolled
+ * to them); otherwise none is until `show` brings all the observed ones into view, as a scroll would.
  */
-export function stubIntersectionObserver({ visible }: { visible: boolean }) {
+export function stubIntersectionObserver({
+  visible,
+  where = () => true,
+}: {
+  visible: boolean
+  where?: (element: Element) => boolean
+}) {
   const observers = new Set<FakeObserver>()
 
   class FakeObserver implements IntersectionObserver {
@@ -19,7 +25,7 @@ export function stubIntersectionObserver({ visible }: { visible: boolean }) {
     }
     observe(element: Element) {
       this.elements.add(element)
-      if (visible) queueMicrotask(() => this.report([element]))
+      if (visible && where(element)) queueMicrotask(() => this.report([element]))
     }
     unobserve(element: Element) {
       this.elements.delete(element)

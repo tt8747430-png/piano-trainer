@@ -75,7 +75,7 @@ export function RouteState({
           {line}
         </p>
         {/* The ways on are the board's pills, 50 tall and bold, whatever button each page passes. */}
-        <div className="mt-5 flex flex-wrap justify-center gap-2 *:h-12.5 *:rounded-full *:px-5 *:text-base *:font-bold">
+        <div className="mt-5 flex flex-wrap justify-center gap-2 *:h-12.5 *:rounded-pill *:px-5 *:text-base *:font-bold">
           {children}
         </div>
       </div>

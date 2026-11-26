@@ -14,7 +14,7 @@ export function RunRow({ id, name, detail, accuracy }: RunLine) {
   return (
     <RowLink
       mark={
-        <span className="grid h-11 w-13 shrink-0 place-items-center rounded-xl bg-muted text-subhead font-bold tabular-nums">
+        <span className="grid h-11 w-13 shrink-0 place-items-center rounded-control bg-muted text-subhead font-bold tabular-nums">
           {accuracy}
         </span>
       }

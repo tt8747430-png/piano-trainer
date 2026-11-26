@@ -783,7 +783,7 @@ export function ChordPlayer({
                     >
                       <span
                         aria-hidden
-                        className={cn('size-2 rounded-full', theirs ? 'bg-primary' : 'bg-learned')}
+                        className={cn('size-2 rounded-pill', theirs ? 'bg-primary' : 'bg-learned')}
                       />
                       {t('chordPlayer.online.live')}
                       {link && !link.mine && !link.canEdit ? (

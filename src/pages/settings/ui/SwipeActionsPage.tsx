@@ -69,6 +69,7 @@ function Side({ surface, title, info }: { surface: BarSurface; title: string; in
                   label={label}
                   value={name(value)}
                   mark={glyph(value, 'size-4.5 shrink-0')}
+                  setting={`bars.${surface}`}
                 />
               }
             />
@@ -94,7 +95,7 @@ function SwipePreview({ kind }: { kind: Kind }) {
       role="img"
       aria-label={t('bars.preview')}
       className={cn(
-        'relative h-16 overflow-hidden rounded-xl shadow-[0_0_0_1px_var(--color-border)]',
+        'relative h-16 overflow-hidden rounded-control shadow-[0_0_0_1px_var(--color-border)]',
         first ? PAINT[BAR_PAINTS[first]].tile : 'bg-muted',
       )}
     >
@@ -106,7 +107,11 @@ function SwipePreview({ kind }: { kind: Kind }) {
       ) : null}
       <div className="absolute inset-y-0 start-24 -end-24 flex items-center gap-3 bg-card px-4 shadow-[-1px_0_0_var(--color-border)]">
         <span
-          className={cn('grid size-10 shrink-0 place-items-center rounded-lg', tile.fill, tile.ink)}
+          className={cn(
+            'grid size-10 shrink-0 place-items-center rounded-control',
+            tile.fill,
+            tile.ink,
+          )}
         >
           <Tile aria-hidden className="size-5" />
         </span>

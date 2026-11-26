@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { useOnline } from '@/shared/lib'
 import { ActionRow, ConfirmDialog, DangerRow, SettingsGroup } from '@/shared/ui'
-import { usePianoSound } from '../model/use-piano-sound'
+import type { PianoSoundControl } from '../model/use-piano-sound'
 
 /** Bytes as a learner reads them: megabytes to one decimal. */
 const megabytes = (bytes: number, locale: string) =>
@@ -18,14 +18,15 @@ const megabytes = (bytes: number, locale: string) =>
  * Storage and backup's Piano sound (the board's P_STORAGE; "the sound settings go to the storage and
  * backup"): the grand, how much of it this device keeps and Download for offline use with its
  * progress until all of it is kept (offline it waits, saying it needs the internet); removing it is
- * the page's foot's (`RemovePianoRow`). Where the browser keeps no caches, nothing.
+ * the page's foot's (`RemovePianoRow`), both reading the page's one `piano`, so a removal shows here at
+ * once. Where the browser keeps no caches, nothing.
  */
-export function PianoSoundGroup() {
+export function PianoSoundGroup({ piano }: { piano: PianoSoundControl }) {
   const { t } = useTranslation(['settings', 'common', 'player'])
   const locale = useLocale()
   const online = useOnline()
-  const piano = usePianoSound()
   const { sound } = piano
+  if (sound.state === 'none') return null
   return (
     <SettingsGroup flush title={t('piano.sound')} info={t('pianoSound.info')}>
       {sound.state === 'reading' ? (
@@ -108,9 +109,8 @@ export function PianoSoundGroup() {
  * Remove downloaded piano, the page's first loss (the board's P_STORAGE): a red row among the losses
  * at its foot, never inside the download's group, asking first; shown once some of the grand is kept.
  */
-export function RemovePianoRow() {
+export function RemovePianoRow({ piano }: { piano: PianoSoundControl }) {
   const { t } = useTranslation('settings')
-  const piano = usePianoSound()
   const [removing, setRemoving] = useState(false)
   if (piano.sound.state !== 'known' || piano.sound.kept === 0) return null
   return (

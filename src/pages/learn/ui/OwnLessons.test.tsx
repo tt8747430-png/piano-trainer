@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import type { Editor } from '@tiptap/core'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { untranslated } from '@/app/testing/untranslated'
 import { blankLesson, lessonById } from '@/entities/lesson'
 import { OWN_LESSONS_STORAGE_KEY, type OwnLessonsState } from '@/entities/own-lessons'
 import { createMemoryStorage, OPEN_SETTINGS, REST_MS } from '@/shared/lib'
@@ -41,23 +42,30 @@ function withOwn(state: OwnLessonsState = SAVED) {
   return storage
 }
 
-/** The screen bar's Settings (the gear), not the sidebar's. */
+/** The screen bar's Settings (the gear), not the sidebar's: its window over the page. */
 async function openSettings(user: ReturnType<typeof userEvent.setup>) {
   await screen.findByRole('heading', { level: 1 })
   const bar = document.querySelector<HTMLElement>('[data-slot="screen-bar"]')!
-  await user.click(within(bar).getByRole('link', { name: 'Settings' }))
+  await user.click(within(bar).getByRole('button', { name: 'Settings' }))
+  return screen.findByRole('dialog', { name: 'Settings' })
+}
+
+/** New's floating +, opened, and one of the things it makes chosen. */
+async function makeNew(user: ReturnType<typeof userEvent.setup>, what: string) {
+  await user.click(await screen.findByRole('button', { name: 'New' }))
+  await user.click(await screen.findByRole('button', { name: what }))
 }
 
 describe('Your lessons (R30-5)', () => {
   beforeEach(stubTextLayout)
 
-  it('is the chip after the levels: empty, it says so, and New lesson opens the new one to write', async () => {
+  it('is made from Learn’s New, written in place, and read under Made by you', async () => {
     const user = userEvent.setup()
     const { router, ownLessonsStore } = await renderApp('/')
-    await user.click(await screen.findByRole('radio', { name: 'Your lessons' }))
-    const own = await screen.findByRole('region', { name: 'Your lessons' })
-    expect(own).toHaveTextContent('No lessons of your own yet.')
-    await user.click(screen.getByRole('button', { name: 'New lesson' }))
+    // Nothing of the learner's own yet: no Made by you on Learn.
+    await screen.findByRole('region', { name: 'Levels' })
+    expect(screen.queryByRole('region', { name: 'Made by you' })).not.toBeInTheDocument()
+    await makeNew(user, 'New lesson')
     const sheet = await screen.findByRole('dialog', { name: 'New lesson' })
     await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Hymn intros')
     await user.click(within(sheet).getByRole('button', { name: 'Create lesson' }))
@@ -72,24 +80,39 @@ describe('Your lessons (R30-5)', () => {
     await user.click(screen.getByRole('button', { name: 'Done' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/lessons/own-lesson-1'))
     const place = await screen.findByRole('navigation', { name: 'Where this lesson is' })
-    expect(within(place).getByRole('link', { name: 'Your lessons' })).toHaveAttribute(
+    expect(within(place).getByRole('link', { name: 'Made by you' })).toHaveAttribute(
       'href',
-      '/?journey=own',
+      '/your-lessons',
     )
   })
 
-  it('lists the learner’s lessons with how far each is read, never in a level’s count', async () => {
-    const { progressStore } = await renderApp('/?journey=own', { storage: withOwn() })
-    const own = await screen.findByRole('region', { name: 'Your lessons' })
+  it('says so on its page while the learner has made nothing', async () => {
+    await renderApp('/your-lessons')
+    expect(await screen.findByText('No lessons or courses yet')).toBeInTheDocument()
+  })
+
+  it('lists the learner’s own on Learn and on their page, learned once they are', async () => {
+    const { progressStore, unmount } = await renderApp('/', { storage: withOwn() })
+    const own = await screen.findByRole('region', { name: 'Made by you' })
     expect(within(own).getByRole('link', { name: /^Hymn intros in G/ })).toHaveAttribute(
       'href',
       '/lessons/own-lesson-1',
     )
-    expect(own).toHaveTextContent('0 of 1 learned')
+    const course = within(own).getByRole('link', { name: /^Sunday hymn playing/ })
+    expect(course).toHaveTextContent('Course · 2 lessons')
     act(() =>
       progressStore.setState({ learned: { 'lesson:own-lesson-1': '2026-11-05T10:00:00.000Z' } }),
     )
-    expect(own).toHaveTextContent('1 of 1 learned')
+    expect(course).toHaveTextContent('Course · 2 lessons · 1 learned')
+    unmount()
+    // Their page: a course's lessons under its fold.
+    const user = userEvent.setup()
+    await renderApp('/your-lessons', { storage: withOwn() })
+    await user.click(await screen.findByRole('button', { name: 'Show its lessons' }))
+    expect(await screen.findByRole('link', { name: /^Hymn intros in G/ })).toHaveAttribute(
+      'href',
+      '/lessons/own-lesson-1',
+    )
   })
 
   it('reads as any lesson, its Edit the learner’s own, and keeps what is written', async () => {
@@ -124,10 +147,10 @@ describe('Your lessons (R30-5)', () => {
     act(() =>
       progressStore.setState({ learned: { 'lesson:own-lesson-1': '2026-11-05T10:00:00.000Z' } }),
     )
-    await openSettings(user)
-    expect(await screen.findByRole('radiogroup', { name: 'Lessons read as' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Share link' })).toBeNull()
-    await user.click(screen.getByRole('button', { name: 'Rename' }))
+    const window = await openSettings(user)
+    // It lives on the learner's devices: no Share link.
+    expect(within(window).queryByRole('button', { name: 'Share link' })).toBeNull()
+    await user.click(within(window).getByRole('button', { name: /^Name/ }))
     const sheet = await screen.findByRole('dialog', { name: 'Rename lesson' })
     const name = within(sheet).getByRole('textbox', { name: 'Name' })
     await user.clear(name)
@@ -137,7 +160,11 @@ describe('Your lessons (R30-5)', () => {
       en: 'Intros in G',
       ru: 'Intros in G',
     })
-    await user.click(screen.getByRole('button', { name: 'Duplicate' }))
+    await user.click(
+      within(await screen.findByRole('dialog', { name: 'Settings' })).getByRole('button', {
+        name: 'Duplicate',
+      }),
+    )
     await waitFor(() => expect(router.state.location.pathname).toBe('/lessons/own-lesson-2'))
     expect(ownLessonsStore.getState().lessons.map((lesson) => lesson.id)).toEqual([
       'own-lesson-1',
@@ -150,14 +177,13 @@ describe('Your lessons (R30-5)', () => {
         state: OPEN_SETTINGS,
       }),
     )
+    // Deleted at once, with Undo in its toast (R38).
     await user.click(await screen.findByRole('button', { name: 'Delete lesson' }))
-    await user.click(
-      within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Delete' }),
-    )
-    await waitFor(() => expect(router.state.location.search).toEqual({ journey: 'own' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/your-lessons'))
     expect(ownLessonsStore.getState().lessons.map((lesson) => lesson.id)).toEqual(['own-lesson-2'])
     expect(ownLessonsStore.getState().courses[0]?.lessons).toEqual(['bass-clef'])
     expect(progressStore.getState().learned['lesson:own-lesson-1']).toBeUndefined()
+    expect(await screen.findByText('“Intros in G” deleted')).toBeInTheDocument()
   })
 
   it('is not found once it is gone', async () => {
@@ -166,26 +192,23 @@ describe('Your lessons (R30-5)', () => {
   })
 
   it('reads in Russian', async () => {
-    await renderApp('/?journey=own', { locale: 'ru' })
-    expect(await screen.findByRole('region', { name: 'Ваши уроки' })).toHaveTextContent(
-      'Своих уроков пока нет.',
-    )
-    expect(screen.getByRole('button', { name: 'Новый урок' })).toBeInTheDocument()
+    await renderApp('/your-lessons', { locale: 'ru', storage: withOwn() })
+    await screen.findByRole('link', { name: /^Sunday hymn playing/ })
+    expect(untranslated(document.body)).toEqual([])
   })
 })
 
 describe('Your courses (R30-5)', () => {
   beforeEach(stubTextLayout)
 
-  it('follow the shelves, each on its cover, and New course opens the new one to edit', async () => {
+  it('are made from New on their page, the new one opened to edit', async () => {
     const user = userEvent.setup()
-    const { router, ownLessonsStore } = await renderApp('/?view=courses', { storage: withOwn() })
-    const own = await screen.findByRole('region', { name: 'Your courses' })
-    expect(within(own).getByRole('link', { name: /^Sunday hymn playing/ })).toHaveAttribute(
+    const { router, ownLessonsStore } = await renderApp('/your-lessons', { storage: withOwn() })
+    expect(await screen.findByRole('link', { name: /^Sunday hymn playing/ })).toHaveAttribute(
       'href',
       '/courses/own-course-1',
     )
-    await user.click(within(own).getByRole('button', { name: 'New course' }))
+    await makeNew(user, 'New course')
     const sheet = await screen.findByRole('dialog', { name: 'New course' })
     await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Reading four voices')
     await user.click(within(sheet).getByRole('button', { name: 'Create course' }))
@@ -196,8 +219,7 @@ describe('Your courses (R30-5)', () => {
   it('starts a course from the two weeks: its lessons copied into Your lessons, the course holding them', async () => {
     const user = userEvent.setup()
     const { router, ownLessonsStore } = await renderApp('/your-lessons', { storage: withOwn() })
-    await user.click((await screen.findAllByRole('button', { name: 'New' }))[0]!)
-    await user.click(await screen.findByRole('menuitem', { name: 'New course' }))
+    await makeNew(user, 'New course')
     const sheet = await screen.findByRole('dialog', { name: 'New course' })
     expect(within(sheet).getByRole('radio', { name: 'Empty course' })).toBeChecked()
     await user.click(
@@ -230,11 +252,11 @@ describe('Your courses (R30-5)', () => {
       'href',
       '/lessons/bass-clef?course=own-course-1',
     )
-    await user.click(screen.getByRole('link', { name: 'Start course' }))
+    await user.click(screen.getByRole('link', { name: 'Start: Hymn intros in G' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/lessons/own-lesson-1'))
     const place = await screen.findByRole('navigation', { name: 'Where this lesson is' })
-    expect(place).toHaveTextContent('Sunday hymn playing · Lesson 1 of 2')
-    expect(screen.getByRole('link', { name: /Next lesson/ })).toHaveAttribute(
+    expect(place).toHaveTextContent('Lesson 1 of 2 · Sunday hymn playing')
+    expect(screen.getAllByRole('link', { name: /Next lesson/ })[0]).toHaveAttribute(
       'href',
       '/lessons/bass-clef?course=own-course-1',
     )
@@ -276,10 +298,11 @@ describe('Your courses (R30-5)', () => {
 
   it('renames, duplicates and deletes on its Settings, its lessons kept', async () => {
     const user = userEvent.setup()
-    const { router, ownLessonsStore } = await renderApp('/courses/own-course-1/settings', {
+    const { router, ownLessonsStore } = await renderApp('/courses/own-course-1', {
       storage: withOwn(),
     })
-    await user.click(await screen.findByRole('button', { name: 'Duplicate' }))
+    const window = await openSettings(user)
+    await user.click(within(window).getByRole('button', { name: 'Duplicate' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/courses/own-course-2'))
     expect(ownLessonsStore.getState().courses[1]?.title).toBe('Sunday hymn playing copy')
     await act(() =>
@@ -289,11 +312,9 @@ describe('Your courses (R30-5)', () => {
         state: OPEN_SETTINGS,
       }),
     )
+    // Deleted at once, with Undo in its toast (R38).
     await user.click(await screen.findByRole('button', { name: 'Delete course' }))
-    await user.click(
-      within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Delete' }),
-    )
-    await waitFor(() => expect(router.state.location.search).toEqual({ view: 'courses' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/your-lessons'))
     expect(ownLessonsStore.getState().courses.map((course) => course.id)).toEqual(['own-course-2'])
     expect(ownLessonsStore.getState().lessons).toHaveLength(1)
   })

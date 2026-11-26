@@ -22,7 +22,7 @@ describe('A course’s lesson', () => {
     const user = userEvent.setup()
     const { progressStore, router } = await renderApp('/courses/called-to-play/five-ways')
     const next = book.lessons[at + 1]!
-    await user.click(await screen.findByRole('link', { name: /Next lesson/ }))
+    await user.click((await screen.findAllByRole('link', { name: /Next lesson/ }))[0]!)
     await waitFor(() =>
       expect(router.state.location.pathname).toBe(`/courses/called-to-play/${next.id}`),
     )
@@ -34,7 +34,7 @@ describe('A course’s lesson', () => {
     const user = userEvent.setup()
     const { progressStore, router } = await renderApp('/courses/called-to-play/five-ways')
     const next = book.lessons[at + 1]!
-    ;(await screen.findByRole('link', { name: /Next lesson/ })).focus()
+    ;(await screen.findAllByRole('link', { name: /Next lesson/ }))[0]!.focus()
     await user.keyboard('{Enter}')
     await waitFor(() =>
       expect(router.state.location.pathname).toBe(`/courses/called-to-play/${next.id}`),
@@ -48,8 +48,8 @@ describe('A course’s lesson', () => {
   it('ends its course on the way to the guided songs', async () => {
     const last = book.lessons.at(-1)!
     await renderApp(`/courses/called-to-play/${last.id}`)
-    const way = await screen.findByRole('link', { name: /On to the guided songs/ })
-    expect(way.getAttribute('href')).toBe('/courses/called-to-play')
+    const [way] = await screen.findAllByRole('link', { name: /On to the guided songs/ })
+    expect(way?.getAttribute('href')).toBe('/courses/called-to-play')
     expect(screen.queryByRole('link', { name: /Next lesson/ })).not.toBeInTheDocument()
   })
 
@@ -68,7 +68,9 @@ describe('A course’s lesson', () => {
 
   it('is not found under a course that does not have it', async () => {
     await renderApp('/courses/gorshkov/five-ways')
-    expect(await screen.findByText('Page not found')).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Page not found' }),
+    ).toBeInTheDocument()
   })
 
   it('speaks Russian on every block', async () => {

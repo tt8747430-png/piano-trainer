@@ -4,16 +4,17 @@ import { describe, expect, it, vi } from 'vitest'
 import { ToolKey } from './ToolKey'
 
 describe('ToolKey', () => {
-  it('is a key named by its label, on or off as a toggle, greyed out of reach', async () => {
+  it('is a key named by its label, on or off as a toggle, greyed in its place out of reach', async () => {
     const user = userEvent.setup()
     const onClick = vi.fn()
+    const onDotted = vi.fn()
     render(
       <>
         <ToolKey label="Quarter note" pressed onClick={onClick}>
           ♩
         </ToolKey>
         <ToolKey label="Rest">𝄽</ToolKey>
-        <ToolKey label="Dotted" disabled>
+        <ToolKey label="Dotted" disabled onClick={onDotted}>
           .
         </ToolKey>
       </>,
@@ -21,9 +22,13 @@ describe('ToolKey', () => {
     const quarter = screen.getByRole('button', { name: 'Quarter note' })
     expect(quarter).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'Rest' })).not.toHaveAttribute('aria-pressed')
-    expect(screen.getByRole('button', { name: 'Dotted' })).toBeDisabled()
     await user.click(quarter)
     expect(onClick).toHaveBeenCalledOnce()
+    // Greyed, it keeps its focus and its tooltip; a press does nothing.
+    const dotted = screen.getByRole('button', { name: 'Dotted' })
+    expect(dotted).toHaveAttribute('aria-disabled', 'true')
+    await user.click(dotted)
+    expect(onDotted).not.toHaveBeenCalled()
   })
 
   it('says what a term means in its tooltip and to a screen reader, never on its face', async () => {
@@ -49,7 +54,7 @@ describe('ToolKey', () => {
       </ToolKey>,
     )
     const staccato = screen.getByRole('button', { name: 'Staccato' })
-    expect(staccato).toBeDisabled()
+    expect(staccato).toHaveAttribute('aria-disabled', 'true')
     expect(staccato).not.toHaveAttribute('title')
     expect(staccato).toHaveAccessibleDescription('')
   })

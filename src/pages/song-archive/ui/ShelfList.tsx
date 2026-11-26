@@ -126,7 +126,7 @@ function ShelfRow({
     // with 8 corners, 12 from its title over its line, each at its normal height).
     laptop
       ? 'gap-4 [&_[data-slot=row-tile]]:size-10 [&_[data-slot=row-tile]]:rounded-thumb'
-      : 'min-h-12 gap-3 py-2 [&_[data-slot=row-tile]]:size-11 [&_[data-slot=row-tile]]:rounded-lg **:data-[slot=row-detail]:leading-[normal] **:data-[slot=row-title]:leading-[normal]',
+      : 'min-h-12 gap-3 py-2 [&_[data-slot=row-tile]]:size-11 [&_[data-slot=row-tile]]:rounded-control **:data-[slot=row-detail]:leading-[normal] **:data-[slot=row-title]:leading-[normal]',
   )
   // In Select a tap chooses the row, its check leading it; else a song opens, a playlist is a face.
   const body =

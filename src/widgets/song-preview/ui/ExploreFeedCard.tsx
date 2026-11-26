@@ -53,7 +53,7 @@ export function ExploreFeedCard({ entry, table = false }: { entry: PublicEntry; 
         aria-label={t('explore.report', { title: entry.title })}
         title={t('public.report')}
         onClick={() => setReporting(true)}
-        className="grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted"
+        className="grid size-11 shrink-0 place-items-center rounded-pill text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted"
       >
         <MoreHorizontal aria-hidden className="size-5" />
       </button>
@@ -119,7 +119,7 @@ export function ExploreFeedCard({ entry, table = false }: { entry: PublicEntry; 
       {link(
         'min-h-20 flex-1 gap-4 py-3 pl-3 transition-colors duration-150 ease-out hover:bg-muted/60',
         <>
-          <PublicCover entry={entry} tile className="w-14 shrink-0 rounded-xl" />
+          <PublicCover entry={entry} tile className="w-14 shrink-0 rounded-control" />
           <span className="flex min-w-0 flex-1 flex-col gap-0.5">
             <span className="line-clamp-2 text-base leading-tight font-semibold text-pretty">
               {entry.title}

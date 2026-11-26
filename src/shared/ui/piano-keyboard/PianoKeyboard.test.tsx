@@ -66,11 +66,11 @@ describe('PianoKeyboard', () => {
     expect(screen.getByRole('button', { name: 'G4' })).toHaveFocus()
   })
 
-  it('shows a mark with its label, in its colour’s wash while it is quiet', () => {
+  it('shows a mark with its label, in its full colour while it is quiet', () => {
     renderKeyboard({ marks: new Map<Midi, KeyMark>([[midi(62), { tone: 'root', label: '1' }]]) })
     const d = screen.getByRole('button', { name: 'D4' })
     expect(d).toHaveTextContent('1')
-    expect(d).toHaveClass('bg-role-root-wash')
+    expect(d).toHaveClass('bg-role-root')
   })
 
   it('names a marked key’s note under its degree, unless marked notes go unnamed', () => {
@@ -101,7 +101,7 @@ describe('PianoKeyboard', () => {
     expect(shownText(screen.getByRole('button', { name: 'C4' }))).toContain('C4')
     expect(shownText(screen.getByRole('button', { name: 'D4' }))).toBe('')
     rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} namedKeys="all" />)
-    expect(shownText(screen.getByRole('button', { name: 'C sharp 4' }))).toContain('C#')
+    expect(shownText(screen.getByRole('button', { name: 'C sharp 4' }))).toContain('C♯')
     rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} namedKeys="none" />)
     expect(shownText(screen.getByRole('button', { name: 'C4' }))).toBe('')
   })
@@ -121,15 +121,15 @@ describe('PianoKeyboard', () => {
     const e = screen.getByRole('button', { name: 'E4' })
     fireEvent.pointerDown(e, { pointerId: 1, pointerType: 'touch' })
     expect(e).toHaveAttribute('data-down')
-    expect(c).toHaveClass('bg-role-root-wash')
+    expect(c).toHaveClass('bg-role-root')
     expect(shownText(c)).toContain('1')
   })
 
-  it('makes keys toggles when it holds a selection, and fills the selected ones yellow', () => {
+  it('makes keys toggles when it holds a selection, and fills the selected ones key-down sky', () => {
     renderKeyboard({ selected: new Set([C4]) })
     const c = screen.getByRole('button', { name: 'C4' })
     expect(c).toHaveAttribute('aria-pressed', 'true')
-    expect(c).toHaveClass('bg-primary')
+    expect(c).toHaveClass('bg-(--key-down)')
     expect(screen.getByRole('button', { name: 'D4' })).toHaveAttribute('aria-pressed', 'false')
   })
 
@@ -138,7 +138,7 @@ describe('PianoKeyboard', () => {
     expect(screen.getByRole('button', { name: 'C4' })).not.toHaveAttribute('aria-pressed')
   })
 
-  it('puts a key down: a plain one turns the down colour, a marked one its full colour', () => {
+  it('puts a key down: a plain one turns the down colour, a marked one keeps its colour and sinks', () => {
     const marks = new Map<Midi, KeyMark>([
       [C4, { tone: 'root', label: '1' }],
       [midi(64), { tone: 'scale', label: '3' }],
@@ -148,17 +148,24 @@ describe('PianoKeyboard', () => {
     const c = screen.getByRole('button', { name: 'C4' })
     expect(c).toHaveAttribute('data-down')
     expect(c).toHaveClass('bg-role-root')
-    expect(screen.getByRole('button', { name: 'E4' })).toHaveClass('bg-key-scale-down')
-    expect(screen.getByRole('button', { name: 'F4' })).toHaveClass('bg-key-tonic-down')
+    expect(screen.getByRole('button', { name: 'E4' })).toHaveClass(
+      'bg-key-scale',
+      'key-face-white-down',
+      'translate-y-0.5',
+    )
+    expect(screen.getByRole('button', { name: 'F4' })).toHaveClass(
+      'bg-key-tonic',
+      'translate-y-0.5',
+    )
     const d = screen.getByRole('button', { name: 'D4' })
     expect(d).toHaveAttribute('data-down')
     expect(d).toHaveClass('bg-key-down')
     expect(screen.getByRole('button', { name: 'G4' })).not.toHaveAttribute('data-down')
   })
 
-  it('lights Name chord’s keys yellow', () => {
+  it('lights Name chord’s keys key-down sky, never the honey of the one action', () => {
     renderKeyboard({ lit: new Set([C4]) })
-    expect(screen.getByRole('button', { name: 'C4' })).toHaveClass('bg-primary')
+    expect(screen.getByRole('button', { name: 'C4' })).toHaveClass('bg-(--key-down)')
   })
 
   it('shows a wrong key and an outlined one', () => {
@@ -175,12 +182,12 @@ describe('PianoKeyboard', () => {
     expect(screen.queryByRole('button', { name: /Octave|Settings|Sustain/ })).toBeNull()
   })
 
-  it('is never longer than the screen’s share for the keys, though that is under the shortest keys', () => {
+  it('draws Fit’s keys 112 to 132 long, never longer than the screen’s share for the keys', () => {
     renderKeyboard()
     const keys = screen.getByRole('group', { name: 'Keyboard' })
     // A phone on its side keeps the music more room than the shortest keys would leave it.
     expect(keys.style.height).toMatch(
-      /^clamp\(min\(56px, var\(--keys-most\)\), .*, var\(--keys-most\)\)$/,
+      /^clamp\(min\(112px, var\(--keys-most\)\), .*, min\(132px, var\(--keys-most\)\)\)$/,
     )
   })
 
@@ -208,10 +215,12 @@ describe('PianoKeyboard', () => {
   })
 
   it('stands as tall as the divider set it, its keys as wide as ever', () => {
-    renderKeyboard({ height: 120 })
+    const { rerender } = renderKeyboard()
     const keys = screen.getByRole('group', { name: 'Keyboard' })
+    const width = keys.style.width
+    rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} height={120} />)
     expect(keys.style.height).toBe('120px')
-    expect(keys.style.width).toContain('100cqw')
+    expect(keys.style.width).toBe(width)
   })
 
   it('keeps the keys that matter in view when its key size changes', () => {

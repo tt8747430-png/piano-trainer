@@ -56,7 +56,7 @@ export function Stepper({
         title={name}
         disabled={disabled || next < min || next > max}
         onClick={() => onChange(Math.min(max, Math.max(min, next)))}
-        className="flex size-11 shrink-0 items-center justify-center rounded-xl text-foreground transition-colors hover:bg-muted disabled:text-muted-foreground/50 disabled:hover:bg-transparent [&_svg]:size-5"
+        className="flex size-11 shrink-0 items-center justify-center rounded-control text-foreground transition-colors hover:bg-muted disabled:text-muted-foreground/50 disabled:hover:bg-transparent [&_svg]:size-5"
       >
         <Icon aria-hidden />
       </button>
@@ -66,7 +66,7 @@ export function Stepper({
     <div
       role="group"
       aria-label={label}
-      className="flex shrink-0 items-center rounded-xl bg-card ring-1 ring-border"
+      className="flex shrink-0 items-center rounded-control bg-card ring-1 ring-border"
     >
       {button(-1)}
       {typed ? (

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { renderRouted } from '@/app/testing/render-routed'
 import type { SyncLine } from '@/shared/lib/sync'
@@ -8,7 +8,7 @@ const ANA = { id: 'ana', email: 'ana@example.com', name: 'Ana', role: 'learner' 
 
 describe('the account card (A15)', () => {
   it.each<[SyncLine, string]>([
-    [{ kind: 'synced', ago: { value: -2, unit: 'minute' } }, 'Synced 2 min. ago'],
+    [{ kind: 'synced', ago: { value: -2, unit: 'minute' } }, 'Synced 2 min ago'],
     [{ kind: 'waiting', count: 3 }, '3 changes pending'],
     [{ kind: 'offline' }, 'Offline'],
     [{ kind: 'failed' }, 'Last sync failed'],
@@ -16,7 +16,8 @@ describe('the account card (A15)', () => {
   ])('shows the learner and one line of the sync: %o', async (line, said) => {
     await renderRouted(<AccountCardFace account={ANA} line={line} />)
     const card = await screen.findByRole('link', { name: /Ana/ })
-    expect(card).toHaveTextContent(`Ana ana@example.com ${said}`)
+    for (const text of ['Ana', 'ana@example.com', said])
+      expect(within(card).getByText(text)).toBeInTheDocument()
     expect(card).toHaveAttribute('href', '/settings/account')
   })
 

@@ -18,6 +18,8 @@ import {
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
   DEFAULT_CHORD_PLAYER,
+  DEFAULT_CHORDS,
+  DEFAULT_INTERVALS,
   defaultKeyboard,
   TEXT_SIZES,
 } from './types'
@@ -53,9 +55,21 @@ const DEFAULTS = {
   metronome: DEFAULT_METRONOME,
   foldedSections: [],
   practiceRecent: [],
-  lessonReading: 'page',
+  // The palette's Recent before anything is used: the values, marks and lines written most.
+  paletteRecent: [
+    'quarter',
+    'eighth',
+    'articulation:staccato',
+    'articulation:accent',
+    'slur',
+    'dynamic:mf',
+    'dynamic:p',
+    'chord',
+  ],
   progressions: DEFAULT_PROGRESSIONS,
+  intervals: DEFAULT_INTERVALS,
   chordPlayer: DEFAULT_CHORD_PLAYER,
+  chords: DEFAULT_CHORDS,
   bars: DEFAULT_BARS,
   tuner: { a4: 440 },
   scaleStaff: { tonic: false, tetrachords: false },
@@ -69,14 +83,12 @@ describe('createSettingsStore', () => {
     ).toEqual(DEFAULT_PLAYBACK)
   })
 
-  it('keeps how the other hand looks and plays where still valid, dimmed and played otherwise (A35)', () => {
-    expect(restored({ otherHand: { look: 'hide', play: false } }).otherHand).toEqual({
-      look: 'hide',
-      play: false,
+  it('keeps how the other hand looks where still valid, dimmed otherwise (A35)', () => {
+    expect(restored({ otherHand: { look: 'show', play: false } }).otherHand).toEqual({
+      look: 'show',
     })
-    expect(restored({ otherHand: { look: 'grey', play: 'yes' } }).otherHand).toEqual(
-      DEFAULT_OTHER_HAND,
-    )
+    expect(restored({ otherHand: { look: 'hide' } }).otherHand).toEqual(DEFAULT_OTHER_HAND)
+    expect(DEFAULT_OTHER_HAND).toEqual({ look: 'dim' })
     expect(restored({ melody: 'staff' })).not.toHaveProperty('melody')
   })
 
@@ -124,25 +136,17 @@ describe('createSettingsStore', () => {
         metronome: true,
       },
       playback: {
-        countdown: 'visual',
+        countdown: 'none',
         speedStep: 10,
       },
       otherHand: { look: 'show' },
       sound: { staves: { bass: 35, staff0: 0 }, recording: 60, click: 5 },
       trainer: { autoNext: true },
       keyboard: {
-        keySize: 'large',
-        swipe: 'glissando',
         namedKeys: 'none',
-        markNotes: false,
-        chordNames: false,
         typing: true,
-        autoplay: false,
-        dock: 'top',
         folded: true,
         foldedLandscape: false,
-        pedals: 'all',
-        volume: 70,
       },
       keysWindow: {
         phone: { left: 8, bottom: 96, width: 386, height: 200 },
@@ -182,12 +186,16 @@ describe('createSettingsStore', () => {
         layout: 'vertical',
         music: 'grid',
         diagrams: 'summary',
+        gridBars: null,
         chordNames: false,
         lyrics: false,
         pinned: false,
         textSize: 130,
         keys: false,
-        hands: true,
+        hands: false,
+        angle: 'seat',
+        handsOnKeys: false,
+        range: 'song',
       },
       metronome: {
         bpm: 72,
@@ -197,12 +205,16 @@ describe('createSettingsStore', () => {
         subdivision: 'triplets',
         trainer: { on: true, play: 4, mute: 1 },
         speed: { on: true, from: 60, to: 90, step: 3, every: 2 },
+        volume: 60,
+        flash: true,
       },
       foldedSections: ['chords.tensions'],
       practiceRecent: ['tuner', 'chords'],
-      lessonReading: 'sections',
+      paletteRecent: ['half', 'tie'],
       progressions: { names: 'chords', voicing: 'block', inversion: 1 },
-      chordPlayer: { names: 'nashville', voicing: 'block' },
+      intervals: { order: 'in-order', speed: 'medium' },
+      chordPlayer: { names: 'nashville', voicing: 'block', follow: true },
+      chords: { labels: 'names', range: 'chord', rangeFrom: 48, angle: 'seat', handsOnKeys: false },
     }
     expect(restored(saved)).toEqual(saved)
   })
@@ -252,23 +264,14 @@ describe('createSettingsStore', () => {
           hidden: ['bass'],
         },
       }).scoreView,
-    ).toEqual({
-      layout: 'page',
-      music: 'sheet',
-      diagrams: 'animated',
-      chordNames: false,
-      lyrics: true,
-      pinned: true,
-      textSize: 100,
-      keys: true,
-      hands: false,
-    })
+    ).toEqual({ ...DEFAULT_SCORE_VIEW, layout: 'page', chordNames: false })
     expect(restored({ scoreView: { layout: 'paper' } }).scoreView).toEqual(DEFAULT_SCORE_VIEW)
   })
 
-  it('shows the keys, not the hands, until the learner turns the hands on (R36)', () => {
-    expect(DEFAULT_SCORE_VIEW.hands).toBe(false)
-    expect(restored({ scoreView: { hands: 'yes' } }).scoreView.hands).toBe(false)
+  it('shows the hands at the keys until the learner turns them off (R36)', () => {
+    expect(DEFAULT_SCORE_VIEW.hands).toBe(true)
+    expect(restored({ scoreView: { hands: 'yes' } }).scoreView.hands).toBe(true)
+    expect(restored({ scoreView: { hands: false } }).scoreView.hands).toBe(false)
   })
 
   it('opens a sidebar saved as anything but open or collapsed', () => {
@@ -292,15 +295,15 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('opens the editor in Replace, its palette at the left, unless left otherwise (R29 B7, R31-E)', () => {
-    expect(DEFAULT_EDITING).toMatchObject({ paletteSide: 'left' })
+  it('opens the editor in Replace, its palette at the right, unless left otherwise (R29 B7, R31-E)', () => {
+    expect(DEFAULT_EDITING).toMatchObject({ paletteSide: 'right' })
     expect(restored({ editorMode: 'chord', editing: { paletteSide: 'top' } })).toMatchObject({
       editorMode: 'replace',
       editing: DEFAULT_EDITING,
     })
-    expect(restored({ editorMode: 'insert', editing: { paletteSide: 'right' } })).toMatchObject({
+    expect(restored({ editorMode: 'insert', editing: { paletteSide: 'left' } })).toMatchObject({
       editorMode: 'insert',
-      editing: { ...DEFAULT_EDITING, paletteSide: 'right' },
+      editing: { ...DEFAULT_EDITING, paletteSide: 'left' },
     })
   })
 
@@ -346,7 +349,7 @@ describe('createSettingsStore', () => {
   })
 
   it('starts afresh over a save of the version before the hands at the keys (R36)', () => {
-    expect(SETTINGS_VERSION).toBe(37)
+    expect(SETTINGS_VERSION).toBe(58)
     expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 36)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
@@ -373,7 +376,7 @@ describe('createSettingsStore', () => {
   it('starts the Metronome at 120 in 4/4 with a click, each part saved kept where valid (A39)', () => {
     const trainer = { on: false, play: 2, mute: 2 }
     const speed = { on: false, from: 80, to: 120, step: 5, every: 4 }
-    const plain = { levels: null, subdivision: 'none', trainer, speed }
+    const plain = { levels: null, subdivision: 'none', trainer, speed, volume: 100, flash: false }
     expect(DEFAULT_METRONOME).toEqual({ bpm: 120, meter: '4/4', sound: 'click', ...plain })
     // Any time signature it can count is kept; 4/3 is none.
     expect(restored({ metronome: { bpm: 400, meter: '7/8', sound: 'beep' } }).metronome).toEqual({
@@ -398,6 +401,15 @@ describe('createSettingsStore', () => {
     expect(
       restored({ metronome: { subdivision: 'triplets', speed: { on: true, step: 0 } } }).metronome,
     ).toMatchObject({ subdivision: 'triplets', speed: { on: true, step: 5 } })
+    // Its volume one of its steps of ten, the flash a switch.
+    expect(restored({ metronome: { volume: 40, flash: true } }).metronome).toMatchObject({
+      volume: 40,
+      flash: true,
+    })
+    expect(restored({ metronome: { volume: 45, flash: 'yes' } }).metronome).toMatchObject({
+      volume: 100,
+      flash: false,
+    })
     expect(restored({ metronome: 'fast' }).metronome).toEqual(DEFAULT_METRONOME)
   })
 
@@ -432,50 +444,27 @@ describe('createSettingsStore', () => {
         finePointer,
       }).getState().keyboard
     expect(keyboard(true)).toEqual({
-      keySize: 'piano',
-      swipe: 'scroll',
       namedKeys: 'c',
-      markNotes: true,
-      chordNames: true,
       typing: true,
-      autoplay: true,
-      dock: 'bottom',
       folded: false,
       foldedLandscape: true,
-      pedals: 'sustain',
-      volume: 100,
     })
     expect(keyboard(false).typing).toBe(false)
   })
 
   it('restores the keyboard settings, an unknown value taking its default alone', () => {
     const keyboard = {
-      keySize: 'huge',
-      swipe: 'glissando',
       namedKeys: 'all',
-      markNotes: 'no',
-      chordNames: 'no',
       typing: 'yes',
-      autoplay: 'no',
-      dock: 'top',
       folded: true,
       foldedLandscape: 'no',
-      pedals: 'three',
-      volume: 140,
+      keySize: 'huge',
     }
     expect(restored({ theme: 'light', locale: 'en', keyboard }).keyboard).toEqual({
-      keySize: 'piano',
-      swipe: 'glissando',
       namedKeys: 'all',
-      markNotes: true,
-      chordNames: true,
       typing: false,
-      autoplay: true,
-      dock: 'top',
       folded: true,
       foldedLandscape: true,
-      pedals: 'sustain',
-      volume: 100,
     })
   })
 

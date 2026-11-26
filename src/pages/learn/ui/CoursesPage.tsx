@@ -22,15 +22,16 @@ export function CoursesPage() {
       title={t('courses')}
       large
       back={<BackButton />}
-      tools={
-        <>
-          {actions}
-          {editing ? null : <CoursesAbout />}
-        </>
-      }
+      tools={<CoursesAbout />}
+      // The shelves' Publish, the glass word just before Done while editing (EDITR).
       edit={
         editable
-          ? { editing, onEdit: () => show({ edit: true }), onDone: () => show({ edit: false }) }
+          ? {
+              editing,
+              onEdit: () => show({ edit: true }),
+              onDone: () => show({ edit: false }),
+              publish: actions,
+            }
           : undefined
       }
     />

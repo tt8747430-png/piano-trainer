@@ -15,7 +15,7 @@ const ROW = `${ROW_ROOM} w-full text-base`
 
 /** A row that acts, on the group's fill: its hover a shade over the fill (the fill is the Row family's hover). */
 const ROW_PRESS =
-  'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none'
+  'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:-outline-offset-3'
 
 /**
  * A group of settings' rows on the muted fill, as the canvas's `GROUP` draws them (canvas 179): one
@@ -45,7 +45,7 @@ export function GroupRows({
         'flex flex-col rows-line overflow-hidden',
         // On the page's paper a group is the card (14 corners, the hairline ring), as the kit's GROUP
         // draws `bg=SHEET`; a filled group keeps its fill alone, 12 round.
-        surface === 'sheet' ? 'card' : 'rounded-xl bg-muted',
+        surface === 'sheet' ? 'card' : 'rounded-control bg-muted',
         className,
       )}
     >
@@ -197,7 +197,7 @@ export function ChoiceList<T extends string>({
   return (
     <Listbox
       label={label}
-      className="overflow-hidden rounded-xl bg-card *:rows-line"
+      className="overflow-hidden rounded-control bg-card *:rows-line"
       optionClassName="min-h-12 px-4 text-base"
       groups={[
         {

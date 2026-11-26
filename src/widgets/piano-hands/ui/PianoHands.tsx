@@ -32,7 +32,7 @@ function placeTags(layer: HTMLElement, tags: readonly KeyTag[], place: KeyPlace)
     if (!element) {
       element = layer.ownerDocument.createElement('span')
       element.className =
-        'absolute flex h-5.5 min-w-5.5 -translate-x-1/2 -translate-y-full items-center justify-center rounded-full px-1.25 text-xs font-bold whitespace-nowrap text-primary-foreground shadow-[0_0_0_1.5px_color-mix(in_oklab,var(--shade)_55%,transparent),var(--elevation-thumb)]'
+        'absolute flex h-5.5 min-w-5.5 -translate-x-1/2 -translate-y-full items-center justify-center rounded-pill px-1.25 text-xs font-bold whitespace-nowrap text-primary-foreground shadow-[0_0_0_1.5px_color-mix(in_oklab,var(--shade)_55%,transparent),var(--elevation-thumb)]'
       layer.append(element)
     }
     const [x, y] = place(tag.key, tag.black)

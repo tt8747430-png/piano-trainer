@@ -65,7 +65,7 @@ export function KeyStrip({
     <svg
       viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
       preserveAspectRatio="none"
-      className={`block h-10 w-full overflow-hidden rounded-sm ${move ? 'cursor-grab touch-none outline-none' : ''}`}
+      className={`block h-10 w-full overflow-hidden rounded-control ${move ? 'cursor-grab touch-none outline-none' : ''}`}
       {...(move
         ? {
             role: 'slider',

@@ -5,7 +5,7 @@ import { say, TOAST_MS } from './say'
 import { Toaster } from './Toaster'
 
 describe('Toaster', () => {
-  it('says what was done, politely, with its action and its Close', async () => {
+  it('says what was done, politely, with its action', async () => {
     const user = userEvent.setup()
     const undo = vi.fn()
     render(<Toaster />)
@@ -19,18 +19,11 @@ describe('Toaster', () => {
     expect(undo).toHaveBeenCalledOnce()
   })
 
-  it('goes at its Close', async () => {
-    const user = userEvent.setup()
+  it('has no Close: it goes by itself or by a swipe', async () => {
     render(<Toaster />)
     act(() => say('Moved to Hymns'))
     await screen.findByText('Moved to Hymns')
-    expect(screen.queryByRole('button', { name: 'Undo' })).toBeNull()
-    // Base UI keeps a toast's Close from a screen reader, which reaches the toasts by F6.
-    const close = document.querySelector('[data-slot="toast-close"]')
-    if (!(close instanceof HTMLElement)) throw new Error('a toast has its Close')
-    expect(close).toHaveAttribute('aria-label', 'Close')
-    await user.click(close)
-    await vi.waitFor(() => expect(screen.queryByText('Moved to Hymns')).toBeNull())
+    expect(screen.queryByRole('button')).toBeNull()
   })
 
   it('takes an Undo once: it closes the toast it stood on', async () => {

@@ -123,7 +123,7 @@ export function ChordNotes({ found, keys }: { found: FoundChord; keys: readonly 
       {tiles.map((tile) => (
         <li
           key={tile.degree}
-          className="flex h-18 flex-col items-center justify-center rounded-xl bg-card ring-1 ring-border"
+          className="flex h-18 flex-col items-center justify-center rounded-control bg-card ring-1 ring-border"
         >
           <span className="text-[1.5rem]/[normal] font-bold">{tile.note}</span>
           <span className="text-xs text-muted-foreground">

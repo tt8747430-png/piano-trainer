@@ -56,7 +56,7 @@ interface LoopRows {
 
 /** A filled pill of the tempo's, its colour alone changing on a press (`DESIGN.md`). */
 const PILL =
-  'flex-none rounded-full font-semibold text-foreground transition-colors hover:bg-muted-foreground/15'
+  'flex-none rounded-pill font-semibold text-foreground transition-colors hover:bg-muted-foreground/15'
 /** The tempo's − and +: 44 round, the sign 20. */
 const STEP = cn(PILL, 'size-11 bg-muted text-xl font-normal')
 
@@ -84,7 +84,7 @@ function BeatLights({
           key={beat}
           aria-hidden
           className={cn(
-            'rounded-full',
+            'rounded-pill',
             beat === 0 ? 'size-4' : 'size-3',
             beat === lit ? 'bg-honey-ring' : beat === 0 ? 'bg-muted-foreground/40' : 'bg-border',
           )}

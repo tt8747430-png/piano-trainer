@@ -4,12 +4,11 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 
 describe('About (R29 B9, R32)', () => {
-  it('shows the version and build, Software update, the licence, Legal and every credit', async () => {
+  it('shows the version and build, the licence, Legal and every credit', async () => {
     await renderApp('/settings/about')
     expect(await screen.findByRole('heading', { level: 1, name: 'About' })).toBeInTheDocument()
     for (const text of [
       'Version',
-      'Software update',
       'All rights reserved',
       'Acknowledgements',
       'Verovio',

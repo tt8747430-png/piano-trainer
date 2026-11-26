@@ -44,7 +44,7 @@ describe('ScreenHeader', () => {
     render(<ScreenHeader title="Chords" views={<div />} />)
   })
 
-  it('puts Edit beside the title and tools, Settings and More at the bar’s end, in that order (A3)', () => {
+  it('puts the tools, Settings, More and Edit at the bar’s end, in that order (A3)', () => {
     render(
       <ScreenHeader
         title="Song"
@@ -57,12 +57,10 @@ describe('ScreenHeader', () => {
     const buttons = within(screen.getByRole('banner')).getAllByRole('button')
     expect(
       buttons.map((button) => button.getAttribute('aria-label') ?? button.textContent),
-    ).toEqual(['Edit', 'MIDI', 'Settings', 'More'])
-    // The pencil follows the title in the same group, so it wraps with the title's last line.
-    expect(screen.getByRole('heading', { level: 1 }).nextElementSibling).toBe(buttons[0])
+    ).toEqual(['MIDI', 'Settings', 'More', 'Edit'])
   })
 
-  it('shows Done in the pencil’s place beside the title while editing', async () => {
+  it('shows Done in Edit’s place while editing, the acts that do not edit gone', async () => {
     const onDone = vi.fn()
     render(
       <ScreenHeader
@@ -72,13 +70,12 @@ describe('ScreenHeader', () => {
       />,
     )
     const buttons = within(screen.getByRole('banner')).getAllByRole('button')
-    expect(buttons.map((button) => button.textContent)).toEqual(['Done', 'Settings'])
-    expect(screen.getByRole('heading', { level: 1 }).nextElementSibling).toBe(buttons[0])
+    expect(buttons.map((button) => button.textContent)).toEqual(['Done'])
     await userEvent.click(screen.getByRole('button', { name: 'Done' }))
     expect(onDone).toHaveBeenCalledOnce()
   })
 
-  it('keeps a screen’s title in the bar, a long one on two lines rather than cut', () => {
+  it('keeps a screen’s title in the bar on one line, a long one cut short', () => {
     render(
       <ScreenHeader
         title="Wonderful Grace of Jesus"
@@ -87,8 +84,8 @@ describe('ScreenHeader', () => {
     )
     const title = screen.getByRole('heading', { level: 1 })
     expect(within(screen.getByRole('banner')).getByRole('heading', { level: 1 })).toBe(title)
-    expect(title).toHaveClass('line-clamp-2')
-    expect(title).not.toHaveClass('truncate')
+    expect(title).toHaveClass('truncate')
+    expect(title).not.toHaveClass('line-clamp-2')
   })
 
   it('sets a place’s title larger in the bar’s one row, never in a block of its own', () => {
@@ -120,43 +117,14 @@ describe('ScreenHeader', () => {
     return { bar, under }
   }
 
-  it('hides while the page scrolls down and comes back on the way up, the pinned keys under it', async () => {
-    // A page over two screens tall: a shorter one keeps its bar (A31).
+  it('stays while the page scrolls, the pinned keys under it', async () => {
     vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockReturnValue(4000)
     const { bar, under } = renderBar()
     await waitFor(() => expect(under()).toBe('64px'))
-    expect(bar).not.toHaveAttribute('data-hidden')
-    scrollTo(120)
-    expect(bar).toHaveAttribute('data-hidden')
-    expect(under()).toBe('0px')
-    scrollTo(80)
-    expect(bar).not.toHaveAttribute('data-hidden')
-    expect(under()).toBe('64px')
-  })
-
-  it('stays on a page under two screens tall, where hiding would take the controls under it along', async () => {
-    vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockReturnValue(1200)
-    const { bar, under } = renderBar()
-    await waitFor(() => expect(under()).toBe('64px'))
     scrollTo(120)
     scrollTo(300)
     expect(bar).not.toHaveAttribute('data-hidden')
-  })
-
-  it('stays until the page has scrolled past it', async () => {
-    const { bar, under } = renderBar()
-    await waitFor(() => expect(under()).toBe('64px'))
-    scrollTo(40)
-    expect(bar).not.toHaveAttribute('data-hidden')
     expect(under()).toBe('64px')
-  })
-
-  it('stays while focus is inside it', async () => {
-    const user = userEvent.setup()
-    const { bar } = renderBar()
-    await user.click(screen.getByRole('button', { name: 'Back' }))
-    scrollTo(300)
-    expect(bar).not.toHaveAttribute('data-hidden')
   })
 })
 
@@ -564,7 +532,7 @@ describe('RowLink', () => {
     )
     const link = screen.getByRole('link', { name: 'Chords Beginner' })
     expect(link).toHaveAttribute('href', '/practice/chords')
-    expect(link.querySelector('[data-slot="row-tile"]')).toHaveClass('bg-paint-sand')
+    expect(link.querySelector('[data-slot="row-tile"]')).toHaveClass('bg-paint-tile-sand')
   })
 
   it('shows what it holds under its title and detail', () => {
@@ -593,7 +561,7 @@ describe('RowButton', () => {
     render(<RowButton title="Learn C♯m" icon={Settings} paint="sky" onClick={onClick} />)
     const row = screen.getByRole('button', { name: 'Learn C♯m' })
     expect(row).toHaveAttribute('type', 'button')
-    expect(row.querySelector('[data-slot="row-tile"]')).toHaveClass('bg-paint-sky')
+    expect(row.querySelector('[data-slot="row-tile"]')).toHaveClass('bg-paint-tile-sky')
     expect(row.querySelector('[data-slot="row-chevron"]')).not.toBeInTheDocument()
     await userEvent.setup().click(row)
     expect(onClick).toHaveBeenCalledOnce()
