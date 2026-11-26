@@ -1,0 +1,21 @@
+# From 006. Du-mă la izvorul.pdf (1 page) and the choir book, page 11.
+title: 6 Du-mă la izvorul
+composer: Alfred Bierli
+spatium: 1.75
+systems: 1 5 9 13
+hide-tempo
+hide-names
+
+[Soprano]
+1: @1 1.Du -- mă la iz _ -- vo -- rul, un -- de Cur -- ge'a vi -- e -- ții a -- pă;
+1: @5 La Gol -- go -- ta, _ un -- de tre -- ce Se -- tea mea _ su _ -- fle -- teas -- că.
+1: @9 Du -- mă la iz -- vo -- rul, La a -- pa lui cu -- ra -- tă.
+1: @13 Sân -- ge -- le lui I -- sus Alb ca nea -- ua mă spa -- lă.
+2: @1 2.Du -- mă la iz _ -- vo -- rul, un -- de Poa -- te pie -- ri pă -- ca -- tul;
+2: @5 Și de ori -- ce _ le -- gă -- tu -- ră Se mân -- tu _ -- ie _ su -- fle -- tul.
+3: @1 3.Du -- mă la iz _ -- vo -- rul, un -- de Și eu mă voi cu -- ră -- ți;
+3: @5 În va -- lul a _ -- ces -- tei a -- pe De tot mă _ voi _ în -- no -- i.
+
+[Tenor italic]
+1: @9 Du -- mă la iz -- vo -- rul, Du -- mă la iz -- vo -- rul, La a -- pa lui cu -- ra -- tă.
+1: @13 Sân -- ge -- le lui I -- sus, Sân -- ge -- le lui I -- sus Alb ca nea -- ua mă spa -- lă.

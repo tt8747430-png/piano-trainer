@@ -3,6 +3,7 @@
 Each song may hold a `match.txt` beside its files, written from the song's PDF and its page in the choir's book:
 
     title: 1 Binecuvântat să fie Domnul
+    composer: Valer Bogdan             the name printed at the right, under the title
     spatium: 1.9                       staff space in mm (the printed size)
     systems: 1 5 9 13 16 | 20 22 25    first bar of each line; | starts a new page
     hide-empty-staves                  a staff with nothing to sing in a line is left out, as printed
@@ -59,6 +60,8 @@ def parse(path):
         key = key.strip()
         if key == 'title':
             spec['title'] = value.strip()
+        elif key == 'composer':
+            spec['composer'] = value.strip()
         elif key == 'spatium':
             spec['spatium'] = value.strip()
         elif key == 'lyrics-size':
@@ -203,6 +206,19 @@ def layout_mscx(score, spec):
                     else:
                         tx.text = spec['title']
             break
+    if spec.get('composer'):
+        vb = next(score.iter('VBox'))
+        texts = [t for t in vb.findall('Text') if t.findtext('style') == 'composer']
+        if texts:
+            t = texts[0]
+            tx = t.find('text')
+            for c in list(tx):
+                tx.remove(c)
+        else:
+            t = ET.SubElement(vb, 'Text')
+            ET.SubElement(t, 'style').text = 'composer'
+            tx = ET.SubElement(t, 'text')
+        tx.text = spec['composer']
     staffs = [s for s in score.findall('Staff') if s.find('Measure') is not None]
     first = staffs[0]
     measures = first.findall('Measure')
