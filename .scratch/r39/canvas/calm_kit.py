@@ -133,13 +133,11 @@ def WHEEL(cols):
     colsh = ''.join(f'<div style="flex: {flex}; min-width: 0; display: flex; flex-direction: column"><sc-for list="{{{{{lst}}}}}" as="w" hint-placeholder-count="7"><button type="button" onClick="{{{{w.pick}}}}" style="height: 44px; border: 0; background: transparent; color: {INK}; opacity: {{{{w.op}}}}; font: inherit; font-size: 18px; font-weight: {{{{w.fw}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{w.l}}}}</button></sc-for></div>' for lst, flex in cols)
     return f'<div style="position: relative; display: flex; gap: 4px"><div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 132px; height: 44px; border-radius: 10px; background: {FILL}"></div><div style="position: relative; flex: 1; display: flex; gap: 4px">{colsh}</div></div>'
 
-# STATUS_DARK: the status bar over a dark band (the Player's and editor's), its time and glyphs in paper
-STATUS_DARK = STATUS.replace('background: #F7F3EE;', 'background: #332921; color: #FEFDFB;', 1)
-assert STATUS_DARK != STATUS
-def phone(fname, title, body, js, sheets='', bg=PAGE, dark=False):
+def phone(fname, title, body, js, sheets='', bg=PAGE, bar=None):
+    # bar: the status bar's ground when the screen's own bar continues it (the editor's light header, as Flat's)
     html = HEAD % title + f"""<div style="width: 450px; height: 920px; position: relative; font-family: {FONT}">
 <div data-menuroot style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; overflow: hidden; border-radius: 62px; background: {bg}; color: {INK}; display: flex; flex-direction: column">
-<div style="flex: none; height: 62px; position: relative">{STATUS_DARK if dark else STATUS}</div>
+<div style="flex: none; height: 62px; position: relative">{STATUS.replace('background: #F7F3EE;', f'background: {bar};', 1) if bar else STATUS}</div>
 {body}
 {sheets}
 <div aria-hidden="true" style="position: absolute; left: 134px; bottom: 8px; width: 134px; height: 5px; border-radius: 9999px; background: {INK}; z-index: 90"></div>

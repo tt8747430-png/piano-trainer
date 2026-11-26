@@ -715,34 +715,51 @@ def SONGMENU_KEYS(S, SET, TOAST, DEF='mine', close_others=''):
             f"actDup: () => {SET}({{ ...shut, {m5} }}), actArchive: () => {SET}({{ ...shut, {m6} }}), "
             f"expXml: () => {SET}({{ ...shut, {m7} }}), expMxl: () => {SET}({{ ...shut, {m8} }}), expMidi: () => {SET}({{ ...shut, {m9} }}) }}; }})(),")
 
-# The phone's header as Flat's (owner, 2026-11-26: "refactor the mobile version the same way and to be like the flat
-# editor the same"; "but the header should also be the same as the flat"): Flat's phone editor has one header row
-# (flat-score-editor 017, 018; help.flat.io's mobile screenshots: ←, the transport, the keyboard, ☰) and its menu
-# behind ☰ (Credits, Manage instruments, Version history, MIDI input, Layout, Export Score). Ours: ✕, the transport
-# (Go to start, Play, the metronome, Loop: 44 circles for a finger), Practice | Edit as glyph tabs, ☰; the song's name,
-# its versions and its acts are ☰'s (no title in the row, as Flat's); in Edit the acts row follows (the board's own).
-# over: laid over the screen from its very top, the status bar's 62 inside it (the Player's absolute layers)
-MENUI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M4 7h16M4 12h16M4 17h16"></path></svg>'
-def PHBAND(mode, close_href, practice_href, edit_href, over=False):
-    x = (f'<a href="{close_href}" aria-label="Close" data-tip="Close · Esc" style="flex: none; width: 44px; height: 44px; border-radius: 22px; color: {ONB}; display: flex; align-items: center; justify-content: center">'
-         '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></a>')
-    m = (f'<button type="button" aria-label="Menu" data-tip="Menu" aria-haspopup="dialog" aria-expanded="{{{{phMenuX}}}}" onClick="{{{{phMenu}}}}" style="flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px; '
-         f'background: {{{{phMenuBg}}}}; color: {ONB}; display: flex; align-items: center; justify-content: center; cursor: pointer">{MENUI}</button>')
+# The phone's header as Flat's phone editor draws it (owner, 2026-11-26: "the header and the toolbar doesnt look like
+# flat, and the play edit switch not it the header but in the setting or in the menu"): a light bar, never a dark band
+# (Flat's mobile editor, help.flat.io's mobile screenshots: paste, addvoice): ← at the start; the transport in one
+# outlined pill of bare glyphs (Go to start, Play, Loop and, ours, the metronome; Flat's "loop button in the header");
+# the piano-keys glyph that shows the keys notes are typed on (Flat's phone: "the only way to add notes is … the keys of
+# the piano"); ☰ at the end, its menu holding the rest, Practice | Edit at its top. A hairline under it; in Edit
+# Flat's second row follows (the board's acts row). keys: the board's own keys button. over: laid over the screen
+# from its top, the status bar's 62 inside it (the Player's absolute layers)
+MENUI = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="M4 7h16M4 12h16M4 17h16"></path></svg>'
+ARROWLI = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>'
+_PB = 'flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px; background: transparent; color: ' + INK + '; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer'
+def PHTRANSPORT():
+    b = lambda lab, tip, inner, act, extra='', look='': f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{_PB}{look}">{inner}</button>'
+    start = b('Go to start', 'Go to start', '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="2.5" height="14" rx="1"></rect><path d="M19 6.3v11.4a1 1 0 0 1-1.5.86L9.4 13.3a1.5 1.5 0 0 1 0-2.6l8.1-5.26A1 1 0 0 1 19 6.3z"></path></svg>', 'hdStart')
+    play = b('{{hdPlayTip}}', '{{hdPlayTip}}', '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="{{hdPlayD}}"></path></svg>', 'hdPlay')
+    loop = b('Loop', '{{hdLoopTip}}', '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>', 'hdLoop', '', '; background: {{hdLoopPh}}')
+    met = b('{{hdMetTip}}', '{{hdMetTip}}', METI.replace('width="20" height="20"', 'width="22" height="22"') + '<sc-if value="{{hdMetOff}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="position: absolute; width: 24px; height: 1.5px; border-radius: 1px; background: currentColor; transform: rotate(-45deg)"></span></sc-if>', 'hdMet')
+    return (f'<div role="toolbar" aria-label="Transport" style="flex: none; height: 48px; box-sizing: border-box; padding: 0 2px; border-radius: 24px; box-shadow: inset 0 0 0 1px {LINE}; display: flex; align-items: center">'
+            f'{start}{play}{loop}{met}</div>')
+def PHBAND(back_href, keys, over=False):
+    x = f'<a href="{back_href}" aria-label="Back" data-tip="Back · Esc" style="{_PB}; text-decoration: none">{ARROWLI}</a>'
+    m = f'<button type="button" aria-label="Menu" data-tip="Menu" aria-haspopup="dialog" aria-expanded="{{{{phMenuX}}}}" onClick="{{{{phMenu}}}}" style="{_PB}; background: {{{{phMenuBg}}}}">{MENUI}</button>'
     pos = 'position: absolute; z-index: 48; left: 0; right: 0; top: 0; padding-top: 62px' if over else 'flex: none; position: relative; z-index: 20'
-    return (f'<header data-band style="{pos}; box-sizing: border-box; padding-left: 4px; padding-right: 4px; background: {BAND}; color: {ONB}">'
-            f'<div style="height: 56px; display: flex; align-items: center; gap: 4px">{x}{HDRTRANSPORT(phone=True)}<span style="flex: 1"></span>'
-            f'{MODESW(mode, practice_href, edit_href, compact=True)}{m}</div></header>')
+    return (f'<header data-band style="box-sizing: border-box; padding: 0 8px; {pos}; background: {SHEET}; color: {INK}; box-shadow: inset 0 -1px 0 {LINE}">'
+            f'<div style="height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 4px">{x}{PHTRANSPORT()}{keys}{m}</div></header>')
+PHKEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys" aria-haspopup="dialog" aria-expanded="{{{{hdKeysOn}}}}" onClick="{{{{hdKeys}}}}" style="{_PB}; background: {{{{hdKeysPh}}}}">'
+             + KEYSI.replace('width="22" height="22"', 'width="24" height="24"') + '</button>')
+# Practice | Edit at the top of ☰ (the owner: "not in the header but in the setting or in the menu"), as Flat's menu
+# opens on its editor switch: one segmented control, the whole width, each a glyph and its word, the current one white
+def PHMODE(mode, practice_href, edit_href):
+    seg = lambda lab, ic, href, sel: (f'<a href="{href}" role="tab" aria-selected="{"true" if sel else "false"}" style="flex: 1; height: 40px; border-radius: 10px; background: {SHEET if sel else "transparent"}; '
+                                      f'box-shadow: {"0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)" if sel else "none"}; color: {INK}; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: {600 if sel else 500}">{ic}{lab}</a>')
+    return (f'<div role="tablist" aria-label="Mode" style="display: flex; gap: 2px; padding: 2px; border-radius: 12px; background: {FILL}">'
+            + seg('Practice', MUSICI, practice_href, mode == 'play') + seg('Edit', PENI, edit_href, mode == 'edit') + '</div>')
 # ☰ on a phone, as Flat's menu: the song's name heads it; the laptop rail's places as rows, each opening its sheet with
 # the panel's own body (one implementation), then the song's acts (the laptop title menu's: Recordings, Share link,
 # Export, Print; Duplicate and Archive apart). places: (id, label, value, body, act): act, when given, is the board's own
 # opener; PHKEYS (or the board's own keys) give phMenu, phMenuOn, phMenuX, phMenuBg, phClose, ph{id}On, ph{id}, and
 # phShare, phPrint, phDup, phArch, phMidiGo, phKeysGo, phOptsGo; head: what stands over the rows (the save state)
 EXPROWS = lambda: GROUP(*(('action', l, a, INK) for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))), bg=SHEET)
-def PHMENU(places, takes_href, head='', extra='', title='Amazing Grace'):
+def PHMENU(places, takes_href, mode_html='', head='', extra='', title='Amazing Grace'):
     rows = tuple(('link', lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places)
     acts = GROUP(('link', 'Recordings', '3', takes_href), ('action', 'Share link', 'phShare', INK), ('link', 'Export', '', 'phExp'), ('action', 'Print', 'phPrint', INK), bg=SHEET)
     loss = GROUP(('action', 'Duplicate song', 'phDup', INK), ('action', 'Archive song', 'phArch', INK), bg=SHEET)
-    out = BSHEET('phMenuOn', title, head + GROUP(*rows, bg=SHEET) + acts + extra + loss, close='phClose', maxh='calc(100% - 124px)')
+    out = BSHEET('phMenuOn', title, head + mode_html + GROUP(*rows, bg=SHEET) + acts + extra + loss, close='phClose', maxh='calc(100% - 124px)')
     for pid, lab, val, body, act in places:
         if not act:
             out += BSHEET(f'ph{pid}On', lab, body, close='phClose', maxh='calc(100% - 124px)')
@@ -754,7 +771,7 @@ def PHACTS(SET, shut, TOAST):
             f"phMidiGo: () => ({SET})({{ {shut}, hdPop: 'midi' }}), phKeysGo: () => ({SET})({{ {shut}, hdPop: 'keys' }}), phOptsGo: () => ({SET})({{ {shut}, hdPop: 'opts' }}), ")
 def PHKEYS(S, SET, ids, TOAST):
     return ("...(() => { const P = " + S + ".ph ?? null; const o = { phMenu: () => (" + SET + ")({ ph: P === 'menu' ? null : 'menu', hdPop: null }), phMenuOn: P === 'menu', phMenuX: P === 'menu' ? 'true' : 'false', "
-            "phMenuBg: P === 'menu' ? 'rgba(254,253,251,.16)' : 'transparent', phClose: () => (" + SET + ")({ ph: null }), " + PHACTS(SET, 'ph: null', TOAST) + "}; for (const id of " + repr(list(ids) + ['Exp']) + ") { o['ph' + id + 'On'] = P === id; o['ph' + id] = () => (" + SET + ")({ ph: id }); } return o; })(),")
+            "phMenuBg: P === 'menu' ? '#EEE9E2' : 'transparent', phClose: () => (" + SET + ")({ ph: null }), " + PHACTS(SET, 'ph: null', TOAST) + "}; for (const id of " + repr(list(ids) + ['Exp']) + ") { o['ph' + id + 'On'] = P === id; o['ph' + id] = () => (" + SET + ")({ ph: id }); } return o; })(),")
 
 # Rename version…: a small form, the one thing a laptop centres (ui-and-mockups)
 def RENAMEDLG():
@@ -942,8 +959,8 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
             " hdPlayD: (" + playing + ") ? 'M7 4h4v16H7zM13 4h4v16h-4z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z',"
             " hdOpts: tg('opts'), hdOptsOn: pop === 'opts', hdOptsX: pop === 'opts' ? 'true' : 'false',"
             " hdMet: () => { const n = NEXT[met]; SET({ metro: n === 'on', countBars: n === 'off' ? 0 : 1, " + TOAST("MN[n]") + " }); }, hdMetTip: MN[met], hdMetOff: met === 'off', "
-            " hdLoop: " + loop + ", hdLoopOn: (" + loop_on + ") ? 'true' : 'false', hdLoopBg: (" + loop_on + ") ? '#EDC684' : '#FEFDFB', hdLoopTip: " + loop_tip + ","
-            " hdTr: tg('tr'), hdTrOn: pop === 'tr', hdTrX: pop === 'tr' ? 'true' : 'false', hdTrL: (tr > 0 ? '+' : tr < 0 ? '−' : '') + Math.abs(tr), hdKeyL: KEYS[((tr % 12) + 12) % 12], hdTrUp: () => SET({ trans: Math.min(11, tr + 1) }), hdTrDown: () => SET({ trans: Math.max(-11, tr - 1) }), hdTrUpDis: tr >= 11, hdTrDownDis: tr <= -11, hdTrMoved: tr !== 0, hdTrReset: () => SET({ trans: 0 }), hdMidi: tg('midi'), hdMidiAny: (S.midiDev ?? 'fp30') !== 'none', hdMidiNone: (S.midiDev ?? 'fp30') === 'none', hdSnd: () => SET({ midiSnd: !S.midiSnd }), hdSndOn: S.midiSnd ? 'true' : 'false', hdSndTr: S.midiSnd ? '#7FB685' : '#DAD1C8', hdSndKn: S.midiSnd ? 22 : 2, hdMidiOn: pop === 'midi', hdMidiX: pop === 'midi' ? 'true' : 'false', hdMidiBg: pop === 'midi' ? 'rgba(254,253,251,.16)' : 'transparent', hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent',"
+            " hdLoop: " + loop + ", hdLoopOn: (" + loop_on + ") ? 'true' : 'false', hdLoopBg: (" + loop_on + ") ? '#EDC684' : '#FEFDFB', hdLoopPh: (" + loop_on + ") ? '#EDC684' : 'transparent', hdLoopTip: " + loop_tip + ","
+            " hdTr: tg('tr'), hdTrOn: pop === 'tr', hdTrX: pop === 'tr' ? 'true' : 'false', hdTrL: (tr > 0 ? '+' : tr < 0 ? '−' : '') + Math.abs(tr), hdKeyL: KEYS[((tr % 12) + 12) % 12], hdTrUp: () => SET({ trans: Math.min(11, tr + 1) }), hdTrDown: () => SET({ trans: Math.max(-11, tr - 1) }), hdTrUpDis: tr >= 11, hdTrDownDis: tr <= -11, hdTrMoved: tr !== 0, hdTrReset: () => SET({ trans: 0 }), hdMidi: tg('midi'), hdMidiAny: (S.midiDev ?? 'fp30') !== 'none', hdMidiNone: (S.midiDev ?? 'fp30') === 'none', hdSnd: () => SET({ midiSnd: !S.midiSnd }), hdSndOn: S.midiSnd ? 'true' : 'false', hdSndTr: S.midiSnd ? '#7FB685' : '#DAD1C8', hdSndKn: S.midiSnd ? 22 : 2, hdMidiOn: pop === 'midi', hdMidiX: pop === 'midi' ? 'true' : 'false', hdMidiBg: pop === 'midi' ? 'rgba(254,253,251,.16)' : 'transparent', hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeysPh: pop === 'keys' ? '#EEE9E2' : 'transparent',"
             " hdRooms: ['Off', 'Studio', 'Hall', 'Cathedral'].map((l) => { const on = (S.room ?? 'Off') === l; return { l, on: on ? 'true' : 'false', bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: on ? 600 : 500, pick: () => SET({ room: l }) }; }),"
             " hdRec: () => SET({ rec: !rec, " + TOAST("rec ? 'Recording stopped · Recording 4 kept' : 'Recording · play on your keyboard'") + " }), hdRecOn: rec ? 'true' : 'false', hdRecL: rec ? 'Stop recording' : 'Record', hdRecR: rec ? '2px' : '6px',"
             " hdSpeedL: (sp / 100).toFixed(1) + '×', hdSlower: () => SET({ speed: Math.max(20, sp - 10) }), hdFaster: () => SET({ speed: Math.min(200, sp + 10) }), hdSlowerDis: sp <= 20, hdFasterDis: sp >= 200,"

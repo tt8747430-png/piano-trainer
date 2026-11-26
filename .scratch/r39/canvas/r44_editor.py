@@ -80,7 +80,7 @@ ED4 = js(r'''
       cats: seg(PALR.map((p) => p[0]), cat, (l) => set({ cat: l })), catsI: PALR.map(([c]) => { const [g, f] = CATI[c]; return { c, t: TITLE[c] ?? c, g, ff: FF[f], fs: f === 'music' ? 22 : f === 'serif' ? 18 : 15, fst: f === 'serif' ? 'italic' : 'normal', fw: f === 'serif' ? 700 : 600, on: c === cat ? 'true' : 'false', bg: c === cat ? '#FEFDFB' : 'transparent', sh: c === cat ? '0 1px 2px rgba(51,41,33,.12)' : 'none', fg: c === cat ? '#332921' : '#685E56', pick: () => set({ cat: c }) }; }), tools: sections.find((s) => s.c === cat).tools, sections,
       open, folded: !open, toggleOpen: () => set({ open: !open }), openLabel: open ? 'Fold the palette' : 'Open the palette', openRot: open ? '180deg' : '0deg',
       noteL, whereL: 'Bar 4 · beat 1 · “sweet”' + (voice ? ' · voice 2' : '') + (marks.length ? ' · ' + marks.map((m) => NAME[m]).join(', ') : ''),
-      keysOn: keys, keysPressed: keys ? 'true' : 'false', keysBg: keys ? '#332921' : 'transparent', keysFg: keys ? '#FEFDFB' : '#332921', toggleKeys: () => set({ keys: !keys }),
+      keysOn: keys, keysPressed: keys ? 'true' : 'false', keysBg: keys ? '#332921' : 'transparent', keysPh: keys ? '#EEE9E2' : 'transparent', keysFg: keys ? '#FEFDFB' : '#332921', toggleKeys: () => set({ keys: !keys }),
       undo: () => { if (marks.length) set({ marks: marks.slice(0, -1), undone: [...(st.undone ?? []), { m: marks[marks.length - 1] }] }); else if (rest) set({ rest: false, undone: [...(st.undone ?? []), { r: true }] }); },
       redo: () => { const u = st.undone ?? []; if (!u.length) return; const x = u[u.length - 1]; set(x.r ? { rest: true, undone: u.slice(0, -1) } : { marks: [...marks, x.m], undone: u.slice(0, -1) }); },
       delNote: () => set({ rest: true, undone: [] }),
@@ -276,9 +276,15 @@ _PANELOLD = '<!--panel-->'
 # three buttons sit … after Undo and Redo", "the toolbar under the transport"): the dark band's two rows (PHBAND), then
 # the acts row as Flat's second row: Delete | Undo, Redo | Copy, Cut, Paste, the keys at its end. The note input moved
 # to the palette's folded row (Flat's palette sheet opens on the durations, 018); the view toggle went to ☰ › View.
-ACTS_P = (f'<div role="toolbar" aria-label="Edit" style="flex: none; height: 52px; box-sizing: border-box; padding: 0 8px; display: flex; align-items: center; gap: 0; box-shadow: inset 0 -1px 0 {LINE}">'
-          + CLIP + '<span style="flex: 1"></span>' + KEYSBTN + '</div>')
-eph4 = (TIP_CSS + PHBAND('edit', 'Songs.dc.html', 'Player.dc.html', 'Editor.dc.html') + ACTS_P
+# Flat's second row, its acts as bare glyphs spread across the width, no separators (help.flat.io, copy, cut and paste:
+# "the three buttons sit … after Undo and Redo", "in the toolbar under the transport"); Flat's voice, measure and comment
+# buttons have nothing to act on here (one voice a staff, no comments), so they are not drawn
+ACTS_P = (f'<div role="toolbar" aria-label="Edit" style="flex: none; height: 52px; box-sizing: border-box; padding: 0 8px; display: flex; align-items: center; justify-content: space-between; background: {SHEET}; box-shadow: inset 0 -1px 0 {LINE}">'
+          + TBTN('Delete', DELI, 'delNote', 'Delete') + TBTN('Undo', UNDO, 'undo', 'Undo') + TBTN('Redo', REDO, 'redo', 'Redo') + TBTN('Copy', COPYI, 'copied', 'Copy') + TBTN('Cut', CUTI, 'cut', 'Cut') + TBTN('Paste', PASTEI, 'pasted', 'Paste') + '</div>')
+# the keys' switch in the header, as Flat's piano glyph: bare, a sand wash while the keys show
+PHKEYSED = KEYSBTN.replace('border-radius: 12px; background: {{keysBg}}; color: {{keysFg}}', 'border-radius: 22px; background: {{keysPh}}; color: ' + INK).replace('width="22" height="22"', 'width="24" height="24"')
+assert PHKEYSED != KEYSBTN
+eph4 = (TIP_CSS + PHBAND('Songs.dc.html', PHKEYSED) + ACTS_P
         + '<div class="edlay" style="flex: 1; min-height: 0; display: flex; flex-direction: column">'
         + SCOREAREA(DESK('12px') + PANO(0.95, '16px 16px 16px 12px')) + SHEETP + '</div>' + EDLAY_CSS)
 
@@ -423,12 +429,12 @@ PH_PLACES = (('Song', 'Song', '{{verName}}', f'<div style="display: flex; flex-d
              ('Tr', 'Transpose', '{{hdKeyL}}', '', 'openTr'), ('Inst', 'Instruments', '2', '', 'openInst'),
              ('Lay', 'Layout', 'A4', '', 'openLayout'), ('Aud', 'Audio', '', '', 'openAudio'), ('Cred', 'Credits', '', '', 'openCredits'),
              ('Opts', 'Playback options', '', '', 'phOptsGo'), ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
-PHLAYERS = lambda saved, extra='': (PHMENU(PH_PLACES, 'Takes.dc.html', head=saved, extra=extra) + HDRPOPS(False, 0, 0, 0, phone=True) + THINGPAGE('creditsOn', 'closeSheet', 'Credits', ED_CREDITS, False)
+PHLAYERS = lambda saved, extra='', edit_href='Editor.dc.html': (PHMENU(PH_PLACES, 'Takes.dc.html', PHMODE('edit', 'Player.dc.html', edit_href), head=saved, extra=extra) + HDRPOPS(False, 0, 0, 0, phone=True) + THINGPAGE('creditsOn', 'closeSheet', 'Credits', ED_CREDITS, False)
                           + BSHEET('instOn', 'Instruments', _P44(INST_BODY), maxh=_MH) + BSHEET('pickInstOn', 'New instrument', ED_PICK, 'Cancel', maxh=_MH)
                           + BSHEET('layoutOn', 'Layout', LAY_BODY, maxh=_MH) + BSHEET('trSheetOn', 'Transpose', TRROWS(True), maxh=_MH) + BSHEET('audOn', 'Audio', AUD_BODY_P, maxh=_MH) + BSHEET('exportOn', 'Export', EXPORTMENU, maxh=_MH))
 # the ☰'s keys on the editor's own sheet state: the menu is the 'more' sheet, Song and View two more
 PHEDKEYS = ("phMenu: () => set({ sheet: st.sheet === 'more' ? null : 'more', hdPop: null, sm: false, exp: false }), phMenuOn: st.sheet === 'more', phMenuX: st.sheet === 'more' ? 'true' : 'false', "
-            "phMenuBg: st.sheet === 'more' ? 'rgba(254,253,251,.16)' : 'transparent', phClose: () => set({ sheet: null }), phSongOn: st.sheet === 'song', phSong: () => set({ sheet: 'song' }), phViewOn: st.sheet === 'view', phView: () => set({ sheet: 'view' }), phExpOn: st.sheet === 'phexp', phExp: () => set({ sheet: 'phexp' }), "
+            "phMenuBg: st.sheet === 'more' ? '#EEE9E2' : 'transparent', phClose: () => set({ sheet: null }), phSongOn: st.sheet === 'song', phSong: () => set({ sheet: 'song' }), phViewOn: st.sheet === 'view', phView: () => set({ sheet: 'view' }), phExpOn: st.sheet === 'phexp', phExp: () => set({ sheet: 'phexp' }), "
             + PHACTS('set', 'sheet: null', lambda m, u: 'toast: ' + m + (" + ' · Undo'" if u else '')))
 PHJS = lambda j: (j.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1).replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: st.sheet === 'more', " + PHEDKEYS, 1)
                    .replace("href: 'PlayerLaptop.dc.html', pick", "href: 'Player.dc.html', pick", 1))
@@ -442,7 +448,7 @@ def VERPAGE(h):
     assert n
     return h
 eph4, elm4 = VERPAGE(eph4), VERPAGE(elm4)
-phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, PHJS(ED4), PHLAYERS(ED_SAVED), dark=True)
+phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, PHJS(ED4), PHLAYERS(ED_SAVED), bar=SHEET)
 # Go to bar (research F11, Flat's and Dorico's ⌘G): a small card over the sheet's head, the bar's number and its count
 GOTO_FIELD = '<div style="display: flex; align-items: center; gap: 12px"><input value="9" aria-label="Bar" type="text" inputmode="numeric" enterkeyhint="go" style="width: 96px; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: 0 0 0 2px #332921; font: inherit; font-size: 17px; font-variant-numeric: tabular-nums; color: #332921; outline: none"><span style="font-size: 15px; color: #7A6E64; font-variant-numeric: tabular-nums">of 16</span></div>'
 ED4L = ED4.replace("['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]]", "['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }], ['Go to bar (⌘G)', st.sheet === 'goto', { sheet: 'goto' }, { sheet: null }]]").replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['more', 'export'].includes(st.sheet), gotoOn: st.sheet === 'goto',", 1)

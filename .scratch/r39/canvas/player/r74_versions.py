@@ -221,18 +221,18 @@ def phone_band(t):
     for cond in ('isPace', 'isHands', 'isKeys', 'isMore', 'isView', 'isViews', 'isKey'):
         t = _cut_el(t, t.index(f'<sc-if value="{{{{{cond}}}}}"'), 'sc-if')
     h0 = t.index('<header'); h1 = t.index('</header>', h0) + len('</header>')
-    t = t[:h0] + PHBAND('play', 'Songs.dc.html', 'Player.dc.html', 'Editor.dc.html', over=True) + t[h1:]
-    # the status bar over the dark band, in paper (calm_kit's STATUS_DARK)
+    t = t[:h0] + PHBAND('Songs.dc.html', PHKEYSBTN, over=True) + t[h1:]
+    # the status bar over the header
     st = 'height: 54px; z-index: 5; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; padding: 6px 34px 0 50px; color: {{statusFg}};'
-    assert t.count(st) == 1; t = t.replace(st, st.replace('z-index: 5', 'z-index: 49').replace('{{statusFg}}', ONB), 1)
-    # the music starts under the band (62 + 56); the band stays while playing, as the laptop's
-    assert t.count('sheetTop: 124') == 1; t = t.replace('sheetTop: 124', 'sheetTop: 118', 1)
+    assert t.count(st) == 1; t = t.replace(st, st.replace('z-index: 5', 'z-index: 49'), 1)
+    # the music starts under the header (62 + 60); the band stays while playing, as the laptop's
+    assert t.count('sheetTop: 124') == 1; t = t.replace('sheetTop: 124', 'sheetTop: 122', 1)
     assert t.count('showControls: !playing,') == 1; t = t.replace('showControls: !playing,', 'showControls: true,', 1)
     places = (('Song', 'Song', '{{verName}}', f'<div style="display: flex; flex-direction: column">{VERPANEL()}</div>', None),
               ('View', 'View', '{{viewName}}', VIEWPANEL(inset=False), None),
               ('Tr', 'Transpose', '{{hdKeyL}}', TRROWS(True), None),
-              ('Opts', 'Playback options', '', '', 'phOptsGo'), ('Keys', 'Piano keys', '', '', 'phKeysGo'), ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
-    t = t.replace('</main>', '</main>' + HDRPOPS(True, 0, 0, 0, keys_right=0, phone=True) + PHMENU(places, 'Takes.dc.html'), 1)
+              ('Opts', 'Playback options', '', '', 'phOptsGo'), ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
+    t = t.replace('</main>', '</main>' + HDRPOPS(True, 0, 0, 0, keys_right=0, phone=True) + PHMENU(places, 'Takes.dc.html', PHMODE('play', 'Player.dc.html', 'Editor.dc.html')), 1)
     st_ = '(o) => this.setState(o)'
     vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
           "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', ...viewPress(id) }; }), "
