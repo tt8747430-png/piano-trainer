@@ -126,6 +126,7 @@ owner's, typos fixed.
 - **The Player's small buttons reach 44 (2026-11-19, the lines; 44px targets):** on the phone and the laptop alike, the Practice sheet's − and + of the tempo and its Tap stood 40, as did a pattern row's heart and Listen and the Pattern sheet's Sort and filter; each is now 44, the size of every other touch target on the phone.
 
 ## Player and editor together
+- **The Grid's bar numbers readable (the loop, 2026-11-26):** they were 10px in #A39A90 (2.5:1), under the type floor; now 12px in soft ink, as every other secondary figure.
 - **Piano keys on, one sign on both sizes (the loop, 2026-11-26):** the laptop toolbar drew the keys' toggle as an ink-filled square while on, the phone a honey-deep glyph; both are the honey-deep glyph now (Flat's keyboard glyph turns blue), and no heavy fill competes with Play.
 - **The laptop's chosen tool shows (the loop, 2026-11-26):** the note-input pill's pressed tile was the pill's own colour, so the chosen duration was invisible; it is white and lifted now, the segmented control's chosen look.
 - **Undo and Redo show when they can act (the loop, 2026-11-26):** both were ink with nothing to undo; Flat's second row greys them (003, 005). Now each is at half strength with no pointer until there is something to take back or bring back, on both sizes and in every view in Edit; the canvas had no disabled look at all, so the laptop's Zoom out at its least now dims by the same rule.

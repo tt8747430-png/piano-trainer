@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · PENDING · the Grid view's bar numbers at the 12px floor in soft ink (#685E56, 4.5:1 and over), not 10px in #A39A90 at 2.5:1; they still fit the phone's 16 gutter to bar 32 (lines: PlayerViewGrid, EditorGrid phone and 393, PlayerLaptopGrid, EditorLaptopGrid 0 problems) · PlayerApp, PlayerDesk, and the editor's Grid boards built from them · pending
 ## Changes
 
 - 2026-11-26 · ce32da08 · the laptop toolbar's Piano keys, while the keys show, a honey-deep glyph with no ink square, as the phone's and as Flat turns its keyboard glyph blue: the black-filled tile was a second heavy mark beside Play's one honey fill (lines: EditorLaptop, Editor 0 problems) · EditorLaptop, EditorDraftLaptop, Editor, EditorDraft · v784
