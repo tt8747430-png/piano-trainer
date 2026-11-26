@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · the laptop Player's keys centre in the room beside the panel; Diagrams, Grid and Lyrics end 16 above the keys when they show (the lyrics ran under them) · PlayerDesk · pending
 
 ## Changes
 

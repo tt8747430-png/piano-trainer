@@ -72,6 +72,12 @@ def player_rail(t):
     t = t[:h] + cards + t[h:]
     i = t.index('<section role="region" aria-label="{{viewName}} settings"'); j = t.rindex('<sc-if value="{{isView}}"', 0, i)
     t = t[:j] + '<sc-if value="{{panelView}}"' + t[j + len('<sc-if value="{{isView}}"'):]
+    # the keys centred in the room beside the panel (their left was set for the whole window)
+    assert t.count('kbLeft: 305,') == 1
+    t = t.replace('kbLeft: 305,', "kbLeft: ((s.rail ?? 'song') === 'none' ? 76 : 428) + Math.round((1710 - ((s.rail ?? 'song') === 'none' ? 76 : 428) - KB.w) / 2),", 1)
+    # a view's music ends 16 above the keys when they show (it ended at the transport's line, under the keys' band)
+    assert t.count('const KB_VALS = {\nareaTop: 0,') == 1
+    t = t.replace('const KB_VALS = {\nareaTop: 0,', 'const KB_VALS = {\nareaTop: 0, viewBottom: keys ? 904 - (800 - bandH) + 16 : DEV.bottom,', 1)
     # the rail, under the bar, at the window's left edge
     rail = (f'<nav aria-label="Panels" style="position: absolute; z-index: 31; left: 0; top: 72px; bottom: 0; width: 76px; padding: 0 0 12px; box-sizing: border-box; background: #F7F3EE; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
             f'<div role="tablist" aria-orientation="vertical" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Song', SONGI, 'Song', 'Song') + _RAILBTN('View', VIEWI, 'View', 'View') + '</div></nav>')
