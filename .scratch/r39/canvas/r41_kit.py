@@ -749,7 +749,7 @@ def PARTSECTION(inst=None):
     eye = EYEI.replace('width="20" height="20"', 'width="24" height="24"')
     sb = (f'<button type="button" aria-label="Solo {{{{c.name}}}}" data-tip="Solo" aria-pressed="{{{{c.solo}}}}" onClick="{{{{c.doSolo}}}}" style="{_PB}; color: {{{{c.soloFg}}}}">'
           '<span aria-hidden="true" style="width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid currentColor; background: {{c.soloBg}}; color: {{c.soloTx}}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; line-height: 1">S</span></button>')
-    vb = (f'<button type="button" aria-label="{{{{c.eyeL}}}}" data-tip="{{{{c.eyeL}}}}" aria-pressed="{{{{c.on}}}}" aria-disabled="{{{{c.last}}}}" onClick="{{{{c.pick}}}}" style="{_PB}; color: {{{{c.eyeFg}}}}">'
+    vb = (f'<button type="button" aria-label="{{{{c.eyeL}}}}" data-tip="{{{{c.eyeL}}}}" aria-pressed="{{{{c.on}}}}" aria-disabled="{{{{c.last}}}}" data-tip-dis="{{{{c.eyeL}}}}: the last staff shown" onClick="{{{{c.pick}}}}" style="{_PB}; color: {{{{c.eyeFg}}}}">'
           f'<sc-if value="{{{{c.shown}}}}" hint-placeholder-val="{{{{true}}}}">{eye}</sc-if><sc-if value="{{{{c.hidden}}}}" hint-placeholder-val="{{{{false}}}}">{EYEOFFI}</sc-if></button>')
     glyph = (f'<span aria-hidden="true" style="flex: none; width: 24px; display: flex; color: {{{{c.nameFg}}}}"><sc-if value="{{{{c.isVoice}}}}" hint-placeholder-val="{{{{false}}}}">{MICI.replace('width="20" height="20"', 'width="24" height="24"')}</sc-if>'
              f'<sc-if value="{{{{c.isKeys}}}}" hint-placeholder-val="{{{{true}}}}">{KEYSI.replace('width="22" height="22"', 'width="24" height="24"')}</sc-if></span>')
@@ -1295,10 +1295,13 @@ DELI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M21 5H9l-7
 COPYI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></svg>'
 CUTI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"></path></svg>'
 PASTEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>'
-TBTN = lambda lab, svg, act, tip, dis=None, col=INK: (f'<button type="button" aria-label="{lab}" data-tip="{tip}"' + (f' aria-disabled="{{{{{dis}}}}}"' if dis else '') +
+# a tool that cannot act here says why in its tooltip ("Undo: nothing to undo"), as Flat's disabled tools stay hoverable
+# and name their reason (FLAT_UI_SHELL_AND_MOTION §2.2); WHY is each such tool's reason
+WHY = {'undoDis': 'nothing to undo', 'redoDis': 'nothing to redo', 'zinDis': 'at the largest size', 'zoutDis': 'at the smallest size'}
+TBTN = lambda lab, svg, act, tip, dis=None, col=INK: (f'<button type="button" aria-label="{lab}" data-tip="{tip}"' + (f' aria-disabled="{{{{{dis}}}}}" data-tip-dis="{lab}: {WHY[dis]}"' if dis else '') +
     f' onClick="{{{{{act}}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: transparent; color: {col}; display: flex; align-items: center; justify-content: center">{svg}</button>')
 # a disabled act at half strength, no pointer (craft-details, Instructions 6): Undo with nothing done, Redo with nothing undone
-DISABLED_CSS = '<style data-dis>[aria-disabled="true"] { opacity: .5; cursor: default; pointer-events: none }</style>'
+DISABLED_CSS = '<style data-dis>[aria-disabled="true"] { cursor: not-allowed } [aria-disabled="true"] svg { opacity: .5 } [aria-disabled="true"][data-tip-dis]:hover::after { content: attr(data-tip-dis) }</style>'
 ACTS_P = (DISABLED_CSS + f'<div role="toolbar" aria-label="Edit" style="flex: none; position: relative; z-index: 19; height: 56px; box-sizing: border-box; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; background: {SHEET}; color: {SOFT}; box-shadow: 0 2px 6px rgba(51,41,33,.08)">'
           + TBTN('Delete', DELI, 'delNote', 'Delete', col=SOFT) + TBTN('Undo', UNDO, 'undo', 'Undo', 'undoDis', col=SOFT) + TBTN('Redo', REDO, 'redo', 'Redo', 'redoDis', col=SOFT) + TBTN('Copy', COPYI, 'copied', 'Copy', col=SOFT) + TBTN('Cut', CUTI, 'cut', 'Cut', col=SOFT) + TBTN('Paste', PASTEI, 'pasted', 'Paste', col=SOFT) + '</div>')
 # the laptop toolbar's acts on what is chosen (the editor's, and the Player's views in Edit): Delete | Undo Redo | Copy Cut Paste

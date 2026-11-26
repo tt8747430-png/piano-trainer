@@ -61,7 +61,10 @@ async function open(target, device, steps) {
   for (const s of steps) {
     // A board's empty full-page layer can sit over the frame; a click that it intercepts is forced.
     if (s.click) await page.locator(s.click).first().click({ timeout: 3000 }).catch(() => page.locator(s.click).first().click({ force: true, timeout: 3000 })).catch((e) => console.log('ERR', e.message.slice(0, 120)))
+    if (s.hover) await page.locator(s.hover).first().hover({ timeout: 3000 }).catch(() => page.locator(s.hover).first().hover({ force: true, timeout: 3000 })).catch((e) => console.log('ERR', e.message.slice(0, 120)))  // a tooltip or a hover state
     if (s.wait) await page.waitForTimeout(s.wait)
+    if (s.shot) await page.screenshot({ path: s.shot })  // the page as it stands at this step, before the overlay (a hover's tooltip)
+    if (s.eval) console.log('EVAL', JSON.stringify(await page.evaluate(s.eval).catch((e) => e.message.slice(0, 160))))  // a measure the overlay cannot show
     if (s.scroll) { const v = page.viewportSize(); await page.mouse.move(v.width * 0.6, v.height / 2); await page.mouse.wheel(0, s.scroll); await page.waitForTimeout(300) }  // over the page, never the sidebar
   }
   await page.waitForTimeout(300)
