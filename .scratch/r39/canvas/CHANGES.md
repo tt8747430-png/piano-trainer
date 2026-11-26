@@ -8,12 +8,12 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-26 · (this commit) · R74: the version and Edit two controls (VERSW beside the name, EDITB at the bar's end, pressed while editing); the capsule gone · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v748
-- 2026-11-26 · (this commit) · R74: no ink Done in the editor's bar (Edit stays, pressed); the phone editor's menu as the laptop's title menu plus the rail's places (Instruments, Layout, Audio, Export sheets from the panels' own bodies); dead rows and the old Layout page and Instruments card removed · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v747
-- 2026-11-26 · (this commit) · Settings' Shortcuts popover is now a Keyboard shortcuts page under General, with Back, as Page layouts · SettingsLaptop, Settings · v747
 
 ## Changes
 
+- 2026-11-26 · (this commit) · R74: the version and Edit two controls (VERSW beside the name, EDITB at the bar's end, pressed while editing); the capsule gone · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v748
+- 2026-11-26 · (this commit) · R74: no ink Done in the editor's bar (Edit stays, pressed); the phone editor's menu as the laptop's title menu plus the rail's places (Instruments, Layout, Audio, Export sheets from the panels' own bodies); dead rows and the old Layout page and Instruments card removed · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v747
+- 2026-11-26 · (this commit) · Settings' Shortcuts popover is now a Keyboard shortcuts page under General, with Back, as Page layouts · SettingsLaptop, Settings · v747
 - 2026-11-26 · (this commit) · clean: r41_songs' old Editor board writer (ED, EDTOP, PALETTE, ED_MORE, the Score settings sheet) removed; r44 is the Editor boards' one writer; every board rebuilds unchanged · none · —
 - 2026-11-26 · (this commit) · clean: the Player's stale builders (r43_player, r46_score, merge_player, capture_score and its captures) deleted; the pre-R74 pair is player/base, r74_versions its one pass, run first by r41.py; every board rebuilds unchanged · none · —
 - 2026-11-26 · (this commit) · the Player's laptop bar as the editor's: ✕, the song's name, the Version and mode capsule beside it, never centred; the name and capsule hold their place between Play and Edit (lines flow: no frame change) · PlayerDesk · v746
