@@ -1,4 +1,4 @@
-# From 005. Mărire Ție, Isuse.pdf (1 page). The choir has no MuseScore file of it: every voice is written in from
+# From 005. Mărire Ție, Isuse.pdf (1 page) and the choir book, page 10 (the same printing). The choir has no MuseScore file of it: every voice is written in from
 # the sheet, at the pitch it sounds, and the song is built from the house template. Where the sheet prints one
 # notehead for both voices of a staff (bars 1, 8, 11, 19) the lower voice writes `u:`. The basses echo the sopranos
 # in bars 13-18 with words of their own, printed in italics under their staff. Bar 13's B4 carries no syllable,
