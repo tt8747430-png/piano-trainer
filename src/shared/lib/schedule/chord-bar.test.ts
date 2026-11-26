@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { buildChord, note, placeChord, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
-import { chordBar } from './chord-bar'
+import { chordBars } from './chord-bar'
 
 const B = TICKS_PER_BEAT
 
@@ -13,10 +13,10 @@ const DIMINISHED_7TH = buildChord(note('C'), {
   alterations: [],
 })
 
-describe('chordBar', () => {
+describe('chordBars', () => {
   it('holds the chord for a whole bar, the left hand’s root on the bass staff', () => {
     const placed = placeChord(DIMINISHED_7TH.tones, { inversion: 0, bothHands: true })
-    const music = chordBar(placed)
+    const music = chordBars([{ placed: placed }])
     expect(music.notes.map((n) => [n.midi, n.hand, n.durationTicks])).toEqual([
       [48, 'lh', 4 * B],
       [60, 'rh', 4 * B],

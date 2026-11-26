@@ -1,6 +1,7 @@
 import { useSearch } from '@tanstack/react-router'
 import { useEffect, useEffectEvent, useState } from 'react'
 import { isOwnSongId, selectOwnSong, usePiecesStoreApi, type PieceId } from '@/entities/piece'
+import { useProgressStoreApi } from '@/entities/progress'
 import {
   selectRecorder,
   useSettings,
@@ -8,6 +9,7 @@ import {
   type RecorderCountIn,
 } from '@/entities/settings'
 import {
+  feedbackOf,
   midiFile,
   quantise,
   selectRoomLeft,
@@ -17,6 +19,7 @@ import {
   type TakeId,
 } from '@/entities/take'
 import { deleteTake, saveTake } from '@/features/manage-takes'
+import { recordTakeAccuracy } from '@/features/record-practised'
 import {
   useRecorder,
   type Along,
@@ -36,10 +39,11 @@ import { TICKS_PER_BEAT, type Midi } from '@/shared/lib/music'
 import type { Duration } from '@/shared/lib/notation'
 import type { GridBar } from '@/shared/lib/schedule'
 import type { EditSearch } from './edit-search'
+import { arrangeDraft } from './arrange-draft'
 import { hasTune, tuneOf } from './tune'
 
 /** How a take is written into the score: where, split at which key, and snapped to which value. */
-export interface WriteChoice {
+interface WriteChoice {
   readonly into: TakeInto
   readonly split: Midi
   readonly grid: Duration
@@ -87,7 +91,8 @@ export interface EditorTakes {
   readonly stop: () => void
   readonly write: (take: Take, choice: WriteChoice) => void
   readonly download: (take: Take) => void
-  readonly remove: (id: TakeId) => void
+  /** Deletes a take; what it returns brings it back. */
+  readonly remove: (id: TakeId) => () => void
 }
 
 /** The draft's bars on the meter's grid, each in its section's (ADR 0097), as the click follows them. */
@@ -108,6 +113,7 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
   const takes = useTakesStoreApi()
   const pieces = usePiecesStoreApi()
   const settings = useSettingsStoreApi()
+  const progress = useProgressStoreApi()
   // The song's editor's URL, or a lesson's example's, which keeps neither: read wherever it is open.
   const search: Partial<EditSearch> = useSearch({ strict: false })
   const open = search.takes === true
@@ -127,14 +133,18 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
     const songGone = isOwnSongId(pieceId) && !selectOwnSong(pieces.getState(), pieceId)
     let saved: TakeId | null = null
     if (!nothingPlayed && !songGone) {
-      saved = saveTake(takes, {
+      const take = {
         pieceId,
         made: Date.now(),
         tempo: plan.tempo,
         meter: plan.meter,
         fromBar: plan.from + 1,
         ...played,
-      })
+      }
+      saved = saveTake(takes, take)
+      // The Profile's best accuracy counts a take as its review scores it.
+      const { percent } = feedbackOf(arrangeDraft(store.getState().draft), { id: saved, ...take })
+      recordTakeAccuracy(progress, percent)
     }
     // A take kept as the screen goes is only saved: there is no sheet to show it on. One kept is
     // reviewed at once (A40, Review your recording).

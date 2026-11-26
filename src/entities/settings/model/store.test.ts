@@ -38,7 +38,7 @@ const DEFAULTS = {
   sound: DEFAULT_SOUND,
   trainer: DEFAULT_TRAINER,
   keyboard: defaultKeyboard(false),
-  keysHeight: { phone: null, side: null, wide: null },
+  keysWindow: { phone: null, side: null, wide: null },
   recorder: DEFAULT_RECORDER,
   editing: DEFAULT_EDITING,
   sidebar: DEFAULT_SIDEBAR,
@@ -53,7 +53,6 @@ const DEFAULTS = {
   metronome: DEFAULT_METRONOME,
   foldedSections: [],
   welcomed: false,
-  tipsSeen: [],
   practiceRecent: [],
   lessonReading: 'page',
   progressions: DEFAULT_PROGRESSIONS,
@@ -64,12 +63,6 @@ const DEFAULTS = {
 }
 
 describe('createSettingsStore', () => {
-  it('reads a lesson as one page, or a section at a time where that was saved (round 26)', () => {
-    expect(restored({}).lessonReading).toBe('page')
-    expect(restored({ lessonReading: 'sections' }).lessonReading).toBe('sections')
-    expect(restored({ lessonReading: 'scroll' }).lessonReading).toBe('page')
-  })
-
   it('keeps how the Player plays where still valid, as it always did otherwise (B7)', () => {
     expect(
       restored({ playback: { countdown: 'loud', cursor: 'beats', pedal: 'down', speedStep: 3 } })
@@ -135,7 +128,7 @@ describe('createSettingsStore', () => {
         countdown: 'visual',
         speedStep: 10,
       },
-      otherHand: { look: 'show', play: false },
+      otherHand: { look: 'show' },
       sound: { staves: { bass: 35, staff0: 0 }, recording: 60, click: 5 },
       trainer: { autoNext: true },
       keyboard: {
@@ -152,7 +145,11 @@ describe('createSettingsStore', () => {
         pedals: 'all',
         volume: 70,
       },
-      keysHeight: { phone: 140, side: null, wide: 210 },
+      keysWindow: {
+        phone: { left: 8, bottom: 96, width: 386, height: 200 },
+        side: null,
+        wide: null,
+      },
       recorder: { click: false, tune: true, countIn: 2 },
       editing: { hearNotes: false, paletteSide: 'right' },
       sidebar: 'collapsed',
@@ -204,7 +201,6 @@ describe('createSettingsStore', () => {
       },
       foldedSections: ['chords.tensions'],
       welcomed: true,
-      tipsSeen: ['coach.listen'],
       practiceRecent: ['tuner', 'chords'],
       lessonReading: 'sections',
       progressions: { names: 'chords', voicing: 'block', inversion: 1 },
@@ -358,13 +354,13 @@ describe('createSettingsStore', () => {
     )
   })
 
-  it('keeps the keys’ height per screen size where it is whole px a screen holds, else none (R34)', () => {
-    expect(restored({ keysHeight: { phone: 120, side: 4.5, wide: -3 } }).keysHeight).toEqual({
-      phone: 120,
-      side: null,
-      wide: null,
-    })
-    expect(restored({ keysHeight: 'tall' }).keysHeight).toEqual({
+  it('keeps the piano’s window per screen size where its sides are whole px, else none (loop round 24)', () => {
+    const window = { left: 8, bottom: 96, width: 386, height: 200 }
+    expect(
+      restored({ keysWindow: { phone: window, side: { ...window, width: -3 }, wide: 'tall' } })
+        .keysWindow,
+    ).toEqual({ phone: window, side: null, wide: null })
+    expect(restored({ keysWindow: 'tall' }).keysWindow).toEqual({
       phone: null,
       side: null,
       wide: null,

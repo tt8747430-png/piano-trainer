@@ -7,10 +7,11 @@ import { readSongFile, SONG_FILE_TYPES } from '../model/read-song-file'
 import { ImportSheet, type ImportState } from './ImportSheet'
 
 /**
- * Import (ADR 0107, Flat's): a MusicXML or MIDI file chosen (`choose`) or dropped (`importFile`)
- * becomes the learner's own song where the learner is (`folder`, else Home). A song read whole opens
- * on its page; one that leaves something out says what, before it is opened; a file that is no song
- * says why; a reading closed before the file is read makes nothing. `view` holds the file picker and the sheet.
+ * Import (ADR 0107, R72's IMPFORM): New › Import opens its sheet on Choose a file (`choose`); a
+ * MusicXML or MIDI file chosen there or dropped (`importFile`) becomes the learner's own song where
+ * the learner is (`folder`, else Home), and the sheet reports it (what came in, what was left out)
+ * before Open song; a file that is no song says why; a reading closed before the file is read makes
+ * nothing. `view` holds the file picker and the sheet.
  */
 export function useSongImport(folder: FolderId | null): {
   choose: () => void
@@ -37,16 +38,14 @@ export function useSongImport(folder: FolderId | null): {
         return
       }
       const id = importSong(pieces, library, read.song, folder)
-      if (Object.keys(read.leftOut).length === 0) {
-        setState({ kind: 'idle' })
-        openSong(id)
-        return
-      }
       setMade(id)
       setState({ kind: 'done', title: read.song.title, leftOut: read.leftOut })
     })
   }
-  const choose = () => picker.current?.click()
+  // The sheet's Choose a file: the system's file picker.
+  const pick = () => picker.current?.click()
+  // New › Import: the sheet, on Choose a file.
+  const choose = () => setState({ kind: 'choosing' })
   const view = (
     <>
       <input
@@ -64,6 +63,7 @@ export function useSongImport(folder: FolderId | null): {
       />
       <ImportSheet
         state={state}
+        onChoose={pick}
         onClose={() => {
           reading.current += 1
           setState({ kind: 'idle' })
@@ -71,10 +71,6 @@ export function useSongImport(folder: FolderId | null): {
         onOpen={() => {
           setState({ kind: 'idle' })
           if (made) openSong(made)
-        }}
-        onAgain={() => {
-          setState({ kind: 'idle' })
-          choose()
         }}
       />
     </>

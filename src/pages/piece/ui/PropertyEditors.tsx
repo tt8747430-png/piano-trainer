@@ -1,10 +1,10 @@
-import { Check, Plus, Tag, X } from 'lucide-react'
+import { Plus, Tag, X } from 'lucide-react'
 import { useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TAG_MAX, tagOf } from '@/entities/library'
 import { Button } from '@/shared/ui/primitives/button'
 import { Textarea } from '@/shared/ui/primitives/textarea'
-import { NameField } from '@/shared/ui'
+import { Listbox, NameField } from '@/shared/ui'
 import type { PickerTools } from './PropertyPicker'
 
 /**
@@ -74,15 +74,15 @@ export function TextEditor({
 }
 
 /** One choice of a list property: its value, its name and what is drawn before it (a level's mark). */
-export interface PropertyChoice<V extends string> {
+interface PropertyChoice<V extends string> {
   readonly value: V
   readonly label: string
   readonly mark?: ReactNode
 }
 
 /**
- * A list property's editor (R32-C, Notion's Select): its choices as rows, the chosen one checked; a
- * tap keeps it and closes.
+ * A list property's editor (R32-C, Notion's Select): the kit's list of choices, as every picker's,
+ * the chosen one checked; a tap or Enter keeps it and closes.
  */
 export function ChoiceEditor<V extends string>({
   label,
@@ -98,25 +98,29 @@ export function ChoiceEditor<V extends string>({
   onChoose: (value: V) => void
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="flex flex-col gap-1">
-      {choices.map((choice) => (
-        <button
-          key={choice.value}
-          type="button"
-          role="radio"
-          aria-checked={choice.value === value}
-          onClick={() => {
-            if (choice.value !== value) onChoose(choice.value)
-            tools.close()
-          }}
-          className="choice flex min-h-12 items-center gap-3 rounded-control px-3 text-left focus-visible:-outline-offset-3"
-        >
-          {choice.mark}
-          <span className="min-w-0 flex-1">{choice.label}</span>
-          {choice.value === value ? <Check aria-hidden className="size-5 shrink-0" /> : null}
-        </button>
-      ))}
-    </div>
+    <Listbox
+      label={label}
+      className="gap-0.5"
+      optionClassName="min-h-11 rounded-control px-3 text-base"
+      groups={[
+        {
+          options: choices.map((choice) => ({
+            key: choice.value,
+            selected: choice.value === value,
+            content: (
+              <span className="flex min-w-0 items-center gap-3">
+                {choice.mark}
+                <span>{choice.label}</span>
+              </span>
+            ),
+            onChoose: () => {
+              tools.close()
+              if (choice.value !== value) onChoose(choice.value)
+            },
+          })),
+        },
+      ]}
+    />
   )
 }
 

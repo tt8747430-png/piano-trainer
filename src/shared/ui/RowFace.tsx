@@ -1,17 +1,19 @@
+import { cn } from '@/shared/lib'
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import type { Paint } from './paint'
 import { TileMark } from './TileMark'
 
 /** A row's tile on its paint's wash: an icon, or the row's number where the rows are a sequence; or none. */
-export type RowTile =
+type RowTile =
   | { icon: LucideIcon; numeral?: undefined; paint: Paint }
   | { icon?: undefined; numeral: number; paint: Paint }
   | { icon?: undefined; numeral?: undefined; paint?: undefined }
 
 /** What a row shows, a link's or a button's alike. */
 export type RowFaceProps = {
-  title: string
+  /** Its name; a part of it may be set bold, as a lesson's chord ("Learn **G**"). */
+  title: ReactNode
   /** Its ⓘ, beside its title as every ⓘ sits beside the name it explains. */
   info?: ReactNode
   detail?: string | undefined
@@ -53,7 +55,11 @@ export function RowFace({
   const name = (
     <span
       data-slot="row-title"
-      className="line-clamp-2 text-base leading-snug font-normal text-pretty group-data-current/row:font-semibold"
+      // Over a detail the title is semibold, as the boards draw every two-line row (16/600).
+      className={cn(
+        'line-clamp-2 text-base leading-snug text-pretty group-data-current/row:font-semibold',
+        detail ? 'font-semibold' : 'font-normal',
+      )}
     >
       {title}
     </span>
@@ -70,7 +76,8 @@ export function RowFace({
       ) : null}
       {/* Beside a value, the title takes the room it needs (two thirds at most); the value wraps
           between its words under itself, never inside one, and a narrow row takes from the title, down
-          to its longest word (round 28: never cut inside one at 320px). */}
+          to its longest word (round 28: never cut inside one at 320px); a long value, two lines and then an
+          ellipsis, as every title (a song's long name in its Details). */}
       <span className={value ? 'max-w-[65%] min-w-min flex-[1_4_auto]' : 'min-w-0 flex-1'}>
         {info ? (
           <span className="flex items-center gap-1">
@@ -110,7 +117,10 @@ export function RowFace({
       {value ? (
         <>
           {' '}
-          <span data-slot="row-value" className="ms-auto min-w-min text-end text-muted-foreground">
+          <span
+            data-slot="row-value"
+            className="ms-auto line-clamp-2 min-w-min text-end text-muted-foreground"
+          >
             {value}
           </span>
         </>

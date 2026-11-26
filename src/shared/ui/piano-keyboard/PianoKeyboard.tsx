@@ -16,19 +16,26 @@ import { useKeyNames } from './use-key-names'
 import { useKeyPointers } from './use-key-pointers'
 import { useKeyboardScroll } from './use-keyboard-scroll'
 
-/** Fit's white keys: never narrower than this, so a finger finds them; past it the keyboard scrolls… */
-const MIN_WHITE_PX = 34
+/**
+ * Fit's white keys: never narrower than this, so a finger finds them: the phone boards' keys, about
+ * two octaves across a 402 phone (15 white keys, 26.8 each)…
+ */
+const MIN_WHITE_PX = 26
+/** …and as wide as this many white keys in the width allows: five octaves, as the laptop boards draw. */
+const WHITES_IN_VIEW = 36
+/** Fit's keys are as long as the boards draw them: 112 on a phone, up to 132 on a laptop. */
+const FIT_LENGTH = { least: 112, most: 132, perWhite: 3.6 } as const
 /** Where the keys asked to be in sight must all fit (`fitInView`), Fit narrows them to this at most. */
-const NARROWEST_FIT_PX = 22
-/** …nor wider than this: a wide screen shows the neighbouring keys instead. */
-const MAX_WHITE_PX = 48
+const NARROWEST_FIT_PX = 26
+/** …nor wider than this (the Chord finder board's C2 to C6 across a laptop's 1462 is 50.4): a wider screen shows the neighbouring keys instead. */
+const MAX_WHITE_PX = 52
 /** Large keys: about an octave in view on a phone. */
 const LARGE_WHITE_PX = 56
 /**
  * A key is this many times as long as a white key is wide, on every screen and in a chord's diagram:
  * a piano's proportion…
  */
-export const KEY_LENGTH = 4.4
+const KEY_LENGTH = 4.4
 /** …never shorter than this (All keys on a phone: Songscription's slim keys), unless the screen's share is less… */
 export const MIN_KEYS_PX = 56
 /** …nor taller than this share of the screen's height (`--keys-most`: less on a phone on its side). */
@@ -39,7 +46,8 @@ const keysLength = (length: string, most: string) =>
 
 /** A white key's width for each key size, as CSS in the scroller's container units. */
 const WHITE_WIDTH: Readonly<Record<KeySize, (whitesInRange: number) => string>> = {
-  fit: (whites) => `clamp(${MIN_WHITE_PX}px, 100cqw / ${whites}, ${MAX_WHITE_PX}px)`,
+  fit: (whites) =>
+    `clamp(${MIN_WHITE_PX}px, max(100cqw / ${WHITES_IN_VIEW}, 100cqw / ${whites}), ${MAX_WHITE_PX}px)`,
   large: () => `${LARGE_WHITE_PX}px`,
   piano: () => `calc(100cqw / ${PIANO_LAYOUT.whites})`,
 }
@@ -49,7 +57,7 @@ const WHITE_WIDTH: Readonly<Record<KeySize, (whitesInRange: number) => string>> 
  * to them, down to `NARROWEST_FIT_PX`.
  */
 const fitWidth = (whitesInRange: number, whitesAsked: number) =>
-  `clamp(max(${NARROWEST_FIT_PX}px, min(${MIN_WHITE_PX}px, 100cqw / ${whitesAsked})), 100cqw / ${whitesInRange}, ${MAX_WHITE_PX}px)`
+  `clamp(max(${NARROWEST_FIT_PX}px, min(${MIN_WHITE_PX}px, 100cqw / ${whitesAsked})), max(100cqw / ${WHITES_IN_VIEW}, 100cqw / ${whitesInRange}), ${MAX_WHITE_PX}px)`
 
 /** Where the arrow keys, Home and End take the keyboard's tab stop. */
 const MOVES: Readonly<Partial<Record<string, (key: Midi) => Midi>>> = {
@@ -245,9 +253,11 @@ export function PianoKeyboard({
         style={{
           width: `calc(${PIANO_LAYOUT.whites} * ${white})`,
           height:
-            height === undefined
-              ? keysLength(`calc(${white} * ${KEY_LENGTH})`, MOST_KEYS)
-              : `${height}px`,
+            height !== undefined
+              ? `${height}px`
+              : keySize === 'fit'
+                ? `clamp(min(${FIT_LENGTH.least}px, ${MOST_KEYS}), calc(${white} * ${FIT_LENGTH.perWhite}), min(${FIT_LENGTH.most}px, ${MOST_KEYS}))`
+                : keysLength(`calc(${white} * ${KEY_LENGTH})`, MOST_KEYS),
         }}
       >
         {keyButtons}

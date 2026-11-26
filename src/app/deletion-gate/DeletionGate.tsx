@@ -4,13 +4,14 @@ import { useLocale } from '@/shared/i18n'
 import { useAccount } from '@/shared/lib/account'
 import {
   AlertDialog,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
+import { dateSaid } from '@/shared/lib'
 
 /**
  * Signed in to an account that is to be deleted (ADR 0116): the learner keeps it (the deletion is
@@ -37,23 +38,22 @@ export function DeletionGate() {
     const result = await auth.cancelDeletion()
     if (result.ok) setPurgeAfter(null)
   }
-  const date =
-    purgeAfter === null
-      ? ''
-      : new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(purgeAfter))
+  const date = purgeAfter === null ? '' : dateSaid(purgeAfter, locale)
   return (
     <AlertDialog open={account !== null && purgeAfter !== null}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{t('deletionGate.title')}</AlertDialogTitle>
+      {/* The AppLayers board's gate, the welcome's box: 22 corners, 20 about, a 20 title, then Sign out
+          and Keep account side by side, Keep account the screen's one honey act. */}
+      <AlertDialogContent className="gap-3 rounded-sheet p-5">
+        <AlertDialogHeader className="gap-3">
+          <AlertDialogTitle className="text-xl">{t('deletionGate.title')}</AlertDialogTitle>
           <AlertDialogDescription>{t('deletionGate.body', { date })}</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <Button variant="outline" onClick={() => void auth.signOut()}>
+        <div className="mt-1.5 flex gap-2 *:h-11 *:min-w-0 *:flex-1 *:rounded-full *:text-base *:font-bold">
+          <AlertDialogCancel onClick={() => void auth.signOut()}>
             {t('deletionGate.signOut')}
-          </Button>
+          </AlertDialogCancel>
           <Button onClick={() => void keep()}>{t('deletionGate.keep')}</Button>
-        </AlertDialogFooter>
+        </div>
       </AlertDialogContent>
     </AlertDialog>
   )

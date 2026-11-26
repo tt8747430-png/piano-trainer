@@ -1,27 +1,65 @@
-# The calm kit: tokens, pieces and the phone and laptop frames, shared by calm.py (R40) and r41.py.
+# The calm kit: tokens, pieces and the phone and laptop frames, for r41.py.
 # R40: every Songs and Practice page in the calm language of the Chords page (the other session's "Calm Chords page"):
 # a bare bar, the subject large, one big picture, a quiet switcher, two or three rows, one floating bar with the main
-# action and Play; changes in a wheel; nothing to scroll. Run: python3 -I calm.py
+# action and Play; changes in a wheel; nothing to scroll. Built only through r41.py.
 import json, re, shutil
-G = {}
-exec(open('/home/user/piano-trainer/.scratch/r39/canvas/chords.py').read(), G)
-OUT, HEAD, STATUS, SIDE, LAPFRAME_TOP = G['OUT'], G['HEAD'], G['STATUS'], G['SIDE'], G['LAPFRAME_TOP']
-PHONE_FRAME, LAPTOP_FRAME = G['PHONE_FRAME'], G['LAPTOP_FRAME']
-CALM = '/home/user/piano-trainer/.scratch/chords-calm/calm/project/'
+# the frames and the page head, read from the Main and Laptop boards
+OUT = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
+src = open(OUT + 'Main.dc.html').read()
+lap = open(OUT + 'Laptop.dc.html').read()
+# the status bar as the owner's iPhone 17 Pro has it: 62 tall (testing.md, the device's safe area; the app's
+# inset), the board's bar under it as the app's
+STATUS = re.sub(r'height: \d+px;', 'height: 62px;', re.search(r'(<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: \d+px;.*?</span></div>)', src, re.S).group(1), count=1)
+SIDE = re.search(r'(<nav aria-label="Main" style="background: #FBF8F3.*?</nav>)', lap, re.S).group(1)
+# the sidebar as drawn, before index.py's lapwin.py gives it the rail and Focus buttons
+SIDE = re.sub(r'<div data-sidehead.*?</button></div></div>', '<div style="height: 44px; display: flex; align-items: center; padding: 0 12px; font-family: \'Instrument Serif\', Georgia, serif; font-size: 27px">Piano Trainer</div>', SIDE, count=1, flags=re.S)
+LAPFRAME_TOP = lap.split('<div style="position: absolute; left: 217.7px; top: 124.6px;')[0].split('</helmet>', 1)[1].lstrip('\n')
+# the frame alone: the Practice overview's States box (states_tool.py puts it after the root) is that board's, never every laptop board's
+if '<div data-canvas-tool' in LAPFRAME_TOP:
+    _i = LAPFRAME_TOP.index('<div data-canvas-tool'); _j = LAPFRAME_TOP.index('</sc-if></div>', _i) + len('</sc-if></div>')
+    LAPFRAME_TOP = LAPFRAME_TOP[:_i] + LAPFRAME_TOP[_j:]
+PHONE_FRAME, LAPTOP_FRAME = '/_blob/2fd798458923e267dd22b7a996a98294', '/_blob/0526d4830b1e952a0ab4ba3ffc2765fc'
+
+HEAD = '''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>%s</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Instrument+Serif&amp;family=Noto+Music&amp;display=swap">
+<style>
+body{margin:0}
+button{font:inherit;cursor:pointer}
+.nos{scrollbar-width:none}.nos::-webkit-scrollbar{display:none}
+main>*{flex:none}
+.stp:disabled{color:rgba(104,94,86,.5)!important;cursor:default}
+.ibd:disabled{opacity:.5;cursor:default}
+</style>
+</helmet>
+'''
+
+
 
 # ── tokens (the calm Chords page's, light) ──
 PAGE, SHEET, INK, SOFT, FILL, LINE, LINK, ACCENT = '#F7F3EE', '#FEFDFB', '#332921', '#685E56', '#EEE9E2', '#DAD1C8', '#356890', '#EDC684'
 GLASS = 'rgba(254,253,251,.86)'
+# What floats over the page (bars, the tab bar, the floating actions): a tight lift, no pooled dim under it (owner, 2026-11-19).
+FLOAT = '0 1px 2px rgba(51,41,33,.10), 0 2px 6px -2px rgba(51,41,33,.10)'
 SHADOW = '0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)'
 FONT = "'Instrument Sans', -apple-system, 'Helvetica Neue', sans-serif"
 I = 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'
+# an icon at another size: its width and height only, never a number inside its path
+ICON = lambda svg, px: re.sub(r'width="\d+" height="\d+"', f'width="{px}" height="{px}"', svg, count=1)
 CHEV_L = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="m15 18-6-6 6-6"></path></svg>'
 CHEV_R = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="m9 18 6-6-6-6"></path></svg>'
-CHEV_U = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="m18 15-6-6-6 6"></path></svg>'
 MORE = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>'
-PLAY = '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M7 4.8a1.6 1.6 0 0 1 2.4-1.4l11 6.8a2.1 2.1 0 0 1 0 3.6l-11 6.8A1.6 1.6 0 0 1 7 19.2z"></path></svg>'
+# Play is Lucide's play, filled, as the app draws it (one glyph for every Play on every board)
+PLAY = '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg>'
 STOP = '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"></rect></svg>'
-HEART = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"></path></svg>'
 SEARCH = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4-4"></path></svg>'
 PLUS = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="M12 5v14M5 12h14"></path></svg>'
 UNDO = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M9 14 4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 0 10h-3"></path></svg>'
@@ -48,8 +86,8 @@ const NN = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭'
 function calmKeys(lo, hi, marks, W, H) {
   const ws = []; for (let m = lo; m <= hi; m++) if (NAT.includes(m % 12)) ws.push(m);
   const w = W / ws.length, bw = w * 0.6;
-  const whites = ws.map((m, i) => { const k = marks[m]; return { left: (i * w).toFixed(1), w: w.toFixed(1), h: H, bg: k ? k[0] : '#FEFDFB', label: k ? k[1] : (m % 12 === 0 ? 'C' + (Math.floor(m / 12) - 1) : ''), ink: k ? '#332921' : '#8A8178', fw: k ? 700 : 500 }; });
-  const blacks = []; for (let m = lo; m <= hi; m++) { if (NAT.includes(m % 12)) continue; const i = ws.indexOf(m - 1); const k = marks[m]; blacks.push({ left: ((i + 1) * w - bw / 2).toFixed(1), w: bw.toFixed(1), h: Math.round(H * 0.62), bg: k ? k[0] : '#332C28', label: k ? k[1] : '' }); }
+  const whites = ws.map((m, i) => { const k = marks[m]; return { left: (i * w / W * 100).toFixed(3) + '%', w: (w / W * 100).toFixed(3) + '%', h: H, bg: k ? k[0] : '#FEFDFA', label: k ? k[1] : (m % 12 === 0 ? 'C' + (Math.floor(m / 12) - 1) : ''), ink: k ? '#332921' : '#685E56', fw: k ? 700 : 500 }; });
+  const blacks = []; for (let m = lo; m <= hi; m++) { if (NAT.includes(m % 12)) continue; const i = ws.indexOf(m - 1); const k = marks[m]; blacks.push({ left: (((i + 1) * w - bw / 2) / W * 100).toFixed(3) + '%', w: (bw / W * 100).toFixed(3) + '%', h: Math.round(H * 0.62), bg: k ? k[0] : '#332C28', label: k ? k[1] : '' }); }
   return { whites, blacks };
 }
 // a wheel column: seven rows around the chosen one
@@ -58,7 +96,10 @@ function wheel(items, sel, pick) {
   return out;
 }
 const tabsOf = (list, cur, set) => list.map((t) => ({ l: t, ink: t === cur ? C.ink : C.soft, fw: t === cur ? 700 : 500, line: t === cur ? C.ink : 'transparent', pick: () => set({ tab: t }) }));
-const common = (st, set) => ({ sheetOn: !!st.sheet, closeSheet: () => set({ sheet: null }), changeOn: st.sheet === 'change', moreOn: st.sheet === 'more', openChange: () => set({ sheet: 'change' }), openMore: () => set({ sheet: 'more' }),
+// a row's ··· menu opens at its button (owner, 2026-11-17: "what kind of nonsense is to put this delete in this
+// cnetered popup with doen button"): its right edge on the button's, below it, or above when the screen ends first
+const ANCHOR = (e, h) => { const t = e && e.currentTarget, p = t && t.closest && t.closest('[data-menuroot]'); if (!p) return 'right: 16px; top: 120px'; const b = t.getBoundingClientRect(), r = p.getBoundingClientRect(), k = (r.width / p.offsetWidth) || 1, onLeft = (b.left + b.right) / 2 - r.left < r.width / 2, side = onLeft ? 'left: ' + Math.max(8, Math.round((b.left - r.left) / k)) + 'px' : 'right: ' + Math.max(8, Math.round((r.right - b.right) / k)) + 'px', below = Math.round((b.bottom - r.top) / k) + 4; return below + (h || 160) > p.offsetHeight - 24 ? side + '; bottom: ' + (Math.round((r.bottom - b.top) / k) + 4) + 'px' : side + '; top: ' + below + 'px'; };
+const common = (st, set) => ({ sheetOn: !!st.sheet, closeSheet: () => set({ sheet: null }), changeOn: st.sheet === 'change', moreOn: st.sheet === 'more', openChange: () => set({ sheet: 'change' }), openMore: (e) => set({ sheet: 'more', menuPos: ANCHOR(e, 200) }), menuPos: st.menuPos ?? 'right: 16px; top: 120px',
   playing: !!st.playing, notPlaying: !st.playing, togglePlay: () => set({ playing: !st.playing }), playLabel: st.playing ? 'Stop' : 'Play' });
 '''
 
@@ -66,20 +107,17 @@ const common = (st, set) => ({ sheetOn: !!st.sheet, closeSheet: () => set({ shee
 def BAR(back, right='', backlabel='Back'):
     b = f'<a href="{back}" aria-label="{backlabel}" style="width: 44px; height: 44px; margin-left: -6px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a>' if back else '<span style="width: 44px"></span>'
     return f'<header style="flex: none; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px">{b}<div style="display: flex; align-items: center; gap: 4px">{right}<button type="button" aria-label="More" onClick="{{{{openMore}}}}" style="width: 44px; height: 44px; margin-right: -6px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div></header>'
-ICONBTN = lambda label, svg, act='': f'<button type="button" aria-label="{label}" {("onClick=\"{{" + act + "}}\"") if act else ""} style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{svg}</button>'
-def HERO(size=60, gap=6):
-    return f'<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: {gap}px; padding: 4px 16px 0; text-align: center"><h1 style="margin: 0; font-size: {size}px; line-height: 1; font-weight: 700; letter-spacing: -0.02em; color: {INK}; white-space: nowrap">{{{{name}}}}</h1><p style="margin: 0; font-size: 15px; color: {SOFT}">{{{{sub}}}}</p></div>'
-def KEYS(h):
-    return f'<div style="position: relative; flex: none; width: 100%; height: {h}px; border-radius: 14px; overflow: hidden; background: {LINE}; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{kb.whites}}}}" as="k" hint-placeholder-count="14"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; box-sizing: border-box; padding-bottom: 10px; border-right: 1px solid rgba(51,41,33,.16); background: {{{{k.bg}}}}; color: {{{{k.ink}}}}; font-size: 12px; font-weight: {{{{k.fw}}}}; display: flex; align-items: flex-end; justify-content: center">{{{{k.label}}}}</span></sc-for><sc-for list="{{{{kb.blacks}}}}" as="k" hint-placeholder-count="10"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; box-sizing: border-box; padding-bottom: 6px; border-radius: 0 0 5px 5px; background: {{{{k.bg}}}}; color: {INK}; font-size: 10px; font-weight: 700; display: flex; align-items: flex-end; justify-content: center">{{{{k.label}}}}</span></sc-for><div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: #7C302C"></div></div>'
-def TABS(lst='tabs'):
-    return f'<div role="tablist" style="flex: none; display: flex; justify-content: center; gap: 22px"><sc-for list="{{{{{lst}}}}}" as="t" hint-placeholder-count="4"><button type="button" role="tab" onClick="{{{{t.pick}}}}" style="height: 36px; border: 0; background: transparent; padding: 0 2px; color: {{{{t.ink}}}}; font: inherit; font-size: 15px; font-weight: {{{{t.fw}}}}; box-shadow: inset 0 -2px 0 {{{{t.line}}}}">{{{{t.l}}}}</button></sc-for></div>'
+def KEYS(h, kb='kb', edge=False, ring=True):
+    """kb: the state key holding the keys (kbL for a laptop's wider keyboard); edge: the one instrument, square to the
+    screen's edges; ring: its 1px line (off where a hairline above it draws the edge)."""
+    return (f'<div style="position: relative; flex: none; width: 100%; height: {h}px; border-radius: {"0" if edge else "14px"}; overflow: hidden; background: {LINE}; box-shadow: {"0 0 0 1px " + LINE if ring else "none"}"><sc-for list="{{{{{kb}.whites}}}}" as="k" hint-placeholder-count="14"><span style="position: absolute; left: {{{{k.left}}}}; top: 0; width: {{{{k.w}}}}; height: {{{{k.h}}}}px; box-sizing: border-box; padding-bottom: 10px; border-right: 1px solid rgba(51,41,33,.16); background: {{{{k.bg}}}}; color: {{{{k.ink}}}}; font-size: 12px; font-weight: {{{{k.fw}}}}; display: flex; align-items: flex-end; justify-content: center">{{{{k.label}}}}</span></sc-for><sc-for list="{{{{{kb}.blacks}}}}" as="k" hint-placeholder-count="10"><span style="position: absolute; left: {{{{k.left}}}}; top: 0; width: {{{{k.w}}}}; height: {{{{k.h}}}}px; box-sizing: border-box; padding-bottom: 6px; border-radius: 0 0 5px 5px; background: {{{{k.bg}}}}; color: {INK}; font-size: 12px; font-weight: 700; display: flex; align-items: flex-end; justify-content: center">{{{{k.label}}}}</span></sc-for><div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: #7C302C"></div></div>')
 def ROWS(*rows):
     out = []
     for i, r in enumerate(rows):
-        sep = f'box-shadow: inset 0 -1px 0 {LINE};' if i < len(rows) - 1 else ''
+        sep = f'box-shadow: inset 0 -1px 0 {FILL};' if i < len(rows) - 1 else ''
         kind, label = r[0], r[1]
         if kind == 'step':
-            out.append(f'<div style="min-height: 48px; display: flex; align-items: center; padding: 0 6px 0 16px; {sep}"><span style="flex: 1; font-size: 16px; color: {INK}">{label}</span><button type="button" aria-label="{label}: before" onClick="{{{{{r[3]}}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L.replace("24", "20")}</button><span style="min-width: 70px; text-align: center; font-size: 16px; font-weight: 600; color: {INK}; font-variant-numeric: tabular-nums">{{{{{r[2]}}}}}</span><button type="button" aria-label="{label}: after" onClick="{{{{{r[4]}}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_R.replace("18", "20")}</button></div>')
+            out.append(f'<div style="min-height: 48px; display: flex; align-items: center; padding: 0 6px 0 16px; {sep}"><span style="flex: 1; font-size: 16px; color: {INK}">{label}</span><button type="button" aria-label="{label}: before" onClick="{{{{{r[3]}}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{ICON(CHEV_L, 20)}</button><span style="min-width: 70px; text-align: center; font-size: 16px; font-weight: 600; color: {INK}; font-variant-numeric: tabular-nums">{{{{{r[2]}}}}}</span><button type="button" aria-label="{label}: after" onClick="{{{{{r[4]}}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{ICON(CHEV_R, 20)}</button></div>')
         elif kind == 'link':
             val = f'<span style="font-size: 16px; color: {SOFT}">{r[2]}</span>' if len(r) > 2 and r[2] else ''
             href = r[3] if len(r) > 3 else ''
@@ -90,24 +128,15 @@ def ROWS(*rows):
         elif kind == 'raw':
             out.append(label)
     return f'<div style="flex: none; border-radius: 12px; background: {FILL}; overflow: hidden">{"".join(out)}</div>'
-def FLOAT(change, mids='', play=True, bottom=34, sticky=True):
-    ch = f'<button type="button" onClick="{{{{openChange}}}}" style="flex: 1; min-width: 0; height: 52px; border: 0; background: transparent; padding: 0 12px; display: flex; align-items: center; gap: 6px; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; white-space: nowrap">{change}<span style="display: flex">{CHEV_U}</span></button>' if change else '<span style="flex: 1"></span>'
-    pl = f'<button type="button" aria-label="{{{{playLabel}}}}" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="flex: none; width: 52px; height: 52px; border: 0; border-radius: 26px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOP}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAY}</sc-if></button>' if play else ''
-    pos = f'position: absolute; left: 16px; right: 16px; bottom: {bottom}px; z-index: 40;' if sticky else 'position: relative;'
-    return f'<div role="toolbar" style="{pos} height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{ch}{mids}{pl}</div>'
 PILL = lambda label, act, on='': f'<button type="button" onClick="{{{{{act}}}}}" {("aria-pressed=\"{{" + on + "}}\"") if on else ""} style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {{{{{(on + "Bg") if on else "pillBg"}}}}}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; white-space: nowrap">{label}</button>'
 def WHEEL(cols):
     colsh = ''.join(f'<div style="flex: {flex}; min-width: 0; display: flex; flex-direction: column"><sc-for list="{{{{{lst}}}}}" as="w" hint-placeholder-count="7"><button type="button" onClick="{{{{w.pick}}}}" style="height: 44px; border: 0; background: transparent; color: {INK}; opacity: {{{{w.op}}}}; font: inherit; font-size: 18px; font-weight: {{{{w.fw}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{w.l}}}}</button></sc-for></div>' for lst, flex in cols)
     return f'<div style="position: relative; display: flex; gap: 4px"><div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 132px; height: 44px; border-radius: 10px; background: {FILL}"></div><div style="position: relative; flex: 1; display: flex; gap: 4px">{colsh}</div></div>'
-def SHEET_PHONE(cond, head_left, body, foot=''):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; border-radius: 22px 22px 0 0; background: {SHEET}; padding: 8px 16px 40px; display: flex; flex-direction: column; gap: 12px"><div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px"><span style="font-size: 16px; font-weight: 600; color: {INK}">{head_left}</span><button type="button" onClick="{{{{closeSheet}}}}" style="height: 44px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">Done</button></div>{body}{foot}</section></sc-if>'
-def MORESHEET(title, rows, foot=''):
-    return SHEET_PHONE('moreOn', title, rows, f'<p style="margin: 0; font-size: 13px; color: {SOFT}">{foot}</p>' if foot else '')
 
 def phone(fname, title, body, js, sheets='', bg=PAGE):
     html = HEAD % title + f"""<div style="width: 450px; height: 920px; position: relative; font-family: {FONT}">
-<div style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; overflow: hidden; border-radius: 62px; background: {bg}; color: {INK}; display: flex; flex-direction: column">
-<div style="flex: none; height: 54px; position: relative">{STATUS}</div>
+<div data-menuroot style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; overflow: hidden; border-radius: 62px; background: {bg}; color: {INK}; display: flex; flex-direction: column">
+<div style="flex: none; height: 62px; position: relative">{STATUS}</div>
 {body}
 {sheets}
 <div aria-hidden="true" style="position: absolute; left: 134px; bottom: 8px; width: 134px; height: 5px; border-radius: 9999px; background: {INK}; z-index: 90"></div>
@@ -124,18 +153,51 @@ def phone(fname, title, body, js, sheets='', bg=PAGE):
 """
     open(OUT + fname + '.dc.html', 'w').write(html)
 
-def laptop(fname, title, main, aside, js, pops='', section='Practice'):
-    side = re.sub(r'<a href="[^"]*"(?: aria-current="page")? style="min-height: 52px; border-radius: 10px', lambda m: '<a href="ProfileLaptop.dc.html"' + (' aria-current="page"' if section == 'Profile' else '') + ' style="min-height: 52px; border-radius: 10px' + ('; background: #EAE2D7' if section == 'Profile' else ''), SIDE, count=1).replace('font-weight: 700">G</span>', 'font-weight: 700">A</span>', 1).replace('font-weight: 600">Guest</span>', 'font-weight: 600">Ana Popescu</span>', 1)
+def SIDEBAR(section):
+    """The app's laptop sidebar with its place current: one drawing for every laptop board."""
+    side = SIDE
     for word, href in (('Learn', 'LearnLaptop.dc.html'), ('Songs', 'SongsLaptop.dc.html'), ('Practice', 'Laptop.dc.html')):
         on = word == section
         st = ('background: #EAE2D7; color: #1A1612; text-decoration: none; font-size: 16px; font-weight: 600' if on else 'background: transparent; color: #4A433C; text-decoration: none; font-size: 16px; font-weight: 500')
         side = re.sub(r'<a href="[^"]*"( aria-current="page")? style="(height: 44px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; )[^"]*">((?:(?!</a>).)*?)' + word + '</a>',
                       lambda m: f'<a href="{href}"' + (' aria-current="page"' if on else '') + f' style="{m.group(2)}{st}">{m.group(3)}{word}</a>', side, count=1, flags=re.S)
-    asidehtml = f'<aside class="nos" style="min-height: 0; overflow-y: auto; background: {SHEET}; box-shadow: -1px 0 0 {LINE}; padding: 28px 28px 28px; display: flex; flex-direction: column; gap: 18px">{aside}</aside>' if aside else ''
+    return side
+
+# Songs' places are sub-items of Songs in the sidebar while Songs is current (owner, 2026-11-17: "what about
+# subdivisions in the sidebar"; Apple Music's sidebar, HIG Sidebars): All songs, Explore, the playlists under their
+# heading with +, then Archive and Trash apart under a hairline. Text on the Songs label's edge (44); the place shown
+# on the current wash, Songs itself then only bold. One drawing for every Songs laptop board.
+_SUBCUR = {'SongsLaptop': 'All songs', 'AllSongsLaptop': 'All songs', 'ExploreLaptop': 'Explore', 'FolderLaptop': 'Hymns', 'SharedFolderLaptop': 'Choir hymns', 'ArchiveLaptop': 'Archive', 'TrashLaptop': 'Trash'}
+_SUBPL = (('Favourites', '#F3D2C8', 'FolderLaptop.dc.html'), ('Songs to learn', '#F6E7C8', 'FolderLaptop.dc.html'), ('Hymns', '#D3E5F2', 'FolderLaptop.dc.html'), ('Called to Play', '#E4DCF1', 'FolderLaptop.dc.html'), ('Choir hymns', '#DCE9D6', 'SharedFolderLaptop.dc.html'), ('Grade 3 pieces', '#EEE3D3', 'SharedFolderLaptop.dc.html'))
+def SONGS_SUB(fname):
+    cur = _SUBCUR.get(fname, '')
+    def item(label, href, n='', sq=''):
+        on = label == cur
+        lead = f'<span aria-hidden="true" style="flex: none; width: 20px; height: 20px; margin-left: -28px; border-radius: 5px; background: {sq}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08)"></span>' if sq else ''
+        return (f'<a href="{href}"' + (' aria-current="page"' if on else '') + f' style="height: 40px; border-radius: 10px; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 44px; text-decoration: none; font-size: 15px; '
+                + ('background: #EAE2D7; color: #1A1612; font-weight: 600' if on else 'background: transparent; color: #4A433C; font-weight: 500') + f'">{lead}<span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{label}</span>'
+                + (f'<span style="color: #685E56; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums">{n}</span>' if n else '') + '</a>')
+    head = ('<div style="height: 40px; display: flex; align-items: center; padding: 0 0 0 44px; margin-top: 4px"><span style="flex: 1; font-size: 13px; font-weight: 600; color: #685E56">Playlists</span>'
+            '<button type="button" aria-label="New playlist" data-tip="New playlist" onClick="{{openFolder}}" style="position: relative; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: #4A433C; display: flex; align-items: center; justify-content: center">'
+            '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button></div>')
+    rows = (item('All songs', 'SongsLaptop.dc.html', '8') + item('Explore', 'ExploreLaptop.dc.html') + head
+            + ''.join(item(t, h, '', c) for t, c, h in _SUBPL).replace('padding: 0 12px 0 44px', 'padding: 0 12px 0 72px')
+            + '<div role="separator" style="height: 1px; margin: 6px 12px 6px 44px; background: #E9E2D8"></div>'
+            + item('Archive', 'ArchiveLaptop.dc.html', '3') + item('Trash', 'TrashLaptop.dc.html', '2'))
+    return f'<div role="group" aria-label="Songs" style="display: flex; flex-direction: column; gap: 2px; margin: 2px 0 4px">{rows}</div>', bool(cur)
+def laptop(fname, title, main, aside, js, pops='', section='Practice'):
+    side = SIDEBAR(section)
+    if section == 'Songs':
+        sub, here = SONGS_SUB(fname)
+        m = re.search(r'(<a href="SongsLaptop\.dc\.html" aria-current="page" style="[^"]*">.*?Songs</a>)', side, re.S)
+        if m:
+            songs = m.group(1).replace('background: #EAE2D7', 'background: transparent') if here else m.group(1)
+            side = side.replace(m.group(1), songs + sub, 1)
+    asidehtml = f'<aside class="nos" style="min-height: 0; overflow-y: auto; background: {SHEET}; box-shadow: -1px 0 0 {LINE}; padding: 28px 28px 28px; display: flex; flex-direction: column; gap: 16px">{aside}</aside>' if aside else ''
     cols = 'minmax(0, 1fr) 440px' if aside else 'minmax(0, 1fr)'
     html = HEAD % title + LAPFRAME_TOP + f"""<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr)">
 {side}
-<div style="position: relative; min-width: 0; display: grid; grid-template-columns: {cols}; grid-template-rows: minmax(0, 1fr)">
+<div data-menuroot style="position: relative; min-width: 0; display: grid; grid-template-columns: {cols}; grid-template-rows: minmax(0, 1fr)">
 <div style="position: relative; min-width: 0; min-height: 0; display: flex; flex-direction: column">{main}</div>
 {asidehtml}
 {pops}
@@ -153,34 +215,7 @@ def laptop(fname, title, main, aside, js, pops='', section='Practice'):
 """
     open(OUT + fname + '.dc.html', 'w').write(html)
 
-def POP_L(cond, body, pos='right: 470px; bottom: 120px', w=420):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" style="position: absolute; {pos}; z-index: 61; width: {w}px; box-sizing: border-box; border-radius: 16px; background: {SHEET}; padding: 14px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>'
 
 # A page in the calm shape: phone and laptop from one description
-def calm_page(stem, title, js, stage_phone, stage_laptop, tabs=True, rows='', change='', mids='', more='', more_title='', more_foot='', wheel_cols=None, wheel_head='', back='Main.dc.html', back_l='Laptop.dc.html', hero=60, aside_extra='', play=True, section='Practice', heart=False):
-    right = ICONBTN('Favourite', HEART) if heart else ''
-    wheel_body = WHEEL(wheel_cols) if wheel_cols else ''
-    body = f"""{BAR(back, right)}
-{HERO(hero)}
-<div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 16px 16px 118px">
-<div style="flex: 1; min-height: 0; position: relative">{stage_phone}</div>
-{TABS() if tabs else ''}
-{rows}
-</div>
-{FLOAT(change, mids, play)}"""
-    sheets = (SHEET_PHONE('changeOn', wheel_head, wheel_body) if wheel_cols else '') + (MORESHEET(more_title, more, more_foot) if more else '')
-    phone(stem, title + ', phone', body, js, sheets)
-    main = f"""<header style="flex: none; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px"><a href="{back_l}" aria-label="Back" style="width: 44px; height: 44px; margin-left: -10px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a><div style="display: flex; gap: 4px">{right}<button type="button" aria-label="More" onClick="{{{{openMore}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div></header>
-{HERO(hero + 28, 8)}
-<div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 14px; padding: 22px 64px 28px">
-<div style="flex: 1; min-height: 0; position: relative">{stage_laptop}</div>
-{TABS() if tabs else ''}
-<div style="flex: none; display: flex; justify-content: center"><div style="width: 560px">{FLOAT('', mids, play, sticky=False)}</div></div>
-</div>"""
-    aside = (f'<div style="display: flex; align-items: center; justify-content: space-between"><h2 style="margin: 0; font-size: 20px; font-weight: 700">{change}</h2></div>' + (WHEEL(wheel_cols) if wheel_cols else '') if change else '') + rows + aside_extra
-    pops = POP_L('moreOn', f'<span style="font-size: 16px; font-weight: 600">{more_title}</span>' + more, 'right: 40px; top: 64px', 380) if more else ''
-    laptop(stem + 'Laptop' if stem != 'Main' else 'Laptop', title + ', laptop', main, aside, js, pops, section)
 
-def RB_JS(extra):
-    return 'class Component extends DCLogic {\n  renderVals() {\n    const st = this.state || {}; const set = (o) => this.setState(o);\n' + extra + '\n  }\n}\n'
 

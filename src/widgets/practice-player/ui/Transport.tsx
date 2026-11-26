@@ -15,11 +15,12 @@ import { DOCK_STEP } from './dock-sizes'
  */
 /**
  * One of the transport's three groups (canvas 116): the screen's own before, ‹ ▶ › tinted in the
- * middle, the screen's own after, each a pill of its own; on the narrowest phone they stand bare,
+ * middle, the screen's own after, each a pill of its own, glass, the middle honey glass with Play bare
+ * in it (the canvas's GLASSGRP and TINTGRP); on the narrowest phone they stand bare,
  * shoulder to shoulder, so the seven still fit.
  */
 const GROUP =
-  'flex items-center gap-0.5 rounded-pill bg-muted/70 p-0.5 max-sm:gap-0 narrow-phone:bg-transparent narrow-phone:p-0'
+  'flex items-center rounded-pill glass p-1 small-phone:p-0.5 narrow-phone:bg-transparent narrow-phone:p-0 narrow-phone:shadow-none narrow-phone:backdrop-filter-none'
 
 export function Transport({
   label,
@@ -58,22 +59,23 @@ export function Transport({
   docked?: boolean
 }) {
   return (
-    // Under 390px its controls are 40px, ‹ › narrower and the pill hugs them, so the seven fit a
+    // On a phone its three groups stand on the gutter, 48px buttons as the board (8 apart at 402, 4 under
+    // it, so they fit a 393 phone). Under 390px its controls are 40px, ‹ › narrower and the pill hugs them, so the seven fit a
     // 320px screen; under 360px Play is 48px.
     <FloatingBar
       label={label}
       docked={docked}
-      className="gap-1 max-sm:gap-0 narrow-phone:px-0 landscape-phone:gap-0.5"
+      className="gap-2 max-sm:px-0 max-[402px]:gap-1 narrow-phone:gap-0 landscape-phone:gap-0.5"
     >
       <div className={GROUP}>
         {start}
         {tempo}
       </div>
-      <div className={cn(GROUP, 'bg-primary/15')}>
+      <div className={cn(GROUP, 'glass-honey')}>
         <FloatingBarButton
           label={back.label}
           title={back.title}
-          className={DOCK_STEP}
+          className={cn(DOCK_STEP, 'text-primary-foreground')}
           onClick={onBack}
         >
           <ChevronLeft aria-hidden />
@@ -83,13 +85,13 @@ export function Transport({
           title={play.title}
           playing={playing}
           disabled={disabled}
-          className="narrow-phone:size-12"
+          className="order-none size-12 bg-transparent text-primary-foreground shadow-none hover:bg-foreground/10 small-phone:size-10"
           onClick={onPlay}
         />
         <FloatingBarButton
           label={next.label}
           title={next.title}
-          className={DOCK_STEP}
+          className={cn(DOCK_STEP, 'text-primary-foreground')}
           onClick={onNext}
         >
           <ChevronRight aria-hidden />

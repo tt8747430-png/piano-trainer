@@ -18,7 +18,7 @@ Every measure is on the 4 scale: groups 12 round with rows of 48 and 8 by 16 pad
 its picture 8 round (concentric); segments 44 high in an 11-round track; blocks 12 16 16 with 8 between."""
 
 INK, SOFT, FILL, LINE, SHEET = '#332921', '#685E56', '#EEE9E2', '#DAD1C8', '#FEFDFB'
-CARD = f'border-radius: 12px; background: {SHEET}; overflow: hidden; box-shadow: 0 0 0 1px rgba(51,41,33,.07)'
+CARD = f'border-radius: 14px; background: {SHEET}; overflow: hidden; box-shadow: 0 0 0 1px {LINE}'
 ROW = f'min-height: 48px; box-sizing: border-box; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: {INK}'
 SEP = 'box-shadow: inset 0 1px 0 #E9E2D8'
 HONEY_SEP = 'box-shadow: inset 0 1px 0 rgba(176,122,42,.3)'
@@ -29,7 +29,7 @@ PIC2D = '<g><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M8.3
 
 def SWITCH(v):  # the Chords page's switch: 51 by 31, green when on
     return (f'<span aria-hidden="true" style="position: relative; flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{v}.track}}}}">'
-            f'<span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)"></span></span>')
+            f'<span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: {SHEET}; box-shadow: 0 2px 4px rgba(51,41,33,.2)"></span></span>')
 
 
 def SWROW(label, v, sep=''):
@@ -56,7 +56,7 @@ def CARDV(v, pic, name, inner=''):
 
 
 def LINK(label, sub, sep=''):
-    return (f'<a href="#" style="{ROW}; {sep + "; " if sep else ""}text-decoration: none"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span>{label}</span>'
+    return (f'<a href="Settings.dc.html" style="{ROW}; {sep + "; " if sep else ""}text-decoration: none"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span>{label}</span>'
             f'<sc-if value="{{{{{sub}On}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; color: {SOFT}">{{{{{sub}}}}}</span></sc-if></span>'
             f'<span style="flex: none; display: flex; align-items: center; gap: 4px; color: {{{{{sub}ValC}}}}">{{{{{sub}Val}}}}<span style="display: flex; color: {SOFT}">{CHEV_R}</span></span></a>')
 
@@ -97,6 +97,18 @@ SEG_JS = ("(list, cur, pick) => list.map(([id, l]) => ({ l, on: id === cur, bg: 
           "sh: id === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: id === cur ? 600 : 500, pick: () => pick(id) }))")
 
 
+def PIANO_SHEET_2D(labels=2):
+    """The same sheet where the page draws 2D keys alone (Scales, Intervals, an exercise, a pattern, a progression,
+    the Chord finder): no view cards, since the hands are not offered there; Labels, then Sound and MIDI keyboard."""
+    return ('<!--piano2d-->' + BLOCK(f'<span style="font-size: 16px; color: {INK}">Labels</span>', SEG('kbLabelSeg', labels))
+            + f'<div style="{CARD}">' + LINK('Sound', 'soundSub') + LINK('MIDI keyboard', 'midiSub', SEP) + '</div>')
+# its bindings, wrapped round the page's own values (index.py adds them to every page that draws PIANO_SHEET_2D)
+PIANO2D_JS = ("\n{ const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {\n"
+              "  const v = R.call(this), st = this.state || {}, kbLabel = st.kbLabel ?? 'names', SEGP = " + SEG_JS + ";\n"
+              "  if (kbLabel === 'none') for (const k of Object.keys(v)) { const kb = v[k]; if (kb && Array.isArray(kb.whites)) v[k] = { ...kb, whites: kb.whites.map((w) => ({ ...w, label: '' })), blacks: (kb.blacks || []).map((b) => ({ ...b, label: '' })) }; }\n  return Object.assign({}, v, { kbLabelSeg: SEGP([['names', 'Note names'], ['none', 'None']], kbLabel, (x) => this.setState({ kbLabel: x })),\n"
+              "    kbDimOp: 1, kbPE: 'auto', soundSub: '', soundSubOn: false, soundSubVal: 'Grand piano', soundSubValC: '#685E56', midiSub: '', midiSubOn: false, midiSubVal: 'None', midiSubValC: '#685E56' });\n"
+              "}; }\n")
+
 # The live 3D stage, shared by every page with a 3D piano (the Chords page, the Chord player): the app's own hands
 # (src/widgets/piano-hands, createStage) from pthands.bundle.js. A page sets this._cv (the canvas), this._lb (the labels'
 # box), this._handsIn (the stage's input) and this._labels3d, and calls this._hands3d() after each render.
@@ -105,26 +117,48 @@ STAGE_VARS = ("--key-white: #fefdfb; --key-black: #332c28; --key-bed: #cbc2b9; -
               + ''.join(f"--role-{n}: {c}; --role-{n}-wash: color-mix(in oklab, {c} 62%, #fefdfb); " for n, c in (('root', '#E19E8C'), ('3rd', '#85B8DC'), ('5th', '#9BC093'), ('7th', '#E8C67D'), ('9th', '#B8A8D8'), ('11th', '#D3AC8A'), ('13th', '#82C2C1'))))
 HANDS3D = r'''
   _hands3d() {
-    const cv = this._cv, d = this._handsIn; if (!cv || !d) { if (this._stage && !cv) { this._stage.dispose(); this._stage = null; this._stageCv = null; } return; }
+    const cv = this._cv, d = this._handsIn; if (d) d.angle = this.state.kbAngle === 'above' ? 'above' : 'seat'; if (!cv || !d) { if (this._stage && !cv) { this._stage.dispose(); this._stage = null; this._stageCv = null; } return; }
     try {
       if (!window.PTHands) (0, eval)(PT_BUNDLE);
-      const ang = this.state.kbAngle === 'above' ? 'above' : 'seat';
-      if (!this._stage || this._stageCv !== cv || this._ang !== ang) {
-        window.PTHands.setPitch(ang === 'above' ? 78 : 62); this._ang = ang;
+      if (!this._stage || this._stageCv !== cv) {
         if (this._stage) this._stage.dispose(); if (this._ro) this._ro.disconnect();
         cv.__ptAfter = (proj) => { const box = this._lb; if (!box) return; const L = this._labels3d || [], W = box.clientWidth, H = box.clientHeight;
           while (box.children.length > L.length) box.lastChild.remove();
-          L.forEach((l, i) => { let el = box.children[i]; if (!el) { el = document.createElement('span'); el.style.cssText = 'position: absolute; transform: translate(-50%, -100%); min-width: 22px; height: 22px; box-sizing: border-box; padding: 0 5px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #332921; box-shadow: 0 0 0 1.5px rgba(51,41,33,.55), 0 1px 3px rgba(51,41,33,.3); white-space: nowrap'; box.append(el); }
+          L.forEach((l, i) => { let el = box.children[i]; if (!el) { el = document.createElement('span'); el.style.cssText = 'position: absolute; transform: translate(-50%, -100%); min-width: 22px; height: 22px; box-sizing: border-box; padding: 0 5px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #332921; box-shadow: 0 0 0 1.5px rgba(51,41,33,.55), 0 1px 3px rgba(51,41,33,.3); white-space: nowrap'; box.append(el); }
             const p = proj(l.m, l.black); el.textContent = l.t; el.style.background = l.c; l.x = p[0] * W; l.w = Math.max(22, l.t.length * 8 + 10); l.el = el; el.style.top = Math.max(26, p[1] * H - 3).toFixed(1) + 'px'; });
           // labels over neighbouring keys (D and E♭) are moved apart until neither covers the other
           const by = L.slice().sort((a, b) => a.x - b.x); for (let i = 1; i < by.length; i++) { const need = (by[i - 1].w + by[i].w) / 2 + 3 - (by[i].x - by[i - 1].x); if (need > 0) { by[i - 1].x -= need / 2; by[i].x += need / 2; } }
           // a key outside the view keeps its label hidden, never half cut at the edge
           L.forEach((l) => { l.el.style.left = l.x.toFixed(1) + 'px'; l.el.style.visibility = l.x - l.w / 2 < 4 || l.x + l.w / 2 > W - 4 ? 'hidden' : 'visible'; }); };
+        // the 3D keys play (owner, 2026-11-15: "the 3d keyboard should also be interactive"): a press finds the key under the
+        // finger from the stage's own projection (a black key's top first, then the white key's), sounds it and holds it down
+        if (!cv.__ptTap) { cv.__ptTap = true; cv.style.cursor = 'pointer'; cv.style.touchAction = 'none';
+          const up = () => { if (this._tap3d == null) return; this._tap3d = null; if (this._stage && this._handsIn) this._stage.update(this._handsIn); };
+          cv.addEventListener('pointerdown', (e) => { const m = this._keyAt3d(cv, e); if (m == null) return; e.preventDefault(); this._tap3d = m; this._tone3d(m);
+            if (this._stage && this._handsIn) this._stage.update(Object.assign({}, this._handsIn, { held: new Set([...(this._handsIn.held || []), m]) })); });
+          cv.addEventListener('pointerup', up); cv.addEventListener('pointerleave', up); cv.addEventListener('pointercancel', up); }
         this._stage = window.PTHands.createStage(cv, d, { onLoaded: () => {}, onFailed: () => this.setState({ kbView: '2d' }) }); this._stageCv = cv;
         const box = cv.parentElement, rs = () => { if (this._stage) this._stage.resize(box.clientWidth, box.clientHeight); };
         this._ro = new ResizeObserver(rs); this._ro.observe(box); rs();
       }
       this._stage.update(d); if (this._lb && !(this._labels3d || []).length) this._lb.replaceChildren();
     } catch (e) { this._stage = null; this.setState({ kbView: '2d' }); } // where 3D cannot be drawn, the flat keys
+  }
+  _keyAt3d(cv, e) {
+    const P = cv.__ptProj, K = cv.__ptKey; if (!P || !K) return null;
+    const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    // inside the quad of four projected corners (they are convex in any view of the keys)
+    const inside = (q) => { let s = 0; for (let i = 0; i < 4; i++) { const a = q[i], b = q[(i + 1) % 4], c = (b[0] - a[0]) * (y - a[1]) - (b[1] - a[1]) * (x - a[0]); if (c !== 0) { if (s && Math.sign(c) !== s) return false; s = Math.sign(c); } } return true; };
+    const quad = (m, black) => { const hw = (black ? K.bw : K.w) / 2, z0 = -K.len, z1 = black ? -K.len + K.blen : 0; return [P(m, black, z0, -hw), P(m, black, z0, hw), P(m, black, z1, hw), P(m, black, z1, -hw)]; };
+    const isB = (m) => [1, 3, 6, 8, 10].includes(m % 12);
+    for (let m = 21; m <= 108; m++) if (isB(m) && inside(quad(m, true))) return m;
+    for (let m = 21; m <= 108; m++) if (!isB(m) && inside(quad(m, false))) return m;
+    return null;
+  }
+  _tone3d(m) {
+    try { const A = this._ac3d = this._ac3d || new (window.AudioContext || window.webkitAudioContext)(), t = A.currentTime + 0.01, f = 440 * Math.pow(2, (m - 69) / 12);
+      [[1, 0.22], [2, 0.08], [3, 0.03]].forEach(([h, v]) => { const o = A.createOscillator(), g = A.createGain(); o.type = 'sine'; o.frequency.value = f * h;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.6); o.connect(g).connect(A.destination); o.start(t); o.stop(t + 1.7); });
+    } catch (e) { /* no sound where audio is blocked; the key still goes down */ }
   }
 '''

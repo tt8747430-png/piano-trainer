@@ -1,25 +1,19 @@
 import {
   closestCenter,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
   type DndContextProps,
   type DragEndEvent,
   type DragStartEvent,
   type DropAnimation,
   type UniqueIdentifier,
 } from '@dnd-kit/core'
-import { sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { useState } from 'react'
 import { moveBlock } from './move-block'
 import { useHeldOrder } from './use-held-order'
-import { useMediaQuery } from './use-media-query'
+import { REDUCED_MOTION, useMediaQuery } from './use-media-query'
+import { useDragSensors } from './use-drag-sensors'
 
 /** How a dropped row settles into its place: the app's one ease-out (DESIGN.md, Motion). */
 const DROP_ANIMATION: DropAnimation = { duration: 200, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
-const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
 
 /** A list sorted by drag, as `useSortableList` keeps it. */
 export interface SortableList<T extends UniqueIdentifier> {
@@ -50,11 +44,7 @@ export function useSortableList<T extends UniqueIdentifier>({
   ids: readonly T[]
   onDrop: (next: T[]) => boolean | void
 }): SortableList<T> {
-  const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  )
+  const sensors = useDragSensors()
   const reduced = useMediaQuery(REDUCED_MOTION)
   const [activeId, setActiveId] = useState<T | null>(null)
   const { order: items, hold } = useHeldOrder(ids)

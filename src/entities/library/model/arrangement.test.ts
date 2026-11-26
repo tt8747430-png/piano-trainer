@@ -78,6 +78,7 @@ describe('arrangeLibrary', () => {
             folder: { id: 'hymns', parent: null, picture: 'church', paint: 'grass', songs: [] },
             subfolders: [],
             index: 1,
+            at: 0,
           },
         ],
       }),
@@ -118,9 +119,9 @@ describe('arrangeLibrary', () => {
     const layout = arrangeLibrary(
       library({
         archive: [
-          { kind: 'song', id: 'my-1', from: { folder: null, index: 0 } },
-          { kind: 'song', id: 'a2', from: { folder: 'learning-songs', index: 1 } },
-          { kind: 'song', id: 'my-8', from: { folder: null, index: 0 } },
+          { kind: 'song', id: 'my-1', from: { folder: null, index: 0 }, at: 0 },
+          { kind: 'song', id: 'a2', from: { folder: 'learning-songs', index: 1 }, at: 0 },
+          { kind: 'song', id: 'my-8', from: { folder: null, index: 0 }, at: 0 },
         ],
       }),
       CATALOG,
@@ -194,6 +195,7 @@ describe('arrangeLibrary', () => {
             folder: { id: 'gorshkov', parent: null, picture: 'mic', paint: 'sand', songs: [] },
             subfolders: [],
             index: 0,
+            at: 0,
           },
         ],
       }),
@@ -236,6 +238,7 @@ describe('arrangeLibrary', () => {
               },
             ],
             index: 0,
+            at: 0,
           },
         ],
       }),

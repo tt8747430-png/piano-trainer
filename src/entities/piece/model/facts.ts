@@ -3,10 +3,12 @@ import type { ChartBar } from '@/shared/lib/arrangement'
 import {
   noteName,
   numeralReadings,
+  opensOnPickup,
   playOrder,
+  qualitySuffix,
   sameKey,
   type Chord,
-  type ChordQuality,
+  type ChordKind,
   type Key,
   type Numeral,
   type SpelledNote,
@@ -31,19 +33,21 @@ export interface ChordStretch {
  */
 export interface PieceFacts {
   /** Each chord it writes once, its root as spelled and its quality, in the order it first comes. */
-  readonly chords: readonly { readonly root: SpelledNote; readonly quality: ChordQuality }[]
+  readonly chords: readonly { readonly root: SpelledNote; readonly quality: ChordKind }[]
   /** The built-in patterns it plays. */
   readonly patterns: readonly PatternId[]
   /** Its chords in stretches, each in its key. */
   readonly stretches: readonly ChordStretch[]
   /** The written bars in the order they are played. */
   readonly order: readonly number[]
+  /** Whether it opens on a pickup: its bars numbered from the first full one (`barNumber`). */
+  readonly pickup: boolean
 }
 
 function chordsOnce(chords: readonly Chord[]): PieceFacts['chords'] {
-  const seen = new Map<string, { root: SpelledNote; quality: ChordQuality }>()
+  const seen = new Map<string, { root: SpelledNote; quality: ChordKind }>()
   for (const { root, quality } of chords) {
-    const name = `${noteName(root)} ${quality}`
+    const name = noteName(root) + qualitySuffix(quality)
     if (!seen.has(name)) seen.set(name, { root, quality })
   }
   return [...seen.values()]
@@ -95,6 +99,10 @@ export function factsOf(piece: Piece): PieceFacts {
     chords: chordsOnce(chordsOf(chart)),
     patterns: [...patternsOfPiece(piece)],
     ...stretchesOf(chart.sections, chart.key),
+    pickup: opensOnPickup(
+      chart.sections.flatMap((section) => section.lines.flat()),
+      chart.sections[0]?.meter ?? chart.meter,
+    ),
   }
   known.set(piece, facts)
   return facts

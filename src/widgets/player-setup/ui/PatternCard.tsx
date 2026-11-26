@@ -108,7 +108,17 @@ const changedHands = ({ lh, rh }: { lh: unknown; rh: unknown }) =>
  * the pattern's row says; Back to the pattern brings its own parts back. Then the position the right
  * hand's chords start in. All of it under Accompaniment, as How it plays follows it.
  */
-export function PatternCard({ children }: { children?: ReactNode }) {
+export function PatternCard({
+  headed = true,
+  inversion = true,
+  children,
+}: {
+  /** False on a page of its own (a song's Accompaniment), whose title already names it. */
+  headed?: boolean
+  /** False where the inversion's rows stand on the Accompaniment card (a song's). */
+  inversion?: boolean
+  children?: ReactNode
+}) {
   const { t } = useTranslation('player')
   const locale = useLocale()
   const { figures, openPage, onFigures } = useSetup()
@@ -116,15 +126,10 @@ export function PatternCard({ children }: { children?: ReactNode }) {
   const pattern = figures.pattern === 'chart' ? null : book.require(figures.pattern)
   const name = pattern ? localText(pattern.name, locale) : t('fromChart')
   const changed = changedHands(figures)
-  const about = changed
-    ? t(`changed.${changed}`)
-    : pattern
-      ? localText(pattern.idea, locale)
-      : t('fromChartDescription')
   const left = figures.lh ? LEFT_FIGURES[figures.lh] : pattern ? LEFT_FIGURES[pattern.lh] : null
   const right = figures.rh ? RIGHT_FIGURES[figures.rh] : pattern ? RIGHT_FIGURES[pattern.rh] : null
-  return (
-    <MenuSection title={t('accompaniment')} className="gap-5">
+  const parts = (
+    <>
       <section aria-label={t('pattern')}>
         <Labelled label={t('pattern')} info={t('patternAbout')}>
           <div className="overflow-hidden card">
@@ -133,7 +138,7 @@ export function PatternCard({ children }: { children?: ReactNode }) {
               data-setup-page="pattern"
               aria-label={`${t('pattern')}: ${name}${changed ? `, ${t(`changed.${changed}`).toLowerCase()}` : ''}`}
               onClick={() => openPage('pattern')}
-              className="flex min-h-18 w-full items-center gap-3 px-3 py-2 text-left transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
+              className="flex min-h-16 w-full items-center gap-3 px-3 py-2 text-left transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
             >
               <span
                 aria-hidden
@@ -149,19 +154,16 @@ export function PatternCard({ children }: { children?: ReactNode }) {
                 <span className="block truncate text-lg font-semibold">
                   {changed ? t('yourMix', { pattern: name }) : name}
                 </span>
-                <span
-                  className={cn(
-                    // Its idea in two lines at most: a phone reads it whole, never cut mid-word.
-                    'line-clamp-2 text-sm text-pretty',
-                    changed ? 'font-semibold text-foreground' : 'text-muted-foreground',
-                  )}
-                >
-                  {about}
-                </span>
+                {/* Only a mix says so under its name; what a pattern is stays in Pattern's ⓘ. */}
+                {changed ? (
+                  <span className="block text-sm font-semibold text-pretty">
+                    {t(`changed.${changed}`)}
+                  </span>
+                ) : null}
               </span>
               <OpensMark />
             </button>
-            <div className="grid divide-y divide-hairline border-t border-hairline">
+            <div className="grid rows-hairline border-t border-hairline">
               <HandFigure
                 page="lh"
                 label={t('lh')}
@@ -192,8 +194,15 @@ export function PatternCard({ children }: { children?: ReactNode }) {
           ) : null}
         </Labelled>
       </section>
-      <InversionField />
+      {inversion ? <InversionField /> : null}
       {children}
+    </>
+  )
+  return headed ? (
+    <MenuSection title={t('accompaniment')} className="gap-5">
+      {parts}
     </MenuSection>
+  ) : (
+    <div className="flex flex-col gap-5">{parts}</div>
   )
 }

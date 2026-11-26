@@ -1,12 +1,11 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { Play } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { entryTitles, useRepertoire, type Piece } from '@/entities/piece'
-import { selectLessons, useProgress } from '@/entities/progress'
+import { useRepertoire, type Piece } from '@/entities/piece'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { loopParam } from '@/features/practice'
-import { useLocale } from '@/shared/i18n'
 import { OPEN_PLAINLY } from '@/shared/lib'
+import { opensOnPickup } from '@/shared/lib/music'
 import {
   BackButton,
   ButtonLink,
@@ -15,46 +14,46 @@ import {
   NotFound,
   ScreenHeader,
 } from '@/shared/ui'
-import { lessonKeys } from '../model/section-lessons'
-import { sectionPaint } from '../model/section-paint'
-import { progressOf, sectionIndex } from '../model/song-progress'
+import { sectionIndex } from '../model/song-progress'
 import { useSongLessons } from '../model/use-song-lessons'
 import { SectionCard } from './SectionCard'
 import { SectionLessonGroups } from './SectionLessonGroups'
 
 /**
- * A section's page (ADR 0111): "Learn the Verse", its card (the song, the section's chords,
- * its lessons done), then its lessons in order, each looping its bars in the Player; Practise, floating,
+ * A section's page (ADR 0111): "Learn the Verse", its name on the paper (its rounds, its bars and
+ * chords), then its lessons in order, each looping its bars in the Player; Practise, floating,
  * loops the whole section.
  */
 function SectionView({ piece, section }: { piece: Piece; section: number }) {
   const { t } = useTranslation('piece')
-  const locale = useLocale()
   const { performance, headings, sections } = useSongLessons(piece)
-  const done = useProgress(selectLessons)
   const lessons = sections[section]
   // The route found no section the piece has not.
   if (!lessons) return null
   const heading = headings[section] ?? ''
-  const paint = sectionPaint(heading)
   return (
-    <div className="flex flex-col gap-8 pb-4">
-      <ScreenHeader title={t('learnSection.title', { section: heading })} back={<BackButton />} />
-      <SectionCard
-        title={entryTitles(piece, locale).primary}
-        lessons={lessons}
-        paint={paint}
-        progress={progressOf(lessonKeys(lessons), done)}
+    <div className="flex flex-col gap-2 pb-4 lg:gap-4">
+      <ScreenHeader
+        column="until-laptop"
+        title={t('learnSection.title', { section: heading })}
+        back={<BackButton />}
       />
-      <SectionLessonGroups
-        piece={piece}
-        performance={performance}
-        lessons={lessons}
-        paint={paint}
-      />
+      {/* The section's name on the paper, 24 under the bar on a laptop as every page under a song (its
+          Settings), then its ways in: one column on a phone; on a laptop the
+          Section board's two, the chords and in time at the left, the changes and patterns at the
+          right, every row 56 and, there, its state beside its words with no chevron far from them. */}
+      <div className="page-column flex flex-col gap-4 lg:mx-0 lg:max-w-none lg:gap-5 lg:px-[calc(3.5rem-var(--gutter))] [&_.group\/row]:min-h-14 lg:[&_.group\/row>span:has([data-slot=row-title])]:flex-none lg:[&_[data-slot=row-chevron]]:hidden">
+        <SectionCard
+          heading={heading}
+          lessons={lessons}
+          pickup={opensOnPickup(performance.bars, performance.meter)}
+        />
+        <SectionLessonGroups piece={piece} performance={performance} lessons={lessons} />
+      </div>
       {/* The whole section looped in the Player, the screen's floating action. */}
       <FloatingActions>
         <FabLink
+          extended
           label={t('practise')}
           icon={Play}
           className="[&_svg]:fill-current"

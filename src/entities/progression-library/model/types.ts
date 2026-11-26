@@ -1,6 +1,7 @@
+import { isRecord } from '@/shared/lib'
 import type { PatternId } from '@/entities/pattern'
-import type { LocalText } from '@/shared/i18n'
-import { parseNumerals, type ChordSize, type ChurchMode } from '@/shared/lib/music'
+import { isLocalText, isWrittenText, type LocalText } from '@/shared/i18n'
+import { readsAsNumerals, type ChordSize, type ChurchMode } from '@/shared/lib/music'
 
 /** The styles the Progressions library groups its progressions by. */
 export const PROGRESSION_STYLES = [
@@ -37,8 +38,6 @@ export interface ProgressionDetails {
   readonly name: LocalText
   /** How it sounds, in one short line under its name. */
   readonly character: LocalText
-  /** What it teaches, in a line. */
-  readonly note?: LocalText
   /** The pattern its Player opens with, where it has one of its own. */
   readonly pattern?: PatternId
   /** The chord size it opens at, where triads would lose what it teaches. */
@@ -47,39 +46,24 @@ export interface ProgressionDetails {
   readonly mode?: ChurchMode
 }
 
-const isText = (value: unknown): value is LocalText => {
-  if (typeof value !== 'object' || value === null) return false
-  const { en, ru } = value as Partial<LocalText>
-  return typeof en === 'string' && typeof ru === 'string' && en.trim() !== '' && ru.trim() !== ''
-}
-
-const readsAsLine = (line: unknown): line is string =>
-  typeof line === 'string' && (parseNumerals(line)?.length ?? 0) > 0
-
 /**
  * Whether a body from the database reads as the progression `id` (content as data, ADR 0116): a
  * style, a name and a character in both languages, and a line of numerals that reads in a major key,
  * a minor key, or both.
  */
 export function readsAsProgression(id: string, body: unknown): body is LibraryProgression {
-  if (typeof body !== 'object' || body === null) return false
-  const progression = body as Partial<LibraryProgression> & { major?: unknown; minor?: unknown }
+  if (!isRecord(body)) return false
+  const progression = body
   const { major, minor } = progression
   return (
     progression.id === id &&
     PROGRESSION_STYLES.some((style) => style === progression.style) &&
-    isText(progression.name) &&
-    isText(progression.character) &&
+    isWrittenText(progression.name) &&
+    isWrittenText(progression.character) &&
     (major !== undefined || minor !== undefined) &&
-    (major === undefined || readsAsLine(major)) &&
-    (minor === undefined || readsAsLine(minor))
+    (major === undefined || readsAsNumerals(major)) &&
+    (minor === undefined || readsAsNumerals(minor))
   )
-}
-
-const isLocalText = (value: unknown): value is LocalText => {
-  if (typeof value !== 'object' || value === null) return false
-  const { en, ru } = value as Partial<LocalText>
-  return typeof en === 'string' && typeof ru === 'string'
 }
 
 /**
@@ -87,8 +71,8 @@ const isLocalText = (value: unknown): value is LocalText => {
  * editor opens on; publishing asks `readsAsProgression`.
  */
 export function isProgressionDraft(id: string, body: unknown): body is LibraryProgression {
-  if (typeof body !== 'object' || body === null) return false
-  const draft = body as Partial<LibraryProgression> & { major?: unknown; minor?: unknown }
+  if (!isRecord(body)) return false
+  const draft = body
   return (
     draft.id === id &&
     PROGRESSION_STYLES.some((style) => style === draft.style) &&

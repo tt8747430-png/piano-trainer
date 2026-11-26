@@ -7,6 +7,7 @@ const course: Course = {
   shelf: 'method-books',
   stage: 'intermediate',
   title: { en: 'Bobrova: seven types of accompaniment', ru: 'Боброва: семь видов аккомпанемента' },
+  line: { en: 'Seven ways to accompany a hymn', ru: 'Семь видов аккомпанемента гимна' },
   summary: {
     en: 'N. V. Bobrova’s seven types of accompaniment, all heard on one hymn. Then you accompany hymns and the songs of her songbook from their chords.',
     ru: 'Семь видов аккомпанемента Н. В. Бобровой, все на одном гимне. Затем вы аккомпанируете гимнам и песням её сборника по аккордам.',

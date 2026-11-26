@@ -3,9 +3,39 @@ import { SMUFL, type SmuflName } from './smufl'
 /** The font's units to a staff space: an em is four. */
 export const UNITS_PER_SPACE = 250
 
+/** Each family's digit glyphs, 0 to 9. */
+const DIGITS = {
+  timeSig: [
+    'timeSig0',
+    'timeSig1',
+    'timeSig2',
+    'timeSig3',
+    'timeSig4',
+    'timeSig5',
+    'timeSig6',
+    'timeSig7',
+    'timeSig8',
+    'timeSig9',
+  ],
+  tuplet: [
+    'tuplet0',
+    'tuplet1',
+    'tuplet2',
+    'tuplet3',
+    'tuplet4',
+    'tuplet5',
+    'tuplet6',
+    'tuplet7',
+    'tuplet8',
+    'tuplet9',
+  ],
+} as const satisfies Record<string, readonly SmuflName[]>
+
 /** The figures of a number in a family of digit glyphs: 12 → timeSig1, timeSig2. */
-export function figures(value: number, family: 'timeSig' | 'tuplet'): readonly SmuflName[] {
-  return [...String(Math.trunc(Math.abs(value)))].map((digit) => `${family}${digit}` as SmuflName)
+export function figures(value: number, family: keyof typeof DIGITS): readonly SmuflName[] {
+  return [...String(Math.trunc(Math.abs(value)))].flatMap(
+    (digit) => DIGITS[family][Number(digit)] ?? [],
+  )
 }
 
 /**

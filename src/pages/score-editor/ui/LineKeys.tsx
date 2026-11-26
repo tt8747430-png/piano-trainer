@@ -7,19 +7,20 @@ import { LineIcon } from './palette-icons'
 
 /**
  * A line's key (ADR 0114): drawn in one go over the notes chosen, else from the note at the caret to
- * its bar's end; pressed where it is drawn there already (tapped again, taken away); left out where
- * no note starts (R32-B). Each line's shortcut is Flat's (`TOOL_SHORTCUTS`), named in its tooltip.
+ * its bar's end; pressed where it is drawn there already (tapped again, taken away); greyed in place
+ * where no note starts (Flat's). Each line's shortcut is Flat's (`TOOL_SHORTCUTS`), named in its tooltip.
  */
 function LineKey({ line }: { line: Line }) {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const drawn = useEditorState((state) => lineDrawn(state, line))
-  if (drawn === null) return null
   return (
     <PaletteKey
       label={t(`lines.${line}`)}
       tool={isTool(line) ? line : undefined}
-      pressed={drawn}
+      pressed={drawn === true}
+      disabled={drawn === null}
+      reason={t('reason.noLine')}
       onClick={() => actions.dispatch({ type: 'line', line })}
     >
       <span aria-hidden className="size-7">

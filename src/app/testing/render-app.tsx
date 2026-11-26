@@ -8,11 +8,12 @@ import {
   type FeaturesPort,
 } from '@/shared/api/admin'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createFakeAuth, type AuthGateway } from '@/shared/api/auth'
 import { filesContent, type ContentPort } from '@/shared/api/content'
 import { createFakeContentEditing, type ContentEditingPort } from '@/shared/api/content-editing'
 import { createFakeErrorReporter, type ErrorReporter } from '@/shared/api/errors'
+import { createFakeChordShare } from '@/shared/api/chord-share'
 import { createFakeGroups, type GroupsPort } from '@/shared/api/groups'
 import { createFakeProfile, type ProfilePort } from '@/shared/api/profile'
 import { createFakePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
@@ -90,12 +91,13 @@ export async function renderApp(
   const view = render(
     <App
       stores={stores}
-      services={{ audio, midi: webMidi ? midi : null }}
+      services={{ audio, arranger: createFakeArranger(), midi: webMidi ? midi : null }}
       auth={auth}
       sync={sync}
       publicLibrary={publicLibrary}
       profile={profile}
       groups={groups}
+      chordShare={createFakeChordShare()}
       admin={admin}
       features={features}
       contentEditing={contentEditing}
@@ -118,6 +120,7 @@ export async function renderApp(
     notificationsStore: stores.notifications,
     practiceLibraryStore: stores.practiceLibrary,
     ownLessonsStore: stores.ownLessons,
+    pageLayoutsStore: stores.pageLayouts,
     audio,
     midi,
     auth,

@@ -1,7 +1,6 @@
-import { Bluetooth } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RowButton, Sheet, SheetContent } from '@/shared/ui'
+import { GroupLink, Sheet, SheetContent } from '@/shared/ui'
 
 /** The pairing on each system: an iPhone's or iPad's browser cannot. */
 const SYSTEMS = ['mac', 'windows', 'android', 'ios'] as const
@@ -31,18 +30,13 @@ export function BluetoothPairing() {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <RowButton
-        title={t('midiSettings.bluetooth.connect')}
-        icon={Bluetooth}
-        paint="sky"
-        onClick={() => setOpen(true)}
-      />
-      <Sheet open={open} onOpenChange={setOpen}>
+      <GroupLink label={t('midiSettings.bluetooth.connect')} onClick={() => setOpen(true)} />
+      <Sheet at={{ width: 'w-105' }} open={open} onOpenChange={setOpen}>
         <SheetContent
           title={t('midiSettings.bluetooth.connect')}
           description={t('midiSettings.bluetooth.steps')}
         >
-          <ol className="flex flex-col divide-y divide-hairline">
+          <ol className="flex flex-col rows-hairline">
             <Step number={1}>{t('midiSettings.bluetooth.power')}</Step>
             <Step number={2}>
               {t('midiSettings.bluetooth.pair')}

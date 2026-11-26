@@ -1,36 +1,44 @@
 import { useTranslation } from 'react-i18next'
 import {
+  CADENCES,
   cadenceNumerals,
   signatureOption,
   whyAnswer,
-  type Cadence,
   type ChoiceQuestion,
   type Question,
 } from '@/features/trainer'
 import { useKeyName, useScaleName } from '@/shared/i18n'
 import {
-  keyFromParam,
-  noteName,
+  CHORD_QUALITIES,
+  INTERVAL_GROUPS,
+  printedNote,
   parseKey,
   printedSymbol,
+  SCALE_KINDS,
   writtenName,
-  type ChordQuality,
-  type KeyParam,
-  type ReferenceInterval,
-  type ScaleKind,
 } from '@/shared/lib/music'
 import { INVERSION_NAMES } from '@/shared/ui'
 
-type Step = '1' | '2' | '3' | '4'
-type Place =
-  | 'line'
-  | 'space'
-  | 'under'
-  | 'over'
-  | 'ledgerBelow'
-  | 'byLedgerBelow'
-  | 'ledgerAbove'
-  | 'byLedgerAbove'
+/** The steps of a scale the reasons name: a half step, a whole, a step and a half, two. */
+const STEPS = ['1', '2', '3', '4'] as const
+/** Where a note stands on the staff, as the reasons name it. */
+const PLACES = [
+  'line',
+  'space',
+  'under',
+  'over',
+  'ledgerBelow',
+  'byLedgerBelow',
+  'ledgerAbove',
+  'byLedgerAbove',
+] as const
+const CLEFS = ['treble', 'bass'] as const
+const SIGNS = ['sharps', 'flats'] as const
+const REFERENCE_INTERVALS = [...INTERVAL_GROUPS.simple, ...INTERVAL_GROUPS.compound]
+
+/** An id the reasons give, read as one of its list's; `none` where it is none of them. */
+const idOf = <T extends string>(values: readonly T[], raw: string, none: T): T =>
+  values.find((value) => value === raw) ?? none
 
 /** A key signature's count as the options write it (`3♯`, `2♭`, `0`), read back. */
 const COUNT = /^(\d)(♯|♭)$/
@@ -92,7 +100,7 @@ export function useRoundWords() {
       case 'build-interval':
         return t('quiz:prompt.buildInterval', {
           interval: t(`music:interval.${question.interval}.name`).toLowerCase(),
-          note: noteName(question.lowNote),
+          note: printedNote(question.lowNote),
         })
       case 'name-scale':
         return t('quiz:prompt.nameScale')
@@ -164,9 +172,9 @@ export function useRoundWords() {
       case 'name-scale':
         return scaleName(question.root, question.kind)
       case 'read-note':
-        return writtenName(question.key, question.spelled)
+        return printedSymbol(writtenName(question.key, question.spelled))
       case 'key-degrees':
-        return question.notes.map((tone) => noteName(tone.note)).join(' ')
+        return question.notes.map((tone) => printedNote(tone.note)).join(' ')
       case 'key-signature':
         return `${keyName(question.key)}: ${signatureCount(signatureOption(question.key))}`
       case 'chord-role':
@@ -178,10 +186,16 @@ export function useRoundWords() {
       case 'interval-card':
         return t('quiz:intervalAnswer', {
           interval: t(`music:interval.${question.interval}.name`),
-          low: noteName(question.lowNote),
-          high: noteName(question.highNote),
+          low: printedNote(question.lowNote),
+          high: printedNote(question.highNote),
         })
     }
+  }
+
+  /** A build's answer as its notes, as the Check board says it ("The answer: G B D"); else its name. */
+  function notes(question: Question): string {
+    const said = whyAnswer(question).values.notes
+    return typeof said === 'string' && said !== '' ? said : answer(question)
   }
 
   /**
@@ -196,9 +210,12 @@ export function useRoundWords() {
       notes: text('notes'),
       formula: text('formula'),
       root: text('root'),
-      quality: t(`music:quality.${text('quality') as ChordQuality}`).toLowerCase(),
+      quality: t(`music:quality.${idOf(CHORD_QUALITIES, text('quality'), 'maj')}`).toLowerCase(),
     }
-    const key = () => keyName(keyFromParam(text('key') as KeyParam))
+    const key = () => {
+      const read = parseKey(text('key'))
+      return read ? keyName(read) : text('key')
+    }
     switch (kind) {
       case 'chord':
         return t('quiz:why.chord', chord)
@@ -216,27 +233,27 @@ export function useRoundWords() {
           low: text('low'),
           high: text('high'),
           number: text('number'),
-          interval: t(`music:interval.${text('interval') as ReferenceInterval}.name`),
+          interval: t(`music:interval.${idOf(REFERENCE_INTERVALS, text('interval'), 'r')}.name`),
         })
       case 'scale':
         return t('quiz:why.scale', {
-          scale: `${text('root')} ${t(`music:scaleName.${text('kind') as ScaleKind}`)}`,
+          scale: `${text('root')} ${t(`music:scaleName.${idOf(SCALE_KINDS, text('kind'), 'major')}`)}`,
           notes: text('notes'),
           steps: text('steps')
             .split(' ')
-            .map((step) => t(`quiz:why.step.${step as Step}`))
+            .map((step) => t(`quiz:why.step.${idOf(STEPS, step, '2')}`))
             .join('–'),
         })
       case 'note': {
         const [place = 'line', n = ''] = text('place').split(/(?<=[a-z])(?=\d)|:/)
         return t('quiz:why.note', {
           note: text('note'),
-          clef: t(`quiz:why.clef.${text('clef') as 'treble' | 'bass'}`),
-          place: t(`quiz:why.place.${place as Place}`, { n }),
+          clef: t(`quiz:why.clef.${idOf(CLEFS, text('clef'), 'treble')}`),
+          place: t(`quiz:why.place.${idOf(PLACES, place, 'line')}`, { n }),
         })
       }
       case 'signature':
-        return t(`quiz:why.${text('sign') as 'sharps' | 'flats'}`, {
+        return t(`quiz:why.${idOf(SIGNS, text('sign'), 'sharps')}`, {
           key: key(),
           count,
           notes: text('notes'),
@@ -260,11 +277,11 @@ export function useRoundWords() {
           chords: text('chords'),
         })
       case 'cadence':
-        return t(`quiz:why.cadence.${text('cadence') as Cadence}`, {
+        return t(`quiz:why.cadence.${idOf(CADENCES, text('cadence'), 'authentic')}`, {
           numerals: text('numerals'),
         })
     }
   }
 
-  return { prompt, options, answer, why }
+  return { prompt, options, answer, notes, why }
 }

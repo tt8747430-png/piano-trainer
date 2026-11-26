@@ -1,14 +1,18 @@
 export {
   BAND_PARTS,
+  COUNT_INS,
   DEFAULT_SHEET_SETTINGS,
   MOST_SHEETS,
   SHEET_NAME_MAX,
+  SHEET_PLAYS,
   SHEET_TEMPO,
   sheetName,
   TRANSPOSE_RANGE,
-  type BandPart,
   type ChordSheetEntry,
   type ChordSheetSettings,
+  type ChordSheetSong,
+  type CountIn,
+  type OnlineLink,
   type PartLevel,
   type SavedChordSheet,
 } from './model/types'
@@ -16,10 +20,20 @@ export {
   CHORD_SHEETS_STORAGE_KEY,
   CHORD_SHEETS_VERSION,
   createChordSheetsStore,
+  IN_HAND,
+  MOST_RECENT_SHEETS,
   NEW_ENTRY,
   readSettings,
   type ChordSheetsState,
   type ChordSheetsStore,
+  type RecentSheet,
 } from './model/store'
-export { selectEntry, selectMine, selectSaved } from './model/selectors'
+export {
+  selectEntry,
+  selectMine,
+  selectRecent,
+  selectSaved,
+  selectScratchName,
+} from './model/selectors'
 export { ChordSheetsStoreProvider, useChordSheets, useChordSheetsStoreApi } from './model/context'
+export { CHORD_SHEET_SONGS } from './content/songs'

@@ -1,4 +1,4 @@
-import { Camera, ImageUp, Mail, Trash2 } from 'lucide-react'
+import { Camera, ImageUp, Trash2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BIO_MAX, HANDLE, NAME_MAX, type LearnerProfile } from '@/shared/api/profile'
@@ -13,7 +13,7 @@ import {
   SettingsGroup as Group,
   Sheet,
   SheetContent,
-  type BuiltInAvatar,
+  isBuiltInAvatar,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { SettingsScreen } from '@/widgets/settings-screen'
@@ -25,8 +25,8 @@ type HandleCheck = 'same' | 'invalid' | 'checking' | 'available' | 'taken'
 
 /**
  * Edit profile (B1, memory-palaces'): the picture large with Change photo (Upload photo, the
- * built-in pictures, Remove photo); Name, Username (checked as it is typed), Bio; Email, changed
- * by a link to the new address; Save changes in the bar once something changed. Offline, every
+ * built-in pictures, Remove photo); Name, Username (checked as it is typed), Bio (the email is
+ * Sign-in and security's own page); Save changes in the bar once something changed. Offline, every
  * field reads only.
  */
 export function EditProfilePage() {
@@ -36,7 +36,7 @@ export function EditProfilePage() {
   if (state.kind === 'ready')
     return <ProfileForm key={state.profile.joined} profile={state.profile} />
   return (
-    <SettingsScreen title={t('editProfile.title')} sub>
+    <SettingsScreen title={t('editProfile.title')}>
       {state.kind === 'loading' && online ? (
         <p role="status" className="text-muted-foreground">
           {t('editProfile.loading')}
@@ -85,7 +85,6 @@ function ProfileForm({ profile }: { profile: LearnerProfile }) {
   return (
     <SettingsScreen
       title={t('editProfile.title')}
-      sub
       actions={
         <Button type="submit" form={FORM} variant="soft" disabled={!ready}>
           {saving ? t('editProfile.saving') : t('editProfile.save')}
@@ -162,7 +161,6 @@ function ProfileForm({ profile }: { profile: LearnerProfile }) {
           </div>
         </Group>
       </form>
-      <EmailRow readOnly={readOnly} />
       <PhotoSheet open={photo} onOpenChange={setPhoto} hasPhoto={profile.avatar !== null} />
     </SettingsScreen>
   )
@@ -196,56 +194,6 @@ function useHandleCheck(
   return answer.free ? 'available' : 'taken'
 }
 
-/** The account's email; a new one is confirmed by the link sent to it. */
-function EmailRow({ readOnly }: { readOnly: boolean }) {
-  const { t } = useTranslation('account')
-  const { account, auth } = useAccount()
-  const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
-  if (!account) return null
-  return (
-    <Group title={t('editProfile.email')}>
-      <p className="flex items-center gap-2 px-1 wrap-anywhere text-muted-foreground">
-        <Mail aria-hidden className="size-4 shrink-0" />
-        {account.email}
-      </p>
-      <div className="flex items-end gap-2">
-        <FormField
-          className="min-w-0 flex-1"
-          label={t('editProfile.newEmail')}
-          type="email"
-          autoComplete="email"
-          value={email}
-          readOnly={readOnly}
-          onChange={(event) => {
-            setEmail(event.target.value)
-            setSent(false)
-          }}
-        />
-        <Button
-          type="button"
-          size="lg"
-          className="h-12"
-          disabled={readOnly || !email.includes('@') || email === account.email}
-          onClick={() =>
-            void auth.updateEmail(email.trim()).then((result) => {
-              setSent(result.ok)
-              if (!result.ok) say(t('editProfile.failed'))
-            })
-          }
-        >
-          {t('editProfile.sendLink')}
-        </Button>
-      </div>
-      {sent ? (
-        <p role="status" className="text-sm text-link">
-          {t('editProfile.emailSent')}
-        </p>
-      ) : null}
-    </Group>
-  )
-}
-
 /** Change photo: Upload photo, the twelve built-in pictures, Remove photo. */
 function PhotoSheet({
   open,
@@ -270,7 +218,7 @@ function PhotoSheet({
     done((await uploadAvatar(made)).ok)
   }
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{}} open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('editProfile.changePhoto')}>
         <div className="flex flex-col gap-5 pb-2">
           <input
@@ -294,18 +242,20 @@ function PhotoSheet({
           </Group>
           <Group title={t('editProfile.pictures')}>
             <ul className="grid grid-cols-4 gap-3 sm:grid-cols-6">
-              {(Object.keys(BUILT_IN_AVATARS) as BuiltInAvatar[]).map((id) => (
-                <li key={id} className="grid place-items-center">
-                  <button
-                    type="button"
-                    aria-label={t(`editProfile.avatars.${id}`)}
-                    className="rounded-pill focus-visible:outline-offset-2"
-                    onClick={() => void save({ avatar: id }).then((result) => done(result.ok))}
-                  >
-                    <Avatar name={null} picture={id} size="row" />
-                  </button>
-                </li>
-              ))}
+              {Object.keys(BUILT_IN_AVATARS)
+                .filter(isBuiltInAvatar)
+                .map((id) => (
+                  <li key={id} className="grid place-items-center">
+                    <button
+                      type="button"
+                      aria-label={t(`editProfile.avatars.${id}`)}
+                      className="rounded-pill focus-visible:outline-offset-2"
+                      onClick={() => void save({ avatar: id }).then((result) => done(result.ok))}
+                    >
+                      <Avatar name={null} picture={id} size="row" />
+                    </button>
+                  </li>
+                ))}
             </ul>
           </Group>
           {hasPhoto ? (

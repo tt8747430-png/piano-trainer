@@ -29,6 +29,8 @@ export interface SongPlace {
   readonly key: Key
   /** Its chords' symbols as written, a chord held over several once: `G C G`. */
   readonly chords: readonly string[]
+  /** Whether the song opens on a pickup: its bars numbered from the first full one (`barNumber`). */
+  readonly pickup: boolean
 }
 
 /** Written bars as the Player plays them: where they first run on in its order, else from each's first pass. */
@@ -57,10 +59,16 @@ interface Found extends SongPlace {
 const heldOnce = (chords: readonly Chord[]): string[] =>
   chords.map(chordSymbol).filter((symbol, i, all) => i === 0 || symbol !== all[i - 1])
 
-const placeOf = ({ bars, played, key, chords }: Found): SongPlace => ({ bars, played, key, chords })
+const placeOf = ({ bars, played, key, chords, pickup }: Found): SongPlace => ({
+  bars,
+  played,
+  key,
+  chords,
+  pickup,
+})
 
 function found(piece: Piece, numerals: readonly Numeral[], minor: boolean): Found[] {
-  const { stretches, order } = factsOf(piece)
+  const { stretches, order, pickup } = factsOf(piece)
   return stretches.flatMap((stretch, at) =>
     stretch.key.minor !== minor
       ? []
@@ -73,6 +81,7 @@ function found(piece: Piece, numerals: readonly Numeral[], minor: boolean): Foun
             played: playedBars(order, bars),
             key: stretch.key,
             chords: heldOnce(stretch.chords.slice(span.first, span.last + 1)),
+            pickup,
           }
         }),
   )

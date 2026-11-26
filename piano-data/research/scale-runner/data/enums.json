@@ -1,0 +1,140 @@
+{
+  "_source": "App.framework/App (Dart AOT snapshot string table, arm64 slice)",
+  "_note": "Enum CLASS names EXACT. Values listed are lowercase identifiers present in the snapshot that fit; assignment to an enum is INFERRED unless noted.",
+  "TimingDifficulty": {
+    "values_inferred": [
+      "easy",
+      "normal",
+      "strict"
+    ],
+    "labels_present": [
+      "Easy",
+      "Normal",
+      "Strict"
+    ]
+  },
+  "BeatAccuracy": {
+    "values_inferred": [
+      "onBeat",
+      "close",
+      "off"
+    ],
+    "labels_present": [
+      "On time",
+      "Close, a bit off",
+      "Missed"
+    ],
+    "ui": "Green is on the beat, amber is close, red is off."
+  },
+  "BeatVerdict": {},
+  "StepResult": {
+    "values_inferred": [
+      "correct",
+      "wrong",
+      "ignored",
+      "waiting"
+    ]
+  },
+  "NoteResult": {},
+  "RunTier": {
+    "values_exact_identifiers": [
+      "openingAct",
+      "localLegend",
+      "internationalRecordingStar"
+    ],
+    "labels": [
+      "Opening Act",
+      "Local Legend",
+      "International Recording Star"
+    ]
+  },
+  "JamTier": {
+    "same_as": "RunTier (inferred)"
+  },
+  "RunPhase": {
+    "values_inferred": [
+      "idle",
+      "ready",
+      "running",
+      "done"
+    ]
+  },
+  "JamPhase": {},
+  "InversionPhase": {},
+  "RunMode": {},
+  "QuizMode": {
+    "values_inferred": [
+      "scales",
+      "chords"
+    ]
+  },
+  "GuideMode": {
+    "keys": [
+      "free_play",
+      "scales",
+      "chords",
+      "scale_running",
+      "inversion_running",
+      "jam_mode",
+      "voicings"
+    ]
+  },
+  "Meter": {
+    "values_exact_identifiers": [
+      "fourFour",
+      "threeFour",
+      "sixEight"
+    ]
+  },
+  "Instrument": {
+    "values_inferred": [
+      "piano",
+      "guitar"
+    ]
+  },
+  "TwinDotMode": {
+    "values_inferred": [
+      "primaryOnly",
+      "primaryGhost?",
+      "all"
+    ],
+    "labels_present": [
+      "Primary only",
+      "Primary + ghost",
+      "All positions",
+      "Other positions"
+    ]
+  },
+  "ChordKind": {},
+  "JamFamily": {
+    "values_inferred": [
+      "triad",
+      "seventh",
+      "ninth",
+      "sus"
+    ]
+  },
+  "JamKey": {},
+  "JamResult": {},
+  "ReadoutKind": {},
+  "VoicingCycle": {
+    "labels_present": [
+      "By fifths",
+      "Chromatic",
+      "Up the neck",
+      "Toward the nut"
+    ]
+  },
+  "InversionCycle": {},
+  "VoicingSummaryAction": {},
+  "SyncState": {},
+  "SettingType": {},
+  "StreakUpdate": {
+    "events": [
+      "StreakFrozen",
+      "StreakLost",
+      "StreakMilestone",
+      "StreakOpenEvent"
+    ]
+  }
+}

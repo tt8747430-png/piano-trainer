@@ -3,6 +3,7 @@ import {
   midi,
   midiOf,
   note,
+  printedNote,
   spellAbove,
   spellsAbove,
   TICKS_PER_BEAT,
@@ -26,12 +27,13 @@ interface IntervalExample {
   readonly music: TimedMusic
 }
 
-const TONIC: KeyMark = { tone: 'tonic', label: '1' }
+/** The lower key in the root's paint, named, as a chord's root is painted on the Chords page. */
+const lowerMark = (root: SpelledNote): KeyMark => ({ tone: 'root', label: printedNote(root) })
 
-/** The root alone, in octave 4, marked as the tonic: the keys before an interval is played. */
+/** The root alone, in octave 4, in the root's paint: the keys before an interval is played. */
 export function intervalRoot(root: SpelledNote): ShownKeys {
   const low = midiOf(root, LOWER_OCTAVE)
-  return { keys: [low], marks: new Map([[low, TONIC]]) }
+  return { keys: [low], marks: new Map([[low, lowerMark(root)]]) }
 }
 
 /** Whether the interval over a root is written on its letter (the A9 over E♯ would need F𝄪𝄪: not). */
@@ -40,18 +42,18 @@ export const writesInterval = (root: SpelledNote, name: IntervalName): boolean =
 
 /**
  * An interval over a root in octave 4: the upper note spelled by letter steps from the root (the
- * minor 2nd over D♭ is E𝄫, since the letters are what number an interval), the lower key marked as
- * the tonic and the upper labelled with its degree.
+ * minor 2nd over D♭ is E𝄫, since the letters are what number an interval), each key named, the
+ * lower in the root's rose and the upper in the 5th's sage, as the Intervals board paints them.
  */
 export function intervalExample(root: SpelledNote, name: IntervalName): IntervalExample {
   const interval = INTERVALS[name]
   const upper = spellAbove(root, interval)
   const low = midiOf(root, LOWER_OCTAVE)
   const high = midi(low + interval.semitones)
-  // The upper first, so a unison's one key keeps the tonic's 1.
+  // The upper first, so a unison's one key keeps the root's paint.
   const marks = new Map<Midi, KeyMark>([
-    [high, { tone: 'scale', label: interval.degree }],
-    [low, TONIC],
+    [high, { tone: '5th', label: printedNote(upper) }],
+    [low, lowerMark(root)],
   ])
   return {
     low,

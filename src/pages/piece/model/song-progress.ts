@@ -2,7 +2,7 @@ import { sectionCount, type Piece } from '@/entities/piece'
 import { lessonsDone, type LessonKey, type ProgressState } from '@/entities/progress'
 
 /** How many of some lessons are done, of all of them: each key counted once. */
-export interface LessonProgress {
+interface LessonProgress {
   readonly done: number
   readonly total: number
 }

@@ -1,38 +1,17 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useFolderName, type ShelvedFolder } from '@/entities/library'
+import type { PieceId } from '@/entities/piece'
 import {
-  DEFAULT_CARD_LOOK,
-  useFolderName,
-  useLibrary,
-  type ShelvedFolder,
-} from '@/entities/library'
-import type { Entry, PieceId } from '@/entities/piece'
-import { useEntryFace } from '@/widgets/piece-list'
-import { FavouriteMark, RowFace } from '@/shared/ui'
-import { PieceMark } from '@/widgets/piece-cover'
-import {
-  CardLookProvider,
   FolderFace,
   LibraryDnd,
   RowInHand,
   SelectRow,
+  SONG_FACE,
+  SongCardFace,
   SortableRows,
-  useCardLook,
 } from '@/widgets/song-library'
-import { folderKey, songKey, type Chosen, type LibraryPage } from '../model/use-library-page'
-
-/** A song's face in Select, as its row shows it: its small cover, its title over its composer and key, its ♡ where it is a favourite. */
-function SongFace({ entry, favourite }: { entry: Entry; favourite: boolean }) {
-  const { show } = useCardLook()
-  const { face } = useEntryFace(entry, show)
-  return (
-    <>
-      <PieceMark entry={entry} />
-      <RowFace {...face} />
-      {favourite ? <FavouriteMark /> : null}
-    </>
-  )
-}
+import { folderKey, isChosen, songKey, type LibraryPage } from '../model/use-library-page'
 
 /**
  * The library while Select is on (Mindscape's `LibrarySelectList`): the rows on screen, each chosen
@@ -54,12 +33,14 @@ export function LibrarySelect({
   const { t } = useTranslation('songs')
   const nameOf = useFolderName()
   const { view, select, sortable } = page
-  const folders = new Map(view.folders.map((each) => [each.folder.id, each]))
+  const folders = new Map<string, (typeof view.folders)[number]>(
+    view.folders.map((each) => [each.folder.id, each]),
+  )
   const entries = new Map(
     view.groups.flatMap((group) => group.entries.map((entry) => [entry.id, entry] as const)),
   )
   const folderName = (id: string) => {
-    const each = folders.get(id as never)
+    const each = folders.get(id)
     return each ? nameOf(each.folder) : ''
   }
   const songName = (id: PieceId) => page.titleOf(id)
@@ -69,11 +50,11 @@ export function LibrarySelect({
       : songName(key.slice('song:'.length))
   const face = (key: string) => {
     if (key.startsWith('folder:')) {
-      const each = folders.get(key.slice('folder:'.length) as never)
+      const each = folders.get(key.slice('folder:'.length))
       return each ? <FolderFace folder={each.folder} holds={each} /> : null
     }
     const entry = entries.get(key.slice('song:'.length))
-    return entry ? <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} /> : null
+    return entry ? <SongCardFace entry={entry} /> : null
   }
   // Any folder by name, one out of sight too: the place a folder open stands in.
   const anyFolderName = (id: string) => {
@@ -82,11 +63,10 @@ export function LibrarySelect({
   }
   const placeName = folder?.parent ? anyFolderName(folder.parent) : t('library.home')
   // The place's look, as its rows wear it out of Select: nothing moves on entering it.
-  const look = useLibrary((state) => state.cardLooks[folder?.id ?? 'home'])
   return (
-    <CardLookProvider value={look ?? DEFAULT_CARD_LOOK}>
+    <>
       <LibraryDnd
-        carried={(key) => select.carried(key as Chosen)}
+        carried={(key) => (isChosen(key) ? select.carried(key) : [])}
         nameOf={keyName}
         targetName={(target) =>
           'into' in target
@@ -98,13 +78,17 @@ export function LibrarySelect({
         inHand={(keys) => {
           const [first] = keys
           return first ? (
-            <RowInHand checked={select.chosen.has(first as Chosen)} count={keys.length} carried>
+            <RowInHand
+              checked={isChosen(first) && select.chosen.has(first)}
+              count={keys.length}
+              carried
+            >
               {face(first)}
             </RowInHand>
           ) : null
         }}
-        onCarry={(keys, target) => select.carry(keys as Chosen[], target)}
-        accepts={(keys, target) => select.accepts(keys as Chosen[], target)}
+        onCarry={(keys, target) => select.carry(keys.filter(isChosen), target)}
+        accepts={(keys, target) => select.accepts(keys.filter(isChosen), target)}
       >
         <div className="flex flex-col gap-6">
           {view.folders.length > 0 ? (
@@ -143,7 +127,9 @@ export function LibrarySelect({
           {view.groups.map((group) =>
             group.entries.length === 0 ? null : (
               <section key={group.key} className="flex flex-col gap-3">
-                {group.heading ? <h2 className="text-2xl">{group.heading}</h2> : null}
+                {group.heading ? (
+                  <h2 className="font-sans text-xl font-bold">{group.heading}</h2>
+                ) : null}
                 <SortableRows
                   label={group.heading ?? t('title')}
                   ids={group.entries.map((entry) => entry.id)}
@@ -158,10 +144,13 @@ export function LibrarySelect({
                         name={songName(id)}
                         checked={select.chosen.has(songKey(id))}
                         onToggle={() => select.toggle(songKey(id))}
-                        sortable={sortable}
+                        // The songs follow the sort (R72); only the folders keep the learner's order.
+                        sortable={false}
                         carry={songKey(id)}
+                        face={SONG_FACE}
+                        tall
                       >
-                        <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} />
+                        <SongCardFace entry={entry} />
                       </SelectRow>
                     ) : null
                   }}
@@ -169,7 +158,7 @@ export function LibrarySelect({
                     const entry = entries.get(id)
                     return entry ? (
                       <RowInHand checked={select.chosen.has(songKey(id))}>
-                        <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} />
+                        <SongCardFace entry={entry} />
                       </RowInHand>
                     ) : null
                   }}
@@ -180,6 +169,6 @@ export function LibrarySelect({
         </div>
         {children}
       </LibraryDnd>
-    </CardLookProvider>
+    </>
   )
 }

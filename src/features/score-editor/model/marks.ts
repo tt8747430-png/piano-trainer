@@ -206,6 +206,7 @@ function pedalOn(draft: Draft, inSpan: readonly DraftNote[], span: Where, pedal:
 
 /** What words a note's first onset in a span carries: a tempo mark, a Roman numeral, free text (ADR 0097). */
 type Words = Pick<NoteMarks, 'tempo' | 'numeral' | 'text'>
+const WORD_FIELDS = ['tempo', 'numeral', 'text'] as const satisfies readonly (keyof Words)[]
 
 /** The notes of a span's first onset with their words changed, every note there alike. */
 function wordsOnFirst(
@@ -226,8 +227,10 @@ function wordsOnFirst(
     notes.map((n) => {
       if (n.startTick !== first) return n
       const next: Writable = { ...n.marks }
-      for (const [key, value] of Object.entries(change)) {
-        const field = key as keyof Words
+      for (const key of Object.keys(change)) {
+        const field = WORD_FIELDS.find((each) => each === key)
+        if (field === undefined) continue
+        const value = change[field]
         if (value === undefined) delete next[field]
         else Object.assign(next, { [field]: value })
       }

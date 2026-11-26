@@ -1,0 +1,56 @@
+{
+  "_source": "App.framework/App snapshot strings (snake_case keys) + setter method names (setXxx). Keys EXACT. Types INFERRED from setter names/semantics; defaults NOT recoverable without decompiling (marked null). shared_preferences on macOS stores them with the 'flutter.' prefix (standard plugin behaviour). The container prefs could not be read (sandbox: Operation not permitted).",
+  "practice_quiz": {
+    "enabled_scales": ["string list", "setter enabledScales"], "enabled_chords": ["string list", "enabledChords"],
+    "enabled_keys_scales": ["int list (root pitch classes)", "setEnabledRootPcs"], "enabled_keys_chords": ["int list", "setEnabledRootPcs"],
+    "hint_dots_scales": ["bool", "setDotsHintEnabled"], "hint_dots_chords": ["bool", "setDotsHintEnabled"],
+    "hint_formula_scales": ["bool", "setFormulaHintEnabled"], "hint_formula_chords": ["bool", "setFormulaHintEnabled"],
+    "stats_bar_scales": ["bool", "setStatsBarEnabled"], "stats_bar_chords": ["bool", "setStatsBarEnabled"],
+    "beat_indicator_scales": ["bool", "setBeatIndicatorEnabled"], "beat_indicator_chords": ["bool", "setBeatIndicatorEnabled"],
+    "score_scales": ["int", "quiz score"], "score_chords": ["int", "quiz score"],
+    "best_streak_scales": ["int", "quizBestStreak"], "best_streak_chords": ["int", "quizBestStreak"],
+    "arpeggiated_notes": ["bool", "setArpeggiatedNotes"]
+  },
+  "scale_running": {
+    "run_progression": ["string", "setRunProgressionName"], "run_chords": ["bool", "setRunChordsEnabled: 'Hold each chord while running its mode. Off = plain scale runs.'"],
+    "run_sevenths": ["bool", "setRunSevenths: 'Four-note diatonic 7ths instead of triads'"], "run_increment": ["enum", "setRunKeyIncrement: By fifths / Chromatic / ..."],
+    "run_reps": ["int", "setRunRepsPerKey 'Reps per key'"], "run_key_count_in": ["bool", "setRunKeyCountIn 'Count in between keys'"],
+    "run_start_key": ["int pc", "setRunStartKeyPc 'Starting key'"], "run_show_dots": ["bool", "setRunShowDots"],
+    "run_attempts": ["int", "stats"], "run_correct": ["int", "stats"], "run_key_stats": ["json", "per-key accuracy"], "run_mode_stats": ["json", "per-mode accuracy"]
+  },
+  "inversion_running": {
+    "inv_chords": ["string list", "setInvEnabledChordNames"], "inv_tempo": ["bool", "setInvTempoMode 'Tempo mode'"],
+    "inv_show_dots": ["bool"], "inv_show_formula": ["bool"], "inv_attempts": ["int"], "inv_correct": ["int"], "inv_chord_stats": ["json"]
+  },
+  "jam_mode": {
+    "jam_families": ["string list", "setJamFamilies"], "jam_any_tones": ["bool", "setJamAnyTones 'Any chord tones'"], "jam_freestyle": ["bool", "setJamFreestyle"],
+    "jam_key": ["int pc", "setJamKeyPc"], "jam_session_bars": ["int", "setJamSessionBars 'Session length'"], "jam_count_in_numbers": ["bool", "setJamCountInNumbers 'Count-in display: Numbers (4 3 2 1) vs Beat dots'"],
+    "jam_show_dots": ["bool"], "jam_show_formula": ["bool"], "jam_correct": ["int"], "jam_quality_stats": ["json"], "jam_degree_stats": ["json"]
+  },
+  "voicings": {
+    "voicing_increment": ["enum", "setVoicingIncrement"], "voicing_start_key": ["int pc", "setVoicingStartKeyPc"], "voicing_show_dots": ["bool"], "voicing_show_formula": ["bool"],
+    "voicing_folders": ["json"], "voicing_tags": ["json"], "voicing_expanded_folders": ["string list", "setExpandedVoicingFolders"], "voicing_customs": ["json"], "voicing_deleted": ["json (tombstones)"], "library_items": ["json"]
+  },
+  "metronome_timing": {
+    "metronome_bpm": ["int", "setMetronomeBpm"], "metronome_meter": ["enum fourFour|threeFour|sixEight", "setMeter"], "timing_difficulty": ["enum", "setTimingDifficulty"],
+    "tick_haptic": ["bool", "tickHapticEnabled"], "latency_<device>": ["int ms", "setInputLatencyMs / resolveInputLatencyMs / _latencyKeyFor"]
+  },
+  "instrument_display": {
+    "note_sound": ["bool", "setNoteSoundEnabled 'Play a piano tone when you press a key (turn off if your keyboard has its own sound)'"],
+    "left_handed": ["bool", "setLeftHanded 'Mirror the fretboard for a left-handed grip'"], "guitar_fret_numbers": ["bool"], "guitar_string_labels": ["bool"], "guitar_dot_labels_only": ["bool"], "guitar_twin_mode": ["enum TwinDotMode", "setGuitarTwinMode"],
+    "instrument (key name not seen as snake_case)": ["enum piano|guitar", "setInstrument"]
+  },
+  "midi": { "midi_last_device_id": ["string"], "midi_last_device_name": ["string"], "midi_last_device_type": ["string (e.g. BLE / native)"] },
+  "streak": {
+    "daily_streak_current": ["int"], "daily_streak_best": ["int"], "daily_streak_total_days": ["int"], "daily_streak_last_date": ["string yyyy-mm-dd"], "daily_streak_freeze_used_week": ["string ISO week"],
+    "current_streak": ["int (remote column)"], "streak_days": ["int (remote)"], "total_days": ["int (remote)"]
+  },
+  "reminders": { "reminders_enabled": ["bool"], "reminder_hour": ["int"], "reminder_minute": ["int"], "reminder_prompt_seen": ["bool"] },
+  "onboarding": {
+    "intro_seen": ["bool"], "rotate_hint_dismissed": ["bool"], "last_mode_announced": ["string"],
+    "guide_seen_free_play": ["bool"], "guide_seen_scales": ["bool"], "guide_seen_chords": ["bool"], "guide_seen_scale_running": ["bool"], "guide_seen_inversion_running": ["bool"], "guide_seen_jam_mode": ["bool"], "guide_seen_voicings": ["bool"]
+  },
+  "paywall_trials": { "trial_count_<mode>": ["int", "_trialCountKeyFor; trialsUsed / trialsRemaining"], "trial (legacy)": ["bool", "_legacyTrialUsedKeyFor"] },
+  "promo": { "promo_groove60_seen_pro": ["bool"], "promo_groove60_seen_nonpro": ["bool"], "promo_groove60_tab_dismissed": ["bool"], "promo_cache_groove60": ["json"] },
+  "sync_social": { "sync_device_id": ["string"], "sync_last_at": ["string ISO time"], "sync_remote_stats": ["json"], "social_activity_seen_at": ["string"], "social_weekly_current": ["json"], "mode_stats": ["json"], "device_stats": ["json"], "weekly_stats": ["json"], "user_settings": ["json (remote row)"] }
+}

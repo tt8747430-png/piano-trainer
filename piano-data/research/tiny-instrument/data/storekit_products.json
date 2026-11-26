@@ -1,0 +1,100 @@
+[
+ {
+  "productID": "pack_theory_advanced",
+  "type": "NonConsumable",
+  "displayPrice": "4.99",
+  "referenceName": "Advanced Theory",
+  "familyShareable": true,
+  "localizations": [
+   {
+    "locale": "en_US",
+    "displayName": "Advanced Theory",
+    "description": "Chord progressions, modes & advanced harmony"
+   }
+  ]
+ },
+ {
+  "productID": "pack_chord_lab",
+  "type": "NonConsumable",
+  "displayPrice": "2.99",
+  "referenceName": "Chord Lab",
+  "familyShareable": true,
+  "localizations": [
+   {
+    "locale": "en_US",
+    "displayName": "Chord Lab",
+    "description": "Full chords from one key. Add types & pads."
+   }
+  ]
+ },
+ {
+  "productID": "pack_keyboard_themes",
+  "type": "NonConsumable",
+  "displayPrice": "1.99",
+  "referenceName": "Keyboard Themes",
+  "familyShareable": true,
+  "localizations": [
+   {
+    "locale": "en_US",
+    "displayName": "Keyboard Themes",
+    "description": "Premium keyboard finishes + Rainbow theme."
+   }
+  ]
+ },
+ {
+  "productID": "pack_composition",
+  "type": "NonConsumable",
+  "displayPrice": "4.99",
+  "referenceName": "Composition Studio",
+  "familyShareable": true,
+  "localizations": [
+   {
+    "locale": "en_US",
+    "displayName": "Composition Studio",
+    "description": "Melody writing, phrasing & comp. technique"
+   }
+  ]
+ },
+ {
+  "productID": "pack_theory_core",
+  "type": "NonConsumable",
+  "displayPrice": "2.99",
+  "referenceName": "Core Theory",
+  "familyShareable": true,
+  "localizations": [
+   {
+    "locale": "en_US",
+    "displayName": "Core Theory",
+    "description": "Rhythm, intervals, chords and the foundations of music"
+   }
+  ]
+ },
+ {
+  "productID": "pack_full_library",
+  "type": "NonConsumable",
+  "displayPrice": "14.99",
+  "referenceName": "Full Library",
+  "familyShareable": true,
+  "localizations": [
+   {
+    "locale": "en_US",
+    "displayName": "Full Library",
+    "description": "All chapters and Advanced features"
+   }
+  ]
+ },
+ {
+  "productID": "pack_practice_studio",
+  "type": "NonConsumable",
+  "displayPrice": "4.99",
+  "referenceName": "Practice Studio",
+  "familyShareable": true,
+  "localizations": [
+   {
+    "locale": "en_US",
+    "displayName": "Practice Studio",
+    "description": "Advanced scales, chords & ear training"
+   }
+  ]
+ }
+]

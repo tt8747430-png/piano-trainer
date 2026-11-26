@@ -1,3 +1,4 @@
+import { isRecord } from '@/shared/lib'
 import type { ArpeggioQuality, ExerciseId } from '@/entities/exercise'
 import type { PatternId } from '@/entities/pattern'
 import type { PieceId } from '@/entities/piece'
@@ -58,7 +59,6 @@ export type LessonLink =
       readonly to: string
     }
   /** The Key view harmonising a melody note in its key. */
-  | { readonly opens: 'harmonise'; readonly key: Key; readonly note: SpelledNote }
   /** A song's chords on Progressions, read in their key: as typed, spaces between them. */
   | { readonly opens: 'song-chords'; readonly chords: string }
   /** A piece in the Player, with a pattern or its own. */
@@ -207,8 +207,8 @@ export const blankLesson = (id: string, name = ''): Lesson => ({
  * title and summary, and sections of headings and blocks. Its blocks are the content tests' to hold.
  */
 export function updatesLesson(id: string, body: unknown): body is Lesson {
-  if (typeof body !== 'object' || body === null) return false
-  const lesson = body as Partial<Lesson>
+  if (!isRecord(body)) return false
+  const lesson = body
   return (
     lesson.id === id &&
     typeof lesson.title === 'object' &&

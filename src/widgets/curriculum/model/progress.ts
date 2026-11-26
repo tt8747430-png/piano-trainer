@@ -1,6 +1,7 @@
-import { courseStepIds, type Course } from '@/entities/course'
+import { isLearned } from '@/entities/progress'
+import type { Course } from '@/entities/course'
 import type { Journey, JourneyStep } from '@/entities/lesson'
-import { stepIdOf, type StepId } from '@/entities/step'
+import { courseLessonStepId, stepIdOf, type StepId } from '@/entities/step'
 
 export interface Progress {
   readonly done: number
@@ -10,7 +11,7 @@ export interface Progress {
 type Learned = Readonly<Partial<Record<StepId, string>>>
 
 const progressOf = (ids: readonly StepId[], learned: Learned): Progress => ({
-  done: ids.filter((id) => learned[id] !== undefined).length,
+  done: ids.filter((id) => isLearned(learned, id)).length,
   total: ids.length,
 })
 
@@ -22,9 +23,15 @@ export const journeySteps = (journey: Journey): readonly JourneyStep[] =>
 export const journeyProgress = (journey: Journey, learned: Learned): Progress =>
   progressOf(journeySteps(journey).map(stepIdOf), learned)
 
-/** How much of a course is learned: its lessons and its guided songs. */
+/**
+ * How much of a course is learned: its lessons, as its lesson count and the Course board's "3 of 8
+ * learned" say; its guided songs are on its page, not in the count.
+ */
 export const courseProgress = (course: Course, learned: Learned): Progress =>
-  progressOf(courseStepIds(course), learned)
+  progressOf(
+    course.lessons.map((lesson) => courseLessonStepId(course.id, lesson.id)),
+    learned,
+  )
 
 /**
  * How much of a lesson is read, 0 to 1: its sections read of all it has; the whole of it once it is

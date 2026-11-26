@@ -1,11 +1,11 @@
 import { Minus, Plus } from 'lucide-react'
 import { useState } from 'react'
-import { Button } from './primitives/button'
 import { Input } from './primitives/input'
 
 /**
- * A number set a step at a time (Flat's tempo and measures): its value between − and +, each 44px,
- * greyed at its least and its most. Said in words (`format`), or, `typed`, a field the number is
+ * A number set a step at a time (Flat's tempo and measures), as the canvas's stepper draws it: − and
+ * + 44px either side of its value in one white capsule with a hairline ring, greyed at its least and
+ * its most. Said in words (`format`), or, `typed`, a field the number is
  * typed into as well, kept between its least and its most once it is left.
  */
 export function Stepper({
@@ -42,8 +42,30 @@ export function Stepper({
     if (Number.isFinite(read)) onChange(Math.min(max, Math.max(min, read)))
     setDraft(null)
   }
+  const button = (by: -1 | 1) => {
+    const name = by < 0 ? decrease : increase
+    const next = value + by * step
+    const Icon = by < 0 ? Minus : Plus
+    return (
+      <button
+        type="button"
+        aria-label={name}
+        title={name}
+        disabled={next < min || next > max}
+        onClick={() => onChange(Math.min(max, Math.max(min, next)))}
+        className="flex size-11 shrink-0 items-center justify-center rounded-xl text-foreground transition-colors hover:bg-muted disabled:text-muted-foreground/50 disabled:hover:bg-transparent [&_svg]:size-5"
+      >
+        <Icon aria-hidden />
+      </button>
+    )
+  }
   return (
-    <div role="group" aria-label={label} className="flex items-center gap-2">
+    <div
+      role="group"
+      aria-label={label}
+      className="flex shrink-0 items-center rounded-xl bg-card ring-1 ring-border"
+    >
+      {button(-1)}
       {typed ? (
         <Input
           inputMode="numeric"
@@ -59,40 +81,17 @@ export function Stepper({
               commit()
             }
           }}
-          className="h-11 min-w-0 flex-1 rounded-control bg-card px-4 text-base font-semibold tabular-nums"
+          className="h-11 w-16 rounded-none border-0 bg-transparent px-0 text-center text-subhead font-semibold tabular-nums shadow-none"
         />
       ) : (
         <output
           aria-live="polite"
-          className="min-w-0 flex-1 rounded-control bg-card px-4 py-2.5 font-semibold tabular-nums"
+          className="min-w-16 px-1 text-center text-subhead font-semibold whitespace-nowrap tabular-nums"
         >
           {format(value)}
         </output>
       )}
-      <Button
-        type="button"
-        variant="outline"
-        size="icon"
-        className="size-11 rounded-control"
-        aria-label={decrease}
-        title={decrease}
-        disabled={value - step < min}
-        onClick={() => onChange(Math.max(min, value - step))}
-      >
-        <Minus aria-hidden />
-      </Button>
-      <Button
-        type="button"
-        variant="outline"
-        size="icon"
-        className="size-11 rounded-control"
-        aria-label={increase}
-        title={increase}
-        disabled={value + step > max}
-        onClick={() => onChange(Math.min(max, value + step))}
-      >
-        <Plus aria-hidden />
-      </Button>
+      {button(1)}
     </div>
   )
 }

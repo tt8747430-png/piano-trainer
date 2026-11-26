@@ -1,0 +1,345 @@
+{
+  "source": "Metronaut.app/Contents/Resources/all.json",
+  "cursor": 7065,
+  "counts": {
+    "piece": 149,
+    "collection": 73,
+    "author": 129,
+    "instrument": 29,
+    "accompaniment": 176
+  },
+  "piece": {
+    "byGenre": {
+      "Classical": 90,
+      "Baroque": 20,
+      "": 16,
+      "Jazz": 10,
+      "Romantic": 8,
+      "Traditional": 4,
+      "Pop rock": 1
+    },
+    "byDifficulty": {
+      "1": 62,
+      "2": 58,
+      "3": 21,
+      "null": 8
+    },
+    "byStatus": {
+      "Ready": 144,
+      "Complete": 5
+    },
+    "accompanimentsPerPiece": {
+      "1": 127,
+      "2": 18,
+      "3": 3,
+      "4": 1
+    },
+    "authorsPerPiece": {
+      "1": 149
+    },
+    "collectionsPerPiece": {
+      "0": 62,
+      "1": 85,
+      "2": 2
+    },
+    "movementNonNull": 74,
+    "workNumberNonNull": 46,
+    "pieceIconNonNull": 0,
+    "titleSuffixInParentheses": {
+      "piecesWithParenthesisedSuffix": 8,
+      "piecesWithout": 141
+    }
+  },
+  "accompaniment": {
+    "byKind": {
+      "Piano": 156,
+      "Orchestral": 13,
+      "null": 7
+    },
+    "byInstrument": {
+      "33 Voice": 43,
+      "35 Violin": 27,
+      "38 Cello": 24,
+      "51 Soprano": 24,
+      "34 Flute": 21,
+      "53 Baritone": 6,
+      "54 Tenor": 5,
+      "44 Trumpet in C": 5,
+      "40 French Horn": 3,
+      "57 Mezzo-soprano": 3,
+      "45 Double Bass": 2,
+      "42 Viola": 2,
+      "49 Bassoon": 2,
+      "48 Trombone": 2,
+      "41 Oboe": 2,
+      "56 Clarinet in A": 1,
+      "39 Clarinet in Bb": 1,
+      "52 Bass": 1,
+      "50 English horn": 1,
+      "37 Piano": 1
+    },
+    "byTransposition": {
+      "0": 175,
+      "2": 1
+    },
+    "keysPresent": {
+      "pk": 176,
+      "kind": 176,
+      "instrument": 176,
+      "transposition": 176
+    }
+  },
+  "collection": {
+    "piececollectionTrue": 54,
+    "piecesPerCollection": {
+      "0": 31,
+      "1": 27,
+      "2": 4,
+      "3": 5,
+      "4": 2,
+      "5": 2,
+      "6": 1,
+      "15": 1
+    },
+    "tags": {
+      "(none)": 72,
+      "opera": 1
+    },
+    "imageNonNull": 0
+  },
+  "author": {
+    "imageNonNull": 116,
+    "imageHost": {
+      "s3-eu-west-1.amazonaws.com/production.antescofo.com/": 116
+    },
+    "piecesPerAuthor": {
+      "0": 87,
+      "1": 16,
+      "2": 10,
+      "3": 4,
+      "4": 4,
+      "5": 2,
+      "6": 1,
+      "9": 2,
+      "15": 2,
+      "21": 1
+    },
+    "authorsReferencedByPieces": 42
+  },
+  "instrument": {
+    "list": [
+      {
+        "pk": 33,
+        "name": "Voice",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 34,
+        "name": "Flute",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 35,
+        "name": "Violin",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 36,
+        "name": "Soprano Saxophone",
+        "transposition": -2,
+        "image": null
+      },
+      {
+        "pk": 37,
+        "name": "Piano",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 38,
+        "name": "Cello",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 39,
+        "name": "Clarinet in Bb",
+        "transposition": -2,
+        "image": null
+      },
+      {
+        "pk": 40,
+        "name": "French Horn",
+        "transposition": -7,
+        "image": null
+      },
+      {
+        "pk": 41,
+        "name": "Oboe",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 42,
+        "name": "Viola",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 43,
+        "name": "Mallet",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 44,
+        "name": "Trumpet in C",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 45,
+        "name": "Double Bass",
+        "transposition": -12,
+        "image": null
+      },
+      {
+        "pk": 46,
+        "name": "Tuba",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 48,
+        "name": "Trombone",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 49,
+        "name": "Bassoon",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 50,
+        "name": "English horn",
+        "transposition": -7,
+        "image": null
+      },
+      {
+        "pk": 51,
+        "name": "Soprano",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 52,
+        "name": "Bass",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 53,
+        "name": "Baritone",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 54,
+        "name": "Tenor",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 55,
+        "name": "Alto saxophone",
+        "transposition": -9,
+        "image": null
+      },
+      {
+        "pk": 56,
+        "name": "Clarinet in A",
+        "transposition": -3,
+        "image": null
+      },
+      {
+        "pk": 57,
+        "name": "Mezzo-soprano",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 58,
+        "name": "Trumpet in Eb",
+        "transposition": 3,
+        "image": null
+      },
+      {
+        "pk": 60,
+        "name": "Trumpet in Bb",
+        "transposition": -2,
+        "image": null
+      },
+      {
+        "pk": 65,
+        "name": "Euphonium",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 66,
+        "name": "Alto",
+        "transposition": 0,
+        "image": null
+      },
+      {
+        "pk": 67,
+        "name": "Tenor Saxophone",
+        "transposition": -14,
+        "image": null
+      }
+    ],
+    "byTransposition": {
+      "0": 19,
+      "3": 1,
+      "-2": 3,
+      "-7": 2,
+      "-12": 1,
+      "-3": 1,
+      "-9": 1,
+      "-14": 1
+    }
+  },
+  "referentialIntegrity": {
+    "pieceAuthorIdsMissing": 0,
+    "pieceCollectionIdsMissing": 0,
+    "collectionPieceIdsMissing": 0,
+    "accompanimentInstrumentIdsMissing": 0
+  },
+  "pkRanges": {
+    "piece": [
+      498,
+      992
+    ],
+    "accompaniment": [
+      498,
+      1030
+    ],
+    "collection": [
+      130,
+      253
+    ],
+    "author": [
+      136,
+      268
+    ],
+    "instrument": [
+      33,
+      67
+    ]
+  }
+}

@@ -14,9 +14,7 @@ import {
   modesOfKey,
   relatedScale,
   relativeKey,
-  scaleGaps,
   characteristicDegree,
-  modeVamp,
   scaleDifferences,
   scaleHasChords,
   scaleIntervals,
@@ -108,9 +106,7 @@ describe('a mode’s character (A43)', () => {
     expect(spellScale(note('D'), 'dorian')[at ?? 0]?.note).toEqual(note('B'))
   })
 
-  it('swings Mixolydian between I and ♭VII, and gives major no vamp', () => {
-    expect(modeVamp('mixolydian')).toEqual([0, 6])
-    expect(modeVamp('major')).toEqual([])
+  it('gives major no characteristic degree', () => {
     expect(characteristicDegree('major')).toBeUndefined()
   })
 })
@@ -125,14 +121,6 @@ describe('scaleDifferences (A43)', () => {
   it('finds D Dorian’s B against D minor, and nothing for a pentatonic', () => {
     expect(scaleDifferences(note('D'), 'natural', 'dorian')).toEqual([{ at: 5, note: note('B') }])
     expect(scaleDifferences(note('C'), 'pent', 'major')).toEqual([])
-  })
-})
-
-describe('scaleGaps', () => {
-  it('names the gaps between neighbouring notes up to the octave', () => {
-    expect(scaleGaps('major')).toEqual(['W', 'W', 'H', 'W', 'W', 'W', 'H'])
-    expect(scaleGaps('harmonic')).toEqual(['W', 'H', 'W', 'W', 'H', 'W+H', 'H'])
-    expect(scaleGaps('blues')).toEqual(['W+H', 'W', 'H', 'H', 'W+H', 'W'])
   })
 })
 
@@ -178,12 +166,16 @@ describe('the symmetric scales and the others', () => {
     expect(names(note('C'), kind).join(' ')).toBe(notes)
   })
 
-  it('steps by their gaps', () => {
-    expect(scaleGaps('wholeTone')).toEqual(['W', 'W', 'W', 'W', 'W', 'W'])
-    expect(scaleGaps('halfWhole')).toEqual(['H', 'W', 'H', 'W', 'H', 'W', 'H', 'W'])
-    expect(scaleGaps('wholeHalf')).toEqual(['W', 'H', 'W', 'H', 'W', 'H', 'W', 'H'])
-    expect(scaleGaps('chromatic')).toEqual(Array.from({ length: 12 }, () => 'H'))
-    expect(scaleGaps('hungarian')).toEqual(['W', 'H', 'W+H', 'H', 'H', 'W+H', 'H'])
+  it('steps by their gaps, in semitones up to the octave', () => {
+    const steps = (kind: ScaleKind) => {
+      const up = [...scaleIntervals(kind).map((interval) => interval.semitones), 12]
+      return up.slice(1).map((above, i) => above - (up[i] ?? 0))
+    }
+    expect(steps('wholeTone')).toEqual([2, 2, 2, 2, 2, 2])
+    expect(steps('halfWhole')).toEqual([1, 2, 1, 2, 1, 2, 1, 2])
+    expect(steps('wholeHalf')).toEqual([2, 1, 2, 1, 2, 1, 2, 1])
+    expect(steps('chromatic')).toEqual(Array.from({ length: 12 }, () => 1))
+    expect(steps('hungarian')).toEqual([2, 1, 3, 1, 1, 3, 1])
   })
 
   it('writes the symmetric scales with no signature, a bebop dominant in its Mixolydian’s', () => {

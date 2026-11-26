@@ -344,7 +344,7 @@ settings drawer"; v151's icon list "still not good. research more and look also 
 
 - Flowkey's tempo menu (`flowkey/09`): two short groups, "Learn at your own pace" (Wait Mode) and "Listen and play
   along" (50 % · 75 % · Original); nothing else.
-- Chordify (IMG_4552–4573): Transpose · Capo · Simplify in a strip over the music, tempo · volume · loop in the
+- Chordify (001–022): Transpose · Capo · Simplify in a strip over the music, tempo · volume · loop in the
   transport, everything rarer under ⋯ (setlist, view settings, share, export, song information).
 - Flat's Playback options (`flat-score-editor/05`): three rows, each a page.
 - Apple HIG (Settings, Sheets, Popovers, Toggles, Segmented controls): show only what applies now; most used first;

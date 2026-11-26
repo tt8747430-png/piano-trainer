@@ -1,4 +1,4 @@
-import { CHURCH_MODES, parseNumerals, type ChurchMode } from '@/shared/lib/music'
+import { CHURCH_MODES, type ChurchMode } from '@/shared/lib/music'
 
 /**
  * The libraries of Practice a learner keeps favourites in (R30-4): the exercises and the
@@ -43,10 +43,6 @@ export function ownProgressionName(name: string): string | null {
   const kept = name.trim()
   return kept.length > 0 && kept.length <= OWN_PROGRESSION_NAME_MAX ? kept : null
 }
-
-/** Whether a line of numerals reads (`parseNumerals`), at least one chord. */
-export const readsAsLine = (line: unknown): line is string =>
-  typeof line === 'string' && (parseNumerals(line)?.length ?? 0) > 0
 
 export const isChurchMode = (value: unknown): value is ChurchMode =>
   CHURCH_MODES.some((mode) => mode === value)

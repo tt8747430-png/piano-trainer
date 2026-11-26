@@ -4,7 +4,6 @@ import {
   selectRecorder,
   useSettings,
   useSettingsStoreApi,
-  type RecorderCountIn,
 } from '@/entities/settings'
 import { setRecorderClick, setRecorderCountIn } from '@/features/set-preference'
 import { Segmented } from '@/shared/ui'
@@ -39,7 +38,10 @@ export function RecordingChoices({ tempo, countdown }: { tempo: string; countdow
             value: String(bars),
             label: t(`recorderSettings.countIns.${bars}`),
           }))}
-          onChange={(bars) => setRecorderCountIn(settings, Number(bars) as RecorderCountIn)}
+          onChange={(bars) => {
+            const countIn = RECORDER_COUNT_INS.find((each) => String(each) === bars)
+            if (countIn !== undefined) setRecorderCountIn(settings, countIn)
+          }}
         />
       </div>
     </>

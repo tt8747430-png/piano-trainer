@@ -8,7 +8,15 @@ import {
   EXPRESSION_TEXT,
   EXPRESSIONS,
   DYNAMICS,
+  ENDINGS,
+  FINGERS,
+  isAccidental,
   isCompound,
+  isMidi,
+  isTempoUnit,
+  JUMPS,
+  LETTERS,
+  TREMOLO_STROKES,
   MULTI_REST,
   meterOf,
   numeralText,
@@ -21,14 +29,12 @@ import {
   type BarMarks,
   type Chord,
   type Clef,
-  type Dynamic,
   type Expression,
   type Finger,
   TICKS_PER_BEAT,
   type GraceNote,
   type Jump,
   type Key,
-  type Letter,
   type Meter,
   type Midi,
   type NoteLyrics,
@@ -37,7 +43,6 @@ import {
   type Ornament,
   type Pedal,
   type PedalEvent,
-  type TremoloStrokes,
   type SpelledNote,
   type Syllable,
   type TempoUnit,
@@ -163,8 +168,8 @@ export class NotAScoreError extends Error {
 }
 
 const STEPS: Readonly<Record<string, number>> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }
-const LOWEST: Midi = 21 as Midi
-const HIGHEST: Midi = 108 as Midi
+const LOWEST = 21
+const HIGHEST = 108
 
 const TYPE_VALUES: Readonly<Record<string, string>> = {
   whole: '1',
@@ -231,7 +236,7 @@ function normalWords(text: string): string {
 }
 
 const JUMP_BY_WORDS = new Map<string, Jump>(
-  Object.entries(JUMP_WORDS).map(([jump, { text }]) => [normalWords(text), jump as Jump]),
+  JUMPS.map((jump) => [normalWords(JUMP_WORDS[jump].text), jump]),
 )
 
 /** A score-timewise file's measures as partwise parts: each part's measures in order. */
@@ -268,7 +273,7 @@ function tempoUnitOf(metronome: XmlElement): TempoUnit | undefined {
   const value = TYPE_VALUES[textAt(metronome, 'beat-unit') ?? '']
   if (!value) return undefined
   const unit = `${value}${childOf(metronome, 'beat-unit-dot') ? '.' : ''}`
-  return ['2', '2.', '4', '4.', '8', '8.', '16'].includes(unit) ? (unit as TempoUnit) : undefined
+  return isTempoUnit(unit) ? unit : undefined
 }
 
 /** A tempo unit's length in quarters. */
@@ -560,8 +565,8 @@ export function readMusicXml(source: string): ReadScore {
               at += read.ticks
               break
             }
-            const midi = (read.midi + transpose) as Midi
-            if (midi < LOWEST || midi > HIGHEST) {
+            const midi = read.midi + transpose
+            if (!isMidi(midi) || midi < LOWEST || midi > HIGHEST) {
               leave('notes')
               if (!read.chord && !read.grace) at += read.ticks
               break
@@ -762,8 +767,8 @@ function readBarline(
   const ending = childOf(barline, 'ending')
   if (ending && ending.attrs.type === 'start') {
     const number = (ending.attrs.number ?? '').trim()
-    if (number === '1' || number === '2' || number === '3' || number === '4')
-      bar.ending = Number(number) as 1 | 2 | 3 | 4
+    const found = ENDINGS.find((each) => String(each) === number)
+    if (found) bar.ending = found
     else leave('endings')
   }
   if (childOf(barline, 'segno')) bar.segno = true
@@ -795,8 +800,8 @@ function readDirection(direction: XmlElement, read: DirectionReader) {
         case 'dynamics': {
           for (const each of child.children) {
             if (typeof each === 'string') continue
-            if ((DYNAMICS as readonly string[]).includes(each.name))
-              read.mark({ dynamic: each.name as Dynamic })
+            const dynamic = DYNAMICS.find((name) => name === each.name)
+            if (dynamic) read.mark({ dynamic })
             else read.leave('dynamics')
           }
           break
@@ -949,10 +954,12 @@ function readNote(
   const pitch = childOf(note, 'pitch')
   const step = pitch && textAt(pitch, 'step')
   const octave = pitch && numberAt(pitch, 'octave')
-  if (!pitch || !step || STEPS[step] === undefined || octave === undefined)
+  const letter = LETTERS.find((each) => each === step)
+  if (!pitch || !step || !letter || STEPS[step] === undefined || octave === undefined)
     return { kind: 'skip', ticks, chord, grace }
   const alter = Math.round(numberAt(pitch, 'alter') ?? 0)
-  const accidental = Math.max(-2, Math.min(2, alter)) as SpelledNote['accidental']
+  const clamped = Math.max(-2, Math.min(2, alter))
+  const accidental = isAccidental(clamped) ? clamped : 0
   const midi = (octave + 1) * 12 + (STEPS[step] ?? 0) + alter
   const marks: { -readonly [K in keyof NoteMarks]: NoteMarks[K] } = {}
   let finger: Finger | undefined
@@ -991,7 +998,7 @@ function readNote(
             if (each.name === 'tremolo' && each.attrs.type === 'stop') continue
             if (each.name === 'tremolo' && each.attrs.type === 'start') {
               const strokes = Math.min(3, Math.max(1, Number(textOf(each) || 3)))
-              marks.twoNoteTremolo = strokes as TremoloStrokes
+              marks.twoNoteTremolo = TREMOLO_STROKES.find((count) => count === strokes) ?? 3
               continue
             }
             const ornament =
@@ -1006,8 +1013,8 @@ function readNote(
           for (const each of child.children) {
             if (typeof each === 'string') continue
             const value = Number(textOf(each))
-            if (each.name === 'fingering' && value >= 1 && value <= 5 && finger === undefined)
-              finger = value as Finger
+            const fingered = FINGERS.find((one) => one === value)
+            if (each.name === 'fingering' && fingered && finger === undefined) finger = fingered
             else leftOut += 1
           }
           break
@@ -1060,7 +1067,7 @@ function readNote(
     grace,
     appoggiatura: grace && graceElement.attrs.slash !== 'yes',
     midi,
-    spelled: { letter: step as Letter, accidental },
+    spelled: { letter, accidental },
     ...(finger ? { finger } : {}),
     marks,
     lyrics,

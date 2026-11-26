@@ -1,5 +1,5 @@
 import type { StoreApi } from 'zustand/vanilla'
-import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
+import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
 import { NOTICE_KINDS, NOTICES_KEPT, type Notice, type NoticeKind } from './types'
 
 export const NOTIFICATIONS_STORAGE_KEY = 'pt-notifications'
@@ -24,8 +24,7 @@ export const createNotificationsStore = (saving: SavingOptions = {}): Notificati
     saving,
   )
 
-const isKind = (value: unknown): value is NoticeKind =>
-  typeof value === 'string' && (NOTICE_KINDS as readonly string[]).includes(value)
+const isKind = isOneOf<NoticeKind>(NOTICE_KINDS)
 
 function noticeOf(value: unknown): Notice | null {
   if (!isRecord(value)) return null

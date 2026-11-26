@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { ScrollText, Timer } from 'lucide-react'
+
 import { useTranslation } from 'react-i18next'
 import {
   BluetoothPairing,
@@ -9,7 +9,7 @@ import {
   useMidiLog,
 } from '@/features/connect-midi'
 import { selectMidi, useSettings } from '@/entities/settings'
-import { RowLink, SettingsGroup } from '@/shared/ui'
+import { GroupLink, SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /**
@@ -23,9 +23,7 @@ export function MidiSettingsPage() {
   const latency = useSettings((state) => selectMidi(state).latency)
   return (
     <SettingsScreen title={t('settings:pages.connectPiano')}>
-      <section aria-label={t('midi.label')} className="card px-5 py-4">
-        <MidiConnectionFields />
-      </section>
+      <MidiConnectionFields />
       <SettingsGroup
         title={t('midiSettings.devices.label')}
         info={t('midiSettings.devices.info')}
@@ -33,12 +31,10 @@ export function MidiSettingsPage() {
       >
         <MidiDeviceList />
       </SettingsGroup>
-      <SettingsGroup title={t('midiSettings.playing')}>
+      <SettingsGroup flush title={t('midiSettings.playing')}>
         <MidiPlayingFields />
-        <RowLink
-          title={t('midiSettings.timing.label')}
-          icon={Timer}
-          paint="sky"
+        <GroupLink
+          label={t('midiSettings.timing.label')}
           value={t('midiSettings.timing.value', { latency })}
           render={<Link to="/settings/connect-piano/timing" />}
         />
@@ -47,10 +43,8 @@ export function MidiSettingsPage() {
         <BluetoothPairing />
       </SettingsGroup>
       <SettingsGroup title={t('midiSettings.troubleshooting')} flush>
-        <RowLink
-          title={t('midiSettings.log.label')}
-          icon={ScrollText}
-          paint="sand"
+        <GroupLink
+          label={t('midiSettings.log.label')}
           value={t('midiSettings.log.count', { count: entries.length })}
           render={<Link to="/settings/connect-piano/log" />}
         />

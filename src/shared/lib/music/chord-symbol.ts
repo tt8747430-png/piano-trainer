@@ -1,11 +1,6 @@
-import {
-  CHORD_QUALITIES,
-  chordBass,
-  chordSymbol,
-  qualitySpellings,
-  type Chord,
-  type ChordQuality,
-} from './chord'
+import { chordBass, chordSymbol, kindOfParts, type Chord, type ChordKind } from './chord'
+import { readSuffixParts } from './chord-grammar'
+import { CHORD_QUALITIES, qualitySpellings, type ChordQuality } from './chord-quality'
 import { noteName, parseNoteName, type SpelledNote } from './note'
 
 export class ChordSymbolError extends Error {
@@ -30,6 +25,32 @@ const normalise = (suffix: string): string =>
 export const printedSymbol = (symbol: string): string =>
   symbol.replaceAll('#', '♯').replace(/(?<=[A-G])b|b(?=\d)/g, '♭')
 
+/** A chord's symbol as a chord sheet sets it: its root, its quality's letters, the numbers and alterations raised, its bass. */
+export interface SymbolParts {
+  /** `C`, `F♯`, `B♭`. */
+  readonly root: string
+  /** The quality's letters, on the line: `m`, `maj`, `dim`. */
+  readonly letters: string
+  /** Its numbers and alterations, raised: `7`, `7♭5`, `sus4`, `add9`; empty for none. */
+  readonly raised: string
+  /** The bass after its slash, `/G`; empty for none. */
+  readonly bass: string
+}
+
+/**
+ * A symbol in its parts as printed (`printedSymbol`), the reference apps' and the Real Book's
+ * setting: `C♯m7♭5/G` is C♯ · m · 7♭5 · /G, raised from the first number or alteration on.
+ */
+export function symbolParts(symbol: string): SymbolParts {
+  const [chord = '', bass = ''] = printedSymbol(symbol).split('/')
+  const root = /^[A-G][♯♭𝄪𝄫]*/u.exec(chord)?.[0] ?? ''
+  const quality = chord.slice(root.length)
+  const [, letters = '', raised = ''] = /^([a-zA-Z°ø+]*?)((?:[♯♭]?\d|\(|sus|add|alt).*)?$/u.exec(
+    quality,
+  ) ?? [quality, quality, '']
+  return { root, letters, raised, bass: bass ? `/${bass}` : '' }
+}
+
 /** A note's name as it is printed (`printedSymbol` of `noteName`): `C♯`, `B♭`. */
 export const printedNote = (spelled: SpelledNote): string => printedSymbol(noteName(spelled))
 
@@ -42,9 +63,17 @@ const QUALITY_BY_SUFFIX = new Map<string, ChordQuality>(
   ),
 )
 
-/** The chord a suffix writes, in any of its spellings (`m7b5`, `maj7`, none for major); null for one the table lacks. */
-export const readQualitySuffix = (suffix: string): ChordQuality | null =>
-  QUALITY_BY_SUFFIX.get(normalise(suffix)) ?? null
+/**
+ * The chord a suffix writes, in any of its spellings (`m7b5`, `maj7`, `9#11`, `7(#5,#9)`, none for
+ * major): the table's quality where the table has the chord, else the builder's parts, read by its
+ * grammar; null for a suffix neither reads.
+ */
+export function readQualitySuffix(suffix: string): ChordKind | null {
+  const quality = QUALITY_BY_SUFFIX.get(normalise(suffix))
+  if (quality) return quality
+  const parts = readSuffixParts(suffix)
+  return parts ? kindOfParts(parts) : null
+}
 
 /** Root lengths tried, longest first: `F##`, `Bbb` and `F𝄪` take three code units. */
 const ROOT_LENGTHS = [3, 2, 1]
@@ -68,7 +97,19 @@ export function parseChordSymbol(symbol: string): Chord {
   throw new ChordSymbolError(symbol)
 }
 
-/** A chord as a learner types it, spaces around it left out; null while it cannot be read (mid-word, a symbol the table lacks). */
+/**
+ * Chords a learner types in lower case (`dm7`, `c/e`, `dm7 g7 c`) as they are written: a word's
+ * leading a–g, and a bass's after its slash, in capitals. For a field or search that holds only
+ * chords; a chord sheet's lyrics keep their words.
+ */
+export function rootsInCapitals(typed: string): string {
+  return typed.replace(
+    /(^|[\s,|/])([a-g])/g,
+    (_, before: string, letter: string) => before + letter.toUpperCase(),
+  )
+}
+
+/** A chord as a learner types it, spaces around it left out; null while it cannot be read (mid-word, a chord the builder does not make). */
 export function readChordSymbol(typed: string): Chord | null {
   try {
     return parseChordSymbol(typed.trim())
@@ -90,11 +131,14 @@ export function chordsOfLine(text: string): readonly Chord[] | null {
   return chords.length > 0 && unread.length === 0 ? chords : null
 }
 
+/** A chord in a line: anything but a space, comma or bar line, and whatever its brackets hold (`C7(♭5,♭9)`). */
+const CHORD_WORD = /(?:[^\s,|(]|\([^)]*\)|\()+/g
+
 /** Reads `Dm7, G7 | C`: chords apart by spaces, commas or bar lines; a hyphen stays a chord's minus. */
 export function readChordLine(text: string): ChordLine {
   const chords: Chord[] = []
   const unread: string[] = []
-  for (const word of text.split(/[\s,|]+/).filter(Boolean)) {
+  for (const word of text.match(CHORD_WORD) ?? []) {
     const chord = readChordSymbol(word)
     if (chord) chords.push(chord)
     else unread.push(word)

@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { quantise, type Take } from '@/entities/take'
-import { barAt, type TakeInto } from '@/features/score-editor'
-import { MIDDLE_C, type Midi } from '@/shared/lib/music'
+import { barAt, draftPickup, type TakeInto } from '@/features/score-editor'
+import { barNumber, MIDDLE_C, type Midi } from '@/shared/lib/music'
 import { notate, singleStaff } from '@/shared/lib/notation'
-import { ConfirmDialog, Dropdown, NamedSegmented, SettingsGroup, SwitchRow } from '@/shared/ui'
+import { Dropdown, Labelled, sayUndo, Segmented, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { ScoreView } from '@/shared/ui/score'
 import { TakeRoll } from '@/widgets/take-roll'
@@ -14,7 +14,6 @@ import { gridKey, reviewGrids, reviewMusic } from '../model/review'
 import { TAKES_PAGE } from '../model/use-editor-takes'
 import { useStaffHeads } from '../model/use-staff-heads'
 import { useTakePlay } from '../model/use-take-play'
-import { SheetBack } from './SheetBack'
 import { TakeName } from './TakeName'
 
 /** The engraved result's size: a little under the sheet's. */
@@ -36,7 +35,11 @@ export function RecordReview({ take }: { take: Take }) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
   const key = useEditorState((state) => state.draft.key)
-  const fromBar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
+  const pickup = useEditorState((state) => draftPickup(state.draft))
+  const fromBar = barNumber(
+    useEditorState((state) => barAt(state.draft, state.caret).index),
+    pickup,
+  )
   const staves = useStaffHeads()
   const leadSheet = useEditorState((state) => state.draft.leadSheet)
   const layerName = useLayerName(staves)
@@ -47,7 +50,6 @@ export function RecordReview({ take }: { take: Take }) {
   const [raw, setRaw] = useState(true)
   const [split, setSplit] = useState<Midi>(MIDDLE_C)
   const [into, setInto] = useState<TakeInto>(leadSheet ? singleStaff(0) : 'both')
-  const [discarding, setDiscarding] = useState(false)
   const notes = useMemo(() => {
     const snapped = reviewGrids(take.meter).find((each) => gridKey(each) === chosen)
     return snapped ? quantise(take, snapped) : []
@@ -83,7 +85,6 @@ export function RecordReview({ take }: { take: Take }) {
   ]
   return (
     <div className="flex flex-col gap-4 pt-2">
-      <SheetBack onBack={() => takes.show(TAKES_PAGE)} />
       <TakeName take={take} />
       <section aria-label={t('review.result')} className="flex flex-col gap-2">
         <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-control border border-border bg-card p-2 scrollbar-none">
@@ -96,6 +97,7 @@ export function RecordReview({ take }: { take: Take }) {
         </div>
         <TakeRoll
           take={take}
+          pickup={pickup}
           playing={play.playing}
           onPlayFrom={play.playFrom}
           quantised={notes}
@@ -103,33 +105,48 @@ export function RecordReview({ take }: { take: Take }) {
           split={piano ? { key: split, onChange: setSplit } : undefined}
         />
       </section>
-      <NamedSegmented
-        label={t('review.quantize')}
-        value={chosen}
-        options={grids.map((each) => ({
-          value: gridKey(each),
-          label: gridName(gridKey(each)),
-          title: gridName(gridKey(each)),
-        }))}
-        onChange={setChosen}
-      />
+      <Labelled label={t('review.quantize')}>
+        <Segmented
+          label={t('review.quantize')}
+          value={chosen}
+          options={grids.map((each) => ({
+            value: gridKey(each),
+            label: gridName(gridKey(each)),
+            title: gridName(gridKey(each)),
+          }))}
+          onChange={setChosen}
+        />
+      </Labelled>
+      {/* Hide raw notes and Into in one group, as the board's GROUP: Into a row, its value at its end. */}
       <SettingsGroup flush>
         <SwitchRow
           label={t('review.hideRaw')}
           checked={!raw}
           onCheckedChange={(on) => setRaw(!on)}
         />
+        {intoGroups.reduce((count, group) => count + group.options.length, 0) > 1 ? (
+          <div className="flex min-h-14 items-center gap-3 py-1.5 ps-4 pe-2">
+            <span className="flex-1">{t('recorder.into.label')}</span>
+            <Dropdown
+              bare
+              label={t('recorder.into.label')}
+              value={into}
+              groups={intoGroups}
+              onChange={setInto}
+            />
+          </div>
+        ) : null}
       </SettingsGroup>
-      {intoGroups.reduce((count, group) => count + group.options.length, 0) > 1 ? (
-        <Dropdown
-          label={t('recorder.into.label')}
-          value={into}
-          groups={intoGroups}
-          onChange={setInto}
-        />
-      ) : null}
       <div className="grid grid-cols-2 gap-3">
-        <Button size="lg" variant="outline" onClick={() => setDiscarding(true)}>
+        <Button
+          size="lg"
+          variant="quiet"
+          onClick={() => {
+            const undo = takes.remove(take.id)
+            takes.show(TAKES_PAGE)
+            sayUndo(t('recorder.deleted'), undo)
+          }}
+        >
           {t('review.discard')}
         </Button>
         <Button
@@ -140,18 +157,6 @@ export function RecordReview({ take }: { take: Take }) {
           {t('review.save')}
         </Button>
       </div>
-      <ConfirmDialog
-        open={discarding}
-        onOpenChange={setDiscarding}
-        title={t('review.discardTitle')}
-        body={t('review.discardBody')}
-        action={t('review.discard')}
-        onConfirm={() => {
-          setDiscarding(false)
-          takes.remove(take.id)
-          takes.show(TAKES_PAGE)
-        }}
-      />
     </div>
   )
 }

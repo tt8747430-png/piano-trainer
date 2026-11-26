@@ -1,6 +1,6 @@
-import { useId } from 'react'
 import { cn } from '@/shared/lib'
-import { rowClass } from './row-class'
+import { useDisabledReason } from './disabled-reason'
+import { ROW_CLASS } from './row-class'
 
 /**
  * A row that does something (R24), as iOS's "Sign Out" and Settings' "Sync now" read: its label in
@@ -24,8 +24,7 @@ export function ActionRow({
   reason?: string | undefined
   danger?: boolean
 }) {
-  const id = useId()
-  const why = disabled ? reason : undefined
+  const greyed = useDisabledReason(disabled, reason)
   return (
     <button
       type="button"
@@ -33,16 +32,15 @@ export function ActionRow({
       data-danger={danger ? '' : undefined}
       onClick={onClick}
       disabled={disabled}
-      title={why}
-      aria-describedby={why ? id : undefined}
+      {...greyed.props}
       className={cn(
-        rowClass(false),
+        ROW_CLASS,
         'w-full text-left disabled:opacity-50 disabled:hover:bg-transparent',
       )}
     >
       <span
         className={cn(
-          'min-w-0 flex-1 text-lg leading-snug font-semibold text-pretty',
+          'min-w-0 flex-1 text-base leading-snug text-pretty',
           danger ? 'text-destructive' : 'text-link',
         )}
       >
@@ -53,11 +51,7 @@ export function ActionRow({
           {status}
         </span>
       ) : null}
-      {why ? (
-        <span id={id} hidden>
-          {why}
-        </span>
-      ) : null}
+      {greyed.note}
     </button>
   )
 }

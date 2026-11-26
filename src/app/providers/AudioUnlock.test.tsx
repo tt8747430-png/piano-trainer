@@ -3,11 +3,12 @@ import { describe, expect, it, onTestFinished } from 'vitest'
 import { createFakeAudio } from '@/shared/api/audio'
 import { ServicesProvider } from '@/shared/lib/services'
 import { AudioUnlock } from './AudioUnlock'
+import { createFakeArranger } from '@/shared/api/midi'
 
 function renderUnlock() {
   const audio = createFakeAudio()
   render(
-    <ServicesProvider services={{ audio, midi: null }}>
+    <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: null }}>
       <AudioUnlock />
     </ServicesProvider>,
   )

@@ -9,7 +9,6 @@ import { useShortcuts } from '@/shared/lib/shortcuts'
 import { PianoKeyboard } from '@/shared/ui'
 import { useSpacePedal } from '../model/use-space-pedal'
 import { useTyping } from '../model/use-typing'
-import type { DividerEdge } from './KeysDivider'
 import { KeysPlace } from './KeysPlace'
 
 /** A key plays itself unless the screen says otherwise. */
@@ -37,14 +36,18 @@ export function LiveKeyboard({
   spacePedal = true,
   namesKeys = true,
   showsSound = true,
-  divider,
+  typable = true,
+  floating,
+  height,
   ...keyboard
 }: Omit<
   ComponentProps<typeof PianoKeyboard>,
   'down' | 'keySize' | 'swipe' | 'namedKeys' | 'markNotes' | 'letters' | 'onKeyPress' | 'height'
 > & {
-  /** The divider that resizes the keys, on the side facing the music; none inside a card. */
-  divider?: DividerEdge | undefined
+  /** The keys in their floating window (`KeysPlace`), standing at this foot until moved; none inside a card. */
+  floating?: string | undefined
+  /** The keys' height where no divider sets it (a page's pinned keys, as the boards draw them); else a piano's proportion. */
+  height?: number | undefined
   /** What a tap means besides its sound: a quiz's choice, Wait mode's answer. */
   onKeyPress?: ((key: Midi) => void) | undefined
   /** The explorers' keyboards: the keys struck last go down, alone or together. */
@@ -52,20 +55,19 @@ export function LiveKeyboard({
   /** Space holds the pedal while typing plays the keys: off where the screen gives Space a job. */
   spacePedal?: boolean
   /**
-   * The keys carry their names as the learner chose: off where a key's name is the answer (a round
-   * played on the keys), whatever the setting.
+   * The keys carry their names as the learner chose: where a key's name is the answer (a round played
+   * on the keys), only each C's.
    */
   namesKeys?: boolean
   /** The keys the app sounds go down: off where what sounds is the question (a round by ear). */
   showsSound?: boolean
+  /** The computer's letters and Space play these keys: off for a page's many small keyboards (a lesson's). */
+  typable?: boolean
 }) {
-  const { typing, keySize, swipe, namedKeys, markNotes } = useSettings(selectKeyboard)
-  const settings = {
-    keySize,
-    swipe,
-    namedKeys: namesKeys ? namedKeys : ('none' as const),
-    markNotes,
-  }
+  const { typing, namedKeys } = useSettings(selectKeyboard)
+  // Where a key's name is the answer only the octaves' C stays named, as the Check board draws its
+  // keys, and none where the learner named none.
+  const settings = { namedKeys: namesKeys || namedKeys === 'none' ? namedKeys : ('c' as const) }
   const heard = useSoundingKeys(spotlight ? 'struck' : 'sounding')
   const sounding = showsSound ? heard : NOTHING
   const live = useSoundingKeys('live')
@@ -81,7 +83,7 @@ export function LiveKeyboard({
   const soundingRange = useMemo(() => rangeOf([...sounding, ...held]), [sounding, held])
   // Letters play only where there are letters to type: a setting synced from a laptop does nothing on
   // a phone, which has no way to turn it off (R29).
-  const typingPlays = typing && hasFinePointer()
+  const typingPlays = typable && typing && hasFinePointer()
   const typed = useTyping({
     enabled: typingPlays,
     onKey: play,
@@ -98,7 +100,7 @@ export function LiveKeyboard({
       { label: t('shortcuts.octave'), shown: ['Z', 'X'] },
       ...(spacePedal ? [{ label: t('shortcuts.pedal'), shown: ['Space'] }] : []),
     ],
-    { enabled: typing, scope: 'piano' },
+    { enabled: typable && typing, scope: 'piano' },
   )
   // A key the live voice sounds is down until its damper falls: held, or on under the pedal.
   const down = useMemo(
@@ -121,5 +123,5 @@ export function LiveKeyboard({
       onKeyRelease={letGo}
     />
   )
-  return divider === undefined ? keys(undefined) : <KeysPlace divider={divider}>{keys}</KeysPlace>
+  return floating === undefined ? keys(height) : <KeysPlace foot={floating}>{keys}</KeysPlace>
 }

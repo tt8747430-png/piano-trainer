@@ -8,35 +8,35 @@ const sheet = (props: Partial<Parameters<typeof HandsSheet>[0]> = {}) => (
   <HandsSheet open onOpenChange={vi.fn()} hands="both" onHands={vi.fn()} {...props} />
 )
 
-describe('HandsSheet', () => {
-  it('asks which hands the learner plays, in the keys’ order, the chosen one checked (R36)', () => {
+describe('HandsSheet, the Parts sheet (loop round 24)', () => {
+  it('has a card for each hand, the right first, each switched on where it is played', () => {
     renderWithSettings(sheet({ hands: 'rh' }))
-    expect(screen.getByRole('dialog', { name: 'Which hands do you play?' })).toBeInTheDocument()
-    expect(screen.getAllByRole('radio').map((radio) => radio.textContent)).toEqual([
-      'Left',
-      'Both',
-      'Right',
+    expect(screen.getByRole('dialog', { name: 'Parts' })).toBeInTheDocument()
+    expect(screen.getAllByRole('group').map((group) => group.getAttribute('aria-label'))).toEqual([
+      'Right hand',
+      'Left hand',
     ])
-    expect(screen.getByRole('radio', { name: 'Right' })).toBeChecked()
+    expect(screen.getByRole('switch', { name: 'Right hand: you play it' })).toBeChecked()
+    expect(screen.getByRole('switch', { name: 'Left hand: you play it' })).not.toBeChecked()
   })
 
-  it('chooses a hand', async () => {
+  it('switches a hand off, and switching the last one off turns the other on', async () => {
     const user = userEvent.setup()
     const onHands = vi.fn()
     renderWithSettings(sheet({ onHands }))
-    await user.click(screen.getByRole('radio', { name: 'Left' }))
-    expect(onHands).toHaveBeenCalledWith('lh')
+    await user.click(screen.getByRole('switch', { name: 'Left hand: you play it' }))
+    expect(onHands).toHaveBeenLastCalledWith('rh')
   })
 
-  it('offers Hear the other hand once one hand is chosen', async () => {
+  it('dims the staff of the hand not played, from its own card', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = renderWithSettings(sheet({ hands: 'lh' }))
-    await user.click(screen.getByRole('switch', { name: 'Hear the other hand' }))
-    expect(settingsStore.getState().otherHand.play).toBe(false)
+    const { settingsStore } = renderWithSettings(sheet({ hands: 'rh' }))
+    await user.click(screen.getByRole('switch', { name: 'Dim' }))
+    expect(settingsStore.getState().otherHand.look).toBe('show')
   })
 
-  it('has no other hand to hear where both are played', () => {
-    renderWithSettings(sheet({ hands: 'both' }))
-    expect(screen.queryByRole('switch', { name: 'Hear the other hand' })).not.toBeInTheDocument()
+  it('sets each hand’s volume on its staff', () => {
+    renderWithSettings(sheet())
+    expect(screen.getAllByRole('slider')).toHaveLength(2)
   })
 })

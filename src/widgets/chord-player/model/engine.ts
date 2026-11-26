@@ -2,7 +2,16 @@ import { DEFAULT_SHEET_SETTINGS, type ChordSheetSettings } from '@/entities/chor
 import { variationParts, type Style } from '@/entities/pattern'
 import { PLAY_DELAY, type AudioOutput, type PlayHandle } from '@/shared/api/audio'
 import {
+  MIDI_DIVISION,
+  noteEvents,
+  standardMidiFile,
+  type MidiNote,
+  type MidiTrack,
+  type TimedMidiEvent,
+} from '@/shared/lib'
+import {
   arrangeStyle,
+  NO_MARKS,
   type Band,
   type ChordSheet,
   type DrumVoice,
@@ -13,10 +22,13 @@ import {
   beatsPerBar,
   beatsToTicks,
   C_MAJOR,
+  isCompound,
+  meterParts,
   TICKS_PER_BEAT,
   type Tick,
 } from '@/shared/lib/music'
-import { SWING_SHARE, type KitPiece, type Sound } from '@/shared/lib/schedule'
+import { gainVelocity, SWING_SHARE, type KitPiece, type Sound } from '@/shared/lib/schedule'
+import type { Ticker } from '@/shared/lib/ticker'
 
 /** What the transport plays, read again before each chord: an edit lands at the next one. */
 export interface PlayPlan {
@@ -28,9 +40,6 @@ export interface PlayPlan {
   readonly block?: boolean
 }
 
-/** Starts a clock that calls `onTick` every so often, even in a hidden tab; returns what stops it. */
-export type Ticker = (onTick: () => void) => () => void
-
 /** A box: its section and its index there. */
 export interface BoxPlace {
   readonly section: number
@@ -40,13 +49,15 @@ export interface TransportState {
   readonly playing: boolean
   /** The box sounding now (lit), while it plays. */
   readonly lit: BoxPlace | null
+  /** The beat of its bar sounding now, from 0, while it plays: the bar's tick lit. */
+  readonly beat: number | null
 }
 
 /** How far ahead a chord is queued. */
 const LOOKAHEAD = 0.1
 /** Stop fades the sound over this many beats. */
 const FADE_BEATS = 2
-/** The sheet's last chord rings this long when it does not repeat. */
+/** The sheet's last chord rings this long after its last time through. */
 const TAIL = 3
 /** Notes release a little early, so a chord struck again is heard twice. */
 const LEGATO = 0.95
@@ -175,6 +186,105 @@ function arranged(plan: PlayPlan, last: Arranged | null): Arranged {
   }
 }
 
+/** General MIDI's drum keys (channel 10), voice for voice. */
+const DRUM_KEYS: Readonly<Record<DrumVoice, number>> = {
+  kick: 36,
+  snare: 38,
+  rim: 37,
+  hatClosed: 42,
+  hatOpen: 46,
+  hatPedal: 44,
+  ride: 51,
+  rideBell: 53,
+  crash: 49,
+  tomHigh: 50,
+  tomMid: 47,
+  tomFloor: 43,
+}
+/** General MIDI's programs (from 0) for the band's bass. */
+const BASS_PROGRAMS: Readonly<Record<Style['bass'], number>> = {
+  bassUpright: 32,
+  bassElectric: 33,
+}
+/** The band's channels: the piano, the bass, and General MIDI's drums (channel 10: 9 from 0). */
+const PIANO_CHANNEL = 0
+const BASS_CHANNEL = 1
+const DRUM_CHANNEL = 9
+/** A drum hit's length in the file: a 16th. */
+const HIT_TICKS = MIDI_DIVISION / 4
+
+/** The tracks' names in the learner's language. */
+export interface BandNames {
+  readonly piano: string
+  readonly bass: string
+  readonly drums: string
+}
+
+/**
+ * The sheet once through as the band plays it, a Standard MIDI File: the meter and tempo's track,
+ * then the piano, the bass and the drums each on its own, a part turned off in Settings left out.
+ * The piano's swing is written in, as the transport plays it.
+ */
+export function bandMidi(plan: PlayPlan, title: string, names: BandNames): Uint8Array<ArrayBuffer> {
+  const { band, style } = arranged(plan, null)
+  const compound = isCompound(plan.sheet.meter)
+  // A compound meter's beat is a dotted quarter.
+  const click = compound ? 1.5 : 1
+  const fileTick = (tick: number) => Math.round((tick * MIDI_DIVISION * click) / TICKS_PER_BEAT)
+  const end = fileTick(band.totalTicks)
+  const { count, unit } = meterParts(plan.sheet.meter)
+  const playing = (part: keyof Pick<ChordSheetSettings, 'piano' | 'bass' | 'drums'>) =>
+    plan.settings[part].on && plan.settings[part].level > 0
+  const track = (name: string, events: readonly TimedMidiEvent[]): MidiTrack => ({
+    events: [{ tick: 0, kind: 'name', text: name }, ...events],
+    end,
+  })
+  // Swing works beat by beat, and every bar starts on a beat.
+  const pianoTick = (tick: Tick) => (style.swing ? swung(tick) : tick)
+  const piano: MidiNote[] = (band.piano?.notes ?? []).flatMap((note) =>
+    note.silent === true
+      ? []
+      : [
+          {
+            key: note.midi,
+            on: fileTick(pianoTick(note.startTick)),
+            off: fileTick(
+              pianoTick(Math.min(note.startTick + note.durationTicks, band.totalTicks)),
+            ),
+            velocity: gainVelocity(note.velocity),
+          },
+        ],
+  )
+  const bass: MidiNote[] = band.bass.map((note) => ({
+    key: note.midi,
+    on: fileTick(note.startTick),
+    off: fileTick(Math.min(note.startTick + note.durationTicks, band.totalTicks)),
+    velocity: gainVelocity(note.velocity),
+  }))
+  const drums: MidiNote[] = band.drums.map((hit) => ({
+    key: DRUM_KEYS[hit.voice],
+    on: fileTick(hit.tick),
+    off: fileTick(hit.tick) + HIT_TICKS,
+    velocity: Math.min(127, Math.max(1, Math.round(127 * hit.velocity))),
+  }))
+  return standardMidiFile([
+    track(title, [
+      { tick: 0, kind: 'time', count, unit, click },
+      { tick: 0, kind: 'tempo', quarters: plan.tempo * click },
+    ]),
+    ...(playing('piano') ? [track(names.piano, noteEvents(piano, PIANO_CHANNEL))] : []),
+    ...(playing('bass')
+      ? [
+          track(names.bass, [
+            { tick: 0, kind: 'program', channel: BASS_CHANNEL, program: BASS_PROGRAMS[style.bass] },
+            ...noteEvents(bass, BASS_CHANNEL),
+          ]),
+        ]
+      : []),
+    ...(playing('drums') ? [track(names.drums, noteEvents(drums, DRUM_CHANNEL))] : []),
+  ])
+}
+
 /** How loud a sound is in the plan's mix: its part's level, or none where the part is off, times the volume. */
 export function mixGain(settings: ChordSheetSettings, sound: Sound): number {
   const part =
@@ -206,20 +316,29 @@ export function createChordEngine({
   plan: () => PlayPlan
   onChange?: () => void
 }) {
-  let state: TransportState = { playing: false, lit: null }
+  let state: TransportState = { playing: false, lit: null, beat: null }
   let cache: Arranged | null = null
   let stopTicker: (() => void) | null = null
   /** The next window to queue, by its bar in play order and its start in that bar, in beats. */
   let next: { bar: number; beat: number } | null = null
   let nextAt = 0
   let loop: number | null = null
-  let queued: { at: number; box: BoxPlace; handle: PlayHandle }[] = []
+  /** Each window queued: when it sounds, its box, its first beat in its bar and a beat's seconds. */
+  let queued: { at: number; box: BoxPlace; beat: number; perBeat: number; handle: PlayHandle }[] =
+    []
   let fading: { from: number; seconds: number } | null = null
   let ending: number | null = null
+  /** The times through the sheet finished in this run. */
+  let pass = 0
 
   const set = (change: Partial<TransportState>) => {
     const changed = { ...state, ...change }
-    if (changed.playing === state.playing && sameBox(changed.lit, state.lit)) return
+    if (
+      changed.playing === state.playing &&
+      sameBox(changed.lit, state.lit) &&
+      changed.beat === state.beat
+    )
+      return
     state = changed
     onChange()
   }
@@ -237,7 +356,7 @@ export function createChordEngine({
     queued = []
     fading = null
     ending = null
-    set({ playing: false, lit: null })
+    set({ playing: false, lit: null, beat: null })
   }
 
   /** The bars a pass may play: the whole sheet's, or the looped section's. */
@@ -268,12 +387,19 @@ export function createChordEngine({
       if (!window) return finish()
       const seconds = (ticks: Tick) => (ticks * 60) / (current.tempo * TICKS_PER_BEAT)
       const isLast = window.bar === last && windows.at(-1) === window && loop === null
-      const ringing = isLast && !current.settings.repeat
+      const plays = current.settings.plays
+      const ringing = isLast && plays > 0 && pass >= plays - 1
       const sounds = windowSounds(band, window, seconds, current.style.swing, ringing ? TAIL : 0)
       const handle = audio.play(sounds, nextAt, gain)
       queued = [
         ...queued.filter((each) => each.at > audio.now() - 10),
-        { at: nextAt, box: window.box, handle },
+        {
+          at: nextAt,
+          box: window.box,
+          beat: (window.from - (band.bars[window.bar]?.startTick ?? 0)) / TICKS_PER_BEAT,
+          perBeat: seconds(TICKS_PER_BEAT),
+          handle,
+        },
       ]
       const length = seconds(window.to - window.from)
       const following = windows[windows.indexOf(window) + 1]
@@ -284,7 +410,10 @@ export function createChordEngine({
       } else if (following && following.bar <= last) {
         const barStart = band.bars[following.bar]?.startTick ?? 0
         next = { bar: following.bar, beat: (following.from - barStart) / TICKS_PER_BEAT }
-      } else next = { bar: first, beat: 0 }
+      } else {
+        if (window.bar === last) pass += 1
+        next = { bar: first, beat: 0 }
+      }
     }
   }
 
@@ -304,12 +433,17 @@ export function createChordEngine({
     if (ending !== null && now >= ending) return finish()
     queue()
     const sounding = queued.findLast((each) => each.at <= now + 1e-9) ?? queued[0]
-    set({ lit: sounding?.box ?? null })
+    set({
+      lit: sounding?.box ?? null,
+      beat: sounding
+        ? sounding.beat + Math.floor(Math.max(0, now - sounding.at) / sounding.perBeat)
+        : null,
+    })
   }
 
   return {
-    /** Plays from the top, or from the looped section's first bar, round and round. */
-    play({ loop: section = null }: { loop?: number | null } = {}) {
+    /** Plays from the top, the looped section's first bar, or a chord (Play from here), round and round. */
+    play({ loop: section = null, from }: { loop?: number | null; from?: BoxPlace } = {}) {
       if (stopTicker) finish()
       void audio.unlock()
       audio.stop()
@@ -317,26 +451,32 @@ export function createChordEngine({
       const current = plan()
       cache = arranged(current, cache)
       const { first } = range(cache.band.bars)
-      next = { bar: first, beat: 0 }
-      const start = audio.now() + PLAY_DELAY
-      nextAt = start
+      const start = from ? cache.windows.find((each) => sameBox(each.box, from)) : undefined
+      next = start
+        ? {
+            bar: start.bar,
+            beat: (start.from - (cache.band.bars[start.bar]?.startTick ?? 0)) / TICKS_PER_BEAT,
+          }
+        : { bar: first, beat: 0 }
+      const at = audio.now() + PLAY_DELAY
+      nextAt = at
       if (current.settings.countIn) {
         const beats = beatsPerBar(current.sheet.meter)
         const bar = (barTicks(current.sheet.meter) * 60) / (current.tempo * TICKS_PER_BEAT)
-        const clicks: Sound[] = Array.from({ length: beats }, (_, i) => ({
-          kind: 'click',
-          at: (i * bar) / beats,
-          accent: i === 0,
-        }))
-        audio.play(clicks, start, gain)
-        nextAt = start + bar
+        const clicks: Sound[] = Array.from(
+          { length: beats * current.settings.countIn },
+          (_, i) => ({ kind: 'click', at: (i * bar) / beats, accent: i % beats === 0 }),
+        )
+        audio.play(clicks, at, gain)
+        nextAt = at + bar * current.settings.countIn
       }
       fading = null
       ending = null
+      pass = 0
       queued = []
-      state = { playing: true, lit: null }
+      state = { playing: true, lit: null, beat: null }
       queue()
-      set({ playing: true, lit: queued[0]?.box ?? null })
+      set({ playing: true, lit: queued[0]?.box ?? null, beat: queued[0]?.beat ?? null })
       stopTicker = ticker(tick)
     },
     /** Stops: the sound fades over two beats, then is silenced. */
@@ -345,7 +485,7 @@ export function createChordEngine({
       const tempo = plan().tempo
       fading = { from: audio.now(), seconds: (FADE_BEATS * 60) / tempo }
       next = null
-      set({ playing: false, lit: null })
+      set({ playing: false, lit: null, beat: null })
     },
     /** Loops a section (its index), or the whole sheet again (null), from the next chord on. */
     loop(section: number | null) {
@@ -359,7 +499,6 @@ export function createChordEngine({
     },
   }
 }
-export type ChordEngine = ReturnType<typeof createChordEngine>
 
 const sameBox = (a: BoxPlace | null, b: BoxPlace | null) =>
   a === b || (a !== null && b !== null && a.section === b.section && a.index === b.index)
@@ -374,8 +513,13 @@ export function styleBar(style: Style): Sound[] {
         kind: 'verse',
         repeats: 1,
         variation: 1,
-        chords: [
-          { chord: { root: C_MAJOR.tonic, quality: 'maj' }, beats: beatsPerBar(style.meter) },
+        marks: NO_MARKS,
+        bars: [
+          {
+            chords: [
+              { chord: { root: C_MAJOR.tonic, quality: 'maj' }, beats: beatsPerBar(style.meter) },
+            ],
+          },
         ],
       },
     ],
@@ -391,16 +535,4 @@ export function styleBar(style: Style): Sound[] {
       at: sound.at + seconds(window.from),
     })),
   )
-}
-
-/** A clock in a Worker, ticking every 50 ms: a hidden tab throttles a page's timers, not a worker's. */
-export const workerTicker: Ticker = (onTick) => {
-  const source = 'setInterval(() => postMessage(0), 50)'
-  const url = URL.createObjectURL(new Blob([source], { type: 'text/javascript' }))
-  const worker = new Worker(url)
-  worker.onmessage = () => onTick()
-  return () => {
-    worker.terminate()
-    URL.revokeObjectURL(url)
-  }
 }

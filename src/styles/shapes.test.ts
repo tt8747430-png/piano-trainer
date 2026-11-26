@@ -5,7 +5,21 @@ import { describe, expect, it } from 'vitest'
 const SRC = resolve(import.meta.dirname, '..')
 
 /** The shape scale (R14, DESIGN.md Shapes): the only corners a class may name. */
-const SCALE = ['control', 'card', 'sheet', 'pill', 'key-black', 'key-white', 'none', '[inherit]']
+const SCALE = [
+  'control',
+  'card',
+  'sheet',
+  'pill',
+  'key-black',
+  'key-white',
+  'thumb',
+  'menu',
+  'tile',
+  'mark',
+  'keys',
+  'none',
+  '[inherit]',
+]
 
 /**
  * Where a one-off may stand: the shadcn primitives keep their own classes, which `theme.css` maps

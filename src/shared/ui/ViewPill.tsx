@@ -14,7 +14,7 @@ export interface PillView<V extends string> {
 
 /**
  * A screen's views as one pill in its bar's middle (the Player's canvas: Sheet · Diagrams · Grid ·
- * Lyrics): the one shown filled in ink; each a picture on a phone, named by its tooltip and to a
+ * Lyrics, PlayerDesk; the editor's Play · Edit): a glass pill of 44 segments at 15, a picture's as wide as its word and 18 a side, a word alone's 65 (Editor's Play · Edit) or its word and 8 a side, the one shown filled in ink; each a picture on a phone, named by its tooltip and to a
  * screen reader, its word from 640px. A view the music cannot show is greyed, saying why. A radio
  * group: the arrows move to a view and show it.
  */
@@ -37,7 +37,7 @@ export function ViewPill<V extends string>({
         const picked = views.find((view) => view.value === next)
         if (picked && picked.value !== value) onChange(picked.value)
       }}
-      className="flex items-center gap-0.5 rounded-pill border border-border bg-card p-1 elevation-1"
+      className="flex items-center rounded-pill glass"
     >
       {views.map(({ value: each, label: name, icon: Icon, reason }) => (
         <Radio.Root
@@ -47,14 +47,14 @@ export function ViewPill<V extends string>({
           title={reason ?? name}
           disabled={reason !== undefined}
           className={cn(
-            'inline-flex h-9 min-w-11 cursor-default items-center justify-center gap-2 rounded-pill px-3 text-sm font-semibold whitespace-nowrap text-foreground transition-colors duration-200 ease-out select-none',
-            'relative before:absolute before:inset-x-0 before:-inset-y-1 before:content-[""]',
-            'hover:bg-muted data-checked:bg-foreground data-checked:text-background data-disabled:opacity-40',
-            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+            'inline-flex h-11 min-w-11 cursor-default items-center justify-center gap-2 rounded-pill text-subhead font-medium whitespace-nowrap text-muted-foreground transition-colors duration-200 ease-out select-none',
+            'hover:not-data-checked:text-foreground data-checked:bg-foreground data-checked:font-semibold data-checked:text-background data-disabled:opacity-50',
+            // A view's word from 640px: 18 a side, at least 76 (PlayerDesk's Grid and Lyrics).
+            Icon ? 'px-3.5 sm:min-w-19 sm:px-4.5' : 'min-w-16.25 px-2',
           )}
         >
           {Icon ? <Icon aria-hidden className="size-5 sm:hidden" /> : null}
-          <span className={Icon ? 'max-sm:hidden' : 'px-1'}>{name}</span>
+          <span className={Icon ? 'max-sm:hidden' : undefined}>{name}</span>
         </Radio.Root>
       ))}
     </RadioGroup>

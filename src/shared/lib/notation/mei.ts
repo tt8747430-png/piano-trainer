@@ -1,4 +1,5 @@
 import {
+  barNumber,
   EXPRESSION_TEXT,
   keySignature,
   meterOf,
@@ -17,6 +18,7 @@ import {
   CLEF_FORMS,
   tempoMark,
   SWING_TEXT,
+  symbolParts,
   tremoloStrokes,
   unitNote,
 } from '@/shared/lib/music'
@@ -37,7 +39,7 @@ import { ticksOf } from './values'
 export const pedalId = (tick: number): string => `ped-${tick}`
 
 /** What a Score is written as besides its music. */
-export interface MeiOptions {
+interface MeiOptions {
   /** Its title, in the header (a page's). */
   readonly title?: string
   /** The staves drawn, of those it writes, top down: every one by default. */
@@ -181,6 +183,16 @@ const JUMP_TEXT: Readonly<Record<Jump, string>> = {
   ds: 'D.S.',
   'ds-fine': 'D.S. al Fine',
   'ds-coda': 'D.S. al Coda',
+}
+
+/**
+ * A chord symbol as the score prints it, as `ChordText` sets one in a line: its accidentals as
+ * signs, its numbers and alterations raised (`G⁷`, `C♯m⁷♭⁵`), its bass after the slash on the line.
+ */
+const harmText = (symbol: string): string => {
+  const { root, letters, raised, bass } = symbolParts(symbol)
+  const up = raised ? `<rend rend="sup">${escape(raised)}</rend>` : ''
+  return `${escape(root + letters)}${up}${escape(bass)}`
 }
 
 const escape = (text: string) =>
@@ -365,7 +377,7 @@ class Writer {
       resting > 1 ? `<multiRest num="${resting}"/>` : repeatSign(this.score.measures, index)
     const attrs = [
       `xml:id="m-${index}"`,
-      `n="${index + 1}"`,
+      `n="${barNumber(index, this.score.pickup === true)}"`,
       last.barline ? `right="${RIGHT[last.barline]}"` : '',
       measure.repeatStart ? 'left="rptstart"' : '',
     ].filter(Boolean)
@@ -392,7 +404,7 @@ class Writer {
     if (this.options.chordSymbols)
       for (const chord of measure.chords)
         controls.push(
-          `<harm staff="${top}" tstamp="${at(chord.tick)}">${escape(chord.symbol)}</harm>`,
+          `<harm staff="${top}" tstamp="${at(chord.tick)}">${harmText(chord.symbol)}</harm>`,
         )
     // The pedal on the lowest staff (ADR 0097), each event where it stands: between notes, over a
     // rest, after the last note; named by its tick, so the Player marks the one it plays under (A27).
@@ -512,8 +524,7 @@ class Writer {
       const noteId = `n-${staff}-${event.tick}-${i}`
       if (this.options.fingers && written.finger !== undefined)
         controls.push(
-          // A crossing's finger is typed, so the engraving's class marks it for the accent colour.
-          `<fing startid="#${noteId}" place="${below ? 'below' : 'above'}"${written.crossing ? ' type="crossing"' : ''}>${written.finger}</fing>`,
+          `<fing startid="#${noteId}" place="${below ? 'below' : 'above'}">${written.finger}</fing>`,
         )
       const attrs = [
         `xml:id="${noteId}"`,
@@ -526,6 +537,11 @@ class Writer {
             : '',
         single ? `${dur}${stem}${tremolo(marks?.ornament)}` : '',
         tie ? `tie="${tie}"` : '',
+        // Drawn on the piano's other staff (ADR 0114): Verovio's cross-staff note.
+        written.cross ? `staff="${this.number(staff === 'treble' ? 'bass' : 'treble')}"` : '',
+        // A chord tone is typed by its role, so the engraving's class paints its notehead, which is
+        // solid whatever its value, as the canvas draws a chord's tones.
+        written.role ? `type="role-${written.role}" head.fill="solid"` : '',
       ].filter(Boolean)
       return `<note ${attrs.join(' ')}${single && inside ? `>${inside}</note>` : '/>'}`
     })

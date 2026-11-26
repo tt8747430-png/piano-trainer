@@ -1,4 +1,4 @@
-import { Bell, Music, Piano, Plus, Settings, SunMoon } from 'lucide-react'
+import { Bell, Inbox, Music, Plus, Settings, SunMoon } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -6,17 +6,18 @@ import {
   ChoiceChips,
   ChoiceRow,
   Dropdown,
+  KeysIcon,
   ProgressMeter,
   ProgressRing,
   RoundButton,
   RowButton,
+  Said,
   Segmented,
   SettingsGroup,
   SwitchRow,
   TileMark,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 
 /** A kind of component, its examples on one card. */
 function Kind({ title, children }: { title: string; children: ReactNode }) {
@@ -110,18 +111,16 @@ export function ComponentsTab() {
           />
         </div>
         <ProgressRing share={0.6}>
-          <Piano aria-hidden className="size-5" />
+          <KeysIcon aria-hidden className="size-5" />
         </ProgressRing>
       </Kind>
       <Kind title={t('components.feedback')}>
-        <Empty className="w-full">
-          <EmptyHeader>
-            <EmptyTitle>{t('components.empty')}</EmptyTitle>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button>{t('components.primary')}</Button>
-          </EmptyContent>
-        </Empty>
+        <Said
+          icon={Inbox}
+          title={t('components.empty')}
+          primary
+          action={<Button>{t('components.primary')}</Button>}
+        />
       </Kind>
     </div>
   )

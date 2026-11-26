@@ -4,11 +4,10 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { C_MAJOR, keyParam } from '@/shared/lib/music'
-import { BackButton, ScreenHeader, type MenuAction } from '@/shared/ui'
+import { BackButton, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { NewProgressionSheet } from '@/widgets/content-editor'
 import { PracticeLibrary, useArrangeMode, useLibraryNew } from '@/widgets/practice-library'
-import { SettingsGear } from '@/widgets/practice-pages'
 import { KeepProgressionSheet } from '@/widgets/progression-explorer'
 import { useProgressionLibrary } from '../model/use-progression-library'
 
@@ -25,11 +24,11 @@ type Open = 'none' | 'mine' | 'library'
  * a phone, New ▾ in the bar on a laptop (canvas 169).
  */
 export function ProgressionsPage() {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'music'])
   const view = useSearch({ from: '/shell/practice/progressions' })
   const { account } = useAccount()
   const navigate = useNavigate()
-  const { groups, items } = useProgressionLibrary()
+  const { groups, items } = useProgressionLibrary(view.mode)
   const { editing, edit } = useArrangeMode()
   const [open, setOpen] = useState<Open>('none')
   const editor = editsContent(account)
@@ -44,24 +43,28 @@ export function ProgressionsPage() {
       onSelect: () => setOpen('library'),
     },
   ]
-  const made = useLibraryNew('progressions', creates)
+  const newDial = useLibraryNew('progressions', creates)
   return (
     <div className="flex flex-col gap-4 pb-4">
-      <ScreenHeader
-        title={t('pages.progressions')}
-        back={<BackButton />}
-        edit={edit}
-        tools={editing ? undefined : made.menu}
-        settings={<SettingsGear page="progressions" />}
-      />
       <PracticeLibrary
+        header={{
+          large: true,
+          title: t('pages.progressions'),
+          back: <BackButton />,
+          edit,
+        }}
         kind="progressions"
         view={view}
         items={items}
         groups={groups}
         groupWord="style"
         levels={false}
-        extra={t('library.table.numerals')}
+        columns={{
+          name: t('library.table.name'),
+          second: t('library.table.numerals'),
+          third: t('music:key.label'),
+          shares: [2, 3, 0.6],
+        }}
         mine={{
           empty: (
             <Button variant="soft" onClick={newMine}>
@@ -73,7 +76,7 @@ export function ProgressionsPage() {
         screen={t('pages.progressions')}
         editing={editing}
       />
-      {editing ? null : made.dial}
+      {editing ? null : newDial}
       {open === 'mine' ? (
         <KeepProgressionSheet
           open

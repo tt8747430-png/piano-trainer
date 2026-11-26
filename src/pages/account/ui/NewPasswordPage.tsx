@@ -6,7 +6,7 @@ import { FormField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { passwordProblem } from '../model/fields'
 import { useAuthSubmit } from '../model/use-auth-submit'
-import { AccountScreen, FieldGroup, OfflineLine, ProblemLine } from './AccountScreen'
+import { AccountScreen, OfflineLine, ProblemLine } from './AccountScreen'
 
 /** New password (ADR 0116): opened by a reset link, signed in by it; the new password saved. */
 export function NewPasswordPage() {
@@ -35,7 +35,7 @@ export function NewPasswordPage() {
         <>
           <OfflineLine online={online} />
           <form noValidate onSubmit={(event) => void submit(event)} className="flex flex-col gap-4">
-            <FieldGroup>
+            <>
               <FormField
                 label={t('password')}
                 info={t('signUp.passwordInfo')}
@@ -45,7 +45,7 @@ export function NewPasswordPage() {
                 onChange={(event) => setPassword(event.target.value)}
                 error={invalid ? t('invalid.password') : undefined}
               />
-            </FieldGroup>
+            </>
             <ProblemLine problem={problem} />
             <Button type="submit" size="lg" disabled={!online || busy}>
               {t('newPassword.submit')}

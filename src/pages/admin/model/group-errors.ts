@@ -2,7 +2,7 @@ import type { ErrorEntry } from '@/shared/api/admin'
 import { feedbackText } from '@/shared/lib/error-reports'
 
 /** The reports of one message: how many, on how many screens, and the latest of them. */
-export interface ErrorGroup {
+interface ErrorGroup {
   readonly message: string
   readonly count: number
   /** How many screens (paths) it happened on. */

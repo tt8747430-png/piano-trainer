@@ -13,7 +13,7 @@ import type { PracticeView } from '@/widgets/practice-player'
 import { ownLeftOut } from './own-left-out'
 
 /** A piece's own choices as the Player's URL holds them: its Setup's, and its version (R29 B8). */
-export type PieceParams = SetupParams & { readonly version?: SongVersion }
+type PieceParams = SetupParams & { readonly version?: SongVersion }
 
 /**
  * The Player's URL: how it goes, and the piece's own choices, Simplify on or off (ADR

@@ -1,4 +1,5 @@
-import { qualityWithIntervals, type Chord, type ChordQuality } from './chord'
+import { type Chord } from './chord'
+import { qualityWithIntervals, type ChordQuality } from './chord-quality'
 import { seventhName, triadName } from './chord-name'
 import { labelled } from './interval'
 import type { Key } from './key'
@@ -31,10 +32,6 @@ export const SIZE_NOTES: Readonly<Record<ChordSize, 3 | 4 | 5>> = {
   sevenths: 4,
   ninths: 5,
 }
-
-/** The chord size nearest a stack's notes: 9ths for anything larger. */
-export const sizeOfNotes = (notes: ChordNotes): ChordSize =>
-  notes === 3 ? 'triads' : notes === 4 ? 'sevenths' : 'ninths'
 
 /** A chord of a scale: its notes stacked in thirds from one degree. */
 export interface ScaleChord {
@@ -146,7 +143,7 @@ export function scaleChordAt(
   kind: ScaleKind,
   degree: number,
   notes: 3 | 4 | 5,
-): Chord {
+): Chord<ChordQuality> {
   const base = scaleChords(root, kind, notes === 3 ? 3 : 4)[degree]
   const ninth = notes === 5 ? scaleChords(root, kind, 5)[degree] : undefined
   const quality =

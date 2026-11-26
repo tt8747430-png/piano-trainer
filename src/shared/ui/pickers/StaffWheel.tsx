@@ -7,7 +7,7 @@ const STEP = 28
 const WHEEL_STEP = 40
 
 /** One figure of a time signature as a wheel: its name, its values in order, the one chosen. */
-export interface WheelFigure {
+interface WheelFigure {
   readonly label: string
   readonly values: readonly number[]
   readonly value: number
@@ -95,7 +95,7 @@ function Figure({ figure, place }: { figure: WheelFigure; place: 'top' | 'bottom
         <span
           aria-hidden
           style={{ top: place === 'top' ? 10 : 130 - 86 }}
-          className="absolute inset-x-0 grid h-8 place-items-center font-serif text-2xl leading-none font-bold text-foreground/30"
+          className="absolute inset-x-0 grid h-8 place-items-center font-display text-2xl leading-none font-bold text-foreground/30"
         >
           {text(neighbour)}
         </span>
@@ -103,7 +103,7 @@ function Figure({ figure, place }: { figure: WheelFigure; place: 'top' | 'bottom
       <span
         aria-hidden
         style={{ top: centre - (place === 'top' ? 0 : 86) - 18 }}
-        className="absolute inset-x-0 grid h-9 place-items-center font-serif text-[2.5rem] leading-none font-extrabold tabular-nums"
+        className="absolute inset-x-0 grid h-9 place-items-center font-display text-[2.5rem] leading-none font-extrabold tabular-nums"
       >
         {text(value)}
       </span>
@@ -145,7 +145,7 @@ export function StaffWheel({
           <span
             aria-hidden
             style={{ top: (LINES[2] + LINES[4]) / 2 - 18 }}
-            className="absolute inset-x-0 grid h-9 place-items-center font-serif text-[2.5rem] leading-none font-extrabold text-foreground/60"
+            className="absolute inset-x-0 grid h-9 place-items-center font-display text-[2.5rem] leading-none font-extrabold text-foreground/60"
           >
             {bottom}
           </span>

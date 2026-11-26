@@ -11,7 +11,8 @@ export function PrintedBar({
   notes,
   style,
 }: {
-  number: number
+  /** Its number as printed (`printedBar`): none for a pickup. */
+  number: number | null
   symbols: readonly string[]
   cells: readonly (readonly string[])[]
   notes: readonly string[]
@@ -25,7 +26,7 @@ export function PrintedBar({
       className={BAR}
       style={{ ...style, gridTemplateColumns: `repeat(${cells.length}, minmax(0, 1fr))` }}
     >
-      <BarCells number={number} cells={cells} notes={notes} />
+      <BarCells number={number} cells={cells} notes={notes} face="chart" />
     </div>
   )
 }

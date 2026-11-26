@@ -6,7 +6,7 @@ import type { Draft, EditorAction } from '@/features/score-editor'
 const MOST_STAVES = 8
 
 /** An instrument the score's Settings list (round 28): the piano, a voice, or a staff of no voice. */
-export type ScoreInstrument = 'piano' | VoiceId | 'staff'
+type ScoreInstrument = 'piano' | VoiceId | 'staff'
 
 /** The voice a staff is, by its printed name in either language; none for a staff named otherwise. */
 export function voiceOf(name: StaffName | undefined): VoiceId | undefined {
@@ -18,7 +18,7 @@ export function voiceOf(name: StaffName | undefined): VoiceId | undefined {
 }
 
 /** How many of an instrument the score has, and the edit that makes one fewer or one more (none: it cannot). */
-export interface InstrumentCount {
+interface InstrumentCount {
   readonly count: number
   readonly fewer: EditorAction | null
   readonly more: EditorAction | null

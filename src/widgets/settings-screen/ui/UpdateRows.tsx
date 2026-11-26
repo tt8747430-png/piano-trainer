@@ -1,36 +1,42 @@
-import { Download, LoaderCircle, RefreshCw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/shared/lib'
 import { useAppUpdate } from '@/shared/lib/app-update'
-import { RowButton } from '@/shared/ui'
+import { ActionRow } from '@/shared/ui'
 
 /**
- * About's Software update, as iOS's: where the next version stands as its value; a tap looks for one
- * ("Unavailable offline" without the network). A version waiting is installed from the row under it,
- * the banner's same install, so the banner put off with Later is never the only way to it.
+ * General's Software update (the board's UPDSEC): where the next version stands, a dot beside it (grass when
+ * current, honey when one waits, ochre while it works), then the one act there is: Check for
+ * updates, or Install and restart when one waits, the banner's same install, so the banner put off
+ * with Later is never the only way to it.
  */
 export function UpdateRows() {
   const { t } = useTranslation('settings')
   const { status, check, install } = useAppUpdate()
-  const busy = status === 'checking' || status === 'downloading'
+  const busy = status === 'checking' || status === 'downloading' || status === 'installing'
+  const waiting = status === 'ready' || status === 'installing'
   return (
     <>
-      <RowButton
-        title={t('about.update.label')}
-        icon={busy ? LoaderCircle : RefreshCw}
-        paint="sky"
-        value={t(`about.update.${status}`)}
-        disabled={busy}
-        onClick={check}
-      />
-      {status === 'ready' || status === 'installing' ? (
-        <RowButton
-          title={t(status === 'installing' ? 'about.update.installing' : 'about.update.install')}
-          icon={status === 'installing' ? LoaderCircle : Download}
-          paint="grass"
-          disabled={status === 'installing'}
-          onClick={install}
+      <p role="status" className="flex min-h-13 items-center gap-2.5 px-4 py-2">
+        <span
+          aria-hidden
+          className={cn(
+            'size-2 shrink-0 rounded-pill',
+            status === 'ready'
+              ? 'bg-primary'
+              : busy
+                ? 'bg-paint-tile-yellow'
+                : status === 'current'
+                  ? 'bg-learned'
+                  : 'bg-muted-foreground',
+          )}
         />
-      ) : null}
+        {t(`about.update.${status}`)}
+      </p>
+      <ActionRow
+        title={t(waiting ? 'about.update.install' : 'about.update.check')}
+        disabled={busy}
+        onClick={waiting ? install : check}
+      />
     </>
   )
 }

@@ -1,4 +1,4 @@
-import type { StaffId } from '@/shared/lib/notation'
+import { isStaffId } from '@/shared/lib/notation'
 import type { Column, Extent, Head, Rest } from '../layout'
 import { glyphBox, numbers, union } from './svg-glyphs'
 
@@ -41,7 +41,7 @@ export function headsOf(
   for (const note of svg.querySelectorAll('g.note[id^="n-"]')) {
     const [, staff, tick, index] = note.id.split('-')
     const head = glyphBox(note.querySelector(':scope > g.notehead > use'), space)
-    if (!staff || !head) continue
+    if (!isStaffId(staff) || !head) continue
     const accid = glyphBox(note.querySelector(':scope > g.accid use'), space)
     const dots = dotsRight(note)
     const box = union([head, accid, dots === null ? null : { ...head, right: dots }])
@@ -51,7 +51,7 @@ export function headsOf(
     if (!groups.has(key)) groups.set(key, parent?.classList.contains('chord') ? parent : note)
     heads.push({
       id: note.id,
-      staff: staff as StaffId,
+      staff,
       tick: Number(tick),
       index: Number(index),
       ...at(box),
@@ -74,17 +74,17 @@ export function headsOf(
   for (const rest of svg.querySelectorAll('g.rest[id^="r-"]')) {
     const [, staff, tick] = rest.id.split('-')
     const box = glyphBox(rest.querySelector('use'), space)
-    if (staff && box) rests.push({ staff: staff as StaffId, tick: Number(tick), ...at(box) })
+    if (isStaffId(staff) && box) rests.push({ staff, tick: Number(tick), ...at(box) })
   }
   // Each grace note's head, small, before its note's (ADR 0114).
   const graces: Head[] = []
   for (const note of svg.querySelectorAll('g.note[id^="g-"]')) {
     const [, staff, tick, index] = note.id.split('-')
     const head = glyphBox(note.querySelector(':scope > g.notehead > use'), space)
-    if (!staff || !head) continue
+    if (!isStaffId(staff) || !head) continue
     graces.push({
       id: note.id,
-      staff: staff as StaffId,
+      staff,
       tick: Number(tick),
       index: Number(index),
       ...at(head),

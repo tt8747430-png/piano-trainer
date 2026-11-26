@@ -1,3 +1,4 @@
+import { isRecord } from '@/shared/lib'
 import { parseKey } from '@/shared/lib/music'
 import { factsOf } from './facts'
 import { musicOf, readMusic, type PieceMusic } from './music'
@@ -11,30 +12,10 @@ import {
   type SongCollectionId,
 } from './types'
 
-/** Every field of a piece that is its music: what an editor's draft writes over (ADR 0116). */
-const MUSIC_FIELDS = [
-  'key',
-  'meter',
-  'timeSymbol',
-  'tempoUnit',
-  'tempoText',
-  'tempo',
-  'pattern',
-  'sections',
-  'staves',
-  'leadSheet',
-  'hands',
-  'lyrics',
-  'lyricsOn',
-  'pedal',
-  'header',
-  'layout',
-] as const satisfies readonly (keyof PieceMusic)[]
-
 /** Whether a body from the database reads as a newer copy of this catalog piece: its id, kind and key. */
 export function updatesPiece(entry: Entry, body: unknown): body is Piece {
-  if (typeof body !== 'object' || body === null) return false
-  const update = body as Partial<Piece>
+  if (!isRecord(body)) return false
+  const update = body
   return (
     isPiece(entry) &&
     update.id === entry.id &&
@@ -54,8 +35,8 @@ export type MadeSong = ChartPiece & { readonly collection: SongCollectionId }
  * titled, in a key and a meter, and in a collection Songs lists.
  */
 export function readsAsMadeSong(id: string, body: unknown): body is MadeSong {
-  if (typeof body !== 'object' || body === null) return false
-  const song = body as Partial<MadeSong>
+  if (!isRecord(body)) return false
+  const song = body
   return (
     song.id === id &&
     song.kind === 'song' &&
@@ -96,11 +77,27 @@ export const pieceRecordMeta = (piece: Piece): Readonly<Record<string, unknown>>
  * rest (its titles, its recording) its own. A learner's title is a version's, never the catalog's.
  */
 export function originalWith(piece: ChartPiece, music: PieceMusic): ChartPiece {
-  const own = Object.fromEntries(
-    Object.entries(piece).filter(([field]) => !(MUSIC_FIELDS as readonly string[]).includes(field)),
-  )
+  const {
+    key: _key,
+    meter: _meter,
+    timeSymbol: _timeSymbol,
+    tempoUnit: _tempoUnit,
+    tempoText: _tempoText,
+    tempo: _tempo,
+    pattern: _pattern,
+    sections: _sections,
+    staves: _staves,
+    leadSheet: _leadSheet,
+    hands: _hands,
+    lyrics: _lyrics,
+    lyricsOn: _lyricsOn,
+    pedal: _pedal,
+    header: _header,
+    layout: _layout,
+    ...own
+  } = piece
   const { title: _title, ...written } = music
-  return { ...(own as Omit<ChartPiece, (typeof MUSIC_FIELDS)[number]>), ...written }
+  return { ...own, ...written }
 }
 
 /** An editor's draft of the piece read back as its music: none where it is not a copy whose music reads. */
@@ -121,8 +118,8 @@ export function originalMusic(piece: ChartPiece, body: unknown): PieceMusic | un
  */
 export function originalPiece(piece: ChartPiece, body: unknown): ChartPiece | undefined {
   const music = originalMusic(piece, body)
-  if (!music) return undefined
-  const written = body as Partial<Record<'title' | 'titleEn' | 'titleRu' | 'note', unknown>>
+  if (!music || !isRecord(body)) return undefined
+  const written = body
   const { note: _note, ...withMusic } = originalWith(piece, music)
   const note = readNote(written.note)
   const text = (value: unknown) => (typeof value === 'string' && value.trim() ? value : undefined)

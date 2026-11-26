@@ -1,8 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import type { ReactElement } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BOOK_IDS, EXERCISE_BOOKS, exercisesIn } from '@/entities/exercise'
+import { EXERCISE_SHELVES, exercisesOnShelf, SHELF_TILES } from '@/entities/exercise'
 import { selectMetronome, selectTuner, useSettings } from '@/entities/settings'
+import { useFold } from '@/features/fold-section'
 import { cn, OPEN_PLAINLY } from '@/shared/lib'
 import { FoldSection, GROUPED_LIST, PlaceRow, ScreenHeader, type Tile } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
@@ -12,7 +13,6 @@ import {
   usePageWords,
   type PracticePageId,
 } from '@/widgets/practice-pages'
-import { ToolsButton } from '@/widgets/tools-sheet'
 import { PageCard } from './PageCard'
 
 /** One place Practice lists: a page, or a book of exercises opening the library at its place. */
@@ -24,7 +24,27 @@ interface Place {
   link: ReactElement
 }
 
-/** Practice's groups, each its places in order: Theory, Exercises by book, the Tools last. */
+/** A group of Practice's places under its heading, folded or open as the learner left it (the board's folds). */
+function PracticeGroup({
+  id,
+  title,
+  headingClassName,
+  children,
+}: {
+  id: 'theory' | 'exercises' | 'tools'
+  title: string
+  headingClassName: string
+  children: ReactNode
+}) {
+  const fold = useFold(`practice.${id}`)
+  return (
+    <FoldSection title={title} fold={fold} headingClassName={headingClassName}>
+      {children}
+    </FoldSection>
+  )
+}
+
+/** Practice's groups, each its places in order: Theory, Exercises by shelf, the Tools last. */
 function useGroups(): readonly {
   id: 'theory' | 'exercises' | 'tools'
   places: readonly Place[]
@@ -55,12 +75,12 @@ function useGroups(): readonly {
     { id: 'theory', places: pagesOf('theory') },
     {
       id: 'exercises',
-      places: BOOK_IDS.map((book) => ({
-        key: book,
-        title: t(`exercises.groups.${book}`),
-        detail: t('exercises.count', { count: exercisesIn(book).length }),
-        tile: EXERCISE_BOOKS[book],
-        link: <Link to="/practice/exercises" search={{ place: book }} state={OPEN_PLAINLY} />,
+      places: EXERCISE_SHELVES.map((shelf) => ({
+        key: shelf,
+        title: t(`exercises.shelves.${shelf}`),
+        detail: t('exercises.count', { count: exercisesOnShelf(shelf).length }),
+        tile: SHELF_TILES[shelf],
+        link: <Link to="/practice/exercises" search={{ book: shelf }} state={OPEN_PLAINLY} />,
       })),
     },
     { id: 'tools', places: pagesOf('tools') },
@@ -69,7 +89,7 @@ function useGroups(): readonly {
 
 /**
  * Practice (the canvas's Practice board): Theory, the pages that explain a thing and practise it
- * there; Exercises, by book; the Tools last, also a tap away from the bar's Tools on a phone. Each
+ * there; Exercises, by shelf; the Tools last, their one home here (the bar has no Tools menu). Each
  * group is a heading over one card of rows on a phone (a 44px tile, the name over one line) and
  * cards five across on a laptop.
  */
@@ -77,46 +97,40 @@ export function PracticePage() {
   const { t } = useTranslation('practice')
   const groups = useGroups()
   return (
-    <div className="flex flex-col gap-6">
-      <ScreenHeader
-        title={t('title')}
-        large
-        tools={
-          <>
-            <span className="contents lg:hidden">
-              <ToolsButton />
-            </span>
-            <PlaceActions />
-          </>
-        }
-      />
-      {groups.map(({ id, places }) => (
-        <FoldSection
-          key={id}
-          title={t(`groups.${id}`)}
-          headingClassName="px-1 font-sans text-xl font-bold"
-        >
-          <ul className={cn(GROUPED_LIST, 'lg:hidden')}>
-            {places.map(({ key, title, detail, tile, link }) => (
-              <PlaceRow
-                key={key}
-                icon={tile.icon}
-                paint={tile.paint}
-                title={title}
-                detail={detail}
-                render={link}
-              />
-            ))}
-          </ul>
-          <ul className="hidden grid-cols-5 gap-3 lg:grid">
-            {places.map(({ key, ...place }) => (
-              <li key={key} className="flex [&>a]:flex-1">
-                <PageCard {...place} />
-              </li>
-            ))}
-          </ul>
-        </FoldSection>
-      ))}
+    <div className="flex flex-col">
+      <ScreenHeader title={t('title')} large tools={<PlaceActions />} />
+      {/* The first heading where the boards set it: 20 under the title on a phone, 33 on a laptop. */}
+      <div className="mt-5 flex flex-col gap-8 lg:mt-[33px]">
+        {groups.map(({ id, places }) => (
+          <PracticeGroup
+            key={id}
+            id={id}
+            title={t(`groups.${id}`)}
+            headingClassName="font-sans text-xl font-bold"
+          >
+            <ul className={cn(GROUPED_LIST, 'lg:hidden')}>
+              {places.map(({ key, title, detail, tile, link }) => (
+                <PlaceRow
+                  key={key}
+                  icon={tile.icon}
+                  picture={tile.picture}
+                  paint={tile.paint}
+                  title={title}
+                  detail={detail}
+                  render={link}
+                />
+              ))}
+            </ul>
+            <ul className="hidden grid-cols-3 gap-4 lg:grid xl:grid-cols-5">
+              {places.map(({ key, ...place }) => (
+                <li key={key} className="flex min-w-0 [&>a]:flex-1">
+                  <PageCard {...place} />
+                </li>
+              ))}
+            </ul>
+          </PracticeGroup>
+        ))}
+      </div>
     </div>
   )
 }

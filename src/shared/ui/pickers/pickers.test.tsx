@@ -8,7 +8,6 @@ import { KeysChecklist } from './KeysChecklist'
 import { MenuPicker } from './MenuPicker'
 import { NotePicker } from './NotePicker'
 import { PickerLayoutContext } from './picker-layout'
-import { PickerRow } from './PickerRow'
 import { PitchPicker } from './PitchPicker'
 
 const names = (group: HTMLElement) =>
@@ -171,13 +170,8 @@ describe('MenuPicker', () => {
   it('shows its value with its name, opens a list and chooses from it', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
-    render(
-      <PickerRow label="Chord">
-        <MenuPicker label="Quality" value="maj" options={QUALITIES} onChange={onChange} />
-      </PickerRow>,
-    )
-    const row = screen.getByRole('group', { name: 'Chord' })
-    await user.click(within(row).getByRole('button', { name: 'Quality: Major' }))
+    render(<MenuPicker label="Quality" value="maj" options={QUALITIES} onChange={onChange} />)
+    await user.click(screen.getByRole('button', { name: 'Quality: Major' }))
     const list = await screen.findByRole('listbox', { name: 'Quality' })
     expect(within(list).getByRole('option', { name: 'Major' })).toHaveAttribute(
       'aria-selected',

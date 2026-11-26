@@ -23,7 +23,7 @@ export const SONG_FILE_TYPES = [
 export type SongFileProblem = SongFileError['reason']
 
 /** A file read as a song, or why it is none. */
-export type SongFileResult =
+type SongFileResult =
   ({ readonly ok: true } & ReadSong) | { readonly ok: false; readonly problem: SongFileProblem }
 
 /** Whether text begins as XML does: a tag, after any declaration, comment or space. */

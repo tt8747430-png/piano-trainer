@@ -1,0 +1,2701 @@
+{
+  "description": "Analytics and tracking inventory for Metronaut 9.0.3 (com.antescofo.metronaut), recovered statically. Event names only; no payload values, keys or tokens.",
+  "trackers": [
+    {
+      "name": "AppsFlyer",
+      "evidence": "Frameworks/AppsFlyerLib.framework (stub; code linked into main binary: 228 \"appsflyer\" string hits); Info.plist NSAdvertisingAttributionReportEndpoint https://appsflyer-skadnetwork.com/; NSPrivacyTrackingDomains att.*.appsflyersdk.com etc.; params appsflyer_id / af_web_id sent to Metronaut auth API",
+      "role": "Install attribution, SKAdNetwork, deep links (OneLink: \".onelink.me\" in Networking)",
+      "status": "exact"
+    },
+    {
+      "name": "Branch",
+      "evidence": "Resources/BranchSDK_BranchSDK.bundle; Info.plist branch_key {live,test} (values not reproduced) and branch_universal_link_domains; hosts api3.branch.io, api3-eu.branch.io, api-safetrack(-eu).branch.io, cdn.branch.io, bnc.lt",
+      "role": "Deep links, referral links (link.metronaut.app), attribution",
+      "status": "exact"
+    },
+    {
+      "name": "Braze",
+      "evidence": "Frameworks/BrazeKit.framework, Resources/braze-swift-sdk_BrazeUI.bundle; 778 \"braze\" string hits; Metronaut.BrazeDataSource {lastReportedOpenedPieceId, lastReportedIsPremium}",
+      "role": "CRM: push, in-app messages, content cards, banners, feature flags, geofences. 388 \"crm.*\" strings in en table are its copy",
+      "status": "exact"
+    },
+    {
+      "name": "Facebook SDK (Core, Login, AEM)",
+      "evidence": "Frameworks/FBSDKCoreKit, FBSDKCoreKit_Basics, FBSDKLoginKit, FBAEMKit; Info.plist FacebookAutoLogAppEventsEnabled = true, FacebookAdvertiserIDCollectionEnabled = true, FacebookAppID present (value not reproduced)",
+      "role": "Login + automatic app-event logging + Aggregated Event Measurement (ad attribution)",
+      "status": "exact"
+    },
+    {
+      "name": "Firebase / Google Analytics for Firebase",
+      "evidence": "Frameworks/FirebaseAnalytics, GoogleAppMeasurement, GoogleAppMeasurementIdentitySupport; bundles Firebase_FirebaseABTesting, FirebaseCore, FirebaseCrashlytics, FirebaseInstallations; strings firebaseremoteconfig.googleapis.com, app-analytics-services.com; GoogleService-Info.plist present (keys not reproduced); Info.plist FirebaseAppDelegateProxyEnabled = false",
+      "role": "Analytics, Remote Config, A/B testing, Installations, App Check endpoint referenced",
+      "status": "exact"
+    },
+    {
+      "name": "Firebase Crashlytics",
+      "evidence": "Firebase_FirebaseCrashlytics.bundle; hosts reports.crashlytics.com, update.crashlytics.com, firebase-settings.crashlytics.com",
+      "role": "Crash reporting",
+      "status": "exact"
+    },
+    {
+      "name": "Amplitude",
+      "evidence": "Resources/Amplitude_Amplitude.bundle; hosts api2.amplitude.com, api.eu.amplitude.com, regionconfig(.eu).amplitude.com; Swift types AnalyticsConnector.*; header names ampDeviceId / ampSessionId in Networking (sent to Metronaut backend)",
+      "role": "Product analytics (likely primary event sink for the in-house Analytics package)",
+      "status": "exact (hosts); inferred (primary sink)"
+    },
+    {
+      "name": "Apple AdServices / SKAdNetwork",
+      "evidence": "https://api-adservices.apple.com/api/v1/ in main binary; 82 \"skadnetwork\" string hits; NSUserTrackingUsageDescription (ATT prompt)",
+      "role": "Apple Search Ads attribution, SKAN postbacks",
+      "status": "exact"
+    },
+    {
+      "name": "Google Sign-In",
+      "evidence": "GoogleSignIn bundles; GIDClientID in Info.plist (value not reproduced)",
+      "role": "Login (not a tracker, but a Google data flow)",
+      "status": "exact"
+    },
+    {
+      "name": "Zendesk",
+      "evidence": "https://antescofo.zendesk.com + /api/v2/requests (Networking); help center community.metronautapp.com/hc",
+      "role": "Support tickets with custom_fields and tags",
+      "status": "exact"
+    },
+    {
+      "name": "Segment / Adjust / Sentry mentions",
+      "evidence": "Strings like ios_segment, adjust, sentry occur inside AppsFlyer/Branch plugin-detection tables",
+      "role": "Not integrated (no frameworks or bundles)",
+      "status": "inferred"
+    }
+  ],
+  "att": {
+    "NSUserTrackingUsageDescription": "This will help us to bring more musicians like you to Metronaut community. You won't see any ads in our App.",
+    "NSUserTrackingUsageDescription_NEW_1": "This will help us to bring more musicians like you to Metronaut community.",
+    "NSUserTrackingUsageDescription_NEW_2": "You won't see any ads in our App.",
+    "InfoPlist_base_value": "To Help Build our Community",
+    "source": "en.lproj/InfoPlist.strings and Info.plist (exact)"
+  },
+  "NSPrivacyTrackingDomains_InfoPlist": [
+    "api-safetrack-eu.branch.io",
+    "api-safetrack.branch.io",
+    "att.attr.appsflyer-cn.com",
+    "att.attr.appsflyersdk.com",
+    "att.attr.hevents.appsflyer-cn.com",
+    "att.attr.whappsflyer.com",
+    "att.conversions.appsflyer-cn.com",
+    "att.conversions.appsflyersdk.com",
+    "att.conversions.hevents.appsflyer-cn.com",
+    "att.conversions.whappsflyer.com",
+    "att.dlsdk.appsflyer-cn.com",
+    "att.dlsdk.appsflyersdk.com",
+    "att.dlsdk.hevents.appsflyer-cn.com",
+    "att.dlsdk.whappsflyer.com",
+    "att.launches.appsflyer-cn.com",
+    "att.launches.appsflyersdk.com",
+    "att.launches.hevents.appsflyer-cn.com",
+    "att.launches.whappsflyer.com",
+    "ep1.facebook.com"
+  ],
+  "PrivacyInfo_xcprivacy": {
+    "accessedAPITypes": {
+      "DiskSpace": [
+        "85F4.1",
+        "E174.1"
+      ],
+      "FileTimestamp": [
+        "DDA9.1"
+      ],
+      "UserDefaults": [
+        "CA92.1"
+      ]
+    },
+    "note": "Resources/PrivacyInfo.xcprivacy declares no NSPrivacyTracking, no tracking domains and no collected data types; tracking domains are only in Info.plist."
+  },
+  "events": [
+    {
+      "name": "errorAction(identifier)",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "error{code,domain,localizedDescription}",
+        "scene",
+        "reason"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "User acts on an error UI"
+    },
+    {
+      "name": "annotation_action",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "type",
+        "reason"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Score annotation tool used"
+    },
+    {
+      "name": "annotation_zoom",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "value"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Zoom while annotating"
+    },
+    {
+      "name": "performanceSettingChanged",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "performanceSetting",
+        "category",
+        "setting",
+        "value",
+        "handsSettings",
+        "transposition",
+        "scene"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Any practice setting change (tempo, loop, metronome, volumes, transposition, clef, hands)"
+    },
+    {
+      "name": "deviceOrientationChanged",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "deviceOrientation{current,previous,isForced,isPreviouslyForced}"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Rotation"
+    },
+    {
+      "name": "contactSupportFormBegin",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "scene",
+        "tag"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Support form opened"
+    },
+    {
+      "name": "contactSupportFormFailed",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "error"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Support form submit failed"
+    },
+    {
+      "name": "contactSupportFormSubmitted",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "submitted"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Support form sent"
+    },
+    {
+      "name": "contactSupportFormEnd",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "reason",
+        "duration"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Support form closed"
+    },
+    {
+      "name": "pieceRequestFormBegin",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "scene"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Piece-request form opened"
+    },
+    {
+      "name": "pieceRequestFormFailed",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "error"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Piece-request form failed"
+    },
+    {
+      "name": "pieceRequestFormEnd",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "reason",
+        "duration",
+        "submitted"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Piece-request form closed"
+    },
+    {
+      "name": "askedForPushNotification",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "pushNotifModal{isDeniedAuthorizationStatus}",
+        "tag"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Push permission modal shown"
+    },
+    {
+      "name": "videoMode",
+      "family": "Action events (ActionAnalyticsEventKey)",
+      "properties": [
+        "value"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Video recording mode toggled"
+    },
+    {
+      "name": "performance_setting_changed",
+      "family": "Action events: confirmed wire names",
+      "properties": [],
+      "source": "MetronautAnalyticsKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Raw value of performanceSettingChanged"
+    },
+    {
+      "name": "device_orientation_changed",
+      "family": "Action events: confirmed wire names",
+      "properties": [],
+      "source": "MetronautAnalyticsKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Raw value of deviceOrientationChanged"
+    },
+    {
+      "name": "annotation_action",
+      "family": "Action events: confirmed wire names",
+      "properties": [],
+      "source": "MetronautAnalyticsKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "annotation_zoom",
+      "family": "Action events: confirmed wire names",
+      "properties": [],
+      "source": "MetronautAnalyticsKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "foopup",
+      "family": "Timed events (TimedAnalyticsEventKey, states begin/end)",
+      "properties": [
+        "type",
+        "reason",
+        "duration",
+        "scene"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Generic popup (\"foopup\") shown/closed; types in AnalyticsEventPropertyTypeValue"
+    },
+    {
+      "name": "performanceSettings",
+      "family": "Timed events (TimedAnalyticsEventKey, states begin/end)",
+      "properties": [
+        "type",
+        "reason",
+        "duration"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Practice settings sheet open to close"
+    },
+    {
+      "name": "notification",
+      "family": "Timed events (TimedAnalyticsEventKey, states begin/end)",
+      "properties": [
+        "type",
+        "reason"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "In-app notification/tip shown"
+    },
+    {
+      "name": "annotation",
+      "family": "Timed events (TimedAnalyticsEventKey, states begin/end)",
+      "properties": [
+        "duration"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Annotation mode session"
+    },
+    {
+      "name": "pushOnboarding",
+      "family": "Timed events (TimedAnalyticsEventKey, states begin/end)",
+      "properties": [
+        "reason"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Push opt-in onboarding screen"
+    },
+    {
+      "name": "tunerFoopup",
+      "family": "Timed events (TimedAnalyticsEventKey, states begin/end)",
+      "properties": [
+        "tuningDiapason",
+        "duration"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Tuner popup session"
+    },
+    {
+      "name": "micPermission",
+      "family": "Timed events (TimedAnalyticsEventKey, states begin/end)",
+      "properties": [
+        "status"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Microphone permission prompt"
+    },
+    {
+      "name": "micPermissionWarning",
+      "family": "Timed events (TimedAnalyticsEventKey, states begin/end)",
+      "properties": [
+        "reason"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Mic-denied warning"
+    },
+    {
+      "name": "error",
+      "family": "Timed events (TimedAnalyticsEventKey, states begin/end)",
+      "properties": [
+        "error",
+        "scenario"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Error screen visible"
+    },
+    {
+      "name": "recordings",
+      "family": "Timed events (TimedAnalyticsEventKey, states begin/end)",
+      "properties": [
+        "duration"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Recordings list open"
+    },
+    {
+      "name": "videoRecordingPreview",
+      "family": "Timed events (TimedAnalyticsEventKey, states begin/end)",
+      "properties": [
+        "duration"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Video preview open"
+    },
+    {
+      "name": "performance_settings",
+      "family": "Timed events: confirmed wire names",
+      "properties": [],
+      "source": "MetronautAnalyticsKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Raw value of performanceSettings"
+    },
+    {
+      "name": "foopup",
+      "family": "Cancellable events (CancellableAnalyticsEventKey, states begin/end/cancelled/failed)",
+      "properties": [],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "accompanimentLoading",
+      "family": "Cancellable events (CancellableAnalyticsEventKey, states begin/end/cancelled/failed)",
+      "properties": [
+        "scenario{previewLoadingVersionsList|previewLoadingVersion|previewStreamingVersion|scoreRendering}",
+        "duration",
+        "error"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Download/render of a piece version"
+    },
+    {
+      "name": "print",
+      "family": "Cancellable events (CancellableAnalyticsEventKey, states begin/end/cancelled/failed)",
+      "properties": [
+        "pdfProvider{back|guido|testing}",
+        "printStatus{locked|unlocked}",
+        "printCredits",
+        "pdfDownload{loading|loaded}"
+      ],
+      "source": "MetronautAnalyticsKit __swift5_fieldmd (enum case)",
+      "nameStatus": "case",
+      "trigger": "Print/PDF export"
+    },
+    {
+      "name": "accompaniment_loading",
+      "family": "Cancellable events: confirmed wire names",
+      "properties": [],
+      "source": "MetronautAnalyticsKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "purchase_piece",
+      "family": "Cancellable events: confirmed wire names",
+      "properties": [
+        "purchaseStatus{free|purchased|purchasable}",
+        "productIdentifier"
+      ],
+      "source": "MetronautAnalyticsKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Single-piece purchase flow"
+    },
+    {
+      "name": "selected_piece",
+      "family": "Analytics package events",
+      "properties": [
+        "SelectionContext{sectionTag,indexSection,indexItem}",
+        "scenario",
+        "scene",
+        "feature"
+      ],
+      "source": "Analytics package __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Piece tapped in any list"
+    },
+    {
+      "name": "selected_collection",
+      "family": "Analytics package events",
+      "properties": [
+        "id",
+        "piecesCount",
+        "localizedTitle",
+        "sectionTag",
+        "indexSection",
+        "indexItem"
+      ],
+      "source": "Analytics package __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Collection tapped"
+    },
+    {
+      "name": "selected_post",
+      "family": "Analytics package events",
+      "properties": [
+        "id",
+        "EventAction{performance|postsFeed}"
+      ],
+      "source": "Analytics package __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Community post tapped"
+    },
+    {
+      "name": "memory_warning_received",
+      "family": "Analytics package events",
+      "properties": [],
+      "source": "Analytics package __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "iOS memory warning"
+    },
+    {
+      "name": "userClass_businessOrFirst",
+      "family": "Analytics package events",
+      "properties": [
+        "userClass"
+      ],
+      "source": "Analytics package __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "User class assignment"
+    },
+    {
+      "name": "post_like",
+      "family": "Analytics package events",
+      "properties": [
+        "id"
+      ],
+      "source": "Analytics package __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Community like"
+    },
+    {
+      "name": "post_unlike",
+      "family": "Analytics package events",
+      "properties": [
+        "id"
+      ],
+      "source": "Analytics package __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Community unlike"
+    },
+    {
+      "name": "post_toggle_like",
+      "family": "Analytics package events",
+      "properties": [
+        "id"
+      ],
+      "source": "Analytics package __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "post_piece",
+      "family": "Analytics package events",
+      "properties": [
+        "id"
+      ],
+      "source": "Analytics package __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Open piece from post"
+    },
+    {
+      "name": "post_play",
+      "family": "Analytics package events",
+      "properties": [
+        "id"
+      ],
+      "source": "Analytics package __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Play a post video"
+    },
+    {
+      "name": "post_share",
+      "family": "Analytics package events",
+      "properties": [
+        "id"
+      ],
+      "source": "Analytics package __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Share a post"
+    },
+    {
+      "name": "AccountActionEvent",
+      "family": "Analytics package typed events (type string not recovered)",
+      "properties": [
+        "actionName",
+        "isActive",
+        "url",
+        "value"
+      ],
+      "source": "Analytics package (Analytics_-10EF06E9999E684F_PackageProduct) __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Account screen actions (see Metronaut.AccountAction cases)"
+    },
+    {
+      "name": "ConversionDataSuccessEvent",
+      "family": "Analytics package typed events (type string not recovered)",
+      "properties": [
+        "adgroup",
+        "campaign",
+        "media_source"
+      ],
+      "source": "Analytics package (Analytics_-10EF06E9999E684F_PackageProduct) __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "AppsFlyer onConversionDataSuccess callback"
+    },
+    {
+      "name": "StartedSubscriptionEvent",
+      "family": "Analytics package typed events (type string not recovered)",
+      "properties": [
+        "hasFreeTrial",
+        "conversionScore"
+      ],
+      "source": "Analytics package (Analytics_-10EF06E9999E684F_PackageProduct) __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Subscription started"
+    },
+    {
+      "name": "SubscriptionPurchaseBeginEvent",
+      "family": "Analytics package typed events (type string not recovered)",
+      "properties": [],
+      "source": "Analytics package (Analytics_-10EF06E9999E684F_PackageProduct) __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Purchase sheet started"
+    },
+    {
+      "name": "SubscriptionPromptBeginEvent",
+      "family": "Analytics package typed events (type string not recovered)",
+      "properties": [],
+      "source": "Analytics package (Analytics_-10EF06E9999E684F_PackageProduct) __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Paywall prompt shown"
+    },
+    {
+      "name": "TimedEvent (TYPE_START / TYPE_STOP)",
+      "family": "Analytics package typed events (type string not recovered)",
+      "properties": [
+        "START_DATE",
+        "DATE",
+        "DURATION"
+      ],
+      "source": "Analytics package (Analytics_-10EF06E9999E684F_PackageProduct) __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Generic begin/end pair; suffix strings inferred to be _begin/_end"
+    },
+    {
+      "name": "PerformanceSessionEvent (TYPE_START / TYPE_STOP)",
+      "family": "Performance (practice) session events",
+      "properties": [
+        "identifier",
+        "userId",
+        "deviceId",
+        "opusId",
+        "pieceId",
+        "accompanimentId",
+        "workoutStepId",
+        "workoutId",
+        "instrumentId",
+        "appVersion",
+        "scoreDuration",
+        "date",
+        "startDate",
+        "duration"
+      ],
+      "source": "Domain __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Piece opened for practice until closed"
+    },
+    {
+      "name": "SubPerformanceEvent (TYPE_START / TYPE_STOP)",
+      "family": "Performance (practice) session events",
+      "properties": [
+        "date",
+        "duration",
+        "identifier",
+        "performanceSessionId",
+        "userId",
+        "deviceId",
+        "startPosition",
+        "endPosition",
+        "tempoAverage",
+        "notesNumber",
+        "practiceScore",
+        "isFreeSubscription",
+        "performanceId",
+        "scoreDuration"
+      ],
+      "source": "Domain __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Each play run (press Play to stop) inside a session"
+    },
+    {
+      "name": "PiecePurchaseEvent",
+      "family": "Performance (practice) session events",
+      "properties": [
+        "pieceId",
+        "composerName",
+        "pieceTitle"
+      ],
+      "source": "Domain __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Piece bought/unlocked"
+    },
+    {
+      "name": "OpenedDeeplinkEvent",
+      "family": "Performance (practice) session events",
+      "properties": [
+        "type",
+        "deeplink"
+      ],
+      "source": "Domain __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Deep link opened"
+    },
+    {
+      "name": "piece_opened_first",
+      "family": "Domain literals (user properties / events)",
+      "properties": [],
+      "source": "Domain __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "First piece opened (milestone)"
+    },
+    {
+      "name": "piece_request_upvoted",
+      "family": "Domain literals (user properties / events)",
+      "properties": [
+        "type",
+        "properties",
+        "scenario"
+      ],
+      "source": "Domain __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "User up-voted a piece request"
+    },
+    {
+      "name": "session_start_date",
+      "family": "Domain literals (user properties / events)",
+      "properties": [],
+      "source": "Domain __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "User property"
+    },
+    {
+      "name": "initial_utm_campaign",
+      "family": "Domain literals (user properties / events)",
+      "properties": [],
+      "source": "Domain __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "User property (attribution)"
+    },
+    {
+      "name": "initial_utm_content",
+      "family": "Domain literals (user properties / events)",
+      "properties": [],
+      "source": "Domain __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "User property (attribution)"
+    },
+    {
+      "name": "initial_utm_source",
+      "family": "Domain literals (user properties / events)",
+      "properties": [],
+      "source": "Domain __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "User property (attribution)"
+    },
+    {
+      "name": "referring_link_id",
+      "family": "Domain literals (user properties / events)",
+      "properties": [],
+      "source": "Domain __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "User property (Branch referral)"
+    },
+    {
+      "name": "deleteRecord",
+      "family": "Recording events (Core.RecordingEventType)",
+      "properties": [
+        "id",
+        "pieceId",
+        "accompanimentId",
+        "mode",
+        "duration"
+      ],
+      "source": "Core __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "renamedRecord",
+      "family": "Recording events (Core.RecordingEventType)",
+      "properties": [],
+      "source": "Core __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "saveRecord",
+      "family": "Recording events (Core.RecordingEventType)",
+      "properties": [],
+      "source": "Core __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "sharedRecord",
+      "family": "Recording events (Core.RecordingEventType)",
+      "properties": [],
+      "source": "Core __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "instrumentSelection_action",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Onboarding: instrument chosen"
+    },
+    {
+      "name": "userLevelSelection_action",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Onboarding: level chosen"
+    },
+    {
+      "name": "userStatusSelection_action",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Onboarding: status chosen"
+    },
+    {
+      "name": "userIsTeacherSelection_action",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Onboarding: teacher yes/no"
+    },
+    {
+      "name": "onboardingPreferenceSelection_action",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Onboarding: preference chosen"
+    },
+    {
+      "name": "landing_newUser_action",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Landing screen, new user path"
+    },
+    {
+      "name": "landing_returningUser_action",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Landing screen, returning user path"
+    },
+    {
+      "name": "updateUser_action",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Profile update"
+    },
+    {
+      "name": "firstname_changed",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "lastname_changed",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "nickname_changed",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "experiment_started",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [
+        "group_name"
+      ],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "A/B experiment assignment"
+    },
+    {
+      "name": "experiment_first_screen_practice",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "A/B: first screen = practice"
+    },
+    {
+      "name": "league_up",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Ranking result"
+    },
+    {
+      "name": "league_down",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "league_same",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "league_never",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "league_wood",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "League tier"
+    },
+    {
+      "name": "league_bronze",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "league_silver",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "league_gold",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "league_diamond",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "congrats_type",
+      "family": "Core literals (onboarding / profile / experiments / ranking)",
+      "properties": [],
+      "source": "Core __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Property of congratulation screens"
+    },
+    {
+      "name": "pieceMenu_open",
+      "family": "Piece menu (MetronautUI.PieceMenuEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "pieceMenu_action_share",
+      "family": "Piece menu (MetronautUI.PieceMenuEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "pieceMenu_action_playlist_add",
+      "family": "Piece menu (MetronautUI.PieceMenuEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "pieceMenu_action_playlist_remove",
+      "family": "Piece menu (MetronautUI.PieceMenuEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "pieceMenu_action_students_add",
+      "family": "Piece menu (MetronautUI.PieceMenuEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "pieceMenu_action_offline",
+      "family": "Piece menu (MetronautUI.PieceMenuEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "pieceMenu_action_collection_open",
+      "family": "Piece menu (MetronautUI.PieceMenuEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "playlist_create",
+      "family": "Playlist drawer (MetronautUI.PlaylistDrawerEventType)",
+      "properties": [
+        "id",
+        "name",
+        "count",
+        "favorite",
+        "piecesId",
+        "piecesCount"
+      ],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "playlist_piece_add",
+      "family": "Playlist drawer (MetronautUI.PlaylistDrawerEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "playlist_piece_remove",
+      "family": "Playlist drawer (MetronautUI.PlaylistDrawerEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "playlist_piece_move",
+      "family": "Playlist drawer (MetronautUI.PlaylistDrawerEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "shareMenu_delete",
+      "family": "Share menu (MetronautUI.ShareMenuEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "shareMenu_share",
+      "family": "Share menu (MetronautUI.ShareMenuEventType)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "search_start",
+      "family": "Search (MetronautUI.SearchEvent)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Search field focused"
+    },
+    {
+      "name": "search_stop",
+      "family": "Search (MetronautUI.SearchEvent)",
+      "properties": [
+        "kind{scroll|select|enter|exit|cancel|suggestion|recent}"
+      ],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Search editing ended"
+    },
+    {
+      "name": "search_category_select",
+      "family": "Search (MetronautUI.SearchEvent)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Category tile tapped"
+    },
+    {
+      "name": "filters_select",
+      "family": "Search (MetronautUI.SearchEvent)",
+      "properties": [
+        "kind",
+        "pk"
+      ],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Filter chip on"
+    },
+    {
+      "name": "filters_deselect",
+      "family": "Search (MetronautUI.SearchEvent)",
+      "properties": [
+        "kind",
+        "pk"
+      ],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Filter chip off"
+    },
+    {
+      "name": "filters_deselect_all",
+      "family": "Search (MetronautUI.SearchEvent)",
+      "properties": [
+        "filtersCount"
+      ],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Clear filters"
+    },
+    {
+      "name": "search_perf",
+      "family": "Search (MetronautUI.SearchEvent)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Search performance/latency (inferred)"
+    },
+    {
+      "name": "exploration_cell_click",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "exploration_video_click",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "exploration_list",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "external_link_load",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "In-app web view"
+    },
+    {
+      "name": "external_link_loaded",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "external_link_refresh",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "external_link_scroll",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "header_action",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "gamification_details",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Streak/grade details opened"
+    },
+    {
+      "name": "download_piece",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Offline download"
+    },
+    {
+      "name": "accompaniment_update",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "player_status_failed",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "AVPlayer failure"
+    },
+    {
+      "name": "students_action_send",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Teacher sends piece to students"
+    },
+    {
+      "name": "playlist_action_students_add",
+      "family": "Discovery / exploration / external links",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "workout_start_step",
+      "family": "Workout / training",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "workout_step_success",
+      "family": "Workout / training",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "workout_step_fail",
+      "family": "Workout / training",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "workout_notachieved",
+      "family": "Workout / training",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "workout_training_start",
+      "family": "Workout / training",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "workout_training_success",
+      "family": "Workout / training",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "training_success",
+      "family": "Workout / training",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "popup_workout_success",
+      "family": "Workout / training",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "teacher_success",
+      "family": "Workout / training",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "recording_publish_community",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "popupShown_recording_publish_community",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "recording_upload_done",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "recording_uploaded",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "recording_already_published",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "recording_camera",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "recording_camera_settings",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "recording_internalSpeaker_warning",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Recording through built-in speaker warning"
+    },
+    {
+      "name": "recording_publish_share_from_student",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "recording_publish_share_from_teacher",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "listen_recording_audio",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "listen_recording_video",
+      "family": "Recording / community",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "speechrecognition_permission_prompt",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "speechrecognition_permission_denied",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "speechrecognition_popup",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "headphone_speaker_prompt",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "wireless_speaker_prompt",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": "Bluetooth speaker latency warning"
+    },
+    {
+      "name": "prefer_headphones",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "micro_permission",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "microphone_access",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "midi_connection",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "storage_low",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "reduced_motion",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "no_internet",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "error_no_internet",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "error_generic_with_retry",
+      "family": "Popups / permissions / device (identifiers; may be popup ids rather than events)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "id",
+      "trigger": ""
+    },
+    {
+      "name": "onboarding_goal_concert",
+      "family": "Onboarding (UI)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "onboarding_goal_discover",
+      "family": "Onboarding (UI)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "onboarding_goal_enjoy",
+      "family": "Onboarding (UI)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "onboarding_goal_motivation",
+      "family": "Onboarding (UI)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "onboarding_goal_progress",
+      "family": "Onboarding (UI)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "onboarding_genres",
+      "family": "Onboarding (UI)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "onboarding_genres_count",
+      "family": "Onboarding (UI)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "onboarding_commitment_fingerprint",
+      "family": "Onboarding (UI)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Lottie/asset id"
+    },
+    {
+      "name": "onboarding_commitment_illustration",
+      "family": "Onboarding (UI)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Asset id"
+    },
+    {
+      "name": "onboardingCommitment_sign",
+      "family": "Onboarding (UI)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "User \"signs\" practice commitment"
+    },
+    {
+      "name": "onboardingGoalSelection_action",
+      "family": "Onboarding (UI)",
+      "properties": [],
+      "source": "MetronautUI __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_congrats_with_free_trial",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_congrats_without_free_trial",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_congrats_renew",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_error_internet",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_error_internet_retry",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_error_global",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_error_appstore",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_error_already_user",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_error_purchase",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_error_restore",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_loading",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_waiting",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "contact_form",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "contact_form_community",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "contact_form_performance",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [
+        "pieceId",
+        "accompanimentId"
+      ],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "contact_form_piece_request",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "contact_form_recording",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "contact_subscription_error_form_purchase",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "contact_subscription_error_form_restore",
+      "family": "Subscription result pages (MetronautUI.DescriptionPageEnum)",
+      "properties": [],
+      "source": "MetronautUI __swift5_fieldmd (enum case)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "performance_action",
+      "family": "Practice screen (MetronautPreviewCoreKit)",
+      "properties": [
+        "PerformanceAction{play|rewind|tapOnScore|annotation|previousWorkoutStep|nextWorkoutStep|nextPiece|dismiss|training|practice|instructions|listen|print|settings|advanced|hands|videoMode|recordingMode|rhythmTap}"
+      ],
+      "source": "MetronautPreviewCoreKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Any transport/toolbar action"
+    },
+    {
+      "name": "feedback_ai",
+      "family": "Practice screen (MetronautPreviewCoreKit)",
+      "properties": [
+        "type",
+        "properties"
+      ],
+      "source": "MetronautPreviewCoreKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "AI feedback toggled/shown (PerformanceFeedbackAIEvent)"
+    },
+    {
+      "name": "selected_accompaniment",
+      "family": "Practice screen (MetronautPreviewCoreKit)",
+      "properties": [],
+      "source": "MetronautPreviewCoreKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Version/accompaniment chosen"
+    },
+    {
+      "name": "purchase_piece",
+      "family": "Practice screen (MetronautPreviewCoreKit)",
+      "properties": [],
+      "source": "MetronautPreviewCoreKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "mode_track_gain",
+      "family": "Practice screen (MetronautPreviewCoreKit)",
+      "properties": [
+        "mode",
+        "role",
+        "gain"
+      ],
+      "source": "MetronautPreviewCoreKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Mixer gain per playing mode (property name)"
+    },
+    {
+      "name": "track_role",
+      "family": "Practice screen (MetronautPreviewCoreKit)",
+      "properties": [],
+      "source": "MetronautPreviewCoreKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Property: solo|accompaniment"
+    },
+    {
+      "name": "workout_substep",
+      "family": "Practice screen (MetronautPreviewCoreKit)",
+      "properties": [],
+      "source": "MetronautPreviewCoreKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Property"
+    },
+    {
+      "name": "score_algorithm_version",
+      "family": "Practice screen (MetronautPreviewCoreKit)",
+      "properties": [],
+      "source": "MetronautPreviewCoreKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Property: practice-score algorithm version"
+    },
+    {
+      "name": "videoMode_PiP",
+      "family": "Practice screen (MetronautPreviewCoreKit)",
+      "properties": [],
+      "source": "MetronautPreviewCoreKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Property"
+    },
+    {
+      "name": "performance setting event properties",
+      "family": "PerformanceSettingEvent.Properties (property names)",
+      "properties": [
+        "category",
+        "setting",
+        "value",
+        "mode",
+        "trackRole",
+        "type",
+        "loopLength",
+        "audioOutputType",
+        "audioOutputName",
+        "audioInputType",
+        "audioInputName",
+        "scoreDuration",
+        "scoreAlgorithmVersion",
+        "scoreScale",
+        "playingState",
+        "orientation",
+        "position",
+        "transposition",
+        "performanceMode",
+        "performanceTotalDuration",
+        "pageScrolling",
+        "workoutSubStep",
+        "videoMode",
+        "recordingMode",
+        "videoMode_PiP",
+        "showFingering"
+      ],
+      "source": "MetronautPreviewCoreKit __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Attached to performance_setting_changed / performance_action"
+    },
+    {
+      "name": "recordMenu_open",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "community_recording_playback",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "performance_auto_adaptation",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Engine auto-adapted settings (PerformanceAutoAdaptationEvent)"
+    },
+    {
+      "name": "tap_rhythm",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Rhythm-tap mode"
+    },
+    {
+      "name": "step_finished_end",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "workout_finished_end",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "nickname_textfield_focus",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "midi_settings_scan",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "midi_settings_select",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "midi_settings_deselect",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "settings_add_collection",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Settings menu items (likely event values)"
+    },
+    {
+      "name": "settings_anotate",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "settings_fullperf",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "settings_partition",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "settings_practiceInstructions",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "settings_problem",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "settings_rec_audio",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "settings_rec_camera",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "settings_transpose",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "settings_version",
+      "family": "Practice screen (MetronautPreviewUIKit)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "action(annotationTool|hide(state)|delete|undo|redo|dismiss)",
+      "family": "Score annotation (MetronautPreviewUIKit.ScoreAnnotationEvent)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "didZoom(scale)",
+      "family": "Score annotation (MetronautPreviewUIKit.ScoreAnnotationEvent)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "begin",
+      "family": "Score annotation (MetronautPreviewUIKit.ScoreAnnotationEvent)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "end",
+      "family": "Score annotation (MetronautPreviewUIKit.ScoreAnnotationEvent)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "notification begin/end (alert|tip; reason swipe|tap|timeOut|delete|cancel)",
+      "family": "Score annotation (MetronautPreviewUIKit.ScoreAnnotationEvent)",
+      "properties": [],
+      "source": "MetronautPreviewUIKit __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_product_loaded",
+      "family": "Subscription paywall (MetronautSubscriptionUIKit / CoreKit)",
+      "properties": [
+        "presentedProductIdentifiers",
+        "promotionOfferIdentifiers"
+      ],
+      "source": "MetronautSubscriptionUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_selected",
+      "family": "Subscription paywall (MetronautSubscriptionUIKit / CoreKit)",
+      "properties": [
+        "productId",
+        "segmentIndex"
+      ],
+      "source": "MetronautSubscriptionUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_purchase",
+      "family": "Subscription paywall (MetronautSubscriptionUIKit / CoreKit)",
+      "properties": [
+        "productId",
+        "transactionId",
+        "conversionScore",
+        "probability",
+        "elapsedDuration"
+      ],
+      "source": "MetronautSubscriptionUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_restore",
+      "family": "Subscription paywall (MetronautSubscriptionUIKit / CoreKit)",
+      "properties": [],
+      "source": "MetronautSubscriptionUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_action",
+      "family": "Subscription paywall (MetronautSubscriptionUIKit / CoreKit)",
+      "properties": [],
+      "source": "MetronautSubscriptionUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_switchOff",
+      "family": "Subscription paywall (MetronautSubscriptionUIKit / CoreKit)",
+      "properties": [],
+      "source": "MetronautSubscriptionUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_termsOfUse",
+      "family": "Subscription paywall (MetronautSubscriptionUIKit / CoreKit)",
+      "properties": [],
+      "source": "MetronautSubscriptionUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscription_warning_displayed",
+      "family": "Subscription paywall (MetronautSubscriptionUIKit / CoreKit)",
+      "properties": [
+        "message"
+      ],
+      "source": "MetronautSubscriptionUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "subscriptionPrompt_action",
+      "family": "Subscription paywall (MetronautSubscriptionUIKit / CoreKit)",
+      "properties": [
+        "scenario{subscription|subscriptionChange|subscriptionOffer|subscriptionYearOnly|subscriptionNoFreeTrial}"
+      ],
+      "source": "MetronautSubscriptionUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "probabilistic_multiplier",
+      "family": "Subscription paywall (MetronautSubscriptionUIKit / CoreKit)",
+      "properties": [],
+      "source": "MetronautSubscriptionUIKit __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Property: conversion-probability weighting"
+    },
+    {
+      "name": "state(begin|end{presentedProductIdentifiers,promotionOfferIdentifiers,selectedProductIdentifier,reason closed|actionSucceed})",
+      "family": "Subscription controller states (SubscriptionViewControllerEvent)",
+      "properties": [],
+      "source": "MetronautSubscriptionCoreKit __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "load / select / action(purchase|restore; begin|end|cancelled|failed) / selectSegment / warning / seeAll / hideAll / termsOfUse",
+      "family": "Subscription controller states (SubscriptionViewControllerEvent)",
+      "properties": [],
+      "source": "MetronautSubscriptionCoreKit __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "CongratsState begin(productIdentifier)/end",
+      "family": "Subscription controller states (SubscriptionViewControllerEvent)",
+      "properties": [],
+      "source": "MetronautSubscriptionCoreKit __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "PremiumDescription begin / end(subscription|skip)",
+      "family": "Subscription controller states (SubscriptionViewControllerEvent)",
+      "properties": [],
+      "source": "MetronautSubscriptionCoreKit __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "preview_play",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Audio preview played from a list"
+    },
+    {
+      "name": "preview_pause",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "appStoreReview_action",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Rating prompt"
+    },
+    {
+      "name": "deeplink_input_action",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "switchoff_reason_select",
+      "family": "Main app literals",
+      "properties": [
+        "SwitchOffReason{hesitant_to_confirm|hesitant_to_renew|catalog|level|no_time|expensive|other}"
+      ],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Cancellation survey"
+    },
+    {
+      "name": "collection_action_students_add",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "piece_isAlreadyOpened",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "performance_loading",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "firstName_textfield_focus",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "lastName_textfield_focus",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "selected_card_title",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Property"
+    },
+    {
+      "name": "selected_card_url",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Property"
+    },
+    {
+      "name": "selected_card_video",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": "Property"
+    },
+    {
+      "name": "selected_playlist",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "selected_ranking",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "selected_workout",
+      "family": "Main app literals",
+      "properties": [],
+      "source": "MacOS/Metronaut __cstring literal",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "login_success",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "Login_Apple",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": "Login form tag"
+    },
+    {
+      "name": "Login_Email",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "Login_Facebook",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "Login_Google",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "Login_Phone",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "Login_Wechat",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "Login_Home",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "opened_deeplink",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "selected_card",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "selected_CTA",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "workout_action",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "upload_record",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "UserGoal_form",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "SwitchOffForm_1",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "posts_fetch",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "session_load",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "congrats_user",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": ""
+    },
+    {
+      "name": "start_tempo",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": "Property"
+    },
+    {
+      "name": "start_position",
+      "family": "Main app code immediates (heuristic recovery, short names)",
+      "properties": [],
+      "source": "MacOS/Metronaut code immediate (Swift small string)",
+      "nameStatus": "wire",
+      "trigger": "Property"
+    },
+    {
+      "name": "DeeplinkEvent (processed|failedToProcess)",
+      "family": "Main app typed events",
+      "properties": [],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "UserActivityEvent",
+      "family": "Main app typed events",
+      "properties": [
+        "activityType",
+        "url",
+        "handledByBranch",
+        "handledByAppsFlyer"
+      ],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "NSUserActivity / universal link"
+    },
+    {
+      "name": "BranchDebugEvent",
+      "family": "Main app typed events",
+      "properties": [],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "UserGoalSwitchedEvent",
+      "family": "Main app typed events",
+      "properties": [],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Practice goal toggled"
+    },
+    {
+      "name": "PausedPreviewEvent / PlayedPreviewEvent",
+      "family": "Main app typed events",
+      "properties": [],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "AnalyticsCardEvent",
+      "family": "Main app typed events",
+      "properties": [],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Discovery card"
+    },
+    {
+      "name": "AnalyticsPracticeEvent",
+      "family": "Main app typed events",
+      "properties": [],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Practice tab"
+    },
+    {
+      "name": "AnalyticsWorkoutActionEvent",
+      "family": "Main app typed events",
+      "properties": [],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "PerformanceStateChangeEvent",
+      "family": "Main app typed events",
+      "properties": [
+        "type",
+        "date",
+        "scorePosition"
+      ],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Play/pause/stop transitions"
+    },
+    {
+      "name": "TapTempoEvent",
+      "family": "Main app typed events",
+      "properties": [
+        "averageTempo",
+        "updateCount"
+      ],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": "Tap-tempo"
+    },
+    {
+      "name": "PlayedAccompanimentEvent",
+      "family": "Main app typed events",
+      "properties": [
+        "accompanimentId",
+        "pieceId",
+        "date"
+      ],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    },
+    {
+      "name": "PushNotificationActionType (remind(triggerDuration)|tap|dismiss|none)",
+      "family": "Main app typed events",
+      "properties": [],
+      "source": "MacOS/Metronaut __swift5_fieldmd",
+      "nameStatus": "case",
+      "trigger": ""
+    }
+  ],
+  "propertyEnums": {
+    "AnalyticsEventProperty (MetronautAnalyticsKit)": "scenario, scene, duration, date, type, reason, deviceOrientation, pushNotifModal, submitted, page, fromPage, performanceSetting, error, tag, status, appVersion, handsSettings, category, productIdentifier, offerId, setting, pdfProvider, printStatus, purchaseStatus, pdfDownload, transpositionWarning, printCredits, value, other(key,value), campaign",
+    "AnalyticsEventPropertySceneValue": "other(String), myMusic, preview, performance, workoutStep, pushPresentation, onboarding, tuner, testing",
+    "AnalyticsEventPropertyCategoryValue": "tempo, volume, mode, hands, display, transposition, switch",
+    "AnalyticsEventPropertySettingValue": "tempo, loopStatus, loopPosition, stateMetronome, countDownKind, stateSoloMidi, volumeMidiSolo, volumeMetronome, volumeAccompaniment, transpositionOctave, transpositionInterval, scoreClef, displayAccompaniment, hands",
+    "AnalyticsEventPerformanceSettingPropertyValue": "category, setting, type, loopLength, audioOutputType, audioOutputName, scoreDuration, scoreScale, playingState, position, transposition, performanceMode, tuningDiapason, performanceTotalDuration",
+    "AnalyticsEventPropertyTypeValue": "advertiserTracking, referral, preview, mode, volume, advanced, tip, alert, badConnection, settings, versions, storage, transposition, display, annotationLocked, printLocked, noPrintCredit, printConfirmation, tempo, noPDF, printFail, unknown, hands, listen, recordingMode, rhythmMode, videoFeedback, latency, speechRecognition, tuner",
+    "AnalyticsEventPropertyReasonValue": "sharing, dismiss, tap, swipe, settingChanged, action, close, enableNotif, settings, annotation, recordings, tuner, transposition, versions, print, purchasePiece, subscription, display, error, advertiserTracking, instructions, fullPerformance, contact, volume, videoMode, sharePiece, sharePlay, addToPlaylist, backButton, helpCenter, rhythm, latency, speechRecognitionPermission, sharePieceToStudent",
+    "AnalyticsEventPropertyTagValue": "onboarding, home, account, upvote, pieceRequest, support, userGoal, universalLink",
+    "AnalyticsEventPropertyScenarioValue": "scene(...), previewLoadingVersionsList, previewLoadingVersion, previewStreamingVersion, scoreRendering",
+    "AnalyticsEventPropertyHandsSettingsValue": "left, right, both",
+    "AnalyticsEventPropertyOrientationValue": "portrait, landscape",
+    "AnalyticsEventPropertyPurchaseStatusValue": "free, purchased, purchasable",
+    "AnalyticsEventPropertyPDFProviderValue": "back, guido, testing",
+    "AnalyticsEventPropertyPrintStatusValue": "locked, unlocked",
+    "AnalyticsEventPropertyPDFDownloadValue": "loading, loaded",
+    "AnalyticsEventPropertyCampaignValue": "referralOneFreePiece (wire \"referral_1freePiece\")",
+    "Analytics.Scenario (package)": "myMusic, discovery, practice, search, account, performance, preview, workoutStep, subscription, onboarding, community, ranking, performanceStats",
+    "Analytics.Scene (package)": "collectionDetail, composerDetail, playlistDetail, workout, pieceList, offline, post, recommendation, recordings, voiceCommands, shares, onboarding, community",
+    "Analytics.Feature (package)": "pieceMenu, playlists",
+    "Analytics.ModalEndReason (package)": "dismiss, tap, swipe, back, timeOut, action, dontshow, primaryAction, secondaryAction",
+    "Analytics.NavigationContext properties": "date, duration, feature, fromPage, kind, reason, scenario, scene, type",
+    "Analytics.UserProperty (user profile sent to analytics)": "recordsSaved, recordsShared, userClass, userLevel, preferredInstrumentId, onboardingPref, totalPerformances, totalPerformancesDuration, totalPiecesPaid, totalReferralSent, totalRecommandApp, totalSearchDone, totalSongsDisplayed, totalSongsPurchased, email, isPremium, lastOpenedPieceId, lastPreviewedPieceId, initialUtmCampaign, initialUtmContent, initialUtmSource, isTeacher, userStatus, campaign, channel, referringLink, referringLinkId",
+    "Analytics.RevenueType": "purchase, subscription",
+    "Metronaut.NavigationScenario": "other(String), pushNotification, inAppMessage, spotlight, universalLink, shortcut, widget, siri, commands, banner",
+    "Metronaut.AccountAction (AccountActionEvent.actionName)": "togglePracticeGoal(active), text(field,text), avatarChanged(asset), externalLink(url), automaticRecording(value), onboarding, account, user, mySubscription, settings, avatar, midiSettings, share, shareTeacher, shareStudent, studentsList, speechRecognition, subscribe, switchOffReason, switchOffComment, switchOffHow, zendeskSupport, deeplinkInput, contact, userGoal, deconnexion, resetMyAccount, login, restorePurchases",
+    "Metronaut.SwitchOffReason": "hesitant_to_confirm, hesitant_to_renew, catalog, level, no_time, expensive, other",
+    "Core.MetronautModalAuthorisePushNotifOrigin": "onboarding, appOpening, account, pieceRequest, upVote, support, userGoal"
+  }
+}

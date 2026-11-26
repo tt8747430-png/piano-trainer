@@ -1,4 +1,4 @@
-import { chordBass, qualityIntervals, type Chord, type ChordQuality } from './chord'
+import { chordBass, qualityIntervals, type Chord, type ChordKind } from './chord'
 import { CIRCLE_OF_FIFTHS } from './circle'
 import { isWrittenKey, keySignature, type Key } from './key'
 import { pitchClassOf } from './note'
@@ -28,11 +28,11 @@ const KEYS: readonly Key[] = [
   ...CIRCLE_OF_FIFTHS.map((place) => place.minor),
 ]
 
-const hasInterval = (quality: ChordQuality, steps: number, semitones: number): boolean =>
+const hasInterval = (quality: ChordKind, steps: number, semitones: number): boolean =>
   qualityIntervals(quality).some((each) => each.steps === steps && each.semitones === semitones)
 
 /** A chord that can be a dominant: a major 3rd, and a minor 7th or none (G, G7, G7♭9, G13, G7alt). */
-const isDominant = (quality: ChordQuality): boolean =>
+const isDominant = (quality: ChordKind): boolean =>
   hasInterval(quality, 2, 4) && (quality === 'maj' || hasInterval(quality, 6, 10))
 
 /** Whether a chord is the key's tonic chord: on its tonic, with the key's 3rd and a perfect 5th. */
@@ -99,12 +99,29 @@ function spelledAsTyped(key: Key, chords: readonly Chord[]): Key {
   return typed && isWrittenKey(typed) ? typed : key
 }
 
+/** Whether the key's tonic chord sounds anywhere in the line. */
+const tonicSounds = (chords: readonly Chord[], key: Key): boolean =>
+  chords.some((chord) => isTonic(chord, key))
+
+/** How many times the key's dominant resolves to its tonic chord (V → I, V7 → i): its authentic cadences. */
+function cadences(chords: readonly Chord[], key: Key): number {
+  const dominant = pitchClass(pitchClassOf(key.tonic) + 7)
+  return chords.filter(
+    (chord, place) =>
+      pitchClassOf(chord.root) === dominant &&
+      isDominant(chord.quality) &&
+      isTonic(chords[place + 1], key),
+  ).length
+}
+
 /**
  * The keys a line of chords may be in, most likely first, as a song's key is found from its chords
  * (Gorshkov's lesson 3): each key scores two for each chord it holds, one where its tonic chord opens
- * the line and two where it closes it, and one for each chord out of it that leads as a dominant to
- * the next. Ties go to the key nearest C on the circle, then to major. Only keys that hold a chord
- * are listed, each spelled as the chords spell its tonic.
+ * the line and two where it closes it, one for each chord out of it that leads as a dominant to the
+ * next, and two for each of its authentic cadences, V to I (GarageBand's tonic progressions, their
+ * strongest). Ties go to the key whose tonic chord sounds (GarageBand's rule for two keys of one
+ * signature), then to the key nearest C on the circle, then to major. Only keys that hold a chord are
+ * listed, each spelled as the chords spell its tonic.
  */
 export function keysOfChords(chords: readonly Chord[]): KeyReading[] {
   return KEYS.flatMap((circleKey) => {
@@ -114,11 +131,16 @@ export function keysOfChords(chords: readonly Chord[]): KeyReading[] {
     if (held === 0) return []
     const applied = read.filter((reading) => reading.numeral?.of).length
     const score =
-      2 * held + (isTonic(chords[0], key) ? 1 : 0) + (isTonic(chords.at(-1), key) ? 2 : 0) + applied
+      2 * held +
+      (isTonic(chords[0], key) ? 1 : 0) +
+      (isTonic(chords.at(-1), key) ? 2 : 0) +
+      applied +
+      2 * cadences(chords, key)
     return [{ key, held, score }]
   }).sort(
     (a, b) =>
       b.score - a.score ||
+      Number(tonicSounds(chords, b.key)) - Number(tonicSounds(chords, a.key)) ||
       Math.abs(keySignature(a.key)) - Math.abs(keySignature(b.key)) ||
       Number(a.key.minor) - Number(b.key.minor),
   )

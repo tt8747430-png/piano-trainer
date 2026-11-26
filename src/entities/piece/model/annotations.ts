@@ -1,4 +1,4 @@
-import { isOneOf } from '@/shared/lib'
+import { isOneOf, isRecord } from '@/shared/lib'
 import { DYNAMICS, type Dynamic } from '@/shared/lib/music'
 import { isStaffId, type StaffId } from '@/shared/lib/notation'
 
@@ -28,9 +28,6 @@ export type Annotation = {
   | { readonly kind: 'dynamic'; readonly value: Dynamic }
   | { readonly kind: 'breath' | 'pause' | 'circle' }
 )
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
 
 /** A saved mark where it reads whole; null otherwise (a save is untrusted). */
 export function annotationOf(saved: unknown): Annotation | null {

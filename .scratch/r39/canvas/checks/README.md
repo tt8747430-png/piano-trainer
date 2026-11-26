@@ -12,6 +12,13 @@ generator. Each is one expression that returns JSON; `layout_check.js` here is t
 | `system_measure.js`  | the distinct text colours, backgrounds, radii (with the element's height), shadows,       |
 |                      | weights                                                                                   |
 
+## After every rebuild
+
+`python3 checks/regress.py` compares each built board with the last commit and prints `REVERTED?` for a board that
+shrank by more than 15%, grew by more than half, or changed its title. One is never published until the generator that
+rewrote it is found: each board has one generator (`r41.py` runs them in order; a helper file is exec'd in its own
+namespace, never imported, so it cannot re-run an old writer or shadow the kit's names).
+
 ## Running one
 
 `run.mjs` serves the built boards to Chromium, plays steps and prints each `eval`'s result:
@@ -27,3 +34,22 @@ RT=<path to the Design type's dc-runtime.js> CSP=1 node run.mjs <Board> <width> 
 - A laptop popover has no Done button; close it by clicking the element before `[role=dialog]`.
 - `dc-runtime.js` is the Design artifact type's own script; read it from the type with the Artifact tool once per
   session and keep it in the scratchpad.
+
+## The inventory and the layers
+
+- `python3 checks/inventory.py` writes `../plan/inventory.md`: every board by canvas page, every sheet, popover, menu
+  and dialog it holds (by its `aria-label`), and every kit component with the generators that call it. Run it after a
+  rebuild; a component used by nothing is deleted, and a board on no canvas page is placed or deleted.
+- `RT=… node .scratch/r39/canvas/checks/layers.mjs [Board …]` (from the repo root) opens every board, taps every
+  control in its screen that does not leave the board, and measures each layer that opens, two levels deep (New ›
+  New lesson): OUTSIDE the screen, a word CUT at its edge, two controls in OVERLAP, a phone's SHEET ON A LAPTOP,
+  a SMALL control, an EMPTY layer, a page that THROWS. Its last line counts the layers opened and those with problems.
+
+`python3 checks/dead_replaces.py <scratch dir>` builds a copy of the canvas with every `.replace(a, b)` and `re.sub` wrapped and prints each call that never matched: a patch on a helper's output that silently stopped applying (the laptop take's roll stood at 340×120 for rounds). It names suspects only; remove one, rebuild, and `diff -rq` against a copy of `practice/project` made before is the proof. `index.py:43` (a name with no comma) is expected.
+
+## The board against the app by text (`port/tdiff.py`)
+
+`RT=$RT python3 checks/port/tdiff.py <route> <Board> <w> <h>`, run from `.scratch/r39/canvas` with the dev server on
+5191: every visible text's own box, size, weight and colour on the board and on the app's route, aligned at the first
+text both show; it prints only what differs (BOARD ONLY, APP ONLY, DIFF pos/font/color). Run it before any screenshot
+of a port; shoot only what it flags.

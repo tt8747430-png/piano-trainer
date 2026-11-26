@@ -1,4 +1,5 @@
 export { ScoreSheet } from './ui/ScoreSheet'
+export { useHeadings } from './ui/use-headings'
 export type { SheetField } from './model/field-place'
 export type { EditPrinted, Printed, PrintedSign } from './model/printed'
 export { useLayerName } from './model/use-layer-name'

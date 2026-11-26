@@ -1,3 +1,4 @@
+import type { ScoreHeader } from '@/entities/piece'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TextSize } from '@/entities/settings'
@@ -13,7 +14,6 @@ import {
 import { useScrollMotion } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
-import { SheetTitle } from '@/shared/ui'
 import { ChordSummary } from '@/widgets/chord-diagrams'
 import { loopedBars } from '../model/beat-span'
 import { footRoom, inSight, lineScroll } from '../model/in-sight'
@@ -22,6 +22,7 @@ import { BackToPlayhead } from './BackToPlayhead'
 import { lyricLines, shownLines, soundingChip, type Span } from '../model/lyric-lines'
 import { foldRepeats } from '../model/repeated-lines'
 import { BeatStrip } from './BeatStrip'
+import { ViewTitle } from './ViewTitle'
 import { LyricRow } from './LyricRow'
 
 /**
@@ -37,6 +38,7 @@ import { LyricRow } from './LyricRow'
  */
 export function ChordsOverLyrics({
   title,
+  credits,
   performance,
   headings,
   bars,
@@ -51,6 +53,7 @@ export function ChordsOverLyrics({
   onSymbol,
 }: {
   title: string
+  credits?: ScoreHeader | undefined
   performance: Performance
   headings: readonly string[]
   /** Every bar as played, in beats. */
@@ -122,7 +125,7 @@ export function ChordsOverLyrics({
       aria-label={t('views.lyrics')}
       className="-mx-gutter flex h-full scroll-pb-(--float-room) flex-col gap-4 overflow-y-auto overscroll-contain px-gutter text-base *:shrink-0 sm:text-lg landscape-phone:mx-0 landscape-phone:px-0"
     >
-      <SheetTitle title={title} place="lines" />
+      <ViewTitle title={title} credits={credits} />
       <div
         ref={strip}
         className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0"
@@ -136,7 +139,7 @@ export function ChordsOverLyrics({
           onLoop={onLoop}
         />
         {pinned ? (
-          <div className="mx-auto mt-1 w-full max-w-2xl px-gutter landscape-phone:px-0">
+          <div className="page-column mt-1 px-gutter landscape-phone:px-0">
             <ChordSummary chords={summary} sounding={sounding} onChord={onSymbol} />
           </div>
         ) : null}
@@ -145,16 +148,13 @@ export function ChordsOverLyrics({
           width; the strip above runs across the view. The width is in rem: a width in the font's own
           `ch` had Chrome restyle the whole screen at every beat played. Its text at the size chosen,
           every length in its lines in `em`. */}
-      <div
-        className="mx-auto flex w-full max-w-2xl flex-col gap-[0.75em]"
-        style={{ fontSize: `${textSize}%` }}
-      >
+      <div className="page-column flex flex-col" style={{ fontSize: `${textSize}%` }}>
         {shown.map(({ line, index, starts }) => {
           const heading = headings[line.section]
           return (
             <Fragment key={index}>
               {starts && heading ? (
-                <h2 className="pt-[0.75em] text-[0.875em] tracking-[0.3em] text-muted-foreground uppercase">
+                <h2 className="pt-[1.6667em] pb-[0.3333em] font-sans text-[0.75em] font-bold tracking-caps text-muted-foreground uppercase first:pt-[1em]">
                   {heading}
                 </h2>
               ) : null}

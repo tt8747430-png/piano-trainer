@@ -18,7 +18,9 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import type { PerformanceNote } from '@/shared/lib/arrangement'
 import type { Midi } from '@/shared/lib/music'
 import { keyFill, type KeyFill, type KeyMark } from '@/shared/ui'
-import { followed, frame, VIEW, type Framing } from '../../model/camera'
+import type { CameraAngle } from '@/shared/lib'
+import { followed, frame, PITCH, VIEW, type Framing } from '../../model/camera'
+import { KEY, keyX } from '../../model/keys'
 import {
   choreograph,
   handPose,
@@ -32,6 +34,7 @@ import { fingerAngles } from '../../model/poses'
 import { createKeyboard, type Keyboard, type PianoPaint } from './keyboard'
 import { addNails, placeHand, poseFinger, setUpHand, tint, type HandRig } from './rig'
 import { withPaint } from './paint'
+import { REDUCED_MOTION } from '@/shared/lib'
 
 /** What the stage shows: the music, where it is, and what the learner holds. */
 export interface StageInput {
@@ -50,7 +53,19 @@ export interface StageInput {
   readonly faded: Side | null
   /** The music's lowest and highest keys, for the camera. */
   readonly range: { readonly low: Midi; readonly high: Midi } | null
+  /**
+   * What a pressed key is painted by: the hand pressing it (the Player's), or its chord tone, as its
+   * mark says (Chords' stage, its canvas).
+   */
+  readonly pressedPaint?: 'hand' | 'tone'
+  /** Where the camera looks from: the seat, or above (the Piano sheet's Angle). */
+  readonly angle?: CameraAngle
+  /** The hands drawn at the keys; without them the keys alone, pressed where they are held. */
+  readonly handsShown?: boolean
 }
+
+/** Where a key's far end stands on the canvas, from 0 to 1 across and down: what a tag is put over. */
+export type KeyPlace = (key: Midi, black: boolean) => readonly [number, number]
 
 export interface Stage {
   update(input: StageInput): void
@@ -74,13 +89,13 @@ const REST: Readonly<Record<KeyFill, string>> = {
   lit: 'var(--primary)',
   selected: 'var(--primary)',
   wrong: 'var(--destructive)',
-  root: 'var(--role-root-wash)',
-  '3rd': 'var(--role-3rd-wash)',
-  '5th': 'var(--role-5th-wash)',
-  '7th': 'var(--role-7th-wash)',
-  '9th': 'var(--role-9th-wash)',
-  '11th': 'var(--role-11th-wash)',
-  '13th': 'var(--role-13th-wash)',
+  root: 'var(--role-root)',
+  '3rd': 'var(--role-3rd)',
+  '5th': 'var(--role-5th)',
+  '7th': 'var(--role-7th)',
+  '9th': 'var(--role-9th)',
+  '11th': 'var(--role-11th)',
+  '13th': 'var(--role-13th)',
   rh: 'var(--hand-rh-wash)',
   lh: 'var(--hand-lh-wash)',
   staff: 'var(--hand-staff-wash)',
@@ -91,18 +106,9 @@ const DOWN: Readonly<Record<KeyFill, string>> = {
   ...REST,
   white: 'var(--key-down)',
   black: 'var(--key-down)',
-  root: 'var(--role-root)',
-  '3rd': 'var(--role-3rd)',
-  '5th': 'var(--role-5th)',
-  '7th': 'var(--role-7th)',
-  '9th': 'var(--role-9th)',
-  '11th': 'var(--role-11th)',
-  '13th': 'var(--role-13th)',
   rh: 'var(--hand-rh)',
   lh: 'var(--hand-lh)',
   staff: 'var(--hand-staff)',
-  tonic: 'var(--key-tonic-down)',
-  scale: 'var(--key-scale-down)',
 }
 
 const FILLS = Object.keys(REST).filter((fill): fill is KeyFill => fill in REST)
@@ -194,7 +200,12 @@ async function loadHand(side: Side): Promise<DrawnHand> {
 export function createStage(
   canvas: HTMLCanvasElement,
   input: StageInput,
-  events: { readonly onLoaded: () => void; readonly onFailed: () => void },
+  events: {
+    readonly onLoaded: () => void
+    readonly onFailed: () => void
+    /** After each frame: where the keys stand now, for what is drawn over them. */
+    readonly onDrawn?: (place: KeyPlace) => void
+  },
 ): Stage {
   const renderer = new WebGLRenderer({
     canvas,
@@ -226,13 +237,13 @@ export function createStage(
   const keyboard: Keyboard = createKeyboard()
   scene.add(keyboard.group)
   const camera = new PerspectiveCamera((VIEW.fov * 180) / Math.PI, 1, 0.05, 5)
-  camera.rotation.x = -VIEW.pitch
+  camera.rotation.x = -PITCH[input.angle ?? 'seat']
 
   let now = input
   let size = { width: 1, height: 1 }
   let part: Choreography = choreograph(now.notes)
   let apart = handsApart(part)
-  let framing: Framing = frame(size, now.range, apart)
+  let framing: Framing = frame(size, now.range, apart, now.angle)
   let cameraX = framing.x
   let paints = readPaints(canvas.parentElement ?? document.body)
   const hands: Partial<Record<Side, DrawnHand>> = {}
@@ -263,7 +274,7 @@ export function createStage(
 
   // With less motion asked for, a step, the hands' fading and the camera land at once; the hands
   // playing still play, as a film of them would.
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)')
+  const still = window.matchMedia(REDUCED_MOTION)
   const eased = (dt: number, tau: number) => (still.matches ? 1 : 1 - Math.exp(-dt / tau))
 
   /** One frame: the hands and keys eased toward where the music has them; whether they settled. */
@@ -278,7 +289,10 @@ export function createStage(
       const hand = hands[side]
       const music = part[side]
       if (!hand) continue
-      const target = music ? pressHeld(handPose(music, tick, now.perSecond), now.held) : null
+      const target =
+        music && now.handsShown !== false
+          ? pressHeld(handPose(music, tick, now.perSecond), now.held)
+          : null
       hand.rig.root.visible = target !== null
       const fadeTo = target === null ? 0 : now.faded === side ? 1 / 3 : 1
       const kFade = eased(dt, EASE.fade)
@@ -349,13 +363,14 @@ export function createStage(
       if (press !== target) moving = true
       const fill = keyFill(key, { marks: now.marks, ...(now.wrong ? { wrong: now.wrong } : {}) })
       const rest = paints.rest.get(fill) ?? paints.piano.white
+      const plain = fill === 'white' || fill === 'black'
+      const toned = now.pressedPaint === 'tone' && !plain ? (paints.down.get(fill) ?? rest) : null
       const paint = by
-        ? rest.clone().lerp(paints.hand[by.side], Math.min(1, press * 1.5))
+        ? rest.clone().lerp(toned ?? paints.hand[by.side], Math.min(1, press * 1.5))
         : held
           ? (paints.down.get(fill) ?? rest)
           : rest
       keyboard.set(key, press, paint)
-      const plain = fill === 'white' || fill === 'black'
       if (press === 0 && plain && !held) {
         painted.delete(key)
         keyPress.delete(key)
@@ -374,6 +389,10 @@ export function createStage(
     camera.position.set(cameraX, framing.y, framing.z)
     aim()
     renderer.render(scene, camera)
+    events.onDrawn?.((key, black) => {
+      const at = new Vector3(keyX(key), black ? KEY.blackHeight : 0, -KEY.length).project(camera)
+      return [(at.x + 1) / 2, (1 - at.y) / 2]
+    })
     return !moving
   }
 
@@ -432,12 +451,15 @@ export function createStage(
       const notesChanged = next.notes !== now.notes
       const rangeChanged =
         next.range?.low !== now.range?.low || next.range?.high !== now.range?.high
+      const angleChanged = next.angle !== now.angle
       now = next
+      if (angleChanged) camera.rotation.x = -PITCH[next.angle ?? 'seat']
       if (notesChanged) {
         part = choreograph(next.notes)
         apart = handsApart(part)
       }
-      if (notesChanged || rangeChanged) framing = frame(size, next.range, apart)
+      if (notesChanged || rangeChanged || angleChanged)
+        framing = frame(size, next.range, apart, next.angle)
       wake()
     },
     resize: (width, height) => {
@@ -445,7 +467,7 @@ export function createStage(
       renderer.setSize(size.width, size.height, false)
       camera.aspect = size.width / size.height
       camera.updateProjectionMatrix()
-      framing = frame(size, now.range, apart)
+      framing = frame(size, now.range, apart, now.angle)
       wake()
     },
     dispose: () => {

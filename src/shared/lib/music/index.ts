@@ -1,5 +1,7 @@
-export { midi, PITCH_CLASSES, pitchClass, type Midi, type PitchClass } from './pitch'
+export { isMidi, midi, PITCH_CLASSES, pitchClass, type Midi, type PitchClass } from './pitch'
 export {
+  barNumber,
+  barsCounted,
   barTicks,
   beatGrouping,
   beatsPerBar,
@@ -10,6 +12,8 @@ export {
   eighthTicks,
   groupTicks,
   isCompound,
+  opensOnPickup,
+  printedBar,
   isMeter,
   METER_COUNTS,
   METER_UNITS,
@@ -43,8 +47,11 @@ export {
   MIDDLE_C,
   MIDDLE_OCTAVES,
   PIANO,
+  WHITE_KEYS,
   isBlackKey,
   keyboardRange,
+  keysAround,
+  type KeysAround,
   octaveOf,
   printedKeyName,
   rangeOf,
@@ -52,11 +59,13 @@ export {
 } from './keyboard'
 export {
   accidentalSign,
+  isAccidental,
   LETTERS,
   midiOf,
   note,
   noteFromParam,
   noteName,
+  letterIndex,
   noteParam,
   otherSpelling,
   parseNoteInOctave,
@@ -105,25 +114,32 @@ export {
 export { CHORD_ROLES, type ChordRole, type Tone } from './tone'
 export { type NoteLyrics, type Syllable } from './lyrics'
 export {
-  CHORD_FAMILIES,
-  CHORD_QUALITIES,
   chordBass,
-  chordFamily,
-  chordRootSpelling,
   chordSymbol,
   qualityRootSpelling,
   writtenSymbol,
-  qualitiesIn,
   qualityIntervals,
-  qualitySpellings,
   qualitySuffix,
   spellChord,
+  isTableQuality,
+  kindOfParts,
+  partsOfKind,
   type Chord,
-  type ChordFamily,
-  type ChordQuality,
+  type ChordKind,
 } from './chord'
 export {
+  CHORD_FAMILIES,
+  CHORD_QUALITIES,
+  chordFamily,
+  chordRootSpelling,
+  qualitiesIn,
+  qualitySpellings,
+  type ChordFamily,
+  type ChordQuality,
+} from './chord-quality'
+export {
   ALTERATIONS,
+  CHORD_PARTS,
   partsOf,
   ADDED_TONES,
   addedOf,
@@ -132,7 +148,6 @@ export {
   BUILT_SIZES,
   buildChord,
   fitParts,
-  SEVENTH_DEGREE,
   SEVENTHS,
   seventhsOf,
   sizesOf,
@@ -153,16 +168,24 @@ export {
   parseChordSymbol,
   readChordLine,
   readChordSymbol,
+  rootsInCapitals,
   type ChordLine,
   printedChord,
   printedNote,
   printedSymbol,
+  symbolParts,
+  type SymbolParts,
 } from './chord-symbol'
 export { nameChords, type FoundChord, type LeftOut } from './chord-finder'
-export { alteredSymbol, voicingKind, VOICING_KINDS, type VoicingKind } from './voicing-kind'
-export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
+export {
+  alteredSymbol,
+  lowestFirst,
+  voicingKind,
+  VOICING_KINDS,
+  type VoicingKind,
+} from './voicing-kind'
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
-export { voiceLead, type RowPosition } from './voice-lead'
+export { middleOf, voiceLead, type RowPosition } from './voice-lead'
 export {
   chordRole,
   KEY_ROLES,
@@ -192,6 +215,7 @@ export {
   numeralText,
   parseNumeral,
   parseNumerals,
+  readsAsNumerals,
   readDegree,
   type Numeral,
 } from './numerals'
@@ -209,9 +233,7 @@ export {
   COMPARED_SCALES,
   scaleDifferences,
   type ComparedScale,
-  modeVamp,
   scaleDegreeNames,
-  scaleGaps,
   scaleHasChords,
   scaleIntervals,
   scaleKey,
@@ -243,7 +265,6 @@ export {
 } from './place'
 export {
   arpeggioFingering,
-  fingerCrossings,
   handPositions,
   FINGERINGS,
   FINGERS,
@@ -260,7 +281,6 @@ export {
   VOICINGS,
   voiceChord,
   voicingBar,
-  voicingInLeftHand,
   voicingTakesInversion,
   type Voicing,
   type VoicingBar,
@@ -272,7 +292,6 @@ export {
   ROMAN_NUMERALS,
   SIZE_NOTES,
   STACK_SIZES,
-  sizeOfNotes,
   scaleChordAt,
   scaleChords,
   scaleChordHolds,
@@ -291,16 +310,10 @@ export {
   type TensionChord,
 } from './colour-notes'
 export { SKILLS, chordSkill, isSkillId, scaleSkill, skillOf, type SkillId } from './skill'
-export {
-  CIRCLE_OF_FIFTHS,
-  circleFunctions,
-  circleKey,
-  randomKey,
-  sameKey,
-  type CircleRing,
-} from './circle'
+export { CIRCLE_OF_FIFTHS, circleKey, randomKey, sameKey, type CircleRing } from './circle'
 export { keysHolding, type KeyHolding } from './keys-holding'
 export { keysOfChords, readInKey, type ChordReading, type KeyReading } from './key-of-chords'
+export { keyOfNotes } from './key-of-notes'
 export { findNumerals, numeralReadings, standsFor, type FoundSpan } from './numeral-find'
 export { KEY_WALKS, walkKeys, type KeyWalk } from './key-walk'
 export { LEAD_INS, withLeadIns, type LeadIn } from './lead-in'
@@ -321,7 +334,6 @@ export {
   PEDALS,
   SWING_MARKS,
   SWING_TEXT,
-  hasMarks,
   writtenShift,
   type Articulation,
   type Dynamic,

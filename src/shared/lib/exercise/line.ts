@@ -87,13 +87,14 @@ export const handBelow = (keys: readonly Played[], below = 12): Played[] =>
 
 /**
  * Each hand's keys one after another in 8ths from `from`, both hands together, the last held to the
- * end of its bar.
+ * end of its bar (`bar` ticks long, a 4/4 bar by default).
  */
 export function inEighths(
   hands: Readonly<Partial<Record<Hand, readonly Played[]>>>,
   from: Tick = 0,
   /** The notes' lengths in turn, in 8ths, repeating (a dotted pair is 1.5 then 0.5): even by default. */
   lengths: readonly number[] = [1],
+  bar: Tick = BAR,
 ): LineNote[] {
   return BOTH_HANDS.flatMap((hand) => {
     let startTick = from
@@ -102,7 +103,7 @@ export function inEighths(
       const at = startTick
       startTick += length
       const last = i === keys.length - 1
-      const durationTicks = last ? Math.ceil((at + length) / BAR) * BAR - at : length
+      const durationTicks = last ? Math.ceil((at + length) / bar) * bar - at : length
       return { ...key, hand, startTick: at, durationTicks }
     })
   })
@@ -110,18 +111,19 @@ export function inEighths(
 
 /**
  * Each hand's chords one after another, `every` ticks apart from `from`, the last held to the end of
- * its bar.
+ * its bar (`bar` ticks long, a 4/4 bar by default).
  */
 export function inBeats(
   hands: Readonly<Partial<Record<Hand, readonly (readonly Played[])[]>>>,
   every: Tick,
   from: Tick = 0,
+  bar: Tick = BAR,
 ): LineNote[] {
   return BOTH_HANDS.flatMap((hand) =>
     (hands[hand] ?? []).flatMap((keys, i, chords) => {
       const startTick = from + i * every
       const last = i === chords.length - 1
-      const durationTicks = last ? Math.ceil((startTick + every) / BAR) * BAR - startTick : every
+      const durationTicks = last ? Math.ceil((startTick + every) / bar) * bar - startTick : every
       return keys.map((key) => ({ ...key, hand, startTick, durationTicks }))
     }),
   )

@@ -1,66 +1,55 @@
 import { useTranslation } from 'react-i18next'
 import { selectMidi, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setMidi } from '@/features/set-preference'
-import { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift } from '@/shared/lib'
+import { OCTAVE_SHIFTS, PEDAL_WAYS } from '@/shared/lib'
 import { TOUCHES } from '@/shared/lib/schedule'
-import { Segmented, SettingField, SettingRows } from '@/shared/ui'
-import { useMidiConnection } from '../use-midi-connection'
+import { GroupRow, GroupSegmented, Stepper } from '@/shared/ui'
 
 /** An octave shift as written: a sign before it, the minus a true one. */
-const shiftLabel = (shift: OctaveShift) =>
-  shift > 0 ? `+${shift}` : shift < 0 ? `−${-shift}` : '0'
+const shiftLabel = (shift: number) => (shift > 0 ? `+${shift}` : shift < 0 ? `−${-shift}` : '0')
+
+const LOWEST = Math.min(...OCTAVE_SHIFTS)
+const HIGHEST = Math.max(...OCTAVE_SHIFTS)
 
 /**
- * How the MIDI keyboard plays, on the MIDI screen: its octave shift, its touch and its pedal's way
- * round, each one row whose ⓘ says what it does (ADR 0096). Greyed where the browser cannot
- * connect a keyboard, as the line over the switches says.
+ * How the MIDI keyboard plays (the board's Playing): Octave shift a − n + stepper at its row's end,
+ * then Touch and Pedal as segmented rows. Rows of a flush settings group.
  */
 export function MidiPlayingFields() {
   const { t } = useTranslation('common')
   const store = useSettingsStoreApi()
   const midi = useSettings(selectMidi)
-  const disabled = useMidiConnection().connection.kind === 'unsupported'
   return (
-    <SettingRows>
-      <SettingField
-        setting="midi.octaveShift"
-        label={t('midiSettings.octaveShift.label')}
-        info={t('midiSettings.octaveShift.detail')}
-      >
-        <Segmented
+    <>
+      <GroupRow setting="midi.octaveShift" label={t('midiSettings.octaveShift.label')}>
+        <Stepper
           label={t('midiSettings.octaveShift.label')}
           value={midi.octaveShift}
-          disabled={disabled}
-          options={OCTAVE_SHIFTS.map((value) => ({ value, label: shiftLabel(value) }))}
-          onChange={(octaveShift) => setMidi(store, { octaveShift })}
+          min={LOWEST}
+          max={HIGHEST}
+          format={shiftLabel}
+          onChange={(next) => {
+            const octaveShift = OCTAVE_SHIFTS.find((shift) => shift === next)
+            if (octaveShift !== undefined) setMidi(store, { octaveShift })
+          }}
+          decrease={t('midiSettings.octaveShift.down')}
+          increase={t('midiSettings.octaveShift.up')}
         />
-      </SettingField>
-      <SettingField
+      </GroupRow>
+      <GroupSegmented
         setting="midi.touch"
         label={t('midiSettings.touch.label')}
-        info={t('midiSettings.touch.detail')}
-      >
-        <Segmented
-          label={t('midiSettings.touch.label')}
-          value={midi.touch}
-          disabled={disabled}
-          options={TOUCHES.map((value) => ({ value, label: t(`midiSettings.touch.${value}`) }))}
-          onChange={(touch) => setMidi(store, { touch })}
-        />
-      </SettingField>
-      <SettingField
+        value={midi.touch}
+        options={TOUCHES.map((value) => ({ value, label: t(`midiSettings.touch.${value}`) }))}
+        onChange={(touch) => setMidi(store, { touch })}
+      />
+      <GroupSegmented
         setting="midi.pedal"
         label={t('midiSettings.pedal.label')}
-        info={t('midiSettings.pedal.detail')}
-      >
-        <Segmented
-          label={t('midiSettings.pedal.label')}
-          value={midi.pedal}
-          disabled={disabled}
-          options={PEDAL_WAYS.map((value) => ({ value, label: t(`midiSettings.pedal.${value}`) }))}
-          onChange={(pedal) => setMidi(store, { pedal })}
-        />
-      </SettingField>
-    </SettingRows>
+        value={midi.pedal}
+        options={PEDAL_WAYS.map((value) => ({ value, label: t(`midiSettings.pedal.${value}`) }))}
+        onChange={(pedal) => setMidi(store, { pedal })}
+      />
+    </>
   )
 }

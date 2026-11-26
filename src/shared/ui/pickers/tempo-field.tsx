@@ -57,7 +57,7 @@ function HeldStep({
       aria-label={label}
       title={label}
       disabled={disabled}
-      className="size-11 shrink-0 rounded-control"
+      className="shrink-0 rounded-control"
       onPointerDown={(event) => {
         if (event.button !== 0) return
         step.current()
@@ -117,7 +117,7 @@ export function TempoField({
       commit()
     }
   }
-  const custom = value.text !== null && !(TEMPO_TERMS as readonly string[]).includes(value.text)
+  const custom = value.text !== null && !TEMPO_TERMS.some((term) => term === value.text)
   const [ownWords, setOwnWords] = useState(custom)
   const textChoice = value.text === null ? '' : ownWords || custom ? 'own' : value.text
   const hear = () => {
@@ -133,6 +133,7 @@ export function TempoField({
       {units ? (
         <Row name={t('tempoField.beat')}>
           <MenuPicker
+            bare
             label={t('tempoField.beat')}
             value={value.unit}
             face={(unit) => (
@@ -178,10 +179,10 @@ export function TempoField({
             size="icon"
             aria-label={t('tempoField.hear')}
             title={t('tempoField.hear')}
-            className="size-11 shrink-0 rounded-pill text-link"
+            className="shrink-0 text-link"
             onClick={hear}
           >
-            <Play aria-hidden />
+            <Play aria-hidden className="fill-current" />
           </Button>
         </div>
       </Row>
@@ -189,6 +190,7 @@ export function TempoField({
         <>
           <Row name={t('tempoField.text')}>
             <MenuPicker
+              bare
               label={t('tempoField.text')}
               value={textChoice}
               options={[

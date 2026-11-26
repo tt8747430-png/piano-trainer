@@ -1,0 +1,2752 @@
+{
+ "boards": {
+  "Accompaniment": [
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Rename"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort and filter"
+   },
+   {
+    "role": "dialog",
+    "label": "New folder"
+   }
+  ],
+  "AccompanimentLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Rename"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort and filter"
+   },
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "New folder"
+   }
+  ],
+  "Admin": [
+   {
+    "role": "alertdialog",
+    "label": "{{dlg.t}}"
+   },
+   {
+    "role": "dialog",
+    "label": "New group"
+   },
+   {
+    "role": "dialog",
+    "label": "Add member"
+   },
+   {
+    "role": "dialog",
+    "label": "{{mMenuT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "New flag"
+   }
+  ],
+  "AdminLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "alertdialog",
+    "label": "{{dlg.t}}"
+   },
+   {
+    "role": "dialog",
+    "label": "New group"
+   },
+   {
+    "role": "dialog",
+    "label": "Add member"
+   },
+   {
+    "role": "dialog",
+    "label": "{{mMenuT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "New flag"
+   }
+  ],
+  "AllSongs": [
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "menu",
+    "label": "Sort"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "New playlist"
+   },
+   {
+    "role": "dialog",
+    "label": "New song"
+   },
+   {
+    "role": "dialog",
+    "label": "Import"
+   },
+   {
+    "role": "dialog",
+    "label": "Record"
+   }
+  ],
+  "AllSongsLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "Sort"
+   },
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "New playlist"
+   },
+   {
+    "role": "dialog",
+    "label": "New song"
+   },
+   {
+    "role": "dialog",
+    "label": "Import"
+   },
+   {
+    "role": "dialog",
+    "label": "Record"
+   }
+  ],
+  "AppLayers": [
+   {
+    "role": "dialog",
+    "label": "Search"
+   }
+  ],
+  "AppLayersLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Search"
+   }
+  ],
+  "Archive": [
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "Apply style to"
+   },
+   {
+    "role": "alertdialog",
+    "label": "{{permT}}"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Apply to all folders?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Delete \u201cHymns\u201d?"
+   },
+   {
+    "role": "menu",
+    "label": "{{whoT}}"
+   }
+  ],
+  "ArchiveLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "Apply style to"
+   },
+   {
+    "role": "alertdialog",
+    "label": "{{permT}}"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Apply to all folders?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Delete \u201cHymns\u201d?"
+   },
+   {
+    "role": "menu",
+    "label": "{{whoT}}"
+   }
+  ],
+  "Check": [
+   {
+    "role": "dialog",
+    "label": "Level"
+   },
+   {
+    "role": "dialog",
+    "label": "Chord qualities"
+   }
+  ],
+  "CheckLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Level"
+   },
+   {
+    "role": "dialog",
+    "label": "Chord qualities"
+   }
+  ],
+  "ChordFinder": [
+   {
+    "role": "dialog",
+    "label": "Chord finder settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "ChordFinderLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Chord finder settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "ChordPlayer": [
+   {
+    "role": "dialog",
+    "label": "{{selSym}}"
+   },
+   {
+    "role": "dialog",
+    "label": "{{tagTitle}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Share"
+   },
+   {
+    "role": "dialog",
+    "label": "Style"
+   },
+   {
+    "role": "dialog",
+    "label": "Key"
+   },
+   {
+    "role": "dialog",
+    "label": "Tempo"
+   },
+   {
+    "role": "dialog",
+    "label": "Repeats"
+   },
+   {
+    "role": "dialog",
+    "label": "Chord player settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   },
+   {
+    "role": "dialog",
+    "label": "Chord sheet"
+   }
+  ],
+  "ChordPlayerLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "{{selSym}}"
+   },
+   {
+    "role": "dialog",
+    "label": "{{tagTitle}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Share"
+   },
+   {
+    "role": "dialog",
+    "label": "Style"
+   },
+   {
+    "role": "dialog",
+    "label": "Key"
+   },
+   {
+    "role": "dialog",
+    "label": "Tempo"
+   },
+   {
+    "role": "dialog",
+    "label": "Repeats"
+   },
+   {
+    "role": "dialog",
+    "label": "Chord player settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   },
+   {
+    "role": "dialog",
+    "label": "Chord sheet"
+   }
+  ],
+  "Chords": [
+   {
+    "role": "menu",
+    "label": "Play as"
+   },
+   {
+    "role": "menu",
+    "label": "Hands"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   },
+   {
+    "role": "dialog",
+    "label": "{{nextTitle}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Key"
+   },
+   {
+    "role": "dialog",
+    "label": "Voicing"
+   },
+   {
+    "role": "dialog",
+    "label": "Root"
+   },
+   {
+    "role": "dialog",
+    "label": "Chord type"
+   },
+   {
+    "role": "dialog",
+    "label": "In the bass"
+   }
+  ],
+  "ChordsLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "Play as"
+   },
+   {
+    "role": "menu",
+    "label": "Hands"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   },
+   {
+    "role": "dialog",
+    "label": "{{nextTitle}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Key"
+   },
+   {
+    "role": "dialog",
+    "label": "Voicing"
+   },
+   {
+    "role": "dialog",
+    "label": "Root"
+   },
+   {
+    "role": "dialog",
+    "label": "In the bass"
+   },
+   {
+    "role": "dialog",
+    "label": "Chord type"
+   }
+  ],
+  "CircleOfFifths": [],
+  "CircleOfFifthsLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   }
+  ],
+  "Course": [
+   {
+    "role": "alertdialog",
+    "label": "Delete Intro to Music Reading?"
+   },
+   {
+    "role": "dialog",
+    "label": "New lesson"
+   },
+   {
+    "role": "menu",
+    "label": "Publishing"
+   }
+  ],
+  "CourseLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Delete Intro to Music Reading?"
+   },
+   {
+    "role": "dialog",
+    "label": "New lesson"
+   },
+   {
+    "role": "menu",
+    "label": "Publishing"
+   }
+  ],
+  "Editor": [
+   {
+    "role": "dialog",
+    "label": "Amazing Grace"
+   },
+   {
+    "role": "dialog",
+    "label": "About publishing"
+   },
+   {
+    "role": "dialog",
+    "label": "Credits"
+   },
+   {
+    "role": "dialog",
+    "label": "Instruments"
+   },
+   {
+    "role": "dialog",
+    "label": "Add an instrument"
+   }
+  ],
+  "EditorDraft": [
+   {
+    "role": "dialog",
+    "label": "Amazing Grace"
+   },
+   {
+    "role": "dialog",
+    "label": "Credits"
+   },
+   {
+    "role": "dialog",
+    "label": "Instruments"
+   },
+   {
+    "role": "dialog",
+    "label": "Add an instrument"
+   },
+   {
+    "role": "dialog",
+    "label": "Version history"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Publish Amazing Grace?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Restore this version?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Discard changes?"
+   }
+  ],
+  "EditorDraftLaptop": [
+   {
+    "role": "dialog",
+    "label": "Amazing Grace"
+   },
+   {
+    "role": "dialog",
+    "label": "Credits"
+   },
+   {
+    "role": "dialog",
+    "label": "Instruments"
+   },
+   {
+    "role": "dialog",
+    "label": "Add an instrument"
+   },
+   {
+    "role": "dialog",
+    "label": "Version history"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Publish Amazing Grace?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Restore this version?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Discard changes?"
+   }
+  ],
+  "EditorLaptop": [
+   {
+    "role": "dialog",
+    "label": "Amazing Grace"
+   },
+   {
+    "role": "dialog",
+    "label": "About publishing"
+   },
+   {
+    "role": "dialog",
+    "label": "Go to bar"
+   },
+   {
+    "role": "dialog",
+    "label": "Credits"
+   },
+   {
+    "role": "dialog",
+    "label": "Instruments"
+   },
+   {
+    "role": "dialog",
+    "label": "Add an instrument"
+   }
+  ],
+  "Exercise": [
+   {
+    "role": "dialog",
+    "label": "Key"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "ExerciseLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Key"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "Explore": [
+   {
+    "role": "menu",
+    "label": "Order"
+   },
+   {
+    "role": "dialog",
+    "label": "Report this song?"
+   }
+  ],
+  "ExploreLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "Order"
+   },
+   {
+    "role": "dialog",
+    "label": "Report this song?"
+   }
+  ],
+  "FingerTechnique": [
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Rename"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort and filter"
+   },
+   {
+    "role": "dialog",
+    "label": "New folder"
+   }
+  ],
+  "FingerTechniqueLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Rename"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort and filter"
+   },
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "New folder"
+   }
+  ],
+  "Folder": [
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "menu",
+    "label": "Sort"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "New playlist"
+   },
+   {
+    "role": "dialog",
+    "label": "New song"
+   },
+   {
+    "role": "dialog",
+    "label": "Import"
+   },
+   {
+    "role": "dialog",
+    "label": "Record"
+   },
+   {
+    "role": "menu",
+    "label": "Hymns"
+   }
+  ],
+  "FolderLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "Sort"
+   },
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "menu",
+    "label": "Hymns"
+   },
+   {
+    "role": "dialog",
+    "label": "New playlist"
+   },
+   {
+    "role": "dialog",
+    "label": "New song"
+   },
+   {
+    "role": "dialog",
+    "label": "Import"
+   },
+   {
+    "role": "dialog",
+    "label": "Record"
+   }
+  ],
+  "Groups": [
+   {
+    "role": "dialog",
+    "label": "New group"
+   },
+   {
+    "role": "dialog",
+    "label": "Join with a link"
+   },
+   {
+    "role": "dialog",
+    "label": "Choose a folder"
+   },
+   {
+    "role": "dialog",
+    "label": "Share with a group"
+   },
+   {
+    "role": "alertdialog",
+    "label": "{{rmT}}"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Delete Choir accompanists?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Stop sharing Choir hymns?"
+   }
+  ],
+  "GroupsLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "New group"
+   },
+   {
+    "role": "dialog",
+    "label": "Join with a link"
+   },
+   {
+    "role": "dialog",
+    "label": "Choose a folder"
+   },
+   {
+    "role": "dialog",
+    "label": "Share with a group"
+   },
+   {
+    "role": "alertdialog",
+    "label": "{{rmT}}"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Delete Choir accompanists?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Stop sharing Choir hymns?"
+   }
+  ],
+  "Intervals": [
+   {
+    "role": "dialog",
+    "label": "{{name}}"
+   },
+   {
+    "role": "menu",
+    "label": "Play as"
+   },
+   {
+    "role": "dialog",
+    "label": "From"
+   },
+   {
+    "role": "dialog",
+    "label": "Interval settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "IntervalsLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "{{name}}"
+   },
+   {
+    "role": "menu",
+    "label": "Play as"
+   },
+   {
+    "role": "dialog",
+    "label": "From"
+   },
+   {
+    "role": "dialog",
+    "label": "Interval settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "JazzVocabulary": [
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Rename"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort and filter"
+   },
+   {
+    "role": "dialog",
+    "label": "New folder"
+   }
+  ],
+  "JazzVocabularyLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Rename"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort and filter"
+   },
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "New folder"
+   }
+  ],
+  "Laptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   }
+  ],
+  "Learn": [
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "{{newT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "New course"
+   }
+  ],
+  "LearnCourses": [
+   {
+    "role": "dialog",
+    "label": "Courses"
+   },
+   {
+    "role": "dialog",
+    "label": "About the courses"
+   },
+   {
+    "role": "dialog",
+    "label": "New course"
+   }
+  ],
+  "LearnCoursesLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Courses"
+   },
+   {
+    "role": "dialog",
+    "label": "About the courses"
+   },
+   {
+    "role": "dialog",
+    "label": "New course"
+   }
+  ],
+  "LearnLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "{{newT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "New course"
+   }
+  ],
+  "LearnLevel": [
+   {
+    "role": "dialog",
+    "label": "Chapter"
+   }
+  ],
+  "LearnLevelLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Chapter"
+   }
+  ],
+  "LearnYours": [
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "{{newT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   }
+  ],
+  "LearnYoursLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "{{newT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   }
+  ],
+  "Legal": [],
+  "LegalLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   }
+  ],
+  "Lesson": [
+   {
+    "role": "dialog",
+    "label": "The colours"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Delete How major scales work?"
+   },
+   {
+    "role": "dialog",
+    "label": "Insert"
+   },
+   {
+    "role": "dialog",
+    "label": "Scale"
+   },
+   {
+    "role": "dialog",
+    "label": "About Notes"
+   },
+   {
+    "role": "dialog",
+    "label": "{{blkT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "How major scales work"
+   },
+   {
+    "role": "dialog",
+    "label": "In this lesson"
+   },
+   {
+    "role": "dialog",
+    "label": "Tools"
+   },
+   {
+    "role": "dialog",
+    "label": "Versions of How major scales work"
+   },
+   {
+    "role": "dialog",
+    "label": "Style: Scale"
+   }
+  ],
+  "LessonLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "The colours"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Delete How major scales work?"
+   },
+   {
+    "role": "dialog",
+    "label": "Insert"
+   },
+   {
+    "role": "dialog",
+    "label": "Scale"
+   },
+   {
+    "role": "dialog",
+    "label": "About Notes"
+   },
+   {
+    "role": "dialog",
+    "label": "{{blkT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "How major scales work"
+   },
+   {
+    "role": "dialog",
+    "label": "In this lesson"
+   },
+   {
+    "role": "dialog",
+    "label": "Tools"
+   },
+   {
+    "role": "dialog",
+    "label": "Versions of How major scales work"
+   },
+   {
+    "role": "dialog",
+    "label": "Style: Scale"
+   }
+  ],
+  "Main": [],
+  "Metronome": [
+   {
+    "role": "dialog",
+    "label": "Subdivision"
+   }
+  ],
+  "MetronomeLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Subdivision"
+   }
+  ],
+  "Pattern": [
+   {
+    "role": "menu",
+    "label": "Play over"
+   },
+   {
+    "role": "dialog",
+    "label": "{{name}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "PatternLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "Play over"
+   },
+   {
+    "role": "dialog",
+    "label": "{{name}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "PatternNew": [
+   {
+    "role": "dialog",
+    "label": "{{name}}"
+   }
+  ],
+  "PatternNewLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "{{name}}"
+   }
+  ],
+  "PlayChord": [],
+  "PlayChordLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   }
+  ],
+  "PlayChromatic": [
+   {
+    "role": "dialog",
+    "label": "Setup"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   }
+  ],
+  "PlayChromaticLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Setup"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   }
+  ],
+  "PlayExercise": [
+   {
+    "role": "dialog",
+    "label": "Setup"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   }
+  ],
+  "PlayExerciseLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Setup"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   }
+  ],
+  "PlayProgression": [
+   {
+    "role": "dialog",
+    "label": "Setup"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   }
+  ],
+  "PlayProgressionLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Setup"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   }
+  ],
+  "PlayWalk": [
+   {
+    "role": "dialog",
+    "label": "Setup"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   }
+  ],
+  "PlayWalkLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Setup"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   }
+  ],
+  "Player": [],
+  "PlayerApp": [
+   {
+    "role": "menu",
+    "label": "View"
+   },
+   {
+    "role": "dialog",
+    "label": "Played through"
+   },
+   {
+    "role": "dialog",
+    "label": "Metronome sound"
+   },
+   {
+    "role": "dialog",
+    "label": "Transpose"
+   },
+   {
+    "role": "dialog",
+    "label": "Pattern"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort and filter"
+   },
+   {
+    "role": "dialog",
+    "label": "{{viewName}} settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   },
+   {
+    "role": "dialog",
+    "label": "Practice"
+   },
+   {
+    "role": "dialog",
+    "label": "Parts"
+   },
+   {
+    "role": "dialog",
+    "label": "Settings"
+   },
+   {
+    "role": "menu",
+    "label": "Song"
+   },
+   {
+    "role": "dialog",
+    "label": "{{sheet.name}} chord"
+   }
+  ],
+  "PlayerDesk": [
+   {
+    "role": "dialog",
+    "label": "Played through"
+   },
+   {
+    "role": "dialog",
+    "label": "Metronome sound"
+   },
+   {
+    "role": "dialog",
+    "label": "Transpose"
+   },
+   {
+    "role": "dialog",
+    "label": "Pattern"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort and filter"
+   },
+   {
+    "role": "dialog",
+    "label": "{{viewName}} settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   },
+   {
+    "role": "dialog",
+    "label": "Practice"
+   },
+   {
+    "role": "dialog",
+    "label": "Parts"
+   },
+   {
+    "role": "dialog",
+    "label": "Settings"
+   },
+   {
+    "role": "menu",
+    "label": "Song"
+   },
+   {
+    "role": "dialog",
+    "label": "{{sheet.name}} chord"
+   }
+  ],
+  "PlayerDiagrams": [],
+  "PlayerDone": [],
+  "PlayerDoneLaptop": [],
+  "PlayerHands": [],
+  "PlayerKey": [],
+  "PlayerKeyboard": [],
+  "PlayerLaptop": [],
+  "PlayerLaptopKeyboard": [],
+  "PlayerLaptopLoop": [],
+  "PlayerLaptopParts": [],
+  "PlayerLaptopSheet": [],
+  "PlayerLoop": [],
+  "PlayerPractice": [],
+  "PlayerSettings": [],
+  "PlayerViewDiagrams": [],
+  "PlayerViewGrid": [],
+  "PlayerViewLyrics": [],
+  "PlayerViewSheet": [],
+  "PracticeResult": [],
+  "PracticeResultLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   }
+  ],
+  "Profile": [
+   {
+    "role": "alertdialog",
+    "label": "Clear all notifications?"
+   },
+   {
+    "role": "dialog",
+    "label": "Notifications"
+   }
+  ],
+  "ProfileLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Clear all notifications?"
+   },
+   {
+    "role": "dialog",
+    "label": "Notifications"
+   }
+  ],
+  "Progression": [
+   {
+    "role": "menu",
+    "label": "What it plays"
+   },
+   {
+    "role": "dialog",
+    "label": "Key"
+   },
+   {
+    "role": "dialog",
+    "label": "Progression settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "ProgressionEdit": [
+   {
+    "role": "dialog",
+    "label": "About this"
+   },
+   {
+    "role": "dialog",
+    "label": "Publishing"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Discard your changes?"
+   }
+  ],
+  "ProgressionEditLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   },
+   {
+    "role": "dialog",
+    "label": "Publishing"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Discard your changes?"
+   }
+  ],
+  "ProgressionLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "What it plays"
+   },
+   {
+    "role": "dialog",
+    "label": "Key"
+   },
+   {
+    "role": "dialog",
+    "label": "Progression settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "Progressions": [
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Rename"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort and filter"
+   },
+   {
+    "role": "dialog",
+    "label": "New folder"
+   }
+  ],
+  "ProgressionsLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Rename"
+   },
+   {
+    "role": "dialog",
+    "label": "Sort and filter"
+   },
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "New folder"
+   }
+  ],
+  "Scales": [
+   {
+    "role": "menu",
+    "label": "Play"
+   },
+   {
+    "role": "menu",
+    "label": "Hands"
+   },
+   {
+    "role": "dialog",
+    "label": "Tempo"
+   },
+   {
+    "role": "dialog",
+    "label": "Tonic"
+   },
+   {
+    "role": "dialog",
+    "label": "Scale"
+   },
+   {
+    "role": "dialog",
+    "label": "Scale settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "ScalesLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "Play"
+   },
+   {
+    "role": "menu",
+    "label": "Hands"
+   },
+   {
+    "role": "dialog",
+    "label": "Tempo"
+   },
+   {
+    "role": "dialog",
+    "label": "Tonic"
+   },
+   {
+    "role": "dialog",
+    "label": "Scale"
+   },
+   {
+    "role": "dialog",
+    "label": "Scale settings"
+   },
+   {
+    "role": "dialog",
+    "label": "Piano"
+   }
+  ],
+  "Section": [
+   {
+    "role": "dialog",
+    "label": "About this"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Unpublish it?"
+   },
+   {
+    "role": "dialog",
+    "label": "Licence"
+   },
+   {
+    "role": "dialog",
+    "label": "Export"
+   }
+  ],
+  "SectionLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Unpublish it?"
+   },
+   {
+    "role": "dialog",
+    "label": "Licence"
+   },
+   {
+    "role": "dialog",
+    "label": "Export"
+   }
+  ],
+  "Settings": [
+   {
+    "role": "dialog",
+    "label": "About this"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Sign out?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Reset progress?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Remove downloaded piano samples?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Restore this backup?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Delete your account?"
+   },
+   {
+    "role": "dialog",
+    "label": "Change photo"
+   },
+   {
+    "role": "dialog",
+    "label": "Connect a Bluetooth MIDI keyboard"
+   },
+   {
+    "role": "dialog",
+    "label": "Shortcuts"
+   },
+   {
+    "role": "dialog",
+    "label": "{{swTitle}}"
+   }
+  ],
+  "SettingsLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Sign out?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Reset progress?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Remove downloaded piano samples?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Restore this backup?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Delete your account?"
+   },
+   {
+    "role": "dialog",
+    "label": "Change photo"
+   },
+   {
+    "role": "dialog",
+    "label": "Connect a Bluetooth MIDI keyboard"
+   },
+   {
+    "role": "dialog",
+    "label": "Shortcuts"
+   },
+   {
+    "role": "dialog",
+    "label": "{{swTitle}}"
+   }
+  ],
+  "SharedFolder": [],
+  "SharedFolderLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   }
+  ],
+  "SignIn": [],
+  "SignInLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   }
+  ],
+  "Song": [
+   {
+    "role": "menu",
+    "label": "Amazing Grace"
+   },
+   {
+    "role": "dialog",
+    "label": "Title and credits"
+   }
+  ],
+  "SongLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "Amazing Grace"
+   },
+   {
+    "role": "dialog",
+    "label": "Title and credits"
+   }
+  ],
+  "SongSettings": [
+   {
+    "role": "dialog",
+    "label": "About this"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Unpublish it?"
+   },
+   {
+    "role": "dialog",
+    "label": "Licence"
+   },
+   {
+    "role": "dialog",
+    "label": "Export"
+   }
+  ],
+  "SongSettingsLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "About this"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Unpublish it?"
+   },
+   {
+    "role": "dialog",
+    "label": "Licence"
+   },
+   {
+    "role": "dialog",
+    "label": "Export"
+   }
+  ],
+  "Songs": [
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "New playlist"
+   },
+   {
+    "role": "dialog",
+    "label": "New song"
+   },
+   {
+    "role": "dialog",
+    "label": "Import"
+   },
+   {
+    "role": "dialog",
+    "label": "Record"
+   }
+  ],
+  "SongsLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "Sort"
+   },
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "menu",
+    "label": "{{rowT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "New playlist"
+   },
+   {
+    "role": "dialog",
+    "label": "New song"
+   },
+   {
+    "role": "dialog",
+    "label": "Import"
+   },
+   {
+    "role": "dialog",
+    "label": "Record"
+   }
+  ],
+  "Take": [
+   {
+    "role": "alertdialog",
+    "label": "{{keepT}}"
+   }
+  ],
+  "TakeLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "alertdialog",
+    "label": "{{keepT}}"
+   }
+  ],
+  "Takes": [
+   {
+    "role": "menu",
+    "label": "{{moreT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Into"
+   }
+  ],
+  "TakesLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "{{moreT}}"
+   },
+   {
+    "role": "dialog",
+    "label": "Into"
+   }
+  ],
+  "Trash": [
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "Apply style to"
+   },
+   {
+    "role": "alertdialog",
+    "label": "{{permT}}"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Apply to all folders?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Delete \u201cHymns\u201d?"
+   },
+   {
+    "role": "menu",
+    "label": "{{whoT}}"
+   }
+  ],
+  "TrashLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "menu",
+    "label": "New"
+   },
+   {
+    "role": "dialog",
+    "label": "Apply style to"
+   },
+   {
+    "role": "alertdialog",
+    "label": "{{permT}}"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Apply to all folders?"
+   },
+   {
+    "role": "alertdialog",
+    "label": "Delete \u201cHymns\u201d?"
+   },
+   {
+    "role": "menu",
+    "label": "{{whoT}}"
+   }
+  ],
+  "Tuner": [],
+  "TunerLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   }
+  ],
+  "YourCourseSettings": [
+   {
+    "role": "dialog",
+    "label": "Rename"
+   }
+  ],
+  "YourCourseSettingsLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Rename"
+   }
+  ],
+  "YourLessonSettings": [
+   {
+    "role": "dialog",
+    "label": "Rename"
+   },
+   {
+    "role": "dialog",
+    "label": "In courses"
+   }
+  ],
+  "YourLessonSettingsLaptop": [
+   {
+    "role": "menu",
+    "label": "Ana Popescu"
+   },
+   {
+    "role": "dialog",
+    "label": "Rename"
+   },
+   {
+    "role": "dialog",
+    "label": "In courses"
+   }
+  ]
+ },
+ "components": {
+  "BAR": {
+   "kit": "calm_kit.py",
+   "users": [
+    "r49_settings.py"
+   ]
+  },
+  "KEYS": {
+   "kit": "calm_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py",
+    "r44_editor.py",
+    "r56_results.py",
+    "r60_scales.py"
+   ]
+  },
+  "ROWS": {
+   "kit": "calm_kit.py",
+   "users": [
+    "r46_admin.py"
+   ]
+  },
+  "PILL": {
+   "kit": "calm_kit.py",
+   "users": [
+    "r47_edit.py"
+   ]
+  },
+  "WHEEL": {
+   "kit": "calm_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r58_chordplayer.py"
+   ]
+  },
+  "SIDEBAR": {
+   "kit": "calm_kit.py",
+   "users": [
+    "r42_chords.py"
+   ]
+  },
+  "SONGS_SUB": {
+   "kit": "calm_kit.py",
+   "users": []
+  },
+  "MODESW": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r44_editor.py"
+   ]
+  },
+  "TOP": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py",
+    "r42_chords.py",
+    "r45_places.py",
+    "r46_admin.py",
+    "r47_edit.py",
+    "r48_course.py",
+    "r49_settings.py",
+    "r50_profile.py",
+    "r51_account.py",
+    "r52_global.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r56_results.py",
+    "r57_yours.py",
+    "r58_chordplayer.py",
+    "r59_takes.py",
+    "r60_scales.py",
+    "r62_progression.py",
+    "r63_pattern.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "LPAD": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r42_chords.py",
+    "r51_account.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r56_results.py",
+    "r60_scales.py",
+    "r61_intervals.py",
+    "r62_progression.py",
+    "r63_pattern.py",
+    "r64_metronome.py",
+    "r65_tuner.py",
+    "r66_chord_finder.py",
+    "r67_circle.py",
+    "r68_exercise.py"
+   ]
+  },
+  "IB": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py",
+    "r45_places.py",
+    "r46_admin.py",
+    "r47_edit.py",
+    "r48_course.py",
+    "r49_settings.py",
+    "r50_profile.py",
+    "r52_global.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r58_chordplayer.py",
+    "r60_scales.py",
+    "r63_pattern.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "TB": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r45_places.py",
+    "r47_edit.py",
+    "r48_course.py",
+    "r53_songs_more.py",
+    "r57_yours.py",
+    "r59_takes.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "CLOSEB": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r51_account.py",
+    "r54_practice_more.py",
+    "r56_results.py"
+   ]
+  },
+  "GEAR": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r58_chordplayer.py"
+   ]
+  },
+  "DOTS": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py"
+   ]
+  },
+  "TITLEBAR": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r45_places.py",
+    "r50_profile.py",
+    "r52_global.py",
+    "r57_yours.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "LTITLEBAR": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r45_places.py",
+    "r46_admin.py",
+    "r50_profile.py",
+    "r51_account.py",
+    "r52_global.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r57_yours.py",
+    "r59_takes.py",
+    "r63_pattern.py"
+   ]
+  },
+  "LPLACEBAR": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r53_songs_more.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "PSEARCH": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r53_songs_more.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "LCOL": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r50_profile.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r57_yours.py",
+    "r63_pattern.py"
+   ]
+  },
+  "INFOB": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r44_editor.py",
+    "r47_edit.py",
+    "r49_settings.py",
+    "r54_practice_more.py",
+    "r61_intervals.py",
+    "r63_pattern.py"
+   ]
+  },
+  "INFOTIP": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r44_editor.py",
+    "r47_edit.py",
+    "r49_settings.py",
+    "r54_practice_more.py",
+    "r61_intervals.py",
+    "r63_pattern.py"
+   ]
+  },
+  "SUBJECT": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py"
+   ]
+  },
+  "H2": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py",
+    "r45_places.py",
+    "r48_course.py",
+    "r50_profile.py",
+    "r52_global.py",
+    "r53_songs_more.py"
+   ]
+  },
+  "CAPS": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py",
+    "r45_places.py",
+    "r46_admin.py",
+    "r47_edit.py",
+    "r48_course.py",
+    "r49_settings.py",
+    "r50_profile.py",
+    "r52_global.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r57_yours.py",
+    "r58_chordplayer.py"
+   ]
+  },
+  "SEGC": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py",
+    "r49_settings.py",
+    "r52_global.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r57_yours.py",
+    "r58_chordplayer.py",
+    "r59_takes.py"
+   ]
+  },
+  "CHIPS": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r47_edit.py",
+    "r57_yours.py"
+   ]
+  },
+  "LABELLED": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r45_places.py"
+   ]
+  },
+  "WCHIPS": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r45_places.py"
+   ]
+  },
+  "STEPPER": {
+   "kit": "r41_kit.py",
+   "users": []
+  },
+  "TOGGLE": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r54_practice_more.py"
+   ]
+  },
+  "GROUP": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py",
+    "r42_chords.py",
+    "r44_editor.py",
+    "r45_places.py",
+    "r46_admin.py",
+    "r47_edit.py",
+    "r48_course.py",
+    "r49_settings.py",
+    "r50_profile.py",
+    "r51_account.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r55_editor_draft.py",
+    "r57_yours.py",
+    "r58_chordplayer.py",
+    "r59_takes.py",
+    "r62_progression.py",
+    "r63_pattern.py",
+    "r64_metronome.py",
+    "r65_tuner.py",
+    "r66_chord_finder.py",
+    "r68_exercise.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "BTN": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py",
+    "r44_editor.py",
+    "r45_places.py",
+    "r46_admin.py",
+    "r47_edit.py",
+    "r48_course.py",
+    "r49_settings.py",
+    "r50_profile.py",
+    "r51_account.py",
+    "r52_global.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r55_editor_draft.py",
+    "r56_results.py",
+    "r57_yours.py",
+    "r58_chordplayer.py",
+    "r59_takes.py",
+    "r65_tuner.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "PLAYBTN": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py",
+    "r54_practice_more.py",
+    "r56_results.py"
+   ]
+  },
+  "DOCK": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r47_edit.py",
+    "r53_songs_more.py",
+    "r57_yours.py",
+    "r58_chordplayer.py",
+    "r59_takes.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "DOCK_L": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r58_chordplayer.py"
+   ]
+  },
+  "CARD": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r45_places.py",
+    "r49_settings.py",
+    "r50_profile.py",
+    "r52_global.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r56_results.py",
+    "r59_takes.py",
+    "r60_scales.py",
+    "r61_intervals.py",
+    "r62_progression.py",
+    "r63_pattern.py",
+    "r68_exercise.py"
+   ]
+  },
+  "ROOTGRID": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r47_edit.py",
+    "r54_practice_more.py",
+    "r58_chordplayer.py",
+    "r61_intervals.py",
+    "r62_progression.py",
+    "r68_exercise.py"
+   ]
+  },
+  "BSHEET": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py",
+    "r42_chords.py",
+    "r44_editor.py",
+    "r45_places.py",
+    "r46_admin.py",
+    "r47_edit.py",
+    "r48_course.py",
+    "r49_settings.py",
+    "r50_profile.py",
+    "r52_global.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r55_editor_draft.py",
+    "r56_results.py",
+    "r57_yours.py",
+    "r59_takes.py",
+    "r60_scales.py",
+    "r61_intervals.py",
+    "r62_progression.py",
+    "r63_pattern.py",
+    "r64_metronome.py",
+    "r66_chord_finder.py",
+    "r68_exercise.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "ROWMENU": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_songs.py",
+    "r48_course.py",
+    "r53_songs_more.py",
+    "r57_yours.py",
+    "r59_takes.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "MENUSHELL": {
+   "kit": "r41_kit.py",
+   "users": []
+  },
+  "POPOVER": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r41_songs.py",
+    "r42_chords.py",
+    "r44_editor.py",
+    "r45_places.py",
+    "r47_edit.py",
+    "r49_settings.py",
+    "r50_profile.py",
+    "r54_practice_more.py",
+    "r55_editor_draft.py",
+    "r56_results.py",
+    "r57_yours.py",
+    "r58_chordplayer.py",
+    "r59_takes.py",
+    "r60_scales.py",
+    "r61_intervals.py",
+    "r62_progression.py",
+    "r63_pattern.py",
+    "r64_metronome.py",
+    "r66_chord_finder.py",
+    "r68_exercise.py"
+   ]
+  },
+  "EDITR": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r45_places.py",
+    "r47_edit.py",
+    "r48_course.py"
+   ]
+  },
+  "LTOP": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r45_places.py",
+    "r47_edit.py",
+    "r48_course.py",
+    "r52_global.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r56_results.py",
+    "r58_chordplayer.py"
+   ]
+  },
+  "TABBAR": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r45_places.py",
+    "r50_profile.py",
+    "r52_global.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "NEWDIAL": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r45_places.py",
+    "r53_songs_more.py",
+    "r57_yours.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "NEWFAB": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r46_admin.py",
+    "r53_songs_more.py"
+   ]
+  },
+  "NEWMENU": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r45_places.py",
+    "r57_yours.py"
+   ]
+  },
+  "SHOWSTATES": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r41_practice.py",
+    "r44_editor.py",
+    "r45_places.py",
+    "r46_admin.py",
+    "r47_edit.py",
+    "r48_course.py",
+    "r49_settings.py",
+    "r51_account.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r57_yours.py",
+    "r58_chordplayer.py",
+    "r59_takes.py",
+    "r60_scales.py",
+    "r61_intervals.py",
+    "r63_pattern.py",
+    "r64_metronome.py",
+    "r65_tuner.py",
+    "r66_chord_finder.py",
+    "r72_flat_songs.py"
+   ]
+  },
+  "EMPTY_T": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r53_songs_more.py"
+   ]
+  },
+  "PREVPILL": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r47_edit.py",
+    "r49_settings.py"
+   ]
+  },
+  "LIB_ROW": {
+   "kit": "r41_lib.py",
+   "users": []
+  },
+  "SEARCHROW": {
+   "kit": "r41_lib.py",
+   "users": []
+  },
+  "LEMPTY": {
+   "kit": "r41_lib.py",
+   "users": [
+    "r46_admin.py",
+    "r57_yours.py"
+   ]
+  },
+  "SKELROW": {
+   "kit": "r41_lib.py",
+   "users": []
+  },
+  "NONE": {
+   "kit": "r41_lib.py",
+   "users": []
+  },
+  "BARE": {
+   "kit": "r41_lib.py",
+   "users": []
+  },
+  "SECTIONS": {
+   "kit": "r41_lib.py",
+   "users": []
+  },
+  "NAMEFIELD": {
+   "kit": "r41_lib.py",
+   "users": [
+    "r45_places.py",
+    "r48_course.py"
+   ]
+  },
+  "NEWNAME": {
+   "kit": "r41_lib.py",
+   "users": [
+    "r46_admin.py",
+    "r53_songs_more.py"
+   ]
+  },
+  "ADDROW": {
+   "kit": "r41_lib.py",
+   "users": [
+    "r45_places.py",
+    "r46_admin.py",
+    "r48_course.py",
+    "r53_songs_more.py"
+   ]
+  },
+  "ADDCARD": {
+   "kit": "r41_lib.py",
+   "users": [
+    "r41_practice.py",
+    "r45_places.py",
+    "r58_chordplayer.py"
+   ]
+  },
+  "FACES": {
+   "kit": "r41_lib.py",
+   "users": [
+    "r53_songs_more.py"
+   ]
+  },
+  "LAPSHEET": {
+   "kit": "r41_lib.py",
+   "users": [
+    "r45_places.py",
+    "r48_course.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r55_editor_draft.py",
+    "r57_yours.py"
+   ]
+  },
+  "NEWNAME_L": {
+   "kit": "r41_lib.py",
+   "users": [
+    "r46_admin.py"
+   ]
+  }
+ }
+}

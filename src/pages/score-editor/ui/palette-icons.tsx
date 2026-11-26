@@ -112,7 +112,7 @@ export function FieldIcon({ field }: { field: keyof typeof FIELD_ICONS }) {
 }
 
 /** The bar edits the palette's Bar holds, each with a picture. */
-export type BarKeyEdit = BarEdit
+export type BarKeyEdit = Exclude<BarEdit, 'insertEnd'>
 
 /** Each bar edit's picture, drawn on a staff as the edit changes it. */
 const BAR_ICONS: Readonly<Record<BarKeyEdit, ReactNode>> = {
@@ -140,20 +140,12 @@ const BAR_ICONS: Readonly<Record<BarKeyEdit, ReactNode>> = {
       <path d="M8 8 L16 16 M16 8 L8 16" strokeWidth="2.25" />
     </Icon>
   ),
-  // A system break: the line goes on below.
+  // A system break: the line goes on below (pressed again, the lines join).
   newLine: (
     <Icon>
       <path d="M3 6 H20 V12 H5" />
       <path d="M8.5 8.5 L5 12 L8.5 15.5" />
       <path d="M5 18 H14" opacity="0.45" />
-    </Icon>
-  ),
-  // The next line's bars brought up onto this one.
-  joinLine: (
-    <Icon>
-      <path d="M3 7 H12" />
-      <path d="M3 17 H9 C15 17 17 13 17 8" />
-      <path d="M14 10.5 L17 7.5 L20 10.5" />
     </Icon>
   ),
   // A rehearsal mark's boxed letter after a double barline: a new section.

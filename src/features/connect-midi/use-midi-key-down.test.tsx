@@ -2,14 +2,16 @@ import { renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi, type FakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, type FakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
 import { useMidiKeyDown } from './use-midi-key-down'
 
 function wrapperWith(keyboard: FakeMidi | null) {
   return ({ children }: { children: ReactNode }) => (
-    <ServicesProvider services={{ audio: createFakeAudio(), midi: keyboard }}>
+    <ServicesProvider
+      services={{ audio: createFakeAudio(), arranger: createFakeArranger(), midi: keyboard }}
+    >
       {children}
     </ServicesProvider>
   )

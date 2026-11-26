@@ -2,7 +2,7 @@ import { DndContext } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { GripVertical, Minus, Plus, type LucideIcon } from 'lucide-react'
+import { Minus, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   barAvailable,
@@ -12,8 +12,8 @@ import {
   type BarSurface,
 } from '@/entities/settings'
 import { cn, useSortableList } from '@/shared/lib'
-import { ActionRow, SettingsGroup } from '@/shared/ui'
 import { BAR_ICONS } from '../model/bar-icons'
+import { ActionRow, DragHandle, SettingsGroup } from '@/shared/ui'
 
 /** The round mark at a row's start: a red − takes the act off, a green + puts it on (iOS's edit list). */
 function EditMark({
@@ -37,7 +37,7 @@ function EditMark({
       title={title}
       disabled={disabled}
       onClick={onClick}
-      className="grid size-11 flex-none place-items-center disabled:opacity-40"
+      className="grid size-11 flex-none place-items-center disabled:opacity-50"
     >
       <span
         aria-hidden
@@ -52,36 +52,40 @@ function EditMark({
   )
 }
 
-/** An act's icon and name, the row's middle. */
-function ActName({
-  icon: Icon,
-  label,
-  muted,
-}: {
-  icon: LucideIcon
-  label: string
-  muted?: boolean
-}) {
+/**
+ * An act's face, the row's middle (owner, 2026-11-17: "make the toolbar icons not just text"; the
+ * board's TBROW): the glyph it wears in the toolbar on a 36 sand tile, then its name, so the list
+ * reads as the bar above it. An act that cannot be added while every slot is used dims its tile and
+ * quiets its name, which stays readable.
+ */
+function ActFace({ act, label, muted = false }: { act: BarAct; label: string; muted?: boolean }) {
+  const Icon = BAR_ICONS[act]
   return (
-    <span
-      className={cn('flex min-w-0 flex-1 items-center gap-3', muted && 'text-muted-foreground')}
-    >
-      <Icon aria-hidden className="size-5 flex-none" />
-      <span className="truncate">{label}</span>
-    </span>
+    <>
+      <span
+        aria-hidden
+        className={cn(
+          'grid size-9 flex-none place-items-center rounded-thumb bg-muted',
+          muted && 'opacity-50',
+        )}
+      >
+        <Icon className="size-5" />
+      </span>
+      <span className={cn('min-w-0 flex-1 truncate', muted && 'text-muted-foreground')}>
+        {label}
+      </span>
+    </>
   )
 }
 
 /** An act on the bar: its − at the start, its name, its handle at the end to drag it in order. */
 function OnRow({
   act,
-  icon,
   label,
   canRemove,
   onRemove,
 }: {
   act: BarAct
-  icon: LucideIcon
   label: string
   canRemove: boolean
   onRemove: () => void
@@ -95,7 +99,7 @@ function OnRow({
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn(
-        'relative flex min-h-13 items-center gap-1 bg-card py-1 pl-1 not-last:border-b not-last:border-hairline',
+        'relative flex min-h-13 items-center gap-2 bg-card py-1 ps-2 pe-1 not-last:border-b not-last:border-hairline',
         isDragging && 'z-10 shadow-md',
       )}
     >
@@ -106,16 +110,8 @@ function OnRow({
         disabled={!canRemove}
         onClick={onRemove}
       />
-      <ActName icon={icon} label={label} />
-      <button
-        type="button"
-        aria-label={t('bars.move', { act: label })}
-        className="grid size-11 flex-none touch-none place-items-center text-muted-foreground"
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical aria-hidden className="size-5" />
-      </button>
+      <ActFace act={act} label={label} />
+      <DragHandle label={t('bars.move', { act: label })} {...attributes} {...listeners} />
     </li>
   )
 }
@@ -145,38 +141,45 @@ export function BarEditor({
   const room = barHasRoom(surface, bar)
   const name = (act: BarAct) => t(`bars.act.${act}`)
   return (
-    <div data-setting={`bars.${surface}`} className="flex flex-col gap-6">
-      <div className="card overflow-hidden">
-        <DndContext {...sortable.dnd} modifiers={[restrictToVerticalAxis]}>
-          <SortableContext items={[...sortable.items]} strategy={verticalListSortingStrategy}>
-            <ul aria-label={label}>
-              {sortable.items.map((act) => (
-                <OnRow
-                  key={act}
-                  act={act}
-                  icon={BAR_ICONS[act]}
-                  label={name(act)}
-                  canRemove={barCanShrink(surface, bar)}
-                  onRemove={() => onChange(bar.filter((each) => each !== act))}
-                />
-              ))}
-              {sortable.items.length === 0 ? (
-                <li className="px-4 py-3 text-muted-foreground">{t('bars.none')}</li>
-              ) : null}
-            </ul>
-          </SortableContext>
-        </DndContext>
-      </div>
+    <div data-setting={`bars.${surface}`} className="flex flex-col gap-4">
+      <DndContext {...sortable.dnd} modifiers={[restrictToVerticalAxis]}>
+        <SortableContext items={[...sortable.items]} strategy={verticalListSortingStrategy}>
+          {/* A card of rows; in the laptop's Settings dialog, rows on the pane. */}
+          <ul aria-label={label} data-slot="settings-card" className="card overflow-hidden">
+            {sortable.items.map((act) => (
+              <OnRow
+                key={act}
+                act={act}
+                label={name(act)}
+                canRemove={barCanShrink(surface, bar)}
+                onRemove={() => onChange(bar.filter((each) => each !== act))}
+              />
+            ))}
+            {sortable.items.length === 0 ? (
+              <li className="px-4 py-3 text-muted-foreground">{t('bars.none')}</li>
+            ) : null}
+          </ul>
+        </SortableContext>
+      </DndContext>
       {available.length > 0 ? (
-        <SettingsGroup flush title={t('bars.available')}>
+        <section data-slot="settings-group" className="flex flex-col gap-2">
+          <h2 data-slot="settings-heading" className="caps px-4">
+            {t('bars.available')}
+          </h2>
           {room ? null : (
-            <p className="px-4 pt-3 text-sm text-pretty text-muted-foreground">{t('bars.full')}</p>
+            <p data-slot="settings-foot" className="px-4 text-sm text-pretty text-muted-foreground">
+              {t('bars.full')}
+            </p>
           )}
-          <ul>
+          <ul
+            aria-label={t('bars.available')}
+            data-slot="settings-card"
+            className="card overflow-hidden"
+          >
             {available.map((act) => (
               <li
                 key={act}
-                className="flex min-h-13 items-center gap-1 py-1 pr-4 pl-1 not-last:border-b not-last:border-hairline"
+                className="flex min-h-13 items-center gap-2 py-1 ps-2 pe-4 not-last:border-b not-last:border-hairline"
               >
                 <EditMark
                   kind="add"
@@ -184,15 +187,53 @@ export function BarEditor({
                   disabled={!room}
                   onClick={() => onChange([...bar, act])}
                 />
-                <ActName icon={BAR_ICONS[act]} label={name(act)} muted={!room} />
+                <ActFace act={act} label={name(act)} muted={!room} />
               </li>
             ))}
           </ul>
-        </SettingsGroup>
+        </section>
       ) : null}
       <SettingsGroup flush>
         <ActionRow title={t('bars.reset')} onClick={() => onChange(null)} />
       </SettingsGroup>
+    </div>
+  )
+}
+
+/** The acts that lose something, drawn in crimson on a selection's bar, glyph and word alike. */
+const LOSSES: ReadonlySet<BarAct> = new Set(['archive', 'delete'])
+
+/**
+ * The toolbar as a selection shows it (the board's TBPREVIEW): a pill across the column, as the bar
+ * spans the screen, with the count and the bar's acts in their order, each its glyph over its 12
+ * word (the board's SELACT), the losses in crimson.
+ */
+export function BarPreview({ bar }: { bar: readonly BarAct[] }) {
+  const { t } = useTranslation('settings')
+  return (
+    <div role="img" aria-label={t('bars.previewToolbar')} className="flex py-2">
+      <div className="flex h-17 min-w-0 flex-1 items-center gap-1 rounded-pill bg-card px-2 layer-shadow">
+        <span className="px-3 text-subhead font-bold whitespace-nowrap">
+          {t('bars.previewSelected')}
+        </span>
+        {bar.map((act) => {
+          const Icon = BAR_ICONS[act]
+          return (
+            <span
+              key={act}
+              className={cn(
+                'flex h-13 min-w-0 flex-1 flex-col items-center justify-center gap-0.5',
+                LOSSES.has(act) && 'text-destructive',
+              )}
+            >
+              <Icon aria-hidden className="size-5" />
+              <span className="text-xs font-semibold whitespace-nowrap">
+                {t(`bars.act.${act}`)}
+              </span>
+            </span>
+          )
+        })}
+      </div>
     </div>
   )
 }

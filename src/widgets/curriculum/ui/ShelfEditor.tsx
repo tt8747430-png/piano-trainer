@@ -1,16 +1,15 @@
 import { Link } from '@tanstack/react-router'
-import { Plus } from 'lucide-react'
+import { Library, Plus } from 'lucide-react'
 import { Fragment, lazy, Suspense, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { courseById, courseIcon, SHELVES, type CourseOrder, type Shelf } from '@/entities/course'
+import { courseById, SHELVES, type CourseOrder, type Shelf, SHELF_PAINT } from '@/entities/course'
 import { hasAbout } from '@/entities/lesson'
-import { STAGE_PAINT } from '@/entities/step'
-import { DraftActions, DraftStatus, useCourseOrderDraft } from '@/features/edit-original'
+import { PublishWord, useCourseOrderDraft } from '@/features/edit-original'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { PAINT } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { NewCourseSheet, NotOpen, RowGroups, type RowOrder } from '@/widgets/content-editor'
+import { NewCourseSheet, DraftGate, RowGroups, type RowOrder } from '@/widgets/content-editor'
 
 /** The About's document, the editor's own chunk: Learn opens without it. */
 const AboutDocument = lazy(() =>
@@ -59,7 +58,7 @@ function ShelvesDocument({
     <>
       {/* The Courses' About (R29 B9): the lesson's document over the shelves, written in place. */}
       <section aria-labelledby="courses-about" className="flex flex-col gap-2">
-        <h2 id="courses-about" className="px-3 font-display text-xl font-semibold">
+        <h2 id="courses-about" className="px-3 font-sans text-xl font-bold">
           {t('coursesAbout')}
         </h2>
         <Suspense fallback={null}>
@@ -84,18 +83,14 @@ function ShelvesDocument({
           region: t(`shelves.${shelf}`),
           label: t(`shelves.${shelf}`),
           empty: t('edit.courses.empty'),
-          head: (
-            <h2 className="mt-4 px-3 font-display text-xl font-semibold">
-              {t(`shelves.${shelf}`)}
-            </h2>
-          ),
+          head: <h2 className="mt-4 px-3 font-sans text-xl font-bold">{t(`shelves.${shelf}`)}</h2>,
           rows: courses.map((course) => {
-            const paint = PAINT[STAGE_PAINT[course.stage]]
+            const paint = PAINT[SHELF_PAINT[course.shelf]]
             return {
               key: course.id,
               title: localText(course.title, locale),
               detail: t('course.lessonCount', { count: course.lessons.length }),
-              icon: courseIcon(course.id),
+              icon: Library,
               paint: cn(paint.fill, paint.ink),
               link: <Link to="/courses/$courseId/edit" params={{ courseId: course.id }} />,
             }
@@ -122,14 +117,14 @@ function ShelvesDocument({
  * The Courses' shelves in Edit mode (R29 B4, content as data ADR 0116 r25), in place on Learn: each
  * shelf's courses rows dragged into order (a course changes shelf by its own Shelf, in its editor),
  * New course at a shelf's end; the order a draft of `catalog` `courses`, published as one. Its bar
- * (`bar`) carries the draft's status, Publish and menu before the page's Done.
+ * (`bar`) carries Publish before the page's Done, as the board's EDITR.
  */
 export function ShelfEditor({ bar }: { bar: (actions: ReactNode) => ReactNode }) {
   const { t } = useTranslation(['learn', 'editor'])
   const locale = useLocale()
   const draft = useCourseOrderDraft()
   const [making, setMaking] = useState<Shelf | null>(null)
-  // The last change, where the document opens again (another language): kept as it was written.
+  // The last change, where the document opens again: kept as it was written.
   const [written, setWritten] = useState<{ opened: number; order: CourseOrder } | null>(null)
   const { load } = draft
   const save = (next: CourseOrder) => {
@@ -140,28 +135,16 @@ export function ShelfEditor({ bar }: { bar: (actions: ReactNode) => ReactNode })
     <>
       {bar(
         load.state === 'ready' ? (
-          <>
-            <DraftStatus draft={draft} className="me-1" />
-            <DraftActions
-              draft={draft}
-              title={t('learn:courses')}
-              unreadable={t('learn:edit.courses.editorsOnly')}
-              onReset={draft.reopen}
-            />
-          </>
+          <PublishWord
+            draft={draft}
+            unreadable={t('learn:edit.courses.editorsOnly')}
+            onReset={draft.reopen}
+          />
         ) : null,
       )}
-      <div className="mx-auto mt-4 flex w-full max-w-2xl min-w-0 flex-col gap-2">
-        {load.state === 'loading' ? (
-          <NotOpen line={t('editor:original.opening')} />
-        ) : load.state === 'failed' ? (
-          <NotOpen
-            line={t(
-              load.reason === 'offline' ? 'editor:original.offline' : 'editor:original.failed',
-            )}
-          >
-            <Button onClick={draft.reopen}>{t('editor:original.retry')}</Button>
-          </NotOpen>
+      <div className="page-column mt-4 flex min-w-0 flex-col gap-2">
+        {load.state !== 'ready' ? (
+          <DraftGate load={load} reopen={draft.reopen} />
         ) : (
           <Fragment key={draft.opened}>
             <ShelvesDocument

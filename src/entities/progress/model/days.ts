@@ -29,20 +29,55 @@ export const keptDays = (days: readonly unknown[]): readonly string[] =>
 export const withDay = (state: ProgressState, day: string): ProgressState =>
   state.days.includes(day) ? state : { ...state, days: keptDays([...state.days, day]) }
 
-/**
- * The days practised in a row up to `today`, or up to yesterday while today is not yet practised: a
- * streak lasts the day after, for today to keep it.
- */
-export function streak(days: readonly string[], today: string): number {
-  const practised = new Set(days)
-  let day = practised.has(today) ? today : dayAfter(today, -1)
-  let count = 0
-  while (practised.has(day)) {
-    count += 1
-    day = dayAfter(day, -1)
-  }
-  return count
+/** Every so many days practised in a row earn a rest day (ruled 2026-11-07; Scale Runner's weekly freeze). */
+const REST_EVERY = 7
+/** How many rest days are kept for later at most. */
+export const RESTS_KEPT = 2
+
+/** The streak up to today: its days practised, the longest ever, the rest days kept for later, the days rested in it. */
+export interface Streak {
+  readonly count: number
+  readonly best: number
+  readonly rests: number
+  readonly rested: readonly string[]
 }
+
+/**
+ * The streak up to `today`: the days practised in a row, where a missed day is bridged by a rest
+ * day earned by every REST_EVERY days practised (RESTS_KEPT at most), and today, not yet practised,
+ * still keeps it for today to extend.
+ */
+export function streakOf(days: readonly string[], today: string): Streak {
+  const practised = new Set(days)
+  const first = keptDays(days)[0]
+  let count = 0
+  let best = 0
+  let earned = 0
+  let rests = 0
+  let rested: string[] = []
+  for (let day = first; day !== undefined && day <= today; day = dayAfter(day, 1)) {
+    if (practised.has(day)) {
+      count += 1
+      best = Math.max(best, count)
+      earned += 1
+      if (earned % REST_EVERY === 0) rests = Math.min(RESTS_KEPT, rests + 1)
+    } else if (day === today) {
+      break
+    } else if (rests > 0) {
+      rests -= 1
+      rested = [...rested, day]
+    } else {
+      count = 0
+      earned = 0
+      rested = []
+    }
+  }
+  return { count, best, rests, rested }
+}
+
+/** The days practised in a row up to `today`, missed days bridged by rest days (`streakOf`). */
+export const streak = (days: readonly string[], today: string): number =>
+  streakOf(days, today).count
 
 /** The seven days up to `today`, oldest first, each practised or not. */
 export function lastWeek(
@@ -56,10 +91,11 @@ export function lastWeek(
   })
 }
 
-/** A day of a month's calendar: its date, whether it was practised, whether it is today. */
+/** A day of a month's calendar: its date, whether it was practised or rested in the streak, whether it is today. */
 export interface CalendarDay {
   readonly day: string
   readonly practised: boolean
+  readonly rested: boolean
   readonly today: boolean
 }
 
@@ -74,6 +110,7 @@ export function monthOf(
   shift = 0,
 ): readonly (readonly (CalendarDay | null)[])[] {
   const practised = new Set(days)
+  const rested = new Set(streakOf(days, today).rested)
   const first = dateOfDay(today)
   first.setDate(1)
   first.setMonth(first.getMonth() + shift)
@@ -82,7 +119,12 @@ export function monthOf(
   const cells: (CalendarDay | null)[] = Array.from({ length: lead }, () => null)
   for (let date = 1; date <= length; date += 1) {
     const day = localDay(new Date(first.getFullYear(), first.getMonth(), date, 12))
-    cells.push({ day, practised: practised.has(day), today: day === today })
+    cells.push({
+      day,
+      practised: practised.has(day),
+      rested: rested.has(day),
+      today: day === today,
+    })
   }
   while (cells.length % 7 !== 0) cells.push(null)
   return Array.from({ length: cells.length / 7 }, (_, week) => cells.slice(week * 7, week * 7 + 7))

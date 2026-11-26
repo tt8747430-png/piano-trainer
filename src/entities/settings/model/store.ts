@@ -4,6 +4,7 @@ import { isLocale } from '@/shared/i18n/locale'
 import { isStaffId } from '@/shared/lib/notation'
 import {
   createSavedStore,
+  isCount,
   isLatency,
   isOneOf,
   SHEET_VIEWS,
@@ -11,13 +12,13 @@ import {
   savedObject,
   type SavingOptions,
 } from '@/shared/lib'
-import { isInversion, type Midi } from '@/shared/lib/music'
+import { isInversion, midi, type Midi } from '@/shared/lib/music'
 import { beatsOf, BPM_RANGE, isMetronomeMeter } from '@/shared/lib/schedule'
 import {
   CHORD_KEYS_MAX,
-  isLessonReading,
   DEFAULT_CHORD_FINDER,
   DEFAULT_METRONOME,
+  METRONOME_VOLUMES,
   DEFAULT_MIDI,
   DEFAULT_SCORE_VIEW,
   DEFAULT_PRACTICE,
@@ -27,31 +28,35 @@ import {
   DEFAULT_RECORDER,
   RECORDER_COUNT_INS,
   DEFAULT_SIDEBAR,
-  DEFAULT_KEYS_HEIGHT,
-  KEYS_HEIGHT_MOST,
+  DEFAULT_KEYS_WINDOWS,
+  KEYS_WINDOW_MOST,
   DEFAULT_OTHER_HAND,
   DEFAULT_PLAYBACK,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
   DEFAULT_CHORD_PLAYER,
+  DEFAULT_CHORDS,
+  isChordLabels,
+  isChordRange,
+  isCameraAngle,
+  isSongRange,
+  type ChordsSettings,
   type ChordPlayerSettings,
   isProgressionNames,
   isProgressionVoicing,
   DEVICE_NAME_MAX,
   FOLDED_MAX,
   SECTION_ID_MAX,
-  PRACTICE_TOGGLES,
   REMEMBERED_CHORDS,
   defaultKeyboard,
   detectLocale,
-  isKeyDock,
   isDiagramsMode,
   isTextSize,
+  isGridBars,
   isOtherHandLook,
   isCountdown,
   isSpeedStep,
-  isKeySize,
   isBeatLevel,
   isMetronomeSound,
   isSubdivision,
@@ -61,17 +66,22 @@ import {
   isOctaveShift,
   isPedalWay,
   isSidebar,
-  isSwipe,
   isTheme,
   isTouch,
   type ChordFinderSettings,
   type ProgressionsSettings,
+  type IntervalSettings,
+  DEFAULT_INTERVALS,
+  isIntervalOrder,
+  isIntervalSpeed,
   type KeyboardSettings,
-  type KeysHeight,
+  type KeysWindow,
+  type KeysWindows,
   type MetronomeSettings,
   type MidiSettings,
   type OtherHandSettings,
   type PlaybackSettings,
+  type PracticeToggle,
   type PracticeToggles,
   type EditingSettings,
   type RecorderSettings,
@@ -88,7 +98,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 43
+export const SETTINGS_VERSION = 57
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -111,7 +121,7 @@ export function createSettingsStore({
         sound: DEFAULT_SOUND,
         trainer: DEFAULT_TRAINER,
         keyboard: defaultKeyboard(finePointer),
-        keysHeight: DEFAULT_KEYS_HEIGHT,
+        keysWindow: DEFAULT_KEYS_WINDOWS,
         recorder: DEFAULT_RECORDER,
         editing: DEFAULT_EDITING,
         sidebar: DEFAULT_SIDEBAR,
@@ -126,11 +136,12 @@ export function createSettingsStore({
         metronome: DEFAULT_METRONOME,
         foldedSections: [],
         welcomed: false,
-        tipsSeen: [],
         practiceRecent: [],
-        lessonReading: 'page',
+        paletteRecent: PALETTE_RECENT_START,
         progressions: DEFAULT_PROGRESSIONS,
+        intervals: DEFAULT_INTERVALS,
         chordPlayer: DEFAULT_CHORD_PLAYER,
+        chords: DEFAULT_CHORDS,
         bars: DEFAULT_BARS,
         tuner: DEFAULT_TUNER,
         scaleStaff: DEFAULT_SCALE_STAFF,
@@ -144,17 +155,20 @@ export function createSettingsStore({
 /** A toggle keeps what was saved; one never saved (a newer toggle) takes its default. */
 function practiceToggles(value: unknown): PracticeToggles {
   const saved = savedObject<PracticeToggles>(value)
-  return Object.fromEntries(
-    PRACTICE_TOGGLES.map((toggle) => {
-      const kept: unknown = saved[toggle]
-      return [toggle, typeof kept === 'boolean' ? kept : DEFAULT_PRACTICE[toggle]]
-    }),
-  ) as Record<keyof PracticeToggles, boolean>
+  const kept = (toggle: PracticeToggle): boolean => {
+    const was: unknown = saved[toggle]
+    return typeof was === 'boolean' ? was : DEFAULT_PRACTICE[toggle]
+  }
+  return {
+    fingerNumbers: kept('fingerNumbers'),
+    namedNotes: kept('namedNotes'),
+    positions: kept('positions'),
+    metronome: kept('metronome'),
+  }
 }
 
 /** A volume as saved: a whole percent from 0 to 100. */
-const isVolume = (value: unknown): value is number =>
-  Number.isInteger(value) && (value as number) >= 0 && (value as number) <= 100
+const isVolume = (value: unknown): value is number => isCount(value) && value <= 100
 
 /** Each part's volume as saved where it is one, at full otherwise; a staff's kept by a staff's id. */
 function soundSettings(value: unknown): SoundSettings {
@@ -181,16 +195,32 @@ function playbackSettings(value: unknown): PlaybackSettings {
   }
 }
 
-/** How the other hand looks and plays as saved, each where still valid. */
+/** How the other hand looks as saved, where still valid. */
 function otherHandSettings(value: unknown): OtherHandSettings {
   const saved = savedObject<OtherHandSettings>(value)
   return {
     look: isOtherHandLook(saved.look) ? saved.look : DEFAULT_OTHER_HAND.look,
-    play: typeof saved.play === 'boolean' ? saved.play : DEFAULT_OTHER_HAND.play,
   }
 }
 
 /** Each place's fold as saved where it is a boolean; a place never chosen stays unset. */
+/** How many tools the palette's Recent group keeps. */
+export const PALETTE_RECENT_MAX = 8
+/**
+ * Recent before anything is used (the Editor board, Flat's recent notation): the values, marks and
+ * lines a song is written with most, by the ids the palette's keys record.
+ */
+const PALETTE_RECENT_START: readonly string[] = [
+  'quarter',
+  'eighth',
+  'articulation:staccato',
+  'articulation:accent',
+  'slur',
+  'dynamic:mf',
+  'dynamic:p',
+  'chord',
+]
+
 /** The palette's category: a name, or none chosen. */
 const paletteCategory = (value: unknown): string | null =>
   typeof value === 'string' && value !== '' ? value : null
@@ -269,6 +299,15 @@ function chordFinderSettings(value: unknown): ChordFinderSettings {
   }
 }
 
+/** Intervals' choices as saved where each is still one of its values, the default otherwise. */
+function intervalSettings(value: unknown): IntervalSettings {
+  const saved = savedObject<IntervalSettings>(value)
+  return {
+    order: isIntervalOrder(saved.order) ? saved.order : DEFAULT_INTERVALS.order,
+    speed: isIntervalSpeed(saved.speed) ? saved.speed : DEFAULT_INTERVALS.speed,
+  }
+}
+
 /** Progressions' choices as saved where each is still one of its values, the default otherwise. */
 function progressionsSettings(value: unknown): ProgressionsSettings {
   const saved = savedObject<ProgressionsSettings>(value)
@@ -285,6 +324,25 @@ function chordPlayerSettings(value: unknown): ChordPlayerSettings {
   return {
     names: isProgressionNames(saved.names) ? saved.names : DEFAULT_CHORD_PLAYER.names,
     voicing: isProgressionVoicing(saved.voicing) ? saved.voicing : DEFAULT_CHORD_PLAYER.voicing,
+    follow: typeof saved.follow === 'boolean' ? saved.follow : DEFAULT_CHORD_PLAYER.follow,
+  }
+}
+
+function chordsSettings(value: unknown): ChordsSettings {
+  const saved = savedObject<ChordsSettings>(value)
+  return {
+    labels: isChordLabels(saved.labels) ? saved.labels : DEFAULT_CHORDS.labels,
+    range: isChordRange(saved.range) ? saved.range : DEFAULT_CHORDS.range,
+    rangeFrom:
+      typeof saved.rangeFrom === 'number' &&
+      Number.isInteger(saved.rangeFrom) &&
+      saved.rangeFrom >= 21 &&
+      saved.rangeFrom <= 108
+        ? midi(saved.rangeFrom)
+        : DEFAULT_CHORDS.rangeFrom,
+    angle: isCameraAngle(saved.angle) ? saved.angle : DEFAULT_CHORDS.angle,
+    handsOnKeys:
+      typeof saved.handsOnKeys === 'boolean' ? saved.handsOnKeys : DEFAULT_CHORDS.handsOnKeys,
   }
 }
 
@@ -296,26 +354,31 @@ const isSheetView = isOneOf(SHEET_VIEWS)
  */
 function scoreViewSettings(value: unknown): ScoreViewSettings {
   const saved = savedObject<ScoreViewSettings>(value)
-  const switched = (key: 'chordNames' | 'lyrics' | 'pinned' | 'keys' | 'hands') =>
+  const switched = (key: 'chordNames' | 'lyrics' | 'pinned' | 'keys' | 'hands' | 'handsOnKeys') =>
     typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key]
   return {
     layout: isSheetView(saved.layout) ? saved.layout : DEFAULT_SCORE_VIEW.layout,
     music: isMusicView(saved.music) ? saved.music : DEFAULT_SCORE_VIEW.music,
     diagrams: isDiagramsMode(saved.diagrams) ? saved.diagrams : DEFAULT_SCORE_VIEW.diagrams,
+    gridBars: isGridBars(saved.gridBars) ? saved.gridBars : DEFAULT_SCORE_VIEW.gridBars,
     chordNames: switched('chordNames'),
     lyrics: switched('lyrics'),
     pinned: switched('pinned'),
     textSize: isTextSize(saved.textSize) ? saved.textSize : DEFAULT_SCORE_VIEW.textSize,
     keys: switched('keys'),
     hands: switched('hands'),
+    angle: isCameraAngle(saved.angle) ? saved.angle : DEFAULT_SCORE_VIEW.angle,
+    handsOnKeys: switched('handsOnKeys'),
+    range: isSongRange(saved.range) ? saved.range : DEFAULT_SCORE_VIEW.range,
   }
 }
 
 /** A tempo the Metronome keeps: whole beats a minute within its range. */
 const isBpm = (value: unknown): value is number =>
+  typeof value === 'number' &&
   Number.isInteger(value) &&
-  (value as number) >= BPM_RANGE.min &&
-  (value as number) <= BPM_RANGE.max
+  value >= BPM_RANGE.min &&
+  value <= BPM_RANGE.max
 
 /** The Metronome's tempo, meter, sound, beats, subdivision and trainers, each as saved where valid (A39). */
 function metronomeSettings(value: unknown): MetronomeSettings {
@@ -350,6 +413,8 @@ function metronomeSettings(value: unknown): MetronomeSettings {
       step: count(speed.step, initial.speed.step),
       every: count(speed.every, initial.speed.every),
     },
+    volume: METRONOME_VOLUMES.find((volume) => volume === saved.volume) ?? initial.volume,
+    flash: typeof saved.flash === 'boolean' ? saved.flash : initial.flash,
   }
 }
 
@@ -362,33 +427,29 @@ function foldedSections(value: unknown): string[] {
   return [...new Set(ids)].slice(-FOLDED_MAX)
 }
 
-/** Each size's height kept where it is a whole number of px a screen could hold, else none. */
-function keysHeight(value: unknown): KeysHeight {
-  const saved = savedObject<KeysHeight>(value)
-  const height = (each: unknown) =>
-    Number.isInteger(each) && typeof each === 'number' && each > 0 && each <= KEYS_HEIGHT_MOST
-      ? each
+/** Each size's window kept where its edges are whole px a screen could hold, else none. */
+function keysWindows(value: unknown): KeysWindows {
+  const saved = savedObject<KeysWindows>(value)
+  const px = (each: unknown, least: number): each is number =>
+    typeof each === 'number' && Number.isInteger(each) && each >= least && each <= KEYS_WINDOW_MOST
+  const window = (each: unknown): KeysWindow | null => {
+    const kept = savedObject<KeysWindow>(each)
+    return px(kept.left, 0) && px(kept.bottom, 0) && px(kept.width, 1) && px(kept.height, 1)
+      ? { left: kept.left, bottom: kept.bottom, width: kept.width, height: kept.height }
       : null
-  return { phone: height(saved.phone), side: height(saved.side), wide: height(saved.wide) }
+  }
+  return { phone: window(saved.phone), side: window(saved.side), wide: window(saved.wide) }
 }
 
 /** Each saved choice that is still one of its values stands; anything else takes the current one. */
 function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSettings {
   const saved = savedObject<KeyboardSettings>(value)
   return {
-    keySize: isKeySize(saved.keySize) ? saved.keySize : current.keySize,
-    swipe: isSwipe(saved.swipe) ? saved.swipe : current.swipe,
     namedKeys: isNamedKeys(saved.namedKeys) ? saved.namedKeys : current.namedKeys,
-    markNotes: typeof saved.markNotes === 'boolean' ? saved.markNotes : current.markNotes,
-    chordNames: typeof saved.chordNames === 'boolean' ? saved.chordNames : current.chordNames,
     typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
-    autoplay: typeof saved.autoplay === 'boolean' ? saved.autoplay : current.autoplay,
-    dock: isKeyDock(saved.dock) ? saved.dock : current.dock,
     folded: typeof saved.folded === 'boolean' ? saved.folded : current.folded,
     foldedLandscape:
       typeof saved.foldedLandscape === 'boolean' ? saved.foldedLandscape : current.foldedLandscape,
-    pedals: saved.pedals === 'all' || saved.pedals === 'sustain' ? saved.pedals : current.pedals,
-    volume: isVolume(saved.volume) ? saved.volume : current.volume,
   }
 }
 
@@ -414,7 +475,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     sound: soundSettings(saved.sound),
     trainer: trainerSettings(saved.trainer),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
-    keysHeight: keysHeight(saved.keysHeight),
+    keysWindow: keysWindows(saved.keysWindow),
     recorder: recorderSettings(saved.recorder),
     editing: editingSettings(saved.editing),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
@@ -435,15 +496,15 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
           ...new Set(saved.practiceRecent.filter((id): id is string => typeof id === 'string')),
         ].slice(0, 8)
       : [],
-    tipsSeen: Array.isArray(saved.tipsSeen)
-      ? [...new Set(saved.tipsSeen.filter((id): id is string => typeof id === 'string'))].slice(
-          0,
-          64,
-        )
-      : [],
-    lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
+    paletteRecent: Array.isArray(saved.paletteRecent)
+      ? [
+          ...new Set(saved.paletteRecent.filter((id): id is string => typeof id === 'string')),
+        ].slice(0, PALETTE_RECENT_MAX)
+      : PALETTE_RECENT_START,
     progressions: progressionsSettings(saved.progressions),
+    intervals: intervalSettings(saved.intervals),
     chordPlayer: chordPlayerSettings(saved.chordPlayer),
+    chords: chordsSettings(saved.chords),
     bars: barsSettings(saved.bars),
     tuner: tunerSettings(saved.tuner),
     scaleStaff: scaleStaffSettings(saved.scaleStaff),

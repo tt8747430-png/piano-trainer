@@ -1,8 +1,5 @@
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 
-/** The tempo popover's speeds: shares of the piece's tempo. */
-export const SPEEDS = [0.5, 0.75, 1] as const
-
 /**
  * The learner's speed (ADR 0105, Chordify's), in percent of the piece's tempo: from half of it to
  * twice it, in steps of 5.

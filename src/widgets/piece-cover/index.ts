@@ -1,3 +1,7 @@
 export { PieceCover } from './ui/PieceCover'
 export { PieceMark } from './ui/PieceMark'
 export { PieceFirstPage } from './ui/PieceFirstPage'
+export { PieceShelfCover } from './ui/PieceShelfCover'
+export { IncipitStaff } from './ui/IncipitStaff'
+export { PlaylistCover } from './ui/PlaylistCover'
+export { playlistPaint } from './ui/playlist-paint'

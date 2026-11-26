@@ -1,6 +1,7 @@
 export {
   failureOf,
   netResult,
+  statusError,
   type NetFailed,
   type NetFailure,
   type NetOptions,

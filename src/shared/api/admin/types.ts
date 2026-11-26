@@ -42,9 +42,11 @@ export interface Report {
   readonly reportedAt: string
 }
 
-/** One thing an admin did: when, what, to what. */
+/** One thing an admin did: when, who, what, to what. */
 export interface LogEntry {
   readonly at: string
+  /** The administrator's account; none once it is gone. */
+  readonly adminId: string | null
   readonly action: string
   readonly target: string
 }
@@ -71,7 +73,6 @@ export interface AdminPort {
   setMember(groupId: string, userId: string, member: boolean): Promise<NetResult<void>>
   switches(): Promise<NetResult<readonly FeatureSwitch[]>>
   saveSwitch(feature: FeatureSwitch): Promise<NetResult<void>>
-  deleteSwitch(key: string): Promise<NetResult<void>>
   reports(): Promise<NetResult<readonly Report[]>>
   /** Hides a song from the Public library, or shows it again. */
   hide(itemId: string, hidden: boolean): Promise<NetResult<void>>

@@ -26,7 +26,7 @@ const fetchParsed: FetchJson = async (url) => {
 }
 
 /** The recorded instruments' decoded audio may hold this much at most (A27): 80 MB. */
-export const DECODED_BUDGET = 80 * 1024 * 1024
+const DECODED_BUDGET = 80 * 1024 * 1024
 
 /** Where the sets are served from: `public/samples/<instrument>/`. */
 export const SAMPLES_BASE = '/samples/'
@@ -61,7 +61,8 @@ export function createSampleLoader({
   budget = DECODED_BUDGET,
   base = SAMPLES_BASE,
 }: {
-  context: BaseAudioContext
+  /** Where the files decode: only its decoder is used. */
+  context: Pick<BaseAudioContext, 'decodeAudioData'>
   fetchBytes?: FetchBytes
   fetchJson?: FetchJson
   budget?: number

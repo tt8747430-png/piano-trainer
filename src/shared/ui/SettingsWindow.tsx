@@ -1,0 +1,58 @@
+import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
+import { BackButton } from './BackButton'
+import { Dialog, DialogContent } from './primitives/dialog'
+import { Sheet, SheetContent } from './Sheet'
+import { WindowHeader } from './WindowHeader'
+
+/**
+ * A thing's Settings over its page, never a page of its own (the SongSettings boards' SETWIN): on a
+ * laptop the app Settings' window, 720 wide and one height, centred on the window, 22 round, the page dimmed
+ * behind, its bar the title (Back before it on a page inside) and a close ×, its one column scrolling
+ * under the bar; on a phone a tall sheet with Back and Done. The address stays the page's own.
+ */
+export function SettingsWindow({
+  open,
+  onOpenChange,
+  title,
+  onBack,
+  backTo,
+  children,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  title: string
+  /** A page inside the window (Publish, Export): Back to Settings, before the title. */
+  onBack?: (() => void) | undefined
+  /** Where Back goes when not to Settings (New playlist, back to Move to). */
+  backTo?: string | undefined
+  children: ReactNode
+}) {
+  const { t } = useTranslation('common')
+  const laptop = useMediaQuery(LAPTOP)
+  const back = onBack ? (
+    <BackButton label={backTo ?? t('nav.settings')} onClick={onBack} />
+  ) : undefined
+  if (!laptop)
+    return (
+      <Sheet open={open} onOpenChange={onOpenChange}>
+        <SheetContent tall title={title} back={back}>
+          {children}
+        </SheetContent>
+      </Sheet>
+    )
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        showCloseButton={false}
+        className="flex h-(--window-height) w-180 max-w-none flex-col gap-0 overflow-hidden rounded-sheet bg-card p-0 text-base text-foreground window-shadow sm:max-w-none"
+      >
+        <WindowHeader title={title} back={back} closeLabel={t('close')} />
+        <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-8 pt-5 pb-8">
+          {children}
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}

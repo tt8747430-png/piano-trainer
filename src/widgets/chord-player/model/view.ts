@@ -9,10 +9,8 @@ export interface ChordPlayerView {
   readonly sheet?: string | undefined
   readonly p?: string | undefined
   readonly key?: KeyParam | undefined
-  readonly share?: string | undefined
-}
-
-/** The Chord player's Settings: whose sheet it sets. */
-export interface ChordPlayerSettingsView {
-  readonly sheet?: string | undefined
+  /** A shared sheet's link (R39-10): opened among My chord sheets on arrival. */
+  readonly link?: string | undefined
+  /** Edit layout on (R76): each panel outlined with its tag, the bar's Reset and Done. */
+  readonly layout?: 'edit' | undefined
 }

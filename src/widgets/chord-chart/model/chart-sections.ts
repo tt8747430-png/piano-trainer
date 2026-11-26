@@ -58,7 +58,7 @@ export function chartBar(performance: Performance, written: number): ChartBar | 
 }
 
 /** A section's bars: the first and the last, by index. */
-export interface SectionBars {
+interface SectionBars {
   readonly first: number
   readonly last: number
 }
@@ -86,14 +86,15 @@ export interface PlacedBar {
 /**
  * How many beat columns every row of the Grid has (ADR 0108): as many whole bars of the music's
  * commonest length as `room` beats hold (two 4-beat bars on a phone held upright, two of 3/4 in six),
- * one at least, and never fewer than its longest bar's place.
+ * one at least, and never fewer than its longest bar's place; or, where a row's bars are chosen
+ * (`perRow`, the Grid's Bars per row), as many of them.
  */
-export function gridColumns(bars: readonly GridBar[], room: number): number {
+export function gridColumns(bars: readonly GridBar[], room: number, perRow?: number): number {
   if (bars.length === 0) return 1
   const counts = new Map<number, number>()
   for (const { slot } of bars) counts.set(slot, (counts.get(slot) ?? 0) + 1)
   const [common = 1] = [...counts].sort((a, b) => b[1] - a[1] || b[0] - a[0])[0] ?? []
-  const fits = common * Math.max(1, Math.floor(room / common))
+  const fits = common * (perRow ?? Math.max(1, Math.floor(room / common)))
   return Math.max(fits, ...bars.map(({ slot }) => slot))
 }
 

@@ -1,3 +1,5 @@
+import { isRecord } from '../saved'
+
 /**
  * A block's or a card's style (R29 B9, D4): roundness, border, shadow, its colours, its padding and
  * its layout, every value from a short list. One sanitiser reads any saved or published style: an
@@ -51,43 +53,46 @@ export const BLOCK_PRESETS = {
 
 /** The preset a style is, if it is one: what the presets' strip marks chosen. */
 export function presetOf(style: BlockStyle): BlockPreset | null {
-  const found = (Object.keys(BLOCK_PRESETS) as BlockPreset[]).find((preset) =>
-    sameStyle(BLOCK_PRESETS[preset], style),
-  )
+  const found = Object.keys(BLOCK_PRESETS)
+    .filter(isPreset)
+    .find((preset) => sameStyle(BLOCK_PRESETS[preset], style))
   return found ?? null
 }
 
 /** Whether two styles draw the same. */
-export const sameStyle = (a: BlockStyle, b: BlockStyle): boolean =>
-  (Object.keys(a) as (keyof BlockStyle)[]).every((key) => a[key] === b[key])
+export function sameStyle(a: BlockStyle, b: BlockStyle): boolean {
+  const other = new Map(Object.entries(b))
+  return Object.entries(a).every(([key, value]) => other.get(key) === value)
+}
 export type BlockPreset = keyof typeof BLOCK_PRESETS
+const isPreset = (key: string): key is BlockPreset => key in BLOCK_PRESETS
 
 const HEX = /^#[0-9a-f]{6}$/i
 
-const step = <N extends number>(value: unknown, most: N, fallback: N): N =>
-  typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= most
-    ? (value as N)
-    : fallback
+const RADII = [0, 1, 2, 3, 4] as const
+const BORDERS = [0, 1, 2] as const
+const SHADOWS = [0, 1, 2] as const
+
+const isHex = (text: string): text is `#${string}` => HEX.test(text)
 
 const colour = (value: unknown, fallback: BlockStyle['surface']): BlockStyle['surface'] => {
   if (typeof value !== 'string') return fallback
-  if ((STYLE_PAINTS as readonly string[]).includes(value)) return value as StylePaint
-  return HEX.test(value) ? (value.toLowerCase() as `#${string}`) : fallback
+  const paint = STYLE_PAINTS.find((each) => each === value)
+  if (paint) return paint
+  const hex = value.toLowerCase()
+  return isHex(hex) ? hex : fallback
 }
 
-const oneOf = <T extends string>(values: readonly T[], value: unknown, fallback: T): T =>
-  typeof value === 'string' && (values as readonly string[]).includes(value)
-    ? (value as T)
-    : fallback
+const oneOf = <T>(values: readonly T[], value: unknown, fallback: T): T =>
+  values.find((each) => each === value) ?? fallback
 
 /** Any value read as a style: what it says that is valid, the default for the rest. */
 export function sanitiseStyle(value: unknown): BlockStyle {
-  const saved =
-    typeof value === 'object' && value !== null ? (value as Record<string, unknown>) : {}
+  const saved = isRecord(value) ? value : {}
   return {
-    radius: step(saved.radius, 4, DEFAULT_STYLE.radius),
-    border: step(saved.border, 2, DEFAULT_STYLE.border),
-    shadow: step(saved.shadow, 2, DEFAULT_STYLE.shadow),
+    radius: oneOf(RADII, saved.radius, DEFAULT_STYLE.radius),
+    border: oneOf(BORDERS, saved.border, DEFAULT_STYLE.border),
+    shadow: oneOf(SHADOWS, saved.shadow, DEFAULT_STYLE.shadow),
     surface: colour(saved.surface, DEFAULT_STYLE.surface),
     text: colour(saved.text, DEFAULT_STYLE.text),
     padding: oneOf(STYLE_PADDINGS, saved.padding, DEFAULT_STYLE.padding),

@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 
 /** A tile: its picture over its name; greyed where it cannot be chosen, `reason` its tooltip. */
-export interface PictureTile<V extends string> {
+interface PictureTile<V extends string> {
   readonly value: V
   readonly label: string
   readonly picture: ReactNode
@@ -54,7 +54,7 @@ export function PictureTiles<V extends string>({
           disabled={tile.reason !== undefined}
           aria-label={tile.label}
           title={tile.reason}
-          className="flex min-h-11 min-w-0 cursor-default flex-col items-center gap-1.5 rounded-control border border-input bg-card px-1.5 py-2.5 text-center text-sm leading-tight font-medium text-pretty text-muted-foreground select-none choice data-disabled:opacity-40"
+          className="flex min-h-11 min-w-0 cursor-default flex-col items-center gap-1.5 rounded-control border border-input bg-card px-1.5 py-2.5 text-center text-sm leading-tight font-medium text-pretty text-muted-foreground select-none choice data-disabled:opacity-50"
         >
           {tile.picture}
           <span>{tile.label}</span>

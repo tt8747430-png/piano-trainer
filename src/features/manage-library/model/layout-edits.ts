@@ -22,7 +22,7 @@ import { mergeVisibleOrder } from '@/shared/lib'
  */
 
 /** A song's place after every other: where a song restored to its collection's folder stands. */
-export const LAST = Number.MAX_SAFE_INTEGER
+const LAST = Number.MAX_SAFE_INTEGER
 
 /** A song moved, and where it stood: what an Undo puts back. */
 export interface Moved {
@@ -212,10 +212,14 @@ export function putFoldersBack(
 }
 
 /** Songs out of the library into the archive, the newest first, each saying where it stood. */
-export function archiveSongs(layout: LibraryLayout, ids: readonly PieceId[]): LibraryLayout {
+export function archiveSongs(
+  layout: LibraryLayout,
+  ids: readonly PieceId[],
+  at: number,
+): LibraryLayout {
   const moved = placesOf(layout, ids)
   const rest = without(layout, new Set(moved.map((each) => each.id)))
-  const entries = moved.map((each): ShelvedEntry => ({ kind: 'song', ...each }))
+  const entries = moved.map((each): ShelvedEntry => ({ kind: 'song', ...each, at }))
   return { ...rest, archive: [...entries, ...rest.archive] }
 }
 
@@ -243,7 +247,11 @@ export function restoreSongs(layout: LibraryLayout, ids: readonly PieceId[]): Li
  * Songs into the Trash (R34), the newest first, each saying where it stood: in a list, its place; in
  * the archive, the place it was archived from; in an archived folder, that folder.
  */
-export function trashSongs(layout: LibraryLayout, ids: readonly PieceId[]): LibraryLayout {
+export function trashSongs(
+  layout: LibraryLayout,
+  ids: readonly PieceId[],
+  at: number,
+): LibraryLayout {
   const wanted = new Set(ids)
   const archived = layout.archive.flatMap((entry): Moved[] =>
     entry.kind === 'song'
@@ -258,7 +266,7 @@ export function trashSongs(layout: LibraryLayout, ids: readonly PieceId[]): Libr
   )
   const moved = [...placesOf(layout, ids), ...archived]
   const rest = without(layout, new Set(moved.map((each) => each.id)))
-  return { ...rest, trash: [...moved, ...rest.trash] }
+  return { ...rest, trash: [...moved.map((each) => ({ ...each, at })), ...rest.trash] }
 }
 
 /** Songs out of the Trash, back where each stood (`putBack`). */
@@ -272,7 +280,7 @@ export const untrashSongs = (layout: LibraryLayout, ids: readonly PieceId[]): Li
  * A folder, with its songs and every folder under it, out of the library into the archive, saying
  * where it stood: the folder it stood in, and its place among those there.
  */
-export function archiveFolder(layout: LibraryLayout, id: FolderId): LibraryLayout {
+export function archiveFolder(layout: LibraryLayout, id: FolderId, at: number): LibraryLayout {
   const place = folderPlace(layout.folders, id)
   const folder = layout.folders.find((each) => each.id === id)
   if (!place || !folder) return layout
@@ -281,7 +289,7 @@ export function archiveFolder(layout: LibraryLayout, id: FolderId): LibraryLayou
   return {
     ...layout,
     folders: layout.folders.filter((each) => !under.has(each.id)),
-    archive: [{ kind: 'folder', folder, subfolders, index: place.index }, ...layout.archive],
+    archive: [{ kind: 'folder', folder, subfolders, index: place.index, at }, ...layout.archive],
   }
 }
 
@@ -343,6 +351,7 @@ export function dropFolder(
   layout: LibraryLayout,
   id: FolderId,
   catalog: LibraryCatalog,
+  at: number,
 ): LibraryLayout {
   const own = new Set(catalog.ownSongs)
   const collectionOf = new Map(
@@ -370,18 +379,20 @@ export function dropFolder(
           folder: { ...folder, parent: null, songs },
           subfolders: [],
           index: LAST,
+          at,
         },
       ]
     return songs.map((song) => ({
       kind: 'song',
       id: song,
       from: { folder: collectionOf.get(song) ?? null, index: LAST },
+      at,
     }))
   })
   const gone = new Set(dropping.map((folder) => folder.id))
   const rest = without(layout, new Set(ownSongs))
   const archive = rest.archive.filter((each) => each.kind !== 'folder' || !gone.has(each.folder.id))
-  const trashed = ownSongs.map((song) => ({ id: song, from: { folder: null, index: LAST } }))
+  const trashed = ownSongs.map((song) => ({ id: song, from: { folder: null, index: LAST }, at }))
   return {
     ...rest,
     folders: rest.folders.filter((folder) => !gone.has(folder.id)),

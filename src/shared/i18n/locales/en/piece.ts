@@ -7,7 +7,6 @@ export const piece = {
   // the piece is a song's or a study's, by its kind: Russian names it.
   learnSong: {
     progress: '{{done}} of {{total}}',
-    progressSaid: 'Lessons done: {{done}} of {{total}}',
     sections: 'Sections',
     lessons_one: '{{count}} lesson',
     lessons_other: '{{count}} lessons',
@@ -16,7 +15,7 @@ export const piece = {
   // A section's page: its chords in order, its changes, its pattern; each lesson looped in the Player.
   learnSection: {
     title: 'Learn the {{section}}',
-    rounds: '{{n}} ×',
+    rounds: '{{n}}×',
     noChords: 'No chord symbols',
     // Each group of lessons named by what it does, a word or two; how it does it behind its ⓘ
     // (ADR 0111).
@@ -24,7 +23,7 @@ export const piece = {
     chordsInfo_one: 'Hold each chord on the keys to learn it.',
     chordsInfo_other:
       'Hold each chord on the keys {{count}} times to learn it, letting go of every key between.',
-    learnChord: 'Learn {{chord}}',
+    learnChord: 'Learn <b>{{chord}}</b>',
     held: '{{held}} of {{needed}}',
     inTime: 'In time',
     inTimeInfo:
@@ -56,6 +55,7 @@ export const piece = {
   more: 'More',
   practise: 'Practise',
   editScore: 'Edit score',
+  editCredits: 'Edit title and credits',
   writeChart: 'Write the chart',
   // A songbook entry whose chords are not written yet.
   noChart: {
@@ -79,9 +79,6 @@ export const piece = {
   shareLinked: 'Link copied. Anyone who opens it sees the chords as you play them.',
   shareFailed: 'The link could not be made here.',
   shareTooLong: 'This song is too long to fit in a link.',
-  deleting: {
-    says: 'The song moves to the Trash in Songs, to be restored until the Trash is emptied.',
-  },
   scaleOf: 'Scale: {{scale}}',
   // What is said of a song or study, behind its ⓘ.
   aboutMore: 'More',
@@ -166,9 +163,24 @@ export const piece = {
       other: 'Another language',
     },
   },
+  // A song's place, as the Player left it (canvas 125): where to go on from, and the bars played.
+  place: {
+    continue: 'Continue from bar {{bar}}',
+    start: 'From the start',
+    first: 'Bar 1',
+    last: 'Bar {{bar}}',
+    played_one: 'Played {{count}} time',
+    played_other: 'Played {{count}} times',
+    minutes_one: '{{count}} minute',
+    minutes_other: '{{count}} minutes',
+    said: '{{played}} of {{total}} bars played; bar {{next}} is next',
+    saidAll: '{{played}} of {{total}} bars played',
+  },
   practice: {
     title: 'Your practice',
     last: 'Played last',
+    wait: 'Wait mode',
+    waitBest: 'Best {{percent}} · {{hands}}',
     takes: 'Takes',
     takeCount_one: '{{count}} recording',
     takeCount_other: '{{count}} recordings',
@@ -189,15 +201,12 @@ export const piece = {
     exportLine: 'MusicXML, MIDI',
     deleteSong: 'Delete song',
     duplicate: 'Duplicate',
-    duplicateTitle: 'Duplicate {{title}}?',
-    duplicateBody:
-      'An editable copy of this song is added to your library. The original remains unchanged.',
+    duplicated: '{{title}} added to your songs',
     copyTitle: '{{title}} (copy)',
     title: 'Settings',
     open: 'Settings',
     library: 'Library',
-    folder: 'Folder',
-    favourite: 'Favourite',
+    folder: 'Playlist',
     home: 'Library',
     archived: 'Archived',
     share: 'Share',

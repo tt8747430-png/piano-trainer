@@ -1,6 +1,5 @@
-import { useEffect, useEffectEvent, useState, type ReactElement, type ReactNode } from 'react'
+import { useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import {
   BackButton,
   RowButton,
@@ -45,9 +44,11 @@ const rank = (row: SettingsRow) => {
 }
 
 /** A page the screen's own Settings open inside the sheet: its title and what it shows. */
-export interface InnerPage {
+interface InnerPage {
   readonly title: string
   readonly content: ReactNode
+  /** Its Back, in the sheet's header. */
+  readonly onBack: () => void
 }
 
 /**
@@ -74,17 +75,8 @@ export function SettingsSheet({
   children?: ReactNode
 }) {
   const { t } = useTranslation('player')
-  const { head, pages, links = [], acts, onPanel } = useSettingsExtras()
+  const { head, pages, links = [], acts } = useSettingsExtras()
   const [open, setOpen] = useState(false)
-  // On a laptop a panel at the right, the music in sight beside it (R29, screen 4.1).
-  const laptop = useMediaQuery(LAPTOP)
-  // Beside the music, the screen makes room for it, so nothing of the screen is under it.
-  const panelled = open && laptop
-  const tellPanel = useEffectEvent((shown: boolean) => onPanel?.(shown))
-  useEffect(() => {
-    tellPanel(panelled)
-    return () => tellPanel(false)
-  }, [panelled])
   const extra = pages.find((each) => each.id === page)
   const rows: readonly (SettingsRow & { readonly render?: ReactElement })[] = [
     ...music,
@@ -113,10 +105,7 @@ export function SettingsSheet({
       : (extra?.label ?? inner?.title ?? t('settingsPage.open'))
   return (
     <Sheet
-      swipeDirection={laptop ? 'right' : 'down'}
-      modal={!laptop}
-      // Beside the music, it stays open as the music plays: Close, Escape and the gear close it.
-      disablePointerDismissal={laptop}
+      hung="score-bar"
       open={open}
       onOpenChange={(next) => {
         setOpen(next)
@@ -124,7 +113,16 @@ export function SettingsSheet({
       }}
     >
       <SetupTrigger />
-      <SheetContent title={title}>
+      <SheetContent
+        title={title}
+        back={
+          page === 'main' ? undefined : extra ? (
+            <BackButton onClick={() => onPage('main')} />
+          ) : inner ? (
+            <BackButton onClick={inner.onBack} />
+          ) : undefined
+        }
+      >
         {page === 'main' ? (
           <div className="flex flex-col gap-5">
             {head}
@@ -165,10 +163,7 @@ export function SettingsSheet({
             )}
           </div>
         ) : extra ? (
-          <div className="flex flex-col gap-5">
-            <BackButton onClick={() => onPage('main')} />
-            {extra.content}
-          </div>
+          extra.content
         ) : (
           inner?.content
         )}

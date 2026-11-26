@@ -1,0 +1,548 @@
+[
+ {
+  "name": "Adagietto",
+  "id": "tempopreset.adagietto",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 72.0
+ },
+ {
+  "name": "Adagio",
+  "id": "tempopreset.adagio",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 66.0
+ },
+ {
+  "name": "Affettuoso",
+  "id": "tempopreset.affettuoso",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 72.0
+ },
+ {
+  "name": "Agitato",
+  "id": "tempopreset.agitato",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 144.0
+ },
+ {
+  "name": "Alla breve",
+  "id": "tempopreset.allabreve",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 144.0
+ },
+ {
+  "name": "Alla marcia",
+  "id": "tempopreset.allamarcia",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 120.0
+ },
+ {
+  "name": "Allegretto",
+  "id": "tempopreset.allegretto",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 112.0
+ },
+ {
+  "name": "Allegrissimo",
+  "id": "tempopreset.allegrissimo",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 176.0
+ },
+ {
+  "name": "Allegro",
+  "id": "tempopreset.allegro",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 140.0
+ },
+ {
+  "name": "Allegro moderato",
+  "id": "tempopreset.allegromoderato",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 120.0
+ },
+ {
+  "name": "Allegro vivace",
+  "id": "tempopreset.allegrovivace",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 176.0
+ },
+ {
+  "name": "Andante",
+  "id": "tempopreset.andante",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 80.0
+ },
+ {
+  "name": "Andante moderato",
+  "id": "tempopreset.andantemoderato",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 96.0
+ },
+ {
+  "name": "Andantino",
+  "id": "tempopreset.andantino",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 92.0
+ },
+ {
+  "name": "Animato",
+  "id": "tempopreset.animato",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 144.0
+ },
+ {
+  "name": "Appassionato",
+  "id": "tempopreset.appassionato",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 144.0
+ },
+ {
+  "name": "Brillante",
+  "id": "tempopreset.brillante",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 172.0
+ },
+ {
+  "name": "Con bravura",
+  "id": "tempopreset.conbravura",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 144.0
+ },
+ {
+  "name": "Con brio",
+  "id": "tempopreset.conbrio",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 120.0
+ },
+ {
+  "name": "Con dolcezza",
+  "id": "tempopreset.condolcezza",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 72.0
+ },
+ {
+  "name": "Con fuoco",
+  "id": "tempopreset.confuoco",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 160.0
+ },
+ {
+  "name": "Con moto",
+  "id": "tempopreset.conmoto",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 120.0
+ },
+ {
+  "name": "Deciso",
+  "id": "tempopreset.deciso",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 120.0
+ },
+ {
+  "name": "Energico",
+  "id": "tempopreset.energico",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 144.0
+ },
+ {
+  "name": "Eroico",
+  "id": "tempopreset.eroico",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 96.0
+ },
+ {
+  "name": "Furioso",
+  "id": "tempopreset.furioso",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 172.0
+ },
+ {
+  "name": "Giocoso",
+  "id": "tempopreset.giocoso",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 120.0
+ },
+ {
+  "name": "Gioioso",
+  "id": "tempopreset.gioioso",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 132.0
+ },
+ {
+  "name": "Grandioso",
+  "id": "tempopreset.grandioso",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 72.0
+ },
+ {
+  "name": "Grave",
+  "id": "tempopreset.grave",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 36.0
+ },
+ {
+  "name": "Grazioso",
+  "id": "tempopreset.grazioso",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 108.0
+ },
+ {
+  "name": "L'istesso tempo",
+  "id": "tempopreset.listessotempo",
+  "gradual": false,
+  "type": "kReset",
+  "bpm_or_amount": null
+ },
+ {
+  "name": "Lacrimoso",
+  "id": "tempopreset.lacrimoso",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 60.0
+ },
+ {
+  "name": "Lamentoso",
+  "id": "tempopreset.lamentoso",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 60.0
+ },
+ {
+  "name": "Larghetto",
+  "id": "tempopreset.larghetto",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 60.0
+ },
+ {
+  "name": "Larghissimo",
+  "id": "tempopreset.larghissimo",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 24.0
+ },
+ {
+  "name": "Largo",
+  "id": "tempopreset.largo",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 56.0
+ },
+ {
+  "name": "Lento",
+  "id": "tempopreset.lento",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 60.0
+ },
+ {
+  "name": "Lento",
+  "id": "tempopreset.relative_lento",
+  "gradual": false,
+  "type": "kRelative",
+  "bpm_or_amount": 90.0
+ },
+ {
+  "name": "Maestoso",
+  "id": "tempopreset.maestoso",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 70.0
+ },
+ {
+  "name": "Malinconico",
+  "id": "tempopreset.malinconico",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 60.0
+ },
+ {
+  "name": "Marcia moderato",
+  "id": "tempopreset.marciamoderato",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 86.0
+ },
+ {
+  "name": "Marziale",
+  "id": "tempopreset.marziale",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 120.0
+ },
+ {
+  "name": "Mesto",
+  "id": "tempopreset.mesto",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 60.0
+ },
+ {
+  "name": "Misterioso",
+  "id": "tempopreset.misterioso",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 66.0
+ },
+ {
+  "name": "Moderato",
+  "id": "tempopreset.moderato",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 108.0
+ },
+ {
+  "name": "Mosso",
+  "id": "tempopreset.mosso",
+  "gradual": false,
+  "type": "kRelative",
+  "bpm_or_amount": 110.0
+ },
+ {
+  "name": "Movimento",
+  "id": "tempopreset.movimento",
+  "gradual": false,
+  "type": "kRelative",
+  "bpm_or_amount": 200.0
+ },
+ {
+  "name": "Nobilmente",
+  "id": "tempopreset.nobilmente",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 72.0
+ },
+ {
+  "name": "Patetico",
+  "id": "tempopreset.patetico",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 72.0
+ },
+ {
+  "name": "Prestissimo",
+  "id": "tempopreset.prestissimo",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 200.0
+ },
+ {
+  "name": "Presto",
+  "id": "tempopreset.presto",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 172.0
+ },
+ {
+  "name": "Ritenuto",
+  "id": "tempopreset.ritenuto",
+  "gradual": false,
+  "type": "kRelative",
+  "bpm_or_amount": 70.0
+ },
+ {
+  "name": "Scherzando",
+  "id": "tempopreset.scherzando",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 144.0
+ },
+ {
+  "name": "Stretto",
+  "id": "tempopreset.stretto",
+  "gradual": false,
+  "type": "kRelative",
+  "bpm_or_amount": 120.0
+ },
+ {
+  "name": "Tempo I",
+  "id": "tempopreset.tempoI",
+  "gradual": false,
+  "type": "kReset",
+  "bpm_or_amount": null
+ },
+ {
+  "name": "Tempo II",
+  "id": "tempopreset.tempoII",
+  "gradual": false,
+  "type": "kReset",
+  "bpm_or_amount": null
+ },
+ {
+  "name": "Tempo comodo",
+  "id": "tempopreset.tempocomodo",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 72.0
+ },
+ {
+  "name": "Tempo giusto",
+  "id": "tempopreset.tempogiusto",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 72.0
+ },
+ {
+  "name": "Tempo primo",
+  "id": "tempopreset.tempoprimo",
+  "gradual": false,
+  "type": "kReset",
+  "bpm_or_amount": null
+ },
+ {
+  "name": "Tempo secondo",
+  "id": "tempopreset.temposecondo",
+  "gradual": false,
+  "type": "kReset",
+  "bpm_or_amount": null
+ },
+ {
+  "name": "Tempo semplice",
+  "id": "tempopreset.temposemplice",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 72.0
+ },
+ {
+  "name": "Tranquillamente",
+  "id": "tempopreset.tranquillamente",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 60.0
+ },
+ {
+  "name": "Trionfante",
+  "id": "tempopreset.trionfante",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 72.0
+ },
+ {
+  "name": "Vivace",
+  "id": "tempopreset.vivace",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 160.0
+ },
+ {
+  "name": "Vivacissimo",
+  "id": "tempopreset.vivacissimo",
+  "gradual": false,
+  "type": "kAbsolute",
+  "bpm_or_amount": 172.0
+ },
+ {
+  "name": "a tempo",
+  "id": "tempopreset.atempo",
+  "gradual": false,
+  "type": "kReset",
+  "bpm_or_amount": null
+ },
+ {
+  "name": "accelerando",
+  "id": "tempopreset.accel",
+  "gradual": true,
+  "type": null,
+  "bpm_or_amount": 125.0
+ },
+ {
+  "name": "allargando",
+  "id": "tempopreset.allarg",
+  "gradual": true,
+  "type": null,
+  "bpm_or_amount": 75.0
+ },
+ {
+  "name": "calando",
+  "id": "tempopreset.calando",
+  "gradual": true,
+  "type": null,
+  "bpm_or_amount": 50.0
+ },
+ {
+  "name": "lentando",
+  "id": "tempopreset.lentando",
+  "gradual": true,
+  "type": null,
+  "bpm_or_amount": 75.0
+ },
+ {
+  "name": "morendo",
+  "id": "tempopreset.morendo",
+  "gradual": true,
+  "type": null,
+  "bpm_or_amount": 50.0
+ },
+ {
+  "name": "precipitando",
+  "id": "tempopreset.precipitando",
+  "gradual": true,
+  "type": null,
+  "bpm_or_amount": 115.0
+ },
+ {
+  "name": "rallentando",
+  "id": "tempopreset.rall",
+  "gradual": true,
+  "type": null,
+  "bpm_or_amount": 75.0
+ },
+ {
+  "name": "ritardando",
+  "id": "tempopreset.ritardando",
+  "gradual": true,
+  "type": null,
+  "bpm_or_amount": 75.0
+ },
+ {
+  "name": "smorzando",
+  "id": "tempopreset.smorz",
+  "gradual": true,
+  "type": null,
+  "bpm_or_amount": 50.0
+ },
+ {
+  "name": "sostenuto",
+  "id": "tempopreset.sost",
+  "gradual": true,
+  "type": null,
+  "bpm_or_amount": 95.0
+ },
+ {
+  "name": "stringendo",
+  "id": "tempopreset.stringendo",
+  "gradual": true,
+  "type": null,
+  "bpm_or_amount": 125.0
+ }
+]

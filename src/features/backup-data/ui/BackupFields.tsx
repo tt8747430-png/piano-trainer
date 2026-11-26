@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { downloadFile, keepsSaves, safeLocalStorage } from '@/shared/lib'
+import { dateSaid, downloadFile, keepsSaves, safeLocalStorage } from '@/shared/lib'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,7 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
-import { ActionRow } from '@/shared/ui'
+import { ActionRow, Problem } from '@/shared/ui'
 import {
   backupName,
   hasOtherVersions,
@@ -85,10 +85,7 @@ export function BackupFields({
     onRestored()
   }
   const made = found?.made ? new Date(found.made) : null
-  const madeText =
-    made && !Number.isNaN(made.getTime())
-      ? made.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })
-      : null
+  const madeText = made && !Number.isNaN(made.getTime()) ? dateSaid(made, locale) : null
 
   return (
     <>
@@ -106,11 +103,7 @@ export function BackupFields({
           event.target.value = ''
         }}
       />
-      {failed ? (
-        <p role="alert" className="px-4 pb-3 text-destructive">
-          {t(`backup.${failed}`)}
-        </p>
-      ) : null}
+      {failed ? <Problem className="px-4 pb-3">{t(`backup.${failed}`)}</Problem> : null}
       <AlertDialog
         open={found !== null}
         onOpenChange={(opened) => (opened ? null : setFound(null))}

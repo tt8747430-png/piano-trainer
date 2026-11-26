@@ -14,7 +14,8 @@ import {
   type SetupChange,
 } from '@/widgets/player-setup'
 import { SwingField, type PlayerControl, type ScoreTrack } from '@/widgets/practice-player'
-import { trackOf } from '@/features/practice'
+import { defaultPattern, trackOf } from '@/features/practice'
+import { PlayCards, type ArrangementChoice } from './PlayCards'
 
 /**
  * A piece's own pages of the Player's Settings (A35, R31-P): Staves, each track played, shown and how
@@ -36,6 +37,7 @@ export function PieceSetup({
   onStaves,
   sync,
   onSwing,
+  arrangement,
 }: {
   piece: Piece
   /** What this kind of music is offered (`controlsFor`). */
@@ -54,6 +56,8 @@ export function PieceSetup({
   /** The recording's Sync, where the piece has one. */
   sync?: RecordingSync | undefined
   onSwing: (feel: SwingFeel) => void
+  /** The Arrangement card's choice, where the music has versions. */
+  arrangement: ArrangementChoice | null
 }) {
   const { t } = useTranslation(['player', 'music'])
   const chordSize = controls.has('chordSize') ? choosableChordSize(piece) : null
@@ -77,6 +81,8 @@ export function PieceSetup({
       id: 'accompaniment',
       label: t('settingsPage.accompaniment'),
       icon: Music2,
+      // Opened by the Accompaniment card's Pattern, not a row of its own.
+      listed: false,
       content: (
         <Accompaniment
           chordSize={chordSize}
@@ -88,7 +94,17 @@ export function PieceSetup({
         />
       ),
     })
-  return <PlayerSetup figures={choice} fit={fit} onFigures={onChange} pages={pages} />
+  return (
+    <PlayerSetup figures={choice} fit={fit} onFigures={onChange} pages={pages}>
+      {arrangement || controls.has('accompaniment') ? (
+        <PlayCards
+          arrangement={arrangement}
+          own={defaultPattern(piece)}
+          page={controls.has('accompaniment') ? 'accompaniment' : null}
+        />
+      ) : null}
+    </PlayerSetup>
+  )
 }
 
 /** A chord chart's Accompaniment page: its chord size, the pattern and its hands, its Swing. */
@@ -122,7 +138,7 @@ function Accompaniment({
           />
         </Labelled>
       ) : null}
-      <PatternCard>
+      <PatternCard headed={false} inversion={false}>
         {swing === null ? null : <SwingField swing={swing} onSwing={onSwing} />}
       </PatternCard>
     </>

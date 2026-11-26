@@ -1,6 +1,17 @@
 export const player = {
   // The bar's button that shows or hides the piano keys under the music (R29, Flat's).
   setup: 'Setup',
+  // A run's own view (the run boards): where it stands, its floating acts and its Setup's Start.
+  run: {
+    chord: 'Chord {{at}} of {{of}}',
+    key: 'Key {{at}} of {{of}}',
+    transport: 'Setup, play and tempo',
+    tempo: 'Tempo',
+    play: 'Play',
+    start: 'Start',
+    slower: 'Slower',
+    faster: 'Faster',
+  },
   // The bar's More (ADR 0108, 0107): a piece's information and its sections as sheets, Share as the
   // song page's, Print, the music as a MIDI file (with a recording, at a fixed tempo or time aligned
   // to it).
@@ -11,6 +22,8 @@ export const player = {
   print: 'Print',
   // The Player's views of the music (ADR 0108), Pick your view's (R29); each names its own part of the
   // screen.
+  // The menu beside the song's head in the Player's settings, named as the View menu is.
+  songMenu: 'Song',
   views: {
     backToPlayhead: 'Back to the music',
     pick: 'Pick your view',
@@ -32,6 +45,7 @@ export const player = {
     textSize: { label: 'Text size', smaller: 'Smaller text', larger: 'Larger text' },
     // Why the words' switch is greyed (ADR 0108).
     noWords: 'The music has no words',
+    barsPerRow: 'Bars per row',
     mode: {
       label: 'Mode',
       animated: 'Animated',
@@ -41,7 +55,6 @@ export const player = {
     },
   },
   // The row of tools under the Player's bar (ADR 0108), as a screen reader names it.
-  restart: 'Restart',
   foot: { label: 'Practice tools' },
   version: {
     change: 'Change version',
@@ -49,14 +62,12 @@ export const player = {
     label: 'Version',
     of: 'Version: {{level}}',
     arrangement: 'Arrangement',
+    whatYouPlay: 'What you play',
+    scoring: 'Scoring',
     group: { own: 'Your version', solo: 'Piano solo', voice: 'Piano and voice' },
     level: { original: 'Original', simple: 'Simplified', easy: 'Easy' },
     difficulty: 'Difficulty {{n}} of 3',
-    about: {
-      original: 'The score as written',
-      simple: 'Every chord a plain triad, the tune kept',
-      easy: 'The tune, one note of each chord',
-    },
+    levels: 'Level',
     alreadySimple: 'Its chords are already simple',
   },
   tuner: {
@@ -64,12 +75,17 @@ export const player = {
     note: 'Note heard',
     cents: 'Cents off',
     listening: 'Play or sing a note',
-    reading: '{{hz}} Hz · {{cents}} cents',
-    denied: 'The microphone is not available. Allow it in the browser to use the tuner.',
+    inTune: 'In tune',
+    flat_one: '{{count}} cent flat',
+    flat_other: '{{count}} cents flat',
+    sharp_one: '{{count}} cent sharp',
+    sharp_other: '{{count}} cents sharp',
+    noMicrophone: 'No microphone',
+    denied: 'Allow the microphone in the browser to use the tuner.',
     retry: 'Try again',
     a4: 'A4',
     hz: '{{hz}} Hz',
-    reference: 'A4 = {{hz}} Hz',
+    waiting: 'Listening',
     lower: 'Lower A4',
     higher: 'Higher A4',
   },
@@ -91,17 +107,9 @@ export const player = {
       circle: 'Circle',
     },
   },
-  progress: 'Progress',
-  coach: {
-    listen: 'Tap a note to start from there, then press Play.',
-    wait: 'Press Play, then play each highlighted note.',
-    follow: 'Play the highlighted notes; the accompaniment follows your tempo.',
-    close: 'Dismiss tip',
-  },
   // The modes at the learner's own pace, in the transport's Pace (R36, flowkey's).
   modes: {
     wait: { name: 'Wait mode', line: 'The music waits for the right notes.' },
-    follow: { name: 'Interpret', line: 'The music follows your tempo.' },
   },
   tools: 'Tools',
   // The tools row's Transpose (ADR 0105): the key the music is in, moved a semitone at a time.
@@ -131,6 +139,8 @@ export const player = {
   },
   /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
   nextChord: 'Next: {{symbol}}',
+  diagramsRow: 'Chords, one at a time',
+  noChordShort: 'N.C.',
   /** A line of Chords over lyrics, by its bars: a tap takes the Player there. */
   line: {
     one: 'Bar {{n}}',
@@ -143,34 +153,26 @@ export const player = {
   key: 'Key',
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },
-  progression: { title: '{{numerals}} in {{key}}', walking: '{{numerals}} from {{key}}, {{walk}}' },
-  /** A piece walked through the keys, from the learner's key. */
-  /** A walk through the keys, as a title says it. */
-  walking: {
-    'semitones-up': 'up by semitones',
-    'semitones-down': 'down by semitones',
-    'semitones-up-down': 'up and down by semitones',
-    'tones-up': 'up by whole tones',
-    'tones-down': 'down by whole tones',
-    fifths: 'down the circle of fifths',
-    'fifths-up': 'up the circle of fifths',
-    'minor-thirds': 'up by minor thirds',
-    'major-thirds': 'up by major thirds',
-  },
+  progression: { title: '{{numerals}} in {{key}}' },
   chromatic: { title: 'Chromatically: {{chords}}', fifths: 'Circle of fifths: {{chords}}' },
   qualities: 'Chord types',
   direction: 'Direction',
   directions: { up: 'Up', down: 'Down', both: 'Up and down', fifths: 'Circle of fifths' },
   tempo: 'Tempo',
   hands: 'Hands',
-  handsOf: 'Hands: {{hands}}',
-  // The foot's Hands (R36, flowkey's hands menu): the hands the learner plays, in every mode.
-  handsChoice: 'Which hands do you play?',
+  handsOf: 'Parts: {{hands}}',
+  // The foot's Parts (loop round 24, the board's): each hand, whether the learner plays it, how loud
+  // the app plays it otherwise, and Dim on its staff.
+  parts: {
+    title: 'Parts',
+    play: '{{hand}}: you play it',
+    volume: '{{hand}}, volume',
+    dim: 'Dim',
+  },
   pattern: 'Pattern',
   // The Setup's section of what a chord chart's hands play (A35): the pattern, the position, swing.
   accompaniment: 'Accompaniment from the chords',
   fromChart: 'From the chart',
-  fromChartDescription: 'Each section and chord as the song marks it.',
   rh: 'Right hand',
   lh: 'Left hand',
   ownFigure: 'The pattern’s own',
@@ -232,7 +234,6 @@ export const player = {
     songGroup: 'This song',
     shareGroup: 'Share',
     metronome: 'Metronome sound and beats',
-    onScreenPiano: 'On-screen piano',
     speed: 'Playback speed',
     speedStepInfo:
       'The tempo increase after each clean pass while speed training works up to the song’s tempo.',
@@ -240,7 +241,6 @@ export const player = {
     accompaniment: 'Accompaniment',
     playback: 'Playback',
     display: 'Score view',
-    hands: 'Hands',
     countdown: {
       label: 'Count-in',
       detail: 'A bar counted before the music begins.',
@@ -250,16 +250,6 @@ export const player = {
       visual: 'Silent',
     },
     keys: 'Show the keyboard',
-    otherHand: {
-      label: 'The other hand',
-      detail: 'How the hand you don’t play shows in the music.',
-      info: 'Show: its staff as written. Dim: its notes greyed. Hide: only your hand’s staff remains.',
-      show: 'Show',
-      dim: 'Dim',
-      hide: 'Hide',
-    },
-    playOther: 'Hear the other hand',
-    playOtherInfo: 'The app plays the hand you don’t play, in every mode.',
   },
   /** The hands at the keys (R36): a piano seen from the seat, two hands playing the music on it. */
   handsAtKeys: {
@@ -275,19 +265,31 @@ export const player = {
   /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */
   allPatterns: 'All patterns',
   ownPattern: 'Make your own pattern',
+  /** The Pattern sheet (the Accompaniment library's shape): its search, folds, rows and filters. */
+  patternSheet: {
+    search: 'Search patterns',
+    closeAll: 'Close all',
+    openAll: 'Open all',
+    az: 'A–Z',
+    ungraded: 'Not graded',
+    noMatch: 'No patterns match',
+    listen: 'Listen to {{name}}',
+    stop: 'Stop {{name}}',
+    reset: 'Reset',
+  },
   /** Under a pattern that plays its own shapes, the hand's position is faded. */
   inversion: { own: 'This pattern plays its own shapes.' },
   /** A progression through the keys, back home at the end. */
   keyWalk: {
-    label: 'In all 12 keys',
+    label: 'Keys',
     one: 'One key',
     'semitones-up': 'Chromatically, rising',
     'semitones-down': 'Chromatically, falling',
     'semitones-up-down': 'Chromatically, up and back',
     'tones-up': 'In whole steps, rising',
     'tones-down': 'In whole steps, falling',
-    fifths: 'Circle of fifths, falling (C F B♭ …)',
-    'fifths-up': 'Circle of fifths, rising (C G D …)',
+    fifths: 'Circle of fifths, falling',
+    'fifths-up': 'Circle of fifths, rising',
     'minor-thirds': 'In minor thirds',
     'major-thirds': 'In major thirds',
   },
@@ -323,8 +325,6 @@ export const player = {
     click: 'Metronome',
     clickInfo: 'A click on every beat while the music plays.',
     volume: 'Volume',
-    volumeInfo:
-      'How loud each part plays. Only the chords turns the recording right down and both hands up, so you hear the chords alone.',
     staves: 'Staves',
     recording: 'Recording',
     onlyChords: 'Only the chords',
@@ -351,37 +351,61 @@ export const player = {
     view: 'The piano as',
     hands: '3D piano',
     keys: '2D keys',
-    all: 'All piano settings',
-    connect: 'Connect a piano',
+    sound: 'Sound',
+    grand: 'Grand piano',
+    offline: 'Offline: a lighter piano plays the notes not downloaded',
+    midi: 'MIDI keyboard',
+    angle: 'Angle',
+    angles: { seat: 'Seat', above: 'Above' },
+    handsOnKeys: 'Hands on the keys',
+    range: 'Range',
+    rangeShown: 'The keys shown: {{from}} to {{to}}',
+    ranges: { chord: 'Fit the chord', two: '2 octaves', four: '4 octaves' },
+    // The Player's Range (its Piano sheet, the canvas's): the song's keys, or a keyboard's span.
+    songRanges: { song: 'Fit the song', '61': '61 keys', '76': '76 keys', '88': '88 keys' },
+    labels: 'Labels',
+    label: {
+      names: 'Note names',
+      degrees: 'Degrees',
+      intervals: 'Intervals',
+      fingers: 'Fingers',
+      none: 'None',
+    },
   },
   practiceSheet: {
+    tempo: 'Tempo',
+    tap: 'Tap',
     title: 'Practice',
     of: 'Practice: {{mode}}',
     wait: 'Wait',
     play: 'Play',
-    tempo: 'Tempo',
     scoreTempo: 'Score tempo: {{tempo}} BPM',
     metronome: 'Metronome',
     metronomeOff: 'Off',
     metronomeCountIn: 'Count-in',
     metronomeOn: 'On',
+    // The loop's own rows, under its bars, once bars are looped (PlayerApp's Practice sheet).
+    loopBar: 'Loop bar {{first}}',
+    loopBars: 'Loop bars {{first}}–{{last}}',
+    repeats: 'Repeats',
+    endless: 'Endless',
+    between: 'Between repeats',
+    betweenNone: 'None',
+    betweenCountIn: 'Count-in',
+    betweenRest: 'Rest',
+    speedUp: 'Speed up each pass',
   },
   pace: {
     title: 'Pace',
     of: 'Pace: {{value}}',
     // Listening, the button shows the tempo as a metronome mark: its name says it too (WCAG 2.5.3).
-    ofTempo: 'Pace: {{value}}, ♩ = {{tempo}}',
-    ownPace: 'At your own pace',
-    playAlong: 'Listen and play along',
     needsPiano: 'Connect a piano or show the Keyboard.',
     // The hands at the keys stand in for them, and hands on screen cannot be played.
     needsKeysNotHands: 'Connect a piano, or show the Keyboard instead of the hands.',
     speed: '{{percent}} speed',
     // The popover's slider: a share of the piece's tempo, 50% to 200% in 5% steps (ADR 0105).
-    speedLabel: 'Speed',
     own: 'Original tempo',
     speedTraining: 'Speed training',
-    speedTrainingDetail: '{{percent}} faster each pass, up to 100%',
   },
   // The Player's shortcuts, as the sheet lists them.
   shortcuts: {
@@ -400,24 +424,56 @@ export const player = {
     close: 'Remove the loop, or close',
   },
   loop: 'Loop',
+  // The transport's Loop while bars are looped: named by them, a tap removes the loop (its boards).
+  loopOn: {
+    bars: 'Bars {{first}}–{{last}}',
+    bar: 'Bar {{first}}',
+    remove: 'Loop {{bars}}, remove',
+  },
   back: 'Back',
   /** The transport's ‹ and ›: a note (or chord) at a time. */
   previousNote: 'Previous note',
   nextNote: 'Next note',
   // The Settings' head (its canvas): Edit score, the whole row under the song's name.
-  editScore: 'Edit score',
   play: 'Play',
   stop: 'Stop',
-  /** The transport (Loop, Restart, ‹ Play ›, Pace, the metronome), as a screen reader names it. */
+  /** The transport (Pace, Loop, ‹ Play ›, Hands, the keyboard), as a screen reader names it. */
   transport: 'Playback',
   playThese: 'Play {{notes}}',
   right: 'Correct',
   notThat: 'Not {{note}}',
-  finishedClean: 'Finished without a slip',
-  finishedSlips: 'Finished · slips: {{count}}',
-  loopBar: 'Loop bar {{first}}',
-  loopBars: 'Loop bars {{first}}–{{last}}',
-  again: 'Again',
+  octaveLower: 'Play it an octave lower',
+  octaveHigher: 'Play it an octave higher',
+  finishedClean: 'Played through without a slip',
+  finishedScore: 'Played through · Score {{score}}%',
+  newBest: 'New best',
+  bestScore: 'Best {{score}}%',
+  // Played through: a Wait pass at the song's end (the board's PlayerDone).
+  done: {
+    title: 'Played through',
+    of: '{{hands}} · Wait',
+    percent: '{{score}}%',
+    scoreLabel: 'right first time',
+    bpm: 'BPM, {{mark}}',
+    scoreTempo: 'the score’s tempo',
+    scoreTempoWas: 'score tempo {{tempo}}',
+    bars: 'Bars',
+    barsLabel: 'Slips, four bars at a time',
+    group: '{{first}}–{{last}}',
+    slips_zero: 'No slips',
+    slips_one: '{{count}} slip',
+    slips_other: '{{count}} slips',
+    pauses_one: '{{count}} pause',
+    pauses_other: '{{count}} pauses',
+    groupAria: 'Bars {{bars}}: {{slips}}. Loop them',
+    groupAriaPauses: 'Bars {{bars}}: {{slips}}, {{pauses}}. Loop them',
+    practiseBar: 'Practise bar {{first}}',
+    practiseBars: 'Practise bars {{first}}–{{last}}',
+    again: 'Play again',
+    tryPlay: 'Try it in Play',
+    streak_one: '{{count}} day in a row',
+    streak_other: '{{count}} days in a row',
+  },
   /** An exercise's Setup: the choices its rule takes. */
   // A scale run's practice, as the reference app's Practice Scale sheet.
   scalePractice: {
@@ -438,7 +494,7 @@ export const player = {
   // An exercise's tempos, rung by rung.
   tempoLadder: {
     label: 'Tempo ladder',
-    info: 'Climb one rung once four passes in a row are clean and even. After a slip, step back a rung. The exercise opens at the tempo you last played it at.',
+    info: 'In Wait mode the ladder climbs one rung once four passes in a row are clean, and steps back a rung after a slip. The exercise opens at the tempo you last played it at.',
   },
   exercise: {
     nextKey: 'Next key',

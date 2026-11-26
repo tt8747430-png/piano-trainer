@@ -30,7 +30,7 @@ const back = async (user: ReturnType<typeof userEvent.setup>) =>
   user.click(await screen.findByRole('button', { name: /^Back\b/ }))
 
 describe('Back goes up, on every place', () => {
-  it('Songs: folder → song → Settings, then Back ×3 lands in Songs', async () => {
+  it('Songs: folder → song, then Back ×2 lands in Songs', async () => {
     const user = userEvent.setup()
     const { router, piecesStore, libraryStore } = await renderApp('/songs')
     await screen.findByRole('heading', { level: 1, name: 'Songs' })
@@ -40,9 +40,6 @@ describe('Back goes up, on every place', () => {
       router.navigate({ to: '/songs/folders/$folderId', params: { folderId: folderId! } }),
     )
     await act(() => router.navigate({ to: '/songs/$pieceId', params: { pieceId: 'bz5' } }))
-    await act(() => router.navigate({ to: '/songs/$pieceId/settings', params: { pieceId: 'bz5' } }))
-    await back(user)
-    await waitFor(() => expect(at(router)).toEqual({ path: '/songs/bz5', entry: 2 }))
     await back(user)
     await waitFor(() => expect(at(router).path).toBe(`/songs/folders/${folderId}`))
     await back(user)

@@ -65,7 +65,7 @@ export const NOTE_LEVELS = [
   'ledger-lines',
   'full-range',
 ] as const
-export type NoteLevel = (typeof NOTE_LEVELS)[number]
+type NoteLevel = (typeof NOTE_LEVELS)[number]
 
 const key = (text: string): Midi => read(text).key
 

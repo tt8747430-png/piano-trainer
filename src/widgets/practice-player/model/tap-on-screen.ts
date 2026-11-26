@@ -1,9 +1,9 @@
 /** What a tap on the Player's screen does to its floating transport. */
-export type DockTap = 'show' | 'toggle' | 'none'
+type DockTap = 'show' | 'toggle' | 'none'
 
 /** The controls a tap works itself: a tap on one leaves the transport as it is. */
 const CONTROL =
-  'button, a, input, select, textarea, label, [role="slider"], [role="dialog"], [role="menu"], [role="listbox"]'
+  'button, a, input, select, textarea, label, [role="slider"], [role="dialog"], [role="menu"], [role="listbox"], [role="radio"], [role="radiogroup"], [role="tab"], [role="switch"], [role="checkbox"]'
 
 /**
  * Where a tap on the Player's screen leaves its transport (as a reading app's bars, forScore's): on

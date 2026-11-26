@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useBarName } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
-import { printedSymbol } from '@/shared/lib/music'
+import { opensOnPickup, printedBar, printedSymbol } from '@/shared/lib/music'
 import { usePositionName } from '@/shared/ui'
 import { pickAt, useSheetChoice, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { chordPositions } from '../model/chord-positions'
@@ -68,7 +68,10 @@ export function BarTargets({
         return position ? `${symbol} ${positionName(position)}` : symbol
       })
       // A bar of no chord is named by its number alone (ADR 0114).
-      return barName(bar + 1, chords.join(' '))
+      return barName(
+        printedBar(bar, opensOnPickup(performance.bars, performance.meter)),
+        chords.join(' '),
+      )
     })
   }, [layout, performance, positions, positionName, barName, firstBar])
   return layout.measures.map((measure, index) => {

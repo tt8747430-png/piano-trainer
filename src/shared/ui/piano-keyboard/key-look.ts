@@ -2,7 +2,7 @@ import type { NamedKeys } from '@/shared/lib'
 import { VERDICT_SHAPE } from '../verdict-shape'
 import {
   isBlackKey,
-  noteName,
+  printedNote,
   pitchClass,
   plainSpelling,
   printedKeyName,
@@ -13,7 +13,7 @@ import {
 } from '@/shared/lib/music'
 
 /** A chord tone's role, a hand in the Player, or a scale's note: its tonic or another (roles stay on chord tones). */
-export type KeyTone = ChordRole | 'rh' | 'lh' | 'staff' | 'tonic' | 'scale'
+type KeyTone = ChordRole | 'rh' | 'lh' | 'staff' | 'tonic' | 'scale'
 export interface KeyMark {
   readonly tone: KeyTone
   readonly label?: string
@@ -88,7 +88,7 @@ function nameOf(key: Midi, namedKeys: NamedKeys): string | undefined {
   if (namedKeys === 'none') return undefined
   const pc = pitchClass(key)
   if (pc === 0) return printedKeyName(key)
-  return namedKeys === 'all' ? noteName(plainSpelling(pc, true)) : undefined
+  return namedKeys === 'all' ? printedNote(plainSpelling(pc, true)) : undefined
 }
 
 /** A wrong key's own mark where nothing else labels it, the score's wrong shape: crimson is never its only cue. */
@@ -131,7 +131,16 @@ function atMostTwo(label: KeyLabel, lettered: boolean): KeyLabel {
 export const toneMark = (
   tone: Pick<Tone, 'role' | 'degree' | 'note'>,
   face: KeyTone = tone.role,
-): KeyMark => ({ tone: face, label: tone.degree, note: noteName(tone.note) })
+): KeyMark => ({ tone: face, label: tone.degree, note: printedNote(tone.note) })
+
+/**
+ * A chord tone's key as the boards label it where a page has no Labels setting (the Chord finder, a
+ * progression, a pattern): its paint by role, its note's name alone, the degree left to the tiles.
+ */
+export const nameMark = (tone: Pick<Tone, 'role' | 'note'>): KeyMark => ({
+  tone: tone.role,
+  label: printedNote(tone.note),
+})
 
 /** How a key looks: a wrong key over a lit one, a lit one over a mark, a mark over a selection; down over all. */
 export function keyLook(key: Midi, states: KeyStates, text: KeyText): KeyLook {
@@ -154,8 +163,7 @@ export type KeyStateWords = Readonly<Record<'wrong' | 'missing' | 'lit', string>
   readonly roles: Readonly<Record<ChordRole, string>>
 }
 
-const isChordRole = (fill: KeyFill): fill is ChordRole =>
-  (CHORD_ROLES as readonly string[]).includes(fill)
+const isChordRole = (fill: KeyFill): fill is ChordRole => CHORD_ROLES.some((role) => role === fill)
 
 /**
  * What a key says besides its note, for a screen reader: a chord tone's role, what its mark prints

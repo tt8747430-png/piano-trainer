@@ -31,6 +31,9 @@ const APPLE = (
   </svg>
 )
 
+/** The board's account buttons: 50 tall, round ends, the soft hairline round them, 16 semibold, 10 between the mark and the name. */
+const PILL = 'h-12.5 gap-2.5 rounded-full border-border font-semibold'
+
 /**
  * Signing in with another account (ADR 0116): Google, which leaves for its page and comes back to
  * the callback, and Apple, shown as coming soon. Then the line that sets them apart from the form.
@@ -54,24 +57,26 @@ export function SocialButtons({
     }
   }
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-4">
       <Button
         variant="outline"
         size="lg"
+        className={PILL}
         disabled={!online || leaving}
         onClick={() => void signInWith('google')}
       >
         {GOOGLE}
         {t('google')}
       </Button>
-      <Button variant="outline" size="lg" disabled>
+      <Button variant="outline" size="lg" className={PILL} disabled>
         {APPLE}
         {t('apple')}
-        <span className="rounded-pill bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-          {t('soon')}
-        </span>
+        <span className="text-footnote font-medium">· {t('soon')}</span>
       </Button>
-      <div className="flex items-center gap-3 text-sm text-muted-foreground" aria-hidden>
+      <div
+        className="flex items-center gap-3 text-sm leading-[normal] text-muted-foreground"
+        aria-hidden
+      >
         <span className="h-px flex-1 bg-border" />
         {t('or')}
         <span className="h-px flex-1 bg-border" />

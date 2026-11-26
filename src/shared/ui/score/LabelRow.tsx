@@ -1,5 +1,12 @@
 import { Fragment, type ReactNode } from 'react'
-import { beatUnit, tempoMark, unitNote, type Meter, type TempoUnit } from '@/shared/lib/music'
+import {
+  beatUnit,
+  symbolParts,
+  tempoMark,
+  unitNote,
+  type Meter,
+  type TempoUnit,
+} from '@/shared/lib/music'
 import type { BarLabel } from './bar-labels'
 import { LABEL_INSET_PX } from './label-row'
 import type { ScoreLayout } from './layout'
@@ -18,6 +25,22 @@ export type PrintLabel = (part: PrintedPart, content: ReactNode) => ReactNode
  * bars' buttons.
  */
 const plain: PrintLabel = (_part, content) => <span aria-hidden>{content}</span>
+
+/**
+ * A chord's symbol as a lead sheet sets it over the staff, as `ChordText` does in a line: its numbers
+ * and alterations raised (`G⁷`, `C♯m⁷♭⁵`), the bass after its slash on the line.
+ */
+function RowSymbol({ symbol }: { symbol: string }) {
+  const { root, letters, raised, bass } = symbolParts(symbol)
+  return (
+    <>
+      {root}
+      {letters}
+      {raised ? <sup className="text-[0.7em]">{raised}</sup> : null}
+      {bass}
+    </>
+  )
+}
 
 /** What a bar's label says, in the order it is printed, each part as the sheet prints it. */
 function partsOf(
@@ -49,7 +72,7 @@ function partsOf(
             node: print(
               { kind: 'tempo', tempo },
               <>
-                <span className="font-music">{unitNote(tempoUnit ?? beatUnit(meter))}</span>={' '}
+                <span className="font-music">{unitNote(tempoUnit ?? beatUnit(meter))}</span> ={' '}
                 {tempoMark(tempo, tempoUnit ?? beatUnit(meter), meter)}
               </>,
             ),
@@ -112,11 +135,11 @@ export function LabelRow({
           <span
             key={index}
             data-slot="bar-label"
-            className="absolute top-0 truncate text-xs text-muted-foreground tabular-nums"
+            className="absolute top-0 truncate text-xs text-muted-foreground"
             style={{
               left: measure.x + LABEL_INSET_PX,
               maxWidth: Math.max(0, until - measure.x - 2 * LABEL_INSET_PX),
-              fontSize: `${0.75 * size}rem`,
+              fontSize: `${Math.max(0.75, 0.875 * size)}rem`,
             }}
           >
             {parts.map(({ key, node }, at) => (
@@ -132,10 +155,10 @@ export function LabelRow({
         <span
           key={at}
           aria-hidden
-          className="absolute bottom-0.5 font-display leading-none font-semibold whitespace-nowrap"
+          className="absolute bottom-0.5 font-display leading-none font-bold whitespace-nowrap"
           style={{ left: x, fontSize: px }}
         >
-          {symbol}
+          <RowSymbol symbol={symbol} />
           {detail ? (
             <span className="ml-1 font-sans text-[0.7em] font-normal text-muted-foreground">
               {detail}

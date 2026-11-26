@@ -28,18 +28,16 @@ swung and re-zoomed as a page showed other keys. Each screen that wanted a compu
   screen, their widths unchanged; arrows, Home, End and Enter (back to the proportion) from the keyboard; kept per
   screen size (`keysHeight`: phone upright, phone on its side, wider), the screen as left, not a preference. The
   Player, the editor and every page's docked keys have it; keys inside a card (a round, a chord diagram) do not.
-- **Marks.** The keys put down are the ones struck last, and every mark stays (its wash while quiet, its full paint
-  while it sounds; ADR 0011). A marked key names its note under its degree (`markNotes`); no row of chips repeats it.
+- **Marks.** The keys put down are the ones struck last, and every mark stays (a chord tone or a scale's note in its full
+  paint, sinking while it sounds; a hand's wash while quiet, its full paint while it sounds; ADR 0011). A marked key names its note under its degree (`markNotes`); no row of chips repeats it.
 - **Typing** reads physical keys (`code`), so every layout plays the same notes; never from a text field, with a
   modifier held, or on auto-repeat.
-- **The keyboard's controls are the screen's bar's** (`KeyboardTools`, R34): the chord a hand holds (the live
-  voice's and a MIDI keyboard's keys, three notes or more, by the Chord finder's first name, from 40rem, unless
-  `chordNames` is off; not on the Chord finder, whose stage names it), **Sustain** while the keys show, and
-  **Keyboard**, which shows or hides them. Pages use `PageKeyboardTools` over the saved fold (`folded`, and
+- **The keys show or hide from the bar's Piano** (owner, 2026-11-17: "the same floating keyboard everywhere"): every
+  page with keys has the one Piano in its bar (`PianoButton`; the Player's and the editor's their own; the Chord
+  player has none, its keys being a panel of its layout, shown, hidden and sized there and deaf to the saved fold,
+  ADR 0052), opening the Piano sheet whose first row shows or hides them over the saved fold (`folded`, and
   `foldedLandscape` on a phone on its side, where a reading page opens with them hidden; a screen played on,
-  `screen="playing"`, keeps them out); the Player its own choice. Hidden, the keys fold into a thin labelled strip
-  where they stood (`KeyboardStrip`, "Keyboard ↗", Songscription's Score only) that brings them back at a tap;
-  nothing floats. The editor's bar, full on a phone held upright, keeps its Sustain from 40rem.
+  `screen="playing"`, keeps them out). Hidden, nothing stands where they stood: no strip, no pedal, nothing floats.
 - **Names on narrow keys:** All keys on a phone (a white key under 12px, a container query) name middle C alone,
   small and on one line; a mark's note name goes, its degree stays.
 - **The sheet's one pill** (`SheetPill`, R34, Songscription's view pill): the score's layout (`SheetLayoutPicker`

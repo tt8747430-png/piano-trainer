@@ -1,3 +1,4 @@
+import type { ScoreHeader } from '@/entities/piece'
 import { useMemo } from 'react'
 import type { DiagramsMode, MusicView, TextSize } from '@/entities/settings'
 import {
@@ -27,6 +28,7 @@ import { GridView } from './GridView'
 export function ChordView({
   view,
   title,
+  credits,
   performance,
   headings,
   practice,
@@ -39,6 +41,8 @@ export function ChordView({
 }: {
   view: Exclude<MusicView, 'sheet'>
   title: string
+  /** Printed under the title, as the sheet prints it (ADR 0114). */
+  credits?: ScoreHeader | undefined
   performance: Performance
   /** Each section's name, by section; none for music of one section. */
   headings: readonly string[]
@@ -71,6 +75,7 @@ export function ChordView({
   return view === 'grid' ? (
     <GridView
       title={title}
+      credits={credits}
       performance={performance}
       headings={headings}
       beat={beat}
@@ -83,6 +88,7 @@ export function ChordView({
   ) : view === 'lyrics' ? (
     <ChordsOverLyrics
       title={title}
+      credits={credits}
       performance={performance}
       headings={headings}
       bars={bars}
@@ -99,6 +105,7 @@ export function ChordView({
   ) : (
     <ChordDiagrams
       title={title}
+      credits={credits}
       performance={performance}
       bars={bars}
       beat={beat}
@@ -106,7 +113,6 @@ export function ChordView({
       loop={loop}
       words={words}
       mode={mode}
-      clock={practice.clock}
       onGo={go}
       onLoop={onLoopChange}
     />

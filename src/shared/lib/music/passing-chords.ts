@@ -1,10 +1,5 @@
-import {
-  type Chord,
-  type ChordQuality,
-  qualityIntervals,
-  qualityRootSpelling,
-  spellChord,
-} from './chord'
+import { type Chord, qualityIntervals, qualityRootSpelling, spellChord } from './chord'
+import { type ChordQuality } from './chord-quality'
 import { INTERVALS, spellAbove, spellBelow, type IntervalName } from './interval'
 import type { Key } from './key'
 import { pitchClassOf, plainRoot, type SpelledNote } from './note'
@@ -24,7 +19,7 @@ export const PASSING_CATEGORIES = [
   'diatonic',
   'cadence',
 ] as const
-export type PassingCategory = (typeof PASSING_CATEGORIES)[number]
+type PassingCategory = (typeof PASSING_CATEGORIES)[number]
 
 /** The ways to get from one chord to another, each a rule from the target's root. */
 const PASSING_KINDS = [
@@ -45,7 +40,7 @@ const PASSING_KINDS = [
   'minorPlagal',
   'gospelWalkUp',
 ] as const
-export type PassingKind = (typeof PASSING_KINDS)[number]
+type PassingKind = (typeof PASSING_KINDS)[number]
 
 const CATEGORY_OF: Readonly<Record<PassingKind, PassingCategory>> = {
   secondaryDominant: 'dominant',

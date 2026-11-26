@@ -30,12 +30,13 @@ export interface ShelvedFolder extends Omit<SavedFolder, 'songs'> {
 type Shelving = ShelvedFolder & { songs: PieceId[] }
 
 export type ShelvedEntry =
-  | { readonly kind: 'song'; readonly id: PieceId; readonly from: SongPlace }
+  | { readonly kind: 'song'; readonly id: PieceId; readonly from: SongPlace; readonly at: number }
   | {
       readonly kind: 'folder'
       readonly folder: ShelvedFolder
       readonly subfolders: readonly ShelvedFolder[]
       readonly index: number
+      readonly at: number
     }
 
 /**

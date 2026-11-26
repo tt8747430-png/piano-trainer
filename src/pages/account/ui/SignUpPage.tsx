@@ -7,7 +7,7 @@ import { FormField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { emailProblem, passwordProblem } from '../model/fields'
 import { useAuthSubmit } from '../model/use-auth-submit'
-import { AccountScreen, FieldGroup, OfflineLine, ProblemLine } from './AccountScreen'
+import { ACCOUNT_LINK, AccountScreen, OfflineLine, ProblemLine } from './AccountScreen'
 import { SocialButtons } from './SocialButtons'
 
 type Field = 'name' | 'email' | 'password'
@@ -55,7 +55,7 @@ export function SignUpPage() {
       <OfflineLine online={online} />
       <SocialButtons online={online} onProblem={setProblem} />
       <form noValidate onSubmit={(event) => void submit(event)} className="flex flex-col gap-4">
-        <FieldGroup>
+        <>
           <FormField
             label={t('name')}
             autoComplete="name"
@@ -81,26 +81,32 @@ export function SignUpPage() {
             onChange={(event) => setPassword(event.target.value)}
             error={invalid.password ? t('invalid.password') : undefined}
           />
-        </FieldGroup>
+        </>
         <ProblemLine problem={problem} />
         <Button type="submit" size="lg" disabled={!online || busy}>
           {t('signUp.submit')}
         </Button>
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="text-center text-sm leading-[1.45] text-pretty text-muted-foreground">
           {t('signUp.agree')}{' '}
-          <Link to="/legal/terms" className="font-medium text-foreground underline">
+          <Link
+            to="/legal/terms"
+            className="relative font-semibold text-link before:absolute before:-inset-x-1 before:-inset-y-3.25 before:content-[''] hover:underline"
+          >
             {t('signUp.terms')}
           </Link>{' '}
           {t('signUp.and')}{' '}
-          <Link to="/legal/privacy" className="font-medium text-foreground underline">
+          <Link
+            to="/legal/privacy"
+            className="relative font-semibold text-link before:absolute before:-inset-x-1 before:-inset-y-3.25 before:content-[''] hover:underline"
+          >
             {t('signUp.privacy')}
           </Link>
           .
         </p>
       </form>
-      <p className="text-center text-sm text-muted-foreground">
-        {t('signUp.haveAccount')}{' '}
-        <Link to="/account/sign-in" replace className="font-medium text-foreground underline">
+      <p className="flex flex-wrap items-center justify-center gap-0.5 text-subhead text-muted-foreground">
+        {t('signUp.haveAccount')}
+        <Link to="/account/sign-in" replace className={ACCOUNT_LINK}>
           {t('signUp.signIn')}
         </Link>
       </p>

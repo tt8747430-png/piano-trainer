@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
 import type { DiagramChord } from '@/features/practice'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { midi, note, pitchClass } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
 import { ChordSummary } from './ChordSummary'
@@ -33,7 +33,13 @@ const CHORDS: readonly DiagramChord[] = [
 
 const renderSummary = (chords: readonly DiagramChord[]) =>
   renderWithSettings(
-    <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
+    <ServicesProvider
+      services={{
+        audio: createFakeAudio(),
+        arranger: createFakeArranger(),
+        midi: createFakeMidi(),
+      }}
+    >
       <ChordSummary chords={chords} />
     </ServicesProvider>,
   )

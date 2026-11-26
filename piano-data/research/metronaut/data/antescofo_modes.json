@@ -1,0 +1,219 @@
+{
+ "_source": "AntescofoKit.PerformanceMode raw table @0x32c038 (exact); Resources/AppResources/AntescofoIncludes/actions.asco.txt (exact)",
+ "scriptDefaults": {
+  "metronomicTempo": 1,
+  "default_latency_ms": 50,
+  "default_target": 5,
+  "default_anticipation": "progressive",
+  "catch_up_type": "i_QUAD_IN",
+  "target_mode1": 0.1,
+  "target_mode2": 0.1,
+  "target_mode3": 10,
+  "target_mode4": 5,
+  "target_mode5": 10,
+  "target_mode6": 5,
+  "target_mode8": 9999,
+  "target_mode9": 0.1,
+  "loadTime": {
+   "gamma": -1,
+   "preventzigzag": "off",
+   "decodewindow": 42
+  },
+  "silenceGamma": {
+   "value": -0.01,
+   "minRestBeats": 2,
+   "startAfterBeats": 0.5,
+   "restoreBeforeBeats": 1
+  }
+ },
+ "modes": [
+  {
+   "case": "playback",
+   "iosMode": 1,
+   "comment": "Playback (with Solo)",
+   "tempo_limitation": 0,
+   "reset_musician_tempo": true,
+   "target": "target_mode1",
+   "metronomicTempo": 0,
+   "tight": "first"
+  },
+  {
+   "case": "playbackmetronomic",
+   "iosMode": 2,
+   "comment": "playback with metronomic tempo",
+   "tempo_limitation": 0,
+   "reset_musician_tempo": true,
+   "target": "target_mode2",
+   "metronomicTempo": 1,
+   "tight": "first"
+  },
+  {
+   "case": "playbackRecording",
+   "iosMode": 10,
+   "comment": "playback with recording (non metronomic)",
+   "tempo_limitation": 0,
+   "target": "target_mode1",
+   "metronomicTempo": 0,
+   "tight": "first"
+  },
+  {
+   "case": "follow",
+   "iosMode": 3,
+   "comment": ".follow1",
+   "tempo_limitation": 0,
+   "decodewindow": 30,
+   "tempo_estimation": 0,
+   "target": "target_mode3",
+   "anticipation": "progressive",
+   "metronomicTempo": 0,
+   "tight": "all",
+   "preventzigzag": "off",
+   "variance": 0.3
+  },
+  {
+   "case": "follow2",
+   "iosMode": 4,
+   "comment": ".follow2",
+   "tempo_limitation": 0,
+   "decodewindow": 30,
+   "tempo_estimation": 1,
+   "target": "target_mode4",
+   "anticipation": "progressive",
+   "metronomicTempo": 0,
+   "tight": "all",
+   "preventzigzag": "off",
+   "variance": 0.3
+  },
+  {
+   "case": "follow3",
+   "iosMode": 5,
+   "tempo_limitation": 0,
+   "decodewindow": 30,
+   "tempo_estimation": 1,
+   "target": "target_mode5",
+   "anticipation": "progressive",
+   "metronomicTempo": 0,
+   "tight": "all",
+   "preventzigzag": "off",
+   "variance": 0.3
+  },
+  {
+   "case": "follow4",
+   "iosMode": 6,
+   "tempo_limitation": 0,
+   "decodewindow": 30,
+   "tempo_estimation": 1,
+   "target": "target_mode5",
+   "anticipation": "progressive",
+   "metronomicTempo": 0,
+   "tight": "all",
+   "preventzigzag": "off",
+   "variance": 0.3
+  },
+  {
+   "case": null,
+   "iosMode": 7,
+   "comment": "OSC receiver begin",
+   "preventzigzag": "off"
+  },
+  {
+   "case": "coach1",
+   "iosMode": 8,
+   "comment": "Coach1 (with playback that does not adapt)",
+   "tempo_limitation": 0,
+   "tempo_estimation": 0,
+   "decodewindow": 20,
+   "target": "target_mode8",
+   "anticipation": "progressive",
+   "metronomicTempo": 0,
+   "tight": "first",
+   "preventzigzag": "on",
+   "variance": 0.2
+  },
+  {
+   "case": "notebynote",
+   "iosMode": 9,
+   "comment": "Note à note",
+   "tempo_limitation": 1,
+   "decodewindow": 10,
+   "tempo_estimation": 1,
+   "target": "target_mode9",
+   "anticipation": "conservative",
+   "metronomicTempo": 0,
+   "tight": "all",
+   "preventzigzag": "off",
+   "variance": 0.2
+  },
+  {
+   "case": "reading",
+   "iosMode": 11,
+   "comment": "no case in script"
+  }
+ ],
+ "iosMessages": [
+  "exe_pv_recreated",
+  "fadeout",
+  "userIsPlaying",
+  "tutoring_diff_acc",
+  "tutoring_diff_mus",
+  "tutoring_pos_acc",
+  "missed_event",
+  "completedLoop"
+ ],
+ "userModes": {
+  "order": [
+   "reading",
+   "coach",
+   "withSolo",
+   "playAlong",
+   "magicPlayAlong"
+  ],
+  "labels": {
+   "reading": "Sight-reading / Wait",
+   "coach": "Training / AI Feedback",
+   "withSolo": "Listening",
+   "playAlong": "Performing / Fixed",
+   "magicPlayAlong": "Magic Performing / AI Tempo"
+  },
+  "getters": {
+   "isMagicModeEnabled": [
+    "magicPlayAlong"
+   ],
+   "isAccompanimentEnabled": "multiTrack && mode != reading",
+   "isMixerEnabled": "multiTrack && mode == withSolo",
+   "forcedCursorMode": {
+    "reading": "continuous",
+    "other": null
+   },
+   "isCoachModeEnabled": [
+    "withSolo"
+   ],
+   "isListeningMode": [
+    "reading",
+    "coach",
+    "magicPlayAlong"
+   ],
+   "usesScoreFollower": [
+    "coach",
+    "magicPlayAlong"
+   ],
+   "calculateScoresPerformance": [
+    "reading",
+    "coach",
+    "playAlong",
+    "magicPlayAlong"
+   ],
+   "calculatePenalty": [
+    "reading",
+    "coach",
+    "magicPlayAlong"
+   ],
+   "detectionWarningEnabled": [
+    "magicPlayAlong"
+   ],
+   "resolvedTransportMode": {
+    "coach": "playAlong"
+   }
+  }
+ }
+}

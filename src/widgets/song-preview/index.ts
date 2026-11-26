@@ -1,4 +1,6 @@
-export { CategoryPicker } from './ui/CategoryPicker'
 export { useAuthorName } from './model/use-author-name'
-export { ExploreCard, SavesCount, StarsAverage } from './ui/ExploreCard'
+export { SavesCount } from './ui/SavesCount'
+export { EXPLORE_COLUMNS, ExploreFeedCard } from './ui/ExploreFeedCard'
+export { PublicCover } from './ui/PublicCover'
+export { ReportDialog } from './ui/ReportDialog'
 export { SongPreview } from './ui/SongPreview'

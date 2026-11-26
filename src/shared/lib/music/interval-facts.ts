@@ -2,12 +2,27 @@ import type { Interval, IntervalName } from './interval'
 import { plainSemitones } from './note'
 
 /**
- * The Intervals explorer's cards: the thirteen within the octave, then the compound intervals a
- * chord symbol names (♭9, 9, #9, 11, #11, ♭13, 13).
+ * The Intervals explorer's cards: the thirteen within the octave, then the thirteen compound ones
+ * beyond it to the double octave, as theory books list them (the tritone's twelfth as d12, beside
+ * the A11 a chord symbol writes as #11).
  */
 export const INTERVAL_GROUPS = {
   simple: ['r', 'm2', 'M2', 'm3', 'M3', 'P4', 'A4', 'P5', 'm6', 'M6', 'm7', 'M7', 'P8'],
-  compound: ['m9', 'M9', 'A9', 'P11', 'A11', 'm13', 'M13'],
+  compound: [
+    'm9',
+    'M9',
+    'm10',
+    'M10',
+    'P11',
+    'A11',
+    'd12',
+    'P12',
+    'm13',
+    'M13',
+    'm14',
+    'M14',
+    'P15',
+  ],
 } as const satisfies Record<string, readonly IntervalName[]>
 export type IntervalGroup = keyof typeof INTERVAL_GROUPS
 export const INTERVAL_GROUP_IDS = ['simple', 'compound'] as const satisfies readonly IntervalGroup[]

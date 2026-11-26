@@ -1,5 +1,4 @@
 import { ArrowUpDown, Trash2 } from 'lucide-react'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, useStaffTitle } from '@/entities/piece'
 import { VOICE_IDS, VOICES } from '@/features/edit-piece'
@@ -17,7 +16,7 @@ import {
 } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
 import { singleStaff } from '@/shared/lib/notation'
-import { ActionMenu, ConfirmDialog, type MenuAction } from '@/shared/ui'
+import { ActionMenu, sayUndo, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { StaffList, type StaffRow } from '@/widgets/instrument-list'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -46,7 +45,6 @@ export function InstrumentsPanel() {
   const names = useStaffNames(heads)
   const titleOf = useStaffTitle()
   const [staves, setStaves] = useEditorStaves()
-  const [deleting, setDeleting] = useState<Deleting | null>(null)
   const tracks: TrackId[] = [
     ...heads.map((_, place) => singleStaff(place)),
     ...(leadSheet ? [] : PIANO),
@@ -100,7 +98,7 @@ export function InstrumentsPanel() {
           icon: Trash2,
           destructive: true,
           hidden: lastStaff,
-          onSelect: () => setDeleting({ place, name }),
+          onSelect: () => remove({ place, name }),
         },
       ],
     }
@@ -118,7 +116,7 @@ export function InstrumentsPanel() {
               icon: Trash2,
               destructive: true,
               hidden: heads.length === 0,
-              onSelect: () => setDeleting({ piano: t('songs:setup.piano') }),
+              onSelect: () => remove({ piano: t('songs:setup.piano') }),
             },
           ],
         },
@@ -143,16 +141,26 @@ export function InstrumentsPanel() {
       },
     ]
   })
-  const confirm = () => {
-    if (!deleting) return
-    if ('piano' in deleting) {
+  // A delete the editor's Undo can take back happens at once, with Undo in its toast (R38): the
+  // score steps back and the staves' view returns as it was.
+  const remove = (target: Deleting) => {
+    const before = staves
+    if ('piano' in target) {
       actions.dispatch({ type: 'piano', hidden: true })
       setStaves(PIANO.reduce((kept, id) => withTrack(kept, id, { play: true, show: true }), staves))
     } else {
-      actions.dispatch({ type: 'removeStaff', place: deleting.place })
-      setStaves(movedStaves(staves, deleting.place, null))
+      actions.dispatch({ type: 'removeStaff', place: target.place })
+      setStaves(movedStaves(staves, target.place, null))
     }
-    setDeleting(null)
+    sayUndo(
+      'piano' in target
+        ? t('instruments.pianoHidden')
+        : t('instruments.deleted', { staff: target.name }),
+      () => {
+        actions.dispatch({ type: 'undo' })
+        setStaves(before)
+      },
+    )
   }
   return (
     <>
@@ -184,20 +192,6 @@ export function InstrumentsPanel() {
             ]}
           />
         }
-      />
-      <ConfirmDialog
-        open={deleting !== null}
-        onOpenChange={(open) => {
-          if (!open) setDeleting(null)
-        }}
-        title={t('instruments.deleteTitle', {
-          staff: deleting ? ('piano' in deleting ? deleting.piano : deleting.name) : '',
-        })}
-        body={t(
-          deleting && 'piano' in deleting ? 'instruments.pianoBody' : 'instruments.deleteBody',
-        )}
-        action={t('instruments.deleteAction')}
-        onConfirm={confirm}
       />
     </>
   )

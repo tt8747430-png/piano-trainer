@@ -9,7 +9,7 @@ const SPACE = 6
  * A short staff a sign is drawn on (ADR 0115, 0114): its five lines in the soft ink, the sign over them
  * in the ink of the cell. `top` is the top line's y; the picture is `width` by `height`.
  */
-export function ShortStaff({
+function ShortStaff({
   width,
   height,
   top,
@@ -48,7 +48,7 @@ const SHARP_STEPS = [0, 3, -1, 2, 5, 1, 4] as const
 const FLAT_STEPS = [4, 1, 5, 2, 6, 3, 7] as const
 
 /** The signs of a key signature on a treble staff whose top line is at `top`, from `x` on. */
-export function SignatureGlyphs({ count, x, top }: { count: number; x: number; top: number }) {
+function SignatureGlyphs({ count, x, top }: { count: number; x: number; top: number }) {
   const steps = (count > 0 ? SHARP_STEPS : FLAT_STEPS).slice(0, Math.abs(count))
   // Bravura's sharp is a staff space wide; a flat a little less: each set a space apart.
   const each = SPACE * 1.15

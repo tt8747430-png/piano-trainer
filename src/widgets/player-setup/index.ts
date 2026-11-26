@@ -5,7 +5,7 @@ export {
   type SetupChange,
   type SetupParams,
 } from './model/setup-params'
-export { KeyWalkField } from './ui/KeyWalkField'
+export { InversionField } from './ui/InversionField'
 export { PatternCard } from './ui/PatternCard'
 export { PlayerSetup, type MusicPage } from './ui/PlayerSetup'
 export {
@@ -14,5 +14,6 @@ export {
   type SettingsExtras,
   type SettingsPageRow,
 } from './ui/setup-extras'
+export { useSetup } from './ui/setup-context'
 export { SettingsSheet } from './ui/SettingsSheet'
 export { StavesSection, type RecordingSync } from './ui/StavesSection'

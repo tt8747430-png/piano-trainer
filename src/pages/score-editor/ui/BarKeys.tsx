@@ -1,6 +1,11 @@
 import { useTranslation } from 'react-i18next'
-import { REPEAT_BAR_CHOICES, type BarMarkChoice } from '@/features/score-editor'
-import { useScoreEditorContext } from '../model/editor-context'
+import {
+  chosenBars,
+  REPEAT_BAR_CHOICES,
+  startsLine,
+  type BarMarkChoice,
+} from '@/features/score-editor'
+import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { BarIcon, type BarKeyEdit } from './palette-icons'
 import type { Tool } from '../model/shortcuts'
 import { GroupName, KeyGrid, PaletteKey } from './palette-keys'
@@ -11,7 +16,6 @@ const BAR_KEYS: readonly BarKeyEdit[] = [
   'insert',
   'delete',
   'newLine',
-  'joinLine',
   'newSection',
 ]
 
@@ -24,13 +28,15 @@ const BAR_TOOLS: Readonly<Partial<Record<BarKeyEdit, Tool>>> = {
 
 /**
  * Measures (R31-E, Flat's): what acts on the bars chosen, else the caret's: a bar added before or
- * after, the bars deleted, a line or a section (its rehearsal mark) begun there or the lines joined,
- * a page begun there; then the multi-bar rests and the bar repeats. A bar's length is its time
- * signature's: no key changes it here.
+ * after, the bars deleted, a system break (pressed where a line starts there; pressed again it
+ * joins the line to the one before, research F14), a section (its rehearsal mark) or a page begun
+ * there; then the multi-bar rests and the bar repeats. A bar's length is its time signature's: no
+ * key changes it here.
  */
 export function BarKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
+  const broken = useEditorState((state) => startsLine(state.draft, chosenBars(state).from))
   return (
     <>
       <KeyGrid label={t('palette.groups.bars')}>
@@ -39,6 +45,7 @@ export function BarKeys() {
             key={edit}
             label={t(`bars.${edit}`)}
             tool={BAR_TOOLS[edit]}
+            {...(edit === 'newLine' && { pressed: broken })}
             onClick={() => actions.dispatch({ type: 'bars', edit })}
           >
             <span aria-hidden className="size-7">

@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch, useNavigate } from '@tanstack/react-router'
-import { ArrowUpDown, Highlighter, Layers, ListTree } from 'lucide-react'
+import { ArrowUpDown, Highlighter, ListTree } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -9,6 +9,7 @@ import {
   isOwnSongId,
   isPiece,
   musicOf,
+  printedHeader,
   selectHasVersion,
   usePieces,
   usePiecesStoreApi,
@@ -32,7 +33,7 @@ import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song
 import { useSongExport } from '@/features/song-files'
 import { useLocale, useKeyName } from '@/shared/i18n'
 import { useUp, useSetSearch } from '@/shared/lib'
-import { isCompound } from '@/shared/lib/music'
+import { isCompound, opensOnPickup } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
 import { SwingField, useScoreTracks } from '@/widgets/practice-player'
 import type { PlayerSearch } from '../model/player-search'
@@ -43,7 +44,7 @@ import { PlayerLayout } from './PlayerLayout'
 import { SectionsSheet } from './SectionsSheet'
 import { ClefChoice } from './ClefChoice'
 import { TransposePage } from './TransposePage'
-import { VersionPage, type VersionChoice } from './VersionPage'
+import { type VersionChoice } from './PlayCards'
 import { AnnotateBar } from './AnnotateBar'
 
 /** A song with no typed marks. */
@@ -68,6 +69,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
     changeTrack,
     recordingSync,
     syncRecording,
+    bestBefore,
   } = usePlayer(piece, search, setSearch)
   // The Version sheet (R29 B8): the learner's version or the app's, the voice's staves heard and
   // shown or not, at a level.
@@ -163,8 +165,10 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
     // Its chords drawn in the inversions chosen for them in this piece (ADR 0108).
     <PieceInversions pieceId={piece.id}>
       <PlayerLayout
+        bestBefore={bestBefore}
         title={title}
-        credits={isDegreePiece(piece) ? undefined : piece.header}
+        about={[keyName({ tonic: choice.tonic, minor: pieceKey(piece).minor }), piece.meter]}
+        credits={isDegreePiece(piece) ? undefined : printedHeader(piece)}
         layout={isDegreePiece(piece) ? undefined : piece.layout}
         onClose={close}
         view={search}
@@ -199,6 +203,17 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             onStaves={changeTrack}
             sync={piece.recording ? { ms: recordingSync, onChange: syncRecording } : undefined}
             onSwing={player.setSwing}
+            arrangement={
+              controls.has('simplify')
+                ? {
+                    chosen: chosenVersion,
+                    own,
+                    voice: singles.length > 0,
+                    simplifies,
+                    onChoose: chooseVersion,
+                  }
+                : null
+            }
           />
         }
         // The music's own pages of the Settings (its canvas's Song settings): the key it is played
@@ -219,25 +234,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
               />
             ),
           },
-          ...(controls.has('simplify')
-            ? [
-                {
-                  id: 'version',
-                  label: t('player:version.title'),
-                  icon: Layers,
-                  value: t(`player:version.level.${choice.version}`),
-                  content: (
-                    <VersionPage
-                      chosen={chosenVersion}
-                      own={own}
-                      voice={singles.length > 0}
-                      simplifies={simplifies}
-                      onChoose={chooseVersion}
-                    />
-                  ),
-                },
-              ]
-            : []),
         ]}
         more={more}
         musicXml={files.musicXml}
@@ -278,6 +274,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
       <SectionsSheet
         starts={starts}
         headings={headings}
+        pickup={opensOnPickup(performance.bars, performance.meter)}
         current={sectionAt(performance, player.practice.state.beatGroup)}
         onGo={goToBar}
         open={sectionsOpen}

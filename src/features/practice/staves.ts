@@ -1,5 +1,5 @@
 import type { NoteHand } from '@/shared/lib/arrangement'
-import { isSingleStaff, singleStaff, type StaffId } from '@/shared/lib/notation'
+import { isSingleStaff, isStaffId, singleStaff, type StaffId } from '@/shared/lib/notation'
 
 /** What the Player plays and shows (A35): each staff of the score, and a song's recording. */
 export type TrackId = StaffId | 'recording'
@@ -14,6 +14,11 @@ export interface TrackChoice {
 export type PlayerStaves = Readonly<Partial<Record<TrackId, TrackChoice>>>
 
 const ALL_ON: TrackChoice = { play: true, show: true }
+
+const isTrackId = (value: string): value is TrackId => value === 'recording' || isStaffId(value)
+
+/** The tracks the learner changed. */
+const changedTracks = (staves: PlayerStaves): TrackId[] => Object.keys(staves).filter(isTrackId)
 
 export const trackOf = (staves: PlayerStaves, id: TrackId): TrackChoice => staves[id] ?? ALL_ON
 
@@ -72,7 +77,7 @@ export function readStaves(param: string | undefined): PlayerStaves {
 
 /** The staves as a URL writes them, in the score's order; none where every track is all on. */
 export function stavesParam(staves: PlayerStaves): string | undefined {
-  const written = (Object.keys(staves) as TrackId[])
+  const written = changedTracks(staves)
     .sort((a, b) => rank(a) - rank(b))
     .map((id) => {
       const { play, show } = trackOf(staves, id)
@@ -83,7 +88,7 @@ export function stavesParam(staves: PlayerStaves): string | undefined {
 
 /** The staves out of sight, in the score's order: the recording is never one. */
 export const hiddenStaves = (staves: PlayerStaves): StaffId[] =>
-  (Object.keys(staves) as TrackId[])
+  changedTracks(staves)
     .filter((id): id is StaffId => id !== 'recording' && !trackOf(staves, id).show)
     .sort((a, b) => rank(a) - rank(b))
 
@@ -152,7 +157,7 @@ export function movedStaves(staves: PlayerStaves, from: number, to: number | nul
     return at
   }
   return Object.fromEntries(
-    (Object.keys(staves) as TrackId[]).flatMap((id): [TrackId, TrackChoice | undefined][] => {
+    changedTracks(staves).flatMap((id): [TrackId, TrackChoice | undefined][] => {
       if (!isSingleStaff(id)) return [[id, staves[id]]]
       const place = placeOf(Number(id.slice(5)))
       return place === null ? [] : [[singleStaff(place), staves[id]]]
@@ -163,7 +168,7 @@ export function movedStaves(staves: PlayerStaves, from: number, to: number | nul
 /** The single staves' choices once the staves stand in `order` (each the place it stood at). */
 export const orderedStaves = (staves: PlayerStaves, order: readonly number[]): PlayerStaves =>
   Object.fromEntries(
-    (Object.keys(staves) as TrackId[]).map((id): [TrackId, TrackChoice | undefined] => [
+    changedTracks(staves).map((id): [TrackId, TrackChoice | undefined] => [
       isSingleStaff(id) ? singleStaff(order.indexOf(Number(id.slice(5)))) : id,
       staves[id],
     ]),

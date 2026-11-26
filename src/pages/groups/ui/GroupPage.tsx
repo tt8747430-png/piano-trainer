@@ -4,9 +4,17 @@ import { useTranslation } from 'react-i18next'
 import { GroupMark, useGroupsData } from '@/features/share-folder'
 import { GROUP_NAME_MAX, type LearnerGroup, type SharedFolder } from '@/shared/api/groups'
 import { useGroups } from '@/shared/lib/groups'
-import { BackButton, ConfirmDialog, MoreMenu, NameField, ScreenHeader } from '@/shared/ui'
+import {
+  BackButton,
+  ConfirmDialog,
+  MoreMenu,
+  NameField,
+  Problem,
+  RowsLoading,
+  ScreenHeader,
+} from '@/shared/ui'
 import { GroupMembers, type MemberAsk } from './GroupMembers'
-import { GroupsState, RowsLoading } from './GroupsState'
+import { GroupsState } from './GroupsState'
 import { GroupShared } from './GroupShared'
 import { InviteCard } from './InviteCard'
 
@@ -123,11 +131,7 @@ function GroupView({
             : undefined
         }
       />
-      {said ? (
-        <p role="alert" className="text-sm text-destructive">
-          {said}
-        </p>
-      ) : null}
+      {said ? <Problem>{said}</Problem> : null}
       <div className="flex flex-col gap-7 lg:grid lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:items-start lg:gap-x-12">
         <div className="flex flex-col gap-6">
           {editing !== null ? (

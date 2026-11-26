@@ -1,0 +1,3 @@
+const fs=require('fs');for(const f of process.argv.slice(2)){const fd=fs.openSync(f,'r');const h=Buffer.alloc(65536);fs.readSync(fd,h,0,65536,0);
+let o=12;const info={};while(o<h.length-8){const id=h.toString('latin1',o,o+4);const sz=h.readUInt32LE(o+4);if(id=='LIST'){const t=h.toString('latin1',o+8,o+12);if(t=='INFO'){let p=o+12;const end=o+8+sz;while(p<end){const cid=h.toString('latin1',p,p+4);const cs=h.readUInt32LE(p+4);info[cid]=cid=='ifil'||cid=='iver'?h.readUInt16LE(p+8)+'.'+h.readUInt16LE(p+10):h.toString('latin1',p+8,p+8+cs).replace(/\0+$/,'');p+=8+cs+(cs&1)}}break}o+=8+sz}
+console.log(require('path').basename(f),JSON.stringify(info))}

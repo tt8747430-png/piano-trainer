@@ -2,4 +2,4 @@
 export const isOneOf =
   <T>(values: readonly T[]) =>
   (value: unknown): value is T =>
-    (values as readonly unknown[]).includes(value)
+    values.some((each) => each === value)

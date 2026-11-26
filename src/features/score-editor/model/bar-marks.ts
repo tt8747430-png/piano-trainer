@@ -26,17 +26,11 @@ export const BARLINE_CHOICES = [
 ] as const
 /** The signs and jumps beside them (ADR 0097). */
 export const JUMP_CHOICES = ['segno', 'coda', 'toCoda', 'fine', ...JUMPS] as const
-/** The page break before a bar (ADR 0097, Flat's Measure): its line starts a new page. */
-export const LAYOUT_CHOICES = ['pageBreak'] as const
 /** Flat's Measure's bar repeats, of one bar and two, and its multi-bar rest (ADR 0097). */
 export const REPEAT_BAR_CHOICES = ['barRepeat1', 'barRepeat2', 'multiRest'] as const
-export const BAR_MARK_CHOICES = [
-  ...BARLINE_CHOICES,
-  ...JUMP_CHOICES,
-  ...LAYOUT_CHOICES,
-  ...REPEAT_BAR_CHOICES,
-] as const
-export type BarMarkChoice = (typeof BAR_MARK_CHOICES)[number]
+/** Every mark a bar takes; `pageBreak`, the break before a bar (ADR 0097, Flat's Measure), starts a new page. */
+export type BarMarkChoice =
+  (typeof BARLINE_CHOICES | typeof JUMP_CHOICES | typeof REPEAT_BAR_CHOICES)[number] | 'pageBreak'
 
 const BARLINE_OF: Partial<Record<BarMarkChoice, Barline>> = {
   repeatEnd: 'repeat',
@@ -54,12 +48,16 @@ const AT_START = ['repeatStart', 'segno', 'coda', 'pageBreak'] as const
 const AT_END = ['fine', 'toCoda'] as const
 
 const isOne = <T extends string>(all: readonly T[], value: string): value is T =>
-  (all as readonly string[]).includes(value)
+  all.some((each) => each === value)
 
 /** A bar with one mark set to `value`, or without it where `value` is undefined. */
 function withMark<K extends keyof BarMarks>(bar: DraftBar, key: K, value: BarMarks[K]): DraftBar {
-  const { [key]: _was, ...rest } = bar
-  return (value === undefined ? rest : { ...rest, [key]: value }) as DraftBar
+  const next: { -readonly [P in keyof DraftBar]: DraftBar[P] } = { ...bar }
+  // The copy's marks, written through: the mark moves to the end, as a spread would put it.
+  const marks: { -readonly [P in keyof BarMarks]: BarMarks[P] } = next
+  delete marks[key]
+  if (value !== undefined) marks[key] = value
+  return next
 }
 
 /** A bar with `value` at `key`, or without it where it is there already. */
@@ -97,7 +95,7 @@ export function markBars(draft: Draft, { from, to }: BarRange, choice: BarMarkCh
   let marked = draft
   for (let index = from; index <= to; index += 1)
     marked = withBar(marked, index, (bar) =>
-      choice === 'plain' ? (withoutBarMarks(bar) as DraftBar) : toggled(bar, 'ending', ending),
+      choice === 'plain' ? withoutBarMarks(bar) : toggled(bar, 'ending', ending),
     )
   return marked
 }

@@ -15,13 +15,27 @@ export const NAMED_KEYS = ['c', 'all', 'none'] as const
 /** Which keys carry their note's name: every C, every key, or none. */
 export type NamedKeys = (typeof NAMED_KEYS)[number]
 
-export const KEY_DOCKS = ['bottom', 'top'] as const
-/** Where a page's keys stay while it scrolls: over the tab bar, or under the screen's bar. */
-export type KeyDock = (typeof KEY_DOCKS)[number]
-
+export const CHORD_LABELS = ['names', 'degrees', 'intervals', 'fingers', 'none'] as const
 /**
- * The pedals the bar's Sustain works (R31-P, R34): the sustain pedal alone, or with the soft and
- * sostenuto pedals in its menu.
+ * What a chord's keys and the heads on its staff carry (canvas 89, 151): each note's name, its degree
+ * in the chord, the interval up from the note below it, its finger, or nothing.
  */
-export const PEDALS_SHOWN = ['sustain', 'all'] as const
-export type PedalsShown = (typeof PEDALS_SHOWN)[number]
+export type ChordLabels = (typeof CHORD_LABELS)[number]
+
+export const CHORD_RANGES = ['chord', 'two', 'four'] as const
+/** How many keys a chord's piano shows (the canvas's Range): just the chord's, or two or four octaves round it. */
+export type ChordRange = (typeof CHORD_RANGES)[number]
+
+export const SONG_RANGES = ['song', '61', '76', '88'] as const
+/**
+ * How many keys the Player shows (its Piano sheet's Range, the canvas's): every note of the song, or
+ * a keyboard's span, 61 (C2–C7), 76 (E1–G7) or the piano's 88 (A0–C8).
+ */
+export type SongRange = (typeof SONG_RANGES)[number]
+
+export const CAMERA_ANGLES = ['seat', 'above'] as const
+/**
+ * Where a 3D piano is seen from (the Piano sheet's Angle, canvas 121): the seat, as Flowkey films,
+ * or above, looking down more steeply on the keys.
+ */
+export type CameraAngle = (typeof CAMERA_ANGLES)[number]

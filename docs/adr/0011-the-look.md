@@ -26,7 +26,8 @@ over colourful content; few typefaces in fixed text styles.
 - **The keys** are paper keys parted by the line, a warm black. A mark is its paint's wash while
   its key is quiet and its full paint while it sounds; a plain key sounding turns sky. By night the white keys are a
   shade softer.
-- **Type:** Literata sets `h1`–`h3` and chord symbols at 600; Onest sets reading text and every control. Text styles
+- **Type:** the canvas's two faces: Iowan Old Style sets `h1`–`h3` and chord symbols at 600; Instrument Sans sets
+  reading text, every control and the tooltips (Russian in the system's sans behind it, which has no Cyrillic). Text styles
   in rem: 17, 20, 22, 28, 34, 44, and 72 for the chord. ♭ ♮ ♯ come from the Text Accidentals face before Noto Music.
 - **Shape:** soft rounded rectangles: buttons 12px, cards 14px, sheets 20px.
 - **Increased contrast:** under `prefers-contrast: more`, secondary text, lines and dividers step up in both themes.

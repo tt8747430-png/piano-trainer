@@ -23,12 +23,16 @@ export const music = {
       '11th': 'From the 11th',
       '13th': 'From the 13th',
     },
-    // The position a row's chords start in, and whether they move smoothly from it (ADR 0115).
-    first: 'Inversion',
+    // The position a row's chords start in, and how they move from it (ADR 0115).
+    first: 'First chord’s inversion',
     startAbout: 'Which note of the first chord sits lowest. Here is C major in each inversion:',
-    nearest: 'Smooth voice leading',
-    nearestInfo:
-      'On, each chord after the first takes the inversion nearest the one before, so the voices move the least. Off, every chord keeps the first chord’s inversion.',
+    // As a progression's Voicing (Voice-led · Block), one word for one choice across the app.
+    voicing: {
+      label: 'Voicing',
+      led: 'Voice-led',
+      block: 'Block',
+      info: 'Voice-led, each chord after the first takes the inversion nearest the one before, so the voices move the least. Block, every chord keeps the first chord’s inversion.',
+    },
   },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {
@@ -49,10 +53,10 @@ export const music = {
   },
   family: {
     tri: 'Triads',
-    six: '6th & add',
-    sev: '7th chords',
-    nin: '9ths & more',
-    alt: 'Altered 7ths',
+    six: 'Added notes',
+    sev: 'Sevenths',
+    nin: 'Extended',
+    alt: 'Altered',
   },
   quality: {
     maj: 'Major triad',
@@ -156,7 +160,6 @@ export const music = {
     bebopDominant: 'bebop dominant',
   },
   // A scale's structure in whole and half steps.
-  gap: { W: 'W', H: 'H', 'W+H': 'W+H' },
   // A key, as a pop-up names it.
   tempoField: {
     beat: 'Beat',
@@ -216,10 +219,17 @@ export const music = {
     m9: { name: 'Minor ninth', short: 'm9' },
     M9: { name: 'Major ninth', short: 'M9' },
     A9: { name: 'Augmented ninth', short: 'A9' },
+    m10: { name: 'Minor tenth', short: 'm10' },
+    M10: { name: 'Major tenth', short: 'M10' },
     P11: { name: 'Perfect eleventh', short: 'P11' },
     A11: { name: 'Augmented eleventh', short: 'A11' },
+    d12: { name: 'Diminished twelfth', short: 'd12' },
+    P12: { name: 'Perfect twelfth', short: 'P12' },
     m13: { name: 'Minor thirteenth', short: 'm13' },
     M13: { name: 'Major thirteenth', short: 'M13' },
+    m14: { name: 'Minor fourteenth', short: 'm14' },
+    M14: { name: 'Major fourteenth', short: 'M14' },
+    P15: { name: 'Double octave', short: 'P15' },
   },
   consonance: {
     perfect: 'Perfect consonance',
@@ -230,6 +240,9 @@ export const music = {
   sheet: {
     label: 'Sheet music',
     firstPage: 'The first page',
+    // A chord's bar on the Chords staff, where several share it.
+    play: 'Play {{chord}}',
+    pick: 'Show and play {{chord}}',
     // How a score is laid out (ADR 0096, 0108, 0115), the same words in the Player and the editor,
     // Dorico's and Sibelius's: A4 pages, lines down the screen, one line across.
     layout: {
@@ -253,6 +266,8 @@ export const music = {
     error: 'The music can’t be shown.',
     bar: 'Bar {{n}}',
     barChords: 'Bar {{n}}: {{chords}}',
+    pickup: 'Pickup',
+    pickupChords: 'Pickup: {{chords}}',
     loopStart: 'Loop start',
     loopEnd: 'Loop end',
     // The piano's name at a score's first line's head (ADR 0114), as a printed score names it; a
@@ -311,38 +326,15 @@ export const music = {
   harmony: {
     // A progression's row with why it works drawn on it (A23): each chord's role, each move's arrow.
     roles: 'What each chord does',
-    role: { home: 'home', away: 'away', tension: 'tension' },
+    role: { home: 'Tonic', away: 'Predominant', tension: 'Dominant' },
     colour: { sad: 'sad', soft: 'soft', bright: 'bright' },
     chip: '{{numeral}}, {{what}}',
+    // Under each chord, how its root moves to the next (the last back to the first).
     move: {
-      fifth: { down: 'down a 5th', up: 'up a 5th' },
-      third: { down: 'down a 3rd', up: 'up a 3rd' },
-      second: { down: 'down a 2nd', up: 'up a 2nd' },
-    },
-    meaning: {
-      fifth: 'the strongest pull',
-      third: 'two notes shared',
-      second: 'fresh, no note shared',
-      back: 'a step back',
-      same: 'the root stays',
-    },
-    playMove: 'Play {{from}} to {{to}}: the root moves {{move}}',
-    legend: {
-      name: 'Home, away, tension',
-      arrows: 'Arrows: root movement',
-      terms: {
-        home: { name: 'Home', text: 'The tonic and the chords that stand in for it: at rest.' },
-        away: { name: 'Away', text: 'The subdominant family (IV, ii): moving off from home.' },
-        tension: { name: 'Tension', text: 'The dominant family (V, vii°): pulling back home.' },
-        sad: {
-          name: 'Sad, soft, bright',
-          text: 'A minor chord in a major key (vi, the relative minor, sad; ii and iii soft), or a major chord in a minor key (bright).',
-        },
-        fifth: { name: '↓5', text: 'Down a 5th: the strongest pull, how most cadences close.' },
-        third: { name: '↓3', text: 'Down a 3rd: mild, the two chords share two notes.' },
-        second: { name: '↑2', text: 'Up a 2nd: fresh, the two chords share no note.' },
-        back: { name: '↑5 ↑3 ↓2', text: 'The same moves the other way: they step back.' },
-      },
+      fifth: { down: '5th down →', up: '5th up →' },
+      third: { down: '3rd down →', up: '3rd up →' },
+      second: { down: '2nd down →', up: '2nd up →' },
+      same: 'Root stays →',
     },
     playChain: 'Play the chain',
   },
@@ -400,8 +392,6 @@ export const music = {
     presto: { name: 'Presto', meaning: 'Very fast' },
     prestissimo: { name: 'Prestissimo', meaning: 'As fast as possible' },
   },
-  tempoRange: '{{from}}–{{to}} BPM',
-  tempoRangeFrom: '{{from}} BPM and faster',
   // A key's degrees by name, on the Key view's table.
   degree: {
     label: 'Scale degrees',

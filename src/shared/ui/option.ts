@@ -16,6 +16,8 @@ export interface Option<V extends OptionValue> {
   readonly short?: string
   /** Why it cannot be chosen, where it cannot: a segment greyed, saying so in its tooltip. */
   readonly reason?: string | undefined
+  /** How many it keeps, after its label in soft ink (a filter's chip); none, it dims. */
+  readonly count?: number
 }
 
 /**
@@ -32,7 +34,7 @@ export function optionName(option: Option<OptionValue>): string | undefined {
 }
 
 /** Options under a name: a pop-up button's group (a chord family). */
-export interface OptionGroup<V extends OptionValue> {
+interface OptionGroup<V extends OptionValue> {
   readonly label: string
   readonly options: readonly Option<V>[]
 }

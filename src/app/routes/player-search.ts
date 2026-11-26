@@ -70,8 +70,10 @@ const PRACTICE_DEFAULTS: PracticeView = {
 export const PLAYER_DEFAULTS: PlayerSearch = { ...PRACTICE_DEFAULTS, version: 'original' }
 const isVersion = isOneOf(SONG_VERSIONS)
 /** The Player's own params: how it goes, whatever it plays. */
-/** The most beats of rest a loop takes before each repeat. */
-const MOST_REST = 4
+/** The most beats of rest a loop takes before each repeat: a bar of the longest meter counted. */
+const MOST_REST = 12
+/** The most times a loop is played before it stops. */
+const MOST_REPEATS = 99
 function practiceView(raw: Raw): PracticeView {
   return {
     mode: valueOr(isMode, raw.mode, PRACTICE_DEFAULTS.mode),
@@ -83,6 +85,8 @@ function practiceView(raw: Raw): PracticeView {
     click: typeof raw.click === 'boolean' ? raw.click : undefined,
     keys: typeof raw.keys === 'boolean' ? raw.keys : undefined,
     rest: wholeIn(raw.rest, 1, MOST_REST, undefined),
+    restSilent: raw.restSilent === true ? true : undefined,
+    repeats: wholeIn(raw.repeats, 1, MOST_REPEATS, undefined),
   }
 }
 /** The pattern and the hands' figures a Setup chooses, whatever the Player plays. */
@@ -270,13 +274,14 @@ const readEditSearch = (raw: Raw): EditSearch => ({
   takes: raw.takes === true,
   record: raw.record === true,
   bar: bar(raw),
+  ...(raw.credits === true ? { credits: true } : {}),
   // Which staves play and show (A40), the Player's own `staves` (A35).
   ...(isStavesParam(raw.staves) ? { staves: raw.staves } : {}),
 })
 export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)
 
 // A lesson's example of notes on the score: its place among the lesson's, and its course.
-export const EXAMPLE_DEFAULTS: ExampleSearch = { n: 0 }
+const EXAMPLE_DEFAULTS: ExampleSearch = { n: 0 }
 const readExampleSearch = (raw: Raw): ExampleSearch => ({
   n: wholeIn(raw.n, 0, 999, 0),
   ...(typeof raw.course === 'string' && raw.course !== '' ? { course: raw.course } : {}),

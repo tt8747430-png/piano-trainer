@@ -1,5 +1,6 @@
 export { addToCourse } from './add-to-course'
 export { createOwnCourse } from './create-course'
+export { createOwnCourseFrom } from './create-from-template'
 export { createOwnLesson } from './create-lesson'
 export {
   deleteOwnCourse,
@@ -15,3 +16,4 @@ export { renameOwnCourse, renameOwnLesson } from './rename'
 export { saveOwnCourse } from './save-course'
 export { saveOwnLesson } from './save-lesson'
 export { setInCourse } from './set-in-course'
+export { setOwnCourseLook } from './set-look'

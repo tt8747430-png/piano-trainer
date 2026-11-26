@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createFakeAudio, type FakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { arrange, parseFigure, type Chart, type Performance } from '@/shared/lib/arrangement'
 import { note, parseChordSymbol } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
@@ -49,7 +49,7 @@ beforeEach(() => {
 afterEach(() => vi.useRealTimers())
 
 function practise(performance: Performance, setup: PracticeSetup) {
-  const services = { audio, midi: createFakeMidi() }
+  const services = { audio, arranger: createFakeArranger(), midi: createFakeMidi() }
   return renderHook(() => usePractice(performance, setup), {
     wrapper: ({ children }: { children: ReactNode }) => (
       <ServicesProvider services={services}>{children}</ServicesProvider>

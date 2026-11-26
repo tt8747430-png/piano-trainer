@@ -20,6 +20,7 @@ import {
   type MetronomeTime,
 } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
+import { steadyTicker } from '@/shared/lib/ticker'
 import { useTapTempo } from './use-tap-tempo'
 
 /** How far ahead of the audio clock the beats are queued, in seconds: past a hidden page's timer. */
@@ -47,7 +48,7 @@ const trainerOf = ({ on, play, mute }: MetronomeSettings['trainer']) => (on ? { 
 interface Run {
   next: MetronomeBeat
   planned: readonly MetronomeBeat[]
-  timer: ReturnType<typeof setInterval>
+  stopTicking: () => void
 }
 
 export interface Metronome extends MetronomeSettings {
@@ -71,6 +72,10 @@ export interface Metronome extends MetronomeSettings {
   setSubdivision(subdivision: Subdivision): void
   /** The speed trainer turned on or off, or its tempos and steps changed. */
   setSpeed(change: Partial<MetronomeSettings['speed']>): void
+  /** How loud it clicks, one of `METRONOME_VOLUMES`. */
+  setVolume(volume: number): void
+  /** The screen flashing on each beat, or not. */
+  setFlash(flash: boolean): void
   /** The tempo heard now: the speed trainer's bar's while it runs. */
   readonly tempoNow: number
   /** The bar trainer turned on or off, or its counts changed. */
@@ -86,6 +91,19 @@ export interface Metronome extends MetronomeSettings {
  * while it plays. The Metronome's page and the quick metronome in a screen's Tools share it. A song's
  * own click is its transport's (R31-P: no screen with a song opens the Tools sheet).
  */
+/** A beat's sounds at the Metronome's Volume: each click's gain and each drum's velocity scaled to it. */
+function atVolume(
+  sounds: ReturnType<typeof beatSounds>,
+  volume: number,
+): ReturnType<typeof beatSounds> {
+  const share = volume / 100
+  return sounds.map((sound) =>
+    sound.kind === 'click'
+      ? { ...sound, gain: (sound.gain ?? 1) * share }
+      : { ...sound, velocity: sound.velocity * share },
+  )
+}
+
 export function useMetronome(): Metronome {
   const { audio } = useServices()
   const store = useSettingsStoreApi()
@@ -106,7 +124,10 @@ export function useMetronome(): Metronome {
     const { beats, next } = plannedBeats(current.next, now + AHEAD, time)
     for (const beat of beats)
       if (!mutedBar(beat.bar, trainerOf(settings.trainer)))
-        audio.play(beatSounds(settings, beat.beat, 60 / tempoOf(time, beat.bar)), beat.at)
+        audio.play(
+          atVolume(beatSounds(settings, beat.beat, 60 / tempoOf(time, beat.bar)), settings.volume),
+          beat.at,
+        )
     current.next = next
     current.planned = [...current.planned.filter((beat) => beat.at > now - KEPT), ...beats]
   }, [audio])
@@ -114,7 +135,7 @@ export function useMetronome(): Metronome {
   const stop = useCallback(() => {
     const current = run.current
     if (!current) return
-    clearInterval(current.timer)
+    current.stopTicking()
     run.current = null
     audio.stop()
     setPlaying(false)
@@ -127,7 +148,7 @@ export function useMetronome(): Metronome {
     run.current = {
       next: { at: audio.now() + PLAY_DELAY, beat: 0, bar: 0 },
       planned: [],
-      timer: setInterval(queue, TOP_UP),
+      stopTicking: steadyTicker(TOP_UP)(queue),
     }
     queue()
     setPlaying(true)
@@ -201,6 +222,8 @@ export function useMetronome(): Metronome {
     },
     setSubdivision: (subdivision) => save({ subdivision }),
     setSpeed: (change) => save({ speed: { ...store.getState().metronome.speed, ...change } }),
+    setVolume: (volume) => save({ volume }),
+    setFlash: (flash) => save({ flash }),
     tempoNow:
       playing && bar !== null && settings.speed.on
         ? speedAt(bar, settings.speed)

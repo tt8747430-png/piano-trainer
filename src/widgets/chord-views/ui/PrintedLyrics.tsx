@@ -25,7 +25,7 @@ export function PrintedLyrics({
         return (
           <Fragment key={index}>
             {starts && heading ? (
-              <h2 className="pt-3 text-sm tracking-[0.3em] text-muted-foreground uppercase break-after-avoid">
+              <h2 className="pt-3 text-sm tracking-caps text-muted-foreground uppercase break-after-avoid">
                 {heading}
               </h2>
             ) : null}

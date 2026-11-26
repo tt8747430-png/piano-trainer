@@ -1,7 +1,7 @@
 import { useRender } from '@base-ui/react/use-render'
 import { OpensMark } from './NavMarks'
 import { RowFace, type RowFaceProps } from './RowFace'
-import { rowClass } from './row-class'
+import { ROW_CLASS } from './row-class'
 
 /**
  * A list row that leads to a page: its face (`RowFace`: a tile, a title of up to two lines, a detail,
@@ -18,7 +18,7 @@ export function RowLink({
     defaultTagName: 'a',
     render,
     props: {
-      className: rowClass(face.paint !== undefined || face.mark !== undefined),
+      className: ROW_CLASS,
       children: <RowFace {...face} end={<OpensMark />} />,
     },
   })

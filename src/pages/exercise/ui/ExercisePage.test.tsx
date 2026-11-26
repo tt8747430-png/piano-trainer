@@ -53,9 +53,9 @@ describe('An exercise’s page', () => {
   it('is made a favourite from the ♡ in its bar, as its row’s More does (R30-4)', async () => {
     const user = userEvent.setup()
     const { practiceLibraryStore } = await renderApp('/practice/exercises/hanon')
-    await user.click(await screen.findByRole('button', { name: 'Add to favourites' }))
+    await user.click(await screen.findByRole('button', { name: 'Add to Favourites' }))
     expect(practiceLibraryStore.getState().favourites.exercises).toEqual(['hanon'])
-    expect(screen.getByRole('button', { name: 'Remove from favourites' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Remove from Favourites' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )

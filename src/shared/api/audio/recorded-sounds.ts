@@ -4,7 +4,7 @@
  * full scale, as WAV so they start on their sample with no encoder's delay. They are in the app's
  * offline cache; each is fetched and decoded once for an audio context.
  */
-export const RECORDED_SOUNDS = {
+const RECORDED_SOUNDS = {
   click: '/sounds/woodblock.wav',
   kick: '/sounds/kick.wav',
   snare: '/sounds/snare.wav',
@@ -28,35 +28,47 @@ export const fetchSound: LoadSound = async (context, url) => {
   }
 }
 
-/** The recorded sounds of each audio context: loading once, then each buffer, or none had. */
-export interface RecordedSounds {
-  /** Starts loading for `context` (once); resolves when every sound is in or has failed. */
+/** The recorded sounds of each audio context: each loaded once, one that failed asked again. */
+interface RecordedSounds {
+  /** Loads for `context` what is not in yet; resolves when each is in or has failed this time. */
   ready(context: AudioContext): Promise<void>
   /** A loaded sound's buffer; null while it loads or where it failed. */
   buffer(context: AudioContext, sound: RecordedSound): AudioBuffer | null
 }
 
 export function createRecordedSounds(load: LoadSound = fetchSound): RecordedSounds {
-  const kept = new WeakMap<
-    AudioContext,
-    { readonly buffers: Map<RecordedSound, AudioBuffer>; readonly loaded: Promise<void> }
-  >()
-  const of = (context: AudioContext) => {
+  interface Kept {
+    readonly buffers: Map<RecordedSound, AudioBuffer>
+    loading: Promise<void> | null
+  }
+  const kept = new WeakMap<AudioContext, Kept>()
+  const of = (context: AudioContext): Kept => {
     const held = kept.get(context)
     if (held) return held
-    const buffers = new Map<RecordedSound, AudioBuffer>()
-    const loaded = Promise.all(
-      (Object.entries(RECORDED_SOUNDS) as [RecordedSound, string][]).map(async ([sound, url]) => {
-        const buffer = await load(context, url)
-        if (buffer) buffers.set(sound, buffer)
-      }),
-    ).then(() => undefined)
-    const made = { buffers, loaded }
+    const made: Kept = { buffers: new Map(), loading: null }
     kept.set(context, made)
     return made
   }
+  /** Loads the sounds not yet in; one that cannot be had now is asked again the next time. */
+  const ready = (context: AudioContext): Promise<void> => {
+    const held = of(context)
+    if (held.loading) return held.loading
+    const missing = Object.keys(RECORDED_SOUNDS)
+      .filter(isRecordedSound)
+      .filter((sound) => !held.buffers.has(sound))
+    if (missing.length === 0) return Promise.resolve()
+    held.loading = Promise.all(
+      missing.map(async (sound) => {
+        const buffer = await load(context, RECORDED_SOUNDS[sound])
+        if (buffer) held.buffers.set(sound, buffer)
+      }),
+    ).then(() => {
+      held.loading = null
+    })
+    return held.loading
+  }
   return {
-    ready: (context) => of(context).loaded,
+    ready,
     buffer: (context, sound) => kept.get(context)?.buffers.get(sound) ?? null,
   }
 }

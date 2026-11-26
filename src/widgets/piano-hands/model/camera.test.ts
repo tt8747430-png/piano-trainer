@@ -1,14 +1,14 @@
 import { PerspectiveCamera, Vector3 } from 'three'
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import { followed, frame, VIEW, type Framing, type ViewSize } from './camera'
+import { followed, frame, PITCH, VIEW, type Framing, type ViewSize } from './camera'
 import { KEY, keyX } from './keys'
 
 /** The camera the scene builds from a framing, and where a point lands in its view (−1 to 1 each way). */
 function shot(framing: Framing, size: ViewSize) {
   const camera = new PerspectiveCamera((VIEW.fov * 180) / Math.PI, size.width / size.height)
   camera.position.set(framing.x, framing.y, framing.z)
-  camera.rotation.x = -VIEW.pitch
+  camera.rotation.x = -PITCH.seat
   camera.updateMatrixWorld()
   return (x: number, y: number, z: number) => new Vector3(x, y, z).project(camera)
 }

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { setMidi } from '@/features/set-preference'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi, type FakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, type FakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
 import { ServicesProvider } from '@/shared/lib/services'
 import { untilTestEnds } from '@/shared/test/listeners'
@@ -19,7 +19,9 @@ const renderWith = (midi: FakeMidi | null, { input = true }: { input?: boolean }
   setMidi(settingsStore, { input })
   return render(
     <SettingsStoreProvider store={settingsStore}>
-      <ServicesProvider services={{ audio: createFakeAudio(), midi }}>
+      <ServicesProvider
+        services={{ audio: createFakeAudio(), arranger: createFakeArranger(), midi }}
+      >
         <MidiReconnect />
       </ServicesProvider>
     </SettingsStoreProvider>,

@@ -1,42 +1,48 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 import { CREDITS_GAP, type SheetCreditLines } from './sheet-credits'
+import { useCreditLine } from './use-credit-line'
 
 /**
- * A score's credits printed under its title as a printed score has them (Flat's, MuseScore's): the
- * subtitle centred with the hymn tune's name under it in capitals, the lyricist over the translator
- * at the left, the composer over the arranger at the right; nothing the learner did not write.
+ * A score's credits printed under its title, as the canvas prints them (the Player's and the
+ * editor's title block): its subtitle centred where it has one, then one quiet line naming who wrote
+ * it, "Words: John Newton · Music: New Britain", centred over lines down the screen and at the right
+ * over a page; nothing the learner did not write.
  */
 export function SheetCredits({
   credits,
+  align = 'end',
   className,
 }: {
   credits: SheetCreditLines
+  align?: 'center' | 'end'
   className?: string
 }): ReactNode {
-  const { subtitle, composer, lyricist, arranger, translator, tune } = credits
-  const row = 'min-h-6 leading-6 wrap-break-word'
+  const { subtitle } = credits
+  const line = useCreditLine(credits)
   return (
     <div
       data-slot="sheet-credits"
       style={{ paddingTop: CREDITS_GAP }}
-      className={cn('flex flex-col font-display', className)}
+      className={cn('flex flex-col gap-0.5', className)}
     >
-      {subtitle ? <p className={cn(row, 'text-center text-lg')}>{subtitle}</p> : null}
-      {tune ? (
-        <p className={cn(row, 'text-center text-sm uppercase tracking-wide')}>{tune}</p>
+      {subtitle ? (
+        <p className="text-center font-display text-lg leading-6 text-balance wrap-break-word">
+          {subtitle}
+        </p>
       ) : null}
-      {lyricist || translator || composer || arranger ? (
-        <div className="flex items-start justify-between gap-4 text-sm">
-          <div className="flex min-w-0 flex-1 flex-col items-start text-start">
-            {lyricist ? <p className={row}>{lyricist}</p> : null}
-            {translator ? <p className={row}>{translator}</p> : null}
-          </div>
-          <div className="flex min-w-0 flex-1 flex-col items-end text-end">
-            {composer ? <p className={row}>{composer}</p> : null}
-            {arranger ? <p className={row}>{arranger}</p> : null}
-          </div>
-        </div>
+      {line ? (
+        <p
+          // Centred over lines down the screen at the boards' 13, 15 from 640px; a page's at its print size.
+          className={cn(
+            'font-sans text-pretty wrap-break-word text-muted-foreground',
+            align === 'center'
+              ? 'text-center text-footnote/[normal] sm:text-subhead/[normal]'
+              : 'text-end text-footnote leading-snug',
+          )}
+        >
+          {line}
+        </p>
       ) : null}
     </div>
   )

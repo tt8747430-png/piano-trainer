@@ -1,4 +1,5 @@
 import { readAbout, type About } from '@/entities/lesson'
+import { isRecord } from '@/shared/lib'
 
 /**
  * The courses' own order (content as data, ADR 0116 r25): their ids as Manage courses dragged them,
@@ -14,12 +15,10 @@ export interface CourseOrder {
 export const COURSE_ORDER_ID = 'courses'
 
 export const isCourseOrder = (value: unknown): value is CourseOrder =>
-  typeof value === 'object' &&
-  value !== null &&
-  Array.isArray((value as { courses?: unknown }).courses) &&
-  (value as { courses: unknown[] }).courses.every((id) => typeof id === 'string') &&
-  ((value as { about?: unknown }).about === undefined ||
-    readAbout((value as { about?: unknown }).about) !== undefined)
+  isRecord(value) &&
+  Array.isArray(value.courses) &&
+  value.courses.every((id) => typeof id === 'string') &&
+  (value.about === undefined || readAbout(value.about) !== undefined)
 
 /**
  * The courses in the order's sequence: the ones it names in its order, each other one after them

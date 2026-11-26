@@ -57,7 +57,7 @@ export function TimingCalibration() {
       <div className="flex flex-wrap items-center gap-3">
         {running ? (
           <Button variant="outline" className="min-h-11" onClick={stop}>
-            <Square aria-hidden />
+            <Square aria-hidden className="fill-current" />
             {t('midiSettings.timing.stop')}
           </Button>
         ) : (

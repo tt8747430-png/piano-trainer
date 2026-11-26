@@ -1,30 +1,20 @@
 import {
   closestCorners,
   DndContext,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
   useDroppable,
-  useSensor,
-  useSensors,
   type DragEndEvent,
   type DragOverEvent,
   type UniqueIdentifier,
 } from '@dnd-kit/core'
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { CSS } from '@dnd-kit/utilities'
-import { Ellipsis, GripVertical, Trash2, type LucideIcon } from 'lucide-react'
+import { Ellipsis, Trash2, type LucideIcon } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useRender } from '@base-ui/react/use-render'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
-import { ActionMenu, say } from '@/shared/ui'
+import { cn, useDragSensors } from '@/shared/lib'
+import { ActionMenu, DragHandle, sayUndo } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { rowPlace, withGroupAt, withRowAt, withRowRemoved, type RowOrder } from '../model/row-order'
 
@@ -83,19 +73,7 @@ function Handle({
   handle: Pick<ReturnType<typeof useSortable>, 'attributes' | 'listeners' | 'setActivatorNodeRef'>
 }) {
   const { attributes, listeners, setActivatorNodeRef } = handle
-  return (
-    <button
-      ref={setActivatorNodeRef}
-      type="button"
-      aria-label={label}
-      title={label}
-      className="grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted active:cursor-grabbing"
-      {...attributes}
-      {...listeners}
-    >
-      <GripVertical aria-hidden className="size-4" />
-    </button>
-  )
+  return <DragHandle label={label} ref={setActivatorNodeRef} {...attributes} {...listeners} />
 }
 
 /** A row's menu, named for the row: what is not done by dragging it (Remove). */
@@ -108,13 +86,7 @@ function RowMenu({ title, onRemove }: { title: string; onRemove: () => void }) {
       align="end"
       trigger={<Ellipsis aria-hidden />}
       render={
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-11 shrink-0"
-          aria-label={label}
-          title={label}
-        />
+        <Button variant="ghost" size="icon" className="shrink-0" aria-label={label} title={label} />
       }
       actions={[
         {
@@ -185,7 +157,7 @@ function GroupList({
         ref={setNodeRef}
         aria-label={group.label}
         data-over={isOver ? '' : undefined}
-        className="flex min-h-16 flex-col divide-y divide-hairline card transition-colors duration-150 ease-out data-over:ring-2 data-over:ring-primary/60"
+        className="flex min-h-16 flex-col rows-hairline card transition-colors duration-150 ease-out data-over:ring-2 data-over:ring-primary/60"
       >
         {children}
       </ol>
@@ -252,11 +224,7 @@ export function RowGroups({
   fixed?: boolean
 }) {
   const { t } = useTranslation('learn')
-  const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  )
+  const sensors = useDragSensors()
   const given: RowOrder = groups.map((group) => ({
     key: group.key,
     rows: group.rows.map((row) => row.key),
@@ -302,10 +270,7 @@ export function RowGroups({
   }
   const remove = (row: DocRow) => {
     onChange(withRowRemoved(given, row.key))
-    say(t('edit.order.removed', { title: row.title }), {
-      label: t('edit.order.undo'),
-      onClick: () => onChange(given),
-    })
+    sayUndo(t('edit.order.removed', { title: row.title }), () => onChange(given))
   }
   // Rows numbered through the document, group after group.
   const firsts = order.map((_, g) =>

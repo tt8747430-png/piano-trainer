@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Copy } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
+import { cn, copyText } from '@/shared/lib'
 import { say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Checkbox } from '@/shared/ui/primitives/checkbox'
@@ -44,14 +44,13 @@ export function CopyLinkField({ url }: { url: string }) {
       <Button
         variant="ghost"
         size="icon"
-        className="size-11 shrink-0 rounded-control"
+        className="shrink-0 rounded-control"
         aria-label={t('public.copyLink')}
         title={t('public.copyLink')}
         onClick={() =>
-          void navigator.clipboard
-            ?.writeText(url)
-            .then(() => say(t('public.linkCopied')))
-            .catch(() => say(t('public.linkNotCopied')))
+          void copyText(url).then((copied) =>
+            say(t(copied ? 'public.linkCopied' : 'public.linkNotCopied')),
+          )
         }
       >
         <Copy aria-hidden />

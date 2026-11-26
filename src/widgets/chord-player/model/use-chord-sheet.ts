@@ -9,6 +9,7 @@ import {
 } from '@/entities/chord-sheet'
 import { editSheet } from '@/features/manage-chord-sheets'
 import {
+  eachChord,
   emptySheet,
   sheetToText,
   textToSheet,
@@ -17,6 +18,7 @@ import {
   type ChordSheet,
 } from '@/shared/lib/arrangement'
 import type { Chord } from '@/shared/lib/music'
+import { shareSections } from './shared-sheet'
 
 /** Each sheet's edits to undo and redo, by its id (`''` the sheet in hand): kept while the app runs. */
 interface History {
@@ -45,6 +47,8 @@ export interface ChordSheetInHand {
   readonly entry: ChordSheetEntry
   /** Whether it is one of My chord sheets (`?sheet=`), not the sheet in hand. */
   readonly saved: boolean
+  /** Whether a saved sheet has edits not saved yet: it shows and plays them, marked Draft. */
+  readonly draft: boolean
   /** Changes the sheet as written, kept to undo. */
   edit(change: (sheet: ChordSheet) => ChordSheet): void
   /** Changes it as shown (transposed), kept to undo: each chord moved back into its own key. */
@@ -71,10 +75,11 @@ export function useChordSheet(id: string | undefined): ChordSheetInHand | null {
     },
     () => `${historyOf(key).undo.length}/${historyOf(key).redo.length}`,
   )
-  const text = entry?.text ?? NEW_ENTRY.text
+  // A saved sheet opens on its draft, where it has one.
+  const text = entry?.draft ?? entry?.text ?? NEW_ENTRY.text
   const sheet = useMemo(() => textToSheet(text) ?? emptySheet(), [text])
   const transpose = entry?.settings.transpose ?? 0
-  const shown = useMemo(() => transposeSheet(sheet, transpose), [sheet, transpose])
+  const shown = useMemo(() => shareSections(transposeSheet(sheet, transpose)), [sheet, transpose])
   // The latest sheet, for edits made one after another before a render.
   const latest = useRef(sheet)
   useLayoutEffect(() => {
@@ -89,7 +94,7 @@ export function useChordSheet(id: string | undefined): ChordSheetInHand | null {
       history.undo = [...history.undo, before].slice(-DEPTH)
       history.redo = []
       latest.current = next
-      editSheet(store, id, { text: after })
+      editSheet(store, id, id === undefined ? { text: after } : { draft: after })
       changed()
     },
     [store, id, key],
@@ -109,7 +114,7 @@ export function useChordSheet(id: string | undefined): ChordSheetInHand | null {
       history[to] = [...history[to], sheetToText(latest.current)]
       const restored = textToSheet(text)
       if (restored) latest.current = restored
-      editSheet(store, id, { text })
+      editSheet(store, id, id === undefined ? { text } : { draft: text })
       changed()
     },
     [store, id, key],
@@ -121,6 +126,7 @@ export function useChordSheet(id: string | undefined): ChordSheetInHand | null {
     shown,
     entry,
     saved: id !== undefined,
+    draft: entry.draft !== null,
     edit: (change) => write(change(latest.current)),
     editShown: (change) => {
       const own = latest.current
@@ -129,10 +135,9 @@ export function useChordSheet(id: string | undefined): ChordSheetInHand | null {
       write({
         ...moved,
         key: own.key,
-        sections: moved.sections.map((section) => ({
-          ...section,
-          chords: section.chords.map((each) => ({ ...each, chord: written(each.chord) })),
-        })),
+        sections: moved.sections.map((section) =>
+          eachChord(section, (each) => ({ ...each, chord: written(each.chord) })),
+        ),
       })
     },
     written,

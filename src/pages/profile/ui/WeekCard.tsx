@@ -1,17 +1,23 @@
 import { Link } from '@tanstack/react-router'
+import type { CSSProperties } from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { dateOfDay, lastWeek, selectDays, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { cn, formatLocale } from '@/shared/lib'
 import { useToday } from '@/widgets/practice-days'
 import { usePracticeTime } from '../model/format'
+import { ProfileSection } from './ProfileSection'
+
+/** The steps the chart's two lines stand at, in minutes: the least whose second holds the week's most. */
+const STEPS = [5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240] as const
 
 /**
- * The last seven days as a picture (canvas 128): "Last 7 days" and, at the right, the time
- * practised and the days of seven; then one bar a day, its height the minutes played against the
- * week's most, today in the strong sand, a day not played a flat line, each day's letter under it. The
- * whole card opens Streak, the month's calendar.
+ * The last seven days as a picture under its own heading (WEEKL, WEEKLAP): "Last 7 days" with the time
+ * practised and the days of seven at the right; in its card the minutes' scale at the left (0 and two
+ * lines), one bar a day on it, today in copper and the days before in ember, a day not played a flat
+ * stub, each day's letter under it. The plot is 72 tall on a phone and 150 on a laptop, where the
+ * card stands as tall as the badges beside it and the chart fills it. The card opens Streak.
  */
 export function WeekCard() {
   const { t } = useTranslation('account')
@@ -25,61 +31,99 @@ export function WeekCard() {
       lastWeek(days, today).map(({ day, practised }) => ({
         day,
         practised,
-        seconds: seconds[day] ?? 0,
+        minutes: (seconds[day] ?? 0) / 60,
       })),
     [days, seconds, today],
   )
-  const total = week.reduce((sum, day) => sum + day.seconds, 0)
+  const total = week.reduce((sum, day) => sum + day.minutes * 60, 0)
   const played = week.filter((day) => day.practised).length
-  const most = Math.max(...week.map((day) => day.seconds))
-  const letter = new Intl.DateTimeFormat(locale, { weekday: 'narrow' })
-  const named = new Intl.DateTimeFormat(locale, { weekday: 'long' })
+  const most = Math.max(...week.map((day) => day.minutes))
+  const step = STEPS.find((each) => each * 2 >= most) ?? STEPS.at(-1) ?? 240
+  const letter = new Intl.DateTimeFormat(formatLocale(locale), { weekday: 'narrow' })
+  const named = new Intl.DateTimeFormat(formatLocale(locale), { weekday: 'long' })
   return (
-    <Link
-      to="/profile/streak"
-      className="group flex flex-col gap-4 card px-4 py-4 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3"
-    >
-      <div className="flex items-baseline justify-between gap-3">
-        <p className="text-[0.9375rem] font-semibold">{t('profile.week.title')}</p>
-        <p className="text-sm text-muted-foreground tabular-nums">
+    <ProfileSection
+      fold="week"
+      title={t('profile.week.title')}
+      aside={
+        <span className="text-subhead text-muted-foreground tabular-nums">
           {t('profile.week.summary', { time: time(total), days: played })}
-        </p>
-      </div>
-      <div className="flex flex-col gap-2">
-        <ol className="grid h-16 grid-cols-7 items-end gap-2">
-          {week.map((day) => (
-            <li
-              key={day.day}
-              aria-label={t('profile.week.day', {
-                day: named.format(dateOfDay(day.day)),
-                time: time(day.seconds),
-              })}
-              className="flex h-full items-end"
-            >
+        </span>
+      }
+    >
+      <Link
+        to="/profile/streak"
+        aria-label={t('profile.week.title')}
+        className="flex flex-col card px-4 pt-3.5 pb-3 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3 lg:justify-center"
+      >
+        <div className="relative flex gap-2 [--chart-h:4.5rem] [--chart-top:calc(var(--chart-h)-0.5rem)] lg:[--chart-h:9.375rem] lg:[--chart-top:calc(var(--chart-h)-0.375rem)]">
+          <div
+            aria-hidden
+            className="relative h-(--chart-h) w-5 shrink-0 text-right text-xs leading-3 text-muted-foreground tabular-nums"
+          >
+            <span className="absolute right-0 bottom-[calc(var(--chart-top)-6px)]">{step * 2}</span>
+            <span className="absolute right-0 bottom-[calc(var(--chart-top)/2-6px)]">{step}</span>
+            <span className="absolute right-0 -bottom-1.5">0</span>
+          </div>
+          <div className="relative flex min-w-0 flex-1 flex-col gap-2">
+            {/* A week with no day practised says what fills it, centred on the flat days' plot. */}
+            {played === 0 ? (
+              <p className="absolute inset-x-0 top-0 z-1 grid h-(--chart-h) place-items-center text-center text-sm text-pretty text-muted-foreground">
+                {/* On the card's paper, so no grid line runs through its words. */}
+                <span className="bg-card px-2">{t('profile.week.empty')}</span>
+              </p>
+            ) : null}
+            <ol className="relative flex h-(--chart-h) items-end gap-2 shadow-[inset_0_-1px_0_var(--color-border)]">
               <span
                 aria-hidden
-                className={cn(
-                  'w-full rounded-control',
-                  day.seconds > 0 ? 'min-h-1' : 'h-0.5 rounded-none bg-hairline',
-                  day.seconds > 0 &&
-                    (day.day === today ? 'bg-paint-full-sand' : 'bg-paint-full-sand/45'),
-                )}
-                style={day.seconds > 0 ? { height: `${(day.seconds / most) * 100}%` } : undefined}
+                className="absolute inset-x-0 bottom-[calc(var(--chart-top)/2)] h-px bg-muted"
               />
-            </li>
-          ))}
-        </ol>
-        <ol
-          aria-hidden
-          className="grid grid-cols-7 gap-2 text-center text-xs text-muted-foreground"
-        >
-          {week.map((day) => (
-            <li key={day.day} className={cn(day.day === today && 'font-semibold text-foreground')}>
-              {letter.format(dateOfDay(day.day))}
-            </li>
-          ))}
-        </ol>
-      </div>
-    </Link>
+              <span aria-hidden className="absolute inset-x-0 bottom-(--chart-top) h-px bg-muted" />
+              {week.map((day) => (
+                <li
+                  key={day.day}
+                  aria-label={t('profile.week.day', {
+                    day: named.format(dateOfDay(day.day)),
+                    time: time(day.minutes * 60),
+                  })}
+                  className="relative flex h-full flex-1 items-end"
+                >
+                  <span
+                    aria-hidden
+                    className={cn(
+                      'w-full rounded-t-[2px]',
+                      day.minutes > 0
+                        ? day.day === today
+                          ? 'bg-played'
+                          : 'bg-practised-day'
+                        : day.practised
+                          ? 'h-1 bg-practised-day'
+                          : 'h-0.5 bg-muted',
+                    )}
+                    style={
+                      day.minutes > 0
+                        ? ({
+                            height: `calc(var(--chart-top) * ${Math.min(1.1, day.minutes / (step * 2))})`,
+                          } satisfies CSSProperties)
+                        : undefined
+                    }
+                  />
+                </li>
+              ))}
+            </ol>
+            <ol aria-hidden className="flex gap-2 text-center text-xs text-muted-foreground">
+              {week.map((day) => (
+                <li
+                  key={day.day}
+                  className={cn('flex-1', day.day === today && 'font-semibold text-foreground')}
+                >
+                  {letter.format(dateOfDay(day.day))}
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </Link>
+    </ProfileSection>
   )
 }

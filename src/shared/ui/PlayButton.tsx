@@ -6,6 +6,7 @@ import { Button } from './primitives/button'
 /**
  * An example's Play as a round icon (or the picture of what it plays), named by what it plays, and
  * Stop behind its square while that sounds: beside a staff or a row, it says no more than its picture.
+ * A filled circle on the paper, no ring (the boards' example Play on `FILL`).
  */
 export function PlayButton({
   label,
@@ -30,7 +31,10 @@ export function PlayButton({
       aria-label={name}
       title={name}
       onClick={onClick}
-      className={cn('shrink-0 rounded-pill', className)}
+      className={cn(
+        'shrink-0 rounded-pill border-transparent bg-muted hover:bg-(--hairline)',
+        className,
+      )}
     >
       {playing ? (
         <Square aria-hidden className="size-4 fill-current" />

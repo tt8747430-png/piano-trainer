@@ -185,7 +185,8 @@ export function PageCanvas({
   const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
     // A grip (a note's, the loop's) drags itself. Not its pointer capture: a touch is captured by
     // whatever it lands on, so every touch would be a grip's.
-    const target = event.target as Element
+    const target = event.target
+    if (!(target instanceof Element)) return
     // The pill's buttons are their own: a press on them never drags the pages.
     if (target.closest('[data-slot="sheet-pill"]')) return
     if (event.button !== 0 || target.closest('[data-grip]')) return
@@ -196,10 +197,10 @@ export function PageCanvas({
     // A move what it is over claimed (bars chosen by a held finger) does not pan.
     if (!last || event.defaultPrevented) return
     const now = { x: event.clientX, y: event.clientY }
-    const all = [...pointers.current.entries()]
-    if (all.length >= 2) {
+    const [first, second] = [...pointers.current.entries()]
+    if (first && second) {
       // Two fingers: the canvas zoomed by how far apart they go, about the point between them.
-      const [[a, at], [, bt]] = all as [[number, typeof now], [number, typeof now]]
+      const [[a, at], [, bt]] = [first, second]
       const other = event.pointerId === a ? bt : at
       const before = Math.hypot(last.x - other.x, last.y - other.y)
       const after = Math.hypot(now.x - other.x, now.y - other.y)
@@ -251,7 +252,6 @@ export function PageCanvas({
         <Button
           variant="ghost"
           size="icon"
-          className="size-11 rounded-pill"
           aria-label={t('sheet.canvas.zoomOut')}
           title={t('sheet.canvas.zoomOut')}
           onClick={() => zoomBy(1 / ZOOM_STEP)}
@@ -264,7 +264,6 @@ export function PageCanvas({
         <Button
           variant="ghost"
           size="icon"
-          className="size-11 rounded-pill"
           aria-label={t('sheet.canvas.zoomIn')}
           title={t('sheet.canvas.zoomIn')}
           onClick={() => zoomBy(ZOOM_STEP)}
@@ -274,7 +273,6 @@ export function PageCanvas({
         <Button
           variant="ghost"
           size="icon"
-          className="size-11 rounded-pill"
           aria-label={t('sheet.canvas.fit')}
           title={t('sheet.canvas.fit')}
           onClick={() => {

@@ -8,13 +8,36 @@ the key's facts and chords one tab away, and the run playing at a tempo you can 
 - "fingerings as the printed books give them, more kinds, Hanon 1–20, a tempo ladder": fingering by hand from the
   books for every major and white-key minor, the honest note where none is standard; twenty scale kinds in five
   families; Hanon 1–20 and the tempo ladder under Practise this scale.
-- "The tabs say what is in them": Scale (7 notes) · Chords (I–vii°) · Key (2 flats).
+- **One page, no tabs** (owner, 2026-11-16: "are the tabs correct? do we need them. should we migrate them, should we
+  somehow merge them … what is already know by the user"; piano-chords-and-scales-app `006`–`013`, one scroll of the
+  staff, Triads and Sevenths): Scale · Chords · Key is gone. The Key tab repeated the Scale tab's staff to show two
+  rows, and the three tabs hid less than a screen between them. The page reads down once: the name and its signature
+  ("1 sharp"; the note names left, the keys and the staff name them), the run with its fingers, "Chords in G major" as
+  the song page's chord cards (the keys drawn, the name, the numeral; a row that scrolls on a phone, seven across on a
+  laptop), On the circle of fifths, then Practise in the Player (on a laptop the key's rows stand
+  under Practise in the right column). Replaces "The tabs say what is in them".
+- **The key on the circle of fifths, drawn** (owner, 2026-11-16: "what is with this relative minor, refactor htis. and
+  on the circle of fifths. this doenst make any sense"): the rows "Relative minor · E minor" and "On the circle of fifths ·
+  Between C and D" said in words what the circle shows. They are now the key's slice of the circle: three cells, IV ·
+  I · V, each major over its relative minor (C/Am · G/Em · D/Bm), the signature in each cell's corner, the scale's own
+  cell lit; a tap goes to that key; the heading "On the circle of fifths ›" opens the Circle of fifths. Counted by
+  fifths from the signature, so a harmonic or melodic minor names its neighbours rightly; modes and pentatonics have none.
 - "Every control says what it belongs to; octaves are a stepper; formulas are computed": Tonic, Scale, On the staff,
   Hands, Octaves (− 1 octave +), Direction; the notes and steps computed from the scale.
-- "No finger numbers on or under keys": fingers are on the staff and in the table, never on the keys.
+- "No finger numbers on or under keys": fingers are on the staff, each hand's on its own staff of the grand staff, never on the keys.
 - "Every Practice page has its own Settings page": the gear opens Scale settings (Fingering: As the scale · From the
   thumb; Rhythm; Count-in; All piano settings ›).
 - Today's bar of four icons goes; the gear is the only control at the right of the bar.
+- **The Chords page's shape** (loop, 2026-11-14; owner: "components consistent across the app (one piano, one dial,
+  one sheet shape)"; canvas v174, `r60_scales.py`): the keys edge to edge under a bar of glass buttons (Back ·
+  Scales and keys · Settings · Piano); the scale's name as its two pickers, tonic ⌄ and scale ⌄, as the chord's
+  are, with its signature and notes under them; the run engraved
+  with its fingers over the notes and "Right hand 1 2 3 1 2 3 4 5", "Left hand …" under it (or "No standard
+  fingering for this scale"); Practise G major in the Player as rows (Up and down hands together, Hands
+  separately, Tempo ladder, Contrary motion, Hanon 1–20); one floating bar as Chords': Tempo (72 BPM, − +) ·
+  Play scale ⌄ (Up, Up and down, Down; Octaves − n +) · Hands (Both, Right, Left). Replaces the Tonic, Scale,
+  Hands and Octaves rows and the Practise this scale bar. No Formula chips, no Structure, no Fingers · Degrees ·
+  Steps switch, no finger numbers on the keys.
 
 ## Today
 
@@ -40,3 +63,15 @@ lit; Fingering by hand; Practise this scale (Hands together, Tempo ladder, Hanon
 
 Sources: the ABRSM scale books' fingerings; Hanon, _The Virtuoso Pianist_; Piano Companion's scale page; musicca's
 scale and key-signature pages.
+
+## Ported (loop, 2026-11-14)
+
+- The page in the Chords page's shape, to canvas v174 (commit 0ec30560): keys at the top, the name as its two
+  pickers with its signature and notes, Scale · Chords · Key, the run with each hand's fingers in a line, the floating
+  bar Tempo · Play scale ⌄ · Hands.
+- Practise in the Player as the board's PRACT60, on the kit's `PractiseRows` (the Chords page's one implementation):
+  a plain heading, no fold; each row Play, the drill's name, the music it starts with ("C E · D F · E G …"), a
+  chevron. The two-line descriptions cut with "…", the drill icon and the level bars are gone.
+- The bar's Play split grows with its label (176 px at least): "Играть гамму" was cut on every phone.
+- Kept as the app has them (the board has no place for them yet): Compare, Start on, Fingering and Rhythm, under the
+  run; the staff scrolls sideways where the run is longer than the phone.

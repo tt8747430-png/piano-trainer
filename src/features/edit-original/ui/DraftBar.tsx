@@ -1,8 +1,18 @@
-import { CloudCheck, CloudOff, Ellipsis, History, LoaderCircle, Trash2, Upload } from 'lucide-react'
-import type { ReactElement } from 'react'
+import { CloudCheck, CloudOff, Ellipsis, History, LoaderCircle, Trash2 } from 'lucide-react'
+import { useState, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { ActionMenu, ButtonLink, RowButton, type MenuAction } from '@/shared/ui'
+import {
+  ActionMenu,
+  ActionRow,
+  ButtonLink,
+  GroupRow,
+  RowButton,
+  say,
+  SettingsGroup,
+  type MenuAction,
+  RoundButton,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { ContentDraft } from '../model/use-content-draft'
 import { useDraftAsk } from '../model/use-draft-ask'
@@ -60,8 +70,23 @@ export function DraftStatus({
   )
 }
 
-/** The item's Publish page (R29 B6): a router `Link` to it, and the way there from a menu or a row. */
-interface PublishPage {
+/**
+ * Where the score editor's draft stands, as its line under the menu's title on a phone and beside
+ * Close on a laptop (the EditorDraft boards' status): saved, saving or not saved, and while it is as
+ * published, Published · no changes. Not saved is said in crimson.
+ */
+export function DraftSaid({ draft }: { draft: DraftState }) {
+  const { t } = useTranslation('editor')
+  const unsaved = draft.saved === 'offline' || draft.saved === 'failed'
+  return (
+    <span role="status" className={unsaved ? 'text-destructive' : undefined}>
+      {t(statusKey(draft) ?? 'original.asPublished')}
+    </span>
+  )
+}
+
+/** The way to the item's Publish (R29 B6), a page in its Settings window: the bar's Publish, and a menu's or a row's. */
+interface ToPublish {
   readonly link: ReactElement
   readonly open: () => void
 }
@@ -80,7 +105,7 @@ export function DraftActions({
   unreadable,
   onReset,
   more = [],
-  publishPage,
+  toPublish,
 }: {
   draft: DraftActing
   title: string
@@ -89,7 +114,7 @@ export function DraftActions({
   /** What is said where a publish is refused for a draft that does not read as the item. */
   unreadable: string
   onReset: () => void
-  publishPage?: PublishPage | undefined
+  toPublish?: ToPublish | undefined
 }) {
   const { t } = useTranslation('editor')
   const ask = useDraftAsk()
@@ -99,19 +124,12 @@ export function DraftActions({
       <ActionMenu
         label={t('original.more')}
         align="end"
-        trigger={<Ellipsis aria-hidden />}
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-11 shrink-0 rounded-pill"
-            aria-label={t('original.more')}
-            title={t('original.more')}
-          />
-        }
+        trigger={null}
+        // The bar's glass circle, as every bar button on the boards (IB) and the song's ···.
+        render={<RoundButton label={t('original.more')} icon={Ellipsis} className="shrink-0" />}
         actions={[
           ...more,
-          ...(publishPage
+          ...(toPublish
             ? []
             : [
                 {
@@ -132,13 +150,13 @@ export function DraftActions({
           },
         ]}
       />
-      {publishPage ? (
-        <ButtonLink className="h-11 shrink-0 rounded-pill px-4" render={publishPage.link}>
+      {toPublish ? (
+        <ButtonLink className="shrink-0 px-4" render={toPublish.link}>
           {t('original.publish')}
         </ButtonLink>
       ) : (
         <Button
-          className="h-11 shrink-0 rounded-pill px-4"
+          className="shrink-0 px-4"
           disabled={!draft.drafted || busy}
           onClick={() => setAsked('publish')}
         >
@@ -157,48 +175,166 @@ export function DraftActions({
 }
 
 /**
- * The draft's acts as rows (R31-E), the score editor's gear's last group, Flat's one menu: Publish…
- * (its page, the rights ticked there), Versions, and Discard changes, asked first as the bar's menu
- * asks (`DraftDialogs`).
+ * Publishing in one tap (owner, 2026-11-17: "i dont like this publish button and why it opens a third
+ * … drawer"): published at once, its toast saying learners receive it, with Undo where an earlier
+ * version stands to restore (the version before published again, the changes kept among the
+ * Versions). The bar's Publish and Settings' Publish changes both act through it.
+ */
+function usePublishNow(draft: DraftActing, unreadable: string, onReset: () => void) {
+  const { t } = useTranslation('editor')
+  const [busy, setBusy] = useState(false)
+  const failed = (reason: string) =>
+    say(
+      reason === 'unreadable'
+        ? unreadable
+        : reason === 'offline'
+          ? t('original.actionOffline')
+          : t('original.actionFailed'),
+    )
+  const publish = async () => {
+    setBusy(true)
+    // The version learners have now, to publish again should the editor undo.
+    const kept = await draft.versions()
+    const before = kept.ok ? kept.value[0] : undefined
+    const result = await draft.publish()
+    setBusy(false)
+    if (!result.ok) return failed(result.reason)
+    say(
+      t('original.published'),
+      before
+        ? {
+            label: t('undo'),
+            onClick: () =>
+              void draft.restore(before.version).then((restored) => {
+                if (!restored.ok) return failed(restored.reason)
+                say(t('original.unpublishedChange'))
+                onReset()
+              }),
+          }
+        : undefined,
+    )
+  }
+  return { busy, publish }
+}
+
+/**
+ * Publish in Edit's bar (the kit's EDITR): the glass word just before Done; a tap publishes
+ * (`usePublishNow`). It reads Published, and waits, until the next change.
+ */
+export function PublishWord({
+  draft,
+  unreadable,
+  onReset,
+}: {
+  draft: DraftActing
+  /** What is said where a publish is refused for a draft that does not read as the item. */
+  unreadable: string
+  /** Opens the editor again on the item as published, after Undo. */
+  onReset: () => void
+}) {
+  const { t } = useTranslation('editor')
+  const { busy, publish } = usePublishNow(draft, unreadable, onReset)
+  return (
+    <Button
+      variant="bar"
+      className="shrink-0 px-4"
+      disabled={!draft.drafted || busy}
+      onClick={() => void publish()}
+    >
+      {t(draft.drafted ? 'original.publish' : 'original.publishedWord')}
+    </Button>
+  )
+}
+
+/**
+ * An item's Publishing in its Settings (owner, 2026-11-18, the board's THINGSET): where it stands
+ * (`status`), Versions (to restore one), and only while there are changes, Publish changes (one
+ * tap) and Discard changes (asked first).
+ */
+export function DraftPublishing({
+  draft,
+  title,
+  status,
+  unreadable,
+  onReset,
+}: {
+  draft: DraftActing
+  title: string
+  status: string | undefined
+  unreadable: string
+  onReset: () => void
+}) {
+  const { t } = useTranslation('editor')
+  const ask = useDraftAsk()
+  const { busy, publish } = usePublishNow(draft, unreadable, onReset)
+  return (
+    <>
+      <SettingsGroup flush title={t('original.draft')}>
+        <GroupRow label={t('publishPage.status')}>
+          <span className="text-muted-foreground">{status}</span>
+        </GroupRow>
+        <RowButton opens title={t('original.versions')} onClick={() => ask.setAsked('versions')} />
+      </SettingsGroup>
+      {draft.drafted ? (
+        <SettingsGroup flush>
+          <ActionRow
+            title={t('original.publishChanges')}
+            disabled={busy}
+            onClick={() => void publish()}
+          />
+          <ActionRow title={t('original.discard')} danger onClick={() => ask.setAsked('discard')} />
+        </SettingsGroup>
+      ) : null}
+      <DraftDialogs
+        ask={ask}
+        draft={draft}
+        title={title}
+        unreadable={unreadable}
+        onReset={onReset}
+      />
+    </>
+  )
+}
+
+/**
+ * The draft's acts as rows (R31-E), in the score editor's menu as the EditorDraft board draws them:
+ * `versions`, the first group's last row, opens the published versions to restore one; `publishing`,
+ * the last group, is Publish… (its page, the rights ticked there) and Discard changes, asked first as
+ * the bar's menu asks (`DraftDialogs`).
  */
 export function DraftRows({
+  part,
   draft,
   title,
   unreadable,
   onReset,
-  publishPage,
+  toPublish,
 }: {
+  part: 'versions' | 'publishing'
   draft: DraftActing
   title: string
   unreadable: string
   onReset: () => void
-  publishPage: PublishPage
+  toPublish: ToPublish
 }) {
   const { t } = useTranslation('editor')
   const ask = useDraftAsk()
   return (
     <>
-      <RowButton
-        title={t('original.publishMore')}
-        icon={Upload}
-        paint="sky"
-        onClick={publishPage.open}
-      />
-      <RowButton
-        title={t('original.versions')}
-        icon={History}
-        paint="sand"
-        onClick={() => ask.setAsked('versions')}
-      />
-      <RowButton
-        title={t('original.discard')}
-        icon={Trash2}
-        paint="sand"
-        destructive
-        disabled={!draft.drafted}
-        reason={t('original.nothingToDiscard')}
-        onClick={() => ask.setAsked('discard')}
-      />
+      {part === 'versions' ? (
+        <RowButton opens title={t('original.versions')} onClick={() => ask.setAsked('versions')} />
+      ) : (
+        <>
+          <RowButton opens title={t('original.publishMore')} onClick={toPublish.open} />
+          <RowButton
+            title={t('original.discard')}
+            destructive
+            disabled={!draft.drafted}
+            reason={t('original.nothingToDiscard')}
+            onClick={() => ask.setAsked('discard')}
+          />
+        </>
+      )}
       <DraftDialogs
         ask={ask}
         draft={draft}

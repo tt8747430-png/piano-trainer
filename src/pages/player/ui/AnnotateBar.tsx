@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ANNOTATION_TEXT_MAX, type Annotation, type AnnotationKind } from '@/entities/piece'
 import type { StaffId } from '@/shared/lib/notation'
-import { Segmented } from '@/shared/ui'
+import { Segmented, Toolbar } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
@@ -11,6 +11,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/
 /** The dynamics a learner marks, softest first. */
 const DYNAMICS = ['pp', 'p', 'mp', 'mf', 'f', 'ff'] as const
 const FINGERS = [1, 2, 3, 4, 5] as const
+/** A mark's key in the chooser: what it shows, and the mark it makes. */
+type Choice = readonly [string | number, Annotation]
 
 /** Each mark's face on its button: what it prints. */
 const FACE: Readonly<Record<AnnotationKind, string>> = {
@@ -85,22 +87,11 @@ export function AnnotateBar({
           </form>
         ) : (
           <div className="flex flex-wrap gap-1">
-            {(kind === 'fingering' ? FINGERS : DYNAMICS).map((value) => (
-              <Button
-                key={value}
-                variant="outline"
-                className="min-w-11"
-                onClick={() =>
-                  kind === 'fingering'
-                    ? mark({ at, staff, kind, value: value as (typeof FINGERS)[number] })
-                    : mark({
-                        at,
-                        staff,
-                        kind: 'dynamic',
-                        value: value as (typeof DYNAMICS)[number],
-                      })
-                }
-              >
+            {(kind === 'fingering'
+              ? FINGERS.map((value): Choice => [value, { at, staff, kind, value }])
+              : DYNAMICS.map((value): Choice => [value, { at, staff, kind: 'dynamic', value }])
+            ).map(([value, made]) => (
+              <Button key={value} variant="outline" className="min-w-11" onClick={() => mark(made)}>
                 {value}
               </Button>
             ))}
@@ -110,10 +101,9 @@ export function AnnotateBar({
     </Popover>
   )
   return (
-    <div
-      role="toolbar"
-      aria-label={t('annotate.bar')}
-      className="card absolute inset-x-0 top-2 z-20 mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-1 p-1 shadow-md"
+    <Toolbar
+      label={t('annotate.bar')}
+      className="card absolute inset-x-0 top-2 z-20 mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-1 p-1 elevation-float"
     >
       {staves.length > 1 ? (
         <Segmented
@@ -153,6 +143,6 @@ export function AnnotateBar({
         <Check data-icon="inline-start" />
         {t('annotate.done')}
       </Button>
-    </div>
+    </Toolbar>
   )
 }

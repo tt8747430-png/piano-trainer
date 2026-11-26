@@ -1,31 +1,60 @@
 import { barOf, useSettings } from '@/entities/settings'
 import { useTranslation } from 'react-i18next'
 import { PieceLink, type Entry } from '@/entities/piece'
-import { FavouriteToggle } from '@/features/manage-library'
 import { cn, useLongPress } from '@/shared/lib'
 import {
   menuOf,
-  POINTER_ONLY,
+  MoreMenu,
   ROW_BODY,
-  ROW_CARD,
   ROW_FLAT,
   ROW_LIBRARY_FACE,
   RowFace,
-  RowMore,
   swipeOf,
   SwipeRow,
   type RowAction,
 } from '@/shared/ui'
 import { PieceMark } from '@/widgets/piece-cover'
 import { useEntryFace } from '@/widgets/piece-list'
-import { useCardLook } from './card-look'
-
-/** A song's swipe (ADR 0106): to the right Favourite; to the left Move, then Archive at the edge. */
+import { useSongStatus } from './use-song-status'
 
 /**
- * A song of the library as a row (canvas 133, Mindscape's deck row): its small cover (its first
- * notes), its title over its composer and key, a link to its page; the ♡ at its end, one tap; its
- * More under a mouse, a swipe and a long press (Select with it chosen) under a finger.
+ * A song card's face as R72's SONGROW lays it: 16 between its parts, its tile 56 with 12 corners, its
+ * title on a 20 line and its two lines at their normal height, 2 apart.
+ */
+export const SONG_FACE =
+  'gap-4 py-3 pl-3 [&_[data-slot=row-tile]]:size-14 [&_[data-slot=row-tile]]:rounded-xl **:data-[slot=row-title]:leading-5 **:data-[slot=row-detail]:mt-0.5 **:data-[slot=row-detail]:leading-[normal] **:data-[slot=row-status]:mt-0.5 **:data-[slot=row-status]:leading-[normal]'
+
+/** A song's row shows its key under its title; where it stands is its own line. */
+const SONG_SHOWS = { key: true, chords: false, progress: false } as const
+
+/**
+ * What a song's card shows, read or chosen in Select (R72's SONGROW): its first notes, its title over
+ * its composer and key, and where it stands with when it was last played.
+ */
+export function SongCardFace({ entry }: { entry: Entry }) {
+  const { face } = useEntryFace(entry, SONG_SHOWS)
+  const status = useSongStatus(entry)
+  return (
+    <>
+      <PieceMark entry={entry} />
+      <RowFace {...face}>
+        {face.children}
+        <span
+          data-slot="row-status"
+          className="block truncate text-sm text-muted-foreground tabular-nums"
+        >
+          {status}
+        </span>
+      </RowFace>
+    </>
+  )
+}
+
+/**
+ * A song of the library as a row (the R72 board's SONGROW, Flat's library): its own card 88 tall, its
+ * small cover 56 (its first notes), its title over its composer and key and where it stands with when
+ * it was last played ("Bar 9 of 16 · Today"), a link to its page; ··· at its end holds its acts,
+ * Favourite among them; a swipe and a long press (Select with it chosen) under a finger too.
  */
 export function SongRow({
   entry,
@@ -41,9 +70,7 @@ export function SongRow({
   // What each swipe offers: the learner's (R29 B10, Settings › Swipe actions).
   const leading = useSettings((state) => barOf(state.bars, 'swipe.songs.leading'))
   const trailing = useSettings((state) => barOf(state.bars, 'swipe.songs.trailing'))
-  // What the place's look shows (R29 B9, Card style), and whether its rows share one card.
-  const { show, style } = useCardLook()
-  const { face } = useEntryFace(entry, show)
+  const { face } = useEntryFace(entry, SONG_SHOWS)
   const press = useLongPress({ onLongPress: onSelect })
   return (
     <li className="min-w-0">
@@ -52,18 +79,14 @@ export function SongRow({
         trailing={swipeOf(actions, trailing)}
         className="h-full"
       >
-        <div
-          className={cn(style.layout === 'list' ? ROW_FLAT : ROW_CARD, 'has-[>a:hover]:bg-muted')}
-        >
-          <PieceLink entry={entry} className={cn(ROW_BODY, ROW_LIBRARY_FACE)} {...press}>
-            <PieceMark entry={entry} />
-            <RowFace {...face} />
+        <div className={cn(cn(ROW_FLAT, 'min-h-22'), 'has-[>a:hover]:bg-muted')}>
+          <PieceLink entry={entry} className={cn(ROW_BODY, ROW_LIBRARY_FACE, SONG_FACE)} {...press}>
+            <SongCardFace entry={entry} />
           </PieceLink>
-          <FavouriteToggle piece={entry.id} />
-          <RowMore
+          <MoreMenu
+            on="row"
             label={t('library.moreOf', { name: face.title })}
             actions={menuOf(actions)}
-            className={POINTER_ONLY}
           />
         </div>
       </SwipeRow>

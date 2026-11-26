@@ -33,7 +33,7 @@ export interface MenuAction {
 }
 
 /** A menu's item: 44px tall, its icon, its name. */
-const ITEM = 'min-h-11 gap-3 rounded-control px-3 text-base [&_svg:not([class*=size-])]:size-5'
+const ITEM = '[&_svg:not([class*=size-])]:size-5'
 
 /**
  * A pull-down button (Apple's), a real menu (Base UI's Menu, memory-palaces' `FlyoutMenu`): a button
@@ -111,7 +111,7 @@ export function ActionMenu({
       <DropdownMenuContent
         aria-label={label}
         align={align}
-        className="w-auto max-w-[min(20rem,calc(100vw-2rem))] min-w-56 overscroll-contain rounded-control p-1.5"
+        className="w-auto max-w-[min(20rem,calc(100vw-2rem))] min-w-60 overscroll-contain"
       >
         {groups.map((group, at) => (
           <Fragment key={`${group.name ?? ''}-${at}`}>

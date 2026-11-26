@@ -55,7 +55,7 @@ care shows in a hundred small things done the same way.
    unless the owner named one. An area with older specs carries their standing rulings over. Top: **The rulings as they stand**, one bullet each, the owner's words
    quoted, the decision, its references. No history below it: when a later ruling replaces a line, the old line is deleted in the
    same edit (git keeps it).
-5. **Canvas:** one canvas holds every place (owner, v15): the area is a page of The ideal Piano Trainer, built by
+5. **Canvas, in the four phases** (sketch in the spec, wireframe, mockup, prototype; `owner-way/references/ui-and-mockups.md`, Building a screen, 4)**:** one canvas holds every place (owner, v15): the area is a page of The ideal Piano Trainer, built by
    `.scratch/r39/canvas/index.py`, its rows the phone boards, their Night boards, the laptop boards and theirs (canvas
    100–101). A place drawn elsewhere is merged in. Phone and laptop, drawn from
    the screenshots of step 2 with the real songs and the exact labels, every panel and page reachable and working
@@ -64,12 +64,13 @@ care shows in a hundred small things done the same way.
    the research: draw the recommended fix, then ask about what is still open (in a loop: decide it, ask nothing).
 6. **Each reaction from the owner** is one turn of this loop, in this order: re-read the rulings; change the canvas;
    run its browser test and look at the screenshots at both sizes; the polish pass (below); publish; write the ruling into the spec and a
-   bullet into the feedback log and a line in `.scratch/r39/plan/loop.md`; commit those files by path and
-   push (docs go at once); report.
+   bullet into the feedback log; commit those files by path and
+   push (docs go at once); one line saying what changed, then the next turn of the loop in the same message (in a
+   loop nothing ends the turn but "stop", `owner-way`).
 7. **When asked what is left to port:** a table in the spec, `# | canvas ruling | app today (files) | port`. Then list
    the stale lines found, and ask about what the canvas has no place for (acts, menus, old features), each with
    your recommendation (in a loop: decide each, ask nothing). Record each answer as a ruling: kept with its home, or removed with no home elsewhere.
-8. **Build** only after the owner's "ok": the port table's order, one item per commit; in a loop `owner-way`'s Loops and refactors (no tests or lint, the full visual pass, the build at the area's end, `main` when the owner asks), otherwise its gate. In
+8. **Build** after the owner's "ok" (in a loop at once, no "ok" awaited): the port table's order, one item per commit; in a loop `owner-way`'s Loops and refactors (no tests or lint, the full visual pass, the build at the area's end, `main` when the owner asks), otherwise its gate. In
    autonomous mode ("continue with all") or a loop the canvas and spec are still made first, then built without waiting;
    every open choice is decided, and no question is put to the owner.
 
@@ -104,7 +105,7 @@ Before every publish, and again before a port is called done:
    the screen's edge (R42 v81).
 
 1. **Walk every state** of what changed: rest, hover, focus, pressed, open, loading, empty, error, offline, a long
-   title, Russian, phone and laptop, Day and Night. Replay any motion at 10% speed (the browser's Animations panel).
+   title, phone and laptop, Day and Night, in English only (owner, 2026-11-16). Replay any motion at 10% speed (the browser's Animations panel).
 2. **On the phone,** the screen does one thing, and each section scrolls in one direction. Type and targets are
    no smaller than on the laptop. There is no card in a card. A choice made in context is a bottom sheet; something
    new opens a page. Both empty states are drawn: the first run points at the main action, and no results says so,
@@ -156,6 +157,7 @@ source; installing one is the owner's decision.
 | emilkowalski/skills `emil-design-eng`, `ui-cheatsheet` (MIT) | whether to animate by frequency, durations, origin-aware popovers |
 | benjitaylor/skills `stageshow` (MIT) | the five ways a canvas fails, the exacting designer's look |
 | benjitaylor/agentation (PolyForm Shield) | removed 2026-11-13; the owner's screenshots do its job |
+| Articles: Chawla (trends), Nurkhon (design engineer), Malewicz (UI direction), Babich (DESIGN.md) | glass bars low-key, never hidden; every width between phone and laptop holds; components handed over with every state; tokens by role with when-not; no trend textures |
 | Nine design skills the owner pasted, written for Figma (source and licence not stated) | rewritten for the canvas and installed: `product-designer`, `screen-design`, `state-expander`, `phone-from-laptop`, `ux-writing`, `interface-review`, `spacing-audit`, `design-consistency`, `board-cleanup` |
 | A Firecrawl video and its scrape skill (transcript) | search then scrape for research when the connector is attached; `proxy: "basic"`, never past a bot check; Interact not used |
 | Kevin: Matt Pocock's agent skills v1.3 (transcript) | grill the owner on the open decisions after two rejections of a part, recommendation with each; variants side by side for what talk cannot settle; retro into checks |
@@ -176,7 +178,8 @@ all" builds every finding in one turn.
 
 ## Reporting
 
-Answer first, in the owner's words for things. Then what changed (bullets), the checks run, the canvas link and
+In a loop there is no report and no end of turn (`owner-way`, Reporting): one line per item, then the next item.
+Outside a loop: answer first, in the owner's words for things. Then what changed (bullets), the checks run, the canvas link and
 version, the push state, and the open questions numbered, each with your recommendation, already drawn; in a loop or
 autonomous mode no questions, only what was decided. A question
 the owner answers with a question gets the facts from the code, the choices, and one recommendation.
@@ -199,7 +202,7 @@ area writes its phone and laptop boards from the same parts and state, and the r
 | A reference cited but never read | read its manual page; quote its labels |
 | Several options drawn when the owner asked for one improvement | build the recommendation; ask after, drawn |
 | Rejected patterns returning in new clothes (chips by kind, stars, two-a-row cards) | the feedback log's "Never" lines |
-| App code started while the design is open | the canvas until "ok"; then port |
+| App code started while the design is open | the canvas until "ok", then port; in a loop the canvas first, then port at once |
 | Docs left out of a turn | spec, log, drawing, commit, push: every turn |
 | A clean screen called done ("fine is the floor") | the evidence of care: status, undo, recovery, one pattern per situation |
 | A small tweak reported as a round | one bold decision per turn, named at the top of the report |

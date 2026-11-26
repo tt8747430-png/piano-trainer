@@ -1,0 +1,441 @@
+[
+ {
+  "name": "Bend",
+  "entityID": "ornament.brassBend",
+  "category": "kJazz",
+  "compositeID": "comp.brassBend",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false",
+  "realisation": "-1,0"
+ },
+ {
+  "name": "Cadence",
+  "entityID": "ornament.precompCadence",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompCadence",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,-1"
+ },
+ {
+  "name": "Cadence with turn",
+  "entityID": "ornament.precompCadenceWithTurn",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompCadenceWithTurn",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,-1"
+ },
+ {
+  "name": "Cadence with upper prefix",
+  "entityID": "ornament.precompCadenceUpperPrefix",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompCadenceUpperPrefix",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,-1"
+ },
+ {
+  "name": "Cadence with upper prefix and turn",
+  "entityID": "ornament.precompCadenceUpperPrefixTurn",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompCadenceUpperPrefixTurn",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,-1"
+ },
+ {
+  "name": "Descending slide",
+  "entityID": "ornament.precompDescendingSlide",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompDescendingSlide",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "false",
+  "usesNoteBelow": "true",
+  "realisation": "-1,-2"
+ },
+ {
+  "name": "Double cadence",
+  "entityID": "ornament.precompDoubleCadenceLowerPrefix",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompDoubleCadenceLowerPrefix",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "-1,0,1,0,1,0,1"
+ },
+ {
+  "name": "Double cadence with mordent",
+  "entityID": "ornament.precompPortDeVoixMordent",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompPortDeVoixMordent",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "-1,0,1,0,1,0,-1"
+ },
+ {
+  "name": "Double cadence with mordent and upper prefix",
+  "entityID": "ornament.precompInvertedMordentUpperPrefix",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompInvertedMordentUpperPrefix",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,-1,0,1,0,1,0,1,0,-1"
+ },
+ {
+  "name": "Double cadence with upper prefix",
+  "entityID": "ornament.precompDoubleCadenceUpperPrefix",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompDoubleCadenceUpperPrefix",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,-1,0,1,0,1"
+ },
+ {
+  "name": "Double cadence with upper prefix and turn",
+  "entityID": "ornament.precompDoubleCadenceUpperPrefixTurn",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompDoubleCadenceUpperPrefixTurn",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,-1"
+ },
+ {
+  "name": "Flip",
+  "entityID": "ornament.brassFlip",
+  "category": "kJazz",
+  "compositeID": "comp.brassFlip",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false",
+  "realisation": "-1,0"
+ },
+ {
+  "name": "Haydn ornament",
+  "entityID": "ornament.haydn",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentHaydn",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,-1"
+ },
+ {
+  "name": "Inverted turn",
+  "entityID": "ornament.turnInverted",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentTurnInverted",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "-1,0,1"
+ },
+ {
+  "name": "Inverted turn up",
+  "entityID": "ornament.turnUpS",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentTurnUpS",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "-1,0,1"
+ },
+ {
+  "name": "Jazz turn",
+  "entityID": "ornament.brassJazzTurn",
+  "category": "kJazz",
+  "compositeID": "comp.brassJazzTurn",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false",
+  "realisation": "-1,0,1"
+ },
+ {
+  "name": "Mordent",
+  "entityID": "ornament.mordent",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentMordent",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "false",
+  "usesNoteBelow": "true",
+  "realisation": "0,1"
+ },
+ {
+  "name": "Mordent with release",
+  "entityID": "ornament.precompMordentRelease",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompMordentRelease",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "false",
+  "usesNoteBelow": "true",
+  "realisation": "0,1"
+ },
+ {
+  "name": "Mordent with upper prefix",
+  "entityID": "ornament.precompMordentUpperPrefix",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompMordentUpperPrefix",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,1"
+ },
+ {
+  "name": "Pincé",
+  "entityID": "ornament.pinceCouperin",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPinceCouperin",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "false",
+  "usesNoteBelow": "true",
+  "realisation": "0,-1,0,-1"
+ },
+ {
+  "name": "Port de voix",
+  "entityID": "ornament.portDeVoixV",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPortDeVoixV",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false",
+  "realisation": "1"
+ },
+ {
+  "name": "Schleifer",
+  "entityID": "ornament.schleifer",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentSchleifer",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "-1,0,1"
+ },
+ {
+  "name": "Shake",
+  "entityID": "ornament.shake3",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentShake3",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false",
+  "realisation": "1,0,1"
+ },
+ {
+  "name": "Short trill",
+  "entityID": "ornament.shortTrill",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentShortTrill",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false",
+  "realisation": "0,-1"
+ },
+ {
+  "name": "Slide",
+  "entityID": "ornament.precompSlide",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompSlide",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false",
+  "realisation": "-2,-1"
+ },
+ {
+  "name": "Slide-trill (D'Anglebert)",
+  "entityID": "ornament.precompSlideTrillDAnglebert",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompSlideTrillDAnglebert",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true"
+ },
+ {
+  "name": "Slide-trill (Muffat)",
+  "entityID": "ornament.precompSlideTrillMuffat",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompSlideTrillMuffat",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true"
+ },
+ {
+  "name": "Slide-trill with one-note suffix (Marpurg)",
+  "entityID": "ornament.precompSlideTrillMarpurg",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompSlideTrillMarpurg",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true"
+ },
+ {
+  "name": "Slide-trill with two-note suffix (J.S. Bach)",
+  "entityID": "ornament.precompSlideTrillBach",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompSlideTrillBach",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true"
+ },
+ {
+  "name": "Slide-trill with two-note suffix (Muffat)",
+  "entityID": "ornament.precompSlideTrillSuffixMuffat",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompSlideTrillSuffixMuffat",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true"
+ },
+ {
+  "name": "Smear",
+  "entityID": "ornament.brassSmear",
+  "category": "kJazz",
+  "compositeID": "comp.brassSmear",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false",
+  "realisation": "-1,0"
+ },
+ {
+  "name": "Supported appoggiatura trill",
+  "entityID": "ornament.precompAppoggTrill",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompAppoggTrill",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false",
+  "realisation": "1,0,1,0,1"
+ },
+ {
+  "name": "Supported appoggiatura trill with two-note suffix",
+  "entityID": "ornament.precompAppoggTrillSuffix",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompAppoggTrillSuffix",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false"
+ },
+ {
+  "name": "Tremblement",
+  "entityID": "ornament.tremblement",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentTremblement",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "false",
+  "usesNoteBelow": "true",
+  "realisation": "0,-1,0,-1"
+ },
+ {
+  "name": "Tremblement appuyé",
+  "entityID": "ornament.tremblementCouperin",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentTremblementCouperin",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false",
+  "realisation": "1,0,1,0,1"
+ },
+ {
+  "name": "Trill",
+  "entityID": "ornament.trill",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentTrill",
+  "hasWavyLine": "true",
+  "multiSegmentLineEntityID": "multisegmentline.wiggleTrill",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false"
+ },
+ {
+  "name": "Trill with lower suffix",
+  "entityID": "ornament.precompTrillLowerSuffix",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompTrillLowerSuffix",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true"
+ },
+ {
+  "name": "Trill with mordent",
+  "entityID": "ornament.precompTrillWithMordent",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompTrillWithMordent",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,1,0,1,0,-1"
+ },
+ {
+  "name": "Trill with two-note suffix (Dandrieu)",
+  "entityID": "ornament.precompTrillSuffixDandrieu",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompTrillSuffixDandrieu",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false"
+ },
+ {
+  "name": "Turn",
+  "entityID": "ornament.turn",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentTurn",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,-1"
+ },
+ {
+  "name": "Turn up",
+  "entityID": "ornament.turnUp",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentTurnUp",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "1,0,-1"
+ },
+ {
+  "name": "Turn with slash",
+  "entityID": "ornament.turnSlash",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentTurnSlash",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true",
+  "realisation": "-1,0,1"
+ },
+ {
+  "name": "Turn-trill (D'Anglebert)",
+  "entityID": "ornament.precompTurnTrillDAnglebert",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompTurnTrillDAnglebert",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true"
+ },
+ {
+  "name": "Turn-trill with two-note suffix (J.S. Bach)",
+  "entityID": "ornament.precompTurnTrillBach",
+  "category": "kBaroqueAndClassical",
+  "compositeID": "comp.ornamentPrecompTurnTrillBach",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "true"
+ },
+ {
+  "name": "Vibrato Bar Dip",
+  "entityID": "ornament.vibratoBarDip",
+  "category": "kGuitar",
+  "compositeID": "comp.guitarVibratoBarDip",
+  "hasWavyLine": "false",
+  "usesNoteAbove": "true",
+  "usesNoteBelow": "false"
+ }
+]

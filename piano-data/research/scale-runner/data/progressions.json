@@ -1,0 +1,35 @@
+{
+  "_source": "App.framework/App (Dart AOT snapshot string table, arm64 slice)",
+  "_note": "EXACT preset names used by Scale Running ('Follow a chord progression'). Numbers are scale degrees. Chord qualities per degree not recoverable (code).",
+  "presets": [
+    "Hold C, run C Ionian (single chord / plain run)",
+    "2-5-1",
+    "2-5-1 (Minor)",
+    "2-5-1 (Minor - Jazz)",
+    "2-5-1 (Tritone Substitution)",
+    "2-5-1-6 (Tritone Substitution - Alternative)",
+    "1-6-2-5",
+    "1-6-2-5 (Alternative)",
+    "1-4-5",
+    "1-5-6-4",
+    "12-bar blues",
+    "1-2-5 (formula string present; role uncertain)"
+  ],
+  "keyAdvance": {
+    "By fifths": "Round the circle of fifths once. <n> keys.",
+    "Chromatic": "Up a semitone at a time for an octave, then back down. 25 keys.",
+    "_other": "'Key change', 'How the key moves', 'How the key advances after each full pass of the progression'; enum values present: fifths, random, fixed (inferred options)"
+  },
+  "jamFamilies": [
+    "Triads",
+    "7th chords",
+    "9th chords",
+    "Sus2 / Sus4"
+  ],
+  "jamFamilyEnumValues": [
+    "triad",
+    "seventh",
+    "ninth",
+    "sus"
+  ]
+}

@@ -2,7 +2,7 @@ import { noteName, TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
 import type { StaffId, TimedMusic } from '@/shared/lib/notation'
 
 /** A written onset's column on the staff: where a tap on it plays the notes struck there. */
-export interface NoteColumn {
+interface NoteColumn {
   readonly tick: Tick
   /** From the half-way point to the onset before to the half-way point to the next (CSS pixels). */
   readonly left: number

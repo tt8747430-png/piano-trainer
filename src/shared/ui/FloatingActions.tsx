@@ -4,7 +4,6 @@ import {
   useContext,
   useEffect,
   useId,
-  useLayoutEffect,
   useState,
   type ComponentProps,
   type ReactElement,
@@ -12,28 +11,35 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
+import { cn, useRootSize } from '@/shared/lib'
 import { ButtonLink } from './ButtonLink'
 import { FloatingContext } from './floating-context'
+import { KindTile } from './KindTile'
 import { Button } from './primitives/button'
 
+/** The transport's glyphs, filled wherever they stand (the boards' Play and Stop). */
+const filled = (Icon: LucideIcon) => (Icon === Play || Icon === Square ? 'fill-current' : undefined)
+
 /**
- * The actions stand in a row along the foot, in its middle, so none climbs over the page; beside the
+ * The actions stand in a row along the foot at its trailing end, so none climbs over the page; a bar
+ * (`FloatingBar`) spans the foot and centres itself in it. Beside the
  * page (`aside`: keys docked at the foot of a phone on its side or of a laptop) in a column at its
  * right, over the keys.
  */
 const ALIGN = 'flex-row items-center aside:flex-col'
 /**
- * A dial opens as a card over its button at the foot, growing from it, centred on it. Beside the
+ * A dial opens as a card over its button at the foot, growing from its bottom right. Beside the
  * page, where the height is short, it opens beside its button towards the page, from its top down.
  */
-const DIAL_ALIGN =
-  'left-1/2 -translate-x-1/2 origin-bottom aside:right-full aside:left-auto aside:mr-3 aside:translate-x-0 aside:origin-top-right'
+const DIAL_ALIGN = 'right-0 origin-bottom-right aside:right-full aside:mr-3 aside:origin-top-right'
 const DIAL_ASIDE = 'aside:top-0 aside:bottom-auto aside:mb-0'
 /** The page keeps this far clear of the actions: their row's margin over the foot. */
 const FLOATING_GAP_PX = 12
 /** The room the actions take along one side, their gap included; none while there are none. */
-const room = (px: number | undefined) => `${px ? px + FLOATING_GAP_PX : 0}px`
+const room = (px: number) => `${px ? px + FLOATING_GAP_PX : 0}px`
+
+/** The page pads clear of them by that room, both ways. */
+const ROOM = { block: '--floating-block', inline: '--floating-inline', write: room }
 
 /** What a tap may land on and still be the page's own, not a tap on the page: a control or the keys. */
 const CONTROLS =
@@ -41,13 +47,13 @@ const CONTROLS =
 
 /**
  * The one row every screen's floating actions stand in, at the foot of the screen over the tab bar
- * and the keys docked there, the width of the screen beside a rail or a sidebar, in its middle, each
+ * and the keys docked there, the width of the screen beside a rail or a sidebar, at its trailing end, each
  * action its icon with its name as its tooltip (ADR 0061). Where keys
  * are docked on a screen wide for its height (`aside`), they stand in a column at its side instead,
  * so the little height left stays the page's. The page pads clear of them by the room they take,
  * which the host measures (`--floating-block`, `--floating-inline`; `theme.css` says which counts).
- * A tap on the page (on no control and on no key) folds them away out of the reading's way, and the
- * next brings them back; a new `screen` brings them back too.
+ * A finger's tap on the page (on no control and on no key) folds them away out of the reading's way,
+ * and the next brings them back; a new `screen` brings them back too. A mouse's click folds nothing.
  */
 export function FloatingHost({
   screen,
@@ -68,6 +74,12 @@ export function FloatingHost({
   // A tap on the screen's page, heard at the document: the page's own markup stays as it is.
   useEffect(() => {
     const tap = (event: MouseEvent) => {
+      // A finger's tap only: a mouse's click on the page is a reader's, and hides nothing.
+      if (
+        !(event instanceof PointerEvent) ||
+        (event.pointerType !== 'touch' && event.pointerType !== 'pen')
+      )
+        return
       const target = event.target
       if (!(target instanceof Element) || !target.closest('main') || target.closest(CONTROLS))
         return
@@ -78,25 +90,7 @@ export function FloatingHost({
     document.addEventListener('click', tap)
     return () => document.removeEventListener('click', tap)
   }, [])
-  // Measured before the first paint, so the page never pads for them a frame late and reflows (A31).
-  useLayoutEffect(() => {
-    if (!column) return
-    const root = document.documentElement.style
-    const box = column.getBoundingClientRect()
-    root.setProperty('--floating-block', room(box.height))
-    root.setProperty('--floating-inline', room(box.width))
-    const observer = new ResizeObserver(([entry]) => {
-      const size = entry?.borderBoxSize[0]
-      root.setProperty('--floating-block', room(size?.blockSize))
-      root.setProperty('--floating-inline', room(size?.inlineSize))
-    })
-    observer.observe(column)
-    return () => {
-      observer.disconnect()
-      root.removeProperty('--floating-block')
-      root.removeProperty('--floating-inline')
-    }
-  }, [column])
+  useRootSize(column, ROOM)
   return (
     <FloatingContext.Provider value={{ column }}>
       {children}
@@ -104,15 +98,19 @@ export function FloatingHost({
         data-slot="floating-host"
         data-hidden={hidden || undefined}
         className={cn(
-          'pointer-events-none fixed inset-x-0 bottom-docked z-20 mb-3 flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
-          'justify-center aside:justify-end',
+          'pointer-events-none fixed inset-x-0 bottom-nav-bar z-20 mb-(--floating-gap) aside:bottom-docked flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pr-gutter-safe lg:left-sidebar lg:mb-8 lg:px-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed lg:group-data-[sidebar=focus]/main:left-0',
+          'justify-end',
         )}
       >
         <div
           ref={setColumn}
           data-slot="floating-actions"
           inert={hidden}
-          className={cn('vt-floating flex gap-3', !hidden && '[&>*]:pointer-events-auto', ALIGN)}
+          className={cn(
+            'vt-floating flex w-full justify-end gap-3 aside:w-auto',
+            !hidden && '[&>*>*]:pointer-events-auto',
+            ALIGN,
+          )}
         />
       </div>
     </FloatingContext.Provider>
@@ -120,7 +118,8 @@ export function FloatingHost({
 }
 
 /**
- * A screen's actions in the thumb's reach, floating at the foot of the screen over the page: its
+ * A screen's actions in the thumb's reach, floating at the foot of the screen over the page, at its bottom right as the
+ * canvas's New (Material 3's FAB, owner 2026-11-15): its
  * main one a large round `Fab`, the rest folded into a `SpeedDial` beside it. Every part of a screen
  * that floats an action stands in the host's one column, the first to come highest, so none covers
  * another. The page under it pads its foot clear of them.
@@ -142,7 +141,16 @@ export function FloatingActions({
   const { column } = useContext(FloatingContext)
   if (!column) return null
   return createPortal(
-    <div className={cn('flex gap-3', ALIGN, last && 'order-last', className)}>{children}</div>,
+    <div
+      className={cn(
+        'flex w-full justify-end gap-3 aside:w-auto',
+        ALIGN,
+        last && 'order-last',
+        className,
+      )}
+    >
+      {children}
+    </div>,
     column,
   )
 }
@@ -154,11 +162,11 @@ export function FloatingActions({
 const PRESS =
   'transition-[scale,box-shadow,background-color,filter] duration-150 ease-out active:scale-96'
 /** The main floating action: 56px, honey, the highest shade. */
-const FAB = `size-14 rounded-pill elevation-2 hover:elevation-3 active:elevation-1 [&_svg:not([class*=size-])]:size-6 ${PRESS}`
+const FAB = `size-14 rounded-pill elevation-float [&_svg:not([class*=size-])]:size-6 ${PRESS}`
 /** The main action with its name beside its icon (an extended FAB). */
-const FAB_EXTENDED = `h-14 gap-2 rounded-pill px-5 pl-4 elevation-2 hover:elevation-3 active:elevation-1 [&_svg:not([class*=size-])]:size-6 ${PRESS}`
+const FAB_EXTENDED = `h-14 gap-2 rounded-pill px-5 pl-4 elevation-float [&_svg:not([class*=size-])]:size-6 ${PRESS}`
 /** A second action: 48px, the raised paper with its soft line, a lower shade. */
-export const MINI_FAB = `size-12 rounded-pill border-border bg-raised elevation-1 hover:bg-muted hover:elevation-2 [&_svg:not([class*=size-])]:size-5 ${PRESS}`
+const MINI_FAB = `size-12 rounded-pill border-border bg-raised elevation-float hover:bg-muted [&_svg:not([class*=size-])]:size-5 ${PRESS}`
 /** A second action with its words: a 48px pill of the same paper. */
 
 /**
@@ -178,13 +186,13 @@ export function Fab({
   if (extended)
     return (
       <Button size="lg" className={cn(FAB_EXTENDED, className)} {...props}>
-        <Icon data-icon="inline-start" aria-hidden />
+        <Icon data-icon="inline-start" aria-hidden className={filled(Icon)} />
         {label}
       </Button>
     )
   return (
     <Button size="icon" aria-label={label} title={label} className={cn(FAB, className)} {...props}>
-      <Icon aria-hidden />
+      <Icon aria-hidden className={filled(Icon)} />
     </Button>
   )
 }
@@ -206,7 +214,7 @@ export function FabLink({
   if (extended)
     return (
       <ButtonLink size="lg" className={cn(FAB_EXTENDED, className)} {...props}>
-        <Icon data-icon="inline-start" aria-hidden />
+        <Icon data-icon="inline-start" aria-hidden className={filled(Icon)} />
         {label}
       </ButtonLink>
     )
@@ -218,59 +226,8 @@ export function FabLink({
       className={cn(FAB, className)}
       {...props}
     >
-      <Icon aria-hidden />
+      <Icon aria-hidden className={filled(Icon)} />
     </ButtonLink>
-  )
-}
-
-/**
- * A screen's one Play as its main floating button, named by what it plays, Stop while it sounds; the
- * screen's Enter plays it (`usePlayKey`).
- */
-export function PlayFab({
-  label,
-  playing,
-  onClick,
-}: {
-  label: string
-  playing: boolean
-  onClick: () => void
-}) {
-  const { t } = useTranslation('common')
-  return (
-    <Fab
-      label={playing ? t('stop') : label}
-      icon={playing ? Square : Play}
-      aria-pressed={playing}
-      onClick={onClick}
-    />
-  )
-}
-
-/**
- * A second action beside the main one, always in sight: its icon on a round button, its name its
- * tooltip.
- */
-export function FabPill({
-  label,
-  icon: Icon,
-  className,
-  ...props
-}: { label: string; icon: LucideIcon } & Omit<
-  ComponentProps<typeof Button>,
-  'children' | 'size' | 'variant'
->) {
-  return (
-    <Button
-      variant="surface"
-      size="icon"
-      aria-label={label}
-      title={label}
-      className={cn(MINI_FAB, className)}
-      {...props}
-    >
-      <Icon aria-hidden />
-    </Button>
   )
 }
 
@@ -336,7 +293,7 @@ export function SpeedDial({
           aria-expanded={open}
           aria-controls={open ? id : undefined}
           onClick={() => (open ? close() : setShown('open'))}
-          className={cn(main ? FAB : MINI_FAB, open && !main && 'bg-muted elevation-2')}
+          className={cn(main ? FAB : MINI_FAB, open && !main && 'bg-muted')}
         >
           <Icon
             aria-hidden
@@ -355,7 +312,7 @@ export function SpeedDial({
             inert={!open}
             data-closing={!open || undefined}
             className={cn(
-              'dial-card absolute bottom-full mb-3 flex w-max max-w-[calc(100vw-2*var(--gutter))] flex-col rounded-card border border-border bg-raised p-1.5 elevation-3',
+              'dial-card absolute bottom-full mb-4 flex w-max min-w-50 max-w-[calc(100vw-2*var(--gutter))] flex-col gap-0.5 glass rounded-menu p-1.5',
               DIAL_ASIDE,
               DIAL_ALIGN,
             )}
@@ -397,7 +354,7 @@ export function SpeedDialAction({
   // Named by its label; its line says what it does, as its description.
   const named = { 'aria-label': label, 'aria-describedby': detail ? detailId : undefined }
   const look = cn(
-    'w-full justify-start gap-3 rounded-control px-2 pr-5 text-left text-base font-semibold text-foreground transition-colors active:bg-muted',
+    'w-full justify-start gap-3 rounded-thumb pr-4 pl-2 text-left text-base font-medium text-foreground transition-colors active:bg-muted',
     detail ? 'h-auto min-h-14 py-2' : 'h-12',
   )
   const choose = () => {
@@ -406,12 +363,7 @@ export function SpeedDialAction({
   }
   const face = (
     <>
-      <span
-        aria-hidden
-        className="grid size-9 shrink-0 place-items-center rounded-control bg-muted text-foreground [&_svg]:size-5"
-      >
-        <Icon />
-      </span>
+      <KindTile icon={Icon} />
       <span className="flex min-w-0 flex-col">
         <span className="truncate">{label}</span>
         {detail ? (

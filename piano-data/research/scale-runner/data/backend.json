@@ -1,0 +1,66 @@
+{
+  "_source": "App.framework/App (Dart AOT snapshot string table, arm64 slice) + Info.plist",
+  "_note": "Table/RPC names EXACT. Keys/tokens exist (Supabase publishable key, RevenueCat Apple API key, Google OAuth client id, Firebase GoogleService-Info.plist) but are deliberately not reproduced.",
+  "supabase": {
+    "host": "<project>.supabase.co (REST, realtime, storage, functions, auth endpoints)",
+    "tables": [
+      "profiles",
+      "friendships",
+      "invites",
+      "applause",
+      "streaks",
+      "mode_stats",
+      "weekly_stats",
+      "device_stats",
+      "user_settings",
+      "library_items",
+      "voicings",
+      "voicing_folders",
+      "voicing_tags",
+      "voicing_customs",
+      "voicing_deleted",
+      "app_promos"
+    ],
+    "rpcOrFunctions": [
+      "accept_invite_tx",
+      "invite_preview",
+      "delete_account"
+    ],
+    "selectExample": "streak_days, created_at, seen_at, from:profiles!applause_from_id_fkey(id, display_name, avatar_seed)",
+    "columnsSeen": [
+      "avatar_seed",
+      "display_name",
+      "current_streak",
+      "best_streak?",
+      "total_days",
+      "streak_days",
+      "days_mask",
+      "iso_week",
+      "week_start",
+      "user_a",
+      "user_b",
+      "from_id",
+      "to_id",
+      "inviter_id",
+      "invited_at",
+      "seen_at",
+      "ends_at",
+      "device_id",
+      "updated_at",
+      "created_at"
+    ]
+  },
+  "inviteLinks": "https://scalerunner.c1gnus.com/invite (+ custom scheme scalerunner://)",
+  "revenuecat": {
+    "productId": "com.scalerunner.app.pro",
+    "entitlement_inferred": "pro",
+    "packageType": "lifetime (one-time purchase)",
+    "apiKey": "present (appl_…), not reproduced"
+  },
+  "signIn": [
+    "Sign in with Apple",
+    "Sign in with Google",
+    "Sign in with email (Supabase OTP/magic link, inferred)"
+  ],
+  "firebase": "firebase_core only (no Analytics/Crashlytics packages found)"
+}

@@ -6,13 +6,7 @@ export {
   type PracticeState,
 } from './practice-machine'
 export { SONG_VERSIONS, type SongVersion } from './choice'
-export {
-  OWN_PACE_MODES,
-  PRACTICE_MODES,
-  waitsForNotes,
-  type OwnPaceMode,
-  type PracticeMode,
-} from './practice-mode'
+export { PRACTICE_MODES, waitsForNotes, type PracticeMode } from './practice-mode'
 export { usePractice, type Practice } from './use-practice'
 export { FULL_MIX, partGain, type Mix, type MixPart } from './mix'
 export {
@@ -55,9 +49,9 @@ export {
 } from './beats'
 export { useBeat } from './use-beat'
 
-export { arrangePiece, isSingleStaff, ownChoice, simplifies } from './arrange-piece'
+export { arrangePiece, defaultPattern, isSingleStaff, ownChoice, simplifies } from './arrange-piece'
 export type { PracticeChoice } from './choice'
-export { diagramMarks, keysRange, pedalKeys, playerRange, practiceMarks } from './marks'
+export { diagramMarks, keysRange, pedalKeys, playerRange, practiceMarks, songRange } from './marks'
 export { spellPitchClass } from './note-names'
 export { arrangeWalk, WALK, type WalkChoice } from './walk'
 export { arrangeChromatic, walkOpening } from './chromatic'
@@ -74,4 +68,3 @@ export {
 export { arrangeProgression } from './progression'
 export { PROGRESSION, type ProgressionChoice } from './progression-choice'
 export { walkingFit } from './walking'
-export { PractiseChords } from './ui/PractiseChords'

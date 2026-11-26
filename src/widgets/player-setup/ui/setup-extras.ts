@@ -19,7 +19,7 @@ export interface SettingsPageRow extends SettingsRow {
  * A row leading to a page that is a setting's home elsewhere (R32: the On-screen piano's page, the
  * home of every on-screen piano's settings): `render` is its router `Link`.
  */
-export interface SettingsLinkRow extends SettingsRow {
+interface SettingsLinkRow extends SettingsRow {
   readonly render: ReactElement
 }
 
@@ -47,8 +47,6 @@ export interface SettingsExtras {
   /** Rows to a setting's home elsewhere, ranked among the pages. */
   readonly links?: readonly SettingsLinkRow[]
   readonly acts: readonly SettingsAct[]
-  /** Told when the sheet opens or closes as a panel at the right (a laptop): the screen makes room. */
-  readonly onPanel?: (open: boolean) => void
 }
 
 export const SettingsExtrasContext = createContext<SettingsExtras>({ pages: [], acts: [] })

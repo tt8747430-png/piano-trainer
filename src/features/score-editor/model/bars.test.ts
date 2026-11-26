@@ -6,11 +6,11 @@ import {
   deleteBars,
   insertBar,
   insertBarBefore,
-  joinLine,
   newLine,
   pasteBars,
   setBarTicks,
   setPickup,
+  toggleLine,
 } from './bars'
 import { deleteChord } from './chords'
 
@@ -225,10 +225,10 @@ describe('setBarTicks', () => {
 })
 
 describe('lines', () => {
-  it('starts a new line at a bar, and joins it to the next', () => {
+  it('starts a new line at a bar, and a system break there again joins it', () => {
     const split = newLine(sung, 1)
     expect(form(split)).toEqual([[['G@0'], ['C@0'], ['D@0', 'G@0']]])
-    expect(form(joinLine(split, 0))).toEqual([
+    expect(form(toggleLine(split, 1))).toEqual([
       [
         ['G@0', 'C@0'],
         ['D@0', 'G@0'],

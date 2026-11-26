@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { CHORD_QUALITIES, chordRootSpelling, qualityIntervals, type ChordQuality } from './chord'
+import { qualityIntervals } from './chord'
+import { CHORD_QUALITIES, chordRootSpelling, type ChordQuality } from './chord-quality'
 import { note } from './note'
 import { parseChordSymbol } from './chord-symbol'
 import { pitchClass } from './pitch'

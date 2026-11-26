@@ -1,10 +1,12 @@
 export {
   AccountSettingsPage,
+  AppearancePage,
   ChangePasswordPage,
+  EmailPage,
   EditProfilePage,
   ProfilePrivacyPage,
   GeneralPage,
-  OnScreenPianoPage,
+  PageLayoutsPage,
   FeedbackPage,
   SelectToolbarPage,
   SwipeActionsPage,
@@ -13,11 +15,6 @@ export {
 } from '@/pages/settings'
 export { HowToUsePage } from '@/pages/how-to-use'
 export { AboutPage } from '@/pages/about'
-export {
-  ChordFinderSettingsPage,
-  ProgressionsSettingsPage,
-  ScalesSettingsPage,
-} from '@/pages/practice-settings'
 export { MidiLogPage } from '@/pages/midi-log'
 export { MidiSettingsPage, TimingCalibrationPage } from '@/pages/midi-settings'
 export {

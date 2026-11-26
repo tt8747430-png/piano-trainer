@@ -38,7 +38,7 @@ export const BAR_LIMITS: Readonly<
 
 /** What each surface holds until the learner changes it: today's. */
 export const DEFAULT_BARS: Readonly<Record<BarSurface, readonly BarAct[]>> = {
-  'select.songs': ['favourite', 'move', 'archive', 'delete'],
+  'select.songs': ['move', 'favourite', 'archive'],
   'swipe.songs.leading': ['favourite'],
   'swipe.songs.trailing': ['move', 'archive'],
   'swipe.folders.leading': ['edit'],
@@ -77,6 +77,3 @@ export const barAvailable = (surface: BarSurface, bar: readonly BarAct[]): reado
 /** The learner's bar for a surface: theirs where they changed it, else its default. */
 export const barOf = (bars: Bars, surface: BarSurface): readonly BarAct[] =>
   bars[surface] ?? DEFAULT_BARS[surface]
-
-export const isBarSurface = (value: string): value is BarSurface =>
-  (BAR_SURFACES as readonly string[]).includes(value)

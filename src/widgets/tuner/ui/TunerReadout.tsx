@@ -1,14 +1,14 @@
+import { MicOff } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectTuner, useSettings } from '@/entities/settings'
 import { openBrowserMicrophone, type OpenMicrophone } from '@/shared/api/audio'
 import { cn } from '@/shared/lib'
 import { centsOff, detectPitch, nearestNote } from '@/shared/lib/music'
-import { Button } from '@/shared/ui/primitives/button'
+import { Said } from '@/shared/ui'
 
 /** Each key's name, sharps for the black keys, as a tuner reads them. */
 const NAMES = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'] as const
-const keyName = (key: number) => `${NAMES[((key % 12) + 12) % 12]}${Math.floor(key / 12) - 1}`
 
 /** How often the tuner listens, in ms. */
 const EVERY_MS = 100
@@ -25,22 +25,29 @@ type Heard =
       readonly cents: number
     }
 
+/** The gauge's ticks, every 5 cents from −50 to +50 over 120°, the 25s longer. */
+const TICKS = Array.from({ length: 21 }, (_, place) => {
+  const cents = -50 + place * 5
+  const angle = (cents / 50) * 60 * (Math.PI / 180)
+  const from = cents % 25 === 0 ? 110 : 120
+  const at = (radius: number) =>
+    `${(160 + Math.sin(angle) * radius).toFixed(1)} ${(170 - Math.cos(angle) * radius).toFixed(1)}`
+  return `M${at(from)}L${at(134)}`
+})
+
 /**
- * The Tuner's face (R29 B8, B11), the same in the Player's sheet and on its own page: the microphone
- * listened to while `listening`, the note heard, a needle ±50 cents from it, and its frequency, read
- * against the A4 saved on the Tuner's Settings page. Says so where the microphone is refused or
- * missing.
+ * The Tuner's face (canvas 180), its page's readout, listening while it is open, as the board's
+ * `NOTE` and `GAUGE`: the note heard large with its octave lowered, how far it is in words (In tune in
+ * grass, else so many cents flat or sharp) and its frequency; under it the needle on an arc ±50 cents
+ * with the in-tune band, read against the A4 the Tuner keeps. While nothing is heard the note is a
+ * faint dash, the word Listening and the needle at rest, "Play or sing a note" under the arc; where the
+ * microphone is refused or missing, the kit's empty state, No microphone with Try again, in its place.
  */
 export function TunerReadout({
-  listening,
   microphone = openBrowserMicrophone,
-  large = false,
 }: {
-  listening: boolean
   /** Where its sound comes from: the browser's microphone, or a test's. */
   microphone?: OpenMicrophone
-  /** On its own page: the note and needle larger. */
-  large?: boolean
 }) {
   const { t } = useTranslation('player')
   const { a4 } = useSettings(selectTuner)
@@ -48,7 +55,6 @@ export function TunerReadout({
   // Each Try again asks for the microphone afresh.
   const [attempt, setAttempt] = useState(0)
   useEffect(() => {
-    if (!listening) return
     let closed = false
     let release = () => {}
     let timer: ReturnType<typeof setInterval> | undefined
@@ -75,62 +81,127 @@ export function TunerReadout({
       release()
       setHeard({ kind: 'listening' })
     }
-  }, [listening, microphone, a4, attempt])
+  }, [microphone, a4, attempt])
+  const pitch = heard.kind === 'pitch' ? heard : null
+  const cents = pitch ? Math.max(-50, Math.min(50, pitch.cents)) : 0
+  const off = pitch ? Math.round(pitch.cents) : 0
+  const tuned = pitch !== null && Math.abs(pitch.cents) <= IN_TUNE
+  // At rest, a faint dash with no octave, as the board's quiet state.
+  const name = pitch ? NAMES[((pitch.key % 12) + 12) % 12] : '–'
+  const octave = pitch ? Math.floor(pitch.key / 12) - 1 : 4
   if (heard.kind === 'denied')
     return (
-      <div role="alert" className="flex flex-col items-center gap-4 text-center">
-        <p className="text-pretty text-muted-foreground">{t('tuner.denied')}</p>
-        <Button variant="outline" onClick={() => setAttempt((count) => count + 1)}>
-          {t('tuner.retry')}
-        </Button>
+      // 40 around it on a laptop, as the board's (the kit's empty state stands 56).
+      <div role="alert" data-fill className="flex w-full flex-1 flex-col justify-center lg:-my-4">
+        <Said
+          icon={MicOff}
+          title={t('tuner.noMicrophone')}
+          description={t('tuner.denied')}
+          primary
+          action={
+            <button type="button" onClick={() => setAttempt((count) => count + 1)}>
+              {t('tuner.retry')}
+            </button>
+          }
+        />
       </div>
     )
-  const cents = heard.kind === 'pitch' ? Math.max(-50, Math.min(50, heard.cents)) : 0
-  const tuned = heard.kind === 'pitch' && Math.abs(heard.cents) <= IN_TUNE
   return (
-    <div className="flex w-full flex-col items-center gap-5">
-      <output
-        aria-live="polite"
-        aria-label={t('tuner.note')}
-        className={cn(
-          'font-heading font-semibold tabular-nums',
-          large ? 'text-8xl' : 'text-6xl',
-          tuned && 'text-paint-full-grass',
-        )}
-      >
-        {heard.kind === 'pitch' ? keyName(heard.key) : '–'}
-      </output>
-      {/* The needle: from −50 cents at the left to +50 at the right, centred in tune. */}
-      <div
+    <div className="flex w-full flex-col items-center gap-3">
+      <div className="flex flex-col items-center gap-1">
+        <output
+          aria-live="polite"
+          aria-label={t('tuner.note')}
+          className={cn(
+            'font-bold',
+            pitch === null && 'text-border',
+            'text-[6rem]/none lg:text-[10.5rem]/none',
+          )}
+        >
+          {name}
+          {/* The browser's own subscript, lowered as the board's, not the reset's. */}
+          <sub
+            className={cn(
+              'static align-sub text-[0.333em] leading-none font-semibold',
+              !pitch && 'invisible',
+            )}
+          >
+            {octave}
+          </sub>
+        </output>
+        <p
+          className={cn(
+            'text-[1.125rem]/[normal] font-semibold',
+            pitch === null ? 'text-muted-foreground' : tuned ? 'text-learned' : 'text-attention',
+          )}
+        >
+          {pitch === null
+            ? t('tuner.waiting')
+            : tuned
+              ? t('tuner.inTune')
+              : off < 0
+                ? t('tuner.flat', { count: -off })
+                : t('tuner.sharp', { count: off })}
+        </p>
+        {/* Kept while nothing is heard, so the gauge never jumps when a note comes. */}
+        <p
+          className={cn(
+            'text-subhead/[normal] text-muted-foreground tabular-nums',
+            !pitch && 'invisible',
+          )}
+        >
+          {t('tuner.hz', { hz: pitch ? pitch.frequency.toFixed(1) : a4.toFixed(1) })}
+        </p>
+      </div>
+      <svg
         role="meter"
         aria-label={t('tuner.cents')}
         aria-valuemin={-50}
         aria-valuemax={50}
         aria-valuenow={Math.round(cents)}
-        className={cn(
-          'relative w-full rounded-control bg-muted',
-          large ? 'h-14 max-w-md' : 'h-10 max-w-80',
-        )}
+        viewBox="0 0 320 188"
+        className="block w-full max-w-[340px] lg:max-w-[720px]"
       >
-        <span aria-hidden className="absolute inset-y-1 left-1/2 w-px bg-foreground/40" />
-        <span
-          aria-hidden
-          className={cn(
-            'absolute inset-y-0 w-1 -translate-x-1/2 rounded-pill transition-[left] duration-100',
-            tuned ? 'bg-paint-full-grass' : 'bg-primary',
-          )}
-          style={{ left: `${50 + cents}%` }}
+        <path
+          d="M43.9 104A134 134 0 0 1 276.1 104"
+          fill="none"
+          className="stroke-muted"
+          strokeWidth={22}
         />
-      </div>
-      <p className="text-sm text-muted-foreground tabular-nums">
-        {heard.kind === 'pitch'
-          ? t('tuner.reading', {
-              hz: heard.frequency.toFixed(1),
-              cents: `${heard.cents >= 0 ? '+' : '−'}${Math.abs(Math.round(heard.cents))}`,
-            })
-          : t('tuner.listening')}
+        <path
+          d="M149.5 36.4A134 134 0 0 1 170.5 36.4"
+          fill="none"
+          className="stroke-paint-full-grass"
+          strokeWidth={22}
+        />
+        {TICKS.map((tick) => (
+          <path key={tick} d={tick} className="stroke-muted-foreground" strokeWidth={1.6} />
+        ))}
+        <g
+          className="transition-transform duration-100"
+          style={{ transform: `rotate(${(cents / 50) * 60}deg)`, transformOrigin: '160px 170px' }}
+        >
+          <path
+            d="M160 170L160 44"
+            strokeWidth={4}
+            strokeLinecap="round"
+            className={
+              pitch === null ? 'stroke-border' : tuned ? 'stroke-learned' : 'stroke-attention'
+            }
+          />
+        </g>
+        <circle cx={160} cy={170} r={8} className="fill-foreground" />
+        <text x={36} y={178} fontSize={12} className="fill-muted-foreground">
+          −50
+        </text>
+        <text x={266} y={178} fontSize={12} className="fill-muted-foreground">
+          +50
+        </text>
+      </svg>
+      {/* Kept while a note is heard, so nothing below the arc moves. */}
+      <p className={cn('text-subhead/[normal] text-muted-foreground', pitch && 'invisible')}>
+        {t('tuner.listening')}
       </p>
-      <p className="text-sm text-muted-foreground">{t('tuner.reference', { hz: a4 })}</p>
     </div>
   )
 }

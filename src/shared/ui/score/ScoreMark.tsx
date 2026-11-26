@@ -28,7 +28,7 @@ export function ScoreMark({
         'pointer-events-none absolute z-0 transition-[left,width] duration-200 ease-out motion-reduce:transition-none',
         MARK_CLASS[kind],
       )}
-      style={box}
+      style={{ ...box }}
     />
   )
 }

@@ -29,7 +29,14 @@ export interface PageSetup {
 const PER_MM = 10
 
 /** Verovio's options for a printed page (A40): its own units, tenths of a millimetre. */
-export function pageOptions(page: PageSetup): Record<string, unknown> {
+/**
+ * A staff's lines 0.13 of a space thick and its ledger lines 0.14, as the boards draw a staff and as
+ * Bravura's engraving defaults set them (staffLineThickness 0.13); Verovio's unit is half a space, and
+ * its own (0.15, 0.25) drew the lines half as thick, grey beside the notes.
+ */
+const LINES = { staffLineWidth: 0.26, ledgerLineThickness: 0.29 } as const
+
+function pageOptions(page: PageSetup): Record<string, unknown> {
   const mm = (value: number) => Math.round(value * PER_MM)
   // Verovio's unit is half a staff space; a staff is four spaces high.
   const unit = (page.staffMm * PER_MM) / 8
@@ -58,6 +65,7 @@ export function pageOptions(page: PageSetup): Record<string, unknown> {
     svgViewBox: true,
     svgRemoveXlink: true,
     font: page.font,
+    ...LINES,
   }
 }
 
@@ -69,6 +77,8 @@ export interface EngraveOptions {
   readonly scale: number
   /** Laid out on pages of this height (a page view), else one line as tall as it is. */
   readonly pageHeight?: number | undefined
+  /** Its staves joined by a brace (the grand staff): room left of the line for it. */
+  readonly braced?: boolean | undefined
   /** A printed page as the score's Layout sets it (A40): the rest is then its. */
   readonly page?: PageSetup | undefined
 }
@@ -81,10 +91,11 @@ const BRACE_ROOM = 60
 const UNBOUNDED = 60_000
 
 /** Verovio's options for what is asked: our page and its units agree, a CSS px a unit at its scale. */
-export function verovioOptions({
+function verovioOptions({
   width,
   scale,
   pageHeight,
+  braced = true,
 }: EngraveOptions): Record<string, unknown> {
   // Verovio takes a whole percentage: the page's units follow the scale it takes.
   const verovioScale = Math.max(1, Math.round(scale * SCALE_PER_ONE))
@@ -98,7 +109,7 @@ export function verovioOptions({
     breaks: pageHeight === undefined ? (width === undefined ? 'none' : 'encoded') : 'auto',
     // Every line justified to its width, the last too.
     minLastJustification: 0,
-    pageMarginLeft: BRACE_ROOM,
+    pageMarginLeft: braced ? BRACE_ROOM : 0,
     pageMarginRight: 0,
     pageMarginTop: 0,
     pageMarginBottom: 0,
@@ -116,6 +127,7 @@ export function verovioOptions({
     spacingLinear: 0.25,
     condense: 'auto',
     condenseFirstPage: false,
+    ...LINES,
   }
 }
 

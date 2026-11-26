@@ -1,0 +1,804 @@
+{
+  "_about": "Colours extracted from Piano Companion 1.6.1028 (Mac). All values exact from decompiled code unless certainty says otherwise. Assets.car contains no named colours (only AppIcon + packed images).",
+  "pitchClassColors": [
+    {
+      "pitchClass": 0,
+      "name": "C",
+      "rgb": [
+        255,
+        0,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#FF0000",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    },
+    {
+      "pitchClass": 1,
+      "name": "C#",
+      "rgb": [
+        255,
+        102,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#FF6600",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    },
+    {
+      "pitchClass": 2,
+      "name": "D",
+      "rgb": [
+        255,
+        153,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#FF9900",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    },
+    {
+      "pitchClass": 3,
+      "name": "D#",
+      "rgb": [
+        255,
+        204,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#FFCC00",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    },
+    {
+      "pitchClass": 4,
+      "name": "E",
+      "rgb": [
+        255,
+        255,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#FFFF00",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    },
+    {
+      "pitchClass": 5,
+      "name": "F",
+      "rgb": [
+        0,
+        170,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#00AA00",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    },
+    {
+      "pitchClass": 6,
+      "name": "F#",
+      "rgb": [
+        0,
+        119,
+        119
+      ],
+      "alpha": 1,
+      "hex": "#007777",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    },
+    {
+      "pitchClass": 7,
+      "name": "G",
+      "rgb": [
+        0,
+        153,
+        255
+      ],
+      "alpha": 1,
+      "hex": "#0099FF",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    },
+    {
+      "pitchClass": 8,
+      "name": "G#",
+      "rgb": [
+        102,
+        0,
+        204
+      ],
+      "alpha": 1,
+      "hex": "#6600CC",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    },
+    {
+      "pitchClass": 9,
+      "name": "A",
+      "rgb": [
+        102,
+        0,
+        153
+      ],
+      "alpha": 1,
+      "hex": "#660099",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    },
+    {
+      "pitchClass": 10,
+      "name": "A#",
+      "rgb": [
+        153,
+        0,
+        136
+      ],
+      "alpha": 1,
+      "hex": "#990088",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    },
+    {
+      "pitchClass": 11,
+      "name": "B",
+      "rgb": [
+        204,
+        0,
+        170
+      ],
+      "alpha": 1,
+      "hex": "#CC00AA",
+      "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions static fields (Semitones[])",
+      "use": "Note marker fill on keyboards (PianoKeyboard.AddCircleForNote, PianoPlayView.NoteBadge); text black on pc 3 and 4, white otherwise",
+      "certainty": "exact"
+    }
+  ],
+  "scalePositionColorOrder": {
+    "order": [
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "A",
+      "B",
+      "C#",
+      "D#",
+      "F#",
+      "G#",
+      "A#"
+    ],
+    "source": "PianoCompanion.dll PianoCompanion.OSX.Extensions.ColorExtensions.ScalePositions / ScalePositionToCGColor(int)",
+    "use": "Progression cell border colour by relative-chord position (TrackItemCellController line ~443)"
+  },
+  "keyImages": {
+    "_note": "Sampled from Resources/Keys/*.png (centre column, 50% height). Key images are bitmaps; the colours below are inferred from pixels.",
+    "whiteNormal": {
+      "hex": "#EBECEF",
+      "top": "#BCBCBC (small) / #969696 (large) top shade",
+      "bottom": "#BBBFC5"
+    },
+    "whitePressed": {
+      "hex": "#2AAE76",
+      "top": "#228B5D / #1B6F4A",
+      "bottom": "#228D61"
+    },
+    "whiteRoot": {
+      "hex": "#C93D3A",
+      "top": "#A1312E / #802724",
+      "bottom": "#A03130"
+    },
+    "blackNormal": {
+      "hex": "#111111",
+      "gradient": "#262626 (top) -> #040404 (75%)"
+    },
+    "blackPressed": {
+      "hex": "#28B36F"
+    },
+    "blackRoot": {
+      "hex": "#D53A36"
+    },
+    "outline": "#171717 / #010101 (edge pixels)",
+    "certainty": "inferred (pixel sampling)"
+  },
+  "fingerColors": {
+    "1": {
+      "rgb": [
+        246,
+        110,
+        82
+      ],
+      "alpha": 1,
+      "hex": "#F66E52",
+      "source": "PianoKeyboard.FirstFinger",
+      "use": "Finger number marker, thumb",
+      "certainty": "exact"
+    },
+    "2": {
+      "rgb": [
+        78,
+        125,
+        134
+      ],
+      "alpha": 1,
+      "hex": "#4E7D86",
+      "source": "PianoKeyboard.SecondFinger",
+      "use": "Finger 2",
+      "certainty": "exact"
+    },
+    "3": {
+      "rgb": [
+        77,
+        177,
+        143
+      ],
+      "alpha": 1,
+      "hex": "#4DB18F",
+      "source": "PianoKeyboard.ThirdFinger",
+      "use": "Finger 3",
+      "certainty": "exact"
+    },
+    "4": {
+      "rgb": [
+        177,
+        26,
+        255
+      ],
+      "alpha": 1,
+      "hex": "#B11AFF",
+      "source": "PianoKeyboard.FourthFinger",
+      "use": "Finger 4",
+      "certainty": "exact"
+    },
+    "5": {
+      "rgb": [
+        187,
+        158,
+        129
+      ],
+      "alpha": 1,
+      "hex": "#BB9E81",
+      "source": "PianoKeyboard.FifthFinger",
+      "use": "Finger 5 (default for any other value)",
+      "certainty": "exact"
+    }
+  },
+  "circleOfFifths": {
+    "majorTriadSector": {
+      "rgb": [
+        255,
+        175,
+        175
+      ],
+      "hex": "#FFAFAF",
+      "derivation": "C colour (255,0,0) at alpha 80/255 over white (255,255,255)"
+    },
+    "minorTriadSector": {
+      "rgb": [
+        175,
+        228,
+        175
+      ],
+      "hex": "#AFE4AF",
+      "derivation": "F colour (0,170,0) at alpha 80/255 over white"
+    },
+    "diminishedTriadSector": {
+      "rgb": [
+        175,
+        223,
+        255
+      ],
+      "hex": "#AFDFFF",
+      "derivation": "G colour (0,153,255) at alpha 80/255 over white"
+    },
+    "noChordSector": {
+      "rgb": [
+        255,
+        255,
+        255
+      ],
+      "hex": "#FFFFFF",
+      "derivation": "centerColor"
+    },
+    "selectedSectorFill": {
+      "rgb": [
+        255,
+        153,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#FF9900",
+      "source": "CircleOfFifhtsView ctor selectedColor",
+      "use": "Selected ring segment fill",
+      "certainty": "exact"
+    },
+    "centerFill": {
+      "rgb": [
+        255,
+        255,
+        255
+      ],
+      "alpha": 1,
+      "hex": "#FFFFFF",
+      "source": "CircleOfFifhtsView ctor centerColor",
+      "use": "Centre disc and empty sectors",
+      "certainty": "exact"
+    },
+    "sectorStroke": {
+      "rgb": [
+        0,
+        0,
+        0
+      ],
+      "alpha": 0.3765,
+      "hex": "#000000",
+      "source": "CircleOfFifhtsView ctor strokeColor",
+      "use": "Sector outline, width 0.005 of radius",
+      "certainty": "exact"
+    },
+    "selectedSectorStroke": {
+      "rgb": [
+        0,
+        0,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#000000",
+      "source": "CircleOfFifhtsView ctor selectedStrokeColor",
+      "use": "Selected sector outline, width 0.01 of radius",
+      "certainty": "exact"
+    },
+    "text": {
+      "value": "NSColor.Black",
+      "source": "CircleOfFifhtsView ctor textColor"
+    },
+    "selectedText": {
+      "value": "NSColor.White (set as fill, but DrawString uses textColor, so selected labels still render black)",
+      "source": "CircleOfFifhtsView.drawLabel",
+      "certainty": "exact (code); visual result inferred"
+    },
+    "ringCircles": {
+      "value": "NSColor.Black, line width 0.01 of radius, drawn at R0 and R2",
+      "source": "DrawRect / CreateBitmap"
+    }
+  },
+  "staff": {
+    "lightDrawing": {
+      "hex": "#000000",
+      "source": "Manufaktura.OSX NSStaffView.IsDarkMode setter -> Color.Black"
+    },
+    "darkDrawing": {
+      "rgb": [
+        235,
+        235,
+        235
+      ],
+      "alpha": 1,
+      "hex": "#EBEBEB",
+      "source": "Manufaktura.Controls.Primitives.Color.DarkModeDrawingColor",
+      "use": "Staff symbols in dark mode",
+      "certainty": "exact"
+    },
+    "lightBackground": "NSColor.White (NSStaffView / StaffPanel)",
+    "darkBackground": "NSColor.Black (NSStaffView / StaffPanel)",
+    "highlightedScaleNote": {
+      "rgb": [
+        255,
+        0,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#FF0000",
+      "source": "StaffView.ShowScale note.CustomColor = Color.Red",
+      "use": "Current note when stepping a scale",
+      "certainty": "exact"
+    }
+  },
+  "pianoPlay": {
+    "toolbarBackground": {
+      "value": "NSColor.Black",
+      "source": "PianoToolbarView ctor"
+    },
+    "recordRed": {
+      "rgb": [
+        255,
+        59,
+        48
+      ],
+      "alpha": 1,
+      "hex": "#FF3B30",
+      "source": "PianoToolbarView.RecordRed",
+      "use": "Record / stop-recording icon",
+      "certainty": "exact"
+    },
+    "toolbarIcons": {
+      "value": "NSColor.White",
+      "source": "PianoToolbarView"
+    },
+    "overviewMask": {
+      "rgba": [
+        0.5,
+        0.5,
+        0.5,
+        0.3
+      ],
+      "source": "PianoOverviewView.CaretView.DrawRect",
+      "use": "Grey veil left and right of the visible window"
+    },
+    "overviewCaretStroke": {
+      "rgba": [
+        1,
+        0,
+        0,
+        1
+      ],
+      "source": "PianoOverviewView.CaretView.DrawRect",
+      "use": "Red rectangle = visible key window"
+    },
+    "noteBadgeBorder": {
+      "value": "NSColor.Black, 1 px",
+      "source": "PianoPlayView.NoteBadge"
+    },
+    "smallKeyBorder": {
+      "value": "NSColor.Black, 0.5 px",
+      "source": "PianoKey.ConfigureKey (PianoMode.Small)"
+    },
+    "markerBorder": {
+      "value": "NSColor.White, max(1, 1.5*scale) px",
+      "source": "PianoKeyboard.AddCircleForNote/AddCircleForFinger"
+    }
+  },
+  "metronome": {
+    "accent": {
+      "rgb": [
+        239,
+        108,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#EF6C00",
+      "source": "MetronomeViewController.Accent",
+      "use": "Active beat dot",
+      "certainty": "exact"
+    },
+    "crossActive": {
+      "value": "NSColor.SystemTeal",
+      "source": "MetronomeViewController (cross-rhythm dots)"
+    },
+    "dotIdle": {
+      "value": "NSColor.SystemGray",
+      "source": "BeatDotsView ctor"
+    },
+    "dotActiveDefault": {
+      "value": "NSColor.SystemOrange",
+      "source": "BeatDotsView ctor"
+    }
+  },
+  "payment": {
+    "accent": {
+      "rgb": [
+        253,
+        187,
+        43
+      ],
+      "alpha": 1,
+      "hex": "#FDBB2B",
+      "source": "PaymentModalController.AccentColor",
+      "use": "Active carousel dot, accents",
+      "certainty": "exact"
+    },
+    "cardBorder": {
+      "rgb": [
+        220,
+        220,
+        220
+      ],
+      "alpha": 1,
+      "hex": "#DCDCDC",
+      "source": "PaymentModalController.CardBorderColor",
+      "use": "Product card border",
+      "certainty": "exact"
+    },
+    "dotIdle": {
+      "rgb": [
+        200,
+        200,
+        200
+      ],
+      "alpha": 1,
+      "hex": "#C8C8C8",
+      "source": "PaymentModalController.DotIdleColor",
+      "use": "Inactive carousel dot; also a view border",
+      "certainty": "exact"
+    },
+    "scrim": {
+      "rgb": [
+        0,
+        0,
+        0
+      ],
+      "alpha": 0.4,
+      "hex": "#000000",
+      "source": "PaymentModalController line ~294",
+      "use": "Background scrim (40% black)",
+      "certainty": "exact"
+    },
+    "highlightText": {
+      "rgb": [
+        255,
+        162,
+        26
+      ],
+      "alpha": 1,
+      "hex": "#FFA21A",
+      "source": "PaymentModalController line ~450",
+      "use": "Highlighted text (e.g. badge/price)",
+      "certainty": "exact"
+    },
+    "secondaryText": {
+      "rgb": [
+        128,
+        128,
+        128
+      ],
+      "alpha": 1,
+      "hex": "#808080",
+      "source": "PaymentModalController line ~459",
+      "use": "Secondary text",
+      "certainty": "exact"
+    }
+  },
+  "songbook": {
+    "chordLight": {
+      "rgb": [
+        176,
+        122,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#B07A00",
+      "source": "SongbookSheetView.ChordColor (light appearance); SongbookPdfWriter.ChordColor",
+      "use": "Chord names over lyrics",
+      "certainty": "exact"
+    },
+    "chordDark": {
+      "rgb": [
+        253,
+        187,
+        43
+      ],
+      "alpha": 1,
+      "hex": "#FDBB2B",
+      "source": "SongbookSheetView.ChordColor (dark appearance)",
+      "use": "Chord names over lyrics",
+      "certainty": "exact"
+    },
+    "highlightPill": {
+      "rgb": [
+        253,
+        187,
+        43
+      ],
+      "alpha": 0.2784,
+      "hex": "#FDBB2B",
+      "source": "SongbookSheetView.HighlightPillColor (alpha 0.28)",
+      "use": "Playing-chord highlight",
+      "certainty": "exact"
+    },
+    "laneChip": {
+      "rgb": [
+        253,
+        187,
+        43
+      ],
+      "alpha": 0.2392,
+      "hex": "#FDBB2B",
+      "source": "ChordLaneView.DrawRect (alpha 0.24), corner radius 6",
+      "use": "Chord chips",
+      "certainty": "exact"
+    },
+    "editorTint": {
+      "rgb": [
+        253,
+        187,
+        43
+      ],
+      "alpha": 1,
+      "hex": "#FDBB2B",
+      "source": "SongbookEditorWindowController line ~436",
+      "use": "Button ContentTintColor",
+      "certainty": "exact"
+    },
+    "pdfSecondary": {
+      "rgb": [
+        102,
+        102,
+        102
+      ],
+      "hex": "#666666",
+      "source": "SongbookPdfWriter.SecondaryColor (0.4,0.4,0.4)"
+    }
+  },
+  "misc": {
+    "appRaterBackground": {
+      "rgb": [
+        243,
+        152,
+        18
+      ],
+      "alpha": 1,
+      "hex": "#F39812",
+      "source": "AppRaterPanel.RaterBackgroundColor",
+      "use": "Rate-the-app panel",
+      "certainty": "exact"
+    },
+    "currentScaleChevron": {
+      "rgb": [
+        129,
+        129,
+        167
+      ],
+      "alpha": 1,
+      "hex": "#8181A7",
+      "source": "CurrentScaleView ctor",
+      "use": "Chevron icon",
+      "certainty": "exact"
+    },
+    "progressionCellSelected": {
+      "rgb": [
+        170,
+        170,
+        170
+      ],
+      "alpha": 0.6667,
+      "hex": "#AAAAAA",
+      "source": "TrackItemCellController.SelectedColor",
+      "use": "Selected progression cell",
+      "certainty": "exact"
+    },
+    "relativeScaleBorder100": {
+      "value": "F pitch colour (0,170,0)",
+      "source": "RelativeScaleItemController line ~352",
+      "use": "Border when match is 100%"
+    },
+    "relativeScaleBorderOther": {
+      "value": "D pitch colour (255,153,0)",
+      "source": "RelativeScaleItemController line ~352"
+    },
+    "iconSortAlphaToggled": {
+      "rgb": [
+        21,
+        133,
+        255
+      ],
+      "alpha": 1,
+      "hex": "#1585FF",
+      "source": "Elements.SortAlpha",
+      "use": "Toggled sort icon",
+      "certainty": "exact"
+    },
+    "iconScreenshotToggled": {
+      "rgb": [
+        255,
+        226,
+        81
+      ],
+      "alpha": 1,
+      "hex": "#FFE251",
+      "source": "Elements (icon_screenshot)",
+      "use": "Toggled",
+      "certainty": "exact"
+    },
+    "iconThumbsUp": {
+      "rgb": [
+        63,
+        173,
+        74
+      ],
+      "alpha": 1,
+      "hex": "#3FAD4A",
+      "source": "Elements.Rate",
+      "use": "",
+      "certainty": "exact"
+    },
+    "iconFacebook": {
+      "rgb": [
+        59,
+        89,
+        152
+      ],
+      "alpha": 1,
+      "hex": "#3B5998",
+      "source": "Elements.Facebook",
+      "use": "",
+      "certainty": "exact"
+    },
+    "iconTwitter": {
+      "rgb": [
+        27,
+        178,
+        233
+      ],
+      "alpha": 1,
+      "hex": "#1BB2E9",
+      "source": "Elements.Twitter",
+      "use": "",
+      "certainty": "exact"
+    },
+    "iconShopUnlock": {
+      "rgb": [
+        255,
+        182,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#FFB600",
+      "source": "Elements.FullVersion/Unlock/Unlock2",
+      "use": "Upgrade icons",
+      "certainty": "exact"
+    },
+    "gradient": {
+      "from": "#000000",
+      "to": "#FFFFFF",
+      "direction": "left to right",
+      "source": "Image.CreateGradient"
+    }
+  },
+  "systemColorsUsedInCode": {
+    "counts": {
+      "ControlText": 51,
+      "White": 30,
+      "Black": 18,
+      "SecondaryLabel": 14,
+      "SelectedText": 7,
+      "Label": 5,
+      "DarkGray": 5,
+      "Clear": 5,
+      "Gray": 4,
+      "DisabledControlText": 3,
+      "SystemOrange": 2,
+      "SystemGray": 2,
+      "WindowBackground": 1,
+      "TextBackground": 1,
+      "TertiaryLabel": 1,
+      "SystemTeal": 1,
+      "SelectedControl": 1,
+      "SelectedContentBackground": 1,
+      "Link": 1
+    },
+    "source": "grep of NSColor.<Name> in PianoCompanion.dll"
+  },
+  "systemColorsUsedInNibs": {
+    "counts": {
+      "controlTextColor": 12,
+      "controlBackgroundColor": 11,
+      "controlColor": 10,
+      "textBackgroundColor": 9,
+      "labelColor": 9,
+      "separatorColor": 7,
+      "headerTextColor": 7,
+      "gridColor": 7,
+      "selectedTextColor": 2,
+      "headerColor": 2,
+      "_sourceListBackgroundColor": 1
+    },
+    "source": "strings of compiled nibs in Resources/*.nib and Main.storyboardc/*.nib"
+  }
+}

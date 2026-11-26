@@ -5,7 +5,6 @@ colors:
   paper: '#F7F3EE'
   paper-card: '#FEFDFB'
   sand-sunken: '#EEE9E2'
-  sand-hairline: '#E5DFD6'
   soft-line: '#DAD1C8'
   control-line: '#908479'
   ink: '#332921'
@@ -18,7 +17,7 @@ colors:
   sky-deep: '#356890'
   grass-deep: '#44684A'
   ochre: '#A8742A'
-  crimson: '#A34243'
+  crimson: '#B3261E'
   white: '#FFFFFF'
   paint-brick: '#E19E8C'
   paint-yellow: '#E8C67D'
@@ -27,11 +26,11 @@ colors:
   paint-lilac: '#B8A8D8'
   paint-sand: '#D3AC8A'
   paint-teal: '#82C2C1'
-  wash-yellow: '#F7E8C4'
-  wash-grass: '#D9EBD5'
-  wash-sky: '#D1E6F7'
-  wash-lilac: '#E6DFF6'
-  wash-sand: '#F5E0CF'
+  wash-yellow: '#F6E7C8'
+  wash-grass: '#DCE9D6'
+  wash-sky: '#D3E5F2'
+  wash-lilac: '#E4DCF1'
+  wash-sand: '#F3D2C8'
   yellow-deep: '#7A5B22'
   lilac-deep: '#6A5988'
   sand-deep: '#7D5B40'
@@ -65,57 +64,57 @@ colors:
   sky-night-ink: '#C2DBF1'
 typography:
   chord-display:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '72px'
     fontWeight: 600
     lineHeight: 1
   display:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '44px'
     fontWeight: 600
     lineHeight: 1.1
   large-title:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '34px'
     fontWeight: 600
     lineHeight: 1.15
   title-1:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '28px'
     fontWeight: 600
     lineHeight: 1.2
   title-2:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '22px'
     fontWeight: 600
     lineHeight: 1.3
   title-3:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '20px'
     fontWeight: 600
     lineHeight: 1.25
   headline:
-    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Instrument Sans Variable, Text Accidentals, Noto Music, -apple-system, Helvetica Neue, system-ui, sans-serif'
     fontSize: '17px'
     fontWeight: 600
     lineHeight: 1.375
   control:
-    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Instrument Sans Variable, Text Accidentals, Noto Music, -apple-system, Helvetica Neue, system-ui, sans-serif'
     fontSize: '16px'
     fontWeight: 600
     lineHeight: 1.5
   body:
-    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Instrument Sans Variable, Text Accidentals, Noto Music, -apple-system, Helvetica Neue, system-ui, sans-serif'
     fontSize: '16px'
     fontWeight: 400
     lineHeight: 1.5
   label:
-    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Instrument Sans Variable, Text Accidentals, Noto Music, -apple-system, Helvetica Neue, system-ui, sans-serif'
     fontSize: '14px'
     fontWeight: 500
     lineHeight: 1.43
   key-label:
-    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Instrument Sans Variable, Text Accidentals, Noto Music, -apple-system, Helvetica Neue, system-ui, sans-serif'
     fontSize: '14px'
     fontWeight: 700
     lineHeight: 1
@@ -124,7 +123,7 @@ rounded:
   white-key: '9px'
   control: '12px'
   card: '14px'
-  sheet: '20px'
+  sheet: '22px'
   pill: '9999px'
 spacing:
   gutter: '16px'
@@ -253,15 +252,24 @@ Warm neutrals and seven quiet paints. Each role has a day value, a night value a
 - **Grass Deep** (`learned`): learned, known, on, connected.
 - **Ochre** (`attention`): a gap or "to check"; a dot, never text.
 - **Crimson** (`destructive`): wrong and destructive.
+- **Heart** (`heart`, #B84A3E; by Night the crimson's light shade): a favourite's ♡, filled; a row's ♡ at rest is `heart-rest`, #B4AAA0.
 
 ### Neutral
 
 - **Paper** (`background`): the page, a shade darker than the cards on it.
 - **Card Paper** (`card`, `popover`, `raised`): cards, sheets, popovers, controls at rest, what floats.
 - **Sand** (`muted`, `accent`): hover and pressed fills, tracks.
-- **Soft Line** (`border`, `chosen`): 1px round a card, and the one selected fill, a step darker than hover.
+- **Soft Line** (`border`, `chosen`): 1px round a card, and the selected fill of a segment, tab or place, a step darker than hover; a chosen chip (a library's All · Favourites · Mine, any `ChoiceChips`) is filled in ink with the page's colour on it (canvas 153).
+- **Honey wash** (`chosen-honey`, its edge `honey-ring`): the one exception to the Neutral Choice Rule, where the
+  chosen among equals shows what each is: the Player's Pattern sheet (the pattern playing, its place chip and its
+  Sort and filter chips, `ChoiceChips` `tone="honey"`, and Sort and filter while one is on), the chosen card of
+  `RadioCards` (its rows parted by the honey ring at 30%), and Played through's bars picked to loop. A lesson's
+  takeaway has its own quiet fill, `honey-wash`.
+- **Layout edge, Layout zone** (`layout-edge`, `layout-zone`): Edit layout on the Chord player alone (R76): a panel's
+  2px dashed outline in deep honey, and the honey wash of a place a panel may be put in. Never a focus ring, a
+  selection or a card's line; outside Edit layout nothing wears them.
 - **Control Line** (`input`): 1px round a control, firm enough to find it (3:1).
-- **Hairline** (`hairline`): a divider inside a card.
+- **Hairline** (`hairline`): a divider inside a card, the canvas's FILL (#EEE9E2 by day), as its GROUP parts rows.
 - **Ink, Soft Ink** (`foreground`, `muted-foreground`): text, secondary text, the navigation's icons.
 - **Umber** (`selected`): the check on a chosen item; never an action.
 
@@ -299,12 +307,14 @@ judged note its verdict's shape beside its head (● right, ◂ early, ▸ late,
 
 ## Typography
 
-**Display Font:** Literata Variable (with Text Accidentals, Noto Music, Georgia)
-**Body Font:** Onest Variable (with Text Accidentals, Noto Music, system-ui)
+**Display Font:** Iowan Old Style, the book serif Apple ships (with Text Accidentals, Noto Music, Palatino, Georgia)
+**Body Font:** Instrument Sans Variable (with Text Accidentals, Noto Music, the system's sans)
 **Label/Mono Font:** Noto Music, for a music sign that stands alone
 
-**Character:** a book serif for what is named, a clear sans for what is read and pressed, both covering Latin and
-Cyrillic. Neither face has ♭ ♮ ♯, so Text Accidentals sits behind both, drawn to stand by the capitals.
+**Character:** a book serif for what is named, a clear sans for what is read and pressed: the canvas's two faces (its
+SERIF and FONT), no third. Instrument Sans has no Cyrillic, so Russian reads in the system's sans behind it, as the
+boards set it. Neither face has ♭ ♮ ♯, so Text Accidentals sits behind both, drawn to stand by the capitals. A tooltip
+is the sans, 500 12/16 on ink, 8 round, 4 by 8 in.
 
 ### Hierarchy
 
@@ -314,17 +324,27 @@ Sizes are in rem, so they follow the reader's text size. A screen's title steps 
 - **Display** (600, 44px, 1.1): a screen's title from 1024px.
 - **Large title** (600, 34px, 1.15): a screen's title from 640px.
 - **Title 1** (600, 28px, 1.2): a screen's title on a phone.
+- **Place** (`text-place`, the sans bold, 30px): a place's title on a laptop (Songs, Settings, a bar's title from
+  1024px), as the boards set it; its line's height is the caller's.
+- **Name** (`text-name`, the sans bold, 26px): a thing's name heading its own page (a badge, an achievement, a run's
+  result, a role's tile).
 - **Title 2** (600, 22px, 1.3): section and sheet titles; a screen's title on a phone on its side.
 - **Title 3** (600, 20px, 1.25): a group's title, a card's name.
-- **Headline** (Onest 600, 17px, 1.375): a row's title, the pill button.
-- **Control** (Onest 600, 16px, 1.5): buttons, values, segments.
-- **Body** (Onest 400, 16px, 1.5): everything else; prose at most 65ch.
-- **Label** (Onest 500, 14px or 12px): row details, a field's name in soft ink, bar numbers.
-- **Key label** (Onest 700, 14px or 12px): a mark's degree or finger; a note name, tabular.
+- **Headline** (Instrument Sans 600, 17px, 1.375): a row's title, the pill button.
+- **Control** (Instrument Sans 600, 16px, 1.5): buttons, values, segments.
+- **Body** (Instrument Sans 400, 16px, 1.5): everything else; prose at most 65ch.
+- **Subhead** (`text-subhead`, 15px, Apple's Subheadline): a row's detail and second line.
+- **Label** (Instrument Sans 500, 14px or 12px): row details, a field's name in soft ink, bar numbers.
+- **Footnote** (`text-footnote`, 13px, Apple's Footnote): a caption under a row or a figure.
+- **Key label** (Instrument Sans 700, 14px or 12px): a mark's degree or finger; a note name, tabular.
+- **Subject** (`subject-title`: display face 700, 36px, 1.1, -0.01em): the one thing a Practice page is about (the
+  interval, the progression, the pattern, the exercise).
+- **Section head** (`section-head`: 600, 14px, ink): the head over a card of rows on a page (Practise, Options).
+- **Caps** (`caps`: 600, 13px, 1rem, +0.04em, uppercase, soft ink): a field's or a group's caption.
 
 ### Named Rules
 
-**The Serif Names Rule.** Literata at 600 sets every `h1`–`h3` and every chord symbol. It never sets a control, a tab or
+**The Serif Names Rule.** Iowan Old Style at 600 sets every `h1`–`h3` and every chord symbol. It never sets a control, a tab or
 a key label.
 
 **The Printed Chord Rule.** A chord on screen is printed (`C♯m7`). What is stored, typed or put in a URL stays ASCII.
@@ -337,19 +357,26 @@ fakes a bold.
 Phone first, and every screen takes the width it is given; no screen is capped. The gutter grows with the width: 16px
 on a phone, 24px from 640px, 40px beside the sidebar.
 
-- **Grids, not columns:** row cards in as many 18rem columns as fit (`grid-cards`), fields in 20rem (`grid-fields`),
-  chord buttons in `grid-chords`, tiles in `grid-tiles`. Rows and grids stay even on wide screens.
-- **Rhythm:** 24px between a screen's parts, 32px between sections, 16–20px inside a group, with `gap`.
+- **Grids, not columns:** row cards in as many 18rem columns as fit (`grid-cards`), fields in 20rem (`grid-fields`).
+  Rows and grids stay even on wide screens.
+- **Rhythm:** 24px between a screen's parts, 32px between sections, 16–20px inside a group, with `gap`. A section's
+  heading sits on the content's edge, 32 below what comes before and 12 above what it heads, so it reads with its own
+  group (proximity). A group's small-capital label starts on its rows' 16 inset, 8 above the group. Sibling tiles stand
+  at least as far apart as their own inset (Profile's figures, 12).
 - **The shell:** four places in a bar docked at the foot of a phone, a rail down the left of a phone on its side, a
   256px sidebar from 1024px (72px collapsed), as Claude's: the name and its toggle, Search as a field, Learn, Songs
-  and Practice, Recents (the songs opened last), and under a line the learner (picture and name, opening the
-  Profile) with Settings' gear beside it. The phone's bar keeps the Profile as its last tab. The phone's bar shows on the places
+  and Practice, Recents (the songs opened last), and at its foot one account row (picture, name and ⌃⌄) opening a
+  menu above it: the email, Profile, Settings, Language, Help, then Sign out apart. Its rows, places and Songs' places alike, are `nav-foreground` (#4A433C, 500); the current one `nav-current-foreground` (#1A1612, 600) on the `nav-current` wash (#EAE2D7), as the account row while its menu is open. The phone's bar keeps the Profile as its last tab. The phone's bar shows on the places
   alone; what a place opens has the whole height.
 - **Full screens** (the Player, the score editor, the Check) have no navigation: the viewport's height, scrolling
   inside.
 - **A page that shows a thing on the keys** reads top to bottom: the keys pinned, what it is with its one Play, its
   choices, then its titled sections. No page splits into two columns of unrelated things.
-- **Settings:** one column of grouped cards on a phone, each page pushed with Back; from 64rem the libraries' two
+- **Two panes from 80rem (`WIDE`):** Settings and Songs stand in two panes only from 1280; under it the sidebar
+  leaves a second pane too narrow to read, so they keep one column. A bar over the 672 column (`page-column`) sets its
+  row on that column (`ScreenHeader column`), so title and content share an edge at every width.
+- **Focus (laptop):** the sidebar's head holds its toggle and Focus (Lucide Maximize), 40 each in the dense row, the name 18 on one line. Focus hides the sidebar and the side panels of content (the Chord player's chords and styles, Songs' library pane), never a page's own list of sections; the screen and what is docked take the window. Exit focus (Minimize, a bar circle) is then the bar's first button, before Back or the title; Esc leaves too. It lasts the session (`useFocusMode`), the `focus-mode:` variant styling what changes.
+- **Settings:** one column of grouped cards on a phone, each page pushed with Back; from 80rem the libraries' two
   panes: a sidebar of tree rows (17rem, a painted swatch each, sticky under the bar and scrolling on its own) beside
   the page (44rem), which scrolls with the window. Never two columns of unequal groups.
 - **The editor's palette docks:** from 48rem a panel at the sheet's side (left or right, as Note input's Palette
@@ -370,16 +397,29 @@ whole.
 ## Elevation & Depth
 
 Flat and grouped. A card separates by its lighter paper and a 1px soft line, never by a shadow; hover and press fill
-with sand. _Ruled 2026-11-07, not yet built: cards white on a darker sand panel with a small layered shadow (`craft-
-details.md`, "Depth"); this paragraph changes when it is._ Shadows belong to what floats over the page, and they are soft, layered and deeper by night.
+with sand, as the boards' `CARD` and `GROUP` draw them (a 1px ring that takes no room). Shadows belong to what floats over the page, and they are soft, layered and deeper by night.
 
 ### Shadow Vocabulary
 
-- **Elevation 1** (`elevation-1`): resting second actions.
-- **Elevation 2** (`elevation-2`): the main action and the transport.
-- **Elevation 3** (`elevation-3`): under a pointer, or an open dial.
+- **Float** (`elevation-float`, in `glass` and `glass-honey`): every bar, the tab bar, the floating actions (the + and
+  the mini actions) and the floating bars of the Practice pages, a tight lift of two layers (0 1px 2px and 0 2px 6px
+  -2px, ink at 10%) with no shade pooled under it (owner, 2026-11-19: "i dont like this dimm under the floatign
+  actions"; the canvas's `FLOAT`). It does not deepen under a pointer; a press shows by colour.
+- **Thumb** (`elevation-thumb`): a control's moving part over its track: a segmented control's thumb, a switch's knob, a
+  slider's handle, a loop grip, the chosen root.
+- **Elevation 1** (`elevation-1`): a row lifted while it is dragged, a resting second action inside content.
+- **Elevation 2** (`elevation-2`): dialogs and sheets that stand above the page (the canvas's `SHADOW`).
+- **Elevation 3** (`elevation-3`): a dragged card, an open dial.
 - **Popover** (`shadow-md` with a 1px ring of ink at 10%): popovers and menus, opening 5px inside the safe area, clear
   of the notch, the status bar and the home indicator.
+
+### Stacking
+
+One scale, no value between its steps: `z-1` a part over its neighbours inside a component (a slim key's name), `z-10`
+a lift inside content (a black key, a chord's handles), `z-20` what sticks while its page scrolls, `z-30` what floats
+over the page (the floating actions and bars), `z-40` the bars and the Chord player's Edit layout (its zones, outlines,
+tags and the keys' grab, later in the page over earlier), `z-50` every layer (sheets, dialogs, popovers, menus, the
+search palette), `z-60` the toast alone, so an Undo said from a sheet is seen over it.
 
 Sheets rise over a page dimmed to 10% black and need no shadow.
 
@@ -388,8 +428,9 @@ lip and a black key's slope draw a piano and appear nowhere else.
 
 ## Shapes
 
-One scale of four corners, and a corner is never written any other way (`src/styles/shapes.test.ts`): a control 12px, a
-card 14px, a sheet 20px, a pill round. Every line is 1px; only focus rings and the keys' rings are wider.
+One scale of corners, and a corner is never written any other way (`src/styles/shapes.test.ts`): a control 12px, a
+card 14px, a sheet 22px, a pill round, a menu or popover 16px (`menu`); inside a control, a cover or a sidebar row 10px (`thumb`) and a paint's tile or a
+tooltip 8px (`tile`); the smallest marks, a checkbox or a bar in a strip, 4px (`mark`); a keyboard standing on its own, fixed or in a lesson, 20px in its frame (`keys`). Every line is 1px; only focus rings and the keys' rings are wider.
 
 Something inside a shape takes its holder's shape, so a fill reaches the edges: an item in a capsule is a pill, the first
 row of a card takes the card's corner. The keys are drawings, not controls: a black key's foot 6px, a white key's 9px,
@@ -401,38 +442,52 @@ square at the top.
 
 ### Placement
 
-- **A detail page** reads title, facts, sections; its one primary action floats at the foot.
+- **A detail page** reads title, facts, sections; its one primary action floats at the foot, honey, alone (one floating action per screen, Material 3); Play sits at the head of the music it plays; the page's info is a plain column on the paper, never a card (owner, 2026-11-17: "use proper floating actions", "learn how to correctly use cards"; `edge-lines`).
 - **The bar** (`ScreenHeader`) is one row of one height on every screen: Back, the title with its Edit (a quiet pencil;
   Done in its place while editing) right after it, then at its end, in this order whatever the page passes: tools,
-  Settings (the gear), More. A plain title is set slightly tight, at 1rem on a phone (1.25rem from 40rem), its
+  Settings (the gear), More. Its title is the sans, as every board draws it (canvas 133): a plain title semibold at 1.0625rem on a phone (1.125rem
+  from 40rem), a place's bold at 1.625rem; a section's head in a page is the sans bold at 1.25rem (the serif stays for
+  names of music, lesson text and the score). A plain title's
   actions 4px apart there, so a tool's name fits whole on two lines beside its tools ("Определитель аккордов"); a
   word is never split. A place's or a detail page's title is larger
   in the same row and may take two lines. Nothing hangs under the bar: a status goes in it or in its menu, and a page's
-  views sit in its content. A place's views (Learn's Lessons · Courses, Songs' My songs · Explore) are its title
-  (`TitleTabs`): their words where the title stands, in Onest at the large title's size, the one shown in ink with an
-  ink line under it, the other in soft ink; the place's name stays the page's heading, unseen. A pane kept in sight
+  views sit in its content. A pane kept in sight
   under the bar (a style's preview) is `Pinned`: solid, edge to edge, moving with the bar; never a card floating over
   the controls. What is docked at the foot (`Docked`) owns the ground down to the screen's edge. It slides away while reading down and returns as the page turns up.
+- **Glass is the controls' layer, and every bar and floating button wears it** (owner, 2026-11-16: "I want
+  consistency and all the buttons should be glass"): Back, Close, the bar's tools, Settings, More, a view switch,
+  the floating actions and the transport float over the page in one glass: the warm sheet at 86%, 20px blur with
+  saturation 1.6, a 1px ink ring at 7% and a soft shadow (0 4px 14px −6px, ink at 25%). A lone button is a 44 circle;
+  buttons of one function share one capsule (View with Settings; Undo, Redo and More), More last. Glass never
+  goes on content: a card, a cover, a list row or a sheet's own rows (Apple HIG, Materials: "Don't use Liquid Glass
+  in the content layer"). The full rules, from Apple's Toolbars guidance, are in `.scratch/r39/plan/bars.md`:
+  Back or Close alone at the leading edge, as its symbol; at most three groups; a text button (Edit, Done, Save) in a
+  capsule of its own, never sharing glass with a symbol; one honey action at most, trailing.
+- **A bar has no background** (owner, 2026-11-16: "why the header in the player has background"): no band, no
+  fill and no hairline under it, on every screen, the Player's and the editor's included. Its buttons float over
+  the page; where content scrolls under it, a scroll edge fade (the page's paper to clear) keeps the title legible
+  (Apple HIG, Toolbars: "Reduce the use of toolbar backgrounds").
 - **Page, sheet or menu:** a page for settings and many fields; a sheet for creating one thing or one focused choice; a
   menu for one-tap commands. A sheet never holds a second sheet; a menu never holds a setting.
 - **An act on an item is a button, never a switch:** Favourite and Learned on the item's card and in its menus. An item's
   Settings holds what it is, not what the learner does with it.
-- **Creating** is the floating +, opening a dial of the ways to add. **Every New …** is one `NewSheet`: the name, a few
+- **Creating** is the floating + (Flat's My scores), opening a dial of the ways to add. **Every New …** is one `NewSheet`: the name, a few
   properties, one Create pinned at the foot.
 - **Score screens have three layers:** the flat bar; the music, with the sheet's pill; the Player's docked transport and
   foot. In the editor, what acts on the notes chosen is a capsule over the music only while something is chosen.
 
 ### Buttons
 
-- **Shape:** Onest 600 at 16px in the control corner. Sizes are 44px, 48px (`lg`), a 56px pill, and a 72px round Play.
+- **Shape:** Instrument Sans 600 at 16px in the control corner. Sizes are 44px, 48px (`lg`), a 56px pill, and a 72px round Play.
   Icon-only buttons are 44px with a 20px icon.
 - **Primary:** `default`, honey with ink on it.
 - **Second actions:** `soft` and `outline`, card paper in the control line; `secondary`, sky mist.
 - **Quiet:** `ghost`, no fill until hovered; `bar`, a screen bar's round button; `tool`, a toolbar's, no frame until
   hovered, open or pressed; `link`, deep sky.
 - **Destructive:** card paper with a crimson line and label.
-- **Floating** (`FloatingActions`): the main action a honey 56px circle, a second a raised 48px circle. A dial opens as a
-  card of rows; every floating button keeps a gap above the home indicator.
+- **Floating** (`FloatingActions`): the main action a honey 56px circle (or extended with its word), one per screen;
+  a raised 48px circle only inside a floating bar of the page's own controls (a practice page's Play · Tempo), never
+  a second act floating beside a detail page's one. A dial opens as a card of rows; every floating button keeps a gap above the home indicator.
 - **Focus:** one 3px deep-sky outline, 2px off, appearing at once (`src/styles/focus.test.ts`); inset where a scroller
   or a card's edge would cut it.
 - **Every Play becomes Stop** while it sounds; an item in a grid is pressed instead.
@@ -450,7 +505,7 @@ square at the top.
   drawn as keys. A key is the key-signature grid (`KeyPicker`, `KeySignaturePicker`): Major · Minor, sharps over flats,
   the same grid as the score editor's and New song's. Time and tempo are one control each. _Drawn on canvas 111, not
   yet built: one Key drawer for every key and root (− +, the letters, ♭ ♮ ♯), replacing the grid here when ported._
-- **Picture choice** (`PictureChoice`): a setting that changes how something looks is drawn, a line drawing over a short
+- **Picture choice** (`PictureTiles`): a setting that changes how something looks is drawn, a line drawing over a short
   name. A choice with no honest picture stays text.
 - **Only what applies is offered.** A row that nothing applies to stays in place, greyed, its tooltip saying why, so
   nothing under it moves. The score editor's palette is the exception: a key that cannot act is not drawn (ADR 0114).
@@ -459,7 +514,7 @@ square at the top.
 
 - **Card** (`card`): card paper, the card corner, the soft line. A group's rows part by hairlines.
 - **Five row kinds, one component each:** opens a page (`RowLink`: label, value, ›); picks a value (`ChoiceRow`,
-  `ChoiceCard`, `PictureChoice`); on or off (`SwitchRow`); does something (`ActionRow`, link ink, no chevron); ends or
+  `ChoiceCard`, `PictureTiles`); on or off (`SwitchRow`); does something (`ActionRow`, link ink, no chevron); ends or
   destroys (`DangerRow`, red, in a `DangerGroup`, last on its page and alone). A row that opens a sheet is a `RowButton`.
 - **Navigation marks** (`NavMarks` alone): ‹ for Back, › at a row's edge, ⌃⌄ by a picker's value, ⌄ on a fold. Arrows
   only for movement.
@@ -467,15 +522,20 @@ square at the top.
   anywhere and carries no ›; its row is picture, name, one line, ⋯.
 - **Sheet** (`Sheet`): the page's paper (its cards white on it), the sheet corner on top, a grab handle, the title
   centred (sans, 17px, semibold) with Done at its right in the link's ink (R42), an optional
-  footer. It stands on the phone's keyboard. Never a sheet over a sheet.
+  footer. It stands on the phone's keyboard. Never a sheet over a sheet. On a laptop it is the boards' POPOVER, a card
+  hung under the button that opened it: its title at the start, 16 in, and no Done (a click outside or Esc closes it);
+  a page under its first keeps Back with the title centred.
 - **Properties** (a song's Details): a `RowTrigger` per property, its name and value, the value "Not set" in soft ink
   where empty; a tap opens its editor beside it (a popover on a laptop, a sheet on a phone), titled with its name.
-- **A place's card style** (`StyleEditor`): the preview is a pinned pane on the muted fill, of fixed height, never over a
+- **A lesson block's style** (`StyleEditor`): the preview is a pinned pane on the muted fill, of fixed height, never over a
   control; presets lead as a strip of drawn tiles, the chosen ringed in ink. Styles are made of the paints, so the dark
   theme redraws them; Night alone is a dark card in both themes.
 - **Popover and ⓘ:** an `InfoTip` is a 16px ⓘ in soft ink beside a name; no line of explanation stands under a control.
-- **Toast** (`say`): a card over the screen's foot, clear of all that floats there, with Undo and ✕; gone in five
-  seconds. A loss that can be undone happens at once and toasts with Undo instead of asking; only what can't be undone,
+- **Toast** (`say`): ink, 14 round, over the screen's foot and above every sheet, clear of all that floats there (on a
+  laptop centred on its pane, 460 wide and 28 up, beside the floating actions at the corner; over a floating bar, a
+  lesson's, 116 up); its
+  line in the sheet's colour, Undo in honey (deep honey by Night, when the toast is light), no ✕; gone in six seconds, paused under the pointer,
+  or by a swipe. A loss that can be undone happens at once and toasts with Undo instead of asking; only what can't be undone,
   or reaches other people, asks first in the dialog, naming what goes.
 - **Marks:** learned a grass disc with a check (`LearnedBadge`); a gap a 10px ochre dot; progress a 6px grass bar on a
   sand track (`ProgressMeter`), or an arc round a lesson's number (`ProgressRing`).
@@ -499,7 +559,7 @@ pedals, no finger numbers. Every control is the screen's bar's; nothing about th
   Down step 16px, Home and End go to the ends, a double click or Enter returns to the piano's proportion. The height
   is kept for a phone upright, a phone on its side and a wider screen apart. A splitter to a screen reader.
 - **In the bar** (`KeyboardTools`), before the gear: the chord held (from 40rem: a small soft label "Chord held" then
-  the symbol in Literata, 20px), **Sustain** while the keys show, and **Keyboard** (the piano icon, pressed while
+  the symbol in the serif, 20px), **Sustain** while the keys show, and **Keyboard** (the piano icon, pressed while
   they show); in the Player **Hands at the keys** (a hand) before it, the keys' place showing the one pressed and
   folding when it is pressed again. Sustain wears a pedal drawn as a line icon; down from anywhere (a finger, Space,
   a MIDI foot, the score's pedal while music plays) it fills `--key-down`, as a key held down, never a second honey
@@ -521,8 +581,8 @@ pedals, no finger numbers. Every control is the screen's bar's; nothing about th
   sheen towards the player, a sloped front, their shadow on the ivory; a 1px bed parts them; the key slip's red felt
   (`--key-felt`) along their far end. The light and shade lie over each key's fill, so marks keep their colour. A
   computer letter sits on its key as a small key cap.
-- **Marks:** a role, a hand or a scale's note is its wash at rest and full paint while it sounds, ink on it. A scale's
-  notes are sky, its tonic yellow.
+- **Marks:** a chord tone or a scale's note wears its full paint at rest and while it sounds, ink on it; sounding, it
+  sinks. A hand is its wash at rest and full paint while it sounds. A scale's notes are honey sand, its tonic rose.
 - **Down:** a plain key turns sky, sinks 2px in 80ms (its far end darker under the felt, its shadow gone) and stays down at least 150ms. A quiz's chosen keys are honey, a wrong
   key crimson with ✕, a missing key a deep-sky ring.
 - **Focus:** a two-tone ring, ink outside and white inside, so it shows on any key.
@@ -558,8 +618,8 @@ appears under a finger; the layout's one control.
 
 ### The music
 
-- **Sheet music** is engraved by Verovio in `currentColor` from the tokens: notes in ink, staff lines in the control line,
-  a staff not practised in soft ink.
+- **Sheet music** is engraved by Verovio in `currentColor` from the tokens: notes, staff lines and barlines in ink, as the
+  boards print a staff; a staff not practised in soft ink.
 - **What is chosen is coloured, never boxed:** notes in the selection colour, a range or loop a light band of it, tight
   to the notes. The playhead is one thin line across the staves in sight. Empty staff chooses nothing.
 - **What sounds is lit, in the Player:** the heads at the playhead take their hand's colour, as their keys do: the right
@@ -572,9 +632,14 @@ appears under a finger; the layout's one control.
 
 - **One curve,** `ease-out` (`cubic-bezier(0.22, 1, 0.36, 1)`): 200ms for colour, 80ms for keys. Sheets rise on the iOS
   sheet curve in 450ms and follow the finger.
+- **Layers grow from where they were opened,** on the one curve, closing faster than they open (claude.ai's measured
+  values): a dialog from 0.98 in 200ms, a popover, menu or select from 0.97 in 200ms, each closing in 150ms; a tooltip
+  from 0.98 in 120ms, closing in 100ms. Menus stand 6 from their button. A toast stays 6 seconds, paused under the
+  pointer.
 - **Only `transform` and `opacity` move.** Buttons and chips animate colour alone, and pressing one never moves it; the
   floating actions keep their press.
-- **Strips and diagrams move on their own;** the page does not. Under reduced motion every transition is instant.
+- **Strips and diagrams move on their own;** the page does not. Under reduced motion every transition and animation
+  is instant, app-wide (`theme.css`).
 
 ## Do's and Don'ts
 
@@ -583,7 +648,7 @@ appears under a finger; the layout's one control.
 - **Do** give each screen one honey control and show the chosen in neutrals.
 - **Do** part cards by surface and a 1px line.
 - **Do** label every coloured key, and give every quiet value a firm one under `prefers-contrast: more`.
-- **Do** set titles and chord symbols in Literata 600 and everything else in Onest.
+- **Do** set titles and chord symbols in Iowan Old Style 600 and everything else in Instrument Sans.
 - **Do** keep targets at 44px and focus visible, with a shared component for every kind of thing.
 
 ### Don't:

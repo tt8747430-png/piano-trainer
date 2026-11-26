@@ -3,14 +3,16 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderWithSettings as render } from '@/app/testing/render-with-settings'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { ServicesProvider } from '@/shared/lib/services'
 import { MidiControl } from './MidiControl'
 
 describe('MidiControl', () => {
   it('says in one line when the browser cannot connect a keyboard', () => {
     render(
-      <ServicesProvider services={{ audio: createFakeAudio(), midi: null }}>
+      <ServicesProvider
+        services={{ audio: createFakeAudio(), arranger: createFakeArranger(), midi: null }}
+      >
         <MidiControl />
       </ServicesProvider>,
     )
@@ -21,7 +23,13 @@ describe('MidiControl', () => {
   it('connects and names the keyboard', async () => {
     const user = userEvent.setup()
     render(
-      <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
+      <ServicesProvider
+        services={{
+          audio: createFakeAudio(),
+          arranger: createFakeArranger(),
+          midi: createFakeMidi(),
+        }}
+      >
         <MidiControl />
       </ServicesProvider>,
     )
@@ -33,7 +41,11 @@ describe('MidiControl', () => {
     const user = userEvent.setup()
     render(
       <ServicesProvider
-        services={{ audio: createFakeAudio(), midi: createFakeMidi({ state: 'denied' }) }}
+        services={{
+          audio: createFakeAudio(),
+          arranger: createFakeArranger(),
+          midi: createFakeMidi({ state: 'denied' }),
+        }}
       >
         <MidiControl />
       </ServicesProvider>,
@@ -47,7 +59,13 @@ describe('MidiControl', () => {
     const user = userEvent.setup()
     const away = { state: 'away', device: 'Piano', devices: ['Pads'] } as const
     render(
-      <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi(away) }}>
+      <ServicesProvider
+        services={{
+          audio: createFakeAudio(),
+          arranger: createFakeArranger(),
+          midi: createFakeMidi(away),
+        }}
+      >
         <MidiControl />
       </ServicesProvider>,
     )

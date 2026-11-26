@@ -69,8 +69,11 @@ export function stubScrolling({
  * `coordsAtPos`, its scrolling to the selection) reads as at the page's corner.
  */
 export function stubTextLayout() {
-  const proto = Range.prototype as Partial<Pick<Range, 'getClientRects' | 'getBoundingClientRect'>>
-  const own = { rects: proto.getClientRects, box: proto.getBoundingClientRect }
+  const proto = Range.prototype
+  const own = {
+    getClientRects: Object.getOwnPropertyDescriptor(proto, 'getClientRects'),
+    getBoundingClientRect: Object.getOwnPropertyDescriptor(proto, 'getBoundingClientRect'),
+  }
   const empty = (): DOMRect => ({
     x: 0,
     y: 0,
@@ -82,12 +85,22 @@ export function stubTextLayout() {
     bottom: 0,
     toJSON: () => ({}),
   })
-  proto.getClientRects = () => Object.assign([], { item: () => null }) as unknown as DOMRectList
-  proto.getBoundingClientRect = empty
+  const none = (): DOMRectList =>
+    Object.assign<DOMRect[], Pick<DOMRectList, 'item'>>([], { item: () => null })
+  Object.defineProperty(proto, 'getClientRects', {
+    configurable: true,
+    writable: true,
+    value: none,
+  })
+  Object.defineProperty(proto, 'getBoundingClientRect', {
+    configurable: true,
+    writable: true,
+    value: empty,
+  })
   onTestFinished(() => {
-    if (own.rects) proto.getClientRects = own.rects
-    else delete proto.getClientRects
-    if (own.box) proto.getBoundingClientRect = own.box
-    else delete proto.getBoundingClientRect
+    for (const [name, was] of Object.entries(own)) {
+      if (was) Object.defineProperty(proto, name, was)
+      else Reflect.deleteProperty(proto, name)
+    }
   })
 }

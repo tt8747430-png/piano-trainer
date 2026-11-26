@@ -2,10 +2,12 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { Archive } from 'lucide-react'
 import { useDeferredValue, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LIBRARY_PANES, RowLink } from '@/shared/ui'
+import { CountSort, RowLink } from '@/shared/ui'
 import {
   folderArchive,
+  LIBRARY_SORTS,
   libraryCatalog,
+  SORT_DIRECTIONS,
   useFolderName,
   useLibraryStoreApi,
   usePermissions,
@@ -14,35 +16,37 @@ import {
 import { useRepertoire } from '@/entities/piece'
 import { editFolder, FolderEditPanel, type FolderEdit } from '@/features/manage-library'
 import { useSongDrop, useSongImport } from '@/features/song-files'
-import { useMediaQuery, useSetSearch } from '@/shared/lib'
+import { cn, useMediaQuery, useSetSearch, LAPTOP } from '@/shared/lib'
+import { PLACE_COLUMN } from '@/widgets/song-library'
 import type { FolderSearch, SongsFilter } from '../model/songs-filter'
 import { useLibraryPage } from '../model/use-library-page'
-import { ContinueShelf } from './ContinueShelf'
 import { LibraryBrowse } from './LibraryBrowse'
 import { LibraryDialogs } from './LibraryDialogs'
 import { LibraryEmpty } from './LibraryEmpty'
-import { LibraryFilters } from './LibraryFilters'
 import { LibraryHeader } from './LibraryHeader'
+import { LibrarySearch, SearchEverywhere } from './LibrarySearch'
 import { LibrarySelect } from './LibrarySelect'
-import { LibraryTree } from './LibraryTree'
-import { SharedWithMe } from './SharedWithMe'
-import { NewActions, NewMenu } from './NewActions'
+import { LibraryTable } from './LibraryTable'
+import { NewActions } from './NewActions'
 import { SelectionBar } from './SelectionBar'
-import { FolderHead } from '@/widgets/song-library'
 
 /**
- * A place of the library (ADR 0106, Mindscape's `DeckLibraryPage`): Home (`folder` null, My songs
- * in Songs' switch), its folders then its own songs, or a folder, its songs; the bar, the search and filters, the rows read
- * or chosen in Select, and New floating (New song, New folder, Import), or Select's bar in its
- * place; a MusicXML or MIDI file dropped on it imported (ADR 0107).
+ * A list of the library's songs (ADR 0106, R72's LISTPAGE, Flat's library): All songs (every song,
+ * or the favourites alone from My songs' card) or a folder, its folders first. The bar (Back, the
+ * title, Select, ···, New), then the search and the count with its sort, side by side on a laptop,
+ * then the songs' cards; Select's bar in New's place while choosing; a MusicXML or MIDI file dropped
+ * on it imported (ADR 0107).
  */
 export function LibraryScreen({
   folder,
   filter,
   inEdit = false,
+  all = false,
 }: {
   folder: ShelvedFolder | null
   filter: SongsFilter
+  /** All songs, or its favourites alone: every song in one list, no folders. */
+  all?: 'all' | 'favourites' | false
   /** The folder in Edit (its URL's `edit`): its name and look in place under the bar. */
   inEdit?: boolean
 }) {
@@ -50,14 +54,18 @@ export function LibraryScreen({
   const nameOf = useFolderName()
   const navigate = useNavigate()
   const q = useDeferredValue(filter.q)
-  // A laptop's two panes (R30 S2): the library's tree on the left, the place's songs on the right.
-  const wide = useMediaQuery(LIBRARY_PANES)
-  const page = useLibraryPage(folder, { ...filter, q }, { tree: wide })
+  const laptop = useMediaQuery(LAPTOP)
+  const page = useLibraryPage(
+    folder,
+    { ...filter, q },
+    { tree: all !== false, favouritesOnly: all === 'favourites' },
+  )
   // Import, from New or a file dropped on the library, made where the learner is (ADR 0107).
   const songImport = useSongImport(folder?.id ?? null)
   const drop = useSongDrop(songImport.importFile)
-  // No search, level, With chords, favourites or chords known: the route fills its defaults.
-  const clear = () => void navigate({ to: '.', search: {}, replace: true })
+  // Clear search: the route fills its defaults, Favourites kept.
+  const clear = () =>
+    void navigate({ to: '.', search: (was) => ({ ...was, q: '' }), replace: true })
   const { view } = page
   const store = useLibraryStoreApi()
   const repertoire = useRepertoire()
@@ -85,47 +93,99 @@ export function LibraryScreen({
   const empty = view.folders.length === 0 && view.shown === 0
   // The folder's songs archived from it (D10): its last row, Archived (n), while there are some.
   const archived = folder ? folderArchive(page.layout, folder.id).length : 0
-  // What the place shows under its bar: in the right pane on a laptop, the whole width on a phone.
-  const body = (
-    <>
-      {folder && !editing && !page.select.on && page.view.here ? (
-        <FolderHead folder={folder} holds={page.view.here} />
-      ) : null}
-      {folder && editing ? (
-        <FolderEditPanel
-          value={editing}
-          placeholder={nameOf(folder)}
-          onChange={setDraft}
-          onDone={done}
-        />
-      ) : null}
-      <LibraryFilters
-        page={page}
+  const screen = folder
+    ? nameOf(folder)
+    : all === 'favourites'
+      ? t('places.favourites')
+      : t('all.title')
+  // The search, quiet while nothing is in the list to search; on a phone Select hides it with the
+  // count, a laptop's bar keeps it (one frame).
+  const search =
+    (page.select.on && !laptop) || (empty && !view.filtering) ? null : (
+      <LibrarySearch
         filter={filter}
-        screen={folder ? nameOf(folder) : t('title')}
-        wide={wide}
+        screen={screen}
+        label={folder ? t('folder.search') : undefined}
+        inBar={laptop}
       />
+    )
+  // How many it shows and its sort, the way it runs under a line (R72's COUNTROW and SORTMENU).
+  const count =
+    empty || page.select.on ? null : (
+      <CountSort
+        count={t('folder.songCount', { count: view.shown })}
+        label={t('sort.label')}
+        sort={page.sort}
+        sorts={LIBRARY_SORTS.map((value) => ({ value, label: t(`sort.${value}`) }))}
+        onSort={page.setSort}
+        ways={{
+          way: page.direction,
+          options: SORT_DIRECTIONS.map((value) => ({ value, label: t(`sort.${value}`) })),
+          onWay: page.setDirection,
+        }}
+      />
+    )
+  return (
+    <div
+      className={cn('flex flex-col gap-3 pb-4', laptop && cn('gap-4', PLACE_COLUMN))}
+      {...drop.dropProps}
+    >
+      <LibraryHeader
+        page={page}
+        folder={folder}
+        all={all}
+        search={laptop ? search : undefined}
+        count={empty ? undefined : t('folder.songCount', { count: view.shown })}
+        edit={
+          folder && renames
+            ? {
+                editing: editing !== null,
+                onEdit: () => setSearch({ edit: true }),
+                onDone: done,
+              }
+            : undefined
+        }
+      />
+      {folder && editing ? (
+        // As wide as the search on a laptop (520), never the page's width.
+        <div className="w-full max-w-130">
+          <FolderEditPanel
+            value={editing}
+            placeholder={nameOf(folder)}
+            onChange={setDraft}
+            onDone={done}
+          />
+        </div>
+      ) : null}
+      {/* A phone stacks the search and the count with its sort (the LISTPAGE board); a laptop's are
+          in its bar and its table's head. */}
+      {laptop ? (
+        filter.q.trim() === '' ? null : (
+          <SearchEverywhere query={filter.q} />
+        )
+      ) : (
+        <>
+          {/* 4 under the bar, as the board's column starts */}
+          <div className="-mt-2">{search}</div>
+          {count}
+        </>
+      )}
       {empty ? (
-        <LibraryEmpty page={page} inFolder={folder !== null} filter={filter} onClear={clear} />
+        <LibraryEmpty
+          page={page}
+          place={folder ? 'folder' : all === 'favourites' ? 'favourites' : 'home'}
+          filter={filter}
+          onClear={clear}
+        />
+      ) : laptop ? (
+        <LibraryTable page={page} noFolders={all !== false} onClear={clear} />
       ) : page.select.on ? (
         // Select's bar in the rows' drag: its places take what a row's face carries.
         <LibrarySelect page={page} folder={folder}>
           <SelectionBar page={page} folder={folder} />
         </LibrarySelect>
       ) : (
-        <>
-          {/* A phone's Home opens with what was played last (R30 S3); a laptop's tree has its place. */}
-          {folder === null && !wide && view.shown === view.scope.length ? <ContinueShelf /> : null}
-          <LibraryBrowse
-            page={page}
-            place={folder?.id ?? 'home'}
-            table={wide}
-            moreFolders={
-              folder === null && !wide && !view.filtering ? <SharedWithMe inTree={false} /> : null
-            }
-            onClear={clear}
-          />
-        </>
+        <LibraryBrowse page={page} noFolders={all !== false} moreFolders={null} onClear={clear} />
       )}
       {folder && archived > 0 && !page.select.on ? (
         <div className="card">
@@ -139,55 +199,9 @@ export function LibraryScreen({
           />
         </div>
       ) : null}
-    </>
-  )
-  return (
-    <div className="flex flex-col gap-4 pb-4" {...drop.dropProps}>
-      <LibraryHeader
-        page={page}
-        folder={folder}
-        add={
-          wide ? (
-            <NewMenu page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
-          ) : undefined
-        }
-        edit={
-          folder && renames
-            ? {
-                editing: editing !== null,
-                onEdit: () => setSearch({ edit: true }),
-                onDone: done,
-              }
-            : undefined
-        }
-      />
-      {wide ? (
-        <div className="grid grid-cols-[17rem_minmax(0,1fr)] items-start gap-8">
-          <aside className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-4">
-            <LibraryTree
-              current={
-                folder?.id ??
-                (filter.favourites
-                  ? 'favourites'
-                  : filter.learned === 'yes'
-                    ? 'learned'
-                    : filter.learned === 'no'
-                      ? 'learning'
-                      : 'all')
-              }
-              extra={<SharedWithMe inTree />}
-            />
-          </aside>
-          <div className="flex min-w-0 flex-col gap-4">{body}</div>
-        </div>
-      ) : (
-        body
-      )}
       {!page.select.on ? (
-        wide ? null : (
-          <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
-        )
-      ) : empty ? (
+        <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
+      ) : empty || laptop ? (
         <SelectionBar page={page} folder={folder} />
       ) : null}
       <LibraryDialogs page={page} folder={folder} />

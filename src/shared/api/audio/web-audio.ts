@@ -1,5 +1,6 @@
 import { hasFinePointer } from '@/shared/lib/fine-pointer'
 import type { Midi } from '@/shared/lib/music'
+import { pageTicker, steadyTicker, type Ticker } from '@/shared/lib/ticker'
 import {
   SOFT_GAIN,
   type ClickSound,
@@ -36,6 +37,29 @@ const PARTIALS = [
 const SILENT = 0.0001
 
 const frequencyOf = (key: Midi) => 440 * 2 ** ((key - 69) / 12)
+
+/**
+ * The limiter every sound goes out through: a band's piano, bass and drums together, or a full chord
+ * under the pedal, could go past full scale and distort; held just under it instead, its attack quick
+ * enough to catch a strike.
+ */
+const LIMITER = { threshold: -3, knee: 0, ratio: 20, attack: 0.002, release: 0.2 } as const
+
+/** Each context's way out, made once: through the limiter to the speakers. */
+const outputs = new WeakMap<BaseAudioContext, AudioNode>()
+function outputOf(context: BaseAudioContext): AudioNode {
+  const made = outputs.get(context)
+  if (made) return made
+  const limiter = context.createDynamicsCompressor()
+  limiter.threshold.value = LIMITER.threshold
+  limiter.knee.value = LIMITER.knee
+  limiter.ratio.value = LIMITER.ratio
+  limiter.attack.value = LIMITER.attack
+  limiter.release.value = LIMITER.release
+  limiter.connect(context.destination)
+  outputs.set(context, limiter)
+  return limiter
+}
 
 /**
  * A sound's nodes: the sources that make it and the gain it leaves by; a recorded voice's own damper
@@ -82,6 +106,8 @@ function partials(context: AudioContext, frequency: number, filter: AudioNode, a
 
 /** How fast a damper silences a string: the level's time constant, in seconds. */
 const DAMPING = 0.04
+/** How long Stop takes to fade what sounds, in seconds. */
+const STOP_FADE = 0.015
 /** How long after its damper falls a voice's oscillators stop. */
 const DAMPED = 0.25
 /** The soft pedal's low-pass: this many times the key's pitch, kept between these (Hz), gently. */
@@ -109,7 +135,7 @@ const playNote: Render<NoteSound> = (context, note, at, gain, ended) => {
   const sources = partials(context, frequency, filter, at)
   for (const source of sources) source.stop(end + DAMPED)
   if (sources[0]) sources[0].onended = ended
-  filter.connect(envelope).connect(context.destination)
+  filter.connect(envelope).connect(outputOf(context))
   return { sources, output: envelope }
 }
 
@@ -123,7 +149,7 @@ function dampedAt({ sources, output }: Voice, at: number) {
 /**
  * The soft pedal's tone for a key struck under it (una corda): fewer strings struck, by a softer
  * part of the hammer, so the upper partials fall away. A low-pass about two and a half octaves over
- * the key, into `destination`; what the voice sounds goes through it.
+ * the key, into the way out; what the voice sounds goes through it.
  */
 function softTone(context: AudioContext, key: Midi): BiquadFilterNode {
   const filter = context.createBiquadFilter()
@@ -133,7 +159,7 @@ function softTone(context: AudioContext, key: Midi): BiquadFilterNode {
     Math.max(SOFT_TONE.lowest, frequencyOf(key) * SOFT_TONE.over),
   )
   filter.Q.value = SOFT_TONE.q
-  filter.connect(context.destination)
+  filter.connect(outputOf(context))
   return filter
 }
 
@@ -193,7 +219,7 @@ function tone(
   envelope.gain.setValueAtTime(SILENT, at)
   envelope.gain.exponentialRampToValueAtTime(Math.max(SILENT, peak), at + 0.002)
   envelope.gain.exponentialRampToValueAtTime(SILENT, at + length)
-  oscillator.connect(envelope).connect(context.destination)
+  oscillator.connect(envelope).connect(outputOf(context))
   oscillator.start(at)
   oscillator.stop(at + length + 0.01)
   oscillator.onended = ended
@@ -234,7 +260,7 @@ function noise(
   envelope.gain.setValueAtTime(SILENT, at)
   envelope.gain.exponentialRampToValueAtTime(Math.max(SILENT, peak), at + 0.001)
   envelope.gain.exponentialRampToValueAtTime(SILENT, at + length)
-  source.connect(filter).connect(envelope).connect(context.destination)
+  source.connect(filter).connect(envelope).connect(outputOf(context))
   // Each strike from its own place in the noise, so no two hats are the same.
   source.start(at, Math.random() * 0.5)
   source.stop(at + length + 0.01)
@@ -335,7 +361,7 @@ function playRecorded(
   if (click.accent) source.playbackRate.value = rate
   const output = context.createGain()
   output.gain.value = (click.accent ? accent : beat) * gain
-  source.connect(output).connect(context.destination)
+  source.connect(output).connect(outputOf(context))
   source.start(at)
   source.onended = ended
   return { sources: [source], output }
@@ -387,7 +413,56 @@ const animationFrame = (look: () => void) => void requestAnimationFrame(look)
 /** Whether the page has had a gesture, which lets it start audio; where the browser cannot say, yes. */
 const browserActivated = () => navigator.userActivation?.hasBeenActive ?? true
 
-/** Audio a browser holds back until a gesture: started suspended, or interrupted (iOS, by a call). */
+/**
+ * The page as the audio needs to know it: whether it is in sight, and a call each time it comes back
+ * into sight (another app or tab left, the phone woken). Where there is no page, never in sight.
+ */
+export interface AudioPage {
+  visible(): boolean
+  onShown(shown: () => void): void
+  /** Calls `rerouted` when the outputs change: headphones in or out, a Bluetooth speaker joined. */
+  onRerouted(rerouted: () => void): void
+}
+
+const browserPage: AudioPage = {
+  visible: () => typeof document !== 'undefined' && document.visibilityState === 'visible',
+  onShown(shown) {
+    if (typeof window === 'undefined') return
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') shown()
+    })
+    window.addEventListener('pageshow', shown)
+    window.addEventListener('focus', shown)
+  },
+  onRerouted(rerouted) {
+    navigator.mediaDevices?.addEventListener('devicechange', rerouted)
+  },
+}
+
+/**
+ * The audio session as the app first sounds: playback, as a music app's, which plays through the
+ * phone's silent switch and is given back after a call (Safari's default for Web Audio is muted by
+ * the switch). Left alone while a microphone records, and before anything sounds, so the learner's
+ * other music plays on until they play something here.
+ */
+const playbackSession = () => {
+  if (navigator.audioSession?.type === 'auto') navigator.audioSession.type = 'playback'
+}
+
+/** How often, in milliseconds, the clock is watched while something sounds. */
+const WATCH_MS = 1000
+/**
+ * A clock that moved less than this many seconds in a watch, its context saying it runs, has stopped:
+ * the output was taken (another app's audio, a call) and given back dead, as iOS does.
+ */
+const STILL = 0.05
+/** After this many still watches the context is woken by suspending and resuming it. */
+const STILL_WATCHES = 2
+/** After this many it is replaced, once nothing counts on its clock. */
+const RENEW_WATCHES = 4
+/** A watch counts once this share of its time has gone by on the page. */
+const WATCH_FULL = 0.75
+
 /** How long a first sound waits for the recordings, in milliseconds, before it plays without them. */
 const SOUNDS_WAIT = 1500
 
@@ -400,10 +475,14 @@ function within(promise: Promise<void>, ms: number): Promise<void> {
   ]).finally(() => clearTimeout(timer))
 }
 
+/** Audio a browser holds back: started suspended before a gesture, or interrupted (iOS: a call, another app's audio). */
 const heldBack = (context: AudioContext) =>
   context.state === 'suspended' || context.state === 'interrupted'
 
-/** A recording's file, fetched once: its bytes, or null where it cannot be had (it stays silent). */
+/**
+ * A recording's file, fetched once: its bytes, or null where it cannot be had (silent this time,
+ * asked again next time: offline now, online later).
+ */
 const recordingFiles = new Map<string, Promise<ArrayBuffer | null>>()
 const fetchRecording = (src: string): Promise<ArrayBuffer | null> => {
   const known = recordingFiles.get(src)
@@ -411,6 +490,10 @@ const fetchRecording = (src: string): Promise<ArrayBuffer | null> => {
   const fetched = fetch(src)
     .then((response) => (response.ok ? response.arrayBuffer() : null))
     .catch(() => null)
+    .then((bytes) => {
+      if (!bytes) recordingFiles.delete(src)
+      return bytes
+    })
   recordingFiles.set(src, fetched)
   return fetched
 }
@@ -446,7 +529,7 @@ export async function stretchVoice(
     Array.from({ length: file.numberOfChannels }, (_, channel) => file.getChannelData(channel)),
   )
   const gain = context.createGain()
-  node.connect(gain).connect(context.destination)
+  node.connect(gain).connect(outputOf(context))
   return {
     play: ({ output, input, rate, semitones }) =>
       void node.schedule({ output, input, rate, semitones, active: true }),
@@ -470,6 +553,8 @@ export function createWebAudioOutput({
   activated = browserActivated,
   loadSound = fetchSound,
   loadSamples = (context) => createSampleLoader({ context }),
+  page = browserPage,
+  watcher = pageTicker(WATCH_MS),
 }: {
   createContext?: () => AudioContext | null
   frame?: (look: () => void) => void
@@ -483,6 +568,10 @@ export function createWebAudioOutput({
   loadSound?: LoadSound
   /** The recorded instruments' loader for a context (R29 SND). */
   loadSamples?: (context: AudioContext) => SampleLoader
+  /** Whether the page is in sight, and when it comes back. */
+  page?: AudioPage
+  /** The clock the output is watched by while something sounds: every second. */
+  watcher?: Ticker
 } = {}): AudioOutput {
   let context: AudioContext | null | undefined
   /** The recorded instruments: the grand, the light piano, the basses and the kit. */
@@ -497,20 +586,130 @@ export function createWebAudioOutput({
   const held = new Map<Midi, Voice>()
   /** The keyboard's speaker the notes go to, while they go through the piano. */
   let piano: MidiSoundOutput | null = null
-  /** The live voice's volume: a gain, the square of the Volume's share (ADR 0105's way). */
-  let liveVolume = 1
 
-  /** The AudioContext, created on first use; null where the browser has none. */
+  /**
+   * The context's clock stopped while it said it ran, and waking it did not start it: it is replaced
+   * at the next start (an unlock, a key), never under a transport already counting on its clock.
+   */
+  let stalled = false
+  /**
+   * Whether the context has run. Before, any gesture resumes it, so the first sound is not late;
+   * after, only a sound does: a tap on a menu never takes the output back from another app.
+   */
+  let ran = false
+  /** The clock at the last watch, and how many watches in a row it stood still. */
+  let watched: { readonly audio: number; readonly page: number } | null = null
+  let stillWatches = 0
+  let unwatch: (() => void) | null = null
+
+  /** The AudioContext, created on first use, and again after a closed one; null where the browser has none. */
   const openContext = (): AudioContext | null => {
+    if (context?.state === 'closed') renew()
     if (context === undefined) {
       context = createContext()
       if (context) {
+        context.onstatechange = wake
         void recorded.ready(context)
-        instruments = createInstruments(context, loadSamples(context), context.destination)
+        instruments = createInstruments(context, loadSamples(context), outputOf(context))
       }
     }
     return context
   }
+
+  /**
+   * A context fit to start on: a stalled one replaced first, once nothing counts on its clock (a
+   * transport stopped; its sounds never end on a dead clock, so Stop is what lets it go).
+   */
+  const startContext = (): AudioContext | null => {
+    if (stalled && !busy()) renew()
+    return openContext()
+  }
+
+  /** Lets the context go, closed with all it was sounding: the next use makes a new one. */
+  const renew = () => {
+    const old = context
+    if (!old) return
+    old.onstatechange = null
+    if (old.state !== 'closed') void old.close().catch(none)
+    recordings.stop()
+    recordings = makeRecordings()
+    lookahead.clear()
+    keys.clear()
+    voices.clear()
+    strings.clear()
+    held.clear()
+    context = undefined
+    instruments = null
+    stalled = false
+    ran = false
+    watched = null
+    stillWatches = 0
+  }
+
+  /** Whether anything is sounding, or due to: then a stopped clock is silence the learner hears. */
+  const busy = () => voices.size > 0 || held.size > 0 || lookahead.pending > 0 || recordings.playing
+
+  /**
+   * Audio taken by another app or a call is taken back while something should sound and the page is
+   * in sight: as it comes back into sight, as the context's state changes, and at every watch. A held
+   * context resumes (where a gesture has let the page start audio); a clock that stands still while
+   * its context says it runs is woken by suspending and resuming it, and replaced when that fails.
+   * Nothing sounding, nothing is taken back: the learner's other music plays on.
+   */
+  const look = () => {
+    const audio = context
+    if (!audio || !busy()) {
+      unwatch?.()
+      unwatch = null
+      watched = null
+      stillWatches = 0
+      return
+    }
+    if (!page.visible()) {
+      watched = null
+      return
+    }
+    if (heldBack(audio)) {
+      // The count of still watches is kept: a clock woken and still dead goes on to be replaced.
+      watched = null
+      if (activated()) void audio.resume().catch(none)
+      return
+    }
+    if (audio.state !== 'running') return
+    const moment = { audio: audio.currentTime, page: pageNow() }
+    const before = watched
+    watched = moment
+    // A first watch, or one that came early (a state change), says nothing.
+    if (!before || moment.page - before.page < WATCH_MS * WATCH_FULL) return
+    stillWatches = moment.audio - before.audio < STILL ? stillWatches + 1 : 0
+    if (stillWatches === STILL_WATCHES)
+      void audio
+        .suspend()
+        .then(() => audio.resume())
+        .catch(none)
+    else if (stillWatches >= RENEW_WATCHES) stalled = true
+  }
+  /** Watches the clock from now while something sounds; `look` stops it once nothing does. */
+  function watch() {
+    if (!unwatch && context && busy()) unwatch = watcher(look)
+  }
+  /** Looks now, and goes on watching while something sounds. */
+  function wake() {
+    if (context?.state === 'running') ran = true
+    look()
+    watch()
+  }
+  page.onShown(wake)
+  // A new output can leave the context running into nothing (iOS): while something sounds, it is
+  // suspended and resumed onto the new route.
+  page.onRerouted(() => {
+    const audio = context
+    if (!audio || audio.state !== 'running' || !busy()) return
+    void audio
+      .suspend()
+      .then(() => audio.resume())
+      .catch(none)
+  })
 
   const render = (sound: Sound, at: number, gain: number) => {
     // A sound turned right down is not played at all.
@@ -562,6 +761,7 @@ export function createWebAudioOutput({
           : CLICK_VOICES[name](context, sound, at, gain * (sound.gain ?? 1), ended)
     }
     voices.add(voice)
+    watch()
   }
 
   const now = () => context?.currentTime ?? 0
@@ -582,28 +782,32 @@ export function createWebAudioOutput({
       return { audio: stamp.contextTime, page: stamp.performanceTime }
     return { audio: heard(), page: pageNow() }
   }
-  const lookahead = createLookahead({ now, render })
+  const lookahead = createLookahead({ now, render, ticker: steadyTicker(25) })
   const keys = createSoundingKeys({ now, frame })
-  const recordings = createRecordingPlayer({
-    now,
-    voiceFor: (src) => {
-      const audio = openContext()
-      return audio ? makeVoice(audio, src) : Promise.resolve(null)
-    },
-  })
+  const makeRecordings = () =>
+    createRecordingPlayer({
+      now,
+      voiceFor: (src) => {
+        const audio = openContext()
+        return audio ? makeVoice(audio, src) : Promise.resolve(null)
+      },
+    })
+  let recordings = makeRecordings()
   const voice = createLiveVoice({
     strike(key, gain, soft) {
-      const audio = openContext()
+      const audio = startContext()
       if (!audio) return
-      if (heldBack(audio)) void audio.resume()
+      playbackSession()
+      if (heldBack(audio)) void audio.resume().catch(none)
       // Under the soft pedal two thirds as loud and darker; every key as loud as the piano's Volume.
-      const level = liveVolume * (soft ? SOFT_GAIN : 1)
-      const out = soft ? softTone(audio, key) : audio.destination
+      const level = soft ? SOFT_GAIN : 1
+      const out = soft ? softTone(audio, key) : outputOf(audio)
       const sampled = instruments?.piano(key, gain, audio.currentTime, level, out)
       held.set(
         key,
         sampled ? recordedVoice(sampled, none) : holdNote(audio, key, gain * level, out),
       )
+      watch()
     },
     silence(key) {
       const sound = held.get(key)
@@ -617,13 +821,21 @@ export function createWebAudioOutput({
 
   return {
     async unlock() {
-      const audio = openContext()
-      // With no gesture behind it (a sound as a screen opens), resuming could only fail.
-      if (audio && heldBack(audio) && activated()) await audio.resume()
+      const audio = startContext()
+      // With no gesture behind it (a sound as a screen opens), resuming could only fail; a refusal
+      // (iOS while a call holds the output) leaves it held, taken back at the next gesture or watch.
+      if (audio && heldBack(audio) && activated()) {
+        playbackSession()
+        await audio.resume().catch(none)
+      }
       // The light piano and the grand's middle are loaded as the audio opens, in the background.
       void instruments?.warm()
       // The recorded clicks and drums are in before the first beat, or given up on soon.
       if (audio) await within(recorded.ready(audio), SOUNDS_WAIT)
+    },
+    prime() {
+      const audio = startContext()
+      if (audio && !ran && heldBack(audio) && activated()) void audio.resume().catch(none)
     },
     play(sounds, at, gain) {
       const audio = openContext()
@@ -632,8 +844,10 @@ export function createWebAudioOutput({
         // Audio held back with no gesture to start it (a round sounded as its trainer opens) is let
         // go, not queued to burst out at the first tap; where the browser lets it run, it plays.
         if (!activated()) return NOTHING_PLAYED
-        void audio.resume()
       }
+      // The session first: changed under a running context, iOS would interrupt it.
+      playbackSession()
+      if (heldBack(audio)) void audio.resume().catch(none)
       const start = at ?? audio.currentTime + PLAY_DELAY
       // What the sounds strike is fetched as they are scheduled: in by the time they sound.
       instruments?.need(sounds)
@@ -646,9 +860,13 @@ export function createWebAudioOutput({
       lookahead.clear()
       keys.clear()
       if (!context) return
+      // Faded out in a moment, not cut: a sound cut mid-wave clicks.
+      const at = context.currentTime
       for (const { sources, output } of voices) {
-        output.disconnect()
-        for (const source of sources) source.stop(context.currentTime)
+        output.gain.cancelScheduledValues(at)
+        output.gain.setValueAtTime(output.gain.value, at)
+        output.gain.linearRampToValueAtTime(0, at + STOP_FADE)
+        for (const source of sources) source.stop(at + STOP_FADE)
       }
       voices.clear()
       strings.clear()
@@ -657,9 +875,6 @@ export function createWebAudioOutput({
     release: voice.release,
     pedal: voice.pedal,
     pedals: voice.pedals,
-    pianoVolume(share) {
-      liveVolume = Math.min(1, Math.max(0, share)) ** 2
-    },
     notesTo(output) {
       piano?.stop()
       piano = output
@@ -674,7 +889,13 @@ export function createWebAudioOutput({
         : null
     },
     loadRecording: (src) => void fetchRecording(src),
-    playRecording: (src, play, volume) => recordings.play(src, play, volume),
+    playRecording(src, play, volume) {
+      const audio = openContext()
+      playbackSession()
+      if (audio && heldBack(audio) && activated()) void audio.resume().catch(none)
+      recordings.play(src, play, volume)
+      watch()
+    },
     now,
     // What is heard now, moved by how long before or after now the page's moment was.
     audioTimeAt: (pageTime) => {

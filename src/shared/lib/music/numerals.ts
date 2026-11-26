@@ -1,11 +1,12 @@
 import {
+  isTableQuality,
   qualityIntervals,
   qualitySuffix,
-  qualityWithIntervals,
   spellChord,
   type Chord,
-  type ChordQuality,
+  type ChordKind,
 } from './chord'
+import { qualityWithIntervals, type ChordQuality } from './chord-quality'
 import { readQualitySuffix } from './chord-symbol'
 import { spellAbove } from './interval'
 import type { Key } from './key'
@@ -31,7 +32,7 @@ import type { Tone } from './tone'
 export interface Numeral {
   readonly degree: number
   readonly shift: -1 | 0 | 1
-  readonly quality: ChordQuality
+  readonly quality: ChordKind
   /** The degree whose key it is read in (`V/ii`, A in C), where it is applied to another chord. */
   readonly of?: AppliedDegree
   /** The chord tone in the bass (`I/5`, C/G in C), where it is not the root. */
@@ -39,8 +40,8 @@ export interface Numeral {
 }
 
 /** The chord tones a numeral writes in its bass, after a slash: `/3`, `/5`, `/7`. */
-export const NUMERAL_BASSES = ['3rd', '5th', '7th'] as const
-export type NumeralBass = (typeof NUMERAL_BASSES)[number]
+const NUMERAL_BASSES = ['3rd', '5th', '7th'] as const
+type NumeralBass = (typeof NUMERAL_BASSES)[number]
 /** A bass's tone as a numeral writes it, and back. */
 const BASS_DIGITS: ReadonlyMap<NumeralBass, string> = new Map(
   NUMERAL_BASSES.map((role) => [role, role.charAt(0)] as const),
@@ -51,7 +52,7 @@ const DIGIT_BASSES = new Map([...BASS_DIGITS].map(([role, digit]) => [digit, rol
  * The degree an applied numeral is read from, after its slash: its index and shift, and its key's mode,
  * minor under lower case (`/ii`, D minor in C), major under upper (`/IV`).
  */
-export interface AppliedDegree {
+interface AppliedDegree {
   readonly degree: number
   readonly shift: -1 | 0 | 1
   readonly minor: boolean
@@ -80,9 +81,9 @@ const LOWER_TAILS: ReadonlyMap<ChordQuality, string> = new Map<ChordQuality, str
   ['m69', '6/9'],
   ['madd9', 'add9'],
   ['m7', '7'],
-  ['mM7', 'Maj7'],
+  ['mM7', 'maj7'],
   ['m9', '9'],
-  ['mM9', 'Maj9'],
+  ['mM9', 'maj9'],
   ['m11', '11'],
   ['m13', '13'],
   ['dim', '°'],
@@ -92,17 +93,20 @@ const LOWER_TAILS: ReadonlyMap<ChordQuality, string> = new Map<ChordQuality, str
 ])
 const LOWER_QUALITIES = new Map([...LOWER_TAILS].map(([quality, tail]) => [tail, quality] as const))
 
-/** Whether a chord has a minor 3rd, so a numeral writes it in lower case (`ii7`, `vii°`). */
-export const hasMinorThird = (quality: ChordQuality): boolean => LOWER_TAILS.has(quality)
+/** Whether a chord has a minor 3rd (`ii7`, `vii°`, `iim7(add11)`). */
+export const hasMinorThird = (quality: ChordKind): boolean =>
+  isTableQuality(quality)
+    ? LOWER_TAILS.has(quality)
+    : quality.triad === 'min' || quality.triad === 'dim'
 /** Other ways a lower-case numeral's tail is typed. */
 const TAIL_ALIASES: ReadonlyMap<string, string> = new Map([
   ['o', '°'],
   ['o7', '°7'],
   ['ø', 'ø7'],
-  ['maj7', 'Maj7'],
-  ['M7', 'Maj7'],
-  ['maj9', 'Maj9'],
-  ['M9', 'Maj9'],
+  ['Maj7', 'maj7'],
+  ['M7', 'maj7'],
+  ['Maj9', 'maj9'],
+  ['M9', 'maj9'],
 ])
 
 type PlainTriad = 'maj' | 'min' | 'dim' | 'aug'
@@ -115,7 +119,8 @@ const GROWN_SEVENTH: Readonly<Record<PlainTriad, ChordQuality>> = {
   aug: 's5',
 }
 
-const isPlainTriad = (quality: ChordQuality): quality is PlainTriad => quality in GROWN_SEVENTH
+const isPlainTriad = (quality: ChordKind): quality is PlainTriad =>
+  isTableQuality(quality) && quality in GROWN_SEVENTH
 
 /** Whether a numeral's chord grows with a progression's chord size: a plain triad does, a chord written out does not. */
 export const numeralGrows = (numeral: Numeral): boolean => isPlainTriad(numeral.quality)
@@ -134,11 +139,11 @@ function grownNinth(seventh: ChordQuality, ninth: number): ChordQuality {
 }
 
 /** A lower-case numeral's chord: by its tail, or by a suffix that itself writes a chord with a minor 3rd (`iim7`). */
-function lowerQuality(tail: string): ChordQuality | null {
+function lowerQuality(tail: string): ChordKind | null {
   const short = LOWER_QUALITIES.get(TAIL_ALIASES.get(tail) ?? tail)
   if (short) return short
   const full = readQualitySuffix(tail)
-  return full && LOWER_TAILS.has(full) ? full : null
+  return full && hasMinorThird(full) ? full : null
 }
 
 /** A degree as Roman numerals write it, in either case, after a ♭ or ♯: its index from the tonic and its shift. */
@@ -153,12 +158,13 @@ export function readDegree(
 
 /**
  * One numeral: a degree, then what a chord symbol writes after its root. Upper case takes any chord
- * as the table spells it (`V7`, `IMaj7`, `I6`, `Vsus4`, `III+`, the sheets' `IIm7` and `IVm9`); lower
- * case is a chord with a minor 3rd, its suffix without the `m` (`ii`, `ii7`, `i6`, `ii9`, `iMaj7`),
+ * as the table spells it (`V7`, `Imaj7`, `I6`, `Vsus4`, `III+`, the sheets' `IIm7` and `IVm9`); lower
+ * case is a chord with a minor 3rd, its suffix without the `m` (`ii`, `ii7`, `i6`, `ii9`, `imaj7`),
  * a diminished one by its mark (`vii°`, `vii°7`, `iiø7`). After a slash, the degree whose key it is
- * read in (`V/ii`, `ii°/vi`): an applied chord.
+ * read in (`V/ii`, `ii°/vi`): an applied chord. `N`, `N6` and `subV7` are read as `♭II`, `♭II/3` and `♭II7`.
  */
-export function parseNumeral(token: string): Numeral | null {
+export function parseNumeral(written: string): Numeral | null {
+  const token = unaliased(written)
   const applied = APPLIED.exec(token)
   if (applied) {
     const [, own = '', sign = '', roman = ''] = applied
@@ -169,6 +175,17 @@ export function parseNumeral(token: string): Numeral | null {
       : { ...numeral, of: { ...of, minor: roman !== roman.toUpperCase() } }
   }
   return parseOwnNumeral(token)
+}
+
+/**
+ * The names theory books give two chromatic chords, read as the numerals they are: the Neapolitan
+ * (`N` ♭II, `N6` ♭II over its 3rd) and the tritone substitute (`subV7`, `subV` ♭II7), as Suggester's
+ * numerals write them.
+ */
+function unaliased(token: string): string {
+  if (token === 'N') return '♭II'
+  if (token === 'N6') return '♭II/3'
+  return token.replace(/^subV7?(?=\/|$)/, '♭II7')
 }
 
 /** A numeral of the key itself, with no applied slash: over its bass where a slash names one (`I/5`). */
@@ -188,9 +205,16 @@ function parseOwnNumeral(token: string): Numeral | null {
   return !read || !quality ? null : { ...read, quality }
 }
 
+/** A numeral in a line: anything but a space, comma, hyphen or dash, and whatever its brackets hold (`V7(#5,♭9)`). */
+const NUMERAL_TOKEN = /(?:[^\s,\-–—(]|\([^)]*\)|\()+/g
+
+/** Whether a saved line of numerals reads (`parseNumerals`), at least one chord. */
+export const readsAsNumerals = (line: unknown): line is string =>
+  typeof line === 'string' && (parseNumerals(line)?.length ?? 0) > 0
+
 /** A line of numerals apart by spaces, commas, hyphens or dashes; null if any cannot be read, or none is there. */
 export function parseNumerals(text: string): Numeral[] | null {
-  const tokens = text.split(/[\s,\-–—]+/).filter(Boolean)
+  const tokens = text.match(NUMERAL_TOKEN) ?? []
   const numerals: Numeral[] = []
   for (const token of tokens) {
     const numeral = parseNumeral(token)
@@ -202,12 +226,12 @@ export function parseNumerals(text: string): Numeral[] | null {
 
 /**
  * A numeral as it is written, one way: lower case for a chord with a minor 3rd (`ii7`, `viiø7`,
- * `i6`), upper case with the table's suffix for any other (`♭VII`, `IMaj7`, `V7♭9`, `Vsus4`).
+ * `i6`), upper case with the table's suffix for any other (`♭VII`, `Imaj7`, `V7♭9`, `Vsus4`).
  */
 export function numeralText(numeral: Numeral): string {
   const sign = numeral.shift < 0 ? '♭' : numeral.shift > 0 ? '#' : ''
   const roman = ROMAN_NUMERALS[numeral.degree] ?? ''
-  const tail = LOWER_TAILS.get(numeral.quality)
+  const tail = isTableQuality(numeral.quality) ? LOWER_TAILS.get(numeral.quality) : undefined
   const own =
     sign +
     (tail === undefined ? roman + qualitySuffix(numeral.quality) : roman.toLowerCase() + tail) +
@@ -221,9 +245,9 @@ function appliedText(of: AppliedDegree): string {
   return (of.shift < 0 ? '♭' : of.shift > 0 ? '#' : '') + (of.minor ? roman.toLowerCase() : roman)
 }
 
-/** Numerals as a line to read, a dash between them: `ii–V–I`. */
+/** Numerals as a line to read, a dash between them: `ii – V – I`. */
 export const numeralsLine = (numerals: readonly Numeral[]): string =>
-  numerals.map(numeralText).join('–')
+  numerals.map(numeralText).join(' – ')
 
 /** Numerals as a URL holds them: joined by hyphens, flats as `b`. */
 export const numeralsParam = (numerals: readonly Numeral[]): string =>
@@ -233,14 +257,15 @@ export const numeralsParam = (numerals: readonly Numeral[]): string =>
  * A half-diminished chord grown to a 9th: its 9th is the natural one whatever the key has over it
  * (locrian ♮2, the tensions table's), for the key's ♭9 is never played over it.
  */
-const withOwnNinth = (quality: ChordQuality): ChordQuality => (quality === 'hd' ? 'hd9' : quality)
+const withOwnNinth = <Kind extends ChordKind>(quality: Kind): Kind | 'hd9' =>
+  quality === 'hd' ? 'hd9' : quality
 
 /**
  * Whether a minor key's chord on this degree stands on its raised 6th or 7th, as melodic and
  * harmonic minor have them: a diminished or half-diminished chord on the 6th (A minor's F♯°, F♯ø7),
  * or any diminished one on the 7th (G♯°, G♯°7, G♯ø7).
  */
-const onRaisedDegree = (degree: number, quality: ChordQuality): boolean =>
+const onRaisedDegree = (degree: number, quality: ChordKind): boolean =>
   (degree === 6 && (quality === 'dim' || quality === 'o7' || quality === 'hd')) ||
   (degree === 5 && (quality === 'dim' || quality === 'hd'))
 

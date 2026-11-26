@@ -1,99 +1,65 @@
-import { FolderInput, Plus } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { Heart, Music, SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Said } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
-import { keyFromParam } from '@/shared/lib/music'
-import { useKeyName } from '@/shared/i18n'
-import { filtersOn, placesOn } from '../model/library-view'
 import type { SongsFilter } from '../model/songs-filter'
 import type { LibraryPage } from '../model/use-library-page'
 
 /**
- * A place of the library with nothing to list (Mindscape's `LibraryEmpty`): an empty folder offers
- * New song and Move songs here; an empty Home, New song; filters that keep nothing say what found
- * nothing (the search, the one filter on by its own words, or these filters), and Clear filters.
+ * A place of the library with nothing to list: a folder or Favourites says what shows there and
+ * links to All songs (R72); an empty library says where songs live and points to Explore; a search that keeps nothing says so,
+ * with Clear search.
  */
 export function LibraryEmpty({
   page,
-  inFolder,
+  place,
   filter,
   onClear,
 }: {
   page: LibraryPage
-  inFolder: boolean
+  /** Where it is empty: a folder, Favourites, or the whole library. */
+  place: 'folder' | 'favourites' | 'home'
   filter: SongsFilter
   onClear: () => void
 }) {
   const { t } = useTranslation('songs')
   const { t: common } = useTranslation('common')
-  const keyName = useKeyName()
-  if (page.view.filtering) {
-    const searched = filter.q.trim()
-    const on = filtersOn(filter)
-    // A place alone (Favourites, Learning, Learned) found nothing: said as the place, its way out All songs.
-    const placeAlone = !searched && on === placesOn(filter)
-    // What found nothing, said as plainly as it was asked: the one filter by its own words.
-    const said = searched
-      ? on === 0
-        ? t('emptyQuery', { query: searched })
-        : on === 1 && filter.stage !== 'any'
-          ? t('emptyQueryStage', { query: searched, stage: common(`stage.${filter.stage}`) })
-          : t('emptyQueryFilters', { query: searched })
-      : on > 1
-        ? t('emptyFilters')
-        : filter.stage !== 'any'
-          ? t('emptyStage', { stage: common(`stage.${filter.stage}`) })
-          : filter.key !== ''
-            ? t('emptyKey', { key: keyName(keyFromParam(filter.key)) })
-            : filter.favourites
-              ? t('emptyFavourites')
-              : filter.learned === 'yes'
-                ? t('emptyLearned')
-                : filter.learned === 'no'
-                  ? t('emptyLearning')
-                  : t('empty')
+  // A search that found nothing (R72's NOMATCH): what was asked, how to try again, Clear search.
+  if (page.view.filtering)
     return (
-      <Empty>
-        <EmptyHeader>
-          {/* A long query breaks rather than run off the screen. */}
-          <EmptyTitle className="break-words">{said}</EmptyTitle>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button variant="soft" onClick={onClear}>
-            {placeAlone ? t('tree.all') : common('library.clearFilters')}
-          </Button>
-        </EmptyContent>
-      </Empty>
+      <Said
+        quiet
+        icon={SearchX}
+        title={t('emptyQuery', { query: filter.q.trim() })}
+        description={t('emptyQueryLine')}
+        action={<Button onClick={onClear}>{common('clearSearch')}</Button>}
+      />
     )
-  }
+  // A folder or Favourites with nothing in it: the one empty state, saying what shows here, with the
+  // way to All songs.
+  if (place !== 'home')
+    return (
+      <Said
+        icon={place === 'folder' ? Music : Heart}
+        title={t(place === 'folder' ? 'folder.emptyTitle' : 'places.emptyFavourites')}
+        description={t(
+          place === 'folder' ? 'folder.emptyDescription' : 'places.emptyFavouritesLine',
+        )}
+        action={<Link to="/songs/all">{t('folder.addSongs')}</Link>}
+      />
+    )
+  // A library with nothing in it (R72's BAREP): where songs live, the three ways in, and Explore.
   return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyTitle>{t(inFolder ? 'folder.emptyTitle' : 'homeEmpty.title')}</EmptyTitle>
-        <EmptyDescription>
-          {t(inFolder ? 'folder.emptyDescription' : 'homeEmpty.description')}
-        </EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent className="flex-row flex-wrap justify-center">
-        {page.may('addSong') ? (
-          <Button variant="soft" onClick={() => page.open({ kind: 'new-song' })}>
-            <Plus data-icon="inline-start" aria-hidden />
-            {t('newSong')}
-          </Button>
-        ) : null}
-        {inFolder && page.may('moveIn') ? (
-          <Button variant="soft" onClick={() => page.open({ kind: 'move-in' })}>
-            <FolderInput data-icon="inline-start" aria-hidden />
-            {t('folder.moveIn')}
-          </Button>
-        ) : null}
-      </EmptyContent>
-    </Empty>
+    <Said
+      icon={Music}
+      title={t('homeEmpty.title')}
+      description={t('homeEmpty.description')}
+      action={
+        <Link to="/songs" search={{ view: 'explore' }}>
+          {t('homeEmpty.explore')}
+        </Link>
+      }
+    />
   )
 }

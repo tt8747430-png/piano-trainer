@@ -22,7 +22,9 @@ const OCTAVE = 12
 const FOURTH = 5
 const MAJOR_THIRD = 4
 
-const lowestFirst = (keys: readonly Midi[]): number[] => [...new Set(keys)].sort((a, b) => a - b)
+/** Keys once each, lowest first. */
+export const lowestFirst = (keys: Iterable<Midi>): Midi[] =>
+  [...new Set(keys)].sort((a, b) => a - b)
 const steps = (sorted: readonly number[]): number[] =>
   sorted.slice(1).map((key, i) => key - (sorted[i] ?? key))
 const within = (sorted: readonly number[]) => (sorted.at(-1) ?? 0) - (sorted[0] ?? 0) < OCTAVE

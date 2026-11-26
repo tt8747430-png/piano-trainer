@@ -8,6 +8,7 @@ import {
 import type { Chart, StaffMusic } from '@/shared/lib/arrangement'
 import { chartOf, stavesOf } from './chart'
 import { HEADER_FIELDS } from './score-header'
+import { printedHeader } from './song-facts'
 import {
   defaultLyricsStaff,
   lyricsStaff,
@@ -54,6 +55,7 @@ export function musicOf(piece: ChartPiece): PieceMusic {
   const staves = piece.staves?.length ? { staves: piece.staves } : {}
   const sung = piece.lyrics?.length ? piece.lyrics : undefined
   const on = lyricsStaff(piece)
+  const header = printedHeader(piece)
   return {
     key: piece.key,
     meter: piece.meter,
@@ -69,7 +71,7 @@ export function musicOf(piece: ChartPiece): PieceMusic {
     ...(sung ? { lyrics: sung } : {}),
     ...(sung && on !== defaultLyricsStaff(piece) ? { lyricsOn: on } : {}),
     ...(piece.pedal ? { pedal: piece.pedal } : {}),
-    ...(piece.header ? { header: piece.header } : {}),
+    ...(header ? { header } : {}),
     ...(piece.layout ? { layout: piece.layout } : {}),
   }
 }

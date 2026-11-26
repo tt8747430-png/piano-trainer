@@ -5,17 +5,13 @@ import { describe, expect, it, vi } from 'vitest'
 import { ButtonLink } from './ButtonLink'
 import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
-import { FactCard } from './FactCard'
 import { InversionChoice } from './InversionChoice'
-import { TitleTabs } from './TitleTabs'
 import { RankMark } from './RankMark'
-import { NamedSegmented } from './NamedSegmented'
 import { Labelled } from './Labelled'
 import { MenuSection } from './MenuSection'
 import { optionName } from './option'
 import { Pinned } from './Pinned'
 import { PlayLabel } from './PlayLabel'
-import { RatingMark } from './RatingMark'
 import { RoundButton } from './RoundButton'
 import { RoundLink } from './RoundLink'
 import { RowButton } from './RowButton'
@@ -28,7 +24,6 @@ import { Segmented } from './Segmented'
 import { SettingField } from './SettingField'
 import { SwitchRow } from './SwitchRow'
 import { ToggleChips } from './ToggleChips'
-import { ToggleTile } from './ToggleTile'
 import { TypedField } from './TypedField'
 
 const MODES = [
@@ -42,37 +37,6 @@ describe('ScreenHeader', () => {
     render(<ScreenHeader title="Learn" settings={<button type="button">Settings</button>} />)
     expect(screen.getByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
-  })
-
-  it('sets a place’s views as its title, its name still the page’s heading (R31-S)', async () => {
-    const user = userEvent.setup()
-    const shown: string[] = []
-    render(
-      <ScreenHeader
-        title="Songs"
-        large
-        views={
-          <TitleTabs
-            label="Views"
-            value="mine"
-            options={[
-              { value: 'mine', label: 'My songs' },
-              { value: 'explore', label: 'Explore' },
-            ]}
-            onChange={(view) => shown.push(view)}
-          />
-        }
-        tools={<button type="button">Select</button>}
-      />,
-    )
-    const bar = screen.getByRole('banner')
-    expect(within(bar).getByRole('heading', { level: 1, name: 'Songs' })).toHaveClass('sr-only')
-    expect(within(bar).getByRole('radio', { name: 'My songs' })).toBeChecked()
-    await user.click(within(bar).getByRole('radio', { name: 'Explore' }))
-    expect(shown).toEqual(['explore'])
-    // One row: the views where the title stands, nothing under the bar.
-    expect(bar.nextElementSibling).toBeNull()
-    expect(within(bar).getByRole('button', { name: 'Select' })).toBeInTheDocument()
   })
 
   it('gives only a place its views', () => {
@@ -293,18 +257,6 @@ describe('Segmented', () => {
   })
 })
 
-describe('NamedSegmented', () => {
-  it('shows its name beside the segments, and is named by it once', async () => {
-    const user = userEvent.setup()
-    const onChange = vi.fn()
-    render(<NamedSegmented label="Mode" value="step" options={MODES} onChange={onChange} />)
-    expect(screen.getByText('Mode')).toBeVisible()
-    expect(screen.getByRole('radiogroup', { name: 'Mode' })).toBeInTheDocument()
-    await user.click(screen.getByRole('radio', { name: 'Wait' }))
-    expect(onChange).toHaveBeenCalledWith('wait')
-  })
-})
-
 describe('InversionChoice', () => {
   it('offers root position and each inversion the chord has, at most three', async () => {
     const user = userEvent.setup()
@@ -477,46 +429,7 @@ describe('a choice’s explanation', () => {
   })
 })
 
-describe('ToggleTile', () => {
-  it('says what it does in its tooltip, never in a line on it', () => {
-    render(
-      <ToggleTile
-        label="Glissando"
-        tip="A swipe plays the keys"
-        icon={Settings}
-        pressed={false}
-        onPressedChange={() => {}}
-      />,
-    )
-    const tile = screen.getByRole('button', { name: 'Glissando' })
-    expect(tile).toHaveAccessibleDescription('A swipe plays the keys')
-    expect(tile).toHaveAttribute('title', 'A swipe plays the keys')
-    expect(tile).not.toHaveTextContent('A swipe plays the keys')
-  })
-
-  it('closed, still says why when pointed at', () => {
-    render(
-      <ToggleTile
-        label="Recording"
-        tip="Only in D minor"
-        icon={Settings}
-        pressed={false}
-        disabled
-        onPressedChange={() => {}}
-      />,
-    )
-    const tile = screen.getByRole('button', { name: 'Recording' })
-    expect(tile).toBeDisabled()
-    expect(tile).toHaveAccessibleDescription('Only in D minor')
-  })
-})
-
 describe('marks', () => {
-  it('names a rating in words', () => {
-    render(<RatingMark rating="gap" />)
-    expect(screen.getByText('Gap')).toHaveClass('sr-only')
-  })
-
   it('names a rank by its label', () => {
     render(<RankMark rank={2} label="Intermediate" />)
     expect(screen.getByRole('img', { name: 'Intermediate' })).toBeInTheDocument()
@@ -738,20 +651,6 @@ describe('RowGroup', () => {
     expect(
       screen.getByRole('heading', { level: 3, name: 'One change at a time' }),
     ).toBeInTheDocument()
-  })
-})
-
-describe('FactCard', () => {
-  it('names its fact under its icon, in a list of facts', () => {
-    render(
-      <dl>
-        <FactCard icon={Settings} name="Tempo">
-          72 BPM
-        </FactCard>
-      </dl>,
-    )
-    expect(screen.getByRole('term')).toHaveTextContent('Tempo')
-    expect(screen.getByRole('definition')).toHaveTextContent('72 BPM')
   })
 })
 

@@ -1,7 +1,14 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isStepId, type StepId } from '@/entities/step'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
-import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
+import {
+  createSavedStore,
+  isCount,
+  isOneOf,
+  isRecord,
+  savedObject,
+  type SavingOptions,
+} from '@/shared/lib'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import { DAYS_KEPT, keptDays } from './days'
 import {
@@ -19,15 +26,20 @@ import {
   FIRSTS,
   HISTORY_KEPT,
   type Answer,
+  type PlayedRun,
   type PracticeRun,
+  type QuizRun,
+  type RunStep,
+  type StaffNote,
   type FirstId,
   type ProgressState,
   type RunKey,
   type TrainerRecord,
 } from './types'
+import { songPlay, SONGS_KEPT } from './songs'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 7
+export const PROGRESS_VERSION = 13
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -48,21 +60,20 @@ const isDate = (value: unknown): value is string =>
 const isAnswer = (value: unknown): value is Answer =>
   isRecord(value) && typeof value.correct === 'boolean' && isDate(value.at)
 
-const isCount = (value: unknown): value is number =>
-  typeof value === 'number' && Number.isInteger(value) && value >= 0
-
 /** The entries of a saved record whose key passes and whose value can be read, as a new record. */
 function kept<K extends string, V>(
   saved: unknown,
   isKey: (key: string) => key is K,
   read: (value: unknown) => V | undefined,
 ): Partial<Record<K, V>> {
-  if (!isRecord(saved)) return {}
-  const entries = Object.entries(saved).flatMap(([key, value]) => {
-    const valid = isKey(key) ? read(value) : undefined
-    return valid === undefined ? [] : [[key, valid] as const]
-  })
-  return Object.fromEntries(entries) as Partial<Record<K, V>>
+  const result: Partial<Record<K, V>> = {}
+  if (!isRecord(saved)) return result
+  for (const [key, value] of Object.entries(saved)) {
+    if (!isKey(key)) continue
+    const valid = read(value)
+    if (valid !== undefined) result[key] = valid
+  }
+  return result
 }
 
 const isPieceKey = (key: string): key is string => key !== ''
@@ -113,7 +124,7 @@ const isKeyName = (key: string): key is string => /^[A-G](#|b)?m?$/.test(key)
 /** What an earned day is kept under: a badge's tier (`streak:2`) or a milestone's id. */
 const isEarnedKey = (key: string): key is string => /^[a-z][a-z-]*(:[1-4])?$/.test(key)
 
-const isFirst = (key: string): key is FirstId => (FIRSTS as readonly string[]).includes(key)
+const isFirst = isOneOf<FirstId>(FIRSTS)
 
 /** Of the days kept with a value, the latest `DAYS_KEPT`. */
 function latestDays<V>(record: Partial<Record<string, V>>): Partial<Record<string, V>> {
@@ -180,15 +191,46 @@ function sanitize(persisted: unknown): ProgressState {
       })
       .toSorted((a, b) => b.at.localeCompare(a.at))
       .slice(0, HISTORY_KEPT),
+    songs: Object.fromEntries(
+      Object.entries(kept(saved.songs, isPieceKey, songPlay)).slice(-SONGS_KEPT),
+    ),
   }
 }
 
-/** A run the history can show: its place, its numbers in range and a real time; else none. */
+/** A run the history can show: a quiz's or a played one, its place, its numbers in range and a real time; else none. */
 function practiceRun(value: unknown): PracticeRun | undefined {
-  const { key, accuracy, answered, streak, averageMs, at } = savedObject<PracticeRun>(value)
+  const saved = savedObject<PracticeRun>(value)
+  const { key, accuracy, at } = saved
   if (typeof key !== 'string' || !isRunKey(key) || !isPercent(accuracy)) return undefined
+  if (typeof at !== 'string' || Number.isNaN(Date.parse(at))) return undefined
+  const id = `${key}@${at}`
+  if (saved.kind === 'played') {
+    const { title, href, tempo, steps, chords } = savedObject<PlayedRun>(value)
+    if (typeof title !== 'string' || typeof href !== 'string' || !href.startsWith('/'))
+      return undefined
+    if (!isTempo(tempo) || !Array.isArray(steps) || steps.length < 1 || !steps.every(isRunStep))
+      return undefined
+    if (!Array.isArray(chords) || !chords.every(isStaffChord)) return undefined
+    return { kind: 'played', id, key, title, href, tempo, steps, chords, accuracy, at }
+  }
+  const { answered, streak, averageMs } = savedObject<QuizRun>(value)
   if (!isCount(answered) || answered < 1 || !isCount(streak) || !isCount(averageMs))
     return undefined
-  if (typeof at !== 'string' || Number.isNaN(Date.parse(at))) return undefined
-  return { id: `${key}@${at}`, key, accuracy, answered, streak, averageMs, at }
+  return { kind: 'quiz', id, key, accuracy, answered, streak, averageMs, at }
 }
+
+const isRunStep = (value: unknown): value is RunStep =>
+  value === 'clean' || value === 'slip' || value === 'pause'
+
+const isStaffChord = (value: unknown): value is readonly StaffNote[] =>
+  Array.isArray(value) &&
+  value.every((note: unknown) => {
+    if (!isRecord(note)) return false
+    const { step, accidental } = note
+    return (
+      Number.isInteger(step) &&
+      typeof accidental === 'number' &&
+      Number.isInteger(accidental) &&
+      Math.abs(accidental) <= 2
+    )
+  })

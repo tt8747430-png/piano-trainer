@@ -1,33 +1,26 @@
 import { useNavigate } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
+import { Book } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useOwnLessonsStoreApi, type OwnLesson } from '@/entities/own-lessons'
 import { useProgressStoreApi } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
-import {
-  deleteOwnLesson,
-  duplicateOwnLesson,
-  renameOwnLesson,
-  restoreOwnLesson,
-} from '@/features/manage-own-lessons'
-import { ResetStepsRow, resetSteps, restoreSteps } from '@/features/reset-progress'
+import { duplicateOwnLesson, renameOwnLesson } from '@/features/manage-own-lessons'
+import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, say, ScreenHeader } from '@/shared/ui'
-import { InCoursesRow, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
+import { type SettingsWindowOpen } from '@/shared/lib'
+import { say, sayUndo, SettingsWindow, ThingHead } from '@/shared/ui'
+import { deleteOwn, InCoursesRow, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 
 /**
- * A lesson of the learner's own's Settings (R30-5), the same page as a level's lesson's: how lessons
- * read; The lesson, Rename, In courses and Duplicate (the copy opened); its Progress reset; and Delete last, at
+ * A lesson of the learner's own's Settings (R30-5), the same shape as a level's lesson's (the board's
+ * THINGSET): the lesson at the head; The lesson, Rename, In courses and Duplicate (the copy opened); its Progress reset; and Delete last, at
  * once with Undo, its progress going with it. No Share link: the lesson lives on the learner's devices.
  */
 export function OwnLessonSettings({
   lesson,
-  reading,
-}: {
-  lesson: OwnLesson
-  /** How lessons read: its home is every lesson's Settings. */
-  reading: ReactNode
-}) {
+  open,
+  onOpenChange,
+}: { lesson: OwnLesson } & SettingsWindowOpen) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const navigate = useNavigate()
@@ -36,11 +29,17 @@ export function OwnLessonSettings({
   const title = localText(lesson.title, locale)
   const step = lessonStepId(lesson.id)
   return (
-    <div className="flex flex-col gap-6 pb-8">
-      <ScreenHeader title={t('settings.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <p className="-mt-2 px-1 text-muted-foreground text-pretty">{title}</p>
-        {reading}
+    <SettingsWindow open={open} onOpenChange={onOpenChange} title={t('settings.title')}>
+      <div className="flex flex-col gap-6">
+        <ThingHead
+          mark={
+            <span className="grid size-16 shrink-0 place-items-center rounded-pill bg-card ring-1 ring-border ring-inset">
+              <Book aria-hidden className="size-6" />
+            </span>
+          }
+          name={title}
+          line={t('own.lessonLine', { count: lesson.sections.length })}
+        />
         <OwnItemRows
           title={title}
           words={{ group: t('settings.lesson'), rename: t('own.renameLesson') }}
@@ -68,19 +67,11 @@ export function OwnLessonSettings({
           }}
           onDelete={() => {
             void navigate({ to: '/your-lessons', replace: true })
-            const deleted = deleteOwnLesson(store, lesson.id)
-            if (!deleted) return
-            const forgotten = resetSteps(progress, [step])
-            say(t('own.deleted', { title }), {
-              label: t('settings.undo'),
-              onClick: () => {
-                restoreOwnLesson(store, deleted)
-                restoreSteps(progress, forgotten)
-              },
-            })
+            const deleted = deleteOwn(store, progress, { lessons: [lesson.id] })
+            if (deleted) sayUndo(t('own.deleted', { title }), deleted.undo)
           }}
         />
       </div>
-    </div>
+    </SettingsWindow>
   )
 }

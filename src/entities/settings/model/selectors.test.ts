@@ -3,7 +3,7 @@ import { DEFAULT_BARS } from './bars'
 import {
   selectChordFinder,
   selectKeyboard,
-  selectKeysHeight,
+  selectKeysWindow,
   selectOtherHand,
   selectMetronome,
   selectMidi,
@@ -28,7 +28,9 @@ import {
   DEFAULT_EDITING,
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
+  DEFAULT_INTERVALS,
   DEFAULT_CHORD_PLAYER,
+  DEFAULT_CHORDS,
   defaultKeyboard,
   type SettingsState,
 } from './types'
@@ -42,14 +44,13 @@ describe('settings selectors', () => {
       sound: DEFAULT_SOUND,
       trainer: DEFAULT_TRAINER,
       keyboard: defaultKeyboard(false),
-      keysHeight: { phone: 120, side: null, wide: null },
+      keysWindow: { phone: null, side: null, wide: null },
       recorder: DEFAULT_RECORDER,
       editing: DEFAULT_EDITING,
       foldedSections: ['chords.tensions'],
       welcomed: true,
-      tipsSeen: [],
       practiceRecent: [],
-      lessonReading: 'sections',
+      paletteRecent: [],
       sidebar: 'collapsed',
       paletteFolded: true,
       paletteCategory: null,
@@ -61,7 +62,9 @@ describe('settings selectors', () => {
       playback: DEFAULT_PLAYBACK,
       metronome: DEFAULT_METRONOME,
       progressions: DEFAULT_PROGRESSIONS,
+      intervals: DEFAULT_INTERVALS,
       chordPlayer: DEFAULT_CHORD_PLAYER,
+      chords: DEFAULT_CHORDS,
       bars: DEFAULT_BARS,
       tuner: { a4: 440 },
       scaleStaff: { tonic: false, tetrachords: false },
@@ -72,7 +75,7 @@ describe('settings selectors', () => {
     expect(selectOtherHand(state)).toBe(DEFAULT_OTHER_HAND)
     expect(selectTrainer(state)).toBe(DEFAULT_TRAINER)
     expect(selectKeyboard(state)).toBe(state.keyboard)
-    expect(selectKeysHeight(state)).toEqual({ phone: 120, side: null, wide: null })
+    expect(selectKeysWindow(state)).toBe(state.keysWindow)
     expect(selectRecorder(state)).toBe(DEFAULT_RECORDER)
     expect(selectSidebar(state)).toBe('collapsed')
     expect(selectMidi(state)).toBe(DEFAULT_MIDI)

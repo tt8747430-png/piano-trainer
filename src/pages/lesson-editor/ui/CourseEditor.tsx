@@ -10,7 +10,7 @@ import { useAddLesson, useCourseDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { Dropdown, type EditAction } from '@/shared/ui'
 import { AboutDocument } from '@/widgets/lesson-document'
-import { DraftScreen, Properties, PropertyRow } from '@/widgets/content-editor'
+import { DocText, DraftScreen, Properties, PropertyRow } from '@/widgets/content-editor'
 import { CourseParts } from './CourseParts'
 import { OwnCourseEditor } from './OwnCourseEditor'
 
@@ -84,6 +84,15 @@ function CourseDocument({
       onOrder={(order) => change({ ...record, lessons: order })}
     >
       <Properties label={t('learn:edit.doc.properties')}>
+        <PropertyRow name={t('learn:edit.course.line')}>
+          <DocText
+            label={t('learn:edit.course.line')}
+            value={record.line ?? course.line}
+            locale={locale}
+            placeholder={words('edit.course.linePlaceholder')}
+            onChange={(line) => change({ ...record, line })}
+          />
+        </PropertyRow>
         <PropertyRow name={t('learn:edit.course.shelf')}>
           <Dropdown
             bare
@@ -120,7 +129,7 @@ function CourseDocument({
       </Properties>
       {/* Its About (R29 B9): the lesson's document under the course's head, written in place. */}
       <section aria-labelledby="course-about" className="flex flex-col gap-2">
-        <h2 id="course-about" className="font-display text-2xl">
+        <h2 id="course-about" className="font-sans text-xl font-bold">
           {t('learn:course.about')}
         </h2>
         <AboutDocument
@@ -141,7 +150,7 @@ function CourseDocument({
 }
 
 /** Where the course editor writes: an editor's draft of one of the app's courses, or the learner's own. */
-export type CourseSource =
+type CourseSource =
   | { readonly kind: 'draft'; readonly course: Course }
   | { readonly kind: 'own'; readonly course: OwnCourse }
 
@@ -167,23 +176,22 @@ export function CourseEditor({ source, ...props }: EditorProps & { source: Cours
 }
 
 /**
- * An editor's course editor (ADR 0116, round 21): the course's draft as one document, one language
- * at a time (the bar's choice); each lesson is edited on its own page; the draft's status, Publish
- * and menu in the bar.
+ * An editor's course editor (ADR 0116, round 21): the course's draft as one document in the app's
+ * language; each lesson is edited on its own page; Publish, one tap, and Done in the bar.
  */
 function DraftCourseEditor({ course, back, toCourse, edit }: EditorProps & { course: Course }) {
   const { t } = useTranslation('learn')
-  const shown = useLocale()
-  const [locale, setLocale] = useState<Locale>(shown)
+  // Written in the app's language (Settings › Language, its one home).
+  const locale = useLocale()
   const draft = useCourseDraft(course)
   const addLesson = useAddLesson(course.id)
   const navigate = useNavigate()
-  // The course as last written, for the document to open on in the other language.
+  // The course as last written, for the document to open on again.
   const written = useRef<{ opened: number; record: CourseRecord } | null>(null)
   // A new course's name is its draft's: the device has none of it.
   const title = localText(
     draft.load.state === 'ready' ? draft.load.value.title : course.title,
-    shown,
+    locale,
   )
   const save = (record: CourseRecord) => {
     written.current = { opened: draft.opened, record }
@@ -213,16 +221,7 @@ function DraftCourseEditor({ course, back, toCourse, edit }: EditorProps & { cou
       backTo={{ link: toCourse, label: t('edit.course.back') }}
       editorsOnly={t('edit.course.editorsOnly')}
       unreadable={t('edit.course.unreadable')}
-      language={{ value: locale, onChange: setLocale }}
-      publishPage={{
-        link: <Link to="/courses/$courseId/publish" params={{ courseId: course.id }} />,
-        open: () =>
-          void draft
-            .flush()
-            .then(() =>
-              navigate({ to: '/courses/$courseId/publish', params: { courseId: course.id } }),
-            ),
-      }}
+      oneTap
     >
       {(initial) => (
         <CourseDocument

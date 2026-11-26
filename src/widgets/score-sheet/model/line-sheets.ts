@@ -39,7 +39,7 @@ function lastUsed<T>(): (key: string, make: () => T) => T {
 }
 
 /** How the sheet's lines are cut: all its bars as one line (`across`), or each chart line to fit. */
-export type LineCut =
+type LineCut =
   | { readonly across: true }
   | { readonly across?: false; readonly room: number; readonly widths: readonly number[] }
 

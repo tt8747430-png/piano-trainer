@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { blankLesson, lessonById } from '@/entities/lesson'
 import { OWN_LESSONS_STORAGE_KEY, type OwnLessonsState } from '@/entities/own-lessons'
-import { createMemoryStorage, REST_MS } from '@/shared/lib'
+import { createMemoryStorage, OPEN_SETTINGS, REST_MS } from '@/shared/lib'
 import { stubTextLayout } from '@/shared/test/layout'
 
 const INTROS = {
@@ -144,7 +144,11 @@ describe('Your lessons (R30-5)', () => {
       'own-lesson-2',
     ])
     await act(() =>
-      router.navigate({ to: '/lessons/$lessonId/settings', params: { lessonId: 'own-lesson-1' } }),
+      router.navigate({
+        to: '/lessons/$lessonId',
+        params: { lessonId: 'own-lesson-1' },
+        state: OPEN_SETTINGS,
+      }),
     )
     await user.click(await screen.findByRole('button', { name: 'Delete lesson' }))
     await user.click(
@@ -187,6 +191,30 @@ describe('Your courses (R30-5)', () => {
     await user.click(within(sheet).getByRole('button', { name: 'Create course' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/courses/own-course-2/edit'))
     expect(ownLessonsStore.getState().courses[1]?.title).toBe('Reading four voices')
+  })
+
+  it('starts a course from the two weeks: its lessons copied into Your lessons, the course holding them', async () => {
+    const user = userEvent.setup()
+    const { router, ownLessonsStore } = await renderApp('/your-lessons', { storage: withOwn() })
+    await user.click((await screen.findAllByRole('button', { name: 'New' }))[0]!)
+    await user.click(await screen.findByRole('menuitem', { name: 'New course' }))
+    const sheet = await screen.findByRole('dialog', { name: 'New course' })
+    expect(within(sheet).getByRole('radio', { name: 'Empty course' })).toBeChecked()
+    await user.click(
+      within(sheet).getByRole('radio', { name: 'Two weeks: F major and accompaniment' }),
+    )
+    expect(within(sheet).getByRole('textbox', { name: 'Name' })).toHaveValue(
+      'Two weeks: F major and accompaniment',
+    )
+    await user.click(within(sheet).getByRole('button', { name: 'Create course' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/courses/own-course-2/edit'))
+    const { lessons, courses } = ownLessonsStore.getState()
+    const course = courses[1]!
+    expect(course.title).toBe('Two weeks: F major and accompaniment')
+    expect(course.lessons).toHaveLength(15)
+    expect(lessons.find((lesson) => lesson.id === course.lessons[1])?.title.en).toBe(
+      'Day 1: the map of the key',
+    )
   })
 
   it('reads as a course: its lessons, the learner’s and the app’s, each read in the course', async () => {
@@ -255,7 +283,11 @@ describe('Your courses (R30-5)', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/courses/own-course-2'))
     expect(ownLessonsStore.getState().courses[1]?.title).toBe('Sunday hymn playing copy')
     await act(() =>
-      router.navigate({ to: '/courses/$courseId/settings', params: { courseId: 'own-course-1' } }),
+      router.navigate({
+        to: '/courses/$courseId',
+        params: { courseId: 'own-course-1' },
+        state: OPEN_SETTINGS,
+      }),
     )
     await user.click(await screen.findByRole('button', { name: 'Delete course' }))
     await user.click(

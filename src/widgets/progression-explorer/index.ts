@@ -9,3 +9,4 @@ export {
 export { typedSearch } from './model/typed-progression'
 export { KeepProgressionSheet, type KeepStart } from './ui/KeepProgressionSheet'
 export { ProgressionExplorer } from './ui/ProgressionExplorer'
+export { ProgressionPractice } from './ui/ProgressionPractice'

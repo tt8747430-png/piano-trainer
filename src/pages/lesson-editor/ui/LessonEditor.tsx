@@ -1,11 +1,11 @@
-import { Link, useNavigate } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 import { useRef, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
 import { useOwnLessonsStoreApi, type OwnLesson } from '@/entities/own-lessons'
 import { useLessonDraft } from '@/features/edit-original'
 import { saveOwnLesson } from '@/features/manage-own-lessons'
-import { localText, useLocale, type Locale } from '@/shared/i18n'
+import { localText, useLocale } from '@/shared/i18n'
 import { useRestingSave } from '@/shared/lib'
 import type { EditAction } from '@/shared/ui'
 import { DraftScreen, LocalScreen } from '@/widgets/content-editor'
@@ -16,7 +16,7 @@ import { inBothLanguages, LessonDocument, OpenScore } from '@/widgets/lesson-doc
  * `id` (a course's as `<course>/<lesson>`, ADR 0116), or the learner's own lesson on their device
  * (R30-5).
  */
-export type LessonSource =
+type LessonSource =
   | { readonly kind: 'draft'; readonly id: string; readonly course?: string }
   | { readonly kind: 'own'; readonly lesson: OwnLesson }
 
@@ -77,9 +77,8 @@ function OwnLessonEditor({
 
 /**
  * An editor's lesson editor (ADR 0116, round 21): the lesson's draft opened (else the lesson as
- * published) as one document, written where it reads, one language at a time (the bar's choice);
- * each change saved to the draft once the editor rests; the draft's status, Publish and menu in the
- * bar.
+ * published) as one document, written where it reads, in the app's language; each change saved to
+ * the draft once the editor rests; Publish, one tap, and Done in the bar.
  */
 function DraftLessonEditor({
   lesson,
@@ -95,8 +94,8 @@ function DraftLessonEditor({
   course: string | undefined
 }) {
   const { t } = useTranslation('learn')
-  const shown = useLocale()
-  const [locale, setLocale] = useState<Locale>(shown)
+  // Written in the app's language (Settings › Language, its one home).
+  const locale = useLocale()
   const draft = useLessonDraft(lesson, id)
   const navigate = useNavigate()
   // An example of notes opened on its own score (round 27): the draft saved first, so the score
@@ -109,7 +108,7 @@ function DraftLessonEditor({
         search: { n, ...(course ? { course } : {}) },
       }),
     )
-  // The lesson as last written, for the document to open on in the other language.
+  // The lesson as last written, for the document to open on again.
   const written = useRef<{ opened: number; lesson: Lesson } | null>(null)
   const save = (next: Lesson) => {
     written.current = { opened: draft.opened, lesson: next }
@@ -117,7 +116,7 @@ function DraftLessonEditor({
   }
   // A new lesson's name is its draft's: the device has none of it.
   const opened = draft.load.state === 'ready' ? draft.load.value : lesson
-  const title = localText(opened.title, shown)
+  const title = localText(opened.title, locale)
   return (
     <DraftScreen
       draft={draft}
@@ -129,21 +128,7 @@ function DraftLessonEditor({
       backTo={{ link: toLesson, label: t('edit.back') }}
       editorsOnly={t('edit.editorsOnly')}
       unreadable={t('edit.unreadable')}
-      language={{ value: locale, onChange: setLocale }}
-      // A level's lesson's Publish page (R29 B6); a course's is published with its course.
-      publishPage={
-        course
-          ? undefined
-          : {
-              link: <Link to="/lessons/$lessonId/publish" params={{ lessonId: id }} />,
-              open: () =>
-                void draft
-                  .flush()
-                  .then(() =>
-                    navigate({ to: '/lessons/$lessonId/publish', params: { lessonId: id } }),
-                  ),
-            }
-      }
+      oneTap
     >
       {(initial) => {
         const last = written.current?.opened === draft.opened ? written.current.lesson : initial

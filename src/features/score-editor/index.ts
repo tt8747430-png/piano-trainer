@@ -28,6 +28,7 @@ export {
 } from './model/draft'
 export { placesIn, selectionSpan, tapsIn } from './model/caret-moves'
 export { chosenBars, MOST_BARS } from './model/form-edits'
+export { draftPickup, startsLine } from './model/bars'
 export {
   EDIT_MODES,
   type BarEdit,
@@ -55,7 +56,7 @@ export {
   type PlacedBar,
 } from './model/timeline'
 export { NOTE_VALUES, takesDot, takesTuplet, valueOf, type ChosenValue } from './model/values'
-export { chosenNotes, fingeredAt, shownValue } from './model/chosen'
+export { chosenNotes, fingeredAt, shownValue, spellNotes } from './model/chosen'
 export { hasMark, hasPedal, type MarkChoice } from './model/marks'
 export { singsHere, sungAt, sungFrom, sungNear, syllableAt, verseCount } from './model/lyrics'
 export { lineDrawn, type Line } from './model/lines'

@@ -66,8 +66,11 @@ use one.
 - **On the page only what changes the music shown** (R30): the chord size drawn only where a chord grows, Approach
   chords None · Secondary dominants · ii–V, Songs with this progression only where a song uses it.
 - **The library's breadth** follows the common named progressions of the reference sites, checked as chords, with a
-  **Modal** style of vamps that open in their mode (`mode` on an entry; its lines still written against major or
-  minor). A rotation of a loop already there (vi–IV–I–V, the Aeolian shuttle, I–♭VII–IV beside I–♭VII–IV–I) stays
+  **Modal** style of vamps that open in their mode, and a four-chord progression for the modes no other entry
+  already holds (Dorian i–IV–v–i, Lydian I–II–vii–I, Phrygian i–♭II–III–i; Mixolydian's is Borrowed ♭VII, Aeolian's
+  the walk-up's minor line), each named "progression", never "cadence", which in the Phrygian means iv⁶–V
+  (`mode` on an entry; its lines still written against major or minor). The gospel walk-up's note names it the
+  Mario cadence too. A rotation of a loop already there (vi–IV–I–V, the Aeolian shuttle, I–♭VII–IV beside I–♭VII–IV–I) stays
   out, as the loop test holds. A modal vamp is heard in a song only where it comes back to its first chord
   (`heardLine`: I–II–I, never Aura Lee's I–II⁷ on to V), on the song page and in its songs alike.
 - **Both ways:** a progression's page lists **Songs with this progression**, each at the bars it is first heard on,
@@ -83,9 +86,15 @@ use one.
   bass's line of degrees and the drums' 16-step grid a bar, a fill on a section's last bar its last time round and
   a crash on its first beat, swing as triplets (`arrangeStyle`); Accompaniment's patterns are its piano-only
   styles. The transport queues each chord 0.1 s ahead from the sheet as it stands, so an edit lands at the next
-  chord. **My chord sheets** are `pt-chord-sheets` (version 1, synced as `chord_sheets`): the sheet in hand and
-  the learner's own, each its text, style, tempo and how it plays (instruments, count-in, repeat, volume,
-  transpose, set on the Chord player's Settings); Written as and Voicing are `pt-settings.chordPlayer`.
+  chord. **My chord sheets** are `pt-chord-sheets` (version 2, synced as `chord_sheets`): the sheet in hand,
+  the learner's own and the five opened last (`recent`, the sheet in hand among them as `in-hand`), each its text, style, tempo and how it plays (instruments, count-in, repeat, volume,
+  transpose, set on the Chord player's Settings); Written as and Voicing are `pt-settings.chordPlayer`. No act
+  waits on a gesture alone (R67): a chord's tile is tapped to choose it and tapped again to open its dialog, and
+  dragged to move it; a key chord tapped replaces the chord chosen (or is added at the end when none is), or is
+  dragged into a bar.
+  Randomize (`randomProgression`) starts on the tonic, moves by function and closes V–I, each step as likely as
+  Piston's table of usual root progressions makes it (usual, sometimes, less often), so I → IV and V → I come
+  often and iii seldom.
 
 ## Consequences
 

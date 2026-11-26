@@ -1,50 +1,95 @@
-import { ShieldCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { DeviceStorage } from '@/shared/api/device-storage'
 import { useLocale } from '@/shared/i18n'
-import { ActionRow } from '@/shared/ui'
+import { SettingsGroup, SwitchRow } from '@/shared/ui'
 import { useDeviceStorage } from '../model/use-device-storage'
 
-/** Bytes as a learner reads them: a megabyte to one decimal, at least 0.1. */
+/** Bytes as a learner reads them: a megabyte to one decimal, at least 0.1 where anything is kept. */
 const megabytes = (bytes: number, locale: string) =>
   new Intl.NumberFormat(locale, {
     style: 'unit',
     unit: 'megabyte',
     maximumFractionDigits: 1,
-  }).format(Math.max(0.1, bytes / 1_000_000))
+  }).format(bytes === 0 ? 0 : Math.max(0.1, bytes / 1_000_000))
 
 /**
- * What this device keeps of the app (its songs, progress and the offline copy): how much, and whether
- * the browser keeps it safe; Keep them safe asks it to, so a phone short of space does not clear them.
+ * What this device keeps of the app (the board's Device storage): how much, in bold over a bar parted
+ * into the learner's songs and takes and the piano's samples (`piano`, bytes) with its legend; then
+ * Protect from clearing, a switch that asks the browser to keep it all (once granted it stays on: a
+ * browser keeps no way to take it back), and under the card what the browser said. The page's Device storage group, whole.
  */
-export function KeepOnDeviceFields({ storage }: { storage?: DeviceStorage }) {
+export function KeepOnDeviceFields({
+  storage,
+  piano = 0,
+}: {
+  storage?: DeviceStorage
+  piano?: number
+}) {
   const { t } = useTranslation('settings')
   const locale = useLocale()
   const { kept, refused, keepSafe } = useDeviceStorage(storage)
   if (kept.state === 'unknown')
-    return <p className="px-4 py-3 text-muted-foreground">{t('storage.reading')}</p>
+    // While the browser is asked (a moment), the card's own rows with their values not yet in, so
+    // the page does not move when they come.
+    return (
+      <SettingsGroup flush title={t('storage.label')} info={t('storage.info')}>
+        <div aria-busy className="flex flex-col gap-2 p-4">
+          <p className="font-semibold text-muted-foreground">{t('storage.reading')}</p>
+          <span aria-hidden className="h-1.5 rounded-pill bg-muted" />
+          <p aria-hidden className="text-footnote">
+            &nbsp;
+          </p>
+        </div>
+        <SwitchRow
+          label={t('storage.keepSafe')}
+          checked={false}
+          disabled
+          reason={t('storage.reading')}
+          onCheckedChange={() => undefined}
+        />
+      </SettingsGroup>
+    )
+  const used = kept.used ?? 0
+  const pianoPart = Math.min(piano, used)
+  const songs = used - pianoPart
+  const share = (bytes: number) => `${used > 0 ? (bytes / used) * 100 : 0}%`
   return (
-    <>
+    <SettingsGroup
+      flush
+      title={t('storage.label')}
+      info={t('storage.info')}
+      footnote={kept.safe ? t('storage.safe') : refused ? t('storage.refused') : undefined}
+    >
       {kept.used === null ? null : (
-        <p className="px-4 pt-3 pb-1">
-          {t('storage.used', { size: megabytes(kept.used, locale) })}
-        </p>
+        <div className="flex flex-col gap-2 p-4">
+          <p className="font-semibold tabular-nums">
+            {t('storage.used', { size: megabytes(used, locale) })}
+          </p>
+          <span aria-hidden className="flex h-1.5 overflow-hidden rounded-pill bg-muted">
+            <span className="h-full bg-paint-tile-sky" style={{ width: share(songs) }} />
+            <span className="h-full bg-learned" style={{ width: share(pianoPart) }} />
+          </span>
+          <p className="flex flex-wrap gap-x-4 gap-y-1 text-footnote text-muted-foreground tabular-nums">
+            <span className="flex items-center gap-1.5">
+              <span aria-hidden className="size-2 rounded-pill bg-paint-tile-sky" />
+              {t('storage.songs', { size: megabytes(songs, locale) })}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span aria-hidden className="size-2 rounded-pill bg-learned" />
+              {t('storage.piano', { size: megabytes(pianoPart, locale) })}
+            </span>
+          </p>
+        </div>
       )}
-      {kept.safe ? (
-        <p role="status" className="flex items-center gap-2 px-4 pt-1 pb-3 font-medium">
-          <ShieldCheck aria-hidden className="size-5 shrink-0 text-learned" />
-          {t('storage.safe')}
-        </p>
-      ) : (
-        <>
-          <ActionRow title={t('storage.keepSafe')} onClick={() => void keepSafe()} />
-          {refused ? (
-            <p role="status" className="px-4 pb-3 text-sm text-muted-foreground">
-              {t('storage.refused')}
-            </p>
-          ) : null}
-        </>
-      )}
-    </>
+      <SwitchRow
+        label={t('storage.keepSafe')}
+        checked={kept.safe}
+        disabled={kept.safe}
+        reason={t('storage.safe')}
+        onCheckedChange={(on) => {
+          if (on) void keepSafe()
+        }}
+      />
+    </SettingsGroup>
   )
 }

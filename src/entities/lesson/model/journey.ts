@@ -1,5 +1,6 @@
+import { isRecord } from '@/shared/lib'
 import { isStage, type Stage, type Step } from '@/entities/step'
-import type { LocalText } from '@/shared/i18n'
+import { isLocalText, type LocalText } from '@/shared/i18n'
 import { CHORD_FAMILIES, SCALE_KINDS } from '@/shared/lib/music'
 
 /** A node of a journey's chapter: a lesson to read, or a chord family or scale to check on Practice. */
@@ -25,18 +26,12 @@ export interface Journey {
   readonly chapters: readonly Chapter[]
 }
 
-const isText = (value: unknown): value is LocalText => {
-  if (typeof value !== 'object' || value === null) return false
-  const { en, ru } = value as Partial<LocalText>
-  return typeof en === 'string' && typeof ru === 'string'
-}
-
 const isId = (value: unknown): value is string => typeof value === 'string' && value.trim() !== ''
 
 /** A step as the database keeps it: a lesson by id, a chord family's or a scale's Check. */
 function isJourneyStep(value: unknown): value is JourneyStep {
-  if (typeof value !== 'object' || value === null) return false
-  const step = value as Partial<Record<string, unknown>>
+  if (!isRecord(value)) return false
+  const step = value
   switch (step.kind) {
     case 'lesson':
       return isId(step.lessonId)
@@ -50,11 +45,11 @@ function isJourneyStep(value: unknown): value is JourneyStep {
 }
 
 function isChapter(value: unknown): value is Chapter {
-  if (typeof value !== 'object' || value === null) return false
-  const chapter = value as Partial<Chapter>
+  if (!isRecord(value)) return false
+  const chapter = value
   return (
     isId(chapter.id) &&
-    isText(chapter.title) &&
+    isLocalText(chapter.title) &&
     Array.isArray(chapter.steps) &&
     chapter.steps.every(isJourneyStep)
   )
@@ -65,13 +60,13 @@ function isChapter(value: unknown): value is Chapter {
  * title and goal, and its chapters in order, each its steps in order. A journey is kept whole.
  */
 export function updatesJourney(id: string, body: unknown): body is Journey {
-  if (typeof body !== 'object' || body === null) return false
-  const journey = body as Partial<Journey>
+  if (!isRecord(body)) return false
+  const journey = body
   return (
     journey.id === id &&
     isStage(journey.stage) &&
-    isText(journey.title) &&
-    isText(journey.goal) &&
+    isLocalText(journey.title) &&
+    isLocalText(journey.goal) &&
     Array.isArray(journey.chapters) &&
     journey.chapters.every(isChapter)
   )

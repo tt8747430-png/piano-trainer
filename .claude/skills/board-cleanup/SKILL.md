@@ -88,6 +88,9 @@ Do NOT:
 
 Finish with a short before and after:
 
+In a loop (`owner-way`, Loops and refactors), this is one line inside the turn and the next item follows; never a closing report.
+
+
 - X parts renamed.
 - X unused helpers, keys or boards removed.
 - X strays moved back into the flow.

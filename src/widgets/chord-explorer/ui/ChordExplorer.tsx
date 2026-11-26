@@ -1,65 +1,49 @@
-import { selectKeyboard, useSettings } from '@/entities/settings'
-import { Square } from 'lucide-react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
-import { PinnedKeyboard } from '@/features/live-keyboard'
 import { recordKeyPractised } from '@/features/record-practised'
-import { ArpeggioIcon } from '@/shared/ui/icons/ArpeggioIcon'
-import { chordShown, noteOnTop, useShownKeys } from '@/features/play-example'
-import { useKeyName } from '@/shared/i18n'
-import { partsFromParams, partsParams } from '@/shared/lib'
-import {
-  colourNotes,
-  keyFromParam,
-  numeralOf,
-  numeralText,
-  printedSymbol,
-  qualitySpellings,
-  writtenSymbol,
-  type ChordQuality,
-  type ColourNote,
-  type Triad,
-} from '@/shared/lib/music'
-import { chordSounds } from '@/shared/lib/schedule'
+import { chordShown, useShownKeys } from '@/features/play-example'
+import { printedSymbol, writtenSymbol, VOICINGS, voicingBar } from '@/shared/lib/music'
+import { chordSounds, chordsInTurn, turnStarts } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
 import {
-  ChordHeading,
+  ActionMenu,
   FloatingActions,
-  FloatingBar,
-  FloatingBarButton,
-  FloatingBarPlay,
+  FloatingPiece,
+  FloatingPieces,
+  FloatingPlaySplit,
+  HandsPicture,
+  sayUndo,
   usePlayKey,
 } from '@/shared/ui'
 import {
+  addedChord,
+  changedChord,
   changedView,
+  chordSteps,
+  chordViews,
+  choseChord,
+  MOST_CHORDS,
+  removedChord,
+  type ChordStep,
+  takesTwoHands,
   chordKeys,
-  fingeringRows,
   viewChord,
   type ChordView,
 } from '../model/chord-view'
-import { ChordFingering } from './ChordFingering'
-import { ChordBuilder } from './ChordBuilder'
+import { ChordName } from './ChordName'
 import { ChordPractice } from './ChordPractice'
-import { ChordHead } from './ChordHead'
 import { ChordSheet } from './ChordSheet'
-import { ColourNotes } from './ColourNotes'
-
-/** A triad's quality, for a chord the table does not name: what its numeral is written from. */
-const TRIAD_QUALITY: Readonly<Record<Triad, ChordQuality>> = {
-  maj: 'maj',
-  min: 'min',
-  dim: 'dim',
-  aug: 'aug',
-  sus2: 'sus2',
-  sus4: 'sus4',
-  power: 'five',
-}
+import { ChordStage } from './ChordStage'
+import { NextChordSheet } from './NextChordSheet'
+import { staffKey } from '../model/next-chords'
+import { VoicingPicture } from './VoicingPicture'
 
 /**
- * Any chord built part by part on any root, read top to bottom: the keys by role and degree; what it
- * is (its symbol, its tones, the other ways it is written, the chord on a staff), Play and Arpeggio floating;
- * its choices; a 7th chord's available tensions; and its ways into the Player.
+ * Any chord on any root, as the canvas's Chords board draws it, top to bottom: the hands at the keys
+ * (or the keys); its name as three pickers (root, type, the note in the bass); the chord on a staff
+ * with its fingers beside the notes; its ways into the Player; and floating at the foot, the voicing,
+ * Play with how it plays, and the hands.
  */
 export function ChordExplorer({
   chord,
@@ -72,20 +56,61 @@ export function ChordExplorer({
   const play = usePlay()
   const playback = usePlayback<string>()
   // Placed once per view: a Play or Stop re-renders here, and a new placement would engrave the staff again.
-  const { chord: built, placed } = useMemo(() => viewChord(chord), [chord])
-  const rows = useMemo(() => fingeringRows(chord), [chord])
-  // What stands on the keys is this chord's: a tension played over the last one is forgotten with it.
+  const { chord: built, placed, fingers } = useMemo(() => viewChord(chord), [chord])
   const at = Object.values(chord).join(' ')
-  // The keys by role, no finger numbers on them (R34): the fingering table and hands show them.
-  const [shown, show] = useShownKeys(at, chordShown([...placed.lh, ...placed.rh]))
+  // The keys by role, no finger numbers on them unless Labels says Fingers (canvas 151).
+  const [shown] = useShownKeys(at, chordShown([...placed.lh, ...placed.rh]))
   const symbol = writtenSymbol(built)
+  // Every chord on the staff, the chosen one as placed above.
+  const chosenAt = chord.at ?? 0
+  const sheet = useMemo(
+    () =>
+      chordViews(chord).map((view, i) => {
+        if (i === chosenAt) return { placed, fingers, symbol }
+        const each = viewChord(view)
+        return { placed: each.placed, fingers: each.fingers, symbol: writtenSymbol(each.chord) }
+      }),
+    [chord, chosenAt, placed, fingers, symbol],
+  )
+  // The staff's chords, practised as written: each in the staff's key.
+  const staffChords = useMemo(
+    () =>
+      chordViews(chord).flatMap((view) => {
+        const { root, quality } = viewChord(view).chord
+        return quality ? [{ root, quality }] : []
+      }),
+    [chord],
+  )
+  // The Next chord sheet: open from the + to add, or from a chord's name to change that chord.
+  const [next, setNext] = useState<{ readonly editing: number | null } | null>(null)
+  const sounded = (view: ChordView) => {
+    play(chordSounds(chordKeys(view), { arpeggio: false }))
+    practised(view)
+  }
+  const nextPicked = (step: ChordStep) => {
+    const view =
+      next?.editing == null ? addedChord(chord, step) : changedChord(chord, next.editing, step)
+    onChange(view)
+    sounded(view)
+  }
+  const removed = () => {
+    if (next?.editing == null) return
+    const before = chord
+    const gone = sheet[next.editing]?.symbol ?? ''
+    setNext(null)
+    onChange(removedChord(chord, next.editing))
+    sayUndo(t('practice:chords.next.removed', { chord: printedSymbol(gone) }), () =>
+      onChange(before),
+    )
+  }
+  const pick = (i: number) => {
+    const view = i === chosenAt ? chord : choseChord(chord, i)
+    if (i !== chosenAt) onChange(view)
+    play(chordSounds(chordKeys(view), { arpeggio: false }))
+    practised(view)
+  }
   const { quality } = built
-  // The other ways its symbol is written: the table's, where the table has the chord, each printed
-  // as the sheets print a chord.
-  const others = quality ? qualitySpellings(quality).slice(1) : []
-  // A choice sounds by itself, unless Settings › Keyboard turns that off: it has no button, so no
-  // Stop, and it cuts off what played.
-  const { autoplay } = useSettings(selectKeyboard)
+  // A choice sounds by itself: it has no button, so no Stop, and it cuts off what played.
   // A key's chords played in it count the key practised (B1's Keys practised, as the walk Player's).
   const progress = useProgressStoreApi()
   const practised = (view: ChordView) => {
@@ -97,102 +122,174 @@ export function ChordExplorer({
   const change = (next: Partial<ChordView>) => {
     const view = changedView(chord, next)
     onChange(view)
-    if (!autoplay) return
     play(chordSounds(chordKeys(view), { arpeggio: false }))
     practised(view)
   }
-  const parts = partsFromParams(chord)
-  const key = chord.key ? keyFromParam(chord.key) : undefined
-  const keyName = useKeyName()
-  const notes = useMemo(() => colourNotes(built.root, parts, key), [built.root, parts, key])
-  const numeral = key
-    ? numeralOf({ root: built.root, quality: quality ?? TRIAD_QUALITY[parts.triad] }, key)
-    : null
-  const context =
-    key && numeral
-      ? t('practice:chords.colour.inKey', { numeral: numeralText(numeral), key: keyName(key) })
-      : undefined
-  const colour = (each: ColourNote) => {
-    if (each.toggled) {
-      const view = changedView(chord, partsParams(each.toggled))
-      onChange(view)
-      playback.toggle(`${at} ${each.label}`, () =>
-        chordSounds(chordKeys(view), { arpeggio: false }),
-      )
-      return
-    }
-    const over = noteOnTop(shown, each.pitchClass, {
-      tone: each.group === 'avoid' ? 'scale' : each.role,
-      label: each.label,
-    })
-    show(over)
-    playback.toggle(`${at} ${each.label}`, () => chordSounds(over.keys, { arpeggio: false }))
+  // With several chords, Play plays them all in turn unless its menu says only the chosen one.
+  const [only, setOnly] = useState(false)
+  const several = chordSteps(chord).length > 1
+  const all = several && !only
+  // While Play all plays, the chord sounding is shown chosen and the staff follows it.
+  // What sounds is shown only while Play plays, so a stopped Play shows the chosen chord again.
+  const [turnAt, setSounding] = useState<number | null>(null)
+  const sounding = playback.playing === null ? null : turnAt
+  const turns = useRef<ReturnType<typeof setTimeout>[]>([])
+  const clearTurns = () => {
+    turns.current.forEach(clearTimeout)
+    turns.current = []
   }
-  const sound = (id: 'chord' | 'arpeggio') =>
-    playback.toggle(id, () => chordSounds(chordKeys(chord), { arpeggio: id === 'arpeggio' }))
-  usePlayKey(() => sound('chord'))
+  const stopTurns = () => {
+    clearTurns()
+    setSounding(null)
+  }
+  useEffect(() => {
+    if (playback.playing === null) clearTurns()
+  }, [playback.playing])
+  useEffect(() => clearTurns, [])
+  const sound = (id: 'chord' | 'arpeggio') => {
+    const keys = chordViews(chord).map(chordKeys)
+    const arpeggio = id === 'arpeggio'
+    stopTurns()
+    playback.toggle(id, () =>
+      all ? chordsInTurn(keys, { arpeggio }) : chordSounds(chordKeys(chord), { arpeggio }),
+    )
+    if (all && playback.playing !== id)
+      turns.current = turnStarts(keys, { arpeggio }).map((start, i) =>
+        setTimeout(() => setSounding(i), start * 1000),
+      )
+  }
+  // How Play sounds the chord, chosen in its menu (R42): together, or one note after another.
+  const [playAs, setPlayAs] = useState<'chord' | 'arpeggio'>('chord')
+  usePlayKey(() => sound(playAs))
+  // The hands are a choice for a close chord one hand holds; any other is played as it says.
+  const handsChoice = chord.voicing === 'close' && !takesTwoHands(built.tones.length)
+  const handsShown = handsChoice ? chord.hands : 'both'
 
   return (
-    <div className="flex flex-col gap-6">
-      <PinnedKeyboard shown={shown} />
-      <ChordHead
-        name={
-          <>
-            <hgroup>
-              <ChordHeading symbol={symbol} />
-              {quality ? (
-                <p className="text-muted-foreground">{t(`music:quality.${quality}`)}</p>
-              ) : null}
-            </hgroup>
-            {others.length > 0 ? (
-              <p className="flex flex-wrap items-baseline gap-x-4">
-                <span className="text-muted-foreground">{t('practice:chords.written')}</span>
-                <span className="font-display text-xl font-semibold">
-                  {others
-                    .map((suffix) => printedSymbol(writtenSymbol({ root: built.root, suffix })))
-                    .join(' · ')}
-                </span>
-              </p>
-            ) : null}
-          </>
-        }
-        staff={<ChordSheet placed={placed} />}
-        choices={
-          <ChordBuilder chord={chord} tones={built.tones} placed={placed} onChange={change} />
-        }
-      />
-      <ChordFingering rows={rows} />
-      <ColourNotes notes={notes} context={context} onToggle={colour} onPlay={colour} />
-      {quality ? (
-        <ChordPractice
-          root={built.root}
-          quality={quality}
-          inversion={built.tones.length <= 4 ? chord.inversion : 0}
-        />
-      ) : null}
-      <FloatingActions>
-        {/* Two ways to hear one chord, each named (R29-P4): Play, the notes together; Arpeggio, one
-            after another from the bottom up. */}
-        <FloatingBar label={t('practice:transport')} className="gap-1.5 pr-1.5">
-          <FloatingBarPlay
-            named
-            label={t('music:play')}
-            playing={playback.playing === 'chord'}
-            onClick={() => sound('chord')}
+    <div className="flex flex-col gap-4 lg:gap-6">
+      <ChordStage chord={chord} shown={shown} />
+      {/* The body under the stage, 880 wide at most on a laptop, its parts 24 apart, as the board's column. */}
+      <div className="flex flex-col gap-4 md:mx-auto md:w-full md:max-w-[55rem] lg:gap-6">
+        <h2 className="sr-only">{printedSymbol(symbol)}</h2>
+        <ChordName chord={chord} tones={built.tones} quality={quality} onChange={change} />
+        <section className="card flex flex-col gap-3 px-3 py-4">
+          <ChordSheet
+            chords={sheet}
+            at={sounding ?? chosenAt}
+            onPick={pick}
+            onName={(i) => setNext({ editing: i })}
+            onAdd={
+              chordSteps(chord).length < MOST_CHORDS ? () => setNext({ editing: null }) : undefined
+            }
           />
-          <FloatingBarButton
-            named
-            label={playback.playing === 'arpeggio' ? t('common:stop') : t('practice:arpeggio')}
-            aria-pressed={playback.playing === 'arpeggio'}
-            onClick={() => sound('arpeggio')}
-          >
-            {playback.playing === 'arpeggio' ? (
-              <Square aria-hidden />
-            ) : (
-              <ArpeggioIcon aria-hidden />
+        </section>
+        {quality ? (
+          <ChordPractice
+            chord={{ root: built.root, quality }}
+            inversion={built.tones.length <= 4 ? chord.inversion : 0}
+            chords={staffChords}
+            staffKey={staffKey(chord)}
+          />
+        ) : null}
+      </div>
+      <NextChordSheet
+        open={next !== null}
+        onOpenChange={(open) => setNext(open ? (next ?? { editing: null }) : null)}
+        view={chord}
+        editing={next?.editing ?? null}
+        onPick={nextPicked}
+        onRemove={removed}
+      />
+      <FloatingActions>
+        {/* The canvas's three pieces of glass: the voicing, Play with how it plays, the hands. */}
+        <FloatingPieces label={t('practice:transport')}>
+          <ActionMenu
+            label={t('practice:chords.voicing.label')}
+            render={
+              <FloatingPiece
+                label={`${t('practice:chords.voicing.label')}: ${t(`practice:chords.voicing.names.${chord.voicing}`)}`}
+                caption={t(`practice:chords.voicing.captions.${chord.voicing}`)}
+              >
+                <VoicingPicture placed={placed} />
+              </FloatingPiece>
+            }
+            trigger={null}
+            actions={VOICINGS.filter((voicing) => !voicingBar(built.tones, voicing)).map(
+              (voicing) => ({
+                key: voicing,
+                label: t(`practice:chords.voicing.names.${voicing}`),
+                checked: chord.voicing === voicing,
+                onSelect: () => change({ voicing }),
+              }),
             )}
-          </FloatingBarButton>
-        </FloatingBar>
+          />
+          <FloatingPlaySplit
+            label={t(
+              `practice:chords.playAs.${all ? 'playAll' : playAs === 'chord' ? 'playChord' : 'arpeggiate'}`,
+            )}
+            playing={playback.playing === playAs}
+            onPlay={() => sound(playAs)}
+            menuLabel={t('practice:chords.playAs.label')}
+            menu={(trigger) => (
+              <ActionMenu
+                label={t('practice:chords.playAs.label')}
+                align="end"
+                render={trigger}
+                trigger={null}
+                actions={[
+                  ...(['chord', 'arpeggio'] as const).map((each) => ({
+                    key: each,
+                    label: t(`practice:chords.playAs.${each === 'chord' ? 'block' : 'arpeggio'}`),
+                    checked: playAs === each,
+                    onSelect: () => setPlayAs(each),
+                  })),
+                  ...(several
+                    ? [
+                        {
+                          key: 'all',
+                          group: 'order',
+                          unnamed: true,
+                          label: t('practice:chords.playAs.inOrder', {
+                            count: chordSteps(chord).length,
+                          }),
+                          checked: !only,
+                          onSelect: () => setOnly(false),
+                        },
+                        {
+                          key: 'one',
+                          group: 'order',
+                          unnamed: true,
+                          label: t('practice:chords.playAs.only', { chord: printedSymbol(symbol) }),
+                          checked: only,
+                          onSelect: () => setOnly(true),
+                        },
+                      ]
+                    : []),
+                ]}
+              />
+            )}
+          />
+          <ActionMenu
+            label={t('practice:hands')}
+            align="end"
+            render={
+              <FloatingPiece
+                label={`${t('practice:hands')}: ${t(`common:hands.${handsShown}`)}`}
+                caption={t('practice:hands')}
+                disabled={!handsChoice}
+              >
+                <HandsPicture hands={handsShown} />
+              </FloatingPiece>
+            }
+            trigger={null}
+            actions={(['both', 'rh', 'lh'] as const).map((each) => ({
+              key: each,
+              label: t(`common:hands.${each}`),
+              checked: handsShown === each,
+              onSelect: () => change({ hands: each }),
+            }))}
+          />
+        </FloatingPieces>
       </FloatingActions>
     </div>
   )

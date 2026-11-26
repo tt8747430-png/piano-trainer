@@ -1,4 +1,4 @@
-import { BookOpenText, ChartNoAxesColumnIncreasing, KeyboardMusic } from 'lucide-react'
+import { KeyboardMusic } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { lessonById, type Chapter, type Journey, type JourneyStep } from '@/entities/lesson'
@@ -8,10 +8,11 @@ import {
   selectLearned,
   selectRead,
   useProgress,
+  isLearned,
 } from '@/entities/progress'
 import { lessonStepId, skillsOfStep, StepLink, stepIdOf, type StepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { ProgressMeter } from '@/shared/ui'
+import { ButtonLink, ProgressMeter, ScaleIcon } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 import { journeyProgress, lessonShare } from '../model/progress'
 import { afterWorthSaying } from '../model/after'
@@ -19,27 +20,31 @@ import { useStepTitle } from '../model/use-step-title'
 import { LessonLine, LessonRow, LessonStop } from './LessonRow'
 
 const ICON = {
-  lesson: BookOpenText,
   chords: KeyboardMusic,
-  scale: ChartNoAxesColumnIncreasing,
+  scale: ScaleIcon,
 } as const
 
+/** Where a step stands on the level's spine: whether the learner has come to it, passed it, and its ends. */
+type Place = { reached: boolean; passed: boolean; first: boolean; last: boolean }
+
 /**
- * A step of a chapter as a library's row: its tile plain until learned (a lesson's number, a
- * check's picture; grass with a check once learned, an arc round it as a lesson is read, ringed in honey where Continue leads), its title and
- * one detail line (a lesson's number and the lessons to read first; a check's kind and how much of it
- * is known), Next where Continue leads, a chevron. The whole row opens it.
+ * A step of a chapter as a timeline's row (the canvas's PATHROW): a lesson's tile its soft dot until
+ * learned, its book ringed in honey where Continue leads, a check's square its kind's picture; its
+ * title and one detail line (a lesson's number and the lessons to read first; a check's kind and how
+ * much of it is known), Next where Continue leads. The whole row opens it.
  */
 function StepRow({
   step,
   number,
   numbers,
   next,
+  place,
 }: {
   step: JourneyStep
   number: number | undefined
   numbers: ReadonlyMap<StepId, number>
   next: boolean
+  place: Place
 }) {
   const { t } = useTranslation('learn')
   const title = useStepTitle()(step).primary
@@ -47,10 +52,9 @@ function StepRow({
   const read = useProgress(selectRead)
   const answers = useProgress(selectAllAnswers)
   const id = stepIdOf(step)
-  const done = learned[id] !== undefined
+  const done = isLearned(learned, id)
   const lesson = step.kind === 'lesson' ? lessonById(step.lessonId) : undefined
   const share = lesson ? lessonShare(lesson.sections.length, read[id], done) : 0
-  const Icon = ICON[step.kind]
   const asked = (lesson?.after ?? []).flatMap((each) => {
     const n = numbers.get(lessonStepId(each))
     return n === undefined ? [] : [n]
@@ -60,24 +64,23 @@ function StepRow({
   const detail =
     step.kind === 'lesson'
       ? [
-          // The number said once: on the tile, or here where the tile shows Next's book or a check.
-          number === undefined || !(next || done) ? null : t('lessonNumber', { n: number }),
+          number === undefined ? null : t('lessonNumber', { n: number }),
           after.length > 0 ? t('after', { lessons: after.join(', ') }) : null,
         ]
       : [
           t(`kind.${step.kind}`),
-          skills.length > 0
-            ? t('known', { known: knownCount(skills, answers), total: skills.length })
-            : null,
+          skills.length === 1
+            ? t(knownCount(skills, answers) === 1 ? 'knownOne' : 'notKnownYet')
+            : skills.length > 0
+              ? t('known', { known: knownCount(skills, answers), total: skills.length })
+              : null,
         ]
+  const Icon = step.kind === 'lesson' ? null : ICON[step.kind]
   return (
-    <LessonStop>
+    <LessonStop {...place}>
       <LessonRow
         render={<StepLink step={step} />}
-        // A lesson's tile its number, the same as its line's; a check's square its kind's picture.
-        mark={
-          next || number === undefined ? <Icon className="size-5" strokeWidth={1.75} /> : number
-        }
+        mark={Icon ? <Icon strokeWidth={1.75} /> : undefined}
         square={step.kind !== 'lesson'}
         done={done}
         share={share}
@@ -89,39 +92,44 @@ function StepRow({
   )
 }
 
-/** A chapter as a group of the library: its name and how much is learned over one card of rows. */
+/**
+ * A chapter: its number and name in the soft 14 over its line, how much of it is learned beside it
+ * ("3 of 3"; at the row's end on a phone, beside the name on a laptop), its rows tucked 2 into its 28 band.
+ */
 function ChapterGroup({
   chapter,
   n,
   numbers,
   next,
+  placeOf,
 }: {
   chapter: Chapter
   n: number
   numbers: ReadonlyMap<StepId, number>
   next: StepId | undefined
+  placeOf: (step: StepId) => Place
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const id = useId()
   const learned = useProgress(selectLearned)
   const ids = chapter.steps.map(stepIdOf)
-  const done = ids.filter((each) => learned[each] !== undefined).length
+  const done = ids.filter((each) => isLearned(learned, each)).length
   const title = localText(chapter.title, locale)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-2">
-      <h3 className="flex items-baseline gap-2 px-3 font-sans text-sm font-semibold text-muted-foreground">
+    <section aria-labelledby={id} className="flex flex-col gap-0.5">
+      <h3 className="-mb-1 flex min-h-7 items-center justify-between gap-3 font-sans text-sm font-semibold text-muted-foreground lg:justify-start">
         <span id={id} className="sr-only">
           {t('journey.chapter', { n, title })}
         </span>
-        <span aria-hidden className="min-w-0 flex-1">
+        <span aria-hidden className="min-w-0">
           {n} · {title}
         </span>
-        <span className="shrink-0 font-normal tabular-nums">
-          {t('journey.count', { learned: done, total: ids.length })}
+        <span className="shrink-0 text-footnote font-normal tabular-nums">
+          {t('journey.of', { learned: done, total: ids.length })}
         </span>
       </h3>
-      <LessonLine>
+      <LessonLine across={3}>
         {chapter.steps.map((step) => {
           const stepId = stepIdOf(step)
           return (
@@ -131,6 +139,7 @@ function ChapterGroup({
               number={numbers.get(stepId)}
               numbers={numbers}
               next={stepId === next}
+              place={placeOf(stepId)}
             />
           )
         })}
@@ -140,40 +149,75 @@ function ChapterGroup({
 }
 
 /**
- * A level's page's body (canvas 163): its stage and how much of it is learned over a meter, its goal,
- * then its chapters, each a line of its steps. Its name is the page's title, in the bar. Every step
- * opens; the order only suggests.
+ * A level's page's body (the LearnLevel boards' LVHEAD and PATHF): what it teaches in a line of
+ * reading (65ch at most), its stage and how much is learned over the 6 meter, then the one honey act,
+ * Start, Continue or Review and the lesson it opens; then its chapters 32 apart (40 on a laptop), each a line of its
+ * steps. Its name is the serif heading above it. Every step opens; the order only suggests.
  */
 export function LevelLessons({ journey }: { journey: Journey }) {
   const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
   const learned = useProgress(selectLearned)
+  const stepTitle = useStepTitle()
   const next = continueStep(learned)?.id
   const progress = journeyProgress(journey, learned)
+  const steps = journey.chapters.flatMap((chapter) => chapter.steps)
   const numbers = new Map(
-    journey.chapters
-      .flatMap((chapter) => chapter.steps)
+    steps
       .filter((step) => step.kind === 'lesson')
       .map((step, i): [StepId, number] => [stepIdOf(step), i + 1]),
   )
+  const isDone = (id: StepId) => isLearned(learned, id)
+  const go = steps.find((step) => !isDone(stepIdOf(step))) ?? steps[0]
+  const goWord =
+    progress.done === 0 ? 'start' : progress.done === progress.total ? 'review' : 'continue'
+  // Each chapter is its own line, as the board's: no spine above its first row or below its last.
+  const placeOf = (id: StepId): Place => {
+    const order = (
+      journey.chapters.find((chapter) => chapter.steps.some((step) => stepIdOf(step) === id))
+        ?.steps ?? []
+    ).map(stepIdOf)
+    const at = order.indexOf(id)
+    return {
+      reached: isDone(id) || id === next,
+      passed: isDone(id),
+      first: at === 0,
+      last: at === order.length - 1,
+    }
+  }
   const counts = { learned: progress.done, total: progress.total }
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-3 px-1">
+    <div className="flex flex-col gap-8 lg:gap-10">
+      <div className="flex w-full flex-col gap-2 lg:max-w-160">
+        <p className="mb-1 max-w-[65ch] text-base/normal text-pretty text-muted-foreground">
+          {localText(journey.goal, locale)}
+        </p>
         <ProgressMeter
           done={progress.done}
           total={progress.total}
           count={`${t(`common:stage.${journey.stage}`)} · ${t('learn:progress', counts)}`}
           said={t('learn:progress', counts)}
           above
+          className="text-sm/[normal]"
         />
-        <p className="max-w-prose text-pretty text-muted-foreground">
-          {localText(journey.goal, locale)}
-        </p>
+        {go ? (
+          <ButtonLink size="lg" className="mt-1 w-full" render={<StepLink step={go} />}>
+            {t(`learn:journey.${goWord}`, { title: stepTitle(go).primary })}
+          </ButtonLink>
+        ) : null}
       </div>
-      {journey.chapters.map((chapter, i) => (
-        <ChapterGroup key={chapter.id} chapter={chapter} n={i + 1} numbers={numbers} next={next} />
-      ))}
+      <div className="flex flex-col gap-8 lg:gap-10">
+        {journey.chapters.map((chapter, i) => (
+          <ChapterGroup
+            key={chapter.id}
+            chapter={chapter}
+            n={i + 1}
+            numbers={numbers}
+            next={next}
+            placeOf={placeOf}
+          />
+        ))}
+      </div>
     </div>
   )
 }

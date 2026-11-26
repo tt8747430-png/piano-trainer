@@ -1,7 +1,6 @@
-import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { stubMatchMedia } from '@/shared/test/match-media'
 import { renderApp } from '@/app/testing/render-app'
 import { createFakeErrorReporter } from '@/shared/api/errors'
 import { untranslated } from '@/app/testing/untranslated'
@@ -169,14 +168,6 @@ describe('Settings', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/settings/about'))
   })
 
-  it('draws a page Settings does not list alone, with Back, on a laptop', async () => {
-    onLaptop()
-    await renderApp('/settings/chord-finder')
-    await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('complementary', { name: 'Settings' })).toBeNull()
-    expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
-  })
-
   it('says the app’s version on About’s row', async () => {
     await renderApp('/settings')
     const about = await screen.findByRole('link', { name: /^About/ })
@@ -192,58 +183,6 @@ describe('Settings', () => {
     expect(await screen.findByRole('dialog', { name: 'Backup' })).toHaveTextContent(
       'live on this device only',
     )
-  })
-
-  it('sets up the keyboard, and saves each change', async () => {
-    stubMatchMedia({ dark: false, pointer: 'fine' })
-    const user = userEvent.setup()
-    const { settingsStore, router } = await renderApp('/settings/on-screen-piano')
-    const keys = await screen.findByRole('radiogroup', { name: 'Key size' })
-    await user.click(within(keys).getByRole('radio', { name: 'Large' }))
-    await user.click(screen.getByRole('switch', { name: /^Chord symbol/ }))
-    const swipe = screen.getByRole('radiogroup', { name: 'Swipe gesture' })
-    await user.click(within(swipe).getByRole('radio', { name: 'Glissando' }))
-    // The keys' height is the divider's and showing them the bar's Keyboard (R34): no setting here.
-    for (const name of ['Collapse keyboard', 'Key depth'])
-      expect(screen.queryByRole('radiogroup', { name })).not.toBeInTheDocument()
-    await act(() => router.navigate({ to: '/settings/computer-keys' }))
-    await user.click(await screen.findByRole('switch', { name: /^Play with computer keyboard/ }))
-    expect(settingsStore.getState().keyboard).toMatchObject({
-      keySize: 'large',
-      typing: true,
-      chordNames: false,
-      swipe: 'glissando',
-    })
-  })
-
-  it('says what each keyboard choice does in one line under its name (R32)', async () => {
-    await renderApp('/settings/on-screen-piano')
-    expect(
-      await screen.findByText('All keys fit the width; a larger size scrolls to follow the music.'),
-    ).toBeVisible()
-    expect(screen.getByRole('switch', { name: /^Chord symbol/ })).toHaveAccessibleDescription(
-      'Names the chord you hold in the bar.',
-    )
-  })
-
-  it('draws the sustain pedal, or all three, as chosen (R31-P)', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/on-screen-piano')
-    expect(settingsStore.getState().keyboard.pedals).toBe('sustain')
-    await user.click(await screen.findByRole('radio', { name: 'All three' }))
-    expect(settingsStore.getState().keyboard.pedals).toBe('all')
-  })
-
-  it('starts on All keys, and sets the piano’s volume (R33, R34)', async () => {
-    const { settingsStore, audio } = await renderApp('/settings/on-screen-piano')
-    const sizes = await screen.findByRole('radiogroup', { name: 'Key size' })
-    expect(within(sizes).getByRole('radio', { name: 'All keys' })).toBeChecked()
-    expect(audio.volume).toBe(1)
-    const volume = screen.getByRole('slider', { hidden: true })
-    act(() => volume.focus())
-    fireEvent.keyDown(volume, { key: 'Home' })
-    await waitFor(() => expect(audio.volume).toBe(0))
-    expect(settingsStore.getState().keyboard.volume).toBe(0)
   })
 
   it('says on MIDI devices’ row when the browser cannot connect one', async () => {
@@ -339,6 +278,6 @@ describe('Settings', () => {
     await renderApp('/settings/feedback')
     await user.type(await screen.findByRole('textbox', { name: 'Description' }), 'Broken')
     expect(screen.getByRole('button', { name: 'Send report' })).toBeDisabled()
-    expect(screen.getByText('Sending requires an internet connection.')).toBeInTheDocument()
+    expect(screen.getByText('You’re offline. Sending needs a connection.')).toBeInTheDocument()
   })
 })

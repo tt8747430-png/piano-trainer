@@ -9,27 +9,34 @@ import { renderApp } from './testing/render-app'
 
 /**
  * Settings' own pages, by the page each is the home of (R18, R20): a route, or the rows that turn a
- * screen's gear to it (the score editor's, R32-B; the Player's, R32).
+ * screen's gear to it (the score editor's, R32-B; the Player's, R32), or a Practice page's gear
+ * opening its settings in place.
  */
 const PAGES: readonly (readonly [SettingsPageId, string, ...RegExp[]])[] = [
   ['general', '/settings/general'],
-  ['on-screen-piano', '/settings/on-screen-piano'],
   ['connect-piano', '/settings/connect-piano'],
   ['player', '/play/bz5', /^Score view/],
   ['player', '/play/bz5', /^Playback/],
   ['player', '/play/bz5', /^Staves/],
   ['score-editor', '/edit/bz5', /^Note input/],
   ['score-editor', '/edit/bz5', /^Recording/],
-  ['progressions', '/settings/progressions'],
-  ['chord-player', '/practice/chord-player/settings'],
+  ['intervals', '/practice/intervals', /^Interval settings$/],
+  ['progressions', '/practice/progressions/doo-wop', /^Progression settings$/],
+  ['chord-player', '/practice/chord-player', /^Chord player settings$/],
   ['metronome', '/practice/metronome'],
   ['tuner', '/practice/tuner'],
-  ['chord-finder', '/settings/chord-finder'],
+  ['chord-finder', '/practice/chord-finder', /^Chord finder settings$/],
   ['trainers', '/practice/quiz/chords'],
   ['select-toolbar', '/settings/select-toolbar'],
   ['swipe-actions', '/settings/swipe-actions'],
   ['lessons', `/lessons/${LESSONS[0]!.id}/settings`],
 ]
+
+/** A Practice page's settings, opened in place from the gear its bar names by them. */
+async function openPageGear(user: ReturnType<typeof userEvent.setup>, name: RegExp | undefined) {
+  await user.click(await screen.findByRole('button', { name }))
+  return screen.findByRole('dialog', { name })
+}
 
 const isKey = (key: string): key is SettingKey => key in SETTING_HOMES
 
@@ -44,7 +51,9 @@ describe('each setting drawn on its one home (R18, A10)', () => {
       if (rows.length > 0)
         place = path.startsWith('/play/')
           ? await openPlayerGear(user, ...rows)
-          : await openGear(user, ...rows)
+          : path.startsWith('/practice/')
+            ? await openPageGear(user, rows[0])
+            : await openGear(user, ...rows)
       else await screen.findByRole('heading', { level: 1 })
       // A key drawn more than once on its own page (a volume a staff) counts once.
       const keys = [

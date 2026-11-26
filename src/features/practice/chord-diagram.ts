@@ -3,6 +3,7 @@ import type { Performance, PerformedChord } from '@/shared/lib/arrangement'
 import {
   chordSymbol,
   isInversion,
+  lowestFirst,
   midi,
   pitchClass,
   pitchClassOf,
@@ -72,9 +73,6 @@ export interface DiagramChord {
 
 /** A note's key in the octave a chord folds into, F3 to E4. */
 const foldedKey = (pc: PitchClass): Midi => midi(FOLD_FROM + pitchClass(pc - FOLD_FROM))
-
-/** Keys lowest first, each once. */
-const lowestFirst = (keys: readonly Midi[]): Midi[] => [...new Set(keys)].sort((a, b) => a - b)
 
 /** A chord's tones close over a key: each on the nearest key at or above it. */
 const closeOver = (from: Midi, base: PitchClass, tones: readonly PitchClass[]): Midi[] =>

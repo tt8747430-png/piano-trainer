@@ -2,21 +2,22 @@ import type { Bars } from './bars'
 import { isLocale, type Locale } from '@/shared/i18n/locale'
 import type { Inversion } from '@/shared/lib/music'
 import {
+  CAMERA_ANGLES,
+  CHORD_LABELS,
+  CHORD_RANGES,
   isOneOf,
-  KEY_DOCKS,
-  KEY_SIZES,
   NAMED_KEYS,
   OCTAVE_SHIFTS,
   PEDAL_WAYS,
-  SWIPES,
-  type KeyDock,
+  SONG_RANGES,
+  type CameraAngle,
+  type ChordLabels,
+  type ChordRange,
   type SheetView,
-  type KeySize,
   type NamedKeys,
   type OctaveShift,
   type PedalWay,
-  type PedalsShown,
-  type Swipe,
+  type SongRange,
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
@@ -41,8 +42,7 @@ export type Theme = (typeof THEMES)[number]
  * The Player's saved switches: the View menu's chord positions, finger numbers and named notes, and
  * the click (`metronome`, the transport's quick toggle, ADR 0105).
  */
-export const PRACTICE_TOGGLES = ['fingerNumbers', 'namedNotes', 'positions', 'metronome'] as const
-export type PracticeToggle = (typeof PRACTICE_TOGGLES)[number]
+export type PracticeToggle = 'fingerNumbers' | 'namedNotes' | 'positions' | 'metronome'
 export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
 
 /**
@@ -58,23 +58,22 @@ export interface SoundSettings {
 }
 
 /**
- * With one hand chosen (A35, R36: the foot's Hands, in every mode): how the other hand's staff looks
- * (shown as it is, dimmed, or hidden, only the chosen hand's staff left), and whether it is heard.
+ * With one hand chosen (loop round 24, the Parts sheet's Dim): how the other hand's staff looks, as it
+ * is or dimmed. How loud it is heard is its staff's volume.
  */
-export const OTHER_HAND_LOOKS = ['show', 'dim', 'hide'] as const
+export const OTHER_HAND_LOOKS = ['show', 'dim'] as const
 export type OtherHandLook = (typeof OTHER_HAND_LOOKS)[number]
 export interface OtherHandSettings {
   readonly look: OtherHandLook
-  readonly play: boolean
 }
-/** The other hand dimmed, and heard, as the Player always did. */
-export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim', play: true }
+/** The other hand dimmed, as the Player always did. */
+export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim' }
 
 /**
- * How the Player's count-in goes (B7, the reference's Countdown): none; a bar of clicks counted down
- * on the screen; or counted down on the screen alone, unheard.
+ * How the Player's count-in goes (Flat's metronome: Off · Count-in): none, or a bar of clicks counted
+ * down on the screen. New learners start without, as Flat's.
  */
-export const COUNTDOWNS = ['none', 'audible', 'visual'] as const
+export const COUNTDOWNS = ['none', 'audible'] as const
 export type Countdown = (typeof COUNTDOWNS)[number]
 /** How much faster each pass of speed training plays, a share of the piece's tempo in percent. */
 export const SPEED_STEPS = [2, 5, 10] as const
@@ -89,9 +88,9 @@ export interface PlaybackSettings {
   readonly countdown: Countdown
   readonly speedStep: SpeedStep
 }
-/** No count-in, 5% a pass. */
+/** A bar counted in, as the Practice sheet's board starts; 5% a pass. */
 export const DEFAULT_PLAYBACK: PlaybackSettings = {
-  countdown: 'none',
+  countdown: 'audible',
   speedStep: 5,
 }
 
@@ -104,19 +103,14 @@ export interface TrainerSettings {
 /** How every lesson shows its examples. */
 /** The keyboard settings: the same on every screen, set in Settings › On-screen piano. */
 export interface KeyboardSettings {
-  readonly keySize: KeySize
-  readonly swipe: Swipe
+  /**
+   * What the keys carry (the Piano sheet's Labels, the boards' PIANO_SHEET_2D): the Cs named, or
+   * nothing. Every other choice about the keys went with the On-screen piano page (owner,
+   * 2026-11-15): the keys fit their screen, a swipe scrolls them, the sustain pedal alone.
+   */
   readonly namedKeys: NamedKeys
-  /** A key a page marks (a chord's, a scale's) names its note under its degree. */
-  readonly markNotes: boolean
-  /** The bar names the chord a hand holds. */
-  readonly chordNames: boolean
-  /** The computer keyboard plays the keys. */
+  /** The computer keyboard plays the keys (General's Computer keyboard). */
   readonly typing: boolean
-  /** A chord or a scale chosen on a Practice page plays as it is chosen. */
-  readonly autoplay: boolean
-  /** Where a page's keys stay while it scrolls. */
-  readonly dock: KeyDock
   /** A page's keys hidden from its bar's Keyboard (R34): the screen as the learner left it. */
   readonly folded: boolean
   /**
@@ -124,20 +118,25 @@ export interface KeyboardSettings {
    * apart from `folded`: the screen is too short for the page and the keys both (ADR 0062).
    */
   readonly foldedLandscape: boolean
-  /** The pedals the bar's Sustain works (R34): sustain alone, or with soft and sostenuto in its menu. */
-  readonly pedals: PedalsShown
-  /** How loud the keys a hand plays sound (the live voice), a whole percent from 0 to 100 (R33). */
-  readonly volume: number
 }
 
 /** The sizes of screen the keys' height is kept for (R34): a phone upright, on its side, a wider screen. */
-export const KEYS_SCREEN_SIZES = ['phone', 'side', 'wide'] as const
-export type KeysScreenSize = (typeof KEYS_SCREEN_SIZES)[number]
-/** The keys' height the divider set, in px, for each size of screen; null: a piano's proportion. */
-export type KeysHeight = Readonly<Record<KeysScreenSize, number | null>>
-export const DEFAULT_KEYS_HEIGHT: KeysHeight = { phone: null, side: null, wide: null }
-/** The tallest height kept: no screen has keys taller. */
-export const KEYS_HEIGHT_MOST = 2000
+export type KeysScreenSize = 'phone' | 'side' | 'wide'
+/**
+ * The keys' window where the learner left it (loop round 24): px from the screen's left and its foot,
+ * its width and height.
+ */
+export interface KeysWindow {
+  readonly left: number
+  readonly bottom: number
+  readonly width: number
+  readonly height: number
+}
+/** The keys' window for each size of screen; null: at the foot over the transport, the screen's width, a piano's proportion. */
+export type KeysWindows = Readonly<Record<KeysScreenSize, KeysWindow | null>>
+export const DEFAULT_KEYS_WINDOWS: KeysWindows = { phone: null, side: null, wide: null }
+/** The farthest a window's edge is kept: no screen is wider or taller. */
+export const KEYS_WINDOW_MOST = 8000
 
 const SIDEBARS = ['open', 'collapsed'] as const
 /** A laptop's sidebar: its places named, or their icons alone. */
@@ -232,6 +231,12 @@ export const DIAGRAMS_MODES = ['animated', 'summary'] as const
 export type DiagramsMode = (typeof DIAGRAMS_MODES)[number]
 
 /**
+ * How many bars a row of the Grid holds (PlayerViewGrid's Bars per row): two, or four.
+ */
+export const GRID_BARS = [2, 4] as const
+export type GridBars = (typeof GRID_BARS)[number]
+
+/**
  * Chords over lyrics' text sizes (ADR 0108, Chordify's font size): its words and chords as a percent
  * of their own size, smallest first, a step at a time by its − and +.
  */
@@ -249,6 +254,8 @@ export interface ScoreViewSettings {
   readonly layout: SheetView
   readonly music: MusicView
   readonly diagrams: DiagramsMode
+  /** The Grid's bars a row; none chosen, the screen's: two on a phone, four from 640px (its boards). */
+  readonly gridBars: GridBars | null
   readonly chordNames: boolean
   /** The verses under the staff they are written on, where the song has words. */
   readonly lyrics: boolean
@@ -263,6 +270,12 @@ export interface ScoreViewSettings {
    * the music on it; off, the keys, which a tap plays.
    */
   readonly hands: boolean
+  /** Where the 3D piano is seen from (its Piano sheet's Angle): from the seat, or from above. */
+  readonly angle: CameraAngle
+  /** The 3D piano with the hands at the keys, or the keys alone (Hands on the keys). */
+  readonly handsOnKeys: boolean
+  /** How many keys stand in the keys' place (its Piano sheet's Range): the song's, or 61, 76 or 88. */
+  readonly range: SongRange
 }
 
 /**
@@ -274,22 +287,26 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   layout: 'vertical',
   music: 'sheet',
   diagrams: 'animated',
+  gridBars: null,
   chordNames: true,
   lyrics: true,
   pinned: true,
   textSize: 100,
   keys: true,
-  hands: false,
+  hands: true,
+  angle: 'seat',
+  handsOnKeys: true,
+  range: 'song',
 }
 
 /** The bar trainer as left: on or off, its counts kept either way. */
-export interface BarTrainerSettings extends BarTrainer {
+interface BarTrainerSettings extends BarTrainer {
   readonly on: boolean
 }
 
 /** The Metronome as the learner left it (ADR 0052): its tempo, meter, sound and bar trainer. */
 /** The speed trainer (A39): from one tempo toward another by a step every so many bars. */
-export interface SpeedTrainerSettings extends SpeedTrainer {
+interface SpeedTrainerSettings extends SpeedTrainer {
   readonly on: boolean
 }
 
@@ -304,7 +321,14 @@ export interface MetronomeSettings {
   readonly subdivision: Subdivision
   readonly trainer: BarTrainerSettings
   readonly speed: SpeedTrainerSettings
+  /** How loud it clicks, in `METRONOME_VOLUMES`' steps of ten, a percent of its full sound. */
+  readonly volume: number
+  /** The screen flashes on each beat, to follow it by eye. */
+  readonly flash: boolean
 }
+
+/** The Metronome's volumes, ten to a hundred percent. */
+export const METRONOME_VOLUMES = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] as const
 
 /** 120 a minute in 4/4, a click on each beat; the bar trainer off, at two bars and two. */
 export const DEFAULT_METRONOME: MetronomeSettings = {
@@ -315,6 +339,8 @@ export const DEFAULT_METRONOME: MetronomeSettings = {
   subdivision: 'none',
   trainer: { on: false, play: 2, mute: 2 },
   speed: { on: false, from: 80, to: 120, step: 5, every: 4 },
+  volume: 100,
+  flash: false,
 }
 
 export interface SettingsState {
@@ -324,8 +350,8 @@ export interface SettingsState {
   sound: SoundSettings
   trainer: TrainerSettings
   keyboard: KeyboardSettings
-  /** The keys' height the divider set, per size of screen (R34): the screen as the learner left it. */
-  keysHeight: KeysHeight
+  /** The keys' window, moved and sized by the learner, per size of screen (loop round 24). */
+  keysWindow: KeysWindows
   recorder: RecorderSettings
   /** How the score editor writes (round 28). */
   editing: EditingSettings
@@ -351,16 +377,20 @@ export interface SettingsState {
   foldedSections: readonly string[]
   /** Whether the welcome was seen: the app's first run shows it once. */
   welcomed: boolean
-  /** The tips put away or done (R31-P), by their ids (`coach.listen`): a tip shows until then. */
-  tipsSeen: readonly string[]
   /** Practice's pages opened from its list, the latest first (R30-4): its Continue's two. */
   practiceRecent: readonly string[]
-  /** How a lesson reads (round 26): one page of its sections, or a section at a time. */
-  lessonReading: LessonReading
+  /**
+   * The score editor's palette tools used last, the latest first (loop round 57, Flat's recent
+   * notation): its Recent group, eight at most, each still in its own category.
+   */
+  paletteRecent: readonly string[]
   /** How Progressions writes and voices every progression (A24). */
   progressions: ProgressionsSettings
+  /** How Intervals plays them all, and how fast (canvas 176). */
+  intervals: IntervalSettings
   /** How the Chord player writes its chords and voices its piano (R29 CP6). */
   chordPlayer: ChordPlayerSettings
+  chords: ChordsSettings
   /** The bars the learner arranged (R29 B10): a surface left out holds its default. */
   bars: Bars
   /** The Tuner's reference pitch (R29 B11). */
@@ -393,12 +423,6 @@ export interface TunerSettings {
   readonly a4: number
 }
 export const DEFAULT_TUNER: TunerSettings = { a4: 440 }
-
-/** How a lesson reads: one page of its sections (the plain page), or a section at a time. */
-export const LESSON_READINGS = ['page', 'sections'] as const
-export type LessonReading = (typeof LESSON_READINGS)[number]
-export const isLessonReading = (value: unknown): value is LessonReading =>
-  LESSON_READINGS.some((reading) => reading === value)
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
   fingerNumbers: false,
@@ -448,7 +472,7 @@ export const DEFAULT_CHORD_FINDER: ChordFinderSettings = {
 }
 
 /** How Progressions writes its chords: Roman numerals, Nashville numbers, or chord symbols. */
-export const PROGRESSION_NAMES = ['numerals', 'nashville', 'chords'] as const
+export const PROGRESSION_NAMES = ['chords', 'numerals', 'nashville'] as const
 export type ProgressionNames = (typeof PROGRESSION_NAMES)[number]
 export const isProgressionNames = isOneOf(PROGRESSION_NAMES)
 
@@ -467,6 +491,24 @@ export interface ProgressionsSettings {
   readonly inversion: Inversion
 }
 
+/** How Play all goes through the intervals: in the page's order, or shuffled each time. */
+export const INTERVAL_ORDERS = ['in-order', 'shuffled'] as const
+export type IntervalOrder = (typeof INTERVAL_ORDERS)[number]
+export const isIntervalOrder = isOneOf(INTERVAL_ORDERS)
+
+/** How fast an interval's two notes follow each other, and Play all goes from one to the next. */
+export const INTERVAL_SPEEDS = ['slow', 'medium', 'fast'] as const
+export type IntervalSpeed = (typeof INTERVAL_SPEEDS)[number]
+export const isIntervalSpeed = isOneOf(INTERVAL_SPEEDS)
+
+/** Intervals' own settings (canvas 176): Play all's order and the speed every interval plays at. */
+export interface IntervalSettings {
+  readonly order: IntervalOrder
+  readonly speed: IntervalSpeed
+}
+
+export const DEFAULT_INTERVALS: IntervalSettings = { order: 'in-order', speed: 'medium' }
+
 export const DEFAULT_PROGRESSIONS: ProgressionsSettings = {
   names: 'numerals',
   voicing: 'led',
@@ -480,29 +522,49 @@ export const DEFAULT_PROGRESSIONS: ProgressionsSettings = {
 export interface ChordPlayerSettings {
   readonly names: ProgressionNames
   readonly voicing: ProgressionVoicing
+  /** Follow a MIDI arranger (a Genos): its Start, Stop and clock lead the sheet, which sends it its sections. */
+  readonly follow: boolean
 }
-export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = { names: 'chords', voicing: 'led' }
+export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = {
+  names: 'chords',
+  voicing: 'led',
+  follow: false,
+}
+
+/** The Chords page's own settings, in its Piano sheet. */
+export interface ChordsSettings {
+  /** What its keys and its staff's heads carry. */
+  readonly labels: ChordLabels
+  /** How many keys its piano shows. */
+  readonly range: ChordRange
+  /** The white key the strip was dragged to, where two or four octaves start; null: the C under the chord. */
+  readonly rangeFrom: Midi | null
+  /** Where its 3D piano is seen from. */
+  readonly angle: CameraAngle
+  /** Its 3D piano with the hands at the keys, or the keys alone. */
+  readonly handsOnKeys: boolean
+}
+export const DEFAULT_CHORDS: ChordsSettings = {
+  labels: 'names',
+  range: 'chord',
+  rangeFrom: null,
+  angle: 'seat',
+  handsOnKeys: true,
+}
+export const isCameraAngle = isOneOf(CAMERA_ANGLES)
+export const isChordLabels = isOneOf(CHORD_LABELS)
+export const isChordRange = isOneOf(CHORD_RANGES)
+export const isSongRange = isOneOf(SONG_RANGES)
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
-  keySize: 'fit',
-  swipe: 'scroll',
   namedKeys: 'c',
-  markNotes: true,
-  chordNames: true,
   typing: finePointer,
-  autoplay: true,
-  dock: 'bottom',
   folded: false,
   foldedLandscape: true,
-  pedals: 'sustain',
-  volume: 100,
 })
 
 export const isTheme = isOneOf(THEMES)
-export const isKeySize = isOneOf(KEY_SIZES)
-export const isSwipe = isOneOf(SWIPES)
-export const isKeyDock = isOneOf(KEY_DOCKS)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
 export const isSidebar = isOneOf(SIDEBARS)
 export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)
@@ -511,6 +573,7 @@ export const isPedalWay = isOneOf(PEDAL_WAYS)
 export const isMusicView = isOneOf(MUSIC_VIEWS)
 export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
 export const isTextSize = isOneOf(TEXT_SIZES)
+export const isGridBars = isOneOf(GRID_BARS)
 export const isOtherHandLook = isOneOf(OTHER_HAND_LOOKS)
 export const isCountdown = isOneOf(COUNTDOWNS)
 export const isSpeedStep = isOneOf(SPEED_STEPS)

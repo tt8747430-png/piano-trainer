@@ -1,4 +1,3 @@
-import { FolderInput } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -26,16 +25,15 @@ export function InCoursesRow({ lessonId }: { lessonId: OwnLessonId }) {
     <>
       <RowButton
         title={t('own.inCourses')}
-        icon={FolderInput}
-        paint="yellow"
         value={
           named.length > 0 ? named.map((course) => course.title).join(', ') : t('own.noCourses')
         }
+        opens
         onClick={() => setOpen(true)}
       />
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet at={{}} open={open} onOpenChange={setOpen}>
         <SheetContent title={t('own.inCourses')}>
-          <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
+          <ul className="flex flex-col rows-hairline overflow-hidden card">
             {courses.map((course) => (
               <li key={course.id}>
                 <RowCheck

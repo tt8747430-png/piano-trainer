@@ -11,8 +11,17 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "Explore.dc.html": {
+    "AllSongs.dc.html": {
       "x": 530,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "All songs, Select, Sort, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Explore.dc.html": {
+      "x": 1060,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -21,25 +30,43 @@
       "page": "songs"
     },
     "Folder.dc.html": {
-      "x": 1060,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "A folder, its settings, Card style, Archived, phone",
-      "is_interactive": true,
-      "page": "songs"
-    },
-    "Archive.dc.html": {
       "x": 1590,
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "Archive and Trash, phone",
+      "title": "A playlist, its settings, Card style, Archived, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SharedFolder.dc.html": {
+      "x": 2120,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A playlist shared with you, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Archive.dc.html": {
+      "x": 2650,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Archive: Select, Restore, Move to Trash, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Trash.dc.html": {
+      "x": 3180,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Trash: Select, Restore, Delete permanently, phone",
       "is_interactive": true,
       "page": "songs"
     },
     "Groups.dc.html": {
-      "x": 2120,
+      "x": 3710,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -48,7 +75,7 @@
       "page": "songs"
     },
     "Song.dc.html": {
-      "x": 2650,
+      "x": 4240,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -57,7 +84,7 @@
       "page": "songs"
     },
     "SongSettings.dc.html": {
-      "x": 3180,
+      "x": 4770,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -66,7 +93,7 @@
       "page": "songs"
     },
     "Section.dc.html": {
-      "x": 3710,
+      "x": 5300,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -75,7 +102,7 @@
       "page": "songs"
     },
     "Editor.dc.html": {
-      "x": 4240,
+      "x": 5830,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -84,7 +111,7 @@
       "page": "songs"
     },
     "EditorDraft.dc.html": {
-      "x": 4770,
+      "x": 6360,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -92,8 +119,17 @@
       "is_interactive": true,
       "page": "songs"
     },
+    "Takes.dc.html": {
+      "x": 6890,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The takes, Review your recording, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
     "Take.dc.html": {
-      "x": 5300,
+      "x": 7420,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -110,8 +146,17 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "ExploreLaptop.dc.html": {
+    "AllSongsLaptop.dc.html": {
       "x": 2223,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "All songs, Select, Sort, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "ExploreLaptop.dc.html": {
+      "x": 4446,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -120,25 +165,43 @@
       "page": "songs"
     },
     "FolderLaptop.dc.html": {
-      "x": 4446,
-      "y": 1720,
-      "w": 2143,
-      "h": 1299,
-      "title": "A folder, its settings, Card style, Archived, laptop",
-      "is_interactive": true,
-      "page": "songs"
-    },
-    "ArchiveLaptop.dc.html": {
       "x": 6669,
       "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "Archive and Trash, laptop",
+      "title": "A playlist, its settings, Card style, Archived, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SharedFolderLaptop.dc.html": {
+      "x": 8892,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A playlist shared with you, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "ArchiveLaptop.dc.html": {
+      "x": 11115,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Archive: Select, Restore, Move to Trash, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "TrashLaptop.dc.html": {
+      "x": 13338,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Trash: Select, Restore, Delete permanently, laptop",
       "is_interactive": true,
       "page": "songs"
     },
     "GroupsLaptop.dc.html": {
-      "x": 8892,
+      "x": 15561,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -147,7 +210,7 @@
       "page": "songs"
     },
     "SongLaptop.dc.html": {
-      "x": 11115,
+      "x": 17784,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -156,7 +219,7 @@
       "page": "songs"
     },
     "SongSettingsLaptop.dc.html": {
-      "x": 13338,
+      "x": 20007,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -165,7 +228,7 @@
       "page": "songs"
     },
     "SectionLaptop.dc.html": {
-      "x": 15561,
+      "x": 22230,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -174,7 +237,7 @@
       "page": "songs"
     },
     "EditorLaptop.dc.html": {
-      "x": 17784,
+      "x": 24453,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -183,7 +246,7 @@
       "page": "songs"
     },
     "EditorDraftLaptop.dc.html": {
-      "x": 20007,
+      "x": 26676,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -191,8 +254,17 @@
       "is_interactive": true,
       "page": "songs"
     },
+    "TakesLaptop.dc.html": {
+      "x": 28899,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The takes, Review your recording, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
     "TakeLaptop.dc.html": {
-      "x": 22230,
+      "x": 31122,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -214,7 +286,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "The Player, Practice with a loop, phone",
+      "title": "The Player, practising with a loop, phone",
       "is_interactive": true,
       "page": "player"
     },
@@ -227,8 +299,17 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerHands.dc.html": {
+    "PlayerDone.dc.html": {
       "x": 1590,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Played through, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerHands.dc.html": {
+      "x": 2120,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -237,7 +318,7 @@
       "page": "player"
     },
     "PlayerViewSheet.dc.html": {
-      "x": 2120,
+      "x": 2650,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -246,7 +327,7 @@
       "page": "player"
     },
     "PlayWalk.dc.html": {
-      "x": 2650,
+      "x": 3180,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -255,7 +336,7 @@
       "page": "player"
     },
     "PlayChromatic.dc.html": {
-      "x": 3180,
+      "x": 3710,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -264,7 +345,7 @@
       "page": "player"
     },
     "PlayProgression.dc.html": {
-      "x": 3710,
+      "x": 4240,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -273,7 +354,7 @@
       "page": "player"
     },
     "PlayExercise.dc.html": {
-      "x": 4240,
+      "x": 4770,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -282,7 +363,7 @@
       "page": "player"
     },
     "PlayerPractice.dc.html": {
-      "x": 4770,
+      "x": 5300,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -291,7 +372,7 @@
       "page": "player"
     },
     "PlayerViewDiagrams.dc.html": {
-      "x": 5300,
+      "x": 5830,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -300,7 +381,7 @@
       "page": "player"
     },
     "PlayerViewGrid.dc.html": {
-      "x": 5830,
+      "x": 6360,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -309,7 +390,7 @@
       "page": "player"
     },
     "PlayerViewLyrics.dc.html": {
-      "x": 6360,
+      "x": 6890,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -318,7 +399,7 @@
       "page": "player"
     },
     "PlayerSettings.dc.html": {
-      "x": 6890,
+      "x": 7420,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -327,20 +408,11 @@
       "page": "player"
     },
     "PlayerKey.dc.html": {
-      "x": 7420,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Transpose, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerDone.dc.html": {
       "x": 7950,
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "The Player, Played through, phone",
+      "title": "The Player, Transpose, phone",
       "is_interactive": true,
       "page": "player"
     },
@@ -353,45 +425,9 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerApp.dc.html": {
-      "x": 9010,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, earlier draft, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerNight.dc.html": {
-      "x": 0,
-      "y": 1720,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Night, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerKeyboardNight.dc.html": {
-      "x": 530,
-      "y": 1720,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Piano, Night, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerDoneNight.dc.html": {
-      "x": 1060,
-      "y": 1720,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Played through, Night, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
     "PlayerLaptop.dc.html": {
       "x": 0,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player, laptop",
@@ -400,25 +436,34 @@
     },
     "PlayerLaptopLoop.dc.html": {
       "x": 2223,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "The Player, Practice with a loop, laptop",
+      "title": "The Player, practising with a loop, laptop",
       "is_interactive": true,
       "page": "player"
     },
     "PlayerLaptopKeyboard.dc.html": {
       "x": 4446,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player, Keyboard, laptop",
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerLaptopParts.dc.html": {
+    "PlayerDoneLaptop.dc.html": {
       "x": 6669,
-      "y": 3140,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Played through, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopParts.dc.html": {
+      "x": 8892,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player, Parts, laptop",
@@ -426,8 +471,8 @@
       "page": "player"
     },
     "PlayerLaptopSheet.dc.html": {
-      "x": 8892,
-      "y": 3140,
+      "x": 11115,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player, Sheet settings, laptop",
@@ -435,8 +480,8 @@
       "page": "player"
     },
     "PlayWalkLaptop.dc.html": {
-      "x": 11115,
-      "y": 3140,
+      "x": 13338,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player: walk the chords, laptop",
@@ -444,8 +489,8 @@
       "page": "player"
     },
     "PlayChromaticLaptop.dc.html": {
-      "x": 13338,
-      "y": 3140,
+      "x": 15561,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player: a chromatic walk, laptop",
@@ -453,8 +498,8 @@
       "page": "player"
     },
     "PlayProgressionLaptop.dc.html": {
-      "x": 15561,
-      "y": 3140,
+      "x": 17784,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player: a progression in 12 keys, laptop",
@@ -462,38 +507,11 @@
       "page": "player"
     },
     "PlayExerciseLaptop.dc.html": {
-      "x": 17784,
-      "y": 3140,
+      "x": 20007,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player: an exercise, laptop",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerDesk.dc.html": {
-      "x": 20007,
-      "y": 3140,
-      "w": 2143,
-      "h": 1299,
-      "title": "The Player, earlier draft, laptop",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerLaptopNight.dc.html": {
-      "x": 0,
-      "y": 4939,
-      "w": 2143,
-      "h": 1299,
-      "title": "The Player, Night, laptop",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerLaptopKeyboardNight.dc.html": {
-      "x": 2223,
-      "y": 4939,
-      "w": 2143,
-      "h": 1299,
-      "title": "The Player, Piano, Night, laptop",
       "is_interactive": true,
       "page": "player"
     },
@@ -677,18 +695,9 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "ChordsNight.dc.html": {
-      "x": 0,
-      "y": 1720,
-      "w": 450,
-      "h": 920,
-      "title": "Chords, Night, phone",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Laptop.dc.html": {
       "x": 0,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Practice, laptop",
@@ -697,7 +706,7 @@
     },
     "ChordsLaptop.dc.html": {
       "x": 2223,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Chords, laptop",
@@ -706,7 +715,7 @@
     },
     "PlayChordLaptop.dc.html": {
       "x": 4446,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "A chord practice run and its results, laptop",
@@ -715,7 +724,7 @@
     },
     "ScalesLaptop.dc.html": {
       "x": 6669,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Scales and keys, laptop",
@@ -724,7 +733,7 @@
     },
     "IntervalsLaptop.dc.html": {
       "x": 8892,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Intervals, laptop",
@@ -733,7 +742,7 @@
     },
     "ProgressionsLaptop.dc.html": {
       "x": 11115,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Progressions, laptop",
@@ -742,7 +751,7 @@
     },
     "ProgressionLaptop.dc.html": {
       "x": 13338,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "A progression, laptop",
@@ -751,7 +760,7 @@
     },
     "ProgressionEditLaptop.dc.html": {
       "x": 15561,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "A progression, edited by an editor, laptop",
@@ -760,7 +769,7 @@
     },
     "AccompanimentLaptop.dc.html": {
       "x": 17784,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Accompaniment, laptop",
@@ -769,7 +778,7 @@
     },
     "PatternLaptop.dc.html": {
       "x": 20007,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "A pattern, laptop",
@@ -778,7 +787,7 @@
     },
     "PatternNewLaptop.dc.html": {
       "x": 22230,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "A new pattern, laptop",
@@ -787,7 +796,7 @@
     },
     "ChordPlayerLaptop.dc.html": {
       "x": 24453,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Chord player, laptop",
@@ -796,7 +805,7 @@
     },
     "FingerTechniqueLaptop.dc.html": {
       "x": 26676,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Finger technique, laptop",
@@ -805,7 +814,7 @@
     },
     "JazzVocabularyLaptop.dc.html": {
       "x": 28899,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Jazz vocabulary, laptop",
@@ -814,7 +823,7 @@
     },
     "ExerciseLaptop.dc.html": {
       "x": 31122,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "An exercise, laptop",
@@ -823,7 +832,7 @@
     },
     "CheckLaptop.dc.html": {
       "x": 33345,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Check a song, laptop",
@@ -832,7 +841,7 @@
     },
     "MetronomeLaptop.dc.html": {
       "x": 35568,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Metronome, laptop",
@@ -841,7 +850,7 @@
     },
     "TunerLaptop.dc.html": {
       "x": 37791,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Tuner, laptop",
@@ -850,7 +859,7 @@
     },
     "ChordFinderLaptop.dc.html": {
       "x": 40014,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Chord finder, laptop",
@@ -859,19 +868,10 @@
     },
     "CircleOfFifthsLaptop.dc.html": {
       "x": 42237,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Circle of fifths, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
-    "ChordsLaptopNight.dc.html": {
-      "x": 0,
-      "y": 4939,
-      "w": 2143,
-      "h": 1299,
-      "title": "Chords, Night, laptop",
       "is_interactive": true,
       "page": "practice"
     },
@@ -907,7 +907,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "Your lessons and courses, phone",
+      "title": "Made by you, phone",
       "is_interactive": true,
       "page": "places"
     },
@@ -1010,45 +1010,9 @@
       "is_interactive": true,
       "page": "places"
     },
-    "LearnNight.dc.html": {
-      "x": 0,
-      "y": 1720,
-      "w": 450,
-      "h": 920,
-      "title": "Learn, Night, phone",
-      "is_interactive": true,
-      "page": "places"
-    },
-    "LearnLevelNight.dc.html": {
-      "x": 530,
-      "y": 1720,
-      "w": 450,
-      "h": 920,
-      "title": "A level, Night, phone",
-      "is_interactive": true,
-      "page": "places"
-    },
-    "LearnCoursesNight.dc.html": {
-      "x": 1060,
-      "y": 1720,
-      "w": 450,
-      "h": 920,
-      "title": "Courses, Night, phone",
-      "is_interactive": true,
-      "page": "places"
-    },
-    "LearnYoursNight.dc.html": {
-      "x": 1590,
-      "y": 1720,
-      "w": 450,
-      "h": 920,
-      "title": "Your lessons and courses, Night, phone",
-      "is_interactive": true,
-      "page": "places"
-    },
     "LearnLaptop.dc.html": {
       "x": 0,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Learn, laptop",
@@ -1057,7 +1021,7 @@
     },
     "LearnLevelLaptop.dc.html": {
       "x": 2223,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "A level, laptop",
@@ -1066,7 +1030,7 @@
     },
     "LearnCoursesLaptop.dc.html": {
       "x": 4446,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Courses, laptop",
@@ -1075,16 +1039,16 @@
     },
     "LearnYoursLaptop.dc.html": {
       "x": 6669,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "Your lessons and courses, laptop",
+      "title": "Made by you, laptop",
       "is_interactive": true,
       "page": "places"
     },
     "ProfileLaptop.dc.html": {
       "x": 8892,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Profile, laptop",
@@ -1093,7 +1057,7 @@
     },
     "PracticeResultLaptop.dc.html": {
       "x": 11115,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "A practice run’s results, from Profile, laptop",
@@ -1102,7 +1066,7 @@
     },
     "SettingsLaptop.dc.html": {
       "x": 13338,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Settings, laptop",
@@ -1111,7 +1075,7 @@
     },
     "AdminLaptop.dc.html": {
       "x": 15561,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Administration, laptop",
@@ -1120,7 +1084,7 @@
     },
     "LessonLaptop.dc.html": {
       "x": 17784,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "A lesson, read and edited, laptop",
@@ -1129,7 +1093,7 @@
     },
     "CourseLaptop.dc.html": {
       "x": 20007,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "A course, read and edited, laptop",
@@ -1138,7 +1102,7 @@
     },
     "YourLessonSettingsLaptop.dc.html": {
       "x": 22230,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Your own lesson’s Settings, laptop",
@@ -1147,7 +1111,7 @@
     },
     "YourCourseSettingsLaptop.dc.html": {
       "x": 24453,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Your own course’s Settings, laptop",
@@ -1156,7 +1120,7 @@
     },
     "SignInLaptop.dc.html": {
       "x": 26676,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Sign in and the account pages, laptop",
@@ -1165,7 +1129,7 @@
     },
     "LegalLaptop.dc.html": {
       "x": 28899,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Privacy Policy and Terms, laptop",
@@ -1174,48 +1138,24 @@
     },
     "AppLayersLaptop.dc.html": {
       "x": 31122,
-      "y": 3140,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "Across the app: search, MIDI, shortcuts, notices, route states, laptop",
       "is_interactive": true,
       "page": "places"
     },
-    "LearnLaptopNight.dc.html": {
-      "x": 0,
-      "y": 4939,
-      "w": 2143,
-      "h": 1299,
-      "title": "Learn, Night, laptop",
-      "is_interactive": true,
-      "page": "places"
+    "PlayerApp.dc.html": {
+      "h": 920,
+      "w": 450,
+      "x": 44460,
+      "y": 300
     },
-    "LearnLevelLaptopNight.dc.html": {
-      "x": 2223,
-      "y": 4939,
-      "w": 2143,
+    "PlayerDesk.dc.html": {
       "h": 1299,
-      "title": "A level, Night, laptop",
-      "is_interactive": true,
-      "page": "places"
-    },
-    "LearnCoursesLaptopNight.dc.html": {
-      "x": 4446,
-      "y": 4939,
       "w": 2143,
-      "h": 1299,
-      "title": "Courses, Night, laptop",
-      "is_interactive": true,
-      "page": "places"
-    },
-    "LearnYoursLaptopNight.dc.html": {
-      "x": 6669,
-      "y": 4939,
-      "w": 2143,
-      "h": 1299,
-      "title": "Your lessons and courses, Night, laptop",
-      "is_interactive": true,
-      "page": "places"
+      "x": 44990,
+      "y": 300
     }
   },
   "createdOnFiles": {
@@ -1227,86 +1167,70 @@
     "view": "canvas",
     "page": "practice"
   },
+  "noteOrder": [
+    "songs-phone",
+    "songs-laptop",
+    "player-phone",
+    "player-laptop",
+    "practice-phone",
+    "practice-laptop",
+    "places-phone",
+    "places-laptop"
+  ],
   "notes": {
     "songs-phone": {
       "x": 0,
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 5750,
-      "page": "songs"
+      "maxW": 7340,
+      "page": "songs",
+      "w": 240
     },
     "songs-laptop": {
       "x": 0,
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 24373,
-      "page": "songs"
+      "maxW": 8000,
+      "page": "songs",
+      "w": 240
     },
     "player-phone": {
       "x": 0,
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 9460,
-      "page": "player"
-    },
-    "player-phone-night": {
-      "x": 0,
-      "y": 1420,
-      "text": "Phone, Night",
-      "kind": "title1",
-      "maxW": 1510,
-      "page": "player"
+      "maxW": 8000,
+      "page": "player",
+      "w": 240
     },
     "player-laptop": {
       "x": 0,
-      "y": 2840,
+      "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 22150,
-      "page": "player"
-    },
-    "player-laptop-night": {
-      "x": 0,
-      "y": 4639,
-      "text": "Laptop, Night",
-      "kind": "title1",
-      "maxW": 4366,
-      "page": "player"
+      "maxW": 8000,
+      "page": "player",
+      "w": 240
     },
     "practice-phone": {
       "x": 0,
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 10520,
-      "page": "practice"
-    },
-    "practice-phone-night": {
-      "x": 0,
-      "y": 1420,
-      "text": "Phone, Night",
-      "kind": "title1",
-      "maxW": 450,
-      "page": "practice"
+      "maxW": 8000,
+      "page": "practice",
+      "w": 240
     },
     "practice-laptop": {
       "x": 0,
-      "y": 2840,
+      "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 44380,
-      "page": "practice"
-    },
-    "practice-laptop-night": {
-      "x": 0,
-      "y": 4639,
-      "text": "Laptop, Night",
-      "kind": "title1",
-      "maxW": 2143,
-      "page": "practice"
+      "maxW": 8000,
+      "page": "practice",
+      "w": 240
     },
     "places-phone": {
       "x": 0,
@@ -1314,59 +1238,54 @@
       "text": "Phone",
       "kind": "title1",
       "maxW": 7870,
-      "page": "places"
-    },
-    "places-phone-night": {
-      "x": 0,
-      "y": 1420,
-      "text": "Phone, Night",
-      "kind": "title1",
-      "maxW": 2040,
-      "page": "places"
+      "page": "places",
+      "w": 240
     },
     "places-laptop": {
       "x": 0,
-      "y": 2840,
+      "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 33265,
-      "page": "places"
-    },
-    "places-laptop-night": {
-      "x": 0,
-      "y": 4639,
-      "text": "Laptop, Night",
-      "kind": "title1",
-      "maxW": 8812,
-      "page": "places"
+      "maxW": 8000,
+      "page": "places",
+      "w": 240
     }
   },
   "order": [
     "Songs.dc.html",
+    "AllSongs.dc.html",
     "Explore.dc.html",
     "Folder.dc.html",
+    "SharedFolder.dc.html",
     "Archive.dc.html",
+    "Trash.dc.html",
     "Groups.dc.html",
     "Song.dc.html",
     "SongSettings.dc.html",
     "Section.dc.html",
     "Editor.dc.html",
     "EditorDraft.dc.html",
+    "Takes.dc.html",
     "Take.dc.html",
     "SongsLaptop.dc.html",
+    "AllSongsLaptop.dc.html",
     "ExploreLaptop.dc.html",
     "FolderLaptop.dc.html",
+    "SharedFolderLaptop.dc.html",
     "ArchiveLaptop.dc.html",
+    "TrashLaptop.dc.html",
     "GroupsLaptop.dc.html",
     "SongLaptop.dc.html",
     "SongSettingsLaptop.dc.html",
     "SectionLaptop.dc.html",
     "EditorLaptop.dc.html",
     "EditorDraftLaptop.dc.html",
+    "TakesLaptop.dc.html",
     "TakeLaptop.dc.html",
     "Player.dc.html",
     "PlayerLoop.dc.html",
     "PlayerKeyboard.dc.html",
+    "PlayerDone.dc.html",
     "PlayerHands.dc.html",
     "PlayerViewSheet.dc.html",
     "PlayWalk.dc.html",
@@ -1379,24 +1298,17 @@
     "PlayerViewLyrics.dc.html",
     "PlayerSettings.dc.html",
     "PlayerKey.dc.html",
-    "PlayerDone.dc.html",
     "PlayerDiagrams.dc.html",
-    "PlayerApp.dc.html",
-    "PlayerNight.dc.html",
-    "PlayerKeyboardNight.dc.html",
-    "PlayerDoneNight.dc.html",
     "PlayerLaptop.dc.html",
     "PlayerLaptopLoop.dc.html",
     "PlayerLaptopKeyboard.dc.html",
+    "PlayerDoneLaptop.dc.html",
     "PlayerLaptopParts.dc.html",
     "PlayerLaptopSheet.dc.html",
     "PlayWalkLaptop.dc.html",
     "PlayChromaticLaptop.dc.html",
     "PlayProgressionLaptop.dc.html",
     "PlayExerciseLaptop.dc.html",
-    "PlayerDesk.dc.html",
-    "PlayerLaptopNight.dc.html",
-    "PlayerLaptopKeyboardNight.dc.html",
     "Main.dc.html",
     "Chords.dc.html",
     "PlayChord.dc.html",
@@ -1417,7 +1329,6 @@
     "Tuner.dc.html",
     "ChordFinder.dc.html",
     "CircleOfFifths.dc.html",
-    "ChordsNight.dc.html",
     "Laptop.dc.html",
     "ChordsLaptop.dc.html",
     "PlayChordLaptop.dc.html",
@@ -1438,7 +1349,6 @@
     "TunerLaptop.dc.html",
     "ChordFinderLaptop.dc.html",
     "CircleOfFifthsLaptop.dc.html",
-    "ChordsLaptopNight.dc.html",
     "Learn.dc.html",
     "LearnLevel.dc.html",
     "LearnCourses.dc.html",
@@ -1454,10 +1364,6 @@
     "SignIn.dc.html",
     "Legal.dc.html",
     "AppLayers.dc.html",
-    "LearnNight.dc.html",
-    "LearnLevelNight.dc.html",
-    "LearnCoursesNight.dc.html",
-    "LearnYoursNight.dc.html",
     "LearnLaptop.dc.html",
     "LearnLevelLaptop.dc.html",
     "LearnCoursesLaptop.dc.html",
@@ -1473,10 +1379,8 @@
     "SignInLaptop.dc.html",
     "LegalLaptop.dc.html",
     "AppLayersLaptop.dc.html",
-    "LearnLaptopNight.dc.html",
-    "LearnLevelLaptopNight.dc.html",
-    "LearnCoursesLaptopNight.dc.html",
-    "LearnYoursLaptopNight.dc.html"
+    "PlayerApp.dc.html",
+    "PlayerDesk.dc.html"
   ],
   "pages": [
     {

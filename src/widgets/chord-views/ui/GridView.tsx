@@ -1,16 +1,19 @@
+import type { ScoreHeader } from '@/entities/piece'
+import { useGridBars } from '@/entities/settings'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { writtenBarOf, type BarRange, type PlayedBeat } from '@/features/practice'
 import { barUnder, useElementSize, useScrollMotion } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
-import type { Tick } from '@/shared/lib/music'
-import { LoopGrip, SheetTitle } from '@/shared/ui'
+import { opensOnPickup, type Tick } from '@/shared/lib/music'
+import { LoopGrip } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { loopedBars, playedOf } from '../model/beat-span'
 import { inSight } from '../model/in-sight'
 import { useFollow } from '../model/use-follow'
 import { BackToPlayhead } from './BackToPlayhead'
 import { gridWords } from '../model/lyric-lines'
+import { ViewTitle } from './ViewTitle'
 
 /**
  * The Grid (ADR 0108): the music's chord chart in beats under its title, its sections headed,
@@ -23,6 +26,7 @@ import { gridWords } from '../model/lyric-lines'
  */
 export function GridView({
   title,
+  credits,
   performance,
   headings,
   beat,
@@ -33,6 +37,7 @@ export function GridView({
   onLoop,
 }: {
   title: string
+  credits?: ScoreHeader | undefined
   performance: Performance
   headings: readonly string[]
   beat: PlayedBeat
@@ -48,6 +53,7 @@ export function GridView({
 }) {
   const { t } = useTranslation('player')
   const bar = writtenBarOf(performance, beat.bar)
+  const perRow = useGridBars()
   const sung = useMemo(() => (words ? gridWords(performance) : undefined), [words, performance])
   const scroller = useRef<HTMLElement>(null)
   // The bar last kept in sight; none before the Grid opens.
@@ -70,12 +76,13 @@ export function GridView({
     <section
       ref={scroller}
       aria-label={t('views.grid')}
-      className="flex h-full scroll-pb-(--float-room) flex-col gap-6 overflow-y-auto overscroll-contain *:shrink-0"
+      className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col gap-3.5 overflow-y-auto px-3 overscroll-contain *:shrink-0"
     >
-      <SheetTitle title={title} place="lines" />
-      <div className="relative mx-auto w-full">
+      <ViewTitle title={title} credits={credits} />
+      <div className="relative mx-auto w-full lg:px-24">
         <ChordChart
           tap="go"
+          rowBars={perRow}
           performance={performance}
           headings={headings}
           playing={bar}
@@ -86,7 +93,7 @@ export function GridView({
         />
         {loop ? <GridLoopGrips performance={performance} loop={loop} onLoop={onLoop} /> : null}
       </div>
-      <div aria-hidden className="-mt-6 h-(--float-room) shrink-0" />
+      <div aria-hidden className="-mt-3.5 h-(--float-room) shrink-0" />
       <BackToPlayhead follow={follow} />
     </section>
   )
@@ -134,10 +141,11 @@ function GridLoopGrips({
           <LoopGrip
             end="start"
             bar={first}
+            pickup={opensOnPickup(performance.bars, performance.meter)}
             min={0}
             max={last}
             barAt={barUnder}
-            style={places.start}
+            style={{ ...places.start }}
             onMove={(written) => {
               const played = playedOf(performance, written, loop.first, 0, loop.last)
               if (played !== null) onLoop({ first: played, last: loop.last })
@@ -146,10 +154,11 @@ function GridLoopGrips({
           <LoopGrip
             end="end"
             bar={last}
+            pickup={opensOnPickup(performance.bars, performance.meter)}
             min={first}
             max={lastWritten}
             barAt={barUnder}
-            style={places.end}
+            style={{ ...places.end }}
             onMove={(written) => {
               const played = playedOf(performance, written, loop.last, loop.first, bars - 1)
               if (played !== null) onLoop({ first: loop.first, last: played })

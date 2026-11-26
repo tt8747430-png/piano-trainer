@@ -2,7 +2,7 @@ import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { Piece } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { LETTERS } from '@/shared/lib/music'
-import { clefIn, notate, type Score } from '@/shared/lib/notation'
+import { clefIn, notate, openingOf, type Score } from '@/shared/lib/notation'
 
 /** The bars a cover shows: the opening, enough to know a song by. */
 export const INCIPIT_BARS = 2
@@ -14,7 +14,13 @@ export const INCIPIT_BARS = 2
  * staff in its key and metre.
  */
 export function incipitScore(piece: Piece, bars: number = INCIPIT_BARS): Score {
-  const score = notate(arrangePiece(piece, { ...ownChoice(piece), tune: true }, BUILT_IN_PATTERNS))
+  // A bar past the opening is notated too, so a note tied over its last barline keeps its tie.
+  const score = notate(
+    openingOf(
+      arrangePiece(piece, { ...ownChoice(piece), tune: true }, BUILT_IN_PATTERNS),
+      bars + 1,
+    ),
+  )
   const staff = score.staves[0]
   return {
     ...score,
@@ -29,7 +35,13 @@ export function incipitScore(piece: Piece, bars: number = INCIPIT_BARS): Score {
  * tune's staff alone where it has one, with its chord symbols and words, without its tempo mark.
  */
 export function openingScore(piece: Piece, bars: number): Score {
-  const score = notate(arrangePiece(piece, { ...ownChoice(piece), tune: true }, BUILT_IN_PATTERNS))
+  // A bar past the opening is notated too, so a note tied over its last barline keeps its tie.
+  const score = notate(
+    openingOf(
+      arrangePiece(piece, { ...ownChoice(piece), tune: true }, BUILT_IN_PATTERNS),
+      bars + 1,
+    ),
+  )
   const staff = score.staves[0]
   return {
     ...score,
@@ -39,7 +51,7 @@ export function openingScore(piece: Piece, bars: number): Score {
 }
 
 /** The heads a song's small cover draws: its first notes, enough to know the tune by. */
-export const MARK_NOTES = 5
+const MARK_NOTES = 5
 
 /** The step of a clef's middle line, counted in letters from C0: B4 on a treble staff, D3 on a bass. */
 const MIDDLE_LINE = { treble: 4 * 7 + 6, bass: 3 * 7 + 1 } as const
@@ -52,7 +64,21 @@ const REACH = 6
  * from the staff's middle line (up positive), held within a ledger line of the staff, from the
  * same opening its engraved cover shows. A song with no notes yet has none.
  */
-export function incipitSteps(piece: Piece, count: number = MARK_NOTES): number[] {
+export function incipitSteps(piece: Piece, count: number = MARK_NOTES): readonly number[] {
+  const kept = STEPS.get(piece)?.get(count)
+  if (kept) return kept
+  const steps = stepsOf(piece, count)
+  STEPS.set(piece, (STEPS.get(piece) ?? new Map()).set(count, steps))
+  return steps
+}
+
+/**
+ * Each song's first notes, kept while the song is: the library draws a cover for every row each time
+ * it opens, and a song edited is a new object, so its notes are found again.
+ */
+const STEPS = new WeakMap<Piece, Map<number, readonly number[]>>()
+
+function stepsOf(piece: Piece, count: number): readonly number[] {
   const score = incipitScore(piece)
   const staff = score.staves[0]
   if (!staff) return []

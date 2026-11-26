@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export type ReleaseReason = 'claimed' | 'outside'
 
-export const SWIPE_SURFACE_ATTR = 'data-swipe-surface'
+const SWIPE_SURFACE_ATTR = 'data-swipe-surface'
 
 interface Holder {
   id: symbol
@@ -16,7 +16,7 @@ let listening = false
 function onPointerDownCapture(event: PointerEvent) {
   const current = holder
   if (!current?.node) return
-  const target = event.target as Element | null
+  const target = event.target instanceof Element ? event.target : null
   if (target && current.node.contains(target)) return
   releaseHolder(current, target?.closest(`[${SWIPE_SURFACE_ATTR}]`) ? 'claimed' : 'outside')
 }
@@ -40,7 +40,7 @@ function releaseHolder(current: Holder, reason: ReleaseReason) {
   current.release(reason)
 }
 
-export function holdGesture(
+function holdGesture(
   id: symbol,
   node: HTMLElement | null,
   release: (reason: ReleaseReason) => void,
@@ -50,13 +50,13 @@ export function holdGesture(
   listen()
 }
 
-export function dropGesture(id: symbol) {
+function dropGesture(id: symbol) {
   if (holder?.id !== id) return
   holder = null
   unlisten()
 }
 
-export interface SurfaceProps {
+interface SurfaceProps {
   ref: (node: HTMLElement | null) => void
   [SWIPE_SURFACE_ATTR]: ''
 }

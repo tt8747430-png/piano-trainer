@@ -62,8 +62,9 @@ seen on screen" with the diagrams on a last page.
     tracks (by name, or the only two) its hands by pitch, one track split at middle C; every other track a single
     staff; the sustain pedal (control 64, down from 64) as the pedal line on the same grid, a lift and a press there
     together a change, none past the music's end. Export writes control 64 at each event of the line.
-  - **What it leaves out** is counted by kind and listed after the import in a sheet, with Open the song; an import
-    that leaves nothing out opens the song's page at once. A file over 20 MB or 20,000 notes is too large, one that is
+  - **One sheet that reports** (R72's IMPFORM; a dialog centred on a laptop): New › Import opens it on Choose a
+    file; once read, the song's name, then what it leaves out, counted by kind on a honey note (or "Everything in
+    the file came in"), and Open song; its header says Close once the song is made. A file over 20 MB or 20,000 notes is too large, one that is
     no score says what Import opens, a damaged one (a .mxl garbled or cut short too) says so. Closing the sheet while
     a file is read makes nothing of it.
 - **The tuning** is a chip of the song page's fact line where the recording is not at A 440 Hz (`tuningOf`), its ⓘ

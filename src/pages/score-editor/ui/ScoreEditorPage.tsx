@@ -8,29 +8,32 @@ import {
   isPiece,
   musicOf,
   selectOwnSong,
+  shelfOf,
   usePieces,
   usePiecesStoreApi,
   type ChartPiece,
 } from '@/entities/piece'
 import {
   DraftRows,
-  DraftStatus,
+  DraftSaid,
   draftWithMusic,
   useMadeSong,
   useOriginalDraft,
 } from '@/features/edit-original'
 import { useLocale } from '@/shared/i18n'
+import { OPEN_PUBLISH } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, NotFound } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { editorTarget, originalTarget } from '../model/editor-target'
-import { NotOpen } from './NotOpen'
+import { NotOpen } from '@/widgets/content-editor'
 import { ScoreEditor } from './ScoreEditor'
+import { EditorGate } from './EditorGate'
 
 function Editing({ id }: { id: string }) {
   const { t } = useTranslation('common')
   // The bar the caret opens on, as printed: the Player's cursor's, where Edit came from it (ADR 0115).
-  const { bar } = useSearch({ from: '/full-screen/edit/$pieceId' })
+  const { bar, credits } = useSearch({ from: '/full-screen/edit/$pieceId' })
   // The visit opens on what the store holds now; the editor saves into it from there.
   const pieces = usePiecesStoreApi()
   const [target] = useState(() => editorTarget(pieces.getState(), id))
@@ -44,61 +47,86 @@ function Editing({ id }: { id: string }) {
         <ButtonLink render={<Link to="/songs" />}>{t('notFound.toSongs')}</ButtonLink>
       </NotFound>
     )
-  return <ScoreEditor target={target} bar={bar} />
+  return <ScoreEditor target={target} bar={bar} credits={credits} />
 }
 
 /** A built-in song's original, an editor's to change (ADR 0116): its draft opened, then edited. */
 function EditingOriginal({ piece }: { piece: ChartPiece }) {
   const { t } = useTranslation('editor')
   const locale = useLocale()
-  const { bar } = useSearch({ from: '/full-screen/edit/$pieceId' })
+  const { bar, credits } = useSearch({ from: '/full-screen/edit/$pieceId' })
   const draft = useOriginalDraft(piece)
   const navigate = useNavigate()
   const { load, save } = draft
+  // Its Publish (R29 B6), a page in its Settings' window, the rights ticked there each time: its page
+  // (a song's in Songs, a study's in Practice) opens with the window turned to it.
+  const publishRoute = {
+    to:
+      shelfOf(piece.kind) === 'practice'
+        ? '/practice/accompaniment/studies/$pieceId'
+        : '/songs/$pieceId',
+    params: { pieceId: piece.id },
+    state: OPEN_PUBLISH,
+  } as const
+  const toPublish = {
+    link: <Link {...publishRoute} onClick={() => void draft.flush()} />,
+    open: () => void draft.flush().then(() => navigate(publishRoute)),
+  }
   // The score writes the draft's music; the rest of the song (what its page says) stays the draft's.
   const target = useMemo(() => {
     if (load.state !== 'ready') return null
     const opened = load.value
     return originalTarget(piece, musicOf(opened), (music) => save(draftWithMusic(opened, music)))
   }, [load, piece, save])
-  if (load.state === 'loading') return <NotOpen line={t('original.opening')} />
+  if (load.state === 'loading')
+    return (
+      <EditorGate>
+        <NotOpen kind="opening" line={t('original.opening')} />
+      </EditorGate>
+    )
   if (load.state === 'failed' || !target)
     return (
-      <NotOpen
-        line={t(
-          load.state === 'failed' && load.reason === 'offline'
-            ? 'original.offline'
-            : 'original.failed',
-        )}
-      >
-        <Button onClick={draft.reopen}>{t('original.retry')}</Button>
-      </NotOpen>
+      <EditorGate>
+        <NotOpen
+          kind={load.state === 'failed' && load.reason === 'offline' ? 'offline' : 'failed'}
+          line={t(
+            load.state === 'failed' && load.reason === 'offline'
+              ? 'original.offline'
+              : 'original.failed',
+          )}
+        >
+          <Button onClick={draft.reopen}>{t('original.retry')}</Button>
+        </NotOpen>
+      </EditorGate>
     )
   return (
     <ScoreEditor
       key={draft.opened}
       target={target}
       bar={bar}
+      credits={credits}
       // Where the draft stands, beside the gear's title, and its acts, the gear's last group (R31-E):
       // never over the music, never beside Done.
       draft={{
-        status: <DraftStatus draft={draft} compact={false} />,
-        rows: (
+        status: <DraftSaid draft={draft} />,
+        versions: (
           <DraftRows
+            part="versions"
             draft={draft}
             title={entryTitles(piece, locale).primary}
             unreadable={t('original.unreadable')}
             onReset={draft.reopen}
-            // Its Publish page (R29 B6), the rights ticked there each time.
-            publishPage={{
-              link: <Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />,
-              open: () =>
-                void draft
-                  .flush()
-                  .then(() =>
-                    navigate({ to: '/songs/$pieceId/publish', params: { pieceId: piece.id } }),
-                  ),
-            }}
+            toPublish={toPublish}
+          />
+        ),
+        rows: (
+          <DraftRows
+            part="publishing"
+            draft={draft}
+            title={entryTitles(piece, locale).primary}
+            unreadable={t('original.unreadable')}
+            onReset={draft.reopen}
+            toPublish={toPublish}
           />
         ),
       }}
@@ -110,14 +138,28 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
 function MadeOriginal({ id }: { id: string }) {
   const { t } = useTranslation('editor')
   const load = useMadeSong(id)
-  if (load.state === 'loading') return <NotOpen line={t('original.opening')} />
+  if (load.state === 'loading')
+    return (
+      <EditorGate>
+        <NotOpen kind="opening" line={t('original.opening')} />
+      </EditorGate>
+    )
   if (load.state === 'failed')
-    return <NotOpen line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')} />
+    return (
+      <EditorGate>
+        <NotOpen
+          kind={load.reason === 'offline' ? 'offline' : 'failed'}
+          line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')}
+        />
+      </EditorGate>
+    )
   if (load.state === 'none')
     return (
-      <NotOpen line={t('original.failed')}>
-        <ButtonLink render={<Link to="/songs" />}>{t('original.toSongs')}</ButtonLink>
-      </NotOpen>
+      <EditorGate>
+        <NotOpen kind="missing" line={t('original.gone')}>
+          <ButtonLink render={<Link to="/songs" />}>{t('original.toSongs')}</ButtonLink>
+        </NotOpen>
+      </EditorGate>
     )
   return <EditingOriginal piece={load.song} />
 }

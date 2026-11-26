@@ -48,7 +48,7 @@ function Actions({
  * The song's tempo mark (A34, Flat's tempo popover): Beat, BPM, Tempo text and Hear the tempo, then
  * Save, one step Undo takes back.
  */
-export function TempoPicker({ onDone }: { onDone: () => void }) {
+function TempoPicker({ onDone }: { onDone: () => void }) {
   const { actions } = useScoreEditorContext()
   const meter = useEditorState((state) => state.draft.meter)
   const wasUnit = useEditorState((state) => state.draft.tempoUnit ?? beatUnit(state.draft.meter))
@@ -92,7 +92,7 @@ export function TempoPicker({ onDone }: { onDone: () => void }) {
  * A tempo change mid-song at the caret (A34, Flat's Tempo change in Text): its BPM in the song's beat
  * and Hear the tempo, then Save, or Delete where the notes there carry one.
  */
-export function TempoChangePicker({ onDone }: { onDone: () => void }) {
+function TempoChangePicker({ onDone }: { onDone: () => void }) {
   const { actions } = useScoreEditorContext()
   const unit = useEditorState((state) => beatUnit(state.draft.meter))
   const song = useEditorState((state) => Math.round(state.draft.tempo))

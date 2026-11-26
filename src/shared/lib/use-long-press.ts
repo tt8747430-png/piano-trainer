@@ -6,7 +6,7 @@ import {
   useRef,
 } from 'react'
 
-export interface LongPressOptions {
+interface LongPressOptions {
   delay?: number
   moveTolerance?: number
 }

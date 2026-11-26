@@ -5,49 +5,73 @@ import type { SampleManifest } from './sample-manifest'
  * Test doubles for the recorded instruments: an audio context with just enough to see what a sampler
  * builds, and a loader whose every file decodes to a buffer named by its URL.
  */
+/** A decoded second of silence that knows the URL it was decoded from. */
+class NamedBuffer implements AudioBuffer {
+  readonly length = 44_100
+  readonly numberOfChannels = 1
+  readonly duration = 1
+  readonly sampleRate = 44_100
+
+  constructor(readonly name: string) {}
+
+  getChannelData(): Float32Array<ArrayBuffer> {
+    return new Float32Array(this.length)
+  }
+
+  copyFromChannel(): void {}
+
+  copyToChannel(): void {}
+}
+
+/** A buffer source as the fake context records it. */
+interface FakeSource {
+  buffer: AudioBuffer | null
+  playbackRate: { value: number }
+  started: number
+  stopped: number
+  onended: (() => void) | null
+}
+
+/** A gain as the fake context records it: its level and each target set on it. */
+interface FakeGain {
+  value: number
+  targets: { value: number; at: number; constant: number }[]
+}
+
 export class SamplerContext {
   currentTime = 0
   readonly destination = {}
-  readonly sources: {
-    buffer: AudioBuffer | null
-    playbackRate: { value: number }
-    started: number
-    stopped: number
-    onended: (() => void) | null
-  }[] = []
-  readonly gains: { value: number; targets: { value: number; at: number; constant: number }[] }[] =
-    []
+  readonly sources: FakeSource[] = []
+  readonly gains: FakeGain[] = []
 
   async decodeAudioData(bytes: ArrayBuffer): Promise<AudioBuffer> {
-    const name = new TextDecoder().decode(bytes)
-    return { length: 44_100, numberOfChannels: 1, duration: 1, name } as unknown as AudioBuffer
+    return new NamedBuffer(new TextDecoder().decode(bytes))
   }
 
   createBufferSource() {
-    const source = {
-      buffer: null as AudioBuffer | null,
+    const played: FakeSource = {
+      buffer: null,
       playbackRate: { value: 1 },
       started: -1,
       stopped: -1,
-      onended: null as (() => void) | null,
+      onended: null,
+    }
+    const source = Object.assign(played, {
       connect: (next: unknown) => next,
       disconnect: () => undefined,
       start(at: number) {
-        source.started = at
+        played.started = at
       },
       stop(at: number) {
-        source.stopped = at
+        played.stopped = at
       },
-    }
+    })
     this.sources.push(source)
     return source
   }
 
   createGain() {
-    const record = {
-      value: 1,
-      targets: [] as { value: number; at: number; constant: number }[],
-    }
+    const record: FakeGain = { value: 1, targets: [] }
     this.gains.push(record)
     return {
       gain: {
@@ -70,7 +94,7 @@ export class SamplerContext {
 
 /** The URL a fake buffer was decoded from. */
 export const sampleNameOf = (buffer: AudioBuffer | null | undefined) =>
-  (buffer as unknown as { name: string } | null | undefined)?.name
+  buffer instanceof NamedBuffer ? buffer.name : undefined
 
 const ROOTS = Array.from({ length: 30 }, (_, index) => 21 + index * 3)
 
@@ -118,7 +142,7 @@ export function loaderOver(
   manifests: Readonly<Record<string, SampleManifest>>,
 ): SampleLoader {
   return createSampleLoader({
-    context: context as unknown as BaseAudioContext,
+    context,
     fetchJson: async (url) => manifests[url.split('/')[2] ?? ''] ?? null,
     fetchBytes: async (url) => new TextEncoder().encode(url).buffer,
   })

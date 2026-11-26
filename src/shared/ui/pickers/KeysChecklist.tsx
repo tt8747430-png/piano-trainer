@@ -39,6 +39,7 @@ export function KeysChecklist({
   return (
     <div>
       <Sheet
+        at={{}}
         open={open}
         onOpenChange={(next) => {
           if (next) setDraft(new Set(value.map(keySignature)))
@@ -54,7 +55,7 @@ export function KeysChecklist({
           }
         >
           <span className="min-w-0 text-foreground">{label}</span>
-          <span className="flex shrink-0 items-center gap-1 text-muted-foreground tabular-nums">
+          <span className="flex shrink-0 items-center gap-1 text-muted-foreground">
             {t('picker.chosen', { count: chosen.size, total: SIGNATURES.length })}
             <OpensMark />
           </span>
@@ -81,20 +82,16 @@ export function KeysChecklist({
           <div className="flex gap-4 pb-2">
             <Button
               variant="link"
-              className="h-11 px-0 text-base text-link"
+              className="px-0 text-link"
               onClick={() => setDraft(new Set(SIGNATURES))}
             >
               {t('picker.selectAll')}
             </Button>
-            <Button
-              variant="link"
-              className="h-11 px-0 text-base text-link"
-              onClick={() => setDraft(new Set())}
-            >
+            <Button variant="link" className="px-0 text-link" onClick={() => setDraft(new Set())}>
               {t('picker.clearAll')}
             </Button>
           </div>
-          <ul className="card divide-y divide-hairline overflow-hidden">
+          <ul className="card rows-hairline overflow-hidden">
             {SIGNATURES.map((count) => (
               <li key={count}>
                 <RowCheck

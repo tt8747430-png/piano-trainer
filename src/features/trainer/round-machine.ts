@@ -29,14 +29,14 @@ export interface ChordQuestion {
 }
 
 /** A cadence in a key, voiced: what a cadence round shows and sounds. */
-export interface CadenceQuestion {
+interface CadenceQuestion {
   readonly cadence: Cadence
   readonly key: Key
   readonly voicing: CadenceVoicing
 }
 
 /** A chord played for a cadence: which of the cadence's two chords it is. */
-export interface CadenceChord extends CadenceQuestion {
+interface CadenceChord extends CadenceQuestion {
   readonly at: 0 | 1
 }
 
@@ -186,7 +186,7 @@ export function choiceAnswer(question: ChoiceQuestion): string {
   }
 }
 
-export type RoundResult =
+type RoundResult =
   | {
       readonly kind: 'keys'
       readonly correct: boolean

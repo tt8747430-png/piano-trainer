@@ -69,15 +69,44 @@ Slow it down: the browser's Animations panel at 10%, and walk every state (rest,
 error, offline). What looks off at 10% is what feels off at full speed. Report each finding as a table row: severity,
 place, before, after, why.
 
+## Instructions from the owner's articles (2026-11-17)
+
+From Chawla, Nurkhon, Malewicz and Babich (`redesigning-a-screen/references/lessons-from-videos.md`). Each is a rule to
+follow, not a trend to note; `DESIGN.md` and the rulings still win.
+
+1. **Bars stay, quietly.** Every bar and the phone's tab bar are the `glass` surface and stay on screen while the page
+   scrolls under them: never hidden by scrolling, never given a band or line. A bar may shrink while scrolling down
+   only if its board draws the smaller state, and then grows back on the first scroll up.
+2. **Glass only over moving content.** Glass goes on what floats over a page (bars, the tab bar, floating actions, the
+   floating keyboard's frame); never on a card, a row, a sheet's body or a button inside content.
+3. **No trend textures.** No metal, mirror-ball, jelly, neumorphic extrusion, shader, particle field, 3D carousel,
+   endless gallery, parallax or mascot on any screen. Paper and ink only; a texture is allowed only where it is the
+   music itself (the staff, the keys).
+4. **Motion confirms an act, or it is not drawn.** Allowed: a menu or popover growing from its trigger, a sheet rising,
+   a toast arriving, a check after Save, the keys lighting as they sound. Each uses the values in Motion above.
+   Not allowed: motion on load, motion that loops on its own off the music, motion on scroll.
+5. **Every width holds.** A screen is drawn at 402 and 1710, and must also hold at 744 (iPad mini, upright), 852×393 (a
+   phone on its side) and 1024: nothing cut, overlapping or stranded in an empty band. A passport foldable opened
+   is a short, wide tablet and falls in this range. Check these widths in Pass 2 (`testing.md`).
+6. **A component is handed over with all its states.** A kit part made or changed in `shared/ui` (and its board helper)
+   carries, in the same commit: default, hover (pointer only), pressed, `focus-visible` (the app's one outline, 3px of `ring` 2px out, from `theme.css`; never restated),
+   disabled (50% opacity, no pointer), and loading where the act waits (a spinner in place of its icon, the label
+   kept). `DESIGN.md`'s Components entry names each state's token.
+7. **A token is a decision.** A new or changed token in `DESIGN.md`'s frontmatter is named by its role (`surface`,
+   `text-muted`, `radius-card`), never by its look (`blue`, `gray-1`); the paints (`paint-*`, `wash-*`) are the one
+   exception, being the music's data colours. In the same commit its prose says what it is for, why, and when not to
+   use it. A token nothing uses is deleted; two that serve one role become one.
+8. **Tune by numbers, then fix them.** A value tuned by eye on the canvas (a duration, a blur, an inset) is written into
+   the board's code as a number and into `DESIGN.md` when it is a token; never "about" or "feels right".
+
 ## Where the app's own rules differ
 
 - **Press:** the skills scale a pressed button to 0.96. `DESIGN.md`: buttons and chips change colour alone and never move;
   only the floating actions keep their press (`active:scale-96`).
-- **Depth:** ruled 2026-11-07, "yes to shadows": cards are white on a darker sand panel with a small layered shadow
-  (`0 0 0 1px` ink at 5%, `0 1px 2px` at 6%, `0 3px 10px -4px` at 10%); tracks are inset. `DESIGN.md` still says
-  surface and line until it is built.
-- **Letter-spacing:** `baseline-ui` forbids changing it; the app sets none today, and `seven-questions` (large headings
-  tighten 2 to 3%) stands over the ban.
+- **Depth:** cards separate by their lighter paper and a 1px ring, never a shadow, as the boards draw them;
+  shadows belong to what floats (`DESIGN.md`).
+- **Letter-spacing:** `baseline-ui` forbids changing it; the boards tighten large titles (-0.01em, a tempo's figures
+  -0.03em), and `seven-questions` (large headings tighten 2 to 3%) stands over the ban.
 - **Motion values:** `animate`, `emil-design-eng` and `review-animations` share one table (curves, durations, press
   0.97, reduced motion "gentler, not zero"). The app overrides four rows: its one curve is `--ease-out`
   `cubic-bezier(0.22, 1, 0.36, 1)` (`src/styles/theme.css`); sheets take about 450ms; buttons do not scale on press;

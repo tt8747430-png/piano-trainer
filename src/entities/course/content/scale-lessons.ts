@@ -17,7 +17,7 @@ import {
   signatureNotes,
   spellChord,
   tonicSpelling,
-  writtenOctave,
+  writtenName,
   type Finger,
   type Hand,
   type Key,
@@ -101,10 +101,6 @@ export const fingerText = (fingers: readonly Finger[]): string => fingers.join('
 
 // ── The kernel's facts ───────────────────────────────────────────────────────────────────────────
 
-/** A line of notes' token for a key under its spelling: `F#4`, `C♭5`. */
-const token = (key: Midi, spelled: SpelledNote): string =>
-  `${noteName(spelled)}${writtenOctave(key, spelled)}`
-
 /** A scale's run from its tonic, one octave and the tonic above, with its keys from `octave`. */
 function run(tonic: SpelledNote, kind: ScaleKind, octave: number) {
   const shift = 12 * (octave - 4)
@@ -168,7 +164,7 @@ export function chordsOn(numerals: string, key: Key): string[] {
 
 /** A run up and back down in quarters, the last note a half: four bars of 4/4. */
 function runLine(notes: readonly { note: SpelledNote; midi: Midi }[]): string {
-  const up = notes.map((placed) => token(placed.midi, placed.note))
+  const up = notes.map((placed) => writtenName(placed.midi, placed.note))
   const down = [...up].reverse().slice(1)
   const last = down.pop() ?? ''
   return [...up, ...down, `${last}/2`].join(' ')
@@ -178,7 +174,7 @@ function runLine(notes: readonly { note: SpelledNote; midi: Midi }[]): string {
 const downLine = (notes: readonly { note: SpelledNote; midi: Midi }[]): string =>
   [...notes]
     .reverse()
-    .map((placed) => token(placed.midi, placed.note))
+    .map((placed) => writtenName(placed.midi, placed.note))
     .join(' ')
 
 /** A chord symbol as prose writes it, as the sheet prints it: F♯m, not F#m. */
@@ -186,7 +182,7 @@ const shown = (symbol: string | undefined): string => printedSymbol(symbol ?? ''
 
 /** An arpeggio up two octaves and back in 8ths, the last note a half: two bars of 4/4. */
 function arpeggioLine(notes: readonly { note: SpelledNote; midi: Midi }[]): string {
-  const up = notes.map((placed) => `${token(placed.midi, placed.note)}/8`)
+  const up = notes.map((placed) => `${writtenName(placed.midi, placed.note)}/8`)
   const down = [...up].reverse().slice(1)
   const last = (down.pop() ?? '').replace('/8', '/2')
   return [...up, ...down, last].join(' ')
@@ -693,14 +689,14 @@ export function arpeggioLesson(key: Key): Lesson {
     const keys = Array.from({ length: 3 }, (_, i) => {
       const at = inversion + i
       const tone = tones[at % 3] ?? bass
-      return token(midi(root + tone.semitones + 12 * Math.floor(at / 3)), tone.note)
+      return writtenName(midi(root + tone.semitones + 12 * Math.floor(at / 3)), tone.note)
     })
     const bassKey = midi(root - 12 + bass.semitones)
     const written =
       inversion === 0
         ? symbol
         : chordSymbol({ root: key.tonic, quality: key.minor ? 'min' : 'maj', bass: bass.note })
-    return { symbol: written, hands: `${token(bassKey, bass.note)} | ${keys.join(' ')}` }
+    return { symbol: written, hands: `${writtenName(bassKey, bass.note)} | ${keys.join(' ')}` }
   }
   const noteNames = tones.map((tone) => tone.note)
   return {

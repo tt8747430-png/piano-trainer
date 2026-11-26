@@ -1,28 +1,47 @@
-import { Trash2 } from 'lucide-react'
+import { Flag, Plus } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FeatureSwitch, Group, SwitchState } from '@/shared/api/admin'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { useAdmin } from '@/shared/lib/admin'
-import { ConfirmDialog, FormField, InfoTip, RoundButton, Segmented } from '@/shared/ui'
+import {
+  Fab,
+  FloatingActions,
+  NewSheet,
+  Said,
+  Segmented,
+  SettingsGroup,
+  SheetPart,
+  ToggleChips,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Switch } from '@/shared/ui/primitives/switch'
-import { useLoaded } from '../model/use-loaded'
+import { Input } from '@/shared/ui/primitives/input'
+import { SettingsScreen } from '@/widgets/settings-screen'
 import { useChangeProblem } from '../model/use-change-problem'
+import { useLoaded } from '@/shared/lib'
 import { FailureLine, LoadedState } from './LoadedState'
 
 const STATES = ['everyone', 'nobody', 'groups'] as const satisfies readonly SwitchState[]
 const KEY = /^[a-z][a-z0-9-]{1,40}$/
 
+/** A flag's key from what it turns on: "Hands at the keys, 3D" is `hands-at-the-keys-3d`. */
+const slug = (words: string) =>
+  words
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 41)
+
 /**
- * Administration › Feature flags: each enabled for everyone, no one or selected groups; added by key
- * and description, deleted once asked.
+ * Administration › Feature flags (the Admin board): one card of flags, each what it turns on and its
+ * key, Enabled for Everyone · No one · Groups, and with Groups the groups as chips that toggle; New
+ * flag floats at the foot on a phone and stands in the pane's row on a laptop, opening a New sheet:
+ * what it turns on, and its key, made from those words until it is typed.
  */
 export function SwitchesTab() {
   const { t } = useTranslation('admin')
   const admin = useAdmin()
-  const [key, setKey] = useState('')
-  const [label, setLabel] = useState('')
-  const [deleting, setDeleting] = useState<FeatureSwitch | null>(null)
+  const laptop = useMediaQuery(LAPTOP)
   const load = useCallback(async () => {
     const [switches, groups] = await Promise.all([admin.switches(), admin.groups()])
     if (!switches.ok) return switches
@@ -32,63 +51,50 @@ export function SwitchesTab() {
   const { loaded, reload } = useLoaded(load)
   const { problem, after } = useChangeProblem(reload)
   const save = (feature: FeatureSwitch) => void admin.saveSwitch(feature).then(after)
-  const keyWrong = key !== '' && !KEY.test(key)
+  const [naming, setNaming] = useState<string | null>(null)
+  const [typedKey, setTypedKey] = useState<string | null>(null)
+  const label = (naming ?? '').trim()
+  const key = typedKey ?? slug(label)
+  const open = () => {
+    setNaming('')
+    setTypedKey(null)
+  }
+  const create = () => {
+    if (!label || !KEY.test(key)) return
+    void admin.saveSwitch({ key, label, state: 'nobody', groups: [] }).then((result) => {
+      if (result.ok) setNaming(null)
+      after(result)
+    })
+  }
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="flex items-center gap-1 px-3 font-sans text-sm font-semibold text-muted-foreground">
-        {t('switches.new')}
-        <InfoTip name={t('sections.flags')}>{t('switches.info')}</InfoTip>
-      </h2>
-      <form
-        className="flex flex-col gap-3 sm:flex-row sm:items-end"
-        onSubmit={(event) => {
-          event.preventDefault()
-          if (!KEY.test(key) || !label.trim()) return
-          save({ key, label: label.trim(), state: 'nobody', groups: [] })
-          setKey('')
-          setLabel('')
-        }}
-      >
-        <FormField
-          className="sm:w-48"
-          label={t('switches.key')}
-          value={key}
-          autoCapitalize="none"
-          onChange={(event) => setKey(event.target.value)}
-          error={keyWrong ? t('switches.invalidKey') : undefined}
-        />
-        <FormField
-          className="min-w-0 flex-1"
-          label={t('switches.label')}
-          value={label}
-          maxLength={120}
-          onChange={(event) => setLabel(event.target.value)}
-        />
-        <Button type="submit" size="lg" disabled={!KEY.test(key) || !label.trim()}>
-          {t('switches.add')}
-        </Button>
-      </form>
+    <SettingsScreen
+      title={t('sections.flags')}
+      actions={laptop ? <Button onClick={open}>{t('switches.new')}</Button> : null}
+    >
+      {laptop ? null : (
+        <FloatingActions>
+          <Fab label={t('switches.new')} icon={Plus} onClick={open} />
+        </FloatingActions>
+      )}
       {problem ? <FailureLine reason={problem} /> : null}
       <LoadedState loaded={loaded} reload={reload}>
         {({ switches, groups }) =>
           switches.length === 0 ? (
-            <p className="text-muted-foreground">{t('switches.none')}</p>
+            <Said
+              icon={Flag}
+              title={t('switches.none')}
+              primary
+              action={<Button onClick={open}>{t('switches.new')}</Button>}
+            />
           ) : (
-            <ul className="flex flex-col gap-2">
+            <SettingsGroup flush>
               {switches.map((feature) => (
-                <li key={feature.key} className="flex flex-col gap-3 card p-4">
-                  <div className="flex items-center gap-2">
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-semibold">{feature.label}</p>
-                      <p className="truncate font-mono text-sm text-muted-foreground">
-                        {feature.key}
-                      </p>
-                    </div>
-                    <RoundButton
-                      label={t('switches.delete')}
-                      icon={Trash2}
-                      onClick={() => setDeleting(feature)}
-                    />
+                <div key={feature.key} className="flex flex-col gap-3 py-3 ps-4 pe-3">
+                  <div className="flex min-w-0 flex-col gap-0.5 leading-[normal]">
+                    <span className="truncate font-semibold">{feature.label}</span>
+                    <span className="truncate font-mono text-footnote text-muted-foreground">
+                      {feature.key}
+                    </span>
                   </div>
                   <Segmented
                     label={`${t('switches.state')}: ${feature.label}`}
@@ -100,33 +106,46 @@ export function SwitchesTab() {
                     onChange={(state) => save({ ...feature, state })}
                   />
                   {feature.state === 'groups' ? (
-                    <SwitchGroups feature={feature} groups={groups} onChange={save} />
+                    <GroupChips feature={feature} groups={groups} onChange={save} />
                   ) : null}
-                </li>
+                </div>
               ))}
-            </ul>
+            </SettingsGroup>
           )
         }
       </LoadedState>
-      <ConfirmDialog
-        open={deleting !== null}
-        onOpenChange={(open) => {
-          if (!open) setDeleting(null)
-        }}
-        title={t('switches.deleteTitle', { label: deleting?.label ?? '' })}
-        body={t('switches.deleteBody')}
-        action={t('switches.confirm')}
-        onConfirm={() => {
-          if (deleting) void admin.deleteSwitch(deleting.key).then(after)
-          setDeleting(null)
-        }}
-      />
-    </div>
+      <NewSheet
+        open={naming !== null}
+        onOpenChange={(next) => (next ? open() : setNaming(null))}
+        title={t('switches.new')}
+        nameLabel={t('switches.turnsOn')}
+        name={naming ?? ''}
+        maxLength={120}
+        onName={setNaming}
+        createLabel={t('switches.create')}
+        onCreate={create}
+      >
+        <SheetPart title={t('switches.key')}>
+          <Input
+            aria-label={t('switches.key')}
+            value={key}
+            autoCapitalize="none"
+            spellCheck={false}
+            className="font-mono"
+            aria-invalid={key !== '' && !KEY.test(key)}
+            onChange={(event) => setTypedKey(event.target.value)}
+          />
+          {key !== '' && !KEY.test(key) ? (
+            <p className="text-sm text-destructive">{t('switches.invalidKey')}</p>
+          ) : null}
+        </SheetPart>
+      </NewSheet>
+    </SettingsScreen>
   )
 }
 
-/** The groups a switch is on for, each with its own switch. */
-function SwitchGroups({
+/** The groups a flag is on for, as the kit's toggle chips, a tap toggling each. */
+function GroupChips({
   feature,
   groups,
   onChange,
@@ -136,28 +155,14 @@ function SwitchGroups({
   onChange: (feature: FeatureSwitch) => void
 }) {
   const { t } = useTranslation('admin')
+  if (groups.length === 0)
+    return <p className="text-sm text-muted-foreground">{t('switches.noGroups')}</p>
   return (
-    <fieldset className="flex flex-col">
-      <legend className="text-sm text-muted-foreground">{t('switches.groups')}</legend>
-      {groups.length === 0 ? (
-        <p className="py-2 text-sm text-muted-foreground">{t('switches.noGroups')}</p>
-      ) : null}
-      {groups.map((group) => (
-        <label key={group.id} className="flex min-h-11 items-center gap-3">
-          <span className="min-w-0 flex-1 truncate text-sm">{group.name}</span>
-          <Switch
-            checked={feature.groups.includes(group.id)}
-            onCheckedChange={(on) =>
-              onChange({
-                ...feature,
-                groups: on
-                  ? [...feature.groups, group.id]
-                  : feature.groups.filter((id) => id !== group.id),
-              })
-            }
-          />
-        </label>
-      ))}
-    </fieldset>
+    <ToggleChips
+      label={t('switches.groups')}
+      value={feature.groups}
+      options={groups.map((group) => ({ value: group.id, label: group.name }))}
+      onChange={(ids) => onChange({ ...feature, groups: ids })}
+    />
   )
 }

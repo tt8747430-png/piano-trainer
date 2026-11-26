@@ -1,5 +1,5 @@
 import { isPatternId, type PatternId } from '@/entities/pattern'
-import { SECTION_KINDS } from '@/entities/piece'
+import { isKeyText, SECTION_KINDS } from '@/entities/piece'
 import type { Draft, DraftHeading } from '@/features/score-editor'
 import { isOneOf, isRecord } from '@/shared/lib'
 import { isMeter } from '@/shared/lib/music'
@@ -11,7 +11,7 @@ const VERSION = 1
  * What a song's MusicXML keeps for the app alone (ADR 0107), which the music cannot say: the
  * pattern it plays, each section's heading and its lines' bars, and each chord's method code.
  */
-export interface SongFileData {
+interface SongFileData {
   readonly pattern: PatternId
   readonly sections: readonly {
     readonly heading: DraftHeading
@@ -59,8 +59,7 @@ function headingOf(saved: unknown): DraftHeading | null {
     ...(typeof label === 'string' && label !== '' ? { label } : {}),
     ...(last === true ? { last } : {}),
     ...(typeof en === 'string' && typeof ru === 'string' ? { detail: { en, ru } } : {}),
-    // The key is read again where the music is: a key that is none is dropped there.
-    ...(typeof key === 'string' ? { key: key as DraftHeading['key'] } : {}),
+    ...(isKeyText(key) ? { key } : {}),
     ...(isMeter(meter) ? { meter } : {}),
   }
 }
@@ -80,7 +79,7 @@ export function readSongFileData(text: string | undefined): SongFileData | undef
     if (!isRecord(section) || !Array.isArray(section.lines) || !section.lines.every(isCount))
       return null
     const heading = headingOf(section.heading)
-    return heading ? { heading, lines: section.lines as number[] } : null
+    return heading ? { heading, lines: section.lines.filter(isCount) } : null
   })
   if (sections.length === 0 || !sections.every((section) => section !== null)) return undefined
   const methods = saved.methods.filter(

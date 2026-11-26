@@ -7,6 +7,7 @@ const course: Course = {
   shelf: 'technique',
   stage: 'intermediate',
   title: { en: 'Major Scales', ru: 'Мажорные гаммы' },
+  line: { en: 'Every key: notes, fingering, chords', ru: 'Каждая тональность: ноты, аппликатура, аккорды' },
   summary: {
     en: 'All twelve major scales, one key at a time in circle-of-fifths order. For each key, learn its notes and key signature, the fingering for each hand and its three primary chords.',
     ru: 'Все двенадцать мажорных гамм, по одной тональности, по квинтовому кругу. В каждой вы выучите ноты и ключевые знаки, аппликатуру каждой руки и три главных трезвучия.',

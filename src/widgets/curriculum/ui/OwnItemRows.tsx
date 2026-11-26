@@ -1,8 +1,15 @@
-import { Copy, PencilLine } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { OWN_NAME_MAX } from '@/entities/own-lessons'
-import { DangerGroup, DangerRow, NewSheet, RowButton, say, SettingsGroup } from '@/shared/ui'
+import {
+  ActionRow,
+  DangerGroup,
+  DangerRow,
+  NewSheet,
+  RowButton,
+  say,
+  SettingsGroup,
+} from '@/shared/ui'
 
 /** What the rows say of the item: a lesson's words or a course's. */
 export interface OwnItemWords {
@@ -45,15 +52,9 @@ export function OwnItemRows({
   }
   return (
     <SettingsGroup flush title={words.group}>
-      <RowButton
-        title={t('edit.order.name')}
-        value={title}
-        icon={PencilLine}
-        paint="sky"
-        onClick={() => open(true)}
-      />
+      <RowButton title={t('edit.order.name')} value={title} opens onClick={() => open(true)} />
       {children}
-      <RowButton title={t('own.duplicate')} icon={Copy} paint="grass" onClick={onDuplicate} />
+      <ActionRow title={t('own.duplicate')} onClick={onDuplicate} />
       <NewSheet
         open={renaming}
         onOpenChange={open}
@@ -86,7 +87,7 @@ export function OwnDeleteGroup({
   onDelete: () => void
 }) {
   return (
-    <DangerGroup>
+    <DangerGroup className="mt-4">
       <DangerRow title={words.delete} onClick={onDelete} />
     </DangerGroup>
   )

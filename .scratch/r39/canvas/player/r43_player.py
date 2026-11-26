@@ -9,8 +9,12 @@ Reads the merged Player pages from player/base/ (written by merge_player.py) and
   ♭ ♮ ♯ on the chosen letter only, every key spelled the way it moves (up in sharps, down in flats), Back to the
   written key;
 - the chord names over the staff in the Chords page's book serif; the Chords page's tap, focus and tooltip rules.
-Run: python3 -I player/r43_player.py  (from .scratch/r39/canvas)"""
+Run: python3 -I player/r43_player.py  (from .scratch/r39/canvas)
+
+Careful: the built PlayerApp and PlayerDesk boards carry passes made after this script (the States
+tool, the keys' faces), which a fresh run drops; for a small change, patch the two built boards in place too."""
 import re, pathlib
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_kit.py').read())  # MODESW, MODEBAR_P/L, GLASSFX: the bar shared with the editor
 
 HERE = pathlib.Path(__file__).resolve().parent
 OUT = HERE.parent / 'practice' / 'project'
@@ -65,7 +69,7 @@ const setKey = (l, a) => this.setState({ songKey: { l, a } });
 const stepKey = (dir) => setKey(...spellPc((keyPc + dir + 12) % 12, dir));
 const KEYPICK = (curL, curA, pick) => ({
   lets: [0, 1, 2, 3, 4, 5, 6].map((l) => { const on = l === curL, a2 = on ? curA : 0;
-    return { s: LET[l] + ACCS[String(a2)], on, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px #DAD1C8', fw: on ? 800 : 600,
+    return { s: LET[l] + ACCS[String(a2)], on, bg: on ? '#DAD1C8' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px #DAD1C8', fw: on ? 800 : 600,
       aria: 'Key of ' + LET[l] + (a2 ? (a2 > 0 ? ' sharp' : ' flat') : '') + ' major', pick: () => { if (!on) pick(l, 0); } }; }),
   accs: [[-1, '♭', 'Flat'], [0, '♮', 'Natural'], [1, '♯', 'Sharp']].map(([a, g, w]) => { const on = a === curA, good = keyOk(curL, a);
     return { l: g, aria: w + ' ' + LET[curL], on, dis: !good, op: good ? 1 : 0.35, bg: on ? '#FEFDFB' : 'transparent',
@@ -99,6 +103,9 @@ def patch(t, phone):
     # ── fonts and the Chords page's interaction rules ──
     t = t.replace('family=Instrument+Serif&amp;display=swap', 'family=Instrument+Serif&amp;family=Noto+Music&amp;display=swap', 1)
     t = t.replace('</style>', '</style>' + MOTION, 1)
+    # ── the score keeps its page width and centres when the phone layout is wider (an iPad upright, 744) ──
+    t = t.replace('tabindex="0" ref="{{scoreRef}}" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;', 'tabindex="0" ref="{{scoreRef}}" style="position: absolute; left: max(0px, calc(50% - 201px)); right: max(0px, calc(50% - 201px)); top: 0; bottom: 0;') if phone else t
+    t = t.replace('<main style="position: absolute; left: 0; right: 0; top: {{areaTop}}px; bottom: 0; overflow: hidden">', '<main style="position: absolute; left: 0; right: 0; top: {{areaTop}}px; bottom: 0; overflow: hidden; background: #F7F3EE">') if phone else t
     # ── the bar in light glass; the chosen view ink ──
     t = sub(t, r"glass: \w+ \? '[^']*' : '[^']*', glassFg: \w+ \? '[^']*' : '[^']*', glassLine: \w+ \? '[^']*' : '[^']*',", f"glass: '{GLASS}', glassFg: '{INK}', glassLine: '{LINE}',")
     t = sub(t, r"setBg: open === 'settings' \? \(\w+ \? '[^']*' : '[^']*'\) : \(\w+ \? '[^']*' : '[^']*'\),", f"setBg: open === 'settings' ? '{FILL}' : '{GLASS}',")
@@ -131,7 +138,7 @@ def patch(t, phone):
     pace = pace.replace('aria-label="Pace: {{paceLabel}}"', 'aria-label="Practice: {{paceLabel}}"')
     if phone:
         cap = lambda bg='transparent', fg=INK: f'width: 48px; height: 48px; padding: 0; border: 0; border-radius: 24px; background: {bg}; color: {fg}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px'
-        word = lambda v: f'<span style="font-size: 11px; font-weight: 600; line-height: 1; white-space: nowrap">{{{{{v}}}}}</span>'
+        word = lambda v: f'<span style="font-size: 12px; font-weight: 600; line-height: 1; white-space: nowrap">{{{{{v}}}}}</span>'
         pace = restyle(pace, cap(), small(svg(pace)) + word('paceCap'))
         loop = restyle(loop, cap('{{loopBg}}', '{{loopFg}}'), small(svg(loop)) + word('loopCap'))
         hands = restyle(hands, cap(), HANDSI + word('handsCap'))
@@ -177,12 +184,10 @@ def patch(t, phone):
 CHEV_R = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>'
 CHEV_L = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>'
 CARD = 'background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px rgba(51,41,33,.07)'
-ICON3D = '<svg width="40" height="24" viewBox="0 0 48 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M9 6h30l7 18H2z"></path><path d="M14.5 6 11 24M20 6l-2 18M26 6v18M31.5 6l3 18M37 6l5 18"></path><path d="M12.6 6h3l-1.2 9h-3.4zM18.3 6h3l-.7 9h-3.3zM27.6 6h3l1 9h-3.3zM33.3 6h3l1.9 9h-3.4z" fill="currentColor"></path></svg>'
-ICON2D = '<svg width="40" height="24" viewBox="0 0 48 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M8.3 4v20M14.6 4v20M20.9 4v20M27.1 4v20M33.4 4v20M39.7 4v20"></path><path d="M6.5 4h3.6v11H6.5zM12.8 4h3.6v11h-3.6zM25.3 4h3.6v11h-3.6zM31.6 4h3.6v11h-3.6zM37.9 4h3.6v11h-3.6z" fill="currentColor"></path></svg>'
 ROW = 'min-height: 48px; box-sizing: border-box; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: #332921'
 SEP = 'border-top: 1px solid #E9E2D8; margin-top: -1px'
 def SWITCH(v):  # the Chords page's switch (R42 v85): 51 by 31, green when on
-    return f'<span aria-hidden="true" style="position: relative; flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{v}.track}}}}"><span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)"></span></span>'
+    return f'<span aria-hidden="true" style="position: relative; flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{v}.track}}}}"><span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 2px 4px rgba(51,41,33,.2)"></span></span>'
 def VCARD(v, icon, name, inner=''):
     dot = (f'<span aria-hidden="true" style="flex: none; width: 22px; height: 22px; border-radius: 11px; background: {{{{{v}.dot}}}}; box-shadow: {{{{{v}.dotRing}}}}; color: #FEFDFB; display: flex; align-items: center; justify-content: center">'
            f'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{{{{v}.mk}}}}"><path d="m5 12 5 5 9-10"></path></svg></span>')
@@ -191,8 +196,6 @@ def VCARD(v, icon, name, inner=''):
 def SEGROW(label, lst, w):
     return (f'<div style="{ROW}; {SEP}"><span>{label}</span><div role="group" style="flex: none; width: {w}px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; padding: 2px; border-radius: 9px; background: #EEE9E2">'
             f'<sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="2"><button type="button" aria-pressed="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="height: 30px; padding: 0 6px; border: 0; border-radius: 7px; background: {{{{o.bg}}}}; box-shadow: {{{{o.shadow}}}}; color: #332921; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap">{{{{o.name}}}}</button></sc-for></div></div>')
-def LINKROW(label, val, first=False):
-    return (f'<a href="#" style="{ROW}; {"" if first else SEP + "; "}text-decoration: none"><span>{label}</span><span style="display: flex; align-items: center; gap: 4px; color: #685E56">{val}<span style="display: flex; color: #685E56">{CHEV_R}</span></span></a>')
 # one Piano sheet, the very markup the Chords page uses (piano_sheet.py; owner, canvas 121: "merge them and make proper
 # one piano settings"). Only its choices follow the page: a song fits the song or the learner's own piano.
 import sys; sys.path.insert(0, str(HERE.parent)); import piano_sheet as PS
@@ -223,21 +226,23 @@ def kit(t, phone):
     t = t.replace('padding: 6px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 15px; color: #332921',
                   'padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: #332921')
     t = t.replace('border-radius: 9px; background: #E7E0D6', 'border-radius: 9px; background: #EEE9E2')
-    t = t.replace('<p style="margin: 6px 14px -4px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #685E56">',
-                  '<p style="margin: 6px 4px -4px; font-size: 13px; font-weight: 600; color: #685E56">')
+    t = t.replace('<p style="margin: 6px 14px -4px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #685E56">',
+                  '<p style="margin: 6px 4px -4px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #685E56">')  # the kit's CAPS, as every group label (rounds 15, 25)
+    # the next lyric line reads at 4.5:1 in soft ink (was #A39A90, 2.5:1); its lighter weight keeps it second (loop 63)
+    t = t.replace('line-height: 1.2; color: #A39A90">{{lineNext}}', 'line-height: 1.2; color: #685E56">{{lineNext}}')
     t = t.replace('<span aria-hidden="true" style="color: #A39A90; font-size: 18px">›</span>', '<span aria-hidden="true" style="display: flex; color: #685E56">' + CHEV_R + '</span>')
     # the switch
     t = re.sub(r'width: 44px; height: 26px; (padding: 0; border: 0; )?border-radius: 9999px; background: \{\{([\w.]+)\}\}',
                r'width: 51px; height: 31px; \1border-radius: 16px; background: {{\2}}', t)
     t = re.sub(r'top: 3px; left: \{\{([\w.]+)\}\}px; width: 20px; height: 20px; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba\(26,22,18,0\.3\)',
-               r'top: 2px; left: {{\1}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)', t)
+               r'top: 2px; left: {{\1}}px; width: 27px; height: 27px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 2px 4px rgba(51,41,33,.2)', t)
     t = sub(t, r"track: ([^?,]+)\? '#B07A2A' : '#D9D1C6', knob: ([^?,]+)\? 21 : 3", r"track: \1? '#7FB685' : '#DAD1C8', knob: \2? 22 : 2", n=0)
     # a sheet's title: centred, with Done on a phone (the Chords sheets); left on a laptop's popover
     if phone:
         t = re.sub(r'<h2 style="margin: 4px 14px 2px; font-size: 17px; font-weight: 700; line-height: 1.2">(.*?)</h2>',
                    r'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 40px"><h2 style="margin: 0; font-size: 17px; font-weight: 600">\1</h2><button type="button" onClick="{{close}}" style="position: absolute; right: -4px; height: 44px; padding: 0 4px; border: 0; background: transparent; color: #356890; font: inherit; font-size: 17px; font-weight: 600">Done</button></div>', t)
     else:
-        t = t.replace('<h2 style="margin: 4px 14px 2px; font-size: 17px; font-weight: 700; line-height: 1.2">', '<h2 style="margin: 0 4px; font-size: 17px; font-weight: 600; line-height: 1.2">')
+        t = t.replace('<h2 style="margin: 4px 14px 2px; font-size: 17px; font-weight: 700; line-height: 1.2">', '<h2 style="margin: 0; font-size: 17px; font-weight: 600; line-height: 1.2">')  # on the cards' edge, as every popover's title (loop round 67, the lines)
     # a page inside a sheet: Back as the chevron, the title centred
     t = re.sub(r'<div style="display: flex; align-items: center; gap: 6px; margin: 0 0 2px"><button type="button" aria-label="Back" onClick="\{\{(\w+)\}\}" style="[^"]*"><svg[^>]*><path d="M19 12H5M12 19l-7-7 7-7"></path></svg></button><h2 style="margin: 0; font-size: 17px; font-weight: 700; line-height: 1.2">(.*?)</h2></div>',
                lambda m: f'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 40px"><button type="button" aria-label="Back" onClick="{{{{{m.group(1)}}}}}" style="position: absolute; left: -10px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: #332921; display: flex; align-items: center; justify-content: center">{CHEV_L}</button><h2 style="margin: 0; font-size: 17px; font-weight: 600">{m.group(2)}</h2></div>', t)
@@ -245,11 +250,11 @@ def kit(t, phone):
     m = re.search(r'(<section role="dialog" aria-label="Keyboard" [^>]*>.*?</h2>(?:<button[^>]*>Done</button></div>)?\n)(.*?)(</section>)', t, flags=re.S)
     assert m, 'keyboard sheet'
     t = t[:m.start(2)] + KBBODY + '\n' + t[m.end(2):]
-    t = sub(t, r"(kb3d: keys && kbStyle === '3d', kb2d: keys && kbStyle === '2d',)", lambda mm: mm.group(1) + ' ' + KBVALS)
+    t = sub(t, r"(kb3d: keys && kbStyle === '3d', kb2d: keys && kbStyle === '2d',)", lambda mm: 'kbOn: !!keys, ' + mm.group(1) + ' ' + KBVALS)
     t = sub(t, r"const kbNames = s\.kbNames \?\? true;", "const kbLabel = s.kbLabel ?? 'names', kbNames = kbLabel !== 'none';\nconst DEG = ['1', '♭2', '2', '♭3', '3', '4', '♯4', '5', '♭6', '6', '♭7', '7'], labelOf = (m) => kbLabel === 'degrees' ? DEG[(m - keyPc + 120) % 12] : NOTE[m % 12];")
     t = lit(t, "t: mine ? NOTE[k.m % 12] :", "t: mine ? labelOf(k.m) :")
     t = lit(t, "const name = NOTE[m % 12];", "const name = labelOf(m);")
-    t = t.replace('aria-label="Keyboard', 'aria-label="Piano').replace('>Keyboard</h2>', '>Piano</h2>').replace('data-tip="Keyboard"', 'data-tip="Piano"').replace('<span>Keyboard</span></button>', '<span>Piano</span></button>')
+    t = t.replace('aria-label="Keyboard', 'aria-label="Piano').replace('>Keyboard</h2>', '>Piano</h2>').replace('data-tip="Keyboard"', 'data-tip="Piano"').replace('<span>Keyboard</span></button>', '<span>{{kbCap}}</span></button>')
     # a phone's sheet stops below the bar (Close, the views, the gear), never under it (owner, canvas 122: "the piano
     # settings in the player are not correct height")
     if phone:
@@ -267,14 +272,15 @@ def kit(t, phone):
             '<sc-for list="{{doneGroups}}" as="g" hint-placeholder-count="4"><button type="button" aria-label="{{g.aria}}" onClick="{{g.pick}}" style="min-width: 0; min-height: 72px; box-sizing: border-box; padding: 8px; border: 0; border-radius: 12px; background: {{g.bg}}; box-shadow: {{g.ring}}; color: #332921; font: inherit; display: flex; flex-direction: column; align-items: stretch; gap: 4px; text-align: left">'
             '<span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums">{{g.l}}</span>'
             '<span aria-hidden="true" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px"><sc-for list="{{g.cells}}" as="c" hint-placeholder-count="4"><span style="height: 12px; border-radius: 3px; background: {{c.bg}}"></span></sc-for></span>'
-            '<span style="font-size: 12px; color: {{g.subC}}; font-variant-numeric: tabular-nums">{{g.sub}}</span></button></sc-for></div>'
-            '<span style="flex: none; padding: 0 4px; font-size: 13px; color: #4A433C">{{doneBarsLine}}</span>', flags=re.S)
+            '<span style="font-size: 12px; color: {{g.subC}}; font-variant-numeric: tabular-nums">{{g.sub}}</span>'
+            '<span style="display: {{g.pauseShow}}; margin-top: -4px; font-size: 12px; color: #685E56; font-variant-numeric: tabular-nums">{{g.pause}}</span></button></sc-for></div>'
+            '', flags=re.S)
     t = t.replace('>Each bar</p>', '>Bars</p>')
     t = lit(t, "doneBarsLine: 'Most slips in bars 5–8 (5 of 7). Tap a bar to practise its four.',",
-            "doneBarsLine: 'Most slips in bars 5–8 (5 of 7). Tap four bars to practise them.',\n"
-            "doneGroups: [0, 1, 2, 3].map((g) => { const n4 = [0, 0, 1, 0, 0, 3, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0].slice(g * 4, g * 4 + 4), a = g * 4 + 1, n = n4.reduce((x, y) => x + y, 0), weak = a === 5;\n"
-            "  return { l: a + '–' + (a + 3), cells: n4.map((k) => ({ bg: k === 0 ? '#E4DDD3' : k === 1 ? '#F8D9C2' : k === 2 ? '#F0A877' : '#B07A2A' })), sub: n === 0 ? 'No slips' : n === 1 ? '1 slip' : n + ' slips', subC: n ? '#332921' : '#685E56',\n"
-            "    aria: 'Bars ' + a + '–' + (a + 3) + ': ' + (n === 0 ? 'no slips' : n === 1 ? '1 slip' : n + ' slips') + '. Practise them', bg: weak ? '#FBF1DD' : '#FEFDFB', ring: weak ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)',\n"
+            ""
+            "doneGroups: [0, 1, 2, 3].map((g) => { const n4 = [0, 0, 1, 0, 0, 3, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0].slice(g * 4, g * 4 + 4), a = g * 4 + 1, n = n4.reduce((x, y) => x + y, 0), weak = a === 5, p = [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0].slice(g * 4, g * 4 + 4).reduce((x, y) => x + y, 0);\n"
+            "  return { l: a + '–' + (a + 3), cells: n4.map((k) => ({ bg: k === 0 ? '#E4DDD3' : k === 1 ? '#F8D9C2' : k === 2 ? '#F0A877' : '#B07A2A' })), sub: n === 0 ? 'No slips' : n === 1 ? '1 slip' : n + ' slips', subC: n ? '#332921' : '#685E56', pause: p === 1 ? '1 pause' : p + ' pauses', pauseShow: p ? 'block' : 'none',\n"
+            "    aria: 'Bars ' + a + '–' + (a + 3) + ': ' + (n === 0 ? 'no slips' : n === 1 ? '1 slip' : n + ' slips') + (p ? ', ' + (p === 1 ? '1 pause' : p + ' pauses') : '') + '. Practise them', bg: weak ? '#FBF1DD' : '#FEFDFB', ring: weak ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)',\n"
             "    pick: () => { this.setState({ loop: true, loopA: a, loopB: a + 3, bar: a, beat: 1 }); togglePlayNow(); } }; }),")
     # Played through's text stacks on the 4 scale, and its buttons without the browser's 1 by 6 padding (canvas 122)
     t = t.replace('flex-direction: column; gap: 2px', 'flex-direction: column; gap: 4px')
@@ -420,8 +426,157 @@ def grid4(t, phone):
     return t
 
 
+
+def headed(t, phone):
+    """Loop round 24 (owner, IMG_6045–6056: "the titles doesnt look good and should be in the headers ... no settings in
+    the view buttons. floating buttons with backroung doesnt make sense"): the bar is a band of paper with a hairline,
+    Close and the gear plain icons on it, the song's title and its credit beside Close; the score prints no title
+    under it. A view button only shows its view; its settings are the gear's. On a phone the views are one button
+    with the view shown, opening a menu of the four."""
+    top = 66 if phone else 16
+    left = 60 if phone else 68
+    plain = 'border: 0; background: transparent; color: #332921'
+    t = re.sub(r'(aria-label="Close" data-tip="Close" style="[^"]*?)border: 1px solid \{\{glassLine\}\}; border-radius: 9999px; background: \{\{glass\}\}; backdrop-filter: blur\(12px\); color: \{\{glassFg\}\}',
+               r'\1border: 0; border-radius: 9999px; background: transparent; color: #332921', t, count=1)
+    t = re.sub(r'(aria-label="Settings" data-tip="Settings" aria-expanded="\{\{isMore\}\}" onClick="\{\{openMore\}\}" style="[^"]*?)border: 1px solid \{\{glassLine\}\}; border-radius: 9999px; background: \{\{setBg\}\}; backdrop-filter: blur\(12px\); color: \{\{glassFg\}\}',
+               r'\1border: 0; border-radius: 9999px; background: {{setBgPlain}}; color: #332921', t, count=1)
+    # each view button only shows its view
+    t = t.replace("pick: () => (id !== view ? this.setState({ view: id, open: 'none' }) : this.setState({ open: open === 'view' ? 'none' : 'view' })),",
+                  "pick: () => this.setState({ view: id, open: 'none' }),", 1)
+    t = t.replace("const hint = !on ? 'Show ' + name : sheet ? (pano ? 'Show as pages' : 'Show as one line') : name + ' settings';", "const hint = name;", 1)
+    t = t.replace("const label = sheet && on ? (pano ? 'Sheet, one line' : 'Sheet, pages') : name;", "const label = name;", 1)
+    t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', isViews: open === 'views', openViews: toggleOpen('views'), setBgPlain: open === 'settings' ? '#EEE9E2' : 'transparent', viewNowD: (VIEWS.find((v) => v[0] === view) || VIEWS[0])[2], viewNowName: (VIEWS.find((v) => v[0] === view) || VIEWS[0])[1],", 1)
+    if phone:
+        nav0 = t.index('<nav aria-label="View"')
+        nav1 = t.index('</nav>', nav0) + len('</nav>')
+        menu = ('<button type="button" aria-label="View: {{viewNowName}}" data-tip="View" aria-expanded="{{isViews}}" onClick="{{openViews}}" '
+                f'style="position: absolute; z-index: 48; right: 60px; top: {top}px; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: transparent; color: #332921; display: flex; align-items: center; justify-content: center">'
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{viewNowD}}"></path></svg></button>'
+                '<sc-if value="{{isViews}}" hint-placeholder-val="{{false}}"><div onClick="{{openViews}}" style="position: absolute; inset: 0; z-index: 55"></div>'
+                f'<div role="menu" aria-label="View" style="position: absolute; z-index: 56; right: 12px; top: {top + 50}px; width: 220px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: #FEFDFB; '
+                'box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.08), 0 18px 40px -12px rgba(51,41,33,.28)">'
+                '<sc-for list="{{views}}" as="v" hint-placeholder-count="4"><button type="button" role="menuitemradio" aria-checked="{{v.on}}" onClick="{{v.pick}}" '
+                'style="width: 100%; height: 44px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; gap: 12px; padding: 0 10px; color: #332921; font: inherit; font-size: 16px; text-align: left">'
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{v.d}}"></path></svg>'
+                '<span style="flex: 1">{{v.label}}</span><span aria-hidden="true" style="opacity: {{v.tick}}; font-weight: 700">✓</span></button></sc-for></div></sc-if>')
+        t = t[:nav0] + menu + t[nav1:]
+        t = t.replace("on: on ? 'true' : 'false', bg: on ? '#332921' : 'transparent',", "on: on ? 'true' : 'false', tick: on ? 1 : 0, bg: on ? '#332921' : 'transparent',", 1)
+    # with the keys shown the views still start under the bar (they started at 16, from before the bar was a band)
+    old, new = ('topKeys: 16', 'topKeys: 128') if phone else ('topKeys: 36', 'topKeys: 80')
+    assert old in t
+    t = t.replace(old, new, 1)
+    return t
+
+
+def onebar(t, phone):
+    """Loop round 61 (owner, 2026-11-16: "the headers should be properly with no background and glass buttons … proper way
+    to switch from the player to editor not like this two different controls in the editor and in the player"): the
+    Player's bar is the editor's, from the kit: no band; Close a glass circle leading; the Play · Edit switch (Play
+    chosen) where the editor's stands; the Player's own controls one glass group trailing (on a phone View and
+    Settings, on a laptop the four views beside Settings). The title is the score's, printed on the page as the editor
+    prints it; the other views print the same head above their content."""
+    close = re.search(r'<a href="(Song(?:Laptop)?\.dc\.html)" aria-label="Close" data-tip="Close" style="[^"]*">\s*(<svg.*?</svg>)\s*</a>\n?', t, re.S)
+    sett = re.search(r'<div style="position: absolute; right: \d+px; top: \d+px; display: flex; gap: 8px">\s*(<button type="button" aria-label="Settings".*?</button>)\s*</div>\n?', t, re.S)
+    assert close and sett, 'bar parts'
+    gear = re.sub(r'style="width: 44px; height: 44px; border: 0; border-radius: 9999px;', 'style="position: relative; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px;', sett.group(1), count=1)
+    if phone:
+        vb = re.search(r'<button type="button" aria-label="View: \{\{viewNowName\}\}".*?</button>', t, re.S)
+        view = vb.group(0).replace('position: absolute; z-index: 48; right: 60px; top: 66px; ', 'position: relative; padding: 0; ').replace('border-radius: 9999px', 'border-radius: 22px')
+        t = t[:vb.start()] + t[vb.end():]
+        # the views' menu hangs from the bar's foot, at its trailing edge
+        t = t.replace('right: 12px; top: 116px; width: 220px;', 'right: 16px; top: 120px; width: 220px;', 1)
+        right = f'<div style="display: flex; justify-content: flex-end; min-width: 132px"><div role="group" aria-label="View and settings" style="flex: none; display: flex; border-radius: 22px; {GLASSFX}; pointer-events: auto">{view}{gear}</div></div>'
+    else:
+        nb = re.search(r'<nav aria-label="View".*?</nav>\n?', t, re.S)
+        nav = re.sub(r'style="z-index: 48; position: absolute; left: 50%; top: 16px; transform: translateX\(-50%\); height: 44px; box-sizing: border-box; padding: 4px; display: flex; gap: 2px; border-radius: 9999px; border: 1px solid \{\{glassLine\}\}; background: \{\{glass\}\}; backdrop-filter: blur\(12px\)"',
+                     f'style="flex: none; height: 44px; box-sizing: border-box; padding: 4px; display: flex; gap: 2px; border-radius: 22px; {GLASSFX}; pointer-events: auto"', nb.group(0), count=1)
+        assert nav != nb.group(0), 'nav'
+        t = t[:nb.start()] + t[nb.end():]
+        right = f'<div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-width: 132px">{nav}<div style="flex: none; display: flex; border-radius: 22px; {GLASSFX}; pointer-events: auto">{gear}</div></div>'
+    sett = re.search(r'<div style="position: absolute; right: \d+px; top: \d+px; display: flex; gap: 8px">\s*<button type="button" aria-label="Settings".*?</button>\s*</div>\n?', t, re.S)
+    t = t[:sett.start()] + t[sett.end():]
+    href, xsvg = close.group(1), close.group(2)
+    x = (f'<a href="{href}" aria-label="Close" data-tip="Close · Esc" style="flex: none; position: relative; width: 44px; height: 44px; border-radius: 22px; {GLASSFX}; '
+         f'color: {INK}; display: flex; align-items: center; justify-content: center; text-decoration: none; pointer-events: auto">{xsvg}</a>')
+    bar = (f'<header style="position: absolute; z-index: 48; left: 0; right: 0; top: {54 if phone else 0}px; {MODEBAR_P if phone else MODEBAR_L}; pointer-events: none">'
+           f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{x}</div>'
+           f'{MODESW("play", "Editor.dc.html" if phone else "EditorLaptop.dc.html")}{right}</header>\n')
+    close = re.search(r'<a href="Song(?:Laptop)?\.dc\.html" aria-label="Close" data-tip="Close" style="[^"]*">\s*<svg.*?</svg>\s*</a>\n?', t, re.S)
+    t = t[:close.start()] + bar + t[close.end():]
+    # the title prints as the editor prints it: the book serif at its regular weight (the editor's page, scaled to the Player's staves)
+    t = re.sub(r"(<h2 style=\"position: absolute; left: 0; right: 0; top: \d+px; margin: 0; text-align: center; )font-family: Georgia, 'Times New Roman', serif; font-size: (26|40)px; font-weight: 700;",
+               lambda m: m.group(1) + f"font-family: {SERIF}; font-size: {24 if phone else 36}px; font-weight: 400;", t)
+    # one way to the editor: the bar's Edit (the song sheet's Edit score went with it, "one way to each action")
+    t, n = re.subn(r'<button type="button" style="flex: 1 1 100%; order: 1;[^"]*"><svg[^>]*><path d="M12 20h9M16\.5[^"]*"></path></svg>Edit score</button>', '', t)
+    assert n == 1, 'edit score'
+    # the other views print the score's head, and start under it
+    h2 = re.search(r'<h2 style="position: absolute; left: 0; right: 0; top: \d+px; ([^"]*)">Amazing Grace</h2><p style="position: absolute; left: 0; right: 0; top: \d+px; ([^"]*)">Words: John Newton · Music: New Britain (American folk tune)</p>', t)
+    assert h2, 'title'
+    headH = 52 if phone else 72
+    head = (f'<sc-if value="{{{{notSheet}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; left: 16px; right: 16px; top: {{{{viewHeadTop}}}}px; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none">'
+            f'<h2 style="{h2.group(1)}">Amazing Grace</h2><p style="{h2.group(2)}">Words: John Newton · Music: New Britain (American folk tune)</p></div></sc-if>\n')
+    t = t.replace('<sc-if value="{{isDiagrams}}"', head + '<sc-if value="{{isDiagrams}}"', 1)
+    old = 'viewTop: keys ? DEV.topKeys : DEV.top,'
+    assert old in t, 'viewTop'
+    t = t.replace(old, f"viewTop: (keys ? DEV.topKeys : DEV.top) + {headH}, viewHeadTop: keys ? DEV.topKeys : DEV.top, notSheet: view !== 'sheet',", 1)
+    return t
+
+
+def floating(t, phone):
+    """Loop round 24 (owner, IMG_6045–6056: "piano should also be floating and draggabble and resizeble from all the
+    angles"): the keys are a window over the music, at the foot above the transport until moved: rounded, lifted,
+    a grip along its top to move it and handles at its four corners and four edges to size it from any side. The
+    music takes the whole screen under the bar; nothing is docked at the top."""
+    left, w, bottom = (8, 386, 762) if phone else (305, 1100, 800)
+    t = t.replace("const KB = { top: 62, w: 402," if phone else "const KB = { top: 0, w: 1710,", f"const KB = {{ top: 0, w: {w},", 1)
+    t = t.replace("kbTop: KB.top, kbW: KB.w,", f"kbTop: {bottom} - bandH, kbLeft: {left}, kbW: KB.w,", 1)
+    t = t.replace("areaTop: keys ? KB.top + bandH : 0,", "areaTop: 0,", 1)
+    t = t.replace('<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: 62px; background: #2A1F18"></div>\n', '', 1)
+    t = t.replace('left: 0; top: {{kbTop}}px;', 'left: {{kbLeft}}px; top: {{kbTop}}px;')
+    lift = 'border-radius: 20px; box-shadow: 0 0 0 1px rgba(51,41,33,.10), 0 2px 6px rgba(51,41,33,.14), 0 18px 40px -12px rgba(51,41,33,.40)'
+    t = t.replace('height: {{kbH}}px; object-fit: cover">', 'height: {{kbH}}px; object-fit: cover; ' + lift + '">', 1)
+    t = t.replace('height: {{kbH}}px; overflow: hidden; background: #2A1F18">', 'height: {{kbH}}px; overflow: hidden; background: #2A1F18; ' + lift + '">', 1)
+    if phone:
+        t = t.replace("sheetTop: keys ? 40 : 116,", "sheetTop: 124,", 1).replace("statusFg: keys ? '#FFFFFF' : '#332921',", "statusFg: '#332921',", 1).replace("panoTop: keys ? 191 : 376,", "panoTop: 376,", 1)
+    else:
+        t = t.replace("sheetTop: keys ? 44 : 64, bandTop: (keys ? 44 : 64) + 100,", "sheetTop: 76, bandTop: 176,", 1).replace("panoTop: keys ? 166 : 340,", "panoTop: 340,", 1)
+    h = 'position: absolute; z-index: 21; background: rgba(254,253,251,.92); box-shadow: 0 0 0 1px rgba(51,41,33,.25)'
+    chrome = (
+        # only while the piano shows (round 41: the grips stood on a bare score with the piano off)
+        '<sc-if value="{{kbOn}}" hint-placeholder-val="{{false}}">'
+        '<div aria-hidden="true" style="position: absolute; z-index: 20; left: {{kbLeft}}px; top: {{kbTop}}px; width: {{kbW}}px; height: {{kbH}}px; border-radius: 20px; pointer-events: none">'
+        # the grip along the top: hold and move
+        '<span data-tip="Move the piano" style="position: absolute; left: 50%; top: 0; width: 88px; height: 24px; margin-left: -44px; display: flex; align-items: center; justify-content: center; cursor: grab; pointer-events: auto">'
+        '<span style="width: 44px; height: 5px; border-radius: 3px; background: rgba(254,253,251,.92); box-shadow: 0 0 0 1px rgba(51,41,33,.25)"></span></span>'
+        # the four corners
+        f'<span style="{h}; left: 6px; top: 6px; width: 14px; height: 4px; border-radius: 2px; cursor: nwse-resize"></span><span style="{h}; left: 6px; top: 6px; width: 4px; height: 14px; border-radius: 2px; cursor: nwse-resize"></span>'
+        f'<span style="{h}; right: 6px; top: 6px; width: 14px; height: 4px; border-radius: 2px; cursor: nesw-resize"></span><span style="{h}; right: 6px; top: 6px; width: 4px; height: 14px; border-radius: 2px; cursor: nesw-resize"></span>'
+        f'<span style="{h}; left: 6px; bottom: 6px; width: 14px; height: 4px; border-radius: 2px; cursor: nesw-resize"></span><span style="{h}; left: 6px; bottom: 6px; width: 4px; height: 14px; border-radius: 2px; cursor: nesw-resize"></span>'
+        f'<span style="{h}; right: 6px; bottom: 6px; width: 14px; height: 4px; border-radius: 2px; cursor: nwse-resize"></span><span style="{h}; right: 6px; bottom: 6px; width: 4px; height: 14px; border-radius: 2px; cursor: nwse-resize"></span>'
+        # the four edges
+        f'<span style="{h}; left: 3px; top: 50%; width: 4px; height: 28px; margin-top: -14px; border-radius: 2px; cursor: ew-resize"></span>'
+        f'<span style="{h}; right: 3px; top: 50%; width: 4px; height: 28px; margin-top: -14px; border-radius: 2px; cursor: ew-resize"></span>'
+        f'<span style="{h}; left: 50%; bottom: 3px; width: 28px; height: 4px; margin-left: -14px; border-radius: 2px; cursor: ns-resize"></span>'
+        '</div></sc-if>')
+    anchor = '<sc-if value="{{showControls}}" hint-placeholder-val="{{true}}">\n\n</sc-if>\n</sc-if>'
+    assert anchor in t, 'anchor'
+    t = t.replace(anchor, chrome + '\n' + anchor, 1)
+    return t
+
 for name, phone in (('PlayerApp', True), ('PlayerDesk', False)):
-    t = grid4(parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone), phone)
+    t = floating(onebar(headed(grid4(parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone), phone), phone), phone), phone)
+    # Played through: its title on the sheet's 16 column, as its cards and buttons (the lines, 2026-11-18)
+    t = t.replace('gap: 8px; padding: 4px 4px 0 8px"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><h2', 'gap: 8px; padding: 4px 0 0 0"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><h2')
+    # Played through: its two and four columns stand 12 apart, more than a card's own inset, so each reads alone (the lines' proximity)
+    i = t.find('aria-label="Played through"')
+    if i >= 0:
+        j = t.index('</section>', i)
+        t = t[:i] + t[i:j].replace('minmax(0, 1fr)); gap: 8px', 'minmax(0, 1fr)); gap: 12px') + t[j:]
+    if phone:  # the floating piano keeps its place over the centred score when the phone layout is wider (744)
+        t = t.replace('left: {{kbLeft}}px', 'left: calc({{kbLeft}}px + max(0px, 50% - 201px))')
+        t = t.replace('position: absolute; left: 0; top: 0; width: 402px; height: 874px; border: 0; padding: 0; background: rgba(26, 22, 18, 0.32)', 'position: absolute; inset: 0; border: 0; padding: 0; background: rgba(26, 22, 18, 0.32)')
+        # the keys and the transport hang from the screen's foot, so a shorter screen (a phone on its side) keeps them (round 66)
+        t = t.replace('top: {{kbTop}}px', 'top: calc(100% - 874px + {{kbTop}}px)').replace('calc({{capTop}}px', 'calc(100% - 874px + {{capTop}}px')
     (OUT / f'{name}.dc.html').write_text(t)
 # a board for the new page
 w = (OUT / 'PlayerSettings.dc.html').read_text()
@@ -434,17 +589,4 @@ for v, name in (('sheet', 'Sheet'), ('diagrams', 'Diagrams'), ('grid', 'Grid'), 
 lk = (OUT / 'PlayerLaptopKeyboard.dc.html').read_text()
 (OUT / 'PlayerLaptopParts.dc.html').write_text(lk.replace('open="keys"', 'open="hands"').replace('Keyboard</title>', 'Parts</title>'))
 (OUT / 'PlayerLaptopSheet.dc.html').write_text(lk.replace('open="keys"', 'open="view"').replace('Keyboard</title>', 'Sheet settings</title>'))
-# Night (owner, canvas 122: "3. 3. yes"): the Player in the app's dark roles, through the one map the Chords page uses
-import night as NT
-for name in ('PlayerApp', 'PlayerDesk'):
-    # the Player draws its surfaces in pure white (the Chords page keeps #FFFFFF for ink on colour), and its piano
-    # pictures are lit for the day: by night they are surfaces, and the pictures dim to the dusk keys' level
-    h = (OUT / f'{name}.dc.html').read_text().replace('background: #FFFFFF', 'background: #FEFDFB').replace('background: #fff;', 'background: #FEFDFB;')
-    h = h.replace('<img src="{{kbImg}}" alt="{{kbAlt}}" style="', '<img src="{{kbImg}}" alt="{{kbAlt}}" style="filter: brightness(.8); ', 1)
-    (OUT / f'{name}Night.dc.html').write_text(NT.night(h))
-for w, comp in (('Player', 'PlayerApp'), ('PlayerLaptop', 'PlayerDesk'), ('PlayerKeyboard', 'PlayerApp'), ('PlayerLaptopKeyboard', 'PlayerDesk'), ('PlayerDone', 'PlayerApp')):
-    h = (OUT / f'{w}.dc.html').read_text()
-    assert f'name="{comp}"' in h, w
-    h = h.replace(f'name="{comp}"', f'name="{comp}Night"', 1).replace('</title>', ', Night</title>', 1).replace('<html', '<html data-theme="dark"', 1).replace('body{margin:0}', 'body{margin:0;background:#191512}', 1)
-    (OUT / f'{w}Night.dc.html').write_text(h)
 print('r43 player ok')

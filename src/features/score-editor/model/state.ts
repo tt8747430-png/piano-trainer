@@ -1,4 +1,6 @@
 import type { BarMarkChoice } from './bar-marks'
+import type { Voice } from './voices'
+import type { CrossTo } from './notes'
 import type { HeaderField, PieceLayout, SectionKind, StaffName } from '@/entities/piece'
 import type { Chord, Clef, Finger, Key, Midi, TempoUnit, Tick } from '@/shared/lib/music'
 import type { Clip } from './clip'
@@ -68,6 +70,8 @@ export const nextMode = (mode: EditMode): EditMode =>
 export interface EditorState extends Snapshot {
   readonly value: ChosenValue
   readonly mode: EditMode
+  /** The voice a piano staff's notes are written in (ADR 0114): the second under the first, stems down. */
+  readonly voice: Voice
   readonly struck: Struck | null
   readonly clip: Clip | null
   readonly past: readonly Snapshot[]
@@ -77,7 +81,8 @@ export interface EditorState extends Snapshot {
 /** Flat's two grace notes: the acciaccatura, slashed, and the appoggiatura. */
 export type GraceKind = 'acciaccatura' | 'appoggiatura'
 
-export type BarEdit = 'insert' | 'insertBefore' | 'delete' | 'newLine' | 'joinLine' | 'newSection'
+/** What a bar key does: `newLine` is the system break, set or taken off (Flat's ⌘Enter). */
+export type BarEdit = 'insert' | 'insertBefore' | 'insertEnd' | 'delete' | 'newLine' | 'newSection'
 
 /** The clipboard's edits, on what is chosen (ADR 0114): the bars in the chord row, the notes on a staff. */
 export type ClipEdit = 'copy' | 'cut' | 'paste'
@@ -99,6 +104,10 @@ export type EditorAction =
   | { readonly type: 'text'; readonly text: string }
   /** The editing mode chosen; none, the next round (I). */
   | { readonly type: 'mode'; readonly mode?: EditMode }
+  /** Voice 2 on or off (Flat's and Dorico's ⇧V), on the piano's staves. */
+  | { readonly type: 'voice' }
+  /** The notes chosen drawn on the piano's other staff, or back (Dorico's ⌘⇧↑ ⌘⇧↓). */
+  | { readonly type: 'cross'; readonly to: CrossTo }
   | {
       readonly type: 'move'
       readonly by: CaretMove
@@ -117,6 +126,9 @@ export type EditorAction =
     }
   /** What is chosen let go: the notes chosen, a chord's one note (Escape). */
   | { readonly type: 'deselect' }
+  /** Everything on the caret's staff chosen (⌘A, research F12). */
+  | { readonly type: 'selectAll' }
+  | { readonly type: 'repeat' }
   /**
    * The note over (1) or under (−1) the one chosen in the chord at the caret, the chord's top or foot
    * from the whole chord; past its last, the staff over or under (Alt ↑ ↓, ADR 0096).
@@ -189,6 +201,8 @@ export type EditorAction =
   | { readonly type: 'syllable'; readonly verse: number; readonly text: string }
   /** The notes at the caret joined to the same keys' notes after them. */
   | { readonly type: 'tie' }
+  /** A note added to each chord chosen, else just written, `steps` notes of the key above (or below). */
+  | { readonly type: 'interval'; readonly steps: number }
   /** A chord set at the caret's place in the chords (the chord-symbol field's), the caret staying. */
   | { readonly type: 'chord'; readonly chord: Chord }
   /** A take written from the caret's bar. */
@@ -258,6 +272,7 @@ export const initialEditor = (draft: Draft, mode: EditMode = 'replace'): EditorS
   layer: topStaff(draft),
   value: { value: 4, dots: 0 },
   mode,
+  voice: 1,
   selection: null,
   chordNote: null,
   grace: false,

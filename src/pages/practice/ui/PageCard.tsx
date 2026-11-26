@@ -17,27 +17,34 @@ export function PageCard({
   link: ReactElement
 }) {
   const Icon = tile.icon
+  const Picture = tile.picture
   return useRender({
     defaultTagName: 'a',
     render: link,
     props: {
       className:
-        'flex min-h-44 flex-col gap-4 card p-4 transition-colors duration-200 ease-out hover:border-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+        'flex min-h-44 flex-col gap-3 card p-4 transition-colors duration-200 ease-out hover:ring-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       children: (
         <>
           <span
             aria-hidden
             className={cn(
-              'grid size-20 place-items-center rounded-card',
+              'grid size-24 place-items-center overflow-hidden rounded-sheet',
               PAINT[tile.paint].fill,
               PAINT[tile.paint].ink,
             )}
           >
-            <Icon className="size-9" strokeWidth={1.75} />
+            {Picture ? (
+              <Picture className="size-full" />
+            ) : (
+              <Icon className="size-9" strokeWidth={1.75} />
+            )}
           </span>
           <span className="flex flex-col gap-0.5">
-            <span className="font-semibold text-balance">{title}</span>
-            <span className="text-sm text-pretty text-muted-foreground tabular-nums">{detail}</span>
+            <span className="text-lg leading-[normal] font-bold text-balance">{title}</span>
+            <span className="text-sm leading-[normal] text-pretty text-muted-foreground tabular-nums">
+              {detail}
+            </span>
           </span>
         </>
       ),

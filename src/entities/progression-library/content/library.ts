@@ -1,4 +1,3 @@
-import type { LocalText } from '@/shared/i18n'
 import type {
   LibraryProgression,
   ModeLines,
@@ -10,7 +9,7 @@ import { CHARACTERS } from './characters'
 /** An entry as written, its character added from `CHARACTERS`. */
 type Written = ModeLines & Omit<ProgressionDetails, 'character'>
 
-type Extras = Pick<LibraryProgression, 'note' | 'pattern' | 'size' | 'mode'>
+type Extras = Pick<LibraryProgression, 'pattern' | 'size' | 'mode'>
 
 /** A progression of the library: one idea, with its line in each mode it has. */
 const entry = <const Id extends string>(
@@ -27,8 +26,6 @@ const entry = <const Id extends string>(
   name: { en, ru },
   ...extras,
 })
-
-const note = (en: string, ru: string): LocalText => ({ en, ru })
 
 /**
  * The Ultimate Piano's progressions by style with the app's own practice
@@ -49,30 +46,11 @@ const LIBRARY = [
     'Axis of Awesome',
     {
       pattern: 'pop8',
-      note: note(
-        'The most used pop progression. Started from the relative minor, it becomes i–VI–III–VII, the minor loop of many ballads.',
-        'Самая распространённая последовательность в поп-музыке. Если начать её от параллельного минора, получится i–VI–III–VII, минорный круг многих баллад.',
-      ),
     },
   ),
-  entry('pop', 'let-it-be', { major: 'I V vi IV I V IV I' }, 'Let It Be', 'Let It Be', {
-    note: note(
-      'Only the key’s own chords. Most pop songs need no others.',
-      'Только аккорды самой тональности. Большинству поп-песен других не нужно.',
-    ),
-  }),
-  entry('pop', 'yesterday', { major: 'I V/vi vi IV V I vi V/V IV I' }, 'Yesterday', 'Yesterday', {
-    note: note(
-      'Two secondary dominants: chords that act as the V of a chord other than I. In C, E7 pulls to Am, and D7 pulls to G, which never comes. That broken expectation is a deceptive cadence.',
-      'Две побочные доминанты: аккорды, которые служат V не для I, а для другого аккорда. В до мажоре E7 тянет к Am, а D7 к G, который так и не приходит. Обманутое ожидание — это прерванная каденция.',
-    ),
-  }),
-  entry('pop', 'clocks', { major: 'I v v ii' }, 'Clocks', 'Clocks', {
-    note: note(
-      'The v is borrowed from the parallel minor, the minor key on the same tonic. In C that is Gm, from C minor, and it darkens the sound. This borrowing is called modal interchange.',
-      'Аккорд v взят из одноимённого минора, минорной тональности с той же тоникой. В до мажоре это Gm из до минора, и он затемняет звучание. Такое заимствование называют модальным смешением.',
-    ),
-  }),
+  entry('pop', 'let-it-be', { major: 'I V vi IV I V IV I' }, 'Let It Be', 'Let It Be'),
+  entry('pop', 'yesterday', { major: 'I V/vi vi IV V I vi V/V IV I' }, 'Yesterday', 'Yesterday'),
+  entry('pop', 'clocks', { major: 'I v v ii' }, 'Clocks', 'Clocks'),
   entry(
     'pop',
     'doo-wop',
@@ -81,69 +59,28 @@ const LIBRARY = [
     'Ду-воп 50-х',
     {
       pattern: 'flow',
-      note: note(
-        'The left hand stays on the bass while the right hand moves through the key’s main triads, I, IV and V, over every chord. In a minor key the same loop is heard from its vi, as R&B’s vi–IV–V–I.',
-        'Левая рука остаётся на басу, а правая над каждым аккордом движется по главным трезвучиям тональности: I, IV и V. В миноре тот же круг слышат от vi, как vi–IV–V–I в R&B.',
-      ),
     },
   ),
   entry('pop', 'alternative-pop', { major: 'I IV vi V' }, 'Alternative pop', 'Альтернативный поп'),
-  entry('pop', 'royal-road', { major: 'IV V iii vi' }, 'Royal Road', 'Royal Road', {
-    note: note(
-      'A favourite of Japanese pop, where it is called the Royal Road.',
-      'Любимая последовательность японской поп-музыки, где её называют «Королевской дорогой».',
-    ),
-  }),
+  entry('pop', 'royal-road', { major: 'IV V iii vi' }, 'Royal Road', 'Royal Road'),
   entry(
     'pop',
     'pachelbel',
     { major: 'I V vi iii IV I IV V' },
     'Pachelbel’s Canon',
     'Канон Пахельбеля',
-    {
-      note: note(
-        'The chords over the bass line of Pachelbel’s Canon, used in many pop songs since.',
-        'Аккорды над басовой линией Канона Пахельбеля. С тех пор они звучат во многих поп-песнях.',
-      ),
-    },
   ),
-  entry('pop', 'line-cliche', { minor: 'i iMaj7 i7 i6' }, 'Minor line cliché', 'Минорное клише', {
-    note: note(
-      'One minor chord held while a single voice falls a semitone at a time from its root: 8, 7, ♭7, 6.',
-      'Один минорный аккорд держится, а один голос спускается от основного тона по полутонам: 8, 7, ♭7, 6.',
-    ),
-  }),
-  entry('rock', 'rock-shuffle', { major: 'I V IV' }, 'Rock shuffle', 'Рок-шаффл', {
-    note: note(
-      'Down from the dominant (V) through the subdominant (IV) to the tonic (I). This V–IV–I ending closes rock and gospel songs alike.',
-      'Вниз от доминанты (V) через субдоминанту (IV) к тонике (I). Таким окончанием V–IV–I завершаются и рок-, и госпел-песни.',
-    ),
-  }),
+  entry('pop', 'line-cliche', { minor: 'i iMaj7 i7 i6' }, 'Minor line cliché', 'Минорное клише'),
+  entry('rock', 'rock-shuffle', { major: 'I V IV' }, 'Rock shuffle', 'Рок-шаффл'),
   entry('rock', 'wild-thing', { major: 'I IV V IV' }, 'Wild Thing', 'Wild Thing'),
-  entry('rock', 'blues-rock-riff', { minor: 'i III IV' }, 'Blues-rock riff', 'Блюз-роковый рифф', {
-    note: note(
-      'The minor key’s III, then a major IV: the raised 6th of the Dorian mode. Played as power chords, it is the riff of a hundred rock songs.',
-      'III минорной тональности, затем мажорная IV: повышенная 6-я ступень дорийского лада. Квинтами это рифф сотни рок-песен.',
-    ),
-  }),
-  entry('pop', 'creep', { major: 'I III IV iv' }, 'Creep', 'Creep', {
-    note: note(
-      'A major III where the key has a minor iii, then IV turning minor: the iv is borrowed from the parallel minor. In C: C, E, F, Fm.',
-      'Мажорная III там, где в тональности минорная iii, затем IV становится минорной: iv взята из одноимённого минора. В до мажоре: C, E, F, Fm.',
-    ),
-  }),
+  entry('rock', 'blues-rock-riff', { minor: 'i III IV' }, 'Blues-rock riff', 'Блюз-роковый рифф'),
+  entry('pop', 'creep', { major: 'I III IV iv' }, 'Creep', 'Creep'),
   entry(
     'rock',
     'borrowed-flat-seven',
     { major: 'I ♭VII IV I' },
     'Borrowed ♭VII',
     'Заимствованная ♭VII',
-    {
-      note: note(
-        'The ♭VII is borrowed from the parallel minor. In C it is B♭, from C minor: rock’s bluesy step down from I.',
-        'Аккорд ♭VII взят из одноимённого минора. В до мажоре это B♭ из до минора: блюзовый шаг рока вниз от I.',
-      ),
-    },
   ),
   entry(
     'jazz',
@@ -154,10 +91,6 @@ const LIBRARY = [
     {
       pattern: 'jazz',
       size: 'sevenths',
-      note: note(
-        'The basic jazz cadence: m7, then 7, then Maj7. In minor the ii is half-diminished and the V stays major, with a ♭9 at 9ths, so it pulls into the minor tonic.',
-        'Основная джазовая каденция: m7, затем 7, затем Maj7. В миноре ii полууменьшённый, а V остаётся мажорной, с ♭9 у нонаккордов, и тянет в минорную тонику.',
-      ),
     },
   ),
   entry(
@@ -166,12 +99,6 @@ const LIBRARY = [
     { major: 'iiø7/iii V7♭9/iii iii7 V7/ii ii7 V7 I6' },
     'ii–V chain',
     'Цепочка ii–V',
-    {
-      note: note(
-        'Each ii–V visits another key for a moment, every dominant falling a 5th, until the last one leads home.',
-        'Каждый оборот ii–V ненадолго уводит в другую тональность, каждая доминанта опускается на квинту, пока последняя не приведёт домой.',
-      ),
-    },
   ),
   entry(
     'jazz',
@@ -181,10 +108,6 @@ const LIBRARY = [
     'Fly Me to the Moon',
     {
       size: 'sevenths',
-      note: note(
-        'In C, C7 leads to F, then Bø and E7 are the minor ii–V into Am.',
-        'В до мажоре C7 ведёт к F, затем Bø и E7 — минорный ii–V в Am.',
-      ),
     },
   ),
   entry(
@@ -193,12 +116,6 @@ const LIBRARY = [
     { major: 'I vi ii V', minor: 'i VI ii° V' },
     'Rhythm changes',
     'Rhythm changes',
-    {
-      note: note(
-        'The opening chords of Gershwin’s “I Got Rhythm”, the basis of many jazz tunes.',
-        'Начальные аккорды песни Гершвина «I Got Rhythm», основа многих джазовых пьес.',
-      ),
-    },
   ),
   entry('jazz', 'full-turnaround', { major: 'iii vi ii V' }, 'Full turnaround', 'Полный оборот'),
   entry('jazz', 'sweet-jazz', { major: 'I IV ii V' }, 'Sweet jazz', 'Мягкий джаз'),
@@ -210,10 +127,6 @@ const LIBRARY = [
     'Тритоновая замена',
     {
       size: 'sevenths',
-      note: note(
-        'In C, D♭7 stands in for G7, a tritone away. Both have the same 3rd and 7th, and the bass now falls by semitones into I.',
-        'В до мажоре D♭7 заменяет G7, который отстоит от него на тритон. У них одни и те же терция и септима, а бас теперь спускается к I по полутонам.',
-      ),
     },
   ),
   entry(
@@ -224,37 +137,17 @@ const LIBRARY = [
     'Разрешение с ♭9',
     {
       size: 'ninths',
-      note: note(
-        'Into major, the ♭9 adds tension and slides down to the 5th of I. Into minor, it is the key’s own 9th: use it right away. The top four notes of V7♭9 form a diminished 7th chord.',
-        'В мажоре ♭9 добавляет напряжения и соскальзывает на квинту I. В миноре это собственная нона тональности: берите её сразу. Четыре верхних звука V7♭9 образуют уменьшённый септаккорд.',
-      ),
     },
   ),
-  entry('jazz', 'backdoor', { major: 'iv7 ♭VII7 Imaj7' }, 'Backdoor ii–V', 'Ход «с чёрного хода»', {
-    note: note(
-      'A ii–V that comes home from a whole tone below: iv7 and ♭VII7 are borrowed from the parallel minor (Fm7 B♭7 to Cmaj7).',
-      'Связка ii–V, которая приходит домой с тона ниже: iv7 и ♭VII7 взяты из одноимённого минора (Fm7 B♭7 к Cmaj7).',
-    ),
-  }),
+  entry('jazz', 'backdoor', { major: 'iv7 ♭VII7 Imaj7' }, 'Backdoor ii–V', 'Ход «с чёрного хода»'),
   entry(
     'jazz',
     'coltrane',
     { major: 'Imaj7 ♭III7 ♭VImaj7 VII7 IIImaj7 V7 Imaj7' },
     'Coltrane changes',
     'Гармония Колтрейна',
-    {
-      note: note(
-        'Three keys a major third apart (C, A♭, E), each reached by its own V7: the cycle of Giant Steps.',
-        'Три тональности на расстоянии большой терции (C, A♭, E), в каждую ведёт своя V7: цикл Giant Steps.',
-      ),
-    },
   ),
-  entry('jazz', 'ragtime', { major: 'III7 VI7 II7 V7 I' }, 'Ragtime progression', 'Рэгтайм', {
-    note: note(
-      'Dominant 7ths round the circle of fifths, each the V of the next, until the last lands on I.',
-      'Доминантсептаккорды по квинтовому кругу, каждый служит V для следующего, пока последний не придёт к I.',
-    ),
-  }),
+  entry('jazz', 'ragtime', { major: 'III7 VI7 II7 V7 I' }, 'Ragtime progression', 'Рэгтайм'),
   entry(
     'blues',
     'blues-turnaround',
@@ -270,10 +163,6 @@ const LIBRARY = [
     'Блюз, 12 тактов',
     {
       pattern: 'blues',
-      note: note(
-        'The most common blues form: twelve bars of I7, IV7 and V7. Try the blues scale on top.',
-        'Самая распространённая форма блюза: двенадцать тактов на I7, IV7 и V7. Попробуйте сверху блюзовую гамму.',
-      ),
     },
   ),
   entry(
@@ -282,12 +171,6 @@ const LIBRARY = [
     { major: 'I7 IV7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7' },
     '12-bar blues, quick change',
     '12-тактовый блюз с быстрой сменой',
-    {
-      note: note(
-        'The 12-bar blues with the IV in bar 2: the change to IV comes quickly, then the form goes on as the slow change does.',
-        '12-тактовый блюз с IV во втором такте: смена на IV приходит быстро, дальше форма идёт как обычно.',
-      ),
-    },
   ),
   entry(
     'blues',
@@ -295,12 +178,6 @@ const LIBRARY = [
     { minor: 'i7 i7 i7 i7 iv7 iv7 i7 i7 VI7 V7 i7 V7' },
     'Minor blues',
     'Минорный блюз',
-    {
-      note: note(
-        'The 12-bar form in a minor key: i and iv minor 7ths, and ♭VI7 stepping down a semitone to V7 in bar 9.',
-        '12-тактовая форма в миноре: минорные септаккорды i и iv, а в девятом такте VI7 спускается на полутон к V7.',
-      ),
-    },
   ),
   entry(
     'blues',
@@ -315,12 +192,6 @@ const LIBRARY = [
     { major: 'I7 IV7 I7 I7 IV7 IV7 I7 VI7 ii7 V7 I7 V7' },
     'Jazz blues',
     'Джазовый блюз',
-    {
-      note: note(
-        'The 12-bar with a quick change and a jazz turnaround: bar 8 moves to VI7, then ii7–V7 leads home.',
-        '12 тактов с быстрой сменой и джазовым оборотом: в 8-м такте VI7, затем ii7–V7 ведёт домой.',
-      ),
-    },
   ),
   entry(
     'classical',
@@ -328,12 +199,6 @@ const LIBRARY = [
     { major: 'I IV V I', minor: 'i iv V i' },
     'Complete cadence',
     'Полная каденция',
-    {
-      note: note(
-        'Home on I, away to the subdominant (IV) and the dominant (V), then home again. In minor the V is major, taken from harmonic minor, so it leads home.',
-        'Тоника, затем субдоминанта (IV) и доминанта (V), и снова тоника. В миноре V мажорная, из гармонического минора, поэтому ведёт к тонике.',
-      ),
-    },
   ),
   entry(
     'classical',
@@ -341,12 +206,6 @@ const LIBRARY = [
     { major: 'I V I', minor: 'i V i' },
     'Authentic cadence',
     'Автентическая каденция',
-    {
-      note: note(
-        'V to I closes on home. At 9ths the dominant takes the key’s own 9th: a plain 9 into major, smooth and bright, and a ♭9 into minor.',
-        'V–I замыкает на тонике. У нонаккордов доминанта берёт нону тональности: простую в мажоре, мягко и светло, и ♭9 в миноре.',
-      ),
-    },
   ),
   entry(
     'classical',
@@ -354,12 +213,6 @@ const LIBRARY = [
     { major: 'I IV V vi', minor: 'i iv V VI' },
     'Deceptive cadence',
     'Прерванная каденция',
-    {
-      note: note(
-        'V sets up a return home, but the progression lands on vi instead of I. In minor it lands on VI.',
-        'V готовит возвращение к тонике, но последовательность приходит на vi вместо I. В миноре она приходит на VI.',
-      ),
-    },
   ),
   entry(
     'classical',
@@ -367,12 +220,6 @@ const LIBRARY = [
     { major: 'I IV I', minor: 'i iv i' },
     'Plagal cadence',
     'Плагальная каденция',
-    {
-      note: note(
-        'IV goes straight to I, with no V between. It is the “Amen” sung at the end of hymns.',
-        'IV переходит прямо в I, без V. Это «аминь», которое поют в конце гимнов.',
-      ),
-    },
   ),
   entry(
     'classical',
@@ -380,31 +227,14 @@ const LIBRARY = [
     { minor: 'i VII VI V' },
     'Andalusian cadence',
     'Андалузская каденция',
-    {
-      note: note(
-        'Four chords stepping down from the minor tonic to a major V. In A minor: Am, G, F, E.',
-        'Четыре аккорда спускаются от минорной тоники к мажорной V. В ля миноре: Am, G, F, E.',
-      ),
-    },
   ),
-  entry('classical', 'picardy', { minor: 'i iv V I' }, 'Picardy third', 'Пикардийская терция', {
-    note: note(
-      'A minor piece that ends on the major tonic chord: the third of the last chord is raised, an old way to close in light.',
-      'Минорная пьеса заканчивается мажорным тоническим аккордом: терция последнего аккорда повышена. Старинный способ закончить светло.',
-    ),
-  }),
+  entry('classical', 'picardy', { minor: 'i iv V I' }, 'Picardy third', 'Пикардийская терция'),
   entry(
     'classical',
     'amen',
     { major: 'IV iv I' },
     'Minor plagal cadence',
     'Минорная плагальная каденция',
-    {
-      note: note(
-        'The plagal cadence with the subdominant turned minor on the way: iv is borrowed from the parallel minor, its 3rd stepping down to the tonic’s 5th.',
-        'Плагальная каденция, в которой субдоминанта по пути становится минорной: iv взята из одноимённого минора, её терция спускается к квинте тоники.',
-      ),
-    },
   ),
   entry(
     'classical',
@@ -412,12 +242,6 @@ const LIBRARY = [
     { minor: 'iv/3 V' },
     'Phrygian half cadence',
     'Фригийская половинная каденция',
-    {
-      note: note(
-        'A minor key’s half cadence: iv in first inversion to V, the bass falling a semitone (F to E in A minor), as the Phrygian mode’s last step does.',
-        'Половинная каденция минора: iv в первом обращении к V, бас спускается на полутон (F к E в ля миноре), как последний шаг фригийского лада.',
-      ),
-    },
   ),
   entry(
     'classical',
@@ -425,19 +249,8 @@ const LIBRARY = [
     { minor: 'i ♭II/3 V i' },
     'Neapolitan sixth',
     'Неаполитанский секстаккорд',
-    {
-      note: note(
-        'The major chord on the lowered 2nd, in first inversion (B♭/D in A minor), leading to V. Its root falls a semitone to the dominant’s leading tone.',
-        'Мажорный аккорд на пониженной II ступени в первом обращении (B♭/D в ля миноре) ведёт к V. Его основной тон спускается на полутон к вводному тону доминанты.',
-      ),
-    },
   ),
-  entry('classical', 'lament', { minor: 'i v/3 iv/3 V' }, 'Lament bass', 'Ламенто', {
-    note: note(
-      'The bass walks down from the tonic to the dominant by step (A G F E in A minor), the chords following it: the oldest sound of grief in music.',
-      'Бас идёт по ступеням вниз от тоники к доминанте (A G F E в ля миноре), аккорды следуют за ним: древнейший музыкальный образ скорби.',
-    ),
-  }),
+  entry('classical', 'lament', { minor: 'i v/3 iv/3 V' }, 'Lament bass', 'Ламенто'),
   entry('soul', 'neo-soul', { major: 'vi V IV V', minor: 'i VII VI VII' }, 'Neo-soul', 'Нео-соул'),
   entry('gospel', 'gospel-standard', { major: 'I iii IV V' }, 'Gospel standard', 'Госпел-стандарт'),
   entry('gospel', 'gospel-hymn', { major: 'I IV I V' }, 'Gospel hymn', 'Госпел-гимн'),
@@ -449,10 +262,6 @@ const LIBRARY = [
     'Госпел 7–3–6',
     {
       size: 'sevenths',
-      note: note(
-        'Named after its bass notes, the 7th, 3rd and 6th degrees of the key. It is a ii–V–i into the relative minor, then a ii–V–I home.',
-        'Названа по басу: VII, III и VI ступени тональности. Это ii–V–i в параллельный минор, затем ii–V–I домой.',
-      ),
     },
   ),
   entry(
@@ -461,12 +270,6 @@ const LIBRARY = [
     { major: '♭VI ♭VII I', minor: 'VI VII i' },
     'Gospel walk-up',
     'Госпел-подход',
-    {
-      note: note(
-        'The bass climbs by whole tones into I. In major, ♭VI and ♭VII are borrowed from the parallel minor.',
-        'Бас поднимается к I целыми тонами. В мажоре ♭VI и ♭VII взяты из одноимённого минора.',
-      ),
-    },
   ),
   entry(
     'gospel',
@@ -474,53 +277,55 @@ const LIBRARY = [
     { major: 'Imaj7 #i°7 ii7 V7' },
     'Diminished turnaround',
     'Оборот с уменьшённым',
-    {
-      note: note(
-        'A diminished 7th on the raised tonic walks the bass up a semitone into ii: C, C♯, D.',
-        'Уменьшённый септаккорд на повышенной тонике ведёт бас на полутон вверх к ii: C, C♯, D.',
-      ),
-    },
   ),
   entry('modal', 'dorian-vamp', { minor: 'i IV' }, 'Dorian vamp', 'Дорийский вамп', {
     mode: 'dorian',
-    note: note(
-      'A minor chord and the major chord a 4th above it: the major IV holds the Dorian mode’s raised 6th (F♯ in A Dorian).',
-      'Минорный аккорд и мажорный аккорд квартой выше: мажорная IV содержит повышенную VI ступень дорийского лада (F♯ в ля дорийском).',
-    ),
   }),
+  entry(
+    'modal',
+    'dorian-progression',
+    { minor: 'i IV v i' },
+    'Dorian progression',
+    'Дорийская последовательность',
+    {
+      mode: 'dorian',
+    },
+  ),
   entry('modal', 'mixolydian-vamp', { major: 'I ♭VII' }, 'Mixolydian vamp', 'Миксолидийский вамп', {
     mode: 'mixolydian',
-    note: note(
-      'A major chord and the major chord a whole tone below: ♭VII holds the Mixolydian mode’s lowered 7th (B♭ in C Mixolydian).',
-      'Мажорный аккорд и мажорный аккорд на тон ниже: ♭VII содержит пониженную VII ступень миксолидийского лада (B♭ в до миксолидийском).',
-    ),
   }),
   entry('modal', 'lydian-vamp', { major: 'I II' }, 'Lydian vamp', 'Лидийский вамп', {
     mode: 'lydian',
-    note: note(
-      'A major chord and the major chord a whole tone above: II holds the Lydian mode’s raised 4th (F♯ in C Lydian).',
-      'Мажорный аккорд и мажорный аккорд на тон выше: II содержит повышенную IV ступень лидийского лада (F♯ в до лидийском).',
-    ),
   }),
+  entry(
+    'modal',
+    'lydian-progression',
+    { major: 'I II vii I' },
+    'Lydian progression',
+    'Лидийская последовательность',
+    {
+      mode: 'lydian',
+    },
+  ),
   entry('modal', 'phrygian-vamp', { minor: 'i ♭II' }, 'Phrygian vamp', 'Фригийский вамп', {
     mode: 'phrygian',
-    note: note(
-      'A minor chord and the major chord a semitone above it: ♭II holds the Phrygian mode’s lowered 2nd (B♭ in A Phrygian).',
-      'Минорный аккорд и мажорный аккорд на полутон выше: ♭II содержит пониженную II ступень фригийского лада (B♭ в ля фригийском).',
-    ),
   }),
+  entry(
+    'modal',
+    'phrygian-progression',
+    { minor: 'i ♭II III i' },
+    'Phrygian progression',
+    'Фригийская последовательность',
+    {
+      mode: 'phrygian',
+    },
+  ),
   entry(
     'theory',
     'key-chords',
     { major: 'I ii iii IV V vi vii°', minor: 'i ii° III iv v VI VII' },
     'The chords of the key',
     'Аккорды тональности',
-    {
-      note: note(
-        'Set Approach chords to By its V to hear the secondary dominants, or to By its ii–V for a ii–V–I into every chord of the key.',
-        'Подведите к каждому аккорду через его V, и прозвучат побочные доминанты. Через его ii–V получится ii–V–I к каждому аккорду тональности.',
-      ),
-    },
   ),
   entry(
     'theory',
@@ -530,10 +335,6 @@ const LIBRARY = [
     'По квинтовому кругу',
     {
       size: 'sevenths',
-      note: note(
-        'Every degree of the key, each a 5th from the last, back home to I: the circle of fifths in the key’s own chords. In 7th chords, each chord’s 3rd becomes the next chord’s 7th. In minor, from iv, it is Autumn Leaves. Set Approach chords to By its ii–V to go round the circle in ii–V–Is.',
-        'Все ступени тональности, каждая через квинту от предыдущей, и домой к I: квинтовый круг на аккордах самой тональности. В септаккордах терция каждого аккорда становится септимой следующего. В миноре, от iv, это Autumn Leaves. Подведите к каждому аккорду через его ii–V, и круг пройдёт оборотами ii–V–I.',
-      ),
     },
   ),
   entry(
@@ -542,12 +343,6 @@ const LIBRARY = [
     { major: 'I iv7 i7 v7 ii7 vi7 ♭VI ♭III ♭VII IV' },
     'Stack Your Chords',
     'Stack Your Chords',
-    {
-      note: note(
-        'Five m7 chords move clockwise round the circle of fifths, then four chords on major triads lead back home. Take it through all 12 keys.',
-        'Пять аккордов m7 идут по квинтовому кругу по часовой стрелке, затем четыре аккорда на мажорных трезвучиях возвращают домой. Пройдите её во всех 12 тональностях.',
-      ),
-    },
   ),
 ] as const
 

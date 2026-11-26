@@ -1,4 +1,4 @@
-import { CHORD_QUALITIES, type ChordQuality } from './chord'
+import { CHORD_QUALITIES, type ChordQuality } from './chord-quality'
 import { SCALE_KINDS, type ScaleKind } from './scale'
 
 /** Something the quiz rates: one chord quality or one scale kind. */
@@ -16,7 +16,10 @@ const SKILL_BY_ID = new Map<string, Skill>([
 ])
 
 /** All 54: the 41 chord qualities, then the 13 scale kinds. */
-export const SKILLS = [...SKILL_BY_ID.keys()] as readonly SkillId[]
+export const SKILLS: readonly SkillId[] = [
+  ...CHORD_QUALITIES.map(chordSkill),
+  ...SCALE_KINDS.map(scaleSkill),
+]
 
 export const isSkillId = (value: unknown): value is SkillId =>
   typeof value === 'string' && SKILL_BY_ID.has(value)

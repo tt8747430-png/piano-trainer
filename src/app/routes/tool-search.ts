@@ -18,7 +18,7 @@ export const chordFinderSearch = routeSearch(readChordFinderSearch, CHORD_FINDER
 export const CHORD_FINDER_KEPT = ['key'] as const satisfies readonly (keyof ChordFinderView)[]
 
 // The Circle of fifths (R29 B11): the key tapped, none at first.
-export function readCircleSearch(raw: Raw): CircleView {
+function readCircleSearch(raw: Raw): CircleView {
   const key = readKey(raw.key)
   return key ? { key: keyParam(key) } : {}
 }

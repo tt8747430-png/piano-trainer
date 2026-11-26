@@ -20,7 +20,7 @@ export function PreviewLine({ draft }: { draft: Draft }) {
   const shown = useSettings(selectScoreView)
   return (
     <section aria-label={t('transpose.preview')} className="flex flex-col gap-2">
-      <h3 className="text-sm font-semibold text-muted-foreground">{t('transpose.preview')}</h3>
+      <h3 className="font-sans text-sm font-semibold text-muted-foreground">{t('transpose.preview')}</h3>
       <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-control border border-border bg-background p-2">
         <div inert className="pointer-events-none">
           <ScoreSheet

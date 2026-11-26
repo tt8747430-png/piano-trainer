@@ -209,7 +209,3 @@ const OCTAVE_SHIFT: Readonly<Record<OctaveLine, number>> = {
 /** Semitones a note is written from where it sounds under its octave line. */
 export const writtenShift = (marks: NoteMarks | undefined): number =>
   marks?.octave ? OCTAVE_SHIFT[marks.octave] : 0
-
-/** Whether a note carries no mark at all. */
-export const hasMarks = (marks: NoteMarks | undefined): marks is NoteMarks =>
-  marks !== undefined && Object.keys(marks).length > 0

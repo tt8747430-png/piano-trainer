@@ -24,6 +24,24 @@ export function chosenSpan(state: EditorState): Where {
 export const chosenNotes = (state: EditorState): DraftNote[] =>
   state.layer === 'chords' ? [] : notesOf(state.draft, state.layer).filter(isAt(chosenSpan(state)))
 
+/**
+ * Where ♮ ♯ ♭ and Respell act (research F6, Flat's sharpLastNote, Dorico's retrospective respelling):
+ * what is chosen; else, with nothing at the caret, the note or chord written just before it.
+ */
+export function spellSpan(state: EditorState): Where {
+  const span = chosenSpan(state)
+  if (typeof span !== 'number' || state.layer === 'chords' || chosenNotes(state).length > 0)
+    return span
+  const before = notesOf(state.draft, state.layer).filter(
+    (n) => n.startTick + n.durationTicks === state.caret,
+  )
+  return before.length === 0 ? span : Math.max(...before.map((n) => n.startTick))
+}
+
+/** The notes ♮ ♯ ♭ and Respell act on (`spellSpan`): none where nothing is chosen nor just written. */
+export const spellNotes = (state: EditorState): DraftNote[] =>
+  state.layer === 'chords' ? [] : notesOf(state.draft, state.layer).filter(isAt(spellSpan(state)))
+
 /** Where the fingering field writes (ADR 0096): the chord's one note chosen, else the notes at the caret. */
 export const fingerPlace = ({
   caret,

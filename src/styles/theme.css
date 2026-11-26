@@ -1,11 +1,13 @@
 /* `dark:` follows the app's theme attribute, not the OS, so shadcn primitives obey the setting. */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 /* A phone on its side on the music stand: short and wide (the Player's two-column layout). */
-@custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px) and (max-width: 1023px));
+@custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 520px) and (max-width: 1023px));
 /* A phone held upright narrower than 390px: the transport's seven controls a size down. */
 @custom-variant small-phone (@media (max-width: 389.98px));
 /* The narrowest phones held upright (under 360px): a bar of round buttons gives up what it can spare. */
 @custom-variant narrow-phone (@media (max-width: 359.98px));
+/* Inside a screen while Focus hides the sidebar and the side panels (`use-focus-mode.ts`). */
+@custom-variant focus-mode (&:is([data-sidebar=focus] *));
 /* A wash under the pointer only where a mouse or a trackpad hovers, at every size: a phone keeps a
    tapped element hovered, and some say they hover, so a tap would leave its wash behind (the
    printed title's, a palette key's). */
@@ -19,7 +21,7 @@
 /* Keys docked at the foot of a screen wide for its height (a phone on its side, a laptop): the
    screen's floating actions stand at its side, over the keys, not over the little height left. */
 @custom-variant aside {
-  @media (orientation: landscape) and (max-height: 500px), (width >= 64rem) {
+  @media (orientation: landscape) and (max-height: 520px), (width >= 64rem) {
     :root:has([data-slot='docked']) & {
       @slot;
     }
@@ -32,11 +34,17 @@
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-chosen: var(--chosen);
+  --color-chosen-honey: var(--chosen-honey);
+  --color-switch-on: var(--switch-on);
+  --color-switch-knob: var(--switch-knob);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-selected: var(--selected);
+  --color-nav-foreground: var(--nav-foreground);
+  --color-nav-current-foreground: var(--nav-current-foreground);
+  --color-nav-current: var(--nav-current);
   --color-selected-foreground: var(--selected-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -45,7 +53,11 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-heart: var(--heart);
+  --color-heart-rest: var(--heart-rest);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-alert: var(--alert);
+  --color-alert-foreground: var(--alert-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -74,9 +86,9 @@
   --color-paint-tile-grass: var(--paint-tile-grass);
   --color-paint-tile-sky: var(--paint-tile-sky);
   --color-paint-tile-lilac: var(--paint-tile-lilac);
-  --color-on-paint-full: var(--on-paint-full);
   --color-thumb: var(--thumb);
   --color-raised: var(--raised);
+  --color-glass: var(--glass);
 
   --color-hand-rh: var(--hand-rh);
   --color-hand-lh: var(--hand-lh);
@@ -84,34 +96,58 @@
   --color-hand-rh-wash: var(--hand-rh-wash);
   --color-hand-lh-wash: var(--hand-lh-wash);
   --color-hand-staff-wash: var(--hand-staff-wash);
+  --color-roll-upper: var(--roll-upper);
+  --color-roll-lower: var(--roll-lower);
 
   --color-key-white: var(--key-white);
   --color-key-black: var(--key-black);
+  --color-honey-ring: var(--honey-ring);
+  --color-honey-wash: var(--honey-wash);
+  --color-layout-edge: var(--layout-edge);
+  --color-layout-zone: var(--layout-zone);
+  --color-slip-0: var(--slip-0);
+  --color-slip-1: var(--slip-1);
+  --color-slip-2: var(--slip-2);
+  --color-slip-3: var(--slip-3);
+  --color-wheel-near: var(--wheel-near);
+  --color-wheel-relative: var(--wheel-relative);
+  --color-wheel-near-inner: var(--wheel-near-inner);
+  --color-honey-ink: var(--honey-ink);
+  --color-toast-action: var(--toast-action);
+  --color-eyebrow: var(--eyebrow);
+  --color-played: var(--played);
+  --color-practised-day: var(--practised-day);
+  --color-medal-bronze: var(--medal-bronze);
+  --color-medal-silver: var(--medal-silver);
+  --color-medal-gold: var(--medal-gold);
+  --color-medal-platinum: var(--medal-platinum);
+  --color-medal-none: var(--medal-none);
+  --color-scrim: var(--scrim);
   --color-key-bed: var(--key-bed);
   --color-key-shade: var(--key-shade);
-  --color-key-sheen: var(--key-sheen);
-  --color-key-felt: var(--key-felt);
   --color-on-key-white: var(--on-key-white);
   --color-on-key-black: var(--on-key-black);
   --color-key-down: var(--key-down);
   --color-on-key-down: var(--on-key-down);
   --color-key-tonic: var(--key-tonic);
-  --color-key-tonic-down: var(--key-tonic-down);
   --color-on-key-tonic: var(--on-key-tonic);
   --color-key-scale: var(--key-scale);
-  --color-key-scale-down: var(--key-scale-down);
   --color-on-key-scale: var(--on-key-scale);
   --color-key-focus: var(--key-focus);
   --color-key-focus-halo: var(--key-focus-halo);
 
-  /* Neither face has ♭ ♮ ♯: both take them from Text Accidentals, set for text (fonts/), not a staff. */
-  --font-sans: 'Onest Variable', 'Text Accidentals', 'Noto Music', system-ui, sans-serif;
   /*
-   * The book's typeset titles: Literata, a book serif drawn for screens, variable in weight and
-   * optical size (the browser fits its design to each size), Latin and Cyrillic alike. Titles and
-   * chord symbols only; every control reads in Onest.
+   * The canvas's two faces (r41_kit FONT and SERIF): Instrument Sans for reading and acting, Iowan
+   * Old Style, the book serif Apple ships, for titles and chord symbols. Instrument Sans has no
+   * Cyrillic, so Russian reads in the system's sans after it, as the boards set it. Neither face
+   * has ♭ ♮ ♯: both take them from Text Accidentals, set for text (fonts/), not a staff, and the
+   * other music signs from Text Music Signs, Noto Music limited to them.
    */
-  --font-display: 'Literata Variable', 'Text Accidentals', 'Noto Music', Georgia, serif;
+  --font-sans:
+    'Instrument Sans Variable', 'Text Accidentals', 'Text Music Signs', -apple-system,
+    'Helvetica Neue', system-ui, sans-serif;
+  --font-display:
+    'Iowan Old Style', 'Text Accidentals', 'Text Music Signs', 'Palatino', Georgia, serif;
   /* A music sign that stands alone: set by the music font's own metrics. */
   --font-music: 'Noto Music', serif;
 
@@ -122,13 +158,6 @@
   --color-role-9th: var(--role-9th);
   --color-role-11th: var(--role-11th);
   --color-role-13th: var(--role-13th);
-  --color-role-root-wash: var(--role-root-wash);
-  --color-role-3rd-wash: var(--role-3rd-wash);
-  --color-role-5th-wash: var(--role-5th-wash);
-  --color-role-7th-wash: var(--role-7th-wash);
-  --color-role-9th-wash: var(--role-9th-wash);
-  --color-role-11th-wash: var(--role-11th-wash);
-  --color-role-13th-wash: var(--role-13th-wash);
   --color-on-role: var(--on-role);
 }
 
@@ -139,7 +168,8 @@
  */
 @theme {
   /*
-   * One shape scale (R14, DESIGN.md Shapes): a control 12 · a card 14 · a sheet 20 · a pill round.
+   * One shape scale (R14, DESIGN.md Shapes): a control 12 · a card 14 · a menu or popover 16, its
+   * items 10 (concentric in its 6 inset) · a sheet and a centred dialog 22 · a pill round.
    * The keys are drawings, not controls: a black key's foot 6, a white key's 9; a row's 30px tile,
    * a mark, 8 (canvas 128). Everything else takes `rounded-control`, `-card`, `-sheet` or `-pill`; Tailwind's own sizes, which the shadcn
    * primitives keep in their classes, resolve to the same scale (`src/styles/shapes.test.ts`). In
@@ -147,15 +177,18 @@
    */
   --radius-control: var(--radius);
   --radius-card: calc(var(--radius) + 2px);
-  /* The narrowest a card in a `CardGrid` is drawn (P11): a chord's, a row's, a tile's. */
-  --card-min-chord: 8.5rem;
-  --card-min-row: 18rem;
-  --card-min-tile: 11rem;
-  --radius-sheet: calc(var(--radius) + 8px);
+  --radius-sheet: calc(var(--radius) + 10px);
+  --radius-menu: calc(var(--radius) + 4px);
   --radius-pill: calc(infinity * 1px);
   --radius-key-black: calc(var(--radius) - 6px);
   --radius-key-white: calc(var(--radius) - 3px);
   --radius-tile: calc(var(--radius) - 4px);
+  /* A small picture, a cover, a sidebar's row: 10, a step in from the control's 12. */
+  --radius-thumb: calc(var(--radius) - 2px);
+  /* The keys' frame, the canvas's FRAME (r47_blocks): a keyboard on its own, fixed or in a lesson: 20. */
+  --radius-keys: calc(var(--radius) + 8px);
+  /* The smallest marks: a checkbox, a bar in a strip, a cover's staff card: 4. */
+  --radius-mark: calc(var(--radius) - 8px);
   --radius-xs: var(--radius-control);
   --radius-sm: var(--radius-control);
   --radius-md: var(--radius-control);
@@ -165,6 +198,17 @@
   --radius-3xl: var(--radius-card);
   --radius-4xl: var(--radius-sheet);
 
+  /*
+   * Three letter-spacings only (edge-lines laws, Type anatomy 10): a title of 34px and above, a chord's
+   * or a figure's large digits, and small capitals. Everything else 0.
+   */
+  --tracking-title: -0.01em;
+  --tracking-figures: -0.03em;
+  --tracking-caps: 0.04em;
+
+  /* Apple's Subheadline and Footnote: a row's detail and second line (15), a caption under it (13). */
+  --text-footnote: 0.8125rem;
+  --text-subhead: 0.9375rem;
   --text-lg: 1.0625rem;
   --text-lg--line-height: 1.375;
   --text-xl: 1.25rem;
@@ -177,6 +221,11 @@
   --text-4xl--line-height: 1.15;
   --text-5xl: 2.75rem;
   --text-5xl--line-height: 1.1;
+  /* By role, as the boards set them: a place's title on a laptop (Songs, Settings, a bar's title from
+     lg), and a thing's name heading its own page (a badge, an achievement, a run's result). Each line's
+     height is the caller's. */
+  --text-place: 1.875rem;
+  --text-name: 1.625rem;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -210,12 +259,15 @@
       --keys-most: 22dvh;
     }
   }
-  /* The phone's tab bar, docked at the bottom (its border, its top padding, its 56px places, the
-     home indicator): what sits at the screen's foot stays above it. Beside a rail or a sidebar, nothing. */
+  /* The phone's tab bar, a glass capsule 64 high floating over the home indicator (the canvas's
+     TABBAR): what sits at the screen's foot stays above it. On a phone on its side it is the compact
+     capsule (52 high, 24 over the foot, as iOS's in compact height); beside a sidebar, nothing. */
   :root {
-    --nav-bar: calc(1px + --spacing(1.5) + --spacing(14) + env(safe-area-inset-bottom));
+    --tab-bar-foot: max(--spacing(3), calc(env(safe-area-inset-bottom) - --spacing(1)));
+    --nav-bar: calc(--spacing(16) + var(--tab-bar-foot));
     @variant landscape-phone {
-      --nav-bar: 0px;
+      --tab-bar-foot: --spacing(6);
+      --nav-bar: calc(--spacing(13) + var(--tab-bar-foot));
     }
     @variant lg {
       --nav-bar: 0px;
@@ -224,11 +276,12 @@
   /* The room the screen's floating actions take (`FloatingHost` measures them, a gap included): at the
      foot, their height; standing `aside`, their width, at the side they stand. The page pads by it. */
   :root {
+    --floating-gap: --spacing(3);
     --floating-foot: var(--floating-block, 0px);
     --floating-left: 0px;
     --floating-right: 0px;
   }
-  @media (orientation: landscape) and (max-height: 500px), (width >= 64rem) {
+  @media (orientation: landscape) and (max-height: 520px), (width >= 64rem) {
     :root:has([data-slot='docked']) {
       --floating-foot: 0px;
       --floating-right: var(--floating-inline, 0px);
@@ -238,20 +291,32 @@
       --floating-right: 0px;
     }
   }
-  /* A screen's side gutter: 16px on a phone, 24px from 640px, 40px beside a sidebar. */
+  /* A screen's side gutter: 16px on a phone, 24px from 640px, 56px beside a sidebar (every laptop board's column). */
   :root {
     --gutter: --spacing(4);
     @variant sm {
       --gutter: --spacing(6);
     }
     @variant lg {
-      --gutter: --spacing(10);
+      --gutter: --spacing(14);
     }
   }
   body {
     @apply bg-background font-sans text-foreground antialiased;
   }
-  /* Titles are typeset in the book's serif, semibold; reading text and controls stay Onest. */
+  /* Under reduced motion every transition and animation is instant (craft-details, Motion): a layer
+     still opens and closes, at once; 0.01ms, not 0, so Base UI's end events still fire. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  /* Titles are typeset in the book's serif, semibold; reading text and controls stay in the sans. */
   h1,
   h2,
   h3 {
@@ -328,9 +393,149 @@
   }
 }
 
+/* A bar's title on a phone: it fades and lifts away over the page's first 40px of scroll while the bar
+   stays (the canvas's data-bar-title); a laptop's bar keeps it. */
+@utility bar-title {
+  animation: bar-title linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0 40px;
+  @variant lg {
+    animation: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+@keyframes bar-title {
+  to {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}
+
+/* The soft caps every field and group is captioned in (the kit's CAPS): 13 semibold, tracked 0.04em, soft ink. */
+@utility caps {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+}
+
+/* A Practice page's subject (the interval, the progression, the pattern, the exercise): 36 in the display face, bold, 1.1, tightened 1%. */
+@utility subject-title {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: var(--tracking-title);
+  text-wrap: balance;
+}
+
+/* The head over a card of rows on a page (Practise, Options, How to play): 14 semibold in ink. */
+@utility section-head {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: normal;
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+
 /* DESIGN's card: lighter paper than the page, a soft 1px line round it, 14px corners. */
+/*
+ * The laptop Settings dialog's pane (the board's SETCSS): every group a sentence-case heading, 16
+ * semibold in ink, 4 over its rows; the rows lie on the pane, no card, 56 tall, parted by hairlines,
+ * their words on the pane's edge; a footer on that edge too.
+ */
+@utility settings-pane {
+  & [data-slot='settings-group'] {
+    gap: --spacing(1);
+  }
+  & [data-slot='settings-head'] {
+    padding-inline: 0;
+  }
+  & [data-slot='settings-heading'] {
+    padding-inline: 0;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--foreground);
+  }
+  & [data-slot='settings-card'] {
+    border: 0;
+    border-radius: 0;
+    /* The card's ring is a shadow: none on the pane. */
+    box-shadow: none;
+    background: transparent;
+    overflow: visible;
+    padding-inline: 0;
+  }
+  & [data-slot='settings-card'] > * {
+    min-height: --spacing(14);
+    padding-inline: 0;
+    border-radius: 0;
+  }
+  & [data-slot='settings-card'] > [data-slot='switch-row'] {
+    padding-inline: 0;
+  }
+  & [data-slot='settings-card'] > :hover {
+    background: transparent;
+  }
+  & [data-slot='settings-foot'] {
+    padding-inline: 0;
+  }
+}
+/*
+ * A picture's edge (craft-details, Images): a cover, a paint tile, a course's banner. 1px inside it at
+ * 10% of the ink, black by day and white by night, so a light picture keeps its edge on the paper.
+ */
+@utility picture-edge {
+  @apply ring-1 ring-foreground/10 ring-inset;
+}
+
 @utility card {
-  @apply rounded-card border border-border bg-card;
+  @apply rounded-card bg-card ring-1 ring-border;
+}
+
+/*
+ * Rows parted by a line that takes no room, as the boards' GROUP draws them (an inset line under each
+ * row but the last, not a border): a list of 52 or 80 rows stands 52 or 80 a row. `rows-line` in the
+ * line's ink, `rows-hairline` in the softer hairline. Zero specificity, so a row's own position wins.
+ */
+@utility rows-line {
+  :where(& > :not(:last-child)) {
+    position: relative;
+  }
+  :where(& > :not(:last-child))::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--color-border);
+    pointer-events: none;
+  }
+}
+@utility rows-hairline {
+  :where(& > :not(:last-child)) {
+    position: relative;
+  }
+  :where(& > :not(:last-child))::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--color-hairline);
+    pointer-events: none;
+  }
 }
 
 /*
@@ -442,6 +647,10 @@
 @utility -mx-gutter {
   margin-inline: calc(-1 * var(--gutter));
 }
+/* A row that scrolls sideways snaps its first item to the gutter, not to the screen's edge. */
+@utility scroll-px-gutter {
+  scroll-padding-inline: var(--gutter);
+}
 /* The same gutter clear of a notch at the side, on a phone on its side: the screen's own edges. */
 @utility px-gutter-safe {
   padding-left: max(var(--gutter), env(safe-area-inset-left));
@@ -455,9 +664,12 @@
 @utility pr-floating {
   padding-right: calc(max(var(--gutter), env(safe-area-inset-right)) + var(--floating-right));
 }
-/* What floats at the screen's side, in from its edge by a gutter. */
-@utility right-gutter {
-  right: max(var(--gutter), env(safe-area-inset-right));
+/* The page's reading column, 672 wide and centred (DESIGN.md, Placement): a page's content, its bar's row
+   (`ScreenHeader column`) and a phone's sheet stand on it, so their edges meet at every width. */
+@utility page-column {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--container-2xl);
 }
 /* A grid of cards that takes the width it is given: as many columns of at least 18rem as fit. */
 @utility grid-cards {
@@ -469,17 +681,6 @@
 @utility grid-fields {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
-}
-/* Chord buttons, as many across as fit, each at least 4.5rem. */
-@utility grid-chords {
-  display: grid;
-  /* Wide enough for a slash chord (Cm6/G, G♭m/B♭) on one line: four to a phone's row. */
-  grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
-}
-/* The same for small tiles, at least 9rem. */
-@utility grid-tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(9rem, 100%), 1fr));
 }
 
 /* Clear the notch and the home indicator: named utilities, not arbitrary values in markup. */
@@ -510,7 +711,8 @@
    the phone's tab bar (Mindscape's, its ADR 0002). The tab bar is the places' own too: on what a place
    opens (`data-away`) it steps away and the screen has the whole height; a bar that takes its place
    (Select's, `data-takes-tab-bar`) stands there alone. The page pads for them no more: its foot pads by
-   the keyboard's range instead (`pb-foot-*`). */
+   the keyboard's range instead (`pb-foot-*`). Upright and on its side alike: a phone on its side
+   has no sidebar either, and its 393 of height is the last to spare for a bar over what a place opened. */
 :root[data-keyboard] {
   --floating-foot: 0px;
 }
@@ -518,11 +720,13 @@
 :root[data-keyboard] [data-slot='toast-viewport'] {
   display: none;
 }
-@media (orientation: portrait) and (max-width: 63.99rem) {
+@media (max-width: 63.99rem) {
   :root:has([data-slot='app-nav'][data-away]),
   :root:has([data-takes-tab-bar]) {
-    /* The foot is the home indicator's then: what floats keeps its gap above it. */
+    /* The foot is the home indicator's then: what floats stands on it, as the canvas's dock does (34
+       over a 34 indicator), or 12 from the screen's edge where there is none. */
     --nav-bar: env(safe-area-inset-bottom);
+    --floating-gap: max(0px, calc(--spacing(3) - env(safe-area-inset-bottom)));
   }
   /* The keyboard covers the foot: nothing to keep a gap above (it wins over the rule above). */
   :root[data-keyboard],
@@ -570,29 +774,21 @@
 @utility pb-safe-2 {
   padding-bottom: max(--spacing(2), env(safe-area-inset-bottom));
 }
-/* A screen beside the laptop's sidebar: clear of it, open (16rem) or collapsed (4.5rem), by a gutter. */
+/* A screen beside the laptop's sidebar: clear of it, open (15.5rem, the boards' 248) or collapsed (4.5rem), by a gutter. */
 @utility pl-sidebar {
-  padding-left: calc(--spacing(64) + var(--gutter) + var(--floating-left));
+  padding-left: calc(--spacing(62) + var(--gutter) + var(--floating-left));
 }
 @utility pl-sidebar-collapsed {
   padding-left: calc(--spacing(18) + var(--gutter) + var(--floating-left));
 }
-/* A phone on its side: its places a rail down the left (5rem, clear of a notch there), the screen
-   clear of it by a gutter, and of the floating actions where they stand at its left. */
+/* A screen in Focus: no sidebar, clear of the window's edge by a gutter alone. */
+@utility pl-focus {
+  padding-left: calc(var(--gutter) + var(--floating-left));
+}
+/* A phone on its side: the screen clear of a notch at its left by a gutter, and of the floating
+   actions where they stand at its left. */
 @utility pl-safe-left {
-  padding-left: env(safe-area-inset-left);
-}
-@utility w-rail {
-  width: calc(--spacing(20) + env(safe-area-inset-left));
-}
-@utility pl-rail {
-  padding-left: calc(
-    --spacing(20) + env(safe-area-inset-left) + var(--gutter) + var(--floating-left)
-  );
-}
-/* No narrower than its longest word, nor wider than its line: a title that wraps between words only. */
-@utility min-w-longest-word {
-  min-width: min(100%, min-content);
+  padding-left: calc(env(safe-area-inset-left) + var(--gutter) + var(--floating-left));
 }
 /* Drawn only in sight (R32): a long score's lines out of view cost no style, layout, paint or hit
    test. Its height while skipped is the screen's to give (`contain-intrinsic-size` in `style`). */
@@ -682,8 +878,42 @@
   box-shadow: 0 2px 3px var(--key-cast);
 }
 
+@utility elevation-float {
+  box-shadow: var(--elevation-float);
+}
+@utility elevation-thumb {
+  box-shadow: var(--elevation-thumb);
+}
 @utility elevation-1 {
   box-shadow: var(--elevation-1);
+}
+/* What floats over the page (the canvas's docks): the glass, its line ring and the float's tight lift. */
+@utility glass {
+  background-color: var(--glass);
+  backdrop-filter: blur(24px) saturate(1.8);
+  box-shadow:
+    0 0 0 1px var(--border),
+    var(--elevation-float);
+}
+@utility glass-honey {
+  background-color: var(--glass-honey);
+  backdrop-filter: blur(24px) saturate(1.8);
+  box-shadow:
+    inset 0 1px 0 var(--glass-honey-lit),
+    0 0 0 1px rgb(176 122 42 / 0.28),
+    var(--elevation-float);
+}
+/* A layer over the page that is not glass (a dialog, a popover): the line ring and the float's shade. */
+@utility layer-shadow {
+  box-shadow:
+    0 0 0 1px var(--border),
+    var(--elevation-2);
+}
+/* A window over the page (the app Settings, a thing's Settings): the line ring and its deep shade. */
+@utility window-shadow {
+  box-shadow:
+    0 0 0 1px var(--border),
+    var(--elevation-window);
 }
 @utility elevation-2 {
   box-shadow: var(--elevation-2);
@@ -735,9 +965,33 @@
     translate: 0 6px;
   }
 }
+/*
+ * The Metronome's Flash on the beat: the screen washed in honey as each beat sounds, fading at once;
+ * opacity alone moves. Under reduced motion it does not flash: the beats' squares still show the beat.
+ */
+.beat-flash {
+  animation: beat-flash 320ms var(--ease-out) forwards;
+}
+@keyframes beat-flash {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .beat-flash {
+    display: none;
+  }
+}
 /* Docked over the tab bar, and what floats over the keys docked there (`--docked`, `Docked`). */
 @utility bottom-nav-bar {
   bottom: var(--nav-bar);
+}
+/* Keys docked at the foot rest on the screen's floating bar (the design's stack): over it, never under. */
+@utility bottom-over-floating {
+  bottom: calc(var(--nav-bar) + var(--floating-foot));
 }
 @utility bottom-docked {
   bottom: calc(var(--nav-bar) + var(--docked, 0px));
@@ -771,16 +1025,28 @@
     --foot-pad: --spacing(12);
   }
 }
-/* What stands over all that stands at the screen's foot (a toast): `bottom-foot-3`. */
-@utility bottom-foot-* {
-  bottom: calc(
-    --spacing(--value(integer)) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot)
-  );
+/* Where a toast stands (the canvas's one toast): on a phone over all that stands at the screen's foot;
+   on a laptop 28 up, the floating actions at the pane's corner beside it, or 116 up over a floating
+   bar that spans the foot (a lesson's), clear of it. */
+@utility toast-foot {
+  bottom: calc(--spacing(3) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot));
+  @variant lg {
+    bottom: calc(--spacing(7) + var(--docked, 0px));
+  }
+}
+@media (width >= 64rem) {
+  :root:has([data-slot='floating-actions'] [role='toolbar']) [data-slot='toast-viewport'] {
+    bottom: calc(--spacing(29) + var(--docked, 0px));
+  }
 }
 /* The keys shown or hidden from the bar's Keyboard (R34) leave and come as one, fading, while the
-   page under them takes or gives their room at once; the screen's floating actions ride with them. */
+   page under them takes or gives their room at once; the screen's floating actions ride with them.
+   Named only while the change runs (`morph`): a named element is a backdrop root, and the glass over
+   or inside it would blur nothing, the tiles under a floating bar showing through its honey. */
 @utility vt-keys {
-  view-transition-name: keys;
+  :root[data-morphing] & {
+    view-transition-name: keys;
+  }
 }
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -788,7 +1054,9 @@
 }
 /* The screen's floating actions ride up and down with the keys under them, never jumping. */
 @utility vt-floating {
-  view-transition-name: floating-actions;
+  :root[data-morphing] & {
+    view-transition-name: floating-actions;
+  }
 }
 ::view-transition-group(keys),
 ::view-transition-group(floating-actions) {
@@ -842,18 +1110,12 @@
   }
 }
 
-/* What is docked beside the rail or the sidebar starts where the screen does. */
-@utility left-rail {
-  left: calc(--spacing(20) + env(safe-area-inset-left));
-}
+/* What is docked beside the sidebar starts where the screen does: at its 248 (15.5rem), as `pl-sidebar`. */
 @utility left-sidebar {
-  left: --spacing(64);
+  left: --spacing(62);
 }
 @utility left-sidebar-collapsed {
   left: --spacing(18);
-}
-@utility bottom-safe {
-  bottom: max(--spacing(4), env(safe-area-inset-bottom));
 }
 
 /* The Player's screen, and the score editor's (widgets/practice-player, ADR 0061, 0115):
@@ -861,8 +1123,7 @@
    At every size a column: the bar (its lead and actions in columns of their own, so neither squeezes
    the other), the sheet taking what is left, Wait mode's line and the keys at the foot. On a phone on
    its side Wait mode's line joins the bar's row, between its lead and its actions, so the sheet keeps
-   the height its row would take. Where the keyboard settings dock the keys at the top
-   (`data-keys='top'`), they sit under the bar. */
+   the height its row would take.*/
 @utility player-screen {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -875,8 +1136,6 @@
   /* The music's scroll room under the transport floating over its foot: room to scroll into, never a
      row kept empty. */
   --float-room: 5.5rem;
-  /* How far the screen's top padding lies above the bar: its band reaches the screen's top edge. */
-  --bar-above: calc(--spacing(2) + max(--spacing(4), env(safe-area-inset-top)));
   & > [data-area='bar'] {
     grid-area: bar;
   }
@@ -903,14 +1162,6 @@
     z-index: 30;
     margin-bottom: 0.5rem;
   }
-  &[data-keys='top'] {
-    grid-template-rows: auto auto minmax(0, 1fr) auto;
-    grid-template-areas:
-      'bar'
-      'keys'
-      'sheet'
-      'status';
-  }
   /* The Player's transport in its own row at the foot (R31-P): nothing floats over the music. */
   & > [data-area='transport'] {
     grid-area: transport;
@@ -924,15 +1175,6 @@
       'keys'
       'transport';
   }
-  &[data-keys='top']:has(> [data-area='transport']) {
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
-    grid-template-areas:
-      'bar'
-      'keys'
-      'sheet'
-      'status'
-      'transport';
-  }
   /* On a phone on its side the bar is one row, Wait mode's line in it beside its end group, keeping
      its words (ADR 0108, 0105, 0115). The bar's columns are the screen's, so the line stands in its
      own. */
@@ -943,7 +1185,6 @@
       'bar bar bar bar'
       'sheet sheet sheet sheet'
       'keys keys keys keys';
-    --bar-above: max(--spacing(4), env(safe-area-inset-top));
     /* Along the sheet's foot, as upright and as the editor's dock (ADR 0115): the sheet between the
        bar and the keys is shorter than an upright transport, which covered the bar and the keys. */
     --float-room: 4rem;
@@ -954,13 +1195,6 @@
     & > [data-area='dock'] {
       margin-bottom: 0.25rem;
     }
-    &[data-keys='top'] {
-      grid-template-rows: auto auto minmax(0, 1fr);
-      grid-template-areas:
-        'bar bar bar bar'
-        'keys keys keys keys'
-        'sheet sheet sheet sheet';
-    }
     &:has(> [data-area='transport']) {
       grid-template-rows: auto minmax(0, 1fr) auto auto;
       grid-template-areas:
@@ -969,24 +1203,15 @@
         'keys keys keys keys'
         'transport transport transport transport';
     }
-    &[data-keys='top']:has(> [data-area='transport']) {
-      grid-template-rows: auto auto minmax(0, 1fr) auto;
-      grid-template-areas:
-        'bar bar bar bar'
-        'keys keys keys keys'
-        'sheet sheet sheet sheet'
-        'transport transport transport transport';
-    }
   }
 }
 
-/* The score's bar, the Player's and the editor's one surface (ADR 0115, R31-E): Close, the title
-   and Practise · Edit at its start, the screen's own buttons at its end, one row at every size. Its
-   band, the card's paper with one hairline under the whole, reaches the screen's edges (the gutters
-   and the top), drawn behind it; its buttons are round and stand inside it, clear of its hairline. */
+/* The score's bar, the Player's and the editor's one surface (ADR 0115; their boards, loop round 61):
+   Close at its start, Play · Edit in its middle, the screen's own glass group at its end; glass
+   buttons over the music, no band and no hairline. The end's column holds at least the editor's three
+   buttons, so the switch stands in the same place in both bars and nothing moves between them. */
 @utility score-bar {
   position: relative;
-  isolation: isolate;
   /* Over the music, whose area is positioned for what floats on it. */
   z-index: 25;
   display: grid;
@@ -995,45 +1220,29 @@
   align-items: center;
   column-gap: --spacing(2);
   padding-bottom: --spacing(1);
-  &::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    top: calc(-1 * var(--bar-above, 0px));
-    bottom: 0;
-    left: calc(-1 * max(var(--gutter), env(safe-area-inset-left)));
-    right: calc(-1 * max(var(--gutter), env(safe-area-inset-right)));
-    border-bottom: 1px solid var(--color-hairline);
-    background: var(--color-card);
-  }
   & > [data-area='lead'] {
     grid-area: lead;
   }
   & > [data-area='actions'] {
     grid-area: actions;
   }
-  /* The Player's and the editor's bar (their canvases): Close, a pill in the middle of the room the
-     ends leave (so a wider end never runs under it), the end's buttons; bare over the paper, no band
-     and no hairline. */
   &:has(> [data-area='middle']) {
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto minmax(max-content, 1fr);
     grid-template-areas: 'lead middle actions';
-    &::before {
-      border-bottom: 0;
-      background: var(--color-background);
+    /* Three 44px buttons: the editor's Undo, Redo and More. */
+    & > [data-area='actions'] {
+      min-width: --spacing(33);
     }
   }
   & > [data-area='middle'] {
     grid-area: middle;
     justify-self: center;
   }
-  @variant max-sm {
-    column-gap: --spacing(1);
-  }
   /* A 320px phone, or one with Display Zoom (round 28, R31-E): Close, Done and the end's buttons keep
      one row with their gaps closed, each icon button 40px wide (still 44px tall) and Done's padding
-     tighter, so none covers another. */
+     tighter, so none covers another. Above it the columns stand 8 apart, as the Editor board's. */
   @media (width < 360px) {
+    column-gap: --spacing(1);
     & > [data-area='actions'] {
       gap: 0;
     }
@@ -1074,18 +1283,18 @@
    sung and leaves out the next before the chords give anything up; then the chords take what the
    rest leaves them, never more than they are drawn at: their diagrams shrink to it (`max-h-full`). */
 @utility diagrams-view {
-  container-type: size;
+  /* The Player's Diagrams board (loop round 61): the title at the head; the chords' row, the beat
+     strip and the line sung standing together in the middle of the room under it, 16 apart (20 on
+     a laptop). */
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) minmax(5rem, auto) auto auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto minmax(0, 1fr);
   grid-template-areas: 'title' '.' 'chords' 'strip' 'words' '.';
   & > [data-area='title'] {
     grid-area: title;
-    margin-bottom: --spacing(2);
   }
   & > [data-area='chords'] {
     grid-area: chords;
-    min-height: 0;
   }
   & > [data-area='strip'] {
     grid-area: strip;
@@ -1095,12 +1304,10 @@
     grid-area: words;
     margin-top: --spacing(4);
   }
-  /* Too short a room for both lines and the chords as drawn (a 667px-tall phone, any phone on its
-     side): the line being sung alone; between lines, the next alone, the wait's dash left out. */
-  @container (height < 19rem) {
-    & > [data-area='words'] > [data-slot='sung-line'] ~ [data-slot='coming-line'],
-    & > [data-area='words'] > [data-slot='wait'] {
-      display: none;
+  @variant lg {
+    & > [data-area='strip'],
+    & > [data-area='words'] {
+      margin-top: --spacing(5);
     }
   }
   @variant landscape-phone {
@@ -1108,19 +1315,11 @@
     grid-template-rows: minmax(0, 1fr) auto auto auto minmax(0, 1fr);
     grid-template-areas: 'chords .' 'chords title' 'chords strip' 'chords words' 'chords .';
     column-gap: --spacing(4);
-    /* One line of the title beside the chords, cut short where it is longer: with the strip and
-       the line sung, it fits the room a 375px-tall phone on its side leaves. */
-    & > [data-area='title'] {
-      margin-bottom: 0;
-      & > h1 {
-        overflow: hidden;
-        line-height: 1.1;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+    & > [data-area='chords'] {
+      align-self: center;
     }
     & > [data-area='strip'] {
-      margin-top: --spacing(0.5);
+      margin-top: --spacing(2);
     }
     & > [data-area='words'] {
       margin-top: --spacing(1);
@@ -1171,5 +1370,13 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* A row that scrolls sideways under the finger with no bar drawn: shelves, chips, the chords' row. */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

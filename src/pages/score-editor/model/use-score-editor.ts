@@ -63,7 +63,11 @@ function useCloseTo(target: EditorTarget): () => void {
  * takes (ADR 0028): while one records, its keys write nothing and Space or Escape stops it.
  * Opened at `bar` (as printed), the caret starts there.
  */
-export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorValue {
+export function useScoreEditor(
+  target: EditorTarget,
+  bar?: number,
+  credits = false,
+): ScoreEditorValue {
   // The screen stays on while this screen is open: a phone on the stand does not lock mid-song.
   useWakeLock()
   const pieces = usePiecesStoreApi()
@@ -117,9 +121,18 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   // Opened at a bar (Edit from the Player's cursor, ADR 0115): the caret goes to its start, once,
   // and the URL forgets it.
   const setSearch = useSetSearch<EditSearch>()
+  // The caret to a bar's first beat by its printed number, on the row it is on (Go to bar, ⌘G).
+  const goToBar = useCallback(
+    (printed: number) => {
+      const placed = barsOf(store.getState().draft)[printed - 1]
+      if (placed)
+        store.dispatch({ type: 'place', tick: placed.start, layer: store.getState().layer })
+    },
+    [store],
+  )
+  const [goingTo, setGoingTo] = useState(false)
   const openAt = useEffectEvent((printed: number) => {
-    const placed = barsOf(store.getState().draft)[printed - 1]
-    if (placed) store.dispatch({ type: 'place', tick: placed.start, layer: store.getState().layer })
+    goToBar(printed)
     setSearch({ bar: undefined })
   })
   useEffect(() => {
@@ -129,8 +142,12 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   // The staves heard and in sight (A40): the Instruments' All, S and eye, the Player's `staves`.
   const [staves] = useEditorStaves()
   const hidden = useMemo(() => hiddenStaves(staves), [staves])
-  // The gear's sheet (R31-E), at its page, or shut (null).
-  const [gear, setGear] = useState<GearPage | null>(null)
+  // The gear's sheet (R31-E), at its page, or shut (null); on Title and credits where the song's
+  // page's pencil opened the editor, and the URL forgets it.
+  const [gear, setGear] = useState<GearPage | null>(credits ? 'credits' : null)
+  useEffect(() => {
+    if (credits) setSearch({ credits: undefined })
+  }, [credits, setSearch])
   // The field open over the sheet, typing a chord symbol, a syllable or fingers where they print
   // (ADR 0096), each where the View shows it.
   const fieldsShown = useMemo(
@@ -212,8 +229,29 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     if (!(event.target instanceof Element)) return
     if (event.target.closest(OWN_KEYS)) return
     if (ARROWS.has(event.key) && event.target.closest(OWN_ARROWS)) return
+    // Space plays from the caret and stops, as the Player's and Flat's and Dorico's (F3); on a
+    // control it is that control's.
+    if (
+      event.key === ' ' &&
+      !event.metaKey &&
+      !event.ctrlKey &&
+      !event.altKey &&
+      !event.shiftKey &&
+      !event.target.closest(
+        'button,input,textarea,select,[role=switch],[role=radio],[contenteditable]',
+      )
+    ) {
+      event.preventDefault()
+      togglePlay()
+      return
+    }
     const shortcut = shortcutOf(event, store.getState().layer)
     if (!shortcut) return
+    if (shortcut.type === 'goTo') {
+      event.preventDefault()
+      setGoingTo(true)
+      return
+    }
     if (shortcut.type === 'field') {
       event.preventDefault()
       openField(fieldOf(shortcut.field))
@@ -258,7 +296,14 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     store,
     takes,
     heard,
-    actions: { dispatch, play, togglePlay, close, dismissUnsaved: () => setUnsaved(false) },
+    actions: {
+      dispatch,
+      play,
+      togglePlay,
+      close,
+      dismissUnsaved: () => setUnsaved(false),
+      goToBar,
+    },
     view: {
       // The chord symbols shown or not are the View's (ADR 0114).
       chordNames: shown.chordNames,
@@ -270,6 +315,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       hidden,
       field,
       openField,
+      goingTo,
+      setGoingTo,
     },
     meta: {
       id: target.id,

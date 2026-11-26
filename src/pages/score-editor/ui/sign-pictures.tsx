@@ -1,8 +1,5 @@
 import type { ReactNode } from 'react'
 import type { BarMarkChoice } from '@/features/score-editor'
-import { keySignature, type Clef, type Key } from '@/shared/lib/music'
-import { ClefSign, SignatureGlyphs } from '@/shared/ui/pickers/picker-pictures'
-import { SmuflPath, TimeSignatureSign } from '@/shared/ui/smufl'
 
 /** A staff space in the picture's units: its five lines from y 8 to 32. */
 const SPACE = 6
@@ -31,37 +28,6 @@ function Staff({ children }: { children: ReactNode }) {
         ))}
       </g>
       {children}
-    </svg>
-  )
-}
-
-/** A key's signature after a treble clef, as forScore draws its palette's keys (ADR 0115). */
-export function KeyPicture({ signatureOf }: { signatureOf: Key }) {
-  const count = keySignature(signatureOf)
-  // Centred together: the clef, then the signature's signs.
-  const start = WIDTH / 2 - (18 + Math.abs(count) * SPACE * 1.15) / 2
-  return (
-    <Staff>
-      <SmuflPath name="gClef" x={start} y={TOP + 3 * SPACE} space={SPACE} />
-      <SignatureGlyphs count={count} x={start + 20} top={TOP} />
-    </Staff>
-  )
-}
-
-/** A clef drawn on its staff (ADR 0115, 0114): the picker's own picture. */
-export function ClefPicture({ clef }: { clef: Clef }) {
-  return <ClefSign clef={clef} />
-}
-
-/** A time signature as a key's face: its figures one over the other, Bravura's (ADR 0114). */
-export function TimeFigures({
-  meter,
-}: {
-  meter: { readonly count: number; readonly unit: number }
-}) {
-  return (
-    <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
-      <TimeSignatureSign count={meter.count} unit={meter.unit} x={12} y={12} space={5} />
     </svg>
   )
 }
@@ -141,7 +107,7 @@ const BARLINES = {
   ending4: ending('4.'),
 } as const satisfies Partial<Record<BarMarkChoice, ReactNode>>
 
-export type BarlinePictured = keyof typeof BARLINES
+type BarlinePictured = keyof typeof BARLINES
 
 /** A barline or an ending drawn on its staff (ADR 0115). */
 export function BarlinePicture({ choice }: { choice: BarlinePictured }) {

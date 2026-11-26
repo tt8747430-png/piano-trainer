@@ -73,3 +73,59 @@ pickers, the chord on staff and keys); Mark Levine, _The Jazz Piano Book_ (rootl
 ### Canvas 160 (2026-11-11)
 
 The grilling, answered q1 to q12 and confirmed ("q10d: ok q12: OK"). Built: the Chord trainer, Quiz, Quiz run, the Quiz's Trainer and Exercises boards removed (and from the published canvas); Finger technique and Jazz vocabulary libraries; the Chords practice list as ruled; PlayChord (the run in the Player and its results) and PracticeResult (the same from Profile); Profile's Practice history. Checked in the runtime at both sizes: the run, both result states, Profile and its history page, the overview, the libraries, Check and Intervals; 117 boards, no missing or dead links.
+
+## Port from the board's code (2026-11-13, owner: "follow the design artifact and read its code")
+
+Ported, measured against `Chords.dc.html` / `ChordsLaptop.dc.html` (r42_chords.py, piano_sheet.py, r41_kit.py):
+
+| Board part | App |
+| --- | --- |
+| PH_HEAD: glass Back, title, glass Piano | `ChordsPage`, button variant `glass`, `BackButton variant="glass"` |
+| STAGE3D 220 / 286, keys held in role colours, lettered tags | `ChordStage`, stage `pressedPaint: 'tone'`, `onDrawn`, `PianoHands tags` |
+| NAME_A: root · chord type · in the bass (54 high, 14 round, fill) | `ChordName` (type list in the board's five groups, symbol then name) |
+| STAFFCARD: treble alone, no time, name in sky, fingers; hands' fingers under | `ChordSheet`, `chordBar(placed, { symbol, fingers })`, ScoreView `chordSymbols` |
+| PRACTISE rows (honey 36 circle, 16/600, 13 soft, chevron) | `PractiseRows` / `PractiseRow` in the kit |
+| DOCK_A: Voicing · PlaySplit · Hands pieces, 148px fade | `FloatingPieces` (fade inside) |
+| Piano sheet: Show the piano, CARDV view cards, SWITCH | `features/live-keyboard/PianoSheet`, `RadioCards` (CARDV), `Switch` (51×31, #7FB685) |
+| Symbols read maj7 | the chord table's suffixes |
+
+Still to port, in this order:
+
+1. ~~The staff's noteheads in their tone colours and each finger beside its note~~ (5e3259be: heads solid in their
+   tones' paints, names left and fingers right of the chord, the name at 17px over it, the staff at the board's size
+   across the card; a single staff keeps no brace room). Left: the chord placed mid-bar, which comes with item 3's
+   second bar.
+2. ~~The Piano sheet's rows~~ (ce3be88c, 969a2af9 and after): the 3D card's Angle (Seat · Above, the camera at 62° or
+   78°) and Hands on the keys; Range, the 88-key strip that drags (14 or 28 white keys from the C under the chord or
+   where it was dragged; a drag on Fit the chord shows two octaves); Labels in two rows; Sound (Grand piano, offline
+   a second line) and MIDI keyboard (the keyboard heard) as link rows, in the Player's sheet too.
+3. The staff's + (Add a chord: the Next chord sheet) and "Practise these chords" for several. From the board
+   (r42_chords.py `addChord`, `nextList`, `chromList`, `editChord`, `pickChord`, `removeChord`, `playSeq`, B_NEXT):
+   - **The URL** holds the chords (`chords`, up to 8, each root, type and inversion) and the one chosen (`at`);
+     the pickers, the hands, the keys and the fingers show the chosen one; voicing and hands are the page's.
+   - **The staff** writes a bar per chord, each name over its bar: the chosen in sky at 700, the others in soft ink
+     at 600 (13px name when several); the chosen chord's heads ringed in sky. A tap on a bar chooses and plays it;
+     a tap on its name opens the Next chord sheet titled "Change Am7", which also holds "Remove Am7" (gone at once,
+     "Am7 removed · Undo"). The staff scrolls sideways to keep the chosen bar in view.
+   - **The +** sits after the last bar, a 36 dashed circle in a 44 target (honey-deep), up to 8 chords. It opens
+     **Next chord**: Diatonic · Chromatic. Diatonic, "In C major" (the first chord's key: its root, minor when the
+     chord is), six of the key's chords, the likeliest after the chosen one first then by degree, sevenths when the
+     chosen chord has a 7th, each a 72-high tile (symbol 22 serif bold, numeral 14 soft), two across; those on the
+     staff left out; none left: "Every chord of C major is on the staff" and Chromatic chords. Chromatic, "From
+     Cmaj7", the same type a half step, whole step and minor 3rd up and down ("half step up"). Then All chords ›
+     (the Chord type sheet, adding the chord it picks). A pick adds the chord in the inversion that moves least from
+     the one before, plays it, and keeps the sheet open; Done closes it.
+   - **Play** becomes Play all for several, its menu adding "All 3 chords, in order" and "Only Am7"; the chords
+     sound one after another, the sounding one chosen.
+   - **Practise** is headed "Practise these chords in the Player" for several.
+   Built (this round): the chords in the URL, a bar each, the chosen one ringed, the staff scrolling sideways;
+   each chord mid-bar and the empty bar's +; Next chord (Diatonic, Chromatic, All chords, Change and Remove with
+   Undo); Play all with "All 3 chords, in order" · "Only Dm7"; Practise these chords with Chord changes (the
+   progression Player, the chords as numerals in the staff's key). Left: the sounding chord chosen while Play all
+   plays; Shuffle and the several-chord drills come with item 4.
+4. ~~The drills Over the root and Diatonically~~ (d52f93a5): one chord adds Over the root (LH root · RH chord, the
+   Player's whole-note figures) and Diatonically, in the key it belongs to (a major key's I ii V7 vii, a °7 on vii
+   of harmonic minor), up to its octave and back; several chords Over the root, Chromatically and Circle of fifths
+   (the progression walked through the keys) and Shuffle.
+5. ~~The name's width~~: the parts' gaps were 8 where the board's are 6 (between parts and inside each), and the
+   chevron side 8 where the board's is 9; with the board's values Cmaj7 · root position fits one line at 402.

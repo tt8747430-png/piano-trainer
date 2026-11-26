@@ -8,10 +8,11 @@ const NOTES = 4
 
 /**
  * Where the right hand's chord stands: the first chord's inversion (Root unless the URL says), and
- * Nearest (on unless the URL says). Under a pattern that plays its own shapes both show, faded,
- * the ⓘ beside the first chord's name saying why (ADR 0096).
+ * its Voicing (Voice-led unless the URL says Block). Under a pattern that plays its own shapes both show, faded,
+ * the ⓘ beside the first chord's name saying why (ADR 0096). As `rows`, two rows of the song's
+ * Accompaniment card.
  */
-export function InversionField() {
+export function InversionField({ rows = false }: { rows?: boolean }) {
   const { t } = useTranslation('player')
   const { figures, fit, onFigures } = useSetup()
   const follows = followsInversion(usePatternBook(), figures, fit.chart)
@@ -20,6 +21,7 @@ export function InversionField() {
       notes={NOTES}
       position={{ inversion: figures.inversion ?? 0, nearest: figures.nearest }}
       disabled={!follows}
+      rows={rows}
       info={follows ? undefined : t('inversion.own')}
       onChange={({ inversion, nearest }) =>
         onFigures(

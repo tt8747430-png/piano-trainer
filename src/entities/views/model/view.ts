@@ -1,5 +1,5 @@
 /** A param a screen's URL holds: what a view is made of. */
-export type ViewParam = string | number | boolean
+type ViewParam = string | number | boolean
 /** A screen's last view: its URL's params, as its route's reader will read them again. */
 export type RememberedView = Readonly<Record<string, ViewParam>>
 /** The screens' last views by path, the one used last at the end. */

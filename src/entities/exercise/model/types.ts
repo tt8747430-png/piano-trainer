@@ -4,9 +4,28 @@ import type { Inversion, ScaleKind } from '@/shared/lib/music'
 import type { SwingFeel } from '@/shared/lib/schedule'
 import type { ExerciseChoice, FigureId, Octaves } from './choice'
 
-/** The exercise groups, in the catalog's order: a scale's and a chord's open from their pages, the rest from Exercises. */
-export const EXERCISE_GROUPS = ['scales', 'arpeggios', 'barryHarris', 'jonny', 'technique'] as const
+/**
+ * The exercise groups, in the catalog's order: a scale's and a chord's open from their pages, the
+ * rest are a shelf's sources (a book, a teacher, a drill of its own).
+ */
+export const EXERCISE_GROUPS = [
+  'scales',
+  'arpeggios',
+  'barryHarris',
+  'jonny',
+  'virtuoso',
+  'fiveFinger',
+] as const
 export type ExerciseGroup = (typeof EXERCISE_GROUPS)[number]
+
+/** The shelves Practice lists under Exercises, each a page of its sources folded (the canvas's FingerTechnique, JazzVocabulary). */
+export const EXERCISE_SHELVES = ['technique', 'jazz'] as const
+export type ExerciseShelf = (typeof EXERCISE_SHELVES)[number]
+/** Each shelf's sources, in the order its page folds them. */
+export const SHELF_GROUPS: Readonly<Record<ExerciseShelf, readonly ExerciseGroup[]>> = {
+  technique: ['virtuoso', 'fiveFinger'],
+  jazz: ['barryHarris', 'jonny'],
+}
 
 /** The exercises, each written by a rule of its own, in the Player at `/play/exercise/$exerciseId`. */
 export const EXERCISE_IDS = [
@@ -38,7 +57,7 @@ export type ExerciseId = (typeof EXERCISE_IDS)[number]
  * plays its own way. Its root is always a choice, spelled by its rule: as its scale, its chord, or its
  * key.
  */
-export interface ExerciseFields {
+interface ExerciseFields {
   readonly root: 'scale' | 'chord' | 'key'
   readonly kind?: readonly ScaleKind[]
   readonly octaves?: readonly Octaves[]
@@ -72,6 +91,10 @@ export interface Exercise {
   readonly group: ExerciseGroup
   readonly stage: Stage
   readonly name: LocalText
+  /** Its tile's few characters on its shelf's row: Hanon's numbers (1–20), a chord's sign (6°). */
+  readonly mark?: string
+  /** What it is for, in a few words: its row's line on its shelf (the canvas's Focus). */
+  readonly focus?: LocalText
   /** What it trains, in a line (whose idea it is, its group says). */
   readonly trains: LocalText
   /** How to play it, in plain words: what its page says over its fingering's picture (A41). */

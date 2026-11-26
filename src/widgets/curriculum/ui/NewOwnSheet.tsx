@@ -1,10 +1,10 @@
 import { useNavigate } from '@tanstack/react-router'
-import { BookOpenText, Library } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FolderLook } from '@/entities/library'
 import {
   OWN_COURSE_LOOK,
+  OWN_COURSE_TEMPLATES,
   OWN_NAME_MAX,
   selectOwnCourses,
   useOwnLessons,
@@ -14,46 +14,43 @@ import {
 import { LookFields } from '@/features/manage-library'
 import {
   createOwnCourse,
+  createOwnCourseFrom,
   createOwnLesson,
   saveOwnCourse,
   setInCourse,
 } from '@/features/manage-own-lessons'
-import { ChoiceChips, NewSheet, SheetPart, type MenuAction } from '@/shared/ui'
+import { localText, useLocale } from '@/shared/i18n'
+import { ChoiceChips, NewSheet, SheetPart } from '@/shared/ui'
 
 /** What the learner makes: a lesson or a course of their own. */
 export type OwnKind = 'lesson' | 'course'
 const NO_COURSE = 'none'
-
-/**
- * New's two (canvas 167): New lesson and New course, for the phone's dial and the menus of Learn's row
- * and the laptop's New; each opens its own sheet.
- */
-export function useNewOwnActions(onPick: (kind: OwnKind) => void): readonly MenuAction[] {
-  const { t } = useTranslation('learn')
-  return [
-    {
-      key: 'lesson',
-      label: t('own.newLesson'),
-      icon: BookOpenText,
-      onSelect: () => onPick('lesson'),
-    },
-    { key: 'course', label: t('own.newCourse'), icon: Library, onSelect: () => onPick('course') },
-  ]
-}
+const EMPTY = 'empty'
 
 /**
  * New lesson or New course (canvas 167), as Flat's New score: its name, then the one thing it needs,
- * the course a lesson goes in or a course's cover; Create opens what was made in its editor. Open
+ * the course a lesson goes in or a course's cover; a course can start from one the app hands over
+ * (Start from), its lessons copied into Your lessons. Create opens what was made in its editor. Open
  * while `kind` is set.
  */
 export function NewOwnSheet({ kind, onClose }: { kind: OwnKind | null; onClose: () => void }) {
   const { t } = useTranslation('learn')
   const navigate = useNavigate()
   const store = useOwnLessonsStoreApi()
+  const locale = useLocale()
   const courses = useOwnLessons(selectOwnCourses)
   const [name, setName] = useState('')
   const [into, setInto] = useState<OwnCourseId | typeof NO_COURSE>(NO_COURSE)
   const [look, setLook] = useState<FolderLook>(OWN_COURSE_LOOK)
+  const [from, setFrom] = useState<string>(EMPTY)
+  const template = OWN_COURSE_TEMPLATES.find((each) => each.id === from)
+  const startFrom = (id: string) => {
+    const next = OWN_COURSE_TEMPLATES.find((each) => each.id === id)
+    setFrom(id)
+    setName(next ? localText(next.title, locale) : '')
+    setLook(next ? next.look : OWN_COURSE_LOOK)
+    setFailed(false)
+  }
   const [failed, setFailed] = useState(false)
   const close = (next: boolean) => {
     if (next) return
@@ -61,6 +58,7 @@ export function NewOwnSheet({ kind, onClose }: { kind: OwnKind | null; onClose: 
     setName('')
     setInto(NO_COURSE)
     setLook(OWN_COURSE_LOOK)
+    setFrom(EMPTY)
     setFailed(false)
   }
   const create = () => {
@@ -72,7 +70,9 @@ export function NewOwnSheet({ kind, onClose }: { kind: OwnKind | null; onClose: 
       void navigate({ to: '/lessons/$lessonId/edit', params: { lessonId: made } })
       return
     }
-    const made = createOwnCourse(store, name)
+    const made = template
+      ? createOwnCourseFrom(store, template, name, locale)
+      : createOwnCourse(store, name)
     if (!made) return setFailed(true)
     const course = store.getState().courses.find((each) => each.id === made)
     if (course) saveOwnCourse(store, { ...course, look })
@@ -107,8 +107,24 @@ export function NewOwnSheet({ kind, onClose }: { kind: OwnKind | null; onClose: 
         </SheetPart>
       ) : null}
       {kind === 'course' ? (
+        <SheetPart title={t('own.startFrom')}>
+          <ChoiceChips<string>
+            label={t('own.startFrom')}
+            value={from}
+            options={[
+              { value: EMPTY, label: t('own.emptyCourse') },
+              ...OWN_COURSE_TEMPLATES.map((each) => ({
+                value: each.id,
+                label: localText(each.title, locale),
+              })),
+            ]}
+            onChange={startFrom}
+          />
+        </SheetPart>
+      ) : null}
+      {kind === 'course' ? (
         <SheetPart title={t('own.cover')}>
-          <LookFields look={look} onChange={setLook} />
+          <LookFields look={look} onChange={setLook} pictures={false} paintLabel={false} covers />
         </SheetPart>
       ) : null}
     </NewSheet>

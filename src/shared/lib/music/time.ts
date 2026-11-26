@@ -48,11 +48,18 @@ export const isMeter = (value: unknown): value is Meter => {
   return match !== null && Number(match[1]) <= 16
 }
 
+/** A meter's two figures, read once per meter: the notation asks for them at every note. */
+const PARTS = new Map<Meter, { readonly count: number; readonly unit: MeterUnit }>()
+
 /** A meter's two figures. */
 export function meterParts(meter: Meter): { readonly count: number; readonly unit: MeterUnit } {
+  const kept = PARTS.get(meter)
+  if (kept) return kept
   const [count, unit] = meter.split('/').map(Number)
   const known = METER_UNITS.find((each) => each === unit)
-  return { count: count ?? 4, unit: known ?? 4 }
+  const parts = { count: count ?? 4, unit: known ?? 4 }
+  PARTS.set(meter, parts)
+  return parts
 }
 
 /** The meter of two figures, where they make one. */
@@ -214,6 +221,27 @@ export function beatsBefore(
     : 0
 }
 
+/** Whether bars open on a pickup (`beatsBefore`): a first bar shorter than its meter's. */
+export const opensOnPickup = (
+  bars: readonly { readonly beats: number; readonly meter?: Meter | undefined }[],
+  meter: Meter,
+): boolean => beatsBefore(bars, 0, meter) > 0
+
+/**
+ * Bar `index` (from 0) as a musician numbers it (Dorico, MuseScore, Sibelius): from the first full
+ * bar, a pickup counted with the bar it leads into.
+ */
+export const barNumber = (index: number, pickup: boolean): number =>
+  pickup ? Math.max(index, 1) : index + 1
+
+/** Bar `index` as it is printed and named: its number (`barNumber`), or `null` for a pickup. */
+export const printedBar = (index: number, pickup: boolean): number | null =>
+  pickup && index === 0 ? null : barNumber(index, pickup)
+
+/** How many bars a musician counts in `count` written: a pickup is not one. */
+export const barsCounted = (count: number, pickup: boolean): number =>
+  pickup ? Math.max(count - 1, 1) : count
+
 /** The notes a tempo mark may count (ADR 0114): a value, a dot after it where dotted. */
 export const TEMPO_UNITS = ['2', '2.', '4', '4.', '8', '8.', '16'] as const
 export type TempoUnit = (typeof TEMPO_UNITS)[number]
@@ -266,12 +294,16 @@ export const tempoMark = (tempo: number, unit: TempoUnit, meter: Meter): number 
 export const tempoOfMark = (mark: number, unit: TempoUnit, meter: Meter): number =>
   (mark * unitTicks(unit, meter)) / TICKS_PER_BEAT
 
+const UNIT_NOTES = new Map([
+  ['2', '\u{1D15E}'],
+  ['4', '\u{1D15F}'],
+  ['8', '\u{1D160}'],
+  ['16', '\u{1D161}'],
+])
+
 /** A tempo unit as music text: 𝅗𝅥, ♩, ♪ or 𝅘𝅥𝅯 (SMuFL's text notes), a dot after it where dotted. */
 export function unitNote(unit: TempoUnit): string {
-  const note =
-    { '2': '\u{1D15E}', '4': '\u{1D15F}', '8': '\u{1D160}', '16': '\u{1D161}' }[
-      unit.replace('.', '') as '2' | '4' | '8' | '16'
-    ] ?? '\u{1D15F}'
+  const note = UNIT_NOTES.get(unit.replace('.', '')) ?? '\u{1D15F}'
   return unit.endsWith('.') ? `${note}\u{1D16D}` : note
 }
 

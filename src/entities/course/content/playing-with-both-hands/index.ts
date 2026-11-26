@@ -9,6 +9,7 @@ const course: Course = {
   shelf: 'beginner',
   stage: 'beginner',
   title: { en: 'Playing with Both Hands', ru: 'Игра двумя руками' },
+  line: { en: 'Two hands, one piece', ru: 'Две руки, одна пьеса' },
   summary: {
     en: 'Bring the hands together in four steps: pass a tune from hand to hand, play a tune over a bass, play two notes in one hand, then your first chords, C, F and G.',
     ru: 'Соединяем руки за четыре шага: мелодия переходит из руки в руку, мелодия звучит над басом, одна рука берёт две ноты, и, наконец, первые аккорды C, F и G.',

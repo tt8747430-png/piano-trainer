@@ -46,7 +46,7 @@ export type StepVelocities = readonly number[]
 export type DrumGrid = Partial<Readonly<Record<DrumVoice, StepVelocities>>>
 
 /** What a bass note plays of the chord sounding: its root (its bass, over a slash), 5th, octave, 3rd, or a semitone to the next chord's root. */
-export type BassDegree = 'root' | 'fifth' | 'octave' | 'third' | 'approach'
+type BassDegree = 'root' | 'fifth' | 'octave' | 'third' | 'approach'
 export interface BassStep {
   readonly step: number
   readonly degree: BassDegree
@@ -193,7 +193,7 @@ function chordsOf(bar: PlayedBar): Sounding[] {
     chord: each.chord,
     from: beatsToTicks(each.from),
     to: beatsToTicks(each.from + each.beats),
-    struck: !each.held,
+    struck: true,
   }))
 }
 
@@ -257,7 +257,9 @@ function drumsOf(
   const steps = barSteps(meter)
   const hits: DrumHit[] = []
   if (crash) hits.push({ voice: 'crash', tick: bar.startTick, velocity: 0.9 })
-  for (const voice of Object.keys(grid) as DrumVoice[]) {
+  for (const key of Object.keys(grid)) {
+    const voice = DRUM_VOICES.find((each) => each === key)
+    if (!voice) continue
     const velocities = grid[voice] ?? []
     for (let k = 0; k < steps; k++) {
       const velocity = gridAt(velocities, k) ?? 0

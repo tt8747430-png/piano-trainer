@@ -4,6 +4,7 @@ import {
   DIAGRAM_INVERSIONS_VERSION,
 } from '@/entities/diagram-inversion'
 import { OWN_LESSONS_STORAGE_KEY, OWN_LESSONS_VERSION } from '@/entities/own-lessons'
+import { PAGE_LAYOUTS_STORAGE_KEY, PAGE_LAYOUTS_VERSION } from '@/entities/page-layout'
 import { PATTERNS_STORAGE_KEY, PATTERNS_VERSION } from '@/entities/pattern'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { PRACTICE_LIBRARY_STORAGE_KEY, PRACTICE_LIBRARY_VERSION } from '@/entities/practice-library'
@@ -25,8 +26,11 @@ const STORES = {
   [DIAGRAM_INVERSIONS_STORAGE_KEY]: DIAGRAM_INVERSIONS_VERSION,
   [PRACTICE_LIBRARY_STORAGE_KEY]: PRACTICE_LIBRARY_VERSION,
   [OWN_LESSONS_STORAGE_KEY]: OWN_LESSONS_VERSION,
+  [PAGE_LAYOUTS_STORAGE_KEY]: PAGE_LAYOUTS_VERSION,
 } as const
-export const SAVE_KEYS = Object.keys(STORES) as (keyof typeof STORES)[]
+type SaveKey = keyof typeof STORES
+/** The keys a backup holds, each a store's. */
+export const SAVE_KEYS = Object.keys(STORES).filter((key): key is SaveKey => key in STORES)
 
 const KIND = 'piano-trainer-backup'
 const FORMAT = 1

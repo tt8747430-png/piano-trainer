@@ -6,11 +6,11 @@
 //
 //   node .claude/skills/owner-way/scripts/shots.mjs <base-url> <out-dir> <step> [step…]
 //
-// A step is a route, then any acts after " >> ": `click=<name>` taps the button, link, tab or
+// A step is a route, then any acts after " >> ": `click=<name>` (or `click=<en>|<ru>`) taps the button, link, tab or
 // option of that name; `type=<text>` types into the field focused (a sheet's name); `scroll` shoots
 // the page part way and at its end; `wait=<ms>`.
 //   "/play/hot-cross-buns >> click=Original"   "/songs/folders/f1/settings >> click=Card style >> scroll"
-// SIZES=iphone-app,macbook-safari THEMES=light LANGUAGES=en narrow the matrix while iterating;
+// SIZES=iphone-app,macbook-safari THEMES=light narrow the matrix while iterating;
 // the whole matrix is the pass.
 import { mkdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -23,6 +23,9 @@ const ALL_SIZES = [
   { name: 'iphone-safari', width: 393, height: 695, touch: true },
   { name: 'iphone-side', width: 852, height: 393, touch: true, insets: { left: 59, right: 59, bottom: 21 }, standalone: true },
   { name: 'iphone-17-pro', width: 402, height: 874, touch: true, insets: { top: 62, bottom: 34 }, standalone: true },
+  // Pass 2's tablet widths (testing.md): an iPad mini upright, and a tablet or an opened foldable on its side.
+  { name: 'ipad-mini', width: 744, height: 1133, touch: true, standalone: true },
+  { name: 'tablet-side', width: 1024, height: 768, touch: true, standalone: true },
   { name: 'macbook-safari', width: 1710, height: 904, touch: false },
   { name: 'macbook-app', width: 1710, height: 984, touch: false },
 ]
@@ -34,7 +37,8 @@ const LANGUAGES = pick(
     { name: 'en', locale: 'en-GB' },
     { name: 'ru', locale: 'ru-RU' },
   ],
-  process.env.LANGUAGES,
+  // English only by default (owner, 2026-11-16: "stop testing in russian ... only in english"); LANGUAGES=ru still shoots it.
+  process.env.LANGUAGES ?? 'en',
 )
 
 const [base, out, ...steps] = process.argv.slice(2)
@@ -53,7 +57,9 @@ const settingsVersion = Number(
 // SEED=<file.json>: saved stores ({ "pt-own-lessons": "<its saved text>" }) a returning learner starts with.
 const seed = process.env.SEED ? JSON.parse((await import('node:fs')).readFileSync(process.env.SEED, 'utf8')) : {}
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM ?? '/opt/pw-browsers/chromium'
-const browser = await chromium.launch({ executablePath })
+// Through the session's proxy where there is one, so a page that reads the project's database can reach it.
+const proxy = process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY, bypass: 'localhost,127.0.0.1' } : undefined
+const browser = await chromium.launch({ executablePath, ...(proxy ? { proxy } : {}) })
 const problems = []
 let shots = 0
 
@@ -98,7 +104,7 @@ for (const size of SIZES) {
         await page.goto(new URL(route, base).href, { waitUntil: 'networkidle' })
         // A score is engraved after the page loads: wait for its notes, as the learner does.
         await page
-          .waitForFunction(() => !document.querySelector('[data-slot="score-skeleton"]') && (!document.querySelector('[data-slot="score"]') || document.querySelector('[data-slot="score"] svg g.note')), null, { timeout: 15000 })
+          .waitForFunction(() => ![...document.querySelectorAll('[data-slot="score-skeleton"]')].some((each) => { const box = each.getBoundingClientRect(); let top = 0, bottom = innerHeight; for (let up = each.parentElement; up; up = up.parentElement) { const style = getComputedStyle(up); if (/(auto|scroll|hidden)/.test(style.overflowY)) { const edge = up.getBoundingClientRect(); top = Math.max(top, edge.top); bottom = Math.min(bottom, edge.bottom) } } return box.bottom > top && box.top < bottom }) && (!document.querySelector('[data-slot="score"]') || document.querySelector('[data-slot="score"] svg g.note')), null, { timeout: 15000 })
           .catch(() => problems.push(`${route}: the score was not drawn within 15 s`))
         // Never a shot before the page has fully loaded (the owner's rule).
         for (const part of await settle(page)) problems.push(`${route}: never settled (${part})`)
@@ -119,18 +125,35 @@ for (const size of SIZES) {
         for (const act of acts) {
           const [kind, value] = act.split('=')
           if (kind === 'click') {
+            // `click=Add a chord|Добавить аккорд`: the name in each language, by the shot's language.
+            const names = value.split('|')
+            const name = (language.name === 'ru' ? names[1] : names[0]) ?? names[0]
             const target = page
-              .getByRole('button', { name: value, exact: true })
-              .or(page.getByRole('link', { name: value, exact: true }))
-              .or(page.getByRole('tab', { name: value, exact: true }))
-              .or(page.getByRole('radio', { name: value, exact: true }))
-              .or(page.getByRole('menuitem', { name: value, exact: true }))
+              .getByRole('button', { name, exact: true })
+              .or(page.getByRole('link', { name, exact: true }))
+              .or(page.getByRole('tab', { name, exact: true }))
+              .or(page.getByRole('radio', { name, exact: true }))
+              .or(page.getByRole('menuitem', { name, exact: true }))
+              .or(page.getByRole('switch', { name, exact: true }))
+              .or(page.getByRole('checkbox', { name, exact: true }))
               .first()
-            await target.click({ timeout: 5000 }).catch((error) => problems.push(`${label}: no “${value}” to tap (${error.message.split('\n')[0]})`))
+            await target.click({ timeout: 5000 }).catch((error) => problems.push(`${label}: no “${name}” to tap (${error.message.split('\n')[0]})`))
             await page.waitForTimeout(600)
           } else if (kind === 'type') {
             await page.keyboard.type(act.slice('type='.length))
             await page.waitForTimeout(300)
+          } else if (kind === 'slide') {
+            // Drags the open sheet's first slider from its middle to `value` of its width (0 to 1).
+            const box = await page.getByRole('slider').first().boundingBox()
+            if (!box) problems.push(`${label}: no slider to drag`)
+            else {
+              const y = box.y + box.height / 2
+              await page.mouse.move(box.x + box.width / 2, y)
+              await page.mouse.down()
+              await page.mouse.move(box.x + box.width * Number(value), y, { steps: 8 })
+              await page.mouse.up()
+              await page.waitForTimeout(600)
+            }
           } else if (kind === 'wait') await page.waitForTimeout(Number(value))
           else if (kind === 'scroll') scrolls = true
         }

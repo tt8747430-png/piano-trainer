@@ -43,7 +43,11 @@ export function FolderEditPanel({
         maxLength={FOLDER_NAME_MAX}
         onChange={(event) => onChange({ ...value, name: event.target.value })}
       />
-      <LookFields look={value.look} onChange={(look) => onChange({ ...value, look })} />
+      <LookFields
+        pictures={false}
+        look={value.look}
+        onChange={(look) => onChange({ ...value, look })}
+      />
     </form>
   )
 }

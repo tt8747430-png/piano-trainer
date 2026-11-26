@@ -1,0 +1,2490 @@
+{
+  "collection": "Intermediate",
+  "format": "Exported from ChordLab 1.0.6 built-in content. Pitch classes: 0=C..11=B. MIDI 60 = middle C. Beats are quarter notes.",
+  "voicings": [
+    {
+      "name": "Minor 9",
+      "chordlabQualityId": 34,
+      "rootPitchClass": 0,
+      "intervals": [
+        0,
+        3,
+        7,
+        10,
+        14
+      ],
+      "velocities": [
+        72,
+        54,
+        50,
+        30,
+        71
+      ],
+      "exampleMidiNotes": [
+        60,
+        63,
+        67,
+        70,
+        74
+      ],
+      "targetBpm": 110
+    },
+    {
+      "name": "Major 9",
+      "chordlabQualityId": 34,
+      "rootPitchClass": 0,
+      "intervals": [
+        0,
+        4,
+        7,
+        11,
+        14
+      ],
+      "velocities": [
+        68,
+        62,
+        60,
+        70,
+        83
+      ],
+      "exampleMidiNotes": [
+        60,
+        64,
+        67,
+        71,
+        74
+      ],
+      "targetBpm": 110
+    },
+    {
+      "name": "Dominant 9",
+      "chordlabQualityId": 34,
+      "rootPitchClass": 0,
+      "intervals": [
+        0,
+        4,
+        7,
+        10,
+        14
+      ],
+      "velocities": [
+        69,
+        68,
+        43,
+        47,
+        79
+      ],
+      "exampleMidiNotes": [
+        60,
+        64,
+        67,
+        70,
+        74
+      ],
+      "targetBpm": 110
+    },
+    {
+      "name": "6/9",
+      "chordlabQualityId": 34,
+      "rootPitchClass": 0,
+      "intervals": [
+        0,
+        4,
+        7,
+        9,
+        14
+      ],
+      "velocities": [
+        85,
+        73,
+        78,
+        77,
+        89
+      ],
+      "exampleMidiNotes": [
+        60,
+        64,
+        67,
+        69,
+        74
+      ],
+      "targetBpm": 110
+    },
+    {
+      "name": "Alt",
+      "chordlabQualityId": 34,
+      "rootPitchClass": 0,
+      "intervals": [
+        0,
+        4,
+        8,
+        10,
+        15
+      ],
+      "velocities": [
+        71,
+        83,
+        57,
+        49,
+        81
+      ],
+      "exampleMidiNotes": [
+        60,
+        64,
+        68,
+        70,
+        75
+      ],
+      "targetBpm": 110
+    },
+    {
+      "name": "A Nice Tritone Sub",
+      "chordlabQualityId": 34,
+      "rootPitchClass": 0,
+      "intervals": [
+        0,
+        4,
+        10,
+        14,
+        18,
+        21
+      ],
+      "velocities": [
+        33,
+        56,
+        49,
+        65,
+        61,
+        67
+      ],
+      "exampleMidiNotes": [
+        48,
+        52,
+        58,
+        62,
+        66,
+        69
+      ],
+      "targetBpm": 110
+    },
+    {
+      "name": "Minor 9",
+      "chordlabQualityId": 34,
+      "rootPitchClass": 0,
+      "intervals": [
+        0,
+        10,
+        14,
+        15,
+        19
+      ],
+      "velocities": [
+        83,
+        45,
+        83,
+        64,
+        85
+      ],
+      "exampleMidiNotes": [
+        48,
+        58,
+        62,
+        63,
+        67
+      ],
+      "targetBpm": 110
+    }
+  ],
+  "progressions": [
+    {
+      "name": "2-5-1 (With 9ths)",
+      "key": "C",
+      "keyPitchClass": 0,
+      "mode": "Major",
+      "bpm": 120.0,
+      "targetBpm": 100,
+      "timeSignature": [
+        4,
+        4
+      ],
+      "totalBeats": 8.0,
+      "chords": [
+        {
+          "startBeat": 0.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            50,
+            53,
+            57,
+            60,
+            64
+          ],
+          "noteNames": [
+            "D3",
+            "F3",
+            "A3",
+            "C4",
+            "E4"
+          ]
+        },
+        {
+          "startBeat": 2.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            43,
+            53,
+            57,
+            59,
+            64
+          ],
+          "noteNames": [
+            "G2",
+            "F3",
+            "A3",
+            "B3",
+            "E4"
+          ]
+        },
+        {
+          "startBeat": 4.0,
+          "durationBeats": 4.0,
+          "midiNotes": [
+            48,
+            52,
+            55,
+            59,
+            62
+          ],
+          "noteNames": [
+            "C3",
+            "E3",
+            "G3",
+            "B3",
+            "D4"
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "midiNote": 64,
+          "velocity": 88,
+          "startBeat": 0.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 50,
+          "velocity": 76,
+          "startBeat": 0.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 57,
+          "velocity": 70,
+          "startBeat": 0.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 88,
+          "startBeat": 0.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 53,
+          "velocity": 64,
+          "startBeat": 0.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 43,
+          "velocity": 83,
+          "startBeat": 2.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 64,
+          "velocity": 89,
+          "startBeat": 2.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 59,
+          "velocity": 85,
+          "startBeat": 2.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 57,
+          "velocity": 80,
+          "startBeat": 2.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 53,
+          "velocity": 74,
+          "startBeat": 2.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 48,
+          "velocity": 79,
+          "startBeat": 4.0,
+          "durationBeats": 4.0
+        },
+        {
+          "midiNote": 62,
+          "velocity": 70,
+          "startBeat": 4.0,
+          "durationBeats": 4.0
+        },
+        {
+          "midiNote": 59,
+          "velocity": 82,
+          "startBeat": 4.0,
+          "durationBeats": 4.0
+        },
+        {
+          "midiNote": 52,
+          "velocity": 62,
+          "startBeat": 4.0,
+          "durationBeats": 4.0
+        },
+        {
+          "midiNote": 55,
+          "velocity": 79,
+          "startBeat": 4.0,
+          "durationBeats": 4.0
+        }
+      ]
+    },
+    {
+      "name": "Just the Two of Us",
+      "key": "F",
+      "keyPitchClass": 5,
+      "mode": "Minor",
+      "bpm": 90.0,
+      "targetBpm": 100,
+      "timeSignature": [
+        4,
+        4
+      ],
+      "totalBeats": 32.0,
+      "chords": [
+        {
+          "startBeat": 0.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            49,
+            53,
+            56,
+            60,
+            63
+          ],
+          "noteNames": [
+            "C#3",
+            "F3",
+            "Ab3",
+            "C4",
+            "Eb4"
+          ]
+        },
+        {
+          "startBeat": 2.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            48,
+            52,
+            56,
+            58,
+            63
+          ],
+          "noteNames": [
+            "C3",
+            "E3",
+            "Ab3",
+            "Bb3",
+            "Eb4"
+          ]
+        },
+        {
+          "startBeat": 4.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            53,
+            56,
+            60,
+            63,
+            67
+          ],
+          "noteNames": [
+            "F3",
+            "Ab3",
+            "C4",
+            "Eb4",
+            "G4"
+          ]
+        },
+        {
+          "startBeat": 6.0,
+          "durationBeats": 1.0,
+          "midiNotes": [
+            51,
+            54,
+            58,
+            61,
+            65
+          ],
+          "noteNames": [
+            "Eb3",
+            "F#3",
+            "Bb3",
+            "C#4",
+            "F4"
+          ]
+        },
+        {
+          "startBeat": 7.0,
+          "durationBeats": 1.0,
+          "midiNotes": [
+            44,
+            54,
+            58,
+            60,
+            65
+          ],
+          "noteNames": [
+            "Ab2",
+            "F#3",
+            "Bb3",
+            "C4",
+            "F4"
+          ]
+        },
+        {
+          "startBeat": 8.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            49,
+            53,
+            56,
+            60,
+            63
+          ],
+          "noteNames": [
+            "C#3",
+            "F3",
+            "Ab3",
+            "C4",
+            "Eb4"
+          ]
+        },
+        {
+          "startBeat": 10.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            48,
+            52,
+            56,
+            58,
+            63
+          ],
+          "noteNames": [
+            "C3",
+            "E3",
+            "Ab3",
+            "Bb3",
+            "Eb4"
+          ]
+        },
+        {
+          "startBeat": 12.0,
+          "durationBeats": 1.0,
+          "midiNotes": [
+            53,
+            56,
+            60,
+            63,
+            67
+          ],
+          "noteNames": [
+            "F3",
+            "Ab3",
+            "C4",
+            "Eb4",
+            "G4"
+          ]
+        },
+        {
+          "startBeat": 13.0,
+          "durationBeats": 1.0,
+          "midiNotes": [
+            52,
+            55,
+            59,
+            62,
+            66
+          ],
+          "noteNames": [
+            "E3",
+            "G3",
+            "B3",
+            "D4",
+            "F#4"
+          ]
+        },
+        {
+          "startBeat": 14.0,
+          "durationBeats": 1.0,
+          "midiNotes": [
+            51,
+            54,
+            58,
+            61,
+            65
+          ],
+          "noteNames": [
+            "Eb3",
+            "F#3",
+            "Bb3",
+            "C#4",
+            "F4"
+          ]
+        },
+        {
+          "startBeat": 15.0,
+          "durationBeats": 1.0,
+          "midiNotes": [
+            44,
+            54,
+            58,
+            60,
+            65
+          ],
+          "noteNames": [
+            "Ab2",
+            "F#3",
+            "Bb3",
+            "C4",
+            "F4"
+          ]
+        },
+        {
+          "startBeat": 16.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            49,
+            53,
+            56,
+            60,
+            63
+          ],
+          "noteNames": [
+            "C#3",
+            "F3",
+            "Ab3",
+            "C4",
+            "Eb4"
+          ]
+        },
+        {
+          "startBeat": 18.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            48,
+            52,
+            56,
+            58,
+            63
+          ],
+          "noteNames": [
+            "C3",
+            "E3",
+            "Ab3",
+            "Bb3",
+            "Eb4"
+          ]
+        },
+        {
+          "startBeat": 20.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            53,
+            56,
+            60,
+            63,
+            67
+          ],
+          "noteNames": [
+            "F3",
+            "Ab3",
+            "C4",
+            "Eb4",
+            "G4"
+          ]
+        },
+        {
+          "startBeat": 22.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            46,
+            56,
+            60,
+            62,
+            67
+          ],
+          "noteNames": [
+            "Bb2",
+            "Ab3",
+            "C4",
+            "D4",
+            "G4"
+          ]
+        },
+        {
+          "startBeat": 24.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            49,
+            53,
+            56,
+            60,
+            63
+          ],
+          "noteNames": [
+            "C#3",
+            "F3",
+            "Ab3",
+            "C4",
+            "Eb4"
+          ]
+        },
+        {
+          "startBeat": 26.0,
+          "durationBeats": 2.0,
+          "midiNotes": [
+            48,
+            52,
+            56,
+            58,
+            63
+          ],
+          "noteNames": [
+            "C3",
+            "E3",
+            "Ab3",
+            "Bb3",
+            "Eb4"
+          ]
+        },
+        {
+          "startBeat": 28.0,
+          "durationBeats": 4.0,
+          "midiNotes": [
+            53,
+            56,
+            60,
+            63,
+            67
+          ],
+          "noteNames": [
+            "F3",
+            "Ab3",
+            "C4",
+            "Eb4",
+            "G4"
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "midiNote": 49,
+          "velocity": 56,
+          "startBeat": 0.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 53,
+          "velocity": 62,
+          "startBeat": 0.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 39,
+          "startBeat": 0.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 77,
+          "startBeat": 0.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 53,
+          "startBeat": 0.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 48,
+          "velocity": 59,
+          "startBeat": 2.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 61,
+          "startBeat": 2.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 35,
+          "startBeat": 2.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 52,
+          "velocity": 51,
+          "startBeat": 2.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 58,
+          "velocity": 38,
+          "startBeat": 2.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 53,
+          "velocity": 52,
+          "startBeat": 4.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 21,
+          "startBeat": 4.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 65,
+          "startBeat": 4.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 28,
+          "startBeat": 4.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 67,
+          "velocity": 80,
+          "startBeat": 4.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 51,
+          "velocity": 46,
+          "startBeat": 6.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 65,
+          "velocity": 70,
+          "startBeat": 6.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 61,
+          "velocity": 45,
+          "startBeat": 6.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 54,
+          "velocity": 30,
+          "startBeat": 6.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 58,
+          "velocity": 48,
+          "startBeat": 6.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 44,
+          "velocity": 41,
+          "startBeat": 7.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 65,
+          "velocity": 63,
+          "startBeat": 7.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 54,
+          "velocity": 34,
+          "startBeat": 7.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 67,
+          "startBeat": 7.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 58,
+          "velocity": 30,
+          "startBeat": 7.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 49,
+          "velocity": 47,
+          "startBeat": 8.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 71,
+          "startBeat": 8.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 53,
+          "startBeat": 8.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 53,
+          "velocity": 37,
+          "startBeat": 8.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 34,
+          "startBeat": 8.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 48,
+          "velocity": 60,
+          "startBeat": 10.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 46,
+          "startBeat": 10.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 58,
+          "velocity": 37,
+          "startBeat": 10.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 23,
+          "startBeat": 10.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 52,
+          "velocity": 36,
+          "startBeat": 10.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 48,
+          "startBeat": 12.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 53,
+          "velocity": 58,
+          "startBeat": 12.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 42,
+          "startBeat": 12.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 67,
+          "velocity": 75,
+          "startBeat": 12.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 60,
+          "startBeat": 12.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 52,
+          "velocity": 32,
+          "startBeat": 13.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 66,
+          "velocity": 40,
+          "startBeat": 13.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 62,
+          "velocity": 41,
+          "startBeat": 13.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 59,
+          "velocity": 43,
+          "startBeat": 13.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 55,
+          "velocity": 37,
+          "startBeat": 13.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 61,
+          "velocity": 49,
+          "startBeat": 14.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 65,
+          "velocity": 51,
+          "startBeat": 14.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 58,
+          "velocity": 35,
+          "startBeat": 14.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 51,
+          "velocity": 39,
+          "startBeat": 14.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 54,
+          "velocity": 34,
+          "startBeat": 14.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 65,
+          "velocity": 65,
+          "startBeat": 15.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 71,
+          "startBeat": 15.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 54,
+          "velocity": 35,
+          "startBeat": 15.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 58,
+          "velocity": 44,
+          "startBeat": 15.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 44,
+          "velocity": 18,
+          "startBeat": 15.0,
+          "durationBeats": 1.0
+        },
+        {
+          "midiNote": 49,
+          "velocity": 50,
+          "startBeat": 16.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 25,
+          "startBeat": 16.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 53,
+          "velocity": 33,
+          "startBeat": 16.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 47,
+          "startBeat": 16.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 68,
+          "startBeat": 16.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 52,
+          "velocity": 53,
+          "startBeat": 18.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 51,
+          "startBeat": 18.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 48,
+          "velocity": 44,
+          "startBeat": 18.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 58,
+          "velocity": 35,
+          "startBeat": 18.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 30,
+          "startBeat": 18.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 53,
+          "velocity": 35,
+          "startBeat": 20.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 32,
+          "startBeat": 20.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 48,
+          "startBeat": 20.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 48,
+          "startBeat": 20.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 67,
+          "velocity": 86,
+          "startBeat": 20.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 47,
+          "startBeat": 22.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 67,
+          "velocity": 69,
+          "startBeat": 22.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 65,
+          "startBeat": 22.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 62,
+          "velocity": 72,
+          "startBeat": 22.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 46,
+          "velocity": 39,
+          "startBeat": 22.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 49,
+          "velocity": 54,
+          "startBeat": 24.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 45,
+          "startBeat": 24.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 70,
+          "startBeat": 24.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 61,
+          "startBeat": 24.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 53,
+          "velocity": 40,
+          "startBeat": 24.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 48,
+          "velocity": 62,
+          "startBeat": 26.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 52,
+          "velocity": 59,
+          "startBeat": 26.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 56,
+          "startBeat": 26.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 36,
+          "startBeat": 26.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 58,
+          "velocity": 41,
+          "startBeat": 26.0,
+          "durationBeats": 2.0
+        },
+        {
+          "midiNote": 53,
+          "velocity": 33,
+          "startBeat": 28.0,
+          "durationBeats": 4.0
+        },
+        {
+          "midiNote": 56,
+          "velocity": 28,
+          "startBeat": 28.0,
+          "durationBeats": 4.0
+        },
+        {
+          "midiNote": 60,
+          "velocity": 38,
+          "startBeat": 28.0,
+          "durationBeats": 4.0
+        },
+        {
+          "midiNote": 63,
+          "velocity": 36,
+          "startBeat": 28.0,
+          "durationBeats": 4.0
+        },
+        {
+          "midiNote": 67,
+          "velocity": 68,
+          "startBeat": 28.0,
+          "durationBeats": 4.0
+        }
+      ]
+    }
+  ],
+  "melodies": [
+    {
+      "name": "Minor Pentatonic",
+      "key": "C",
+      "keyPitchClass": 0,
+      "bpm": 90.0,
+      "targetBpm": 100,
+      "timeSignature": [
+        4,
+        4
+      ],
+      "totalBeats": 12.0,
+      "notes": [
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 0.0,
+          "durationBeats": 0.5,
+          "velocity": 83,
+          "exampleMidiNote": 48
+        },
+        {
+          "intervalFromKeyRoot": -9,
+          "startBeat": 0.5,
+          "durationBeats": 0.5,
+          "velocity": 71,
+          "exampleMidiNote": 51
+        },
+        {
+          "intervalFromKeyRoot": -7,
+          "startBeat": 1.0,
+          "durationBeats": 0.5,
+          "velocity": 71,
+          "exampleMidiNote": 53
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 1.5,
+          "durationBeats": 0.5,
+          "velocity": 79,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -2,
+          "startBeat": 2.0,
+          "durationBeats": 0.5,
+          "velocity": 63,
+          "exampleMidiNote": 58
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 2.5,
+          "durationBeats": 0.5,
+          "velocity": 71,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": 3,
+          "startBeat": 3.0,
+          "durationBeats": 0.5,
+          "velocity": 69,
+          "exampleMidiNote": 63
+        },
+        {
+          "intervalFromKeyRoot": 5,
+          "startBeat": 3.5,
+          "durationBeats": 0.5,
+          "velocity": 69,
+          "exampleMidiNote": 65
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 4.0,
+          "durationBeats": 0.5,
+          "velocity": 69,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 10,
+          "startBeat": 4.5,
+          "durationBeats": 0.5,
+          "velocity": 66,
+          "exampleMidiNote": 70
+        },
+        {
+          "intervalFromKeyRoot": 12,
+          "startBeat": 5.0,
+          "durationBeats": 0.5,
+          "velocity": 66,
+          "exampleMidiNote": 72
+        },
+        {
+          "intervalFromKeyRoot": 10,
+          "startBeat": 5.5,
+          "durationBeats": 0.5,
+          "velocity": 66,
+          "exampleMidiNote": 70
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 6.0,
+          "durationBeats": 0.5,
+          "velocity": 66,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 5,
+          "startBeat": 6.5,
+          "durationBeats": 0.5,
+          "velocity": 66,
+          "exampleMidiNote": 65
+        },
+        {
+          "intervalFromKeyRoot": 3,
+          "startBeat": 7.0,
+          "durationBeats": 0.5,
+          "velocity": 67,
+          "exampleMidiNote": 63
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 7.5,
+          "durationBeats": 0.5,
+          "velocity": 73,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": -2,
+          "startBeat": 8.0,
+          "durationBeats": 0.5,
+          "velocity": 77,
+          "exampleMidiNote": 58
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 8.5,
+          "durationBeats": 0.5,
+          "velocity": 69,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -7,
+          "startBeat": 9.0,
+          "durationBeats": 0.5,
+          "velocity": 67,
+          "exampleMidiNote": 53
+        },
+        {
+          "intervalFromKeyRoot": -9,
+          "startBeat": 9.5,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 51
+        },
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 10.0,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 48
+        }
+      ]
+    },
+    {
+      "name": "Major Pentatonic",
+      "key": "C",
+      "keyPitchClass": 0,
+      "bpm": 90.0,
+      "targetBpm": 100,
+      "timeSignature": [
+        4,
+        4
+      ],
+      "totalBeats": 12.0,
+      "notes": [
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 0.0,
+          "durationBeats": 0.5,
+          "velocity": 88,
+          "exampleMidiNote": 48
+        },
+        {
+          "intervalFromKeyRoot": -10,
+          "startBeat": 0.5,
+          "durationBeats": 0.5,
+          "velocity": 86,
+          "exampleMidiNote": 50
+        },
+        {
+          "intervalFromKeyRoot": -8,
+          "startBeat": 1.0,
+          "durationBeats": 0.5,
+          "velocity": 81,
+          "exampleMidiNote": 52
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 1.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -3,
+          "startBeat": 2.0,
+          "durationBeats": 0.5,
+          "velocity": 74,
+          "exampleMidiNote": 57
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 2.5,
+          "durationBeats": 0.5,
+          "velocity": 58,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": 2,
+          "startBeat": 3.0,
+          "durationBeats": 0.5,
+          "velocity": 86,
+          "exampleMidiNote": 62
+        },
+        {
+          "intervalFromKeyRoot": 4,
+          "startBeat": 3.5,
+          "durationBeats": 0.5,
+          "velocity": 76,
+          "exampleMidiNote": 64
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 4.0,
+          "durationBeats": 0.5,
+          "velocity": 69,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 9,
+          "startBeat": 4.5,
+          "durationBeats": 0.5,
+          "velocity": 74,
+          "exampleMidiNote": 69
+        },
+        {
+          "intervalFromKeyRoot": 12,
+          "startBeat": 5.0,
+          "durationBeats": 0.5,
+          "velocity": 101,
+          "exampleMidiNote": 72
+        },
+        {
+          "intervalFromKeyRoot": 9,
+          "startBeat": 5.5,
+          "durationBeats": 0.5,
+          "velocity": 75,
+          "exampleMidiNote": 69
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 6.0,
+          "durationBeats": 0.5,
+          "velocity": 74,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 4,
+          "startBeat": 6.5,
+          "durationBeats": 0.5,
+          "velocity": 89,
+          "exampleMidiNote": 64
+        },
+        {
+          "intervalFromKeyRoot": 2,
+          "startBeat": 7.0,
+          "durationBeats": 0.5,
+          "velocity": 84,
+          "exampleMidiNote": 62
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 7.5,
+          "durationBeats": 0.5,
+          "velocity": 77,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": -3,
+          "startBeat": 8.0,
+          "durationBeats": 0.5,
+          "velocity": 76,
+          "exampleMidiNote": 57
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 8.5,
+          "durationBeats": 0.5,
+          "velocity": 96,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -8,
+          "startBeat": 9.0,
+          "durationBeats": 0.5,
+          "velocity": 74,
+          "exampleMidiNote": 52
+        },
+        {
+          "intervalFromKeyRoot": -10,
+          "startBeat": 9.5,
+          "durationBeats": 0.5,
+          "velocity": 74,
+          "exampleMidiNote": 50
+        },
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 10.0,
+          "durationBeats": 0.5,
+          "velocity": 73,
+          "exampleMidiNote": 48
+        }
+      ]
+    },
+    {
+      "name": "Minor Blues",
+      "key": "C",
+      "keyPitchClass": 0,
+      "bpm": 90.0,
+      "targetBpm": 100,
+      "timeSignature": [
+        4,
+        4
+      ],
+      "totalBeats": 16.0,
+      "notes": [
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 0.0,
+          "durationBeats": 0.5,
+          "velocity": 76,
+          "exampleMidiNote": 48
+        },
+        {
+          "intervalFromKeyRoot": -9,
+          "startBeat": 0.5,
+          "durationBeats": 0.5,
+          "velocity": 76,
+          "exampleMidiNote": 51
+        },
+        {
+          "intervalFromKeyRoot": -7,
+          "startBeat": 1.0,
+          "durationBeats": 0.5,
+          "velocity": 76,
+          "exampleMidiNote": 53
+        },
+        {
+          "intervalFromKeyRoot": -6,
+          "startBeat": 1.5,
+          "durationBeats": 0.5,
+          "velocity": 76,
+          "exampleMidiNote": 54
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 2.0,
+          "durationBeats": 0.5,
+          "velocity": 73,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -2,
+          "startBeat": 2.5,
+          "durationBeats": 0.5,
+          "velocity": 71,
+          "exampleMidiNote": 58
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 3.0,
+          "durationBeats": 0.5,
+          "velocity": 59,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": 3,
+          "startBeat": 3.5,
+          "durationBeats": 0.5,
+          "velocity": 71,
+          "exampleMidiNote": 63
+        },
+        {
+          "intervalFromKeyRoot": 5,
+          "startBeat": 4.0,
+          "durationBeats": 0.5,
+          "velocity": 64,
+          "exampleMidiNote": 65
+        },
+        {
+          "intervalFromKeyRoot": 6,
+          "startBeat": 4.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 66
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 5.0,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 10,
+          "startBeat": 5.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 70
+        },
+        {
+          "intervalFromKeyRoot": 12,
+          "startBeat": 6.0,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 72
+        },
+        {
+          "intervalFromKeyRoot": 10,
+          "startBeat": 6.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 70
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 7.0,
+          "durationBeats": 0.5,
+          "velocity": 75,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 6,
+          "startBeat": 7.5,
+          "durationBeats": 0.5,
+          "velocity": 69,
+          "exampleMidiNote": 66
+        },
+        {
+          "intervalFromKeyRoot": 5,
+          "startBeat": 8.0,
+          "durationBeats": 0.5,
+          "velocity": 72,
+          "exampleMidiNote": 65
+        },
+        {
+          "intervalFromKeyRoot": 3,
+          "startBeat": 8.5,
+          "durationBeats": 0.5,
+          "velocity": 59,
+          "exampleMidiNote": 63
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 9.0,
+          "durationBeats": 0.5,
+          "velocity": 59,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": -2,
+          "startBeat": 9.5,
+          "durationBeats": 0.5,
+          "velocity": 59,
+          "exampleMidiNote": 58
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 10.0,
+          "durationBeats": 0.5,
+          "velocity": 61,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -6,
+          "startBeat": 10.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 54
+        },
+        {
+          "intervalFromKeyRoot": -7,
+          "startBeat": 11.0,
+          "durationBeats": 0.5,
+          "velocity": 69,
+          "exampleMidiNote": 53
+        },
+        {
+          "intervalFromKeyRoot": -9,
+          "startBeat": 11.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 51
+        },
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 12.0,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 48
+        }
+      ]
+    },
+    {
+      "name": "Major Bebop",
+      "key": "C",
+      "keyPitchClass": 0,
+      "bpm": 90.0,
+      "targetBpm": 90,
+      "timeSignature": [
+        4,
+        4
+      ],
+      "totalBeats": 20.0,
+      "notes": [
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 0.0,
+          "durationBeats": 0.5,
+          "velocity": 84,
+          "exampleMidiNote": 48
+        },
+        {
+          "intervalFromKeyRoot": -10,
+          "startBeat": 0.5,
+          "durationBeats": 0.5,
+          "velocity": 80,
+          "exampleMidiNote": 50
+        },
+        {
+          "intervalFromKeyRoot": -8,
+          "startBeat": 1.0,
+          "durationBeats": 0.5,
+          "velocity": 79,
+          "exampleMidiNote": 52
+        },
+        {
+          "intervalFromKeyRoot": -7,
+          "startBeat": 1.5,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 53
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 2.0,
+          "durationBeats": 0.5,
+          "velocity": 86,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -4,
+          "startBeat": 2.5,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 56
+        },
+        {
+          "intervalFromKeyRoot": -3,
+          "startBeat": 3.0,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 57
+        },
+        {
+          "intervalFromKeyRoot": -1,
+          "startBeat": 3.5,
+          "durationBeats": 0.5,
+          "velocity": 83,
+          "exampleMidiNote": 59
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 4.0,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": 2,
+          "startBeat": 4.5,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 62
+        },
+        {
+          "intervalFromKeyRoot": 4,
+          "startBeat": 5.0,
+          "durationBeats": 0.5,
+          "velocity": 74,
+          "exampleMidiNote": 64
+        },
+        {
+          "intervalFromKeyRoot": 5,
+          "startBeat": 5.5,
+          "durationBeats": 0.5,
+          "velocity": 74,
+          "exampleMidiNote": 65
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 6.0,
+          "durationBeats": 0.5,
+          "velocity": 71,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 8,
+          "startBeat": 6.5,
+          "durationBeats": 0.5,
+          "velocity": 72,
+          "exampleMidiNote": 68
+        },
+        {
+          "intervalFromKeyRoot": 9,
+          "startBeat": 7.0,
+          "durationBeats": 0.5,
+          "velocity": 76,
+          "exampleMidiNote": 69
+        },
+        {
+          "intervalFromKeyRoot": 11,
+          "startBeat": 7.5,
+          "durationBeats": 0.5,
+          "velocity": 67,
+          "exampleMidiNote": 71
+        },
+        {
+          "intervalFromKeyRoot": 12,
+          "startBeat": 8.0,
+          "durationBeats": 0.5,
+          "velocity": 67,
+          "exampleMidiNote": 72
+        },
+        {
+          "intervalFromKeyRoot": 11,
+          "startBeat": 8.5,
+          "durationBeats": 0.5,
+          "velocity": 67,
+          "exampleMidiNote": 71
+        },
+        {
+          "intervalFromKeyRoot": 9,
+          "startBeat": 9.0,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 69
+        },
+        {
+          "intervalFromKeyRoot": 8,
+          "startBeat": 9.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 68
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 10.0,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 5,
+          "startBeat": 10.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 65
+        },
+        {
+          "intervalFromKeyRoot": 4,
+          "startBeat": 11.0,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 64
+        },
+        {
+          "intervalFromKeyRoot": 2,
+          "startBeat": 11.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 62
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 12.0,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": -1,
+          "startBeat": 12.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 59
+        },
+        {
+          "intervalFromKeyRoot": -3,
+          "startBeat": 13.0,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 57
+        },
+        {
+          "intervalFromKeyRoot": -4,
+          "startBeat": 13.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 56
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 14.0,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -7,
+          "startBeat": 14.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 53
+        },
+        {
+          "intervalFromKeyRoot": -8,
+          "startBeat": 15.0,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 52
+        },
+        {
+          "intervalFromKeyRoot": -10,
+          "startBeat": 15.5,
+          "durationBeats": 0.5,
+          "velocity": 68,
+          "exampleMidiNote": 50
+        },
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 16.0,
+          "durationBeats": 1.0,
+          "velocity": 68,
+          "exampleMidiNote": 48
+        }
+      ]
+    },
+    {
+      "name": "Minor Bebop",
+      "key": "C",
+      "keyPitchClass": 0,
+      "bpm": 90.0,
+      "targetBpm": 90,
+      "timeSignature": [
+        4,
+        4
+      ],
+      "totalBeats": 18.0,
+      "notes": [
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 0.0,
+          "durationBeats": 0.5,
+          "velocity": 88,
+          "exampleMidiNote": 48
+        },
+        {
+          "intervalFromKeyRoot": -10,
+          "startBeat": 0.5,
+          "durationBeats": 0.5,
+          "velocity": 86,
+          "exampleMidiNote": 50
+        },
+        {
+          "intervalFromKeyRoot": -9,
+          "startBeat": 1.0,
+          "durationBeats": 0.5,
+          "velocity": 74,
+          "exampleMidiNote": 51
+        },
+        {
+          "intervalFromKeyRoot": -7,
+          "startBeat": 1.5,
+          "durationBeats": 0.5,
+          "velocity": 59,
+          "exampleMidiNote": 53
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 2.0,
+          "durationBeats": 0.5,
+          "velocity": 74,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -4,
+          "startBeat": 2.5,
+          "durationBeats": 0.5,
+          "velocity": 52,
+          "exampleMidiNote": 56
+        },
+        {
+          "intervalFromKeyRoot": -3,
+          "startBeat": 3.0,
+          "durationBeats": 0.5,
+          "velocity": 80,
+          "exampleMidiNote": 57
+        },
+        {
+          "intervalFromKeyRoot": -1,
+          "startBeat": 3.5,
+          "durationBeats": 0.5,
+          "velocity": 92,
+          "exampleMidiNote": 59
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 4.0,
+          "durationBeats": 0.5,
+          "velocity": 83,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": 2,
+          "startBeat": 4.5,
+          "durationBeats": 0.5,
+          "velocity": 79,
+          "exampleMidiNote": 62
+        },
+        {
+          "intervalFromKeyRoot": 3,
+          "startBeat": 5.0,
+          "durationBeats": 0.5,
+          "velocity": 80,
+          "exampleMidiNote": 63
+        },
+        {
+          "intervalFromKeyRoot": 5,
+          "startBeat": 5.5,
+          "durationBeats": 0.5,
+          "velocity": 82,
+          "exampleMidiNote": 65
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 6.0,
+          "durationBeats": 0.5,
+          "velocity": 85,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 8,
+          "startBeat": 6.5,
+          "durationBeats": 0.5,
+          "velocity": 91,
+          "exampleMidiNote": 68
+        },
+        {
+          "intervalFromKeyRoot": 9,
+          "startBeat": 7.0,
+          "durationBeats": 0.5,
+          "velocity": 82,
+          "exampleMidiNote": 69
+        },
+        {
+          "intervalFromKeyRoot": 11,
+          "startBeat": 7.5,
+          "durationBeats": 0.5,
+          "velocity": 74,
+          "exampleMidiNote": 71
+        },
+        {
+          "intervalFromKeyRoot": 12,
+          "startBeat": 8.0,
+          "durationBeats": 0.5,
+          "velocity": 102,
+          "exampleMidiNote": 72
+        },
+        {
+          "intervalFromKeyRoot": 11,
+          "startBeat": 8.5,
+          "durationBeats": 0.5,
+          "velocity": 76,
+          "exampleMidiNote": 71
+        },
+        {
+          "intervalFromKeyRoot": 9,
+          "startBeat": 9.0,
+          "durationBeats": 0.5,
+          "velocity": 73,
+          "exampleMidiNote": 69
+        },
+        {
+          "intervalFromKeyRoot": 8,
+          "startBeat": 9.5,
+          "durationBeats": 0.5,
+          "velocity": 71,
+          "exampleMidiNote": 68
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 10.0,
+          "durationBeats": 0.5,
+          "velocity": 79,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 5,
+          "startBeat": 10.5,
+          "durationBeats": 0.5,
+          "velocity": 100,
+          "exampleMidiNote": 65
+        },
+        {
+          "intervalFromKeyRoot": 3,
+          "startBeat": 11.0,
+          "durationBeats": 0.5,
+          "velocity": 70,
+          "exampleMidiNote": 63
+        },
+        {
+          "intervalFromKeyRoot": 2,
+          "startBeat": 11.5,
+          "durationBeats": 0.5,
+          "velocity": 72,
+          "exampleMidiNote": 62
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 12.0,
+          "durationBeats": 0.5,
+          "velocity": 76,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": -1,
+          "startBeat": 12.5,
+          "durationBeats": 0.5,
+          "velocity": 86,
+          "exampleMidiNote": 59
+        },
+        {
+          "intervalFromKeyRoot": -3,
+          "startBeat": 13.0,
+          "durationBeats": 0.5,
+          "velocity": 70,
+          "exampleMidiNote": 57
+        },
+        {
+          "intervalFromKeyRoot": -4,
+          "startBeat": 13.5,
+          "durationBeats": 0.5,
+          "velocity": 76,
+          "exampleMidiNote": 56
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 14.0,
+          "durationBeats": 0.5,
+          "velocity": 79,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -7,
+          "startBeat": 14.5,
+          "durationBeats": 0.5,
+          "velocity": 67,
+          "exampleMidiNote": 53
+        },
+        {
+          "intervalFromKeyRoot": -9,
+          "startBeat": 15.0,
+          "durationBeats": 0.5,
+          "velocity": 72,
+          "exampleMidiNote": 51
+        },
+        {
+          "intervalFromKeyRoot": -10,
+          "startBeat": 15.5,
+          "durationBeats": 0.5,
+          "velocity": 61,
+          "exampleMidiNote": 50
+        },
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 16.0,
+          "durationBeats": 0.5,
+          "velocity": 103,
+          "exampleMidiNote": 48
+        }
+      ]
+    },
+    {
+      "name": "Dominant Bebop",
+      "key": "C",
+      "keyPitchClass": 0,
+      "bpm": 90.0,
+      "targetBpm": 90,
+      "timeSignature": [
+        4,
+        4
+      ],
+      "totalBeats": 20.0,
+      "notes": [
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 0.0,
+          "durationBeats": 0.5,
+          "velocity": 80,
+          "exampleMidiNote": 48
+        },
+        {
+          "intervalFromKeyRoot": -10,
+          "startBeat": 0.5,
+          "durationBeats": 0.5,
+          "velocity": 78,
+          "exampleMidiNote": 50
+        },
+        {
+          "intervalFromKeyRoot": -8,
+          "startBeat": 1.0,
+          "durationBeats": 0.5,
+          "velocity": 85,
+          "exampleMidiNote": 52
+        },
+        {
+          "intervalFromKeyRoot": -7,
+          "startBeat": 1.5,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 53
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 2.0,
+          "durationBeats": 0.5,
+          "velocity": 82,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -3,
+          "startBeat": 2.5,
+          "durationBeats": 0.5,
+          "velocity": 85,
+          "exampleMidiNote": 57
+        },
+        {
+          "intervalFromKeyRoot": -2,
+          "startBeat": 3.0,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 58
+        },
+        {
+          "intervalFromKeyRoot": -1,
+          "startBeat": 3.5,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 59
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 4.0,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": 2,
+          "startBeat": 4.5,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 62
+        },
+        {
+          "intervalFromKeyRoot": 4,
+          "startBeat": 5.0,
+          "durationBeats": 0.5,
+          "velocity": 65,
+          "exampleMidiNote": 64
+        },
+        {
+          "intervalFromKeyRoot": 5,
+          "startBeat": 5.5,
+          "durationBeats": 0.5,
+          "velocity": 66,
+          "exampleMidiNote": 65
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 6.0,
+          "durationBeats": 0.5,
+          "velocity": 71,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 9,
+          "startBeat": 6.5,
+          "durationBeats": 0.5,
+          "velocity": 71,
+          "exampleMidiNote": 69
+        },
+        {
+          "intervalFromKeyRoot": 10,
+          "startBeat": 7.0,
+          "durationBeats": 0.5,
+          "velocity": 71,
+          "exampleMidiNote": 70
+        },
+        {
+          "intervalFromKeyRoot": 11,
+          "startBeat": 7.5,
+          "durationBeats": 0.5,
+          "velocity": 72,
+          "exampleMidiNote": 71
+        },
+        {
+          "intervalFromKeyRoot": 12,
+          "startBeat": 8.0,
+          "durationBeats": 0.5,
+          "velocity": 72,
+          "exampleMidiNote": 72
+        },
+        {
+          "intervalFromKeyRoot": 11,
+          "startBeat": 8.5,
+          "durationBeats": 0.5,
+          "velocity": 72,
+          "exampleMidiNote": 71
+        },
+        {
+          "intervalFromKeyRoot": 10,
+          "startBeat": 9.0,
+          "durationBeats": 0.5,
+          "velocity": 72,
+          "exampleMidiNote": 70
+        },
+        {
+          "intervalFromKeyRoot": 9,
+          "startBeat": 9.5,
+          "durationBeats": 0.5,
+          "velocity": 72,
+          "exampleMidiNote": 69
+        },
+        {
+          "intervalFromKeyRoot": 7,
+          "startBeat": 10.0,
+          "durationBeats": 0.5,
+          "velocity": 72,
+          "exampleMidiNote": 67
+        },
+        {
+          "intervalFromKeyRoot": 5,
+          "startBeat": 10.5,
+          "durationBeats": 0.5,
+          "velocity": 69,
+          "exampleMidiNote": 65
+        },
+        {
+          "intervalFromKeyRoot": 4,
+          "startBeat": 11.0,
+          "durationBeats": 0.5,
+          "velocity": 72,
+          "exampleMidiNote": 64
+        },
+        {
+          "intervalFromKeyRoot": 2,
+          "startBeat": 11.5,
+          "durationBeats": 0.5,
+          "velocity": 69,
+          "exampleMidiNote": 62
+        },
+        {
+          "intervalFromKeyRoot": 0,
+          "startBeat": 12.0,
+          "durationBeats": 0.5,
+          "velocity": 69,
+          "exampleMidiNote": 60
+        },
+        {
+          "intervalFromKeyRoot": -1,
+          "startBeat": 12.5,
+          "durationBeats": 0.5,
+          "velocity": 69,
+          "exampleMidiNote": 59
+        },
+        {
+          "intervalFromKeyRoot": -2,
+          "startBeat": 13.0,
+          "durationBeats": 0.5,
+          "velocity": 61,
+          "exampleMidiNote": 58
+        },
+        {
+          "intervalFromKeyRoot": -3,
+          "startBeat": 13.5,
+          "durationBeats": 0.5,
+          "velocity": 61,
+          "exampleMidiNote": 57
+        },
+        {
+          "intervalFromKeyRoot": -5,
+          "startBeat": 14.0,
+          "durationBeats": 0.5,
+          "velocity": 61,
+          "exampleMidiNote": 55
+        },
+        {
+          "intervalFromKeyRoot": -7,
+          "startBeat": 14.5,
+          "durationBeats": 0.5,
+          "velocity": 61,
+          "exampleMidiNote": 53
+        },
+        {
+          "intervalFromKeyRoot": -8,
+          "startBeat": 15.0,
+          "durationBeats": 0.5,
+          "velocity": 61,
+          "exampleMidiNote": 52
+        },
+        {
+          "intervalFromKeyRoot": -10,
+          "startBeat": 15.5,
+          "durationBeats": 0.5,
+          "velocity": 62,
+          "exampleMidiNote": 50
+        },
+        {
+          "intervalFromKeyRoot": -12,
+          "startBeat": 16.0,
+          "durationBeats": 0.5,
+          "velocity": 62,
+          "exampleMidiNote": 48
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,11 @@
-import { midi, pitchClass, type Midi, type PitchClass, type Tone } from '@/shared/lib/music'
+import {
+  middleOf,
+  midi,
+  pitchClass,
+  type Midi,
+  type PitchClass,
+  type Tone,
+} from '@/shared/lib/music'
 
 /** A right-hand voicing starts on one of the 13 notes from E3 up to E4, so it lies within 52–75. */
 const LOWEST_BASE = 52
@@ -15,9 +22,6 @@ const ascending = (a: number, b: number) => a - b
 /** These pitch classes stacked upward from `base`, lowest first. */
 const voicingFrom = (base: number, pcs: readonly PitchClass[]): number[] =>
   pcs.map((pc) => base + pitchClass(pc - base)).sort(ascending)
-
-const middleOf = (keys: readonly number[]): number =>
-  keys.reduce((sum, key) => sum + key, 0) / Math.max(keys.length, 1)
 
 /**
  * What a voicing costs after the previous one: how far its voices move (voice by voice, a common

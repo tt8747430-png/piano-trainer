@@ -16,8 +16,7 @@ export type Line = (typeof LINES)[number]
 /** The lines that set an octave on every note under them. */
 const OCTAVES = ['8va', '8vb', '15ma', '15mb'] as const
 type OctaveLineChoice = (typeof OCTAVES)[number]
-const isOctave = (line: Line): line is OctaveLineChoice =>
-  (OCTAVES as readonly string[]).includes(line)
+const isOctave = (line: Line): line is OctaveLineChoice => OCTAVES.some((octave) => octave === line)
 
 type Writable = { -readonly [K in keyof NoteMarks]: NoteMarks[K] }
 

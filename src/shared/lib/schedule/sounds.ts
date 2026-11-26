@@ -35,6 +35,33 @@ export function chordSounds(
     }))
 }
 
+/** The room after a chord before the next, in seconds: a struck chord's 1.1, a roll's last note's 0.7 (the canvas's). */
+const NEXT_AFTER = { block: 1.1, roll: 0.7 } as const
+
+/** When each chord starts, in seconds, played one after another as `chordsInTurn` plays them. */
+export function turnStarts(
+  chords: readonly (readonly Midi[])[],
+  options: { readonly arpeggio: boolean },
+): number[] {
+  let at = 0
+  return chords.map((keys) => {
+    const start = at
+    at += options.arpeggio ? (keys.length - 1) * ARPEGGIO.gap + NEXT_AFTER.roll : NEXT_AFTER.block
+    return start
+  })
+}
+
+/** Chords one after another, each struck or rolled as `chordSounds` plays it: the Chords staff's Play all. */
+export function chordsInTurn(
+  chords: readonly (readonly Midi[])[],
+  options: { readonly arpeggio: boolean },
+): NoteSound[] {
+  const starts = turnStarts(chords, options)
+  return chords.flatMap((keys, i) =>
+    chordSounds(keys, options).map((sound) => ({ ...sound, at: sound.at + (starts[i] ?? 0) })),
+  )
+}
+
 /** The three ways an interval is heard: the lower note first, the upper first, or both at once. */
 export const INTERVAL_WAYS = ['up', 'down', 'together'] as const
 export type IntervalWay = (typeof INTERVAL_WAYS)[number]

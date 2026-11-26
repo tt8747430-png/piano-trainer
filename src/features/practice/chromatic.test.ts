@@ -41,10 +41,10 @@ describe('chromaticChart', () => {
   it('plays every chosen chord on a root before the next, in the table’s order, each spelled its way', () => {
     expect(symbols(chromaticChart(note('G'), ['n9', 'm9', 'maj9'], 'up')).slice(0, 6)).toEqual([
       'Gm9',
-      'GMaj9',
+      'Gmaj9',
       'G9',
       'G#m9',
-      'A♭Maj9',
+      'A♭maj9',
       'A♭9',
     ])
   })

@@ -1,71 +1,80 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { CopyPlus, Eye, EyeOff, Globe, PencilLine, Play, Star, Trash2 } from 'lucide-react'
+import { CopyPlus, Eye, EyeOff, Globe, PencilLine, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   isOwnPatternId,
   isPatternId,
   isPatternRef,
-  LEFT_FIGURES,
-  RIGHT_FIGURES,
   selectIsFavourite,
   selectIsHidden,
   usePatternBook,
   usePatterns,
   usePatternsStoreApi,
+  usePartName,
+  partOfShelf,
   type BookPattern,
   type OwnPatternId,
   type PatternBook,
 } from '@/entities/pattern'
-import { piecesPlaying } from '@/entities/piece'
+import { entryTitles, piecesPlaying } from '@/entities/piece'
 import { PinnedKeyboard } from '@/features/live-keyboard'
+import { PianoButton } from '@/widgets/practice-pages'
 import {
   deleteOwnPattern,
   restoreOwnPattern,
   toggleFavourite,
   toggleHidden,
 } from '@/features/manage-patterns'
+import { useMarkPracticeUsed } from '@/features/manage-practice-library'
 import { useShownKeys } from '@/features/play-example'
+import { Button } from '@/shared/ui/primitives/button'
 import { localText, useLocale } from '@/shared/i18n'
 import {
+  ActionMenu,
   BackButton,
   ButtonLink,
-  FabLink,
-  Fact,
-  FloatingActions,
   MoreMenu,
+  NameHeart,
   NotFound,
-  RoundButton,
-  say,
+  PractiseRow,
+  PractiseRows,
+  sayUndo,
   ScreenHeader,
   type MenuAction,
 } from '@/shared/ui'
-import { PatternPlay, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
-import { PieceList } from '@/widgets/piece-list'
-import { useForgetScreens } from '@/shared/lib'
+import { PatternPieces, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
+import { EntryRow } from '@/widgets/piece-list'
+import { useForgetScreens, useSettingsWindow } from '@/shared/lib'
+import { C_MAJOR, keyParam, keysAround } from '@/shared/lib/music'
+import { PROGRESSION } from '@/features/practice'
+import { ProgressionPractice } from '@/widgets/progression-explorer'
+import { PatternPublishWindow } from './PatternPublishWindow'
 
-/** The star in the bar: a favourite comes first in the Player's list. */
+/** How many songs and lessons Used in shows before Show all. */
+const FOLDED = 5
+
+/** The ♡ beside the name: a favourite comes first in the Player's list. */
 function FavouriteButton({ pattern }: { pattern: BookPattern }) {
   const { t } = useTranslation('practice')
   const store = usePatternsStoreApi()
   const favourite = usePatterns(selectIsFavourite(pattern.ref))
   return (
-    <RoundButton
+    <NameHeart
+      pressed={favourite}
       label={t('patterns.favourite')}
-      icon={Star}
-      aria-pressed={favourite}
-      onClick={() => toggleFavourite(store, pattern.ref)}
-      className="aria-pressed:bg-chosen aria-pressed:[&_svg]:fill-current"
+      onToggle={() => toggleFavourite(store, pattern.ref)}
     />
   )
 }
 
 /**
  * A pattern's actions for its bar's More: for a built-in one, a pattern of the learner's own from it
- * and hiding it from the Player; for the learner's own, Edit, Publish in library (a page of its own,
- * round 27) and Delete, last, done at once with Undo in its toast. What was done (a line) comes
+ * and hiding it from the Player; for the learner's own, Edit, Publish in library (a window over the
+ * page, `onPublish`) and Delete, last, done at once with Undo in its toast. What was done (a line) comes
  * with them.
  */
-function usePatternActions(pattern: BookPattern, name: string) {
+function usePatternActions(pattern: BookPattern, name: string, onPublish: () => void) {
   const { t } = useTranslation(['practice', 'songs', 'editor'])
   const store = usePatternsStoreApi()
   const navigate = useNavigate()
@@ -84,10 +93,7 @@ function usePatternActions(pattern: BookPattern, name: string) {
     }).then(() => {
       const deleted = deleteOwnPattern(store, id)
       if (!deleted) return
-      say(t('patterns.deleted', { name }), {
-        label: t('patterns.undo'),
-        onClick: () => restoreOwnPattern(store, deleted),
-      })
+      sayUndo(t('patterns.deleted', { name }), () => restoreOwnPattern(store, deleted))
     })
   }
   const actions: MenuAction[] =
@@ -130,11 +136,7 @@ function usePatternActions(pattern: BookPattern, name: string) {
             key: 'publish',
             label: t('editor:publishPage.open'),
             icon: Globe,
-            onSelect: () =>
-              void navigate({
-                to: '/practice/accompaniment/patterns/$patternRef/publish',
-                params: { patternRef: own },
-              }),
+            onSelect: onPublish,
           },
           {
             key: 'delete',
@@ -153,70 +155,134 @@ function usePatternActions(pattern: BookPattern, name: string) {
 }
 
 /**
- * A pattern explained: its idea, what each hand plays, the pattern on the staff and heard on the keys,
- * its source's explanation and the music that plays it. Its bar holds the star and More (its own
- * actions); Practise in the Player floats.
+ * A pattern's page, as its board (`r63_pattern.py`): Back · Pattern · the keys' tools · More; the keys
+ * at the top lighting what it plays; its name in the serif with its ♡, its book and whether it is
+ * built in; its bar on the grand staff with what it is; Practise in the Player, round and round in C
+ * and through the keys (a tune's pattern, in its song); Used in; one floating bar Loop · Play ⌄ (Play
+ * over a bar of C major or a song it is used in). On a laptop, one centred column 880 wide.
  */
 function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBook }) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
-  const sample = usePatternSample(pattern, book)
-  const [shown, show] = useShownKeys(pattern.ref, sample.shown)
-  const name = localText(pattern.name, locale)
+  useMarkPracticeUsed('accompaniment', `pattern:${pattern.ref}`)
+  const partName = usePartName()
   const pieces = isPatternId(pattern.ref) ? piecesPlaying(pattern.ref) : []
-  const more = usePatternActions(pattern, name)
+  const tune = pattern.pattern.rh.kind === 'tune'
+  // What it is played over: a bar of C (none chosen), or a song it is used in.
+  const [overId, setOverId] = useState<string | null>(tune ? (pieces[0]?.id ?? null) : null)
+  const over = pieces.find((piece) => piece.id === overId)
+  const sample = usePatternSample(pattern, book, over)
+  const [shown, show] = useShownKeys(`${pattern.ref} ${overId ?? ''}`, sample.shown)
+  const name = localText(pattern.name, locale)
+  const publishWindow = useSettingsWindow()
+  const more = usePatternActions(pattern, name, () => publishWindow.openAt('publish'))
+  const own = isOwnPatternId(pattern.ref)
+  const [allUses, setAllUses] = useState(false)
+  const overs = [
+    ...(tune ? [] : [{ id: null, label: t('patterns.barOfC') }]),
+    ...pieces
+      .slice(0, 4)
+      .map((piece) => ({ id: piece.id, label: entryTitles(piece, locale).primary })),
+  ]
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <ScreenHeader
-        title={name}
+        title={t('patterns.title')}
         back={<BackButton />}
-        tools={<FavouriteButton pattern={pattern} />}
+        settings={<PianoButton />}
         more={<MoreMenu actions={more.actions} />}
       />
-      <PinnedKeyboard shown={shown} />
-      <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
-        <div className="flex max-w-prose flex-col gap-5">
-          <p className="text-xl text-balance">{localText(pattern.idea, locale)}</p>
-          <dl className="flex flex-col gap-2">
-            <Fact term={t('patterns.rightHand')}>
-              {localText(RIGHT_FIGURES[pattern.rh].name, locale)}
-            </Fact>
-            <Fact term={t('patterns.leftHand')}>
-              {localText(LEFT_FIGURES[pattern.lh].name, locale)}
-            </Fact>
-          </dl>
-          <section className="flex flex-col gap-4 card p-4">
-            <PatternStaff sample={sample} />
-            <PatternPlay sample={sample} onShow={show} variant="default" />
-          </section>
-          {pattern.description ? (
-            <p className="text-lg leading-relaxed">{localText(pattern.description, locale)}</p>
-          ) : null}
-          {more.said}
-        </div>
-        {pieces.length > 0 ? (
-          <PieceList groups={[{ id: 'used-in', heading: t('patterns.usedIn'), entries: pieces }]} />
-        ) : null}
-      </div>
-      {/* The way on: the pattern played in the Player, under its sample's music. */}
-      <FloatingActions>
-        <FabLink
-          label={t('inPlayer')}
-          icon={Play}
-          className="[&_svg]:fill-current"
-          render={
-            sample.piece ? (
-              <Link
-                to="/play/$pieceId"
-                params={{ pieceId: sample.piece.id }}
-                search={{ pattern: pattern.ref }}
-              />
-            ) : (
-              <Link to="/play/progression" search={{ pattern: pattern.ref }} />
-            )
-          }
+      {own ? (
+        <PatternPublishWindow
+          pattern={pattern}
+          open={publishWindow.open}
+          onOpenChange={publishWindow.onOpenChange}
         />
-      </FloatingActions>
+      ) : null}
+      <PinnedKeyboard shown={shown} place="top" least={PATTERN_KEYS} />
+      <div className="flex flex-col gap-4 lg:mx-auto lg:mt-2 lg:w-full lg:max-w-220 lg:gap-6">
+        <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-0.5">
+              <h2 className="subject-title">{name}</h2>
+              <FavouriteButton pattern={pattern} />
+            </div>
+            <p className="ms-0.5 text-subhead/[normal] text-muted-foreground">
+              {own ? t('patterns.yours') : partName(partOfShelf(pattern.group))}
+            </p>
+          </div>
+          {more.said}
+          {/* Its bar on the grand staff at reading size, on the paper with its line under it as
+              a caption, no card (canvas, "A pattern's grand staff at reading size"). */}
+          <section className="flex flex-col gap-3">
+            <PatternStaff sample={sample} />
+            <p className="mx-1 max-w-[65ch] text-subhead leading-[1.4] text-pretty text-muted-foreground">
+              {localText(pattern.idea, locale)}
+            </p>
+          </section>
+        </div>
+        <div className="flex min-w-0 flex-col gap-4 lg:gap-6">
+          {tune ? (
+            sample.piece ? (
+              <PractiseRows title={t('progressions.practiseRows')}>
+                <PractiseRow
+                  title={entryTitles(sample.piece, locale).primary}
+                  detail={t('patterns.practise')}
+                  render={
+                    <Link
+                      to="/play/$pieceId"
+                      params={{ pieceId: sample.piece.id }}
+                      search={{ pattern: pattern.ref }}
+                    />
+                  }
+                />
+              </PractiseRows>
+            ) : null
+          ) : (
+            <ProgressionPractice
+              musicKey={C_MAJOR}
+              inPlayer={{ p: PROGRESSION.numerals, key: keyParam(C_MAJOR), pattern: pattern.ref }}
+            />
+          )}
+          {pieces.length > 0 ? (
+            <section className="flex flex-col gap-2">
+              <h3 className="font-sans text-sm font-semibold text-foreground">
+                {t('patterns.usedIn')}
+              </h3>
+              <ul className="card flex flex-col p-1.5">
+                {(allUses ? pieces : pieces.slice(0, FOLDED)).map((piece) => (
+                  <EntryRow key={piece.id} entry={piece} tile={false} />
+                ))}
+              </ul>
+              {!allUses && pieces.length > FOLDED ? (
+                <Button variant="soft" className="self-start" onClick={() => setAllUses(true)}>
+                  {t('library.showAll', { count: pieces.length })}
+                </Button>
+              ) : null}
+            </section>
+          ) : null}
+        </div>
+      </div>
+      <PatternPieces
+        sample={sample}
+        onShow={show}
+        menuLabel={t('patterns.playOver')}
+        menu={(trigger) => (
+          <ActionMenu
+            label={t('patterns.playOver')}
+            align="end"
+            render={trigger}
+            trigger={null}
+            actions={overs.map((each) => ({
+              key: each.id ?? 'c',
+              group: t('patterns.playOver'),
+              label: each.label,
+              checked: overId === each.id,
+              onSelect: () => setOverId(each.id),
+            }))}
+          />
+        )}
+      />
     </div>
   )
 }
@@ -237,3 +303,6 @@ export function PatternPage() {
     </NotFound>
   )
 }
+
+/** The board's keys under both hands: C2 to A4 on a phone, F1 to C6 on a laptop. */
+const PATTERN_KEYS = keysAround(48, [12, 21], [19, 36])

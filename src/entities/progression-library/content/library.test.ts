@@ -122,14 +122,6 @@ describe('the progressions library', () => {
     expect(progressionMode(listed('let-it-be'), true)).toBe(false)
   })
 
-  it('says a note in both languages', () => {
-    for (const each of PROGRESSION_LIBRARY) {
-      if (!each.note) continue
-      expect(each.note.en.trim(), each.id).not.toBe('')
-      expect(each.note.ru.trim(), each.id).not.toBe('')
-    }
-  })
-
   it('says how every progression sounds in one short line, in both languages', () => {
     for (const each of PROGRESSION_LIBRARY)
       for (const said of [each.character.en, each.character.ru]) {

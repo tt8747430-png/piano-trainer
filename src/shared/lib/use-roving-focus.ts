@@ -1,10 +1,22 @@
 import { useEffect, useRef, type FocusEvent, type KeyboardEvent, type RefObject } from 'react'
 
-/** The keys of a row the focus moves along: its buttons that can be pressed. */
+/**
+ * What keeps its own arrows inside a row: a radio group (a segmented choice), a field, a slider. Its
+ * buttons are one stop of their own, and the arrows pressed in it are its.
+ */
+const OWN_ARROWS =
+  '[role=radiogroup], input, textarea, select, [role=slider], [contenteditable=true]'
+
+/** The keys of a row the focus moves along: its buttons that can be pressed, outside an inner group. */
 const keysOf = (row: HTMLElement): HTMLElement[] =>
-  [...row.querySelectorAll<HTMLElement>('button')].filter(
-    (key) => !key.hasAttribute('disabled') && !key.closest('[inert]'),
-  )
+  [...row.querySelectorAll<HTMLElement>('button')].filter((key) => {
+    const own = key.closest(OWN_ARROWS)
+    return (
+      !key.hasAttribute('disabled') &&
+      !key.closest('[inert]') &&
+      (own === null || !row.contains(own) || own === row)
+    )
+  })
 
 /** The key a row's one stop starts at: the one last focused, else one pressed or current, else the first. */
 function stopOf(row: HTMLElement, last: HTMLElement | null): HTMLElement | undefined {
@@ -21,17 +33,18 @@ function stopOf(row: HTMLElement, last: HTMLElement | null): HTMLElement | undef
 /**
  * A row of keys as one stop of the Tab key (ADR 0114, WAI-ARIA's toolbar): the key last focused takes
  * the stop (else the one pressed, else the first), ← → move along the keys, past a greyed one, Home and
- * End to its ends. Its handlers go on the row; keys coming and going, greyed or not, keep one stop.
+ * End to its ends (↑ ↓ too, a row standing upright: `vertical`). Its handlers go on the row; keys
+ * coming and going, greyed or not, keep one stop. A radio group or a field inside it keeps its own
+ * stop and its own arrows.
  */
-export function useRovingFocus(row: RefObject<HTMLElement | null>) {
+export function useRovingFocus(row: RefObject<HTMLElement | null>, vertical = false) {
   const last = useRef<HTMLElement | null>(null)
   useEffect(() => {
     const box = row.current
     if (!box) return
     const place = () => {
       const stop = stopOf(box, last.current)
-      for (const key of box.querySelectorAll<HTMLElement>('button'))
-        key.tabIndex = key === stop ? 0 : -1
+      for (const key of keysOf(box)) key.tabIndex = key === stop ? 0 : -1
     }
     place()
     const watch = new MutationObserver(place)
@@ -45,23 +58,28 @@ export function useRovingFocus(row: RefObject<HTMLElement | null>) {
   }, [row])
 
   const onFocus = (event: FocusEvent<HTMLElement>) => {
-    const key = (event.target as Element).closest('button')
     const box = row.current
-    if (!key || !box || !keysOf(box).includes(key)) return
+    if (!box) return
+    const keys = keysOf(box)
+    const target = event.target
+    const key = target instanceof Node ? keys.find((each) => each.contains(target)) : undefined
+    if (!key) return
     last.current = key
-    for (const each of box.querySelectorAll<HTMLElement>('button'))
-      each.tabIndex = each === key ? 0 : -1
+    for (const each of keys) each.tabIndex = each === key ? 0 : -1
   }
 
   const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     const box = row.current
     if (!box || event.altKey || event.metaKey || event.ctrlKey || event.shiftKey) return
     const keys = keysOf(box)
-    const at = keys.indexOf(document.activeElement as HTMLElement)
+    const at = keys.findIndex((key) => key === document.activeElement)
     if (at < 0) return
+    const next = Math.min(keys.length - 1, at + 1)
+    const before = Math.max(0, at - 1)
     const to = {
-      ArrowRight: Math.min(keys.length - 1, at + 1),
-      ArrowLeft: Math.max(0, at - 1),
+      ArrowRight: next,
+      ArrowLeft: before,
+      ...(vertical ? { ArrowDown: next, ArrowUp: before } : {}),
       Home: 0,
       End: keys.length - 1,
     }[event.key]

@@ -3,14 +3,9 @@ import { noteFromParam, noteParam, SCALE_FAMILIES, scaleKindsIn } from '@/shared
 import { MenuPicker, NotePicker } from '@/shared/ui'
 import type { ScaleView } from '../model/scale-view'
 
-/** A picker set in the heading's type: no box, a dotted underline and its ⌃⌄ say it opens. */
-const IN_TITLE =
-  'h-auto border-0 bg-transparent px-0 font-display text-3xl sm:text-4xl underline decoration-dotted decoration-2 underline-offset-6 hover:bg-transparent data-popup-open:bg-transparent'
-
 /**
- * Which scale, as its name (R29-P8, Chord Trainer's "C ⌃⌄ Natural ⌃⌄ Major ⌃⌄"): the heading itself is
- * two menus, its Tonic as written and its Scale by family, reading "B ⌃⌄ natural minor ⌃⌄"; no
- * "Root" to puzzle over and no second title under it.
+ * Which scale, as its name made of its two pickers (canvas 174, as the Chords page's name): its Tonic
+ * as written and its Scale by family, "G ⌃⌄ major ⌃⌄"; no "Root" to puzzle over.
  */
 export function ScaleChoice({
   scale,
@@ -24,16 +19,15 @@ export function ScaleChoice({
 }) {
   const { t } = useTranslation(['practice', 'music'])
   return (
-    <h2 aria-label={name} className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+    <h2 aria-label={name} className="flex min-w-0 flex-wrap items-stretch gap-2">
       <NotePicker
-        bare
+        title
         label={t('practice:scales.tonic')}
         value={noteFromParam(scale.root)}
         onChange={(root) => onChange({ root: noteParam(root) })}
-        className={IN_TITLE}
       />
       <MenuPicker
-        bare
+        title
         label={t('practice:scales.label')}
         value={scale.kind}
         groups={SCALE_FAMILIES.map((family) => ({
@@ -43,8 +37,9 @@ export function ScaleChoice({
             label: t(`music:scaleKind.${kind}`),
           })),
         }))}
+        // The name as it follows its tonic, as a musician writes it: G major, D Dorian.
+        face={(kind) => t(`music:scaleName.${kind}`)}
         onChange={(kind) => onChange({ kind })}
-        className={IN_TITLE}
       />
     </h2>
   )

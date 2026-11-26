@@ -7,8 +7,22 @@ export const settings = {
     exit: 'Exit',
   },
   title: 'Settings',
-  language: { label: 'Language', en: 'English', ru: 'Русский' },
-  theme: { label: 'Appearance', system: 'Match system', light: 'Light', dark: 'Dark' },
+  // The laptop's Settings dialog (claude.ai's): its close, its search over the places, a sub-page's Back.
+  dialog: {
+    close: 'Close',
+    search: 'Search',
+    searchLabel: 'Search settings',
+    none: 'No settings match',
+    back: 'Back to {{page}}',
+  },
+  language: { label: 'Language', app: 'App language', en: 'English', ru: 'Русский' },
+  theme: {
+    label: 'Appearance',
+    row: 'Theme',
+    system: 'Match system',
+    light: 'Light',
+    dark: 'Dark',
+  },
   // Settings' groups (R32), in the list's order.
   groups: {
     general: { label: 'App' },
@@ -19,22 +33,47 @@ export const settings = {
   // Settings' pages, named for what they set (R32).
   pages: {
     general: 'General',
+    appearance: 'Appearance',
     storage: 'Storage and backup',
-    onScreenPiano: 'On-screen piano',
     connectPiano: 'MIDI devices',
+    adminGroups: 'Groups',
     computerKeys: 'Computer keyboard',
     selectionToolbar: 'Selection toolbar',
     swipeActions: 'Swipe actions',
     guide: 'User guide',
     feedback: 'Report a problem',
     about: 'About',
+    pageLayouts: 'Page layouts',
   },
-  // The on-screen piano's page: its groups.
+  // Settings › General › Page layouts (R76): each page whose panels the learner arranged.
+  layouts: {
+    label: 'Layout',
+    changed: 'Changed by you',
+    asCame: 'As it came',
+    allAsCame: 'As they came',
+    count_one: '{{count}} changed',
+    count_other: '{{count}} changed',
+    reset: 'Reset',
+    resetName: 'Reset {{page}}’s layout',
+    resetAll: 'Reset every page',
+    pageReset: '{{page}}’s layout reset',
+    allReset: 'Every page’s layout reset',
+    undo: 'Undo',
+    pages: { 'chord-player': 'Chord player' },
+    more: '+ {{count}} more',
+    hidden: '{{panel}} hidden',
+    place: {
+      top: '{{panel}} at the top',
+      float: '{{panel}} floating',
+      bottom: '{{panel}} at the bottom',
+      left: '{{panel}} on the left',
+      right: '{{panel}} on the right',
+    },
+    size: '{{panel}} {{size}}',
+  },
+  // Storage and backup's Piano sound.
   piano: {
-    essentials: 'Keys and sound',
-    look: 'Display',
-    place: 'Placement',
-    play: 'While you play',
+    sound: 'Piano sound',
   },
   progress: {
     reset: 'Reset progress',
@@ -49,6 +88,8 @@ export const settings = {
     info: 'Your songs, progress and the app’s offline copy are stored by this browser. When a device runs low on space, a browser may clear an app’s data unless the app has asked it to keep the data.',
     reading: 'Calculating storage…',
     used: '{{size}} used on this device',
+    songs: 'Songs and takes {{size}}',
+    piano: 'Piano {{size}}',
     keepSafe: 'Protect from clearing',
     safe: 'Protected: the browser will not clear this data to free up space',
     refused:
@@ -56,12 +97,14 @@ export const settings = {
   },
   // The grand piano's recorded notes on this device (A27, R29 SND).
   pianoSound: {
-    label: 'Offline piano',
     info: 'The piano is a sampled grand: Salamander Grand Piano, a Yamaha C5. Its samples download as you first play each note. Download them all to hear the grand offline; until then, a lighter sampled piano plays offline.',
     reading: 'Calculating storage…',
     kept: '{{kept}} of {{total}} downloaded',
     ready: 'Available offline',
+    partly: 'Partly downloaded',
+    none: 'Not downloaded yet',
     download: 'Download for offline use',
+    needsInternet: 'Needs the internet',
     downloading: 'Downloading… {{percent}}%',
     failed: 'Some samples could not be downloaded. Try again when you are online.',
     remove: 'Remove downloaded piano samples',
@@ -69,12 +112,9 @@ export const settings = {
     body: 'Offline, a lighter sampled piano plays until you download them again.',
     cancel: 'Cancel',
     confirm: 'Remove',
-    footnote:
-      'Resetting clears your lessons, practised songs, practice results, streak and badges on this device. Removing the samples frees their space; they download again as you play.',
   },
   backup: {
     label: 'Backup',
-    says: 'Your songs, folders, takes, patterns, progress and settings live on this device only. Save them to a file to keep them safe or to move them to another device.',
     save: 'Save a backup',
     restore: 'Restore from a file',
     notBackup: 'This file is not a Piano Trainer backup.',
@@ -95,14 +135,22 @@ export const settings = {
   bars: {
     selectToolbar: 'Selection toolbar',
     swipeActions: 'Swipe actions',
-    songs: 'Songs and folders',
-    selectFootnote: 'Up to four actions appear in the toolbar when you select songs or folders.',
-    swipeFootnote:
-      'Up to two actions on each side. An archived or deleted song comes back with Undo in the message.',
+    songs: 'Songs and playlists',
+    swipeInfo: 'Archive and Delete happen at once, with Undo in the toast.',
     songRows: 'Songs',
-    folderRows: 'Folders',
+    folderRows: 'Playlists',
     swipeRight: 'Leading swipe (right)',
     swipeLeft: 'Trailing swipe (left)',
+    first: 'First',
+    second: 'Second',
+    noAction: 'No action',
+    preview: 'A swiped row',
+    previewSong: 'Amazing Grace',
+    previewComposer: 'John Newton',
+    previewFolder: 'Hymns',
+    previewHolds: '12 songs',
+    previewToolbar: 'The selection toolbar',
+    previewSelected: '2 selected',
     available: 'Available',
     full: 'All slots are in use. Remove an action to add another.',
     none: 'No action: this swipe does nothing.',
@@ -129,6 +177,7 @@ export const settings = {
   sync: {
     label: 'Sync',
     now: 'Sync now',
+    pending: 'Changes pending',
     state: {
       idle: 'Up to date',
       syncing: 'Syncing…',
@@ -138,7 +187,7 @@ export const settings = {
     waiting_one: '{{count}} change pending',
     waiting_other: '{{count}} changes pending',
     last: 'Last synced {{when}}',
-    what: 'Your songs, folders, takes, progress and settings sync while you are signed in.',
+    what: 'Your songs, playlists, takes, progress and settings sync while you are signed in.',
     // The account card's one line (A15).
     line: {
       synced: 'Synced {{when}}',
@@ -165,6 +214,7 @@ export const settings = {
       offline: 'Unavailable offline',
       failed: 'Check failed. Try again',
       install: 'Install and restart',
+      check: 'Check for updates',
     },
   },
   // The account's own page (round 3): its name, password, signing out, deleting it.
@@ -177,6 +227,19 @@ export const settings = {
     signOutInfo: 'Your songs and progress stay on this device and sync again when you sign in.',
     signOutCancel: 'Cancel',
     signedOut: 'You are not signed in.',
+    signedOutWhy:
+      'Your songs and progress stay on this device. Sign in to sync them across your devices.',
+    // Account's groups (Apple's Sign-In & Security): who it is, then how they sign in.
+    profile: 'Profile',
+    editProfile: 'Edit profile',
+    privacy: 'Privacy',
+    security: 'Sign-in and security',
+    // Email, its own page under Sign-in and security.
+    emailPage: {
+      current: 'Current email',
+      send: 'Send confirmation link',
+      sent: 'Check your inbox: the new address takes effect once you confirm it.',
+    },
     signIn: 'Sign in',
     create: 'Create account',
     // The role an editor or administrator holds, and their preview (R32).
@@ -191,7 +254,6 @@ export const settings = {
       cancel: 'Keep account',
       confirm: 'Delete',
       scheduled: 'Your account will be deleted on {{date}}. Sign in before then to keep it.',
-      footnote: 'Your account and synced data are deleted after 30 days.',
     },
   },
   // Signing in to an account that is to be deleted.
@@ -204,9 +266,10 @@ export const settings = {
   // Report a problem (R29 B2, R32): its own page, sent with the app's error reports.
   report: {
     label: 'Description',
+    placeholder: 'What were you doing, and what happened?',
     footnote:
       'Include what you were doing and the screen you were on. Reports are anonymous and read by the Piano Trainer team.',
-    offline: 'Sending requires an internet connection.',
+    offline: 'You’re offline. Sending needs a connection.',
     send: 'Send report',
     sent: 'Report sent. Thank you.',
   },
@@ -241,10 +304,10 @@ export const settings = {
     songs: {
       title: 'Organise your library',
       library:
-        'Songs holds your library: folders first, then songs. Search finds a song by title; Filters narrow the list by key, level or favourites.',
-      folder: 'New folder groups songs. Folders can contain folders of their own.',
+        'Songs holds your library: playlists first, then songs. Search finds a song by title; Filters narrow the list by key, level or favourites.',
+      folder: 'New playlist gathers songs. A playlist can hold playlists of its own.',
       select: 'Select, or a long press on a row, chooses several songs at once.',
-      move: 'Move to… places the selected songs in a folder. Undo in the message reverses it.',
+      move: 'Move to… places the selected songs in a playlist. Undo in the message reverses it.',
       archive:
         'Archive puts songs away without deleting them. They wait in the Archive, in Songs, to be restored.',
       favourite: 'The heart marks a song as a favourite.',

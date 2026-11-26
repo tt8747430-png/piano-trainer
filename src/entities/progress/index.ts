@@ -6,6 +6,11 @@ export {
   type RunKey,
   type RunResult,
   type PracticeRun,
+  type PlayedResult,
+  type PlayedRun,
+  type QuizRun,
+  type RunStep,
+  type StaffNote,
   HISTORY_KEPT,
   type TrainerRecord,
 } from './model/types'
@@ -16,6 +21,7 @@ export {
   withLearned,
   withLesson,
   withoutSteps,
+  withPlayedRun,
   withRun,
   withSectionRead,
   withTempo,
@@ -34,9 +40,12 @@ export {
   lastWeek,
   localDay,
   monthOf,
+  RESTS_KEPT,
   streak,
+  streakOf,
   withDay,
   type CalendarDay,
+  type Streak,
 } from './model/days'
 export {
   createProgressStore,
@@ -51,26 +60,26 @@ export {
   selectAnswers,
   selectDays,
   selectHolds,
+  isLearned,
   selectIsLearned,
   selectLearned,
   selectLessonDone,
-  selectLessons,
   selectExercised,
   selectHistory,
   selectRun,
   selectPractised,
+  selectSongPlay,
   selectRead,
   selectTempo,
   selectTrainerRecord,
-  selectTrainerRecords,
 } from './model/selectors'
 export { ProgressStoreProvider, useProgress, useProgressStoreApi } from './model/context'
 export { practiceRecord, type PracticeRecord } from './model/record'
+export { withSongStretch, withWaitScore, type SongPlay, type SongStretch } from './model/songs'
 export {
   BADGES,
   badgesOf,
   isBadgeId,
-  nextMilestone,
   TIERS,
   type Badge,
   type BadgeFigures,
@@ -80,7 +89,6 @@ export {
 export {
   earnedKeys,
   isMilestoneId,
-  levelMinutes,
   levelOf,
   MILESTONES,
   profileFigures,

@@ -1,11 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
 import {
   selectEditing,
-  selectKeyboard,
   selectPaletteFolded,
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
+import { useRepertoire, type Piece } from '@/entities/piece'
 import { setPaletteFolded } from '@/features/set-preference'
 import {
   cn,
@@ -27,6 +27,7 @@ import { useScoreEditor } from '../model/use-score-editor'
 import { useAnswerRecord } from '../model/use-record-take'
 import { CaretLine } from './CaretLine'
 import { EditorGear, type EditorDraft } from './EditorGear'
+import { GoToBar } from './GoToBar'
 import { SelectionActions } from './SelectionActions'
 import { EditorActions, EditorLead, EditorMode } from './EditorHeader'
 import { EditorKeyboard } from './EditorKeyboard'
@@ -35,7 +36,7 @@ import { EditorSheet } from './EditorSheet'
 import { FieldDocked } from './field-docked'
 import { OpenField } from './OpenField'
 import { RecordingBar } from './RecordingBar'
-import { TakesSheet } from './TakesSheet'
+import { TakesPage } from './TakesPage'
 import { UnsavedNotice } from './UnsavedNotice'
 
 /** What the sheet keeps between its music and what floats over it, in CSS px. */
@@ -66,26 +67,41 @@ const PANEL_EDGE_RIGHT =
 export function ScoreEditor({
   target,
   bar,
+  credits = false,
   draft,
   done,
 }: {
   target: EditorTarget
   bar?: number | undefined
+  /** Opened on the gear's Title and credits (the song page's pencil). */
+  credits?: boolean | undefined
   /** An editor's draft of a song's original (ADR 0116): its state and acts, in the gear. */
   draft?: EditorDraft
   /** Done in its own place (a lesson's example's, back to its lesson). */
   done?: ReactNode
 }) {
-  const editor = useScoreEditor(target, bar)
+  const editor = useScoreEditor(target, bar, credits)
+  // The learner's own song or version, saved as it is edited: what Export writes from the gear.
+  const repertoire = useRepertoire()
+  const own =
+    target.kind === 'song' || target.kind === 'version' ? repertoire.piece(target.id) : undefined
   return (
     <ScoreEditorContext value={editor}>
-      <EditorScreen draft={draft} done={done} />
+      <EditorScreen draft={draft} done={done} own={own} />
     </ScoreEditorContext>
   )
 }
 
 /** The editor's screen over its context's draft (`ScoreEditor`). */
-function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?: ReactNode }) {
+function EditorScreen({
+  draft,
+  done,
+  own,
+}: {
+  draft?: EditorDraft | undefined
+  done?: ReactNode
+  own: Piece | undefined
+}) {
   const editor = useScoreEditorContext()
   useEditorShortcutList()
   useAnswerRecord()
@@ -93,7 +109,6 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
   const panel = usePalettePanel()
   const right = useSettings((state) => selectEditing(state).paletteSide) === 'right'
   const idle = editor.takes.stage === 'idle'
-  const dock = useSettings((state) => selectKeyboard(state).dock)
   const settings = useSettingsStoreApi()
   const folded = useSettings(selectPaletteFolded)
   const fold = (next: boolean) => setPaletteFolded(settings, next)
@@ -137,17 +152,16 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
   const footShown = floating.shown || !idle
   const music =
     editor.view.layout === 'page' ? (
-      // Pages on their canvas (ADR 0096): it moves and zooms them itself, the area never scrolls.
+      // Pages on their canvas (ADR 0096), edge to edge as Flat's: it moves and zooms them itself, the area never scrolls.
       <div
         ref={sheet}
         data-area="sheet"
-        className="h-full min-h-0 overflow-clip"
+        className="-mx-gutter h-full min-h-0 overflow-clip"
         {...floating.reading}
         onClickCapture={floating.show}
       >
-        <div className="h-full overflow-clip rounded-control">
-          <EditorSheet onAnchor={setAnchor} covered={{ bottom: below + GAP }} />
-        </div>
+        {/* Flat's page view: the canvas reaches the screen's edges, no frame round it. */}
+        <EditorSheet onAnchor={setAnchor} covered={{ bottom: below + GAP }} />
       </div>
     ) : (
       <div
@@ -167,9 +181,16 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
     <>
       {/* The Player's frame (ADR 0115): its bar's two groups, the work and the keys in the Player's
           places, so the bar and the keys stand still as Practise · Edit switches. */}
-      <div data-keys={dock} className={SCORE_SCREEN}>
+      <div
+        className={cn(
+          SCORE_SCREEN,
+          // As Flat's, what stands at the foot (the keys, else the palette) runs on under the home
+          // indicator to the screen's edge, its own paper filling the inset.
+          '-mb-[calc(env(safe-area-inset-bottom)+0.5rem)] landscape-phone:mb-0 [&>[data-area=keys]]:bg-card [&>[data-area=keys]]:pb-safe',
+        )}
+      >
         <ScoreBar
-          lead={<EditorLead />}
+          lead={<EditorLead own={own !== undefined} said={draft?.status} />}
           middle={<EditorMode done={done} />}
           actions={<EditorActions />}
         />
@@ -199,43 +220,50 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
               <EditorPanel />
             </aside>
           ) : null}
-          <div className="relative flex min-h-0 flex-1 flex-col">
-            {/* The sheet's one pill at its foot, clear of what floats there (R34, Songscription's):
+          {/* Beside a docked panel the keys stand under the sheet alone, the panel running on to the
+              screen's foot, as the EditorLaptop board draws them. */}
+          <div className="flex min-h-0 flex-1 flex-col">
+            <div className="relative flex min-h-0 flex-1 flex-col">
+              {/* The sheet's one pill at its foot, clear of what floats there (R34, Songscription's):
                 the layout, and in Page view the canvas's zoom beside it; on a phone held upright
                 the layout is the gear's View's, the zoom alone. */}
-            <SheetToolsContext value={panel ? <SheetLayoutTools /> : null}>
-              <div className="min-h-0 flex-1">{music}</div>
-            </SheetToolsContext>
-            {editor.view.layout === 'page' || !panel ? null : (
-              <SheetPill covered={{ bottom: below + GAP }}>
-                <SheetLayoutTools />
-              </SheetPill>
-            )}
-            {/* What floats over the music (ADR 0115): above it, only its own controls taking a touch. */}
-            <div className="pointer-events-none absolute inset-0 z-30">
-              {/* A change that could not be saved, said at the sheet's head. */}
-              <div className="absolute inset-x-0 top-2 flex justify-center px-2">
-                <div className="pointer-events-auto w-full max-w-md">
-                  <UnsavedNotice />
+              <SheetToolsContext value={panel ? <SheetLayoutTools /> : null}>
+                <div className="min-h-0 flex-1">{music}</div>
+              </SheetToolsContext>
+              {editor.view.layout === 'page' || !panel ? null : (
+                <SheetPill covered={{ bottom: below + GAP }}>
+                  <SheetLayoutTools />
+                </SheetPill>
+              )}
+              {/* What floats over the music (ADR 0115): above it, only its own controls taking a touch. */}
+              <div className="pointer-events-none absolute inset-0 z-30">
+                {/* Go to bar's card, hung under the sheet's head (⌘G). */}
+                <GoToBar />
+                {/* A change that could not be saved, said at the sheet's head. */}
+                <div className="absolute inset-x-0 top-2 flex justify-center px-2">
+                  <div className="pointer-events-auto w-full max-w-md">
+                    <UnsavedNotice />
+                  </div>
                 </div>
-              </div>
-              <div
-                ref={foot}
-                data-hidden={footShown ? undefined : true}
-                inert={!footShown}
-                // The selection's commands, or a take's strip, at the sheet's foot (ADR 0115).
-                className="absolute inset-x-0 bottom-0 flex justify-center px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
-              >
-                <div className="flex shrink-0 flex-col items-center gap-2">
-                  <SelectionActions />
-                  {idle ? null : (
-                    <div className="pointer-events-auto">
-                      <RecordingBar />
-                    </div>
-                  )}
+                <div
+                  ref={foot}
+                  data-hidden={footShown ? undefined : true}
+                  inert={!footShown}
+                  // The selection's commands, or a take's strip, at the sheet's foot (ADR 0115).
+                  className="absolute inset-x-0 bottom-0 flex justify-center px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
+                >
+                  <div className="flex shrink-0 flex-col items-center gap-2">
+                    <SelectionActions />
+                    {idle ? null : (
+                      <div className="pointer-events-auto">
+                        <RecordingBar />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
+            {panel ? <EditorKeyboard edge={right ? 'left' : 'right'} /> : null}
           </div>
           {panel || typing ? null : (
             // The palette docked under the sheet, over the keys (R34, as the keys dock).
@@ -246,13 +274,14 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
             <KeyboardAnchor ref={setDocked} />
           ) : null}
         </div>
-        <EditorKeyboard />
+        {/* Under the unfolded palette the keys step aside, as Flat's (owner, 2026-11-15). */}
+        {panel ? null : <EditorKeyboard stepAside={!typing && !folded} />}
       </div>
       <FieldDocked value={typing}>
         <OpenField anchor={typing ? docked : anchor} />
       </FieldDocked>
-      <TakesSheet />
-      <EditorGear draft={draft} />
+      <TakesPage />
+      <EditorGear draft={draft} own={own} />
     </>
   )
 }

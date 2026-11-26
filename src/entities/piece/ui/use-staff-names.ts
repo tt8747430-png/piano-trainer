@@ -26,10 +26,12 @@ export function useStaffNames(
   const names = staffNamesOf(staves, locale)
   const key = JSON.stringify(names)
   // A staff of no name is null in the key, none again in the names.
-  return useMemo(
-    () => (JSON.parse(key) as (string | null)[]).map((name) => name ?? undefined),
-    [key],
-  )
+  return useMemo(() => {
+    const read: unknown = JSON.parse(key)
+    return Array.isArray(read)
+      ? read.map((name: unknown) => (typeof name === 'string' ? name : undefined))
+      : []
+  }, [key])
 }
 
 /**

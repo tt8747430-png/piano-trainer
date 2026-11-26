@@ -7,31 +7,42 @@ import {
   useOwnLessonsStoreApi,
   type OwnCourse,
 } from '@/entities/own-lessons'
+import { useProgressStoreApi } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import {
-  deleteOwnCourse,
   duplicateOwnCourse,
   renameOwnCourse,
-  restoreOwnCourse,
+  setOwnCourseLook,
 } from '@/features/manage-own-lessons'
+import { LookFields } from '@/features/manage-library'
 import { ResetStepsRow } from '@/features/reset-progress'
-import { BackButton, say, ScreenHeader } from '@/shared/ui'
-import { OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
+import { type SettingsWindowOpen } from '@/shared/lib'
+import { say, sayUndo, SettingsGroup, SettingsWindow, ThingHead } from '@/shared/ui'
+import { deleteOwn, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
+import { CourseMark } from './CourseMark'
 
 /**
  * A course of the learner's own's Settings (R30-5), as a course's: The course, Rename and Duplicate
  * (the copy opened); its lessons' progress reset; and Delete last, at once with Undo, its lessons kept.
  */
-export function OwnCourseSettings({ course }: { course: OwnCourse }) {
+export function OwnCourseSettings({
+  course,
+  open,
+  onOpenChange,
+}: { course: OwnCourse } & SettingsWindowOpen) {
   const { t } = useTranslation('learn')
   const navigate = useNavigate()
+  const progress = useProgressStoreApi()
   const store = useOwnLessonsStoreApi()
   const lessons = ownCourseLessons(course, useOwnLessons(selectOwnLessons))
   return (
-    <div className="flex flex-col gap-6 pb-8">
-      <ScreenHeader title={t('settings.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <p className="-mt-2 px-1 text-muted-foreground text-pretty">{course.title}</p>
+    <SettingsWindow open={open} onOpenChange={onOpenChange} title={t('settings.title')}>
+      <div className="flex flex-col gap-6">
+        <ThingHead
+          mark={<CourseMark />}
+          name={course.title}
+          line={t('own.courseLine', { count: lessons.length })}
+        />
         <OwnItemRows
           title={course.title}
           words={{ group: t('settings.course'), rename: t('own.renameCourse') }}
@@ -47,6 +58,16 @@ export function OwnCourseSettings({ course }: { course: OwnCourse }) {
             void navigate({ to: '/courses/$courseId', params: { courseId: copy } })
           }}
         />
+        {/* Its cover, chosen here as on the New course sheet: the picture and its paint. */}
+        <SettingsGroup title={t('own.cover')} bare>
+          <LookFields
+            pictures={false}
+            paintLabel={false}
+            covers
+            look={course.look}
+            onChange={(look) => setOwnCourseLook(store, course.id, look)}
+          />
+        </SettingsGroup>
         <ResetStepsRow
           steps={lessons.map(({ lesson }) => lessonStepId(lesson.id))}
           words={{
@@ -61,15 +82,11 @@ export function OwnCourseSettings({ course }: { course: OwnCourse }) {
           }}
           onDelete={() => {
             void navigate({ to: '/your-lessons', replace: true })
-            const deleted = deleteOwnCourse(store, course.id)
-            if (!deleted) return
-            say(t('own.deleted', { title: course.title }), {
-              label: t('settings.undo'),
-              onClick: () => restoreOwnCourse(store, deleted),
-            })
+            const deleted = deleteOwn(store, progress, { courses: [course.id] })
+            if (deleted) sayUndo(t('own.deleted', { title: course.title }), deleted.undo)
           }}
         />
       </div>
-    </div>
+    </SettingsWindow>
   )
 }

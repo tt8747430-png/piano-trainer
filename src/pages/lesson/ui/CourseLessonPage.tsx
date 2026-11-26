@@ -1,11 +1,12 @@
 import { Link, useParams, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { courseLesson, nextCourseLesson, previousCourseLesson } from '@/entities/course'
+import { courseLesson, nextCourseLesson } from '@/entities/course'
 import { courseLessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton } from '@/shared/ui'
 import { LessonLayout, PlaceLink } from './LessonLayout'
+import { CourseLessonSettingsWindow } from './LessonSettingsWindow'
 
 /**
  * A course's lesson (ADR 0053): its course over it and its number there; the lesson before it, and on
@@ -22,7 +23,6 @@ export function CourseLessonPage() {
   if (!place) return null
   const course = { to: '/courses/$courseId', params: { courseId } } as const
   const next = nextCourseLesson(place)
-  const previous = previousCourseLesson(place)
   const courseTitle = localText(place.course.title, locale)
   const lessonLink = (id: string) => (
     <Link to="/courses/$courseId/$lessonId" params={{ courseId, lessonId: id }} />
@@ -53,14 +53,18 @@ export function CourseLessonPage() {
             }
           : undefined
       }
-      settings={<Link to="/courses/$courseId/$lessonId/settings" params={{ courseId, lessonId }} />}
+      settings={(win) => (
+        <CourseLessonSettingsWindow courseId={courseId} lessonId={lessonId} {...win} />
+      )}
       back={<BackButton />}
       after={(place.lesson.after ?? []).flatMap((id) => {
-        const before = place.course.lessons.find((each) => each.id === id)
+        const at = place.course.lessons.findIndex((each) => each.id === id)
+        const before = place.course.lessons[at]
         return before
           ? [
               {
                 title: localText(before.title, locale),
+                n: at + 1,
                 link: {
                   to: '/courses/$courseId/$lessonId',
                   params: { courseId, lessonId: id },
@@ -71,21 +75,12 @@ export function CourseLessonPage() {
       })}
       place={
         <>
-          <PlaceLink {...course}>{courseTitle}</PlaceLink> ·{' '}
-          {t('place', { n: place.n, total: place.total })}
+          {t('place', { n: place.n, total: place.total })} ·{' '}
+          <PlaceLink {...course}>{courseTitle}</PlaceLink>
         </>
       }
       track={{
         up: { link: <Link {...course} />, label: t('track.toCourseLessons'), title: courseTitle },
-        ...(previous
-          ? {
-              previous: {
-                link: lessonLink(previous.id),
-                label: t('track.previous'),
-                title: localText(previous.title, locale),
-              },
-            }
-          : {}),
         next: next
           ? {
               link: lessonLink(next.id),

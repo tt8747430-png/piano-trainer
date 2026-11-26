@@ -1,5 +1,4 @@
 // @vitest-environment jsdom
-import { DEFAULT_CARD_LOOK } from './card-look'
 import { describe, expect, it } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createLibraryStore, INITIAL_LIBRARY, LIBRARY_STORAGE_KEY, LIBRARY_VERSION } from './store'
@@ -71,13 +70,6 @@ describe('createLibraryStore', () => {
       songLooks: { bz5: { picture: 'piano', paint: 'grass' } },
       songDetails: {
         silent: { level: 'beginner', genre: 'christmas', language: 'en', tags: ['advent'] },
-      },
-      cardLooks: {
-        home: DEFAULT_CARD_LOOK,
-        'folder-3': {
-          ...DEFAULT_CARD_LOOK,
-          style: { ...DEFAULT_CARD_LOOK.style, padding: 'roomy' },
-        },
       },
     }
     expect(restored(saved)).toEqual(saved)

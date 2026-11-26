@@ -1,18 +1,12 @@
+import { CloudOff, Link2Off, TriangleAlert, UserRound, Users } from 'lucide-react'
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { GroupInvite } from '@/shared/api/groups'
 import { useAccount } from '@/shared/lib/account'
 import { useGroups } from '@/shared/lib/groups'
-import { BackButton, ButtonLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink, Said, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
 
 /** An invite link's state: being read, read (its group), off or wrong, or unread. */
 type Read =
@@ -63,47 +57,43 @@ export function JoinGroupPage() {
       ? read
       : { kind: 'guest' }
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 pb-8">
+    <div className="page-column flex flex-col gap-6 pb-8">
       <ScreenHeader title={t('groups.title')} back={<BackButton />} />
-      <Empty>
-        {shown.kind === 'guest' ? (
-          <>
-            <EmptyHeader>
-              <EmptyTitle>{t('groups.guestTitle')}</EmptyTitle>
-              <EmptyDescription>{t('groups.guestLine')}</EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-              <ButtonLink render={<Link to="/account/sign-in" />}>{t('groups.signIn')}</ButtonLink>
-            </EmptyContent>
-          </>
-        ) : shown.kind === 'loading' ? (
-          <EmptyHeader>
-            <EmptyDescription>{t('groups.loading')}</EmptyDescription>
-          </EmptyHeader>
-        ) : shown.kind === 'gone' ? (
-          <EmptyHeader>
-            <EmptyTitle>{t('groups.joinGone')}</EmptyTitle>
-          </EmptyHeader>
-        ) : shown.kind === 'failed' ? (
-          <EmptyHeader>
-            <EmptyTitle>{t(shown.offline ? 'groups.offline' : 'groups.failed')}</EmptyTitle>
-          </EmptyHeader>
-        ) : (
-          <>
-            <EmptyHeader>
-              <EmptyTitle>{t('groups.joinTitle', { name: shown.invite.name })}</EmptyTitle>
-              <EmptyDescription>
-                {t('groups.members', { count: shown.invite.members })}
-              </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-              <Button size="lg" disabled={joining} onClick={() => void join()}>
-                {t('groups.join')}
-              </Button>
-            </EmptyContent>
-          </>
-        )}
-      </Empty>
+      {shown.kind === 'guest' ? (
+        <Said
+          icon={UserRound}
+          title={t('groups.guestTitle')}
+          description={t('groups.guestLine')}
+          primary
+          action={
+            <ButtonLink render={<Link to="/account/sign-in" />}>{t('groups.signIn')}</ButtonLink>
+          }
+        />
+      ) : shown.kind === 'loading' ? (
+        <p role="status" className="px-5 py-14 text-center text-muted-foreground">
+          {t('groups.loading')}
+        </p>
+      ) : shown.kind === 'gone' ? (
+        <Said icon={Link2Off} title={t('groups.joinGone')} />
+      ) : shown.kind === 'failed' ? (
+        <Said
+          icon={shown.offline ? CloudOff : TriangleAlert}
+          title={t(shown.offline ? 'groups.offlineTitle' : 'groups.failedTitle')}
+          description={t(shown.offline ? 'groups.offlineLine' : 'groups.failedLine')}
+        />
+      ) : (
+        <Said
+          icon={Users}
+          title={t('groups.joinTitle', { name: shown.invite.name })}
+          description={t('groups.members', { count: shown.invite.members })}
+          primary
+          action={
+            <Button disabled={joining} onClick={() => void join()}>
+              {t('groups.join')}
+            </Button>
+          }
+        />
+      )}
     </div>
   )
 }

@@ -1,0 +1,104 @@
+{
+ "source": "claude.ai build 0d4c697ee9; see CODE_INTERACTIONS_AND_MOTION.md and DESIGN_TOKENS.md",
+ "durationsMs": {
+  "fast": 60,
+  "snap": 120,
+  "base": 200,
+  "sheet": 300,
+  "slow": 450
+ },
+ "easings": {
+  "out": "cubic-bezier(.165,.84,.44,1)",
+  "snap": "cubic-bezier(.32,.72,0,1)",
+  "overshoot": "cubic-bezier(.34,1.3,.64,1)",
+  "outCubic": "cubic-bezier(.215,.61,.355,1)",
+  "tailwindDefault": "cubic-bezier(.4,0,.2,1)"
+ },
+ "messageActions": {
+  "revealInMs": 120,
+  "revealOutMs": 60
+ },
+ "skeletonRevealDelayMs": {
+  "placeholder": 500,
+  "transcript": 2000,
+  "artifactName": 3000,
+  "hubChin": 5000
+ },
+ "dialog": {
+  "enter": "opacity + scale .98",
+  "durationMs": 200,
+  "easing": "out"
+ },
+ "tooltip": {
+  "durationMs": 120,
+  "easing": "snap"
+ },
+ "popoverScaleFrom": 0.97,
+ "switchKnob": {
+  "durationMs": 120,
+  "easing": "overshoot"
+ },
+ "menus": {
+  "submenuOpenDelayMs": 100,
+  "submenuCloseDelayMs": 0,
+  "typeaheadResetMs": 500,
+  "offsetPx": 6,
+  "submenuOffsetPx": 2,
+  "popupWidthPx": [
+   128,
+   320
+  ],
+  "menuAim": {
+   "restMs": 40,
+   "minVelocityPxPerMs": 0.1
+  },
+  "ignoreTriggerClickAfterHoverOpenMs": 500
+ },
+ "hover": {
+  "sidebarMoreOpenMs": 120,
+  "sidebarMoreCloseMs": 180,
+  "hoverCardOpenMs": 500,
+  "hoverCardCloseMs": 200
+ },
+ "toasts": {
+  "defaultTimeoutMs": 6500,
+  "minTimeoutMs": 6000,
+  "withActionAutoHide": false,
+  "pauseOn": [
+   "hover",
+   "focus",
+   "window-blur"
+  ],
+  "dedupe": "(×N)",
+  "topOffsetPx": {
+   "default": 56,
+   "desktopTitlebar": 92,
+   "fallback": 68
+  }
+ },
+ "sidebar": {
+  "widthPx": {
+   "min": 200,
+   "default": 288,
+   "max": 420
+  },
+  "sheetBelowPx": 700,
+  "overlayBelow": "max(700, width+330-1)",
+  "peek": {
+   "hintPx": 48,
+   "openPx": 16,
+   "dwellMs": 100,
+   "closeMs": 180
+  }
+ },
+ "search": {
+  "serverDebounceMs": 500,
+  "localDebounceMs": 250,
+  "localMinChars": 3,
+  "deeperStagesMs": [
+   300,
+   450,
+   3000
+  ]
+ }
+}

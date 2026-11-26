@@ -13,7 +13,7 @@ import {
   hiddenStaves,
   loopParam,
   pedalKeys,
-  playerRange,
+  songRange,
   practiceMarks,
   practisedHands,
   readLoop,
@@ -28,7 +28,7 @@ import {
 import { setPracticeToggle, setScoreView } from '@/features/set-preference'
 import { clickVoice } from '@/features/metronome'
 import type { Performance } from '@/shared/lib/arrangement'
-import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
+import { beatsPerBar, rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import {
   audibleHands,
@@ -42,7 +42,7 @@ import {
 import { useWakeLock } from '@/shared/lib'
 import type { KeyMark } from '@/shared/ui'
 import { reachLoop, type LoopReach } from './loop-reach'
-import type { PracticeView } from './practice-view'
+import type { Between, PracticeView } from './practice-view'
 import { waitFeedback, type WaitFeedback } from './wait-feedback'
 
 /** No track changed: every one plays and shows. */
@@ -97,12 +97,20 @@ export interface PracticePlayer {
   setMode(mode: PracticeMode): void
   /** Listen at a tempo: the mode and the tempo in one change of the URL. */
   listenAt(tempo: number): void
+  /** Whether each pass of a loop plays faster, up to the piece's tempo. */
+  readonly speedTraining: boolean
   setSpeedTraining(on: boolean): void
   setHands(hands: Hands): void
   setSwing(feel: SwingFeel): void
   /** Beats of rest before each repeat; 0 for none. */
   readonly rest: number
   setRest(beats: number): void
+  /** What sounds between a loop's repeats: nothing, a bar counted in, or a bar's rest. */
+  readonly between: Between
+  setBetween(between: Between): void
+  /** How many times the loop plays; null for endless. */
+  readonly repeats: number | null
+  setRepeats(times: number | null): void
   /** The tempo chosen, the piece's own left out of the URL. */
   setTempo(tempo: number): void
   /** Loops the bar the cursor is in, or removes the loop. */
@@ -133,6 +141,7 @@ export function usePracticePlayer(
   const settings = useSettingsStoreApi()
   const toggles = useSettings(selectPractice)
   const savedKeys = useSettings((state) => selectScoreView(state).keys)
+  const keysShown = useSettings((state) => selectScoreView(state).range)
   const click = view.click ?? toggles.metronome
   const sound = useSettings(selectSound)
   const otherHand = useSettings(selectOtherHand)
@@ -177,13 +186,13 @@ export function usePracticePlayer(
     loop,
     metronome: click,
     countIn: playback.countdown !== 'none',
-    countInHeard: playback.countdown === 'audible',
     speedStep: playback.speedStep,
     voicing,
     rest: view.rest ?? 0,
+    ...(view.restSilent ? { restSilent: true } : {}),
+    ...(loop && view.repeats !== undefined ? { repeats: view.repeats } : {}),
     recording,
     mix,
-    accompany: otherHand.play,
   })
   const { state, press } = practice
   const waiting = waitsForNotes(state.mode)
@@ -192,7 +201,7 @@ export function usePracticePlayer(
     () => (waiting ? practisedHands(practisedHand) : audibleHands(practisedHand)),
     [waiting, practisedHand],
   )
-  const range = useMemo(() => playerRange(performance), [performance])
+  const range = useMemo(() => songRange(performance, keysShown), [performance, keysShown])
   // Stable while the beat group is, so the keyboard's memoised keys re-render only when theirs change.
   const marks = useMemo(
     () =>
@@ -219,12 +228,8 @@ export function usePracticePlayer(
     () => pedalKeys(performance, state.beatGroup),
     [performance, state.beatGroup],
   )
-  // The staves out of sight: the Staves' Show, and the other hand's where it is hidden (A35).
-  const other = otherHand.look === 'hide' ? MUTED[practisedHand] : undefined
-  const hidden = useMemo(() => {
-    const off = hiddenStaves(staves)
-    return other === undefined || off.includes(other) ? off : [...off, other]
-  }, [staves, other])
+  // The staves out of sight: the Staves' Show (A35).
+  const hidden = useMemo(() => hiddenStaves(staves), [staves])
   // Where the loop chosen from the keys began: its other end moves.
   const anchor = useRef<number | null>(null)
 
@@ -259,11 +264,20 @@ export function usePracticePlayer(
       view.keys === undefined ? setScoreView(settings, { keys: on }) : setView({ keys: on }),
     setMode: (mode) => setView({ mode }),
     listenAt: (next) => setView({ mode: 'listen', tempo: next === ownTempo ? undefined : next }),
+    speedTraining: view.speedTraining,
     setSpeedTraining: (on) => setView({ speedTraining: on }),
     setHands: (next) => setView({ hands: next }),
     setSwing: (feel) => setView({ swing: feel }),
     rest: view.rest ?? 0,
     setRest: (beats) => setView({ rest: beats > 0 ? beats : undefined }),
+    between: view.rest === undefined ? 'none' : view.restSilent ? 'rest' : 'countIn',
+    setBetween: (between) =>
+      setView({
+        rest: between === 'none' ? undefined : beatsPerBar(performance.meter),
+        restSilent: between === 'rest' ? true : undefined,
+      }),
+    repeats: view.repeats ?? null,
+    setRepeats: (times) => setView({ repeats: times ?? undefined }),
     setTempo: (next) => setView({ tempo: next === ownTempo ? undefined : next }),
     toggleLoop: () => setView({ loop: loop ? undefined : loopParam({ first: bar, last: bar }) }),
     setLoop: (next) => setView({ loop: next ? loopParam(next) : undefined }),

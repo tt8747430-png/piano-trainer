@@ -1,14 +1,16 @@
 import { useTranslation } from 'react-i18next'
 import type { MusicView } from '@/entities/settings'
-import { MenuSection } from '@/shared/ui'
+import { GroupRow, GroupRows, MenuSection } from '@/shared/ui'
 import { DiagramsFields } from './DiagramsFields'
 import { GridFields } from './GridFields'
 import { LyricsFields } from './LyricsFields'
+import { SheetLayoutTools } from './SheetLayoutTools'
 import { SheetViewFields } from './SheetViewFields'
 
 /**
  * The view shown's own part of the Player's View (ADR 0108), headed by its name and holding nothing
- * of another view's: the sheet music's layout and what it shows (`SheetViewFields`);
+ * of another view's: the sheet music's Layout as a row first, as the Player board's view sheet
+ * draws it, then what it shows (`SheetViewFields`);
  * Diagrams' mode and words (`DiagramsFields`); Chords over lyrics' diagrams pinned and text size
  * (`LyricsFields`, ADR 0108); the Grid's words (`GridFields`). The words' switches are greyed where
  * the music has none (`words`), saying why.
@@ -21,12 +23,17 @@ export function ViewSection({
   /** Whether the music has words, sung on some note. */
   words: boolean
 }) {
-  const { t } = useTranslation('player')
+  const { t } = useTranslation(['player', 'music'])
   const noWords = words ? undefined : t('views.noWords')
   switch (view) {
     case 'sheet':
       return (
         <MenuSection title={t('views.sheet')} className="gap-4">
+          <GroupRows surface="sheet">
+            <GroupRow label={t('music:sheet.layout.label')}>
+              <SheetLayoutTools />
+            </GroupRow>
+          </GroupRows>
           <SheetViewFields />
         </MenuSection>
       )

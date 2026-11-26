@@ -9,8 +9,6 @@ export const selectLearned = (state: ProgressState) => state.learned
 export const selectDays = (state: ProgressState) => state.days
 export const selectPractised = (state: ProgressState) => state.practised
 export const selectExercised = (state: ProgressState) => state.exercised
-export const selectTrainerRecords = (state: ProgressState) => state.trainers
-export const selectLessons = (state: ProgressState) => state.lessons
 
 export const selectAllAnswers = (state: ProgressState) => state.answers
 export const selectRead = (state: ProgressState) => state.read
@@ -21,10 +19,14 @@ export const selectTempo =
   (state: ProgressState): number | undefined =>
     state.tempos[key]
 
+/** Whether a step is learned: one test for every list that marks its learned steps. */
+export const isLearned = (learned: ProgressState['learned'], id: StepId): boolean =>
+  learned[id] !== undefined
+
 export const selectIsLearned =
   (id: StepId) =>
   (state: ProgressState): boolean =>
-    state.learned[id] !== undefined
+    isLearned(state.learned, id)
 
 export const selectAnswers =
   (skill: SkillId) =>
@@ -69,3 +71,6 @@ export const selectRun =
   (id: string) =>
   (state: ProgressState): ProgressState['history'][number] | undefined =>
     state.history.find((run) => run.id === id)
+
+/** A song as the learner has played it in the Player; none before its first play. */
+export const selectSongPlay = (pieceId: PieceId) => (state: ProgressState) => state.songs[pieceId]

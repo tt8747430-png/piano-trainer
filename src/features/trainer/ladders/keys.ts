@@ -8,7 +8,7 @@ const upTo = (keys: readonly Key[], count: number) =>
   keys.filter((key) => Math.abs(keySignature(key)) <= count)
 
 export const SIGNATURE_LEVELS = ['up-to-two', 'up-to-four', 'majors', 'minors', 'all'] as const
-export type SignatureLevel = (typeof SIGNATURE_LEVELS)[number]
+type SignatureLevel = (typeof SIGNATURE_LEVELS)[number]
 
 export const SIGNATURE_LEVEL: Readonly<Record<SignatureLevel, readonly Key[]>> = {
   'up-to-two': upTo(MAJORS, 2),
@@ -19,7 +19,7 @@ export const SIGNATURE_LEVEL: Readonly<Record<SignatureLevel, readonly Key[]>> =
 }
 
 export const DEGREE_LEVELS = ['c-g-f', 'up-to-three', 'majors', 'minors', 'all'] as const
-export type DegreeLevel = (typeof DEGREE_LEVELS)[number]
+type DegreeLevel = (typeof DEGREE_LEVELS)[number]
 
 export const DEGREE_LEVEL: Readonly<Record<DegreeLevel, readonly Key[]>> = {
   'c-g-f': upTo(MAJORS, 1),
@@ -30,7 +30,7 @@ export const DEGREE_LEVEL: Readonly<Record<DegreeLevel, readonly Key[]>> = {
 }
 
 export const ROLE_LEVELS = ['primary', 'with-vi', 'with-ii-iii', 'all-major', 'minor'] as const
-export type RoleLevel = (typeof ROLE_LEVELS)[number]
+type RoleLevel = (typeof ROLE_LEVELS)[number]
 
 /** The keys a chord's role is heard in: up to three sharps or flats. */
 const ROLE_MAJORS = upTo(MAJORS, 3)
@@ -52,7 +52,7 @@ export const ROLE_LEVEL: Readonly<
  * their chords, so there by its order alone.
  */
 export const PROGRESSION_LEVELS = ['primary', 'pop', 'jazz', 'minor'] as const
-export type ProgressionLevel = (typeof PROGRESSION_LEVELS)[number]
+type ProgressionLevel = (typeof PROGRESSION_LEVELS)[number]
 
 export const PROGRESSION_LEVEL: Readonly<
   Record<ProgressionLevel, { readonly keys: readonly Key[]; readonly lines: readonly string[] }>

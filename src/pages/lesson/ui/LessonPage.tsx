@@ -1,13 +1,7 @@
 import { Link, useNavigate, useParams, useSearch } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  lessonById,
-  lessonPlace,
-  nextLessonId,
-  previousLessonId,
-  type Lesson,
-} from '@/entities/lesson'
+import { lessonById, lessonPlace, nextLessonId, type Lesson } from '@/entities/lesson'
 import {
   isOwnLessonId,
   ownCourseLessons,
@@ -22,6 +16,7 @@ import { localText, useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, type EditAction } from '@/shared/ui'
 import { LessonLayout, PlaceLink, type LessonTrack } from './LessonLayout'
+import { LessonSettingsWindow } from './LessonSettingsWindow'
 
 const ROUTE = '/shell/lessons/$lessonId'
 
@@ -60,14 +55,17 @@ function LessonScreen({
       lesson={lesson}
       step={lessonStepId(lesson.id)}
       edit={edit}
-      settings={<Link to="/lessons/$lessonId/settings" params={{ lessonId: lesson.id }} />}
+      settings={(win) => <LessonSettingsWindow lessonId={lesson.id} {...win} />}
       back={<BackButton />}
       after={(lesson.after ?? []).flatMap((id) => {
         const before = lessonById(id)
+        const at = lessonPlace(id)
         return before
           ? [
               {
                 title: localText(before.title, locale),
+                // Its number along the level, where it shares the level with this lesson (the board's "6 · …").
+                n: at && at.journey.id === lessonPlace(lesson.id)?.journey.id ? at.n : undefined,
                 link: {
                   to: '/lessons/$lessonId',
                   params: { lessonId: id },
@@ -84,8 +82,8 @@ function LessonScreen({
 }
 
 /**
- * A lesson's page (ADR 0053), `/lessons/$lessonId`: a level's lesson, with its level and chapter over
- * it and its number along the level; or one of the learner's own (R30-5), read the same, under Your
+ * A lesson's page (ADR 0053), `/lessons/$lessonId`: a level's lesson, with its number along the level
+ * and the level over it; or one of the learner's own (R30-5), read the same, under Your
  * lessons. Either, read in a course of the learner's (`?course=`), has that course over it and its
  * lessons either side. Its progress is the lesson's own wherever it is read.
  */
@@ -115,7 +113,6 @@ function LevelLesson({ lesson }: { lesson: Lesson }) {
   const journey = { to: '/levels/$levelId', params: { levelId: place.journey.id } } as const
   const lessonAt = (id: string | undefined) => (id === undefined ? undefined : lessonById(id))
   const next = lessonAt(nextLessonId(lesson.id))
-  const previous = lessonAt(previousLessonId(lesson.id))
   const journeyTitle = localText(place.journey.title, locale)
   return (
     <LessonScreen
@@ -123,22 +120,12 @@ function LevelLesson({ lesson }: { lesson: Lesson }) {
       edit={editsContent(account) ? edit : undefined}
       place={
         <>
-          <PlaceLink {...journey}>{journeyTitle}</PlaceLink> ·{' '}
-          {localText(place.chapter.title, locale)} ·{' '}
-          {t('place', { n: place.n, total: place.total })}
+          {t('place', { n: place.n, total: place.total })} ·{' '}
+          <PlaceLink {...journey}>{journeyTitle}</PlaceLink>
         </>
       }
       track={{
         up: { link: <Link {...journey} />, label: t('track.toJourney'), title: journeyTitle },
-        ...(previous
-          ? {
-              previous: {
-                link: <Link to="/lessons/$lessonId" params={{ lessonId: previous.id }} />,
-                label: t('track.previous'),
-                title: localText(previous.title, locale),
-              },
-            }
-          : {}),
         next: next
           ? {
               link: <Link to="/lessons/$lessonId" params={{ lessonId: next.id }} />,
@@ -180,7 +167,6 @@ function InOwnCourse({ lesson, course }: { lesson: Lesson; course: OwnCourse }) 
   const edit = useEdit(lesson.id)
   const lessons = ownCourseLessons(course, useOwnLessons(selectOwnLessons))
   const at = lessons.findIndex((each) => each.lesson.id === lesson.id)
-  const previous = lessons[at - 1]?.lesson
   const next = lessons[at + 1]?.lesson
   const home = { to: '/courses/$courseId', params: { courseId: course.id } } as const
   const inCourse = (id: string) => (
@@ -194,21 +180,12 @@ function InOwnCourse({ lesson, course }: { lesson: Lesson; course: OwnCourse }) 
       edit={isOwnLessonId(lesson.id) || editsContent(account) ? edit : undefined}
       place={
         <>
-          <PlaceLink {...home}>{course.title}</PlaceLink> ·{' '}
-          {t('place', { n: at + 1, total: lessons.length })}
+          {t('place', { n: at + 1, total: lessons.length })} ·{' '}
+          <PlaceLink {...home}>{course.title}</PlaceLink>
         </>
       }
       track={{
         up: { link: <Link {...home} />, label: t('track.toCourseLessons'), title: course.title },
-        ...(previous
-          ? {
-              previous: {
-                link: inCourse(previous.id),
-                label: t('track.previous'),
-                title: localText(previous.title, locale),
-              },
-            }
-          : {}),
         next: next
           ? {
               link: inCourse(next.id),

@@ -2,25 +2,27 @@ import { memo, useId, type PointerEvent } from 'react'
 import { BLACK_HEIGHT, cn, type KeyGeometry } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { Glyph } from '../Glyph'
-import { ROLE_BG, ROLE_WASH } from '../role-classes'
+import { ROLE_BG } from '../role-classes'
 import { sameLook, type KeyFill, type KeyLook } from './key-look'
 
 const LABEL_INK = 'text-on-role'
 
-/** A key at rest: plain, or a mark's pale wash (the book's paint before the key is played). */
+/** A key at rest: plain, or a mark in its full paint (the board's keys, canvas 197); the hands keep their wash. */
 const REST: Readonly<Record<KeyFill, string>> = {
   white: 'bg-key-white text-on-key-white',
   black: 'bg-key-black text-on-key-black',
-  lit: 'bg-primary text-primary-foreground',
-  selected: 'bg-primary text-primary-foreground',
+  // A key down and the chosen note's keys in the boards' key-down sky (piano_sheet's --key-down), the
+  // score's selection colour: never the honey of the one action.
+  lit: cn('bg-(--key-down)', LABEL_INK),
+  selected: cn('bg-(--key-down)', LABEL_INK),
   wrong: 'bg-destructive text-destructive-foreground',
-  root: cn(ROLE_WASH.root, LABEL_INK),
-  '3rd': cn(ROLE_WASH['3rd'], LABEL_INK),
-  '5th': cn(ROLE_WASH['5th'], LABEL_INK),
-  '7th': cn(ROLE_WASH['7th'], LABEL_INK),
-  '9th': cn(ROLE_WASH['9th'], LABEL_INK),
-  '11th': cn(ROLE_WASH['11th'], LABEL_INK),
-  '13th': cn(ROLE_WASH['13th'], LABEL_INK),
+  root: cn(ROLE_BG.root, LABEL_INK),
+  '3rd': cn(ROLE_BG['3rd'], LABEL_INK),
+  '5th': cn(ROLE_BG['5th'], LABEL_INK),
+  '7th': cn(ROLE_BG['7th'], LABEL_INK),
+  '9th': cn(ROLE_BG['9th'], LABEL_INK),
+  '11th': cn(ROLE_BG['11th'], LABEL_INK),
+  '13th': cn(ROLE_BG['13th'], LABEL_INK),
   rh: cn('bg-hand-rh-wash', LABEL_INK),
   // The left hand is outlined, the right filled (DESIGN.md, Palette Law; R34): they part by shape too.
   lh: cn('bg-hand-lh-wash outline-1 -outline-offset-1 outline-hand-lh', LABEL_INK),
@@ -29,23 +31,14 @@ const REST: Readonly<Record<KeyFill, string>> = {
   scale: 'bg-key-scale text-on-key-scale',
 }
 
-/** A key that sounds or is held: a plain key turns Key Down, a mark its full paint. */
+/** A key that sounds or is held: a plain key turns Key Down, a hand's mark its full paint; a mark keeps its paint and sinks. */
 const DOWN: Readonly<Record<KeyFill, string>> = {
   ...REST,
   white: 'bg-key-down text-on-key-down',
   black: 'bg-key-down text-on-key-down',
-  root: cn(ROLE_BG.root, LABEL_INK),
-  '3rd': cn(ROLE_BG['3rd'], LABEL_INK),
-  '5th': cn(ROLE_BG['5th'], LABEL_INK),
-  '7th': cn(ROLE_BG['7th'], LABEL_INK),
-  '9th': cn(ROLE_BG['9th'], LABEL_INK),
-  '11th': cn(ROLE_BG['11th'], LABEL_INK),
-  '13th': cn(ROLE_BG['13th'], LABEL_INK),
   rh: cn('bg-hand-rh', LABEL_INK),
   lh: cn('bg-hand-lh/50 outline-2 -outline-offset-2 outline-hand-lh', LABEL_INK),
   staff: cn('bg-hand-staff', LABEL_INK),
-  tonic: 'bg-key-tonic-down text-on-key-tonic',
-  scale: 'bg-key-scale-down text-on-key-scale',
 }
 
 /**
@@ -84,7 +77,7 @@ const MIDDLE_C = 60
 /** A phone's narrow keys (a white key under 12px): the keys' container is under 39rem. */
 const SLIM = {
   key: '@max-[39rem]:overflow-visible',
-  label: 'z-5 @max-[39rem]:px-0 @max-[39rem]:whitespace-nowrap @max-[39rem]:wrap-normal',
+  label: 'z-1 @max-[39rem]:px-0 @max-[39rem]:whitespace-nowrap @max-[39rem]:wrap-normal',
   text: '@max-[39rem]:text-[0.5rem]',
   gone: '@max-[39rem]:hidden',
 } as const
@@ -137,7 +130,7 @@ function KeyButton({
       <span
         aria-hidden
         className={cn(
-          'absolute inset-x-0 bottom-0 origin-bottom transition duration-80 ease-out',
+          'absolute inset-x-0 bottom-0 origin-bottom transition-transform duration-80 ease-out',
           black ? 'h-2 key-front-black' : 'h-1.5 key-lip-white',
           look.down ? 'scale-y-33' : null,
         )}
@@ -166,7 +159,11 @@ function KeyButton({
         <span
           aria-hidden
           className={cn(
-            'relative flex w-full flex-col items-center px-0.5 text-center leading-tight wrap-anywhere transition-opacity duration-200 ease-out',
+            'relative flex w-full flex-col items-center text-center leading-tight transition-opacity duration-200 ease-out',
+            // A note's name never breaks ("C2" or "G♯" over two lines on narrow keys); a mark's word may.
+            look.label.kind === 'name' || look.label.text.length <= 3
+              ? 'px-0 whitespace-nowrap'
+              : 'px-0.5 wrap-anywhere',
             look.label.ghost && 'opacity-40',
             slim && SLIM.label,
             slim && look.label.kind === 'name' && geometry.midi !== MIDDLE_C && SLIM.gone,
@@ -178,7 +175,12 @@ function KeyButton({
           <Glyph
             text={look.label.text}
             className={cn(
-              'font-bold tabular-nums',
+              'tabular-nums',
+              // A plain key's name is quiet (the boards' keys: 12, medium, the key's ink at 60%, legible by Night); a lit or marked
+              // key's label is bold in its own ink.
+              look.label.kind === 'name' && !look.down && look.fill === 'white'
+                ? 'font-medium opacity-60'
+                : 'font-bold',
               look.label.kind === 'name' || look.label.caption ? 'text-xs' : 'text-sm',
               slim && SLIM.text,
             )}

@@ -3,7 +3,7 @@ import type { Locale } from '@/shared/i18n'
 import type { MenuAction } from '@/shared/ui'
 
 /** Each language named in itself. */
-export const LANGUAGE_NAMES: Readonly<Record<Locale, string>> = { en: 'English', ru: 'Русский' }
+const LANGUAGE_NAMES: Readonly<Record<Locale, string>> = { en: 'English', ru: 'Русский' }
 
 /**
  * The language a document is written in (round 24), as the draft's menu's first group: English and

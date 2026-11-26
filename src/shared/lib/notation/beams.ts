@@ -12,7 +12,7 @@ import type { ScoreEvent } from './types'
 import { ticksOf } from './values'
 
 /** Which of a voice's events (by index) are beamed together, and which make a tuplet. */
-export interface BeamPlan {
+interface BeamPlan {
   /** Each beam's events, two or more, in order. */
   readonly beams: readonly (readonly number[])[]
   /** Each tuplet's events, in order. */

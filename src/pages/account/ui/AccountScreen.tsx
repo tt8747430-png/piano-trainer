@@ -1,30 +1,40 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { AuthProblem } from '@/shared/lib/account'
-import { BackButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, Problem, ScreenHeader } from '@/shared/ui'
 
-/** An account page: its title with Back (to the Profile, opened directly), its one narrow column. */
+/**
+ * An account page, as the SignIn board: Close in the bar (a step aside, back where it was opened
+ * from) and the page's name beside it, as every bar (owner's lines sweep, 2026-11-18: an empty bar
+ * is a hole); one column under it, 16 apart, on the phone's 16 gutter. On a laptop the column is
+ * 440 wide and centred, headed by the app's mark.
+ */
 export function AccountScreen({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="flex flex-col gap-2">
-      <ScreenHeader title={title} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-sm flex-col gap-6">{children}</div>
+    <div className="flex flex-col">
+      <ScreenHeader title={title} back={<BackButton close />} />
+      <div className="mx-auto flex w-full max-w-110 flex-col gap-4 pt-2 pb-12">
+        <span
+          aria-hidden
+          className="grid size-16 place-items-center self-center rounded-menu bg-(--p-ink) font-display text-4xl text-(--p-honey) max-lg:hidden"
+        >
+          𝄞
+        </span>
+        {children}
+      </div>
     </div>
   )
 }
 
-/** A form's fields in one card, as the Account's groups hold theirs; its one action under the card. */
-export function FieldGroup({ children }: { children: ReactNode }) {
-  return <div className="flex flex-col gap-4 card px-5 py-5">{children}</div>
-}
+/** A link of the account pages, as the board's: the link colour, 15 semibold, reaching 44. */
+export const ACCOUNT_LINK =
+  'inline-flex min-h-11 items-center px-1 text-subhead font-semibold text-link hover:underline'
 
 /** What the server's answer came to, said where the form's button is. */
 export function ProblemLine({ problem }: { problem: AuthProblem | null }) {
   const { t } = useTranslation('account')
   return (
-    <p role="alert" className="text-sm text-destructive empty:hidden">
-      {problem === null ? '' : t(`problem.${problem}`)}
-    </p>
+    <Problem className="empty:hidden">{problem === null ? '' : t(`problem.${problem}`)}</Problem>
   )
 }
 

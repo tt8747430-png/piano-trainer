@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Bell, Camera, Clock, Flame, Music, Settings, type LucideIcon } from 'lucide-react'
-import { useMemo } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNotifications } from '@/entities/notification'
 import { selectDays, streak, useProgress } from '@/entities/progress'
@@ -8,21 +8,21 @@ import { useProfileFigures } from '@/features/track-achievements'
 import { cn } from '@/shared/lib'
 import { useAccount, useLearnerProfile } from '@/shared/lib/account'
 import { useAppUpdate } from '@/shared/lib/app-update'
-import { Avatar, ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
+import { Avatar, ButtonLink, ScreenHeader, Skeleton } from '@/shared/ui'
 import { useToday } from '@/widgets/practice-days'
 import { usePracticeTime } from '../model/format'
 import { AchievementsPreview } from './AchievementsPreview'
-import { BadgesPreview, NextMilestone } from './BadgesPreview'
+import { BadgesPreview } from './BadgesPreview'
 import { HistoryPreview } from './HistoryPreview'
 import { WeekCard } from './WeekCard'
 
 /**
- * The Profile, a place of its own (B1, memory-palaces'): the learner's name in its bar with their
- * notifications' bell and, on a phone, Settings; their picture (Edit photo on it), name, handle and
- * year joined, and three tiles: the day streak (to Streak), the songs learned, the time practised;
- * the week as a bar a day; the badge nearest as a ring; the first badges and achievements, each with
- * See all, beside the rest on a laptop. A guest sees the
- * device's figures and Sign in; while the server's profile is read, its lines are grey.
+ * The Profile (the Profile boards, r50): the learner's name in its bar with the bell and the gear in
+ * one glass; their picture, name and handle, and three tiles; then the week, Practice history, Badges
+ * and Achievements, each under its own heading. A phone reads them in one column; a laptop in rows
+ * that meet: the learner beside the tiles, the week beside the badges, the history beside the
+ * achievements, each pair's boxes stretched to one bottom edge. A guest sees the device's figures and
+ * Sign in; while the server's profile is read, its lines are grey.
  */
 export function ProfilePage() {
   const { t } = useTranslation(['account', 'common', 'settings'])
@@ -31,75 +31,110 @@ export function ProfilePage() {
   const updateReady = useAppUpdate().status === 'ready'
   const unread = useNotifications((held) => held.notices.filter((notice) => !notice.read).length)
   const name = state.kind === 'ready' && state.profile.name ? state.profile.name : account?.name
+  const bell =
+    unread > 0
+      ? t('profile.notifications.unread', { count: unread })
+      : t('profile.notifications.open')
+  const gear = updateReady
+    ? `${t('common:nav.settings')}, ${t('settings:about.update.ready')}`
+    : t('common:nav.settings')
   return (
-    <div className="flex flex-col gap-2">
+    // The learner 8 under the head on a phone and 16 on a laptop, as the boards start a place's content.
+    <div className="flex flex-col gap-2 lg:gap-4">
       <ScreenHeader
+        column="until-laptop"
         title={account ? name || account.email : t('profile.title')}
         large
         tools={
-          <span className="relative">
-            <RoundLink
-              label={
-                unread > 0
-                  ? t('profile.notifications.unread', { count: unread })
-                  : t('profile.notifications.open')
-              }
-              icon={Bell}
-              render={<Link to="/profile/notifications" />}
-            />
-            {unread > 0 ? (
-              <span
-                aria-hidden
-                className="pointer-events-none absolute top-0.5 right-0.5 grid min-w-4.5 place-items-center rounded-pill bg-destructive px-1 text-[0.6875rem] leading-4.5 font-semibold text-white tabular-nums ring-2 ring-background"
+          // The bell and Settings, each its own 44 glass circle 8 apart, as every board's bar (IB).
+          <div className="flex items-center gap-2">
+            <span className="relative rounded-pill glass">
+              <ButtonLink
+                variant="tool"
+                size="icon"
+                aria-label={bell}
+                title={bell}
+                render={<Link to="/profile/notifications" />}
               >
-                {unread > 99 ? '99+' : unread}
-              </span>
-            ) : null}
-          </span>
-        }
-        settings={
-          // The laptop's sidebar has Settings at its foot: the bar's would be a second way.
-          <span className="relative lg:hidden">
-            <RoundLink
-              label={
-                updateReady
-                  ? `${t('common:nav.settings')}, ${t('settings:about.update.ready')}`
-                  : t('common:nav.settings')
-              }
-              icon={Settings}
-              render={<Link to="/settings" />}
-            />
-            {updateReady ? (
-              <span
-                aria-hidden
-                className="pointer-events-none absolute top-1 right-1 size-2.5 rounded-pill bg-destructive ring-2 ring-background"
-              />
-            ) : null}
-          </span>
+                <Bell aria-hidden />
+              </ButtonLink>
+              {unread > 0 ? (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute top-1.5 right-1.25 grid h-4.5 min-w-4.5 place-items-center rounded-pill bg-destructive px-1 text-xs leading-none font-bold text-destructive-foreground tabular-nums"
+                >
+                  {unread > 99 ? '99+' : unread}
+                </span>
+              ) : null}
+            </span>
+            <span className="relative rounded-pill glass">
+              <ButtonLink
+                variant="tool"
+                size="icon"
+                aria-label={gear}
+                title={gear}
+                render={<Link to="/settings" />}
+              >
+                <Settings aria-hidden />
+              </ButtonLink>
+              {updateReady ? (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute top-1 right-1 size-2.5 rounded-pill bg-destructive ring-2 ring-background"
+                />
+              ) : null}
+            </span>
+          </div>
         }
       />
-      {/* One column on a phone; on a laptop two (canvas 128): the learner, the week and the next
-          badge, then the badges and achievements beside them. */}
-      <div className="mx-auto grid w-full max-w-2xl gap-7 lg:max-w-6xl lg:grid-cols-2 lg:items-start lg:gap-x-10">
-        <div className="flex min-w-0 flex-col gap-7">
+      {/* A phone: the learner, the tiles, the week, the history, the badges, the achievements, 16
+          apart and each section 32 under the one before. A laptop: the pairs in rows 32 apart. */}
+      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-stretch lg:gap-8">
+        <div className="flex flex-col justify-center gap-4 lg:max-xl:col-span-2">
           <Hero />
+        </div>
+        <div className="flex flex-col justify-center lg:max-xl:col-span-2">
+          <Tiles />
+        </div>
+        <Cell>
           <WeekCard />
-          <NextMilestone />
-        </div>
-        <div className="flex min-w-0 flex-col gap-7 lg:pt-2">
+        </Cell>
+        <Cell className="max-lg:order-5">
           <BadgesPreview />
-          <AchievementsPreview />
+        </Cell>
+        <Cell>
           <HistoryPreview />
-        </div>
+        </Cell>
+        <Cell className="max-lg:order-6">
+          <AchievementsPreview />
+        </Cell>
       </div>
     </div>
   )
 }
 
 /**
- * The learner (canvas 128, memory-palaces'): their picture at the left, Edit photo on it, then their
- * name and "@handle · Joined 2025"; a guest's plain figure, Exploring as a guest, what their practice
- * stands to lose and Sign in, in the same place; then the three figures.
+ * A section's place on the page (the board's `pcell`): on a phone 32 under the one before; on a
+ * laptop its box stretches to its neighbour's bottom, what it holds centred in it: the box is the last
+ * child of the fold's body (the section's last child), so the fold's own grid is never centred.
+ */
+function Cell({ className, children }: { className?: string; children: ReactNode }) {
+  return (
+    <div
+      className={cn(
+        'flex min-w-0 flex-col max-lg:mt-4 lg:[&>section]:flex-1 lg:[&>section>:last-child]:flex-1 lg:[&>section>:last-child>div>:last-child]:flex-1 lg:[&>section>:last-child>div>:last-child]:justify-center',
+        className,
+      )}
+    >
+      {children}
+    </div>
+  )
+}
+
+/**
+ * The learner (HERO_P): their picture, 76, Edit photo on its lower right, then their name at 28 and
+ * "@handle · Joined 2025"; a guest's plain figure, Exploring as a guest, what their practice stands to
+ * lose and Sign in, in the same place.
  */
 function Hero() {
   const { t } = useTranslation('account')
@@ -109,63 +144,67 @@ function Hero() {
   const name = profile?.name || account?.name || account?.email || null
   const year = profile ? new Date(profile.joined).getFullYear() : null
   return (
-    <section aria-label={name ?? t('profile.guest')} className="flex flex-col gap-4 pt-1">
-      <div className="flex items-center gap-4">
-        <div className="relative shrink-0 self-start">
-          <Avatar name={account ? name : null} size="hero" picture={profile?.avatar ?? null} />
-          {account ? (
-            // Edit photo on the picture's lower right (memory-palaces'): it opens Edit profile.
-            <span className="absolute -right-2 -bottom-2 rounded-pill bg-background p-0.5">
-              <RoundLink
-                label={t('profile.editPhoto')}
-                icon={Camera}
-                render={<Link to="/settings/account/profile" />}
-              />
-            </span>
-          ) : null}
-        </div>
+    <section aria-label={name ?? t('profile.guest')} className="flex items-center gap-4">
+      <div className="relative shrink-0">
+        <Avatar name={account ? name : null} size="hero" picture={profile?.avatar ?? null} />
         {account ? (
-          state.kind === 'loading' ? (
-            <div aria-busy className="flex flex-col gap-2">
-              <p role="status" className="sr-only">
-                {t('profile.loading')}
-              </p>
-              <span
-                aria-hidden
-                className="h-6 w-40 rounded-pill bg-muted motion-safe:animate-pulse"
-              />
-              <span
-                aria-hidden
-                className="h-4 w-32 rounded-pill bg-muted motion-safe:animate-pulse"
-              />
-            </div>
-          ) : (
-            <div className="flex min-w-0 flex-col gap-1">
-              <p className="text-2xl leading-tight font-bold text-balance break-words">{name}</p>
-              {year ? (
-                <p className="text-sm text-muted-foreground">
-                  {profile?.handle
-                    ? t('profile.handleJoined', { handle: profile.handle, year })
-                    : t('profile.joined', { year })}
-                </p>
-              ) : null}
-            </div>
-          )
-        ) : (
-          <div className="flex min-w-0 flex-col items-start gap-2">
-            <p className="text-xl leading-tight font-bold text-balance">{t('profile.guest')}</p>
-            {/* What a guest stands to lose, said truly (R38, canvas 136): kept here, not everywhere. */}
-            <p className="text-sm text-muted-foreground text-pretty">{t('profile.guestKept')}</p>
-            <ButtonLink render={<Link to="/account/sign-in" />}>{t('profile.signIn')}</ButtonLink>
-          </div>
-        )}
+          // Edit photo (the board's CAM): a 30 round on the card's paper, reaching 44.
+          <Link
+            to="/settings/account/profile"
+            aria-label={t('profile.editPhoto')}
+            title={t('profile.editPhoto')}
+            className="group/cam absolute -right-2 -bottom-2 grid size-11 place-items-center rounded-pill"
+          >
+            <span className="grid size-7.5 place-items-center rounded-pill bg-card text-foreground ring-1 ring-border transition-colors duration-200 ease-out group-hover/cam:bg-muted">
+              <Camera aria-hidden className="size-4" />
+            </span>
+          </Link>
+        ) : null}
       </div>
-      <Tiles />
+      {account ? (
+        state.kind === 'loading' ? (
+          <div aria-busy className="flex flex-1 flex-col gap-2">
+            <p role="status" className="sr-only">
+              {t('profile.loading')}
+            </p>
+            <Skeleton className="h-6 rounded-tile" />
+            <Skeleton className="h-3.5 w-1/2 rounded-pill" />
+          </div>
+        ) : (
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <p className="text-3xl leading-tight font-bold tracking-title text-balance break-words">
+              {name}
+            </p>
+            {year ? (
+              <p className="text-subhead text-muted-foreground">
+                {profile?.handle
+                  ? t('profile.handleJoined', { handle: profile.handle, year })
+                  : t('profile.joined', { year })}
+              </p>
+            ) : null}
+          </div>
+        )
+      ) : (
+        <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
+          <p className="text-2xl leading-tight font-bold text-balance">{t('profile.guest')}</p>
+          {/* What a guest stands to lose, said truly (R38, canvas 136): kept here, not everywhere. */}
+          <p className="text-sm/[1.4] text-pretty text-muted-foreground">
+            {t('profile.guestKept')}
+          </p>
+          {/* GUEST_P's Sign in: a 44 honey pill, bold. */}
+          <ButtonLink className="px-5" render={<Link to="/account/sign-in" />}>
+            {t('profile.signIn')}
+          </ButtonLink>
+        </div>
+      )}
     </section>
   )
 }
 
-/** The day streak (a link to Streak), the songs learned and the time practised, side by side. */
+/**
+ * The day streak (to Streak), the songs learned (to Songs) and the time practised (to Practice
+ * history), side by side, 12 apart: each figure in Soft Ink's mark but the flame, a streak alive.
+ */
 function Tiles() {
   const { t } = useTranslation('account')
   const days = useProgress(selectDays)
@@ -174,57 +213,66 @@ function Tiles() {
   const time = usePracticeTime()
   const run = useMemo(() => streak(days, today), [days, today])
   return (
-    <ul aria-label={t('profile.figures')} className="mt-1 grid w-full grid-cols-3 gap-2">
+    <ul aria-label={t('profile.figures')} className="grid w-full grid-cols-3 gap-3">
       <li className="min-w-0">
-        <Link
-          to="/profile/streak"
-          className={cn(
-            TILE,
-            'transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3',
-          )}
-        >
-          <TileFace label={t('profile.tiles.streak')} value={run} icon={Flame} />
+        <Link to="/profile/streak" className={cn(TILE, TILE_LINK)}>
+          <TileFace
+            label={t('profile.tiles.streak')}
+            value={run}
+            icon={Flame}
+            tone={run > 0 ? 'fill-current text-played' : 'text-muted-foreground'}
+          />
         </Link>
       </li>
       <li className="min-w-0">
-        <div className={TILE}>
-          <TileFace label={t('profile.tiles.songs')} value={figures.songsLearned} icon={Music} />
-        </div>
+        <Link to="/songs" className={cn(TILE, TILE_LINK)}>
+          <TileFace
+            label={t('profile.tiles.songs')}
+            value={figures.songsLearned}
+            icon={Music}
+            tone="text-muted-foreground"
+          />
+        </Link>
       </li>
       <li className="min-w-0">
-        <div className={TILE}>
+        <Link to="/profile/history" className={cn(TILE, TILE_LINK)}>
           <TileFace
             label={t('profile.tiles.time')}
-            value={time(figures.practiceSeconds)}
+            value={time(figures.practiceSeconds, 1)}
             icon={Clock}
+            tone="text-muted-foreground"
           />
-        </div>
+        </Link>
       </li>
     </ul>
   )
 }
 
-const TILE = 'card flex h-full flex-col items-start justify-start gap-1 px-3 py-3'
+/** The board's TILE: a card 12 in, its figure and its name 4 apart. */
+const TILE = 'card flex h-full flex-col gap-1 p-3'
+const TILE_LINK = 'transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3'
 
-/** A tile's figure over its name, the value first (canvas 128): "12", then "🔥 Day streak". */
+/** A tile's face (TILE): the figure at 24 bold with its 18 mark at the right, its name 13 under it. */
 function TileFace({
   label,
   value,
   icon: Icon,
+  tone,
 }: {
   label: string
   value: number | string
   icon: LucideIcon
+  tone: string
 }) {
   return (
     <>
-      <span className="text-xl leading-tight font-bold text-balance tabular-nums sm:text-2xl">
-        {value}
+      <span className="flex items-center justify-between gap-1">
+        <span className="text-2xl leading-tight font-bold tracking-title tabular-nums whitespace-nowrap">
+          {value}
+        </span>
+        <Icon aria-hidden className={cn('size-4.5 shrink-0', tone)} />
       </span>
-      <span className="flex min-w-0 items-center gap-1 text-xs text-muted-foreground sm:text-sm">
-        <Icon aria-hidden className="size-3.5 shrink-0" />
-        <span className="min-w-0 text-pretty">{label}</span>
-      </span>
+      <span className="truncate text-footnote/[1.375] text-muted-foreground">{label}</span>
     </>
   )
 }

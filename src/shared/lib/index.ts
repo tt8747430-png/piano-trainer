@@ -1,6 +1,16 @@
 export { chordLabels, chordLabelWidth, type ChordLabel } from './chord-label'
 export { cn } from './cn'
 export {
+  clockSaid,
+  dateSaid,
+  daySaid,
+  momentSaid,
+  monthDaySaid,
+  shortDateSaid,
+  weekdaySaid,
+} from './day-said'
+export { formatLocale } from './format-locale'
+export {
   partsFromParams,
   partsParams,
   qualityParams,
@@ -10,17 +20,29 @@ export {
 export { foldText, matchesQuery, WORD_BREAK } from './fold-text'
 export { IN_PLACE } from './in-place'
 export { OPEN_PLAINLY } from './open-plainly'
+export {
+  OPEN_PUBLISH,
+  OPEN_SETTINGS,
+  useSettingsWindow,
+  type SettingsWindowPage,
+  type SettingsWindowOpen,
+  type SettingsWindowState,
+} from './open-settings'
 export { isOneOf } from './is-one-of'
 export {
-  KEY_DOCKS,
+  CAMERA_ANGLES,
+  CHORD_LABELS,
+  CHORD_RANGES,
+  SONG_RANGES,
   KEY_SIZES,
   NAMED_KEYS,
-  PEDALS_SHOWN,
   SWIPES,
-  type KeyDock,
+  type CameraAngle,
+  type ChordLabels,
+  type ChordRange,
   type KeySize,
   type NamedKeys,
-  type PedalsShown,
+  type SongRange,
   type Swipe,
 } from './keyboard-choices'
 export { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift, type PedalWay } from './midi-choices'
@@ -44,6 +66,7 @@ export {
 } from './latency'
 export {
   keepCentre,
+  onWhiteEdge,
   scrollToReveal,
   scrollToShow,
   keysInView,
@@ -58,9 +81,9 @@ export {
   safeLocalStorage,
   unguarded,
 } from './safe-storage'
-export { isRecord, savedObject } from './saved'
+export { isCount, isRecord, savedObject } from './saved'
 export { createSavedStore, type SavingOptions } from './saved-store'
-export { downloadFile } from './download-file'
+export { downloadFile, fileTitle } from './download-file'
 export {
   MIDI_DIVISION,
   midiFileName,
@@ -85,24 +108,34 @@ export { useForgetScreens, useUp } from './use-up'
 export { UpProvider } from './up-provider'
 export type { FindUp, Up } from './up-context'
 export { READ_DISTANCE, useHiddenWhileReading } from './use-hidden-while-reading'
-export { useShownOnScrollUp } from './use-shown-on-scroll-up'
 export { hasFinePointer } from './fine-pointer'
-export { LANDSCAPE_PHONE, LAPTOP, useMediaQuery } from './use-media-query'
+export {
+  LANDSCAPE_PHONE,
+  LAPTOP,
+  motionReduced,
+  REDUCED_MOTION,
+  WIDE,
+  useMediaQuery,
+} from './use-media-query'
+export { setFocusMode, useFocusMode } from './use-focus-mode'
 export { useWakeLock } from './use-wake-lock'
 export { startKeyboardViewport, visibleBottom } from './keyboard-viewport'
 export { startKeyboardReveal } from './keyboard-reveal'
-export { shareLink, type LinkShared } from './share-link'
-export { useKeyboardHeight, useKeyboardOpen, useKeyboardTop } from './use-keyboard'
+export { copyText, shareLink, type LinkShared } from './share-link'
+export { useKeyboardHeight, useKeyboardTop } from './use-keyboard'
 export { barUnder } from './bar-under'
 export { useElementSize } from './use-element-size'
 export { fitZoom, useFitZoom } from './use-fit-zoom'
-export { toggled } from './toggled'
+export { flipped, toggled } from './toggled'
 export { tapTempo } from './tap-tempo'
 export { useScrollMotion } from './use-scroll-motion'
+export { useNow } from './use-now'
+export { useRootSize, type RootSizeNames } from './use-root-size'
 export { useRovingFocus } from './use-roving-focus'
 export { SHORTEST_PRESS_MS, usePresses } from './use-presses'
 export { useLatestCallback } from './use-latest-callback'
 export { useSetSearch } from './use-set-search'
+export { useShownLocation } from './use-shown-location'
 export { mergeVisibleOrder } from './order'
 export { nameFrom } from './name-from'
 export { useSortableList, type SortableList } from './use-sortable-list'
@@ -148,3 +181,5 @@ export { plainText } from './plain-text'
 export { slug } from './slug'
 export { AVATAR_BYTES, AVATAR_SIDE, avatarOf, centreSquare } from './image'
 export { REST_MS, useRestingSave } from './use-resting-save'
+export { useDragSensors } from './use-drag-sensors'
+export { useLoaded, type Loaded } from './use-loaded'

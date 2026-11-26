@@ -1,26 +1,24 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import type { BarRange, CellBar, PlayedBeat } from '@/features/practice'
-import { barUnder, cn, useElementSize } from '@/shared/lib'
+import { barUnder, cn, REDUCED_MOTION, useElementSize, useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
-import type { Tick } from '@/shared/lib/music'
-import { LoopGrip } from '@/shared/ui'
-import { CellChords } from '@/widgets/chord-chart'
+import { opensOnPickup, printedSymbol, type Tick } from '@/shared/lib/music'
+import { LeadSymbol, LoopGrip } from '@/shared/ui'
 import { firstBeats } from '../model/strip-place'
 import { stripNames } from '../model/strip-names'
-import { pageOf, stripPages } from '../model/strip-pages'
 
 /** A quarter rest in the music font: where the music turns to no chord. */
 const REST = '\u{1D13D}'
 
 /**
- * The beat strip (ADR 0108, R29: Chordify's): the music's beats as played, a page at a time, the
- * repeats taken, a barline before each bar, a chord named only in the beat where it changes and a
- * rest where the music turns to none (`stripNames`), the beat sounding a black box, the loop's beats
- * on its band, a grip at each of its ends dragging it bar by bar (`onLoop`). The strip stands still: the box moves beat by beat, and when it leaves the page the
- * strip turns to the next (`stripPages`: each line of the chart a page, split where the room is
- * short). A loop inside a page never turns it. A beat tapped takes the cursor there (`onBeat`, the
- * tick it is played at). It is a picture of where the music is, hidden from a screen reader, its
- * beats out of the tab order: the transport and the other views' bars are the way through.
+ * The beat strip (ADR 0108; loop round 61, the Player's Diagrams board): every beat as played in
+ * one row, the repeats taken, each a small white cell 3px apart, a bar's first beat after an ink
+ * line; a chord named in the beat where it changes and a rest where the music turns to none
+ * (`stripNames`); the beat sounding filled in ink; the loop's beats on its wash, a grip at each of
+ * its ends dragging it bar by bar (`onLoop`). The row follows the music, the beat sounding a third
+ * of the way in; it scrolls by hand too. A beat tapped takes the cursor there (`onBeat`). It is a
+ * picture of where the music is, hidden from a screen reader, its beats out of the tab order: the
+ * transport and the chords' row are the way through.
  */
 export function BeatStrip({
   performance,
@@ -51,64 +49,79 @@ export function BeatStrip({
     [performance, bars],
   )
   const sounding = (firsts[beat.bar] ?? 0) + beat.beat
-  // How many beats the room holds: its width over a beat's, once both are laid out.
-  const frame = useRef<HTMLDivElement>(null)
-  const { width } = useElementSize(frame)
-  const [beatWidth, setBeatWidth] = useState(0)
-  useLayoutEffect(() => {
-    setBeatWidth(frame.current?.querySelector<HTMLElement>('[data-cell]')?.offsetWidth ?? 0)
-  }, [width])
-  const room = width > 0 && beatWidth > 0 ? Math.max(1, Math.floor(width / beatWidth)) : Infinity
-  const pages = useMemo(() => stripPages(bars, room), [bars, room])
-  const page = pages[pageOf(pages, beat.bar)] ?? []
+  const still = useMediaQuery(REDUCED_MOTION)
+  const strip = useRef<HTMLDivElement>(null)
+  const { width } = useElementSize(strip)
+  const placed = useRef(false)
+  useEffect(() => {
+    const el = strip.current
+    const cell = el?.querySelector<HTMLElement>(`[data-cell="${sounding}"]`)
+    if (!el || !cell) return
+    const left = cell.getBoundingClientRect().left - el.getBoundingClientRect().left + el.scrollLeft
+    el.scrollTo({
+      left: Math.max(0, left - el.clientWidth / 3),
+      behavior: still || !placed.current ? 'auto' : 'smooth',
+    })
+    placed.current = true
+  }, [sounding, still, width])
   return (
     <div
-      ref={frame}
+      ref={strip}
       aria-hidden
       data-slot="beat-strip"
-      data-page={pageOf(pages, beat.bar)}
-      className={cn('overflow-hidden select-none', className)}
+      className={cn(
+        'overflow-x-auto overflow-y-hidden overscroll-x-contain px-gutter select-none scrollbar-none',
+        className,
+      )}
     >
-      <div className="flex w-max">
-        {page.map((index) => {
-          const bar = bars[index]
-          if (!bar) return null
-          const { played, cells } = bar
+      <div className="flex w-max gap-[3px]">
+        {bars.map(({ played, cells }, index) => {
           const looped = loop !== null && played >= loop.first && played <= loop.last
           return (
-            <div
-              key={played}
-              data-bar={played}
-              className="relative flex border-y border-l-2 border-y-border border-l-foreground bg-card last:border-r-2 last:border-r-foreground"
-            >
+            <div key={`${index}-${played}`} data-bar={played} className="relative flex gap-[3px]">
               {cells.map((_, at) => {
                 const cell = (firsts[index] ?? 0) + at
                 const named = names[index]?.[at]
+                const now = cell === sounding
                 return (
                   <button
                     key={at}
                     type="button"
                     tabIndex={-1}
                     data-cell={cell}
-                    data-sounding={cell === sounding ? '' : undefined}
+                    data-sounding={now ? '' : undefined}
                     data-looped={looped ? '' : undefined}
                     onClick={() => onBeat(ticks[cell] ?? 0)}
                     className={cn(
-                      '@container flex size-14 items-end border-l border-hairline px-1 pb-1.5 first:border-l-0 sm:size-16 landscape-phone:size-10',
-                      cell === sounding
+                      'relative size-11 shrink-0 rounded-mark lg:size-13',
+                      at === 0 && 'border-l-3 border-foreground',
+                      now
                         ? 'bg-foreground text-background'
                         : looped
-                          ? 'bg-ring/15'
-                          : undefined,
+                          ? 'bg-paint-yellow text-foreground'
+                          : 'bg-card text-foreground',
                     )}
                   >
                     {named?.rest ? (
-                      <span data-rest="" className="font-music text-3xl leading-none">
+                      <span
+                        data-rest=""
+                        className="absolute top-1/2 left-1.5 -translate-y-1/2 font-music text-2xl leading-none lg:left-2.5"
+                      >
                         {REST}
                       </span>
-                    ) : (
-                      <CellChords symbols={named?.symbols ?? []} />
-                    )}
+                    ) : named && named.symbols.length > 0 ? (
+                      <span
+                        data-chords=""
+                        className="absolute top-1/2 left-1.5 z-1 -translate-y-1/2 text-lg leading-none font-medium whitespace-nowrap lg:left-2.5 lg:text-2xl"
+                      >
+                        {named.symbols.map((symbol, i) => (
+                          <span key={i}>
+                            {i > 0 ? ' ' : ''}
+                            <LeadSymbol text={printedSymbol(symbol)} />
+                          </span>
+                        ))}
+                      </span>
+                    ) : null}
                   </button>
                 )
               })}
@@ -117,6 +130,7 @@ export function BeatStrip({
                   pointerOnly
                   end="start"
                   bar={loop.first}
+                  pickup={opensOnPickup(performance.bars, performance.meter)}
                   min={0}
                   max={loop.last}
                   barAt={barUnder}
@@ -129,6 +143,7 @@ export function BeatStrip({
                   pointerOnly
                   end="end"
                   bar={loop.last}
+                  pickup={opensOnPickup(performance.bars, performance.meter)}
                   min={loop.first}
                   max={performance.bars.length - 1}
                   barAt={barUnder}

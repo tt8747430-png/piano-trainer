@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { barNumber } from '@/shared/lib/music'
 import { RowButton, Sheet, SheetContent } from '@/shared/ui'
 import type { SectionStart } from '../model/section-starts'
 
@@ -11,6 +12,7 @@ export function SectionsSheet({
   starts,
   headings,
   current,
+  pickup,
   open,
   onOpenChange,
   onGo,
@@ -18,6 +20,8 @@ export function SectionsSheet({
   starts: readonly SectionStart[]
   /** Each section's name, by section. */
   headings: readonly string[]
+  /** Whether the song opens on a pickup: its bars numbered from the first full one. */
+  pickup: boolean
   /** The section the cursor is in. */
   current: number | undefined
   open: boolean
@@ -27,14 +31,14 @@ export function SectionsSheet({
 }) {
   const { t } = useTranslation(['player', 'music'])
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet hung="score-bar" open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('player:sections.title')}>
         <ul className="flex flex-col gap-1">
           {starts.map(({ section, bar }) => (
             <li key={section}>
               <RowButton
                 title={headings[section] ?? ''}
-                detail={t('music:sheet.bar', { n: bar + 1 })}
+                detail={t('music:sheet.bar', { n: barNumber(bar, pickup) })}
                 current={section === current}
                 onClick={() => {
                   onGo(bar)

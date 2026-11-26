@@ -4,7 +4,7 @@ import { LESSONS, lessonById, lessonPlace } from '@/entities/lesson'
 import type { FolderId } from '@/entities/library'
 import type { OwnCourse, OwnLesson } from '@/entities/own-lessons'
 import type { BookPattern, PatternRef } from '@/entities/pattern'
-import { entryTitles, type Entry, type PieceId } from '@/entities/piece'
+import { entryAuthor, entryTitles, type Entry, type PieceId } from '@/entities/piece'
 import type { OwnProgression } from '@/entities/practice-library'
 import { libraryByStyle, libraryLine, progressionMode } from '@/entities/progression-library'
 import { localText, type Locale, type LocalText } from '@/shared/i18n'
@@ -13,6 +13,7 @@ import {
   CHORD_QUALITIES,
   chordsOfLine,
   chordSymbol,
+  isTableQuality,
   keyFromParam,
   note,
   numeralsLine,
@@ -23,10 +24,13 @@ import {
   printedSymbol,
   qualitySpellings,
   readChordSymbol,
+  rootsInCapitals,
   SCALE_KINDS,
   scaleIntervals,
   spellAbove,
+  spellChord,
   writtenSymbol,
+  type ChordKind,
   type ChordQuality,
   type Key,
   type KeyParam,
@@ -60,7 +64,7 @@ export type IndexTarget =
   | { readonly opens: 'lesson'; readonly lesson: string }
   | { readonly opens: 'course'; readonly course: string }
   | { readonly opens: 'course-lesson'; readonly course: string; readonly lesson: string }
-  | { readonly opens: 'chord'; readonly root: SpelledNote; readonly quality: ChordQuality }
+  | { readonly opens: 'chord'; readonly root: SpelledNote; readonly quality: ChordKind }
   /** A scale kind's page, on a tonic where one was typed ("D minor"). */
   | { readonly opens: 'scale'; readonly scale: ScaleKind; readonly root?: SpelledNote }
   /** A progression of the library or the learner's own, on its page (R30-4). */
@@ -157,11 +161,13 @@ export function indexEntries({
     }),
     ...pieces.map((entry): IndexEntry => {
       const { primary, secondary } = entryTitles(entry, locale)
+      // Under its title, as the library's row: its printed title, else its composer (the board's PAL).
+      const detail = secondary ?? entryAuthor(entry)
       return {
         id: `songs:${entry.id}`,
         kind: 'songs',
         title: primary,
-        ...(secondary ? { detail: secondary } : {}),
+        ...(detail ? { detail } : {}),
         words: [entry.title, entry.titleEn ?? '', entry.titleRu ?? ''],
         target: { opens: 'piece', entry, archived: archived.has(entry.id) },
       }
@@ -285,23 +291,29 @@ export function indexEntries({
  * Asus4`), on Progressions in the key it is read in (ADR 0052); none for anything else.
  */
 export function typedEntry(query: string, names: IndexNames): IndexEntry | undefined {
-  const chord = readChordSymbol(query)
+  const typed = rootsInCapitals(query)
+  const chord = readChordSymbol(typed)
   if (chord) {
-    if (pitchClassOf(chord.root) === pitchClassOf(C)) return undefined
     const { root, quality } = chord
+    if (pitchClassOf(root) === pitchClassOf(C) && isTableQuality(quality)) return undefined
     return {
       id: 'chords:typed',
       kind: 'chords',
       title: chordSymbol({ root, quality }),
-      detail: names.quality(quality),
+      // A chord the table names by its name, any other by its notes.
+      detail: isTableQuality(quality)
+        ? names.quality(quality)
+        : spellChord(root, quality)
+            .map((tone) => printedNote(tone.note))
+            .join(' '),
       words: [],
       target: { opens: 'chord', root, quality },
     }
   }
   const scale = typedScale(query, names)
   if (scale) return scale
-  const line = chordsOfLine(query)
-  const search = line ? typedSearch(query, { tonic: C, minor: false }) : null
+  const line = chordsOfLine(typed)
+  const search = line ? typedSearch(typed, { tonic: C, minor: false }) : null
   if (!line || !search) return undefined
   return {
     id: 'progressions:typed',

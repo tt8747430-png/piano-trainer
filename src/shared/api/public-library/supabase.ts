@@ -1,8 +1,12 @@
-import { netResult, type NetOptions } from '../network'
-import type { Json, Backend, PianoClient } from '../supabase'
+import { WORD_BREAK } from '@/shared/lib'
+import { type NetOptions, netResult, statusError } from '../network'
+import { toJson, type Json, type Backend, type PianoClient } from '../supabase'
 import {
   DESCRIPTION_MAX,
-  isPublicCategory,
+  isPublicLicence,
+  isPublicType,
+  TAG_MAX,
+  TAGS_MAX,
   RATED_MIN,
   type PublicEntry,
   type PublicLibrary,
@@ -13,7 +17,7 @@ import {
 // A song's first line of its chart rides along for its card (`body->sections->0->lines->0`): the
 // body itself stays on the server until the item is opened.
 const ENTRY =
-  'id, kind, title, author_id, saves, published_at, meta, category, opening:body->sections->0->lines->0'
+  'id, kind, title, author_id, saves, published_at, meta, opening:body->sections->0->lines->0'
 const LIMIT = 100
 
 interface EntryRow {
@@ -24,7 +28,6 @@ interface EntryRow {
   readonly saves: number
   readonly published_at: string
   readonly meta: Json
-  readonly category: string | null
   readonly opening: Json
 }
 
@@ -47,6 +50,18 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
   const rh = text(meta.rh)
   const lh = text(meta.lh)
   const description = text(meta.description)?.trim().slice(0, DESCRIPTION_MAX)
+  const composer = text(meta.composer)
+    ?.trim()
+    .slice(0, TAG_MAX * 4)
+  const type = isPublicType(meta.type) ? meta.type : undefined
+  const licence = isPublicLicence(meta.licence) ? meta.licence : undefined
+  const tags = Array.isArray(meta.tags)
+    ? meta.tags
+        .flatMap((tag) =>
+          typeof tag === 'string' && tag.trim() ? [tag.trim().slice(0, TAG_MAX)] : [],
+        )
+        .slice(0, TAGS_MAX)
+    : []
   const author = authors.get(row.author_id)
   const opening = typeof row.opening === 'string' ? row.opening : undefined
   return {
@@ -57,7 +72,6 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
     authorAvatar: builtInAvatar(author?.avatar ?? null),
     saves: row.saves,
     publishedAt: row.published_at,
-    category: isPublicCategory(row.category) ? row.category : null,
     rating: ratings.get(row.id) ?? null,
     ...(opening ? { opening } : {}),
     meta: {
@@ -66,16 +80,17 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
       ...(rh && { rh }),
       ...(lh && { lh }),
       ...(description && { description }),
+      ...(composer && { composer }),
+      ...(type && { type }),
+      ...(tags.length > 0 && { tags }),
+      ...(licence && { licence }),
     },
   }
 }
 
-/** A Postgres error thrown with its response's status, so `netResult` reads a 4xx as refused. */
-const thrown = (error: { message: string }, status: number) =>
-  Object.assign(new Error(error.message), { status })
-
-/** A search typed by the learner, safe inside `ilike`: its own `%` and `_` match themselves. */
-const likeOf = (query: string) => `%${query.trim().replace(/[\\%_]/g, (char) => `\\${char}`)}%`
+/** A word as an `ilike` pattern inside an `or` filter: its wildcards escaped, quoted for its commas. */
+const likeOf = (word: string) =>
+  `"%${word.replace(/[\\%_]/g, (char) => `\\${char}`).replaceAll('"', '\\"')}%"`
 
 /** The Public library on Supabase (ADR 0116): its tables' row-level security and two functions. */
 export function createSupabasePublicLibrary(
@@ -107,8 +122,8 @@ export function createSupabasePublicLibrary(
           rows.map((row) => row.id),
         ),
     ])
-    if (authors.error) throw thrown(authors.error, authors.status)
-    if (ratings.error) throw thrown(ratings.error, ratings.status)
+    if (authors.error) throw statusError(authors.error.message, authors.status)
+    if (ratings.error) throw statusError(ratings.error.message, ratings.status)
     return {
       authors: new Map(
         authors.data.flatMap((row) =>
@@ -131,18 +146,22 @@ export function createSupabasePublicLibrary(
     return data?.signedUrl ?? null
   }
   return {
-    browse: ({ kind, sort, query, category }) =>
+    browse: ({ kind, sort, query, tag }) =>
       ask(async (client) => {
         const filtered = () => {
           let request = client.from('public_items').select(ENTRY).eq('kind', kind)
-          if (category) request = request.eq('category', category)
-          if (query.trim()) request = request.ilike('title', likeOf(query))
+          if (tag) request = request.contains('meta', { tags: [tag] })
+          // Word by word, as the library's search: each word in the title or the composer's name.
+          for (const word of query.split(WORD_BREAK).filter(Boolean))
+            request = request.or(
+              `title.ilike.${likeOf(word)},meta->>composer.ilike.${likeOf(word)}`,
+            )
           return request
         }
         const { data, error, status } = await filtered()
           .order(sort === 'saved' ? 'saves' : 'published_at', { ascending: false })
           .limit(LIMIT)
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         if (sort !== 'rated') {
           const known = await around(client, data)
           return data.map((row) => entryOf(row, known))
@@ -154,13 +173,13 @@ export function createSupabasePublicLibrary(
           .gte('count', RATED_MIN)
           .order('average', { ascending: false })
           .limit(LIMIT)
-        if (best.error) throw thrown(best.error, best.status)
+        if (best.error) throw statusError(best.error.message, best.status)
         const bestIds = best.data.flatMap((row) => (row.item_id ? [row.item_id] : []))
         const rated =
           bestIds.length === 0
             ? { data: [], error: null, status: 200 }
             : await filtered().in('id', bestIds)
-        if (rated.error) throw thrown(rated.error, rated.status)
+        if (rated.error) throw statusError(rated.error.message, rated.status)
         const rows = [...rated.data, ...data.filter((row) => !bestIds.includes(row.id))]
         const known = await around(client, rows)
         const score = (row: EntryRow) => {
@@ -179,22 +198,21 @@ export function createSupabasePublicLibrary(
           .select(`${ENTRY}, body`)
           .eq('id', id)
           .maybeSingle()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         if (!data) return null
         const known = await around(client, [data])
         const entry = entryOf(data, known)
         const avatar = await avatarOf(client, known.authors.get(data.author_id)?.avatar ?? null)
         return { entry: { ...entry, authorAvatar: avatar }, body: data.body }
       }),
-    publish: ({ kind, sourceId, title, authorName, meta, category, body, version }) =>
+    publish: ({ kind, sourceId, title, authorName, meta, body, version }) =>
       ask(async (client) => {
         const author = await me()
         const fields = {
           title,
           author_name: authorName,
-          meta: meta as Json,
-          category: kind === 'song' ? (category ?? null) : null,
-          body: body as Json,
+          meta: toJson(meta),
+          body: toJson(body),
           version,
         }
         const {
@@ -207,7 +225,7 @@ export function createSupabasePublicLibrary(
           .eq('author_id', author)
           .eq('source_id', sourceId)
           .maybeSingle()
-        if (readError) throw thrown(readError, readStatus)
+        if (readError) throw statusError(readError.message, readStatus)
         // An update names only what an author may change: never who wrote it, or whether it is hidden.
         const { data, error, status } = held
           ? await client.from('public_items').update(fields).eq('id', held.id).select('id').single()
@@ -216,7 +234,7 @@ export function createSupabasePublicLibrary(
               .insert({ ...fields, kind, source_id: sourceId })
               .select('id')
               .single()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return { sourceId, id: data.id, version }
       }),
     unpublish: (sourceId) =>
@@ -227,7 +245,7 @@ export function createSupabasePublicLibrary(
           .delete()
           .eq('author_id', author)
           .eq('source_id', sourceId)
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
       }),
     mine: () =>
       ask(async (client) => {
@@ -236,7 +254,7 @@ export function createSupabasePublicLibrary(
           .from('public_items')
           .select('id, source_id, version')
           .eq('author_id', author)
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data.map((row): Published => ({
           sourceId: row.source_id,
           id: row.id,
@@ -246,7 +264,7 @@ export function createSupabasePublicLibrary(
     save: (id) =>
       ask(async (client) => {
         const { data, error, status } = await client.rpc('save_public_item', { p_item: id })
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data
       }),
     report: (id, reason, note) =>
@@ -257,7 +275,7 @@ export function createSupabasePublicLibrary(
             { item_id: id, reason, note },
             { onConflict: 'item_id,reporter_id', ignoreDuplicates: true },
           )
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
       }),
     rate: (id, stars) =>
       ask(async (client) => {
@@ -265,9 +283,9 @@ export function createSupabasePublicLibrary(
           p_item: id,
           p_stars: stars,
         })
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         const [rating] = data
-        if (!rating) throw thrown({ message: 'Not found' }, 404)
+        if (!rating) throw statusError('Not found', 404)
         return { average: rating.average, count: rating.count }
       }),
     myRating: (id) =>
@@ -280,7 +298,7 @@ export function createSupabasePublicLibrary(
           .eq('item_id', id)
           .eq('user_id', session.session.user.id)
           .maybeSingle()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data?.stars ?? null
       }),
   }

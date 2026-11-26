@@ -94,7 +94,11 @@ export function MidiLog() {
           aria-pressed={held !== null}
           onClick={() => setHeld(held ? null : entries)}
         >
-          {held ? <Play data-icon="inline-start" /> : <Pause data-icon="inline-start" />}
+          {held ? (
+            <Play data-icon="inline-start" className="fill-current" />
+          ) : (
+            <Pause data-icon="inline-start" />
+          )}
           {held ? t('midiSettings.log.resume') : t('midiSettings.log.pause')}
         </Button>
         <Button
@@ -119,10 +123,7 @@ export function MidiLog() {
             <span className="min-w-0 text-pretty">{t('midiSettings.log.empty')}</span>
           </p>
         ) : (
-          <ol
-            aria-label={t('midiSettings.log.label')}
-            className="flex flex-col divide-y divide-hairline"
-          >
+          <ol aria-label={t('midiSettings.log.label')} className="flex flex-col rows-hairline">
             {[...shown].reverse().map((entry) => (
               <LogRow key={entry.id} entry={entry} />
             ))}

@@ -8,6 +8,34 @@ on comes first, before any filing; (3) one quiet row shape, with search, sort an
 
 ## The rulings as they stand (carried over; feedback-log "Library, adding, publishing" and "Song page")
 
+- **One New, opened one way** (owner, 2026-11-17: "the floating actions should also be consistent how they open. why in the songs page it opens as drawer and in all songs it opens as popup … and also you should fix this in the design artifact first"; Material 3 FAB menu; canvas 169's dial): on a phone the honey + at the bottom right opens its card of rows above it, on Songs, All songs and a playlist alike, never a bottom sheet; on a laptop the honey New ▾ at the bar's end opens the same rows as a menu, on the overview too (the strip of Import · Record · New song went). The rows are one list everywhere: New song, Record, Import, New playlist. Canvas v390.
+- **One focus, one floating act; lists, not cards** (owner, 2026-11-17, lines drawn over the boards: "learn how to correctly use cards … two different focus points … use proper floating actions"; `edge-lines`, citing NN/g Cards and Common region, Material 3 Cards and FABs): a public song's title stands in its bar; its facts are a plain column on the paper, its top on the music's; Play heads the music it plays; Add to my library is the page's one floating action. Songs' New is the floating + at the bottom right (Flat's My scores), not a bar button; the playlists are one inset list of rows, not a card each; the laptop's table stands on the paper, not in a box. Canvas v388.
+
+- **Explore as Flat's list** (owner, 2026-11-17, Flat's search and community lists): rows not cards; laptop pane of Songs | People and Kinds with counts; type badge, author with face, saves, ··· Report; no Play (it only opened the page). Canvas v386, `ExploreFeedCard`, `ExplorePane`.
+- **Playlists, honest links (owner, 2026-11-17; canvas v383, the Songs and SharedFolder boards; Flat's My scores 091–097 and flat.io/library):** folders are playlists with mosaic covers; phone: search, New song · Record · Import, Recently played with All n songs, Playlists as rows, Explore; ··· is Archive and Trash only. Laptop: the Playlists pane (Archive, Trash at its foot) beside every song. A shared playlist opens itself, never Groups. This replaces the drawn folders, the Shared with me section, All songs in ···, and the four-card create strip.
+- **My songs is Flat's library, new, with no backwards compatibility** (owner, 2026-11-16: "look at the example apps
+  and improve the design with no backwards compatibility … I want new completely new design"; `flat-score-editor`
+  091–097). The overview: the title (My songs · Explore) and a glass Search; Recently played as a shelf of engraved
+  covers with See all; Folders as cards (Favourites first, a heart on rose; the learner's folders; Shared with me);
+  Archive and Trash as one card of two rows with their counts; the floating New. A first-run library says "Your songs
+  live here" with one New song. **All songs** (See all, Search) is its own page: Back, All songs, Select; a search field;
+  the count and a sort menu (Last played, Title, Composer, Added · Ascending, Descending, Apple's pull-down menu, as
+  Flat); each song a card (its first notes, title on two lines, composer · key, progress · last played) with ··· for
+  Practise, Edit score, Add to a folder, Favourite, Settings, Archive. Select puts a check before each card and a glass
+  bar of Add to folder, Favourite and Archive in the New's place. New folder is a sheet: a name and Create.
+  A folder is the same page under its own name (Flat's playlist, 095–096), with ··· for Rename, Colour, Share and
+  Archive folder; an empty folder is one card: "Nothing in this folder yet" and Add songs, which opens All songs.
+- **Explore is Flat's feed** (owner, 2026-11-16, the same words; `flat-score-editor` 080–082, 098): the search
+  (songs and people), Songs | People, the kinds as chips, then a card per song: who shared it with ··· (Report), the
+  song's first notes with Play, title, composer · level, then its saves, its rating and Original or Arrangement. People
+  lists who publishes, with their count. No comments: the app has none. This replaces the New, Most saved and Top
+  rated shelves below; a public song's page, the shared link and Explore's states stay.
+  This replaces, for Songs: the place chips and the Sort and filter page (Favourites is a folder now; Learning and
+  Learned show on each card), the Archive icon in the bar, and Continue as the shelf's name.
+- **New song is one sheet, Flat's new score** (owner, 2026-11-16; `flat-score-editor` 072–079): Name, Staves (Piano, Melody, Voice and piano), Tempo and Bars steppers, Key as sharps over flats (C major by default, named beside Key), Time tiles, Create pinned, opening the editor; a centred dialog on a laptop.
+- **Record is one sheet:** Input, Tempo, Click, Count-in, Start recording into the editor.
+- **Import is one sheet that reports** ("Imports keep everything"): Choose a file (MusicXML, MIDI), then the song, what came in, what is kept as text, and Open song.
+- **Publish is Flat's discoverability form** (owner, 2026-11-16: "new completely new design"; `flat-score-editor` 089–090): the song's head, a meter "How easily it is found" (n of 5: Title, Composer, Type, Tags, a description of 20 characters), Title and Composer fields, Type as Original · Arrangement · Other, Tags as chips with × and suggested tags with +, Description with its count, Licence a row opening a sheet of four, then As others will see it, the rights box and one Publish. No Why publish card: an option explains nothing under it. This replaces Category (Tags carry it).
 - "A real library" like Mindscape: built-in and own folders nested to any depth; a real archive in the header; deleting a
   folder deletes its songs; Move at any depth. Swipe actions on rows; drag into folders and onto the Archive.
 - Filter by key. No "Chords I know" or "With chords" chips.
@@ -49,7 +77,7 @@ on comes first, before any filing; (3) one quiet row shape, with search, sort an
 - MuseScore's app: Library tab › Scores, with Favourites for quick access
   ([help](https://intercom.help/musescore/en/articles/8535960)).
 - Flat for Education: folders or list view ([help.flat.io](https://help.flat.io/en/education/resource-library)).
-- Noji (`piano-data/reference-apps/new_app_2`): a Continue card first, then My decks; Recently Deleted at the top of the
+- Noji (`piano-data/reference-apps/noji`): a Continue card first, then My decks; Recently Deleted at the top of the
   library; Edit mode with drag handles; Explore with category chips and shelves with counts and See all.
 - Chordify (`reference-apps/chordify`): Discover's "Get right into it" shelf of big pictures, then the lists.
 - Lessons from the videos (UX Peak, list and filters): pictures big enough to want; one shape language; chips plus one

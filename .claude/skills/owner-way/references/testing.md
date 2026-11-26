@@ -34,26 +34,31 @@ is the owner's iPhone 17 Pro at 402×874, on the canvas and in the app; 393 is t
 | `macbook-safari` | 1710×904 | MacBook Air M3 15-inch, Safari filling the screen | measured in Safari on the owner's Mac                      |
 | `macbook-app`    | 1710×984 | the same Mac, the most an app window can take    | macOS's usable screen, measured; a title bar takes some    |
 
+Pass 2 also opens each changed screen at 744×1133 (`ipad-mini`, iPad mini upright, published spec) and 1024×768
+(`tablet-side`), the widths a tablet or an opened foldable takes (`craft-details`, Instructions from the owner's
+articles, 5); both are in the harness's matrix.
+
 Safari's bars collapse on scrolling, taking the phone to 393×735 (`100lvh`). The simulator ran a newer iOS than a real 14 Pro
 may, and Safari's bars differ by version, so to settle a size open a page logging `innerWidth`, `innerHeight` and `100svh`
 on the phone itself. The Mac's screen is 1710×1107 (macOS's default for this panel, native 2880×1864).
 
-Every size runs in **light and dark**, and in **English and Russian**, whose strings run 20–30% longer.
+Every size runs in **light and dark**, in **English only** (owner, 2026-11-16: "stop testing in russian ... only in
+english"): the Russian strings are still written, never shot or checked.
 
 ## Shooting the matrix
 
 ```bash
 # Dev server (the values only let it start; nothing here reaches a server)
-VITE_SUPABASE_URL=http://localhost:54321 VITE_SUPABASE_PUBLISHABLE_KEY=local-check \
+VITE_SUPABASE_URL=http://localhost:54321 VITE_SUPABASE_PUBLISHABLE_KEY=local-check VITE_SKIP_WELCOME=true \
   npx vite --port 5191 --strictPort            # run in the background; note its PID
 
 node .claude/skills/owner-way/scripts/shots.mjs http://localhost:5191 <scratchpad>/shots /practice/metronome /songs
 ```
 
-It shoots each step at all six sizes, both themes and both languages (24 shots a step) as a returning learner. The phones run
+It shoots each step at all six sizes, both themes and in English (12 shots a step) as a returning learner. The phones run
 as the installed app: the status bar and the home indicator are emulated as safe-area insets (59 and 34 on a 393×852), and
 `navigator.standalone` is true. It waits for a score to be engraved before shooting. A step can act first:
-`"/play/hot-cross-buns >> click=Version >> scroll"` taps by accessible name and then shoots the top, the middle and the end; `type=<text>` types into the field focused (a New sheet's name).
+`"/play/hot-cross-buns >> click=Version >> scroll"` taps by accessible name and then shoots the top, the middle and the end; `type=<text>` types into the field focused (a New sheet's name); `click=<en>|<ru>` names the control in each language; `slide=<0 to 1>` drags the first slider from its middle to that part of its width (the Piano sheet's Range strip).
 `inspect.js` checks every shot and prints a `PROBLEM` line for:
 - text cut with no ellipsis (`CUT`);
 - two controls or texts drawn over each other (`OVERLAP`);
@@ -66,7 +71,7 @@ as the installed app: the status bar and the home indicator are emulated as safe
 `scripts/settle.mjs` (load, network quiet, fonts, images, no busy region or spinner, a still layout) and reports a
 part that never settles instead of shooting past it. **Nothing that only greets or interrupts is shot** (the owner's
 rule): `clearOnboarding` dismisses the app's welcome, sign-in or sign-up prompts, product tours and cookie or newsletter
-banners by their gentlest way out as each page loads, before any act (so a sheet a step opens is kept), and reports what it dismissed. It presses Escape only for a layer left open with no way out: on a bare screen Escape is the screen's own key, and the Player closes on it. `ONBOARDING=1` keeps them, only when
+banners by their gentlest way out as each page loads, before any act (so a sheet a step opens is kept), and reports what it dismissed. It presses Escape only for a layer left open with no way out: on a bare screen Escape is the screen's own key, and the Player closes on it. `VITE_SKIP_WELCOME=true` on the dev server (development builds only, `.env.example`) keeps the welcome from opening at all; start the server without it to check the welcome itself. `ONBOARDING=1` keeps them, only when
 the check is of them or the owner asks. The harness also seeds a returning learner from the served app's own settings
 version, so run it from the checkout that serves the app.
 
@@ -78,7 +83,7 @@ so lazy staves stay blank and sheets never finish opening.
 After the change, with the tests green:
 
 1. Shoot the matrix for every route the change reaches.
-2. Open the shots and read each one: the phone sizes in both languages always, the rest at least once per theme.
+2. Open the shots and read each one: the phone sizes always, the rest at least once per theme.
 3. Drive what a screenshot cannot show (below).
 4. Fix everything found, in one batch.
 
@@ -133,11 +138,11 @@ Use Playwright's `page` (real Chrome) for what a still image hides:
 - One honey control; one place current; one way to each action.
 - Floating things reserve no space and keep their gap above the home indicator.
 - Targets 44px; contrast 4.5:1 (3:1 for large text and control lines), both themes.
-- Every word a musician's term, and every Russian string natural.
+- Every word a musician's term.
 - Controls hold their place. No flash of the other layout.
 
 ## Reporting a pass
 
 State it as evidence: "Pass 2: 24 shots each of `/songs` and `/practice/metronome`, 0 problems; tap-through after the key
-picker works; suite 6,249 passed; build clean." Say which part was not run, and why. Then list what is running and stop what
-is yours by PID.
+picker works; suite 6,249 passed; build clean." Say which part was not run, and why. When the work ends (on "stop"), list what is running and stop what
+is yours by PID; in a loop the report is one line and the next item follows in the same turn.

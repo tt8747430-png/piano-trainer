@@ -7,12 +7,15 @@ import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from './ServicesProvider'
 import { useLiveVoice } from './use-live-voice'
 import { usePlayback } from './use-playback'
+import { createFakeArranger } from '@/shared/api/midi'
 
 const NOTE: Sound = { kind: 'note', midi: midi(60), at: 0, duration: 1, velocity: 0.2 }
 
 function setup<T>(hook: () => T, audio: AudioOutput = createFakeAudio()) {
   const wrapper = ({ children }: { children: ReactNode }) => (
-    <ServicesProvider services={{ audio, midi: null }}>{children}</ServicesProvider>
+    <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: null }}>
+      {children}
+    </ServicesProvider>
   )
   const rendered = renderHook(hook, { wrapper })
   return { audio, result: rendered.result, unmount: rendered.unmount }

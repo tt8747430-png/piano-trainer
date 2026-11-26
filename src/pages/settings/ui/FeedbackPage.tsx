@@ -30,28 +30,35 @@ export function FeedbackPage() {
   return (
     <SettingsScreen title={t('pages.feedback')}>
       <form
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-1.5"
         onSubmit={(event) => {
           event.preventDefault()
           if (online && text.trim() !== '') send()
         }}
       >
-        <label htmlFor={id} className="px-3 text-sm font-semibold text-muted-foreground">
+        <label htmlFor={id} className="px-1 text-footnote font-semibold text-muted-foreground">
           {t('report.label')}
         </label>
         <Textarea
           id={id}
           value={text}
           maxLength={REPORT_MAX}
-          rows={6}
+          rows={7}
+          placeholder={t('report.placeholder')}
           aria-describedby={hint}
           onChange={(event) => setText(event.target.value)}
-          className="min-h-40 rounded-card bg-card px-4 py-3 text-base md:text-base"
+          className="min-h-46 resize-none rounded-xl border-border bg-card p-3 dark:bg-card text-base/[1.45] md:text-base/[1.45]"
         />
-        <p id={hint} className="px-3 text-sm text-muted-foreground">
+        <p id={hint} className="px-1 text-footnote text-pretty text-muted-foreground">
           {online ? t('report.footnote') : t('report.offline')}
         </p>
-        <Button type="submit" size="lg" className="mt-4" disabled={!online || text.trim() === ''}>
+        <Button
+          type="submit"
+          size="lg"
+          // The board's: a 50-tall pill, sand with soft ink until there is something to send.
+          className="mt-2.5 disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
+          disabled={!online || text.trim() === ''}
+        >
           {t('report.send')}
         </Button>
       </form>

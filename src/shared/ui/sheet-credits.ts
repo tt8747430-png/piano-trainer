@@ -22,14 +22,12 @@ export const hasCredits = (credits: SheetCreditLines | undefined): credits is Sh
   credits !== undefined && PRINTED.some((field) => credits[field] !== undefined)
 
 /**
- * The room a score's credits take under its title (a page's, dealing its lines): the subtitle's and
- * the tune's rows, then as many rows as the taller side holds (the lyricist over the translator at
- * the left, the composer over the arranger at the right); none without credits.
+ * The room a score's credits take under its title (a page's, dealing its lines): the subtitle's row,
+ * then the one line naming who wrote it; none without credits.
  */
 export function creditsRoom(credits: SheetCreditLines | undefined): number {
   if (!hasCredits(credits)) return 0
-  const left = Number(credits.lyricist !== undefined) + Number(credits.translator !== undefined)
-  const right = Number(credits.composer !== undefined) + Number(credits.arranger !== undefined)
-  const centred = Number(credits.subtitle !== undefined) + Number(credits.tune !== undefined)
-  return CREDITS_GAP + ROW * (centred + Math.max(left, right))
+  const subtitle = Number(credits.subtitle !== undefined)
+  const named = PRINTED.some((field) => field !== 'subtitle' && credits[field] !== undefined)
+  return CREDITS_GAP + ROW * (subtitle + Number(named))
 }

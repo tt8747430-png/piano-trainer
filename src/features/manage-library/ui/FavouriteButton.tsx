@@ -7,8 +7,8 @@ import { RoundButton } from '@/shared/ui'
 import { toggleFavourite } from '../toggle-favourite'
 
 /**
- * The ♡ on a song's cover (Apple Music's): pressed while the song is a favourite, a sand fill and a
- * filled heart, as a pattern's star is; named by what a tap does.
+ * The ♡ on a song's cover (Apple Music's): pressed while the song is a favourite, its heart filled
+ * red, as a pattern's star is; named by what a tap does.
  */
 export function FavouriteButton({ piece, className }: { piece: PieceId; className?: string }) {
   const { t } = useTranslation(['songs', 'common'])
@@ -20,7 +20,7 @@ export function FavouriteButton({ piece, className }: { piece: PieceId; classNam
       icon={Heart}
       aria-pressed={favourite}
       onClick={() => toggleFavourite(store, piece)}
-      className={cn('aria-pressed:bg-chosen aria-pressed:[&_svg]:fill-current', className)}
+      className={cn('aria-pressed:text-heart aria-pressed:[&_svg]:fill-current', className)}
     />
   )
 }

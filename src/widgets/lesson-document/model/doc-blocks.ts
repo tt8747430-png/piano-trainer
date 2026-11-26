@@ -1,5 +1,7 @@
+import { isLocalText, type LocalText } from '@/shared/i18n'
 import type { Node } from '@tiptap/pm/model'
 import { NodeSelection, TextSelection, type EditorState, type Transaction } from '@tiptap/pm/state'
+import { isRecord } from '@/shared/lib'
 import { DOC } from './lesson-doc'
 
 /**
@@ -19,7 +21,7 @@ export function blockStart(doc: Node, index: number): number {
 export const selectedBlock = (state: EditorState): number => state.selection.$from.index(0)
 
 /** Whether block `index` may move by `by`: a block of the lesson's, onto another of them. */
-export function canMoveBlock(doc: Node, index: number, by: -1 | 1): boolean {
+function canMoveBlock(doc: Node, index: number, by: -1 | 1): boolean {
   const to = index + by
   const fixed = fixedBlocks(doc)
   return index >= fixed && to >= fixed && to < doc.childCount
@@ -101,43 +103,39 @@ const TURN_OF: Record<string, TurnInto> = {
 /** What a block of words is, among what it can be turned into; null for an example, title or summary. */
 export const blockTurn = (node: Node): TurnInto | null => TURN_OF[node.type.name] ?? null
 
-type Both = { en: string; ru: string }
-
 /** A line of a block's words, with both languages where the block carried them. */
 interface Line {
   readonly text: string
-  readonly both: Both | null
+  readonly both: LocalText | null
 }
-
-const isBoth = (value: unknown): value is Both =>
-  typeof value === 'object' && value !== null && 'en' in value && 'ru' in value
 
 /** The lines a block of words holds: a step each, a rule and its note, else its words. */
 function linesOf(node: Node): Line[] {
-  const block = node.attrs['block'] as Record<string, unknown> | null | undefined
+  const carried: unknown = node.attrs['block']
+  const block = isRecord(carried) ? carried : undefined
   const lines: Line[] = []
   switch (node.type.name) {
     case 'orderedList':
       node.forEach((step) => {
-        const text = step.attrs['text'] as unknown
-        lines.push({ text: step.textContent, both: isBoth(text) ? text : null })
+        const text: unknown = step.attrs['text']
+        lines.push({ text: step.textContent, both: isLocalText(text) ? text : null })
       })
       return lines
     case 'note':
       node.forEach((part) => {
-        const carried = part.type.name === 'noteRule' ? block?.['rule'] : block?.['text']
+        const own = part.type.name === 'noteRule' ? block?.['rule'] : block?.['text']
         if (part.textContent || node.childCount === 1)
-          lines.push({ text: part.textContent, both: isBoth(carried) ? carried : null })
+          lines.push({ text: part.textContent, both: isLocalText(own) ? own : null })
       })
       return lines
     case 'paragraph': {
       // A lead in bold reads into the words after it: carried whole only where it has none.
       const both = block?.['kind'] === 'text' && !block['lead'] ? block['text'] : null
-      return [{ text: node.textContent, both: isBoth(both) ? both : null }]
+      return [{ text: node.textContent, both: isLocalText(both) ? both : null }]
     }
     default: {
-      const text = node.attrs['text'] as unknown
-      return [{ text: node.textContent, both: isBoth(text) ? text : null }]
+      const text: unknown = node.attrs['text']
+      return [{ text: node.textContent, both: isLocalText(text) ? text : null }]
     }
   }
 }
@@ -201,18 +199,5 @@ export function turnBlockInto(
   const tr = state.tr.replaceWith(start, start + node.nodeSize, nodes)
   const end = start + nodes.reduce((size, each) => size + each.nodeSize, 0)
   tr.setSelection(TextSelection.near(tr.doc.resolve(end - 1), -1))
-  return tr.scrollIntoView()
-}
-
-/**
- * The transaction putting an empty line under block `index` with `/` typed in it, the caret after
- * it: the gutter's + opens the menu of what can go there (Notion's). Null above the lesson's blocks.
- */
-export function lineAfter(state: EditorState, index: number): Transaction | null {
-  if (index < fixedBlocks(state.doc) || index >= state.doc.childCount) return null
-  const at = blockStart(state.doc, index) + state.doc.child(index).nodeSize
-  const line = state.schema.nodes['paragraph']!.create(null, state.schema.text('/'))
-  const tr = state.tr.insert(at, line)
-  tr.setSelection(TextSelection.create(tr.doc, at + 2))
   return tr.scrollIntoView()
 }

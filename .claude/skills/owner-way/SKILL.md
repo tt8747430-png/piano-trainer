@@ -22,7 +22,7 @@ sometimes German, and send phone screenshots of our app and of apps they admire.
 | Any outside design skill (`stageshow`, `emil-design-eng`, `baseline-ui`…) | `.claude/skills/INSTALLED-FROM-VIDEOS.md`; `CLAUDE.md`, `DESIGN.md` and the rulings win over it |
 | Refactoring a whole screen or its settings | `redesigning-a-screen`                                            |
 | Before saying a screen is done        | [testing](references/testing.md)                                       |
-| Reviewing a screen                    | [ux-principles](references/ux-principles.md)                           |
+| Reviewing a screen                    | [ux-principles](references/ux-principles.md); `edge-lines` (its lines and laws) |
 | Starting an agent                     | [agent-brief](references/agent-brief.md)                               |
 
 ## The quality bar
@@ -33,15 +33,16 @@ reference shows what to add as well as what to copy. The brief and the owner's c
 
 | Area                                         | Reference                                                                      |
 | -------------------------------------------- | ------------------------------------------------------------------------------ |
-| Score editor                                 | Flat, Dorico, Sibelius for iPhone, forScore, MuseScore, Soundslice             |
+| Score editor                                 | Dorico and Flat first, looked at most; Sibelius for iPhone, forScore, MuseScore, Soundslice |
 | Engraving                                    | LilyPond and abcjs rules; Verovio, the engine                                  |
 | Player views, chords, song lessons           | Chordify, without guitar features; Songscription's score page (`.scratch/r39/plan/player-reference-songscription.md`) |
 | Library, folders, swipe actions              | Mindscape and the owner's `memory-palaces` repo, whose code may be copied      |
 | Metronome and the time, key, clef pickers    | the owner's screenshots, the Chordify apps, other references in `piano-data`   |
-| New song, creating things                    | Flat's new score (`flat-score-editor`, IMG_4516–4522)                          |
-| Public library, publish, export, Profile     | Noji (`new_app_2`)                                                             |
+| New song, creating things                    | Flat's new score (`flat-score-editor` 072–078, `newscore-…`)                          |
+| Public library, publish, export, Profile     | Noji (`reference-apps/noji`)                                                             |
 | Profile, Settings, tab bar, selection bar    | `memory-palaces` (`AppNav`, `BottomDock`, `ProfilePage`, `SettingsPage`), and other best-practice apps |
 | Lesson and course editors                    | Obsidian's live preview, Notion and Craft's floating toolbar                   |
+| Any control, component or page               | `piano-data/reference-apps` by file name, then screenshots on the web ([ui-and-mockups](references/ui-and-mockups.md), Building a screen); `piano-chords-and-scales-app` welcome; `music-theory-book-app` for its content only, never its UI |
 
 ## Rules every change is held to
 
@@ -74,11 +75,44 @@ wins there.
 - **Design first, then build to it** (owner, 2026-11-13: "why are you improving the current app and not first make
   design and after that implement the design as close as possible. do like this"): each area is redrawn on the
   canvas first, as its ideal (every page, sheet and state, phone and laptop, Day and Night), published, and only
-  then is the app built to match the drawing as closely as it can, checked against it shot by shot at both sizes.
-  No change to a screen's look or behaviour is made in the app before it is on the canvas. The build is the
-  drawing, with no backwards compatibility (owner, 2026-11-13: "you should refactor with no backwards compatibility,
-  you should do the design and ui as the design artifact says and as close as possible"): render the area's boards
-  beside the app's shots, list every difference, rebuild each, and delete the old shape.
+  then is the app built to it. No change to a screen's look or behaviour is made in the app before it is on the
+  canvas. The build is the drawing, with no backwards compatibility (owner, 2026-11-13: "you should refactor with no
+  backwards compatibility, you should do the design and ui as the design artifact says").
+- **Port from the board's code, exactly** (owner, 2026-11-13: "why dont you follow the design artifact and dont read
+  its code how it implements and does things to create accurate redesign of our app … what is with this white border
+  around the actions"): before writing a line, open the board's generator in `.scratch/r39/canvas/` and every kit
+  helper it calls (`r41_kit.py`: `DOCK`, `GROUP`, `SEGC`, `STEPPER`, `BTN`, `PLAYBTN`, `CARD`, `BSHEET`; `calm_kit.py`'s
+  colours; `keyface.py` for the piano), and copy its structure, order, words, sizes, paddings, gaps, radii, colours,
+  shadows, blur and fonts value for value. The app's kit and tokens change to the board's values; the board is never
+  bent to fit an existing component, and "the kit already has one" is no reason to keep a part that looks different.
+  What the board draws and the app lacks is built; what the app shows and the board does not is deleted. Done is
+  measured, not glanced at: the board and the app screen are both measured in the browser (computed size, padding,
+  radius, colour of each part) and every number matches; a screenshot side by side is the last check, not the only
+  one.
+- **Design only, for now** (owner, 2026-11-15: "now you need to work only on the design and no app implementation at
+  all. fix all the inconsistencies in the design"): until the owner says otherwise, the loop changes the canvas alone
+  and no app code. Each round finds the canvas's inconsistencies across every board (the keyboard and the floating
+  keyboard, the bars, the floating actions, settings placed where they belong, controls mixed with settings) and makes
+  one shape of each everywhere, with no legacy shape kept. Restated 2026-11-17 ("you should only work on the
+  artifact"): no port, no app commit; every round's change is a board, published. Floating actions sit at the bottom right. Every board's
+  states are drawn in the States box outside the phone frame, as the Chords board's. A refactor of a pattern is
+  first researched in the official guidelines (Apple HIG, Material 3) and professional designers' resources, cited
+  in the spec. Every screen is made as properly on a computer as on a phone, its space used: no narrow column
+  floating in an empty laptop screen (owner, 2026-11-15: "all the ui should be properly made also on computer and
+  the empty space should be properly used").
+- **Question everything on the page first** (owner, 2026-11-16: "you should question every decision and every
+  component … so that we dont have unneded components unneded pages, duplicate content"): the current design is not
+  the spec. Each round, before polishing a page, every page, tab, section, control and explanation on it is asked:
+  needed? said elsewhere? merge, move, or show it as a picture? already known to the learner? What fails goes the same
+  turn, and the same is asked between pages and across the whole app (owner, 2026-11-16: "check between the pages
+  for these thigns and across the app"): one home per thing, a link from the others
+  ([ui-and-mockups](references/ui-and-mockups.md), Building a screen, step 2).
+- **A rebuild never reverts a board** (owner, 2026-11-17: "what happened to the chords page: why it has the old
+  design? where did you take it? … remove all the old canvas that can mislead you"): a helper file imported the kit
+  as a module, which re-ran the old R40 Chords writer, and the old design went out. Each board has one generator;
+  old canvases and their generators are deleted, not kept beside the new ones; after every rebuild
+  `python3 checks/regress.py` runs before the publish, and a board it prints is published only once its writer is
+  found and fixed (`.scratch/r39/canvas/checks/README.md`).
 - **A refactor** is a screen's design and its code. It does not read the ADRs: it uses best practice and the UI skills
   freely. The area's rulings (feedback log, the spec's "The rulings as they stand") are read where they bear on the
   change; a ruling changes only when the owner changes it.
@@ -86,9 +120,11 @@ wins there.
   uses it in the same feature: phone and laptop, `en` and `ru`, and the canvas.
 - **Docs:** where relevant, the area's ADR is rewritten in place to what was built, once, at the feature's end; nothing
   stale or old is kept.
-- **No tests, no lint, no typecheck:** none written, none run.
+- **No tests, no lint, no typecheck:** none written, none run (owner, 2026-11-14: "dont run the tests, no test").
 - **The visual pass stays in full:** two passes on every screen changed, the second a fresh look after the fixes, at 402
-  (and the 393 check) and 1710, Day and Night, `en` and `ru`; every shot checked against `seven-questions`, `scan-first`,
+  (and the 393 check) and 1710, by Day and in `en` only (owner, 2026-11-15: "dont check the design in night mode and
+  russian language"; 2026-11-16: "stop testing in russian ... only in english", every test, not only a loop's):
+  Night and Russian are drawn but not checked; every shot checked against `seven-questions`, `scan-first`,
   [craft-details](references/craft-details.md) (gaps on the scale, corners, 44px, icons),
   [ux-principles](references/ux-principles.md), `DESIGN.md` and consistency with the screens that share its parts.
   Everything found is fixed before moving on.
@@ -103,6 +139,20 @@ wins there.
   Learn, Songs, Practice, the Player, the score editor, Profile, Settings, Search, and round again, each round the
   area's canvas improved first and the app then built to it. Only
   the word "stop" ends it.
+- **A message inside a loop adds work; it never ends the loop** (owner, 2026-11-18: "if you think that you finished
+  the work, you should find yourself work and start from the beginning. you have basically no reason to stop, only if
+  i say \"stop\". and fix all the instuctions that made you stop"): what ended the turn of 2026-11-18 was a list of
+  asks (refactor the settings, research Learn) taken for the whole task: once the list was done a summary was
+  written. The asks of a message go to the front of the queue; when they are done the loop goes straight on to the
+  next item below, in the same turn, with no summary between them. Finishing what was asked is never the end.
+- **Where the next item comes from when nothing is asked,** in this order, never "nothing left":
+  1. the findings noted and not yet fixed (the lines tool's PROBLEM and NOTE lines, a breach seen in the code);
+  2. the lines tool over every board, phone and laptop, one area after another (`edge-lines`), and every finding fixed;
+  3. every board at 393, 744, 852×393 and 1024 (`testing.md`), and every sheet, menu and state opened;
+  4. the rules in `edge-lines/references/laws.md` checked one by one against every board (type anatomy, spacing,
+     the design-system layers: a `.replace()` patch on a helper's output is a drift to fold into the kit);
+  5. the area's reference apps in `piano-data/reference-apps`, read again against its boards;
+  6. then Learn, Songs, Practice, the Player, the editor, Profile, Settings, Search from the start, a fresh look each.
 
 ## Whose decision is it
 
@@ -139,11 +189,12 @@ does not read first: write the spec, build it, and log it.
 - **Before starting:** fetch and check the branch is level with `main`.
 - **Don't stop at all until every task is finished.** A message is not a stop: take it in and carry on; stop only on the
   word "stop". A finished item, a pushed commit or a passing suite is not a stopping point; the next item is. End a turn
-  only when every task is done and nothing is left, then report what you did; in a loop nothing is ever left: start again
+  only when every task is done and nothing is left, then report what you did; in a loop nothing is ever left (the next
+  item comes from the list in Loops and refactors): start again
   from the beginning ([Loops and refactors](#loops-and-refactors)). On "continue", pick up exactly where the work
   stopped.
-- **Answer questions first,** in a line or two, then carry on. Asked to research and say what you will do: stop after
-  saying it.
+- **Answer questions first,** in a line or two, then carry on in the same turn. Outside a loop, asked only to research
+  and say what you will do: say it and wait; in a loop, never.
 - **"Continue with all" means autonomous mode:** every open task (the plan's rounds, the review findings), one round after
   another, without asking anything: no AskUserQuestion, no "shall I…", no stopping to report between rounds. It runs as
   a loop ([Loops and refactors](#loops-and-refactors)): the build at each area's end, each change pushed to the session
@@ -153,7 +204,26 @@ does not read first: write the spec, build it, and log it.
   not stop"): a background command, shots, a build or a wakeup is never a reason to end the turn; start the next item
   while it runs and read its output when it lands. In a loop, `ScheduleWakeup` is only a safety net for a container
   restart: set it and keep working, never end the turn after it. The `/loop` skill's "then end the turn" yields to this.
-  A turn ends only on "stop", or when the context must be compacted.
+  A turn ends only on "stop". A full context is never a reason to stop or to write a closing report: the
+  session compacts itself and the work carries on from the summary (owner, 2026-11-14: "continue in loop
+  and don't stop and fix all the instructions that make you stop"). What ended loops before, each wrong
+  (owner, 2026-11-17: "fix all the instructions that make you stop and continue in loop"): the harness's
+  "the user hasn't heard from you in a while" nudge answered with a summary instead of one line and the next
+  tool call; a skill's step that ends in "report" (`redesigning-a-screen`, `seven-questions`, `scan-first`,
+  `spacing-audit`), which in a loop is one line inside the turn; a round, an area or a pushed commit taken for an
+  ending; a long session taken for a reason to hand over. None of these ends a turn. In a loop there is no final report:
+  each finished item gets one line saying what changed, then the next item starts in the same turn; the
+  dev server stays up for the next screen.
+  A publish the permission check refuses is not a stop either (2026-11-18): the boards are still built,
+  checked, logged, committed and pushed, item after item, and each later change publishes every board
+  changed since the last publish; the refusal is said in one line, once (owner, 2026-11-19: "the artifact
+  publish shoudnt stop you from continuing"). A publish refused because the published boards were not read is
+  answered by reading them (`action: "read"` with their paths) and publishing again.
+- **Every canvas change goes in the ledger before the next item** (owner, 2026-11-19: "record your changes before
+  compacting … so that the changes record of your changes to the artifact are not compacted and deleted"):
+  `.scratch/r39/canvas/CHANGES.md`, one line newest first (date, commit, what, boards, version or **pending**),
+  committed with the change. `.claude/hooks/canvas-ledger.sh` prints it on PreCompact and after a compaction or
+  resume; a publish sends the Pending section's boards too, then moves those lines to Changes with the version.
 - **Rounds:** a round closes with its items done, its report, an `impeccable` audit and the full gate (in a loop, the
   build alone), before the next starts. Keep the brief's order.
 - **Work inline by default; make the exception when the work calls for it.** Each agent costs about a session, so one
@@ -172,7 +242,8 @@ does not read first: write the spec, build it, and log it.
 - **Context:** stay under about 450k tokens: read the part of a file you need, filter output to its summary.
 - **Usage limit:** wait for the reset, then resume each stopped agent with SendMessage from where it stopped, never from
   scratch.
-- **Leave nothing running:** list processes before reporting and stop yours by PID.
+- **Leave nothing running** when the work ends (on "stop"): list processes and stop yours by PID. In a loop the
+  work never ends, so the dev server keeps running between items; only a stray or finished process is stopped.
 
 ## Secrets and data
 
@@ -194,7 +265,12 @@ does not read first: write the spec, build it, and log it.
 
 ## Reporting
 
-Short, answer first, in the owner's words for things (screens, controls), not file names:
+A report ends a turn, so in a loop there is none (owner, 2026-11-15: "why did you stop, continue and dont stop, and
+remove all the instructions and skills and memory that go against this"): a summary of rounds, a "next is …" line
+with no tool call after it, or a status message at a natural break is a stop, and is never written. Every message in a
+loop ends with the next tool call; a nudge to say what you are doing gets one line, then the work goes on in the same
+turn. The report below is written only when the owner says "stop" or asks a question; in a loop, one line per item and never a closing report. Short,
+answer first, in the owner's words for things (screens, controls), not file names:
 
 1. What was built or fixed.
 2. What was left and why.

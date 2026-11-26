@@ -1,10 +1,10 @@
-import { Piano, Unplug, Usb } from 'lucide-react'
+import { Unplug, Usb } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectMidi, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setMidi } from '@/features/set-preference'
 import type { MidiDevice } from '@/shared/api/midi'
 import { cn } from '@/shared/lib'
-import { Listbox } from '@/shared/ui'
+import { Listbox, KeysIcon } from '@/shared/ui'
 import { useMidiDevices } from '../use-midi-devices'
 import { useMidiInput } from '../use-midi-input'
 
@@ -15,7 +15,7 @@ function DeviceFace({
   detail,
   away = false,
 }: {
-  icon: typeof Piano
+  icon: typeof KeysIcon
   name: string
   /** What the device is, where the list knows: its maker and what it has. */
   detail?: string | undefined
@@ -86,7 +86,7 @@ export function MidiDeviceList() {
             ...keyboards.map((device) => ({
               key: device.name,
               selected: device.name === chosen,
-              content: <DeviceFace icon={Piano} name={device.name} detail={has(device)} />,
+              content: <DeviceFace icon={KeysIcon} name={device.name} detail={has(device)} />,
               onChoose: () => setMidi(store, { device: device.name }),
             })),
             ...(away && chosen !== null
@@ -96,7 +96,7 @@ export function MidiDeviceList() {
                     selected: true,
                     content: (
                       <DeviceFace
-                        icon={Piano}
+                        icon={KeysIcon}
                         name={chosen}
                         detail={t('midiSettings.devices.away')}
                         away

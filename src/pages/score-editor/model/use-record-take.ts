@@ -4,7 +4,7 @@ import { isMidiConnected, useMidiConnection } from '@/features/connect-midi'
 import { useScoreEditorContext } from './editor-context'
 
 /** What Record a take needs, and Record itself. */
-export interface RecordTake {
+interface RecordTake {
   /** Whether a MIDI keyboard is connected to record from. */
   readonly connected: boolean
   /** Whether the takes have room for another. */

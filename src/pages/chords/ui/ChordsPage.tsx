@@ -1,27 +1,83 @@
 import { useSearch } from '@tanstack/react-router'
-import { PageKeyboardTools } from '@/features/live-keyboard'
 import { useTranslation } from 'react-i18next'
-import { useSetSearch } from '@/shared/lib'
-import { BackButton, ScreenHeader } from '@/shared/ui'
-import { ChordExplorer, type ChordView } from '@/widgets/chord-explorer'
+import {
+  selectChords,
+  selectScoreView,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
+import { useMidiSummary } from '@/features/connect-midi'
+import { PianoSheet, useFoldKeys } from '@/features/live-keyboard'
+import { setChords, setScoreView } from '@/features/set-preference'
+import { CHORD_RANGES, useSetSearch } from '@/shared/lib'
+import { BackButton, RoundButton, ScreenHeader, KeysIcon } from '@/shared/ui'
+import { ChordExplorer, framedChord, RANGE_WHITES, type ChordView } from '@/widgets/chord-explorer'
 import { StepPanel } from '@/widgets/step-panel'
-import { ToolsButton } from '@/widgets/tools-sheet'
 
-/** Chords: any chord built on any root, with its path step's panel when opened from one. */
+/**
+ * Chords, as its canvas board: a bar of glass over the stage (Back, the title, Piano opening the
+ * Piano sheet), any chord built on any root, with its path step's panel when opened from one.
+ */
 export function ChordsPage() {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'player'])
   const { step, ...chord } = useSearch({ from: '/shell/practice/chords' })
   const onChange = useSetSearch<ChordView>()
+  const { folded, fold } = useFoldKeys()
+  const { hands } = useSettings(selectScoreView)
+  const { labels, range, rangeFrom, angle, handsOnKeys } = useSettings(selectChords)
+  const framed = framedChord(chord, range, rangeFrom)
+  const settings = useSettingsStoreApi()
+  const midi = useMidiSummary()
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <ScreenHeader
         title={t('pages.chords')}
         back={<BackButton />}
         tools={
-          <>
-            <PageKeyboardTools />
-            <ToolsButton />
-          </>
+          <PianoSheet
+            midi={midi}
+            keys={!folded}
+            hands={hands}
+            onKeys={(shown) => fold(!shown)}
+            onHands={(shown) => setScoreView(settings, { hands: shown })}
+            labels={{ value: labels, onChange: (next) => setChords(settings, { labels: next }) }}
+            stage={{
+              angle,
+              onAngle: (next) => setChords(settings, { angle: next }),
+              handsOnKeys,
+              onHandsOnKeys: (shown) => setChords(settings, { handsOnKeys: shown }),
+            }}
+            range={{
+              value: range,
+              options: CHORD_RANGES.map((each) => ({
+                value: each,
+                label: t(`player:pianoSheet.ranges.${each}`),
+              })),
+              low: framed.low,
+              high: framed.high,
+              // Fit the chord forgets where the strip was dragged; a drag on it shows two octaves.
+              onChange: (next) =>
+                setChords(
+                  settings,
+                  next === 'chord' ? { range: next, rangeFrom: null } : { range: next },
+                ),
+              move: {
+                whites: RANGE_WHITES[range === 'chord' ? 'two' : range],
+                onMove: (from) =>
+                  setChords(settings, {
+                    range: range === 'chord' ? 'two' : range,
+                    rangeFrom: from,
+                  }),
+              },
+            }}
+            trigger={
+              <RoundButton
+                label={t('player:pianoSheet.title')}
+                icon={KeysIcon}
+                aria-haspopup="dialog"
+              />
+            }
+          />
         }
       />
       {step ? <StepPanel step={step} /> : null}

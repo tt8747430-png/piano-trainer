@@ -1,7 +1,7 @@
 import type { RefObject } from 'react'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import type { Tick } from '@/shared/lib/music'
+import { opensOnPickup, type Tick } from '@/shared/lib/music'
 import type { VerdictMark } from '@/shared/ui'
 import { Playhead, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { BarTargets } from './BarTargets'
@@ -75,8 +75,23 @@ export function SheetOverlay({
         size={labelSize}
       />
       {verdicts ? <VerdictShapes layout={layout} heads={verdicts} /> : null}
+      {/* This line's bars, for a loop's grip dragged here from another line. */}
+      <div
+        aria-hidden
+        data-loop-line
+        data-first={firstBar}
+        data-ends={layout.measures.map((measure) => measure.x + measure.width).join(',')}
+        className="pointer-events-none absolute inset-0"
+      />
       {loop ? (
-        <LoopBand layout={layout} loop={loop} onChange={onLoopChange} firstBar={firstBar} />
+        <LoopBand
+          layout={layout}
+          loop={loop}
+          onChange={onLoopChange}
+          firstBar={firstBar}
+          lastPieceBar={performance.bars.length - 1}
+          pickup={opensOnPickup(performance.bars, performance.meter)}
+        />
       ) : null}
       {group && here ? (
         <Playhead

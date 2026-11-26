@@ -1,7 +1,8 @@
 import { useId, type ReactNode } from 'react'
 import { NameField } from './NameField'
 import { Button } from './primitives/button'
-import { Sheet, SheetContent } from './Sheet'
+import { Problem } from './Problem'
+import { MakeSheet } from './MakeSheet'
 
 /**
  * A part of a New sheet (Flat's new score): its name and a line of what it sets, over its choice, on a
@@ -31,8 +32,8 @@ export function SheetPart({
 }
 
 /**
- * Making anything new, one way across the app (round 25, after Flat's new score and Noji's): a sheet
- * titled for what is made; its name first, focused, above the phone's keyboard; its few properties as
+ * Making anything new, one way across the app (round 25, after Flat's new score and Noji's): a
+ * `MakeSheet` (the phone's bottom sheet, a laptop's centred dialog, as every form) titled for what is made; its name first, focused, above the phone's keyboard; its few properties as
  * parts (`children`); one Create at the foot named for the act, greyed until there is a name, saying
  * so while it makes it and why it was not made.
  */
@@ -80,44 +81,41 @@ export function NewSheet({
   const named = name.trim() !== ''
   const nameId = useId()
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        title={title}
-        // Its name first, focused as it opens: the phone's keyboard comes up under it.
-        initialFocus={() => document.getElementById(nameId) ?? true}
-        footer={
-          <div className="flex flex-col gap-2">
-            <Button size="lg" disabled={!named || creating} onClick={onCreate}>
-              {createIcon}
-              {creating && creatingLabel ? creatingLabel : createLabel}
-            </Button>
-            {failed ? (
-              <p role="alert" className="text-sm text-destructive">
-                {failed}
-              </p>
-            ) : null}
-          </div>
-        }
+    <MakeSheet
+      open={open}
+      onOpenChange={onOpenChange}
+      title={title}
+      wide={children !== undefined}
+      // Its name first, focused as it opens: the phone's keyboard comes up under it.
+      initialFocus={() => document.getElementById(nameId) ?? true}
+      footer={
+        <div className="flex flex-col gap-2">
+          <Button size="lg" disabled={!named || creating} onClick={onCreate}>
+            {createIcon}
+            {creating && creatingLabel ? creatingLabel : createLabel}
+          </Button>
+          {failed ? <Problem>{failed}</Problem> : null}
+        </div>
+      }
+    >
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={(event) => {
+          event.preventDefault()
+          if (named && !creating) onCreate()
+        }}
       >
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={(event) => {
-            event.preventDefault()
-            if (named && !creating) onCreate()
-          }}
-        >
-          {lead}
-          <NameField
-            id={nameId}
-            label={nameLabel}
-            value={name}
-            maxLength={maxLength}
-            onChange={(event) => onName(event.target.value)}
-          />
-          {hint ? <p className="-mt-2 text-sm text-muted-foreground">{hint}</p> : null}
-          {children}
-        </form>
-      </SheetContent>
-    </Sheet>
+        {lead}
+        <NameField
+          id={nameId}
+          label={nameLabel}
+          value={name}
+          maxLength={maxLength}
+          onChange={(event) => onName(event.target.value)}
+        />
+        {hint ? <p className="-mt-2 text-sm text-muted-foreground">{hint}</p> : null}
+        {children}
+      </form>
+    </MakeSheet>
   )
 }

@@ -426,6 +426,31 @@ Applied: the Chords page, canvas 96 (a chord symbol in capitals was wrong conten
 
 The seven-things video came again with these; it is the `seven-questions` skill.
 
+## Four articles the owner sent (2026-11-17): trends, design engineering, UI direction, DESIGN.md
+
+Read as data. Punit Chawla, "New UX/UI trends" (Muzli, 2026-07-30); Nurkhon, "What does a design engineer do?"
+(2026-11-08); Michal Malewicz, "UI design direction 2026–2027" (2026-05-27); Nick Babich, "DESIGN.md best practices"
+(UX Planet, 2026-06-17).
+
+- **Glass navigation is the standard, and it stays low-key:** a floating bar you almost forget while scrolling, never
+  hidden; a bar may collapse to a smaller one as the page scrolls (Apple Music keeps two at the foot). Kept: our bars
+  and the tab bar are glass already (`DESIGN.md`); glass is a language of layers, showing the context behind
+  (Malewicz), so it goes on what floats over content, never on content.
+- **Motion carries the brand only where it confirms an act** (Wise's success screens): kept as our motion rules
+  (`craft-details`); mascots, cinematic carousels, endless galleries and shaders are marketing-page devices and are not
+  adopted for an Operate app.
+- **A new size between phone and laptop:** passport-shaped foldables open to a short, wide tablet. Our boards stay
+  402 and 1710, but a screen must hold at every width between them (the 48rem panes and the sidebar's fold decide it).
+- **Design engineering is our port:** the prototype is built in code and handed over as a finished component with every
+  state; a design in a drawing shows only the states someone drew, code must hold them all (Nurkhon; Koch's "polish,
+  the final 10%"). Kept: the canvas is code, and `state-expander` draws every state before a port.
+- **No new "morphisms":** disco, metal, squircle and the rest are textures of skeuomorphism, not styles; a texture
+  fits only where it means something for the product (Malewicz). Ours stays paper and ink; nothing is added for trend.
+- **DESIGN.md:** tokens named by role (`primary`, `surface`, `text-muted`), never by look; each with its intent, its
+  reason and when not to use it; components built on the tokens with every state (default, hover, pressed, focus,
+  disabled, loading). Ours already has the frontmatter and the role names; each component's states are the thing to
+  keep complete when a component changes.
+
 ## Rulings the videos led to
 
 - **Undo instead of asking** (owner: "adopt also this"): Kole Jain's act first and offer Undo replaces "a loss asks

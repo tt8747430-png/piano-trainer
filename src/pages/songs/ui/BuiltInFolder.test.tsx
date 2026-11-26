@@ -57,7 +57,7 @@ describe.each(['signed-out', 'learner', 'learner-view'] as const)(
         'Play',
         'Edit score',
         'Settings',
-        'Add to favourites',
+        'Add to Favourites',
         'Share link',
         'Export…',
         'Archive',

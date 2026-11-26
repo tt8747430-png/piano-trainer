@@ -8,17 +8,17 @@ import {
   Leaf,
   Mic,
   Music,
-  Piano,
   Star,
   Sun,
   type LucideIcon,
 } from 'lucide-react'
 import type { FolderPicture } from '../model/types'
+import { KeysIcon } from '@/shared/ui'
 
 /** Each picture a folder may wear, drawn. */
 export const FOLDER_PICTURE_ICONS: Readonly<Record<FolderPicture, LucideIcon>> = {
   music: Music,
-  piano: Piano,
+  piano: KeysIcon,
   mic: Mic,
   guitar: Guitar,
   headphones: Headphones,

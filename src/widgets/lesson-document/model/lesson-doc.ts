@@ -1,9 +1,10 @@
 import type { About, Lesson, LessonBlock, LessonSection } from '@/entities/lesson'
-import type { Locale, LocalText } from '@/shared/i18n'
+import { isLocalText, type Locale, type LocalText } from '@/shared/i18n'
 import type { BlockStyle } from '@/shared/lib/style'
+import { carriedBlockOf, carriedStyleOf, inStyle } from './carried'
 
 /** A mark on a run of text: bold, a text block's lead. */
-export interface DocMark {
+interface DocMark {
   readonly type: string
 }
 
@@ -151,28 +152,15 @@ const written = (carried: unknown, locale: Locale, text: string): LocalText => (
   [locale]: text,
 })
 
-const isLocalText = (value: unknown): value is LocalText =>
-  typeof value === 'object' && value !== null && 'en' in value && 'ru' in value
-
 /** The style a node carries; none where it carries none. */
-const styleOf = (node: DocNode): BlockStyle | undefined => {
-  const style = node.attrs?.['style']
-  return typeof style === 'object' && style !== null ? (style as BlockStyle) : undefined
-}
+const styleOf = (node: DocNode): BlockStyle | undefined =>
+  carriedStyleOf(node.attrs?.['style']) ?? undefined
 
 /** The block in the style its node carries (set in the document, over the one it was written with). */
-function withStyle(block: LessonBlock, node: DocNode): LessonBlock {
-  const { style: _was, ...plain } = block
-  const style = styleOf(node)
-  return (style ? { ...plain, style } : plain) as LessonBlock
-}
+const withStyle = (block: LessonBlock, node: DocNode): LessonBlock =>
+  inStyle(block, carriedStyleOf(node.attrs?.['style']))
 
-const carriedBlock = (node: DocNode): LessonBlock | null => {
-  const block = node.attrs?.['block']
-  return typeof block === 'object' && block !== null && 'kind' in block
-    ? (block as LessonBlock)
-    : null
-}
+const carriedBlock = (node: DocNode): LessonBlock | null => carriedBlockOf(node.attrs?.['block'])
 
 /** A paragraph's words: its bold runs at the start its lead, the rest its text. */
 function paragraphBlock(node: DocNode, locale: Locale): LessonBlock | null {

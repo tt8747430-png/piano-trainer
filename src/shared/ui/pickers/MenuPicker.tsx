@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { Listbox } from '../Listbox'
 import { choiceGroups, optionName, type Choices, type OptionValue } from '../option'
 import { PickerShell } from './PickerShell'
@@ -14,7 +14,9 @@ export function MenuPicker<V extends OptionValue>({
   value,
   onChange,
   bare,
+  title,
   face,
+  trigger,
   className,
   ...choices
 }: {
@@ -22,8 +24,12 @@ export function MenuPicker<V extends OptionValue>({
   value: V
   onChange: (value: V) => void
   bare?: boolean
+  /** A part of a name made of its pickers (`PickerShell`'s `title`). */
+  title?: boolean
   /** How the button shows the value, where not by its label: shorter, or a picture. */
   face?: (value: V) => ReactNode
+  /** A trigger that carries its own face (a settings group's row), in place of the value with ⌃⌄. */
+  trigger?: ReactElement
   className?: string
 } & Choices<V>) {
   const groups = choiceGroups(choices).map((group) => ({
@@ -40,6 +46,8 @@ export function MenuPicker<V extends OptionValue>({
       value={face ? face(value) : (current?.label ?? String(value))}
       spoken={spoken}
       bare={bare}
+      title={title}
+      trigger={trigger}
       className={className}
     >
       {({ close, start }) => (

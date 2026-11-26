@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
-import { staffScale, useSectionHeading, useStaffNames, useStaffTitle } from '@/entities/piece'
+import { staffScale, useStaffNames, useStaffTitle } from '@/entities/piece'
 import { barAt, barsOf, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
-import { creditsRoom, PageCanvas, SheetPage, type TitlePlace } from '@/shared/ui'
+import { creditsRoom, PageCanvas, SheetPage, useSameWhileEqual, type TitlePlace } from '@/shared/ui'
 import { lineLead, measureWidths, notate, type StaffId } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { labelRow, scoreHeight, useStaffLabels, versesOf } from '@/shared/ui/score'
@@ -14,8 +14,9 @@ import { lineMusic, oneLine } from '../model/line-music'
 import type { EditPrinted } from '../model/printed'
 import { LayerNames, useLayerName } from '../model/use-layer-name'
 import { SheetLine } from './SheetLine'
+import { useHeadings } from './use-headings'
 
-/** No staff hidden. */
+/** No staff hidden, and none written. */
 const NO_STAVES: readonly StaffId[] = []
 /** The room between lines on a page at full size, for dealing lines onto pages. */
 const LINE_GAP = 16
@@ -41,16 +42,6 @@ const itemKey = (item: PageItem) =>
   item.kind === 'title'
     ? 'title'
     : `${item.sheet.line.section} ${item.sheet.line.line} ${item.sheet.line.start}`
-
-/**
- * Each section's name in the learner's language, by section: printed at its first bar (ADR 0097).
- * The same array while the names are, so a line's row is not drawn again for every edit.
- */
-function useHeadings(draft: Draft): readonly string[] {
-  const named = useSectionHeading()
-  const said = draft.sections.map((section) => named({ ...section.heading, lines: [] })).join('\n')
-  return useMemo(() => said.split('\n'), [said])
-}
 
 /**
  * A page's items as the blocks that stay together as it is spread (ADR 0087): the title with the
@@ -187,13 +178,12 @@ export function ScoreSheet({
   }, [draft, lyrics])
   // The staves a line draws: the score's, less those the View hides (ADR 0114, 0097), never every
   // one; the verses under the staff that sings them.
-  const written = whole?.staves.join(' ') ?? ''
-  const hiddenKey = hidden.join(' ')
+  const written = useSameWhileEqual(whole?.staves ?? NO_STAVES)
+  const hiding = useSameWhileEqual(hidden)
   const drawn = useMemo(() => {
-    const staves = written ? (written.split(' ') as StaffId[]) : []
-    const kept = staves.filter((staff) => !hiddenKey.split(' ').includes(staff))
-    return kept.length > 0 ? kept : staves
-  }, [written, hiddenKey])
+    const kept = written.filter((staff) => !hiding.includes(staff))
+    return kept.length > 0 ? kept : written
+  }, [written, hiding])
   const staves = drawn.length > 0 ? drawn.length : 2
   const verses = whole ? versesOf(whole, drawn) : 0
   // The staves' names at the first line's head (ADR 0114, 0097): each single staff's own, else its

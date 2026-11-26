@@ -3,6 +3,7 @@ import type { LibraryState } from './store'
 
 export const selectFavourites = (state: LibraryState) => state.favourites
 export const selectSort = (state: LibraryState) => state.sort
+export const selectDirection = (state: LibraryState) => state.direction
 
 /** Whether the learner keeps this song among their favourites. */
 export const selectIsFavourite =

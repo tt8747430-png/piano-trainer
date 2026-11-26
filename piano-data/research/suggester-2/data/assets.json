@@ -1,0 +1,1438 @@
+{
+ "_source": "xcrun assetutil --info on each Assets.car. exact. Colour components are 0-1 floats in the stated colour space; appearance any = light, NSAppearanceNameDarkAqua = dark.",
+ "catalogs": {
+  "Suggester 2.app/Contents/Resources/Assets.car": [
+   {
+    "type": "Color",
+    "name": "AccentColor",
+    "renditions": 1,
+    "values": [
+     {
+      "appearance": "any",
+      "colorspace": "srgb",
+      "components": [
+       0,
+       0.5333333333333333,
+       1,
+       1
+      ],
+      "systemColor": "systemBlueColor"
+     }
+    ]
+   },
+   {
+    "type": "Color",
+    "name": "Suggester2-glass_Assets/Color-1",
+    "renditions": 1,
+    "values": [
+     {
+      "appearance": "any",
+      "colorspace": "extended gray",
+      "components": [
+       1,
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "Color",
+    "name": "Suggester2-glass_Assets/Color-2",
+    "renditions": 1,
+    "values": [
+     {
+      "appearance": "any",
+      "colorspace": "p3",
+      "components": [
+       0.984000027179718,
+       0.8389999866485596,
+       0.2939999997615814,
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "Color",
+    "name": "Suggester2-glass_Assets/Color-3",
+    "renditions": 1,
+    "values": [
+     {
+      "appearance": "any",
+      "colorspace": "p3",
+      "components": [
+       1,
+       0.42399999499320984,
+       0,
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "Color",
+    "name": "Suggester2-glass_Assets/Color-4",
+    "renditions": 1,
+    "values": [
+     {
+      "appearance": "any",
+      "colorspace": "extended gray",
+      "components": [
+       0,
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "Icon Image",
+    "name": "Suggester2-glass",
+    "renditions": 7,
+    "sizes": [
+     "32x32",
+     "64x64",
+     "128x128",
+     "256x256",
+     "512x512",
+     "1024x1024"
+    ]
+   },
+   {
+    "type": "IconGroup",
+    "name": "Suggester2-glass/Bubble",
+    "renditions": 3,
+    "sizes": [
+     "NSAppearanceNameDarkAqua",
+     "NSAppearanceNameAqua",
+     "ISAppearanceTintable"
+    ]
+   },
+   {
+    "type": "IconGroup",
+    "name": "Suggester2-glass/Shadow Black",
+    "renditions": 3,
+    "sizes": [
+     "NSAppearanceNameDarkAqua",
+     "NSAppearanceNameAqua",
+     "ISAppearanceTintable"
+    ]
+   },
+   {
+    "type": "IconGroup",
+    "name": "Suggester2-glass/Shadow Overlay",
+    "renditions": 3,
+    "sizes": [
+     "NSAppearanceNameDarkAqua",
+     "NSAppearanceNameAqua",
+     "ISAppearanceTintable"
+    ]
+   },
+   {
+    "type": "IconImageStack",
+    "name": "Suggester2-glass",
+    "renditions": 3,
+    "sizes": [
+     "NSAppearanceNameDarkAqua",
+     "NSAppearanceNameAqua",
+     "ISAppearanceTintable"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "Intent-TrebleClef",
+    "renditions": 12,
+    "sizes": [
+     "4x10",
+     "5x13",
+     "8x19",
+     "10x25",
+     "5x12",
+     "6x15",
+     "9x23",
+     "11x29",
+     "12x29",
+     "15x38"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "Suggester2-glass_Assets/App Icon SuggesterPro",
+    "renditions": 1,
+    "sizes": [
+     "1024x1024"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "Suggester2-glass_Assets/shadow",
+    "renditions": 1,
+    "sizes": [
+     "1024x1024"
+    ]
+   },
+   {
+    "type": "MultiSized Image",
+    "name": "Suggester2-glass",
+    "renditions": 1,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Named Gradient",
+    "name": "Suggester2-glass_Assets/Gradient-1",
+    "renditions": 1,
+    "gradient": {
+     "colors": [
+      "Suggester2-glass_Assets/Color-2",
+      "Suggester2-glass_Assets/Color-3"
+     ],
+     "stops": [
+      0,
+      1
+     ],
+     "startStop": "0.500,0.000 - 0.500,1.000"
+    }
+   },
+   {
+    "type": "Named Gradient",
+    "name": "Suggester2-glass_Assets/Gradient-2",
+    "renditions": 1,
+    "gradient": {
+     "colors": [
+      "Suggester2-glass_Assets/Color-4"
+     ],
+     "stops": [
+      0
+     ],
+     "startStop": "0.500,0.000 - 0.500,1.000"
+    }
+   },
+   {
+    "type": "PackedImage",
+    "name": "ZZZZPackedAsset-1.0.1-gamut0",
+    "renditions": 1,
+    "sizes": [
+     "42x34"
+    ]
+   },
+   {
+    "type": "PackedImage",
+    "name": "ZZZZPackedAsset-2.0.0-gamut0",
+    "renditions": 1,
+    "sizes": [
+     "198x132"
+    ]
+   },
+   {
+    "type": "PackedImage",
+    "name": "ZZZZPackedAsset-2.0.1-gamut0",
+    "renditions": 1,
+    "sizes": [
+     "68x62"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "Intent-TrebleClef",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   }
+  ],
+  "DocumentEditor.framework/Resources/Assets.car": [
+   {
+    "type": "Color",
+    "name": "Chartreuse",
+    "renditions": 2,
+    "values": [
+     {
+      "appearance": "any",
+      "colorspace": "p3",
+      "components": [
+       0.44699999690055847,
+       0.5759999752044678,
+       0,
+       1
+      ]
+     },
+     {
+      "appearance": "NSAppearanceNameDarkAqua",
+      "colorspace": "p3",
+      "components": [
+       0.6589999794960022,
+       0.8080000281333923,
+       0.23100000619888306,
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "Color",
+    "name": "LightOrange",
+    "renditions": 2,
+    "values": [
+     {
+      "appearance": "any",
+      "colorspace": "srgb",
+      "components": [
+       1,
+       0.792156862745098,
+       0.4980392156862745,
+       1
+      ]
+     },
+     {
+      "appearance": "NSAppearanceNameDarkAqua",
+      "colorspace": "srgb",
+      "components": [
+       1,
+       0.803921568627451,
+       0.5019607843137255,
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "Color",
+    "name": "LightYellow",
+    "renditions": 2,
+    "values": [
+     {
+      "appearance": "any",
+      "colorspace": "srgb",
+      "components": [
+       1,
+       0.8980392156862745,
+       0.49019607843137253,
+       1
+      ]
+     },
+     {
+      "appearance": "NSAppearanceNameDarkAqua",
+      "colorspace": "srgb",
+      "components": [
+       1,
+       0.9137254901960784,
+       0.49411764705882355,
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "Color",
+    "name": "SuggesterMint",
+    "renditions": 2,
+    "values": [
+     {
+      "appearance": "any",
+      "colorspace": "p3",
+      "components": [
+       0,
+       0.6470588235294118,
+       0.5098039215686274,
+       1
+      ]
+     },
+     {
+      "appearance": "NSAppearanceNameDarkAqua",
+      "colorspace": "p3",
+      "components": [
+       0.23137254901960785,
+       0.807843137254902,
+       0.6313725490196078,
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "Color",
+    "name": "SuggesterOrange",
+    "renditions": 2,
+    "values": [
+     {
+      "appearance": "any",
+      "colorspace": "srgb",
+      "components": [
+       1,
+       0.5137254901960784,
+       0,
+       1
+      ]
+     },
+     {
+      "appearance": "NSAppearanceNameDarkAqua",
+      "colorspace": "srgb",
+      "components": [
+       1,
+       0.6235294117647059,
+       0.043137254901960784,
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "AppIcon",
+    "renditions": 2,
+    "sizes": [
+     "64x64",
+     "128x128"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "AppIconLarge",
+    "renditions": 1,
+    "sizes": [
+     "1024x1024"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "AppLogo",
+    "renditions": 2,
+    "sizes": [
+     "200x200",
+     "400x400"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "ChordPadX2",
+    "renditions": 2,
+    "sizes": [
+     "180x180"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "ChordShapes",
+    "renditions": 1,
+    "sizes": [
+     "180x180"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "Clouds",
+    "renditions": 1,
+    "sizes": [
+     "1024x512"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "Guitar",
+    "renditions": 12,
+    "sizes": [
+     "13x13",
+     "17x17",
+     "26x26",
+     "33x33",
+     "15x15",
+     "20x20",
+     "30x30",
+     "39x39",
+     "25x25",
+     "50x50"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "Instruments",
+    "renditions": 24,
+    "sizes": [
+     "14x13",
+     "17x16",
+     "27x25",
+     "34x32",
+     "16x15",
+     "20x19",
+     "31x29",
+     "40x37",
+     "21x19",
+     "26x25",
+     "41x38",
+     "52x49",
+     "14x13 NSAppearanceNameDarkAqua",
+     "17x16 NSAppearanceNameDarkAqua",
+     "27x25 NSAppearanceNameDarkAqua",
+     "34x32 NSAppearanceNameDarkAqua",
+     "16x15 NSAppearanceNameDarkAqua",
+     "20x19 NSAppearanceNameDarkAqua",
+     "32x30 NSAppearanceNameDarkAqua",
+     "40x38 NSAppearanceNameDarkAqua",
+     "21x20 NSAppearanceNameDarkAqua",
+     "41x39 NSAppearanceNameDarkAqua",
+     "53x49 NSAppearanceNameDarkAqua"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "TrebleClef",
+    "renditions": 12,
+    "sizes": [
+     "6x14",
+     "7x18",
+     "11x28",
+     "14x36",
+     "7x17",
+     "9x22",
+     "13x33",
+     "17x43",
+     "22x56"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "capsule.pro",
+    "renditions": 12,
+    "sizes": [
+     "20x13",
+     "26x17",
+     "39x26",
+     "51x33",
+     "23x15",
+     "30x20",
+     "46x30",
+     "60x39",
+     "31x20",
+     "61x39",
+     "78x51"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "capsule.pro.fill",
+    "renditions": 12,
+    "sizes": [
+     "19x13",
+     "25x16",
+     "38x25",
+     "49x32",
+     "23x15",
+     "29x19",
+     "45x29",
+     "58x38",
+     "30x19",
+     "59x38",
+     "76x49"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "key.circle",
+    "renditions": 12,
+    "sizes": [
+     "12x12",
+     "15x15",
+     "23x23",
+     "29x29",
+     "14x14",
+     "17x17",
+     "27x27",
+     "34x34",
+     "18x18",
+     "22x22",
+     "35x35",
+     "44x44"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "lightbulb.max.fill",
+    "renditions": 12,
+    "sizes": [
+     "13x15",
+     "17x19",
+     "26x30",
+     "33x38",
+     "16x18",
+     "19x23",
+     "31x36",
+     "38x45",
+     "20x23",
+     "25x29",
+     "40x46",
+     "50x58"
+    ]
+   },
+   {
+    "type": "PackedImage",
+    "name": "ZZZZPackedAsset-1.0.1-gamut0",
+    "renditions": 2,
+    "sizes": [
+     "166x142",
+     "72x50 NSAppearanceNameDarkAqua"
+    ]
+   },
+   {
+    "type": "PackedImage",
+    "name": "ZZZZPackedAsset-2.0.1-gamut0",
+    "renditions": 3,
+    "sizes": [
+     "292x236",
+     "208x178",
+     "134x92 NSAppearanceNameDarkAqua"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "Guitar",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "Instruments",
+    "renditions": 6,
+    "sizes": [
+     "vector",
+     "NSAppearanceNameDarkAqua"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "TrebleClef",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "capsule.pro",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "capsule.pro.fill",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "key.circle",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "lightbulb.max.fill",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   }
+  ],
+  "Resources/MRMusicUI_MRMusicUI.bundle/Contents/Resources/Assets.car (same file also inside AudioUnitExtension.appex)": [
+   {
+    "type": "Image",
+    "name": "ArpeggioDown",
+    "renditions": 12,
+    "sizes": [
+     "14x10",
+     "18x13",
+     "28x20",
+     "36x26",
+     "17x12",
+     "22x16",
+     "33x24",
+     "43x31",
+     "56x40"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "ArpeggioOff",
+    "renditions": 12,
+    "sizes": [
+     "4x10",
+     "5x13",
+     "8x20",
+     "10x26",
+     "5x12",
+     "6x16",
+     "9x24",
+     "11x31",
+     "15x40"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "ArpeggioSkipDown",
+    "renditions": 12,
+    "sizes": [
+     "14x10",
+     "18x13",
+     "28x20",
+     "36x26",
+     "17x12",
+     "22x16",
+     "33x24",
+     "43x31",
+     "56x40"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "ArpeggioSkipUp",
+    "renditions": 12,
+    "sizes": [
+     "14x10",
+     "18x13",
+     "28x20",
+     "36x26",
+     "17x12",
+     "22x16",
+     "33x24",
+     "43x31",
+     "56x40"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "ArpeggioUp",
+    "renditions": 12,
+    "sizes": [
+     "14x10",
+     "18x13",
+     "28x20",
+     "36x26",
+     "17x12",
+     "22x16",
+     "33x24",
+     "43x31",
+     "56x40"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-006",
+    "renditions": 12,
+    "sizes": [
+     "7x17",
+     "9x21",
+     "14x33",
+     "18x42",
+     "8x20",
+     "11x25",
+     "16x39",
+     "21x50",
+     "27x65"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-012",
+    "renditions": 12,
+    "sizes": [
+     "8x17",
+     "11x22",
+     "16x33",
+     "21x43",
+     "10x20",
+     "13x25",
+     "19x39",
+     "25x50",
+     "13x26",
+     "25x51",
+     "32x65"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-025",
+    "renditions": 12,
+    "sizes": [
+     "9x15",
+     "11x20",
+     "18x30",
+     "22x39",
+     "11x18",
+     "13x23",
+     "21x35",
+     "26x46",
+     "14x23",
+     "17x30",
+     "27x46",
+     "34x59"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-037",
+    "renditions": 12,
+    "sizes": [
+     "11x16",
+     "14x21",
+     "21x32",
+     "27x41",
+     "12x19",
+     "16x24",
+     "24x38",
+     "31x48",
+     "16x25",
+     "32x49",
+     "41x63"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-050",
+    "renditions": 12,
+    "sizes": [
+     "9x15",
+     "11x20",
+     "17x30",
+     "22x39",
+     "10x18",
+     "13x23",
+     "20x36",
+     "26x46",
+     "34x60"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-075",
+    "renditions": 12,
+    "sizes": [
+     "10x16",
+     "13x20",
+     "20x31",
+     "25x40",
+     "12x19",
+     "15x24",
+     "23x37",
+     "30x47",
+     "30x48",
+     "39x62"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-100",
+    "renditions": 12,
+    "sizes": [
+     "5x15",
+     "7x20",
+     "10x30",
+     "13x39",
+     "6x18",
+     "8x23",
+     "12x36",
+     "15x46",
+     "20x60"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-150",
+    "renditions": 12,
+    "sizes": [
+     "7x16",
+     "9x20",
+     "13x31",
+     "17x40",
+     "8x19",
+     "10x24",
+     "15x37",
+     "20x48",
+     "25x62"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-200",
+    "renditions": 12,
+    "sizes": [
+     "5x15",
+     "7x20",
+     "10x30",
+     "13x39",
+     "6x18",
+     "8x23",
+     "12x35",
+     "16x45",
+     "16x46",
+     "20x59"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-300",
+    "renditions": 12,
+    "sizes": [
+     "7x16",
+     "9x21",
+     "13x32",
+     "17x41",
+     "8x19",
+     "10x24",
+     "16x37",
+     "20x48",
+     "13x31",
+     "26x62"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-400",
+    "renditions": 12,
+    "sizes": [
+     "8x5",
+     "10x6",
+     "15x9",
+     "19x11",
+     "9x5",
+     "11x7",
+     "17x10",
+     "22x13",
+     "14x9",
+     "28x17"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-600",
+    "renditions": 12,
+    "sizes": [
+     "8x5",
+     "10x6",
+     "16x9",
+     "20x12",
+     "12x7",
+     "19x11",
+     "24x14",
+     "31x18"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "note-800",
+    "renditions": 12,
+    "sizes": [
+     "11x6",
+     "14x8",
+     "22x11",
+     "28x15",
+     "13x7",
+     "17x9",
+     "25x13",
+     "33x17",
+     "21x11",
+     "42x22"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-006",
+    "renditions": 12,
+    "sizes": [
+     "6x16",
+     "8x21",
+     "12x32",
+     "15x41",
+     "7x19",
+     "9x25",
+     "14x38",
+     "18x49",
+     "18x50",
+     "23x64"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-012",
+    "renditions": 12,
+    "sizes": [
+     "6x15",
+     "8x19",
+     "12x30",
+     "15x38",
+     "7x18",
+     "9x23",
+     "14x35",
+     "18x45",
+     "18x46",
+     "23x59"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-025",
+    "renditions": 12,
+    "sizes": [
+     "6x13",
+     "8x17",
+     "12x26",
+     "16x33",
+     "8x15",
+     "10x20",
+     "15x30",
+     "19x39",
+     "19x40",
+     "24x51"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-037",
+    "renditions": 12,
+    "sizes": [
+     "8x14",
+     "11x18",
+     "16x28",
+     "21x36",
+     "10x17",
+     "12x21",
+     "19x33",
+     "24x42",
+     "13x22",
+     "25x43",
+     "32x55"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-050",
+    "renditions": 12,
+    "sizes": [
+     "5x8",
+     "6x11",
+     "10x16",
+     "12x21",
+     "6x10",
+     "8x13",
+     "11x19",
+     "15x25",
+     "19x32"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-075",
+    "renditions": 12,
+    "sizes": [
+     "7x9",
+     "9x12",
+     "13x18",
+     "17x23",
+     "8x11",
+     "10x14",
+     "16x21",
+     "20x28",
+     "11x14",
+     "21x28",
+     "26x36"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-100",
+    "renditions": 12,
+    "sizes": [
+     "6x14",
+     "7x19",
+     "11x28",
+     "13x37",
+     "6x17",
+     "8x22",
+     "12x34",
+     "16x43",
+     "16x44",
+     "21x56"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-150",
+    "renditions": 12,
+    "sizes": [
+     "7x15",
+     "9x20",
+     "14x30",
+     "18x39",
+     "9x18",
+     "11x23",
+     "17x36",
+     "22x46",
+     "11x24",
+     "22x47",
+     "28x60"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-200",
+    "renditions": 12,
+    "sizes": [
+     "9x6",
+     "12x7",
+     "18x11",
+     "23x13",
+     "11x6",
+     "14x8",
+     "21x12",
+     "27x16",
+     "18x10",
+     "35x20"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-300",
+    "renditions": 12,
+    "sizes": [
+     "10x6",
+     "13x7",
+     "19x11",
+     "25x13",
+     "12x6",
+     "15x8",
+     "23x12",
+     "29x16",
+     "19x10",
+     "38x20"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-400",
+    "renditions": 12,
+    "sizes": [
+     "9x6",
+     "12x7",
+     "18x11",
+     "23x13",
+     "11x6",
+     "14x8",
+     "21x12",
+     "27x16",
+     "18x10",
+     "35x20"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-600",
+    "renditions": 12,
+    "sizes": [
+     "9x6",
+     "12x7",
+     "18x11",
+     "23x13",
+     "11x6",
+     "14x8",
+     "21x12",
+     "27x16",
+     "18x10",
+     "28x16",
+     "35x20"
+    ]
+   },
+   {
+    "type": "Image",
+    "name": "rest-800",
+    "renditions": 12,
+    "sizes": [
+     "9x6",
+     "12x7",
+     "18x11",
+     "23x13",
+     "11x6",
+     "14x8",
+     "21x12",
+     "27x16",
+     "18x10",
+     "35x20"
+    ]
+   },
+   {
+    "type": "PackedImage",
+    "name": "ZZZZPackedAsset-1.0.1-gamut0",
+    "renditions": 2,
+    "sizes": [
+     "196x168",
+     "186x170"
+    ]
+   },
+   {
+    "type": "PackedImage",
+    "name": "ZZZZPackedAsset-2.0.1-gamut0",
+    "renditions": 4,
+    "sizes": [
+     "286x242",
+     "258x254",
+     "264x230",
+     "220x202"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "ArpeggioDown",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "ArpeggioOff",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "ArpeggioSkipDown",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "ArpeggioSkipUp",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "ArpeggioUp",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-006",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-012",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-025",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-037",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-050",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-075",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-100",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-150",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-200",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-300",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-400",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-600",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "note-800",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-006",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-012",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-025",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-037",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-050",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-075",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-100",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-150",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-200",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-300",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-400",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-600",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   },
+   {
+    "type": "Vector Glyph",
+    "name": "rest-800",
+    "renditions": 3,
+    "sizes": [
+     "vector"
+    ]
+   }
+  ]
+ }
+}

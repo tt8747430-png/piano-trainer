@@ -15,6 +15,36 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   `app/composition-root.ts` builds the browser adapters once (`createServices()`), with `midi: null` where Web MIDI
   is missing; code reaches them only through `useServices()`, and tests pass `FakeAudio` and `FakeMidi`. Scheduling
   is pure (`shared/lib/schedule` turns ticks into seconds); an adapter only plays. Audio unlocks on the first gesture.
+- **Stop fades, a failed sound is asked again.** Stop ramps what sounds to silence in 15 ms rather than cutting it
+  mid-wave, which clicks. A recorded click, drum or recording that could not be fetched (offline) is asked for again
+  at the next start; the instrument samples already were.
+- **One way out, through a limiter.** Every sound of a context (the piano, the basses, the kit, the clicks, a recording)
+  goes out through one limiter (−3 dB, 20:1, 2 ms attack) to the speakers, so a band and a full chord under the pedal
+  never pass full scale and distort.
+- **Music keeps time in a hidden tab.** Everything that schedules sound ticks on `steadyTicker` (`shared/lib/ticker`),
+  a timer in a Worker, which a hidden tab never slows: the adapter's lookahead, the Metronome, the Player's transport
+  and the Chord player's engine. Where there are no workers (a test's document) it is the page's timer.
+- **The playback session, from the first sound.** As the app first sounds (a play, a key, a recording) the audio session
+  (`navigator.audioSession`, Safari) becomes playback, set before the context resumes, as a music app's: it plays
+  through the phone's silent switch, which mutes Safari's default for Web Audio, and pauses other apps' music as any
+  music app's Play does.
+- **The microphone records only while it listens.** The Tuner's microphone sets the audio session (`navigator.audioSession`,
+  Safari) to play-and-record while any microphone is open and back to auto when the last closes, so the app's sound
+  does not stay at the earpiece's level after the Tuner.
+- **Playing goes on until Stop, in sight or not.** Nothing in the app stops a transport when its tab is hidden, and the
+  worker clock keeps it on time there (checked with page timers held to once a second). iOS is the one exception it
+  cannot overrule: WebKit suspends every page's AudioContext when the app goes to the background or the screen locks,
+  and routing it through an `<audio>` element does not exempt it (WebKit bug 231105). There the music waits where it
+  was and goes on as the app comes back into sight (below).
+- **Audio taken away is taken back while something sounds.** Another app's audio, a call or a locked phone suspends
+  or interrupts the context, and iOS can hand it back running with its clock stopped. The Web Audio adapter takes it
+  back only while something sounds or is due (a voice, a held key, the lookahead's queue, a recording) and the page is
+  in sight: as the page comes back into sight (`AudioPage`), on the context's state change, and every second while it
+  sounds. A held context resumes; a clock that stands still two watches while its context says it runs is suspended and
+  resumed, and after four is replaced at the next start once nothing counts on its clock (after Stop), never under a
+  running transport. A change of outputs (headphones, a Bluetooth speaker) suspends and resumes it onto the new route while something sounds. A closed context is replaced at its next use. Nothing sounding, nothing is taken back, so the
+  learner's other music plays on: `unlock()` belongs to a gesture about to sound (Play, a key, a recording), while
+  `AudioUnlock`'s `prime()` on every other gesture only readies audio that has never run.
 - **The audio port knows what it sounds.** Every note played is a window on the audio clock: `sounding()`,
   `onSounding()`, `struck()` (the keys struck last) and `isPlaying()` read one log. The adapter follows the clock each
   frame only while something sounds and someone listens. `LiveKeyboard` puts those keys down on every keyboard; a

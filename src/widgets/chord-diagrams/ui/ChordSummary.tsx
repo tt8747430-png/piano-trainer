@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DiagramChord } from '@/features/practice'
 import { cn, useScrollMotion } from '@/shared/lib'
-import { printedSymbol } from '@/shared/lib/music'
+import { noteName, printedSymbol } from '@/shared/lib/music'
+import { LeadSymbol, MiniKeys, RaisedSymbol } from '@/shared/ui'
 import { ChordDiagram } from './ChordDiagram'
 import { ChordSheet } from './ChordSheet'
 
@@ -11,9 +12,9 @@ import { ChordSheet } from './ChordSheet'
  * (`chordSummary`), each its keys over its symbol as the sheet prints it (`C♯m7`), a button opening
  * its sheet; one row, scrolling sideways where it is wider than its room. Nothing for music of no
  * chord symbol. Following the music (`sounding`, Chords over lyrics' pinned row, ADR 0108), it is
- * drawn smaller, to stay pinned in little room, and the chord sounding is outlined in ink and kept
- * in sight, the others' symbols muted, and a chord tapped is the music's to go to (`onChord`, ADR
- * 0108) where its sheet would open.
+ * the Lyrics board's row: each chord's framed keys 42 tall, its name 8 under them in the sans at
+ * 500, 14, 16 apart; the chord sounding named bold and kept in sight, and a chord tapped is the
+ * music's to go to (`onChord`, ADR 0108) where its sheet would open.
  */
 export function ChordSummary({
   chords,
@@ -52,38 +53,62 @@ export function ChordSummary({
       <ul
         ref={row}
         aria-label={t('chordSummary')}
-        className="relative flex gap-2 overflow-x-auto overscroll-x-contain scrollbar-none"
+        className={cn(
+          'relative flex overflow-x-auto overscroll-x-contain scrollbar-none',
+          follows
+            ? 'gap-4'
+            : // the Song board's CHORDS_ROW: 8 apart, a row that scrolls on a phone, six columns on a laptop
+              '-mx-4 gap-2 px-4 sm:mx-0 sm:flex-wrap sm:px-0 lg:grid lg:grid-cols-6 lg:overflow-visible',
+        )}
       >
         {chords.map((each) => {
           const now = each.symbol === sounding
           return (
-            <li key={each.symbol} className="shrink-0">
+            <li key={each.symbol} className="shrink-0 lg:min-w-0">
               <button
                 type="button"
                 aria-current={now ? 'true' : undefined}
+                aria-label={
+                  follows
+                    ? undefined
+                    : t('chordDiagram', {
+                        symbol: printedSymbol(each.symbol),
+                        notes: each.notes.map(noteName).join(' '),
+                      })
+                }
                 onClick={() =>
                   onChord ? onChord(each.symbol) : setShown({ symbol: each.symbol, open: true })
                 }
                 className={cn(
-                  'flex flex-col items-center rounded-control border border-transparent transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
-                  follows ? 'gap-0.5 px-1.5 py-1' : 'gap-1.5 p-2',
-                  now && 'border-foreground',
+                  'flex flex-col items-center focus-visible:-outline-offset-3',
+                  // Following the music, a quiet cell; on a song's page, the canvas's chord card.
+                  follows
+                    ? 'gap-2 rounded-control'
+                    : 'gap-2 rounded-card bg-card p-3 lg:w-full shadow-[inset_0_0_0_1px_var(--color-border)] transition-[filter] duration-200 ease-out hover:brightness-[0.97]',
                 )}
               >
-                {/* Every chord on the same keys, the same size. */}
-                <ChordDiagram
-                  chord={each}
-                  className={follows ? 'h-8 w-auto landscape-phone:h-6' : 'h-10 w-auto'}
-                />
+                {/* Every chord on the same keys, the same size: following the music the Diagrams' keys,
+                    on a song's page the boards' mini keys (CHORDS_ROW). */}
+                {follows ? (
+                  <ChordDiagram chord={each} className="h-[42px] w-auto landscape-phone:h-8" />
+                ) : (
+                  <MiniKeys keys={each.keys} />
+                )}
                 <span
                   aria-hidden
                   className={cn(
-                    'font-display leading-tight font-semibold',
-                    follows ? 'text-base landscape-phone:text-sm' : 'text-lg',
-                    follows && !now && 'text-muted-foreground',
+                    'leading-tight',
+                    follows
+                      ? 'font-sans text-sm leading-6 font-medium'
+                      : 'font-sans text-base font-bold',
+                    now && 'font-bold',
                   )}
                 >
-                  {printedSymbol(each.symbol)}
+                  {follows ? (
+                    <RaisedSymbol symbol={each.symbol} />
+                  ) : (
+                    <LeadSymbol text={printedSymbol(each.symbol)} />
+                  )}
                 </span>
               </button>
             </li>

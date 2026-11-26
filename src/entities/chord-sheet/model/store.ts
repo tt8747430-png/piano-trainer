@@ -3,19 +3,23 @@ import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/s
 import { emptySheet, sheetToText, textToSheet } from '@/shared/lib/arrangement'
 import {
   BAND_PARTS,
+  COUNT_INS,
   DEFAULT_SHEET_SETTINGS,
   MOST_SHEETS,
+  SHEET_PLAYS,
   SHEET_TEMPO,
   sheetName,
   TRANSPOSE_RANGE,
   type ChordSheetEntry,
   type ChordSheetSettings,
+  type CountIn,
   type PartLevel,
+  type OnlineLink,
   type SavedChordSheet,
 } from './types'
 
 export const CHORD_SHEETS_STORAGE_KEY = 'pt-chord-sheets'
-export const CHORD_SHEETS_VERSION = 1
+export const CHORD_SHEETS_VERSION = 3
 export { DEFAULT_SHEET_SETTINGS }
 
 /** The style a sheet plays in when none it names is known: the Chord player's first, Pop 1. */
@@ -25,22 +29,42 @@ const DEFAULT_STYLE = 'pop-1'
 export interface ChordSheetsState {
   /** The sheet in hand when none of My chord sheets is open. */
   readonly scratch: ChordSheetEntry
+  /** The sheet in hand's name where it came named: the song or the progression it was opened from. */
+  readonly scratchName: string | null
   /** Newest first. */
   readonly mine: readonly SavedChordSheet[]
   /** The next sheet's number: a deleted id is never reused. */
   readonly nextId: number
+  /**
+   * The sheets opened last, the latest first (R76): My chord sheets by id, the sheet in hand as
+   * `IN_HAND`. The sheet's name in the Chord player's bar opens them.
+   */
+  readonly recent: readonly RecentSheet[]
 }
+
+/** The sheet in hand among the recent sheets. */
+export const IN_HAND = 'in-hand'
+export type RecentSheet = string
+/** The recent sheets the bar's menu lists. */
+export const MOST_RECENT_SHEETS = 5
 export type ChordSheetsStore = StoreApi<ChordSheetsState>
 
 /** A new sheet: one empty Verse in C major, 4/4, in Pop 1 at 100. */
 export const NEW_ENTRY: ChordSheetEntry = {
   text: sheetToText(emptySheet()),
+  draft: null,
   style: DEFAULT_STYLE,
   tempo: 100,
   settings: DEFAULT_SHEET_SETTINGS,
 }
 
-const INITIAL: ChordSheetsState = { scratch: NEW_ENTRY, mine: [], nextId: 1 }
+const INITIAL: ChordSheetsState = {
+  scratch: NEW_ENTRY,
+  scratchName: null,
+  mine: [],
+  nextId: 1,
+  recent: [],
+}
 
 export const createChordSheetsStore = (saving: SavingOptions = {}): ChordSheetsStore =>
   createSavedStore(
@@ -65,6 +89,10 @@ function partLevel(saved: unknown, otherwise: PartLevel): PartLevel {
   return { on: flag(part.on, otherwise.on), level: between(part.level, 0, 100, otherwise.level) }
 }
 
+/** A count-in in bars; a sheet saved when it was on or off counts one bar or none. */
+const countIn = (saved: unknown): CountIn =>
+  saved === true ? 1 : (COUNT_INS.find((bars) => bars === saved) ?? DEFAULT_SHEET_SETTINGS.countIn)
+
 /** Saved settings read field by field; at least one instrument stays on (the piano where none is). */
 export function readSettings(saved: unknown): ChordSheetSettings {
   const settings = isRecord(saved) ? saved : {}
@@ -72,8 +100,8 @@ export function readSettings(saved: unknown): ChordSheetSettings {
     piano: partLevel(settings.piano, DEFAULT_SHEET_SETTINGS.piano),
     bass: partLevel(settings.bass, DEFAULT_SHEET_SETTINGS.bass),
     drums: partLevel(settings.drums, DEFAULT_SHEET_SETTINGS.drums),
-    countIn: flag(settings.countIn, DEFAULT_SHEET_SETTINGS.countIn),
-    repeat: flag(settings.repeat, DEFAULT_SHEET_SETTINGS.repeat),
+    countIn: countIn(settings.countIn),
+    plays: between(settings.plays, 0, SHEET_PLAYS, DEFAULT_SHEET_SETTINGS.plays),
     volume: between(settings.volume, 0, 100, DEFAULT_SHEET_SETTINGS.volume),
     transpose: between(settings.transpose, TRANSPOSE_RANGE.min, TRANSPOSE_RANGE.max, 0),
   }
@@ -87,8 +115,10 @@ function readEntry(saved: unknown): ChordSheetEntry | null {
   if (!isRecord(saved) || typeof saved.text !== 'string') return null
   const sheet = textToSheet(saved.text)
   if (!sheet) return null
+  const draft = typeof saved.draft === 'string' ? textToSheet(saved.draft) : null
   return {
     text: sheetToText(sheet),
+    draft: draft ? sheetToText(draft) : null,
     style: typeof saved.style === 'string' && saved.style.length > 0 ? saved.style : DEFAULT_STYLE,
     tempo: between(saved.tempo, SHEET_TEMPO.min, SHEET_TEMPO.max, NEW_ENTRY.tempo),
     settings: readSettings(saved.settings),
@@ -96,6 +126,19 @@ function readEntry(saved: unknown): ChordSheetEntry | null {
 }
 
 const SHEET_ID = /^sheet-(\d+)$/
+const LINK_ID = /^[0-9a-f-]{36}$/
+
+/** A shared sheet's link as kept; none where it does not read. */
+function readOnline(saved: unknown): OnlineLink | null {
+  if (!isRecord(saved) || typeof saved.id !== 'string' || !LINK_ID.test(saved.id)) return null
+  return {
+    id: saved.id,
+    canEdit: flag(saved.canEdit, false),
+    mine: flag(saved.mine, false),
+    revision: between(saved.revision, 0, Number.MAX_SAFE_INTEGER, 0),
+    unsent: flag(saved.unsent, false),
+  }
+}
 
 /** Stored JSON is untrusted: what reads is kept, field by field. */
 function sanitize(persisted: unknown): ChordSheetsState {
@@ -108,13 +151,20 @@ function sanitize(persisted: unknown): ChordSheetsState {
       const entry = readEntry(value)
       if (!name || !entry || seen.has(value.id)) return []
       seen.add(value.id)
-      return [{ id: value.id, name, ...entry }]
+      return [{ id: value.id, name, ...entry, online: readOnline(value.online) }]
     },
   )
   const past = Math.max(0, ...mine.map(({ id }) => Number(SHEET_ID.exec(id)?.[1] ?? 0))) + 1
   return {
     scratch: readEntry(saved.scratch) ?? NEW_ENTRY,
+    scratchName: typeof saved.scratchName === 'string' ? sheetName(saved.scratchName) : null,
     mine: mine.slice(0, MOST_SHEETS),
     nextId: Math.max(between(saved.nextId, 1, Number.MAX_SAFE_INTEGER, 1), past),
+    recent: (Array.isArray(saved.recent) ? saved.recent : [])
+      .filter(
+        (id: unknown, at: number, all: readonly unknown[]): id is string =>
+          (id === IN_HAND || (typeof id === 'string' && seen.has(id))) && all.indexOf(id) === at,
+      )
+      .slice(0, MOST_RECENT_SHEETS),
   }
 }

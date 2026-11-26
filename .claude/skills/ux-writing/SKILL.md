@@ -195,6 +195,29 @@ Resolve the interaction or information problem before polishing the sentence. Do
 - Never turn an obligation into a guarantee or a legal statement into marketing copy.
 - Flag substantive changes for product, policy, security, or legal validation.
 
+## From Uxcel's "What is UX Writing?" (sent 2026-11-18)
+
+The source: UX writing is "clear, concise, and helpful text that appears within the interface … button labels, error
+messages, onboarding instructions, tooltips, and other forms of microcopy"; "Users come to digital products for
+content, just like diners come to a restaurant for food"; "rather than simply adding text, a UX writer might suggest
+revising the user flow or even eliminating unnecessary features"; "if the UX writing is spot-on, users won't even
+think about it". Copywriting "focuses on creating engaging content … related to marketing, not user experience".
+
+Instructions, each a yes-or-no check on every board:
+
+1. **Every string has a job:** orientation (a title), action (a button), input (a label), feedback (a toast),
+   recovery (an error and its fix), or state (a value). A string with none of these goes.
+2. **No marketing on a working screen:** no slogans, praise of the feature, exclamation marks or "Discover",
+   "Unlock", "Amazing". A screen says what is there and what it does.
+3. **Fix the flow before the words:** when a label needs a second line to be understood, change the control or the
+   flow (a picture, a split into two choices, a step removed), never add an explanation under it.
+4. **Microcopy is short:** a button is a verb and its object in one to three words ("Add to library"); a menu item
+   one or two words; a section head two to four; a toast one sentence of at most about eight words with its Undo.
+5. **The words disappear:** read the screen aloud; any word you stumble on, or that makes you think what it means,
+   is replaced by the word the learner already uses.
+6. **Voice is one:** calm, plain, second person ("Your songs"), present tense, sentence case, on every board; the
+   same act is the same verb everywhere.
+
 ## Prioritize Findings
 
 - **Critical**: obscures a consequence, creates material risk, misleads, or prevents task completion or recovery.
@@ -204,6 +227,9 @@ Resolve the interaction or information problem before polishing the sentence. Do
 Do not inflate severity.
 
 ## Report the Result
+
+In a loop (`owner-way`, Loops and refactors), this is one line inside the turn and the next item follows; never a closing report.
+
 
 For a review, start with one sentence defining the scope, then use:
 

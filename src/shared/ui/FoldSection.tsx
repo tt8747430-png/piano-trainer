@@ -1,7 +1,6 @@
 import { ChevronDown } from 'lucide-react'
-import { useId, type ReactNode } from 'react'
+import { useId, useState, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
-import { FoldBody } from './FoldBody'
 import { InfoTip } from './InfoTip'
 
 /** Whether a section shows its body, and how its heading changes that. */
@@ -23,9 +22,11 @@ const HEADINGS = { 2: 'h2', 3: 'h3' } as const
 export function FoldSection({
   title,
   count,
+  mark,
   fold,
   detail,
   info,
+  action,
   className,
   headingClassName = 'font-sans text-xl font-bold',
   level = 2,
@@ -34,10 +35,14 @@ export function FoldSection({
   title: string
   /** How many it holds, quiet after its name ("Folders 4"). */
   count?: number | undefined
+  /** A word after the count, quiet as it ("· Hidden"). */
+  mark?: string | undefined
   fold?: Fold | undefined
   detail?: ReactNode
   /** What the section is for, opened from the ⓘ beside its name. */
   info?: ReactNode
+  /** What opens the whole section, at the heading's end: a `SeeAll`. */
+  action?: ReactNode
   /** The section's own look (a card) and the room between its parts. */
   className?: string
   headingClassName?: string
@@ -47,26 +52,44 @@ export function FoldSection({
   const headingId = useId()
   const bodyId = useId()
   const open = fold?.open ?? true
+  // Only a body the learner unfolds fades in; on the page's first paint it stands, as everything.
+  const [folded, setFolded] = useState(false)
   const Heading = HEADINGS[level]
   const heading = (
-    <Heading id={headingId} className={cn(info ? 'min-w-0' : undefined, headingClassName)}>
+    <Heading
+      id={headingId}
+      className={cn(
+        info || action ? 'min-w-0' : undefined,
+        action && 'flex-1',
+        headingClassName,
+        // A folding heading's line is 24, its 44 reach grown 10 over and under it (the boards' folds).
+        fold && 'leading-6',
+      )}
+    >
       {fold ? (
         <button
           type="button"
           aria-expanded={open}
           aria-controls={bodyId}
-          onClick={fold.toggle}
+          onClick={() => {
+            setFolded(true)
+            fold.toggle()
+          }}
           // Its reach is 44px tall, grown over the room round the heading, which stays put.
-          className="-my-2 flex min-h-11 w-full items-center gap-2 rounded-control py-2 text-left"
+          className="-my-2.5 flex min-h-11 w-full items-center gap-2 rounded-control py-2.5 text-left"
         >
           {title}
           {count === undefined ? null : (
-            <span className="font-sans text-base text-muted-foreground tabular-nums">{count}</span>
+            <span className="font-sans text-base text-muted-foreground">{count}</span>
           )}
+          {mark ? (
+            <span className="font-sans text-base text-muted-foreground">· {mark}</span>
+          ) : null}
           <ChevronDown
             aria-hidden
+            strokeWidth={2.2}
             className={cn(
-              'size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out',
+              'size-4.5 shrink-0 text-foreground/55 transition-transform duration-200 ease-out',
               open ? '' : '-rotate-90',
             )}
           />
@@ -75,9 +98,7 @@ export function FoldSection({
         <>
           {title}
           {count === undefined ? null : (
-            <span className="ml-2 font-sans text-base text-muted-foreground tabular-nums">
-              {count}
-            </span>
+            <span className="ml-2 font-sans text-base text-muted-foreground">{count}</span>
           )}
         </>
       )}
@@ -85,19 +106,36 @@ export function FoldSection({
   )
   return (
     <section aria-labelledby={headingId} className={cn('flex flex-col gap-3', className)}>
-      {info ? (
-        // Beside the heading, not in it: the section is named by its title alone.
-        <div className="flex items-center gap-2">
+      {info || action ? (
+        // Beside the heading, not in it: the section is named by its title alone. See all stands on
+        // the name's baseline; the ⓘ, a picture, is centred on its line.
+        <div className="flex items-baseline gap-2">
           {heading}
-          <InfoTip name={title}>{info}</InfoTip>
+          {info ? (
+            <InfoTip name={title} className="self-center">
+              {info}
+            </InfoTip>
+          ) : null}
+          {action}
         </div>
       ) : (
         heading
       )}
-      <FoldBody id={bodyId} open={open} className="flex flex-col gap-3">
+      {/* Folded, the body is gone at once, out of reach of the keyboard and a screen reader; unfolded,
+          it stands at once and fades in from 4 above, as the editor's palette (only opacity and
+          transform move, never its height); at once under reduced motion. */}
+      <div
+        id={bodyId}
+        hidden={!open}
+        className={cn(
+          'flex flex-col gap-3',
+          folded &&
+            'transition-[opacity,translate] duration-200 ease-out starting:-translate-y-1 starting:opacity-0 motion-reduce:transition-none',
+        )}
+      >
         {detail}
         {children}
-      </FoldBody>
+      </div>
     </section>
   )
 }

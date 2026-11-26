@@ -1,0 +1,6 @@
+{
+  "Open ${target} in ${applicationName}": "Open ${target} in ${applicationName}",
+  "Search ${applicationName}": "Search ${applicationName}",
+  "Practice in ${applicationName}": "Practice in ${applicationName}",
+  "Play ${target} on ${applicationName}": "Play ${target} on ${applicationName}"
+}

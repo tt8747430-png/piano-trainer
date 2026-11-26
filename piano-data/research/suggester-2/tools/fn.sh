@@ -1,0 +1,2 @@
+#!/bin/sh
+awk -v pat="$2" '/^\/\/ =====/{p=index($0,pat)>0} p' "$1" | grep -Ev '^  (undefined[0-9]*|long|ulong|uint|int|char|byte|bool|code|double|float|ushort|short)[ *]+[A-Za-z_0-9]+;$|DataMemoryBarrier|0x18\) = \*\(long \*\)|^\s*\*[pl]*u*Var[0-9]+ = [01];$|^\s*$|0xd8\);$|0xd0\),[0-9]+\);$|^\s*if \(\*\(char \*\)\(lVar[0-9]+ \+ 0x20\) == .\\x01.\) \{$|^\s*[}{]$|0xc0\) = |\+ 0xc0\);$|0x007028f4|^\s*\*[pu]*Var[0-9]+ = &_kclass|^/\*|^\s*[a-zA-Z_]*Stack_[0-9a-f]+ = 0;$'

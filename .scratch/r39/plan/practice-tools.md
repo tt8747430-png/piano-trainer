@@ -12,6 +12,10 @@ settings behind its own gear, as Soundbrenner's metronome and a hardware tuner a
   (Speed trainer ›, Silent bars ›); no explanation line under a control (an ⓘ at most).
 - The Tools menu in the bar stays (`widgets/tools-sheet`); these are the tools' own pages.
 
+- Tuner (canvas 180, ported): Back · Tuner, no gear; the note, its distance in words and Hz over an arc gauge ±50 cents; Reference pitch stepped in one group; no floating bar.
+- Chord finder (canvas 181, ported): keys at the top; the name with what it is in words ("C major 7th, 1st inversion"), its numeral in the key it is spelled in as one picker ("Imaj7 in C major ⌃", the one home of that key: the settings no longer repeat Spelled in), the notes as tiles with degrees; Also read as · Played · In these keys; floating Clear · Play · Chords; settings behind the gear (Connect a piano among them).
+- Circle of fifths (canvas 182; loop round 58, owner 2026-11-16: "duplicate content", "the page has one focus"): Back · Circle of fifths, no gear or ⓘ; the wheel large and alone, centred on both sizes, majors outside, relative minors inside, no signatures or second spellings on it, the key and its neighbours lit; the key's name and signature ("G major", "1 sharp") in the wheel's empty centre. No "relative E minor" line and no chord tiles: the wheel lights both, and Scales and keys holds the key's chords with their keys drawn. One floating bar Play the chords (honey) · Scales, centred on the wheel.
+
 ## Today
 
 `src/pages/metronome`, `tuner`, `chord-finder`, `circle-of-fifths`; strings `practice.ts` `metronome`, `tools`,
@@ -42,3 +46,12 @@ key, its signature, relative minor, its neighbours, the diatonic chords marked b
 
 Sources: Soundbrenner Metronome (beats you set, subdivisions), Chordify's metronome; a chromatic tuner's cents gauge
 (Peterson, TonalEnergy); the app's chord finder strings; `circle-of-fifths` in `practice.ts`.
+
+## Ported: the Metronome (canvas 179, loop 2026-11-14)
+
+- Back · Metronome as glass; no gear (Flash, Count-in and Volume have no engine or home here; the click's volume lives in the Player's sound).
+- `TempoSteps` as the board's `TEMPO`: "Allegro · BPM" over the number (72px, 120 on a laptop, bold, −3%), −10 −1 +1 +10 as filled pills 52×44; the old ⓘ tip went.
+- The kit's slider as the board's: a 4px track in the line colour, the ink fill, a 28px white thumb with a soft shadow, app-wide.
+- The kit's `Stepper` as the board's `STEPPER`: − value + in one white capsule with a hairline ring, app-wide.
+- `GroupRows`, `GroupRow`, `GroupLink`, `ChoiceList` (new, the board's `GROUP` and lists): Time signature stepped in place; Subdivision, Sound, Speed trainer and Silent bars each a value and › opening its sheet.
+- Tool pages' phone grid sized `minmax(0, 1fr)`, so a wide row no longer widens the page.

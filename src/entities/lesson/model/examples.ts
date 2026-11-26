@@ -83,7 +83,7 @@ export function withExample(lesson: Lesson, key: string, text: string): Lesson {
           ? // The notes rewritten, still rising or falling as they were.
             { ...at.block.answer, notes: text.split(/\s+/).filter(Boolean) }
           : text
-  const [, s, , b] = pathOf(key) as [string, number, string, number]
+  const [, s, , b] = pathOf(key)
   return {
     ...lesson,
     sections: lesson.sections.map((section, i) =>
@@ -92,7 +92,7 @@ export function withExample(lesson: Lesson, key: string, text: string): Lesson {
         : {
             ...section,
             blocks: section.blocks.map((block, j) =>
-              j === b ? ({ ...block, [at.field]: value } as LessonBlock) : block,
+              j === b ? { ...block, [at.field]: value } : block,
             ),
           },
     ),

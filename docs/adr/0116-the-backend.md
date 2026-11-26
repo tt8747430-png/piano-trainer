@@ -40,10 +40,14 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   downloads when opened: the Public library's items, and recordings once they move to storage (round 7). Until
   content is edited in the app (round 6), `entities/*/content` is the source: `scripts/export-content.mjs` and
   `scripts/seed-content.mjs` publish it.
-- **The Public library:** a learner's own song is private until they publish it (its Settings › Publish…, the
-  Publish page `/songs/$pieceId/publish`, as Noji's: a description of at least 20 characters, kept in `meta.description`
-  (the item's JSON, no column of its own), the row as others will see it, the rights in a line and why publish behind
-  the ⓘ; published, its link, View, Versions and Unpublish, r30 below). A published song is a snapshot held as a save
+- **The Public library:** a learner's own song is private until they publish it (its Settings › Publish, a page
+  inside the song's Settings window, R72's, Flat's discoverability form: a meter of how easily it is found (n of
+  5: title, composer, type, tags, a description of at least 20 characters), Title, Composer, Type (Original,
+  Arrangement, Other), Tags (chips, suggestions, at most 8; a first publish starts with the song's genre as its tag, Hymn, Classical, Study…, and its library tags), Description, Licence (All rights reserved, CC BY, CC
+  BY-SA, Public domain), all kept in the item's `meta` JSON with no column of their own (the old `category` column is
+  left null: tags carry it, and Explore's kinds find songs by them); then the card as others will see it, the rights ticked each time, and Publish; on a laptop
+  the fields left and the card, rights and Publish right. Published: In the Public library with its saves, Copy
+  link, View in library, Publish new version once it changed, and Unpublish apart, r30 below). A published song is a snapshot held as a save
   holds an own song (`public_items`, one per author and song, 200 KB at most), read by anyone, written by its author
   unless an editor has blocked them, at most 20 publishes an hour. Songs → Public library lists them, newest or most
   saved, searched by title; a song's page plays it and saves an own copy (a save counted once per signed-in learner,
@@ -56,28 +60,49 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   caller's role itself; never by a client query on `auth.users`. Groups, their members and feature switches are
   admins' tables; a switch is on for everyone, no one, or chosen groups, and the app asks `my_features()` at start
   and at each sign-in (`useFeature`): every build goes to everyone, a feature waits behind its switch. **Administration**
-  (R32; `/admin` and `/admin/$section`, its own chunk, in Settings for administrators: a list on a phone, a group of
-  Settings' sidebar on a laptop, each section a Settings page): Overview, Accounts (a change that removes an
+  (R32; `/admin` and `/admin/$section`, its own chunk, in Settings for administrators: a list on a phone, on a
+  laptop the same Settings dialog with its own places under "‹ Settings", each section a Settings pane): Overview, Accounts (a change that removes an
   administrator asks first), Groups (members folded under Manage members), Feature flags, Content reports (Suspend
   publishing asks first), Feedback (learners' Report a problem, told from errors by its `Report: ` prefix), Error
   log, Audit log, Drafts, Component gallery; every confirmation the one `ConfirmDialog`; every change is written to
   `admin_log`.
+- **Publishing a lesson or a course** is one tap (owner, 2026-11-17: "i dont like this publish button and why it
+  opens a third … drawer"; the kit's EDITR): Edit's bar holds Publish, a glass word, just before Done; it publishes
+  at once (`usePublishNow`), its toast saying learners receive it, with Undo where an earlier version stands (that
+  version published again, the changes kept among the Versions), and reads Published until the next change. The
+  editor writes in the app's language, with no status, menu or language in its bar; there is no Publish page for a
+  lesson or a course. Their Settings hold the rest (the board's THINGSET, one shape for a lesson's, a course's and
+  the learner's own): the thing at its head (`ThingHead`), The lesson's Place (or The course's Shelf), Share link,
+  for an editor Publishing (Status, Versions; Publish changes and Discard changes only while there are changes,
+  `DraftPublishing`), the learner's progress, then Delete last and 16 apart; one column, 1180 at most on a laptop.
 - **The lesson editor** (`pages/lesson-editor`, round 21 to 28; Notion's, Craft's and BlockNote's block editors,
   Obsidian's Live Preview) is one TipTap document that reads as the lesson and as a page being edited:
-  - each block's **gutter** shows beside the block under the pointer, or the caret's on a phone (left of the text on
-    a laptop, at its right on a phone): **＋** puts a line under it with `/` typed, the Insert menu open on it;
-    **⋮⋮** dragged moves the block, tapped opens its menu: **Turn into** (text, section heading, numbered steps,
-    note, in short; its lines kept, a step each into steps, joined for the rest; `turnBlockInto`), Duplicate,
-    Delete. Order is by dragging or Alt+↑/↓, never Move up/down in a menu (the owner's rule), so the brief's Move
-    up/down was left out;
+  - nothing waits in a margin beside the text (loop 63, the owner: "the drag handle reserves space"): the column
+    starts on the page's gutter. The caret's block has its tools in the floating toolbar, as Craft's and Notion's
+    on iOS: **Move** dragged, by mouse or finger, puts it where it is dropped (a honey line shows where with a
+    finger); **···** opens its menu: **Turn into** (text, section heading, numbered steps, note, in short; its
+    lines kept, a step each into steps, joined for the rest; `turnBlockInto`), Style, Duplicate, Delete. Both stand
+    dimmed on the title and the summary, which keep their place. Order is by dragging or Alt+↑/↓, never Move up/down
+    in a menu (the owner's rule);
   - an empty line hints **"Type / to insert music, a note and more"** only where the caret is, as Notion's; the
     title, summary, heading, note and takeaway always say what they are for;
-  - **selected words** get a bubble with the lead in bold, the one mark a lesson's text has; the floating toolbar
-    keeps Insert, Undo and Redo. Each action has one place: a block's kind is its menu's, bold the bubble's;
+  - the floating toolbar is the board's dock: **Bold** (the lead, the one mark a lesson's text has, where the words
+    can carry it), Undo, Redo | Move, ··· | **Insert**, the ink pill last. Each action has one place: a block's
+    kind is its menu's, bold the toolbar's; no bubble over selected words;
+  - **Insert** (the board's INSLIST) opens a sheet titled Insert, on a laptop a popover 420 wide over its button: a search
+    (44 tall, on the fill, "Insert") keeping the kinds whose name holds what is typed, then Text, Music and Ask and
+    link, each a caps label over a card of rows 52 tall, a kind's glyph on its 36 tile (`KindTile`) and its name;
+    a tap adds the block where the caret stood and closes the sheet; a search that keeps none is the kit's `Said`;
   - an **example** (notes, chords, keys, a question, a link) is drawn as the lesson shows it, with no kind's label
     over it. Chosen, it is outlined and a small toolbar floats over its top edge: **Edit** (its line of text and
     its fields in a panel opened in place under it, the same on a phone and a laptop, nothing covering the page;
-    open at once for an example that does not read yet), Edit music for notes, Duplicate, Delete;
+    open at once for an example that does not read yet), Edit music for notes, Duplicate, Delete. Versions are
+    written there too: each version under its number, its name (the chip's word), caption and its own example's
+    fields, Add a version copying the last, ✕ while two stay;
+  - **Insert** (and `/`) offers the board's kinds in its order (`r47_edit.py`'s INSERT): Text, Steps, Note, Rule;
+    Chords, One chord on every root, Scale, Interval, Notes, Voicings, Pattern (the first built-in pattern over a
+    piece that plays it), Progression, Versions (two versions of a row of chords); Question, Link, Picture. A
+    section's heading and its In short are made from words by Turn into, not inserted;
   - the lessons to read first are the lesson's Settings', not a property in the document (ADR 0053).
     A field focused on a phone is lifted clear of the keyboard by the line the caret is in, never by the whole
     document's box, which jumped a tap far down a lesson to its start.

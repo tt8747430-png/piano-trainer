@@ -103,9 +103,20 @@ are, what is next, and that every lesson can still be opened.
   hairline, the number in ink): colour only for learned (sage) and next (the honey ring).
 - **Learn by Night** (canvas 162): phone and laptop Night boards beside the Day ones.
 
+- **A lesson has no tools; its Settings hold only settings** (owner, 2026-11-18: "i dont like the structure of these
+  settings … and i dotn like that the settigs and hte tools are united and als oi dont see very much what is the
+  meaning and value for teh metronome or tuner or otehr tools in the lessons? where the user just learn. remove
+  them"): the lesson's bar is Share link (the link glyph), Settings and Edit; the Tools button, sheet and popover are
+  gone (the Metronome, Tuner and the rest live in Practice). Settings: The lesson (Place); Publishing (Status as a
+  value, "Published 8 November" or "Changes not published", Versions ›; Publish changes and Discard changes only
+  while there are changes); Your progress (Reset progress); Delete lesson apart at the foot. Lesson, LessonLaptop.
+
 ## History
 
 - Canvas 128 (2026-11-11): Learn drawn for the first time on the one canvas: phone and laptop, Lessons and Courses.
 - Canvas 162 (2026-11-13, loop round 10, design first): checks named truly with their pictures; Learn's Night boards.
 - Canvas 163 (2026-11-13): Learn refactored to an overview (Continue, Levels, Courses, your own), a level's page and Courses' page; the header as every place's.
 - Built to canvas 163 (2026-11-13, "as close as possible"): Continue a plain card, "Continue · Foundations" in honey ink, the count over a meter the card's width; each level "Foundations · 13 lessons" beside a smaller ring with a plain number; each course cover its summary under it, Next on the one in progress. The serif titles stay (DESIGN.md), as the canvas draws its own names.
+- Loop round 10, Learn: every bar's title and every section head in Onest as all the boards draw them (a place's bold 26, a page's semibold 17, a section's bold 20), app-wide in one pass; Literata kept for music's names, lesson text and the score.
+
+- Loop round 10 (port): every lesson row says "Lesson N"; lesson and course row titles 1rem semibold; the laptop's Levels head a section head. A course row keeps its counts (lessons · songs · weeks) where the board draws a short line: the courses hold only a paragraph summary, and the counts are what a learner chooses by.

@@ -6,10 +6,14 @@ import { COURSES } from '../content'
 import { COURSE_ORDER_ID, inCourseOrder, isCourseOrder } from './order'
 import { isWholeCourse, updatesCourse, type Course, type Shelf } from './types'
 
-let built = {
+let built: {
+  revision: number
+  courses: readonly Course[]
+  index: ReadonlyMap<string, Course>
+} = {
   revision: -1,
   courses: COURSES,
-  index: new Map(COURSES.map((course) => [course.id, course])) as ReadonlyMap<string, Course>,
+  index: new Map(COURSES.map((course) => [course.id, course])),
 }
 
 /**
@@ -48,6 +52,7 @@ function catalog(): typeof built {
         ? {
             title: record.title,
             summary: record.summary,
+            line: record.line ?? course.line,
             shelf: record.shelf ?? course.shelf,
             stage: record.stage ?? course.stage,
             weeks: record.weeks ?? course.weeks,
@@ -61,11 +66,22 @@ function catalog(): typeof built {
   const made = kept.ids('course').flatMap((id): Course[] => {
     const record = kept.body('course', id)
     if (builtIn.has(id) || !updatesCourse(id, record) || !isWholeCourse(record)) return []
-    const { title, summary, shelf, stage, weeks } = record
+    const { title, line, summary, shelf, stage, weeks } = record
     const lessons = lessonsOf(id, record.lessons, new Map())
     const about = record.about ? readAbout(record.about) : undefined
     return [
-      { id, title, summary, shelf, stage, weeks, lessons, songs: [], ...(about ? { about } : {}) },
+      {
+        id,
+        title,
+        line,
+        summary,
+        shelf,
+        stage,
+        weeks,
+        lessons,
+        songs: [],
+        ...(about ? { about } : {}),
+      },
     ]
   })
   // In the order Manage courses gave them, where one is published.

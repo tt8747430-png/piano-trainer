@@ -1,70 +1,80 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { BookOpenText, Check, Play, RotateCcw, Settings } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { courseById, CourseIcon, courseStepIds, type Course } from '@/entities/course'
+import { courseById, courseStepIds, type Course, SHELF_PAINT } from '@/entities/course'
 import { selectOwnCourse, useOwnLessons } from '@/entities/own-lessons'
 import { PieceLink, pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
-import { STAGE_PAINT, stepOf } from '@/entities/step'
-import { localText, useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { stepOf, type StepId } from '@/entities/step'
+import { useSettingsWindow } from '@/shared/lib'
+import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, FabLink, FloatingActions, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
-import { AboutView } from '@/widgets/lesson-view'
+import { BackButton, ButtonLink, PAINT, RoundButton, ScreenHeader, PageName } from '@/shared/ui'
 import {
-  CourseFacts,
-  courseProgress,
+  CourseBanner,
   CourseLessons,
+  CourseOverview,
+  courseProgress,
   GuidedSongs,
-  isComplete,
-  LearnedMeter,
   openCourseStep,
 } from '@/widgets/curriculum'
+import { CourseSettingsWindow } from './CourseSettingsWindow'
 import { OwnCoursePage } from './OwnCoursePage'
 
 /**
- * The course's one way in, its floating action: Start course, or Continue onto the step to take;
- * Review, onto its first lesson, once every one is learned.
+ * The course's one way in, the honey 50 under its meter (the canvas's BTN): Start, Continue or
+ * Review and the step it opens ("Continue: The bass clef"); Review opens its first lesson.
  */
 function CourseAction({ course }: { course: Course }) {
   const { t } = useTranslation('learn')
+  const locale = useLocale()
   const learned = useProgress(selectLearned)
   const progress = courseProgress(course, learned)
   const open = openCourseStep(course, learned)
-  const step = stepOf(open ?? courseStepIds(course)[0])
-  if (!step || (step.kind !== 'course-lesson' && step.kind !== 'piece')) return null
-  const label = !open
-    ? t('course.review')
-    : progress.done === 0
-      ? t('course.start')
-      : t('course.continue')
-  const Icon = !open ? RotateCcw : step.kind === 'piece' ? Play : BookOpenText
+  const first = courseStepIds(course)[0]
+  const id = open ?? first
+  const step = id ? stepOf(id) : undefined
+  if (!id || !step || (step.kind !== 'course-lesson' && step.kind !== 'piece')) return null
+  const word = !open ? 'review' : progress.done === 0 ? 'start' : 'continue'
   return (
-    <FloatingActions>
-      <FabLink
-        label={label}
-        icon={Icon}
-        render={
-          step.kind === 'piece' ? (
-            // A guided song's page, where it is played and marked learned.
-            <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />
-          ) : (
-            <Link
-              to="/courses/$courseId/$lessonId"
-              params={{ courseId: step.courseId, lessonId: step.lessonId }}
-            />
-          )
-        }
-      />
-    </FloatingActions>
+    <ButtonLink
+      size="lg"
+      className="w-full"
+      render={
+        step.kind === 'piece' ? (
+          // A guided song's page, where it is played and marked learned.
+          <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />
+        ) : (
+          <Link
+            to="/courses/$courseId/$lessonId"
+            params={{ courseId: step.courseId, lessonId: step.lessonId }}
+          />
+        )
+      }
+    >
+      {t(`journey.${word}`, { title: stepTitle(course, id, locale) ?? '' })}
+    </ButtonLink>
   )
 }
 
+/** A course's step by name: its lesson's title, or its guided song's. */
+function stepTitle(course: Course, id: StepId, locale: Locale): string | undefined {
+  const step = stepOf(id)
+  if (step?.kind === 'course-lesson') {
+    const lesson = course.lessons.find((each) => each.id === step.lessonId)
+    return lesson ? localText(lesson.title, locale) : undefined
+  }
+  return step?.kind === 'piece' ? pieceById(step.pieceId)?.title : undefined
+}
+
 /**
- * A course's page (ADR 0053, 0061): one card, its icon on its level's paint beside what it teaches
- * and its facts in words, and along its foot how much is learned; its About, where an editor wrote
- * one (R29 B9); then its lessons numbered as taught, the next ringed, and its guided songs. Its one
- * way in floats. A course of the learner's own (R30-5) reads as `OwnCoursePage`.
+ * A course's page (ADR 0053, 0061; the Course boards): the bar holds Back, the gear and an editor's
+ * Edit; the cover in its shelf's paint, the course's name as the page's serif heading under it, what
+ * it teaches, its facts in one line, how much is learned over a meter and its one way in; then its
+ * lessons on the level's timeline and its guided songs. No About: what it teaches is said once, in
+ * the summary. On a laptop the head is a band across the top (the cover beside the words), the
+ * lessons four across and the songs on the same grid. A course of the learner's own (R30-5) reads as
+ * `OwnCoursePage`.
  */
 export function CoursePage() {
   const { courseId } = useParams({ from: '/shell/courses/$courseId' })
@@ -74,7 +84,8 @@ export function CoursePage() {
 
 /** One of the app's courses. */
 function AppCourse({ courseId }: { courseId: string }) {
-  const { t } = useTranslation('learn')
+  const settingsWindow = useSettingsWindow()
+  const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
   const learned = useProgress(selectLearned)
   const { account } = useAccount()
@@ -83,20 +94,20 @@ function AppCourse({ courseId }: { courseId: string }) {
   // The route finds no course that is not there.
   if (!course) return null
   const progress = courseProgress(course, learned)
-  const paint = PAINT[STAGE_PAINT[course.stage]]
+  const paint = PAINT[SHELF_PAINT[course.shelf]]
   const next = openCourseStep(course, learned)
+  const title = localText(course.title, locale)
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 pb-8">
       <ScreenHeader
-        title={localText(course.title, locale)}
-        // A course's name in full over its page, as a song's: the bar echoes it once scrolled.
-        large
+        title={title}
+        titleOnPage
         back={<BackButton />}
         settings={
-          <RoundLink
+          <RoundButton
             label={t('settings.open')}
             icon={Settings}
-            render={<Link to="/courses/$courseId/settings" params={{ courseId }} />}
+            onClick={() => settingsWindow.onOpenChange(true)}
           />
         }
         edit={
@@ -114,46 +125,25 @@ function AppCourse({ courseId }: { courseId: string }) {
             : undefined
         }
       />
-      {/* A wide laptop: what the course is on the left, its lessons and songs on the right. */}
-      <div className="-mt-2 grid gap-8 xl:grid-cols-2 xl:items-start xl:gap-10">
-        <div className="flex min-w-0 flex-col gap-8 xl:sticky xl:top-4">
-          {/* One card: what it is, its facts and progress, and its one way in along its foot. */}
-          <section className="flex max-w-3xl flex-col overflow-hidden card">
-            <div className="flex items-start gap-4 p-5">
-              <span
-                className={cn(
-                  'grid size-16 shrink-0 place-items-center rounded-control',
-                  paint.fill,
-                  paint.ink,
-                )}
-              >
-                <CourseIcon courseId={course.id} className="size-8" strokeWidth={1.5} />
-              </span>
-              <div className="flex min-w-0 flex-1 flex-col gap-2">
-                <p className="text-pretty">{localText(course.summary, locale)}</p>
-                <CourseFacts course={course} level className="text-sm" />
-              </div>
-            </div>
-            <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5">
-              {isComplete(progress) ? (
-                <p className="flex flex-1 items-center gap-2 font-semibold text-learned">
-                  <Check aria-hidden className="size-5" strokeWidth={3} />
-                  {t('course.done')}
-                </p>
-              ) : (
-                <LearnedMeter progress={progress} className="flex-1" />
-              )}
-              <CourseAction course={course} />
-            </div>
-          </section>
-          {/* Its About (R29 B9): the editor's document, each block in its own style. */}
-          <AboutView about={course.about} label={t('course.about')} />
-        </div>
-        <div className="flex max-w-3xl min-w-0 flex-col gap-8">
-          <CourseLessons course={course} next={next} />
-          <GuidedSongs course={course} />
-        </div>
+      <div className="-mt-6 flex min-w-0 flex-col gap-8">
+        <CourseOverview
+          cover={<CourseBanner fill={paint.fill} ink={paint.ink} />}
+          title={<PageName>{title}</PageName>}
+          summary={localText(course.summary, locale)}
+          facts={[
+            t(`common:stage.${course.stage}`),
+            ...(course.songs.length > 0
+              ? [t('course.songCount', { count: course.songs.length })]
+              : []),
+            t('course.weekCount', { count: course.weeks }),
+          ]}
+          progress={progress}
+          action={<CourseAction course={course} />}
+        />
+        <CourseLessons course={course} next={next} />
+        <GuidedSongs course={course} />
       </div>
+      <CourseSettingsWindow courseId={courseId} {...settingsWindow} />
     </div>
   )
 }

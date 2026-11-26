@@ -3,9 +3,9 @@ import { addNoteKey } from './add-note'
 import { markBars } from './bar-marks'
 import { setClefIn } from './clefs'
 import { shownRows, staffLeftFor } from './rows'
-import { chosenNotes, chosenSpan, fingerPlace, shownValue, takenAway } from './chosen'
+import { chosenNotes, chosenSpan, fingerPlace, shownValue, spellSpan, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
-import { clipEdited } from './clip-edits'
+import { clipEdited, repeated } from './clip-edits'
 import { singleStaff, staffPlace, ticksOf } from '@/shared/lib/notation'
 import { chordNoteStep } from './chord-note'
 import { deleteChord } from './chords'
@@ -14,6 +14,7 @@ import { isHandLayer, type Draft, type Layer } from './draft'
 import { barsCounted, barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
+import { editedInVoice } from './voices'
 import { lineOver, lineSpan } from './lines'
 import { setSyllable, singsHere } from './lyrics'
 import { markNotes, setTempoChange, setText, toggleNumeral } from './marks'
@@ -27,12 +28,15 @@ import {
   makeRoom,
   notesAt,
   respellNotes,
+  crossNotes,
   setDuration,
   setFingers,
   shiftNotes,
   stepNotes,
   steppedKey,
   tieNotes,
+  tieOn,
+  addInterval,
   toggleAccidental,
   writeRest,
 } from './notes'
@@ -51,7 +55,7 @@ import {
 import { setKey, setTempo, setTempoMark, transpose } from './settings'
 import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
-import { barAt, barsOf, keyAt } from './timeline'
+import { barAt, barsOf, keyAt, totalTicks } from './timeline'
 import { toggledDot, toggledTuplet, withValue, type ChosenValue } from './values'
 
 /**
@@ -149,16 +153,20 @@ function graceEdited(state: EditorState, action: EditorAction): EditorState | nu
  * act on them; Escape, or any other action, goes back to their notes.
  */
 export function reduce(state: EditorState, action: EditorAction): EditorState {
-  if (!state.grace) return reduced(state, action)
+  if (!state.grace) return voiced(state, action)
   if (action.type === 'deselect') return { ...state, grace: false }
   const onGrace = graceEdited(state, action)
   if (onGrace) return onGrace
-  const next = reduced(state, action)
+  const next = voiced(state, action)
   // Undo and redo bring back whether the grace notes were chosen with their step.
   if (action.type === 'undo' || action.type === 'redo') return next
   const kept = ON_GRACE.has(action.type) || (action.type === 'place' && action.grace === true)
   return next.grace && !kept ? { ...next, grace: false } : next
 }
+
+/** An action made in the voice chosen, on a piano staff (ADR 0114). */
+const voiced = (state: EditorState, action: EditorAction): EditorState =>
+  editedInVoice(state, action, reduced)
 
 function reduced(state: EditorState, action: EditorAction): EditorState {
   const { draft, layer, caret } = state
@@ -188,6 +196,10 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
     }
     case 'mode':
       return { ...state, mode: action.mode ?? nextMode(state.mode), struck: null }
+    case 'voice':
+      return isHandLayer(layer)
+        ? { ...state, voice: state.voice === 2 ? 1 : 2, struck: null }
+        : state
     case 'move':
       return moveCaret(state, action.by, action.direction, action.extend ?? false)
     case 'place': {
@@ -206,6 +218,13 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
           (n) => (n.marks?.grace?.length ?? 0) > 0,
         )
       return graced ? { ...placed, grace: true } : placed
+    }
+    case 'selectAll': {
+      // The whole staff, as Flat's and Dorico's ⌘A; the caret at its start.
+      const whole = { from: 0, to: totalTicks(draft) }
+      return whole.to === 0
+        ? state
+        : { ...state, selection: { anchor: whole, head: whole }, caret: 0, chordNote: null }
     }
     case 'deselect':
       return state.selection === null && state.chordNote === null
@@ -364,7 +383,7 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
           })
     case 'accidental': {
       if (layer === 'chords') return state
-      const next = toggleAccidental(draft, layer, chosenSpan(state), action.accidental)
+      const next = toggleAccidental(draft, layer, spellSpan(state), action.accidental)
       return commit(state, next, {
         struck: null,
         selection: state.selection,
@@ -383,10 +402,17 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
     case 'respell':
       return layer === 'chords'
         ? state
-        : commit(state, respellNotes(draft, layer, chosenSpan(state)), {
+        : commit(state, respellNotes(draft, layer, spellSpan(state)), {
             struck: null,
             selection: state.selection,
           })
+    case 'cross':
+      return isHandLayer(layer)
+        ? commit(state, crossNotes(draft, layer, spellSpan(state), action.to), {
+            struck: null,
+            selection: state.selection,
+          })
+        : state
     case 'fingers':
       return isHandLayer(layer)
         ? commit(state, setFingers(draft, layer, fingerPlace(state), action.fingers), {
@@ -419,14 +445,26 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
         struck: null,
         selection: state.selection,
       })
-    case 'tie':
+    case 'interval':
       return layer === 'chords'
         ? state
-        : commit(
-            state,
-            tieNotes(draft, layer, state.selection ? selectionSpan(state.selection) : caret),
-            { struck: null },
-          )
+        : commit(state, addInterval(draft, layer, spellSpan(state), action.steps), {
+            struck: null,
+            selection: state.selection,
+          })
+    case 'tie': {
+      if (layer === 'chords') return state
+      if (state.selection)
+        return commit(state, tieNotes(draft, layer, selectionSpan(state.selection)), {
+          struck: null,
+        })
+      // A note after the caret's of the same key: joined, as before. Else, in note input, the note
+      // just written held on at the value chosen, the caret after it (research F5).
+      const joined = tieNotes(draft, layer, caret)
+      if (joined !== draft) return commit(state, joined, { struck: null })
+      const held = tieOn(draft, layer, caret, stepOf(state))
+      return commit(state, held.draft, { caret: held.end, struck: null })
+    }
     // The words go under the staff they are written on alone (ADR 0097).
     case 'syllable':
       return singsHere(draft, layer)
@@ -444,6 +482,8 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
       return barsCounted(state, action.count)
     case 'clip':
       return clipEdited(state, action.edit)
+    case 'repeat':
+      return repeated(state)
     case 'barMarks':
       return commit(state, markBars(draft, chosenBars(state), action.choice))
     case 'clef':

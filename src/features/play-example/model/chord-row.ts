@@ -31,7 +31,7 @@ export const symbolsRow = (symbols: readonly string[]): RowChord[] =>
   symbols.map((symbol) => ({ chord: parseChordSymbol(symbol), symbol }))
 
 /** How a progression's row names its chords: numerals, Nashville numbers, or the chords alone. */
-export type RowNames = 'numerals' | 'nashville' | 'chords'
+type RowNames = 'numerals' | 'nashville' | 'chords'
 
 /**
  * A progression's chords in a key and size, grown as its church mode grows them where it has one, each

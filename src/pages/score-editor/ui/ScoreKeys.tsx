@@ -7,6 +7,7 @@ import {
   EXPRESSION_TEXT,
   type ExpressionGroup,
 } from '@/shared/lib/music'
+import { KeysWait } from '@/shared/ui'
 import { useScoreEditorContext } from '../model/editor-context'
 import { isJumpWords, JUMP_SIGNS, JUMP_WORDS } from '../model/palette-categories'
 import { isTool } from '../model/shortcuts'
@@ -101,7 +102,7 @@ function NumeralKey() {
       tool="numeral"
       onClick={() => actions.dispatch({ type: 'numeral' })}
     >
-      <span aria-hidden className="font-serif text-lg font-semibold leading-none">
+      <span aria-hidden className="font-display text-lg font-semibold leading-none">
         IV<sup className="text-[0.6em]">6</sup>
       </span>
     </PaletteKey>
@@ -125,14 +126,14 @@ function ExpressionKeys({ group }: { group: ExpressionGroup }) {
 
 /**
  * Flat's Tempo tools in Measure (R32-C): Tempo, a tempo mark at the notes chosen set on its dial,
- * then the tempo words (accel., rit., a tempo…), each on the notes chosen; drawn while some are
- * (R32-B).
+ * then the tempo words (accel., rit., a tempo…), each on the notes chosen; greyed in place while
+ * none is, as Flat's.
  */
 export function TempoKeys() {
   const { t } = useTranslation('editor')
-  if (!useNotesChosen()) return null
+  const chosen = useNotesChosen()
   return (
-    <>
+    <KeysWait value={chosen ? null : t('reason.chooseNote')}>
       <GroupName name={t('expressions.tempo')} />
       <KeyGrid label={t('expressions.tempo')}>
         <TempoChangePopover
@@ -146,14 +147,14 @@ export function TempoKeys() {
         />
         <ExpressionKeys group="tempo" />
       </KeyGrid>
-    </>
+    </KeysWait>
   )
 }
 
 /**
  * Text (Flat's): the Lyrics and the chord symbols' keys, each opening its field where it prints
  * (ADR 0096), the Roman numeral and free text; then the character and technique words, as printed,
- * what each asks its tooltip, while notes are chosen (R32-B). The tempo words are Measure's (Flat's).
+ * what each asks its tooltip, greyed in place until notes are chosen (Flat's). The tempo words are Measure's (Flat's).
  */
 export function TextKeys() {
   const { t } = useTranslation('editor')
@@ -163,19 +164,21 @@ export function TextKeys() {
       <KeyGrid>
         <FieldKey field="lyrics" />
         <FieldKey field="chord" />
-        {chosen ? <NumeralKey /> : null}
+        <KeysWait value={chosen ? null : t('reason.chooseNote')}>
+          <NumeralKey />
+        </KeysWait>
         <FieldKey field="text" />
       </KeyGrid>
-      {chosen
-        ? TEXT_GROUPS.map((group) => (
-            <Fragment key={group}>
-              <GroupName name={t(`expressions.${group}`)} />
-              <KeyGrid label={t(`expressions.${group}`)}>
-                <ExpressionKeys group={group} />
-              </KeyGrid>
-            </Fragment>
-          ))
-        : null}
+      <KeysWait value={chosen ? null : t('reason.chooseNote')}>
+        {TEXT_GROUPS.map((group) => (
+          <Fragment key={group}>
+            <GroupName name={t(`expressions.${group}`)} />
+            <KeyGrid label={t(`expressions.${group}`)}>
+              <ExpressionKeys group={group} />
+            </KeyGrid>
+          </Fragment>
+        ))}
+      </KeysWait>
     </>
   )
 }

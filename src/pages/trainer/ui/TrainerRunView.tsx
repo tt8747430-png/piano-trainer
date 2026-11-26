@@ -3,7 +3,7 @@ import type { RunKey } from '@/entities/progress'
 import { selectTrainer, useSettings } from '@/entities/settings'
 import { isCard, useTrainer, type Asks } from '@/features/trainer'
 import { Button } from '@/shared/ui/primitives/button'
-import { Progress } from '@/shared/ui/primitives/progress'
+import { ProgressBar } from '@/shared/ui'
 import { RunResults, TimeLeft, TrainerBoard } from '@/widgets/trainer-board'
 
 /**
@@ -70,12 +70,12 @@ export function TrainerRunView({
       </div>
       {/* How far the run is: the rounds answered of its rounds; a run until stopped has no end to show. */}
       {rounds > 0 ? (
-        <Progress
-          aria-label={t('progress', { n: trainer.number, total: rounds })}
-          getAriaValueText={() => t('progress', { n: trainer.number, total: rounds })}
-          value={trainer.run.answered.length}
-          max={rounds}
-          className="-mt-2"
+        <ProgressBar
+          done={trainer.run.answered.length}
+          total={rounds}
+          label={t('progress', { n: trainer.number, total: rounds })}
+          said={t('progress', { n: trainer.number, total: rounds })}
+          className="-mt-2 h-2 min-h-2 flex-none"
         />
       ) : null}
       <TrainerBoard trainer={trainer} asks={asks} />

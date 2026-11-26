@@ -40,7 +40,9 @@ Four things stop you, and only these: an irreversible or destructive
 operation; a security-sensitive action; a side effect outside this worktree
 that norms say you ask about first (a merge, a push to a shared branch, a
 publish); and a plan so broken that every path forward is a guess. For
-those, stop and ask.
+those, stop and ask. In piano-trainer's loop nothing is asked and nothing
+stops: take the recommendation, build it, and go on (`owner-way`, Loops and
+refactors); only security, keys, accounts and hosting are left untouched.
 
 ## When to Use
 

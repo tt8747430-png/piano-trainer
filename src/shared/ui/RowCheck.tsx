@@ -1,12 +1,11 @@
-import { Check } from 'lucide-react'
 import { cn } from '@/shared/lib'
+import { CheckMark } from './CheckMark'
 import { RowFace, type RowFaceProps } from './RowFace'
-import { rowClass } from './row-class'
+import { ROW_CLASS } from './row-class'
 
 /**
  * A list row that is on or off (a song ticked to move into a folder, Apple Music's Add Music): a `RowLink`'s face,
- * and at its end, in its `trailing` place, a check, umber while on (the neutral chosen), a ring
- * while off; a tap turns it.
+ * and at its end, in its `trailing` place, the kit's `CheckMark`; a tap turns it.
  */
 export function RowCheck({
   checked,
@@ -22,23 +21,9 @@ export function RowCheck({
       role="checkbox"
       aria-checked={checked}
       onClick={() => onCheckedChange(!checked)}
-      className={cn(rowClass(face.paint !== undefined), 'w-full text-left')}
+      className={cn(ROW_CLASS, 'w-full text-left')}
     >
-      <RowFace
-        {...face}
-        trailing={
-          <span
-            data-slot="row-check"
-            aria-hidden
-            className={cn(
-              'grid size-7 shrink-0 place-items-center rounded-pill border transition-colors duration-200 ease-out',
-              checked ? 'border-transparent bg-selected text-selected-foreground' : 'border-input',
-            )}
-          >
-            {checked ? <Check className="size-4" strokeWidth={3} /> : null}
-          </span>
-        }
-      />
+      <RowFace {...face} trailing={<CheckMark checked={checked} />} />
     </button>
   )
 }

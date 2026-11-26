@@ -1,25 +1,11 @@
 import { Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
+import { Said } from '@/shared/ui'
 
-/** The Trash with nothing in it: what it is for, in a line. */
+/** The Trash with nothing in it, the kit's one empty state: what it is for, in a line. */
 export function TrashEmpty() {
   const { t } = useTranslation('songs')
   return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <Trash2 aria-hidden />
-        </EmptyMedia>
-        <EmptyTitle>{t('trash.empty.title')}</EmptyTitle>
-        <EmptyDescription>{t('trash.empty.description')}</EmptyDescription>
-      </EmptyHeader>
-    </Empty>
+    <Said icon={Trash2} title={t('trash.empty.title')} description={t('trash.empty.description')} />
   )
 }

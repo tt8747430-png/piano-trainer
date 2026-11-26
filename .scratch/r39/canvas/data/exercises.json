@@ -1,0 +1,118 @@
+{
+ "technique": [
+  {
+   "group": "virtuoso",
+   "name": "The Virtuoso Pianist",
+   "paint": "grass",
+   "rows": [
+    {
+     "id": "hanon",
+     "name": "Hanon",
+     "line": "Finger independence",
+     "stage": "Intermediate",
+     "mark": "1–20"
+    }
+   ]
+  },
+  {
+   "group": "fiveFinger",
+   "name": "Five-finger position",
+   "paint": "grass",
+   "rows": [
+    {
+     "id": "five-finger",
+     "name": "Five-finger position",
+     "line": "A key's first five notes, up and down",
+     "stage": "Beginner",
+     "mark": "1–5"
+    }
+   ]
+  }
+ ],
+ "jazz": [
+  {
+   "group": "barryHarris",
+   "name": "Barry Harris",
+   "paint": "lilac",
+   "rows": [
+    {
+     "id": "sixth-diminished",
+     "name": "6th-diminished scale",
+     "line": "Eight notes to the octave",
+     "stage": "Advanced",
+     "mark": "6°"
+    },
+    {
+     "id": "sixth-diminished-chords",
+     "name": "6th-diminished chords",
+     "line": "A chord on each note of the scale",
+     "stage": "Professional",
+     "mark": "6°7"
+    },
+    {
+     "id": "dominant-scale",
+     "name": "Dominant scale down",
+     "line": "The V7’s scale with a passing half step",
+     "stage": "Advanced",
+     "mark": "V7"
+    },
+    {
+     "id": "from-third",
+     "name": "Arpeggios from the 3rd",
+     "line": "3-5-7-9 over a ii–V–I",
+     "stage": "Professional",
+     "mark": "3–9"
+    },
+    {
+     "id": "drop-two",
+     "name": "Drop-2 7ths",
+     "line": "The key’s 7th chords up and down",
+     "stage": "Professional",
+     "mark": "D2"
+    }
+   ]
+  },
+  {
+   "group": "jonny",
+   "name": "Piano With Jonny",
+   "paint": "sky",
+   "rows": [
+    {
+     "id": "two-five-one-scale",
+     "name": "2-5-1 scale",
+     "line": "Swung 8ths over a ii–V–I",
+     "stage": "Beginner",
+     "mark": "251"
+    },
+    {
+     "id": "inner-voice",
+     "name": "Inner voice",
+     "line": "The 7th steps down under the 3rd",
+     "stage": "Intermediate",
+     "mark": "7→6"
+    },
+    {
+     "id": "modes",
+     "name": "Modes",
+     "line": "Ionian to Locrian",
+     "stage": "Advanced",
+     "mark": "1–7"
+    },
+    {
+     "id": "rapid-switch",
+     "name": "Rapid switch",
+     "line": "One line through all twelve keys",
+     "stage": "Professional",
+     "mark": "12"
+    },
+    {
+     "id": "pattern-shifting",
+     "name": "Pattern shifting",
+     "line": "One figure on every degree",
+     "stage": "Professional",
+     "mark": "seq"
+    }
+   ]
+  }
+ ]
+}

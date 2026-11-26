@@ -9,6 +9,7 @@ import { ServicesProvider } from '@/shared/lib/services'
 import type { Asks } from './draw'
 import { targetKeys } from './round-keys'
 import { AUTO_NEXT_MS, useTrainer, type TrainerOptions } from './use-trainer'
+import { createFakeArranger } from '@/shared/api/midi'
 
 const ONLY_C_MAJOR: Asks = {
   kind: 'skills',
@@ -32,7 +33,9 @@ function setup(asks: Asks, options: Partial<TrainerOptions> = {}) {
   }
   const wrapper = ({ children }: { children: ReactNode }) => (
     <ProgressStoreProvider store={store}>
-      <ServicesProvider services={{ audio, midi: null }}>{children}</ServicesProvider>
+      <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: null }}>
+        {children}
+      </ServicesProvider>
     </ProgressStoreProvider>
   )
   const hook = renderHook(

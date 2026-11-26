@@ -1,5 +1,6 @@
 export {
   advanceLoop,
+  loopOver,
   beatGroupAt,
   countAt,
   startLoop,
@@ -35,6 +36,8 @@ export {
 export {
   barSounds,
   chordSounds,
+  chordsInTurn,
+  turnStarts,
   INTERVAL_WAYS,
   intervalSounds,
   PRACTICE_RHYTHM_IDS,
@@ -42,7 +45,7 @@ export {
   type IntervalWay,
   type PracticeRhythm,
 } from './sounds'
-export { chordBar } from './chord-bar'
+export { chordBars, type BarChord } from './chord-bar'
 export { pedalSpanAt, type PedalSpan } from './pedal-marks'
 export { clickLevel, voicedClick, type ClickVoicing } from './click-voice'
 export { RUN_DIRECTIONS, runSounds, scaleRun, type RunDirection } from './run'

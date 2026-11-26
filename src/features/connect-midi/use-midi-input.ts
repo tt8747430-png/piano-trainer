@@ -5,7 +5,7 @@ import { useServices } from '@/shared/lib/services'
 import { useMidiConnection, type MidiConnection } from './use-midi-connection'
 
 /** Whether MIDI input is on: the port listening, with a keyboard or not. */
-export const isMidiInputOn = (connection: MidiConnection): boolean =>
+const isMidiInputOn = (connection: MidiConnection): boolean =>
   connection.kind === 'connecting' ||
   (connection.kind === 'ready' &&
     connection.status.state !== 'off' &&

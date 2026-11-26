@@ -80,7 +80,7 @@ const GLYPHS: Readonly<Record<ClefShape, Readonly<Record<-1 | 0 | 1, string>>>> 
 /** A clef as one character of the music font, for a small picture of it (a 15 as its 8). */
 export function clefGlyph(clef: Clef): string {
   const { shape, octaves } = CLEF_FORMS[clef]
-  return GLYPHS[shape][Math.sign(octaves) as -1 | 0 | 1]
+  return GLYPHS[shape][octaves < 0 ? -1 : octaves > 0 ? 1 : 0]
 }
 
 /** Octaves a clef's notes sound from where they are written: treble 8vb's an octave down. */

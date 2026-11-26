@@ -2,7 +2,7 @@ import type { CellBar } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 
 /** What a beat of the strip names: the chords it changes to, or a rest where the music turns to none. */
-export interface StripName {
+interface StripName {
   readonly symbols: readonly string[]
   readonly rest: boolean
 }

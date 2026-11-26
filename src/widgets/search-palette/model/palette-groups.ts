@@ -1,8 +1,8 @@
 import type { IndexEntry, IndexGroup, IndexKind } from './index-entries'
 
 /** The palette's groups, in the order it lists them (rule 27). */
-export const PALETTE_GROUPS = ['practice', 'songs', 'folders', 'lessons'] as const
-export type PaletteGroupId = (typeof PALETTE_GROUPS)[number]
+const PALETTE_GROUPS = ['practice', 'songs', 'folders', 'lessons'] as const
+type PaletteGroupId = (typeof PALETTE_GROUPS)[number]
 
 /** Where each kind the index holds is listed: Practice holds every tool and thing it shows. */
 const GROUP_OF: Readonly<Record<IndexKind, PaletteGroupId>> = {
@@ -19,9 +19,9 @@ const GROUP_OF: Readonly<Record<IndexKind, PaletteGroupId>> = {
 }
 
 /** The rows a group shows: the nearest, the palette's list short enough to read at a glance. */
-export const MOST_PER_GROUP = 6
+const MOST_PER_GROUP = 6
 
-export interface PaletteGroup {
+interface PaletteGroup {
   readonly id: PaletteGroupId
   readonly entries: readonly IndexEntry[]
 }

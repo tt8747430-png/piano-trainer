@@ -1,0 +1,4096 @@
+# UI-like English strings from __TEXT,__cstring (len<=60, no music-token tags; lesson prose with [tags] excluded). Swift small strings (<=15 bytes) are inlined in code and NOT in this list.
+Tiny_Instrument.Coordinator
+Somebody once told me...
+The heat is on…
+Beverly Hills Cop
+Doo doo doo doo doo doo...
+Baby Shark Doo Doo
+Roads? Where we're going, we don't need roads.
+Back to the Future
+Fate is knocking…
+Is this the real life?
+Operatic Fantasy
+That progression again...
+Everything the light touches…
+A long-expected journey...
+A letter for Elise...
+I'm gonna make him an offer he can't refuse.
+Something lurks below…
+Hall of the Mountain King
+You're a wizard...
+I sense a disturbance...
+Why did it have to be snakes?
+Shaken, not stirred...
+You're gonna need a bigger boat…
+Life, uh... finds a way
+Welcome to the Park
+Its fleece was white as snow
+Mary's Little Lamb
+You feel your sins crawling...
+This message will self-destruct...
+Almost like a fantasy...
+Moonlit Arpeggios
+It's been 84 years…
+My Heart Will Go On
+Nyan nyan nyan nyan...
+Pop-Tart Cat Riff
+Joyful, joyful...
+Sneaking around?
+Why is the rum gone?
+We're no strangers to love...
+Never Gonna Stop You
+Drop It Like Darude
+Is it getting warm in here?
+A storm is brewing…
+A long time ago...
+Galactic Fanfare
+Look, up in the sky!
+Man of Steel Fanfare
+Blocks incoming…
+Clear the Lines!
+Ladies and gentlemen...
+Something magical in the forest...
+How I wonder what you are...
+The melody for this Easter egg could not be loaded.
+Easter Egg Found
+You just found an Easter egg!
+Play it note for note — you'll be scored on accuracy
+Reveal a hidden song when you play a famous riff
+Play a familiar melody to unlock
+Undiscovered Easter egg
+Personal_Recordings
+Traditional_Gospel
+Alternative_Indie
+Alternative_Rock
+Chord_Progressions
+Christmas_Carols
+IntentPlayChordAudio
+IntentPlayScaleAudio
+IntentOpenCompose
+IntentOpenEarTraining
+IntentStartPractice
+IntentOpenLesson
+Open Ear Training
+Open Today's Lesson
+Pentatonic Major
+Pentatonic Minor
+Open today's lesson in 
+Start my lesson in 
+Start practice in 
+Start practicing with 
+Open ear training in 
+Start ear training in 
+Open compose in 
+Start composing in 
+Same chord, new bass note
+One note at a time
+Second Inversion
+Move less, sound better
+Loop the changes
+Four notes, more color
+Three Seventh Chords
+Play G, B, D, and F together — fingers 1, 2, 3, 5.
+Play C, E, G, and B together — fingers 1, 2, 3, 5.
+Play A, C, E, and G together — fingers 1, 2, 3, 5.
+Four chords, a thousand songs
+Loop the pop progression
+Loop C, G, A minor, F — four rounds, four beats each.
+Spread the chord out
+Play like an accompanist
+Lock in the loop
+Loop C, G, A minor, F at a slow, steady tempo — four rounds.
+Chord Player, Level 2
+Inversions, sevenths, and real accompaniment
+A real song, your key
+How to import a chord chart
+Step-by-step guide
+First Improvisation
+Make it up — with zero wrong notes
+Five notes, zero wrong notes
+Play A, C, D, E, and G up to the octave — one clean pass.
+Now come back down the same five notes to A3.
+Small ideas, repeated
+Play A, C, D, C, and A — the motif, one clean pass.
+Play A, C, and E — one finger at a time.
+Tension and release
+Freeplay Capstone
+Read Sheet Music
+From five lines to your first song
+Five lines, two clefs
+Play F3, C4, and G4 in order — one landmark at a time.
+Landmarks & Ledger Lines
+Beyond the five lines
+How long is that note?
+Count "1 2 3 4" out loud at a slow, steady pace
+Clap whole, half, and quarter notes against your count
+Clap a bar with a rest in it — silence is counted too
+Steps, skips, and contour
+Meter & Accidentals
+Time signatures and altered notes
+Louder, softer, smoother
+A full song from the page
+Mindset, schedule, and the keys
+Write a letter to your future self
+Show up 5 days a week
+Learn one song I love
+Schedule your practice
+One finger per key
+Five-Finger Warm-up
+Thumb on C, one finger per key up to G.
+Pinky on C, one finger per key up to G.
+Both hands together, one octave apart. Keep them even.
+Your First Chord
+Three notes at once
+Play C, then E, then G — one finger at a time.
+Three more shapes
+Three More Chords
+Play G, B, and D together — fingers 1, 3, 5.
+Play A, C, and E together — fingers 1, 3, 5.
+Play F, A, and C together — fingers 1, 3, 5.
+Moving between chords
+Loop the progression
+7-Day Beginner Plan
+From zero to your first real song
+Your first real song
+Write Your First Song
+From four chords to a saved composition
+Pick a Progression
+The harmonic backbone
+Your Song's Backbone
+Loop the backbone
+Verse, chorus, and the map
+Chorus and Verse
+Chorus: loop C, G, A minor, F — four rounds.
+I chose a form for my song (like verse–chorus–verse–chorus)
+My chorus and verse feel different from each other
+A motif over your chords
+Play E, G, A, G, E, and C in order — one clean pass.
+Passing tones and color
+Hands, texture, movement
+Arrange the Loop
+Finish and save it
+My composition has at least a verse and a chorus
+A brand new Tiny Instrument
+Learn music theory by playing
+Scale and chord practice
+Compose with a piano roll
+Aria AI coaching
+Fixes and polish
+Aria narration flows as it speaks
+Keyboard range per device
+Fixes and stability
+Learn songs from their chord charts
+Practice real songs
+Chord progressions as a practice category
+BPM-goal metronome
+Friendlier MIDI controller names
+Cleaner, more consistent library
+Your music now follows you everywhere
+Smoother song practice
+Set a key in Play
+The staff plays along with you
+Chords and inversions in Play
+Add a bass to any chord
+Chord names on the keyboard
+Choose how notes are spelled
+New Songbook lesson chapter
+A free chapter on turning a chord chart into real practice.
+Play mode learned some music theory
+Thank you, early users
+The full library is yours, no purchase needed.
+Eligible if you first downloaded Tiny Instrument before 
+A faster progression editor
+Do-Re-Mi note names
+Find it in Settings → General → Note Names.
+Each hand, then together
+Match your physical keyboard
+Find it in Settings → MIDI Connections.
+Built for everyone
+Find it in Settings → Keyboard Theme.
+Effects under your fingers
+Find it in Settings → Keyboard Effects.
+A reactive border
+Find it in Settings → Effects → Border Effect.
+Lay out the keyboard your way
+Find it in Settings → Piano Keys and Staff & Notation.
+Larger Text, app-wide
+Find it in Settings → Accessibility → Text Size.
+Set the narration speed
+Find it in Settings → Accessibility → Narration Speed.
+Clear without color
+Calmer animations
+Real sheet music, everywhere
+Real notation on the staff
+Find it in Settings → Staff & Notation → Accidentals.
+Chord names above the staff
+Find it in Settings → Staff & Notation.
+Roman numerals in your key
+Note names, right on the note
+Find it in Settings → Staff & Notation → Note Names.
+Open and share MusicXML
+Compose → Import MusicXML, or the share button to export.
+Learn to read sheet music
+Chord Voicings, an advanced chapter
+More ways to learn
+A rebuilt metronome
+A metronome on your wrist
+Practice that rewards you
+Earn XP and level up
+Achievement badges
+Daily and weekly challenges
+Share your progress on Game Center
+See it before you play it
+Keep your momentum
+Contrary-motion scales your way
+Theory, complete. Practice with a goal.
+Practice with a goal
+Theory, complete
+Lessons you play, not just read
+See what you are playing, engraved
+Now play the real thing
+Settings ▸ Progress & Notifications ▸ Practice schedule
+FocusSessionTimerExpired
+ShowAchievements
+ShowTheoryReference
+TransportToggleMetronome
+TransportToggleLoop
+TransportGoToStart
+TransportTogglePlay
+ComposeExportMusicXML
+ComposeMusicXMLImport
+ComposeMIDIImport
+ComposeMusicXMLImportURL
+AriaApplyScaleToKeyboard
+ComposeSongbookImport
+ComposeOpenSongbook
+AriaNavigateToExplore
+AriaNavigateToPlay
+AriaNavigateToCompose
+AriaOpenComposition
+AriaNavigateToProgressions
+AriaNavigateToPlayExplore
+AriaShowFocusSetup
+PlayDiatonicDegreeSelected
+ClearKeyboardHighlight
+ComposeNewComposition
+AriaNavigateToScalePractice
+ComposeScoreLibrary
+Unknown ChordProgression: 
+Unknown ActivityMode: 
+I – IV – vi – V
+I – vi – IV – V
+I – V – vi – IV
+I – IV – V – I
+Move clockwise and counterclockwise around the circle.
+Tap the tonic of the key signature.
+Tap the tonic of the major key with 1 sharp.
+Tap the tonic of the major key with 2 sharps.
+Tap the tonic of the major key with 1 flat.
+Complete the triad with the right 7th.
+Bottom Note Swap
+Tap the note that belongs on the bottom.
+Catch the altered 5th that changes the chord quality.
+Stack the Thirds
+Build triads by stacking 3rds.
+Blue Note Add-On
+Complete the blues scale by catching the extra grit.
+Translate scale degrees into notes fast.
+Relative Pair Match
+Tap the tonic of the relative key.
+Minor Formula Run
+Build the natural minor scale from the pattern.
+Scale Formula Run
+Build the major scale from the pattern.
+Sort interval cards by feel.
+Mixed interval calls. Land fast.
+Build the stable interval fast.
+Count the half steps, then land on the target note.
+Drop each rhythm into the measure where it fits.
+3 beats grouped as 1-2-3
+6 eighths felt as 2 big beats
+Tap on notes. Freeze on rests.
+Hold the pad for the right note length.
+Staff Speed Round
+Read notes on the staff. 30 seconds on the clock.
+Step Ladder Timed
+Find All the Notes
+Find All the notes
+All Triads
+Parts, texture, and dynamics
+Melody, bass, and accompaniment
+Start simple: one bass note per bar on beat 1, then add more
+Bass lines typically use chord root notes on strong beats
+Start simple and add complexity gradually
+Voicing & Register
+How note spacing changes the feel
+Close voicing: notes within one octave — thick, warm sound
+Texture & Layers
+Building up and stripping back
+Start with a simple melody on Track 1
+Add bass notes on Track 2 starting in Section 2
+Add chord pads on Track 3 starting in Section 3
+Texture = how many parts play at once
+Adding layers builds energy; removing them creates contrast
+Each layer should have its own role and register
+Dynamics & Movement
+Energy arcs and emotional shape
+Calm: few notes, low register, one track
+Building: more notes, rising pitch, add a bass track
+Peak: highest density, widest register, all tracks active
+Resolution: return to calm — fewer notes, lower register
+Every piece needs an energy arc — it can't stay flat
+The classic arc: calm → build → peak → resolve
+Putting It All Together
+Your composition capstone
+Plan your sections: intro, verse, chorus, or A-B-A form
+Start with a strong motif and build everything around it
+Patterns, syncopation, and feel
+Rhythmic Patterns
+Building blocks of groove
+Keep the rhythm the same but change the notes
+This pattern fills exactly one bar of 4/4
+Rhythmic patterns create groove through repetition
+A good pattern has a mix of note lengths
+Varying pitches over a fixed rhythm keeps it interesting
+Syncopation & Off-beats
+Placing emphasis between beats
+Start with notes on beats 1, 2, 3, 4 (use 1/4 note grid)
+Syncopation places emphasis between beats for groove
+Rhythmic Density & Space
+When to play and when to rest
+Dense version: use eighth notes, fill most beats with notes
+Spacious version: use half and whole notes, leave gaps
+Dense passages feel energetic; sparse passages feel calm
+Silence (rests) gives notes more impact
+Alternating density creates dynamic contrast in a piece
+Time Feel & Subdivision
+Straight vs swing and mixing subdivisions
+Try the 1/16 grid for fine control
+Mix long notes (half, quarter) with short bursts (sixteenth)
+Mixed Subdivisions
+Building sections and form
+Verse, chorus, bridge, and common forms
+Use different pitch ranges for each section
+Change the rhythmic feel between sections
+Common forms: AABA and verse-chorus
+Each section should have its own character
+Contrast & Repetition
+Making sections feel different yet connected
+Take a 3-4 note pattern from A and transform it for B
+A - Low & Spacious
+B - High & Active
+The best music balances surprise with familiarity
+Transitions & Flow
+How sections connect
+A drop: leave silence just before the new section hits
+Transitions prepare the listener for section changes
+Pickups start the new melody slightly early for smooth flow
+Building a Complete Piece
+Putting it all together
+Intro: set the mood with a simple idea
+Verse: tell the story — moderate energy, lower register
+Outro: wind down — return to the intro idea
+A complete piece has an energy arc — build, peak, resolve
+Bookend with intro/outro for a polished feel
+Motif Development
+Evolve your musical ideas
+Melodic Sequences
+Same rhythm, different pitch level
+Here's a 4-note motif — a falling scale fragment.
+Move every note down by one scale step for the sequence
+The rhythm must stay exactly the same — only pitch changes
+Each bar starts one scale step lower than the previous
+Let it descend — the falling shape creates momentum
+A short rest at the end before resolving can feel satisfying
+Keep the rhythm locked; only move the starting pitch
+Flip every interval upside down
+Here's a 4-note motif that rises, then leaps.
+Same rhythm, same distances — but mirrored downward.
+Write the inverted form so it mirrors the original movement
+Augmentation & Diminution
+Stretch or compress the rhythm
+Here's a 4-note motif at normal speed.
+Four notes — bright and direct.
+The same idea — but now it feels expansive and solemn.
+Faster — now it feels urgent, like a buildup or variation.
+Use 4–6 quarter notes in bars 1–2
+In bars 3–4, write the same pitches as half notes
+Zoom in on one cell
+Here's a 6-note motif.
+Leave space — rests make fragments breathe
+Fragment Development
+Developing a Melody
+Put it all together
+Bars 1–2: establish your motif clearly
+Bars 3–4: sequence it up or down the scale
+Bars 5–6: invert it, or augment/diminish it
+Bars 7–8: resolve — end on a chord tone on a strong beat
+Always resolve — the listener needs to land somewhere
+Writing melodies that sing
+Motifs & Repetition
+Small ideas that hold a piece together
+Keep the rhythm simple — quarter and eighth notes work well
+Copy your motif's shape but change one or two notes
+Try transposing it — same pattern, different starting note
+Vary the rhythm while keeping the same pitches
+A motif is a short, memorable musical idea (3-5 notes)
+The shape of a melody
+Ascending melodies create a sense of building energy
+The peak should be the highest note in the melody
+Try to reach the peak around the middle of the phrase
+The descent should feel like a natural resolution
+The highest point creates tension; descending resolves it
+Phrasing & Breathing
+Question and answer in melody
+Leave a small rest between the question and answer
+Rests between phrases let the melody breathe
+Tension & Resolution
+Creating movement with non-chord tones
+Place chord tones on beats 1 and 3 (strong beats)
+Place chord tones on strong beats (1 and 3) for stability
+Melody Over Chords
+Targeting chord tones on strong beats
+Try approaching chord tones from one note above or below
+Identify any note in octave 4 (all 12 pitches)
+Identify notes across octaves 3–5
+Identify notes with varied timbres across octaves 3–5
+Identify all perfect intervals (ascending and descending)
+Identify perfect intervals plus seconds and thirds
+Identify all intervals from minor second to octave
+Identify all intervals played harmonically
+Identify scale type including pentatonics
+Major Pentatonic
+Minor Pentatonic
+Identify modes and common scales
+Hear a scale and play it back
+Identify all four triad types
+Identify seventh chord types
+Half-Diminished 7th
+Hear a chord and play it back
+Play back 3-note stepwise melodies in C major
+Play back 4-note melodies with skips in C major
+Play back 5-note melodies in any key
+Play back 6-note melodies across a wide range
+Play back 8-note melodies across a wide range
+Root
+Fifth
+Octave Below
+Off
+Drone
+Split
+Harmonic Functions
+Practice & Play Features
+Chord Progressions
+Navigation & Repeats
+Personal Recordings
+Traditional Gospel
+Alternative / Indie
+Alternative Rock
+Christmas Carols
+Favorites
+Uncategorized
+Scale_Exercises
+Disney_Themes
+Classical
+Rock
+Pop
+Video_Games
+Movies
+Blues
+Metal
+Grunge
+R&B_Soul
+Hip_Hop
+Electronic
+Country
+Folk
+Patriotic
+Transport
+Timing
+Keyboard
+Session
+Beats per measure and which note gets one beat
+4 beats per measure, quarter note gets one beat.
+3 beats per measure, quarter note gets one beat.
+2 beats per measure, quarter note gets one beat.
+2 beats per measure, half note gets one beat.
+2 groups of 3 eighth notes per measure.
+3 groups of 3 eighth notes per measure.
+Compound Quadruple
+4 groups of 3 eighth notes per measure.
+Home base. The key center everything revolves around.
+Often leads to V. A common pre-dominant chord.
+Shares notes with I and V. A softer, connective chord.
+Strong pull toward home. Classic plagal cadence to I.
+Tense and unstable. Pulls strongly up to I.
+Home base in a minor key.
+Naturally diminished in minor. Tense pre-dominant chord.
+A dominant chord built on the fifth. Tonicizes V.
+A dominant chord that temporarily tonicizes ii.
+A dominant chord that temporarily tonicizes vi.
+A dominant chord that temporarily tonicizes IV.
+A pre-dominant seventh chord; leads smoothly into V.
+A soft, connective seventh chord sharing tones with I and V.
+Same note. No distance.
+One half step. Tense and dissonant.
+One whole step. A common melodic step.
+The sound of a minor chord. Darker, sadder.
+The sound of a major chord. Bright, happy.
+Stable and open. The plagal sound.
+Three whole steps. Maximum instability.
+The most consonant interval after the octave. Pure and open.
+Expressive and wide. Inverted major third.
+Warm and sweet. Inverted minor third.
+Bluesy tension. Wants to resolve down.
+Dreamy, jazzy tension. One half step from the octave.
+Same note, one octave higher. Complete consonance.
+A major key. Bright, stable sound.
+A minor key. Darker, more emotional sound.
+Three or more notes played together to create harmony.
+Three notes with a bright, stable, happy quality.
+Three notes with a darker, more emotional quality.
+Open and ambiguous. The second replaces the third.
+Neither major nor minor. The fourth replaces the third.
+Mysterious, unsettled. Built from two major thirds.
+Tense and unstable. Built from two minor thirds.
+Symmetrical and tense. Every note is a minor third apart.
+Bluesy tension. Wants to resolve down a fifth.
+Smooth, mellow. Common in jazz and R&B.
+Warm, jazzy, dreamy. The major triad plus a major seventh.
+Natural minor (Aeolian) scale
+Major (Ionian) scale
+Held for a full measure in 4/4.
+Half the duration of a whole note.
+The basic beat in most time signatures.
+One-eighth of a whole note, so two fit in a single beat.
+One-sixteenth of a whole note, so four fit in a single beat.
+Whole note plus half its value.
+Half note plus half its value.
+Quarter note plus half its value.
+Eighth note plus half its value.
+Three notes in the space of two.
+A full measure of silence.
+Two beats of silence.
+One beat of silence.
+Half a beat of silence.
+Quarter of a beat of silence.
+Moderately soft.
+Moderately loud.
+Sudden strong accent.
+Loud then immediately soft.
+Gradually getting louder.
+Gradually getting softer.
+The home note. Every other degree is measured from here.
+One half step above the root. Creates the Phrygian sound.
+One whole step above the root. Common melodic step.
+Five half steps above the root. Stable and open.
+Nine half steps above the root. Warm and bright.
+7 — major seventh
+Aeolian (natural minor)
+Authentic cadence
+Perfect authentic cadence
+Deceptive cadence
+Treble clef (G-clef)
+Bass clef (F-clef)
+Alto clef (C-clef)
+Tenor clef (C-clef)
+Soprano clef (C-clef)
+Raises the note a half step (one semitone).
+Lowers the note a half step (one semitone).
+Raises the note a whole step (two semitones).
+Lowers the note a whole step (two semitones).
+Structured lessons and a searchable theory reference.
+Play with targets and feedback that scores how you do.
+Play a scale and get feedback on each note.
+Build target chords and check your shapes.
+Move through a chord progression in time.
+Build and save chord progressions to arrange and play.
+Tap pads to play full chords with one finger.
+Drill two-hand coordination from a connected keyboard.
+Play short tunes and match the target notes.
+Learn songs from chord charts.
+Change the keyboard's sound.
+Set a key and scale to highlight the notes that fit.
+Show the notes you play on the staff.
+Held for two beats — an open head with a stem.
+Held for one beat — a filled head with a stem.
+Half a beat — a filled head with one flag; beamed in groups.
+A quarter of a beat — a filled head with two flags.
+Three beats — a half note plus half its value again.
+One and a half beats — a quarter plus half its value.
+Three notes played in the time of two of the same value.
+A note duration.
+Play the marked notes one octave higher than written.
+Play the marked notes one octave lower than written.
+A symbol marking a silence of a given length.
+A two-beat silence — a small block sitting on a staff line.
+A one-beat silence.
+A half-beat silence.
+A notation symbol.
+Short and detached.
+Smooth and connected, with no gaps between notes.
+Played with extra emphasis.
+Held for its full value.
+Strongly marked / accented.
+Held longer than written, at the player's discretion.
+An articulation marking.
+Rapidly alternate with the note above.
+A four-note ornament curling around the written note.
+A quick single alternation with the note above or below.
+A quick ornamental note before the main note.
+An ornament marking.
+All chord tones packed within a single octave.
+Root, 3rd, and 7th — the guide tones — with the 5th omitted.
+Omit the root and play 3-5-7-9; the bass covers the root.
+Chord tones spaced widely, often split across both hands.
+Built by stacking perfect fourths instead of thirds.
+A chord voicing.
+Play the enclosed section again.
+Opens a repeated section (‖:).
+Closes a repeated section — go back and play it again (:‖).
+Play this the first time, then skip it on the repeat.
+Play this on the repeat instead of the first ending.
+The sign you jump back to on a D.S.
+The closing (tail) section you jump to.
+D.C. — go back to the beginning.
+D.S. — go back to the segno sign.
+Jump from here to the coda.
+The end (where the piece finishes after a D.C./D.S.).
+A navigation or repeat marking.
+Release the sustain pedal.
+A sustain-pedal marking.
+A fast slide across the keys from one note to another.
+A fast slide across the keys.
+All the chord's notes sound together at once.
+The chord's notes sound one after another, low to high.
+The chord's notes sound one after another, high to low.
+The notes sweep quickly across, like strumming a guitar.
+A broken-chord accompaniment pattern (low–high–middle–high).
+A way a chord's notes can sound: block, arpeggio, or strum.
+A note that isn't part of the underlying chord.
+Harmonic function
+Chromatic Approach Notes
+Explore — approach any note chromatically
+Explore — walk the bass, comp the chord
+The blue note returns
+It's all in the groove
+Explore — play freely, feel the swing
+The jazz handshake
+Explore — mix the three shells, feel how they connect
+Your First Seventh Chord
+One note changes everything
+Minor with a twist
+The same note, up an octave
+Find the same note in different octaves
+1 — 3 — 5, every time
+Thumb Crossunder
+The secret to smooth scales
+C Major from bottom to top
+Alternate between them. That's a chord progression.
+C and G — the simplest progression
+Music is a conversation
+Music is a conversation. One phrase asks, the next answers.
+Now you play it back
+Now you ask, we'll answer. Make it short — three notes.
+Ask a question. Answer it.
+Blues Roots in A
+One extra note changes everything
+Hold a chord, tell a story
+C Major Pentatonic
+Bright as a sunny day
+A Minor Pentatonic
+Root, then wander
+Stepped
+Continuous
+Always
+On Mistake
+Getting More from the App
+Power features for Play, Compose & Practice
+Play Mode in Depth
+Key reference, chord sidebar, and Chord Lab
+Reach for these when you're exploring or writing.
+Play mode gives you three big helpers.
+Tint the notes of that key's scale
+Change instrument
+The chord sidebar shows the diatonic chords in your key.
+Play mode's key reference, chord sidebar, and Chord Lab.
+Building Chord Progressions
+Create and arrange a progression
+Drag chords to change the order.
+Where do you build a chord progression from scratch?
+Add, reorder, and save chords to your library.
+Launch a saved progression into practice.
+Open Progressions
+Building and arranging a chord progression.
+Changing Inversions in Play
+Reshape a chord with the Bass control
+Handy for smoother voice leading between chords.
+Chord Inversions
+Changing which note is in the bass (its inversion)
+Swapping it for a different chord
+Changing the tempo
+Per-Chord Play Modes
+Hear Block, Arpeggio, and Strum
+Which play mode rolls the notes one after another?
+Hearing and choosing play modes for chords.
+What each part of the app is for
+Build and arrange your own music
+Open Compose when you want to make something of your own.
+Keep songs as chord charts you can open and arrange.
+Ear training drills
+Building and arranging your own music on a timeline
+Scoring a scale you play
+Searching the theory reference
+Compose is for building and arranging your own music.
+A free keyboard, always ready
+Reach for Play when you want to explore freely.
+Pick the sound, from grand piano to synth.
+Highlight the notes that belong, so wrong notes stand out.
+See your notes on the staff as you play.
+Move through a diatonic chord strip in your chosen key.
+Play scores every note
+Play is a free, open keyboard with no scoring
+Play only works with MIDI
+Play teaches one lesson at a time
+Play is a free keyboard with no scoring.
+Choose the instrument sound, key, scale, and staff.
+Use it to explore, warm up, or test an idea.
+Introduces Play mode: the open, unscored keyboard.
+Targets and feedback as you play
+Learn a real song from a chord chart.
+Practice scores what you play against a target.
+Pick the drill that matches the skill you want to build.
+Train your ear by hearing and naming
+Use Listen to connect what you hear to what you know.
+Your typing speed
+Your ear, by identifying intervals, chords, and scales
+Your reading of chord charts
+Your arrangement of a full song
+Listen is ear training: hear a sound, then name it.
+It covers intervals, chords, and scales.
+Regular practice helps you recognise sounds by ear.
+Structured lessons and a theory reference
+Come to Learn when you want guided, step-by-step teaching.
+Explore an idea by playing notes on the keyboard.
+Check what you learned with a quick play challenge or quiz.
+Review the key points at the end of each lesson.
+Where do you find structured lessons and a theory reference?
+Lessons mix Discover, Exercise, and Summary steps.
+Finishing lessons unlocks the chapters that follow.
+Set yourself up for success
+How Lessons Work
+A quick tour of the lesson interface
+Try tapping a highlighted item to explore it.
+Test what you've learned with play challenges and quizzes.
+Review key takeaways at the end of each lesson.
+It's the white key just to the left of the two black keys.
+It plays the sound or shows more information
+It opens a new lesson
+It skips the step
+What's the best way to use Aria while taking lessons?
+How do I navigate lessons with a MIDI keyboard?
+What order should I take the chapters in?
+Sitting at the Keyboard
+Set yourself up before you play a note
+Where should you sit in relation to the keyboard?
+As far back as possible so you can reach all the keys
+To the left, where the low notes are
+Wherever feels most comfortable, position doesn't matter
+Keep your back tall and relaxed — not stiff, not slumped
+Elbows roughly level with the keys, shoulders relaxed
+Feet flat on the floor for a stable base
+Why does sitting position matter for playing keyboard?
+How high should my bench or stool be?
+What if I'm playing on a tablet?
+Hand Shape & Wrist Position
+Curved fingers and a relaxed wrist
+Fingertips contact the keys, joints gently rounded.
+Level with the back of your hand — not sagging or lifted.
+No tension in the forearm, elbow, or shoulder.
+What shape should your fingers make on the keyboard?
+Flat — press keys with the pads of your fingers
+Fully extended and straight
+Gently curved — fingertips touching the keys
+Tightly curled, like a fist
+Play with your fingertips, not the flat of your fingers
+Relax your arms and shoulders; tension slows you down
+My wrist keeps dropping — how do I fix it?
+Should I keep my fingers curved even when playing chords?
+How do I know if my hand position is correct?
+Notes & The Keyboard
+Meet the piano and learn how notes are organized
+White keys and the musical alphabet
+It's in the middle of the keyboard.
+How many letter names are in the musical alphabet?
+Here are the three notes.
+The pattern repeats across the entire keyboard
+Why does the musical alphabet only use 7 letters?
+Finger Numbering
+How musicians count fingers
+Starting from the thumb:
+The widest and strongest finger.
+Your pointing finger.
+The longest finger.
+Often the least independent — worth practising.
+The shortest; anchors the outside of your hand.
+Which finger is number 1?
+Fingers are numbered 1–5, thumb to pinky, on both hands
+Why do musicians number fingers starting from the thumb?
+Is the finger numbering the same for both hands?
+Sharps, flats, and two names for the same note
+Enharmonic Equivalents
+It's a mistake in music theory
+It can be seen as C raised or D lowered
+One name is for piano, one for guitar
+Sharp is louder than flat
+Each black key has two names (enharmonic equivalents)
+There are 5 black keys per octave, in groups of 2 and 3
+How do I know when to use a sharp vs a flat?
+The same note, higher and lower
+Play both together.
+It spans 8 white keys from one note to the same note
+There are 8 black keys
+It was invented in the 8th century
+How many octaves does a full piano have?
+Half Steps & Whole Steps
+The smallest distances on the keyboard
+How many half steps are in a whole step?
+A whole step equals exactly 2 half steps.
+A half step is the distance between any two adjacent keys
+A whole step equals two half steps
+Why are half steps and whole steps important for scales?
+What are the natural half steps — and why do they matter?
+How do half steps and whole steps build up to a major scale?
+Reading the Staff
+How music is written on paper
+Middle C (ledger line)
+Play each line note as it appears on the staff.
+Now play each space note.
+What note is this?
+What word do the treble clef space notes spell?
+The staff has 5 lines and 4 spaces, each representing a note
+How does the staff relate to what I play on the keyboard?
+Why are there two clefs — treble and bass?
+What's the fastest way to memorize staff note names?
+Treble and bass clefs together
+Play each bass clef line note as it appears on the staff.
+Now play each bass clef space note.
+All Cows Eat Grass
+Good Boys Do Fine
+Middle C (bridge)
+Which clef is this note in?
+Which note sits on a ledger line between the two staves?
+What does the bass clef mark?
+Treble + bass together form the grand staff
+When do I read treble clef vs bass clef on the piano?
+How do I know which hand plays which clef?
+What's the best way to practice reading both clefs together?
+Stacking notes to make chords
+How loud you play it
+A triad is three notes built by stacking two thirds
+The Other Chords
+G major, A minor, and F major
+Rhythm, Meter & Expression
+How music moves through time — beat, duration, and dynamics
+The steady heartbeat of music
+Which tempo is faster?
+Very fast and energetic
+Slow and expressive
+Moderate walking pace
+What does BPM stand for?
+Beats Per Minute
+Bars Per Movement
+Every piece of music has a steady pulse called the beat
+How does tempo affect the feel of a piece of music?
+What's the difference between beat and rhythm?
+How long each note is held
+Each note duration is half the length of the one before it
+How do note durations combine to fill a measure?
+What are triplets and how do they fit into note durations?
+Silence is part of the music
+Which rest is the shortest?
+Every note duration has a matching rest of the same length
+Why do rests matter so much in music?
+How do I count rests while playing so I don't lose my place?
+How beats are grouped into measures
+Which time signature would you most likely hear in a waltz?
+Dynamics & Expression
+Playing soft, loud, and everything in between
+Put these dynamics in order from softest to loudest:
+Gradually getting louder
+Gradually getting softer
+At a moderate volume
+With a sudden strong accent
+What dynamics are typical in pop vs classical piano?
+The distance between notes — the DNA of melody and harmony
+Counting Half Steps
+Measuring the distance between any two notes
+The interval determines how two notes sound together
+Major & Minor Thirds
+4 vs 3 half steps — bright vs dark
+Major is 4 half steps, minor is 3
+Major uses white keys only
+They sound the same
+What interval is shown on the staff?
+Thirds are the building blocks of chords
+Perfect Intervals
+Unison, fourth, fifth, octave
+What interval is shown?
+They're called 'perfect' because of their pure, stable sound
+All Intervals Together
+Naming any interval from seconds to octaves
+What interval is 6 half steps?
+What interval is 9 half steps?
+Every half-step distance from 0–12 has an interval name
+Consonance & Dissonance
+Which intervals sound stable vs tense
+Dissonant (tritone)
+Which interval is the most consonant?
+What makes dissonance useful in music?
+It's a mistake to avoid
+It creates tension that resolves to consonance
+It's louder than consonance
+It only appears in modern music
+Practice hearing intervals in Listen mode
+The Major Scale (Ionian)
+W–W–H–W–W–W–H — the master formula
+Between notes 1-2 and 5-6
+Between notes 3-4 and 7-8
+Between notes 2-3 and 6-7
+Between notes 4-5 and 7-8
+G major always has sharps
+It's a convention
+A Scale Is a Movable Pattern
+Slide the same shape to any home note
+The shape never changes. Only where it starts does.
+Moving the shape is what forces a key's sharps or flats
+The Natural Minor Scale (Aeolian)
+W–H–W–W–H–W–W — the darker side
+Between 3-4 and 7-8
+Between 2-3 and 5-6
+Between 1-2 and 4-5
+Between 4-5 and 6-7
+Half steps fall between notes 2–3 and 5–6
+Patterns of notes that define the sound of music
+Relative Major & Minor
+Two scales, same notes, different starting point
+Pentatonic Scales
+Here are the notes.
+Used in blues, rock, folk, and music worldwide
+Numbering the notes in any scale
+What does the number in a scale degree tell you?
+How many sharps the key has
+The note's position in the scale
+How loud to play the note
+Which octave to play in
+Degree formulas describe scales and chords in any key
+Adding the 'blue note' for grit and soul
+Blue note (♭5)
+It creates the distinctive gritty, soulful blues sound
+The Three Minor Scales
+Natural, harmonic, and melodic minor
+Building harmony by stacking intervals
+Chords: The Big Picture
+How harmony is built and named
+Root · 3rd · 5th
+What are the three notes of a triad called?
+Low, middle, high
+Harmony = notes stacked together; a triad stacks two thirds
+Diminished & Augmented
+Two small thirds or two large thirds
+Diminished collapses inward; augmented stretches outward.
+What intervals make up a diminished triad?
+Two major thirds
+Major third + minor third
+Two minor thirds
+Minor third + major third
+What intervals make up an augmented triad?
+Same notes, different bottom note
+Inversions change the bass note, not the chord identity.
+In first inversion, which note is on the bottom?
+First inversion puts the third of the chord on the bottom.
+They create smoother voice leading between chords
+Adding a fourth note for richer harmony
+A seventh chord is a triad plus one more third.
+They're the same chord
+Playing Chords in Context
+Hearing how chords relate in a key
+Listen for function: home, away, tension, release.
+It's the loudest
+It's the chord built on the starting note of the key
+It uses only white keys
+It has the most notes
+Explore all chord types
+The Moveable Chord Shape
+One recipe, slide it to any root
+Up 3 semitones, then up 4
+Up 4 semitones, then up 3
+Up 5 semitones, then up 5
+Up 2 semitones, then up 2
+Practice moving the shape
+How do I play a major chord in any key without memorizing?
+Why does a D major chord have a black key?
+Keys & Key Signatures
+Understanding the home base of music
+A home base note and scale
+Sharps & Flats in Key Signatures
+How key signatures save you from writing accidentals
+Sharps appear in order: F#, C#, G#, D#, A#, E#, B#
+Identifying Keys
+Figuring out what key a piece is in
+The tonic is the note it resolves to — D.
+The sharps or flats tell you which scale is being used
+Combine the tonic + accidentals to name the key
+The Circle of Fifths
+Counting sharps & flats across 12 keys
+C → G (1 sharp)
+G → D (2 sharps)
+Key Neighbors & Relative Minors
+What key is a fifth above G?
+Decreases by one
+Increases by one
+Clockwise = add sharps, counter-clockwise = add flats
+Why the Key Matters
+What knowing the key unlocks
+Which scale and chords will fit
+How loud to play
+It guides transposition and where melodies resolve.
+Explore keys in Play
+Chord Progressions & Harmony
+How chords work together to create music
+Building a chord on every note of the scale
+Diatonic Chords In C Major
+In a major scale, which diatonic chord is diminished?
+Explore scale degrees
+Common Progressions
+The chord sequences behind thousands of songs
+A chord progression is a repeating sequence of chords
+The engine that drives music forward
+The leading tone (7th scale degree)
+The punctuation marks of music
+Which cadence is called the 'Amen cadence'?
+Harmonizing a Melody
+Choosing chords that support a melodic line
+Practice chord progressions
+The grammar behind every progression
+Deceptive motion
+None — it's non-diatonic
+Seven colors from one scale
+The 7 rotations of the major scale
+What mode starts on the 2nd degree of the major scale?
+Each mode has its own unique emotional character
+Natural 6th (with lowered 3rd and 7th)
+Which of these three modes sounds the darkest?
+They all sound the same
+Completing the set
+Which mode is identical to the natural minor scale?
+Modal Interchange
+Borrowing chords from parallel modes
+Advanced Harmony
+Beyond the basics — the colors of sophisticated music
+Secondary Dominants
+The term 'tonicizing' a chord means:
+Making it the permanent tonic
+Resolving away from it
+Temporarily making it feel like a home chord
+Using chords from the parallel minor
+Changing keys within a piece
+What is a pivot chord in modulation?
+A chord that only exists in the new key
+A chord that belongs to both the old key and the new key
+A dominant 7th chord that resolves the modulation
+A borrowed chord from the parallel minor
+Secondary dominant
+9ths, 11ths, and 13ths
+What note makes a major 7th chord into a major 9th chord?
+The 7th scale degree
+The 9th (2nd scale degree, upper octave)
+The 4th scale degree
+The 6th scale degree
+Extended chords are built by continuing to stack:
+Extended chords add 9ths, 11ths, and 13ths beyond the 7th
+Extended chords are essential to jazz, R&B, and neo-soul
+Analyzing a real progression
+Which chord in the progression is a secondary dominant?
+Same chord, many ways to arrange it
+What Is a Voicing?
+Same chord, different layout
+Identity = which notes. Voicing = where you put them.
+All of the above
+What is the difference between a chord and a voicing?
+Does changing the octave of a note change the chord?
+Why would I want to voice a chord differently?
+Close vs Open Voicings
+Tight stacks versus spread-out sound
+Close = within an octave. Open = spread beyond it.
+Open voicings give each tone room to ring clearly.
+What makes a voicing open instead of close?
+Why do open voicings sound fuller?
+How do I turn a close voicing into an open one?
+Inversions as Voicings
+The bass note is a voicing choice
+An inversion is a voicing whose variable is the bass note.
+1st inv (bass E)
+2nd inv (bass G)
+The bass note names the inversion.
+How is an inversion a kind of voicing?
+Which note is in the bass for first inversion?
+How do inversions help voice leading?
+Two-Hand / Spread Voicings
+Split the chord across both hands
+Left hand: foundation. Right hand: colour.
+Left hand (root + 5th)
+Right hand (3rd + 7th)
+How do I split a chord across both hands?
+What does the left hand play in a spread voicing?
+Why do two-hand voicings sound so full?
+Shell Voicings (3rd + 7th)
+Root, 3rd and 7th — drop the 5th
+Shell = root + 3rd + 7th. The 5th sits this one out.
+Root + 3rd + 7th
+No 5th here on purpose — the guide tones carry the quality.
+What is a shell voicing?
+Why do you leave out the 5th in a shell voicing?
+What are guide tones?
+Drop the 2nd note from the top an octave
+Close 4-note voicing → drop the 2nd-from-top an octave.
+Only one note moves — the 2nd from the top, down an octave.
+What is a drop-2 voicing?
+Which note do you drop in a drop-2 voicing?
+Why do drop-2 voicings sound good for comping?
+Rootless Voicings (LH jazz)
+Drop the root, keep the colour
+Rootless = 3-5-7-9. Let the bass cover the root.
+3-5-7-9 (no root)
+What is a rootless voicing?
+Why would you leave out the root of a chord?
+Which notes go in a rootless voicing?
+Voice Leading Between Voicings
+Move the fewest notes between chords
+Hold common tones; step everything else.
+Hold common tones; step the rest to the nearest note
+What is voice leading?
+How do guide tones connect chords?
+Why does the 7th resolve to the 3rd?
+Quartal & Modern Voicings
+Stack fourths for a modal, open sound
+Quartal = stacked perfect fourths, not thirds.
+Quartal (So What)
+Three stacked P4s
+Three perfect fourths, then a major third on top.
+What is a quartal voicing?
+What is the So What voicing?
+Why do quartal voicings sound modern?
+How notes and chords relate to each other
+The note that pulls home
+B (leading tone)
+Why doesn't the natural minor scale have a leading tone?
+How does the leading tone make V7→I feel so strong?
+Home. Stable and resolved.
+Moving away. Creates gentle tension.
+Strong tension. Wants to return home.
+Creates a sense of moving away from home
+Why is IV called the subdominant?
+How does the IV chord work in a 12-bar blues?
+How individual notes move between chords
+Good voice leading means each voice:
+Leaps to a new octave
+Moves by a large interval
+Stays put or moves by a small interval
+Always moves in the same direction
+Voice leading is how individual notes move between chords
+Makes progressions sound connected and flowing
+How do I apply voice leading to piano chords?
+What are common tones and why do they matter?
+What's the difference between good and bad voice leading?
+Intervals that sound stable and at rest
+Which word best describes a consonant interval?
+Stable and at rest
+Consonant intervals sound stable and resolved
+Consonance is the foundation of stable harmony
+Which intervals are most consonant?
+How do consonance and dissonance work together in music?
+Intervals that sound tense and unstable
+What does dissonance create?
+Tension and unrest
+Dissonant intervals sound tense and want to resolve
+Which intervals are most dissonant?
+How does dissonance resolve in a V7 chord?
+Can a chord be dissonant?
+Moving from tension to rest
+Resolution describes:
+Adding more tension to a chord
+Moving from tension to a stable resting point
+Changing the key
+Resolution is the movement from tension to rest
+Dissonance resolves to consonance
+Why does V resolve to I?
+What is an unresolved ending called?
+How does resolution work in jazz harmony?
+Same chord, different arrangement
+What's the difference between a close and an open voicing?
+Does changing the voicing change which chord it is?
+How do I make a chord sound fuller?
+Root, 3rd, and 7th — the guide tones
+Why can you leave out the 5th in a shell voicing?
+How do shell voicings help with comping?
+Distance, tension, and the building blocks of pitch
+The international name for a half step
+How many semitones are in a major scale?
+What's the difference between a semitone and a whole tone?
+The international name for a whole step
+A tone = 2 semitones = one whole step
+Both 'tone' and 'whole step' refer to the same distance
+What's the major scale formula using tones and semitones?
+Is a tone always between two white keys?
+Two names, one pitch
+Key signatures determine which spelling to use
+When should I use a sharp vs a flat for the same note?
+Are there enharmonic equivalents for white keys?
+Why does the spelling matter if the pitch is the same?
+The interval of maximum tension
+It divides the octave exactly in half
+Creates strong tension that wants to resolve
+Why is the tritone called 'the devil in music'?
+Where does the tritone appear in common chords?
+How does the tritone resolve in a V7 chord?
+The distance between two pitches
+Count the semitones: C→C♯→D→D♯→E→F→F♯→G = 7 steps.
+What is an interval?
+A rhythm pattern
+An interval is the distance between two pitches
+Measured in semitones
+The building block of scales, chords, and melodies
+What are the names of the most common intervals?
+How do I recognise intervals by ear?
+The same note, 12 semitones apart
+How many semitones are in an octave?
+An octave spans 12 semitones
+Same note name, one register higher or lower
+The higher note vibrates exactly twice as fast
+Why do notes an octave apart sound so similar?
+What does the number in a note name (C4, C5) mean?
+How many octaves are on a full piano?
+Intervals as Shapes
+Recognize the distance, don't count the notes
+See the gap, don't spell the notes.
+The wider the gap, the bigger the interval.
+Right Hand Interval Warm-up
+Left Hand Interval Warm-up
+Recognizing the gap is faster than counting note names
+How do I recognize an interval without counting?
+What does a fifth feel like on the keyboard?
+Why is an octave the same note?
+Key signatures, tonality, and key relationships
+The home base of a piece of music
+What does the key of a piece define?
+Its time signature
+Its tonal centre and home note
+The number of instruments
+The key is the tonal centre — the home note of a piece
+How do I find the key of a song?
+What is the difference between a key and a scale?
+How many major and minor keys are there?
+The first and home note of a scale
+It sounds most at rest and resolved
+Melodies and progressions tend to begin and end on the tonic
+Why does the tonic sound like home?
+What is the tonic chord?
+The sharps or flats that define a key
+No sharps or flats
+What does a key signature tell you?
+The tempo of the piece
+Which notes are always sharp or flat
+The time signature
+The starting note of the melody
+Written at the start of every staff after the clef
+How do I read a key signature?
+What key has 3 sharps?
+Two keys sharing the same notes
+Relative keys share all the same notes and key signature
+How do I find the relative minor of any major key?
+What is the difference between relative and parallel keys?
+Do relative keys sound the same?
+Neighbors share almost everything
+The inner ring is the relative minor
+Distance means difference
+Neighboring keys on the circle share 6 of 7 notes
+The closer two keys sit, the more closely related they are
+How do I find keys that are closely related to C major?
+Where is the relative minor on the circle of fifths?
+Why do neighboring keys sound good together?
+Same root, different mode
+What do parallel keys share?
+The same 7 notes
+The same key signature
+The same root note
+The same scale pattern
+Distinct from relative keys, which share the same notes
+How do composers use parallel key shifts?
+What is C major's parallel minor?
+Reading and writing the symbols of music
+A sharp, flat, or natural added to a note
+The three accidentals:
+What does an accidental do?
+Changes the time signature
+Marks the end of a phrase
+Accidentals add chromatic notes without changing the key
+When does an accidental stop applying?
+Can a note have a double sharp or double flat?
+Raises a note by one semitone
+What does a sharp sign do?
+Doubles the note's duration
+What is the difference between a sharp and a natural?
+When do I use a sharp vs. a flat for the same pitch?
+What is a double sharp?
+Lowers a note by one semitone
+The ♭ symbol is the lowercase letter 'b' in music notation.
+What does a flat sign do?
+What is the difference between a flat and a natural?
+When should I use a flat instead of a sharp?
+What is a double flat?
+Cancels a previous sharp or flat
+What does a natural sign do?
+Raises a note by a semitone
+Lowers a note by a semitone
+Adds vibrato to a note
+Restores the note to its unaltered pitch
+Applies only within the current bar
+Can also override a note in the key signature
+When do I need to write a natural sign?
+Does a natural sign apply to all octaves?
+What is a courtesy accidental?
+Pulse, speed, and how beats are counted
+Accents on the weak beat
+Beats 1 and 3 — where the foot naturally taps
+Beats 2 and 4 — where syncopation often lands
+The 'and' between beats — another common syncopation point
+Syncopation places rhythmic emphasis on:
+Strong beats (1 and 3)
+Weak beats or off-beats
+The final beat of a bar
+Every beat equally
+Syncopation accents weak beats or off-beats
+Creates rhythmic tension and forward drive
+Common in jazz, funk, and Latin styles
+How do I play syncopated rhythms?
+Is syncopation the same as off-beat?
+What makes jazz rhythms syncopated?
+The steady pulse of music
+Beats have different weights within each measure:
+Feel more prominent — beat 1 is always the strongest
+The constant underlying tick, whether or not it's played
+What is the beat?
+The note at the start of a phrase
+The steady repeating pulse of music
+The beat is the steady, repeating pulse of music
+It's what you tap your foot to
+All rhythm is created in relation to the beat
+What is the difference between beat and rhythm?
+What does it mean to be on the beat?
+How is the beat related to tempo?
+How fast or slow the beat moves
+Common tempo ranges:
+66–75 BPM. Calm, expressive, or solemn.
+76–89 BPM. Natural and unhurried.
+90–109 BPM. Neither slow nor fast.
+110–131 BPM. Energetic and lively.
+What unit is tempo measured in?
+Beats per minute (BPM)
+Tempo is the speed of the beat, measured in BPM
+60 BPM = one beat per second
+Tempo is a powerful expressive tool
+What tempo is 'Allegro'?
+How do I count BPM by ear?
+What is a metronome and how do I use it?
+Meter groups beats into measures
+The downbeat — beat 1 — is always the strongest
+The time signature shows the meter at the start of a score
+What is the difference between 4/4 and 2/4?
+What is a compound meter?
+How do I read a time signature?
+Scale types and patterns
+Notes that belong to the key
+Diatonic (C major)
+Diatonic = belonging to the key
+A major scale has exactly 7 diatonic notes
+Notes outside the key are non-diatonic (chromatic)
+What's the difference between diatonic and chromatic?
+Are all diatonic chords built from scale notes?
+What does non-diatonic mean in practice?
+Outside the key — all 12 pitches
+How many semitones (steps) are in a chromatic scale?
+Chromatic = using all 12 pitches, or notes outside the key
+A chromatic scale moves entirely in semitones
+How are chromatic notes used in melodies?
+What is a chromatic chord?
+A sequence of notes in stepwise order
+What defines a scale?
+Random pitches in any order
+Notes arranged in stepwise pitch order
+Three notes played together
+A repeated rhythm
+A scale is a stepwise sequence of notes ordered by pitch
+Scales are the foundation of melodies, keys, and harmony
+What is the difference between a major and minor scale?
+How many notes are in most scales?
+What is a pentatonic scale?
+Bright, happy — the most common scale
+Which interval pattern defines a major scale?
+Starts and ends on the tonic
+The foundation of most Western music
+How do I build a major scale from any note?
+Why does the major scale sound happy?
+Darker and more melancholic than major
+Different notes entirely
+The same notes, different starting point
+The same starting note
+The same interval pattern
+What is the relative minor of C major?
+How is natural minor different from harmonic minor?
+Why does minor sound sad?
+Natural minor with a raised 7th
+A harmonic minor
+Creates a strong leading tone that pulls to the tonic
+Why is it called harmonic minor?
+What chords are built from harmonic minor?
+How does the augmented second sound?
+Raises the 6th and 7th when ascending
+Jazz uses the ascending form in both directions
+What is the difference between harmonic and melodic minor?
+Does melodic minor descend differently?
+What is the jazz minor scale?
+Five notes, no semitones — universally consonant
+C pentatonic major
+Found in folk, pop, and improvisation worldwide
+How is pentatonic major different from pentatonic minor?
+Why does pentatonic always sound good?
+What music uses pentatonic major?
+Five-note scale at the heart of blues and rock
+A pentatonic minor
+The backbone of blues, rock, and pop soloing
+How do I solo using pentatonic minor?
+Can pentatonic minor be used over major chords?
+Pentatonic minor plus the blue note
+Defines the sound of blues, rock, and jazz
+Why is the ♭5 called the blue note?
+How do I use the blues scale to improvise?
+Black-Key Landmarks
+Find your place by the black-key groups
+Two-then-three, all the way up.
+Black keys cluster in repeating groups of two and three
+How do I find C without reading?
+Why are the black keys grouped in twos and threes?
+Where is F on the keyboard?
+The Moveable Scale Shape
+One pattern, any key
+Same pattern, different starting key.
+The exact keys you press
+The number of black keys
+The starting note
+Why is the major scale pattern the same in every key?
+Does the scale shape look identical on a piano in every key?
+What is WWHWWWH?
+How to shape and express the notes you play
+A chord played note by note
+Now play all three together as a chord.
+What is an arpeggio?
+A chord played all at once
+A scale played backwards
+Two notes played together
+An arpeggio is a chord played one note at a time
+From Italian arpeggiare — 'to play like a harp'
+Arpeggios outline harmony in a flowing texture
+How are arpeggios used in piano music?
+Can arpeggios go downward?
+Smooth and connected notes
+What does legato mean?
+Short and detached
+Smooth and connected
+Loud and accented
+Slow and sustained
+Legato means smooth and connected
+Hold each key until the next is pressed — no gaps
+Marked with a slur — a curved line over the notes
+What is the opposite of legato?
+How do I play legato on piano?
+What is a slur in music notation?
+Short and detached notes
+What does staccato mean?
+Staccato means short and detached
+Release each key immediately — don't hold it
+Marked with a dot above or below the note head
+Creates a light, bouncy, or crisp character
+What is the difference between staccato and staccatissimo?
+Can staccato apply to chords?
+How short is staccato exactly?
+How loud or soft to play
+Which is louder?
+They are the same
+Neither is a dynamic
+What does mezzo-forte mean?
+How much louder is fortissimo than forte?
+Why are dynamics written in Italian?
+1 to 5, thumb to pinky, on both hands
+The least independent — worth practising.
+The shortest; anchors the outside of the hand.
+Why do finger numbers start at the thumb?
+Are the finger numbers the same for both hands?
+How do I read the finger numbers above and below the notes?
+Turn what you know into music you make up
+Putting It Together
+You just improvised
+Start with a motif — 2 to 4 notes.
+Repeat and vary it to build a phrase.
+Land on chord tones to resolve. Play freely between them.
+Tension & Release
+Where melodies breathe
+Chord tones (C, E, G) feel stable — land there to resolve.
+Passing tones (D, F, A, B) create tension and movement.
+Tension → release is what makes phrases feel musical.
+Melody Over Changes
+Your motif follows the harmony
+The C major scale works across all chords in the key.
+Listening to the harmony helps you feel where to land.
+Melody Over One Chord
+Your scale is your palette
+Your scale defines the notes that belong over a chord.
+The root is home — land there to resolve a phrase.
+Playing over a drone trains your ear to hear what fits.
+Repetition & Variation
+Same idea, new feel
+Retrograde — the notes in reverse
+Repeat a motif to make it feel intentional.
+One small idea can fuel a whole melody.
+The atom of melody
+Which of these is a motif?
+C D E F G A B — a full scale
+C E G — three notes with a shape
+Random keys pressed quickly
+Holding a single note for 8 beats
+A motif is 2–4 notes with a rhythmic shape.
+Contour, rhythm, and recognisability make it stick.
+Melodies are built by repeating and varying motifs.
+How melodies are decorated, shaped, and structured
+Passing & Neighbor Tones
+Notes that decorate a line by step
+Neither belongs to the underlying chord.
+Suspensions & Other Embellishments
+Accented and leap-based nonchord tones
+Phrases & Periods
+The musical sentence
+A question phrase, then an answer phrase.
+A phrase is a musical thought that ends with a cadence.
+An antecedent phrase asks; a consequent phrase answers.
+Together they form a period.
+Binary & Ternary Form
+How sections build a whole piece
+An A section, a contrasting B section, then A returns.
+A piece in A–B–A form is in…
+A–B–A, with the opening section returning, is ternary form.
+Binary form is two sections: A–B.
+Ternary form is A–B–A — the opening returns.
+Decorate a Phrase
+Put embellishment and phrasing together
+First the plain chord tones, then the same phrase decorated.
+Embellishment turns a skeleton of chord tones into a melody.
+Method — Unit 1
+Find your hand position and play your first piece
+What is five-finger position?
+Why do we tap the rhythm before playing?
+Can I play the same tune starting on a different note?
+Blocked or Broken: the 3rd
+Two ways to play the same two notes
+Both are the same two notes — only the timing changes.
+Why is C to E called a third?
+Does an interval always sound the same size in every key?
+What should I review before starting a new piece?
+Review: Position and the 3rd
+Left Hand: Broken and Blocked 3rd
+Right Hand: Broken and Blocked 3rd
+Playing Songs with Chords
+Turn a chord progression into a song you can play
+The Four-Chord Song
+One loop behind countless hits
+The four-chord loop in C
+Practice this progression
+More Pop Progressions
+Doo-wop, blues, and ii–V–I
+50s doo-wop: I–vi–IV–V
+Jazz ii7–V7–Imaj7
+12-bar blues: I7–IV7–V7
+The 12-bar blues is built mainly from which chord type?
+Dominant 7th chords
+Practice progressions
+Reading a Chord Chart
+Chords over lyrics and bars
+Tells you which key the written chords are in.
+Chords above the words
+Each chord sits above the point where you change to it.
+A chord chart shows chords above the lyrics.
+Change chords where the chart marks them.
+Open the Songbook
+Making Chords Sound Like a Song
+Accompaniment patterns
+Block chord, then the same chord arpeggiated.
+Practice supports a play mode per progression.
+Practice with play modes
+Play It in Your Key
+Transpose to sing comfortably
+The Roman numerals never change — only the letters do.
+Transpose a progression to a key that fits your voice.
+Transpose in practice
+Open the Songbook or Progressions practice and play.
+Play from the Songbook
+How songs are built: verse, chorus, and the 12-bar blues
+The two building blocks of pop songs
+A verse repeats its music with new words each time.
+The chorus repeats music and words — it's the hook.
+AABA (32-Bar) Form
+The classic jazz-standard shape
+In AABA form, what does the B section do?
+Repeats the main tune
+Provides contrast before the tune returns
+AABA = main section twice, contrast, main section again.
+The B section is the bridge or release.
+There is no separate chorus — the A section is the tune.
+The 12-Bar Blues Form
+Twelve bars everyone on stage knows
+The 12-bar blues in C, one chord per bar
+The last bars form a turnaround that loops the form.
+Advanced Accidentals
+Sharps, flats, and key signatures
+Accidentals on the Staff
+Sharp, flat, natural before a note
+How long does an accidental last?
+For the rest of that bar
+Only that one note
+Until the end of the piece
+After the barline the key signature resumes
+Where is an accidental written relative to its note?
+Double Sharps & Double Flats
+Raising or lowering by two
+Two semitones (a whole step)
+Why do double sharps exist?
+How much does a double flat lower a note?
+Courtesy Accidentals
+A friendly reminder
+Why print a courtesy accidental?
+It changes the pitch
+To remind the player and prevent mistakes
+It is required by the time signature
+To make the note louder
+Why are some accidentals in parentheses?
+Does a cautionary accidental change the note?
+Sharps or flats at the clef
+What is a key signature?
+Why is one sharp the key of G major?
+Do key signature sharps apply in every octave?
+Reading in a Key
+When you still need an accidental
+When do I still need an accidental in a key?
+How do I cancel a key signature sharp?
+What are enharmonic notes?
+Expression & Articulation
+Dynamics, accents, slurs, and ornaments
+How loud or soft
+Which is louder, piano or forte?
+Where are dynamics written on the staff?
+Crescendo & Diminuendo
+Getting louder and softer
+A wedge that opens wider to the right means…
+Gradually softer
+Gradually louder
+What is a crescendo?
+How do I read a hairpin wedge?
+How each note is attacked
+Three notes, three different articulations.
+Play it short and detached
+What does a staccato dot mean?
+How do I play an accent?
+What is the difference between tenuto and staccato?
+Hold the note longer than written
+How long is left to the player's discretion
+It often marks a pause or the end of a phrase
+What is a fermata?
+How long do I hold a fermata?
+Can a fermata sit over a rest?
+Slurs & Phrasing
+Smoothly connected
+A slur arches over four different pitches.
+A slur joins the same pitch; a tie joins different pitches
+They are identical
+A slur means play louder
+How is a slur different from a tie?
+Decorating a note
+Holds the note longer
+Rapidly alternates the note with the one above it
+Makes the note louder
+Joins two notes of the same pitch
+What is a trill?
+What is the difference between a mordent and a turn?
+What is a grace note?
+How beats are grouped into bars
+What the two numbers mean
+The time signature's top number = beats per bar
+What do the two numbers in a time signature mean?
+Why is 4/4 called common time?
+What does the bottom number stand for?
+What is the difference between 3/4 and 4/4?
+Why does a waltz use 3/4?
+What kind of music uses 2/4?
+Beats that divide into three
+What makes 6/8 a compound meter?
+Why is 6/8 counted in two and not six?
+What is the difference between simple and compound meter?
+Fives and sevens
+It can only be played slowly
+It has no time signature
+It is always out of tune
+They're common in folk, progressive rock, and film music
+What is an odd time signature?
+What songs are in 5/4 or 7/8?
+Why do odd meters feel uneven?
+Starting before beat 1
+A short partial bar appears before the first barline
+What is a pickup note?
+What does anacrusis mean?
+Why does a song start before beat 1?
+Repeats, endings, and road-map symbols
+Play the enclosed section again
+What does a repeat barline mean?
+How do I know where a repeat starts?
+What if there is no opening repeat sign?
+1st & 2nd Endings
+On the repeat, which ending do you play?
+The 1st ending again
+The 2nd ending (skipping the 1st)
+One written passage can lead to two different finishes
+What is a first and second ending?
+Which ending do I play on the repeat?
+Why are there two endings?
+Go back to the beginning
+Go back to the segno sign
+Stop at the coda
+What does D.C. mean?
+What is the difference between D.C. and D.S.?
+What does al Fine mean?
+What does 'To Coda' tell you?
+Jump ahead to the coda section
+Go back to the segno
+What does the segno sign mean?
+What does To Coda tell me to do?
+Reading a Road Map
+Putting it together
+A repeat with a first and second ending — trace the route.
+How do I read a musical road map?
+In what order do I follow repeats and jumps?
+Why should I read the signs before playing?
+Pedal, Glissando & Advanced Rhythm
+Sustain, slides, and unusual groupings
+The Sustain Pedal
+Let the notes ring
+The pedal is held down across all four notes, then released.
+Makes notes shorter
+Holds notes ringing after you lift your fingers
+Makes notes louder only
+Changes the pitch
+What does the sustain pedal do?
+What do Ped. and the star symbol mean?
+What is the pedal bracket line?
+A line between two notes: slide from one to the other.
+Play only the two written notes
+Slide across every key between the two notes
+Play the notes very softly
+Repeat the first note
+Play it by dragging a finger or nail across the keys
+What is a glissando?
+How do I play a glissando on piano?
+What does the gliss. line mean?
+Tuplets Beyond Triplets
+Five notes in one beat — a quintuplet.
+What does the number on a tuplet bracket tell you?
+How many notes squeeze into the beat
+Which finger to use
+A triplet fits 3 notes in the space of 2
+What is a quintuplet?
+How is a tuplet different from a triplet?
+What does the number on a tuplet bracket mean?
+How long each note lasts
+How many beats is a half note?
+Why are some note heads open and some filled?
+What note value is the shortest so far?
+Which bar rests on beat 2?
+Every note value has a matching rest of the same length
+Keep counting through rests so you stay in time
+How do I count a rest?
+What does a quarter rest look like?
+Why do we need rests in music?
+Reading and feeling note durations
+A dot after a note adds half the note's value
+How much does a dot add to a note?
+How many beats is a dotted quarter?
+What is a double-dotted note?
+Joining notes into one
+Press Play: you hear one sustained sound, not two.
+Ties are how a note is held across a barline
+What is the difference between a tie and a slur?
+Why use a tie instead of one longer note?
+Can a tie cross a barline?
+Three in the time of two
+Triplets are marked with a bracket and a "3" above the group
+How do I count a triplet?
+What does the 3 over the notes mean?
+Are there other tuplets besides triplets?
+Learn how a triplet fits three notes into the time of two.
+Joining flags into beams
+A beam changes only the look — the durations stay the same
+Why are some eighth notes beamed and some flagged?
+Does beaming change how long a note lasts?
+How do I know where to start a new beam?
+Where pitches live on and beyond the staff
+Five lines, four spaces, and the G-clef
+Why is the treble clef also called the G-clef?
+Because it was invented by a musician named G.
+Because it sits on the lowest line of the staff
+The staff is 5 lines and 4 spaces
+Pitch rises as you move upward on the staff
+What note sits on the bottom line of the treble staff?
+How do I remember the line and space names?
+Why does the clef matter?
+Notes above and below the staff
+Ledger lines extend the staff in either direction
+How many ledger lines can a note have?
+Where is middle C on the staff?
+Why not just add more staff lines?
+Middle C and the Two Clefs
+How treble and bass meet
+Besides treble and bass, what other clefs exist?
+There are no other clefs
+Only the percussion clef
+The G-clef is the only real one
+What is the alto clef used for?
+Why does piano use two clefs?
+Is middle C the same pitch in both clefs?
+Playing an octave higher or lower
+Play the marked notes one octave higher than written
+Play the marked notes one octave lower than written
+Play the marked notes twice
+Hold the marked notes for eight beats
+What is the difference between 8va and 8vb?
+Does 8va change the pitch I read or how I play it?
+What does 15ma mean?
+Reading a Wide Melody
+Putting staff geography together
+Read each note's position before you play
+How do I read a melody faster?
+What is the highest note on the treble staff?
+How do I find a note that's on a ledger line?
+Reading by Shape: Steps & Skips
+Read the distance, not every note name
+Which staff shows a skip (a line-to-line jump)?
+A step moves line-to-space; a skip jumps line-to-line
+Direction and distance carry the melody
+How do I read music without naming every note?
+What is a landmark note?
+Learning songs from chord charts
+Chord Charts and Tabs
+Read the map before you play
+Anatomy of a chart
+Count the lights
+It changes the instrument sound
+It creates a practice target you can jump to or loop
+It hides the lyrics
+It raises the tempo
+A chord chart is a compact map of a song
+Songbook uses section labels as practice targets
+Chords above lyrics tell you when the harmony changes
+Importing into Songbook
+Review the chart before you practice
+From pasted text to Songbook
+Small Room Waltz
+Check slash chords before saving
+Make sure every section label is spelled clearly
+Why should you review the Songbook preview before saving?
+To make sure parsed chords and sections match the chart
+To change the app theme
+To remove all repeated chords
+To disable practice feedback
+Slash chords deserve extra attention during import
+Shows how a pasted chord chart becomes a Songbook entry.
+Sections, Loops, and Small Practice Targets
+Practice one useful piece at a time
+Choose a practice scope
+What is the best first target when a song feels too hard?
+A short section or loop
+The entire song at full speed
+Only the final chord
+A random key change
+Practice scope controls how much of the song you work on
+Loops are for repeated trouble spots
+Tempo can be lowered so chord changes stay accurate
+Chords Above Lyrics
+Use lyric cues for timing
+Find the change point
+Where the chord change happens in the lyric phrase
+Which octave to play
+Which hand to use
+Chord placement above lyrics is a timing cue
+Spacing is approximate, not full rhythmic notation
+Songbook turns those visual cues into chord targets
+Explains how chord-over-lyric charts encode timing.
+Slash Chords and Bass Notes
+Separate the chord from the bass
+How Songbook shows slash chords
+Two unrelated chords
+A chord that must be skipped
+A slash chord is chord over bass
+Loops help practice passing bass movement
+Connects slash chord theory to Songbook practice feedback.
+Choosing Practice Strictness
+Match the feedback to your goal
+Set the right strictness
+Learn the progression
+Respect slash chords
+Polish the performance
+When should you use relaxed chord-only matching?
+When learning the progression for the first time
+Only after a performance is perfect
+When the chart has no chords
+When you want to ignore the song key
+Strictness should match the practice goal
+Chord-only matching helps with early fluency
+Bass and timing strictness are best for polishing details
+Teaches when to relax or tighten Songbook feedback.
+CFBundleShortVersionString
+Learn
+Listen
+Play
+New conversation
+Sorry, I couldn't generate a response.
+Your next lesson is 
+Use emojis freely and expressively throughout.
+User just finished setup.
+Doing a Play & Explore exercise: 
+Related lessons: 
+Recent accuracy: 
+User is editing a chord progression in 
+Use 1-2 emojis naturally per reply.
+Use at most 1 emoji per reply, only when it fits naturally.
+Never use any emoji characters. Plain text only.
+Where should I start?
+What's the best first lesson?
+How do I practice effectively?
+Tell me about ear training
+What scale should I explore?
+Show me a chord to try
+What's the difference between major and minor?
+Suggest a scale for jazz
+Help me understand 
+What should I listen for while practicing 
+Tips for playing 
+What lessons relate to 
+Explain more about the lesson: 
+How can I practice 
+Give me an exercise for 
+What should I learn next in 
+Show me lessons for 
+Practice ear training
+What should I practice next?
+Why did I miss those?
+What lesson should I do next?
+What should I focus on today?
+What is the Circle of Fifths?
+How do scales and keys relate?
+Recommend a study plan
+What are intervals?
+What's consonance and dissonance?
+How do I recognize major and minor thirds?
+Why does ear training matter?
+What are pentatonic scales?
+Explain scale degrees
+Major vs minor scale — what's the difference?
+What are diatonic chords?
+Explain common chord progressions
+How do chord inversions work?
+What's tension and resolution in chords?
+Why did my streak drop?
+How can I improve my 
+How do I build a chord progression?
+What is melodic contour?
+What makes a good song structure?
+Give me a progression to try
+Circle of fifths
+Set today's focus to 
+All navigation card types:
+All action button types:
+M7
+Chase the Notes
+Falling Notes
+Give a concrete actionable tip, not generic encouragement.
+Last worked on: 
+Days since last session: 
+You are a music practice coach.
+Write one sentence (max 20 words). Be specific to the data.
+Use emojis freely and expressively.
+Include 1-2 relevant emojis naturally in the sentence.
+Never use emojis or quotation marks.
+Ready to focus on 
+Pick up where you left off: 
+Ready to practice some 
+Your melody has an 
+Interval Distribution
+Your melody spans 
+Your melody ends on 
+No notes to analyze.
+Motif Repetition
+Not enough notes to detect motifs.
+Section Contrast
+Only one section — add another to compare.
+Nice syncopation!
+Try mixing up note lengths for more rhythmic interest.
+Rhythmic Variety
+Good balance of sound and silence.
+Lots of space — the melody breathes well.
+Very dense — try adding some breathing room.
+Your notes span 
+Voice Independence
+Only one track — add another to analyze voice independence.
+Good independence!
+Textural Density
+All sections use 
+Texture varies between sections — 
+Incorrect — was 
+Not quite — the answer was 
+Progress & Notifications
+MIDI Connections
+Staff & Notation
+Theory migration failed: 
+Ear training migration failed: 
+Bright Grand Piano
+Electric Grand Piano
+Honky-Tonk Piano
+Tine Electric Piano
+FM Electric Piano
+Percussive Organ
+Overdrive Guitar
+Distortion Guitar
+Guitar Harmonics
+Pizzicato Strings
+Audio engine failed to start
+TinyInstrumentMIDI
+Completion And Repeat
+Failed to construct short validation sequence
+Control Change Scheduling
+Failed to construct control-change validation sequence
+Tempo Map Scheduling
+Failed to construct validation sequence
+MIDIPlaybackEngine.scheduler.queue
+Dotted Whole Note
+Dotted Half Note
+Dotted Quarter Note
+Dotted Eighth Note
+META-INF/container.xml
+Melody training.
+Interval training.
+All steps complete!
+That's the whole thing!
+Close, try once more.
+Give it another shot.
+Use the best installed English voice
+Currently using 
+Time to practice
+Even 5 minutes makes a difference.
+Practice something today to start your streak.
+Your week in music
+A few focused minutes today keeps your plan on track.
+Daily challenge ending soon
+Gold badge unlocked
+Ready to practice?
+Ascending + Descending
+Ascending
+Descending
+Guitar Spanish Classical
+Guitar Spanish Classical.sf2
+Warm nylon guitar.
+Compact bundled piano.
+Piano Upright.sf2
+Character upright piano.
+Starter lead synth.
+Celesta_Tuned_Denoised_Mix.sf2
+Tuned and denoised celesta.
+Daniel Militello
+Musical Artifacts
+Creative Commons Attribution 3.0 Unported
+M-Clean_Guitar.sf2
+Electric clean guitar with MegaVoice map.
+Yingchun Soul, FreePats, Karoryfer
+Expressive alto saxophone.
+Large downloadable piano.
+FreePats - Old Piano FB
+Piano EastWest Yamaha C7
+Piano EastWest Yamaha C7.sf2
+Flagship concert piano.
+SoundFontCatalogDidUpdate
+Download failed for 
+Download failed: 
+Finished network transfer for 
+Installed downloaded soundfont 
+ReloadSoundFonts
+Checksum mismatch for 
+Checksum mismatch
+TinyInstrumentSoundFontDownloads
+Removed downloaded soundfont 
+This download is no longer available
+Starting download for 
+SpotlightIndexer: indexing failed — 
+Write your own music
+Play back and explore MIDI files
+Practice chords, scales, and progressions
+Ear training: intervals, scales, chords, and melodies
+Step-by-step music theory lessons
+SpotlightOpenEarTrainingLevel
+Duplicate values for key: '
+Not quite — try again.
+Choose Progression
+Choose Progression…
+Select a template or saved progression to continue.
+Unlock all keys and scales with Practice Studio
+No songs in your Songbook yet.
+Copy practice link
+Pick a song from your Songbook to practise its chords.
+Unlock advanced practice options with Practice Studio
+Randomize Hold Time
+Hand Configuration
+Tempo + accuracy
+No highlights — find the notes yourself.
+Keys light up after a wrong note.
+Chord Progression
+One chord at a time. Play it, then move on.
+Chords fall at tempo. Chase them in real time.
+Loading MIDI file
+Building practice notes
+Starting session
+Could not load this file.
+Getting ready…
+Cannot Load File
+Failed to load MIDI file: 
+Play the full track with both hands.
+Notes below the split go to the left hand.
+Unassigned tracs are excluded from practice.
+Tap to add more tracks.
+Tap to select this hand.
+Tap an unassigned track below to add it here.
+Slower speeds give more time to find the right notes.
+Notes keep falling at tempo. Missed notes are marked red.
+Notes wait at the hit line until you play the correct note.
+No highlights — find the correct notes yourself.
+One note at a time. Learn, then perform.
+Notes fall at tempo. Chase them in real time.
+Browse Templates…
+Create progressions in 
+Unlock scale paths with Practice Studio
+One note at a time. Play it, then move on.
+Scores from the Mutopia Project (public domain).
+Discover Easter eggs or check back for new songs.
+Building song events
+This melody has been unlocked in Practice
+Updating tracks…
+Follow the notes
+Listen to the melody...
+Stepped Practice
+Dismiss full-screen play-along
+Apple_Intelligence
+Enable Apple Intelligence
+Return here after setup — Aria will check automatically.
+1. Open Settings
+Apple Intelligence & Siri
+2. Enable Apple Intelligence
+Make sure the Apple Intelligence toggle is turned on.
+Apple Intelligence
+3. Match Your Languages
+4. Wait for Download
+Downloading AI Model
+Stay connected to Wi-Fi
+Follow these steps
+Apple Intelligence Ready
+Aria is ready to chat. Close this guide and ask anything.
+Private and on-device
+Answers can be wrong
+A companion, not a textbook
+Aria responses can make mistakes.
+SebastianMetadata
+Thanks for being here early
+Thank you for your support
+Track view is wider than iPhone portrait
+Rotate to landscape to see the falling chord track.
+Tiny_Instrument.FluidCoordinator
+Contradictory frame constraints specified.
+Fewer beats per measure
+More beats per measure
+Decrease tempo by 5
+Decrease tempo by 1
+Increase tempo by 1
+Increase tempo by 5
+No MIDI Devices Connected
+NotoMusic-Regular
+Composition Studio
+Complete & return to course
+OpenCourseByStableId
+End practice session?
+This ends your current practice session.
+Great session! What would you like to work on?
+Session Complete
+Return to course
+No attempts recorded
+Start by opening the iPhone Settings app.
+Open from the button below
+2. Go to Accessibility
+Accessibility contains the voice controls.
+3. Open Read & Speak
+4. Find the Voices Section
+In Read & Speak, open Voices.
+Default Language
+Detect Languages
+Inside Voices, choose English from the language list.
+On the English screen, open the Voice picker.
+7. Download a Better Voice
+Pick any voice marked Enhanced or Premium.
+Allison (Enhanced)
+Follow this path in Settings
+Look for one of these
+Better Voice Ready
+Theory narration will sound more natural
+Ear Training prompts can be clearer
+Welcome to Compose
+Your editing tools
+Switch between cursor, paint, erase and scale.
+Switch tools or press 1–4 on your keyboard.
+Tap + to add a section; tap any section to jump to it.
+Tracks, BPM, time signature and MIDI export live here.
+Set BPM and time signature before you start.
+Circle of fifths chord picker
+Rename Progression
+You're working in 
+What do the roman numerals in this progression mean?
+How do I add more interesting chords to this progression?
+What makes a chord progression sound resolved or unresolved?
+Can you suggest a complementary progression in the same key?
+What songs use a similar chord progression?
+Send to Practice
+Auto-Play on Select
+Tap + to add your first chord.
+Listen for MIDI input — play a chord to capture it
+Change to scale chord
+Key Chords
+Any Chord
+Circle of Fifths
+Insert Progression
+Duration per Chord
+This progression has chords outside the key
+Transpose all chords
+Reset free chords to I
+Chords outside the key are replaced with the I chord.
+All chords shift to the new key by the same interval.
+Loading scales…
+Delete Progression?
+No Progressions Yet
+Build your first chord progression or start from a template.
+Create Progression
+I – V – I – IV
+I – III – IV – iv
+I – vi – ii – V
+I – IV – I – V
+I – V – vi – iii
+Blank
+12-Bar Blues
+Minor Blues
+Jazz
+Tiny_Instrument.LineNumberRuler
+Artist (optional)
+Paste a chord chart
+Chords in this song
+Choose Composition
+No chords detected
+Generating chord chart…
+Create a composition in Compose first.
+Move to Category
+Guided (Step by Step)
+Paste a Chord Chart
+From Composition…
+Paste a chord chart from the web to start practising a song.
+Make a song from a chord chart
+Read the full guide online
+Paste your chart
+More help in the online guide
+Saved to your Songbook
+Previous Composition Found
+Export to MusicXML
+Submit for Review
+Composition Exercise
+Loop This Section
+OpenCompositionById
+AriaOpenProgressions
+ModePickerNewComposition
+ModePickerNewProgression
+ModePickerNewSong
+Unlock Composition Studio for unlimited compositions
+Unlock Composition Studio for unlimited songs
+Create and arrange music
+No compositions yet
+Create Composition
+Create a new composition to start sketching ideas
+Or import a MIDI or MusicXML file to get started quickly
+Lesson Compositions
+No progressions yet
+Delete Composition?
+Untitled Composition
+Select MIDI File
+Export to MusicXML…
+Chord Progression…
+Select Instrument
+Metronome off — click to enable
+Save to linked MIDI file
+Metronome on — click to disable
+Play your instrument to record
+Tap to play, scrub the timeline
+Tap to add notes, drag to move
+ComposeSelectAll
+ComposeDuplicate
+Changes can be saved back to the original .mid file.
+Creates a standalone composition. Original file untouched.
+Import MIDI File
+The score library is empty in this build.
+About these scores
+Public-domain scores. 
+Generate Into Section
+Replace Existing Chords?
+This track already has notes in "
+Generate Voicings
+OpenLessonByStableId
+Start this practice?
+Continue to the lesson?
+Copy link to this course
+How this plan works
+One day at a time
+About 20 minutes a day
+Tap a step to start it
+Mark complete & return
+Add another goal
+Timed mode — answer quickly!
+Play the first note you heard
+Identify notes, intervals, and melodies by listening
+Try searching by stage or level description.
+Learn at your own pace
+Beat your best score
+Purchase to unlock
+Earn at least 1 star to unlock the next level
+BRUSH UP ON THEORY
+Mistakes remaining
+Interval Reference
+Notes in this level
+Highlight on keyboard
+Open in Practice
+No lesson loaded yet
+Open the app once to load your current lesson.
+Purchase failed. Please try again.
+All future content packs included
+Best value — save vs buying individually
+Ten premium keyboard finishes
+Each theme recolors keys, highlights, hand tints & fingering
+Rainbow theme doubles as a note-color learning aid
+Unlimited compositions (free: 5 max)
+Unlimited Songbook chord charts (free: 5 max)
+Unlimited saved chord progressions (free: 5 max)
+All future Composition-tier chapters
+Chord extensions: 6, m7, maj7, 9
+Key Mode: in-key chord auto-generation
+Voicing control for inversions and voice-leading
+Hardware pad and MIDI controller mapping
+Advanced scale types (modes, pentatonics, jazz scales, etc.)
+Advanced chord types and all inversions
+Advanced chord & scale practice configuration
+Advanced ear training — chords, modes, melodies
+All Core Theory chapters
+All Advanced Theory chapters
+All Practice Studio features
+All Chord Lab features
+All Composition Studio chapters
+All Play & Explore groups
+Space Gray keyboard theme
+Starlight keyboard theme
+Rose Gold keyboard theme
+Pacific Blue keyboard theme
+Alpine Green keyboard theme
+Cosmic Orange keyboard theme
+Blush keyboard theme
+Citrus keyboard theme
+Indigo keyboard theme
+Rainbow keyboard theme (color = note)
+Melody — Motifs & Repetition
+Melody — Melodic Contour
+Melody — Phrasing & Breathing
+Single-finger chord playback (major, minor, sus, dim)
+Key Mode: auto in-key chord generation
+Voicing control: inversions and voice-leading
+MIDI controller and hardware pad mapping
+All keys and scales unlocked
+Advanced chord practice configuration
+Advanced scale practice configuration
+Ch 7 — Chord Progressions & Harmony
+Ch 8 — Improvisation
+Ch 10 — Advanced Harmony
+Ch 2 — Rhythm, Meter & Expression
+Ch 3 — Intervals
+Ch 6 — Keys & Key Signatures
+Everything in Core Theory
+Everything in Advanced Theory
+Everything in Practice Studio
+Everything in Chord Lab
+Everything in Composition Studio
+All Play & Explore groups — Chords, Technique & Jazz
+See everything included
+Browse all packs
+10 premium keyboard finishes
+Space Gray, Starlight, Rose Gold & Pacific Blue
+Alpine Green, Cosmic Orange & Indigo
+Blush & Citrus pastels
+Rainbow — each note its own color (a learning aid)
+Classic & Midnight are free
+Unlimited compositions in Compose mode (free: 5 max)
+Melody chapter with Motifs, Contour, and Phrasing lessons
+All Composition-tier chapters
+Play & Explore — Chords, Technique & Jazz groups
+Play full chords from a single finger
+Chord types: major, minor, sus, diminished
+Stack extensions: 6, m7, maj7, 9
+Key Mode auto-generates in-key chords
+Voicing control for smooth inversions
+Free tier: basic triads on screen
+All keys and scales for chord & scale practice
+Advanced ear training — chords by ear, modes, melodies
+4 chapters: Rhythm, Intervals, Chords, and Keys
+Build the foundations of music theory
+Chords by Ear · Melodies
+Modes · Pentatonics · Jazz & more
+All chord types · All inversions
+Unlimited saved progressions
+Chapters included
+Restore Purchases
+Hide exploration tips?
+You can turn them back on under Settings › Exploration Tips.
+Show another exploration tip
+Tap the keyboard below to add notes.
+Welcome to Achievements
+You've already earned 
+Shows how to unlock this badge
+Weekly Challenge
+ShowInstrumentPicker
+AriaNavigateToLesson
+AriaNavigateToPractice
+Just a moment…
+Working it out…
+Apple Intelligence unavailable
+Tap for setup guide
+Opens information about Aria's AI responses
+Aria responses can make mistakes. 
+More information
+Aria isn't available
+Tomorrow Morning
+Progressions Library
+Chord Practice, Falling Notes
+Chord Practice, Chase the Notes
+Conversation History
+Aria is speaking
+Double-tap to stop
+New chapter unlocked
+How you earned it: 
+Challenge complete
+Achievement unlocked
+Ask me anything about music theory!
+Theory Reference
+No concepts match
+Add to progressions
+No sessions recorded yet
+Done! Great session!
+No activity yet — complete a session to see it here.
+Open the lesson "
+Browse, play, and practice chord progressions
+A composition lesson — work through it at your own pace
+Continue working on "
+Open the composition studio and write music
+Open the instrument and play at your own pace
+Freely explore the 
+Play the I–V–vi–IV progression in 
+Chase the notes — 
+Choose a practice activity to work on
+Sharp wit. Holds absolutely nothing back
+Direct and honest — no sugarcoating
+Warm and casual, like a practice partner
+Calm, precise, and always encouraging
+Upbeat and full of energy — her natural self
+Practice Schedule
+Turn off practice schedule
+Update Calendar event
+Remove from Calendar
+Double tap to show the breakdown
+Developed by Codeloop
+Clear all Aria conversation history?
+This cannot be undone.
+Aria recalls your last conversation when you reopen.
+Narrate Responses
+Read Aria's replies aloud using the selected voice.
+Keyboard Controls
+Control Already in Use
+Set Up Controller?
+We detected your 
+Clear All Mappings
+Detected: Generic controller
+Match exact CC value
+No signal received yet
+Migrated from Keyboard Shortcuts
+Key Press Effect
+Licenses & Attribution
+Jean-Philippe Côté, Apache License 2.0
+Designed by Kevin Andersson
+Generated using AudioKit
+Music Glyphs Icons
+S. Christian Collins, free use with attribution
+Salamander Grand Piano
+Alexander Holm, Creative Commons Attribution 3.0
+EastWest Yamaha C7 (Exthayan's version)
+Exthayan, Creative Commons Attribution 3.0
+Generated using Helm Synth
+Public Domain MIDI Files
+Various Creators
+Various MIDI Files (Community)
+Piano MIDIs, Discord Community
+Musecord, Discord Community
+Microphone Tuning
+Microphone access
+Microphone inactive
+Microphone active
+Suggested fine-tuning: 
+Calibration complete
+Start Calibration
+Reset Calibration
+Play a note — last fired note will appear here
+Reset all corrections
+Apply correction (
+Threshold — set just below your playing level
+Stability — same note must hold this long before firing
+Set Up Microphone
+Next: Check Tuning
+Adjust the sensitivity
+Detected correctly!
+Apply correction (+00 semitones)
+000.0 Hz · expected 000.0 Hz
+Check the tuning
+Cancel this reminder?
+Clear all lesson reminders?
+Lesson Reminders
+Clear All Reminders
+No lesson reminders scheduled
+Streak-at-risk alert
+Milestone celebrations
+12 sessions, 3h 20m this month. Keep it up!
+10 lessons complete
+You've completed 10 theory lessons. Keep building.
+Time for Lessons
+It's been a while since your last lesson. Jump back in?
+Preview notification sheet
+Plan your week by area
+Practice schedule
+Show Progress on launch
+Aria suggestions
+Suggest focus sessions during lessons
+Show Mode Picker at Startup
+Pick where to start each time you open the app
+Show Note Overlay
+Lists active played notes on screen during playback
+Automatic Octave Shift
+Shows notes too high or low closer to the staff
+Enlarges text throughout the app
+Calms animated effects
+Differentiate Without Color
+Adds shapes and text so meaning isn't shown by color alone
+Reduce Transparency
+Makes blurred backgrounds more solid
+Uses a heavier font weight
+Increase Contrast
+Strengthens colors and borders for readability
+Letter names, solfège, or other systems for note labels
+Sharp or flat spelling for notes and chord labels
+Auto-clear stuck notes
+Automatically silence a note that keeps sounding
+Show stuck-note warning
+Show a banner to silence or reset a stuck note
+Show the staff in Play
+Label notes with their names on the staff
+Staff Note Name Position
+Beside or inside the notehead
+Show Octave on Note Names
+Adds the octave number, e.g. C4, to staff note names
+Draw ledger lines for notes above or below the staff
+Double-Treble Staff
+Second treble clef (15ma bassa) instead of the bass clef
+Chord Names Above Staff
+Label each progression bar with its chord and roman numeral
+Show Roman Numerals
+Show the roman numeral below each chord name on the staff
+Roman Numeral Style
+Colors treble and bass differently on staff and keyboard
+Animate notes as they appear on the staff
+Ripple animation when playing keys
+Particle burst when you hit the right note on the staff
+The window edge glows while you play or Aria talks
+Timeline Loop Controls
+Shows A/B loop start and end markers on the timeline
+Pause Playback on Mode Change
+Continue automatically on correct
+Reset Theory Progress
+Always show, guide when wrong, or never
+Practice Keyboard
+Practice Keyboard Hints
+Practice Fingering
+Show lyrics while practising chord-chart songs
+Highlight Active Word
+Scrolling Lyrics
+Spread Chord Highlights
+Show chord tones across all octaves on the keyboard
+Show Chord Lab Banner
+The Chord Lab entry card on the Play surface
+Auto-Play Chords on Select
+Audition a chord immediately when you select it
+Autoplay MIDI on Select
+Start playing immediately when you tap a song
+Capture recent Play notes so you can replay or save them
+Reinforce correct answer on release
+Replay the correct animation when you lift the key
+Audition a chord when you tap its card in a progression
+Theory Narration
+Reads lessons aloud while you work through them
+Ear Training Narration
+How fast spoken lessons and Aria read
+Automatically find piano tracks
+Enable or disable all audio output
+Mute Connected Keyboard
+Mute On-Screen Keyboard
+Overall playback volume
+Choose the piano or instrument sound for playback
+Restart MIDI Engine
+Force-restart the audio engine if playback is silent
+Download a higher-quality voice for narration
+Auto Expand Keyboard
+Widens the on-screen keyboard to fit incoming notes
+Show Note Names on Keys
+Show Scale Degrees on Keys
+Show Fingering on Keys
+Ripple, flash, sparkle, or splash when you play a note
+Choose a color theme for the on-screen keyboard
+Keyboard Effects
+Key press animations and their style and color
+The animation style for the key press effect
+The color used by the key press effect
+Show left or right hand fingering highlights
+Play notes using your computer keyboard's letter keys
+Show Navigation Arrows
+Buttons to shift the keyboard's note range
+Track Split Routing
+Record left and right hand to separate tracks
+Starting octave for chords shown on the keyboard
+Lowest key of your connected physical MIDI keyboard
+Highest key of your connected physical MIDI keyboard
+Microphone Input
+Map Chord Lab pads to MIDI notes or controls
+MIDI Output Channel
+MIDI output channel for notes you play
+Chord Lab — Chord Channel
+MIDI output channel for Chord Lab chord voices
+Chord Lab — Bass Channel
+MIDI output channel for Chord Lab bass voice
+Sensitivity threshold for CC-based keyboard control triggers
+Controller Profile
+Select a controller profile for accurate button labels
+Load a mapping preset for known controllers
+Remove all keyboard control assignments
+Show Aria practice suggestions on the Progress screen
+Set your daily practice goal to activity count or time
+Number of minutes for your daily practice goal
+Get a daily notification to practice
+Notifies you before your streak expires
+Reminds you to practice when you haven't played in a while
+Celebrate lesson milestones with a notification
+A weekly summary of your practice activity
+Enable or disable Aria's in-app suggestions
+Control how many emojis Aria uses in responses
+Choose Aria's coaching personality style
+Read Aria's replies aloud using the selected voice
+Choose the voice used to narrate Aria's responses
+Delete all Aria conversation history
+Rate on App Store
+See the history of app updates
+Open the online guides for Tiny Instrument
+See the full version history online
+Reddit Community
+Join the Tiny Instrument community on Reddit
+Exploration Tips
+Keyboard color theme
+No results for "
+General
+Accessibility
+Mode
+Sound
+Piano Keys
+Aria Assistant
+Purchases
+About
+React to Playing
+Intensity rises with notes held and velocity
+Playing Border Style
+The border look while you play (Aria keeps its own style)
+Middle C is C3 (Yamaha, Logic Pro, Cubase)
+Always use flats (D♭, E♭, G♭…)
+Always use sharps (C♯, D♯, F♯…)
+Match the key, or fewest accidentals (D♭ not C♯)
+Middle C is C4 (used by most theory references)
+Yamaha / Logic (C3)
+Applies to this 
+Left edge of the on-screen keyboard range
+Left/right buttons to shift the keyboard's note range
+No staff glyph; the note name shows the accidental
+Accidentals on Staff
+Professionally-drawn Bravura music-font glyphs
+Minor degrees read without accidentals (i, III, VI, VII)
+Original SwiftUI noteheads, flags, and accidentals
+Draw ♯/♭ beside every altered note
+Adds the octave number, e.g. C₄
+Engraved (Bravura)
+MIDI Track Selection
+How fast spoken lessons and Aria read.
+Download a better voice for clearer narration
+Better voice ready
+Preview Narration Speed
+Tiny Instrument sounds good with this voice.
+Physical Keyboard
+No inputs active — MIDI is off.
+Enable All Inputs
+No MIDI devices connected.
+Online Resources
+Installed Voices
+No voices match your search
+Install More Voices
+Open the setup guide for enhanced and premium voices
+Live Rewind Duration
+How many seconds to capture for Live Rewind in Play mode
+Starts playing immediately when you tap a song
+The Chord Lab entry card on the Play surface (iPad and Mac)
+Reset Theory Progress?
+Progression Editor
+No settings for 
+Settings for this mode will appear here as the mode grows.
+Why you have this
+Thank you, Early Adopter
+Name notes with fixed-Do solfège (Do, Re, Mi…)
+7th note is Ti (Anglo movable-do tradition)
+7th note is Si (Belgium, France, Italy…)
+Name notes with letters (C, D, E…)
+Solfège (Do Re Mi)
+Note Name Position
+Show Octave Numbers
+Auto (by register)
+No connected devices
+Listening… play a key
+You have full access to everything
+Hide the Chord Lab banner
+Hide Chord Lab banner
+MIDI Pad Mapping
+MIDI Input Monitor (debug)
+Keyboard Mapping
+Waiting for MIDI… hit a pad or key on your controller.
+Reset to Default Keys
+Map hardware MIDI pads / buttons to Chord Lab controls.
+Pads
+No type selected? You play plain single notes.
+Maj — bright and settled.
+Min — darker, more wistful.
+Sus — open and unresolved; it wants to move.
+Dim — tense and dramatic.
+Add 6, m7, M7 or 9 on top of a type for richer colour.
+Example: hold Maj + M7 to play a major-seventh chord.
+Stack a few at once for jazzier voicings.
+Bass adds the root an octave below for a fuller low end.
+Out-of-scale notes nudge to the nearest in-key chord.
+Pad mapping is part of the Chord Lab pack.
+Open in Chord Explorer
+Keyboard hidden — tap to show
+Open Chord Explorer
+Clear keyboard highlight
+Show ghost notes
+Show ghost notes on staff
+Hide ghost notes on staff
+Hide ghost notes
+Show Ghost Notes
+Hide Ghost Notes
+Play-Along Staff
+Save to Composition
+Create a composition in Compose to play it here.
+Quick Save & Continue
+Add the notes on the staff as a new composition.
+KeyboardGuideDismissed
+Remove Highlight
+Play a Progression
+Suggested · follows 
+Random (current)
+Failed to delete soundfont: 
+Failed to rename soundfont: 
+License and attribution
+Update available
+Starting download…
+Your Instruments
+Import .sf2 files
+Search instruments
+No imported instruments
+Attribution required
+Import Sound Font
+Enter a new title for this MIDI file.
+Try adjusting your search criteria.
+No matching MIDI files
+Import MIDI Files
+Drag & drop .mid files anywhere
+Failed to move MIDI file: 
+Edit in Composer
+Failed to delete MIDI file: 
+No imported MIDI files
+Failed to import file: 
+No MIDI file loaded.
+Select a level from the sidebar to start practicing
+Select a practice type from the sidebar
+Load a MIDI file or play with the keyboard
+Create a new composition or select one from the sidebar
+Select a lesson from the sidebar to begin
+Or try something open-ended
+ShowInspectorTool
+What would you like to work on today?
+Live Rewind — nothing recorded yet
+Ask Aria — right-click for options
+View your achievements — right-click for options
+Show the progress card — right-click for options
+Play back the last 
+Instrument Tuner
+Show Progress Card
+View Achievements
+Narration Voice…
+Change duration…
+Enable Live Rewind
+Enable Connected Keyboard
+Enable On-Screen Keyboard
+Restart Audio Engine
+No inputs active
+OpenPlayExploreById
+No details available
+ShowPlayKeyPicker
+Complete lesson 
+More Instruments…
+Slash bass under this chord
+Auto-advance through the chords
+Advance as you play
+Advance as you play: off
+Advance as you play: on
+Advance as you play (paused while auto-advance is on)
+Stop auto-advance
+Pentatonic Blues
+Press and hold, then release when the duration feels right.
+Match this note in another octave
+Listen to the beat, then tap along
+Listen to the beat, then follow along
+Tap the matching black key as fast as you can.
+Read the note on the staff and tap the matching key.
+Nice work. Take a break?
+What should I learn next?
+Type your own question
+Ask Aria about this lesson
+In a minor key, the three functions flow the same way.
+Pre-dominant is optional — T → D → T works too.
+Dominant resolves back to Tonic (D → T)
+V, vii diminished
+Wrong note — try again
+Reading Sheet Music
+Mark as Incomplete
+No song with id “
+When ready, tap Continue
+When ready, tap Next
+Fingering shown — required for this lesson
+Play the highlighted keys to continue
+No wrong notes — just explore.
+Keyboard recommended
+Keyboard required
+Said the finger numbers
+Said the letter names
+Tapped the rhythm
+Count the beat aloud, then tap along.
+Say the counts, in order
+Say the finger numbers, in order
+Say the letter names, in order
+Tap chips in order — this one is not next yet.
+This is the next chip to tap.
+Wrong order. Starting over.
+Play the highlighted chord to fill each bar.
+Nice — every chord played. Continue when you're ready.
+Tap on each beat, with the metronome
+Same shape — new home note.
+Tap a key — watch the pattern slide.
+Songbook preview
+All notes correct!
+Install better voices
+Make lesson narration sound more natural
+Copy Link to Step 
+Compare Voicings
+Try It Somewhere Else
+The blues & rock backbone
+The four-chord pop loop
+The jazz cornerstone
+Related concepts
+ShowRatingOverlay
+Related concept: 
+Change narrator voice
+Replay narration
+Resume narration
+This lesson is locked. Purchase **
+Start a focus session?
+Stay in the zone while you learn.
+OpenPlayExploreGroupById
+You've completed 
+Learn by playing — a guided journey through music theory
+Try a different search, topic, or clear the active filters.
+No Favorites Yet
+Tap the star on any lesson or exercise to save it here.
+Reference topics to explore at your own pace
+This will remove all progress for "
+Unlock Chords, Technique, and Jazz groups with any pack.
+Unlock with any pack
+Read real notation, one subject at a time
+Hands-on technique exercises
+Songbook, setup, and practice workflows
+Your starting point for music theory
+Guided, multi-day learning plans
+Unlock More Lessons
+Continue your music theory journey
+Continue to Next Lesson
+What you learned:
+I did this away from the keyboard — mark done
+Not quite — keep trying
+Microphone access required
+Standard tuning · E2 A2 D3 G3 B3 E4 string buttons
+Auto-detects any note · works for any instrument
+Chords + Walking Bass
+Scale + Bass Drone
+Play up and back down without repeating the top note.
+Play the run downward.
+Play the run upward.
+Left-Hand Motion
+Both hands play the same scale in opposite directions.
+Skip ahead to Together
+Clear Left and Right hands to unlock Together.
+Unlock all scales with Practice Studio
+Unlock all keys with Practice Studio
+Repeat
+Timed
+Reach BPM
+Keep practicing — reach 90% to earn a tier.
+Connect a MIDI keyboard for the full two-hand experience.
+Show higher highlighted keys
+Show lower highlighted keys
+Show Chord Names
+Scale run
+Chord shapes
+MuseScore · Sibelius · Dorico
+Staff & Songbook
+This is how your lessons and Aria will sound at this speed.
+Tap a chapter to see its lessons.
+Simulated progress toward the goal
+No target, play for as long as you like.
+The same picker appears in scale and chord practice setup.
+Set up your schedule
+Edit your schedule
+Play the progression
+Tap a piece to hear how it opens.
+Accidental Style
+Learn a Song from its Chord Chart
+Reading charts, importing, sections, lyrics
+Move all chords from 
+Save Progression
+Save the current key and chords as a custom progression.
+View this song in Compose?
+Show chords above lyrics
+Scrolling lyrics
+Highlight active word
+Play the highlighted keys
+My Chord Progressions
+Nothing is visible yet
+Open the menu to pick a MIDI file
+Or enable the keyboard, staff, or timeline above
+Saved to Compositions
+Instrument Picker
+Run Playback Checks
+Playback Validation
+Start 5-Second Focus Timer
+Learn by doing, not memorizing
+Structured Curriculum
+Live Keyboard Practice
+Play & Explore Mode
+Progress Tracking
+Train your musical hearing
+Pitch & Note Recognition
+Interval Training
+Melody Dictation
+Chord & Scale ID
+Build muscle memory
+Falling Notes Drills
+MIDI File Practice
+Adjustable Tempo
+Streaks & Statistics
+Explore & play freely
+100+ Instruments
+MIDI Playback & Follow
+Scale & Chord Overlays
+MIDI Controller Support
+Multi-Track Arrangement
+Live MIDI Recording
+Start exploring on my own
+Not sure where to start?
+Ask Aria — your personal music coach
+There are 5 modes in Tiny Instrument:
+NIL — stableId not found in curriculum
+Start Today's Lesson
+Rhythm, intervals, chords, and keys
+Progressions, improv, modes, and harmony
+Unlimited compositions, Songbook, and melody lessons
+Premium keyboard finishes + a Rainbow theme
+Dive in and start exploring Tiny Instrument.
+Select a lesson from the list to begin
+Select a level from the list to begin
+Speed & fingering
+Or just explore freely.
+Open the multi-track composer
+Build a chord progression
+Import a chord chart
+Aria's Personality
+Pick how you'd like Aria to communicate with you.
+You can change this any time in Settings.
+Show AI Setup Guide
+Apple Intelligence is enabled on your device
+Powered by Apple Intelligence
+Free to learn, yours to grow
+You own the Full Library
+Original purchase: 
+Unlock when you're ready
+The fundamentals chapter, free to complete
+Play & Explore basics
+Basic scales, chords, and keys
+5 compositions, 5 songs, 5 saved progressions
+Every setting, and MIDI or microphone input
+Lesson reminders — set from any lesson with a long press
+Daily practice reminders at a time you choose
+Streak-at-risk alerts so you never break your run
+Weekly summaries of your practice
+How should we name notes?
+C   D   E   F   G   A   B
+Do  Re  Mi  Fa  Sol  La  Si
+Make the keyboard yours
+Key Press Effects
+Find these anytime in Settings → Keyboard.
+Show Voice Setup Guide
+Theory lessons narrate each step as you go
+Aria speaks her coaching and chat replies aloud
+Ear Training uses voice to guide your listening
+Welcome to
+Tiny Instrument
+Play familiar melodies on the keyboard to discover 
+Melodies
+Songbook
+MIDI
+Warm-ups
+Easter Eggs
+Skip Lesson and Unlock
+Chords, scales, MIDI, and warm-ups
+Search songs, MIDI, warm-ups, and more
+Try a different filter or search term.
+No Easter Eggs Yet
+Complete lessons to unlock warm-ups.
+Import MIDI files from the MIDI Library.
+Import a chord chart in Compose to practise it here.
+Check back for new songs.
+Reset Egg Unlocks
+Keyboard hints disabled — tap to enable
+Play the highlighted key
+Update Practice Session?
+Scale changed to 
+TinyInstrumentSync
+Instrument Tuner Disabled
+This feature is currently turned off for this build.
+Tiny Instrument Website
+Replay Mode Tour
+About Tiny Instrument
+OpenWindowAction
+Toggle Metronome
+Select Instrument…
+New Chord Progression
+Save Practice Progression…
+Open MIDI File…
+Import MIDI to Composition…
+Import MusicXML to Composition…
+Unload MIDI File
+DidSelectMIDIFileURL
+Rate Tiny Instrument
+Failed to import MIDI file: 
+Welcome back — your full access has been restored.
+Metronome running — click to adjust
+ColorSchemeContrast
+EnvironmentValues
+ComposeLayoutConfig
+MuseScore Downloader (ext)
+LibreScore Downloader
+Musical Artifacts (sf2)
+MIDIWorld - Movie Themes
+Playback Controls
+Piano Right Hand
+MIDIController.visualBlocks.queue
+MIDIController.notes.queue
+MIDIController.playback.audio.queue
+Personal_Recordings_-_Untitled_-_
+Practice
+Compose
+Music
+Instruments
+Scale
+Scale Degrees
+Chords
+Progressions
+Vortex_Vortex.bundle
+Attempting to interpolate an empty color array.
+Invalid number of keys found, expected one.
+Fatal error
+VortexView: Unable to locate symbol named 
+Int7 integer overflowed
+Int7 integer underflowed
+Unhandled MIDI event received: 
+SysEx manufacturer ID is not Mackie. Ignoring MIDI message.
+Expected more bytes in SysEx.
+SysEx header present but subsequent bytes not recognized: 
+Received Large Display text MIDI message 
+Received Small Display text MIDI message 
+Small Display text message channel not expected: 
+Encountered out-of-range HUI large display slice index: 
+Unrecognized HUI MIDI status 0xB0 data byte 1: 
+Received message 2 of a switch command (
+Received new switch zone select 
+V-Pot ID is invalid.
+Unhandled HUI event: 
+Universal MIDI Packet cannot be empty.
+Error building MIDI Packet.
+Legacy MIDI Packet is too large (
+Could not execute clock_gettime, errno: 
+UInt9
+UInt7
+UInt4
+UInt25
+UInt14
+Reset All Controllers
+Effects 3 Depth - Chorus Send Level
+Effects 1 Depth - Reverb Send Level
+High Resolution Velocity Prefix
+Portamento Control
+General Purpose 8
+General Purpose 7
+General Purpose 6
+General Purpose 5
+Sound Control 10 - Undefined
+Sound Control 9 - Vibrato Delay
+Sound Control 8 - Vibrato Depth
+Sound Control 7 - Vibrato Rate
+Sound Control 6 - Decay Time
+Sound Control 5 - Brightness
+Sound Control 4 - Attack Time
+Sound Control 3 - Release Time
+Sound Control 2 - Timbre Intensity
+Sound Control 1 - Sound Variation
+Legato Footswitch
+General Purpose 4
+General Purpose 3
+General Purpose 2
+General Purpose 1
+Effect Control 2
+Effect Control 1
+Breath Controller
+General Purpose 4 LSB
+General Purpose 3 LSB
+General Purpose 2 LSB
+General Purpose 1 LSB
+Effect Control 2 LSB
+Effect Control 1 LSB
+PortamentoTime LSB
+Foot Controller LSB
+Breath Controller LSB
+Undefined Per-Note CC
+Raw bytes empty.
+Sequential Circuits
+Voyetra Turtle Beach, Inc.
+Passport Designs
+Kurzweil / Young Chang
+WaveFrame (Timeline)
+ADA Signal Processors, Inc.
+Garfield Electronics
+Oberheim / Gibson Labs
+Grey Matter Response
+Digidesign Inc. / Avid
+Palmtree Instruments
+JLCooper Electronics
+Lowrey Organ Company
+Proel Labs (SIEL)
+Southworth Music Systems
+Solid State Logic Organ Systems
+Audio Veritrieb-P. Struven
+Viscount International Spa (Intercontinental Electronics)
+Clavia Digital Instruments
+Audio Architecture
+Generalmusic Corp SpA
+Cheetah Marketing
+Soundcraft Electronics
+Steinberg Media Technologies Gmb
+AVAB Niethammer AB
+Waldorf Electronics Gmb
+Time/Warner Interactive
+Advanced Gravis Comp. Tech Ltd.
+Dornes Research Group
+Digital Music Corp.
+New England Digital
+IVL Technologies Ltd.
+Southern Music Systems
+Lake Butler Sound Company
+Alesis Studio Electronics
+DOD Electronics Corp.
+Temporal Acuity Products
+Perfect Fretworks
+Rane Corporation
+Anadi Electronique
+Allen & Heath Brenell
+Peavey Electronics
+Spectrum Design and Development
+Axxes (Brian Parsonett)
+Indian Valley Mfg.
+Breakaway Technologies
+Leprecon / CAE Inc.
+Harrison Systems Inc.
+Future Lab/Mark Kuo
+Rocktron Corporation
+Cannon Research Group
+Rodgers Instrument LLC
+Encore Electronics
+CTI Audio, Inc. (Musically Intel. Devs.)
+Broderbund / Red Orb
+Mark Of The Unicorn
+Hotz Corporation
+Richmond Sound Design
+Mindscape (Software Toolworks)
+Russ Jones Marketing / Niche
+Advanced Remote Technologies
+White Instruments
+GT Electronics/Groove Tubes
+Pacific Research & Engineering
+Timeline Vista, Inc.
+Mesa Boogie Ltd.
+Sequoia Development Group
+Studio Electronics
+MIDI Solutions Inc.
+Lightwave Research / High End Systems
+Micro-W Corporation
+Spectral Synthesis, Inc.
+Studio Technologies Inc.
+Peterson Electro-Musical Product, Inc.
+Atari Corporation
+Marion Systems Corporation
+Winjammer Software Ltd.
+AT&T Bell Laboratories
+Accordians International
+EuPhonics (now 3Com)
+Turtle Beach Systems (Voyetra)
+Loud Technologies / Mackie
+BEC Technologies
+Sierra Semiconductor
+Electronics Diversified Inc
+Advanced Micro Devices
+Sabine Musical Mfg. Co. Inc.
+Ta Horng Musical Instrument
+Midisoft Corporation
+Media Trix Peripherals
+Key Electronics, Inc.
+Shure Incorporated
+Crystal Semiconductor
+Conexant (Rockwell)
+Silicon Graphics
+M-Audio (Midiman)
+Topaz Enterprises
+Microsoft Consumer Division
+Line 6 (Fast Forward) (Yamaha)
+Van Koevering Company
+Chromatic Research
+TorComp Research Inc.
+Walker Technical
+Digital Harmony (PAVO)
+InVision Interactive
+Nemesys Music Technology
+DBX Professional (Harman Intl)
+Syndyne Corporation
+BandLab Technologies
+National Semiconductor
+Boom Theory / Adinolfi Alternative Percussion
+Virtual DSP Corporation
+Passport Music Software LLC (Gvox)
+Ashley Audio Inc.
+Summit Audio Inc.
+Aureal Semiconductor Inc.
+Aurisis Research
+Nearfield Research
+Hyperactive Audio Systems
+MidiLite (Castle Studios Productions)
+Radikal Technologies
+Roger Linn Design
+TC-Helicon Vocal Technologies
+Event Electronics
+Sonic Network Inc
+Realtime Music Solutions
+Classical Organs, Inc.
+Numark Industries
+Frontier Design Group, LLC
+Voyager Sound Inc.
+Mixmeister Technology
+Notation Software
+Mercurial Communications
+Logic Sequencing Devices
+Axess Electronics
+Samson Technologies
+Electronic Theatre Controls
+Blackberry (RIM)
+Lynx Studio Technology Inc.
+Damage Control Engineering LLC
+Yost Engineering, Inc.
+Brooks & Forsman Designs LLC / DrumLite
+Infinite Response
+Plogue Art et Technologie, Inc
+RJM Music Technology
+Custom Solutions Software
+Sonarcana LLC / Highly Liquid
+Stanton (Gibson Brands)
+Livid Instruments
+First Act / 745 Media
+Pygraphics, Inc.
+Panadigm Innovations Ltd
+Avedis Zildjian Co
+Auvital Music Corp
+You Rock Guitar (was: Inspired Instruments)
+Chris Grigg Designs
+Slate Digital LLC
+Source Audio LLC
+Ernie Ball / Music Man
+Custom Audio Electronics
+American Audio/DJ
+Mega Control Systems
+Kilpatrick Audio
+NetLogic Microsystems
+Nektar Technology Inc
+Zenph Sound Innovations
+Confusion Studios
+Amelia's Compass LLC
+Synclavier Digital
+Light & Sound Control Devices LLC
+McCarthy Music Corp
+Keith Robert Murray
+ISP Technologies
+Abstrakt Instruments LLC
+Intellijel Designs Inc.
+Dasz Instruments Inc.
+Disaster Area Designs LLC
+Carter Duncan Corp
+Essential Technology
+Cantux Research LLC
+Hummel Technologies
+Electro-Harmonix
+Neunaber Technology LLC
+Sound Devices, LLC
+Spectrasonics, Inc
+Second Sound, LLC
+Matthews Effects
+Bright Blue Beetle
+Audio Impressions
+Ingenious Arts and Technologies LLC
+Isla Instruments
+Amek Div of Harman Industries
+Casa Di Risparmio Di Loreto
+Böhm electronic GmbH
+Syntec Digital Audio
+Trident Audio Developments
+Real World Studio
+Evolution Synthesis, Ltd
+Bontempi SpA (Sigma)
+F.B.T. Elettronica SpA
+LA Audio (Larking Audio)
+Zero 88 Lighting Limited
+Micon Audio Electronics GmbH
+Forefront Technology
+Studio Audio and Video Ltd.
+Kenton Electronics
+Celco/ Electrosonic
+Marshall Products Limited
+MA Lighting Technology
+Fatar SRL c/o Music Industries
+QSC Audio Products Inc.
+Artisan Clasic Organ Inc.
+Pinnacle Audio (Klark Teknik PLC)
+Doepfer Musikelektronik GmbH
+Creative ATC / E-mu
+LG Electronics (Goldstar)
+Midisoft sas di M.Cima & C
+Samick Musical Inst. Co. Ltd.
+Penny and Giles (Bowthorpe PLC)
+LSC Electronics Pty. Ltd.
+Focusrite/Novation
+Samkyung Mechatronics
+Medeli Electronics Co.
+Blue Chip Music Technology
+LG Semicon America
+Access Music Electronics
+Terratec Electronic GmbH
+Propellerhead Software
+Red Sound Systems Ltd
+MAM (Music and More)
+CDS Advanced Technology BV (Lanbox)
+Mode Machines (Touched By Sound GmbH)
+Phil Rees Music Tech
+Stamer Musikanlagen GmbH
+Musical Muntaner S.A. dba Soundart
+Klavis Technologies
+Professional Audio Company
+NewWave Labs (MadWaves)
+Analogue Systems
+Ringway Electronics (Chang-Zhou) Co Ltd
+Faith Technologies (Digiplug)
+Manikin Electronic
+Dolby Australia (Lake)
+Silansys Technologies
+Winbond Electronics
+Cinetix Medien und Interface GmbH
+A&G Soluzioni Digitali
+Central Music Co. (CME)
+Ya Horng Electronic Co LTD
+ELZAB S.A. (G LAB)
+Blackstar Amplification Ltd
+M3i Technologies GmbH
+Gemalto (from Xiring)
+Teenage Engineering
+Tobias Erichsen Consulting
+Hanpin Electron Co Ltd
+Beyond Music Industrial Ltd
+Misa Digital Technologies Ltd
+AI Musics Technology Inc
+Mutable Instruments
+PreSonus Software Ltd
+Ingenico (was Xiring)
+Fairlight Instruments Pty Ltd
+Modal Electronics (Modulus/VacoLoco)
+RWA (Hong Kong) Limited
+Native Instruments
+Surfin Kangaroo Studio
+Philips Electronics HK Ltd
+Machinewerks Ltd.
+Xiamen Elane Electronics
+Marshall Amplification PLC
+Kiwitechnics Ltd
+Muabaobao Education Technology Co Ltd
+Audiothingies (MCDA)
+Morningstar FX Pte Ltd
+Changsha Hotone Audio Co Ltd
+Expert Sleepers Ltd
+Timecode-Vision Technology
+Hornberg Research GbR
+C. Bechstein Digital GmbH
+Motas Electronics Ltd
+Sonic Academy Ltd
+Pianoforce S.R.O
+TouchKeys Instruments Ltd
+Augmented Instruments Ltd (Bela)
+Supercritical Ltd
+Genki Instruments
+Marienberg Devices Germany
+Swapp Technologies SRL
+Electra One S.R.O.
+Digital Clef Limited
+Paul Whittington Group Ltd
+Dongguan MIDIPLUS Co., LTD
+Gracely Pty Ltd.
+Pitch Innovations
+RSS Sound Design
+Nonlinear Labs GmbH
+Robkoo Information & Technologies Co., Ltd.
+Kawai Musical Instruments MFG. CO. Ltd
+Roland Corporation
+Yamaha Corporation
+Casio Computer Co. Ltd
+Kamiya Studio Co. Ltd
+Akai Electric Co. Ltd.
+Victor Company of Japan, Ltd.
+Sony Corporation
+Teac Corporation
+Matsushita Electric Industrial Co. , Ltd
+Fostex Corporation
+Zoom Corporation
+Matsushita Communication Industrial Co., Ltd.
+Suzuki Musical Instruments MFG. Co., Ltd.
+Fuji Sound Corporation Ltd.
+Acoustic Technical Laboratory, Inc.
+Internet Corporation
+Seekers Co. Ltd.
+SD Card Association
+Crimson Technology Inc.
+Softbank Mobile Corp
+D&M Holdings Inc.
+AlphaTheta Corporation
+Pioneer Corporation
+Slik Corporation
+Tsukuba Science Co., Ltd.
+Sonicware Co., Ltd.
+Poppy only workshop
+An unexpected or malformed note name was encountered.
+MIDI note is out of bounds (invalid).
+Cakewalk (Middle C == C5)
+Roland (Middle C == C4)
+Yamaha (Middle C == C3)
+Encoded value is not a valid 
+New Core MIDI API (
+Legacy Core MIDI API
+AnyMIDIEndpoint(name: 
+Got nil while reading MIDIEndpointRef property value 
+Error getting entity ID for endpoint ref 
+Got nil while reading MIDIEndpointRef property list.
+Transmits Program Changes
+Receives Program Changes
+Transmits Bank Select MSB
+Transmits Bank Select LSB
+Receives Bank Select MSB
+Receives Bank Select LSB
+Max Transmit Channels
+Max Receive Channels
+Transmit Channels
+Receive Channels
+Single Realtime Entity
+Is Embedded Entity
+Connection Unique ID
+Advance Schedule Time (μs)
+Pan Disrupts Stereo
+Image (File URL)
+Driver Device Editor App
+Name Configuration Dictionary
+Supports Show Control
+Supports General MIDI
+Connection Error: 
+Internal inconsistency: 
+Unknown OSStatus error: 
+Internal OSStatus error -50.
+I/O Error. (kMIDIMsgIOError)
+The requested object does not exist. (kMIDIObjectNotFound)
+Unable to read the saved state. (kMIDISetupFormatErr)
+Unable to start MIDIServer. (kMIDIServerStartErr)
+Communication with MIDIServer failed. (kMIDIMessageSendErr)
+An invalid MIDIPortRef was passed. (kMIDIInvalidPort)
+An invalid MIDIClientRef was passed. (kMIDIInvalidClient)
+MIDIDevice(name: 
+Endpoint Display Name: 
+MIDIEntity(name: 
+MIDIInput(name: 
+MIDIInputConnection(criteria: 
+Not in a listening state; can't connect to endpoints.
+MIDIInputEndpoint(name: 
+Could not read virtual MIDI endpoint unique ID.
+MIDIOutput(name: 
+MIDIOutputConnection(criteria: 
+Output port reference is nil.
+MIDIOutputEndpoint(name: 
+MIDIThruConnection(ref: 
+Raw bytes cannot be sent using new Core MIDI API.
+Port reference is nil.
+WidgetShared_WidgetShared.bundle
+Seven letter names
+A, B, C, D, E, F, G
+The center of the keyboard
+Sharps and flats
+Chord of the day
+Scale of the day
+Whole and half steps
+The building blocks
+The pop progression
+The jazz progression
+Mary Had a Little Lamb
+A traditional melody
+Secondary dominants
+Borrowing a V chord
+Half-diminished seventh
+Diminished seventh
+Pick up your current lesson in one tap.
+A small theory moment, fresh every day.
+Tap to start learning
+The Aptabase App Key 
+Aptabase: Props with key 
+SIMULATOR_MODEL_IDENTIFIER
+Aptabase: Failed to send 
+Cannot activate twice
+Aptabase.InitOptions
+Aptabase.TrackingMode
+Division by zero.
+Decoded value is not valid.
+4 (Quarter-Frames)
+24 hours
+100 days
+NTSC Color Wall Time
+TimecodeInterval(
+TimecodeInterval 
+Could not create mutable NSAttributedString copy.
+Header is not correct. File may not be a MIDI file.
+Could not read MIDI file header length.
+Encountered unexpected header length header length.
+Could not read MIDI file format.
+Could not read number of tracks; end of file encountered.
+Could not read division info; end of file encountered.
+Could not decode timebase.
+Encountered end of file early.
+There was a problem reading chunk length.
+UnrecognizedChunk(
+Chunk type matches known identifier 
+Not implemented.
+File read error.
+Type 2 (multiple tracks asynchronous)
+Type 1 (multiple tracks synchronous)
+Type 0 (single track)
+There was a problem reading chunk header at byte offset 
+There was a problem reading chunk length at byte offset 
+There was a problem reading track data blob at byte offset 
+There was a problem reading track data at byte offset 
+Chunk count exceeds maximum.
+Chunk length overflowed maximum size.
+Timecode timebase not implemented yet.
+MIDI data is empty / contains no bytes.
+SMPTEOffsetFrameRate(
+Invalid number of bytes. Expected 
+Invalid status nibble: 
+CC number is out of bounds: 
+CC value is out of bounds: 
+Value(s) out of bounds.
+Could not unwrap enum case.
+Unexpected byte length.
+Channel number is out of bounds: 
+Event does not start with expected bytes.
+Note number is out of bounds: 
+Note velocity is out of bounds: 
+Note pressure value is out of bounds: 
+Pitch Bend LSB is out of bounds: 
+Pitch Bend MSB is out of bounds: 
+Port number is out of bounds: 
+Channel Pressure value is out of bounds: 
+Program Change program number is out of bounds: 
+Channel could not be determined.
+Expected CC message with controller number 
+CC message has different channel number.
+Missing running status byte.
+Could not form frame rate from Hours byte.
+Hours is out of bounds: 
+Minutes is out of bounds: 
+Seconds value is out of bounds: 
+Frames value is out of bounds: 
+Subframes value is out of bounds: 
+Could not read sequence number as integer.
+Sequence number is out of bounds: 
+Byte length too short.
+SequencerSpecific(
+Could not extract variable length.
+Fewer bytes are available (
+UniversalSysEx7(
+Not enough bytes.
+Event is not a SysEx event.
+Expected SysEx termination byte 0xF7 but found 
+Event is not a textual event.
+Byte length too length.
+UnrecognizedMeta(type: 
+XMFPatchTypePrefix(
+Param length should always be 1.
+Encountered unexpected param value: 
+ObservableMIDIManager
+WaveformDataRequest.abortWaveformDataQueue
+Created buffer with format
+Cannot read into buffer 
+Error reading into input buffer
+Failed to create edited buffer
+Failed to write new file at
+Failed to create new file
+File wasn't created correctly
+MusicTrackManager
+MIDINoteDuration
+CMFormatDescriptionRef
+Unable to remove temp file at
+Error fading buffer, returning original...
+Failed getting peak amplitude, returning original buffer
+Failed to write to edited buffer
+AVAudioBuffer copy(from) - formats must match!
+AVAudioBuffer copy(from) - No frames to copy!
+AVAudioBuffer copy(from) - no capacity!
+Input file can't be nil.
+Output file can't be nil.
+Options can't be nil.
+Unable to read the input file format.
+Unsupported output format: 
+Unable to setup the AVAssetWriter.
+No audio was found in the input file.
+Unable to add reader output.
+Failed to start writing. Error:
+Failed to start reading. Error:
+Conversion cancelled
+Process canceled
+Conversion failed with error
+Conversion failed at finishWriting
+Failed to convert input to PCM: 
+Output file must be caf, wav or aif.
+Unable to open the input file.
+Output file is nil.
+Error writing to the output file.
+Error reading from the input file.
+Unable to set read format on input file.
+Unable to set the output file data format.
+Unable to create output file at 
+No conversion is needed, formats are the same. Copying to
+Unable to get the input file data format.
+Error disposing output file, could have a memory leak
+Error disposing input file, could have a memory leak
+Unable to determine formats for conversion
+Warning: removing existing file at
+The input file format is in an incompatible format: 
+Deleting on error
+Failed to remove file
+Error: Couldn't read into buffer. 
+Unable to instantiate AVAudioUnit
+AVAudioEngine ext
+Seconds needs to be a positive value
+Couldn't create buffer in renderToFile
+Unknown render result:
+AudioKit | mainMixerNode is nil
+NSMicrophoneUsageDescription
+AudioKit Engine Mixer
+Sample Rate has changed, creating new mainMixerNode at
+I'm sorry Dave, I'm afraid I can't do that
+Could not find the requested device
+AudioKit is not currently running
+Unable to initialize the lock
+Effect CTRL 2 LSB
+Effect CTRL 1 LSB
+Local Control On/Off
+All Controllers Off
+Registered Parameter Number MSB
+Registered Parameter Number LSB
+Non-registered Parameter Number MSB
+Non-registered Parameter Number LSB
+Data Entry Subtraction
+Data Entry Addition
+Celeste Level or Detune
+Sound Control 10
+Soft Pedal On/Off
+Sustenuto On/Off
+Portamento On/Off
+Damper Pedal On/Off
+Expression Pedal
+Modulation Wheel
+Sequence Specific
+Device (Port) Name
+Channel Aftertouch / Pressure
+Polyphonic Aftertouch / Pressure
+Timecode Quarter Frame
+AudioKit.MIDIClockListener
+MIDI Clock Follower
+MIDI Clock Leader Enabled
+AudioKit.MIDIMonoPolyListener
+AudioKit.MIDIOMNIListener
+AudioKit.MIDITempoListener
+Error creating MIDI Input Port: 
+Trying to close midi input 
+Closing MIDI Input '
+Error disconnecting MIDI port: 
+Error disposing MIDI port: 
+Closing All Inputs
+No usable status detected in handleMIDIMessage
+Got unsupported MIDI 2.0 MIDIEventList, skipping
+Got invalid UMP Message Type, skipping rest of the packet
+Got unsupported 128 bit UMP message of type 
+Got unsupported 96 bit UMP message of type: 
+Got unsupported 64 bit UMP message of type: 
+Got unsupported 32 bit UMP message of type: 
+UMP SYSEX - Got unsupported UMPSysEx7bitStatus
+UMP SYSEX - End of UMP SysEx messages
+UMP SYSEX - Continue receiving UMP SysEx messages
+UMP SYSEX - Start receiving UMP SysEx messages
+UMP SYSEX - Got complete SysEx message in one UMP packet
+Unable to create MIDIOutputPort
+Closing MIDI Output '
+Error disposing  MIDI Output port: 
+Disposed MIDI Output port
+Error: Number of port to create can't be less than one)
+Initializing MIDI
+Error creating MIDI client: 
+Done receiving SysEx
+Starting to receive SysEx
+AudioKit.MIDICallbackInstrument
+Unhandled event 
+MTrk
+MThd
+No Tracks in the MIDI File
+Could not start the sequencer
+AudioKit.MIDIPlayer
+Expected AU to respond to MIDI.
+AudioKit.MIDISampler
+MIDI Transformer called
+MIDI SysEx message 
+AudioKit.MIDITimeout
+No parameter tree.
+Low Pass Cutoff Frequency
+Delay time (Seconds)
+Speech Radio Tower
+Speech Golden Pi
+Speech Cosmic Interference
+Speech Alien Chatter
+Multi-Everything Is Broken
+Multi-Echo Tight 2
+Multi-Echo Tight 1
+Multi-Distorted Squared
+Multi-Distorted Cubed
+Multi-Distorted Funk
+Multi-Decimated 4
+Multi-Decimated 3
+Multi-Decimated 2
+Multi-Decimated 1
+Multi-Cellphone Concert
+Multi-Broken Speaker
+Drums Buffer Beats
+Ring Mod Balance
+Expansion Threshold
+Center Frequency
+Cutoff Frequency
+Cut Off Frequency
+Output Volumes - 
+Error: can't ramp parameter 
+Warning: delay of 
+Soundfont file not found: 
+Error loading SoundFont 
+SoundFont file not found: 
+Could not load audio files
+WAV file not found.
+File not found: 
+Code Generated Instrument
+Unable to load new sound in PresetBuilder
+No filename provided in PresetBuilder
+Could not write to 
+No sampleNum provided in PresetBuilder
+Could not set PCM buffer in 
+Couldn't read data into buffer. 
+Copying mono data to 2 channel buffer...
+Failed to setup mono conversion buffer
+Failed to create buffer
+The player needs a file or a valid buffer to schedule
+Format of the buffer doesn't match the player
+Failed to fill buffer
+Unable to schedule file. totalFrames to play: 
+Format has changed, player will be reconnected with format
+Couldn't get tempo track
+Unable to set time signature
+Couldn't get sequence for time resolution
+No tempo track for time resolution
+No midi file found
+Can't get track for index
+Can't get sequence
+Can't delete sequencer track during playback
+Can't add tracks during playback
+Invalid time signature bottom value
+Problem with raw midi channel message
+Problem with raw midi meta message
+Problem with raw midi note message
+Unable to name Track
+Unable to create temp sequence in setLength
+Unable to create iterator in setLength
+Unable to create iterator in clearNote
+Unable to create iterator in isEmpty
+Unable to insert raw midi data
+Unable to write meta event
+Unable to create iterator in 
+Unable to create iterator
+Warning: Samples exceeds the maximum number.
+AudioKit.AmplitudeTap
+The tapped node isn't attached to the engine
+AudioKit.FFTTap
+Actual buffer size is
+Attempting to skip
+Unexpected buffer size of
+Writing partial buffer
+Attempting to set bufferSize to
+The implementation may choose another size.
+Already recording
+File Format is nil
+Channel count mismatch
+Failed to create URL in
+Creating destination:
+Warning, deleting existing record file at
+Attempting to update channelMap to
+Updated channelMap to
+Failed setting channel map
+Failed creating AVAudioChannelLayout
+You must specify a valid channel map
+Failed creating channelBuffer
+Error, Cannot create internal audio file for reading: 
+Warning: already recording
+Warning: Cannot stop recording, already stopped
+Error: Can't delete
+Error: Can't record to
+File has been cleared
+AudioKit.NodeRecorder
+Creating temp file at
+AudioKit.RawBufferTap
+AudioKit.RawDataTap
+Augmented Fifteenth
+Perfect Fifteenth
+Diminished Fifteenth
+Augmented Fourteenth
+Major Fourteenth
+Minor Fourteenth
+Diminished Fourteenth
+Augmented Thirteenth
+Major Thirteenth
+Minor Thirteenth
+Diminished Thirteenth
+Augmented Twelfth
+Diminished Twelfth
+Augmented Eleventh
+Perfect Eleventh
+Diminished Eleventh
+Diminished Tenth
+Diminished Ninth
+Augmented Octave
+Diminished Octave
+Augmented Seventh
+Diminished Seventh
+Diminished Sixth
+Diminished Fifth
+Augmented Fourth
+Diminished Fourth
+Diminished Third
+Augmented Second
+Diminished Second
+Augmented Unison
+Minor Blues Hexatonic
+Major Blues Hexatonic
+Ionian Augmented ♯2
+Super Locrian Diminished ♭♭3
+Locrian Diminished ♭♭3
+Locrian Diminished
+Mixolydian Augmented
+Lydian ♯2 ♯6
+Lydian Augmented ♯2
+Lydian Augmented ♯6
+Jazz Melodic Minor
+Ukrainian Dorian
+Phrygian Dominant
+Ionian Augmented
+Diminished Whole Tone
+Auxiliary Diminished Blues
+Auxiliary Augmented
+Auxiliary Diminished
+Lydian Diminished
+Six Tone Symmetrical
+Prometheus Neopolitan
+Neopolitan Minor
+Neopolitan Major
+Lydian Augmented
+Leading Whole Tone
+Eight Tone Spanish
+Whole Diminished
+Pentatonic Neutral
+DesignSystem_DesignSystem.bundle
+Complete your first 
+Reach a 7-day streak.
+Monthly Devotion
+Reach a 30-day streak.
+Reach a 100-day streak.
+Getting the Habit
+Practice ≥5 minutes 3 days in a row.
+Practice ≥5 minutes 7 days in a row.
+Meet your daily goal 7 times.
+Meet your daily goal 30 times.
+Hit 90% accuracy in 
+Score 100% in any practice type.
+Reach level 5 in the 
+Beat a personal best 10 times.
+Beat a personal best 50 times.
+Complete 10 practice sessions.
+Complete 100 practice sessions.
+Practice for 600 minutes total.
+Complete 25 lessons.
+Reach a 10-note combo.
+Reach a 25-note combo.
+Reach a 50-note combo.
+Practice all 5 activity types in one week.
+Play 10 different instruments.
+Complete the reading & rhythm chapters in Learn.
+Unlock every theory chapter.
+Complete your first theory chapter.
+Complete 5 theory chapters.
+Complete every learning chapter.
+Complete your first Play & Explore exercise.
+Complete 10 Play & Explore exercises.
+Complete every Play & Explore exercise.
+Complete your first reading & rhythm chapter.
+Complete every reading chapter.
+Complete a chapter in every learning tier.
+Complete 5 challenges.
+Complete 25 challenges.
+Challenge Master
+Complete 50 challenges.
+Discover 5 hidden songs.
+Discover 15 hidden songs.
+Discover 30 hidden songs.
+Practice ≥5 minutes 
+Meet your daily goal 5 days this week.
+Practice 300 minutes this week.
+Well-Rounded Week
+Practice all 5 activity types this week.
+Set a new personal best in 
+Reach a 15-note combo today.
+Practice 3 different activity types today.
+Complete 3 practice sessions today.
+Practice 10 minutes today.
+Drill Best Combo
+Ear Training Accuracy
+Practice Minutes
+MIDIControlKit_MIDIControlKit.bundle
+MIDIControllerProfiles
+Play a clean run to complete
+With or Without You
+Don't Stop Believin'
+The most-used loop in pop music.
+Pop-Punk (vi–IV–I–V)
+50s Doo-Wop (I–vi–IV–V)
+The classic 1950s progression.
+Fly Me to the Moon
+The backbone of jazz harmony.
+Right hand on every eighth, left hand root then fifth.
+CFDataCreateWithBytesNoCopy
+CFPropertyListCreateWithData
+CFPropertyListCreateFromXMLData
+CFStringCreateWithCStringNoCopy
+CFDictionaryGetValue
+CFGetTypeID
+CFStringGetTypeID
+CFStringGetCString
+CFRelease
+ProductVersion

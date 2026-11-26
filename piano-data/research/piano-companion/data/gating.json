@@ -1,0 +1,72 @@
+{
+  "_source": "Piano Companion (lite) 1.6.1028, bundle com.songtive.pianocompanion.lite.osx. Decompiled PianoCompanion.dll + PianoCompanion.Engine.OSX.dll. Every entry is exact (cited) unless 'confidence' says inferred.",
+  "liteDetection": {
+    "rule": "Settings.IsLite = CFBundleIdentifier != \"com.binitex.pianocompanion\"",
+    "citation": "PianoCompanion.Engine.Services.Settings.IsLite",
+    "effect": "Lite build: pro flags (ChordsPro, ScalesPro, ProgressionsPro) are loaded from the saved 'settings' object. Non-lite build: SetProductByType(AllInOne) on every Load().",
+    "debugForcePro": false
+  },
+  "entitlementFlags": {
+    "ScalesPro": { "enumValue": 1, "check": "Settings.ScalesPro" },
+    "ChordsPro": { "enumValue": 2, "check": "Settings.ChordsPro" },
+    "ProgressionsPro": { "enumValue": 3, "check": "Settings.ProgressionsPro" },
+    "AllInOne": { "enumValue": 4, "check": "ChordsPro && ScalesPro && ProgressionsPro" },
+    "ChordsScalesPro": { "enumValue": 5, "check": "ChordsPro && ScalesPro" },
+    "citation": "PianoCompanion.Engine.Services.ProductType; Settings.CheckProductByType / SetProductByType"
+  },
+  "products": [
+    { "id": "com.songtive.pianocompanion.lite.osx.1y", "kind": "auto-renewable subscription", "grants": "AllInOne", "shownOnPaywall": true, "paywallCard": "Yearly", "notes": "Only card with trial copy and per-week price (price/52)." },
+    { "id": "com.songtive.pianocompanion.lite.osx.1w", "kind": "auto-renewable subscription", "grants": "AllInOne", "shownOnPaywall": true, "paywallCard": "Weekly" },
+    { "id": "com.songtive.pianocompanion.lite.osx.allinone.nonconsumable", "kind": "non-consumable", "grants": "AllInOne", "shownOnPaywall": true, "paywallCard": "Lifetime" },
+    { "id": "com.songtive.pianocompanion.chordspro.nonconsumable", "kind": "non-consumable (legacy)", "grants": "ChordsPro", "shownOnPaywall": false },
+    { "id": "com.songtive.pianocompanion.scalespro.nonconsumable", "kind": "non-consumable (legacy)", "grants": "ScalesPro", "shownOnPaywall": false },
+    { "id": "com.songtive.pianocompanion.chordsnscalespro.nonconsumable", "kind": "non-consumable (legacy)", "grants": "ChordsScalesPro", "shownOnPaywall": false },
+    { "id": "com.songtive.pianocompanion.progressionspro.nonconsumable", "kind": "non-consumable (legacy)", "grants": "ProgressionsPro", "shownOnPaywall": false }
+  ],
+  "productsCitation": "PianoCompanion.OSX.Helpers.PaymentService (constants, ProductIdToType, IsSubscription, GetAvailableProducts); PaymentModalController.ListProducts",
+  "unknownProductIdFallback": "ProductIdToType default branch returns ChordsPro",
+  "lockedFeatures": [
+    { "area": "Chords Dictionary", "feature": "Choosing a non-root inversion in the toolbar Inversion popover", "requires": "ChordsPro", "liteBehaviour": "Lite alert; SelectedInversion reset to 0", "citation": "ChordsViewController.ViewDidLoad (InversionChanged)" },
+    { "area": "Chords Dictionary (By Keys)", "feature": "Reverse chord lookup with more than 2 clicked keys", "requires": "ChordsPro", "liteBehaviour": "When SelectedNotes.Count > 2 the lite alert is shown and the search is not started", "citation": "ChordsViewController.ViewDidLoad (_pianoKeyboardFilter.KeyPressed)" },
+    { "area": "Chords Dictionary (By Keys)", "feature": "Inversions included in reverse lookup results", "requires": "ChordsPro", "liteBehaviour": "findChordByFormulaPart(includesInversions:false)", "citation": "ChordsViewController.FillDataSourceWithFilters: CheckProductByType(ChordsPro) && !ReverseModeWithoutInversions" },
+    { "area": "Chords Dictionary (By Keys) via MIDI", "feature": "MIDI-input notes in By Keys mode", "requires": "none (no gate)", "liteBehaviour": "HandleNoteChanged calls HandleMidiKey + StartThrottledSearch without CheckWarnIfLite, so >2 MIDI notes are searched in Lite (inversions still excluded)", "citation": "ChordsViewController.HandleNoteChanged; ScalesViewController.HandleNoteChanged" },
+    { "area": "Chords Dictionary (search field)", "feature": "Slash-chord inversion matching in name search (e.g. C/E)", "requires": "ChordsPro", "liteBehaviour": "FindChordsByName(..., allowSlashInversion:false)", "citation": "ChordsViewController.FillDataSourceWithFilters; ChordService.FindChordsByName" },
+    { "area": "Chord details > Sounds great with", "feature": "Full list of companion (successor) chords", "requires": "ChordsPro", "liteBehaviour": "Only first 3 shown with alpha 1.0, 0.5, 0.25 plus an Unlock button (Elements.Unlock2 60pt) that opens the paywall", "citation": "CompanionChordsPanel.Update; ChordsDetailsViewController.LoadChordDetails" },
+    { "area": "Scales Dictionary (By Keys)", "feature": "Reverse scale lookup with more than 2 clicked keys", "requires": "ScalesPro", "liteBehaviour": "Lite alert, search not started", "citation": "ScalesViewController.ViewDidLoad (KeyPressed)" },
+    { "area": "Scales Dictionary", "feature": "Favourites filter (toolbar star)", "requires": "ScalesPro", "liteBehaviour": "Lite alert; ShowFavouriteScales forced false", "citation": "ScalesViewController.ToolbarOnToolbarItemActivated case StarButton" },
+    { "area": "Scale details > Chords", "feature": "Full list of chords in the scale (all groups)", "requires": "ScalesPro", "liteBehaviour": "chords.Take(3) with alpha 1.0, 0.55, 0.10 (step -0.45) plus Unlock button; Parallel Mode not split into per-mode sections", "citation": "ScaleChordsCollectionPanel.Rebuild / BuildSections" },
+    { "area": "Circle of Fifths", "feature": "Scale/Chord mode toggle (toolbar ScaleChordCircleOfFifthsButton)", "requires": "ScalesPro", "liteBehaviour": "Lite alert; stays in scale mode", "citation": "CircleOfFifthsSplitViewController.ChordLookupHandler" },
+    { "area": "Chord Progression", "feature": "Menu Chord Progression > Save / Load / Export to MIDI", "requires": "ProgressionsPro", "liteBehaviour": "Lite alert; nothing saved", "citation": "ChordProgressionViewController.HandleMenuItem" },
+    { "area": "Chord Progression", "feature": "More than 4 chords in a progression", "limitFree": 4, "requires": "ProgressionsPro", "liteBehaviour": "AddNewItem returns null when Items.Count >= 4 and lite alert shown", "citation": "ChordProgressionViewController.AddNewItem" },
+    { "area": "Songbook", "feature": "Create / duplicate song beyond free cap", "limitFree": 2, "requires": "ProgressionsPro", "liteBehaviour": "CanCreate(count, false) = count < 2; otherwise lite alert", "citation": "SongSheetService.FreeCap / CanCreate; SongbookListViewController.OnNewSong / DuplicateClicked" },
+    { "area": "Songbook", "feature": "Share as PDF (list context menu and viewer overflow)", "requires": "ProgressionsPro", "citation": "SongbookListViewController.SharePdfClicked; SongbookViewerViewController.SharePdf" },
+    { "area": "Songbook", "feature": "Print", "requires": "ProgressionsPro", "citation": "SongbookViewerViewController.PrintSheet" },
+    { "area": "Songbook", "feature": "Export MIDI", "requires": "ProgressionsPro", "citation": "SongbookViewerViewController.ExportMidi" },
+    { "area": "Drag and drop", "feature": "Drag a chord/progression out of the app as a MIDI file", "requires": "AllInOne", "sources": ["GeneralItemController.MouseDragged (only after drag distance >= 25pt from item centre)", "ChordSuggesterItemController.MouseDragged", "TrackItemCellController.MouseDragged", "ChordProgressionDragView.MouseDragged (whole track)"], "liteBehaviour": "Lite alert on drag" },
+    { "area": "Metronome", "feature": "Subdivision other than Quarter (Eighth, Triplets, Sixteenth)", "requires": "AllInOne", "liteBehaviour": "Row title suffixed ' ▸ PRO'; picking shows lite alert; Upsell('subdivision')", "citation": "MetronomeViewController.OnSubdivisionPicked; MetronomeLimits.IsSubdivisionPro (subdivision > 1)" },
+    { "area": "Metronome", "feature": "Cross-rhythm 2..9", "requires": "AllInOne", "liteBehaviour": "' ▸ PRO' suffix; Upsell('cross')", "citation": "MetronomeViewController.OnCrossPicked" },
+    { "area": "Metronome", "feature": "Presets (save, apply, delete; max 20)", "requires": "AllInOne", "liteBehaviour": "' ▸ PRO' suffix; presets list empty; Save shows Upsell('presets'); Delete disabled", "citation": "MetronomeViewController.ReloadPresets / OnSavePreset" },
+    { "area": "Metronome", "feature": "Saved settings when not entitled", "requires": "AllInOne", "liteBehaviour": "WithEntitlement(false) keeps Bpm and BeatsPerBar but forces Subdivision=1, CrossRhythm=0", "citation": "MetronomeSettings.WithEntitlement" }
+  ],
+  "liteAlert": {
+    "citation": "BaseNSViewController.CheckWarnIfLite",
+    "style": "NSAlert Informational, sheet on main window",
+    "text_key": "feature_is_not_for_demo_version",
+    "text_en": "This feature is not available for LITE version.",
+    "buttons": [ { "key": "ok", "en": "OK", "response": 1000, "action": "dismiss" }, { "key": "buy", "en": "Buy", "response": 1001, "action": "present PaymentModalController as modal window" } ],
+    "returns": "true when the feature is locked (caller aborts)"
+  },
+  "teaser_unused": {
+    "class": "PianoCompanion.Engine.Services.PianoTeaser",
+    "FreeChordsPerDay": 5,
+    "LockedPillsPerDay": 3,
+    "note": "Defined in the engine, but no call site exists in PianoCompanion.dll (grep). Likely used by the iOS/Android build only (inferred)."
+  },
+  "purchasePolicy": {
+    "replayToleranceMinutes": 10,
+    "rules": "NewPurchase if neither restored nor replayed; non-subscription restored => AlreadyOwned (grants); subscription restored => AlreadyOwned only if receipt expiry > now and not cancelled, else StaleRestore (does not grant). In Buy() the receipt expiry is passed as null, so a restored subscription during Buy is StaleRestore.",
+    "citation": "PianoCompanion.PurchaseResultPolicy; PaymentService.Buy",
+    "storeKitTimeouts": { "buySeconds": 20, "restoreSeconds": 60 },
+    "restoreQueriesOnly": "ItemType.InAppPurchase (GetPurchasesAsync) — subscriptions are not explicitly queried (exact); whether StoreKit returns them anyway is not determinable statically"
+  }
+}

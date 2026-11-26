@@ -9,8 +9,8 @@ describe('the gear’s pages (R32-B)', () => {
     expect(gearBack('input')).toBe('main')
   })
 
-  it('shuts from Title and credits, which the printed title opens', () => {
-    expect(gearBack('credits')).toBeNull()
+  it('goes back from Title and credits to the first page, which leads with it', () => {
+    expect(gearBack('credits')).toBe('main')
   })
 
   it('holds nothing the score prints and sets where it prints it', () => {

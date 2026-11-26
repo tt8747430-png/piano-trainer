@@ -47,6 +47,12 @@ were the measure (line breaking, beams, courtesy signatures, page filling).
 - **The labels' row is ours** (`LabelRow`): HTML over each line in the app's faces, read by a screen reader: the
   line's first bar number, a section's name at its first bar, the tempo, and the chord symbols. The title and the
   staves' names are printed at the head.
+- **Bars are numbered as a musician numbers them** (`barNumber`, Dorico, MuseScore, Sibelius): from the first full bar,
+  a pickup counted with the bar it leads into, so a hymn with a pickup reads bars 1–16, never 1–17. One function says
+  every bar the learner reads (the score's numbers and MEI `n`, a section's bars, the Player's loop, Played through,
+  the chord views, a take, the library's "Bar 9 of 16", the song page's strip, where the pickup's cell joins bar 1);
+  the bar indexes underneath, and the address's `bar`, still count every written bar from 0. A song's saved place
+  keeps whether it opens on a pickup, so the library numbers it without its music.
 - **Pages** are A4 at print size (`PRINT_SCALE`: a staff a 33rd of the page's width, as the printed hymnal), their
   chord symbols 2.6 staff spaces tall. Every page but the last is filled to its height, each gap growing by at most
   `PAGE_STRETCH`; the last is ragged.

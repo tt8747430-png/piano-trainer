@@ -5,6 +5,8 @@ export {
   isFolderPicture,
   folderName,
   LIBRARY_SORTS,
+  SORT_DIRECTIONS,
+  sortStarts,
   MOST_FOLDERS,
   MOST_PIECES,
   ownFolderId,
@@ -13,15 +15,15 @@ export {
   type FolderPaint,
   type FolderPicture,
   type LibrarySort,
+  type SortDirection,
   type OwnFolderId,
   type SongPlace,
   type TrashedSong,
 } from './model/types'
-export { CARD_SHOWS, DEFAULT_CARD_LOOK, type CardLook, type CardShow } from './model/card-look'
 export {
-  type CardPlace,
   createLibraryStore,
   INITIAL_LIBRARY,
+  isFolderId,
   LIBRARY_STORAGE_KEY,
   LIBRARY_VERSION,
   type LibraryState,
@@ -58,7 +60,7 @@ export {
 } from './model/permissions'
 export { useCan, usePermissions } from './model/use-can'
 export { LibraryStoreProvider, useLibrary, useLibraryStoreApi } from './model/context'
-export { selectFavourites, selectIsFavourite, selectSort } from './model/selectors'
+export { selectDirection, selectFavourites, selectIsFavourite, selectSort } from './model/selectors'
 export { useLibraryLayout } from './model/use-library-layout'
 export { FolderTile } from './ui/FolderTile'
 export { FOLDER_PICTURE_ICONS } from './ui/folder-pictures'

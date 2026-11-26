@@ -1,17 +1,19 @@
 import type { Locale } from '@/shared/i18n'
+import type { INTERVAL_GROUPS } from '@/shared/lib/music'
 import type { RowInterval } from './interval-rows'
 
 /** Songs by title, in each language its own list: a Russian learner knows other songs. */
-export type SongTitles = Readonly<Record<Locale, readonly string[]>>
+type SongTitles = Readonly<Record<Locale, readonly string[]>>
 
 /** The songs that open with an interval, rising and falling; the unison has one list. */
-export interface IntervalSongs {
+interface IntervalSongs {
   readonly up: SongTitles
   readonly down?: SongTitles
 }
 
 /** The intervals a song is known by: those within the octave, the tritone once. */
-type SongInterval = Exclude<RowInterval, 'A4' | 'd5' | `${string}${9 | 11 | 13}`> | 'tritone'
+type SongInterval =
+  Exclude<RowInterval, 'A4' | 'd5' | (typeof INTERVAL_GROUPS.compound)[number]> | 'tritone'
 
 const titles = (en: readonly string[], ru: readonly string[]): SongTitles => ({ en, ru })
 
@@ -114,8 +116,11 @@ const SONGS: Readonly<Record<SongInterval, IntervalSongs>> = {
   },
 }
 
+/** Whether an interval has songs of its own. */
+const isSongInterval = (name: string): name is SongInterval => Object.hasOwn(SONGS, name)
+
 /** The songs that open with a row's interval; none for an interval past the octave. */
 export function intervalSongs(name: RowInterval): IntervalSongs | undefined {
   if (name === 'A4' || name === 'd5') return SONGS.tritone
-  return name in SONGS ? SONGS[name as SongInterval] : undefined
+  return isSongInterval(name) ? SONGS[name] : undefined
 }

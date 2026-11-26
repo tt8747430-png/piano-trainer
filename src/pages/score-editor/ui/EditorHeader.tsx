@@ -1,25 +1,44 @@
+import { useNavigate } from '@tanstack/react-router'
 import { Ellipsis, Redo2, Undo2, X } from 'lucide-react'
+import { useAccount } from '@/shared/lib/account'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt } from '@/features/score-editor'
+import { modifierCaps, useShortcutsPlatform } from '@/shared/lib/shortcuts'
 import { Button } from '@/shared/ui/primitives/button'
 import { ModeSwitch } from '@/widgets/mode-switch'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
-/** The editor's bar's lead (its canvas): Close, the one way out. */
-export function EditorLead() {
+/**
+ * The editor's bar's lead (its canvas): Close, the one way out; on a laptop, where the learner's own
+ * song is saved, or where an editor's draft stands (`said`), beside it (the EditorLaptop boards); a
+ * phone's bar has no room, so its ··· says it.
+ */
+export function EditorLead({ own, said }: { own: boolean; said?: ReactNode }) {
   const { t } = useTranslation('common')
+  const { t: te } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
+  const { account } = useAccount()
+  const laptop = useMediaQuery(LAPTOP)
   return (
-    <Button
-      variant="tool"
-      size="icon"
-      aria-label={t('close')}
-      title={t('close')}
-      onClick={actions.close}
-    >
-      <X aria-hidden />
-    </Button>
+    <>
+      {/* Close as a glass circle, over the music (the editor board's bar). */}
+      <Button
+        variant="bar"
+        size="icon"
+        aria-label={t('close')}
+        title={t('close')}
+        onClick={actions.close}
+      >
+        <X aria-hidden />
+      </Button>
+      {laptop && (said || own) ? (
+        <p className="ms-1 truncate text-footnote text-muted-foreground">
+          {said ?? <span role="status">{te(account ? 'savedAccount' : 'savedHere')}</span>}
+        </p>
+      ) : null}
+    </>
   )
 }
 
@@ -32,11 +51,21 @@ export function EditorMode({ done }: { done?: ReactNode }) {
   const { meta, takes } = useScoreEditorContext()
   const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
   const recording = takes.stage !== 'idle'
+  const navigate = useNavigate()
+  // The first bar is where the Player opens: a URL never says so. The Player takes the editor's
+  // place in the history, so Close still goes back where the learner came from.
+  const play = () =>
+    void navigate({
+      to: '/play/$pieceId',
+      params: { pieceId: meta.id },
+      search: bar > 1 ? { bar } : {},
+      replace: true,
+    })
   return (
     done ?? (
       <ModeSwitch
-        pieceId={meta.id}
-        bar={bar}
+        mode="edit"
+        onSwitch={play}
         waiting={recording ? t('recordingBar.label') : undefined}
       />
     )
@@ -54,13 +83,18 @@ export function EditorActions() {
   const canUndo = useEditorState((state) => state.past.length > 0)
   const canRedo = useEditorState((state) => state.future.length > 0)
   const recording = takes.stage !== 'idle'
+  // Each tooltip names its key too (Flat's; the owner: "Shortcuts in every tooltip").
+  const mac = useShortcutsPlatform()
+  const { mod, shift } = modifierCaps(mac)
+  const join = (...caps: string[]) => caps.join(mac ? '' : '+')
   return (
-    <>
+    // Undo, redo and More in one glass pill, floating over the music as the editor board draws them.
+    <div className="flex items-center rounded-pill glass">
       <Button
         variant="tool"
         size="icon"
         aria-label={t('undo')}
-        title={t('undo')}
+        title={`${t('undo')} (${join(mod, 'Z')})`}
         disabled={!canUndo || recording}
         onClick={() => actions.dispatch({ type: 'undo' })}
       >
@@ -70,7 +104,7 @@ export function EditorActions() {
         variant="tool"
         size="icon"
         aria-label={t('redo')}
-        title={t('redo')}
+        title={`${t('redo')} (${join(shift, mod, 'Z')})`}
         disabled={!canRedo || recording}
         onClick={() => actions.dispatch({ type: 'redo' })}
       >
@@ -87,6 +121,6 @@ export function EditorActions() {
       >
         <Ellipsis aria-hidden />
       </Button>
-    </>
+    </div>
   )
 }

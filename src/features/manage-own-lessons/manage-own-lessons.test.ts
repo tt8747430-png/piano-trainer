@@ -1,10 +1,17 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
-import { createOwnLessonsStore } from '@/entities/own-lessons'
+import { blankLesson } from '@/entities/lesson'
+import {
+  createOwnLessonsStore,
+  MOST_OWN,
+  OWN_COURSE_TEMPLATES,
+  type OwnCourseTemplate,
+} from '@/entities/own-lessons'
 import { createMemoryStorage } from '@/shared/lib'
 import {
   addToCourse,
   createOwnCourse,
+  createOwnCourseFrom,
   createOwnLesson,
   deleteOwnCourse,
   deleteOwnLesson,
@@ -134,5 +141,58 @@ describe('own courses', () => {
       'own-course-2',
     ])
     expect(own.getState().lessons).toHaveLength(1)
+  })
+})
+
+describe('a course from a template', () => {
+  const template: OwnCourseTemplate = {
+    id: 'two-lessons',
+    title: { en: 'Two lessons', ru: 'Два урока' },
+    line: { en: 'Two of them', ru: 'Их два' },
+    look: { picture: 'piano', paint: 'yellow' },
+    lessons: [
+      { ...blankLesson('first', 'First'), after: [] },
+      { ...blankLesson('second', 'Second'), after: ['first'] },
+    ],
+  }
+
+  it('copies every lesson under the next numbers and makes the course hold them, in the learner’s language', () => {
+    const own = store()
+    createOwnLesson(own, 'Mine')
+    expect(createOwnCourseFrom(own, template, ' Two weeks ', 'ru')).toBe('own-course-1')
+    const { lessons, courses, nextLesson, nextCourse } = own.getState()
+    expect(lessons.map((lesson) => [lesson.id, lesson.title.en])).toEqual([
+      ['own-lesson-1', 'Mine'],
+      ['own-lesson-2', 'First'],
+      ['own-lesson-3', 'Second'],
+    ])
+    expect(lessons.every((lesson) => lesson.after === undefined)).toBe(true)
+    expect(courses).toEqual([
+      {
+        id: 'own-course-1',
+        title: 'Two weeks',
+        line: 'Их два',
+        look: { picture: 'piano', paint: 'yellow' },
+        lessons: ['own-lesson-2', 'own-lesson-3'],
+      },
+    ])
+    expect([nextLesson, nextCourse]).toEqual([4, 2])
+  })
+
+  it('makes nothing for a name not kept, or where the copies would pass the most kept', () => {
+    const own = store()
+    expect(createOwnCourseFrom(own, template, '  ', 'en')).toBeNull()
+    for (let n = 0; n < MOST_OWN - 1; n += 1) createOwnLesson(own, `Lesson ${n}`)
+    expect(createOwnCourseFrom(own, template, 'Two weeks', 'en')).toBeNull()
+    expect(own.getState().courses).toEqual([])
+    expect(own.getState().lessons).toHaveLength(MOST_OWN - 1)
+  })
+
+  it('keeps the copies across a reload, as any lesson of the learner’s', () => {
+    const storage = createMemoryStorage()
+    const own = createOwnLessonsStore({ storage, otherTabs: new EventTarget() })
+    createOwnCourseFrom(own, OWN_COURSE_TEMPLATES[0]!, 'Two weeks', 'en')
+    const again = createOwnLessonsStore({ storage, otherTabs: new EventTarget() })
+    expect(again.getState()).toEqual(own.getState())
   })
 })

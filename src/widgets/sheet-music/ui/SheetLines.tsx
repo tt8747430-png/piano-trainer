@@ -5,7 +5,14 @@ import type { Performance } from '@/shared/lib/arrangement'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { LANDSCAPE_PHONE, PAGE, PRINT_SCALE, useElementSize, useMediaQuery } from '@/shared/lib'
 import { staffScale, type PieceLayout, type ScoreHeader } from '@/entities/piece'
-import { hasCredits, PageCanvas, SheetCredits, SheetTitle, type VerdictMark } from '@/shared/ui'
+import {
+  hasCredits,
+  LINES_HEAD,
+  PageCanvas,
+  SheetCredits,
+  SheetTitle,
+  type VerdictMark,
+} from '@/shared/ui'
 import {
   lineLead,
   measureWidths,
@@ -180,12 +187,12 @@ export function SheetLines({
       <section
         ref={box}
         aria-label={t('sheet.label')}
-        className="flex h-full scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain"
+        className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain px-3"
         style={{ gap: LINE_GAP }}
       >
-        <div>
+        <div className={LINES_HEAD}>
           <SheetTitle title={title} place="lines" />
-          {hasCredits(credits) ? <SheetCredits credits={credits} /> : null}
+          {hasCredits(credits) ? <SheetCredits credits={credits} align="center" /> : null}
         </div>
         {lines.map(line)}
         {/* Room to scroll the last line clear of what floats over the sheet's foot (`--float-room`),

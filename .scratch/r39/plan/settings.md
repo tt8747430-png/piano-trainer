@@ -13,6 +13,11 @@ one page per group.
   (Match system split light and dark, Light, Dark), the chosen one ringed in ink; Language is English | Русский.
 - **Destructive last, alone, red:** Reset progress at the foot of Storage and backup.
 - **Laptop:** the group list in a 372 pane with the account above it, the chosen page beside it in a 704 column.
+- **The sidebar's foot is one account row, as Claude's** (owner, 2026-11-05 and 2026-11-17: "the side bar is not done
+  like the for example claude sidebar is done"; canvas v392): the learner's picture, name and ⌃⌄; it opens a menu above
+  itself: the email, Profile, Settings, Language (its value in grey), Help, then Sign out under a hairline. No gear at
+  the foot; Settings stays a page with its groups listed on the left, as Claude's own Settings page. The menu keeps 248
+  wide when the sidebar folds to its rail.
 
 - **Every page drawn** (canvas 131): Account holds Editorial access (Role, Preview as learner) for editors and
   administrators, Sync (status, Last synced, Changes pending, Sync now), Sign out (asks) and Delete account (asks,

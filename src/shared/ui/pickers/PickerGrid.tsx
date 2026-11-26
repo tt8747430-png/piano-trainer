@@ -91,7 +91,7 @@ export function PickerCell({
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        'grid place-items-center px-0.5 text-foreground/75 choice focus-visible:z-10 focus-visible:-outline-offset-3 disabled:opacity-35 motion-reduce:transition-none',
+        'grid place-items-center px-0.5 text-foreground/75 choice focus-visible:z-10 focus-visible:-outline-offset-3 disabled:opacity-50 motion-reduce:transition-none',
         row ? 'h-10 min-w-11 shrink-0 rounded-control' : 'min-h-13 min-w-11 bg-card',
       )}
     >

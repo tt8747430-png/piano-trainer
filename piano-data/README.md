@@ -4,15 +4,25 @@ The owner's source material for Piano Trainer: the books its courses follow, ref
 links. Nothing here ships with the app; content is written from it into `src/entities/*/content/`. Deployments leave this folder out, and a push
 that changes only it builds nothing (`.vercelignore`, `vercel.ts`).
 
-| Folder                              | What it holds                                                                                                                                                               |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`method-books/`](method-books)     | The method books whose lessons, patterns and songs the app teaches as courses                                                                                               |
-| [`courses/`](courses)               | Courses taken as sheets: Vasily Gorshkov's accompaniment course, lesson by lesson                                                                                           |
-| [`books/`](books)                   | E-books and cheat sheets, by author or publisher                                                                                                                            |
-| [`scores/`](scores)                 | Sheet music; church songs under `hymns/`, by kind and (arrangements) by meter                                                                                               |
-| [`reference-apps/`](reference-apps) | Screenshots of other piano apps (and of this one), by app and by screen, numbered in viewing order                                                                          |
-| [`web-references/`](web-references) | Saved links (`links/`, Pianote's under `pianote/`), images (`images/`) and screenshots of web pages (`screenshots/`, by topic)                                              |
-| [`transcriptions/`](transcriptions) | Transcripts of the owner's piano videos on YouTube, one file per video, by playlist ([`youtube/`](transcriptions/youtube/README.md), made by `scripts/youtube-transcripts`) |
+| Folder                              | What it holds                                                                                                                                                                     |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`method-books/`](method-books)     | The method books whose lessons, patterns and songs the app teaches as courses                                                                                                     |
+| [`courses/`](courses)               | Courses taken as sheets: Vasily Gorshkov's accompaniment course, lesson by lesson                                                                                                 |
+| [`books/`](books)                   | E-books and cheat sheets, by author or publisher                                                                                                                                  |
+| [`scores/`](scores)                 | Sheet music; church songs under `hymns/`, by kind and (arrangements) by meter                                                                                                     |
+| [`reference-apps/`](reference-apps) | Screenshots of other piano apps (and of this one), by app and by screen, numbered in viewing order                                                                                |
+| [`web-references/`](web-references) | Web pages saved whole (`saved-pages/`, by site), links (`links/`), images (`images/`), screenshots (`screenshots/`, by topic) and a copy of Musicca's site (`musicca-site-copy/`) |
+| [`code-examples/`](code-examples)   | `example-app.zip`: a sample app's source the owner sent as a reference                                                                                                            |
+| [`transcriptions/`](transcriptions) | Transcripts of the owner's piano videos on YouTube, one file per video, by playlist ([`youtube/`](transcriptions/youtube/README.md), made by `scripts/youtube-transcripts`)       |
+
+## Naming
+
+Every screenshot is named by what it shows: `NNN-area-what-it-shows.png`, numbered from `001` in viewing order, in
+lower case with hyphens (`flat-score-editor/091-library-my-scores-home-playlists.png`). The first word after the number
+is the screen or area (`player`, `palette`, `library`, `explore`, `settings`), so `ls` groups a screen's shots and a
+search for `*-library-*` finds them. A folder of one flow's shots takes the same form (`courses-app/009-major-scales/`).
+Saved web pages and links are named by their title (`saved-pages/piano-org/chord-inversions-root-1st-and-2nd-position.webarchive`).
+Cite a shot by its folder and number (`flat-score-editor` 091–097) and its name when it matters.
 
 ## Method books
 
@@ -133,21 +143,36 @@ and MIDI files and recordings. Names are the titles transliterated.
 
 ## Reference apps
 
-| App                                                      | Screens | What they show                                                                                                                                                                                            |
-| -------------------------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`chord-trainer/`](reference-apps/chord-trainer)         | 9       | a chord trainer: quiz on a staff, answer sheets of chord types, the chord builder                                                                                                                         |
-| [`clefs/`](reference-apps/clefs)                         | 4       | Clefs: practice home, a course chapter of lessons, a note-on-staff exercise, results                                                                                                                      |
-| [`courses-app/`](reference-apps/courses-app)             | 51      | a dark courses app (its name is not on its screens): the course carousel, then each course's page and lessons (Introduction to the Piano to Improvising with Chords), one folder each                     |
-| [`duolingo-music/`](reference-apps/duolingo-music)       | 7       | Duolingo Music: course sections, exercises with labelled keys                                                                                                                                             |
-| [`flat-score-editor/`](reference-apps/flat-score-editor) | 5       | Flat: the score editor's note toolbar, palette, keyboard input, instruments                                                                                                                               |
-| [`flowkey/`](reference-apps/flowkey)                     | 9       | Flowkey: home, continue learning, courses, the player                                                                                                                                                     |
-| [`journey-app/`](reference-apps/journey-app)             | 84      | a theory app (its name is not on its screens): its four journeys as maps of chapters and nodes, Settings, and its tools (Key Explorer, Circle of Fifths, Chord Builder, Progression Lab), one folder each |
-| [`piano-trainer/`](reference-apps/piano-trainer)         | 8       | Piano Trainer itself, as it looked: the Player's pattern sheet, Practice, Progressions, the score editor, the Player on _Thank you, God_ and its Setup                                                    |
-| [`sibelius/`](reference-apps/sibelius)                   | 3       | Sibelius: note input with its keypad, a passage chosen                                                                                                                                                    |
-| [`theory-trainer/`](reference-apps/theory-trainer)       | 3       | a theory app: home, an article (the chromatic scale), interval reference cards                                                                                                                            |
-| [`ultimate-piano/`](reference-apps/ultimate-piano)       | 34      | The Ultimate Piano: scales on keys and staff, the circle of fifths, passing chords; then the C major scale (19–28) and its diatonic chords (29–34) played step by step                                    |
+One folder per app, its screens named as above (Naming). Shots of the owner's own phone go to the app they show.
+
+| App                                                                          | Screens | What they show                                                                                                                                                                                                                               |
+| ---------------------------------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`chord-trainer/`](reference-apps/chord-trainer)                             | 9       | a chord trainer: quiz on a staff, answer sheets of chord types, the chord builder                                                                                                                                                            |
+| [`chordify/`](reference-apps/chordify)                                       | 22      | Chordify: the player's views (diagrams, grid, over the lyrics), the chord sheet, the Toolkit's Learn the song by section, song information and the menu, Discover                                                                            |
+| [`clefs/`](reference-apps/clefs)                                             | 4       | Clefs: practice home, a course chapter of lessons, a note-on-staff exercise, results                                                                                                                                                         |
+| [`courses-app/`](reference-apps/courses-app)                                 | 49      | a dark courses app (its name is not on its screens): the course carousel, then each course's page and lessons (Introduction to the Piano to Improvising with Chords), one folder each                                                        |
+| [`dorico/`](reference-apps/dorico)                                           | 165     | Dorico for iPad: the note-input tutorial (caret, durations, markings, editing), Write's panels, Setup's layout options, Play                                                                                                                 |
+| [`duolingo-music/`](reference-apps/duolingo-music)                           | 8       | Duolingo Music: course sections, exercises with labelled keys, results                                                                                                                                                                       |
+| [`flat-score-editor/`](reference-apps/flat-score-editor)                     | 157     | Flat: the editor and its palette (001–071), a new score (072–079), Community and Explore (080–082, 098), the ≡ menu and Instruments (083–086), Credits and Publish (087–090), the library (091–097), the laptop editor (099–157, `desktop-`) |
+| [`flowkey/`](reference-apps/flowkey)                                         | 9       | Flowkey: home, continue learning, courses, the player                                                                                                                                                                                        |
+| [`journey-app/`](reference-apps/journey-app)                                 | 86      | a theory app (its name is not on its screens): its four journeys as maps of chapters and nodes, Settings, and its tools (Key Explorer, Circle of Fifths, Chord Builder, Progression Lab), one folder each                                    |
+| [`music-theory-book-app/`](reference-apps/music-theory-book-app)             | 65      | a music theory book as an app: chapter contents, sequences, chorales, figured bass                                                                                                                                                           |
+| [`noji/`](reference-apps/noji)                                               | 15      | Noji: home with Continue and decks, the streak calendar, a deck's page and settings, publishing a deck, sharing                                                                                                                              |
+| [`piano-chords-and-scales-app/`](reference-apps/piano-chords-and-scales-app) | 60      | a chords and scales app: settings (instrument, MIDI, notation), scales on staff and keys, progressions and their editor, intervals, chord flashcards, the keyboard on its side                                                               |
+| [`quizlet/`](reference-apps/quizlet)                                         | 7       | Quizlet: settings (offline studying), profile and streak, achievements                                                                                                                                                                       |
+| [`sibelius/`](reference-apps/sibelius)                                       | 3       | Sibelius: note input with its keypad, a passage chosen                                                                                                                                                                                       |
+| [`simpleclub/`](reference-apps/simpleclub)                                   | 1       | simpleclub: home with exam readiness, by Night                                                                                                                                                                                               |
+| [`theory-trainer/`](reference-apps/theory-trainer)                           | 3       | a theory app: home, an article (the chromatic scale), interval reference cards                                                                                                                                                               |
+| [`ultimate-piano/`](reference-apps/ultimate-piano)                           | 34      | The Ultimate Piano: scales on keys and staff, the circle of fifths, passing chords; then the C major scale (019–028) and its diatonic chords (029–034) played step by step                                                                   |
 
 ## Web references
+
+### Saved pages
+
+Whole pages kept as Safari web archives, by site, under `web-references/saved-pages/`: `piano-org/` (30 theory and
+practice articles), `vita-piano/` (its complete guides and the D major chord), `musicca/` (the finders, the Chord
+player, the circle of fifths), `chord-lesson-sites/` (C major chords, arpeggios and scale, progressions) and `flat/`
+(Chopin's _Fantaisie-Impromptu_ as Flat shows it).
 
 ### Pianote
 
@@ -199,4 +224,5 @@ Web pages kept as screenshots, under `web-references/screenshots/`, numbered in 
 | `instagram/`                                | 3     | Instagram reels: chord theory, 7-3-6-2-5-1-4 as a bossa nova                                                   |
 | `jon-batiste-blues-pianote/`                | 2     | Pianote's video _Jon Batiste Teaches The Blues_                                                                |
 | `mooz/`                                     | 2     | MOOZ's blog: beginner hits, live lessons with a teacher                                                        |
+| `musicca/`                                  | 4     | Musicca's progressions tables: common pop and rock, jazz and blues, songs with four chords                     |
 | `simply-piano/`                             | 7     | Simply Piano as others describe it: its courses (pianodreamers.com), how a lesson works, reviews, alternatives |

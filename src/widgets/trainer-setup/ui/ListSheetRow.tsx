@@ -1,12 +1,11 @@
-import { Check } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { OpensMark, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { CheckMark, OpensMark, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** One choice of a list sheet: its value, its name, and what it is on C where it shows (Cm7, m3). */
-export interface ListOption {
+interface ListOption {
   readonly value: string
   readonly label: string
   /** An example in the musician's notation, printed at the row's end. */
@@ -14,24 +13,9 @@ export interface ListOption {
 }
 
 /** A list sheet's group: its heading (none for a list of one group) and its choices. */
-export interface ListGroup {
+interface ListGroup {
   readonly label?: string
   readonly options: readonly ListOption[]
-}
-
-/** A choice's check box at the row's start: filled in ink while included, an empty square while not. */
-function CheckBox({ on }: { on: boolean }) {
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        'grid size-6 shrink-0 place-items-center rounded-control border transition-colors duration-200 ease-out',
-        on ? 'border-foreground bg-foreground text-background' : 'border-input',
-      )}
-    >
-      {on ? <Check className="size-4" strokeWidth={3} /> : null}
-    </span>
-  )
 }
 
 /**
@@ -83,7 +67,7 @@ export function ListSheetRow({
   return (
     // Its own box in a list of rows: the list's hairline is drawn under it, the button's hover inside.
     <div>
-      <Sheet>
+      <Sheet at={{}}>
         <SheetTrigger
           render={
             <button
@@ -155,7 +139,7 @@ export function ListSheetRow({
                       {full ? t('choice.none') : t('choice.all')}
                     </Button>
                   </div>
-                  <ul className="card divide-y divide-hairline overflow-hidden">
+                  <ul className="card rows-hairline overflow-hidden">
                     {group.options.map((option) => {
                       const on = chosen.has(option.value)
                       return (
@@ -168,7 +152,7 @@ export function ListSheetRow({
                             onClick={() => turn(option.value)}
                             className="flex min-h-12 w-full items-center gap-3 px-4 text-left transition-colors duration-200 ease-out hover:bg-muted"
                           >
-                            <CheckBox on={on} />
+                            <CheckMark checked={on} />
                             <span
                               className={cn(
                                 'min-w-0 flex-1',

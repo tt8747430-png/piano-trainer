@@ -4,7 +4,7 @@ import { createContext, use } from 'react'
 export const SCREEN_BAR_VAR = '--screen-bar'
 
 /** The bar measured: its rows, which pinned content sits under, and its whole box, clear of the notch. */
-export interface ScreenBarSize {
+interface ScreenBarSize {
   readonly rows: number
   readonly box: number
 }
@@ -12,17 +12,14 @@ export interface ScreenBarSize {
 /** No bar on the screen. */
 export const NO_BAR_SIZE: ScreenBarSize = { rows: 0, box: 0 }
 
-/** A screen's bar, as its header reports it. */
+/** A screen's bar, as its header reports it. It never leaves the screen (craft-details, Bars stay, quietly). */
 export interface ScreenBar {
-  readonly shown: boolean
   /** The header measured: `NO_BAR_SIZE` once it is gone. */
   report(size: ScreenBarSize): void
-  /** Focus is inside the bar: it stays. */
-  hold(held: boolean): void
 }
 
-/** Outside a `ScreenBarProvider`: a bar that always shows, nothing offset. */
-const NO_BAR: ScreenBar = { shown: true, report: () => {}, hold: () => {} }
+/** Outside a `ScreenBarProvider`: nothing offset. */
+const NO_BAR: ScreenBar = { report: () => {} }
 export const ScreenBarContext = createContext<ScreenBar>(NO_BAR)
 
 /** The screen's bar, for its header. */

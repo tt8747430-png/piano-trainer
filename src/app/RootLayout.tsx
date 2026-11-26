@@ -4,6 +4,7 @@ import { ReloadOnRestore } from '@/features/backup-data'
 import { useFirstMidiSession } from '@/features/record-practised'
 import { ShortcutsHelp } from '@/features/shortcuts-help'
 import { useTrackAchievements } from '@/features/track-achievements'
+import { SKIP_WELCOME } from '@/shared/config'
 import { startKeyboardReveal, startKeyboardViewport } from '@/shared/lib'
 import { AppUpdateProvider, createAppUpdate } from '@/shared/lib/app-update'
 import { Welcome } from '@/widgets/welcome'
@@ -44,15 +45,16 @@ export function RootLayout() {
         <Parents>
           <Outlet />
         </Parents>
-        {/* The app's notices, stacked above the tab bar, never over each other. */}
-        <div className="pointer-events-none fixed inset-x-4 bottom-28 z-40 mx-auto flex max-w-md flex-col gap-2 landscape-phone:bottom-4 lg:bottom-4">
+        {/* The app's notices, stacked, never over each other, where the AppLayers board puts them: on a
+            phone at the top, under the status bar; on a laptop centred at the foot, 460 wide. */}
+        <div className="pointer-events-none fixed inset-x-3 top-[calc(env(safe-area-inset-top)+0.5rem)] z-40 flex flex-col gap-2 lg:inset-x-auto lg:top-auto lg:left-1/2 lg:bottom-7 lg:w-115 lg:-translate-x-1/2">
           <LearnerViewNotice />
           <StorageFullNotice />
           <UpdatePrompt offer={!fullScreen} />
         </div>
         <ReloadOnRestore />
         <DeletionGate />
-        <Welcome shown={!onAccountPages} />
+        <Welcome shown={!onAccountPages && !SKIP_WELCOME} />
       </ShortcutsHelp>
     </AppUpdateProvider>
   )

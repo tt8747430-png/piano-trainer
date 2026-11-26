@@ -3,7 +3,14 @@ import { selectChordFinder, useSettings, useSettingsStoreApi } from '@/entities/
 import { useKeysDown } from '@/features/connect-midi'
 import { rememberChords } from '@/features/set-preference'
 import { keyListParam, readKeyList, toggled, useSetSearch, useWakeLock } from '@/shared/lib'
-import { keyFromParam, pitchClass, pitchClassOf, type Key, type Midi } from '@/shared/lib/music'
+import {
+  keyFromParam,
+  lowestFirst,
+  pitchClass,
+  pitchClassOf,
+  type Key,
+  type Midi,
+} from '@/shared/lib/music'
 import {
   EMPTY_LOG,
   findChord,
@@ -48,11 +55,9 @@ interface ChordFinder {
   clear(): void
   /** Whether there are chords played to forget. */
   readonly canForget: boolean
-  /** Forgets the chords played, on the staff and on the device. */
-  forget(): void
+  /** Forgets the chords played, on the staff and on the device; returns what brings them back (Undo). */
+  forget(): () => void
 }
-
-const lowestFirst = (keys: Iterable<Midi>): Midi[] => [...keys].sort((a, b) => a - b)
 
 /**
  * The chord a MIDI keyboard plays, as its keys went down, read on once they are let go; else the keys
@@ -106,11 +111,6 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
     if (remember) rememberChords(store, log.chords.filter(namesChord))
   }, [store, remember, log.chords])
 
-  const forget = () => {
-    // The keys down now are heard already: the log starts empty, not from them again.
-    setLog(EMPTY_LOG)
-    setHeard(downKey)
-  }
   // The chord's root tapped again lets the whole chord go; any other key tapped comes or goes alone.
   const finding = findChord(keys, musicKey)
   const root =
@@ -142,8 +142,12 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
     clear: () => write(''),
     canForget: remember && log.chords.length > 0,
     forget: () => {
-      forget()
-      rememberChords(store, [])
+      const kept = log
+      // The keys down now are heard already: the log starts empty, not from them again. The device
+      // follows the log, so it forgets them too, and keeps them again on Undo.
+      setLog(EMPTY_LOG)
+      setHeard(downKey)
+      return () => setLog(kept)
     },
   }
 }

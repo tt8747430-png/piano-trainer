@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { spellChord, type ChordQuality } from './chord'
+import { spellChord } from './chord'
+import { type ChordQuality } from './chord-quality'
 import { buildChord, CHORD_PARTS, type ChordParts } from './chord-parts'
 import { rangeOf } from './keyboard'
 import { note, type SpelledNote } from './note'

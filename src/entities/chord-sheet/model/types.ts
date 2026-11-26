@@ -2,7 +2,6 @@ import { TRANSPOSITION_RANGE } from '@/shared/lib/music'
 
 /** The band's instruments, each turned on or off and up or down on a sheet (R29 CP6). */
 export const BAND_PARTS = ['piano', 'bass', 'drums'] as const
-export type BandPart = (typeof BAND_PARTS)[number]
 
 export interface PartLevel {
   readonly on: boolean
@@ -10,15 +9,19 @@ export interface PartLevel {
   readonly level: number
 }
 
+/** The bars a sheet may be counted in by (Musicca's count-in, the recorder's choices). */
+export const COUNT_INS = [0, 1, 2] as const
+export type CountIn = (typeof COUNT_INS)[number]
+
 /** How a sheet is played (R29 CP6): saved with it. */
 export interface ChordSheetSettings {
   readonly piano: PartLevel
   readonly bass: PartLevel
   readonly drums: PartLevel
-  /** A bar counted in before the music. */
-  readonly countIn: boolean
-  /** The sheet played again and again until Stop. */
-  readonly repeat: boolean
+  /** Bars counted in before the music: none, one or two. */
+  readonly countIn: CountIn
+  /** How many times the sheet plays through, 1 to 8; 0 again and again until Stop. */
+  readonly plays: number
   /** 0 to 100 %. */
   readonly volume: number
   /** Semitones the sheet is heard and shown moved by, the short way: −5 to +6. */
@@ -29,28 +32,58 @@ export const DEFAULT_SHEET_SETTINGS: ChordSheetSettings = {
   piano: { on: true, level: 80 },
   bass: { on: true, level: 70 },
   drums: { on: true, level: 70 },
-  countIn: false,
-  repeat: true,
+  countIn: 0,
+  plays: 0,
   volume: 80,
   transpose: 0,
 }
 
 /** The tempos a chord sheet plays at, in beats a minute. */
 export const SHEET_TEMPO = { min: 40, max: 240 } as const
+/** The most times a sheet plays through before it ends (0: until Stop). */
+export const SHEET_PLAYS = 8
 export const TRANSPOSE_RANGE = TRANSPOSITION_RANGE
 
 /** A sheet as kept (R29 CP5): its text (`sheetToText`), its style, its tempo and how it plays. */
 export interface ChordSheetEntry {
   readonly text: string
+  /**
+   * One of My chord sheets' edits since its last Save, as text, kept on the device and synced; the
+   * sheet opens on it, and Save makes it the sheet's chords. None while nothing is changed.
+   */
+  readonly draft: string | null
   readonly style: string
   readonly tempo: number
   readonly settings: ChordSheetSettings
 }
 
-/** One of My chord sheets: an entry with its id and its name. */
+/**
+ * A sheet shared live (R39-10): its link's id, whether this copy may change it (its owner, or a link
+ * that can edit), whether it is the learner's own, and the revision this copy last took.
+ */
+export interface OnlineLink {
+  readonly id: string
+  readonly canEdit: boolean
+  readonly mine: boolean
+  readonly revision: number
+  /** A save made here not yet written online (offline): written when the connection is back. */
+  readonly unsent: boolean
+}
+
+/** One of My chord sheets: an entry with its id and its name, and its online link where it is shared. */
 export interface SavedChordSheet extends ChordSheetEntry {
   readonly id: string
   readonly name: string
+  readonly online: OnlineLink | null
+}
+
+/** A song the Chord player's library holds: its name, who it is by, its sheet's text and tempo. */
+export interface ChordSheetSong {
+  readonly id: string
+  readonly name: string
+  readonly by: string
+  readonly text: string
+  readonly tempo: number
 }
 
 /** At most this many of the learner's own sheets are kept. */

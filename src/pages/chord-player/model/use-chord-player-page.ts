@@ -3,13 +3,16 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   selectSaved,
+  SHEET_TEMPO,
+  selectScratchName,
   useChordSheets,
   useChordSheetsStoreApi,
   type ChordSheetEntry,
 } from '@/entities/chord-sheet'
-import { holdSheet, saveAsMine, startNew } from '@/features/manage-chord-sheets'
-import { shareLink } from '@/shared/lib'
-import { lineSheet, sheetToText, textToSheet } from '@/shared/lib/arrangement'
+import { holdSheet, markOpened, saveAsMine, startNew } from '@/features/manage-chord-sheets'
+import { openLink } from '@/features/share-chord-sheet'
+import { useChordShare } from '@/shared/lib/chord-share'
+import { lineSheet, sheetToText } from '@/shared/lib/arrangement'
 import {
   C_MAJOR,
   keyFromParam,
@@ -18,23 +21,30 @@ import {
   parseNumerals,
   type Numeral,
 } from '@/shared/lib/music'
-import { confirm, say } from '@/shared/ui'
-import { useChordSheet, type ChordPlayerRoutes } from '@/widgets/chord-player'
+import { useSetSearch } from '@/shared/lib'
+import { confirm, say, sayUndo } from '@/shared/ui'
+import { useChordSheet, type ChordPlayerRoutes, type ChordPlayerView } from '@/widgets/chord-player'
 
 /**
  * The Chord player page's acts (R29 CP4, CP5): the sheet open (one of My chord sheets, or the sheet in
- * hand), a progression or a shared sheet put in hand on arrival with Undo, New, Save as my chord
- * sheet, Share link, and the links that open another sheet.
+ * hand), a progression put in hand on arrival with Undo, a shared sheet's link opened among My chord
+ * sheets (R39-10), New, Save as my chord sheet, Share, and the links that open another sheet.
  */
 export function useChordPlayerPage() {
   const { t } = useTranslation('practice')
   const view = useSearch({ from: '/shell/practice/chord-player' })
   const navigate = useNavigate()
+  const setSearch = useSetSearch<ChordPlayerView>()
   const store = useChordSheetsStoreApi()
   const hand = useChordSheet(view.sheet)
   const saved = useChordSheets(selectSaved(view.sheet))
   const [saving, setSaving] = useState<string | null>(null)
-  const name = saved?.name ?? t('chordPlayer.untitled')
+  /** Share open: on a saved sheet; for the sheet in hand, once Save as my chord sheet has named it. */
+  const [sharing, setSharing] = useState(false)
+  const [shareAfterSave, setShareAfterSave] = useState(false)
+  const chordShare = useChordShare()
+  const scratchName = useChordSheets(selectScratchName)
+  const name = saved?.name ?? scratchName ?? t('chordPlayer.untitled')
 
   const openSheet = (sheet: string | undefined) =>
     void navigate({
@@ -43,26 +53,27 @@ export function useChordPlayerPage() {
       replace: true,
     })
 
-  /** A sheet put in hand, the one it replaced back with Undo. */
-  const hold = (entry: ChordSheetEntry, said: string) => {
-    const before = holdSheet(store, entry)
+  /** A sheet put in hand under its name, the one it replaced back with Undo. */
+  const hold = (entry: ChordSheetEntry, named: string) => {
+    const before = holdSheet(store, { entry, name: named })
     openSheet(undefined)
-    say(t('chordPlayer.opened', { name: said }), {
-      label: t('chordPlayer.undo'),
-      onClick: () => void holdSheet(store, before),
-    })
+    sayUndo(t('chordPlayer.opened', { name: named }), () => void holdSheet(store, before))
   }
 
-  // A progression or a shared sheet in the URL is put in hand once, then dropped from it.
+  // A progression in the URL is put in hand once; a shared sheet's link opens it among My chord sheets.
   const arrived = useRef(false)
   useEffect(() => {
-    if (arrived.current || (view.p === undefined && view.share === undefined)) return
+    if (arrived.current || (view.p === undefined && view.link === undefined)) return
     arrived.current = true
     const current = store.getState().scratch
-    if (view.share !== undefined) {
-      const sheet = textToSheet(view.share)
-      if (sheet) hold({ ...current, text: sheetToText(sheet) }, t('chordPlayer.untitled'))
-      else openSheet(undefined)
+    if (view.link !== undefined) {
+      const linkId = view.link
+      say(t('chordPlayer.online.opening'))
+      void openLink(chordShare, store, linkId).then((opened) => {
+        if (opened.ok && opened.value) return openSheet(opened.value)
+        openSheet(undefined)
+        say(t(opened.ok ? 'chordPlayer.online.notFound' : 'chordPlayer.online.openFailed'))
+      })
       return
     }
     const numerals = parseNumerals(view.p ?? '') ?? []
@@ -75,7 +86,13 @@ export function useChordPlayerPage() {
     hold({ ...current, text: sheetToText(sheet) }, numeralsLine(numerals))
     // Once, on arrival: the page's own acts change the sheet from here.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view.p, view.share])
+  }, [view.p, view.link])
+
+  // The sheet open goes first among the recent sheets, the bar's menu (R76).
+  const found = hand !== null
+  useEffect(() => {
+    if (found) markOpened(store, view.sheet)
+  }, [store, view.sheet, found])
 
   // An id that names none of My chord sheets (deleted, or another device's) opens the sheet in hand.
   useEffect(() => {
@@ -95,16 +112,40 @@ export function useChordPlayerPage() {
       )
       hold({ ...hand.entry, text: sheetToText(sheet) }, said)
     },
+    openChart(chart, named) {
+      if (!hand) return
+      hold(
+        {
+          ...hand.entry,
+          text: sheetToText(chart.sheet),
+          draft: null,
+          tempo: Math.min(
+            SHEET_TEMPO.max,
+            Math.max(SHEET_TEMPO.min, chart.tempo ?? hand.entry.tempo),
+          ),
+        },
+        named,
+      )
+    },
+    openSong(song) {
+      if (!hand) return
+      hold({ ...hand.entry, text: song.text, draft: null, tempo: song.tempo }, song.name)
+    },
   }
 
-  const hasChords = hand?.sheet.sections.some((section) => section.chords.length > 0) ?? false
+  const hasChords = hand?.sheet.sections.some((section) => section.bars.length > 0) ?? false
   return {
     hand,
     name,
     sheetId: view.sheet,
     routes,
+    /** Edit layout, its URL's `layout=edit`, the entry replaced. */
+    editing: view.layout === 'edit',
+    setEditing: (on: boolean) => setSearch({ layout: on ? 'edit' : undefined }),
     saving,
     setSaving,
+    /** Save as my chord sheet, its name the sheet in hand's where it came named. */
+    startSaving: () => setSaving(scratchName ?? ''),
     async startNew() {
       // A saved sheet keeps its edits; the sheet in hand's are lost, asked first.
       const yes =
@@ -127,13 +168,23 @@ export function useChordPlayerPage() {
       setSaving(null)
       openSheet(id)
       say(t('chordPlayer.save.saved', { name: named.trim() }))
+      if (shareAfterSave) {
+        setShareAfterSave(false)
+        setSharing(true)
+      }
     },
-    async share() {
-      if (!hand) return
-      const path = `/practice/chord-player?share=${encodeURIComponent(sheetToText(hand.sheet))}`
-      const shared = await shareLink({ title: name, path })
-      if (shared === 'copied') say(t('chordPlayer.shared'))
-      if (shared === 'failed') say(t('chordPlayer.shareFailed'))
+    /** Share: a saved sheet's sheet at once; the sheet in hand is named first (it is shared as one of mine). */
+    share() {
+      if (saved) return setSharing(true)
+      setShareAfterSave(true)
+      setSaving(scratchName ?? '')
+    },
+    saved,
+    sharing,
+    setSharing,
+    closeSaving() {
+      setSaving(null)
+      setShareAfterSave(false)
     },
   }
 }

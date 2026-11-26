@@ -155,6 +155,12 @@ const firstBar = (draft: Draft): Tick => beatsPerBar(sectionMeter(draft, 0)) * T
 const isPickup = (draft: Draft, index: number, ticks: Tick): boolean =>
   index === 0 && ticks < firstBar(draft)
 
+/** Whether the draft opens on a pickup: its bars numbered from the first full one (`barNumber`). */
+export const draftPickup = (draft: Draft): boolean => {
+  const first = draft.sections[0]?.lines[0]?.[0]
+  return first !== undefined && isPickup(draft, 0, first.ticks)
+}
+
 /**
  * A pickup made `ticks` long from its start, as it leads into the downbeat: shorter, its first beats
  * and the notes in them taken, the chord sounding where it now starts kept; longer, room before it,
@@ -229,14 +235,21 @@ export function newLine(draft: Draft, index: number): Draft {
   )
 }
 
-/** Bar `index`'s line joined with the next line of its section. */
-export function joinLine(draft: Draft, index: number): Draft {
+/** Whether bar `index` starts a line of its own after another: a system break stands before it. */
+export function startsLine(draft: Draft, index: number): boolean {
+  return index > 0 && slotsOf(draft)[index]?.newLine === true
+}
+
+/**
+ * A system break at bar `index`, as Flat's: a new line from it, or, where one starts there already,
+ * its line joined to the one before. A section's first bar keeps its line.
+ */
+export function toggleLine(draft: Draft, index: number): Draft {
   const slots = slotsOf(draft)
-  const next = slots.findIndex((slot, i) => i > index && slot.newLine)
-  const slot = slots[next]
-  if (!slot || slot.newSection) return draft
+  const slot = slots[index]
+  if (!slot || index === 0 || slot.newSection) return draft
   return withSlots(
     draft,
-    slots.map((other, i) => (i === next ? { ...other, newLine: false } : other)),
+    slots.map((other, i) => (i === index ? { ...other, newLine: !slot.newLine } : other)),
   )
 }

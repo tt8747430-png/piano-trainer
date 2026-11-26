@@ -39,6 +39,7 @@ describe('createStores', () => {
       'library',
       'notifications',
       'ownLessons',
+      'pageLayouts',
       'patterns',
       'pieces',
       'practiceLibrary',
@@ -68,7 +69,7 @@ describe('createBackend and createAuth', () => {
 })
 
 describe('createSync', () => {
-  it('syncs every saved store but the keyboard’s, which is this device’s alone', () => {
+  it('syncs every saved store but the keyboard’s and the page layouts, each this device’s alone', () => {
     expect(SYNCED_SAVES.map((save) => save.key).sort()).toEqual([
       'pt-chord-sheets',
       'pt-diagram-inversions',

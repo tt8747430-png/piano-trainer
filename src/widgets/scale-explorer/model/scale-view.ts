@@ -1,7 +1,4 @@
 import {
-  keyMode,
-  scaleHasChords,
-  type ChordNotes,
   type ComparedScale,
   type Fingering,
   type NoteParam,
@@ -9,45 +6,28 @@ import {
 } from '@/shared/lib/music'
 import type { Hands, PracticeRhythm, RunDirection } from '@/shared/lib/schedule'
 
-/** The views of a scale, in the order their tabs stand. */
-export const SCALE_SHOWS = ['scale', 'chords', 'key'] as const
-
 /**
  * The one layer of labels the run's staff shows (R34, D3), chosen in place: the playing hand's
  * fingers, each note's degree, or the whole and half steps between the notes.
  */
 export const STAFF_MARKS = ['fingers', 'degrees', 'steps'] as const
 export type StaffMarks = (typeof STAFF_MARKS)[number]
-export type ScaleShow = (typeof SCALE_SHOWS)[number]
-
-/** The views a scale has: its run always, its chords with seven notes, its key where it is one's scale. */
-export const showsOf = (kind: ScaleKind): readonly ScaleShow[] =>
-  SCALE_SHOWS.filter(
-    (show) =>
-      show === 'scale' || (show === 'chords' ? scaleHasChords(kind) : keyMode(kind) !== null),
-  )
 
 /** A run's octaves on the Scales page: one to four, as the scale books practise them (R29-P9). */
-export const MIN_OCTAVES = 1
-export const MAX_OCTAVES = 4
-export type RunOctaves = 1 | 2 | 3 | 4
+export const RUN_OCTAVES = [1, 2, 3, 4] as const
+type RunOctaves = (typeof RUN_OCTAVES)[number]
 
 /** What the Scales explorer shows: the scale, what its keys carry, and how it is practised. */
 export interface ScaleView {
   readonly root: NoteParam
   readonly kind: ScaleKind
-  /**
-   * What the page shows: the scale's run, its chords (a seven-note scale only), or its key on the
-   * circle of fifths (a major or minor scale only).
-   */
-  readonly show: ScaleShow
-  /** The degree the run starts on, 1 the tonic (Scale view). */
+  /** The degree the run starts on, 1 the tonic. */
   readonly start: number
-  /** The staff's one layer of labels (Scale view). */
+  /** The staff's one layer of labels. */
   readonly marks: StaffMarks
-  /** How many octaves the run climbs (Scale view): one to four. */
+  /** How many octaves the run climbs: one to four. */
   readonly octaves: RunOctaves
-  /** Which way the run goes (Scale view); absent, up and back down. */
+  /** Which way the run goes; absent, up and back down. */
   readonly direction?: Exclude<RunDirection, 'both'>
   /** The scale on the same tonic its notes are compared with (Scale view, A43); absent, none. */
   readonly compare?: ComparedScale
@@ -57,16 +37,4 @@ export interface ScaleView {
   readonly tempo: number
   /** The hand that plays the run, or both; its fingers stand under the keys (the right hand's for both). */
   readonly hands: Hands
-  /** How many notes each chord stacks: 3 a triad … 7 a 13th (Chords view). */
-  readonly chords: ChordNotes
-  /** Root position (0) to the 3rd inversion, as far as the chords stack. */
-  readonly inversion: number
-  /** What a degree's key plays in Chords view: its chord, or its own note, lighting the chords that hold it. */
-  readonly keysPlay: 'chords' | 'notes'
-  /** Walk the chords rolled upwards rather than struck together. */
-  readonly arpeggio: boolean
-  /** The melody note the Key view harmonises; the key's 3rd when none is chosen. */
-  readonly melody?: NoteParam
-  /** Whether the Key view harmonises with the key's chords only. */
-  readonly onlyInKey?: boolean
 }

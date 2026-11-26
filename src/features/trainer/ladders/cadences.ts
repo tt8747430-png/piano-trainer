@@ -211,7 +211,7 @@ const upToThree = (keys: readonly Key[]) => keys.filter((key) => Math.abs(keySig
  * imperfect, then a minor key's with its Phrygian half cadence, then all of them in either mode.
  */
 export const CADENCE_LEVELS = ['four', 'perfect-imperfect', 'minor', 'all'] as const
-export type CadenceLevel = (typeof CADENCE_LEVELS)[number]
+type CadenceLevel = (typeof CADENCE_LEVELS)[number]
 
 export const CADENCE_LEVEL: Readonly<
   Record<CadenceLevel, { readonly keys: readonly Key[]; readonly cadences: readonly Cadence[] }>

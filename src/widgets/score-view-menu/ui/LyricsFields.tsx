@@ -1,16 +1,16 @@
-import { Minus, Pin, Plus } from 'lucide-react'
+import { Minus, Plus } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectScoreView, TEXT_SIZES, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setScoreView } from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
+import { GroupRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { PartChip, PartChips } from './PartChip'
+import { PartRow, PartRows } from './PartRows'
 
 /**
  * The text size, a step smaller or larger by − and + (ADR 0108, Chordify's font size): its name, then
- * − the size + at the row's end (under its name where the row has no room), each step one of
- * `TEXT_SIZES`, greyed at either end.
+ * − the size + at the row's end, each step one of `TEXT_SIZES`, greyed at either end.
  */
 function TextSizeRow() {
   const { t } = useTranslation('player')
@@ -24,21 +24,8 @@ function TextSizeRow() {
   }
   const id = useId()
   return (
-    <div
-      role="group"
-      aria-labelledby={id}
-      className="flex min-h-14 flex-wrap items-center justify-between gap-x-3 gap-y-2 py-2 text-lg"
-    >
-      <span
-        aria-hidden
-        className="grid size-9 shrink-0 place-items-center rounded-control bg-muted font-display text-base font-semibold text-muted-foreground"
-      >
-        Aa
-      </span>
-      <span id={id} className="flex-1 whitespace-nowrap">
-        {t('views.textSize.label')}
-      </span>
-      <span className="ms-auto flex shrink-0 items-center gap-1">
+    <GroupRow label={<span id={id}>{t('views.textSize.label')}</span>}>
+      <span role="group" aria-labelledby={id} className="flex shrink-0 items-center gap-1">
         <Button
           variant="outline"
           size="icon"
@@ -63,30 +50,28 @@ function TextSizeRow() {
           <Plus aria-hidden />
         </Button>
       </span>
-    </div>
+    </GroupRow>
   )
 }
 
 /**
- * Chords over lyrics' own part of the View (ADR 0108, Chordify's view settings): the song's chord
- * diagrams pinned under its strip, a chip as the View's other parts are (ADR 0115), then its text
- * size.
+ * Chords over lyrics' own part of the View (ADR 0108, Chordify's view settings), one card of rows
+ * as its board draws it: its text size, then the song's chord diagrams pinned under its strip, a
+ * switch row as the View's other parts are, what it does its ⓘ.
  */
 export function LyricsFields() {
   const { t } = useTranslation(['player', 'music'])
   const store = useSettingsStoreApi()
   const pinned = useSettings((state) => selectScoreView(state).pinned)
   return (
-    <div className="flex flex-col gap-2">
-      <PartChips label={t('music:view.show')} info={t('views.pinned.about')}>
-        <PartChip
-          icon={<Pin />}
-          label={t('views.pinned.label')}
-          pressed={pinned}
-          onPressedChange={(on) => setScoreView(store, { pinned: on })}
-        />
-      </PartChips>
+    <PartRows>
       <TextSizeRow />
-    </div>
+      <PartRow
+        label={t('views.pinned.label')}
+        info={t('views.pinned.about')}
+        on={pinned}
+        onChange={(on) => setScoreView(store, { pinned: on })}
+      />
+    </PartRows>
   )
 }

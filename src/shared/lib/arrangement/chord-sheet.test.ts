@@ -11,6 +11,8 @@ import {
   removeChord,
   resizeChord,
   sectionBars,
+  NO_MARKS,
+  sectionChords,
   sheetToChart,
   transposeSheet,
   type ChordSheet,
@@ -20,15 +22,21 @@ import {
 const section = (line: string, more: Partial<SheetSection> = {}): SheetSection => ({
   kind: 'verse',
   repeats: 1,
+  marks: NO_MARKS,
   variation: 1,
-  chords: line.split(' ').map((word) => {
-    const [symbol = '', beats = '4'] = word.split(':')
-    return { chord: parseChordSymbol(symbol), beats: Number(beats) }
-  }),
+  // "C:2 G:2 | Am" is two bars; a line with no bar lines is a bar per chord.
+  bars: (line.includes('|') ? line.split(' | ') : line.split(' ')).map((bar) => ({
+    chords: bar.split(' ').map((word) => {
+      const [symbol = '', beats = '4'] = word.split(':')
+      return { chord: parseChordSymbol(symbol), beats: Number(beats) }
+    }),
+  })),
   ...more,
 })
 const written = (s: SheetSection) =>
-  s.chords.map(({ chord, beats }) => `${chordSymbol(chord)}:${beats}`).join(' ')
+  sectionChords(s)
+    .map(({ chord, beats }) => `${chordSymbol(chord)}:${beats}`)
+    .join(' ')
 
 describe('a chord box resized', () => {
   it('resizing C from 4 to 2 beats gives G 2 more', () => {
@@ -56,7 +64,7 @@ describe('the bars of a section', () => {
       ['1@0+2', '2@2+2'],
       ['2@0+1'],
     ])
-    expect(bars.map((bar) => bar.filled)).toEqual([4, 4, 1])
+    expect(bars.map((bar) => bar.beats)).toEqual([4, 4, 1])
   })
 })
 

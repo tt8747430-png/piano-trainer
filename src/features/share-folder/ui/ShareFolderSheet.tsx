@@ -1,16 +1,10 @@
+import { UserRound } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FolderShare } from '@/shared/api/groups'
 import { useGroups } from '@/shared/lib/groups'
-import { ButtonLink, Dropdown, Sheet, SheetContent } from '@/shared/ui'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
+import { ButtonLink, Dropdown, Problem, RowsLoading, Said, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Checkbox } from '@/shared/ui/primitives/checkbox'
 import { useGroupsData } from '../model/use-groups-data'
@@ -33,7 +27,7 @@ export function ShareFolderSheet({
   folder: FolderShare
 }) {
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{}} open={open} onOpenChange={onOpenChange}>
       {open ? <ShareForm folder={folder} onDone={() => onOpenChange(false)} /> : null}
     </Sheet>
   )
@@ -85,25 +79,23 @@ function ShareForm({ folder, onDone }: { folder: FolderShare; onDone: () => void
       }
     >
       {data.kind === 'guest' ? (
-        <Empty>
-          <EmptyHeader>
-            <EmptyTitle>{t('groups.guestTitle')}</EmptyTitle>
-            <EmptyDescription>{t('groups.guestLine')}</EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
+        <Said
+          icon={UserRound}
+          title={t('groups.guestTitle')}
+          description={t('groups.guestLine')}
+          primary
+          action={
             <ButtonLink render={<Link to="/account/sign-in" />}>{t('groups.signIn')}</ButtonLink>
-          </EmptyContent>
-        </Empty>
+          }
+        />
       ) : data.kind === 'loading' ? (
-        <p className="text-muted-foreground">{t('groups.loading')}</p>
+        <RowsLoading label={t('groups.loading')} rows={2} />
       ) : data.kind === 'failed' ? (
-        <p role="alert" className="text-destructive">
-          {t(data.reason === 'offline' ? 'groups.offline' : 'groups.failed')}
-        </p>
+        <Problem>{t(data.reason === 'offline' ? 'groups.offline' : 'groups.failed')}</Problem>
       ) : data.groups.length === 0 ? (
         <p className="text-pretty text-muted-foreground">{t('groups.noneToShare')}</p>
       ) : (
-        <ul className="flex flex-col divide-y divide-hairline card">
+        <ul className="flex flex-col rows-hairline card">
           {data.groups.map((group) => {
             const choice = chosen(group.id)
             return (
@@ -134,11 +126,7 @@ function ShareForm({ folder, onDone }: { folder: FolderShare; onDone: () => void
           })}
         </ul>
       )}
-      {problem ? (
-        <p role="alert" className="text-sm text-destructive">
-          {problem}
-        </p>
-      ) : null}
+      {problem ? <Problem>{problem}</Problem> : null}
     </SheetContent>
   )
 }

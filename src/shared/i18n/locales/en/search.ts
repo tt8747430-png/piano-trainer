@@ -8,10 +8,12 @@ export const search = {
   noneHint:
     'Check the spelling, or try a song’s title, a chord like Cmaj7 or a scale like D minor.',
   // A song the learner archived, said on its row (ADR 0106).
+  keys: { label: 'Keys', move: 'Move', open: 'Open', close: 'Close' },
   clear: 'Clear search',
   archived: 'Archived',
   // What the palette shows before anything is typed.
   recent: 'Recent searches',
+  clearRecent: 'Clear',
   suggested: 'Suggestions',
   // How to use it, said to a screen reader.
   hint: 'Up and down move through the results, Enter opens one, Escape closes.',
@@ -21,7 +23,7 @@ export const search = {
   groups: {
     practice: 'Practice',
     songs: 'Songs',
-    folders: 'Folders',
+    folders: 'Playlists',
     lessons: 'Lessons',
   },
 } as const

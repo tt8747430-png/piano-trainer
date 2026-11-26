@@ -16,10 +16,12 @@ Vercel.
 | [`owner-way`](.claude/skills/owner-way/SKILL.md)             | how the owner wants work run; at every session start   |
 | [`seven-questions`](.claude/skills/seven-questions/SKILL.md) | every screen, every time: before each publish and port |
 | [`scan-first`](.claude/skills/scan-first/SKILL.md)           | every screen, with the seven: edges, states, emphasis  |
+| [`edge-lines`](.claude/skills/edge-lines/SKILL.md)           | every screen: lines drawn, cards, focus, by the laws    |
 | [PRODUCT.md](PRODUCT.md)                                     | who it is for, what it claims, what stays true         |
 | [DESIGN.md](DESIGN.md)                                       | the look, before any screen                            |
 | [docs/CODE_STYLE.md](docs/CODE_STYLE.md)                     | how code is written, before any code                   |
 | [docs/CONTENT.md](docs/CONTENT.md)                           | a piece, pattern, lesson or course                     |
+| [docs/INDEX.md](docs/INDEX.md)                               | every kit part, slice, token, utility, and who uses it |
 | [docs/adr/](docs/adr/README.md)                              | why an area is the way it is                           |
 
 Design work on the canvas loads these, each when its moment comes ([`redesigning-a-screen`](.claude/skills/redesigning-a-screen/SKILL.md) runs the loop):
@@ -72,7 +74,10 @@ and the running screen before it is trusted. Do the whole task, then a second pa
 **In a loop, or when the owner says so** (`owner-way`, Loops and refactors), steps 1, 2 and 4 give way: no tests
 written or run, no typecheck or lint; step 3's two visual passes stay in full; the build runs once at the end of a big
 feature (an area's refactor) and only what breaks it is fixed; work goes to the session branch, and to `main` only when
-the owner asks.
+the owner asks. A loop never ends a turn and never writes a summary or a closing report, not even to the harness's "the user
+hasn't heard from you" nudge (one line, then the next tool call): only "stop" ends it
+(`owner-way`, Reporting). A message's asks done is not
+the end: the loop goes on to the next item (`owner-way`, Loops and refactors, where the next item comes from).
 
 ## Commands
 
@@ -107,7 +112,8 @@ a Performance becomes a Score (`notation`) or sounds (`schedule`).
 ## The places
 
 This is the app as built. The canvas runs ahead: a ruling drawn but not yet ported is in its area's spec
-(`.scratch/<round>/plan/`) and the feedback log, and is built from there.
+(`.scratch/<round>/plan/`) and the feedback log, and is built from there, from the board's code value for value
+(`owner-way`, Port from the board's code): the kit changes to the board, never the board to the kit.
 
 **Learn · Songs · Practice · Profile**; `app/router.tsx` has every route.
 
@@ -120,26 +126,27 @@ This is the app as built. The canvas runs ahead: a ruling drawn but not yet port
   Publish; MusicXML and MIDI in and out. `pages/songs`, `piece`, `public-library`; `widgets/song-library`, `piece-cover`;
   `features/manage-library`, `song-files`, `publish`, `share-folder`; `entities/library`, `piece`. Groups and
   folders shared with them: `pages/groups`, `shared/api/groups`.
-- **Practice** (`/practice`): Theory (Chords, Scales and keys, Intervals, Progressions, Accompaniment), Exercises by
-  book, the Tools last (the Chord player, Metronome, Tuner, Chord finder, Circle of fifths), each tool's settings
-  in place (the Chord finder's on its own page); the bar's Tools menu is `widgets/tools-sheet`. Exercises,
+- **Practice** (`/practice`): Theory (Chords, Scales and keys, Intervals, Progressions, Accompaniment), Exercises on
+  two shelves (Finger technique, Jazz vocabulary), the Tools last (the Chord player, Metronome, Tuner, Chord finder, Circle of fifths), each tool's settings
+  in place, a sheet from the page's gear (`SettingsGear`); the Tools have no menu in any bar. Exercises,
   Accompaniment (patterns only) and Progressions are one library, `widgets/practice-library`, arranged by the learner;
   its favourites, arrangements and the learner's progressions `entities/practice-library`; a progression's page is
   `pages/progression`.
 - **The Player** (`/play/$pieceId`): one screen over any Performance. The transport's Pace: Listen at a speed, Wait
-  mode, Interpret; the foot's Hands, in every mode; versions Original · Simplified · Easy; the hands at the keys, 3D,
+  mode; the foot's Hands, in every mode; versions Original · Simplified · Easy; the hands at the keys, 3D,
   in the keys' place. `pages/player`; `widgets/practice-player`, `piano-hands`, `chord-views`, `sheet-music`,
   `player-setup`; `features/practice`.
 - **The score editor** (`/edit/$pieceId`): the Player's score in Edit mode, sharing its bar. A docked panel
   from 48rem, a bottom sheet on a phone. `pages/score-editor`; `widgets/score-sheet`, `mode-switch`;
   `features/score-editor`, `edit-piece`, `record-take`.
-- **The Profile** (`/profile`): the learner, badges, achievements, streak, notifications.
+- **The Profile** (`/profile`): the learner, badges, achievements, streak, notifications, practice history (a run's
+  results, `widgets/run-results`, as a run ends in them).
 - **Elsewhere:** Search is a palette (`widgets/search-palette`); Settings (`widgets/settings-screen`) holds only what is
   app-wide; each screen's own settings are its gear's; the account pages, Legal, the Admin area (`/admin`).
 
 ## Rules that span areas
 
-- **State:** what you look at is in the URL; what must be remembered is a saved store; a screen's last view is `pt-views`;
+- **State:** what you look at is in the URL, but for Settings' places on a laptop and a thing's Settings window with its pages (the history entry's state); what must be remembered is a saved store; a screen's last view is `pt-views`;
   everything else is component state.
 - **Back** is Up within the app: where the learner came from, else the parent in `parents.ts`. Screens call `useUp()`; a
   view, tab or step written into the URL replaces the entry (`useSetSearch`).

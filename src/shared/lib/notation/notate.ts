@@ -8,6 +8,7 @@ import {
   beatsBefore,
   beatsPerBar,
   beatsToTicks,
+  opensOnPickup,
   timeSignature,
   writtenOctave,
   writtenShift,
@@ -89,14 +90,18 @@ function barChords(
       tiedFrom,
       tiedTo: noteEnd > end,
       ...(n.finger ? { finger: n.finger } : {}),
-      ...(n.finger && n.crossing ? { crossing: true } : {}),
+      ...(n.cross ? { cross: true } : {}),
+      ...(n.role ? { role: n.role } : {}),
       ...(n.marks ? { marks: n.marks } : {}),
       ...(n.lyrics && staff === sung ? { lyrics: n.lyrics } : {}),
     }
-    const id = `${staff} ${start} ${stop}`
+    const id = `${staff} ${start} ${stop} ${n.voice ?? 1}`
     const group = groups.get(id)
     if (!group) {
-      groups.set(id, { staff, chord: { start, end: stop, notes: [written] } })
+      groups.set(id, {
+        staff,
+        chord: { start, end: stop, notes: [written], ...(n.voice ? { voice: n.voice } : {}) },
+      })
     } else if (!group.chord.notes.some((other) => other.midi === n.midi)) {
       group.chord = {
         ...group.chord,
@@ -137,9 +142,9 @@ function pieceMarks(notes: readonly BarNote[], first: boolean, last: boolean): N
     const { slurEnd, octave, articulations, ...rest } = n.marks
     if (octave) marks.octave ??= octave
     if (first && !n.tiedFrom) {
+      const had = new Map(Object.entries(marks))
       for (const [key, value] of Object.entries(rest)) {
-        const field = key as keyof typeof rest
-        if (marks[field] === undefined) Object.assign(marks, { [field]: value })
+        if (had.get(key) === undefined) Object.assign(marks, { [key]: value })
       }
       if (articulations)
         marks.articulations = [...new Set([...(marks.articulations ?? []), ...articulations])]
@@ -185,9 +190,9 @@ function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
           octave: writtenOctave(n.midi, n.spelled) + writtenShift(n.marks) / 12,
           tie: !last || n.tiedTo,
           continued: i > 0 || n.tiedFrom,
-          ...(n.finger && i === 0 && !n.tiedFrom
-            ? { finger: n.finger, ...(n.crossing ? { crossing: true as const } : {}) }
-            : {}),
+          ...(n.finger && i === 0 && !n.tiedFrom ? { finger: n.finger } : {}),
+          ...(n.cross ? { cross: true } : {}),
+          ...(n.role ? { role: n.role } : {}),
         })),
       })
     })
@@ -229,7 +234,8 @@ function withAccidentals(voices: readonly DraftVoice[], key: Key): ScoreVoice[] 
               accidental: accidentalOf.get(`${v} ${e} ${i}`) ?? null,
               tie: draft.tie,
               ...(draft.finger ? { finger: draft.finger } : {}),
-              ...(draft.crossing ? { crossing: true } : {}),
+              ...(draft.cross ? { cross: true } : {}),
+              ...(draft.role ? { role: draft.role } : {}),
             })),
           },
     ),
@@ -397,5 +403,6 @@ export function notate(music: TimedMusic): Score {
     ...(music.tempoText ? { tempoText: music.tempoText } : {}),
     staves: written,
     measures: drawnAs(measures),
+    ...(!music.continued && opensOnPickup(music.bars, music.meter) ? { pickup: true } : {}),
   }
 }

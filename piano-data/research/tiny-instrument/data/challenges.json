@@ -1,0 +1,93 @@
+{
+ "source": "DesignSystem.ChallengeProvider, decompiled 0x1011d1d2c..0x1011d2c50",
+ "idFormats": {
+  "daily": "daily-%04d-%02d-%02d",
+  "weekly": "weekly-%04d-W%02d",
+  "consistency": "consistency-%04d-W%02d"
+ },
+ "selection": "daily pick: seed = year*10000+month*100+day (madd 10000,100) mixed with splitmix64 constants 0x9e3779b97f4a7c15 / 0xbf58476d1ce4e5b9 / 0x94d049bb133111eb; index into a 4-entry candidate table, plus personalized candidates Focus:<type> and Beat Your Best (inferred from disassembly)",
+ "challenges": [
+  {
+   "kind": "daily",
+   "title": "Daily Practice",
+   "detail": "Practice 10 minutes today.",
+   "icon": "clock.fill",
+   "target": 10,
+   "xpReward": 30,
+   "input": "minutesToday"
+  },
+  {
+   "kind": "daily",
+   "title": "Triple Play",
+   "detail": "Complete 3 practice sessions today.",
+   "icon": "checklist",
+   "target": 3,
+   "xpReward": 30,
+   "input": "sessionsToday"
+  },
+  {
+   "kind": "daily",
+   "title": "Mix It Up",
+   "detail": "Practice 3 different activity types today.",
+   "icon": "square.grid.2x2",
+   "target": 3,
+   "xpReward": 40,
+   "input": "distinctTypesToday"
+  },
+  {
+   "kind": "daily",
+   "title": "Combo Breaker",
+   "detail": "Reach a 15-note combo today.",
+   "icon": "bolt.fill",
+   "target": 15,
+   "xpReward": 35,
+   "input": "bestComboToday"
+  },
+  {
+   "kind": "daily",
+   "title": "Focus: <type>",
+   "detail": "Do a <type> session",
+   "icon": "target",
+   "target": 1,
+   "xpReward": 35,
+   "input": "typeSessionsToday[type]",
+   "note": "title/detail assembled at runtime"
+  },
+  {
+   "kind": "daily",
+   "title": "Beat Your Best",
+   "detail": "Set a new personal best in <type>",
+   "icon": "chart.line.uptrend.xyaxis",
+   "target": 1,
+   "xpReward": 45,
+   "input": "perTypeBeatBestToday"
+  },
+  {
+   "kind": "weekly",
+   "title": "Well-Rounded Week",
+   "detail": "Practice all 5 activity types this week.",
+   "icon": "square.grid.2x2.fill",
+   "target": 5,
+   "xpReward": 120,
+   "input": "distinctTypesThisWeek"
+  },
+  {
+   "kind": "weekly",
+   "title": "Five Hours In",
+   "detail": "Practice 300 minutes this week.",
+   "icon": "clock.fill",
+   "target": 300,
+   "xpReward": 120,
+   "input": "minutesThisWeek"
+  },
+  {
+   "kind": "weekly",
+   "title": "Five-Day Streak",
+   "detail": "Meet your daily goal 5 days this week.",
+   "icon": "calendar.badge.checkmark",
+   "target": 5,
+   "xpReward": 120,
+   "input": "daysGoalMetThisWeek"
+  }
+ ]
+}

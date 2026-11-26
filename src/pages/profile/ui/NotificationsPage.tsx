@@ -1,13 +1,14 @@
-import { useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { BellOff, CheckCheck, Flame, Medal, Target, Trash2, TrendingUp, X } from 'lucide-react'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNotifications, useNotificationsStoreApi, type Notice } from '@/entities/notification'
-import { isMilestoneId, localDay, type BadgeId } from '@/entities/progress'
+import { isBadgeId, isMilestoneId, localDay } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { clockSaid, cn, daySaid, useNow } from '@/shared/lib'
 import {
   BackButton,
+  ButtonLink,
   ConfirmDialog,
   MoreMenu,
   RoundButton,
@@ -19,6 +20,8 @@ import {
 import { MILESTONE_ICON } from '../model/icons'
 
 const GROUPS = ['today', 'yesterday', 'earlier'] as const
+/** A badge's tiers, by their number from 1. */
+const TIERS = ['bronze', 'silver', 'gold', 'platinum'] as const
 
 /** Which group a notice falls in, by the day on the learner's calendar. */
 function groupOf(notice: Notice, now: Date): (typeof GROUPS)[number] {
@@ -39,10 +42,10 @@ function useNoticeTitle(): (notice: Notice) => string {
     if (kind === 'milestone')
       return isMilestoneId(ref) ? t(`profile.achievements.names.${ref}`) : ref
     const [badge = '', tier = '1'] = ref.split(':')
-    const tierName = ['bronze', 'silver', 'gold', 'platinum'][Number(tier) - 1] ?? 'bronze'
+    const tierName = TIERS[Number(tier) - 1] ?? 'bronze'
     return t('profile.notifications.tier', {
-      tier: t(`profile.badges.tiers.${tierName as 'bronze'}`),
-      badge: t(`profile.badges.names.${badge as BadgeId}`),
+      tier: t(`profile.badges.tiers.${tierName}`),
+      badge: isBadgeId(badge) ? t(`profile.badges.names.${badge}`) : badge,
     })
   }
 }
@@ -91,14 +94,21 @@ export function NotificationsPage() {
           ) : undefined
         }
       />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+      <div className="page-column flex flex-col gap-6">
         {notices.length === 0 ? (
-          <Said
-            icon={BellOff}
-            title={t('profile.notifications.emptyTitle')}
-            description={t('profile.notifications.empty')}
-            action={null}
-          />
+          // 8 under the bar on a phone, as Archive's and Trash's empty states
+          <div className="max-lg:-mt-4">
+            <Said
+              icon={BellOff}
+              title={t('profile.notifications.emptyTitle')}
+              description={t('profile.notifications.empty')}
+              action={
+                <ButtonLink size="lg" render={<Link to="/practice" />}>
+                  {t('profile.notifications.practiseNow')}
+                </ButtonLink>
+              }
+            />
+          </div>
         ) : (
           GROUPS.map((group) => {
             const shown = notices.filter((notice) => groupOf(notice, now) === group)
@@ -150,8 +160,7 @@ function Group({
   const locale = useLocale()
   const titleOf = useNoticeTitle()
   const navigate = useNavigate()
-  const time = new Intl.DateTimeFormat(locale, { timeStyle: 'short' })
-  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium' })
+  const now = useNow()
   const open = (notice: Notice) => {
     onRead(notice.id)
     if (notice.kind === 'tier')
@@ -168,11 +177,11 @@ function Group({
       void navigate({ to: notice.kind === 'streak' ? '/profile/streak' : '/profile/achievements' })
   }
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-2">
-      <h2 id={id} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
+    <section aria-labelledby={id} className="flex flex-col gap-1.5">
+      <h2 id={id} className="px-1 caps">
         {title}
       </h2>
-      <ul className="flex flex-col divide-y divide-border overflow-hidden card">
+      <ul className="flex flex-col rows-hairline overflow-hidden card">
         {notices.map((notice) => {
           const at = new Date(notice.at)
           const Icon =
@@ -192,21 +201,23 @@ function Group({
                   },
                 ]}
               >
-                <div className="flex min-h-16 items-center gap-1 bg-card pr-2">
+                <div className="flex min-h-16 items-center gap-1 bg-card pr-1">
                   <button
                     type="button"
                     onClick={() => open(notice)}
                     className="flex min-w-0 flex-1 items-center gap-3 py-2 pl-3 text-left focus-visible:-outline-offset-3"
                   >
                     <TileMark icon={Icon} paint={notice.read ? 'sand' : 'yellow'} />
-                    <span className="flex min-w-0 flex-col">
-                      <span className={cn('text-pretty', !notice.read && 'font-semibold')}>
+                    <span className="flex min-w-0 flex-col gap-0.5">
+                      <span
+                        className={cn('text-pretty', notice.read ? 'font-medium' : 'font-bold')}
+                      >
                         {titleOf(notice)}
                       </span>
-                      <span className="text-sm text-muted-foreground tabular-nums">
-                        {groupOf(notice, new Date()) === 'earlier'
-                          ? date.format(at)
-                          : time.format(at)}
+                      <span className="text-footnote text-muted-foreground">
+                        {groupOf(notice, new Date(now)) === 'earlier'
+                          ? daySaid(at.getTime(), locale, now)
+                          : clockSaid(at, locale)}
                       </span>
                     </span>
                     {!notice.read ? (

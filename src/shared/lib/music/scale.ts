@@ -334,19 +334,6 @@ const CHARACTERISTIC: Partial<Record<ScaleKind, number>> = {
 }
 export const characteristicDegree = (kind: ScaleKind): number | undefined => CHARACTERISTIC[kind]
 
-/**
- * The chords a mode's vamp swings between (A43), by degree: Dorian i–IV, Mixolydian I–♭VII, Lydian
- * I–II, Phrygian i–♭II, Aeolian i–♭VI–♭VII. Empty for a scale with no vamp of its own.
- */
-const VAMPS: Partial<Record<ScaleKind, readonly number[]>> = {
-  dorian: [0, 3],
-  mixolydian: [0, 6],
-  lydian: [0, 1],
-  phrygian: [0, 1],
-  natural: [0, 5, 6],
-}
-export const modeVamp = (kind: ScaleKind): readonly number[] => VAMPS[kind] ?? []
-
 /** The scales a seven-note scale is compared with on its own tonic (A43): the major and the minor. */
 export const COMPARED_SCALES = ['major', 'natural'] as const
 export type ComparedScale = (typeof COMPARED_SCALES)[number]
@@ -366,21 +353,6 @@ export function scaleDifferences(
   return theirs.flatMap((tone, at) =>
     own[at]?.pitchClass === tone.pitchClass ? [] : [{ at, note: tone.note }],
   )
-}
-
-/** The gap between neighbouring notes of a scale: a half step, a whole step, or both (three semitones). */
-type ScaleGap = 'H' | 'W' | 'W+H'
-const GAP_BY_SEMITONES: Readonly<Record<number, ScaleGap>> = { 1: 'H', 2: 'W', 3: 'W+H' }
-
-/** The gaps between neighbouring notes up to the octave: W, H, or W+H. */
-export function scaleGaps(kind: ScaleKind): ScaleGap[] {
-  const semitones = [...scaleIntervals(kind).map((interval) => interval.semitones), 12]
-  return semitones.slice(1).map((above, i) => {
-    const size = above - (semitones[i] ?? 0)
-    const gap = GAP_BY_SEMITONES[size]
-    if (!gap) throw new RangeError(`${kind} has a gap of ${size} semitones`)
-    return gap
-  })
 }
 
 /** A scale coming back down: melodic minor comes down as natural minor, as it is taught; any other as it went up. */

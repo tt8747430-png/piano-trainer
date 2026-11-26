@@ -69,6 +69,7 @@ BOARDS = {
     'PlayerLaptop': ('PlayerDesk', 'view="sheet"', 'The Player, laptop'),
     'PlayerLaptopLoop': ('PlayerDesk', 'view="sheet" loop="true" loopa="5" loopb="8" open="pace"', 'The Player, laptop, loop'),
     'PlayerLaptopKeyboard': ('PlayerDesk', 'view="sheet" open="keys"', 'The Player, laptop, Keyboard'),
+    'PlayerDoneLaptop': ('PlayerDesk', 'view="sheet" open="done"', 'The Player, laptop, Played through'),
 }
 for name, (app, attrs, title) in BOARDS.items():
     w, h = (450, 920) if app == 'PlayerApp' else (2143, 1299)

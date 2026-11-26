@@ -1,13 +1,12 @@
 import { Check, X } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn, useMediaQuery, LAPTOP } from '@/shared/lib'
 import { InfoTip, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 
 /** Where a sign's picker stands by what was tapped: a laptop's popover, else a sheet from the foot. */
-const LAPTOP = '(min-width: 64rem)'
 
 /**
  * A picker's title row, the sheet's in a popover: its name, what it changes under it, its ⓘ where it
@@ -39,7 +38,7 @@ function PickerHead({
       <Button
         variant="ghost"
         size="icon"
-        className="-me-2 -mt-1 size-11 shrink-0"
+        className="-me-2 -mt-1 shrink-0"
         aria-label={t('close')}
         title={t('close')}
         onClick={onClose}
@@ -135,7 +134,7 @@ export function PickerActions({
       <Button
         variant="ghost"
         size="icon"
-        className="size-12 rounded-pill text-link shadow-md hover:text-link disabled:shadow-none [&_svg]:size-7"
+        className="size-12 text-link shadow-md hover:text-link disabled:shadow-none [&_svg]:size-7"
         aria-label={t('picker.apply')}
         title={t('picker.apply')}
         disabled={!changed}

@@ -28,7 +28,7 @@ export function VerdictShapes({
           <span
             key={head.id}
             data-verdict={verdict}
-            className="absolute -translate-y-1/2 text-[0.6875rem] leading-none font-bold"
+            className="absolute -translate-y-1/2 text-xs leading-none font-bold"
             style={{
               left: head.right + 2,
               top: (head.top + head.bottom) / 2,

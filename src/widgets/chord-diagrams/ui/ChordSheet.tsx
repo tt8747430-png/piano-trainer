@@ -35,7 +35,7 @@ export function ChordSheet({
   const inversions = usePieceInversions()
   const play = () => playback.toggle('chord', () => chordSounds(chord.keys, { arpeggio: false }))
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet at={{ width: 'w-105' }} open={open} onOpenChange={onOpenChange}>
       <SheetContent
         title={t('music:chordSheet.title', { symbol: printedSymbol(chord.symbol) })}
         footer={

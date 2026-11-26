@@ -2,7 +2,7 @@ import type { useRender } from '@base-ui/react/use-render'
 import type { LucideIcon } from 'lucide-react'
 import { ButtonLink } from './ButtonLink'
 
-/** A 44px round icon link, named by its label: `render` is the link (a router `Link`). */
+/** A bar's 44px glass icon link, named by its label: `render` is the link (a router `Link`). */
 export function RoundLink({
   label,
   icon: Icon,

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { createFakeAudio } from '@/shared/api/audio'
 import { ServicesProvider } from '@/shared/lib/services'
 import { useSpacePedal } from './use-space-pedal'
+import { createFakeArranger } from '@/shared/api/midi'
 
 function Spaced({ enabled }: { enabled: boolean }) {
   useSpacePedal({ enabled })
@@ -17,13 +18,13 @@ function Spaced({ enabled }: { enabled: boolean }) {
 function setUp(enabled = true) {
   const audio = createFakeAudio()
   const view = render(
-    <ServicesProvider services={{ audio, midi: null }}>
+    <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: null }}>
       <Spaced enabled={enabled} />
     </ServicesProvider>,
   )
   const rerender = (on: boolean) =>
     view.rerender(
-      <ServicesProvider services={{ audio, midi: null }}>
+      <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: null }}>
         <Spaced enabled={on} />
       </ServicesProvider>,
     )

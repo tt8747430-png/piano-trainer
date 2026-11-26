@@ -1,5 +1,5 @@
 /** How far a finger may move and still tap, in CSS px. */
-export const GRIP_SLOP = 6
+const GRIP_SLOP = 6
 /** How far the grab handle is dragged to expand or compact the sheet, in CSS px. */
 export const GRIP_PULL = 24
 

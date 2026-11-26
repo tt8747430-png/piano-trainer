@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
 import { sameKey, type Key } from '@/shared/lib/music'
@@ -14,12 +15,15 @@ export function KeyPicker({
   onChange,
   label,
   bare,
+  trigger,
   className,
 }: {
   value: Key
   onChange: (key: Key) => void
   label?: string
   bare?: boolean
+  /** A trigger with its own face: the floating bar's Key (an exercise, canvas 185). */
+  trigger?: ReactElement
   className?: string
 }) {
   const { t } = useTranslation('music')
@@ -31,6 +35,7 @@ export function KeyPicker({
       value={name(value)}
       spoken={name(value)}
       bare={bare}
+      trigger={trigger}
       wide
       className={className}
     >

@@ -1,5 +1,6 @@
 import { intervalBetween, spellAbove } from './interval'
 import {
+  LETTERS,
   note,
   noteName,
   noteParam,
@@ -52,9 +53,7 @@ export const keySignature = (key: Key): number =>
 export function signatureKey(count: number, minor: boolean): Key {
   const fifths = count + (minor ? 3 : 0)
   for (const accidental of [0, 1, -1] as const) {
-    const letter = (Object.keys(LETTER_FIFTHS) as Letter[]).find(
-      (each) => LETTER_FIFTHS[each] + 7 * accidental === fifths,
-    )
+    const letter = LETTERS.find((each) => LETTER_FIFTHS[each] + 7 * accidental === fifths)
     if (letter) return { tonic: note(letter, accidental), minor }
   }
   throw new RangeError(`No key signature writes ${count}`)
@@ -125,8 +124,14 @@ export function transposeNote(
 /** A key as a URL writes it: its tonic's `NoteParam`, then `m` for minor (`Eb`, `C#m`): only keyParam makes one. */
 export type KeyParam = string & { readonly __brand: 'KeyParam' }
 
-export const keyParam = (key: Key): KeyParam =>
-  (noteParam(key.tonic) + (key.minor ? 'm' : '')) as KeyParam
+/** Whether text is a key as keyParam writes it: a tonic's `NoteParam`, then `m` for minor. */
+const isKeyParam = (text: string): text is KeyParam => /^[A-G](b{0,2}|#{0,2})m?$/.test(text)
+
+export function keyParam(key: Key): KeyParam {
+  const param = noteParam(key.tonic) + (key.minor ? 'm' : '')
+  if (!isKeyParam(param)) throw new RangeError(`${param} is not a key`)
+  return param
+}
 
 /** The key keyParam wrote. */
 export function keyFromParam(param: KeyParam): Key {

@@ -1,6 +1,7 @@
-import { copyBars, deleteBars, pasteBars } from './bars'
+import { barNumber } from '@/shared/lib/music'
+import { copyBars, deleteBars, draftPickup, pasteBars } from './bars'
 import { selectionSpan, startOf } from './caret-moves'
-import { chosenSpan, takenAway } from './chosen'
+import { chosenSpan, spellSpan, takenAway } from './chosen'
 import { clipFits, copyNotes, pasteNotes, type NotesClip } from './clip'
 import type { NoteLayer } from './draft'
 import { barsChosen, chosenBars } from './form-edits'
@@ -31,7 +32,7 @@ function copied(state: EditorState, layer: NoteLayer): NotesClip | null {
   }
 }
 
-/** What Copy would take (ADR 0114): the bars chosen (as printed, from 1), the notes chosen, or nothing. */
+/** What Copy would take (ADR 0114): the bars chosen (numbered as printed, `barNumber`), the notes chosen, or nothing. */
 export function copyTarget(
   state: EditorState,
 ):
@@ -40,7 +41,8 @@ export function copyTarget(
   | null {
   if (state.layer === 'chords') {
     const { from, to } = chosenBars(state)
-    return { kind: 'bars', from: from + 1, to: to + 1 }
+    const pickup = draftPickup(state.draft)
+    return { kind: 'bars', from: barNumber(from, pickup), to: barNumber(to, pickup) }
   }
   const taken = copied(state, state.layer)
   return taken && { kind: 'notes', count: taken.notes.length }
@@ -115,4 +117,30 @@ export function clipEdited(state: EditorState, edit: ClipEdit): EditorState {
       ? deleteNotes(draft, layer, where)
       : takenAway(state, layer, where)
   return commit(state, next, { clip, caret: from, selection: null, chordNote: null, struck: null })
+}
+
+/**
+ * Repeat (Flat's R, Dorico's R; research F13): the notes chosen, else the note or chord just
+ * written, written again right after them, over what is there (in Insert mode pushing it right),
+ * the copy chosen and the caret after it. The clipboard is untouched.
+ */
+export function repeated(state: EditorState): EditorState {
+  const { draft, layer } = state
+  if (layer === 'chords') return state
+  const where = spellSpan(state)
+  const tick = typeof where === 'number' ? where : state.caret
+  const span = state.selection && selectionSpan(state.selection)
+  const clip = span
+    ? copyNotes(draft, layer, span)
+    : copied(typeof where === 'number' ? { ...state, caret: tick, chordNote: null } : state, layer)
+  if (!clip || clip.notes.length === 0) return state
+  const at = span ? span.to : tick + clip.ticks
+  const pasted = pasteNotes(draft, layer, at, clip, state.mode === 'insert')
+  const copy = { from: at, to: pasted.end }
+  return commit(state, pasted.draft, {
+    caret: pasted.end,
+    selection: { anchor: copy, head: copy },
+    chordNote: null,
+    struck: null,
+  })
 }

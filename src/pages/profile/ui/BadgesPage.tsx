@@ -4,26 +4,27 @@ import { useTranslation } from 'react-i18next'
 import { badgesOf, TIERS, useProgress, type BadgeId } from '@/entities/progress'
 import { useProfileFigures } from '@/features/track-achievements'
 import { cn } from '@/shared/lib'
-import { BackButton, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { BackButton, ScreenHeader } from '@/shared/ui'
 import { useDayName } from '../model/format'
 import { useBadgeStanding } from '../model/use-badge-standing'
+import { ProfileList } from './ProfileList'
 import { BadgeRow } from './BadgesPreview'
 import { BadgeMark } from './marks'
 
-/** Every badge (B1), each a row: its picture by tier, its name, "Silver, 2 of 4", a bar to the next. */
+/** Every badge (B1), each a row: its picture by tier, its name, "Silver · 2 more days to Gold", a bar to the next. */
 export function BadgesPage() {
   const { t } = useTranslation('account')
   const figures = useProfileFigures()
   const badges = useMemo(() => badgesOf(figures), [figures])
   return (
-    <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('profile.badges.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <SettingsGroup flush>
+    <div className="flex flex-col gap-2">
+      <ScreenHeader column title={t('profile.badges.title')} back={<BackButton />} />
+      <div className="page-column flex flex-col gap-7">
+        <ProfileList page>
           {badges.map((badge) => (
             <BadgeRow key={badge.id} badge={badge} />
           ))}
-        </SettingsGroup>
+        </ProfileList>
       </div>
     </div>
   )
@@ -48,41 +49,47 @@ export function BadgePage() {
   const id: BadgeId = badge.id
   const name = t(`profile.badges.names.${id}`)
   return (
-    <div className="flex flex-col gap-6">
-      <ScreenHeader title={name} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
+    <div className="flex flex-col gap-2">
+      <ScreenHeader column title={name} back={<BackButton />} />
+      <div className="page-column flex flex-col gap-5">
         <section className="flex flex-col items-center gap-2 text-center">
-          <BadgeMark id={id} tier={badge.tier} size="hero" />
-          <p className="font-display text-2xl font-semibold">{name}</p>
-          <p className="text-muted-foreground">
+          <BadgeMark tier={badge.tier} size="hero" />
+          <p className="font-sans text-name/tight font-bold text-balance">{name}</p>
+          <p className="text-subhead text-muted-foreground">
             {badge.tier
               ? `${t(`profile.badges.tiers.${badge.tier}`)} · ${t('profile.badges.tierOf', { tier: badge.earned })}`
               : `${t('profile.badges.notStarted')} · ${standing(badge)}`}
           </p>
         </section>
         <section aria-labelledby="badge-how" className="flex flex-col gap-1.5">
-          <h2 id="badge-how" className="px-3 font-sans text-sm font-semibold text-muted-foreground">
+          <h2 id="badge-how" className="px-1 caps">
             {t('profile.badges.how')}
           </h2>
-          <p className="card px-4 py-3 text-pretty">{t(`profile.badges.ways.${id}`)}</p>
+          <p className="card p-4 text-pretty">{t(`profile.badges.ways.${id}`)}</p>
         </section>
         <section aria-labelledby="badge-tiers" className="flex flex-col gap-1.5">
-          <div className="flex items-baseline justify-between gap-2 px-3">
-            <h2 id="badge-tiers" className="font-sans text-sm font-semibold text-muted-foreground">
+          <div className="flex items-baseline justify-between gap-3 px-1">
+            <h2 id="badge-tiers" className="font-sans text-xl font-bold">
               {t('profile.badges.tiersTitle')}
             </h2>
-            <p className="text-sm font-semibold tabular-nums">
+            <p className="text-subhead text-muted-foreground tabular-nums">
               {t('profile.badges.you', { have: badge.have })}
             </p>
           </div>
-          <ol className="flex flex-col divide-y divide-border card px-4">
+          <ol className="flex flex-col rows-hairline card px-4">
             {TIERS.map((tier, i) => {
               const goal = badge.tiers[i] ?? 0
               const reached = earned[`${id}:${i + 1}`]
               const isNext = i === badge.earned
               return (
-                <li key={tier} className="flex min-h-14 items-center gap-3 py-2">
-                  <BadgeMark id={id} tier={i < badge.earned ? tier : null} />
+                <li
+                  key={tier}
+                  className={cn(
+                    'flex min-h-15 items-center gap-3 py-2',
+                    i > badge.earned && 'opacity-45',
+                  )}
+                >
+                  <BadgeMark tier={tier} size="tier" />
                   <span className="flex min-w-0 flex-1 flex-col">
                     <span className="font-semibold">{t(`profile.badges.tiers.${tier}`)}</span>
                     <span className="text-sm text-pretty text-muted-foreground">
@@ -91,8 +98,8 @@ export function BadgePage() {
                   </span>
                   <span
                     className={cn(
-                      'shrink-0 text-right text-sm tabular-nums',
-                      i < badge.earned ? 'text-foreground' : 'text-muted-foreground',
+                      'shrink-0 text-right text-sm font-semibold tabular-nums',
+                      i < badge.earned ? 'text-on-paint-grass' : 'text-muted-foreground',
                     )}
                   >
                     {i < badge.earned

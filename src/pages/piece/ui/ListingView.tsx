@@ -1,9 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { PencilLine } from 'lucide-react'
+import { Music, PencilLine } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { Listing } from '@/entities/piece'
-import { FabLink, FloatingActions } from '@/shared/ui'
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
+import { FabLink, FloatingActions, Said } from '@/shared/ui'
 import { PieceAbout, PieceCredits } from './PieceAbout'
 import { PieceFacts } from './PieceFacts'
 import { PieceHeader } from './PieceHeader'
@@ -19,12 +18,7 @@ export function ListingView({ listing }: { listing: Listing }) {
       <PieceHeader entry={listing} />
       <PieceFacts entry={listing} />
       <PieceCredits entry={listing} />
-      <Empty className="border border-dashed border-input">
-        <EmptyHeader>
-          <EmptyTitle>{t('noChart.title')}</EmptyTitle>
-          <EmptyDescription>{t('noChart.description')}</EmptyDescription>
-        </EmptyHeader>
-      </Empty>
+      <Said icon={Music} title={t('noChart.title')} description={t('noChart.description')} />
       <PieceAbout entry={listing} />
       <FloatingActions>
         <FabLink

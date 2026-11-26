@@ -1,6 +1,10 @@
 import type { LoopParam, PracticeMode } from '@/features/practice'
 import type { Hands, SwingFeel } from '@/shared/lib/schedule'
 
+/** What sounds between a loop's repeats (its board's Between repeats): nothing, a bar counted, a bar's rest. */
+export const BETWEENS = ['none', 'countIn', 'rest'] as const
+export type Between = (typeof BETWEENS)[number]
+
 /** How the Player goes, as its URL holds it: an absent tempo is the piece's own. */
 export interface PracticeView {
   readonly mode: PracticeMode
@@ -24,4 +28,8 @@ export interface PracticeView {
   readonly keys?: boolean
   /** Beats of rest, each a click, before each repeat of a loop (ticks between loops); none without. */
   readonly rest?: number
+  /** The rest silent, a bar to breathe in, where it would click (Between repeats: Rest). */
+  readonly restSilent?: boolean
+  /** How many times a loop plays before it stops; endless without. */
+  readonly repeats?: number
 }

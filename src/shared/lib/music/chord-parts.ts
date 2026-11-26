@@ -1,4 +1,9 @@
-import { chordRootSpelling, qualitySuffix, qualityWithIntervals, type ChordQuality } from './chord'
+import {
+  chordRootSpelling,
+  qualityWithIntervals,
+  tableSuffix,
+  type ChordQuality,
+} from './chord-quality'
 import { seventhName, triadName } from './chord-name'
 import { INTERVALS, spellsAbove, type IntervalName, type LabelledInterval } from './interval'
 import { pitchClassOf, plainSpelling, type SpelledNote } from './note'
@@ -90,13 +95,6 @@ const triadSemitones = (triad: Triad): readonly number[] =>
 /** A triad's own suffix: '' for major, `m`, `°`, `+`, `sus2`, `sus4`. */
 const triadSuffix = (triad: Triad): string => triadName(triadSemitones(triad)).suffix
 
-/** How each 7th is written as a degree, as the keys label it: ♭7, 7, 𝄫7. */
-export const SEVENTH_DEGREE: Readonly<Record<Seventh, string>> = {
-  minor: INTERVALS.m7.degree,
-  major: INTERVALS.M7.degree,
-  diminished: INTERVALS.d7.degree,
-}
-
 /** How each part is written in a symbol. */
 const ADDED_SYMBOL: Readonly<Record<AddedTone, string>> = {
   add2: 'add2',
@@ -132,10 +130,13 @@ const SIZES: Readonly<Record<Triad, readonly BuiltSize[]>> = {
 }
 export const sizesOf = (triad: Triad): readonly BuiltSize[] => SIZES[triad]
 
-/** The 7ths over a triad at a size: a diminished 7th only over a diminished triad, and only as a 7th chord. */
+/**
+ * The 7ths over a triad at a size: a diminished 7th only over a diminished triad, and only as a 7th
+ * chord, as is a major 7th over it (`°(maj7)`).
+ */
 export function seventhsOf(triad: Triad, size: BuiltSize): readonly Seventh[] {
   if (triad !== 'dim') return ['minor', 'major']
-  return size === 7 ? ['minor', 'diminished'] : ['minor']
+  return size === 7 ? ['minor', 'diminished', 'major'] : ['minor']
 }
 
 /**
@@ -171,14 +172,21 @@ export function addedOf({ triad, size }: Pick<ChordParts, 'triad' | 'size'>): re
 
 /**
  * The alterations a chord takes, its available tensions: a dominant 7th (a major 3rd under a minor
- * 7th) every one but a ♭13 over a raised 5th, which is that 5th; a major 7th its #11; a 7sus4 its ♭9;
- * the rest none.
+ * 7th) every one but a ♭13 over a raised 5th, which is that 5th; a major 7th its ♭5 and #11 (an
+ * augmented one its #11); a 7sus4 its ♭9; a minor 7th its ♭9 (the Phrygian `m7♭9`) and a minor 9th its
+ * #11 (the Dorian `m9#11`); the major triad its ♭5 (`(♭5)`); the rest none. A minor chord and a
+ * triad are altered only with no tone added.
  */
 export function alterationsOf(parts: ChordParts): readonly Alteration[] {
-  if (parts.size === 5) return []
+  const plain = parts.added.length === 0
+  if (parts.size === 5) return parts.triad === 'maj' && plain ? ['b5'] : []
   if (parts.triad === 'sus4') return parts.seventh === 'minor' ? ['b9'] : []
+  if (parts.triad === 'min') {
+    if (!plain || parts.seventh !== 'minor') return []
+    return parts.size === 7 ? ['b9'] : parts.size === 9 ? ['s11'] : []
+  }
   if (parts.triad !== 'maj' && parts.triad !== 'aug') return []
-  if (parts.seventh === 'major') return ['s11']
+  if (parts.seventh === 'major') return parts.triad === 'maj' ? ['b5', 's11'] : ['s11']
   return parts.triad === 'aug' ? ALTERATIONS.filter((each) => each !== 'b13') : ALTERATIONS
 }
 
@@ -283,7 +291,7 @@ export function withAdded(parts: ChordParts, chosen: readonly AddedTone[]): Chor
  * with the 3rd, and a sus4's 11th, which is its 4th), each alteration in place of its natural tone, or
  * added (a ♭5 under a raised 5th: the altered chord); then the tones it adds.
  */
-function builtIntervals(parts: ChordParts): LabelledInterval[] {
+export function builtIntervals(parts: ChordParts): LabelledInterval[] {
   const names = new Set<IntervalName>(TRIAD_INTERVALS[parts.triad])
   if (parts.size > 5) {
     const major3rd = names.has('M3')
@@ -293,10 +301,10 @@ function builtIntervals(parts: ChordParts): LabelledInterval[] {
       names.add('P11')
     }
     if (parts.size === 13) names.add('M13')
-    for (const alteration of parts.alterations) {
-      names.delete(ALTERED[alteration].takes)
-      names.add(ALTERED[alteration].adds)
-    }
+  }
+  for (const alteration of parts.alterations) {
+    names.delete(ALTERED[alteration].takes)
+    names.add(ALTERED[alteration].adds)
   }
   for (const tone of parts.added) names.add(ADDED_INTERVAL[tone])
   return [...names].map((name) => INTERVALS[name]).sort((a, b) => a.semitones - b.semitones)
@@ -328,9 +336,14 @@ function withAddedTones(name: string, tones: readonly AddedTone[]): string {
 
 /**
  * A triad's suffix with the tones it adds: its 6th written first, with its 9th as `6/9` (`6`, `m6/9`,
- * `6sus4`), then the rest (`add9`, `m(add9)`, `6(add11)`).
+ * `6sus4`), then the rest (`add9`, `m(add9)`, `6(add11)`); an altered triad its alteration in
+ * brackets (`(♭5)`).
  */
 function triadRuleSuffix(parts: ChordParts): string {
+  if (parts.alterations.length > 0) {
+    const signs = parts.alterations.map((each) => ALTERATION_SIGN[each]).join(',')
+    return `${triadSuffix(parts.triad)}(${signs})`
+  }
   const six = parts.added.includes('add6') ? SIX[parts.triad] : undefined
   if (!six) return withAddedTones(triadSuffix(parts.triad), parts.added)
   const sixNine = parts.added.includes('add9')
@@ -340,19 +353,42 @@ function triadRuleSuffix(parts: ChordParts): string {
   )
 }
 
+/** The raised 5th a dominant's name writes after its number, as an alteration is written: `7#5`. */
+const RAISED_FIFTH = '#5'
+
+/**
+ * A 7th chord's alterations as a symbol writes them, by degree, a flat before a sharp: one bare after
+ * the number (`7♭9`, `13#11`), two or more in brackets, apart by commas (`7(♭5,♭9)`, `7(#5,#9)`).
+ * A dominant's raised 5th is one of them (`7#5`, `7(#5,♭9)`).
+ */
+function alteredSuffix(parts: ChordParts, trail: string): { trail: string; altered: string } {
+  const raisedFifth = trail === RAISED_FIFTH
+  const signs = parts.alterations.map((each) => ALTERATION_SIGN[each])
+  if (raisedFifth) signs.splice(parts.alterations.includes('b5') ? 1 : 0, 0, RAISED_FIFTH)
+  const own = raisedFifth ? '' : trail
+  if (signs.length < 2) return { trail: own, altered: signs.join('') }
+  return { trail: own, altered: `(${signs.join(',')})` }
+}
+
 /**
  * A chord's suffix by rule: a triad's with the tones it adds; a 7th chord's name around its highest
- * natural number (`m11`, `13sus4`, `Maj9`), then each alteration in order (`9#11`, `7♭5♭9`,
- * `Maj13#11`), then the tones it adds (`7(add13)`, `m7(add11)`).
+ * natural number (`m11`, `13sus4`, `maj9`), then its alterations (`9#11`, `7(♭5,♭9)`, `maj13#11`),
+ * then the tones it adds (`7(add13)`, `m7(add11)`).
  */
 function ruleSuffix(parts: ChordParts): string {
   if (parts.size === 5) return triadRuleSuffix(parts)
-  const { lead, trail } = seventhName([
+  const named = seventhName([
     ...triadSemitones(parts.triad),
     INTERVALS[SEVENTH_INTERVAL[parts.seventh]].semitones,
   ])
-  const altered = parts.alterations.map((each) => ALTERATION_SIGN[each]).join('')
-  return withAddedTones(`${lead}${highestNatural(parts)}${trail}${altered}`, parts.added)
+  const { trail, altered } = alteredSuffix(parts, named.trail)
+  return withAddedTones(`${named.lead}${highestNatural(parts)}${trail}${altered}`, parts.added)
+}
+
+/** The suffix parts write: the table's where the table has the chord, else the rule's. */
+export function partsSuffix(parts: ChordParts): string {
+  const quality = qualityWithIntervals(builtIntervals(parts))
+  return quality ? tableSuffix(quality) : ruleSuffix(parts)
 }
 
 /** Whether every tone sits on the letter its steps reach: none that would need a third sharp or flat. */
@@ -373,7 +409,7 @@ export function buildChord(given: SpelledNote, parts: ChordParts): BuiltChord {
   return {
     root,
     tones: intervals.map((interval) => toneAbove(root, interval)),
-    suffix: quality ? qualitySuffix(quality) : ruleSuffix(parts),
+    suffix: quality ? tableSuffix(quality) : ruleSuffix(parts),
     ...(quality ? { quality } : {}),
   }
 }
@@ -381,6 +417,12 @@ export function buildChord(given: SpelledNote, parts: ChordParts): BuiltChord {
 /** The root the built chord on this pitch class is named from, by the table's rule. */
 export const builtRootSpelling = (pc: PitchClass, parts: ChordParts): SpelledNote =>
   chordRootSpelling(pc, builtIntervals(parts))
+
+/** A chord's intervals from the root up, as one key: `0 4 7 10`. */
+const intervalsKey = (parts: ChordParts): string =>
+  builtIntervals(parts)
+    .map((interval) => interval.semitones)
+    .join(' ')
 
 /** Every subset of a list, fewest first, each in the list's order. */
 const subsetsOf = <T>(list: readonly T[]): T[][] =>
@@ -393,8 +435,9 @@ const subsetsOf = <T>(list: readonly T[]): T[][] =>
 
 /**
  * Every chord the builder makes, each once, simplest first: by triad, size and 7th, then the fewest
- * added tones, then the fewest alterations. Where two parts build the same chord (a 7th with a ♭9 and
- * a 9th with its 9th lowered; an added 2nd and 9th, which fit to the 2nd alone), the first is kept.
+ * added tones, then the fewest alterations. Where two parts build the same chord, the one with the
+ * fewest added tones is kept, else the first (a 7th with a ♭9 before a 9th with its 9th lowered; a
+ * 13th with a ♭9 before a 7♭9 with a 13th added).
  */
 export const CHORD_PARTS: readonly ChordParts[] = (() => {
   const all = TRIADS.flatMap((triad) =>
@@ -409,16 +452,22 @@ export const CHORD_PARTS: readonly ChordParts[] = (() => {
       }),
     ),
   )
-  const seen = new Set<string>()
-  return all.filter((parts) => {
-    const key = builtIntervals(parts)
-      .map((interval) => interval.semitones)
-      .join(' ')
-    if (seen.has(key)) return false
-    seen.add(key)
-    return true
-  })
+  // Of the parts that build one chord, the one with the fewest added tones: a 13th with its 9th
+  // lowered, not a 7♭9 with a 13th added.
+  const best = new Map<string, ChordParts>()
+  for (const parts of all) {
+    const key = intervalsKey(parts)
+    const kept = best.get(key)
+    if (!kept || parts.added.length < kept.added.length) best.set(key, parts)
+  }
+  return all.filter((parts) => best.get(intervalsKey(parts)) === parts)
 })()
+
+const BY_INTERVALS = new Map(CHORD_PARTS.map((parts) => [intervalsKey(parts), parts] as const))
+
+/** The parts `CHORD_PARTS` builds this chord with: one value for each chord (a 7th with a ♭9, not a 9th with its 9th lowered). */
+export const builderParts = (parts: ChordParts): ChordParts =>
+  BY_INTERVALS.get(intervalsKey(parts)) ?? parts
 
 /** The parts that build a table quality: how a chord family's step opens the builder. */
 export function partsOf(quality: ChordQuality): ChordParts {

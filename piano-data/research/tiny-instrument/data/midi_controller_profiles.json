@@ -1,0 +1,208 @@
+{
+ "profiles": [
+  {
+   "id": "arturia-keylab",
+   "displayName": "Arturia KeyLab",
+   "manufacturer": "Arturia",
+   "nameMatchers": [
+    "keylab essential",
+    "keylab mkii",
+    "keylab"
+   ],
+   "ccLabels": {
+    "85": "Loop",
+    "86": "Record",
+    "91": "Play",
+    "93": "Stop",
+    "116": "Rewind"
+   },
+   "transportDefaults": {
+    "play": {
+     "cc": 91,
+     "note": null
+    },
+    "stop": {
+     "cc": 93,
+     "note": null
+    },
+    "record": {
+     "cc": 86,
+     "note": null
+    },
+    "rewind": {
+     "cc": 116,
+     "note": null
+    },
+    "loopToggle": {
+     "cc": 85,
+     "note": null
+    }
+   }
+  },
+  {
+   "id": "akai-mpk",
+   "displayName": "Akai MPK",
+   "manufacturer": "Akai",
+   "nameMatchers": [
+    "mpk mini",
+    "mpk249",
+    "mpk261",
+    "mpk"
+   ],
+   "ccLabels": {
+    "116": "Rewind",
+    "117": "Stop",
+    "118": "Play",
+    "119": "Record"
+   },
+   "transportDefaults": {
+    "play": {
+     "cc": 118,
+     "note": null
+    },
+    "stop": {
+     "cc": 117,
+     "note": null
+    },
+    "record": {
+     "cc": 119,
+     "note": null
+    },
+    "rewind": {
+     "cc": 116,
+     "note": null
+    }
+   }
+  },
+  {
+   "id": "roland-a-series",
+   "displayName": "Roland A-Series",
+   "manufacturer": "Roland",
+   "nameMatchers": [
+    "a-49",
+    "a-88",
+    "a-series",
+    "roland a"
+   ],
+   "ccLabels": {
+    "81": "Play",
+    "82": "Stop",
+    "83": "Record",
+    "84": "Rewind",
+    "85": "Loop"
+   },
+   "transportDefaults": {
+    "play": {
+     "cc": 81,
+     "note": null
+    },
+    "stop": {
+     "cc": 82,
+     "note": null
+    },
+    "record": {
+     "cc": 83,
+     "note": null
+    },
+    "rewind": {
+     "cc": 84,
+     "note": null
+    },
+    "loopToggle": {
+     "cc": 85,
+     "note": null
+    }
+   }
+  },
+  {
+   "id": "generic-daw",
+   "displayName": "Generic DAW",
+   "manufacturer": "Generic",
+   "nameMatchers": [],
+   "ccLabels": {
+    "113": "Loop",
+    "115": "Rewind",
+    "116": "Play",
+    "117": "Stop",
+    "118": "Pause",
+    "119": "Record"
+   },
+   "transportDefaults": {
+    "play": {
+     "cc": 116,
+     "note": null
+    },
+    "stop": {
+     "cc": 117,
+     "note": null
+    },
+    "pause": {
+     "cc": 118,
+     "note": null
+    },
+    "record": {
+     "cc": 119,
+     "note": null
+    },
+    "rewind": {
+     "cc": 115,
+     "note": null
+    },
+    "loopToggle": {
+     "cc": 113,
+     "note": null
+    }
+   }
+  }
+ ],
+ "standardCC": {
+  "0": "Bank Select",
+  "1": "Modulation Wheel",
+  "2": "Breath Controller",
+  "4": "Foot Controller",
+  "5": "Portamento Time",
+  "6": "Data Entry MSB",
+  "7": "Volume",
+  "8": "Balance",
+  "10": "Pan",
+  "11": "Expression",
+  "12": "Effect Control 1",
+  "13": "Effect Control 2",
+  "32": "Bank Select LSB",
+  "64": "Sustain Pedal",
+  "65": "Portamento",
+  "66": "Sostenuto Pedal",
+  "67": "Soft Pedal",
+  "68": "Legato Footswitch",
+  "69": "Hold 2",
+  "70": "Sound Variation",
+  "71": "Resonance",
+  "72": "Release Time",
+  "73": "Attack Time",
+  "74": "Cutoff",
+  "75": "Decay Time",
+  "76": "Vibrato Rate",
+  "77": "Vibrato Depth",
+  "78": "Vibrato Delay",
+  "84": "Portamento Control",
+  "91": "Reverb",
+  "92": "Tremolo",
+  "93": "Chorus",
+  "94": "Detune",
+  "95": "Phaser",
+  "96": "Data Increment",
+  "97": "Data Decrement",
+  "98": "NRPN LSB",
+  "99": "NRPN MSB",
+  "100": "RPN LSB",
+  "101": "RPN MSB",
+  "120": "All Sound Off",
+  "121": "Reset All Controllers",
+  "122": "Local Control",
+  "123": "All Notes Off",
+  "124": "Omni Mode Off",
+  "125": "Omni Mode On",
+  "126": "Mono Mode",
+  "127": "Poly Mode"
+ }
+}

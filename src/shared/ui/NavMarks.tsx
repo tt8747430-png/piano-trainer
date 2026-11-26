@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { cn } from '@/shared/lib'
 
 /**
@@ -18,9 +18,4 @@ export function OpensMark({ className }: { className?: string }) {
       )}
     />
   )
-}
-
-/** ‹ before a sheet's Back, as a button's leading icon. */
-export function BackMark() {
-  return <ChevronLeft data-icon="inline-start" aria-hidden />
 }

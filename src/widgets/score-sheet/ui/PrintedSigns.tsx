@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { staffLayer } from '@/features/score-editor'
 import { hasFinePointer } from '@/shared/lib'
+import { barNumber } from '@/shared/lib/music'
 import type { ScoreLayout } from '@/shared/ui/score'
 import { headTargets, signTargets, type EditPrinted, type Printed } from '../model/printed'
 import { useSheetLayerName } from '../model/use-layer-name'
@@ -16,12 +17,15 @@ import { useSheetLayerName } from '../model/use-layer-name'
 export function PrintedSigns({
   layout,
   bars,
+  pickup,
   keyless,
   edit,
 }: {
   layout: ScoreLayout
   /** The piece's bar each of the line's measures is. */
   bars: readonly number[]
+  /** Whether the piece opens on a pickup: its bars numbered from the first full one. */
+  pickup: boolean
   /** Whether the line starts in a key printing no sharps or flats: its place is a target too. */
   keyless: boolean
   edit: EditPrinted
@@ -30,7 +34,7 @@ export function PrintedSigns({
   const layerName = useSheetLayerName()
   const [touch] = useState(() => !hasFinePointer())
   const name = (printed: Printed) => {
-    const bar = 'bar' in printed ? printed.bar + 1 : 1
+    const bar = barNumber('bar' in printed ? printed.bar : 0, pickup)
     if (printed.kind === 'clef')
       return t('printed.clefAt', { staff: layerName(staffLayer(printed.staff)), bar })
     if (printed.kind === 'signs')

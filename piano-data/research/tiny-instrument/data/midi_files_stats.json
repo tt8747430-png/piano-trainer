@@ -1,0 +1,335 @@
+{
+ "note": "statistics only; files are copyrighted and not exported",
+ "files": [
+  {
+   "genre": "Alternative Indie",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 1081,
+   "channels": 1,
+   "bytes": 8420,
+   "title": "Pixies - Where is My Mind"
+  },
+  {
+   "genre": "Alternative Rock",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 806,
+   "channels": 1,
+   "bytes": 6732,
+   "title": "Radiohead - Creep"
+  },
+  {
+   "genre": "Classical",
+   "format": 1,
+   "tracks": 5,
+   "ppq": 384,
+   "noteOns": 394,
+   "channels": 4,
+   "bytes": 4667,
+   "title": "Arcadelt Jacob - Ave Maria"
+  },
+  {
+   "genre": "Classical",
+   "format": 1,
+   "tracks": 3,
+   "ppq": 480,
+   "noteOns": 113,
+   "channels": 1,
+   "bytes": 1180,
+   "title": "Beethoven - 9th Symphony (Ode To Joy) [Easy Piano Tutorial]"
+  },
+  {
+   "genre": "Classical",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 2008,
+   "channels": 1,
+   "bytes": 13539,
+   "title": "Edith Piaf - La Foule Arr. Angel Cabral"
+  },
+  {
+   "genre": "Classical",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 479,
+   "channels": 1,
+   "bytes": 3365,
+   "title": "Max Richter - Written on the Sky"
+  },
+  {
+   "genre": "Country",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 651,
+   "channels": 2,
+   "bytes": 4478,
+   "title": "Bonnie Raitt George Michael - I Cant Make You Love Me Easy piano"
+  },
+  {
+   "genre": "Disney Themes",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 2111,
+   "channels": 1,
+   "bytes": 19243,
+   "title": "Elton John - Hakuna Mutata"
+  },
+  {
+   "genre": "Disney Themes",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 595,
+   "channels": 2,
+   "bytes": 4153,
+   "title": "Idina Menzel - Let It Go From the movie Frozen Beginner version"
+  },
+  {
+   "genre": "Hip Hop",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 1792,
+   "channels": 1,
+   "bytes": 12023,
+   "title": "Tyler The Creator - I THOUGHT YOU WANTED TO DANCE"
+  },
+  {
+   "genre": "Jazz",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 297,
+   "channels": 1,
+   "bytes": 3322,
+   "title": "Frank Sinatra - Fly Me To The Moon Flynn Parker Piano on munescore"
+  },
+  {
+   "genre": "Movies",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 5249,
+   "channels": 1,
+   "bytes": 36325,
+   "title": "Hans Zimmer - Interstellar PianoVision 2 track"
+  },
+  {
+   "genre": "Movies",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 908,
+   "channels": 1,
+   "bytes": 6392,
+   "title": "John Carpenter - Halloween Theme"
+  },
+  {
+   "genre": "Movies",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 1957,
+   "channels": 1,
+   "bytes": 12574,
+   "title": "John Williams - Hedwigs Theme arr. Patrik Pietschmann"
+  },
+  {
+   "genre": "Movies",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 152,
+   "channels": 1,
+   "bytes": 1323,
+   "title": "John Williams - jurassic park theme"
+  },
+  {
+   "genre": "Pop",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 932,
+   "channels": 1,
+   "bytes": 6582,
+   "title": "ABBA - The Winner Takes It All"
+  },
+  {
+   "genre": "Pop",
+   "format": 1,
+   "tracks": 1,
+   "ppq": 384,
+   "noteOns": 357,
+   "channels": 1,
+   "bytes": 2932,
+   "title": "Backstreet Boys - I Need You Tonight"
+  },
+  {
+   "genre": "Pop",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 1411,
+   "channels": 1,
+   "bytes": 9678,
+   "title": "Billie Eilish - Happier Than Ever"
+  },
+  {
+   "genre": "Pop",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 750,
+   "channels": 1,
+   "bytes": 5095,
+   "title": "Billie Eilish - Lovely"
+  },
+  {
+   "genre": "Pop",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 713,
+   "channels": 1,
+   "bytes": 5044,
+   "title": "Billy Joel - Pianoman"
+  },
+  {
+   "genre": "Pop",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 1043,
+   "channels": 1,
+   "bytes": 6849,
+   "title": "Bruno Mars - When i was your man"
+  },
+  {
+   "genre": "Pop",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 1502,
+   "channels": 1,
+   "bytes": 10546,
+   "title": "D4vd  Laufey - This is How it Feels"
+  },
+  {
+   "genre": "Pop",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 438,
+   "channels": 1,
+   "bytes": 3229,
+   "title": "Ed Sheeran - Perfect"
+  },
+  {
+   "genre": "Pop",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 1293,
+   "channels": 1,
+   "bytes": 8768,
+   "title": "Lukas Graham - 7 Years"
+  },
+  {
+   "genre": "Pop",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 1368,
+   "channels": 1,
+   "bytes": 9040,
+   "title": "The Beatles - Let it Be"
+  },
+  {
+   "genre": "Pop",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 1466,
+   "channels": 1,
+   "bytes": 10968,
+   "title": "Wiz Khalifa ft. Charlie Puth - See You Again"
+  },
+  {
+   "genre": "R&B Soul",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 814,
+   "channels": 1,
+   "bytes": 5824,
+   "title": "The Weekend - Save Your Tears"
+  },
+  {
+   "genre": "Rock",
+   "format": 1,
+   "tracks": 4,
+   "ppq": 192,
+   "noteOns": 304,
+   "channels": 2,
+   "bytes": 2886,
+   "title": "Allwood Richard - Claro Pascali Gaudio"
+  },
+  {
+   "genre": "Rock",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 1308,
+   "channels": 1,
+   "bytes": 9415,
+   "title": "Arctic Monkeys - 505"
+  },
+  {
+   "genre": "Rock",
+   "format": 1,
+   "tracks": 14,
+   "ppq": 480,
+   "noteOns": 6522,
+   "channels": 12,
+   "bytes": 73694,
+   "title": "Asia - Only Time Will Tell"
+  },
+  {
+   "genre": "Traditional Gospel",
+   "format": 1,
+   "tracks": 6,
+   "ppq": 1024,
+   "noteOns": 108,
+   "channels": 5,
+   "bytes": 7746,
+   "title": "Traditional - Amazing Grace"
+  },
+  {
+   "genre": "Video Games",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 2227,
+   "channels": 1,
+   "bytes": 45545,
+   "title": "C418 - Aria Math Minecraft OST"
+  },
+  {
+   "genre": "Video Games",
+   "format": 1,
+   "tracks": 2,
+   "ppq": 480,
+   "noteOns": 271,
+   "channels": 1,
+   "bytes": 1859,
+   "title": "C418 - Sweden From the Game Minecraft"
+  }
+ ]
+}

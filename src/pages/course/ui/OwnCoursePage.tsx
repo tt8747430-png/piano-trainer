@@ -1,9 +1,8 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { BookOpenText, Check, RotateCcw, Settings } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { lessonPlace } from '@/entities/lesson'
-import { FolderTile } from '@/entities/library'
 import {
   ownCourseLessons,
   selectOwnLessons,
@@ -11,18 +10,20 @@ import {
   type CourseLesson,
   type OwnCourse,
 } from '@/entities/own-lessons'
-import { selectLearned, selectRead, useProgress } from '@/entities/progress'
+import { selectLearned, selectRead, useProgress, isLearned } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
+import { useSettingsWindow } from '@/shared/lib'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, FabLink, FloatingActions, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink, PAINT, RoundButton, ScreenHeader, PageName } from '@/shared/ui'
 import {
-  isComplete,
-  LearnedMeter,
+  CourseBanner,
+  CourseOverview,
   LessonLine,
   lessonShare,
   LessonRow,
   LessonStop,
 } from '@/widgets/curriculum'
+import { CourseSettingsWindow } from './CourseSettingsWindow'
 
 /** A lesson read in the course: its page, carrying the course on. */
 const inCourse = (course: OwnCourse, lessonId: string) => (
@@ -45,23 +46,28 @@ function Lessons({
   const learned = useProgress(selectLearned)
   const read = useProgress(selectRead)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="text-2xl">
+    <section aria-labelledby={id} className="flex flex-col gap-1">
+      <h2 id={id} className="font-sans text-xl font-bold">
         {t('course.lessons')}
       </h2>
       {lessons.length === 0 ? (
         <p className="px-1 text-muted-foreground">{t('own.noCourseLessons')}</p>
       ) : (
-        <LessonLine>
+        <LessonLine across={4}>
           {lessons.map(({ lesson, own }, i) => {
             const step = lessonStepId(lesson.id)
-            const done = learned[step] !== undefined
+            const done = isLearned(learned, step)
             const place = own ? undefined : lessonPlace(lesson.id)
             return (
-              <LessonStop key={lesson.id}>
+              <LessonStop
+                key={lesson.id}
+                reached={done || lesson.id === next}
+                passed={done}
+                first={i === 0}
+                last={i === lessons.length - 1}
+              >
                 <LessonRow
                   render={inCourse(course, lesson.id)}
-                  mark={i + 1}
                   done={done}
                   share={lessonShare(lesson.sections.length, read[step], done)}
                   current={lesson.id === next}
@@ -79,35 +85,34 @@ function Lessons({
 }
 
 /**
- * A course of the learner's own (R30-5), `/courses/own-course-n`, as a course's page reads: one card
- * with its cover, its line, how much is learned and its one way in floating (Start course, Continue,
- * Review); then its lessons. Its gear opens its Settings, its pencil the course editor.
+ * A course of the learner's own (R30-5), `/courses/own-course-n`, as a course's page reads (its
+ * board's): its cover in its paint, its line, its count, how much is learned and what is next, its
+ * one way in in honey (Start course, Continue, Review); then its lessons. Its gear opens its Settings, its pencil the course editor.
  */
 export function OwnCoursePage({ course }: { course: OwnCourse }) {
+  const settingsWindow = useSettingsWindow()
   const { t } = useTranslation('learn')
   const navigate = useNavigate()
   const learned = useProgress(selectLearned)
   const lessons = ownCourseLessons(course, useOwnLessons(selectOwnLessons))
-  const open = lessons.find(({ lesson }) => learned[lessonStepId(lesson.id)] === undefined)
-  const done = lessons.filter(({ lesson }) => learned[lessonStepId(lesson.id)] !== undefined)
+  const open = lessons.find(({ lesson }) => !isLearned(learned, lessonStepId(lesson.id)))
+  const done = lessons.filter(({ lesson }) => isLearned(learned, lessonStepId(lesson.id)))
   const progress = { done: done.length, total: lessons.length }
   const way = open ?? lessons[0]
-  const label = !open
-    ? t('course.review')
-    : progress.done === 0
-      ? t('course.start')
-      : t('course.continue')
+  const paint = PAINT[course.look.paint]
+  const locale = useLocale()
+  const word = !open ? 'review' : progress.done === 0 ? 'start' : 'continue'
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 pb-8">
       <ScreenHeader
         title={course.title}
-        large
+        titleOnPage
         back={<BackButton />}
         settings={
-          <RoundLink
+          <RoundButton
             label={t('settings.open')}
             icon={Settings}
-            render={<Link to="/courses/$courseId/settings" params={{ courseId: course.id }} />}
+            onClick={() => settingsWindow.onOpenChange(true)}
           />
         }
         edit={{
@@ -121,44 +126,25 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
           onDone: () => undefined,
         }}
       />
-      {/* A wide laptop: the course's card on the left, its lessons on the right. */}
-      <div className="-mt-2 grid gap-8 xl:grid-cols-2 xl:items-start xl:gap-10">
-        <section className="flex max-w-3xl min-w-0 flex-col overflow-hidden card xl:sticky xl:top-4">
-          <div className="flex items-start gap-4 p-5">
-            <FolderTile look={course.look} />
-            <div className="flex min-w-0 flex-1 flex-col gap-2">
-              {course.line ? <p className="text-pretty">{course.line}</p> : null}
-              <p className="text-sm text-muted-foreground">
-                {t('course.lessonCount', { count: lessons.length })}
-              </p>
-            </div>
-          </div>
-          {lessons.length > 0 ? (
-            <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5">
-              {isComplete(progress) ? (
-                <p className="flex flex-1 items-center gap-2 font-semibold text-learned">
-                  <Check aria-hidden className="size-5" strokeWidth={3} />
-                  {t('course.done')}
-                </p>
-              ) : (
-                <LearnedMeter progress={progress} className="flex-1" />
-              )}
-            </div>
-          ) : null}
-        </section>
-        <div className="flex max-w-3xl min-w-0 flex-col gap-8">
-          <Lessons course={course} lessons={lessons} next={open?.lesson.id} />
-        </div>
+      {/* As the app's course: the head a band across the top on a laptop, the lessons under it. */}
+      <div className="-mt-6 flex min-w-0 flex-col gap-8 lg:-mt-4">
+        <CourseOverview
+          cover={<CourseBanner fill={paint.fill} ink={paint.ink} />}
+          title={<PageName>{course.title}</PageName>}
+          summary={course.line || undefined}
+          facts={[t('own.course'), t('course.lessonCount', { count: lessons.length })]}
+          progress={progress}
+          action={
+            way ? (
+              <ButtonLink size="lg" className="w-full" render={inCourse(course, way.lesson.id)}>
+                {t(`journey.${word}`, { title: localText(way.lesson.title, locale) })}
+              </ButtonLink>
+            ) : undefined
+          }
+        />
+        <Lessons course={course} lessons={lessons} next={open?.lesson.id} />
       </div>
-      {way ? (
-        <FloatingActions>
-          <FabLink
-            label={label}
-            icon={open ? BookOpenText : RotateCcw}
-            render={inCourse(course, way.lesson.id)}
-          />
-        </FloatingActions>
-      ) : null}
+      <CourseSettingsWindow courseId={course.id} {...settingsWindow} />
     </div>
   )
 }

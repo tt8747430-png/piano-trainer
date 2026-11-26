@@ -15,3 +15,9 @@ export function downloadFile(bytes: Uint8Array<ArrayBuffer>, name: string, type:
   link.remove()
   setTimeout(() => URL.revokeObjectURL(address), KEEP_ADDRESS_MS)
 }
+
+/** What a file system refuses in a name. */
+const UNSAFE = /[/\\:*?"<>|]/g
+
+/** A title as a file's name: what a file system refuses becomes a dash. */
+export const fileTitle = (title: string): string => title.replace(UNSAFE, '-')

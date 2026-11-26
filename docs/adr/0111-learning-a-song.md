@@ -25,19 +25,23 @@ no card on top.
   read only with ⓘ), Genre, Language (Instrumental for a song without words), Tags (Notion's multi-select: the
   library's other tags offered as one types, Create for a new one). On one of the app's songs a learner reads its
   credits; nothing is edited in a mode of the page's own.
-- **The song's Settings** (`/songs/$pieceId/settings`, Noji's deck settings): the song at its head; Library (Folder,
-  Duplicate, Archive or Restore); Share (Publish with its state, a page of its own at
-  `/songs/$pieceId/publish`; Share link; Export…); and apart, Delete (to the Trash at once, with Undo, ADR 0106) or
-  Reset to the original, asked first. A study has no library rows.
-- **A section's page** (`…/sections/$section`) teaches it:
+- **The song's Settings** (Noji's deck settings) open over the song, never a page of their own: on a laptop the app
+  Settings' window (`SettingsWindow`, 720 by 720, centred on the window, the page dimmed), on a phone a tall sheet. The song at its head;
+  Library (Folder, Duplicate, Archive or Restore); Share (Publish with its state; Share link; Export); and apart,
+  Delete (to the Trash at once, with Undo, ADR 0106) or Reset to the original, asked first. Publish, Export and
+  Folder (Move to) are pages inside the window with Back to Settings: a sheet never holds a second sheet. The
+  window and its page are the history entry's state (`useSettingsWindow`), so the address stays the song's and Back
+  steps out of a page inside, then out of the window. A study has no library rows.
+- **A section's page** (`…/sections/$section`) teaches it: its name on the paper (its rounds large, its bars and chords; no card), 8 under the bar, then its ways in, every row 56; one column on a phone, the Section board's two on a laptop (Chords and In time, then One change at a time and Patterns), each row's state beside its words with no chevron, on the 56 column.
   - **Chords**, open: each learned by **three holds** in its sheet: its keys held together on a MIDI keyboard or the
     sheet's keys, every key let go since the last. Each hold is heard (an accented click) and seen ("1 of 3").
   - Then three folds, closed until asked for, each with an ⓘ: **In time** (the Player in Listen, looped over the
     sequence, the click on for that visit), **One change at a time** (Wait mode on the bars two chords span) and
     **Pattern** (a bar of it on one chord, the keys out for that visit, each note lit as it sounds).
   - A row names what it plays (`Em · C · D`, `Em → D/F♯`), checked once done. One change alone is its sequence's.
-- **Progress is what was played.** `pt-progress` keeps the lessons done by key (a chord held three times; a Wait-mode
-  pass over a run of bars, which the Player records for any loop or the whole piece) and the holds counted so far.
+- **Progress is what was played.** `pt-progress` keeps the lessons done by key (a chord held three times; a good
+  Wait-mode pass over a run of bars, its score 80 % or more, the takes' weak share, which the Player records for any
+  loop's lap or the whole piece: Metronaut's "Score above n % to validate this step") and the holds counted so far.
   A section's lessons are computed from the music as the Player plays it, so a chord the learner's version changes
   is a new lesson. Listen does not hear the learner: a sequence, a change or a pattern is done in Wait mode.
 - **The whole piece's Learned mark** stays the learner's own: lessons never set it.

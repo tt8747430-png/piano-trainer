@@ -8,6 +8,7 @@ const course: Course = {
   shelf: 'technique',
   stage: 'beginner',
   title: { en: 'First Exercises for Both Hands', ru: 'Первые упражнения для двух рук' },
+  line: { en: 'Short daily drills for both hands', ru: 'Короткие ежедневные упражнения' },
   summary: {
     en: 'Short daily drills that teach the hands to play together and on their own: five-finger patterns, a tune over simple chords, and Hanon.',
     ru: 'Короткие ежедневные упражнения, которые учат руки играть вместе и независимо: позиция пяти пальцев, мелодия над простыми аккордами и Ганон.',

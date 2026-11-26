@@ -1,6 +1,6 @@
 import type { Midi, Tick } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
-import { leftAt, xAtTick, type Extent, type Head, type ScoreLayout } from './layout'
+import { leftAt, xAtTick, type Extent, type ScoreLayout } from './layout'
 
 /**
  * The one selection's measures, in staff spaces (ADR 0096), the score editor's and the Player's
@@ -11,7 +11,7 @@ import { leftAt, xAtTick, type Extent, type Head, type ScoreLayout } from './lay
 export const MARK = { reach: 0.5, pad: 0.3, lead: 0.5, inset: 0.4 } as const
 
 /** How far round a head a click still lands on it, in staff spaces (ADR 0096). */
-export const GRAB = 0.35
+const GRAB = 0.35
 
 /**
  * The marks' look (ADR 0096): what is chosen is coloured (the notes themselves, ScoreView's
@@ -21,6 +21,8 @@ export const GRAB = 0.35
 export const MARK_CLASS = {
   band: 'rounded-control bg-ring/15',
   line: 'w-0.5 rounded-pill bg-ring',
+  // The loop is the practice's, not a selection: honey, as the Player's boards (a 12% wash).
+  loop: 'bg-honey-ring/12',
 } as const
 
 export type MarkKind = keyof typeof MARK_CLASS
@@ -69,16 +71,6 @@ export interface Chosen {
   readonly to: Tick
   readonly midi?: Midi | undefined
 }
-
-/** The heads a choice is over. */
-export const headsChosen = (layout: Pick<ScoreLayout, 'heads'>, chosen: Chosen): Head[] =>
-  (layout.heads ?? []).filter(
-    (head) =>
-      head.tick >= chosen.from &&
-      head.tick < chosen.to &&
-      (!chosen.staves || chosen.staves.includes(head.staff)) &&
-      (chosen.midi === undefined || head.midi === chosen.midi),
-  )
 
 type Laid = Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads' | 'rests' | 'signs'>
 
@@ -197,14 +189,14 @@ export function pickAt(
   const grab = GRAB * spaceOf(layout)
   const heads = layout.heads ?? []
   // A grace note's head, small and close before its note's: nearer to it than its note's is.
-  const near = (each: readonly Extent[]) =>
+  const near = <T extends Extent>(each: readonly T[]) =>
     each
       .filter((head) => holds(head, x, y, grab))
       .sort((a, b) => centre(a, x, y) - centre(b, x, y))[0]
   const grace = near(layout.graces ?? [])
   const note = near(heads)
   if (grace && (!note || centre(grace, x, y) < centre(note, x, y))) {
-    const { staff, tick, index } = grace as Head
+    const { staff, tick, index } = grace
     return { staff, tick, index, grace: true }
   }
   const under = heads

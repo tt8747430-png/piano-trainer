@@ -4,8 +4,6 @@ import { cn } from '@/shared/lib'
 import { LessonBlock } from './LessonBlock'
 import { SectionHeading, Takeaway } from './SectionParts'
 
-const nothing = () => undefined
-
 /**
  * A page's About as a learner reads it (R29 B9): its sections' headings, blocks and takeaways drawn
  * as a lesson draws them, each in its own style; a heading left blank is not drawn. Its examples play;
@@ -33,9 +31,7 @@ export function AboutView({
             <SectionHeading text={section.heading} style={section.style} />
           ) : null}
           {section.blocks.map((block, b) =>
-            block.kind === 'question' ? null : (
-              <LessonBlock key={`${s}.${b}`} block={block} onShow={nothing} />
-            ),
+            block.kind === 'question' ? null : <LessonBlock key={`${s}.${b}`} block={block} />,
           )}
           {section.takeaway ? (
             <Takeaway text={section.takeaway} style={section.takeawayStyle} />

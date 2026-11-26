@@ -5,12 +5,11 @@ import { selectLocale, selectWelcomed, useSettings, useSettingsStoreApi } from '
 import { setLocale, setWelcomed } from '@/features/set-preference'
 import { LOCALES } from '@/shared/i18n'
 import { useAccount } from '@/shared/lib/account'
-import { Segmented } from '@/shared/ui'
+import { Segmented, SettingsGroup } from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
@@ -39,25 +38,34 @@ export function Welcome({ shown }: { shown: boolean }) {
   }
   return (
     <AlertDialog open={shown && ready && !signedIn && !welcomed}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle className="font-display text-2xl">
+      {/* The AppLayers board's welcome: the app's tile, a sans title, Language in caps, then Start
+          playing over Sign in, each the dialog's width. */}
+      <AlertDialogContent className="w-100 max-w-[calc(100%-3rem)] gap-3 rounded-sheet bg-background p-5 shadow-(--elevation-3)">
+        <img src="/favicon.svg" alt="" className="size-18 justify-self-center rounded-card" />
+        <AlertDialogHeader className="place-items-center gap-3 text-center">
+          <AlertDialogTitle className="font-sans text-[1.5rem] leading-[normal] font-bold text-balance">
             {t('welcome.title')}
           </AlertDialogTitle>
-          <AlertDialogDescription>{t('welcome.says')}</AlertDialogDescription>
+          <AlertDialogDescription className="text-base/[1.45] text-pretty">
+            {t('welcome.says')}
+          </AlertDialogDescription>
         </AlertDialogHeader>
-        <Segmented
-          label={t('welcome.language')}
-          value={locale}
-          options={LOCALES.map((value) => ({ value, label: t(`settings:language.${value}`) }))}
-          onChange={(value) => setLocale(settings, value)}
-        />
-        <AlertDialogFooter>
-          <Button variant="outline" onClick={signIn}>
+        <SettingsGroup title={t('welcome.language')} bare className="gap-3">
+          <Segmented
+            label={t('welcome.language')}
+            value={locale}
+            options={LOCALES.map((value) => ({ value, label: t(`settings:language.${value}`) }))}
+            onChange={(value) => setLocale(settings, value)}
+          />
+        </SettingsGroup>
+        <div className="mt-1.5 grid gap-2">
+          <Button size="lg" onClick={() => setWelcomed(settings)}>
+            {t('welcome.start')}
+          </Button>
+          <Button size="lg" variant="ghost" className="bg-muted hover:bg-muted/80" onClick={signIn}>
             {t('welcome.signIn')}
           </Button>
-          <Button onClick={() => setWelcomed(settings)}>{t('welcome.start')}</Button>
-        </AlertDialogFooter>
+        </div>
       </AlertDialogContent>
     </AlertDialog>
   )

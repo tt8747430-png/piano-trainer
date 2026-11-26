@@ -14,7 +14,7 @@ import {
   type ShelvedFolder,
 } from '@/entities/library'
 import { cn } from '@/shared/lib'
-import { Sheet, SheetContent } from '@/shared/ui'
+import { say, Sheet, SheetContent } from '@/shared/ui'
 import type { Moving } from '../move-to'
 import { FolderSheet } from './FolderSheet'
 import { useLibraryActs } from './use-library-acts'
@@ -45,30 +45,68 @@ export function MoveSheet({
   what: string
   onOpenChange: (open: boolean) => void
 }) {
+  const { t } = useTranslation('songs')
   const [making, setMaking] = useState<Moving | null>(null)
   const acts = useLibraryActs()
   return (
     <>
-      <Sheet open={moving !== null} onOpenChange={onOpenChange}>
+      <Sheet at={{}} open={moving !== null} onOpenChange={onOpenChange}>
         {moving ? (
-          <MovePicker
-            moving={moving}
-            what={what}
-            onPick={(to) => {
-              onOpenChange(false)
-              acts.move(moving, to)
-            }}
-            onNewFolder={() => {
-              onOpenChange(false)
-              setMaking(moving)
-            }}
-          />
+          <SheetContent title={t('move.title')} description={what}>
+            <MovePicker
+              moving={moving}
+              onPick={(to) => {
+                onOpenChange(false)
+                acts.move(moving, to)
+              }}
+              onNewFolder={() => {
+                onOpenChange(false)
+                setMaking(moving)
+              }}
+            />
+          </SheetContent>
         ) : null}
       </Sheet>
+      <NewFolderFor making={making} onDone={() => setMaking(null)} />
+    </>
+  )
+}
+
+/**
+ * Move to…'s places as a page inside a song's Settings' window: a tap on a place moves there, then
+ * `onDone`; New playlist opens the window's page for it (`onNew`).
+ */
+export function MovePlaces({
+  moving,
+  onDone,
+  onNew,
+}: {
+  moving: Moving
+  onDone: () => void
+  onNew: () => void
+}) {
+  const acts = useLibraryActs()
+  return (
+    <MovePicker
+      moving={moving}
+      onPick={(to) => {
+        onDone()
+        acts.move(moving, to)
+      }}
+      onNewFolder={onNew}
+    />
+  )
+}
+
+/** New playlist for what moves: made at Home, what moves moved into it. */
+function NewFolderFor({ making, onDone }: { making: Moving | null; onDone: () => void }) {
+  const acts = useLibraryActs()
+  return (
+    <>
       <FolderSheet
         target={making ? { kind: 'new', parent: null } : null}
         onOpenChange={(open) => {
-          if (!open) setMaking(null)
+          if (!open) onDone()
         }}
         onMade={(id) => {
           if (making) acts.move(making, id)
@@ -93,12 +131,10 @@ function hereOf(layout: LibraryLayout, { songs, folders }: Moving): Place | unde
 
 function MovePicker({
   moving,
-  what,
   onPick,
   onNewFolder,
 }: {
   moving: Moving
-  what: string
   onPick: (to: Place) => void
   onNewFolder: () => void
 }) {
@@ -149,41 +185,39 @@ function MovePicker({
     })
 
   return (
-    <SheetContent title={t('move.title')} description={what}>
-      <ul className="flex flex-col">
-        <li>
-          <PlaceRow
-            depth={0}
-            tile={
-              <span
-                aria-hidden
-                className="grid size-12 shrink-0 place-items-center rounded-control bg-muted text-foreground [&_svg]:size-5"
-              >
-                <House />
-              </span>
-            }
-            name={t('library.home')}
-            here={here === null}
-            barred={null}
-            onPick={() => onPick(null)}
-          />
-        </li>
-        {folderRows(null, 0)}
-        <li>
-          <div className="flex items-center">
-            <button type="button" onClick={onNewFolder} className={cn(ROW, 'text-link')}>
-              <span
-                aria-hidden
-                className="grid size-12 shrink-0 place-items-center rounded-control border border-dashed border-border [&_svg]:size-5"
-              >
-                <FolderPlus />
-              </span>
-              <span className="min-w-0 flex-1 break-words">{t('move.newFolder')}</span>
-            </button>
-          </div>
-        </li>
-      </ul>
-    </SheetContent>
+    <ul className="flex flex-col">
+      <li>
+        <PlaceRow
+          depth={0}
+          tile={
+            <span
+              aria-hidden
+              className="grid size-12 shrink-0 place-items-center rounded-control bg-muted text-foreground [&_svg]:size-5"
+            >
+              <House />
+            </span>
+          }
+          name={t('library.home')}
+          here={here === null}
+          barred={null}
+          onPick={() => onPick(null)}
+        />
+      </li>
+      {folderRows(null, 0)}
+      <li>
+        <div className="flex items-center">
+          <button type="button" onClick={onNewFolder} className={cn(ROW, 'text-link')}>
+            <span
+              aria-hidden
+              className="grid size-12 shrink-0 place-items-center rounded-control border border-dashed border-border [&_svg]:size-5"
+            >
+              <FolderPlus />
+            </span>
+            <span className="min-w-0 flex-1 break-words">{t('move.newFolder')}</span>
+          </button>
+        </div>
+      </li>
+    </ul>
   )
 }
 
@@ -216,10 +250,11 @@ function PlaceRow({
     <div className="flex items-center" style={{ paddingLeft: `${Math.min(depth, 4) * 1.25}rem` }}>
       <button
         type="button"
-        // Here is no move, and a folder into itself none: both stay in sight, neither acts.
+        // Here is no move, and a folder into itself none: both stay in sight, neither moves; a barred
+        // one says why when tapped, a phone having no hover for its title.
         aria-disabled={here || barred !== null || undefined}
         title={barred ?? undefined}
-        onClick={here || barred ? undefined : onPick}
+        onClick={here ? undefined : barred ? () => say(barred) : onPick}
         className={cn(
           ROW,
           here && 'cursor-default hover:bg-transparent',

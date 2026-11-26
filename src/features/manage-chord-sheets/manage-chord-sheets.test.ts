@@ -42,13 +42,18 @@ describe('My chord sheets', () => {
     deleteSheet(store, id)
     expect(store.getState().mine.map((s) => s.id)).toEqual([copy])
   })
-  it('New puts an empty Verse in hand; a sheet held in hand gives back the one it replaced', () => {
+  it('New puts an empty Verse in hand; a sheet held in hand under its name gives back the one it replaced', () => {
     const store = fresh()
     editSheet(store, undefined, { text: LINE.text })
-    const before = holdSheet(store, { ...LINE, text: 'G 3/4; chorus: G' })
-    expect(before.text).toBe(LINE.text)
+    const before = holdSheet(store, {
+      entry: { ...LINE, text: 'G 3/4; chorus: G' },
+      name: 'Isus s-a născut',
+    })
+    expect(before).toEqual({ entry: { ...NEW_ENTRY, text: LINE.text }, name: null })
     expect(store.getState().scratch.text).toBe('G 3/4; chorus: G')
+    expect(store.getState().scratchName).toBe('Isus s-a născut')
     startNew(store)
     expect(store.getState().scratch).toEqual(NEW_ENTRY)
+    expect(store.getState().scratchName).toBeNull()
   })
 })

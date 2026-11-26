@@ -2,25 +2,24 @@ import { Hand } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { BeatSquares, useMetronome } from '@/features/metronome'
 import { useShortcuts } from '@/shared/lib/shortcuts'
+import { tempoWord } from '@/shared/lib/music'
 import { BPM_RANGE } from '@/shared/lib/schedule'
-import { InfoTip } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { FloatingPiece } from '@/shared/ui'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { ToolPage } from '@/widgets/tool-page'
 import { MetronomeSettings } from './MetronomeSettings'
 import { TempoSteps } from '@/shared/ui'
-import { TempoWordTip } from './TempoWordTip'
 
 /**
- * The Metronome (ADR 0052), a tool on Practice (R29 B11), on the tools' one layout, every setting in
- * place as Chordify's (R32): the tempo large between its steps and its word, the bar's beats as
- * squares to tap (accent · beat · silent), the slider with Tap tempo; then, under it on a phone and
- * beside it on a laptop, Sound (time signature, sound, subdivision) and Practice aids (the speed
- * trainer, silent bars); Start floating. No gear: nothing of it is anywhere else. Space starts and
- * stops it, ↑ ↓ change the tempo by 1, with Shift by 10. What it does is its bar's ⓘ.
+ * The Metronome (canvas 179), a tool on Practice, on the tools' one layout, every setting in place as
+ * Chordify's: the tempo's word and BPM over its number between its steps, the slider, the bar's beats as tall
+ * tiles to tap (accent · beat · silent); then, under them on a phone and beside them on a laptop, one
+ * group of rows (time signature, sound, subdivision, the speed trainer, silent bars); Tap and Start
+ * floating. No gear: nothing of it is anywhere else. Space starts and stops it, ↑ ↓ change the tempo
+ * by 1, with Shift by 10.
  */
 export function MetronomePage() {
-  const { t } = useTranslation(['practice', 'common'])
+  const { t } = useTranslation(['practice', 'music'])
   const metronome = useMetronome()
   const name = t('practice:pages.metronome')
   const toggleName = metronome.playing
@@ -56,29 +55,35 @@ export function MetronomePage() {
   return (
     <ToolPage
       title={name}
-      actions={
-        <InfoTip name={name} bar>
-          {t('practice:metronome.info')}
-        </InfoTip>
-      }
       play={{
         label: t('practice:metronome.start'),
         playing: metronome.playing,
         onToggle: metronome.toggle,
       }}
+      bar={
+        <FloatingPiece
+          label={t('practice:metronome.tap')}
+          caption={t('practice:metronome.tapShort')}
+          onClick={metronome.tap}
+        >
+          <Hand aria-hidden />
+        </FloatingPiece>
+      }
+      column={760}
       side={<MetronomeSettings metronome={metronome} />}
     >
-      <div className="flex flex-col items-center gap-2">
-        <TempoSteps bpm={metronome.tempoNow} onStep={metronome.nudge} />
-        <TempoWordTip bpm={metronome.tempoNow} />
-      </div>
-      <BeatSquares
-        levels={metronome.beatLevels}
-        sounding={metronome.beat}
-        muted={metronome.muted}
-        onTap={metronome.tapBeat}
+      <TempoSteps
+        bpm={metronome.tempoNow}
+        mark={t(`music:tempoWord.${tempoWord(metronome.tempoNow)}.name`)}
+        large
+        onStep={metronome.nudge}
       />
-      <div className="flex w-full max-w-md items-center gap-3" data-setting="metronome.bpm">
+      {/* The slider between its ends, 20 and 300, in 12 soft ink, 20 from the tempo and the beats, as the board's TEMPO. */}
+      <div
+        className="my-1 flex h-7 w-full items-center gap-3 text-xs text-muted-foreground tabular-nums"
+        data-setting="metronome.bpm"
+      >
+        <span aria-hidden>{BPM_RANGE.min}</span>
         <Slider
           value={metronome.tempoNow}
           min={BPM_RANGE.min}
@@ -88,11 +93,24 @@ export function MetronomePage() {
         >
           <SliderLabel className="sr-only">{t('practice:metronome.slider')}</SliderLabel>
         </Slider>
-        <Button variant="soft" onClick={metronome.tap} className="shrink-0 rounded-pill">
-          <Hand aria-hidden />
-          {t('practice:metronome.tap')}
-        </Button>
+        <span aria-hidden>{BPM_RANGE.max}</span>
       </div>
+      {metronome.flash && metronome.playing && metronome.beat !== null ? (
+        // Flash on the beat: a honey wash over the screen as each beat sounds, keyed to the beat
+        // so it flashes anew each time; it never takes a tap.
+        <span
+          key={`${metronome.bar ?? 0}.${metronome.beat}`}
+          aria-hidden
+          className="beat-flash pointer-events-none fixed inset-0 z-40 bg-primary/25"
+        />
+      ) : null}
+      <BeatSquares
+        tall
+        levels={metronome.beatLevels}
+        sounding={metronome.beat}
+        muted={metronome.muted}
+        onTap={metronome.tapBeat}
+      />
     </ToolPage>
   )
 }

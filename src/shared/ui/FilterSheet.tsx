@@ -1,18 +1,12 @@
-import { SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useMediaQuery } from '@/shared/lib'
-import { FoldGroup } from './FoldGroup'
+import { useMediaQuery, LAPTOP } from '@/shared/lib'
+import { FoldSection } from './FoldSection'
+import { FilterIcon } from './icons/FilterIcon'
 import { Button } from './primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
 import { Toggle } from './primitives/toggle'
 import { Sheet, SheetContent } from './Sheet'
-
-/**
- * The width from which a library (Songs', Practice's) shows its tree beside its rows, and its filters
- * open in a popover by their button: the sidebar's, `lg`.
- */
-export const LIBRARY_PANES = '(min-width: 64rem)'
 
 /**
  * A library's Filter button and its filters (ADR 0106, the owner's example): the button, its count on
@@ -34,7 +28,7 @@ export function FilterSheet({
   children: ReactNode
 }) {
   const { t } = useTranslation('common')
-  const laptop = useMediaQuery(LIBRARY_PANES)
+  const laptop = useMediaQuery(LAPTOP)
   const [open, setOpen] = useState(false)
   const title = t(sorted ? 'library.filters.sortTitle' : 'library.filters.title')
   const label = count > 0 ? t('library.filters.on', { count }) : title
@@ -47,7 +41,7 @@ export function FilterSheet({
   } as const
   const face = (
     <>
-      <SlidersHorizontal aria-hidden />
+      <FilterIcon aria-hidden />
       {count > 0 ? (
         <span
           aria-hidden
@@ -103,25 +97,25 @@ export function FilterGroup({
 }) {
   const [open, setOpen] = useState(true)
   return (
-    <FoldGroup
-      title={title}
-      open={open}
-      onToggle={() => setOpen((was) => !was)}
-      listClassName={list ? 'flex flex-wrap gap-2' : 'flex flex-col'}
-    >
-      {children}
-    </FoldGroup>
+    <FoldSection title={title} fold={{ open, toggle: () => setOpen((was) => !was) }}>
+      <ul className={list ? 'flex flex-wrap gap-2' : 'flex flex-col'}>{children}</ul>
+    </FoldSection>
   )
 }
 
-/** One choice of a filter's group: a chip pressed while it is the one chosen. */
+/**
+ * One choice of a filter's group: a chip pressed while it is the one chosen, with how many it keeps
+ * after its name where the group counts them (the boards' Major key 18).
+ */
 export function FilterChoice({
   pressed,
   onPress,
+  count,
   children,
 }: {
   pressed: boolean
   onPress: () => void
+  count?: number | undefined
   children: ReactNode
 }) {
   return (
@@ -134,6 +128,9 @@ export function FilterChoice({
         className="h-11 max-w-full min-w-14 text-muted-foreground aria-pressed:text-foreground"
       >
         <span className="truncate">{children}</span>
+        {count === undefined ? null : (
+          <span className="font-medium tabular-nums opacity-60">{count}</span>
+        )}
       </Toggle>
     </li>
   )

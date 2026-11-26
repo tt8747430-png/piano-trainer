@@ -1,7 +1,14 @@
 import { annotationOf, type Annotation } from './annotations'
 import type { StoreApi } from 'zustand/vanilla'
 import { isPatternId } from '@/entities/pattern'
-import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
+import {
+  createSavedStore,
+  isCount,
+  isOneOf,
+  isRecord,
+  savedObject,
+  type SavingOptions,
+} from '@/shared/lib'
 import {
   CLEFS,
   isMeter,
@@ -40,7 +47,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 12
+export const PIECES_VERSION = 13
 
 /** The learner's pieces. */
 export interface PiecesState {
@@ -89,7 +96,7 @@ export const syncOf = (ms: number): number =>
 
 const KEY_TEXT = /^[A-G][#b]?m?$/
 /** A key as a song's text names it, one a signature writes (no A# major, with its ten sharps). */
-const isKeyText = (value: unknown): value is KeyText => {
+export const isKeyText = (value: unknown): value is KeyText => {
   if (typeof value !== 'string' || !KEY_TEXT.test(value)) return false
   const key = parseKey(value)
   return key !== null && isWrittenKey(key)
@@ -99,8 +106,7 @@ const isClef = isOneOf(CLEFS)
 const isText = (value: unknown): value is string => typeof value === 'string'
 /** A staff the lyrics are on, of `staves` single staves: one of them by its place, or the upper staff. */
 const isLyricsStaff = (value: unknown, staves: number): value is LyricsStaff =>
-  value === 'rh' ||
-  (typeof value === 'number' && Number.isInteger(value) && value >= 0 && value < staves)
+  value === 'rh' || (isCount(value) && value < staves)
 /** A tempo in the song's beats a minute: a mark in another unit's may be a part of one, a whole tick's. */
 const isTempo = (value: unknown): value is number =>
   typeof value === 'number' &&
@@ -176,8 +182,11 @@ function singsLyrics(piece: ChartPiece): boolean {
 }
 
 /** A field only where it has a value. */
-const optional = <K extends string, V>(key: K, value: V | undefined) =>
-  (value === undefined ? {} : { [key]: value }) as Partial<Record<K, V>>
+const optional = <K extends string, V>(key: K, value: V | undefined): Partial<Record<K, V>> => {
+  const field: Partial<Record<K, V>> = {}
+  if (value !== undefined) field[key] = value
+  return field
+}
 
 /**
  * Saved music that reads as a piece's: its fields, its chart, single staves and hands; null
@@ -271,9 +280,12 @@ function songOf(saved: unknown): OwnSong | null {
   const note = readNote(saved.note)
   // The Explore item it was added from (B3): an id, as long as a title at most.
   const publicId = isText(saved.publicId) ? saved.publicId.trim().slice(0, TITLE_MAX) : ''
+  // When it came in: what All songs' Added sort reads.
+  if (!isText(saved.added) || Number.isNaN(Date.parse(saved.added))) return null
   return {
     id: saved.id,
     title: song.title,
+    added: saved.added,
     ...song.music,
     ...(author ? { author } : {}),
     ...(publicId ? { publicId } : {}),

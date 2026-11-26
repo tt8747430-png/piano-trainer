@@ -28,6 +28,7 @@ import { scaleHasChords } from '@/shared/lib/music'
 import { AppShell } from './AppShell'
 import { FULL_SCREEN_SCROLL, FullScreenLayout } from './FullScreenLayout'
 import { RootLayout } from './RootLayout'
+import { opensAsDialog } from './settings-dialog/background'
 import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
 import { callbackSearch } from './routes/account-search'
@@ -64,22 +65,28 @@ import {
   WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
-import { learnEditSearch, lessonSearch } from './routes/learn-search'
+import {
+  learnEditSearch,
+  lessonSearch,
+  readYoursSearch,
+  YOURS_KEPT,
+  yoursSearch,
+} from './routes/learn-search'
 import {
   exercisePageSearch,
   PRACTICE_LIBRARY_KEPT,
+  exercisesSearch,
   practiceLibrarySearch,
+  readExercisesSearch,
   readPracticeLibrarySearch,
   readTrainerSearch,
   trainerSearch,
   validateCheckSearch,
-  validatePracticeSettingsSearch,
 } from './routes/practice-search'
 import { searchSearch } from './routes/search-search'
 import {
-  readSongsHomeSearch,
-  SONGS_KEPT,
   songsHomeSearch,
+  allSongsSearch,
   folderSearch,
   validateJoinGroupSearch,
   validateSharedSongSearch,
@@ -91,7 +98,7 @@ import {
   circleSearch,
   readChordFinderSearch,
 } from './routes/tool-search'
-import { chordPlayerSearch, chordPlayerSettingsSearch } from './routes/chord-player-search'
+import { chordPlayerSearch, readChordPlayerSearch } from './routes/chord-player-search'
 import { ShellLayout } from './ShellLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
@@ -116,7 +123,7 @@ const practiceScreens = () => import('./routes/practice-screens')
 function NotFoundScreen() {
   return (
     <AppShell>
-      <NotFoundPage way="songs" />
+      <NotFoundPage way="learn" />
     </AppShell>
   )
 }
@@ -185,11 +192,14 @@ const coursesRoute = createRoute({
 const yoursRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/your-lessons',
+  ...yoursSearch,
+  ...remembered(readYoursSearch, YOURS_KEPT, YOURS_KEPT),
   component: lazyRouteComponent(homeScreens, 'YoursPage'),
 })
 const settingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'SettingsPage'),
 })
 // Administration (ADR 0116, R32): an administrator's sections, each a page of Settings; on a phone
@@ -197,16 +207,25 @@ const settingsRoute = createRoute({
 const adminRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/admin',
+  ...opensAsDialog,
   component: lazyRouteComponent(adminScreens, 'AdminPage'),
 })
 const adminSectionRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/admin/$section',
   notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params }) => {
+  beforeLoad: async ({ params, location }) => {
     const { isAdminSection } = await adminScreens()
     if (!isAdminSection(params.section)) throw notFound()
+    opensAsDialog.beforeLoad({ location })
   },
+  component: lazyRouteComponent(adminScreens, 'AdminSectionPage'),
+})
+// A group of Administration › Groups (the Admin board): its members, its flags, Delete group.
+const adminGroupRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/admin/groups/$group',
+  ...opensAsDialog,
   component: lazyRouteComponent(adminScreens, 'AdminSectionPage'),
 })
 // The Profile (round 3): the learner, the days they practised, their record.
@@ -273,36 +292,40 @@ const notificationsRoute = createRoute({
 const generalRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/general',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'GeneralPage'),
 })
-const onScreenPianoRoute = createRoute({
+// General › Page layouts (R76): each page whose panels the learner arranged, reset from here.
+const pageLayoutsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/settings/on-screen-piano',
-  component: lazyRouteComponent(settingsScreens, 'OnScreenPianoPage'),
-})
-/** Computer keys is a part of On-screen piano (R29): its old link opens there. */
-const computerKeysRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/computer-keys',
-  beforeLoad: () => {
-    throw redirect({ to: '/settings/on-screen-piano', replace: true })
-  },
-  component: lazyRouteComponent(settingsScreens, 'OnScreenPianoPage'),
+  path: '/settings/general/layouts',
+  ...opensAsDialog,
+  component: lazyRouteComponent(settingsScreens, 'PageLayoutsPage'),
 })
 // The bars a learner arranges (R29 B10), Settings › Library's pages (R32).
+// Appearance, its own place (Apple's Display & Brightness): the theme.
+const appearanceRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/appearance',
+  ...opensAsDialog,
+  component: lazyRouteComponent(settingsScreens, 'AppearancePage'),
+})
 const selectToolbarRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/select-toolbar',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'SelectToolbarPage'),
 })
 const swipeActionsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/swipe-actions',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'SwipeActionsPage'),
 })
 const storageRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/storage',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'StoragePage'),
 })
 // The app's Privacy and Terms (ADR 0116): read signed in or not, linked from Help and the account forms.
@@ -319,77 +342,74 @@ const termsRoute = createRoute({
 const accountSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/account',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'AccountSettingsPage'),
 })
 // The account's own pages (B1): Edit profile, Change password, and Privacy.
 const editProfileRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/account/profile',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'EditProfilePage'),
+})
+// Email, its one home under Sign-in and security (Apple's Sign-In & Security › Email).
+const emailRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/account/email',
+  ...opensAsDialog,
+  component: lazyRouteComponent(settingsScreens, 'EmailPage'),
 })
 const changePasswordRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/account/password',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'ChangePasswordPage'),
 })
 const profilePrivacyRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/privacy',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'ProfilePrivacyPage'),
 })
 // How to use (ADR 0052): a short guide, reached from Settings' Help.
 const howToUseRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/how-to-use',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'HowToUsePage'),
 })
 // Report a problem (R32): Settings › Support's page, sent with the app's error reports.
 const feedbackRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/feedback',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'FeedbackPage'),
 })
 // About (R29 B9): the version, the build, the licence and the credits, from Settings' Help.
 const aboutRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/about',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'AboutPage'),
 })
 // Connect a piano (ADR 0034): MIDI input, output, devices and playing, and its MIDI log under it.
 const midiSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/connect-piano',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'MidiSettingsPage'),
-})
-// Each Practice page's Settings (A24, R18): how it sounds and looks every time, reached from the
-// page's gear (`from` naming it, for Back) and from Settings.
-const scalesSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/scales',
-  validateSearch: validatePracticeSettingsSearch,
-  component: lazyRouteComponent(settingsScreens, 'ScalesSettingsPage'),
-})
-const progressionsSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/progressions',
-  validateSearch: validatePracticeSettingsSearch,
-  component: lazyRouteComponent(settingsScreens, 'ProgressionsSettingsPage'),
-})
-const chordFinderSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/chord-finder',
-  validateSearch: validatePracticeSettingsSearch,
-  component: lazyRouteComponent(settingsScreens, 'ChordFinderSettingsPage'),
 })
 const midiLogRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/connect-piano/log',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'MidiLogPage'),
 })
 // Calibrate timing (R34): the piano's lateness, tapped with a click, taken off every take.
 const timingRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/connect-piano/timing',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'TimingCalibrationPage'),
 })
 // The account pages (ADR 0116): signing in, a new account, a forgotten password, a new one.
@@ -431,7 +451,6 @@ const songsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs',
   ...songsHomeSearch,
-  ...remembered(readSongsHomeSearch, SONGS_KEPT, SONGS_KEPT),
   component: lazyRouteComponent(songsScreens, 'SongsPage'),
 })
 // A published song or pattern (ADR 0116), Explore's item: its path kept, so published links work.
@@ -481,30 +500,6 @@ const pieceRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
-// A song's Settings and its Publish in library (round 26), pages of their own under its page.
-const pieceSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/songs/$pieceId/settings',
-  notFoundComponent: notFoundIn('songs'),
-  beforeLoad: async ({ params, context }) => {
-    // A song's, or a study's (its page on Practice has the same gear).
-    const { entryIn } = await songsScreens()
-    const entry = entryIn(context.pieces.getState(), params.pieceId)
-    if (!entry || entry.kind === 'listing') throw notFound()
-    await ensureContent(context.content, 'piece', params.pieceId)
-  },
-  component: lazyRouteComponent(songsScreens, 'SongSettingsPage'),
-})
-const piecePublishRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/songs/$pieceId/publish',
-  notFoundComponent: notFoundIn('songs'),
-  beforeLoad: async ({ params, context }) => {
-    const { entryIn } = await songsScreens()
-    if (!entryIn(context.pieces.getState(), params.pieceId)) throw notFound()
-  },
-  component: lazyRouteComponent(songsScreens, 'PublishPage'),
-})
 // A folder of the library (ADR 0106): its songs, under the filters Home has; not found where the
 // library has no such folder, or it is archived.
 const folderRoute = createRoute({
@@ -519,35 +514,6 @@ const folderRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'FolderPage'),
 })
-// A folder's Settings (R29): its name and look, where it stands, Archive and Delete.
-const folderSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/songs/folders/$folderId/settings',
-  notFoundComponent: notFoundIn('songs'),
-  beforeLoad: async ({ params, context }) => {
-    const { folderIn } = await songsScreens()
-    const { pieces, library } = context
-    if (!folderIn(pieces.getState(), library.getState(), params.folderId)) throw notFound()
-  },
-  component: lazyRouteComponent(songsScreens, 'FolderSettingsPage'),
-})
-// A place's Card style (R29 B9): a folder's from its Settings, Home's from Songs' Card style.
-const folderCardStyleRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/songs/folders/$folderId/card-style',
-  notFoundComponent: notFoundIn('songs'),
-  beforeLoad: async ({ params, context }) => {
-    const { folderIn } = await songsScreens()
-    const { pieces, library } = context
-    if (!folderIn(pieces.getState(), library.getState(), params.folderId)) throw notFound()
-  },
-  component: lazyRouteComponent(songsScreens, 'FolderCardStylePage'),
-})
-const homeCardStyleRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/songs/card-style',
-  component: lazyRouteComponent(songsScreens, 'HomeCardStylePage'),
-})
 // A folder's Archived (D10, R29 B4): the songs archived from it, each to unarchive.
 const folderArchivedRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -559,6 +525,13 @@ const folderArchivedRoute = createRoute({
     if (!folderIn(pieces.getState(), library.getState(), params.folderId)) throw notFound()
   },
   component: lazyRouteComponent(songsScreens, 'FolderArchivedPage'),
+})
+// All songs (R72, Flat's library): every song the learner has, in one list to search, sort and select.
+const allSongsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/all',
+  ...allSongsSearch,
+  component: lazyRouteComponent(songsScreens, 'AllSongsPage'),
 })
 // The library's archive (ADR 0106): what the learner archived, to restore.
 const archiveRoute = createRoute({
@@ -595,8 +568,8 @@ const practiceRoute = createRoute({
 const exercisesRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/exercises',
-  ...practiceLibrarySearch,
-  ...remembered(readPracticeLibrarySearch, PRACTICE_LIBRARY_KEPT, PRACTICE_LIBRARY_KEPT),
+  ...exercisesSearch,
+  ...remembered(readExercisesSearch, PRACTICE_LIBRARY_KEPT, PRACTICE_LIBRARY_KEPT),
   component: lazyRouteComponent(practiceScreens, 'ExercisesPage'),
 })
 // An exercise's page (A41): what it trains, how to play it, and what to start it at.
@@ -715,18 +688,6 @@ const progressionEditRoute = createRoute({
   path: '/practice/progressions/$progressionId/edit',
   component: lazyRouteComponent(explorerScreens, 'ProgressionEditorPage'),
 })
-// A progression's Settings and Publish page (R29 B6), an editor's, from its editor's bar.
-const progressionSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/progressions/$progressionId/settings',
-  component: lazyRouteComponent(explorerScreens, 'ProgressionSettingsPage'),
-})
-const progressionPublishRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/progressions/$progressionId/publish',
-  component: lazyRouteComponent(explorerScreens, 'ProgressionPublishPage'),
-})
-
 // The Chord finder (ADR 0052): a tool of its own, any chord played or tapped named, spelled and written.
 const chordFinderRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -737,17 +698,13 @@ const chordFinderRoute = createRoute({
 })
 
 // The Chord player (R29 CP1): a chord sheet of sections played by a band in a style; its own Settings.
+// Opened plainly, the sheet last open (R76).
 const chordPlayerRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/chord-player',
   ...chordPlayerSearch,
+  ...remembered(readChordPlayerSearch, [], ['sheet']),
   component: lazyRouteComponent(chordPlayerScreens, 'ChordPlayerPage'),
-})
-const chordPlayerSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/chord-player/settings',
-  ...chordPlayerSettingsSearch,
-  component: lazyRouteComponent(chordPlayerScreens, 'ChordPlayerSettingsPage'),
 })
 
 // The Metronome (ADR 0052): a steady beat at any tempo, its choices saved in pt-settings.
@@ -808,19 +765,6 @@ const editPatternRoute = createRoute({
   },
   component: lazyRouteComponent(accompanimentScreens, 'EditPatternPage'),
 })
-// A pattern of the learner's own published to the Public library, on its own page (round 27).
-const publishPatternRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/accompaniment/patterns/$patternRef/publish',
-  notFoundComponent: notFoundIn('accompaniment'),
-  beforeLoad: ({ params, context }) => {
-    if (!isOwnPatternId(params.patternRef) || !inBook(params.patternRef, context.patterns)) {
-      throw notFound()
-    }
-  },
-  component: lazyRouteComponent(accompanimentScreens, 'PatternPublishPage'),
-})
-
 /**
  * A lesson's page is there for a lesson of a level, brought onto the device first (ADR 0116), or for
  * one of the learner's own while they keep it (R30-5); else it is not found.
@@ -871,54 +815,6 @@ const courseLessonRoute = createRoute({
     await ensureContent(context.content, 'lesson', `${params.courseId}/${params.lessonId}`)
   },
   component: lazyRouteComponent(learnScreens, 'CourseLessonPage'),
-})
-// A lesson's and a course's Settings (round 28), pages of their own under theirs, as a song's.
-const lessonSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/lessons/$lessonId/settings',
-  notFoundComponent: notFoundIn('learn'),
-  beforeLoad: ({ params, context }) => findLesson(context, params.lessonId),
-  component: lazyRouteComponent(learnScreens, 'LessonSettingsPage'),
-})
-// An item's Publish page (R29 B6): an editor's, from its Settings' Publish….
-const lessonPublishRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/lessons/$lessonId/publish',
-  notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params, context }) => {
-    const { lessonById, lessonPlace } = await learnScreens()
-    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
-    await ensureContent(context.content, 'lesson', params.lessonId)
-  },
-  component: lazyRouteComponent(learnScreens, 'LessonPublishPage'),
-})
-const coursePublishRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/courses/$courseId/publish',
-  notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params }) => {
-    const { courseById } = await learnScreens()
-    if (!courseById(params.courseId)) throw notFound()
-  },
-  component: lazyRouteComponent(learnScreens, 'CoursePublishPage'),
-})
-const courseSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/courses/$courseId/settings',
-  notFoundComponent: notFoundIn('learn'),
-  beforeLoad: ({ params, context }) => findCourse(context, params.courseId),
-  component: lazyRouteComponent(learnScreens, 'CourseSettingsPage'),
-})
-const courseLessonSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/courses/$courseId/$lessonId/settings',
-  notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params, context }) => {
-    const { courseLesson } = await learnScreens()
-    if (!courseLesson(params.courseId, params.lessonId)) throw notFound()
-    await ensureContent(context.content, 'lesson', `${params.courseId}/${params.lessonId}`)
-  },
-  component: lazyRouteComponent(learnScreens, 'CourseLessonSettingsPage'),
 })
 
 // An editor's lesson editor (ADR 0116): every text of a journey's or a course's lesson; a course's
@@ -986,7 +882,7 @@ const playerRoute = createRoute({
 })
 
 const walkRoute = createRoute({
-  getParentRoute: () => fullScreenRoute,
+  getParentRoute: () => shellRoute,
   path: '/play/walk',
   notFoundComponent: notFoundIn('scales'),
   ...walkSearch,
@@ -999,7 +895,7 @@ const walkRoute = createRoute({
 })
 
 const chromaticRoute = createRoute({
-  getParentRoute: () => fullScreenRoute,
+  getParentRoute: () => shellRoute,
   path: '/play/chromatic',
   ...chromaticSearch,
   ...remembered(readChromaticSearch, CHROMATIC_KEPT),
@@ -1007,7 +903,7 @@ const chromaticRoute = createRoute({
 })
 
 const progressionPlayerRoute = createRoute({
-  getParentRoute: () => fullScreenRoute,
+  getParentRoute: () => shellRoute,
   path: '/play/progression',
   ...progressionPlayerSearch,
   ...remembered(readProgressionPlayerSearch, PROGRESSION_KEPT),
@@ -1016,7 +912,7 @@ const progressionPlayerRoute = createRoute({
 
 // An exercise its own rule writes; each remembers its own view, under its own path.
 const exerciseRoute = createRoute({
-  getParentRoute: () => fullScreenRoute,
+  getParentRoute: () => shellRoute,
   path: '/play/exercise/$exerciseId',
   notFoundComponent: notFoundIn('exercises'),
   ...exerciseSearch,
@@ -1074,7 +970,7 @@ const takeRoute = createRoute({
 })
 
 const checkRoute = createRoute({
-  getParentRoute: () => fullScreenRoute,
+  getParentRoute: () => shellRoute,
   path: '/check',
   notFoundComponent: notFoundIn('learn'),
   validateSearch: validateCheckSearch,
@@ -1102,10 +998,11 @@ const routeTree = rootRoute.addChildren([
     notificationsRoute,
     adminRoute,
     adminSectionRoute,
+    adminGroupRoute,
     settingsRoute,
     generalRoute,
-    onScreenPianoRoute,
-    computerKeysRoute,
+    pageLayoutsRoute,
+    appearanceRoute,
     selectToolbarRoute,
     swipeActionsRoute,
     storageRoute,
@@ -1114,6 +1011,7 @@ const routeTree = rootRoute.addChildren([
     accountSettingsRoute,
     editProfileRoute,
     changePasswordRoute,
+    emailRoute,
     profilePrivacyRoute,
     howToUseRoute,
     feedbackRoute,
@@ -1121,9 +1019,6 @@ const routeTree = rootRoute.addChildren([
     midiSettingsRoute,
     midiLogRoute,
     timingRoute,
-    scalesSettingsRoute,
-    progressionsSettingsRoute,
-    chordFinderSettingsRoute,
     signInRoute,
     signUpRoute,
     forgotPasswordRoute,
@@ -1138,12 +1033,8 @@ const routeTree = rootRoute.addChildren([
     sharedFolderRoute,
     publicSongRoute,
     pieceRoute,
-    pieceSettingsRoute,
-    piecePublishRoute,
     folderRoute,
-    folderSettingsRoute,
-    folderCardStyleRoute,
-    homeCardStyleRoute,
+    allSongsRoute,
     archiveRoute,
     trashRoute,
     folderArchivedRoute,
@@ -1156,20 +1047,12 @@ const routeTree = rootRoute.addChildren([
     progressionLineRoute,
     progressionRoute,
     progressionEditRoute,
-    progressionSettingsRoute,
-    progressionPublishRoute,
     accompanimentRoute,
     newPatternRoute,
     patternRoute,
     editPatternRoute,
-    publishPatternRoute,
     lessonRoute,
     courseLessonRoute,
-    lessonSettingsRoute,
-    courseSettingsRoute,
-    lessonPublishRoute,
-    coursePublishRoute,
-    courseLessonSettingsRoute,
     lessonEditRoute,
     courseLessonEditRoute,
     courseEditRoute,
@@ -1181,22 +1064,16 @@ const routeTree = rootRoute.addChildren([
     circleOfFifthsRoute,
     tunerRoute,
     chordPlayerRoute,
-    chordPlayerSettingsRoute,
     trainerRoute,
     studyRoute,
     studySectionRoute,
     takeRoute,
-  ]),
-  fullScreenRoute.addChildren([
-    playerRoute,
+    checkRoute,
     walkRoute,
     chromaticRoute,
     progressionPlayerRoute,
-    exerciseRoute,
-    editRoute,
-    exampleEditRoute,
-    checkRoute,
   ]),
+  fullScreenRoute.addChildren([playerRoute, exerciseRoute, editRoute, exampleEditRoute]),
 ])
 
 /**

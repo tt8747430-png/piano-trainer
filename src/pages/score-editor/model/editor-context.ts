@@ -33,6 +33,8 @@ export interface ScoreEditorValue {
     readonly close: () => void
     /** Closes the notice of a change that could not be saved. */
     readonly dismissUnsaved: () => void
+    /** The caret to a bar's first beat, by its printed number (Go to bar, ⌘G). */
+    readonly goToBar: (printed: number) => void
   }
   /** What the sheet shows and which of the page's sheets is open: chosen here, never saved. */
   readonly view: {
@@ -52,6 +54,9 @@ export interface ScoreEditorValue {
     readonly hidden: readonly StaffId[]
     /** The field open over the sheet at the caret, typing what is printed there (ADR 0096); null while none is. */
     readonly field: SheetField | null
+    /** Go to bar's card over the sheet's head open (⌘G, research F11). */
+    readonly goingTo: boolean
+    readonly setGoingTo: (open: boolean) => void
     /**
      * Opens a field at the caret where it can open (the chord symbol's taking the caret to its beat in
      * the chord row, the Lyrics field to the tune's note), or closes the one open (null), the caret

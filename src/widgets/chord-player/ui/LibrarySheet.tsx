@@ -2,10 +2,12 @@ import { Copy, Ellipsis, PencilLine, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  CHORD_SHEET_SONGS,
   selectMine,
   SHEET_NAME_MAX,
   useChordSheets,
   useChordSheetsStoreApi,
+  type ChordSheetSong,
   type SavedChordSheet,
 } from '@/entities/chord-sheet'
 import {
@@ -18,12 +20,20 @@ import {
 import { deleteSheet, duplicateSheet, renameSheet } from '@/features/manage-chord-sheets'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { ActionMenu, ChoiceChips, confirm, NewSheet, Sheet, SheetContent } from '@/shared/ui'
+import {
+  ActionMenu,
+  ChoiceChips,
+  confirm,
+  MenuSection,
+  NewSheet,
+  Sheet,
+  SheetContent,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
  * The Library (R29 CP4, P13), opened from the sheet's name: My chord sheets first (each row's menu
- * Rename, Duplicate, Delete), then the app's progressions by style; a tap opens one in place of the
+ * Rename, Duplicate, Delete), then the songs the app holds as sheets, then its progressions by style; a tap opens one in place of the
  * sheet in hand.
  */
 export function LibrarySheet({
@@ -32,6 +42,7 @@ export function LibrarySheet({
   current,
   minor,
   onOpenSaved,
+  onOpenSong,
   onOpenProgression,
 }: {
   open: boolean
@@ -41,6 +52,7 @@ export function LibrarySheet({
   /** The key's mode a progression opens in. */
   minor: boolean
   onOpenSaved(sheet: SavedChordSheet): void
+  onOpenSong(song: ChordSheetSong): void
   onOpenProgression(progression: LibraryProgression): void
 }) {
   const { t } = useTranslation('practice')
@@ -62,13 +74,10 @@ export function LibrarySheet({
   }
   return (
     <>
-      <Sheet open={open} onOpenChange={onOpenChange}>
+      <Sheet at={{ width: 'w-80' }} open={open} onOpenChange={onOpenChange}>
         <SheetContent title={t('chordPlayer.library')} tall>
           <div className="flex flex-col gap-6">
-            <section className="flex flex-col gap-1">
-              <h3 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
-                {t('chordPlayer.mine')}
-              </h3>
+            <MenuSection title={t('chordPlayer.mine')} inset className="gap-1">
               {mine.length === 0 ? (
                 <p className="px-1 text-muted-foreground">{t('chordPlayer.noneMine')}</p>
               ) : (
@@ -93,13 +102,7 @@ export function LibrarySheet({
                           align="end"
                           trigger={<Ellipsis aria-hidden />}
                           render={
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="size-11"
-                              aria-label={label}
-                              title={label}
-                            />
+                            <Button variant="ghost" size="icon" aria-label={label} title={label} />
                           }
                           actions={[
                             {
@@ -136,11 +139,24 @@ export function LibrarySheet({
                   })}
                 </ul>
               )}
-            </section>
-            <section className="flex flex-col gap-3">
-              <h3 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
-                {t('chordPlayer.progressions')}
-              </h3>
+            </MenuSection>
+            <MenuSection title={t('chordPlayer.songs')} inset className="gap-1">
+              <ul className="flex flex-col">
+                {CHORD_SHEET_SONGS.map((song) => (
+                  <li key={song.id}>
+                    <button
+                      type="button"
+                      onClick={() => onOpenSong(song)}
+                      className="flex min-h-12 w-full min-w-0 flex-col justify-center rounded-control px-2 py-1 text-left hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
+                    >
+                      <span className="font-semibold text-pretty">{song.name}</span>
+                      <span className="text-muted-foreground">{song.by}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </MenuSection>
+            <MenuSection title={t('chordPlayer.progressions')} inset className="gap-3">
               <ChoiceChips
                 label={t('chordPlayer.progressions')}
                 value={style}
@@ -163,7 +179,7 @@ export function LibrarySheet({
                         <span className="font-semibold text-pretty">
                           {localText(progression.name, locale)}
                         </span>
-                        <span className="font-display text-muted-foreground">
+                        <span className="text-muted-foreground">
                           {libraryLine(progression, inMinor)}
                         </span>
                       </button>
@@ -171,7 +187,7 @@ export function LibrarySheet({
                   )
                 })}
               </ul>
-            </section>
+            </MenuSection>
           </div>
         </SheetContent>
       </Sheet>

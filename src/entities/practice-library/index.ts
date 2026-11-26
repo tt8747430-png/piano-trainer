@@ -12,6 +12,7 @@ export {
   createPracticeLibraryStore,
   PRACTICE_LIBRARY_STORAGE_KEY,
   PRACTICE_LIBRARY_VERSION,
+  RECENT_MAX,
   type PracticeLibraryState,
   type PracticeLibraryStore,
 } from './model/store'
@@ -44,6 +45,7 @@ export {
 } from './model/arrangement'
 export {
   selectArrangement,
+  selectRecent,
   selectFavouritesOf,
   selectIsFavouriteOf,
   selectOwnProgression,

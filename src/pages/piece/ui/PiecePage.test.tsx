@@ -234,7 +234,7 @@ describe('Piece', () => {
     expect(screen.getByRole('link', { name: 'Practise' })).toHaveAttribute('href', '/play/bz5')
     const bar = screen.getByRole('banner')
     // ♡ moved off the cover, whose tap changes it (R34).
-    expect(within(bar).getByRole('button', { name: 'Add to favourites' })).toBeInTheDocument()
+    expect(within(bar).getByRole('button', { name: 'Add to Favourites' })).toBeInTheDocument()
     expect(within(bar).getByRole('button', { name: 'Learned' })).toBeInTheDocument()
     expect(within(bar).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
@@ -495,7 +495,7 @@ describe('Piece: the learner’s own music', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
     // Learned on an own song too (R29 A28), beside Favourite.
     expect(screen.getByRole('button', { name: 'Learned' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Add to favourites' }))
+    await user.click(screen.getByRole('button', { name: 'Add to Favourites' }))
     expect(libraryStore.getState().favourites).toEqual(['my-1'])
     await openSettings(user)
     await user.click(await screen.findByRole('button', { name: 'Delete song' }))
@@ -534,9 +534,9 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
   it('keeps a song among the favourites from its ♡, named by what a tap does now', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/bz5')
-    await user.click(await screen.findByRole('button', { name: 'Add to favourites' }))
+    await user.click(await screen.findByRole('button', { name: 'Add to Favourites' }))
     expect(libraryStore.getState().favourites).toEqual(['bz5'])
-    await user.click(screen.getByRole('button', { name: 'Remove from favourites' }))
+    await user.click(screen.getByRole('button', { name: 'Remove from Favourites' }))
     expect(libraryStore.getState().favourites).toEqual([])
   })
 
@@ -583,7 +583,7 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
     const user = userEvent.setup()
     await renderApp('/practice/accompaniment/studies/ex3')
     await screen.findByRole('link', { name: 'Practise' })
-    expect(screen.queryByRole('button', { name: 'Add to favourites' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Add to Favourites' })).toBeNull()
     await openSettings(user)
     expect(screen.queryByRole('button', { name: 'Archive' })).toBeNull()
     expect(screen.queryByRole('switch', { name: 'Favourite' })).toBeNull()

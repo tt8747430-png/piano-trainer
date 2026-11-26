@@ -57,9 +57,9 @@ export function IntervalCard({
         }),
   ]
   return (
-    <article aria-labelledby={titleId} className="flex h-full flex-col gap-3 card p-4">
+    <article aria-labelledby={titleId} className="flex h-full flex-col gap-2">
       <header className="flex items-baseline justify-between gap-3">
-        <h3 id={titleId} className="text-xl">
+        <h3 id={titleId} className="font-sans text-lg font-bold">
           {t(`interval.${name}.name`)}
         </h3>
         <span className="shrink-0 font-semibold text-muted-foreground">

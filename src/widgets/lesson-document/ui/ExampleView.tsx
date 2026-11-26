@@ -1,13 +1,5 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
-import {
-  CircleHelp,
-  Copy,
-  FilePen,
-  Paintbrush,
-  Piano,
-  SlidersHorizontal,
-  Trash2,
-} from 'lucide-react'
+import { Copy, FilePen, Paintbrush, Plus, SlidersHorizontal, Trash2, X } from 'lucide-react'
 import {
   Component,
   use,
@@ -19,7 +11,13 @@ import {
   type ReactNode,
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { imageSource, type LessonBlock, type LessonExample } from '@/entities/lesson'
+import {
+  imageSource,
+  type LessonBlock,
+  type LessonExample,
+  type LessonVariant,
+  type VariantExample,
+} from '@/entities/lesson'
 import { i18n, type LocalText } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import type { BlockStyle } from '@/shared/lib/style'
@@ -28,10 +26,12 @@ import {
   Dropdown,
   InfoTip,
   KeyPicker,
+  KeysIcon,
   NotePicker,
   OpensMark,
   Segmented,
   TileMark,
+  Toolbar,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
@@ -43,14 +43,13 @@ import {
   blockReads,
   withBlockExample,
 } from '../model/block-examples'
+import { carriedBlockOf, carriedStyleOf, inStyle } from '../model/carried'
 import { blockName } from './block-names'
 import { LinkFields, PatternFields, VoicingsFields } from './ExampleFields'
 import { DocLocale } from './doc-locale'
 import { blockActions } from './menus'
 import { OpenScore } from './open-score'
 import { StyleBlock } from './style-block'
-
-const nothing = () => undefined
 
 /** An example drawn as the lesson shows it; where it cannot be drawn, nothing (its fields say why). */
 class Drawn extends Component<{ children: ReactNode; fallback: ReactNode }, { failed: boolean }> {
@@ -155,6 +154,107 @@ function WordsLine({
   )
 }
 
+const isVariantExample = (block: LessonBlock): block is VariantExample =>
+  block.kind === 'chords' || block.kind === 'progression' || block.kind === 'voicings'
+
+/**
+ * An example in versions (the board's Versions: chips and Add): each version a group under its
+ * number, its name (the chip's word) and caption, then its own example's fields, as that kind's block
+ * has them; Add a version copies the last, and a version is removed by its ✕ while two stay.
+ */
+function VersionsFields({
+  block,
+  onChange,
+}: {
+  block: Extract<LessonBlock, { kind: 'variants' }>
+  onChange: (block: LessonBlock) => void
+}) {
+  const { t } = useTranslation('learn')
+  const set = (at: number, next: LessonVariant) =>
+    onChange({ ...block, variants: block.variants.map((each, i) => (i === at ? next : each)) })
+  const last = block.variants.at(-1)
+  return (
+    <>
+      <div className="flex flex-col gap-4">
+        {block.variants.map((version, at) => {
+          const examples = blockExamples(version.example)
+          const setExample = (example: LessonBlock) => {
+            if (isVariantExample(example)) set(at, { ...version, example })
+          }
+          const number = t('edit.doc.version', { n: at + 1 })
+          return (
+            <div
+              key={at}
+              role="group"
+              aria-label={number}
+              className="flex flex-col gap-3 border-t border-border pt-3 first:border-t-0 first:pt-0"
+            >
+              <div className="flex min-h-11 items-center justify-between gap-2">
+                <span className="text-sm font-semibold">{number}</span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={t('edit.doc.removeVersion', { n: at + 1 })}
+                  title={t('edit.doc.removeVersion', { n: at + 1 })}
+                  disabled={block.variants.length <= 2}
+                  onClick={() =>
+                    onChange({ ...block, variants: block.variants.filter((_, i) => i !== at) })
+                  }
+                >
+                  <X aria-hidden />
+                </Button>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-sm font-medium">{t('edit.doc.versionName')}</span>
+                <WordsLine
+                  label={`${number}: ${t('edit.doc.versionName')}`}
+                  value={version.label}
+                  placeholder={number}
+                  onChange={(label) => set(at, { ...version, label })}
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-sm font-medium">{t('edit.doc.versionCaption')}</span>
+                <WordsLine
+                  label={`${number}: ${t('edit.doc.versionCaption')}`}
+                  value={version.caption}
+                  placeholder={t('edit.doc.versionCaptionHint')}
+                  onChange={(caption) => set(at, { ...version, caption })}
+                />
+              </div>
+              {examples.map((example) => (
+                <ExampleLine
+                  key={example.key}
+                  block={version.example}
+                  example={example}
+                  named
+                  onChange={setExample}
+                />
+              ))}
+              <KindFields block={version.example} onChange={setExample} />
+            </div>
+          )
+        })}
+      </div>
+      {last ? (
+        <Button
+          variant="outline"
+          className="self-start"
+          onClick={() =>
+            onChange({
+              ...block,
+              variants: [...block.variants, { ...last, label: { en: '', ru: '' } }],
+            })
+          }
+        >
+          <Plus data-icon="inline-start" aria-hidden />
+          {t('edit.doc.addVersion')}
+        </Button>
+      ) : null}
+    </>
+  )
+}
+
 /** The fields an example's kind has beyond its line of text: its key, clef, chord, scale or interval. */
 function KindFields({
   block,
@@ -240,6 +340,8 @@ function KindFields({
       return <LinkFields block={block} onChange={onChange} />
     case 'image':
       return <ImageFields block={block} onChange={onChange} />
+    case 'variants':
+      return <VersionsFields block={block} onChange={onChange} />
     default:
       return null
   }
@@ -304,6 +406,7 @@ const HAS_FIELDS = new Set<LessonBlock['kind']>([
   'interval',
   'voicings',
   'pattern',
+  'variants',
   'link',
   'image',
 ])
@@ -313,8 +416,7 @@ function notesBefore(doc: ReactNodeViewProps['editor']['state']['doc'], pos: num
   let count = 0
   doc.descendants((each, at) => {
     if (pos === undefined || at >= pos) return false
-    const block = each.attrs['block'] as LessonBlock | null | undefined
-    if (block?.kind === 'notes') count += 1
+    if (carriedBlockOf(each.attrs['block'])?.kind === 'notes') count += 1
     return true
   })
   return count
@@ -373,7 +475,7 @@ export function ExampleView({
   const styleBlock = use(StyleBlock)
   // As it reads until it is worked on (round 25): chosen, or a field of it focused.
   const [focused, setFocused] = useState(false)
-  const block = node.attrs['block'] as LessonBlock | null
+  const block = carriedBlockOf(node.attrs['block'])
   // Its fields open: at once for one that does not read yet (one just put in).
   const [opened, setOpened] = useState(
     () => block !== null && (!blockReads(block) || (block.kind === 'image' && block.src === '')),
@@ -391,14 +493,11 @@ export function ExampleView({
   const words = i18n.getFixedT(locale, 'learn')
   const change = (next: LessonBlock) => updateAttributes({ block: next })
   // Drawn in the style its node carries (its ⋯ › Style), over the one its block was written with.
-  const style = node.attrs['style'] as BlockStyle | null
-  const { style: _written, ...plain } = block
-  const shown = (style ? { ...plain, style } : plain) as LessonBlock
+  const style = carriedStyleOf(node.attrs['style'])
+  const shown = inStyle(block, style)
   const name = t(`edit.blocks.${blockName(block)}`)
   const examples = blockExamples(block)
-  // Variants hold whole examples of their own: kept as written, moved, copied or deleted whole.
-  const asWritten = block.kind === 'variants'
-  const editable = !asWritten && (HAS_FIELDS.has(block.kind) || examples.length > 0)
+  const editable = HAS_FIELDS.has(block.kind) || examples.length > 0
   const pos = getPos()
   const index = pos === undefined ? null : editor.state.doc.resolve(pos).index(0)
   const actions = index === null ? [] : blockActions(editor, index, t)
@@ -418,15 +517,14 @@ export function ExampleView({
       )}
     >
       {working ? (
-        <div
-          role="toolbar"
-          aria-label={name}
+        <Toolbar
+          label={name}
           className="absolute -top-7 right-3 z-10 flex items-center gap-0.5 rounded-control border border-border bg-raised p-0.5 elevation-2"
         >
           {editable ? (
             <Button
               variant={open ? 'secondary' : 'ghost'}
-              className="h-11 gap-1.5 px-3 md:h-9"
+              className="gap-1.5 px-3 md:h-10"
               aria-expanded={open}
               aria-controls={open ? panelId : undefined}
               onClick={() => setOpened(!open)}
@@ -435,7 +533,6 @@ export function ExampleView({
               {t('edit.doc.editExample')}
             </Button>
           ) : null}
-          {asWritten ? <InfoTip name={name}>{t('edit.doc.asWritten')}</InfoTip> : null}
           {block.kind === 'notes' && openScore ? (
             // Its music on its own score, the score editor's (round 27): its place among the
             // lesson's examples of notes names it there.
@@ -463,33 +560,25 @@ export function ExampleView({
                 {action.key === 'duplicate' ? <Copy aria-hidden /> : <Trash2 aria-hidden />}
               </Tool>
             ))}
-        </div>
+        </Toolbar>
       ) : null}
       {block.kind === 'question' || block.kind === 'link' ? (
         <InStyle style={style}>
           {block.kind === 'question' ? (
-            // The question's card as the lesson shows it, its words typed where they print.
-            <div className="flex flex-col gap-3 card p-4 text-base">
-              <div className="flex items-start gap-3">
-                <span
-                  aria-hidden
-                  className="grid size-10 shrink-0 place-items-center rounded-pill bg-paint-lilac text-on-paint-lilac"
-                >
-                  <CircleHelp className="size-5" />
-                </span>
-                <WordsLine
-                  label={t('edit.doc.ask')}
-                  value={block.ask}
-                  placeholder={words('edit.doc.ask')}
-                  className="h-auto min-h-10 flex-1 rounded-control border-transparent bg-transparent px-1 font-semibold shadow-none md:text-base dark:bg-transparent"
-                  onChange={(ask) => change({ ...block, ask })}
-                />
-              </div>
+            // The question as the lesson shows it, on the paper, its words typed where they print.
+            <div className="flex flex-col gap-2 text-base">
+              <WordsLine
+                label={t('edit.doc.ask')}
+                value={block.ask}
+                placeholder={words('edit.doc.ask')}
+                className="h-auto min-h-11 rounded-control border-transparent bg-transparent px-0 font-sans text-lg font-bold shadow-none md:text-lg dark:bg-transparent"
+                onChange={(ask) => change({ ...block, ask })}
+              />
               <span
                 aria-hidden
-                className="ml-13 inline-flex h-10 w-fit items-center gap-2 rounded-pill border border-border px-4 text-sm font-medium"
+                className="inline-flex h-10 w-fit items-center gap-2 rounded-pill border border-border px-4 text-sm font-medium"
               >
-                <Piano className="size-4" />
+                <KeysIcon className="size-4" />
                 {words('question.answer')}
               </span>
             </div>
@@ -516,12 +605,13 @@ export function ExampleView({
           key={JSON.stringify(shown)}
           fallback={<p className="text-sm text-muted-foreground">{t('edit.doc.notShown')}</p>}
         >
-          {shown.kind === 'image' && imageSource(shown.src) === null ? (
+          {shown.kind === 'question' ? null : shown.kind === 'image' &&
+            imageSource(shown.src) === null ? (
             <p className="rounded-card bg-muted p-4 text-sm text-muted-foreground">
               {t('edit.doc.imageEmpty')}
             </p>
           ) : (
-            <Shown block={shown as Exclude<LessonBlock, { kind: 'question' }>} onShow={nothing} />
+            <Shown block={shown} />
           )}
         </Drawn>
       ) : (

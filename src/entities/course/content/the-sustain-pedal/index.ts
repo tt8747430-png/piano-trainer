@@ -9,6 +9,7 @@ const course: Course = {
   shelf: 'intermediate',
   stage: 'intermediate',
   title: { en: 'The Sustain Pedal', ru: 'Правая педаль' },
+  line: { en: 'The legato pedal change', ru: 'Запаздывающая педаль' },
   summary: {
     en: 'Learn what the right pedal does and how the foot works it. Then learn the legato pedal change and when to make it, so chords join without a blur.',
     ru: 'Что делает правая педаль и как работать с ней ногой. Затем запаздывающая педаль и то, когда её менять, чтобы аккорды связывались без грязи.',

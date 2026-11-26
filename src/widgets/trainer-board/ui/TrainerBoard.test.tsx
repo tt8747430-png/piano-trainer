@@ -12,6 +12,7 @@ import { ServicesProvider } from '@/shared/lib/services'
 import { ShortcutsProvider } from '@/shared/lib/shortcuts'
 import { FloatingHost } from '@/shared/ui'
 import { TrainerBoard } from './TrainerBoard'
+import { createFakeArranger } from '@/shared/api/midi'
 
 function Board({ asks, autoNext, limit }: { asks: Asks; autoNext: boolean; limit?: number }) {
   const trainer = useTrainer(asks, {
@@ -30,7 +31,9 @@ function renderBoard(
   const store = createProgressStore({ storage: createMemoryStorage() })
   renderWithSettings(
     <ProgressStoreProvider store={store}>
-      <ServicesProvider services={{ audio: createFakeAudio(), midi: null }}>
+      <ServicesProvider
+        services={{ audio: createFakeAudio(), arranger: createFakeArranger(), midi: null }}
+      >
         <ShortcutsProvider mac={false}>
           <FloatingHost screen="trainer">
             <Board asks={asks} autoNext={autoNext} {...(limit ? { limit } : {})} />

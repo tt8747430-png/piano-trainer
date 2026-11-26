@@ -1,6 +1,8 @@
 // A Standard MIDI File (MIDI 1.0's file format) as bytes: the header, and each track's timed events,
 // a take's and a piece's alike.
 
+import { fileTitle } from './download-file'
+
 /** Ticks a quarter note in the app's files. */
 export const MIDI_DIVISION = 480
 
@@ -21,6 +23,8 @@ export type MidiEvent =
   | { readonly kind: 'time'; readonly count: number; readonly unit: number; readonly click: number }
   /** The tempo, in quarter notes a minute. */
   | { readonly kind: 'tempo'; readonly quarters: number }
+  /** The instrument a channel plays from here, General MIDI's program from 0. */
+  | { readonly kind: 'program'; readonly channel: number; readonly program: number }
   | { readonly kind: 'off'; readonly channel: number; readonly key: number }
   /** A controller set: a pedal pressed (64 and up) or let up. */
   | {
@@ -55,18 +59,19 @@ export interface MidiNote {
 }
 
 /**
- * Where an event stands among those at its tick: the name, the time signature and the tempo first;
- * then the keys let go, the pedals let up and pressed, and the keys struck, so a key struck again
- * sounds again and a pedal changed at a chord holds it.
+ * Where an event stands among those at its tick: the name, the time signature, the tempo and the
+ * instruments first; then the keys let go, the pedals let up and pressed, and the keys struck, so a
+ * key struck again sounds again and a pedal changed at a chord holds it.
  */
 const ORDER = {
   name: 0,
   time: 1,
   tempo: 2,
-  off: 3,
-  lifted: 4,
-  pressed: 5,
-  on: 6,
+  program: 3,
+  off: 4,
+  lifted: 5,
+  pressed: 6,
+  on: 7,
 } as const
 const orderOf = (event: MidiEvent): number =>
   event.kind !== 'control'
@@ -100,6 +105,8 @@ function eventBytes(event: MidiEvent): number[] {
       ]
     case 'tempo':
       return [0xff, 0x51, 0x03, ...bigEndian(Math.round(60_000_000 / event.quarters), 3)]
+    case 'program':
+      return [0xc0 | event.channel, event.program]
     case 'off':
       return [0x80 | event.channel, event.key, RELEASE_VELOCITY]
     case 'control':
@@ -171,12 +178,9 @@ export function noteEvents(notes: readonly MidiNote[], channel: number): TimedMi
   })
 }
 
-/** What a file system refuses in a name. */
-const UNSAFE = /[/\\:*?"<>|]/g
-
 /**
  * A MIDI file's name: its title, with nothing a file system refuses, then the tempo its music is
  * written at where one is given (`Daisy fields (73 BPM)`, Chordify's), as `.mid`.
  */
 export const midiFileName = (title: string, bpm?: number): string =>
-  `${title.replace(UNSAFE, '-')}${bpm === undefined ? '' : ` (${bpm} BPM)`}.mid`
+  `${fileTitle(title)}${bpm === undefined ? '' : ` (${bpm} BPM)`}.mid`

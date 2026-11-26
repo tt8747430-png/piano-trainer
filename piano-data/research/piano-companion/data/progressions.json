@@ -1,0 +1,1092 @@
+{
+ "source": "ProgressionPatterns.InitPatterns, AbstractMode subclasses, ChordSuccessors (exact); romanInC/chordsInC computed",
+ "note": "Mode chords are formatted with Semitone.ParseNote((key + offset) % 12, key.Accidental ?? Sharp): with a C key every black-key root is spelled with a sharp (C♯ not D♭, F♯ not G♭).",
+ "modeChordTables": {
+  "Ionian": {
+   "1": {
+    "quality": "M",
+    "offsetNote": "C",
+    "roman": "I",
+    "inC": "C"
+   },
+   "2": {
+    "quality": "m",
+    "offsetNote": "D",
+    "roman": "ii",
+    "inC": "Dm"
+   },
+   "3": {
+    "quality": "m",
+    "offsetNote": "E",
+    "roman": "iii",
+    "inC": "Em"
+   },
+   "4": {
+    "quality": "M",
+    "offsetNote": "F",
+    "roman": "IV",
+    "inC": "F"
+   },
+   "5": {
+    "quality": "M",
+    "offsetNote": "G",
+    "roman": "V",
+    "inC": "G"
+   },
+   "6": {
+    "quality": "m",
+    "offsetNote": "A",
+    "roman": "vi",
+    "inC": "Am"
+   },
+   "7": {
+    "quality": "dim",
+    "offsetNote": "B",
+    "roman": "vii°",
+    "inC": "Bdim"
+   }
+  },
+  "Dorian": {
+   "1": {
+    "quality": "m",
+    "offsetNote": "C",
+    "roman": "i",
+    "inC": "Cm"
+   },
+   "2": {
+    "quality": "m",
+    "offsetNote": "D",
+    "roman": "ii",
+    "inC": "Dm"
+   },
+   "3": {
+    "quality": "M",
+    "offsetNote": "E♭",
+    "roman": "III",
+    "inC": "D♯"
+   },
+   "4": {
+    "quality": "M",
+    "offsetNote": "F",
+    "roman": "IV",
+    "inC": "F"
+   },
+   "5": {
+    "quality": "m",
+    "offsetNote": "G",
+    "roman": "v",
+    "inC": "Gm"
+   },
+   "6": {
+    "quality": "dim",
+    "offsetNote": "A",
+    "roman": "vi°",
+    "inC": "Adim"
+   },
+   "7": {
+    "quality": "M",
+    "offsetNote": "B♭",
+    "roman": "VII",
+    "inC": "A♯"
+   }
+  },
+  "Phrygian": {
+   "1": {
+    "quality": "m",
+    "offsetNote": "C",
+    "roman": "i",
+    "inC": "Cm"
+   },
+   "2": {
+    "quality": "M",
+    "offsetNote": "C♯",
+    "roman": "II",
+    "inC": "C♯"
+   },
+   "3": {
+    "quality": "M",
+    "offsetNote": "E♭",
+    "roman": "III",
+    "inC": "D♯"
+   },
+   "4": {
+    "quality": "m",
+    "offsetNote": "F",
+    "roman": "iv",
+    "inC": "Fm"
+   },
+   "5": {
+    "quality": "dim",
+    "offsetNote": "G",
+    "roman": "v°",
+    "inC": "Gdim"
+   },
+   "6": {
+    "quality": "M",
+    "offsetNote": "A♭",
+    "roman": "VI",
+    "inC": "G♯"
+   },
+   "7": {
+    "quality": "m",
+    "offsetNote": "B♭",
+    "roman": "vii",
+    "inC": "A♯m"
+   }
+  },
+  "Lydian": {
+   "1": {
+    "quality": "M",
+    "offsetNote": "C",
+    "roman": "I",
+    "inC": "C"
+   },
+   "2": {
+    "quality": "M",
+    "offsetNote": "D",
+    "roman": "II",
+    "inC": "D"
+   },
+   "3": {
+    "quality": "m",
+    "offsetNote": "E",
+    "roman": "iii",
+    "inC": "Em"
+   },
+   "4": {
+    "quality": "dim",
+    "offsetNote": "F♯",
+    "roman": "iv°",
+    "inC": "F♯dim"
+   },
+   "5": {
+    "quality": "M",
+    "offsetNote": "G",
+    "roman": "V",
+    "inC": "G"
+   },
+   "6": {
+    "quality": "m",
+    "offsetNote": "A",
+    "roman": "vi",
+    "inC": "Am"
+   },
+   "7": {
+    "quality": "m",
+    "offsetNote": "B",
+    "roman": "vii",
+    "inC": "Bm"
+   }
+  },
+  "Mixolydian": {
+   "1": {
+    "quality": "M",
+    "offsetNote": "C",
+    "roman": "I",
+    "inC": "C"
+   },
+   "2": {
+    "quality": "m",
+    "offsetNote": "D",
+    "roman": "ii",
+    "inC": "Dm"
+   },
+   "3": {
+    "quality": "dim",
+    "offsetNote": "E",
+    "roman": "iii°",
+    "inC": "Edim"
+   },
+   "4": {
+    "quality": "M",
+    "offsetNote": "F",
+    "roman": "IV",
+    "inC": "F"
+   },
+   "5": {
+    "quality": "m",
+    "offsetNote": "G",
+    "roman": "v",
+    "inC": "Gm"
+   },
+   "6": {
+    "quality": "m",
+    "offsetNote": "A",
+    "roman": "vi",
+    "inC": "Am"
+   },
+   "7": {
+    "quality": "M",
+    "offsetNote": "B♭",
+    "roman": "VII",
+    "inC": "A♯"
+   }
+  },
+  "Aeolian": {
+   "1": {
+    "quality": "m",
+    "offsetNote": "C",
+    "roman": "i",
+    "inC": "Cm"
+   },
+   "2": {
+    "quality": "dim",
+    "offsetNote": "D",
+    "roman": "ii°",
+    "inC": "Ddim"
+   },
+   "3": {
+    "quality": "M",
+    "offsetNote": "E♭",
+    "roman": "III",
+    "inC": "D♯"
+   },
+   "4": {
+    "quality": "m",
+    "offsetNote": "F",
+    "roman": "iv",
+    "inC": "Fm"
+   },
+   "5": {
+    "quality": "m",
+    "offsetNote": "G",
+    "roman": "v",
+    "inC": "Gm"
+   },
+   "6": {
+    "quality": "M",
+    "offsetNote": "A♭",
+    "roman": "VI",
+    "inC": "G♯"
+   },
+   "7": {
+    "quality": "M",
+    "offsetNote": "B♭",
+    "roman": "VII",
+    "inC": "A♯"
+   }
+  },
+  "Locrian": {
+   "1": {
+    "quality": "dim",
+    "offsetNote": "C",
+    "roman": "i°",
+    "inC": "Cdim"
+   },
+   "2": {
+    "quality": "M",
+    "offsetNote": "C♯",
+    "roman": "II",
+    "inC": "C♯"
+   },
+   "3": {
+    "quality": "m",
+    "offsetNote": "E♭",
+    "roman": "iii",
+    "inC": "D♯m"
+   },
+   "4": {
+    "quality": "m",
+    "offsetNote": "F",
+    "roman": "iv",
+    "inC": "Fm"
+   },
+   "5": {
+    "quality": "M",
+    "offsetNote": "F♯",
+    "roman": "V",
+    "inC": "F♯"
+   },
+   "6": {
+    "quality": "M",
+    "offsetNote": "A♭",
+    "roman": "VI",
+    "inC": "G♯"
+   },
+   "7": {
+    "quality": "m",
+    "offsetNote": "B♭",
+    "roman": "vii",
+    "inC": "A♯m"
+   }
+  }
+ },
+ "patterns": [
+  {
+   "mode": "Ionian",
+   "degrees": [
+    1,
+    5,
+    6,
+    4
+   ],
+   "roman": "I – V – vi – IV",
+   "inC": "C – G – Am – F"
+  },
+  {
+   "mode": "Ionian",
+   "degrees": [
+    1,
+    3,
+    4,
+    2
+   ],
+   "roman": "I – iii – IV – ii",
+   "inC": "C – Em – F – Dm"
+  },
+  {
+   "mode": "Ionian",
+   "degrees": [
+    1,
+    4,
+    5,
+    1
+   ],
+   "roman": "I – IV – V – I",
+   "inC": "C – F – G – C"
+  },
+  {
+   "mode": "Ionian",
+   "degrees": [
+    1,
+    6,
+    2,
+    5
+   ],
+   "roman": "I – vi – ii – V",
+   "inC": "C – Am – Dm – G"
+  },
+  {
+   "mode": "Ionian",
+   "degrees": [
+    1,
+    6,
+    2,
+    4
+   ],
+   "roman": "I – vi – ii – IV",
+   "inC": "C – Am – Dm – F"
+  },
+  {
+   "mode": "Ionian",
+   "degrees": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "roman": "I – ii – iii – IV – V",
+   "inC": "C – Dm – Em – F – G"
+  },
+  {
+   "mode": "Dorian",
+   "degrees": [
+    1,
+    3,
+    4,
+    1
+   ],
+   "roman": "i – III – IV – i",
+   "inC": "Cm – D♯ – F – Cm"
+  },
+  {
+   "mode": "Dorian",
+   "degrees": [
+    1,
+    3,
+    4,
+    1,
+    7,
+    1
+   ],
+   "roman": "i – III – IV – i – VII – i",
+   "inC": "Cm – D♯ – F – Cm – A♯ – Cm"
+  },
+  {
+   "mode": "Dorian",
+   "degrees": [
+    1,
+    4,
+    5,
+    1
+   ],
+   "roman": "i – IV – v – i",
+   "inC": "Cm – F – Gm – Cm"
+  },
+  {
+   "mode": "Dorian",
+   "degrees": [
+    1,
+    6,
+    7,
+    1
+   ],
+   "roman": "i – vi° – VII – i",
+   "inC": "Cm – Adim – A♯ – Cm"
+  },
+  {
+   "mode": "Dorian",
+   "degrees": [
+    1,
+    2,
+    5,
+    1
+   ],
+   "roman": "i – ii – v – i",
+   "inC": "Cm – Dm – Gm – Cm"
+  },
+  {
+   "mode": "Dorian",
+   "degrees": [
+    1,
+    2,
+    4,
+    1
+   ],
+   "roman": "i – ii – IV – i",
+   "inC": "Cm – Dm – F – Cm"
+  },
+  {
+   "mode": "Phrygian",
+   "degrees": [
+    1,
+    2,
+    3,
+    1
+   ],
+   "roman": "i – II – III – i",
+   "inC": "Cm – C♯ – D♯ – Cm"
+  },
+  {
+   "mode": "Phrygian",
+   "degrees": [
+    1,
+    2,
+    3,
+    6
+   ],
+   "roman": "i – II – III – VI",
+   "inC": "Cm – C♯ – D♯ – G♯"
+  },
+  {
+   "mode": "Phrygian",
+   "degrees": [
+    1,
+    2,
+    6,
+    3
+   ],
+   "roman": "i – II – VI – III",
+   "inC": "Cm – C♯ – G♯ – D♯"
+  },
+  {
+   "mode": "Phrygian",
+   "degrees": [
+    1,
+    3,
+    7,
+    1
+   ],
+   "roman": "i – III – vii – i",
+   "inC": "Cm – D♯ – A♯m – Cm"
+  },
+  {
+   "mode": "Phrygian",
+   "degrees": [
+    1,
+    4,
+    1,
+    2,
+    1
+   ],
+   "roman": "i – iv – i – II – i",
+   "inC": "Cm – Fm – Cm – C♯ – Cm"
+  },
+  {
+   "mode": "Phrygian",
+   "degrees": [
+    1,
+    5,
+    1,
+    2,
+    1
+   ],
+   "roman": "i – v° – i – II – i",
+   "inC": "Cm – Gdim – Cm – C♯ – Cm"
+  },
+  {
+   "mode": "Lydian",
+   "degrees": [
+    1,
+    2,
+    5,
+    1
+   ],
+   "roman": "I – II – V – I",
+   "inC": "C – D – G – C"
+  },
+  {
+   "mode": "Lydian",
+   "degrees": [
+    1,
+    4,
+    6,
+    1
+   ],
+   "roman": "I – iv° – vi – I",
+   "inC": "C – F♯dim – Am – C"
+  },
+  {
+   "mode": "Lydian",
+   "degrees": [
+    1,
+    5,
+    4,
+    6
+   ],
+   "roman": "I – V – iv° – vi",
+   "inC": "C – G – F♯dim – Am"
+  },
+  {
+   "mode": "Lydian",
+   "degrees": [
+    1,
+    2,
+    4,
+    5
+   ],
+   "roman": "I – II – iv° – V",
+   "inC": "C – D – F♯dim – G"
+  },
+  {
+   "mode": "Lydian",
+   "degrees": [
+    1,
+    2,
+    6,
+    4
+   ],
+   "roman": "I – II – vi – iv°",
+   "inC": "C – D – Am – F♯dim"
+  },
+  {
+   "mode": "Lydian",
+   "degrees": [
+    1,
+    6,
+    2,
+    5
+   ],
+   "roman": "I – vi – II – V",
+   "inC": "C – Am – D – G"
+  },
+  {
+   "mode": "Mixolydian",
+   "degrees": [
+    1,
+    7,
+    4,
+    4
+   ],
+   "roman": "I – VII – IV – IV",
+   "inC": "C – A♯ – F – F"
+  },
+  {
+   "mode": "Mixolydian",
+   "degrees": [
+    1,
+    2,
+    4,
+    1
+   ],
+   "roman": "I – ii – IV – I",
+   "inC": "C – Dm – F – C"
+  },
+  {
+   "mode": "Mixolydian",
+   "degrees": [
+    1,
+    2,
+    4,
+    7
+   ],
+   "roman": "I – ii – IV – VII",
+   "inC": "C – Dm – F – A♯"
+  },
+  {
+   "mode": "Mixolydian",
+   "degrees": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "roman": "I – ii – iii° – IV",
+   "inC": "C – Dm – Edim – F"
+  },
+  {
+   "mode": "Mixolydian",
+   "degrees": [
+    1,
+    2,
+    5,
+    7
+   ],
+   "roman": "I – ii – v – VII",
+   "inC": "C – Dm – Gm – A♯"
+  },
+  {
+   "mode": "Mixolydian",
+   "degrees": [
+    1,
+    6,
+    4,
+    5,
+    7,
+    1
+   ],
+   "roman": "I – vi – IV – v – VII – I",
+   "inC": "C – Am – F – Gm – A♯ – C"
+  },
+  {
+   "mode": "Mixolydian",
+   "degrees": [
+    1,
+    4,
+    1,
+    7,
+    1
+   ],
+   "roman": "I – IV – I – VII – I",
+   "inC": "C – F – C – A♯ – C"
+  },
+  {
+   "mode": "Aeolian",
+   "degrees": [
+    1,
+    2,
+    4,
+    1
+   ],
+   "roman": "i – ii° – iv – i",
+   "inC": "Cm – Ddim – Fm – Cm"
+  },
+  {
+   "mode": "Aeolian",
+   "degrees": [
+    1,
+    2,
+    5,
+    1
+   ],
+   "roman": "i – ii° – v – i",
+   "inC": "Cm – Ddim – Gm – Cm"
+  },
+  {
+   "mode": "Aeolian",
+   "degrees": [
+    1,
+    4,
+    7,
+    3
+   ],
+   "roman": "i – iv – VII – III",
+   "inC": "Cm – Fm – A♯ – D♯"
+  },
+  {
+   "mode": "Aeolian",
+   "degrees": [
+    1,
+    6,
+    3,
+    7
+   ],
+   "roman": "i – VI – III – VII",
+   "inC": "Cm – G♯ – D♯ – A♯"
+  },
+  {
+   "mode": "Aeolian",
+   "degrees": [
+    1,
+    6,
+    7,
+    5
+   ],
+   "roman": "i – VI – VII – v",
+   "inC": "Cm – G♯ – A♯ – Gm"
+  },
+  {
+   "mode": "Aeolian",
+   "degrees": [
+    1,
+    4,
+    7,
+    1
+   ],
+   "roman": "i – iv – VII – i",
+   "inC": "Cm – Fm – A♯ – Cm"
+  },
+  {
+   "mode": "Aeolian",
+   "degrees": [
+    1,
+    6,
+    7,
+    1
+   ],
+   "roman": "i – VI – VII – i",
+   "inC": "Cm – G♯ – A♯ – Cm"
+  },
+  {
+   "mode": "Aeolian",
+   "degrees": [
+    1,
+    4,
+    5,
+    1
+   ],
+   "roman": "i – iv – v – i",
+   "inC": "Cm – Fm – Gm – Cm"
+  },
+  {
+   "mode": "Locrian",
+   "degrees": [
+    1,
+    2,
+    4,
+    7
+   ],
+   "roman": "i° – II – iv – vii",
+   "inC": "Cdim – C♯ – Fm – A♯m"
+  },
+  {
+   "mode": "Locrian",
+   "degrees": [
+    1,
+    5,
+    3,
+    2
+   ],
+   "roman": "i° – V – iii – II",
+   "inC": "Cdim – F♯ – D♯m – C♯"
+  },
+  {
+   "mode": "Locrian",
+   "degrees": [
+    1,
+    3,
+    1,
+    2
+   ],
+   "roman": "i° – iii – i° – II",
+   "inC": "Cdim – D♯m – Cdim – C♯"
+  },
+  {
+   "mode": "Locrian",
+   "degrees": [
+    1,
+    3,
+    7,
+    1
+   ],
+   "roman": "i° – iii – vii – i°",
+   "inC": "Cdim – D♯m – A♯m – Cdim"
+  },
+  {
+   "mode": "Locrian",
+   "degrees": [
+    1,
+    4,
+    5,
+    1
+   ],
+   "roman": "i° – iv – V – i°",
+   "inC": "Cdim – Fm – F♯ – Cdim"
+  },
+  {
+   "mode": "Locrian",
+   "degrees": [
+    1,
+    7,
+    1,
+    7
+   ],
+   "roman": "i° – vii – i° – vii",
+   "inC": "Cdim – A♯m – Cdim – A♯m"
+  }
+ ],
+ "randomPattern": "ProgressionPatterns.Random(type, min = 3, max = 8): length = min + rnd % (max + 1) (3..11), each degree 1 + rnd % 7",
+ "successorModel": {
+  "functionWeights": {
+   "1": {
+    "2": 0.7,
+    "3": 0.4,
+    "4": 0.9,
+    "5": 0.9,
+    "6": 0.7,
+    "7": 0.3
+   },
+   "2": {
+    "1": 0.3,
+    "3": 0.3,
+    "4": 0.3,
+    "5": 1,
+    "6": 0.3,
+    "7": 0.6
+   },
+   "3": {
+    "1": 0.3,
+    "2": 0.4,
+    "4": 0.7,
+    "5": 0.3,
+    "6": 0.9
+   },
+   "4": {
+    "1": 0.8,
+    "2": 0.6,
+    "3": 0.2,
+    "5": 1,
+    "6": 0.3,
+    "7": 0.4
+   },
+   "5": {
+    "1": 1,
+    "2": 0.2,
+    "3": 0.2,
+    "4": 0.4,
+    "6": 0.7
+   },
+   "6": {
+    "1": 0.3,
+    "2": 0.9,
+    "3": 0.4,
+    "4": 0.8,
+    "5": 0.7
+   },
+   "7": {
+    "1": 1,
+    "3": 0.6,
+    "6": 0.3
+   }
+  },
+  "rootMotion": {
+   "0": -0.5,
+   "1": 0.04,
+   "2": 0.2,
+   "3": 0.1,
+   "4": 0.08,
+   "5": 0.35,
+   "6": 0.02,
+   "7": 0.05,
+   "8": 0.06,
+   "9": 0.2,
+   "10": 0.15,
+   "11": 0.04
+  },
+  "commonToneBonus": 0.05,
+  "seventhPenalty": 0.12,
+  "defaultLimit": 12,
+  "liteVisible": 3,
+  "liteAlpha": [
+   1,
+   0.5,
+   0.25
+  ]
+ },
+ "successorExamples": {
+  "C": [
+   {
+    "chord": "F",
+    "score": 5
+   },
+   {
+    "chord": "Am",
+    "score": 4.1
+   },
+   {
+    "chord": "Dm",
+    "score": 3.9
+   },
+   {
+    "chord": "G",
+    "score": 2.4
+   },
+   {
+    "chord": "Em",
+    "score": 2.02
+   },
+   {
+    "chord": "F♯dim",
+    "score": 1.44
+   },
+   {
+    "chord": "B♭",
+    "score": 1
+   },
+   {
+    "chord": "Bm",
+    "score": 0.98
+   },
+   {
+    "chord": "Fmaj7",
+    "score": 4.72
+   },
+   {
+    "chord": "Am7",
+    "score": 3.75
+   },
+   {
+    "chord": "Dm7",
+    "score": 3.62
+   },
+   {
+    "chord": "Em7",
+    "score": 1.54
+   }
+  ],
+  "Am": [
+   {
+    "chord": "Dm",
+    "score": 5.3
+   },
+   {
+    "chord": "Em",
+    "score": 2.8
+   },
+   {
+    "chord": "F",
+    "score": 2.64
+   },
+   {
+    "chord": "C",
+    "score": 2.6
+   },
+   {
+    "chord": "G",
+    "score": 2.1
+   },
+   {
+    "chord": "F♯dim",
+    "score": 1.8
+   },
+   {
+    "chord": "Bm",
+    "score": 1.7
+   },
+   {
+    "chord": "B♭",
+    "score": 1.48
+   },
+   {
+    "chord": "Dm7",
+    "score": 5.02
+   },
+   {
+    "chord": "Fmaj7",
+    "score": 2.36
+   },
+   {
+    "chord": "Em7",
+    "score": 2.32
+   },
+   {
+    "chord": "D",
+    "score": 2.2
+   }
+  ],
+  "G7": [
+   {
+    "chord": "C",
+    "score": 2.4
+   },
+   {
+    "chord": "Am",
+    "score": 2.1
+   },
+   {
+    "chord": "F",
+    "score": 1.1
+   },
+   {
+    "chord": "Em",
+    "score": 0.5
+   },
+   {
+    "chord": "Dm",
+    "score": 0.35
+   },
+   {
+    "chord": "Cmaj7",
+    "score": 2.26
+   },
+   {
+    "chord": "Am7",
+    "score": 1.96
+   },
+   {
+    "chord": "Fmaj7",
+    "score": 0.86
+   },
+   {
+    "chord": "Em7",
+    "score": 0.43
+   },
+   {
+    "chord": "Dm7",
+    "score": 0.23
+   }
+  ],
+  "Dm7": [
+   {
+    "chord": "Gm",
+    "score": 4
+   },
+   {
+    "chord": "Am",
+    "score": 3
+   },
+   {
+    "chord": "F",
+    "score": 2.3
+   },
+   {
+    "chord": "C",
+    "score": 2.3
+   },
+   {
+    "chord": "B♭",
+    "score": 2.18
+   },
+   {
+    "chord": "Bdim",
+    "score": 1.8
+   },
+   {
+    "chord": "Em",
+    "score": 1.7
+   },
+   {
+    "chord": "E♭",
+    "score": 0.74
+   },
+   {
+    "chord": "Gm7",
+    "score": 3.79
+   },
+   {
+    "chord": "Am7",
+    "score": 2.52
+   },
+   {
+    "chord": "G",
+    "score": 2.2
+   },
+   {
+    "chord": "G7",
+    "score": 2.06
+   }
+  ]
+ },
+ "curatedProgressions": "CuratedProgressionsLibrary / CuratedProgression types exist (fields Id, Name, RomanNumerals, Pattern, Mode, DefaultKeyValue, TempoBpm, Category, FamousSongs, IsFree; categories Pop, Rock, Blues, Jazz, Classical, Latin, Folk, Worship, Film) but no JSON ships and nothing constructs the library in the macOS build."
+}

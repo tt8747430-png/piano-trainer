@@ -7,9 +7,21 @@ import {
   isTimeLimit,
   type TrainerView,
 } from '@/features/trainer'
-import { isHanonNumber, isHanonRhythm, isOctaves, isTonality } from '@/entities/exercise'
+import {
+  isExerciseShelf,
+  isHanonNumber,
+  isHanonRhythm,
+  isOctaves,
+  isTonality,
+  type ExerciseShelf,
+} from '@/entities/exercise'
 import type { ExercisePageSearch } from '@/pages/exercise'
-import type { PracticeLibraryView, PracticeSort } from '@/widgets/practice-library'
+import {
+  KEY_MODES,
+  type KeyMode,
+  type PracticeLibraryView,
+  type PracticeSort,
+} from '@/widgets/practice-library'
 import { readNote, readText, valueOr, wholeIn } from '@/shared/lib'
 import { noteParam, parseNoteInOctave, PIANO } from '@/shared/lib/music'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
@@ -62,25 +74,10 @@ export function readTrainerSearch(raw: Raw): TrainerView {
 }
 export const trainerSearch = routeSearch(readTrainerSearch, TRAINER_DEFAULTS)
 
-// A Practice page's Settings (A24): the page its gear was pressed on, kept only for Back.
-export const PRACTICE_SETTINGS_FROM = ['scales', 'progressions', 'chord-finder'] as const
-export type PracticeSettingsFrom = (typeof PRACTICE_SETTINGS_FROM)[number]
-export const isPracticeSettingsFrom = (value: unknown): value is PracticeSettingsFrom =>
-  PRACTICE_SETTINGS_FROM.some((page) => page === value)
-export interface PracticeSettingsSearch {
-  readonly from?: PracticeSettingsFrom
-}
-export function validatePracticeSettingsSearch(
-  input: Input<PracticeSettingsSearch>,
-): PracticeSettingsSearch {
-  const raw: Raw = input
-  return { from: isPracticeSettingsFrom(raw.from) ? raw.from : undefined }
-}
-
 // An exercise's page (A41): the key, hands, octaves and tempo it is set to start at, each absent for
 // the exercise's own.
 const EXERCISE_PAGE_DEFAULTS: ExercisePageSearch = {}
-export function readExercisePageSearch(raw: Raw): ExercisePageSearch {
+function readExercisePageSearch(raw: Raw): ExercisePageSearch {
   const root = readNote(raw.root)
   return {
     root: root ? noteParam(root) : undefined,
@@ -97,14 +94,17 @@ export function readExercisePageSearch(raw: Raw): ExercisePageSearch {
 export const exercisePageSearch = routeSearch(readExercisePageSearch, EXERCISE_PAGE_DEFAULTS)
 
 // A library of Practice's (R30-4: Exercises, Accompaniment, Progressions), as Songs' holds its
-// filters: what is searched, the sort, the place open in its tree, the one level shown. A place is a
+// filters: what is searched, the sort, the place open in its tree, the one level and the one key shown. A place is a
 // word the page reads against its own books; one it does not have shows All.
-export const PRACTICE_LIBRARY_DEFAULTS: PracticeLibraryView = {
+const PRACTICE_LIBRARY_DEFAULTS: PracticeLibraryView = {
   q: '',
   sort: 'group',
   place: 'all',
   stage: 'any',
+  mode: 'any',
 }
+const isKeyMode = (value: unknown): value is KeyMode =>
+  typeof value === 'string' && (KEY_MODES as readonly string[]).includes(value)
 const PRACTICE_SORTS: readonly string[] = [
   'group',
   'name',
@@ -121,6 +121,7 @@ export function readPracticeLibrarySearch(raw: Raw): PracticeLibraryView {
         ? raw.place
         : PRACTICE_LIBRARY_DEFAULTS.place,
     stage: isStage(raw.stage) ? raw.stage : PRACTICE_LIBRARY_DEFAULTS.stage,
+    mode: isKeyMode(raw.mode) ? raw.mode : PRACTICE_LIBRARY_DEFAULTS.mode,
   }
 }
 /** What a library remembers between visits: its place and its sort; the search and level are one visit's. */
@@ -132,3 +133,19 @@ export const practiceLibrarySearch = routeSearch(
   readPracticeLibrarySearch,
   PRACTICE_LIBRARY_DEFAULTS,
 )
+
+/** The Exercises route: a library's view and the shelf it shows (`book`) (Finger technique by default). */
+interface ExercisesSearch extends PracticeLibraryView {
+  readonly book: ExerciseShelf
+}
+const EXERCISES_DEFAULTS: ExercisesSearch = {
+  ...PRACTICE_LIBRARY_DEFAULTS,
+  book: 'technique',
+}
+export function readExercisesSearch(raw: Raw): ExercisesSearch {
+  return {
+    ...readPracticeLibrarySearch(raw),
+    book: isExerciseShelf(raw.book) ? raw.book : EXERCISES_DEFAULTS.book,
+  }
+}
+export const exercisesSearch = routeSearch(readExercisesSearch, EXERCISES_DEFAULTS)

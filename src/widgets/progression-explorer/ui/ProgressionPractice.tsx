@@ -1,75 +1,53 @@
 import { Link } from '@tanstack/react-router'
-import {
-  ArrowDownRight,
-  ArrowUpDown,
-  ArrowUpRight,
-  ChevronsDown,
-  ChevronsUp,
-  Music,
-  RotateCcw,
-  RotateCw,
-  type LucideIcon,
-} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useFold } from '@/features/fold-section'
 import { useKeyName } from '@/shared/i18n'
-import { KEY_WALKS, parseNumerals, type Key, type KeyWalk } from '@/shared/lib/music'
-import { RowGroup, RowLink } from '@/shared/ui'
+import {
+  numeralChord,
+  parseNumerals,
+  printedChord,
+  type Key,
+  type KeyWalk,
+} from '@/shared/lib/music'
+import { PractiseRow, PractiseRows } from '@/shared/ui'
 import type { InPlayer } from '../model/progressions-view'
 import { walkPreview } from '../model/walk-preview'
 
-/** Each sequence by the way it goes (R21): rising, falling, up and back, round the circle. */
-const WALK_ICONS: Readonly<Record<KeyWalk, LucideIcon>> = {
-  'semitones-up': ArrowUpRight,
-  'semitones-down': ArrowDownRight,
-  'semitones-up-down': ArrowUpDown,
-  'tones-up': ChevronsUp,
-  'tones-down': ChevronsDown,
-  fifths: RotateCcw,
-  'fifths-up': RotateCw,
-  'minor-thirds': ArrowUpRight,
-  'major-thirds': ChevronsUp,
-}
+/** The walks the page offers, as its board (`r62_progression`): the Player's setup has them all. */
+const PAGE_WALKS: readonly KeyWalk[] = [
+  'semitones-up',
+  'semitones-down',
+  'tones-up',
+  'fifths',
+  'minor-thirds',
+]
 
 /**
- * A progression practised in the Player, as Chords and Scales list theirs: in the key shown, and in
- * all 12 keys (A23), a row for each sequence the Player has, saying the chords it plays first. A
- * progression of one chord has no sequence to practise, so none is offered (R30).
+ * A progression practised in the Player (canvas 177; "a progression is practised one way", loop round
+ * 58), as the Scales page's Practise rows: first in the key shown, round and round, then a row for each
+ * of the board's five sequences through the keys, saying the chords it plays first. A progression of one
+ * chord has no sequence to practise, so none is offered.
  */
 export function ProgressionPractice({ musicKey, inPlayer }: { musicKey: Key; inPlayer: InPlayer }) {
-  const { t } = useTranslation(['practice', 'music', 'player'])
-  const keyName = useKeyName()
-  const inKey = useFold('progressions.practice')
-  const walks = useFold('progressions.walks')
+  const { t } = useTranslation(['practice', 'player'])
   const numerals = parseNumerals(inPlayer.p) ?? []
   const size = inPlayer.chordSize ?? 'triads'
-  return (
-    <>
-      <RowGroup title={t('practice:inPlayer')} fold={inKey}>
-        <li>
-          <RowLink
-            title={t('music:key.in', { key: keyName(musicKey) })}
-            icon={Music}
-            paint="grass"
-            render={<Link to="/play/progression" search={inPlayer} />}
-          />
-        </li>
-      </RowGroup>
-      {new Set(numerals.map((numeral) => numeral.degree)).size < 2 ? null : (
-        <RowGroup title={t('practice:progressions.throughKeys')} fold={walks}>
-          {KEY_WALKS.map((walk) => (
-            <li key={walk}>
-              <RowLink
-                title={t(`player:keyWalk.${walk}`)}
-                detail={walkPreview(numerals, musicKey, walk, size)}
-                icon={WALK_ICONS[walk]}
-                paint="lilac"
-                render={<Link to="/play/progression" search={{ ...inPlayer, walk }} />}
-              />
-            </li>
-          ))}
-        </RowGroup>
-      )}
-    </>
+  const keyName = useKeyName()
+  const chords = numerals.map((numeral) => printedChord(numeralChord(numeral, musicKey, size)))
+  return new Set(numerals.map((numeral) => numeral.degree)).size < 2 ? null : (
+    <PractiseRows title={t('practice:progressions.practiseRows')}>
+      <PractiseRow
+        title={t('practice:progressions.inKeyRow', { key: keyName(musicKey) })}
+        detail={t('practice:progressions.roundAndRound', { chords: chords.join(' ') })}
+        render={<Link to="/play/progression" search={inPlayer} />}
+      />
+      {PAGE_WALKS.map((walk) => (
+        <PractiseRow
+          key={walk}
+          title={t(`player:keyWalk.${walk}`)}
+          detail={walkPreview(numerals, musicKey, walk, size)}
+          render={<Link to="/play/progression" search={{ ...inPlayer, walk }} />}
+        />
+      ))}
+    </PractiseRows>
   )
 }

@@ -1,4 +1,4 @@
-import { TICKS_PER_BEAT, type Finger } from '@/shared/lib/music'
+import { FINGERS, TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { EventFigure, Figure, FigureEvent, FigureTone, FigureToken } from './types'
 
 const FIXED_TOKENS = new Map<string, FigureToken>([
@@ -44,7 +44,8 @@ function readTone(text: string): FigureTone | null {
   const match = /^([^^]+)(?:\^([1-5]))?$/.exec(text)
   const token = match?.[1] ? readToken(match[1]) : null
   if (!token) return null
-  return match?.[2] ? { token, finger: Number(match[2]) as Finger } : { token }
+  const finger = FINGERS.find((each) => each === Number(match?.[2]))
+  return finger ? { token, finger } : { token }
 }
 
 const EVENT = /^(\d+)\/(\d+) (\S+?)(!?)$/

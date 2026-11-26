@@ -167,6 +167,10 @@ export const CHARACTERS: Readonly<Record<ProgressionId, LocalText>> = {
     'Cool and funky, minor with a lift',
     'Прохладный и фанковый, минор с подъёмом',
   ),
+  'dorian-progression': line(
+    'Soulful minor that resolves without a pull',
+    'Душевный минор, который разрешается без нажима',
+  ),
   'mixolydian-vamp': line(
     'Bright but earthy, a rock anthem’s swagger',
     'Светлый, но приземлённый, размах рок-гимна',
@@ -175,8 +179,16 @@ export const CHARACTERS: Readonly<Record<ProgressionId, LocalText>> = {
     'Dreamy and floating, film-score wonder',
     'Мечтательный и парящий, чудо из кино',
   ),
+  'lydian-progression': line(
+    'Bright and weightless, it lands like a float',
+    'Светлая и невесомая, приземляется как в парении',
+  ),
   'phrygian-vamp': line(
     'Tense and Spanish, a semitone away',
     'Напряжённый и испанский, на полутон в сторону',
+  ),
+  'phrygian-progression': line(
+    'Dark and flamenco-tinged, falling home from above',
+    'Тёмная, с привкусом фламенко, падает к тонике сверху',
   ),
 }

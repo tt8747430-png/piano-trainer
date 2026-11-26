@@ -2,38 +2,32 @@ import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
 import { useUp, useSetSearch } from '@/shared/lib'
-import { numeralText } from '@/shared/lib/music'
+import { numeralText, walkKeys } from '@/shared/lib/music'
 import type { ProgressionSearch } from '../model/progression-search'
 import { useProgressionPlayer } from '../model/use-progression-player'
-import { PlayerLayout } from './PlayerLayout'
-import { ProgressionSetup } from './ProgressionSetup'
+import { ProgressionSettings, ProgressionSetup } from './ProgressionSetup'
+import { RunLayout } from './RunLayout'
 
-/** A progression in the Player: numerals in any key, a chord a bar, with a song's patterns. */
+/** A progression in the run view: numerals in any key, a chord a bar, with a song's patterns. */
 export function ProgressionPlayerPage() {
   const { t } = useTranslation('player')
-  const search = useSearch({ from: '/full-screen/play/progression' })
+  const search = useSearch({ from: '/shell/play/progression' })
   const setSearch = useSetSearch<ProgressionSearch>()
-  const { choice, performance, player, fit, headings, changeSetup } = useProgressionPlayer(
-    search,
-    setSearch,
-  )
+  const { choice, performance, player, fit, changeSetup } = useProgressionPlayer(search, setSearch)
   const close = useUp()
   const keyName = useKeyName()
-  const named = { numerals: choice.numerals.map(numeralText).join('–'), key: keyName(choice.key) }
+  const named = { numerals: choice.numerals.map(numeralText).join(' – '), key: keyName(choice.key) }
   return (
-    <PlayerLayout
-      title={
-        choice.walk
-          ? t('progression.walking', { ...named, walk: t(`walking.${choice.walk}`) })
-          : t('progression.title', named)
-      }
-      headings={headings}
+    <RunLayout
+      title={t('progression.title', named)}
       onClose={close}
       view={search}
       player={player}
       performance={performance}
-      setup={
-        <ProgressionSetup
+      keys={choice.walk ? walkKeys(choice.key, choice.walk).length : 1}
+      setup={<ProgressionSetup choice={choice} onChange={changeSetup} />}
+      settings={
+        <ProgressionSettings
           choice={choice}
           fit={fit}
           swing={search.swing}

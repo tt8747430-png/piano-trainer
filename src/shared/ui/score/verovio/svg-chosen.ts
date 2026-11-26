@@ -64,10 +64,12 @@ export function chosenParts(
   keys: ReadonlySet<string> | null,
   grace = false,
 ): Element[] {
-  const staves = chosen.staves as readonly string[] | undefined
+  const staves = chosen.staves
   const inChoice = (element: Element) => {
     const { staff, tick } = placeOf(element)
-    return tick >= chosen.from && tick < chosen.to && (!staves || staves.includes(staff))
+    return (
+      tick >= chosen.from && tick < chosen.to && (!staves || staves.some((each) => each === staff))
+    )
   }
   if (grace) {
     const graces = [...svg.querySelectorAll('g.note[id^="g-"]')].filter(inChoice)

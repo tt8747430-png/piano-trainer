@@ -10,7 +10,7 @@ import {
 import { PieceInversions } from '@/features/choose-diagram-inversion'
 import type { DiagramChord } from '@/features/practice'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createMemoryStorage, SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi, note, pitchClass, printedSymbol } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
@@ -56,7 +56,7 @@ async function openSheet(
   const chord = props.chord ?? C_SHARP_M7
   const sheetUi = <ChordSheet open onOpenChange={onOpenChange} chord={chord} {...props} />
   renderWithSettings(
-    <ServicesProvider services={{ audio, midi: keyboard }}>
+    <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: keyboard }}>
       <DiagramInversionsStoreProvider store={inversions}>
         {piece ? <PieceInversions pieceId="bz5">{sheetUi}</PieceInversions> : sheetUi}
       </DiagramInversionsStoreProvider>

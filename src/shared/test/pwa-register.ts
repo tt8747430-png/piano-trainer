@@ -2,10 +2,17 @@ import { useState } from 'react'
 import { vi } from 'vitest'
 import { heardUntil, untilTestEnds } from './listeners'
 
+/** The registration the fake hands the app: a look for a new version, and the versions waiting or installing. */
+interface FakeRegistration {
+  readonly update: () => Promise<undefined>
+  readonly waiting: typeof waitingWorker | null
+  readonly installing: null
+}
+
 /** What the app asks of `useRegisterSW`, as far as a test can see it. */
 interface RegisterOptions {
   immediate?: boolean
-  onRegisteredSW?: (url: string, registration: ServiceWorkerRegistration) => void
+  onRegisteredSW?: (url: string, registration: FakeRegistration) => void
   onNeedReload?: () => void
 }
 
@@ -41,12 +48,7 @@ export function useRegisterSW(options: RegisterOptions = {}) {
   // as a closed page's would: the document outlives every test of a worker.
   useState(() => {
     registeredWith = options
-    heardUntil(untilTestEnds(), () =>
-      options.onRegisteredSW?.(
-        '/sw.js',
-        registration.worker as unknown as ServiceWorkerRegistration,
-      ),
-    )
+    heardUntil(untilTestEnds(), () => options.onRegisteredSW?.('/sw.js', registration.worker))
   })
   return {
     needRefresh: useState(registration.waiting),

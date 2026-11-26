@@ -1,8 +1,9 @@
 export const common = {
   appName: 'Piano Trainer',
   skipToContent: 'Skip to content',
-  progressGroup: 'Progress',
+  progressGroup: 'Your progress',
   back: 'Back',
+  undo: 'Undo',
   // Edit mode (Noji's, iOS's): a pencil in the bar enters it, a check leaves it.
   editMode: { label: 'Mode', play: 'Play', editing: 'Edit', edit: 'Edit', done: 'Done' },
   nav: {
@@ -16,15 +17,25 @@ export const common = {
     collapse: 'Collapse the sidebar',
     open: 'Open the sidebar',
     recents: 'Recents',
-    guest: 'Guest',
+    notSignedIn: 'Not signed in',
+    // Focus (the canvas's laptop window): the sidebar and side panels hidden, Esc or Exit focus to leave.
+    focus: 'Focus',
+    focusTip: 'Hide the sidebar and panels',
+    exitFocus: 'Exit focus',
+    signIn: 'Sign in',
   },
   errors: {
-    title: 'Something went wrong',
-    offline: 'You’re offline. This screen opens once you’re back online.',
+    title: 'This screen could not open',
+    failed: 'Reloading usually fixes it. The error has been sent so it can be fixed.',
+    offlineTitle: 'You’re offline',
+    offline:
+      'This screen opens once you’re back online. Your songs and lessons on this device still open.',
     reload: 'Reload',
+    retry: 'Try again',
   },
   notFound: {
     title: 'Page not found',
+    line: 'The link may be old, or the song or lesson was deleted.',
     toSongs: 'Go to Songs',
     toLearn: 'Go to Learn',
     toScales: 'Go to Scales and keys',
@@ -37,8 +48,8 @@ export const common = {
   // A library's chrome (Songs', Practice's; ADR 0106): favourites, the search's sort, the filters.
   library: {
     favourites: 'Favourites',
-    favourite: 'Add to favourites',
-    unfavourite: 'Remove from favourites',
+    favourite: 'Add to Favourites',
+    unfavourite: 'Remove from Favourites',
     moreOf: 'More for {{name}}',
     sort: 'Sort',
     clearFilters: 'Clear filters',
@@ -89,6 +100,8 @@ export const common = {
   infoTip: 'About {{name}}',
   loading: 'Loading',
   // The four levels, a journey's and a course's (ADR 0053).
+  // A row's level, short, as Learn numbers its levels (the libraries' rows on a phone).
+  levelNumber: 'Level {{number}}',
   stage: {
     beginner: 'Beginner',
     intermediate: 'Intermediate',
@@ -122,69 +135,22 @@ export const common = {
   // The pedals worked from the bar (R34): each one's name, and what it does.
   pedals: {
     sustain: { name: 'Sustain', label: 'Sustain pedal — hold, or tap to latch' },
-    sostenuto: {
-      name: 'Sost.',
-      label: 'Sostenuto pedal — sustains only the notes held as it is pressed',
-    },
-    soft: { name: 'Soft', label: 'Soft pedal (una corda) — softens the tone while held' },
   },
   // The on-screen keyboard's controls in the screen's bar (R34).
+  keysWindow: {
+    move: 'Move the piano',
+    hint: 'Drag to move the piano · double-tap to put it back',
+  },
   keyboardTools: {
     // The transport's Keyboard caption: what stands in the keys' place.
     short: { keys: '2D', hands: '3D', off: 'Off' },
     keyboard: 'Keyboard',
-    hands: 'Hands at the keys',
-    show: 'Show the keyboard',
-    hide: 'Hide the keyboard',
-    chord: 'Chord held',
-    morePedals: 'Soft and sostenuto pedals',
-    latched: 'Latched',
-    resize: 'Resize keyboard',
   },
-  // The keyboard settings: Settings › On-screen piano.
+  // The computer keyboard's switch: Settings › General.
   keyboardSettings: {
-    pedals: {
-      label: 'Pedals',
-      detail: 'Adds the soft and sostenuto pedals to the Sustain button’s menu.',
-      sustain: 'Sustain only',
-      all: 'All three',
-    },
-    keySize: {
-      label: 'Key size',
-      detail: 'All keys fit the width; a larger size scrolls to follow the music.',
-      fit: 'Fit to music',
-      large: 'Large',
-      piano: 'All keys',
-    },
-    namedKeys: {
-      label: 'Note names',
-      detail: 'Which keys carry their note name.',
-      c: 'On every C',
-      all: 'On every key',
-      none: 'Hidden',
-    },
-    markNotes: 'Note names on highlighted keys',
-    markNotesNote: 'Shows each note’s name beneath its chord tone or scale degree.',
-    chordNames: 'Chord symbol',
-    chordNamesNote: 'Names the chord you hold in the bar.',
-    dock: {
-      label: 'Position',
-      detail: 'Where pages dock their keyboard.',
-      bottom: 'Bottom',
-      top: 'Top',
-    },
-    swipe: {
-      label: 'Swipe gesture',
-      detail: 'Scrolls the keyboard, or plays every key your finger crosses.',
-      scroll: 'Scroll',
-      glissando: 'Glissando',
-    },
-    volume: 'Volume',
     typing: 'Play with computer keyboard',
     typingNote: 'The letter keys play the on-screen piano.',
     typingHint: 'Z and X shift the octave · Space holds the sustain pedal',
-    autoplay: 'Play on selection',
-    autoplayNote: 'Chords and scales sound as soon as you select them on a Practice page.',
   },
   // The computer's shortcuts: the sheet, and the groups every screen shares.
   shortcuts: {
@@ -228,12 +194,8 @@ export const common = {
   // The MIDI keyboard's screen (Settings › MIDI keyboard, ADR 0034) and its MIDI log.
   midiSettings: {
     input: 'MIDI input',
-    inputNote:
-      'The app hears the keys and pedals played on a MIDI keyboard. Off, it hears none and asks nothing as it opens.',
     output: 'MIDI output',
-    outputNote: 'Songs and examples sound from the piano’s own speakers',
     sound: 'MIDI input plays sound',
-    soundNote: 'For a piano without speakers: the app sounds the keys you press',
     needsInput: 'Needs MIDI input',
     unsupportedNote:
       'Web MIDI works in Chrome, Edge, Opera and Firefox on a computer or an Android phone. Safari, and every browser on an iPhone or iPad, has none.',
@@ -253,6 +215,8 @@ export const common = {
     octaveShift: {
       label: 'Octave shift',
       detail: 'Moves what the piano plays up or down, for a piano with fewer keys',
+      down: 'Octave down',
+      up: 'Octave up',
     },
     touch: {
       label: 'Touch',
@@ -322,7 +286,7 @@ export const common = {
     // A Settings row's value: the MIDI keyboard's state in a word or a name.
     summary: {
       unavailable: 'Not available',
-      off: 'Off',
+      off: 'Not connected',
       denied: 'Blocked',
       connecting: 'Connecting…',
       noDevice: 'No device',
@@ -381,5 +345,13 @@ export const common = {
       grid: { label: 'Grid' },
     },
     reset: 'Reset to default',
+  },
+  sheetCredits: {
+    words: 'Words: {{names}}',
+    music: 'Music: {{names}}',
+    wordsAndMusic: 'Words and music: {{names}}',
+    translator: 'Translation: {{names}}',
+    tune: 'Tune: {{names}}',
+    arranger: 'Arranged by {{names}}',
   },
 } as const

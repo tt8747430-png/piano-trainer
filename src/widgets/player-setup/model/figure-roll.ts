@@ -1,6 +1,6 @@
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { wholeBar } from '@/entities/piece'
-import { arrange, type Chart, type EventFigure, type Figure } from '@/shared/lib/arrangement'
+import { arrange, type Chart, type Figure } from '@/shared/lib/arrangement'
 import { C_MAJOR, note } from '@/shared/lib/music'
 
 /** A note of a hand's figure in a bar: where it starts and how long, as shares of the bar, and how high. */
@@ -30,7 +30,9 @@ export function figureRoll(hand: 'rh' | 'lh', figure: Figure): RollNote[] {
   const performance = arrange(C_BAR, {
     tonic: note('C'),
     pattern: BASE,
-    ...(hand === 'rh' ? { rh: figure } : { lh: figure as EventFigure }),
+    ...(hand === 'rh'
+      ? { rh: figure }
+      : { lh: figure.kind === 'events' ? figure : figure.withoutTune }),
   })
   const bar = performance.totalTicks
   const notes = performance.notes.filter((n) => n.hand === hand && !n.silent)

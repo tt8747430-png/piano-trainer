@@ -7,7 +7,7 @@ import {
   type OwnProgression,
 } from '@/entities/practice-library'
 import { progressionById, type LibraryProgression } from '@/entities/progression-library'
-import { saveProgression } from '@/features/manage-practice-library'
+import { saveProgression, useMarkPracticeUsed } from '@/features/manage-practice-library'
 import { useSetSearch } from '@/shared/lib'
 import { keyFromParam } from '@/shared/lib/music'
 import {
@@ -29,6 +29,21 @@ export function ProgressionPage() {
     isOwnProgressionId(progressionId) ? selectOwnProgression(progressionId)(state) : undefined,
   )
   const library = progressionById(progressionId)
+  if (!own && !library) throw notFound()
+  return <Shown own={own} library={library} id={progressionId} />
+}
+
+/** The progression found: marked as used, then its own page or the library's. */
+function Shown({
+  own,
+  library,
+  id,
+}: {
+  own: OwnProgression | undefined
+  library: LibraryProgression | undefined
+  id: string
+}) {
+  useMarkPracticeUsed('progressions', id)
   if (own) return <OwnPage progression={own} />
   if (library) return <LibraryPage progression={library} />
   throw notFound()

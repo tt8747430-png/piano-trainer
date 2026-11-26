@@ -2,7 +2,13 @@ import { WandSparkles } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { chordSuggestions, chordWrittenAt } from '@/features/score-editor'
-import { chordSymbol, printedSymbol, readChordSymbol, type Chord } from '@/shared/lib/music'
+import {
+  chordSymbol,
+  printedSymbol,
+  readChordSymbol,
+  rootsInCapitals,
+  type Chord,
+} from '@/shared/lib/music'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { wizardOf } from '../model/chord-wizard'
 import { useFieldText } from '../model/use-field-text'
@@ -39,7 +45,7 @@ export function ChordSymbolField({ anchor }: { anchor: HTMLElement | null }) {
       if (written) dispatch({ type: 'delete' })
       return true
     }
-    const chord = readChordSymbol(typed)
+    const chord = readChordSymbol(rootsInCapitals(typed))
     if (!chord) return false
     dispatch({ type: 'chord', chord })
     return true
@@ -86,7 +92,7 @@ export function ChordSymbolField({ anchor }: { anchor: HTMLElement | null }) {
     >
       {wizard ? (
         <ChordWizard
-          from={wizardOf(readChordSymbol(typed))}
+          from={wizardOf(readChordSymbol(rootsInCapitals(typed)))}
           onChord={(chord) => setText(chordSymbol(chord))}
           onAdd={() => go(1)}
         />

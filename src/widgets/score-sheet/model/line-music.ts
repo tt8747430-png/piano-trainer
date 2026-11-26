@@ -1,6 +1,7 @@
 import { HAND_IDS } from '@/entities/piece'
 import {
   barsOf,
+  draftPickup,
   layerStaff,
   lyricsLayer,
   sectionMeter,
@@ -48,9 +49,11 @@ export interface SheetLineBars {
   readonly start: number
   /** Each bar's label (ADR 0097): the line's first number, a section's name, the tempo. */
   readonly labels: readonly BarLabel[]
+  /** Whether the piece opens on a pickup: its bars numbered from the first full one (`barNumber`). */
+  readonly pickup: boolean
 }
 
-type UnlabelledLine = Omit<SheetLineBars, 'labels'>
+type UnlabelledLine = Omit<SheetLineBars, 'labels' | 'pickup'>
 
 /** The lines with their bars' labels, read from the piece's bars: each one's section, the tempo over the first. */
 function labelled(draft: Draft, lines: readonly UnlabelledLine[]): SheetLineBars[] {
@@ -58,9 +61,10 @@ function labelled(draft: Draft, lines: readonly UnlabelledLine[]): SheetLineBars
     section: placed.section,
     ...(placed.index === 0 ? { tempo: draft.tempo } : {}),
   }))
+  const pickup = draftPickup(draft)
   return lines.map((line) => {
     const first = line.bars[0]?.index ?? 0
-    return { ...line, labels: barLabels(bars, first, first + line.bars.length) }
+    return { ...line, labels: barLabels(bars, first, first + line.bars.length, pickup), pickup }
   })
 }
 
@@ -143,6 +147,8 @@ function sounding(
       ...(n.finger === undefined ? {} : { finger: n.finger }),
       ...(n.marks ? { marks: n.marks } : {}),
       ...(lyrics && n.lyrics ? { lyrics: n.lyrics } : {}),
+      ...(n.voice ? { voice: n.voice } : {}),
+      ...(n.cross ? { cross: n.cross } : {}),
     }))
 }
 

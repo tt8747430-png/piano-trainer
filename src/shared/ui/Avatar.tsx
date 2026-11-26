@@ -10,10 +10,18 @@ const SIZE = {
   tree: 'size-6 text-xs',
   /** A byline's: beside a name. */
   byline: 'size-11 text-lg',
+  /** A feed card's foot (the Explore board's FEEDCARD): beside who shared it. */
+  feed: 'size-6 text-xs font-bold',
+  /** Explore's People (R72's PERSON): a person's row. */
+  person: 'size-12 text-[1.1875rem] font-bold',
   /** A row's: its tile's size. */
   row: 'size-13 text-2xl',
-  /** The Profile's and the Account's, at their top. */
-  hero: 'size-20 text-4xl',
+  /** The Profile's, at its top (HERO_P). */
+  hero: 'size-19 text-4xl',
+  /** The Account's, at its top (ACC_IN's AVA 64). */
+  account: 'size-16 text-3xl',
+  /** The laptop Settings dialog's account row (LACCT's AVA 36). */
+  nav: 'size-9 text-base',
 } as const
 
 /** Whether a picture is an uploaded one's address, which an image shows. */

@@ -3,8 +3,8 @@ import { cn } from '@/shared/lib'
 import { ROW_CONTROL } from './library-row-class'
 
 /**
- * The ♡ at a library row's end (canvas 133, Songs' and Practice's alike): an outline, filled in ink
- * while it is a favourite, one tap to change it; named by what the tap does.
+ * The ♡ at a library row's end (canvas 133, Songs' and Practice's alike): an outline, faint at rest, filled
+ * red while it is a favourite (the boards' #B84A3E), one tap to change it; named by what the tap does.
  */
 export function HeartToggle({
   pressed,
@@ -13,7 +13,7 @@ export function HeartToggle({
   className,
 }: {
   pressed: boolean
-  /** What a tap does: Favourite, or Remove from favourites. */
+  /** What a tap does: Favourite, or Remove from Favourites. */
   label: string
   onToggle: () => void
   className?: string
@@ -27,7 +27,7 @@ export function HeartToggle({
       onClick={onToggle}
       className={cn(
         ROW_CONTROL,
-        'aria-pressed:text-foreground aria-pressed:[&_svg]:fill-current',
+        'text-heart-rest aria-pressed:text-heart aria-pressed:[&_svg]:fill-current',
         className,
       )}
     >

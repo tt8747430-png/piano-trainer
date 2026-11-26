@@ -6,13 +6,14 @@ import {
   numeralsParam,
   parseNumerals,
   readInKey,
+  rootsInCapitals,
   type Key,
   type KeyParam,
   type Numeral,
 } from '@/shared/lib/music'
 
 /** A typed line as Progressions plays it: its numerals, in the key they are read in. */
-export interface TypedProgression {
+interface TypedProgression {
   readonly numerals: readonly Numeral[]
   readonly key: Key
 }
@@ -22,7 +23,7 @@ const TO_MOVE_KEY = 3
 
 /**
  * What a learner typed (ADR 0052): numerals as written, in the key shown; or a song's chords (`Am F
- * C G`, `Dm7 Gm9 Asus4`) as their numerals, an applied dominant by the chord it leads to. Chords are
+ * C G`, `Dm7 Gm9 Asus4`, in either case) as their numerals, an applied dominant by the chord it leads to. Chords are
  * read in the key shown until a line of three or more is held better by another key: then in the key
  * they are most likely in, so the key holds still while the first chords are typed. Null while any
  * part cannot be read or written as a numeral.
@@ -30,7 +31,7 @@ const TO_MOVE_KEY = 3
 export function readProgression(text: string, key: Key): TypedProgression | null {
   const numerals = parseNumerals(text)
   if (numerals) return { numerals, key }
-  const chords = chordsOfLine(text)
+  const chords = chordsOfLine(rootsInCapitals(text))
   if (!chords) return null
   const found = keysOfChords(chords)
   const [best] = found

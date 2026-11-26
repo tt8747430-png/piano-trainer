@@ -3,7 +3,7 @@ import { useEditorState } from '@tiptap/react'
 import { useEffect, useId, useState, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Locale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { cn, matchesQuery } from '@/shared/lib'
 import { DOC } from '../model/lesson-doc'
 import { insertActions } from './menus'
 
@@ -71,7 +71,7 @@ export function SlashMenu({
     )
   }
   const actions = insertActions(editor, locale, t, clear).filter((action) =>
-    action.label.toLowerCase().includes(query),
+    matchesQuery([action.label], query),
   )
   const chosen = Math.min(active.query === query ? active.at : 0, Math.max(actions.length - 1, 0))
   useEffect(() => {

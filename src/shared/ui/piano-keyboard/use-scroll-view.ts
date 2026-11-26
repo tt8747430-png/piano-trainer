@@ -1,4 +1,4 @@
-import { useMemo, useSyncExternalStore, type RefObject } from 'react'
+import type { RefObject } from 'react'
 import type { ScrollMetrics } from '@/shared/lib'
 
 const NOT_LAID_OUT: ScrollMetrics = { scrollLeft: 0, clientWidth: 0, scrollWidth: 0 }
@@ -87,15 +87,4 @@ export function scrollStore(scroller: RefObject<HTMLElement | null>): ScrollStor
       return element ? storeOf(element).read() : NOT_LAID_OUT
     },
   }
-}
-
-/**
- * Where the scroller is and what it holds, followed as it scrolls and as the window resizes. The
- * rail, and the map in it, come before the scroller, so on mount the map renders before the
- * scroller exists; React subscribes after every ref is set, reads the scroller again then, and
- * renders the map anew if the keyboard has scrolled to the keys that matter meanwhile.
- */
-export function useScrollView(scroller: RefObject<HTMLElement | null>): ScrollMetrics {
-  const store = useMemo(() => scrollStore(scroller), [scroller])
-  return useSyncExternalStore(store.subscribe, store.read)
 }

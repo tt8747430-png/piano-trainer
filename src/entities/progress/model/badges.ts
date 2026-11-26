@@ -20,7 +20,7 @@ export interface BadgeFigures {
 export const TIERS = ['bronze', 'silver', 'gold', 'platinum'] as const
 export type Tier = (typeof TIERS)[number]
 
-export interface BadgeDef {
+interface BadgeDef {
   readonly id: 'streak' | 'repertoire' | 'lessons' | 'scales' | 'devotion' | 'library'
   readonly figure: keyof BadgeFigures
   /** Each tier's goal, bronze to platinum. */
@@ -65,31 +65,6 @@ export function badgesOf(figures: BadgeFigures): Badge[] {
       tiers,
     }
   })
-}
-
-/**
- * The closest unearned tier, for the Profile's "Almost there" card: the one the learner is the
- * greatest share of the way to (from the tier before it), ties to the fewest left.
- */
-export function nextMilestone(figures: BadgeFigures): {
-  readonly id: BadgeId
-  readonly tier: Tier
-  readonly goal: number
-  readonly left: number
-} | null {
-  const candidates = badgesOf(figures).flatMap((badge) => {
-    if (badge.next === null) return []
-    const from = badge.tiers[badge.earned - 1] ?? 0
-    const share = (badge.have - from) / (badge.next - from)
-    const tier = TIERS[badge.earned]
-    return tier
-      ? [{ id: badge.id, tier, goal: badge.next, left: badge.next - badge.have, share }]
-      : []
-  })
-  const best = candidates.toSorted((a, b) => b.share - a.share || a.left - b.left)[0]
-  if (!best) return null
-  const { share: _share, ...milestone } = best
-  return milestone
 }
 
 export const isBadgeId = (value: unknown): value is BadgeId =>

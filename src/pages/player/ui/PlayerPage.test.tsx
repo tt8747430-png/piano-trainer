@@ -775,7 +775,7 @@ describe('Player', () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    expect(screen.queryByRole('combobox', { name: 'In all 12 keys' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('combobox', { name: 'Keys' })).not.toBeInTheDocument()
   })
 
   it('keeps its transport docked at a tap on the screen’s free room, never floating away (R31-P)', async () => {

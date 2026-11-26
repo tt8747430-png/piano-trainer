@@ -531,6 +531,8 @@ function playWritten(
       hand,
       ...(n.finger === undefined ? {} : { finger: n.finger }),
       ...(n.lyrics ? { lyrics: n.lyrics } : {}),
+      ...(n.voice ? { voice: n.voice } : {}),
+      ...(n.cross ? { cross: n.cross } : {}),
       startTick,
       durationTicks: n.durationTicks,
       velocity: hand === 'lh' ? VELOCITY.left : VELOCITY.right,

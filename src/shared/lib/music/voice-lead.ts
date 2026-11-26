@@ -31,7 +31,8 @@ const WEIGHT = {
   parallels: 4,
 } as const
 
-const middle = (keys: readonly number[]): number =>
+/** The mean of a voicing's keys: where the hand's middle sits. */
+export const middleOf = (keys: readonly number[]): number =>
   keys.reduce((sum, key) => sum + key, 0) / Math.max(keys.length, 1)
 
 /** How far each voice of one hand moves to the nearest of the other's, both ways, halved. */
@@ -60,7 +61,7 @@ interface Voicing {
  * the bass. The first chord costs only its distance from home.
  */
 function cost(voicing: Voicing, before: Voicing | null): number {
-  const home = WEIGHT.home * Math.abs(middle(voicing.hand) - HAND.home)
+  const home = WEIGHT.home * Math.abs(middleOf(voicing.hand) - HAND.home)
   if (!before) return home
   const top = Math.max(...voicing.hand)
   const topBefore = Math.max(...before.hand)

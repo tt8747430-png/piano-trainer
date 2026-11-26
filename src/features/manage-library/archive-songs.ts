@@ -14,7 +14,7 @@ export function archiveSongs(
   let archived: PieceId[] = []
   edit.editLibrary(store, catalog, (layout) => {
     archived = edit.placesOf(layout, ids).map((each) => each.id)
-    return edit.archiveSongs(layout, archived)
+    return edit.archiveSongs(layout, archived, Date.now())
   })
   return archived
 }

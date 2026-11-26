@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react'
 import type { NetFailure } from '@/shared/api/network'
-import type {
-  PublicCategory,
-  PublicEntry,
-  PublicKind,
-  PublicSort,
-} from '@/shared/api/public-library'
+import type { PublicEntry, PublicKind, PublicSort } from '@/shared/api/public-library'
 import { useOnline } from '@/shared/lib'
 import { usePublicLibrary } from '@/shared/lib/public-library'
-import type { ExploreCategory } from './explore-view'
+import { EXPLORE_TAGS, type ExploreCategory } from './explore-view'
 
 /** Explore's answer: still asked, what it found, or why there is nothing to show. */
 export type Browse =
@@ -17,7 +12,7 @@ export type Browse =
   | { readonly kind: 'failed'; readonly reason: NetFailure }
 
 /** What one browse of Explore asks for: a chip's songs or patterns, in one order, searched. */
-export interface BrowseAsk {
+interface BrowseAsk {
   readonly cat: ExploreCategory
   readonly sort: PublicSort
   readonly q: string
@@ -26,15 +21,12 @@ export interface BrowseAsk {
 /** How long typing rests before Explore is asked: one request a word, not a letter. */
 const SETTLE_MS = 300
 
-/** A chip's kind and category: Patterns the patterns, All every song, the rest one category's. */
-export function askOf(cat: ExploreCategory): { kind: PublicKind; category?: PublicCategory } {
+/** A chip's kind and tag: Patterns the patterns, All every song, the rest the songs tagged so. */
+function askOf(cat: ExploreCategory): { kind: PublicKind; tag?: string } {
   if (cat === 'patterns') return { kind: 'pattern' }
   if (cat === 'all') return { kind: 'song' }
-  return { kind: 'song', category: cat }
+  return { kind: 'song', tag: EXPLORE_TAGS[cat] }
 }
-
-/** What a browse found; none while it is asked or where it failed. */
-export const entriesOf = (browse: Browse) => (browse.kind === 'found' ? browse.entries : [])
 
 /**
  * Explore's items for what is asked (`ask`), asked again as it changes, once typing rests, when the

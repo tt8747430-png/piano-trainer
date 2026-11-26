@@ -19,7 +19,7 @@ export function FilterChips({ chips }: { chips: readonly FilterChipOn[] }) {
     // Room round the chips inside the scroller, so a chip's focus ring is not cut.
     <ul
       aria-label={t('library.filters.chips')}
-      className="-mx-gutter -my-1 flex gap-2 overflow-x-auto px-gutter py-1 [scrollbar-width:none]"
+      className="-mx-gutter -my-1 flex gap-2 overflow-x-auto px-gutter py-1 scrollbar-none"
     >
       {chips.map((chip) => (
         <li key={chip.id} className="shrink-0">

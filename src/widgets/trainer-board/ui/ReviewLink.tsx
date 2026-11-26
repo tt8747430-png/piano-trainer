@@ -53,7 +53,6 @@ export function ReviewLink({
           search={{
             root: noteParam(question.key.tonic),
             kind: question.key.minor ? 'natural' : 'major',
-            show: 'key',
           }}
           {...props}
         />

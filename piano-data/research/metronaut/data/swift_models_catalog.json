@@ -1,0 +1,7446 @@
+{
+  "description": "Swift catalog/API model types recovered from __swift5_types + __swift5_fieldmd of Metronaut.app frameworks (Networking, Core, Domain, RealmDataSource). Mangled type suffixes: Si=Int, SS=String, Sb=Bool, Sd=Double, Sf=Float, Su=UInt, Sg=Optional, Say..G=Array, SDy..G=Dictionary, <X>=resolved local type, <?>=type from another module (unresolved). codingKeys attached heuristically (nearest following CodingKeys enum whose cases are a subset of the fields).",
+  "Networking": [
+    {
+      "kind": "struct",
+      "name": "Networking.SharesGetRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.SharesGetRequestParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SharesGetRequestParameters",
+      "fields": [
+        {
+          "name": "offset",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "limit",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "offset",
+        "limit"
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "Networking.AbstractRequest",
+      "fields": [
+        {
+          "name": "authBasicName",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "authBasicPass",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "user",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "server",
+          "mangledType": "<Networking.AbstractRequest.ServerEnum>yx_G",
+          "optional": false
+        },
+        {
+          "name": "url",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "method",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "SDySSypGSg",
+          "optional": true
+        },
+        {
+          "name": "validate",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "decoder",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "encoder",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "shouldAppendUserId",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "req",
+          "mangledType": "<?>Sg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.DisplayErrorResponse",
+      "fields": [
+        {
+          "name": "errors",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "errors"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.EmailSignInParams",
+      "fields": [
+        {
+          "name": "email",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "password",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "appsflyer_id",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "af_web_id",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "email",
+        "password",
+        "appsflyer_id",
+        "af_web_id"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Networking.CatalogAPI",
+      "cases": []
+    },
+    {
+      "kind": "enum",
+      "name": "Networking.CatalogAPIv3",
+      "cases": [
+        {
+          "name": "workoutSteps",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Networking.CatalogAPIv2",
+      "cases": [
+        {
+          "name": "all",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "pieces",
+          "mangledType": "<Networking.CatalogAPIv2.Pieces>",
+          "optional": false
+        },
+        {
+          "name": "previewPieces",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Networking.CatalogAPIv2.Pieces",
+      "cases": [
+        {
+          "name": "piece",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "pieceSlug",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.WorkoutRequest",
+      "fields": [
+        {
+          "name": "workoutId",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "parameters",
+          "mangledType": "SDySSypGSg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.WorkoutParameters",
+      "fields": [
+        {
+          "name": "instrument",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "instrument",
+        "level",
+        "countryCode"
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "Networking.RequestPatchPlaylist",
+      "fields": []
+    },
+    {
+      "kind": "class",
+      "name": "Networking.RequestPutPlaylist",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.DiscoverRequest",
+      "fields": [
+        {
+          "name": "parameters",
+          "mangledType": "SDySSypGSg",
+          "optional": true
+        },
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.DiscoverRequestV5",
+      "fields": [
+        {
+          "name": "parameters",
+          "mangledType": "SDySSypGSg",
+          "optional": true
+        },
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.DiscoverParameters",
+      "fields": [
+        {
+          "name": "instrument",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "genre_preference",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "is_intro_offer_eligible",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "offset",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "limit",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "clicked_card_ids",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "launch_date",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "platform",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "instrument",
+        "level",
+        "genre_preference",
+        "countryCode",
+        "is_intro_offer_eligible",
+        "offset",
+        "limit",
+        "clicked_card_ids",
+        "launch_date",
+        "platform"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.FreePiecesRequest",
+      "fields": [
+        {
+          "name": "token",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.FreePiecesParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.FreePiecesParameters",
+      "fields": [
+        {
+          "name": "instrument",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "level",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "instrument",
+        "level",
+        "countryCode"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.GetUserLeagueRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.GetUserLeagueParams>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.GetUserLeagueParams",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.All",
+      "fields": [
+        {
+          "name": "author",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "instrument",
+          "mangledType": "Say<Networking.Instrument>G",
+          "optional": false
+        },
+        {
+          "name": "instrumentfamily",
+          "mangledType": "Say<Networking.InstrumentFamily>G",
+          "optional": false
+        },
+        {
+          "name": "genre",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "accompanimentkind",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "partkind",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "simplification",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "audiocopyright",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "piece",
+          "mangledType": "Say<Networking.Piece>G",
+          "optional": false
+        },
+        {
+          "name": "collection",
+          "mangledType": "Say<Networking.Collection>G",
+          "optional": false
+        },
+        {
+          "name": "opus",
+          "mangledType": "Say<Networking.Opus>G",
+          "optional": false
+        },
+        {
+          "name": "publisher",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "cursor",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "language",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "full",
+          "mangledType": "SbSg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.Instrument",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "register",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "rangeMin",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "rangeMax",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "clef",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "alternateClef1",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "alternateClef2",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "octavia",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "transposition",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "deviceImage",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "defaultOrder",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "closeInstruments",
+          "mangledType": "SaySiG",
+          "optional": false
+        },
+        {
+          "name": "compatibleInstruments",
+          "mangledType": "SaySiGSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "title",
+        "register",
+        "rangeMin",
+        "rangeMax",
+        "clef",
+        "alternateClef1",
+        "alternateClef2",
+        "octavia",
+        "transposition",
+        "deviceImage",
+        "defaultOrder",
+        "freeformMatch",
+        "closeInstruments",
+        "compatibleInstruments"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.InstrumentFamily",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "description",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "instruments",
+          "mangledType": "SaySiG",
+          "optional": false
+        },
+        {
+          "name": "deviceImage",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "defaultOrder",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "title",
+        "description",
+        "instruments",
+        "deviceImage",
+        "defaultOrder",
+        "freeformMatch"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.Piece",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "status",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "originalTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "displayTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "fullTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "movement",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "collections",
+          "mangledType": "SaySiG",
+          "optional": false
+        },
+        {
+          "name": "opus",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "accompaniments",
+          "mangledType": "Say<Networking.Accompaniment>G",
+          "optional": false
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "computedTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "publishers",
+          "mangledType": "SaySiGSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "status",
+        "originalTitle",
+        "title",
+        "displayTitle",
+        "fullTitle",
+        "movement",
+        "collections",
+        "opus",
+        "accompaniments",
+        "freeformMatch",
+        "computedTitle",
+        "publishers"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.Accompaniment",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "status",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "fullTitle",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "kind",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "lyricsLanguage",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "instruments",
+          "mangledType": "SaySiG",
+          "optional": false
+        },
+        {
+          "name": "isoriginal",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "transposition",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "difficulty",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "partKind",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "partExtra",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "simplification",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "musicxmlFile",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "soloMusicxmlFile",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "editedPdfFile",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "ascoFile",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "previewAudioFile",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "previewAudioFile48",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "recordings",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "soloPart",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "previewBeginMeasure",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "previewBeginPulsation",
+          "mangledType": "SdSg",
+          "optional": true
+        },
+        {
+          "name": "previewEndMeasure",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "previewEndPulsation",
+          "mangledType": "SdSg",
+          "optional": true
+        },
+        {
+          "name": "mixers",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "status",
+        "fullTitle",
+        "kind",
+        "lyricsLanguage",
+        "instruments",
+        "isoriginal",
+        "transposition",
+        "difficulty",
+        "partKind",
+        "partExtra",
+        "simplification",
+        "musicxmlFile",
+        "soloMusicxmlFile",
+        "editedPdfFile",
+        "ascoFile",
+        "previewAudioFile",
+        "previewAudioFile48",
+        "recordings",
+        "soloPart",
+        "previewBeginMeasure",
+        "previewBeginPulsation",
+        "previewEndMeasure",
+        "previewEndPulsation",
+        "mixers"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.Collection",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "opuses",
+          "mangledType": "SaySiG",
+          "optional": false
+        },
+        {
+          "name": "pieces",
+          "mangledType": "SaySiG",
+          "optional": false
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "deviceImage",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "shouldDisplay",
+          "mangledType": "SbSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "title",
+        "opuses",
+        "pieces",
+        "freeformMatch",
+        "deviceImage",
+        "shouldDisplay"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.Opus",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "originalTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "displayTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "fullTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "key",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "accidental",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "mood",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "workNumber",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "genre",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "authors",
+          "mangledType": "SaySiG",
+          "optional": false
+        },
+        {
+          "name": "pieces",
+          "mangledType": "SaySiG",
+          "optional": false
+        },
+        {
+          "name": "collections",
+          "mangledType": "SaySiG",
+          "optional": false
+        },
+        {
+          "name": "displayContentSeparately",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "originalTitle",
+        "title",
+        "displayTitle",
+        "fullTitle",
+        "key",
+        "accidental",
+        "mood",
+        "workNumber",
+        "genre",
+        "authors",
+        "pieces",
+        "collections",
+        "displayContentSeparately",
+        "freeformMatch"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PlaylistGetRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.PlaylistGetRequestParams>",
+          "optional": false
+        },
+        {
+          "name": "playlistId",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PlaylistGetRequestParams",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.VideoCardsRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PreviewPiece",
+      "fields": [
+        {
+          "name": "token",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "identifier",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "parameters",
+          "mangledType": "<Networking.PreviewPieceParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PieceSlug",
+      "fields": [
+        {
+          "name": "token",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "author_slug",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "piece_slug",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "parameters",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PreviewPieceParameters",
+      "fields": [
+        {
+          "name": "instrument",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "level",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "instrument",
+        "level",
+        "countryCode"
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "Networking.RequestPostPlaylistPiece",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.RecommendationsRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.RecommendationsParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.RecommendationsParameters",
+      "fields": [
+        {
+          "name": "pieceId",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "limit",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pieceId",
+        "limit",
+        "countryCode"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.ConversionScorePurchaseBeginParameters",
+      "fields": [
+        {
+          "name": "currencyCode",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "instrumentId",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "levelId",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "genrePreference",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "status",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "platform",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "isIpad",
+          "mangledType": "Sb",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "currencyCode",
+        "instrumentId",
+        "levelId",
+        "genrePreference",
+        "status",
+        "platform",
+        "isIpad"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.ConversionScorePurchaseBeginRequest",
+      "fields": [
+        {
+          "name": "parameters",
+          "mangledType": "SDySSypGSg",
+          "optional": true
+        },
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.AppleLoginParams",
+      "fields": [
+        {
+          "name": "access_token",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "first_name",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "last_name",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "firebase_id",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "email",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "instrument_id",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level_id",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "genre_preference",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "status",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "appsflyer_id",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "af_web_id",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "platform",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "access_token",
+        "first_name",
+        "last_name",
+        "firebase_id",
+        "email",
+        "instrument_id",
+        "level_id",
+        "genre_preference",
+        "status",
+        "appsflyer_id",
+        "af_web_id",
+        "platform"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.HTTPError.Response",
+      "fields": [
+        {
+          "name": "statusCode",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "data",
+          "mangledType": "<?>Sg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.WorkoutStepRequest",
+      "fields": [
+        {
+          "name": "token",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "identifier",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "parameters",
+          "mangledType": "<Networking.WorkoutStepParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.WorkoutStepParameters",
+      "fields": [
+        {
+          "name": "instrument",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "level",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "instrument",
+        "level",
+        "countryCode"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SmsCheckParameters",
+      "fields": [
+        {
+          "name": "phone_number",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "country_code",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "verification_code",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "firebase_id",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "instrument_id",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level_id",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "genre_preference",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "appsflyer_id",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "af_web_id",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "platform",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "status",
+          "mangledType": "<?>Sg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "phone_number",
+        "country_code",
+        "verification_code",
+        "firebase_id",
+        "instrument_id",
+        "level_id",
+        "genre_preference",
+        "appsflyer_id",
+        "af_web_id",
+        "platform",
+        "status"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.RecordingUploadCreateResponse",
+      "fields": [
+        {
+          "name": "recording",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "nimUrl",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "imageUrl",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "mediaMultipartInfo",
+          "mangledType": "<Networking.MultiPartInfo>",
+          "optional": false
+        },
+        {
+          "name": "httpStatus",
+          "mangledType": "SiSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "recording",
+        "nimUrl",
+        "imageUrl",
+        "mediaMultipartInfo",
+        "httpStatus"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.ClassroomsGetRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.ClassroomsGetRequestParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.ClassroomsGetRequestParameters",
+      "fields": [
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "countryCode"
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "Networking.CatalogAPIUpdate",
+      "fields": [
+        {
+          "name": "requestClient",
+          "mangledType": "<Networking.RequestClient>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "Networking.AbstractEncodableRequest",
+      "fields": [
+        {
+          "name": "paramsToEncode",
+          "mangledType": "q_Sg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.UserDeepLinkParameters",
+      "fields": [
+        {
+          "name": "first_attributed_touch_data",
+          "mangledType": "SDySS<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "last_attributed_touch_data",
+          "mangledType": "SDySS<?>G",
+          "optional": false
+        },
+        {
+          "name": "user_id",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CollectionRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.CollectionParameters>",
+          "optional": false
+        },
+        {
+          "name": "collectionId",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CollectionParameters",
+      "fields": [
+        {
+          "name": "instrument",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "genrePreference",
+          "mangledType": "SiSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "instrument",
+        "level",
+        "countryCode",
+        "genrePreference"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.RecordingGetRequest",
+      "fields": [
+        {
+          "name": "id",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.RecordingGetRequestParameters>",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "id"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.RecordingGetRequestParameters",
+      "fields": [
+        {
+          "name": "id",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "id"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Networking.CatalogBackend",
+      "cases": []
+    },
+    {
+      "kind": "enum",
+      "name": "Networking.CatalogBackend.China",
+      "cases": [
+        {
+          "name": "staging"
+        },
+        {
+          "name": "production"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Networking.CatalogBackend.World",
+      "cases": [
+        {
+          "name": "staging"
+        },
+        {
+          "name": "production"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PerfVersionsRequest",
+      "fields": [
+        {
+          "name": "pieceId",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "parameters",
+          "mangledType": "SDySSypGSg",
+          "optional": true
+        },
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PerfVersionsParameters",
+      "fields": [
+        {
+          "name": "instrument",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "accompanimentId",
+          "mangledType": "SiSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "instrument",
+        "level",
+        "accompanimentId"
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "Networking.RequestDeletePlaylistPiece",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.FreePieces",
+      "fields": [
+        {
+          "name": "bundles",
+          "mangledType": "Say<Networking.FreePieceBundle>G",
+          "optional": false
+        },
+        {
+          "name": "nextRotation",
+          "mangledType": "<?>Sg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "bundles",
+        "nextRotation"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.FreePieceBundle",
+      "fields": [
+        {
+          "name": "id",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "pieces",
+          "mangledType": "Say<Networking.FreePiece>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "id"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.FreePiece",
+      "fields": [
+        {
+          "name": "id",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "id"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.StaticDataRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.StaticDataRequestParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.StaticDataRequestParameters",
+      "fields": [
+        {
+          "name": "platform",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "platform"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.GetGradeDetailsRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.GetGradeDetailsParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.GetGradeDetailsParameters",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CollectionDetailsRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.CollectionDetailsParams>",
+          "optional": false
+        },
+        {
+          "name": "collectionId",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CollectionDetailsParams",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.ShareDeleteRequest",
+      "fields": [
+        {
+          "name": "params",
+          "mangledType": "<Networking.ShareDeleteRequestParameters>",
+          "optional": false
+        },
+        {
+          "name": "share_id",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.ShareDeleteRequestParameters",
+      "fields": []
+    },
+    {
+      "kind": "class",
+      "name": "Networking.RequestPatchPlaylistPiece",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.HTTPRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "parameters",
+          "mangledType": "SDySSypGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PracticeRequest",
+      "fields": [
+        {
+          "name": "parameters",
+          "mangledType": "SDySSypGSg",
+          "optional": true
+        },
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PracticeParameters",
+      "fields": [
+        {
+          "name": "instrument",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "genre_preference",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "is_intro_offer_eligible",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "clicked_card_ids",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "launch_date",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "platform",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "instrument",
+        "level",
+        "genre_preference",
+        "countryCode",
+        "is_intro_offer_eligible",
+        "clicked_card_ids",
+        "launch_date",
+        "platform"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SchoolsGetRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.SchoolsGetRequestParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SchoolsGetRequestParameters",
+      "fields": [
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "countryCode"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PerfStatsGetRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.PerfStatsGetParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PerfStatsGetParameters",
+      "fields": [
+        {
+          "name": "limit",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "offset",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "limit",
+        "offset"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.StudentsGetRequest",
+      "fields": [
+        {
+          "name": "classroomId",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.StudentsGetRequestParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.StudentsGetRequestParameters",
+      "fields": [
+        {
+          "name": "classroomId",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "offset",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "limit",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "classroomId",
+        "offset",
+        "limit",
+        "countryCode"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SupportTicketRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.SupportTicketCreate>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PlaylistsGetRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.PlaylistsGetRequestParams>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PlaylistsGetRequestParams",
+      "fields": []
+    },
+    {
+      "kind": "enum",
+      "name": "Networking.Requests",
+      "cases": []
+    },
+    {
+      "kind": "enum",
+      "name": "Networking.Backend.Parameters",
+      "cases": [
+        {
+          "name": "countryCode"
+        },
+        {
+          "name": "cursor"
+        },
+        {
+          "name": "userId"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Networking.Backend.Authorization",
+      "cases": [
+        {
+          "name": "bearer",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "basic"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PieceRequest",
+      "fields": [
+        {
+          "name": "language",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "identifier",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "parameters",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "authorization",
+          "mangledType": "<Networking.Backend.Authorization>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PieceParameters",
+      "fields": [
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "countryCode"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.FeaturesRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.FeaturesParameters",
+      "fields": [
+        {
+          "name": "platform",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "platform"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.FacebookParameters",
+      "fields": [
+        {
+          "name": "access_token",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "firebase_id",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "instrument_id",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level_id",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "genre_preference",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "status",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "appsflyer_id",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "af_web_id",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "platform",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "access_token",
+        "firebase_id",
+        "instrument_id",
+        "level_id",
+        "genre_preference",
+        "status",
+        "appsflyer_id",
+        "af_web_id",
+        "platform"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SearchResults",
+      "fields": [
+        {
+          "name": "widgets",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "parameters",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "hasMore",
+          "mangledType": "Sb",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "widgets",
+        "parameters",
+        "hasMore"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SearchOpusesResult",
+      "fields": [
+        {
+          "name": "opuses",
+          "mangledType": "Say<?>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "opuses"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SearchAuthorsResult",
+      "fields": [
+        {
+          "name": "authors",
+          "mangledType": "Say<?>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "authors"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SearchCollectionsResult",
+      "fields": [
+        {
+          "name": "collections",
+          "mangledType": "Say<?>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "collections"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.TestEmailResponse",
+      "fields": [
+        {
+          "name": "ok",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "provider",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "ok",
+        "provider"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SearchParameters",
+      "fields": [
+        {
+          "name": "offset",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "limit",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "query",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "instrument",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "level",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "filters",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "pks",
+          "mangledType": "SaySiGSg",
+          "optional": true
+        },
+        {
+          "name": "token",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "genrePreference",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "hasInternet",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "widescreen",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "showCategories",
+          "mangledType": "SbSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "offset",
+        "limit",
+        "query",
+        "instrument",
+        "level",
+        "filters",
+        "pks",
+        "token",
+        "countryCode",
+        "genrePreference",
+        "hasInternet",
+        "widescreen",
+        "showCategories"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Networking.SearchParameters.Properties",
+      "cases": [
+        {
+          "name": "filtersCount"
+        },
+        {
+          "name": "favorited"
+        },
+        {
+          "name": "purchased"
+        },
+        {
+          "name": "original"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.GetStreakDetailsRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.GetStreakDetailsParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.GetStreakDetailsParameters",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SearchRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "params",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SearchRequestOpuses",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "params",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SearchRequestCollections",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "params",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SearchRequestAuthors",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "params",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.RecommendationRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.RecommendationParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.RecommendationParameters",
+      "fields": [
+        {
+          "name": "pieceId",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "instrument",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "genrePreference",
+          "mangledType": "SiSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pieceId",
+        "instrument",
+        "level",
+        "countryCode",
+        "genrePreference"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CatalogParameters",
+      "fields": [
+        {
+          "name": "cursor",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "language",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "token",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.TeachersGetRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.TeachersGetRequestParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.TeachersGetRequestParameters",
+      "fields": [
+        {
+          "name": "offset",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "limit",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "offset",
+        "limit",
+        "countryCode"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.SharePiecePostRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.MNOpusWrapper",
+      "fields": [
+        {
+          "name": "opuses",
+          "mangledType": "Say<?>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "opuses"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.RecentlyPlayedRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.RecentlyPlayedRequestParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.RecentlyPlayedRequestParameters",
+      "fields": [
+        {
+          "name": "instrument",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "genre",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "offset",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "limit",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "instrument",
+        "level",
+        "genre",
+        "countryCode",
+        "offset",
+        "limit"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CommunityFeedPostsGetRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.CommunityFeedPostsGetRequestParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CommunityFeedPostsGetRequestParameters",
+      "fields": [
+        {
+          "name": "postId",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "offset",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "limit",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "postId"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CommunityPostsGetRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.CommunityPostsGetRequestParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CommunityPostsGetRequestParameters",
+      "fields": [
+        {
+          "name": "postId",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "pieceId",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "userId",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "postId"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CommunityUserPostsGetRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.CommunityUserPostsGetRequestParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CommunityUserPostsGetRequestParameters",
+      "fields": [
+        {
+          "name": "postId",
+          "mangledType": "<?>Sg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "postId"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.CommunityPostGetRequest",
+      "fields": [
+        {
+          "name": "postId",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "parameters",
+          "mangledType": "SDySSypGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "postId"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.AppleVerifyRequest",
+      "fields": [
+        {
+          "name": "token",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "receiptData",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "Networking.RequestGetPlaylist",
+      "fields": []
+    },
+    {
+      "kind": "class",
+      "name": "Networking.RequestGetPlaylists",
+      "fields": []
+    },
+    {
+      "kind": "class",
+      "name": "Networking.RequestPostPlaylist",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.AppStoreDiscountRequest",
+      "fields": [
+        {
+          "name": "userId",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "productIdentifier",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "offerIdentifier",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "appBundleId",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "userId",
+        "productIdentifier",
+        "offerIdentifier",
+        "appBundleId"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.DeviceRequest",
+      "fields": [
+        {
+          "name": "token",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.WeChatParameters",
+      "fields": [
+        {
+          "name": "code",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "firebase_id",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "instrument_id",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level_id",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "genre_preference",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "is_teacher",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "appsflyer_id",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "af_web_id",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "platform",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "code",
+        "firebase_id",
+        "instrument_id",
+        "level_id",
+        "genre_preference",
+        "is_teacher",
+        "appsflyer_id",
+        "af_web_id",
+        "platform"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.ComposerDetailsRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.ComposerDetailsParameters>",
+          "optional": false
+        },
+        {
+          "name": "composerId",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.ComposerDetailsParameters",
+      "fields": [
+        {
+          "name": "instrument",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "genrePreference",
+          "mangledType": "SiSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "instrument",
+        "level",
+        "countryCode",
+        "genrePreference"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.VersionCheckRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "parameters",
+          "mangledType": "SDySSypGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.VersionCheck",
+      "fields": [
+        {
+          "name": "latest_ios_version",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "minimum_ios_version",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "latest_ios_version",
+        "minimum_ios_version"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PurchaseRequest",
+      "fields": [
+        {
+          "name": "token",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.Purchase>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "Networking.VersionChecker",
+      "fields": [
+        {
+          "name": "client",
+          "mangledType": "<Networking.RequestClient>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "Networking.RequestDeletePlaylist",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.PostPerformanceSummaryRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.MyMusicGetRequest",
+      "fields": [
+        {
+          "name": "baseURL",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "headers",
+          "mangledType": "SDyS2SGSg",
+          "optional": true
+        },
+        {
+          "name": "method",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "params",
+          "mangledType": "<Networking.MyMusicGetRequestParameters>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.MyMusicGetRequestParameters",
+      "fields": [
+        {
+          "name": "instrument",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "genre",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "countryCode",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "instrument",
+        "level",
+        "genre",
+        "countryCode"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.AuthResponse",
+      "fields": [
+        {
+          "name": "token",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "user",
+          "mangledType": "<Networking.AuthResponse.User>",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "token",
+        "user"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.GoogleLoginParams",
+      "fields": [
+        {
+          "name": "serverAuthCode",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "email",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "firstName",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "lastName",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "firebaseId",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "instrumentId",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "levelId",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "genrePreference",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "appsflyerId",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "afWebId",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "platform",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "status",
+          "mangledType": "<?>Sg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "serverAuthCode",
+        "email",
+        "firstName",
+        "lastName",
+        "firebaseId",
+        "instrumentId",
+        "levelId",
+        "genrePreference",
+        "appsflyerId",
+        "afWebId",
+        "platform",
+        "status"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Networking.EmailSignUpParams",
+      "fields": [
+        {
+          "name": "email",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "password1",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "password2",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "firebase_id",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "instrument_id",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "level_id",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "genre_preference",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "status",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "appsflyer_id",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "af_web_id",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "platform",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "email",
+        "password1",
+        "password2",
+        "firebase_id",
+        "instrument_id",
+        "level_id",
+        "genre_preference",
+        "status",
+        "appsflyer_id",
+        "af_web_id",
+        "platform"
+      ]
+    }
+  ],
+  "Core": [
+    {
+      "kind": "struct",
+      "name": "Core.SearchContext",
+      "fields": [
+        {
+          "name": "text",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "index",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "selectedFilters",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "userSettings",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "token",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "hasInternet",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "searchCategory",
+          "mangledType": "<?>Sg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.RecommendationResult",
+      "fields": [
+        {
+          "name": "collections",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "authors",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "opuses",
+          "mangledType": "Say<?>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "collections",
+        "authors",
+        "opuses"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNOpus",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "originalTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "displayTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "fullTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "key",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "accidental",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "mood",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "workNumber",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "genre",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "authors",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "pieces",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "collections",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "originalTitle",
+        "title",
+        "displayTitle",
+        "fullTitle",
+        "key",
+        "accidental",
+        "mood",
+        "workNumber",
+        "genre",
+        "freeformMatch",
+        "authors",
+        "pieces",
+        "collections"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.UserLevel"
+    },
+    {
+      "kind": "struct",
+      "name": "Core.AppVersion",
+      "fields": [
+        {
+          "name": "major",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "minor",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "patch",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.AppVersionParser",
+      "fields": [
+        {
+          "name": "versionRegex",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.AccompanimentKind",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "defaultOrder",
+          "mangledType": "SiSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "title",
+        "defaultOrder"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.Mixer",
+      "fields": [
+        {
+          "name": "recordingType",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "mixerTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "mixerSubtitle",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "recordingType",
+        "mixerTitle",
+        "mixerSubtitle"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.SearchIndex",
+      "cases": [
+        {
+          "name": "pieces"
+        },
+        {
+          "name": "collections"
+        },
+        {
+          "name": "authors"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.StaticData",
+      "fields": [
+        {
+          "name": "genres",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "simplifications",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "publishers",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "audioCopyrights",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "partKinds",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "accompanimentKinds",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "instruments",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "instrumentFamilies",
+          "mangledType": "Say<?>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "genres",
+        "simplifications",
+        "publishers",
+        "audioCopyrights",
+        "partKinds",
+        "accompanimentKinds",
+        "instruments",
+        "instrumentFamilies"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNAccompaniment",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "status",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "fullTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "lyricsLanguage",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "isoriginal",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "transposition",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "difficulty",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "partExtra",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "musicxmlFile",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "soloMusicxmlFile",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "editedPdfFile",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "ascoFile",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "soloPart",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "previewAudioFile",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "previewAudioFile48",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "previewBeginMeasure",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "previewBeginPulsation",
+          "mangledType": "SdSg",
+          "optional": true
+        },
+        {
+          "name": "previewEndMeasure",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "previewEndPulsation",
+          "mangledType": "SdSg",
+          "optional": true
+        },
+        {
+          "name": "kind",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "simplification",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "partKind",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "recordings",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "mixers",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "instruments",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "difficultyLevel",
+          "mangledType": "SiSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "status",
+        "fullTitle",
+        "lyricsLanguage",
+        "isoriginal",
+        "transposition",
+        "difficulty",
+        "partExtra",
+        "musicxmlFile",
+        "soloMusicxmlFile",
+        "editedPdfFile",
+        "ascoFile",
+        "soloPart",
+        "previewAudioFile",
+        "previewAudioFile48",
+        "previewBeginMeasure",
+        "previewBeginPulsation",
+        "previewEndMeasure",
+        "previewEndPulsation",
+        "kind",
+        "simplification",
+        "partKind",
+        "recordings",
+        "mixers",
+        "instruments",
+        "difficultyLevel"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "(ext).GlobalSettings.InstrumentSelection",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "(ext).GlobalSettings.InstrumentSelection.UserAction",
+      "fields": [
+        {
+          "name": "properties",
+          "mangledType": "SDySSypG",
+          "optional": false
+        },
+        {
+          "name": "type",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "instrumentId",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "(ext).GlobalSettings.InstrumentSelection.UserAction.Properties",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "(ext).GlobalSettings.InstrumentSelection.InstrumentSubSelection",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "(ext).GlobalSettings.UserLevelSelection",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "(ext).GlobalSettings.UserLevelSelection.UserAction",
+      "fields": [
+        {
+          "name": "properties",
+          "mangledType": "SDySSypG",
+          "optional": false
+        },
+        {
+          "name": "type",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "userLevel",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "(ext).GlobalSettings.UserLevelSelection.UserAction.Properties",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "(ext).GlobalSettings.UserGenreSelection",
+      "fields": []
+    },
+    {
+      "kind": "struct",
+      "name": "(ext).GlobalSettings.UserGenreSelection.UserAction",
+      "fields": [
+        {
+          "name": "properties",
+          "mangledType": "SDySSypG",
+          "optional": false
+        },
+        {
+          "name": "type",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "genrePref",
+          "mangledType": "<?>",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "type"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNInstrumentFamily",
+      "fields": [
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "summary",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "defaultOrder",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "image",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "instruments",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "title",
+        "summary",
+        "defaultOrder",
+        "freeformMatch",
+        "image",
+        "instruments"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNInstrumentFamily.CodingKeys",
+      "cases": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "summary"
+        },
+        {
+          "name": "defaultOrder"
+        },
+        {
+          "name": "freeformMatch"
+        },
+        {
+          "name": "image"
+        },
+        {
+          "name": "instruments"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.Playlist",
+      "fields": [
+        {
+          "name": "id",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "name",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "icon",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "isFavorite",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "owner",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "playlistPieces",
+          "mangledType": "Say<Core.PlaylistPiece>GSg",
+          "optional": true
+        },
+        {
+          "name": "opuses",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "id",
+        "name",
+        "icon",
+        "isFavorite",
+        "playlistPieces",
+        "opuses",
+        "owner"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.PlaylistPiece",
+      "fields": [
+        {
+          "name": "playlistId",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "pieceId",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "order",
+          "mangledType": "SiSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "playlistId",
+        "pieceId",
+        "order"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.PlaylistPieceProperty",
+      "cases": [
+        {
+          "name": "playlistId"
+        },
+        {
+          "name": "pieceId"
+        },
+        {
+          "name": "order"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.PlaylistImageEnum",
+      "cases": [
+        {
+          "name": "Kandinsky"
+        },
+        {
+          "name": "Klimt"
+        },
+        {
+          "name": "Miro"
+        },
+        {
+          "name": "Miro2"
+        },
+        {
+          "name": "Mondiran"
+        },
+        {
+          "name": "Munch"
+        },
+        {
+          "name": "VanGogh"
+        },
+        {
+          "name": "VanGogh2"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.Playlist.CodingKeys",
+      "cases": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "isFavorite"
+        },
+        {
+          "name": "playlistPieces"
+        },
+        {
+          "name": "opuses"
+        },
+        {
+          "name": "owner"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNPiece",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "status",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "originalTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "displayTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "fullTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "movement",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "computedTitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "purchased",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "freePiece",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "opus",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "selectedAccompaniment",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "accompaniments",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "collections",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "publishers",
+          "mangledType": "Say<Core.MNPublisher>GSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "status",
+        "originalTitle",
+        "title",
+        "displayTitle",
+        "fullTitle",
+        "movement",
+        "freeformMatch",
+        "computedTitle",
+        "purchased",
+        "freePiece",
+        "opus",
+        "selectedAccompaniment",
+        "accompaniments",
+        "collections",
+        "publishers"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNPublisher",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "name",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "name"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MetronautModalAuthorisePushNotifOrigin",
+      "cases": [
+        {
+          "name": "onboarding"
+        },
+        {
+          "name": "appOpening"
+        },
+        {
+          "name": "account"
+        },
+        {
+          "name": "pieceRequest"
+        },
+        {
+          "name": "upVote"
+        },
+        {
+          "name": "support"
+        },
+        {
+          "name": "userGoal"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.CellPieceUIViewModel",
+      "fields": [
+        {
+          "name": "pieceId",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "composerId",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "titleColor",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "url",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "placeholderImage",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "authorText",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "authorColor",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "color",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "level1",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "level2",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "level3",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "isLoading",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "previewPlayerItem",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "previewIsPlaying",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "offlineStatus",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "showDifficulty",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "showPlay",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "preferredAccompanimentId",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "showComposerMenuItem",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "isTeacher",
+          "mangledType": "Sb",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.ComposerDetailsResult",
+      "fields": [
+        {
+          "name": "author",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "opuses",
+          "mangledType": "Say<?>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "author",
+        "opuses"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNPiecesListHeader",
+      "fields": [
+        {
+          "name": "image",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "subtitle",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.PerfVersions",
+      "fields": [
+        {
+          "name": "opus",
+          "mangledType": "<Core.MNOpus>",
+          "optional": false
+        },
+        {
+          "name": "versionGroups",
+          "mangledType": "Say<Core.VersionGroup>G",
+          "optional": false
+        },
+        {
+          "name": "lastPerformance",
+          "mangledType": "<?>Sg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "opus",
+        "versionGroups",
+        "lastPerformance"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.VersionGroup",
+      "fields": [
+        {
+          "name": "label",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "difficultyGroups",
+          "mangledType": "Say<Core.DifficultyGroup>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "label",
+        "difficultyGroups"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.DifficultyGroup",
+      "fields": [
+        {
+          "name": "label",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "difficultyLevel",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "versions",
+          "mangledType": "Say<Core.VersionDescriptor>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "label",
+        "difficultyLevel",
+        "versions"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.VersionDescriptor",
+      "fields": [
+        {
+          "name": "label",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "sublabel",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "accompaniments",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "selectedAccompanimentIndex",
+          "mangledType": "SiSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "label",
+        "sublabel",
+        "accompaniments",
+        "selectedAccompanimentIndex"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNCollection",
+      "fields": [
+        {
+          "name": "id",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "image",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "opus",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "pieces",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "id",
+        "title",
+        "freeformMatch",
+        "image",
+        "opus",
+        "pieces"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNCollection.CodingKeys",
+      "cases": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "freeformMatch"
+        },
+        {
+          "name": "image"
+        },
+        {
+          "name": "opus"
+        },
+        {
+          "name": "pieces"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.PiecePreviewPlayingState",
+      "cases": [
+        {
+          "name": "playing",
+          "mangledType": "Sf8progress_t",
+          "optional": false
+        },
+        {
+          "name": "paused",
+          "mangledType": "Sf8progress_t",
+          "optional": false
+        },
+        {
+          "name": "loading"
+        },
+        {
+          "name": "error"
+        },
+        {
+          "name": "disabled"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.PieceRequest",
+      "fields": [
+        {
+          "name": "id",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "artist",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "date",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "voteNumber",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "allowedToVote",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "additionalProperties",
+          "mangledType": "SDySS<?>GSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "id",
+        "title",
+        "artist",
+        "date",
+        "voteNumber",
+        "allowedToVote"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.PieceRequest.CodingKeys",
+      "cases": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "artist"
+        },
+        {
+          "name": "date"
+        },
+        {
+          "name": "voteNumber"
+        },
+        {
+          "name": "allowedToVote"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.DeviceImage",
+      "fields": [
+        {
+          "name": "backgroundColor",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "placeholder",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "_url",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "x1",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "x2",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "x3",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "isAsset",
+          "mangledType": "SbSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "backgroundColor",
+        "placeholder",
+        "_url",
+        "x1",
+        "x2",
+        "x3",
+        "isAsset"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.DeviceImage.CodingKeys",
+      "cases": [
+        {
+          "name": "backgroundColor"
+        },
+        {
+          "name": "placeholder"
+        },
+        {
+          "name": "_url"
+        },
+        {
+          "name": "x1"
+        },
+        {
+          "name": "x2"
+        },
+        {
+          "name": "x3"
+        },
+        {
+          "name": "isAsset"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.VersionMixer",
+      "fields": [
+        {
+          "name": "tracks",
+          "mangledType": "Say<Core.VersionTrack>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "tracks"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.VersionTrack",
+      "fields": [
+        {
+          "name": "role",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "subtitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "number",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "role",
+        "title",
+        "subtitle",
+        "number"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNInstrument",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "register",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "rangeMin",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "rangeMax",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "clef",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "alternateClef1",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "alternateClef2",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "octavia",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "transposition",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "defaultOrder",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "image",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "closeInstruments",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "title",
+        "register",
+        "clef",
+        "alternateClef1",
+        "alternateClef2",
+        "freeformMatch",
+        "image",
+        "closeInstruments"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNInstrument.CodingKeys",
+      "cases": [
+        {
+          "name": "pk"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "register"
+        },
+        {
+          "name": "clef"
+        },
+        {
+          "name": "alternateClef1"
+        },
+        {
+          "name": "alternateClef2"
+        },
+        {
+          "name": "freeformMatch"
+        },
+        {
+          "name": "image"
+        },
+        {
+          "name": "closeInstruments"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MusicPublisher",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "name",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "name"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.Workout",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "subtitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "summary",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "isFree",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "deviceImage",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "workoutSteps",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "title",
+        "subtitle",
+        "summary",
+        "isFree",
+        "deviceImage",
+        "workoutSteps"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.Workout.Properties",
+      "cases": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "free"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.UploadResult",
+      "fields": [
+        {
+          "name": "uploadId",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "etags",
+          "mangledType": "SaySSG",
+          "optional": false
+        },
+        {
+          "name": "thumbnail",
+          "mangledType": "<?>Sg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.StreakResponse",
+      "fields": [
+        {
+          "name": "last",
+          "mangledType": "<Core.Streak>",
+          "optional": false
+        },
+        {
+          "name": "best",
+          "mangledType": "<Core.Streak>",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "last",
+        "best"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.Simplification",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "name",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "name"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.InstrumentDTO",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "register",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "rangeMin",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "rangeMax",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "clef",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "alternateClef1",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "alternateClef2",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "octavia",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "transposition",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "deviceImage",
+          "mangledType": "<Core.DeviceImage>",
+          "optional": false
+        },
+        {
+          "name": "defaultOrder",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "closeInstruments",
+          "mangledType": "SaySiG",
+          "optional": false
+        },
+        {
+          "name": "compatibleInstruments",
+          "mangledType": "SaySiGSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "title",
+        "register",
+        "rangeMin",
+        "rangeMax",
+        "clef",
+        "alternateClef1",
+        "alternateClef2",
+        "octavia",
+        "transposition",
+        "deviceImage",
+        "defaultOrder",
+        "freeformMatch",
+        "closeInstruments",
+        "compatibleInstruments"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.InstrumentFamilyDTO",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "description",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "instruments",
+          "mangledType": "SaySiG",
+          "optional": false
+        },
+        {
+          "name": "deviceImage",
+          "mangledType": "<Core.DeviceImage>",
+          "optional": false
+        },
+        {
+          "name": "defaultOrder",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "title",
+        "description",
+        "instruments",
+        "deviceImage",
+        "defaultOrder",
+        "freeformMatch"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNMyMusicOnboarding",
+      "fields": [
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "title"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.GradeResponse",
+      "fields": [
+        {
+          "name": "last",
+          "mangledType": "<Core.Grade>",
+          "optional": false
+        },
+        {
+          "name": "xpTotal",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "grades",
+          "mangledType": "Say<Core.Grade>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "last",
+        "xpTotal",
+        "grades"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.DefaultAccompanimentPreferences",
+      "fields": [
+        {
+          "name": "tempoCoef",
+          "mangledType": "Sd",
+          "optional": false
+        },
+        {
+          "name": "cursorPosition",
+          "mangledType": "Sd",
+          "optional": false
+        },
+        {
+          "name": "loopStatus",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "loopStart",
+          "mangledType": "Sd",
+          "optional": false
+        },
+        {
+          "name": "loopEnd",
+          "mangledType": "Sd",
+          "optional": false
+        },
+        {
+          "name": "lastScore",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "maxScore",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "lastScoreVersion",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "maxScoreVersion",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "maxRhythmGameScore",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "displayAccompaniment",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "showFingering",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "isInRhythmGame",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "scoreScale",
+          "mangledType": "Sd",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.Composer",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "firstName",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "lastName",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "fullName",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "deviceImage",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "defaultOrder",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "freeformMatch",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "firstName",
+        "lastName",
+        "fullName",
+        "deviceImage",
+        "defaultOrder",
+        "freeformMatch"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.Genre",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "defaultOrder",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "shouldDisplay",
+          "mangledType": "SbSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "title",
+        "defaultOrder",
+        "shouldDisplay"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.FiltersSectionModel",
+      "fields": [
+        {
+          "name": "kind",
+          "mangledType": "<Core.FiltersSectionModel.Kind>",
+          "optional": false
+        },
+        {
+          "name": "items",
+          "mangledType": "Say<?>G",
+          "optional": false
+        },
+        {
+          "name": "accessory",
+          "mangledType": "<Core.FilterItemModel>Sg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.FiltersSectionModel.Kind",
+      "cases": [
+        {
+          "name": "genre"
+        },
+        {
+          "name": "difficulty"
+        },
+        {
+          "name": "accompaniment"
+        },
+        {
+          "name": "instrument"
+        },
+        {
+          "name": "myMusic"
+        },
+        {
+          "name": "composer"
+        },
+        {
+          "name": "originalComposition"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.FilterItemModel",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "kind",
+          "mangledType": "<Core.FilterKind>",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "kind",
+        "title"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.FilterItemModel.Properties",
+      "cases": [
+        {
+          "name": "kind"
+        },
+        {
+          "name": "pk"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.FilterKind",
+      "cases": [
+        {
+          "name": "difficulty"
+        },
+        {
+          "name": "genre"
+        },
+        {
+          "name": "instrument"
+        },
+        {
+          "name": "instrumentFamily"
+        },
+        {
+          "name": "accompanimentKind"
+        },
+        {
+          "name": "favorite"
+        },
+        {
+          "name": "recentlyPlayed"
+        },
+        {
+          "name": "original"
+        },
+        {
+          "name": "composer"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNCard",
+      "fields": [
+        {
+          "name": "id",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "summaryInside",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "summaryOutside",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "theme",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "image",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "action",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "tag",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "id",
+        "title",
+        "summaryInside",
+        "summaryOutside",
+        "theme",
+        "image",
+        "action",
+        "tag"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNCard.CodingKeys",
+      "cases": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "summaryInside"
+        },
+        {
+          "name": "summaryOutside"
+        },
+        {
+          "name": "theme"
+        },
+        {
+          "name": "image"
+        },
+        {
+          "name": "action"
+        },
+        {
+          "name": "tag"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNSearchPieceRequest",
+      "fields": [
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.PartKind",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "name",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk",
+        "name"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNWidget",
+      "fields": [
+        {
+          "name": "widgetType",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "type",
+          "mangledType": "<Core.MNWidget.EntityType>Sg",
+          "optional": true
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "subtitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "entities",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "titleButton",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "tag",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "hasBottomDivider",
+          "mangledType": "SbSg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNWidget.EntityType",
+      "cases": [
+        {
+          "name": "card"
+        },
+        {
+          "name": "opus"
+        },
+        {
+          "name": "collection"
+        },
+        {
+          "name": "composer"
+        },
+        {
+          "name": "author"
+        },
+        {
+          "name": "rating"
+        },
+        {
+          "name": "pieceRequest"
+        },
+        {
+          "name": "workout"
+        },
+        {
+          "name": "workoutDetail"
+        },
+        {
+          "name": "workoutStep"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "onboarding"
+        },
+        {
+          "name": "myMusicOnboarding"
+        },
+        {
+          "name": "placeholder"
+        },
+        {
+          "name": "recordPiece"
+        },
+        {
+          "name": "record"
+        },
+        {
+          "name": "recordPlaceholder"
+        },
+        {
+          "name": "playlist"
+        },
+        {
+          "name": "post"
+        },
+        {
+          "name": "postUser"
+        },
+        {
+          "name": "postUserPlaceholder"
+        },
+        {
+          "name": "postPiece"
+        },
+        {
+          "name": "postPiecePlaceholder"
+        },
+        {
+          "name": "stats"
+        },
+        {
+          "name": "recently"
+        },
+        {
+          "name": "suggestion"
+        },
+        {
+          "name": "history"
+        },
+        {
+          "name": "search"
+        },
+        {
+          "name": "searchCategory"
+        },
+        {
+          "name": "searchPiece"
+        },
+        {
+          "name": "searchComposer"
+        },
+        {
+          "name": "searchCollection"
+        },
+        {
+          "name": "searchPieceRequest"
+        },
+        {
+          "name": "piecesListHeader"
+        },
+        {
+          "name": "recommendations"
+        },
+        {
+          "name": "offline"
+        },
+        {
+          "name": "offlinePlaceholder"
+        },
+        {
+          "name": "video"
+        },
+        {
+          "name": "student"
+        },
+        {
+          "name": "share"
+        },
+        {
+          "name": "sharePlaceholder"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.WidgetType",
+      "cases": [
+        {
+          "name": "card_header_collection"
+        },
+        {
+          "name": "card_header_offline"
+        },
+        {
+          "name": "card_header_playlist"
+        },
+        {
+          "name": "card_header_recently_played"
+        },
+        {
+          "name": "opus_composer"
+        },
+        {
+          "name": "opus_collection"
+        },
+        {
+          "name": "opus_offline"
+        },
+        {
+          "name": "opusMyMusicRecentlyPlayed"
+        },
+        {
+          "name": "opus_playlist"
+        },
+        {
+          "name": "opus_recently_played"
+        },
+        {
+          "name": "record_piece"
+        },
+        {
+          "name": "record"
+        },
+        {
+          "name": "search_categories"
+        },
+        {
+          "name": "search_opuses"
+        },
+        {
+          "name": "search_authors"
+        },
+        {
+          "name": "search_collections"
+        },
+        {
+          "name": "search_opuses_all"
+        },
+        {
+          "name": "search_authors_all"
+        },
+        {
+          "name": "search_collections_all"
+        },
+        {
+          "name": "suggestion_search_history"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "cards"
+        },
+        {
+          "name": "statsMyMusic"
+        },
+        {
+          "name": "students"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNWidget.CodingKeys",
+      "cases": [
+        {
+          "name": "type"
+        },
+        {
+          "name": "widgetType"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "subtitle"
+        },
+        {
+          "name": "entities"
+        },
+        {
+          "name": "action"
+        },
+        {
+          "name": "titleButton"
+        },
+        {
+          "name": "tag"
+        },
+        {
+          "name": "hasBottomDivider"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.SearchCategory",
+      "fields": [
+        {
+          "name": "id",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "query",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "index",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "filters",
+          "mangledType": "Say<?>G",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "id",
+        "title",
+        "query",
+        "index",
+        "filters"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.RankPoolResult",
+      "fields": [
+        {
+          "name": "rankPool",
+          "mangledType": "<Core.RankPool>",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "rankPool"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNDefaultsCard",
+      "cases": [
+        {
+          "name": "clicked_ids"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNDefaultsPieceRequest",
+      "cases": [
+        {
+          "name": "voted_ids"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNDefaultsWorkout",
+      "cases": [
+        {
+          "name": "show_training_onboarding"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNDefaultsFreeWorkoutStep",
+      "cases": [
+        {
+          "name": "show_first_free_workout_step"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNDefaultsPlaylistFavorite",
+      "cases": [
+        {
+          "name": "synced_favorite_playlist"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNSearch",
+      "fields": [
+        {
+          "name": "type",
+          "mangledType": "<Core.MNSearch.MNSearchEnum>",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "type",
+        "title"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNSearch.MNSearchEnum",
+      "cases": [
+        {
+          "name": "suggested"
+        },
+        {
+          "name": "history"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.DefaultUserPreferences",
+      "fields": [
+        {
+          "name": "metronomeState",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "metronomeGain",
+          "mangledType": "Sd",
+          "optional": false
+        },
+        {
+          "name": "cursorMode",
+          "mangledType": "<Core.CursorMode>",
+          "optional": false
+        },
+        {
+          "name": "countDownKind",
+          "mangledType": "<Core.CountdownMode>",
+          "optional": false
+        },
+        {
+          "name": "mode",
+          "mangledType": "<Core.MetronautPerformancePlayingMode>",
+          "optional": false
+        },
+        {
+          "name": "feedbackAIEnabled",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "pianoMinimized",
+          "mangledType": "Sb",
+          "optional": false
+        },
+        {
+          "name": "tuningDiapason",
+          "mangledType": "Sd",
+          "optional": false
+        },
+        {
+          "name": "automaticRecording",
+          "mangledType": "Sb",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.MNSearchPlaceholderType",
+      "cases": [
+        {
+          "name": "noInternet"
+        },
+        {
+          "name": "noResults"
+        },
+        {
+          "name": "error"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.MNSearchPlaceholder",
+      "fields": [
+        {
+          "name": "type",
+          "mangledType": "<Core.MNSearchPlaceholderType>",
+          "optional": false
+        },
+        {
+          "name": "icon",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "title",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "subtitle",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "retryAction",
+          "mangledType": "yycSg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.WorkoutStep",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "opus",
+          "mangledType": "<Core.WorkoutStep.Opus>Sg",
+          "optional": true
+        },
+        {
+          "name": "difficulty",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "difficultyText",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "minScore",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "maxScoreSimplified",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "subStepPerformance",
+          "mangledType": "<Core.WorkoutSubStep>Sg",
+          "optional": true
+        },
+        {
+          "name": "subStepSimplified",
+          "mangledType": "<Core.WorkoutSubStep>Sg",
+          "optional": true
+        },
+        {
+          "name": "isFree",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "workoutStepState",
+          "mangledType": "<Core.WorkoutStepState>Sg",
+          "optional": true
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "workout",
+          "mangledType": "<Core.Workout>Sg",
+          "optional": true
+        },
+        {
+          "name": "suggestedWorkouts",
+          "mangledType": "Say<?>GSg",
+          "optional": true
+        },
+        {
+          "name": "bestScore",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "bestScoreVersion",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "currentScore",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "currentScoreVersion",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "currentTotalXp",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "totalXp",
+          "mangledType": "SiSg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.WorkoutStep.Opus",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "authors",
+          "mangledType": "Say<Core.WorkoutStep.Composer>GSg",
+          "optional": true
+        },
+        {
+          "name": "title",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "pieces",
+          "mangledType": "Say<Core.WorkoutStep.Piece>GSg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.WorkoutStep.Composer",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "fullName",
+          "mangledType": "SSSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "pk"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.WorkoutStep.Piece",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "selectedAccompaniment",
+          "mangledType": "<Core.WorkoutStep.Accompaniment>",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "pk"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.WorkoutStep.Accompaniment",
+      "fields": [
+        {
+          "name": "pk",
+          "mangledType": "Si",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "pk"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.WorkoutStep.Properties",
+      "cases": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "difficulty"
+        },
+        {
+          "name": "free"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.WorkoutSubStep",
+      "fields": [
+        {
+          "name": "explanation",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "extractBeginMeasure",
+          "mangledType": "SuSg",
+          "optional": true
+        },
+        {
+          "name": "extractBeginPulsation",
+          "mangledType": "SdSg",
+          "optional": true
+        },
+        {
+          "name": "extractEndMeasure",
+          "mangledType": "SuSg",
+          "optional": true
+        },
+        {
+          "name": "extractEndPulsation",
+          "mangledType": "SdSg",
+          "optional": true
+        },
+        {
+          "name": "preference",
+          "mangledType": "<Core.PerformancePreferences>",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "explanation",
+        "extractBeginMeasure",
+        "extractBeginPulsation",
+        "extractEndMeasure",
+        "extractEndPulsation",
+        "preference"
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "Core.WorkoutStepState",
+      "cases": [
+        {
+          "name": "practice"
+        },
+        {
+          "name": "training"
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Core.PerformancePreferences",
+      "fields": [
+        {
+          "name": "mode",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "mixer",
+          "mangledType": "SfSg",
+          "optional": true
+        },
+        {
+          "name": "soloGain",
+          "mangledType": "SfSg",
+          "optional": true
+        },
+        {
+          "name": "accompanimentGain",
+          "mangledType": "SfSg",
+          "optional": true
+        },
+        {
+          "name": "tempo",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "metronome",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "countdownMode",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "octaveTransposition",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "intervalTransposition",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "instrumentTransposition",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "clef",
+          "mangledType": "SSSg",
+          "optional": true
+        },
+        {
+          "name": "octavia",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "displayAccompaniment",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "displayPianoKeyboard",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "cursorMode",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "scrollingMode",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "loopState",
+          "mangledType": "SbSg",
+          "optional": true
+        },
+        {
+          "name": "loopBeginMeasure",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "loopBeginPulsation",
+          "mangledType": "SdSg",
+          "optional": true
+        },
+        {
+          "name": "loopEndMeasure",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "loopEndPulsation",
+          "mangledType": "SdSg",
+          "optional": true
+        },
+        {
+          "name": "cursorPosition",
+          "mangledType": "SdSg",
+          "optional": true
+        },
+        {
+          "name": "showFingering",
+          "mangledType": "SbSg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "mode",
+        "mixer",
+        "soloGain",
+        "accompanimentGain",
+        "tempo",
+        "metronome",
+        "countdownMode",
+        "octaveTransposition",
+        "intervalTransposition",
+        "instrumentTransposition",
+        "clef",
+        "octavia",
+        "displayAccompaniment",
+        "displayPianoKeyboard",
+        "cursorMode",
+        "scrollingMode",
+        "loopState",
+        "loopBeginMeasure",
+        "loopBeginPulsation",
+        "loopEndMeasure",
+        "loopEndPulsation",
+        "cursorPosition",
+        "showFingering"
+      ]
+    }
+  ],
+  "Domain": [
+    {
+      "kind": "struct",
+      "name": "Domain.PieceRequestUpvote",
+      "fields": [
+        {
+          "name": "type",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "properties",
+          "mangledType": "SDySSypG",
+          "optional": false
+        },
+        {
+          "name": "scenario",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Domain.PieceRequestContext",
+      "fields": [
+        {
+          "name": "scenario",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "additionalProperties",
+          "mangledType": "SDySSypGSg",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Domain.PiecePurchaseInfo",
+      "fields": [
+        {
+          "name": "identifier",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "purchaseDate",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "lastOpenedDate",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "lastFavoritedDate",
+          "mangledType": "<?>Sg",
+          "optional": true
+        },
+        {
+          "name": "preferredAccompanimentId",
+          "mangledType": "SiSg",
+          "optional": true
+        },
+        {
+          "name": "context",
+          "mangledType": "<?>Sg",
+          "optional": true
+        }
+      ],
+      "codingKeys": [
+        "identifier",
+        "purchaseDate",
+        "lastOpenedDate",
+        "lastFavoritedDate",
+        "preferredAccompanimentId",
+        "context"
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Domain.PiecePurchaseEvent",
+      "fields": [
+        {
+          "name": "date",
+          "mangledType": "<?>",
+          "optional": false
+        },
+        {
+          "name": "baseProperties",
+          "mangledType": "<Domain.PiecePurchaseEvent.Properties>",
+          "optional": false
+        },
+        {
+          "name": "properties",
+          "mangledType": "SDySSypG",
+          "optional": false
+        },
+        {
+          "name": "type",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Domain.PiecePurchaseEvent.Properties",
+      "fields": [
+        {
+          "name": "pieceId",
+          "mangledType": "Si",
+          "optional": false
+        },
+        {
+          "name": "composerName",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "pieceTitle",
+          "mangledType": "SS",
+          "optional": false
+        }
+      ],
+      "codingKeys": [
+        "pieceId",
+        "composerName",
+        "pieceTitle"
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "Domain.InAppProductQueryRequest",
+      "fields": [
+        {
+          "name": "id",
+          "mangledType": "SS",
+          "optional": false
+        },
+        {
+          "name": "callback",
+          "mangledType": "y<?>y<?><?>_pGc",
+          "optional": false
+        },
+        {
+          "name": "queue",
+          "mangledType": "So17OS_dispatch_queueC",
+          "optional": false
+        },
+        {
+          "name": "request",
+          "mangledType": "So17SKProductsRequestC",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "Domain.InAppReceiptRefreshRequest",
+      "fields": [
+        {
+          "name": "refreshReceiptRequest",
+          "mangledType": "So23SKReceiptRefreshRequestC",
+          "optional": false
+        },
+        {
+          "name": "callback",
+          "mangledType": "y<?>yyt<?>_pGc",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Domain.ProductResponse",
+      "fields": [
+        {
+          "name": "retrievedProducts",
+          "mangledType": "ShySo9SKProductCG",
+          "optional": false
+        },
+        {
+          "name": "invalidProductIDs",
+          "mangledType": "ShySSG",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "struct",
+      "name": "Domain.SubscriptionProductRequest",
+      "fields": [
+        {
+          "name": "productIdentifiers",
+          "mangledType": "ShySSG",
+          "optional": false
+        },
+        {
+          "name": "discountIdentifiers",
+          "mangledType": "ShySSGSg",
+          "optional": true
+        },
+        {
+          "name": "isEligibleForIntroductoryOffer",
+          "mangledType": "Sb",
+          "optional": false
+        }
+      ]
+    }
+  ],
+  "RealmDataSource": [
+    {
+      "kind": "class",
+      "name": "RealmDataSource.RealmStaticData",
+      "fields": [
+        {
+          "name": "_id",
+          "mangledType": "<?>ySiG",
+          "optional": false
+        },
+        {
+          "name": "_syncable",
+          "mangledType": "<?>y<?>SgG",
+          "optional": false
+        }
+      ]
+    }
+  ]
+}

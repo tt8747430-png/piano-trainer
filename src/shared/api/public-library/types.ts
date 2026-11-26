@@ -6,11 +6,26 @@ export const DESCRIPTION_MAX = 500
 /** How Explore is sorted: the newest first, the most saved, or the top rated (then the newest). */
 export type PublicSort = 'new' | 'saved' | 'rated'
 
-/** What a published song is, chosen by its author (B3); a pattern has none. */
-export const PUBLIC_CATEGORIES = ['classical', 'folk', 'pop', 'studies'] as const
-export type PublicCategory = (typeof PUBLIC_CATEGORIES)[number]
-export const isPublicCategory = (value: unknown): value is PublicCategory =>
-  typeof value === 'string' && (PUBLIC_CATEGORIES as readonly string[]).includes(value)
+/** What a published song is, as Flat's discoverability form asks (R72): its author's own, or an arrangement. */
+export const PUBLIC_TYPES = ['original', 'arrangement', 'other'] as const
+export type PublicType = (typeof PUBLIC_TYPES)[number]
+export const isPublicType = (value: unknown): value is PublicType =>
+  PUBLIC_TYPES.some((each) => each === value)
+
+/** The licences a song is published under (R72's Licence sheet). */
+export const PUBLIC_LICENCES = [
+  'all-rights-reserved',
+  'cc-by',
+  'cc-by-sa',
+  'public-domain',
+] as const
+export type PublicLicence = (typeof PUBLIC_LICENCES)[number]
+export const isPublicLicence = (value: unknown): value is PublicLicence =>
+  PUBLIC_LICENCES.some((each) => each === value)
+
+/** The most tags a published item carries, and the longest tag. */
+export const TAGS_MAX = 8
+export const TAG_MAX = 24
 
 /** The fewest ratings an average is shown for, and an item counts as top rated. */
 export const RATED_MIN = 3
@@ -38,7 +53,6 @@ export interface PublicEntry {
   readonly authorAvatar: string | null
   readonly saves: number
   readonly publishedAt: string
-  readonly category: PublicCategory | null
   /** Its learners' stars; null before anyone rated it. */
   readonly rating: PublicRating | null
   /** A song's first line of its chart, as written (`C G Am F`), drawn small on its card. */
@@ -53,6 +67,12 @@ export interface PublicEntry {
     readonly rh?: string
     readonly lh?: string
     readonly description?: string
+    /** Who wrote the music, as its author gives it. */
+    readonly composer?: string
+    readonly type?: PublicType
+    /** Words it is found by: a style, an occasion, a level. */
+    readonly tags?: readonly string[]
+    readonly licence?: PublicLicence
   }
 }
 
@@ -64,8 +84,6 @@ export interface Publication {
   readonly title: string
   readonly authorName: string
   readonly meta: PublicEntry['meta']
-  /** A song's category; none for a pattern, or a song its author left uncategorised. */
-  readonly category?: PublicCategory | null
   /** The song as a save holds an own song, its title beside its music: read back by `readSharedSong`. */
   readonly body: unknown
   readonly version: string
@@ -89,8 +107,8 @@ export interface PublicLibrary {
     kind: PublicKind
     sort: PublicSort
     query: string
-    /** Only the songs of one category; every one where none. */
-    category?: PublicCategory
+    /** Only the items tagged so (a style, an occasion), as their authors wrote it; every one where none. */
+    tag?: string
   }): Promise<NetResult<readonly PublicEntry[]>>
   /** One song: its entry and its body; null where it is gone or hidden. */
   item(id: string): Promise<NetResult<{ entry: PublicEntry; body: unknown } | null>>

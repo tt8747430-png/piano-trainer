@@ -14,6 +14,7 @@ export function HandsButton({ hands, onOpen }: { hands: Hands; onOpen: () => voi
       title={name}
       aria-haspopup="dialog"
       caption={short}
+      captionWide={t(`common:hands.${hands}`)}
       className={DOCK_CAPTIONED}
       onClick={onOpen}
     >

@@ -3,15 +3,13 @@ import { Metronome } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  OTHER_HAND_LOOKS,
   SPEED_STEPS,
-  selectOtherHand,
   selectPlayback,
   selectSound,
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
-import { setOtherHand, setPlayback, setSound } from '@/features/set-preference'
+import { setPlayback, setSound } from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import { RowLink, ChoiceCard, SettingsGroup, VolumeSlider } from '@/shared/ui'
 
@@ -27,7 +25,7 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
   const playback = useSettings(selectPlayback)
   const click = useSettings((state) => selectSound(state).click)
   return (
-    <>
+    <div className="flex flex-col gap-4">
       {children}
       <SettingsGroup flush>
         <RowLink
@@ -61,32 +59,6 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
           })
         }
       />
-    </>
-  )
-}
-
-/**
- * The hands (the Player's Settings › Hands, R36): how the hand not practised looks on the music. The
- * hands at the keys are one neutral tone, no choice (R37).
- */
-export function PlayerHands() {
-  const { t } = useTranslation('player')
-  const settings = useSettingsStoreApi()
-  const otherHand = useSettings(selectOtherHand)
-  return (
-    <>
-      <ChoiceCard
-        title={t('settingsPage.otherHand.label')}
-        description={t('settingsPage.otherHand.detail')}
-        info={t('settingsPage.otherHand.info')}
-        setting="otherHand.look"
-        value={otherHand.look}
-        options={OTHER_HAND_LOOKS.map((value) => ({
-          value,
-          label: t(`settingsPage.otherHand.${value}`),
-        }))}
-        onChange={(look) => setOtherHand(settings, { look })}
-      />
-    </>
+    </div>
   )
 }

@@ -33,7 +33,7 @@ export const libraryLine = (progression: LibraryProgression, minor: boolean): st
 
 const modeLine = (param: string, minor: boolean) => `${minor ? 'minor' : 'major'} ${param}`
 
-let built = { revision: -1, all: [] as readonly LibraryProgression[] }
+let built: { revision: number; all: readonly LibraryProgression[] } = { revision: -1, all: [] }
 
 /**
  * The library over the kept content (content as data, ADR 0116): each of the app's progressions the

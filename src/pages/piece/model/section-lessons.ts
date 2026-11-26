@@ -43,7 +43,7 @@ export interface PatternLesson extends Looped {
   readonly pattern: string
   readonly symbol: string
 }
-export type SongLesson = ChordLesson | SequenceLesson | ChangeLesson | PatternLesson
+type SongLesson = ChordLesson | SequenceLesson | ChangeLesson | PatternLesson
 
 /** A section's lessons, in the order its page teaches them. */
 export interface SectionLessons {

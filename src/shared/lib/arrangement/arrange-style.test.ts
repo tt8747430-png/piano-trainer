@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { C_MAJOR, parseChordSymbol, pitchClass, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { arrangeStyle, bassLine, drumSteps, type StyleParts } from './arrange-style'
-import type { ChordSheet, SheetSection } from './chord-sheet'
+import { NO_MARKS, type ChordSheet, type SheetSection } from './chord-sheet'
 import { parseFigure } from './figure'
 import type { EventPattern } from './types'
 
@@ -10,10 +10,11 @@ const B = TICKS_PER_BEAT
 const section = (line: string, more: Partial<SheetSection> = {}): SheetSection => ({
   kind: 'verse',
   repeats: 1,
+  marks: NO_MARKS,
   variation: 1,
-  chords: line.split(' ').map((word) => {
+  bars: line.split(' ').map((word) => {
     const [symbol = '', beats = '4'] = word.split(':')
-    return { chord: parseChordSymbol(symbol), beats: Number(beats) }
+    return { chords: [{ chord: parseChordSymbol(symbol), beats: Number(beats) }] }
   }),
   ...more,
 })
@@ -106,7 +107,7 @@ describe('a style over a chord sheet', () => {
   it('plays the piano part through its pattern, section by section, and nothing for no chords', () => {
     const band = arrangeStyle(sheetOf(section('C G')), [POP], {})
     expect(band.piano?.notes.length).toBeGreaterThan(0)
-    const none = arrangeStyle(sheetOf({ ...section('C'), chords: [] }), [POP], {})
+    const none = arrangeStyle(sheetOf({ ...section('C'), bars: [] }), [POP], {})
     expect(none.piano).toBeNull()
     expect(none.bass).toEqual([])
     expect(none.totalTicks).toBe(0)

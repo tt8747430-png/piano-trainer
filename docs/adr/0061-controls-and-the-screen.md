@@ -18,10 +18,10 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   | One of many (12 keys, chord qualities, scales, voicings, a tempo's rung) | a menu: the value with ⌃⌄ (`Dropdown` in a settings row, `MenuPicker` in a row of pickers) |
   | Two to five, every one in sight                                          | a segmented control on the row (`Segmented`)                                               |
   | Which hands                                                              | `HandsSegmented`: Left · Both · Right, as the hands sit at the keys                        |
-  | On or off                                                                | a switch (`SwitchRow`), or a `ToggleTile` where several sit together                       |
+  | On or off                                                                | a switch (`SwitchRow`)                                                                     |
   | A number                                                                 | a stepper (`Stepper`)                                                                      |
   | Several of many                                                          | a pop-up that checks several (`MultiDropdown`), or a checklist sheet                       |
-  | A few filters                                                            | chips (`ToggleChips`), and only there                                                      |
+  | A few filters                                                            | chips (`ToggleChips`), and only there; chips that wrap stand 8 apart                       |
 
   **On a Settings page** (R29, the owner's choice of Flat's "Advanced settings"): a choice among two or more,
   where the choices are words, is a `ChoiceCard`: the setting's name over a card, every choice a radio with a
@@ -35,7 +35,7 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   No strip that hides its options behind ‹ ›, and no scrolling strip fades at its edges. A choice that has a picture
   is a tile wearing it (`PictureTiles`): a layout, a view, a swing feel, a sign; an inversion is its noteheads.
   Settings changed less often are a sheet on a phone and a popover on a laptop. Views of one thing are a `Segmented` in
-  the page's content; a place's views are its title (`TitleTabs`).
+  the page's content.
 
 - **Four pickers for notes and keys** (`shared/ui/pickers`), one look: a value with ⌃⌄ opening a popover, a bottom
   sheet below 30rem.
@@ -50,14 +50,13 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
     stays its grid of signs (`KeySignaturePicker`, ADR 0114).
   - `KeysChecklist`: several keys (a drill's Custom): the 15 signatures as rows "C major / A minor", Select all ·
     Clear all, Apply.
-  - An explorer's choices stand in one row of them (`PickerRow`): `Root C ⌃⌄ · Quality Major ⌃⌄ · Voicing Close ⌃⌄`,
-    wrapping on a narrow phone. A list of words in that row is a `MenuPicker`; an option the thing cannot take is
-    left out of it.
+  - An explorer's choices stand in one row: `Root C ⌃⌄ · Quality Major ⌃⌄ · Voicing Close ⌃⌄`, wrapping on a
+    narrow phone. A list of words in that row is a `MenuPicker`; an option the thing cannot take is left out of it.
 - **A row that chooses is never a row that leaves.** `RowLink` is only a link; `RowButton` opens a sheet over its
   page.
 - **One action at the thumb.** A screen's job floats in the thumb's reach (`FloatingActions` in the shell's one
-  `FloatingHost`): its main action a 56px round `Fab`, the rest in a `SpeedDial`, all in one row in the middle of the
-  foot, each its icon with its name as its tooltip (no setting: round 28). Creating is one shape on every library
+  `FloatingHost`): its main action a 56px round `Fab`, the rest in a `SpeedDial`, all in one row at the foot's trailing end (on a
+  laptop 16 from the pane's right and 32 from its bottom, as every board), each its icon with its name as its tooltip (no setting: round 28). Creating is one shape on every library
   (canvas 169): `NewDial`, the honey + opening its card of rows, the most made nearest the thumb (one thing to make is
   the + alone), and on a laptop `NewMenu`, the honey New ▾ at the bar's end (one thing is its own button). A
   tap on the page's free room folds them away until the next. The full-screen routes (the Player, the editor, the
@@ -69,7 +68,7 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
 - **The same at every size.** A control has the same name and does the same thing on a phone and a laptop. A size
   changes where it stands, never what it is or says. An icon button is named by its tooltip and its accessible name. A control with words is named by
   them: an `aria-label` only adds to its visible text, never replaces it (WCAG 2.5.3, axe in the e2e).
-- **Secondary sections fold** from their headings (`FoldSection` over `FoldBody`, sliding, inert while folded); what
+- **Secondary sections fold** from their headings (`FoldSection`: folded, the body is gone at once; unfolded, it fades in from 4 above, only opacity and transform moving); what
   is folded is saved by section id (`foldedSections`) and stays folded on every visit.
 - **The screen's bar** (`ScreenHeader`) is a child of the page's root, one row with no tabs under it; it hides
   while reading down and comes back on a scroll up. `src/app/screen-bar.test.tsx` holds every screen to it.
@@ -90,7 +89,8 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   keyboard without resizing anything), and the editor's sheet scrolls the caret's line clear of both. While typing
   the tab bar, the floating actions and the toasts step aside (the page pads for them no more), and the screen's bar
   holds still.
-- **Toasts:** one at a time, the new one replacing the last; Undo in it puts back exactly what was done; gone after
+- **Toasts:** one at a time, the new one replacing the last; on a laptop centred on its pane, 460 wide and 28 up,
+  or 116 up over a floating bar that spans the foot (a lesson's); Undo in it puts back exactly what was done; gone after
   five seconds or on Undo.
 - **Basics:** 44px targets; one focus ring (a 3px outline 2px off the control, inset inside a scroller); reduced
   motion honoured: what slides or morphs changes at once.

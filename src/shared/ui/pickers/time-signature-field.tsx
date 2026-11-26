@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   METER_COUNTS,
@@ -8,7 +8,7 @@ import {
   meterSymbol,
   type Meter,
 } from '@/shared/lib/music'
-import { Switch } from '../primitives/switch'
+import { SwitchRow } from '../SwitchRow'
 import { TimeSignatureSign } from '../smufl'
 import { PickerCell } from './PickerGrid'
 import { usePickerLayout } from './picker-layout'
@@ -40,7 +40,7 @@ const sameValue = (a: TimeSignatureValue, b: TimeSignatureValue) =>
   a.meter === b.meter && (a.symbol && meterSymbol(a.meter) !== null) === b.symbol
 
 /** A time signature drawn as it prints, its figures Bravura's, for a tile. */
-export function TimeSignatureTile({ value }: { value: TimeSignatureValue }) {
+function TimeSignatureTile({ value }: { value: TimeSignatureValue }) {
   const { count, unit } = meterParts(value.meter)
   const symbol = value.symbol ? meterSymbol(value.meter) : null
   return (
@@ -186,7 +186,6 @@ export function TimeSignatureField({
   pickup?: { readonly beats: number; readonly onChange: (beats: number) => void } | undefined
 }) {
   const { t } = useTranslation('music')
-  const switchId = useId()
   const symbolOf = meterSymbol(value.meter)
   const choose = (meter: Meter) =>
     onChange({ meter, symbol: value.symbol && meterSymbol(meter) !== null })
@@ -215,14 +214,12 @@ export function TimeSignatureField({
       </div>
       <TimeSignatureWheels value={value} onChange={onChange} pickup={pickup} />
       {symbolOf === null ? null : (
-        <label htmlFor={switchId} className="flex min-h-11 items-center justify-between gap-3">
-          <span className="text-base">{t('timeField.symbol')}</span>
-          <Switch
-            id={switchId}
-            checked={value.symbol}
-            onCheckedChange={(symbol) => onChange({ meter: value.meter, symbol })}
-          />
-        </label>
+        <SwitchRow
+          label={t('timeField.symbol')}
+          checked={value.symbol}
+          onCheckedChange={(symbol) => onChange({ meter: value.meter, symbol })}
+          className="min-h-11 border-b-0 py-0"
+        />
       )}
     </div>
   )

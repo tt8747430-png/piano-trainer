@@ -2,16 +2,18 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   fitInversion,
+  isInversion,
   midi,
   type Inversion,
   type KeyRange,
   type Midi,
   type RowPosition,
 } from '@/shared/lib/music'
+import { GroupField } from './GroupRows'
 import { InversionChoice } from './InversionChoice'
 import { KeyDiagram } from './KeyDiagram'
 import { Labelled } from './Labelled'
-import { SwitchRow } from './SwitchRow'
+import { Segmented } from './Segmented'
 
 /** The keys the positions are drawn on: C4 to E5, a hand's reach over middle C. */
 const REACH: KeyRange = { from: midi(60), to: midi(76) }
@@ -54,16 +56,18 @@ function PositionsAbout() {
 
 /**
  * Where a row's hand stands (ADR 0047, 0115): the position its first chord starts in, each drawn as
- * its stack of `notes` notes, what a position is drawn on the keys in the ⓘ beside its name; and Move
- * smoothly: on, each chord after the first moves to the position nearest the one before; off, every
- * one stays in the first one's position. Where it is greyed, `info` says why beside its name (ADR
- * 0096), in place of the picture.
+ * its stack of `notes` notes, what a position is drawn on the keys in the ⓘ beside its name; and its
+ * Voicing, as a progression's: Voice-led, each chord after the first moves to the position nearest
+ * the one before; Block, every one stays in the first one's position. Where it is greyed, `info` says why beside its name (ADR
+ * 0096), in place of the picture. As `rows` they are two rows of the card they stand in (the PlayerApp board's
+ * Accompaniment card), each its name over its choice.
  */
 export function PositionField({
   notes,
   position,
   disabled = false,
   info,
+  rows = false,
   onChange,
 }: {
   notes: number
@@ -71,28 +75,38 @@ export function PositionField({
   disabled?: boolean
   /** Why it is greyed, opened from the ⓘ beside its name. */
   info?: ReactNode
+  /** Rows of a card (`GroupField`) in place of a page's fields (`Labelled`). */
+  rows?: boolean
   onChange: (change: { inversion?: Inversion; nearest?: boolean }) => void
 }) {
   const { t } = useTranslation('music')
+  const Field = rows ? GroupField : Labelled
   return (
-    <div className="flex min-w-0 flex-col gap-2">
-      <Labelled label={t('position.first')} info={info ?? <PositionsAbout />}>
+    // Two sections of the card it stands in, spaced as its others.
+    <>
+      <Field label={t('position.first')} info={info ?? <PositionsAbout />}>
         <InversionChoice
           notes={notes}
           label={t('position.first')}
           disabled={disabled}
           value={fitInversion(position.inversion, notes)}
-          onChange={(inversion) => onChange({ inversion: inversion as Inversion })}
+          onChange={(inversion) => {
+            if (isInversion(inversion)) onChange({ inversion })
+          }}
         />
-      </Labelled>
-      <SwitchRow
-        className="border-b-0"
-        label={t('position.nearest')}
-        info={t('position.nearestInfo')}
-        checked={position.nearest}
-        disabled={disabled}
-        onCheckedChange={(nearest) => onChange({ nearest })}
-      />
-    </div>
+      </Field>
+      <Field label={t('position.voicing.label')} info={t('position.voicing.info')}>
+        <Segmented
+          label={t('position.voicing.label')}
+          value={position.nearest ? 'led' : 'block'}
+          disabled={disabled}
+          options={(['led', 'block'] as const).map((voicing) => ({
+            value: voicing,
+            label: t(`position.voicing.${voicing}`),
+          }))}
+          onChange={(voicing) => onChange({ nearest: voicing === 'led' })}
+        />
+      </Field>
+    </>
   )
 }

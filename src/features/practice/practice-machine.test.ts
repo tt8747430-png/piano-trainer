@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest'
 import { midi, TICKS_PER_BEAT } from '@/shared/lib/music'
 import {
   accompanyingHands,
-  followTempo,
   initialPractice,
   practiceReducer,
   practisedHands,
@@ -109,9 +108,10 @@ describe('the practice machine', () => {
       expect(initialPractice(ONE_BAR, 'wait', hands).expected).toEqual(expected)
     })
 
-    it('takes keys only while playing', () => {
+    it('stopped, ignores a wrong key, and starts on the first right one', () => {
       const stopped = initialPractice(ONE_BAR, 'wait', 'rh')
-      expect(run(stopped, ...press(60, 64, 67))).toBe(stopped)
+      expect(run(stopped, ...press(61))).toBe(stopped)
+      expect(run(stopped, ...press(60))).toMatchObject({ playing: true, received: [0] })
     })
 
     it('counts a key in any octave, and is right once every note is in', () => {
@@ -133,7 +133,7 @@ describe('the practice machine', () => {
         { type: 'play' },
         ...answer([61, 48]),
         ...answer([48]),
-        ...answer([62, 63, 55]),
+        ...answer([66, 70, 55]),
         ...answer([55]),
       )
       expect(pass).toMatchObject({ outcome: 'finished', slips: { 0: 1, 1: 2 } })
@@ -333,55 +333,6 @@ describe('one hand chosen (R36)', () => {
     const state = run(initialPractice(ONE_BAR, 'wait', 'lh'), { type: 'play' })
     expect(state.expected).toEqual([0])
     expect(run(state, ...press(48)).outcome).toBe('correct')
-  })
-
-  it('follows that hand in Interpret, moving on at its onset', () => {
-    const state = run(initialPractice(ONE_BAR, 'follow', 'lh'), { type: 'play' })
-    expect(state.expected).toEqual([0])
-    expect(run(state, ...press(48))).toMatchObject({ beatGroup: 1, matched: { beatGroup: 0 } })
-  })
-})
-
-describe('Interpret (follow)', () => {
-  const following = () => run(initialPractice(ONE_BAR, 'follow', 'both'), { type: 'play' })
-  const onset = (state: PracticeState, at: number) =>
-    run(
-      state,
-      ...state.expected.map((pc) => ({ type: 'noteOn', midi: midi(60 + pc), at }) as const),
-    )
-
-  it('follow moves on each matched onset', () => {
-    const state = following()
-    const partway = run(state, { type: 'noteOn', midi: midi(60), at: 0 })
-    expect(partway.beatGroup).toBe(0)
-    const moved = onset(state, 0)
-    expect(moved).toMatchObject({ beatGroup: 1, outcome: 'waiting', received: [] })
-    expect(moved.matched).toEqual({ beatGroup: 0, at: 0 })
-    expect(onset(moved, 0.5).beatGroup).toBe(2)
-  })
-
-  it('takes a wrong key as Wait mode does, and stays', () => {
-    const wrong = run(following(), { type: 'noteOn', midi: midi(62), at: 0 })
-    expect(wrong).toMatchObject({ outcome: 'wrong', beatGroup: 0 })
-  })
-
-  it('follow sets the tempo from the last two beats, clamped', () => {
-    // A beat a group: three onsets half a second apart are 120 a minute.
-    let state = following()
-    expect(followTempo(state, 100)).toBeNull()
-    state = onset(state, 0)
-    expect(followTempo(state, 100)).toBeNull()
-    state = onset(state, 0.5)
-    state = onset(state, 1)
-    expect(followTempo(state, 100)).toBe(120)
-    // Only the last two beats count: a slower one now pulls it down.
-    state = onset(state, 2)
-    expect(followTempo(state, 100)).toBe(80)
-    // Clamped to 40–200 % of the tempo chosen.
-    const rushed = onset(onset(onset(following(), 0), 0.05), 0.1)
-    expect(followTempo(rushed, 100)).toBe(200)
-    const dragged = onset(onset(onset(following(), 0), 5), 10)
-    expect(followTempo(dragged, 100)).toBe(40)
   })
 })
 

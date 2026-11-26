@@ -1,0 +1,2749 @@
+[
+ {
+  "id": "template.BrassBand",
+  "category": "band",
+  "scoreOrder": null,
+  "scoreLayoutOverrides": [
+   "pageSizeAndMarginOptions.pageWidth=841",
+   "pageSizeAndMarginOptions.pageHeight=1189",
+   "defaultSpaceSize=4.61",
+   "transpositionType=LayoutTransposition::kTransposingScore",
+   "systemDividerLayoutOptions.showSystemDividers=true",
+   "bracketingLayoutOptions.bracketPlacingApproach=kBritishBrassBand",
+   "bracketingLayoutOptions.useSubBrackets=false",
+   "bracketingLayoutOptions.showBracketForSingleStaff=true"
+  ],
+  "partLayoutOverrides": [
+   "systemDividerLayoutOptions.showSystemDividers=false"
+  ],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.cornet.soprano.eflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.cornet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.cornet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.cornet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.cornet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.flugelhorn.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.tenor.eflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.tenor.eflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.tenor.eflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.baritone.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.baritone.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone.bass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.euphonium.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.bass.eflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.bass.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.timpani"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.kit.drum.set.basic"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ConcertBand",
+  "category": "band",
+  "scoreOrder": "instrumentscoreorder.windband",
+  "scoreLayoutOverrides": [
+   "pageSizeAndMarginOptions.pageWidth=841",
+   "pageSizeAndMarginOptions.pageHeight=1189",
+   "defaultSpaceSize=2.62",
+   "systemDividerLayoutOptions.showSystemDividers=true",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [
+   "systemDividerLayoutOptions.showSystemDividers=false"
+  ],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.piccolo"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.eflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bass.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.alto"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.alto"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.tenor"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.tenor"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.baritone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.euphonium.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.tuba"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.contrabass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.timpani"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.side.drum"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.bass.drum"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.clash.cymbals"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.PitBand",
+  "category": "band",
+  "scoreOrder": null,
+  "scoreLayoutOverrides": [
+   "pageSizeAndMarginOptions.pageWidth=841",
+   "pageSizeAndMarginOptions.pageHeight=1189",
+   "defaultSpaceSize=3.90",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.piccolo",
+     "instrument.wind.flute",
+     "instrument.wind.clarinet.bflat",
+     "instrument.wind.saxophone.alto"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute",
+     "instrument.wind.clarinet.bflat",
+     "instrument.wind.saxophone.soprano.bflat",
+     "instrument.wind.saxophone.alto"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe",
+     "instrument.wind.coranglais",
+     "instrument.wind.clarinet.bflat",
+     "instrument.wind.saxophone.tenor"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat",
+     "instrument.wind.clarinet.bass.bflat",
+     "instrument.wind.saxophone.tenor",
+     "instrument.wind.saxophone.baritone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat",
+     "instrument.brass.flugelhorn.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat",
+     "instrument.brass.flugelhorn.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat",
+     "instrument.brass.flugelhorn.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone.bass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.kit.drum.set.basic"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.glockenspiel",
+     "instrument.pitchedpercussion.vibraphone.3oct",
+     "instrument.pitchedpercussion.xylophone",
+     "instrument.pitchedpercussion.marimba.4.3oct"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.fretted.electric-guitar",
+     "instrument.fretted.banjo",
+     "instrument.fretted.12-string-acoustic-guitar"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano",
+     "instrument.keyboard.synthesizer"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.fretted.4-string-bass-guitar.alias.4-string-bass"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.BrassQuartet",
+  "category": "chamber",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.BrassQuintet",
+  "category": "chamber",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.tuba"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.BrassTrio",
+  "category": "chamber",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.tuba"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.PianoTrio",
+  "category": "chamber",
+  "scoreOrder": null,
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.violoncello"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.SaxophoneQuartet",
+  "category": "chamber",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.soprano.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.alto"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.tenor"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.baritone"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.SoloViolinAndPiano",
+  "category": "chamber",
+  "scoreOrder": null,
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.StringQuartet",
+  "category": "chamber",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.viola"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.violoncello"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.StringTrio",
+  "category": "chamber",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.viola"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.violoncello"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.WindQuartet",
+  "category": "chamber",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.WindQuintet",
+  "category": "chamber",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.WoodwindTrio",
+  "category": "chamber",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kSmallEnsemble"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.BarbershopQuartet",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral",
+   "castingOffOptions.fixNumberOfSystems=true",
+   "castingOffOptions.numberOfSystemsPerFrame=4",
+   "castingOffOptions.scaleFixedNumberOfSystemsByFrameHeight=true",
+   "castingOffOptions.fixNumberOfBarsPerSystem=true",
+   "castingOffOptions.numberOfBarsPerSystem=3",
+   "pageSizeAndMarginOptions.pageMargins.margins.top=36",
+   "pageSizeAndMarginOptions.pageMargins.margins.bottom=36",
+   "pageSizeAndMarginOptions.pageMargins.margins.inner=36",
+   "pageSizeAndMarginOptions.pageMargins.margins.outer=36",
+   "barNumberLayoutOptions.barNumberFrequency=kEveryBar",
+   "barNumberLayoutOptions.showFirstBarNumberWhenShownEveryBar=true",
+   "barNumberLayoutOptions.barNumberDistanceFromStaff=1",
+   "barNumberLayoutOptions.centreBarNumberOnSystemicBarline=true",
+   "verticalJustificationOptions.justificationThreshold=50",
+   "verticalStaveGapOptions.staveToStaveGap=10",
+   "noteSpacingJustificationOptions.useFinalSystemJustificationThreshold=false"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.singers.tenor"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.singers.bass"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ChoirSatbUnaccompanied",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [
+   "staffLabelOptions.vocalStaffLabelsCapitalised=true"
+  ],
+  "players": [
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.soprano"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.alto"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.tenor"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.bass"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ChoirSatbWithOrgan",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [
+   "staffLabelOptions.vocalStaffLabelsCapitalised=true"
+  ],
+  "players": [
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.soprano"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.alto"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.tenor"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.bass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.organ"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ChoirSatbWithPiano",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [
+   "staffLabelOptions.vocalStaffLabelsCapitalised=true"
+  ],
+  "players": [
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.soprano"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.alto"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.tenor"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.bass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ChoirSabWithPiano",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [
+   "staffLabelOptions.vocalStaffLabelsCapitalised=true"
+  ],
+  "players": [
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.soprano"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.alto"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.bass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ChoirSsaUnaccompanied",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [
+   "staffLabelOptionsvocalStaffLabelsCapitalised=true"
+  ],
+  "players": [
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.soprano"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.soprano"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.alto"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ChoirSsaWithOrgan",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [
+   "staffLabelOptionsvocalStaffLabelsCapitalised=true"
+  ],
+  "players": [
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.soprano"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.soprano"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.alto"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.organ"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ChoirSsaWithPiano",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [
+   "staffLabelOptionsvocalStaffLabelsCapitalised=true"
+  ],
+  "players": [
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.soprano"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.soprano"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.alto"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ChoirTtbbUnaccompanied",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [
+   "staffLabelOptionsvocalStaffLabelsCapitalised=true"
+  ],
+  "players": [
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.tenor"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.tenor"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.bass"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.bass"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ChoirTtbbWithOrgan",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [
+   "staffLabelOptionsvocalStaffLabelsCapitalised=true"
+  ],
+  "players": [
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.tenor"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.tenor"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.bass"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.bass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.organ"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ChoirTtbbWithPiano",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [
+   "staffLabelOptionsvocalStaffLabelsCapitalised=true"
+  ],
+  "players": [
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.tenor"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.tenor"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.bass"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.singers.bass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.SoloVoiceAndPiano",
+  "category": "choral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnFirstSystem=kNone",
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "flowFirstSystemIndent=6",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral"
+  ],
+  "partLayoutOverrides": [
+   "pageSizeAndMarginOptions.pageMargins.type=kMirrored"
+  ],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.singers.soprano"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.BigBand",
+  "category": "jazz",
+  "scoreOrder": "instrumentscoreorder.jazz",
+  "scoreLayoutOverrides": [
+   "pageSizeAndMarginOptions.pageWidth=841",
+   "pageSizeAndMarginOptions.pageHeight=1189",
+   "systemDividerLayoutOptions.showSystemDividers=true",
+   "bracketingLayoutOptions.bracketPlacingApproach=kBigBand",
+   "bracketingLayoutOptions.useSubBrackets=false"
+  ],
+  "partLayoutOverrides": [
+   "systemDividerLayoutOptions.showSystemDividers=false"
+  ],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.alto"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.alto"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.tenor"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.tenor"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.saxophone.baritone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone.bass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.fretted.jazz-guitar"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.fretted.4-string-bass-guitar"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.kit.drum.set.basic"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.JazzQuartet",
+  "category": "jazz",
+  "scoreOrder": "instrumentscoreorder.jazz",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kNoBrackets"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.uprightbass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.kit.drum.set.basic"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.JazzTrio",
+  "category": "jazz",
+  "scoreOrder": "instrumentscoreorder.jazz",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "bracketingLayoutOptions.bracketPlacingApproach=kNoBrackets"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.strings.uprightbass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.kit.drum.set.basic"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ClassicalOrchestra",
+  "category": "orchestral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "systemDividerLayoutOptions.showSystemDividers=true",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral",
+   "bracketingLayoutOptions.showBracketForSingleStaff=true"
+  ],
+  "partLayoutOverrides": [
+   "systemDividerLayoutOptions.showSystemDividers=false"
+  ],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.timpani"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.viola"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violoncello"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.contrabass"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ConcertOrchestra",
+  "category": "orchestral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "pageSizeAndMarginOptions.pageWidth=841",
+   "pageSizeAndMarginOptions.pageHeight=1189",
+   "defaultSpaceSize=3.40",
+   "systemDividerLayoutOptions.showSystemDividers=true",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral",
+   "bracketingLayoutOptions.showBracketForSingleStaff=true"
+  ],
+  "partLayoutOverrides": [
+   "systemDividerLayoutOptions.showSystemDividers=false"
+  ],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone.bass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.tuba"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.timpani"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.side.drum"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.bass.drum"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.clash.cymbals"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.fretted.4-string-bass-guitar"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.harp"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.viola"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violoncello"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.contrabass"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.FilmOrchestra",
+  "category": "orchestral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "pageSizeAndMarginOptions.pageWidth=841",
+   "pageSizeAndMarginOptions.pageHeight=1189",
+   "defaultSpaceSize=2.62",
+   "systemDividerLayoutOptions.showSystemDividers=true",
+   "timeSignatureType=TimeSignatureType::kLarge",
+   "timeSignatureGlyphStyle=TimeSignatureGlyphStyle::kNarrowSansSerif",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral",
+   "bracketingLayoutOptions.showBracketForSingleStaff=true",
+   "barNumberLayoutOptions.showFirstBarNumberWhenShownEveryBar=true",
+   "barNumberLayoutOptions.barNumberFrequency=BarNumberFrequency::kEveryBar",
+   "barNumberLayoutOptions.barNumberHorizonalPosition=BarNumberHorizontalPosition::kCenteredInBar",
+   "barNumberLayoutOptions.showAboveTopStaff=true",
+   "barNumberLayoutOptions.showBelowBottomStaff=true",
+   "barNumberLayoutOptions.alignBarNumbersOnSameSystem=true",
+   "barNumberLayoutOptions.barNumberEnclosureType=BarNumberEnclosureType::kRectangle"
+  ],
+  "partLayoutOverrides": [
+   "systemDividerLayoutOptions.showSystemDividers=false",
+   "timeSignatureType=TimeSignatureType::kLarge",
+   "TimeSignatureGlyphStyle::kNormal"
+  ],
+  "engravingOverrides": [
+   "timeSignatureOptions.largeTimeSignatureTreatPercussionsAndKeysAsSingleBracket=true"
+  ],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute",
+     "instrument.wind.piccolo"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.timpani"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.side.drum"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.bass.drum"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.clash.cymbals"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.harp"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.fretted.classical-guitar"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.fretted.classical-guitar"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.viola"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violoncello"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.contrabass"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.ModernOrchestra",
+  "category": "orchestral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "pageSizeAndMarginOptions.pageWidth=841",
+   "pageSizeAndMarginOptions.pageHeight=1189",
+   "defaultSpaceSize=2.62",
+   "systemDividerLayoutOptions.showSystemDividers=true",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral",
+   "bracketingLayoutOptions.showBracketForSingleStaff=true"
+  ],
+  "partLayoutOverrides": [
+   "systemDividerLayoutOptions.showSystemDividers=false"
+  ],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.piccolo"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.piccolo"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.coranglais"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.coranglais"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.eflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.d"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.a"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.a"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.a"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.contrabassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.contrabassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.d"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone.bass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.tuba"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.timpani"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.timpani"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.side.drum"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.bass.drum"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.clash.cymbals"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.harp"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.viola"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violoncello"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.contrabass"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.RomanticOrchestra",
+  "category": "orchestral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "pageSizeAndMarginOptions.pageWidth=841",
+   "pageSizeAndMarginOptions.pageHeight=1189",
+   "defaultSpaceSize=2.62",
+   "systemDividerLayoutOptions.showSystemDividers=true",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral",
+   "bracketingLayoutOptions.showBracketForSingleStaff=true"
+  ],
+  "partLayoutOverrides": [
+   "systemDividerLayoutOptions.showSystemDividers=false"
+  ],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.piccolo"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.flute"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.oboe"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.coranglais"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.eflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.clarinet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.bassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.wind.contrabassoon"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.horn.f"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.tuba.wagner.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trumpet.bflat"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.trombone.bass"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.brass.tuba"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.timpani"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.side.drum"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.bass.drum"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.orchestral.unpitched.clash.cymbals"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.bells.tubular"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.glockenspiel"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.xylophone"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.celesta"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.harp"
+    ]
+   },
+   {
+    "section": false,
+    "instruments": [
+     "instrument.pitchedpercussion.harp"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.viola"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violoncello"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.contrabass"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.StringOrchestra",
+  "category": "orchestral",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "systemDividerLayoutOptions.showSystemDividers=true",
+   "bracketingLayoutOptions.bracketPlacingApproach=kOrchestral",
+   "bracketingLayoutOptions.showBracketForSingleStaff=true"
+  ],
+  "partLayoutOverrides": [
+   "systemDividerLayoutOptions.showSystemDividers=false"
+  ],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violin"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.viola"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.violoncello"
+    ]
+   },
+   {
+    "section": true,
+    "instruments": [
+     "instrument.strings.contrabass"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.Guitar",
+  "category": "solo",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnFirstSystem=kNone",
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "flowFirstSystemIndent=6",
+   "bracketingLayoutOptions.bracketPlacingApproach=kNoBrackets"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.fretted.classical-guitar"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.GuitarWithTab",
+  "category": "solo",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnFirstSystem=kNone",
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "flowFirstSystemIndent=6",
+   "frettedInstrumentLayoutOptions.playersUsingNotationAndTabPresentation=0",
+   "bracketingLayoutOptions.bracketPlacingApproach=kNoBrackets"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.fretted.classical-guitar"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.LeadSheet",
+  "category": "solo",
+  "scoreOrder": null,
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnFirstSystem=kNone",
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "flowFirstSystemIndent=6",
+   "bracketingLayoutOptions.bracketPlacingApproach=kNoBrackets"
+  ],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.singers.voice"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.SoloOrgan",
+  "category": "solo",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnFirstSystem=kNone",
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "flowFirstSystemIndent=6",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kNoBrackets"
+  ],
+  "partLayoutOverrides": [
+   "pageSizeAndMarginOptions.pageMargins.type=kMirrored"
+  ],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.organ"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.SoloPiano",
+  "category": "solo",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [
+   "staffLabelLayoutOptions.staffLabelsOnFirstSystem=kNone",
+   "staffLabelLayoutOptions.staffLabelsOnSubsequentSystems=kNone",
+   "flowFirstSystemIndent=6",
+   "pageSizeAndMarginOptions.pageMargins.type=kIdentical",
+   "bracketingLayoutOptions.bracketPlacingApproach=kNoBrackets"
+  ],
+  "partLayoutOverrides": [
+   "pageSizeAndMarginOptions.pageMargins.type=kMirrored"
+  ],
+  "engravingOverrides": [],
+  "players": [
+   {
+    "section": false,
+    "instruments": [
+     "instrument.keyboard.piano"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "template.Empty",
+  "category": "empty",
+  "scoreOrder": "instrumentscoreorder.orchestral",
+  "scoreLayoutOverrides": [],
+  "partLayoutOverrides": [],
+  "engravingOverrides": [],
+  "players": []
+ }
+]

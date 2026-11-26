@@ -14,6 +14,7 @@ import {
   createFeatures,
   createProfile,
   createGroups,
+  createChordShare,
   createPublicLibrary,
   createServices,
   createStores,
@@ -45,6 +46,7 @@ createRoot(rootElement).render(
       publicLibrary={createPublicLibrary(backend)}
       profile={createProfile(backend)}
       groups={createGroups(backend)}
+      chordShare={createChordShare(backend)}
       admin={createAdmin(backend)}
       features={createFeatures(backend)}
       contentEditing={createContentEditing(backend)}

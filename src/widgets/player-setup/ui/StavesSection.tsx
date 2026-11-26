@@ -55,7 +55,7 @@ export function StavesSection({
           <span className="text-center">{t('staves.play')}</span>
           <span className="text-center">{t('staves.show')}</span>
         </div>
-        <ul className="divide-y divide-hairline">
+        <ul className="rows-hairline">
           {tracks.map((track) => {
             const { play, show } = trackOf(staves, track.id)
             const last = track.drawn && show && inSight === 1
@@ -139,7 +139,7 @@ export function StavesSection({
       {tracks.some((track) => track.id === 'recording') ? (
         <Button
           variant="outline"
-          className="min-h-11 self-start rounded-pill px-4 text-base"
+          className="min-h-11 self-start px-4"
           onClick={() => onlyTheChords(settings)}
         >
           {t('sound.onlyChords')}

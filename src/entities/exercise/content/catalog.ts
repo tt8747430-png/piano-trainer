@@ -171,9 +171,11 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'sixth-diminished',
+    mark: '6°',
     group: 'barryHarris',
     stage: 'advanced',
     name: { en: '6th-diminished scale', ru: 'Секстово-уменьшённая гамма' },
+    focus: { en: 'Eight notes to the octave', ru: 'Восемь нот в октаве' },
     trains: {
       en: 'Eight notes to the octave: the 6th chord’s notes on the beats, the diminished 7th’s between them',
       ru: 'Восемь нот в октаве: звуки аккорда с секстой на долях, звуки уменьшённого септаккорда между ними',
@@ -190,9 +192,11 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'sixth-diminished-chords',
+    mark: '6°7',
     group: 'barryHarris',
     stage: 'professional',
     name: { en: '6th-diminished chords', ru: 'Секстово-уменьшённые аккорды' },
+    focus: { en: 'A chord on each note of the scale', ru: 'Аккорд на каждой ноте гаммы' },
     trains: {
       en: 'Each note of the 6th-diminished scale with a chord under it, in close position or drop 2',
       ru: 'Каждая нота секстово-уменьшённой гаммы с аккордом под ней, в тесном расположении или Drop 2',
@@ -209,9 +213,11 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'dominant-scale',
+    mark: 'V7',
     group: 'barryHarris',
     stage: 'advanced',
     name: { en: 'Dominant scale down', ru: 'Доминантовая гамма вниз' },
+    focus: { en: 'The V7’s scale with a passing half step', ru: 'Гамма V7 с проходящим полутоном' },
     trains: {
       en: 'The V7’s scale coming down, with one added half step so the chord’s notes land on the beats',
       ru: 'Гамма V7 вниз с добавленным полутоном, чтобы звуки аккорда приходились на доли',
@@ -228,9 +234,11 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'from-third',
+    mark: '3–9',
     group: 'barryHarris',
     stage: 'professional',
     name: { en: 'Arpeggios from the 3rd', ru: 'Арпеджио от терции' },
+    focus: { en: '3-5-7-9 over a ii–V–I', ru: '3-5-7-9 по ii–V–I' },
     trains: {
       en: 'Over a ii–V–I: each chord’s 3-5-7-9, then down the scale into the next chord',
       ru: 'В обороте ii–V–I: 3-5-7-9 каждого аккорда, затем вниз по гамме к следующему',
@@ -247,9 +255,11 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'drop-two',
+    mark: 'D2',
     group: 'barryHarris',
     stage: 'professional',
     name: { en: 'Drop-2 7ths', ru: 'Септаккорды Drop 2' },
+    focus: { en: 'The key’s 7th chords up and down', ru: 'Септаккорды тональности вверх и вниз' },
     trains: {
       en: 'The key’s 7th chords up and down, with the second note from the top moved to the left hand',
       ru: 'Септаккорды тональности вверх и вниз, второй сверху звук перенесён в левую руку',
@@ -266,9 +276,11 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'two-five-one-scale',
+    mark: '251',
     group: 'jonny',
     stage: 'beginner',
     name: { en: '2-5-1 scale', ru: 'Гамма 2-5-1' },
+    focus: { en: 'Swung 8ths over a ii–V–I', ru: 'Свинговые восьмые по ii–V–I' },
     trains: {
       en: 'The right hand plays the scale in swung 8ths over the left hand’s shells of a ii–V–I',
       ru: 'Правая рука играет гамму свингующими восьмыми над «скелетами» ii–V–I в левой',
@@ -285,9 +297,11 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'inner-voice',
+    mark: '7→6',
     group: 'jonny',
     stage: 'intermediate',
     name: { en: 'Inner voice', ru: 'Внутренний голос' },
+    focus: { en: 'The 7th steps down under the 3rd', ru: 'Септима спускается под терцией' },
     trains: {
       en: 'The key’s 7th chords, the 3rd held on top while the 7th steps down to the 6th',
       ru: 'Септаккорды тональности: терция держится сверху, а септима спускается к сексте',
@@ -304,9 +318,11 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'modes',
+    mark: '1–7',
     group: 'jonny',
     stage: 'advanced',
     name: { en: 'Modes', ru: 'Лады' },
+    focus: { en: 'Ionian to Locrian', ru: 'От ионийского до локрийского' },
     trains: {
       en: 'The scale started from each of its notes in turn, Ionian to Locrian, with the scale’s fingering',
       ru: 'Гамма по очереди от каждой своей ступени, от ионийского до локрийского, с аппликатурой гаммы',
@@ -323,9 +339,14 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'rapid-switch',
+    mark: '12',
     group: 'jonny',
     stage: 'professional',
     name: { en: 'Rapid switch', ru: 'Быстрая смена' },
+    focus: {
+      en: 'One line through all twelve keys',
+      ru: 'Одна линия через все двенадцать тональностей',
+    },
     trains: {
       en: 'One unbroken line through all twelve keys, following the circle of fifths',
       ru: 'Одна непрерывная линия через все двенадцать тональностей по квинтовому кругу',
@@ -342,9 +363,11 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'pattern-shifting',
+    mark: 'seq',
     group: 'jonny',
     stage: 'professional',
     name: { en: 'Pattern shifting', ru: 'Перенос фигуры' },
+    focus: { en: 'One figure on every degree', ru: 'Одна фигура на каждой ступени' },
     trains: {
       en: 'A short figure started again on each degree with its shape kept: a melodic sequence',
       ru: 'Короткая фигура от каждой ступени с той же формой: мелодическая секвенция',
@@ -361,9 +384,14 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'five-finger',
-    group: 'technique',
+    mark: '1–5',
+    group: 'fiveFinger',
     stage: 'beginner',
     name: { en: 'Five-finger position', ru: 'Позиция пяти пальцев' },
+    focus: {
+      en: "A key's first five notes, up and down",
+      ru: 'Первые пять нот тональности, вверх и вниз',
+    },
     trains: {
       en: 'One finger on each of a key’s first five notes, up and down',
       ru: 'По пальцу на каждую из первых пяти нот тональности, вверх и вниз',
@@ -380,9 +408,11 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'hanon',
-    group: 'technique',
+    mark: '1–20',
+    group: 'virtuoso',
     stage: 'intermediate',
     name: { en: 'Hanon', ru: 'Ганон' },
+    focus: { en: 'Finger independence', ru: 'Независимость пальцев' },
     trains: {
       en: 'Nos. 1 to 20 of The Virtuoso Pianist: a figure climbs two octaves and comes back, for even, independent fingers',
       ru: '№ 1–20 из «Пианиста-виртуоза»: фигура поднимается на две октавы и возвращается, для ровных и независимых пальцев',

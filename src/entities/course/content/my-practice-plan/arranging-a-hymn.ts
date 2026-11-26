@@ -111,8 +111,8 @@ const arrangingAHymn: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Harmonise E in C major', ru: 'Гармонизовать ми в до мажоре' },
-          target: { opens: 'harmonise', key: C_MAJOR, note: note('E') },
+          title: { en: 'Chords in C major', ru: 'Аккорды до мажора' },
+          target: { opens: 'key', key: C_MAJOR },
         },
         {
           kind: 'link',

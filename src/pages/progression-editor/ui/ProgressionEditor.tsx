@@ -1,4 +1,3 @@
-import { Link, useNavigate } from '@tanstack/react-router'
 import { Settings } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -6,16 +5,27 @@ import { PROGRESSION_STYLES, type LibraryProgression } from '@/entities/progress
 import { useProgressionDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { parseNumerals } from '@/shared/lib/music'
-import { Dropdown, InfoTip, RoundLink, TypedField } from '@/shared/ui'
-import { DocText, DraftScreen, Properties, PropertyRow } from '@/widgets/content-editor'
+import { cn, useSettingsWindow } from '@/shared/lib'
+import {
+  ChoiceChips,
+  FormField,
+  Labelled,
+  NameField,
+  Problem,
+  RoundButton,
+  SettingsGroup,
+} from '@/shared/ui'
+import { DraftScreen } from '@/widgets/content-editor'
+import { ProgressionSettingsWindow } from './ProgressionSettingsWindow'
 
 /** A line of numerals as the field holds it: none where it is empty. */
 const lineOf = (text: string): string | undefined => (text.trim() === '' ? undefined : text)
 
 /**
- * The progression as one document in one language (round 21): its name as the page's heading and
- * how it sounds under it, written in place; its style and its lines of numerals as properties, a
- * line that does not read saying which word. Each change saved to the draft as it rests.
+ * The progression as its board's form (`r54_practice_more.py`'s PEEDIT), in one language: its name
+ * and how it sounds as fields, its style as chips, its lines of numerals typed in the serif in one
+ * card, a key to a row, a line that does not read saying so under it. Each change saved to the draft
+ * as it rests. Sections 24 apart, 8 inside.
  */
 function ProgressionDocument({
   initial,
@@ -36,71 +46,101 @@ function ProgressionDocument({
   // The lines written as one value: a progression keeps a line in one mode at least.
   const setLines = (major: string, minor: string) => {
     const { major: _major, minor: _minor, ...rest } = progression
-    const lines = {
-      ...(lineOf(major) === undefined ? {} : { major }),
-      ...(lineOf(minor) === undefined ? {} : { minor }),
-    }
-    change({
-      ...rest,
-      ...(lines.major === undefined && lines.minor === undefined ? { major } : lines),
-    } as LibraryProgression)
+    const minorReads = lineOf(minor) !== undefined
+    if (!minorReads) change({ ...rest, major })
+    else if (lineOf(major) === undefined) change({ ...rest, minor })
+    else change({ ...rest, major, minor })
   }
-  const unread = (line: string) => (parseNumerals(line) ? null : t('progressions.unread'))
+  const unread = (line: string) => line.trim() !== '' && !parseNumerals(line)
+  const major = progression.major ?? ''
+  const minor = progression.minor ?? ''
+  const wrong = unread(major) || unread(minor)
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <DocText
-          size="title"
-          label={t('progressions.edit.name')}
-          value={progression.name}
-          locale={locale}
-          placeholder={words('progressions.edit.name')}
-          onChange={(name) => change({ ...progression, name })}
+      <NameField
+        label={t('progressions.edit.name')}
+        value={progression.name[locale]}
+        placeholder={words('progressions.edit.name')}
+        aria-invalid={progression.name[locale].trim() === '' || undefined}
+        onChange={(event) =>
+          change({ ...progression, name: { ...progression.name, [locale]: event.target.value } })
+        }
+      />
+      <FormField
+        label={t('progressions.edit.character')}
+        value={progression.character[locale]}
+        placeholder={words('progressions.edit.character')}
+        aria-invalid={progression.character[locale].trim() === '' || undefined}
+        onChange={(event) =>
+          change({
+            ...progression,
+            character: { ...progression.character, [locale]: event.target.value },
+          })
+        }
+      />
+      <Labelled label={t('progressions.edit.style')}>
+        <ChoiceChips
+          label={t('progressions.edit.style')}
+          value={progression.style}
+          options={PROGRESSION_STYLES.map((value) => ({
+            value,
+            label: t(`progressions.style.${value}`),
+          }))}
+          onChange={(style) => change({ ...progression, style })}
         />
-        <DocText
-          label={t('progressions.edit.character')}
-          value={progression.character}
-          locale={locale}
-          placeholder={words('progressions.edit.character')}
-          onChange={(character) => change({ ...progression, character })}
+      </Labelled>
+      <SettingsGroup
+        title={t('progressions.edit.lines')}
+        info={t('progressions.edit.linesInfo')}
+        flush
+      >
+        <LineRow
+          label={t('progressions.edit.major')}
+          value={major}
+          wrong={unread(major)}
+          onChange={(line) => setLines(line, minor)}
         />
-      </div>
-      <Properties label={t('progressions.edit.heading')}>
-        <PropertyRow name={t('progressions.edit.style')}>
-          <Dropdown
-            bare
-            className="max-w-full"
-            label={t('progressions.edit.style')}
-            value={progression.style}
-            options={PROGRESSION_STYLES.map((value) => ({
-              value,
-              label: t(`progressions.style.${value}`),
-            }))}
-            onChange={(style) => change({ ...progression, style })}
-          />
-        </PropertyRow>
-      </Properties>
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-1">
-          <h2 className="font-display text-2xl">{t('progressions.edit.lines')}</h2>
-          <InfoTip name={t('progressions.edit.lines')}>{t('progressions.edit.info')}</InfoTip>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <TypedField
-            label={t('progressions.edit.major')}
-            value={progression.major ?? ''}
-            error={unread(progression.major ?? '')}
-            onChange={(major) => setLines(major, progression.minor ?? '')}
-          />
-          <TypedField
-            label={t('progressions.edit.minor')}
-            value={progression.minor ?? ''}
-            error={unread(progression.minor ?? '')}
-            onChange={(minor) => setLines(progression.major ?? '', minor)}
-          />
-        </div>
-      </div>
+        <LineRow
+          label={t('progressions.edit.minor')}
+          value={minor}
+          wrong={unread(minor)}
+          onChange={(line) => setLines(major, line)}
+        />
+      </SettingsGroup>
+      {wrong ? <Problem className="-mt-4 mx-4">{t('progressions.unread')}</Problem> : null}
     </div>
+  )
+}
+
+/** A key's line of numerals, typed at its row's end in the book serif (the board's GROUP `val` row). */
+function LineRow({
+  label,
+  value,
+  wrong,
+  onChange,
+}: {
+  label: string
+  value: string
+  wrong: boolean
+  onChange: (line: string) => void
+}) {
+  return (
+    <label className="flex min-h-12 items-center gap-3 rounded-control ps-4 pe-4 text-base has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50">
+      <span className="shrink-0">{label}</span>
+      <input
+        value={value}
+        aria-invalid={wrong || undefined}
+        autoCapitalize="off"
+        autoComplete="off"
+        spellCheck={false}
+        enterKeyHint="done"
+        onChange={(event) => onChange(event.target.value)}
+        className={cn(
+          'min-w-0 flex-1 bg-transparent text-end font-display text-base focus-visible:outline-none',
+          wrong && 'text-destructive',
+        )}
+      />
+    </label>
   )
 }
 
@@ -120,45 +160,53 @@ export function ProgressionEditor({
   /** A router `Link` to Progressions. */
   toProgressions: ReactElement
 }) {
-  const { t } = useTranslation(['practice', 'learn'])
+  const { t } = useTranslation(['practice', 'common'])
   const shown = useLocale()
   // The language written: the interface's to start with, switched in the bar.
   const [locale, setLocale] = useState<Locale>(shown)
   const draft = useProgressionDraft(progression)
-  const navigate = useNavigate()
-  const params = { progressionId: progression.id }
+  const settingsWindow = useSettingsWindow()
+  const openPublish = () => void draft.flush().then(() => settingsWindow.openAt('publish'))
   // A new progression's name is its draft's: the device has none of it.
   const opened = draft.load.state === 'ready' ? draft.load.value : progression
   const title = localText(opened.name, shown) || opened.id
   return (
-    <DraftScreen
-      draft={draft}
-      heading={t('progressions.edit.bar')}
-      title={title}
-      back={back}
-      backTo={{ link: toProgressions, label: t('progressions.edit.back') }}
-      editorsOnly={t('progressions.edit.editorsOnly')}
-      unreadable={t('progressions.edit.unreadable')}
-      language={{ value: locale, onChange: setLocale }}
-      // Its Publish page and its Settings (R29 B6): every item's acts in the same places.
-      publishPage={{
-        link: <Link to="/practice/progressions/$progressionId/publish" params={params} />,
-        open: () =>
-          void draft
-            .flush()
-            .then(() => navigate({ to: '/practice/progressions/$progressionId/publish', params })),
-      }}
-      settings={
-        <RoundLink
-          label={t('learn:settings.title')}
-          icon={Settings}
-          render={<Link to="/practice/progressions/$progressionId/settings" params={params} />}
-        />
-      }
-    >
-      {(initial) => (
-        <ProgressionDocument key={locale} initial={initial} locale={locale} onChange={draft.save} />
-      )}
-    </DraftScreen>
+    <>
+      <DraftScreen
+        draft={draft}
+        heading={t('progressions.edit.bar')}
+        form
+        title={title}
+        back={back}
+        backTo={{ link: toProgressions, label: t('progressions.edit.back') }}
+        editorsOnly={t('progressions.edit.editorsOnly')}
+        editorsWhy={t('progressions.edit.editorsWhy')}
+        unreadable={t('progressions.edit.unreadable')}
+        language={{ value: locale, onChange: setLocale }}
+        // Its Settings, a window over the editor, and Publish a page inside it (the ProgressionEdit boards).
+        toPublish={{
+          // Its draft kept first, from the bar's honey Publish as from the menu's.
+          link: <button type="button" onClick={openPublish} />,
+          open: openPublish,
+        }}
+        settings={
+          <RoundButton
+            label={t('common:nav.settings')}
+            icon={Settings}
+            onClick={() => settingsWindow.openAt('settings')}
+          />
+        }
+      >
+        {(initial) => (
+          <ProgressionDocument
+            key={locale}
+            initial={initial}
+            locale={locale}
+            onChange={draft.save}
+          />
+        )}
+      </DraftScreen>
+      <ProgressionSettingsWindow progression={opened} draft={draft} {...settingsWindow} />
+    </>
   )
 }

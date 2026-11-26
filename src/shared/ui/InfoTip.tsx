@@ -6,9 +6,9 @@ import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
 
 // Drawn 20px beside a name, a line of small text's height; its reach grows to a 44px touch target
 // round it (CODE_STYLE §5) without taking that room from the row.
-/** In a screen's bar: a round 44px button on the bar's soft fill, as every bar action (`variant="bar"`). */
+/** In a screen's bar: the 44px glass circle of every bar action (`variant="bar"`), dimmed while it is open. */
 const BAR_TRIGGER =
-  'inline-grid size-11 shrink-0 place-items-center rounded-pill bg-muted/70 text-foreground transition-colors duration-200 ease-out select-none hover:bg-muted data-popup-open:bg-muted [&_svg]:size-5'
+  'glass inline-grid size-11 shrink-0 place-items-center rounded-pill text-foreground select-none hover:brightness-97 data-popup-open:brightness-97 [&_svg]:size-5.5'
 
 const TRIGGER =
   'relative inline-grid size-5 shrink-0 place-items-center rounded-pill text-muted-foreground transition-colors duration-200 ease-out select-none before:absolute before:-inset-3 before:content-[""] hover:text-foreground data-popup-open:text-foreground [&_svg]:size-4'

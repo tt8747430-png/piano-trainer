@@ -1,0 +1,4094 @@
+{
+ "_source": "__swift5_types / __swift5_fieldmd of each binary (parsed with a Node Mach-O reader). Type and field names exact. Field types shown only when they resolve without symbolic references; property-wrapper fields start with _ (@State/@Environment/@ScaledMetric etc.).",
+ "binaries": {
+  "Main": [
+   {
+    "kind": "class",
+    "name": "Suggester_2.TechContainer",
+    "fields": [
+     "_tech"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.ScaleEntity",
+    "fields": [
+     "id: Swift.String",
+     "scale: __C.MRScale",
+     "title: Swift.String",
+     "phoneticTitle: Swift.String",
+     "subtitle: Swift.String"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.ChordSuggestionsIntent",
+    "fields": [
+     "_scaleEntity"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.WhenVisible",
+    "fields": [
+     "content: () -> A",
+     "__visible"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.WelcomeWindowPatcher",
+    "fields": [
+     "__needsConfiguration"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.Shortcuts",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.SuggesterProToolsView",
+    "fields": [
+     "store",
+     "accessControl",
+     "settingsModel: __C.MRSuggesterSettingsModel",
+     "toolsState"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.Suggester2LaunchURL.QueryPair",
+    "fields": [
+     "key: Swift.String",
+     "value: Swift.String"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.Suggester2LaunchURL",
+    "fields": [
+     "url"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.SuggesterProApp",
+    "fields": [
+     "_appDelegate",
+     "store",
+     "accessControl",
+     "_storeState",
+     "_accessControlState",
+     "toolsState",
+     "settingsManager",
+     "launchLogic: __C.MRSuggesterLaunchLogic"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "Suggester_2.MyNSAppDelegate",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.SuggesterOnboardingView",
+    "fields": [
+     "_dismiss",
+     "_settings"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.DocumentRootView",
+    "fields": [
+     "settingsModel: __C.MRSuggesterSettingsModel",
+     "_document",
+     "_techContainer"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "Suggester_2.SuggesterProReferenceFileDocument",
+    "fields": [
+     "internalDocumentModel: __C.MRSuggesterProDocumentModel?"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.AdditionalScenes",
+    "fields": [
+     "store",
+     "accessControl",
+     "settingsModel: __C.MRSuggesterSettingsModel",
+     "toolsState",
+     "_openWindow"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "Suggester_2.SuggesterProSettingsManager",
+    "fields": [
+     "settingsModel: __C.MRSuggesterSettingsModel"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.LauncherMoreSheet",
+    "fields": [
+     "prominent: Swift.Bool",
+     "buttonPadding",
+     "onTools: () -> ()",
+     "onSettings: () -> ()",
+     "onPurchases: () -> ()",
+     "onOnboarding: () -> ()"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.ScaleEntityQuery",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.ScaleEntityQuery.PartialMatch",
+    "fields": [
+     "matchCount: Swift.Int",
+     "entity: <Suggester_2.ScaleEntity>"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "Suggester_2.WelcomeView",
+    "fields": [
+     "__logoVisible",
+     "__onboardingPresented",
+     "__morePresented",
+     "__errorPresented",
+     "__error",
+     "_settings",
+     "_openWindow",
+     "_newDocument",
+     "_openDocument",
+     "_openSettings"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "Suggester_2.ResourceBundleClass",
+    "fields": []
+   }
+  ],
+  "DocumentEditor": [
+   {
+    "kind": "class",
+    "name": "__C.CFError",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "__C.PasteboardType",
+    "fields": [
+     "_rawValue: __C.NSString"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "__C.Decimal",
+    "fields": [
+     "_mantissa"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordBuilderWorkspaceView",
+    "fields": [
+     "_chordModifiersButtonState"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.WorkspaceView",
+    "fields": [
+     "_state",
+     "_toolbarHorizontalPadding"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SongEmptyPlaceholder",
+    "fields": [
+     "_scalePickerScale",
+     "_scalePickerPresented",
+     "_settings",
+     "_song",
+     "_workspaceState",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_selectedScale"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordCollectionState",
+    "fields": [
+     "sections"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.DegreesView",
+    "fields": [
+     "pickStyle",
+     "onPick: (__C.MRChord) -> ()",
+     "header: () -> A",
+     "footer: () -> B",
+     "_state",
+     "_chordModifiers",
+     "_selectedScale"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SettingsSplitView",
+    "fields": [
+     "__currentSection",
+     "__vis",
+     "_shouldInjectBackButton",
+     "_executableType"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.SettingsSuperSection",
+    "fields": [
+     "main",
+     "midi",
+     "purchases",
+     "app"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.SettingsSection",
+    "fields": [
+     "general",
+     "userinterface",
+     "guitar",
+     "audio",
+     "sync",
+     "export",
+     "midiInput",
+     "midiOutput",
+     "midiBluetooth",
+     "application",
+     "purchases"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.AppExtensionButtons",
+    "fields": [
+     "popoverDeploymentDirection",
+     "__informationAlertPresented",
+     "__instrumentPickerPresented",
+     "__settingsPresented",
+     "__exportSheetPresented",
+     "_doc",
+     "_exporter",
+     "_importer",
+     "_instrument"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.BluetoothSettingsView",
+    "fields": [
+     "_accessControl",
+     "_purchaseInvitation"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SuggesterCustomStoreView",
+    "fields": [
+     "_store",
+     "_accessControl",
+     "__manageSubscriptionsPresented"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.VerifyDiscountEligibilityButton",
+    "fields": [
+     "_store",
+     "__errorPresented"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.AlterationIntervalsState",
+    "fields": [
+     "_chord"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SuggesterStoreExplanationView",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.TextMarkerEditorSheet",
+    "fields": [
+     "observableSongItem",
+     "_song",
+     "_text"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.BorrowView",
+    "fields": [
+     "_state"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SectionIndicatorView",
+    "fields": [
+     "sectionMarker: __C.MRSectionMarker?"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordCollectionSectionView",
+    "fields": [
+     "state",
+     "scale: __C.MRScale?",
+     "pickStyle",
+     "onPick: (__C.MRChord) -> ()",
+     "unlockCondition: ((Swift.Int) -> Swift.Bool)?",
+     "onToggle: () -> ()",
+     "_sectionHeaderSpacing"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ToolsScaleSelectorView",
+    "fields": [
+     "_state",
+     "_musicPlayer",
+     "_settings",
+     "__scalePickerSheetPresented"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ScaleOrChordPickerButton",
+    "fields": [
+     "_scale",
+     "_chord",
+     "_settings",
+     "__scalePickerPresented",
+     "__chordPickerPresented"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.AudioOutputDeviceButton",
+    "fields": [
+     "_doc"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.MIDIStormProtectorButton",
+    "fields": [
+     "__dialogPresented",
+     "_midiStormProtector"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordCollectionSectionContentsView",
+    "fields": [
+     "chords: [__C.MRChord]",
+     "scale: __C.MRScale?",
+     "pickStyle",
+     "onPick: (__C.MRChord) -> ()",
+     "unlockCondition: ((Swift.Int) -> Swift.Bool)?",
+     "_instrument",
+     "_chordModifiers"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.DocumentEditorView",
+    "fields": [
+     "putDocumentTitleInNavigationTitle: Swift.Bool",
+     "displayUI: Swift.Bool",
+     "_settings",
+     "_doc",
+     "_song",
+     "_songSequencerState",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_workspaceState",
+     "_undoManager",
+     "_executableType",
+     "_documentEditorState",
+     "__instrumentPickerPresented",
+     "__exportSheetPresented",
+     "_openWindow",
+     "_minimumSongWidth",
+     "_idealSongWidth",
+     "_minimumSuggestionsWidth"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SectionMarkerEditorSheet",
+    "fields": [
+     "observableSongItem",
+     "_title",
+     "_playCount",
+     "__colorCode",
+     "_observableSong"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordButtonContextMenu",
+    "fields": [
+     "chord: __C.MRChord",
+     "_document",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_exporter",
+     "_settings",
+     "_chordModifiers"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.DocumentEditorState",
+    "fields": [
+     "_macOSEditing",
+     "_macOSUseAppKitForSongList"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.OverridenAccessControlEnvironment",
+    "fields": [
+     "_accessControl"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.DegreesWorkspaceView",
+    "fields": [
+     "_state",
+     "_settings",
+     "_doc",
+     "_chordModifiers"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.InstrumentPickerSheet",
+    "fields": [
+     "_doc",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_musicPlayer",
+     "_dismiss",
+     "_selectedInstrument"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordBuilderInvitationView",
+    "fields": [
+     "_workspaceState"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.OctaveShiftSetting",
+    "fields": [
+     "label: A",
+     "_octaveShift",
+     "_settings"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ImportExportButton",
+    "fields": [
+     "popoverDeploymentDirection",
+     "_exportSheetPresented",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_importer"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.DocumentEditorToolbarContent",
+    "fields": [
+     "_instrumentPickerPresented",
+     "_exportSheetPresented",
+     "onShowSettings: () -> ()",
+     "prefix: () -> A",
+     "_undoManager",
+     "_songSequencerState"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordEventParametersSheet",
+    "fields": [
+     "observableSongItem",
+     "_song",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_musicPlayer",
+     "_selectedScale",
+     "_arpeggiation",
+     "_isCustomDuration",
+     "_duration",
+     "_fineDuration"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.ChordBuilderButton",
+    "fields": [
+     "play",
+     "copy",
+     "add"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordBuilderView",
+    "fields": [
+     "footerForStandardTab: () -> A",
+     "buttons: Shy<DocumentEditor.ChordBuilderButton>G",
+     "_state",
+     "_doc",
+     "_settings",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_chordModifiers",
+     "_musicPlayer",
+     "_instrument",
+     "_tuning",
+     "_selectedScale",
+     "_documentEditingDisabled",
+     "_toaster",
+     "_pianoHeight",
+     "horizontalEdgesWidth: Swift.Double"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.WorkspaceSection",
+    "fields": [
+     "none",
+     "suggestions",
+     "degrees",
+     "borrow",
+     "classic",
+     "modulation",
+     "standard",
+     "builder",
+     "detector",
+     "reader",
+     "alter"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.WorkspaceSectionGroup",
+    "fields": [
+     "none",
+     "scaleRelated",
+     "chordRelated",
+     "alteration"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.StandardChordsView",
+    "fields": [
+     "_doc",
+     "_chordModifiers",
+     "_state",
+     "_settings",
+     "_selectedScale"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordSuggestionsToolView",
+    "fields": [
+     "_state",
+     "__suggestionsState"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.EmptyContentMessageView",
+    "fields": [
+     "content: () -> A"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.PlaybackSettingsAudioView",
+    "fields": [
+     "_doc"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ProFeaturePill",
+    "fields": [
+     "prominent: Swift.Bool"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.CustomList",
+    "fields": [
+     "rowBuilder",
+     "_doc",
+     "_song",
+     "_accessControl",
+     "_settings",
+     "_documentEditorState",
+     "_workspaceState",
+     "_alterationsState",
+     "_purchaseInvitation",
+     "_exporter",
+     "_songSequencerState",
+     "_songSequencerPosition",
+     "_musicPlayer",
+     "_executableType"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.WorkspaceEnvironmentModifier",
+    "fields": [
+     "_suggestionsState",
+     "_alterationsState",
+     "_degreesState",
+     "_chordDetectorState",
+     "_standardChordsState",
+     "_borrowState",
+     "_chordBuilderState",
+     "_modulationState",
+     "_chordModifiers",
+     "_chordModifiersButtonState",
+     "_workspaceState"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.BluetoothMIDIDevicesView",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordDetectorToolView",
+    "fields": [
+     "_state"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ExportSettingsView",
+    "fields": [
+     "_settings"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.SongItemContextualMenuState",
+    "fields": [
+     "_idsToTranspose",
+     "_sectionIdToTranspose"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ScaleDetectionInvitationView",
+    "fields": [
+     "_detectScalePresented",
+     "_verticalSizeClass",
+     "_horizontalSizeClass",
+     "__visible"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordDetectorView",
+    "fields": [
+     "_state",
+     "_instrument"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordEventCellContent",
+    "fields": [
+     "observableSongItem",
+     "isBeingAltered: Swift.Bool",
+     "unlocked: Swift.Bool",
+     "timingButtonActive: Swift.Bool",
+     "onAlter: () -> ()",
+     "_settings",
+     "_instrument",
+     "_tuning",
+     "_romanNumeralWidth",
+     "_alterButtonCornerRadius"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ClassicProgressionRowView",
+    "fields": [
+     "pattern: __C.MRClassicPattern",
+     "isPlaying: Swift.Bool",
+     "_doc",
+     "_settings",
+     "_chordModifiers",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_toaster",
+     "_horizontalSizeClass",
+     "_selectedScale",
+     "_documentEditingDisabled",
+     "_musicPlayer"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.CollectionSectionHeader",
+    "fields": [
+     "title: __C.MRLocalizedString?",
+     "collapsed: Swift.Bool?",
+     "action: (() -> ())?"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordBuilderSheet",
+    "fields": [
+     "_chord",
+     "buttons: Shy<DocumentEditor.ChordBuilderButton>G",
+     "_chordBuilderState",
+     "_dismiss"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SuggesterPurchaseInvitationView",
+    "fields": [
+     "__storeIsPresented",
+     "_store",
+     "_dismiss",
+     "_openWindow"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SongRowView",
+    "fields": [
+     "item",
+     "_doc",
+     "_settings",
+     "_workspaceState",
+     "_alterationsState",
+     "_songSequencerPosition",
+     "_songSequencerState",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_instrument",
+     "_tuning",
+     "_standardCellHeight",
+     "_guitarCellHeight"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.MoveCorrect",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.LoadingGuitarChordShapeView",
+    "fields": [
+     "tuning: __C.MRGuitarTuning"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.MelodyScaleDetectorKeyboardView",
+    "fields": [
+     "_detector",
+     "_doc",
+     "_musicPlayer",
+     "_pianoHeight",
+     "horizontalEdgesWidth: Swift.Double"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.MelodyScaleDetectorList",
+    "fields": [
+     "_detector",
+     "_musicPlayer",
+     "__selection"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.MelodyScaleDetectorListRow",
+    "fields": [
+     "scale: __C.MRScale",
+     "userEnteredScale: __C.MRScale?",
+     "overridenUnlockedState: Swift.Bool?",
+     "_settings",
+     "_accessControl"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordReaderView",
+    "fields": [
+     "_doc",
+     "_settings",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_selectedScale",
+     "__text",
+     "__recognizedChords",
+     "__infoMessagePresented",
+     "__errorMessagePresented",
+     "__errorMessage",
+     "_toaster",
+     "_isFocused"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.KeyboardChordDetectorView",
+    "fields": [
+     "_detectedChords",
+     "_error",
+     "_pianoState",
+     "_chordDetector",
+     "_doc",
+     "_musicPlayer",
+     "_pianoHeight",
+     "horizontalEdgesWidth: Swift.Double"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.TransposeSemitonesView",
+    "fields": [
+     "_semitones",
+     "formatAccordingToSelectedScale: Swift.Bool",
+     "_settings",
+     "_selectedScale",
+     "_dismiss",
+     "validRange: Swift.Range<Swift.Int>"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ClassicProgressionsView",
+    "fields": [
+     "_selectedScale",
+     "_previewSequencerState",
+     "_toaster"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ObservableKeyboardScaleDetector",
+    "fields": [
+     "_detectedScales",
+     "_error",
+     "_pianoState",
+     "detector: __C.MRKeyboardScaleDetector?"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ObservableKeyboardScaleDetector.AsyncCallback",
+    "fields": [
+     "onUpdate: ([__C.MRScale], Swift.Bool) -> ()"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.StandardChordsState",
+    "fields": [
+     "_collectionState",
+     "associatedDependencies: <DocumentEditor.StandardChordsState.Dependencies>Sg"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.StandardChordsState.Dependencies",
+    "fields": [
+     "chordModifiers: __C.MRChordModifiers"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.TextMarkerEditorView.FocusableItem",
+    "fields": [
+     "textMarkerText"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.TextMarkerEditorView",
+    "fields": [
+     "_text",
+     "_focusedItem"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ToolsState",
+    "fields": [
+     "_currentPage",
+     "_scale",
+     "chordModifiers",
+     "chordModifiersButtonState",
+     "chordDetectorState",
+     "degreesState",
+     "melodyScaleDetectorState"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.AlterationsView",
+    "fields": [
+     "_isPresented",
+     "_state",
+     "_doc",
+     "_song",
+     "_settings",
+     "_accessControl",
+     "_chordModifiers",
+     "_instrument",
+     "_tuning"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ScaleDegreesToolView",
+    "fields": [
+     "_state"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ExportView",
+    "fields": [
+     "_doc",
+     "_purchaseInvitation",
+     "_accessControl",
+     "_exporter",
+     "_settings",
+     "__needsSynthReset"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ObservableScale",
+    "fields": [
+     "_tab",
+     "_noteEx",
+     "_scaleType",
+     "_customFormula",
+     "_customTitle"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.ObservableScale.Tab",
+    "fields": [
+     "standard",
+     "custom"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ScalePickerView",
+    "fields": [
+     "_observableScale",
+     "__pianoState",
+     "_settings",
+     "_doc",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_musicPlayer",
+     "_pianoHeight",
+     "_verticalSizeClass",
+     "horizontalEdgesWidth: Swift.Double"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ExportCommands",
+    "fields": [
+     "_accessControl",
+     "settingsModel: __C.MRSuggesterSettingsModel",
+     "_doc"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.GuitarChordShapePickerView",
+    "fields": [
+     "chord: __C.MRChord",
+     "onPick: (__C.MRGuitarChordShape?) -> ()",
+     "_accessControl",
+     "_doc",
+     "_settings",
+     "_instrument",
+     "_tuning",
+     "_selectedScale",
+     "_dismiss",
+     "__state"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SuggesterProTech",
+    "fields": [
+     "tech: __C.MRSuggesterTech"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ObservableSettings",
+    "fields": [
+     "model: __C.MRSuggesterSettingsModel"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ObservableSettingsEnvironmentModifier",
+    "fields": [
+     "_settings"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.AppLogoView",
+    "fields": [
+     "_colorScheme"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.GuitarChordDetectorView",
+    "fields": [
+     "_detectedChords",
+     "_error",
+     "_shape",
+     "_baseFret",
+     "_settings",
+     "_doc",
+     "_musicPlayer",
+     "_instrument",
+     "_tuning",
+     "_selectedScale"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SuggestionsView",
+    "fields": [
+     "_state",
+     "scale: __C.MRScale?",
+     "pickStyle",
+     "onPick: (__C.MRChord) -> ()",
+     "header: () -> A",
+     "_chordModifiers",
+     "_accessControl"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SongItemContextualMenuModifier",
+    "fields": [
+     "_state"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SyncSettingsView",
+    "fields": [
+     "_settings"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.SuggestionsState",
+    "fields": [
+     "includeSpecials: Swift.Bool",
+     "_collectionState",
+     "associatedDependencies: <DocumentEditor.SuggestionsState.Dependencies>Sg"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SuggestionsState.Dependencies",
+    "fields": [
+     "scale: __C.MRScale?",
+     "chordModifiers: __C.MRChordModifiers",
+     "accessControl: __C.MRAccessControl"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.WorkspaceSheet",
+    "fields": [
+     "_workspaceState",
+     "_workspaceIconSize"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.BeatButton",
+    "fields": [
+     "_timeSignature",
+     "_tempo",
+     "__presented",
+     "_beatIndicatorBottomPadding"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.BeatIndicator",
+    "fields": [
+     "_timeSignature",
+     "_beatService",
+     "__beatIndicatorColor",
+     "_smallIndicatorSize",
+     "_largeIndicatorSize"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordCollectionSectionState",
+    "fields": [
+     "id",
+     "chordGroup: __C.MRChordGroup",
+     "collapsed: Swift.Bool",
+     "collapsible: Swift.Bool"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ChordModifiersButtonState",
+    "fields": [
+     "_popoverPresented",
+     "_buttonIsProminent"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordModifiersButton",
+    "fields": [
+     "appearance: <DocumentEditor.ChordModifiersButtonAppearance>",
+     "_state",
+     "_chordModifiers",
+     "_horizontalSizeClass"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.ChordModifiersButtonAppearance",
+    "fields": [
+     "toolbar",
+     "customToolbar",
+     "glass",
+     "bordered",
+     "plain"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.MIDITransferableChordEventItemProvider.MIDITransferableChordEventWithoutFileURLDataRepresentation",
+    "fields": [
+     "midiProvider"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.MIDITransferableChordEventItemProvider",
+    "fields": [
+     "midiProvider"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.Dummy",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.GuitarSettingsView",
+    "fields": [
+     "_settings"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.BeatView",
+    "fields": [
+     "_timeSignature",
+     "_tempo"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordView",
+    "fields": [
+     "chord: __C.MRChord",
+     "scale: __C.MRScale?",
+     "instrumentClass: __C.MRInstrumentClass?",
+     "tuning: __C.MRGuitarTuning?",
+     "pickStyle",
+     "onPick: () -> ()",
+     "pickDisabled: Swift.Bool",
+     "unlocked: Swift.Bool",
+     "cornerRadius",
+     "_settings",
+     "_romanNumeralsWidth",
+     "_horizontalPadding",
+     "_keyboardCellHeight",
+     "_guitarCellHeight",
+     "_guitarDiagramSize",
+     "__loading",
+     "__shape"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordScaleDetectorView",
+    "fields": [
+     "onPick: (__C.MRScale) -> ()",
+     "_doc",
+     "__detectedScaleGroup"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.MatchedScaleCell",
+    "fields": [
+     "item: __C.MRScaleDetectorMatchedScale",
+     "onPick: (__C.MRScale) -> ()",
+     "__highlighted",
+     "_settings",
+     "_doc",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_musicPlayer",
+     "_trebleClefHeight",
+     "_cellHeight"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.GuitarInstrumentView",
+    "fields": [
+     "_settings",
+     "_instrument",
+     "_tuning",
+     "_selectedScale",
+     "_verticalSizeClass",
+     "__tuningPickerPresented",
+     "standardHeight",
+     "compactHeight"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.MelodyScaleDetectorState",
+    "fields": [
+     "detector"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.MelodyScaleDetectorView",
+    "fields": [
+     "_state"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.MIDIInputSettingsView",
+    "fields": [
+     "_settings"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.InternalMIDIInputSettingsView",
+    "fields": [
+     "_settings",
+     "_midiSources",
+     "_accessControl",
+     "_purchaseInvitation"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SectionMarkerCell",
+    "fields": [
+     "observableSongItem",
+     "_doc",
+     "_song",
+     "_musicPlayer",
+     "__isEditorPresented"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.MelodyScaleDetectorToolView",
+    "fields": [
+     "_state"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SongRowBackgroundView",
+    "fields": [
+     "item",
+     "highlighted: Swift.Bool",
+     "beingPlayed: Swift.Bool"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.TransposeSongSheet",
+    "fields": [
+     "__semitones",
+     "_doc"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.PurchaseInvitationEnvironment",
+    "fields": [
+     "_observablePurchaseInvitation"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ContextualMenuOperations",
+    "fields": [
+     "song",
+     "settings: <DocumentEditor.ObservableSettings>",
+     "accessControl",
+     "purchaseInvitation"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SongItemContextualMenuItems",
+    "fields": [
+     "ids: Swift.Set<Swift.String>",
+     "_doc",
+     "_song",
+     "_settings",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_exporter",
+     "_contextualMenuState",
+     "_musicPlayer",
+     "_instrument",
+     "_executableType"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.MIDIOutputSettingsView",
+    "fields": [
+     "_settings"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.InternalMIDIOutputSettingsView",
+    "fields": [
+     "_settings",
+     "_midiDestinations",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_executableType"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordCollectionView",
+    "fields": [
+     "_state",
+     "scale: __C.MRScale?",
+     "pickStyle",
+     "unlockCondition: ((Swift.Int) -> Swift.Bool)?",
+     "onPick: (__C.MRChord) -> ()",
+     "header: () -> A",
+     "footer: () -> B",
+     "_settings",
+     "_horizontalPadding",
+     "_itemMinimumWidth",
+     "_interItemSpacing"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.GuitarTuningPickerView",
+    "fields": [
+     "_selectedTuning",
+     "_instrument",
+     "_dismiss",
+     "_accessControl",
+     "__customTuningPresented",
+     "_itemHeight",
+     "_itemMinimumWidth"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.DegreesState",
+    "fields": [
+     "_chordCollectionState",
+     "associatedDependencies: <DocumentEditor.DegreesState.Dependencies>Sg"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.DegreesState.Dependencies",
+    "fields": [
+     "scale: __C.MRScale?",
+     "chordModifiers: __C.MRChordModifiers"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.CustomGuitarTuningView",
+    "fields": [
+     "_tuning",
+     "_settings",
+     "_musicPlayer",
+     "_selectedScale",
+     "__stringEditorPresented",
+     "__editedStringIndex"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.CustomListCoordinator",
+    "fields": [
+     "dataSource",
+     "contextualMenu",
+     "currentInstrumentClass: __C.MRInstrumentClass?",
+     "currentSequencerState: __C.MRSequencerStatus",
+     "currentFocusedItemId: Swift.String?",
+     "hashes: <DocumentEditor.CustomListCoordinator.HashStore>",
+     "currentlyAlteredListId: Swift.String?"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.CustomListCoordinator.HashStore",
+    "fields": [
+     "dictionary: [Swift.String : Swift.Int]"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ApplicationSettingsView",
+    "fields": [
+     "_openURL",
+     "__showRatingConfirmation",
+     "__positiveConfirmation",
+     "__negativeConfirmation",
+     "ourWebsite",
+     "facebook",
+     "termsOfUse",
+     "appStoreRatings",
+     "contactUs",
+     "privacyPolicy",
+     "chordPadX2",
+     "chordShapes"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.AudioUnitExtensionMainView",
+    "fields": [
+     "__lockedModeAlertPresented",
+     "__appearedAlready",
+     "__displayUI",
+     "_accessControl",
+     "_doc"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.GeneralSettingsView",
+    "fields": [
+     "_settings"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordEventCell",
+    "fields": [
+     "observableSongItem",
+     "_doc",
+     "_song",
+     "_accessControl",
+     "_alterationState",
+     "_workspaceState",
+     "_instrument",
+     "_tuning",
+     "__timingPropertiesPresented"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordModifiersView",
+    "fields": [
+     "_chordModifiers",
+     "_settings",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_dismiss"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ToolsSidebarView",
+    "fields": [
+     "_state",
+     "horizontalSizeClassOfParent"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.PlaybackSettingsHumanizationView",
+    "fields": [
+     "_doc",
+     "_musicPlayer",
+     "_documentEditingDisabled",
+     "__editedHumanization"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ToolsView",
+    "fields": [
+     "documentModel: __C.MRSuggesterProDocumentModel",
+     "tech: <DocumentEditor.SuggesterProTech>",
+     "_state",
+     "_settings",
+     "onEnterPage"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.SongItemProvider",
+    "fields": [
+     "doc",
+     "format",
+     "accessControl",
+     "purchaseInvitation",
+     "settings: <DocumentEditor.ObservableSettings>",
+     "$__lazy_storage_$_url"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.TransposeItemsSheet",
+    "fields": [
+     "ids: Swift.Set<Swift.String>",
+     "__semitones",
+     "_song",
+     "_settings",
+     "_accessControl",
+     "_purchaseInvitation"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ToolsPageSiriTipView",
+    "fields": [
+     "page",
+     "scale: __C.MRScale?",
+     "_settings"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.FretboardTuningButton",
+    "fields": [
+     "_tuning",
+     "_settings",
+     "__tuningIsPresented"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.TuningPickerSheet",
+    "fields": [
+     "_tuning",
+     "_accessControl",
+     "_purchaseInvitation",
+     "__selectedTuning"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.MIDIExportHelper",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.WorkspaceSectionBody",
+    "fields": [
+     "section",
+     "_isPresented"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.RomanNumeralsView",
+    "fields": [
+     "chord: __C.MRChord",
+     "scale: __C.MRScale?",
+     "_settings",
+     "_dynamicTypeSize"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.CustomListContextualMenu",
+    "fields": [
+     "menu: __C.NSMenu?",
+     "tableView: weak __C.NSTableView?",
+     "song",
+     "doc",
+     "documentEditorState: <DocumentEditor.DocumentEditorState>",
+     "settings: <DocumentEditor.ObservableSettings>",
+     "accessControl",
+     "purchaseInvitation",
+     "exporter",
+     "operations: <DocumentEditor.ContextualMenuOperations>",
+     "executableType",
+     "musicPlayer: __C.MRMusicPlayer",
+     "ids: Swift.Set<Swift.String>"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ScaleMarkerCell",
+    "fields": [
+     "observableSongItem",
+     "_doc",
+     "_song",
+     "_settings",
+     "_accessControl",
+     "_workspaceState",
+     "_alterationsState",
+     "_trebleClefImageSize"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ObservableKeyboardChordDetector",
+    "fields": [
+     "_detectedChords",
+     "_error",
+     "_pianoState",
+     "detector: __C.MRKeyboardChordDetector?"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ObservableKeyboardChordDetector.AsyncCallback",
+    "fields": [
+     "onUpdate: ([__C.MRChord], Swift.Bool) -> ()"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.CustomGuitarTuningStringView",
+    "fields": [
+     "_castNoteEx",
+     "_settings",
+     "_selectedScale",
+     "choices: [__C.MRCastNoteEx]"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SuggesterProductView",
+    "fields": [
+     "product",
+     "_store",
+     "_colorScheme",
+     "__busyPurchasing",
+     "_buyButtonPaddingHorizontal",
+     "_keyWidth",
+     "_buyButtonPaddingVertical"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ChordBuilderState",
+    "fields": [
+     "_pianoState",
+     "_tab",
+     "_note",
+     "_chordType",
+     "_altBass",
+     "_voicing",
+     "_guitarChordShape",
+     "_octaveShift",
+     "_customFormula",
+     "_rootless"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.ChordBuilderState.Tab",
+    "fields": [
+     "standard",
+     "custom"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.SuggesterObservableStore",
+    "fields": []
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.SuggesterObservableStore.SuggesterProduct",
+    "fields": [
+     "fullUnlock",
+     "fullUnlockUpgrade",
+     "iOSUnlock",
+     "iOSUnlockUpgrade",
+     "macOSUnlock",
+     "macOSUnlockUpgrade",
+     "monthlySubscription"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.DetectedChordCell",
+    "fields": [
+     "chord: __C.MRChord",
+     "_settings",
+     "_doc",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_chordModifiers",
+     "_toaster",
+     "_musicPlayer",
+     "_instrument",
+     "_tuning",
+     "_selectedScale",
+     "_documentEditingDisabled",
+     "__highlighted",
+     "_romanNumeralWidth"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.InstrumentPickerView",
+    "fields": [
+     "_selectedInstrument",
+     "onPick: (__C.MRInstrument) -> ()",
+     "_accessControl",
+     "_dismiss",
+     "_executableType",
+     "_selectedInstrumentGroup",
+     "_itemHeight",
+     "_itemMinimumWidth"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SongOperations",
+    "fields": [
+     "song",
+     "settings: <DocumentEditor.ObservableSettings>",
+     "accessControl",
+     "purchaseInvitation"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordEventParametersButton",
+    "fields": [
+     "observableSongItem",
+     "active: Swift.Bool",
+     "__parametersPresented",
+     "_durationButtonWidth",
+     "_buttonCornerRadius"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.AlterationIntervalsView",
+    "fields": [
+     "originalChordEvent: __C.MRChordEvent",
+     "onPick: (__C.MRChord) -> ()",
+     "_state",
+     "_doc",
+     "_chordModifiers",
+     "_selectedScale"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ObservableSong",
+    "fields": [
+     "songModel: __C.MRSongModel",
+     "items",
+     "_visibleItems",
+     "_selection",
+     "_focusedItemId"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ObservableSong.Item",
+    "fields": [
+     "songItem: __C.MRSongItem",
+     "precedingScaleMarker: __C.MRScaleMarker?",
+     "precedingSectionMarker: __C.MRSectionMarker?"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SongItemsView",
+    "fields": [
+     "_doc",
+     "_song",
+     "_songSequencerState",
+     "_songSequencerPosition",
+     "_settings",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_workspaceState",
+     "_alterationsState",
+     "_musicPlayer",
+     "_documentEditingDisabled",
+     "_documentEditorState"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.BorrowState",
+    "fields": [
+     "_hostScaleDetermined",
+     "_hostScale",
+     "_scalePalette",
+     "_suggestionsState",
+     "associatedHostScaleSelectionDependencies: <DocumentEditor.BorrowState.HostScaleSelectionDependencies>Sg"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.BorrowState.HostScaleSelectionDependencies",
+    "fields": [
+     "contextScale: __C.MRScale"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordBuilderStandardTabView",
+    "fields": [
+     "footer: () -> A",
+     "_state",
+     "_settings",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_instrument",
+     "_tuning",
+     "_selectedScale",
+     "__guitarChordShapePickerPresented"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SongView",
+    "fields": [
+     "_doc",
+     "_song",
+     "_documentEditorState",
+     "_settings",
+     "_workspaceState",
+     "_songSequencerState",
+     "_selectedScale",
+     "_documentEditingDisabled",
+     "__scalePickerPresented",
+     "__scaleDetectorPresented",
+     "_scalePickerScale",
+     "_alertDialogAdapter",
+     "_toolbarHorizontalPadding"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.CustomDurationSections",
+    "fields": [
+     "_fineDuration"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.OverridenObservableAccessControl",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SectionMarkerEditorView",
+    "fields": [
+     "_title",
+     "_playCount",
+     "_colorCode"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.PlaybackSettingsView.Page",
+    "fields": [
+     "audio",
+     "arpeggiation",
+     "humanization"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.PlaybackSettingsView",
+    "fields": [
+     "__currentPage",
+     "__vis"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.FretboardToolView",
+    "fields": [
+     "_settings",
+     "_document",
+     "__tuning",
+     "__scale",
+     "__chord",
+     "__tags",
+     "__highlightedNote"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.TransferableMIDIChordEvent",
+    "fields": [
+     "midiProvider"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.FontLoader",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.BorrowHostScaleSelectionView",
+    "fields": [
+     "_state",
+     "_chordModifiers",
+     "_accessControl",
+     "_selectedScale",
+     "__scalePickerPresented"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.AlterationDependencies",
+    "fields": [
+     "originalChord: __C.MRChord",
+     "scaleContext: __C.MRScale?",
+     "precedingChord: __C.MRChord?",
+     "instrumentClass: __C.MRInstrumentClass",
+     "tuning: __C.MRGuitarTuning?",
+     "guitarDiagramSize: __C.MRGuitarDiagramSize",
+     "chordModifiers: __C.MRChordModifiers",
+     "accessControl: __C.MRAccessControl"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.AlterationsState",
+    "fields": [
+     "_alteredItemId",
+     "_tab",
+     "_alterations",
+     "_currentTabCollectionState",
+     "_alterationIntervalsState",
+     "associatedDependencies"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.AlterationsState.AlterationTab",
+    "fields": [
+     "Qualities",
+     "Voicings",
+     "AltBass",
+     "Intervals"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ScalePickerSheet",
+    "fields": [
+     "_scale",
+     "_editedScale",
+     "onConfirm: (() -> ())?",
+     "_accessControl",
+     "_purchaseInvitation"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SelectedScaleSuggestionsView",
+    "fields": [
+     "_state",
+     "_doc",
+     "_settings",
+     "_chordModifiers",
+     "_accessControl",
+     "_selectedScale"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.SuggesterStoreObservableAccessControl",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.GuitarTuningPickerSheet",
+    "fields": [
+     "_doc",
+     "_accessControl",
+     "_purchaseInvitation",
+     "__selectedTuning"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ScaleView",
+    "fields": [
+     "scale: __C.MRScale",
+     "contextScale: __C.MRScale?",
+     "pickStyle",
+     "onPick: () -> ()",
+     "animatesToTheLeft: Swift.Bool",
+     "__beingPicked",
+     "_settings",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_musicPlayer",
+     "_documentEditingDisabled",
+     "_cellPadding",
+     "_cornerRadius",
+     "_cellHeight"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ImportExportEnvironment",
+    "fields": [
+     "__showError",
+     "__error",
+     "_exporter",
+     "_importer",
+     "_doc",
+     "_settings",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_instrument",
+     "_selectedScale"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.PickStyle",
+    "fields": [
+     "add",
+     "check",
+     "none"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.AudioSettingsView",
+    "fields": [
+     "_settings",
+     "_executableType"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "ImportError",
+    "fields": [
+     "unsupportedLegacyDocument",
+     "invalidData"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.SongItemWriter",
+    "fields": [
+     "row: Swift.Int",
+     "item",
+     "dataSource"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordButton",
+    "fields": [
+     "chord: __C.MRChord",
+     "scale: __C.MRScale?",
+     "arpeggiation: __C.MRArpeggiation?",
+     "pickStyle",
+     "onPick: () -> ()",
+     "__beingPicked",
+     "_doc",
+     "_settings",
+     "_songSequencerState",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_chordModifiers",
+     "_musicPlayer",
+     "_instrument",
+     "_tuning",
+     "_keyboardCellHeight",
+     "_guitarCellHeight",
+     "_cornerRadius"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ScaleSettingsImplementation",
+    "fields": [
+     "hideInconvenientEnharmonicScales: Swift.Bool",
+     "showScaleDegreeWhenPickingNote: Swift.Bool"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ModulationState",
+    "fields": [
+     "_destinationScale",
+     "_scalePickerPresented",
+     "_scalePalette",
+     "associatedDependencies: <DocumentEditor.ModulationState.Dependencies>Sg"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ModulationState.Dependencies",
+    "fields": [
+     "sourceScale: __C.MRScale?",
+     "settings: <DocumentEditor.ScaleSettingsImplementation>"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordIntervalsFormSections",
+    "fields": [
+     "showRoot: Swift.Bool",
+     "_root",
+     "_formula",
+     "_rootless",
+     "_settings",
+     "_selectedScale"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.HoverHighlightBackgroundViewModifier",
+    "fields": [
+     "highlightColor",
+     "__hovered"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.HoverHighlightGlassViewModifier",
+    "fields": [
+     "shape: A",
+     "__hovered"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.PlaybackSettingsArpeggiationView",
+    "fields": [
+     "_doc",
+     "_songSequencerState",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_musicPlayer",
+     "_documentEditingDisabled"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ObservableImporter",
+    "fields": [
+     "_presentedForLegacy",
+     "_presentedForStandard"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ToolsSplitView",
+    "fields": [
+     "_state",
+     "_doc",
+     "_horizontalSizeClass",
+     "__instrumentSheetPresented",
+     "__vis"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.AlterationCollectionPage",
+    "fields": [
+     "_state",
+     "scale: __C.MRScale?",
+     "unlockCondition: ((Swift.Int) -> Swift.Bool)?",
+     "onPick: (__C.MRChord) -> ()"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ObservableSequencerPosition",
+    "fields": [
+     "sequencer: __C.MRSequencer?",
+     "_currentItemId: Swift.String?",
+     "_currentSectionId: Swift.String?",
+     "_$observationRegistrar"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.DurationView",
+    "fields": [
+     "duration: __C.MRFineDuration",
+     "durationRecipient: __C.MRDurationRecipient"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.CustomListRow",
+    "fields": [
+     "value: Swift.Int"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SongPlayButton",
+    "fields": [
+     "_songSequencerState",
+     "_musicPlayer",
+     "imageWidth: Swift.Double"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.WorkspaceSectionPicker",
+    "fields": [
+     "_state",
+     "_workspaceIconSize"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ModulationView",
+    "fields": [
+     "_state",
+     "_doc",
+     "_settings",
+     "_workspaceState",
+     "_selectedScale"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.AlertDialogAdapter",
+    "fields": [
+     "_alertDialogPresented",
+     "message: __C.MRLocalizedString",
+     "title: __C.MRLocalizedString",
+     "positive: __C.MRLocalizedString",
+     "negative: __C.MRLocalizedString",
+     "completion: (__C.MRAlertDialogProviderResult) -> ()"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.GuitarTuningCellView",
+    "fields": [
+     "tuning: __C.MRGuitarTuning",
+     "_selectedTuning",
+     "_settings",
+     "_accessControl",
+     "_musicPlayer",
+     "_selectedScale"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.PickerCardView",
+    "fields": [
+     "title: A",
+     "subtitle: B",
+     "transferable: C",
+     "onTap: () -> ()"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordEventMIDIProvider",
+    "fields": [
+     "chordEvent: __C.MRChordEvent",
+     "scale: __C.MRScale?",
+     "instrumentClass: __C.MRInstrumentClass",
+     "tuning: __C.MRGuitarTuning?",
+     "timeSignature: __C.MRTimeSignature",
+     "tempo",
+     "defaultArpeggiation: __C.MRArpeggiation",
+     "defaultHumanization: __C.MRHumanization",
+     "settings: __C.MRFormattingSettings & __C.MRGuitarSettings & __C.MRMIDIExportSettings & __C.MRVoicingSettings",
+     "accessControl",
+     "purchaseInvitation"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.PlaybackSettingsButton",
+    "fields": []
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ObservableDocument",
+    "fields": [
+     "documentModel: __C.MRSuggesterProDocumentModel",
+     "tech: <DocumentEditor.SuggesterProTech>",
+     "listenedProperties: [__C.MRSuggesterProDocumentModelProperty]"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ObservableDocumentEnvironmentModifier",
+    "fields": [
+     "_observableDocument",
+     "_observableSong",
+     "_observableSongSequencerState",
+     "_observablePreviewSequencerState",
+     "_observableSongSequencerPosition",
+     "_observableBeatService",
+     "_observableMIDIStormProtector",
+     "setSceneFocusedObject: Swift.Bool"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.__Key_songSequencerState",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.__Key_songSequencerPosition",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.__Key_previewSequencerState",
+    "fields": []
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ChordDetectorState",
+    "fields": [
+     "_detectedChords",
+     "_error",
+     "_keyboardChordDetector",
+     "_guitarShape",
+     "_guitarBaseFret",
+     "associatedDependencies: <DocumentEditor.ChordDetectorState.Dependencies>Sg"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ChordDetectorState.Dependencies",
+    "fields": [
+     "instrumentClass: __C.MRInstrumentClass?"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.CustomListDataSourceAndDelegate",
+    "fields": [
+     "tableView: weak __C.NSTableView?",
+     "song",
+     "doc",
+     "settings: <DocumentEditor.ObservableSettings>",
+     "workspaceState",
+     "alterationsState",
+     "sequencerState",
+     "sequencerPosition",
+     "accessControl",
+     "purchaseInvitation",
+     "operations: <DocumentEditor.SongOperations>"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.UndoRedoCommands",
+    "fields": [
+     "_undoCommandAction",
+     "_redoCommandAction"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.CommandAction",
+    "fields": [
+     "disabled: Swift.Bool",
+     "action: () -> ()"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.UndoCommandActionFocusedValues",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.RedoCommandActionFocusedValues",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.ScaleCollectionView",
+    "fields": [
+     "contextScale: __C.MRScale?",
+     "scaleGroups: [__C.MRScaleGroup]",
+     "pickStyle",
+     "onPick: (__C.MRScale) -> ()",
+     "animatesToTheLeft: Swift.Bool",
+     "_sectionHeaderSpacing",
+     "_itemMinimumWidth",
+     "_cellHeight"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.TransposeSectionSheet",
+    "fields": [
+     "sectionId: Swift.String",
+     "__semitones",
+     "_song"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.TextMarkerCell",
+    "fields": [
+     "observableSongItem",
+     "editing: Swift.Bool",
+     "_purchaseInvitation",
+     "_accessControl",
+     "__editorPresented",
+     "_cellHeight"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.BorrowSuggestionsView",
+    "fields": [
+     "_state",
+     "_doc",
+     "_settings",
+     "_chordModifiers",
+     "_accessControl"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.WorkspaceState",
+    "fields": [
+     "_workspacePanelVisible",
+     "_sheetPresented",
+     "_workspaceSection",
+     "suggestionsState",
+     "alterationsState",
+     "degreesState",
+     "chordDetectorState",
+     "chordModifiers"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ObservableExporter",
+    "fields": [
+     "_presentedForDocument",
+     "_presentedForChordEvent",
+     "exportFormat",
+     "chordEventToExport: __C.MRChordEvent?"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.ObservableExporter.ExportFormat",
+    "fields": [
+     "text",
+     "midi",
+     "audio",
+     "suggester2"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SongScaleButton",
+    "fields": [
+     "onPickNewScale: () -> ()",
+     "onDetectScale: () -> ()",
+     "_workspaceState",
+     "_documentEditingDisabled",
+     "__transposeSongPresented"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "DocumentEditor.ToolsPage",
+    "fields": [
+     "suggestions",
+     "scaleDegrees",
+     "chordDetector",
+     "melodyScaleDetector",
+     "fretboard"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.CustomGuitarTuningSheet",
+    "fields": [
+     "_document",
+     "_purchaseInvitation",
+     "_accessControl",
+     "_tuning",
+     "onConfirm: (__C.MRGuitarTuning) -> ()"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.SongFloatingToolbar",
+    "fields": [
+     "_settings",
+     "_doc",
+     "_song",
+     "_workspaceState",
+     "_accessControl",
+     "_purchaseInvitation",
+     "_executableType",
+     "_documentEditingDisabled",
+     "__textMarkerCreatorPresented",
+     "__sectionMarkerCreatorPresented"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "DocumentEditor.LazyProgressView",
+    "fields": [
+     "delay",
+     "__displayed"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "DocumentEditor.ResourceBundleClass",
+    "fields": []
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.BundleFinder",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "__C.CGSize",
+    "fields": [
+     "width",
+     "height"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "__C.mach_timebase_info",
+    "fields": [
+     "numer",
+     "denom"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "__C.CGRect",
+    "fields": [
+     "origin: <__C.CGPoint>",
+     "size: <__C.CGSize>"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "__C.CGPoint",
+    "fields": [
+     "x",
+     "y"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.DocumentEditingDisabledEnvironmentKey",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.InstrumentEnvironmentKey",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.MusicPlayerEnvironmentKey",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.SelectedScaleEnvironmentKey",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.TuningEnvironmentKey",
+    "fields": []
+   },
+   {
+    "kind": "enum",
+    "name": "MRMusicUI.ItemProviderError",
+    "fields": [
+     "unexpected"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.MIDIDestinationEndpointsEnvironment",
+    "fields": [
+     "settings: __C.MRChangeEmitting",
+     "_midiDestinations"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.MIDISourceEndpointsEnvironment",
+    "fields": [
+     "settings: __C.MRChangeEmitting",
+     "_midiSources"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservableAccessControl",
+    "fields": [
+     "_accessControl",
+     "unlockOverride: Swift.Bool"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservableBeatService",
+    "fields": [
+     "internalBeatService: __C.MRBeatService",
+     "sequencer: __C.MRSequencer?",
+     "timeSignatureProvider: () -> __C.MRTimeSignature",
+     "_beat",
+     "beatWorkItem",
+     "info: <__C.mach_timebase_info>"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservableChordModifiers",
+    "fields": [
+     "_chordModifiers"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservableMIDIDestinations",
+    "fields": [
+     "_endpoints",
+     "settings: __C.MRChangeEmitting?"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservableMIDISources",
+    "fields": [
+     "_endpoints",
+     "settings: __C.MRChangeEmitting?"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservableMIDIStormProtector",
+    "fields": [
+     "_tripped",
+     "midiStormProtector: __C.MRMIDIStormProtector"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservablePurchaseInvitation",
+    "fields": [
+     "_isPurchaseInvitationPresented"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservableSequencerState",
+    "fields": [
+     "sequencer: __C.MRSequencer?",
+     "_status: __C.MRSequencerStatus",
+     "_tempo: Swift.Double",
+     "_timeSignature: __C.MRTimeSignature",
+     "_$observationRegistrar"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.StoreDeclaration",
+    "fields": [
+     "products: Say<MRMusicUI.ProductDeclaration>G"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.ProductDeclaration",
+    "fields": [
+     "identifier: Swift.String",
+     "isBestValue: Swift.Bool",
+     "title",
+     "subtitle",
+     "description",
+     "monthly: Swift.Bool",
+     "iOS: Swift.Bool",
+     "macOS: Swift.Bool",
+     "equivalentProductIdentifiers: [Swift.String]",
+     "footnote"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservableStore",
+    "fields": [
+     "storeDeclaration: <MRMusicUI.StoreDeclaration>",
+     "_initialized",
+     "_acquiredProductIdentifiers",
+     "_isCurrentPlatformUnlocked",
+     "_products",
+     "_eligibleForDiscount",
+     "_busy",
+     "_error",
+     "transactionObserver"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "MRMusicUI.ObservableStore.StoreError",
+    "fields": [
+     "ProductNotFound"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservableChordPadXSettings",
+    "fields": [
+     "mutableChordPadXSettings: __C.MRMutableChordPadXSettings"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservableMusicSettings",
+    "fields": [
+     "mutableMusicSettings: __C.MRMutableMusicSettings"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservablePlayerSettings",
+    "fields": [
+     "mutablePlayerSettings: __C.MRMutablePlayerSettings"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.ObservableSuggesterSettings",
+    "fields": [
+     "mutableSuggesterSettings: __C.MRMutableSuggesterSettings"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.StoreObservableAccessControl",
+    "fields": [
+     "subscription"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.StandardArpeggioModePicker",
+    "fields": [
+     "title",
+     "_arpeggioMode",
+     "nullValueText",
+     "lockedIcon: () -> A"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.LocalizedArpeggioModePicker",
+    "fields": [
+     "title: __C.MRLocalizedString",
+     "_arpeggioMode",
+     "nullValueTitle: __C.MRLocalizedString?",
+     "lockedIcon: () -> A"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.ArpeggioModePickerContent",
+    "fields": [
+     "lockedIcon: () -> A",
+     "_accessControl"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.DurationImageProvider",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.LocalizedDurationPickerView",
+    "fields": [
+     "title: __C.MRLocalizedString",
+     "_duration",
+     "recipient: __C.MRDurationRecipient",
+     "nullValueTitle: __C.MRLocalizedString?",
+     "_languageCode"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.DurationPickerContent",
+    "fields": [
+     "recipient: __C.MRDurationRecipient"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.ArpeggiationSection",
+    "fields": [
+     "_arpeggiation",
+     "sectionTitle: __C.MRLocalizedString?",
+     "arpeggioModeTitle: __C.MRLocalizedString",
+     "stepLengthTitle: __C.MRLocalizedString",
+     "arpeggioModeNullTitle: __C.MRLocalizedString",
+     "stepLengthNullTitle: __C.MRLocalizedString",
+     "voicesNullTitle: __C.MRLocalizedString",
+     "lockedIcon: () -> B",
+     "footer: () -> A"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.HumanizationSection",
+    "fields": [
+     "_value",
+     "footer: () -> A",
+     "_isEnabled",
+     "__timing",
+     "__velocity"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.SynthEffectsSections",
+    "fields": [
+     "_effects",
+     "__reverbAmount",
+     "__delayAmount",
+     "__delayFeedback"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.TempoPropertyRow",
+    "fields": [
+     "_tempo",
+     "__tempoText",
+     "__tapTempoDetector"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.EditableGuitarChordShapeDiagramView",
+    "fields": [
+     "_shape",
+     "handedness: __C.MRHandedness",
+     "diagramSize: __C.MRGuitarDiagramSize",
+     "_baseFret",
+     "chevronColor",
+     "onStringStrucked: (Swift.Int, Swift.Int) -> ()",
+     "_colorScheme"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.FretboardView",
+    "fields": [
+     "tuning: __C.MRGuitarTuning",
+     "tags: [__C.MRFretboardTag]",
+     "highlightedNote: __C.MRNote?",
+     "fretRange: Swift.ClosedRange<Swift.Int>",
+     "equalSpacing: Swift.Bool",
+     "lastFretFactor",
+     "handedness: __C.MRHandedness",
+     "settings: __C.MRFormattingSettings",
+     "_colorScheme",
+     "insets",
+     "guideDotSize: Swift.Double",
+     "tagSize: Swift.Double",
+     "lineWidth: Swift.Double",
+     "font"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.GuitarChordDiagramView",
+    "fields": [
+     "guitarChordShape: __C.MRGuitarChordShape",
+     "handedness: __C.MRHandedness",
+     "diagramSize: __C.MRGuitarDiagramSize",
+     "resizable: Swift.Bool",
+     "_colorScheme",
+     "_scaledDiagramSize"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.GuitarChordShapeDiagramPainter",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.UnknownGuitarChordDiagramView",
+    "fields": [
+     "tuning: __C.MRGuitarTuning",
+     "resizable: Swift.Bool"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.OutputCrossbarPianoView",
+    "fields": [
+     "outputCrossbar: __C.MROutputCrossbar",
+     "style",
+     "_verticalSizeClass",
+     "standardHeight",
+     "compactHeight",
+     "_pianoState"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRMusicUI.PianoState",
+    "fields": [
+     "_keys",
+     "_sustainKeys",
+     "_sustainPedalDown",
+     "canvasSize: <__C.CGSize>"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.PianoView",
+    "fields": [
+     "_state",
+     "style",
+     "_scaledKeyWidth",
+     "onMidiKeyTapAction: ((Swift.Int) -> ())?"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRMusicUI.PianoView.Style",
+    "fields": [
+     "whiteKeyColor",
+     "disabledWhiteKeyColor",
+     "blackKeyColor",
+     "disabledBlackKeyColor",
+     "separatorColor",
+     "primaryHighlightColor",
+     "secondaryHighlightColor",
+     "primarySustainHighlightColor",
+     "secondarySustainHighlightColor",
+     "displayShadow: Swift.Bool",
+     "disableKeysOutOfBound: Swift.Bool",
+     "scaledKeyWidth: Swift.Int"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.LanguageCodeKey",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "__C.TextStyleOptionKey",
+    "fields": [
+     "_rawValue: __C.NSString"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRUtilUI.ObservableChangeEmitting",
+    "fields": [
+     "changeEmitting: __C.MRChangeEmitting"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.UndoButton",
+    "fields": [
+     "text",
+     "_undoManager",
+     "__canUndo",
+     "undoManagerChanged"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.UndoStackBridgeViewModifier",
+    "fields": [
+     "undoStack: __C.MRUndoStack",
+     "_undoManager",
+     "__undoStackPublisher"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRUtilUI.UndoStackPublisher",
+    "fields": [
+     "registeredOperationSubject",
+     "undoStack: __C.MRUndoStack?"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.LanguageCode",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.LocalizedStringLabel",
+    "fields": [
+     "text: __C.MRLocalizedString",
+     "systemImage: Swift.String",
+     "_languageCode"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.LocalizedStringNavigationTitle",
+    "fields": [
+     "text: __C.MRLocalizedString",
+     "_languageCode"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.LocalizedStringPicker",
+    "fields": [
+     "text: __C.MRLocalizedString",
+     "selection",
+     "content: () -> A",
+     "_languageCode"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.LocalizedStringSection",
+    "fields": [
+     "text: __C.MRLocalizedString?",
+     "content: () -> A",
+     "footer: () -> B",
+     "_languageCode"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.LocalizedStringText",
+    "fields": [
+     "text: __C.MRLocalizedString",
+     "_languageCode"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.LocalizedStringToggle",
+    "fields": [
+     "localizedString: __C.MRLocalizedString",
+     "_isOn",
+     "_languageCode"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.LocalizedTextField",
+    "fields": [
+     "title: __C.MRLocalizedString?",
+     "_text",
+     "prompt: __C.MRLocalizedString?",
+     "_languageCode"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.PurchaseInvitationView",
+    "fields": [
+     "purchaseInvitation: __C.MRPurchaseInvitation",
+     "headerImage",
+     "featureImage",
+     "onAction: () -> ()",
+     "_dismiss",
+     "_verticalSizeClass"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRUtilUI.TestPurchaseInvitation",
+    "fields": [
+     "callToAction: __C.MRLocalizedString",
+     "dismiss: __C.MRLocalizedString",
+     "featureHighlights: [__C.MRPurchaseInvitationFeatureHighlight]",
+     "subtitle: __C.MRLocalizedString",
+     "title: __C.MRLocalizedString"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRUtilUI.TestPurchaseInvitation.TestFeature",
+    "fields": [
+     "identifier: Swift.String",
+     "title: __C.MRLocalizedString",
+     "text: __C.MRLocalizedString"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.StoreExplanationView",
+    "fields": [
+     "storeExplanation: __C.MRStoreExplanation",
+     "headerImage"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRUtilUI.TestStoreExplanation",
+    "fields": [
+     "title: __C.MRLocalizedString",
+     "bulletPoints: [__C.MRStoreExplanationBulletPoint]"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRUtilUI.TestStoreExplanation.TestBulletPoint",
+    "fields": [
+     "identifier: Swift.String",
+     "text: __C.MRLocalizedString"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.StoreKeyView",
+    "fields": [
+     "colors",
+     "_keyHeight",
+     "_keyWidth"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRUtilUI.TextRichText",
+    "fields": [
+     "richText: __C.MRRichText",
+     "fontTextStyle",
+     "_dynamicTypeSize"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRSwiftUI.BundleFinder",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "__C.PasteboardType",
+    "fields": [
+     "_rawValue: __C.NSString"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "__C.CGSize",
+    "fields": [
+     "width",
+     "height"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.Action",
+    "fields": [
+     "id",
+     "title",
+     "image",
+     "color",
+     "iconColor",
+     "accessibilityIdentifier: Swift.String?",
+     "action: () -> ()"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.ActionGroup",
+    "fields": [
+     "id",
+     "actions: Say<MRSwiftUI.Action>Gyc"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.ActionMenu",
+    "fields": [
+     "_userInterfaceIdiom",
+     "popoverDeploymentDirection",
+     "groups",
+     "label: () -> A",
+     "__actionsPresented",
+     "__buttonVisible",
+     "_actionMenuFallback"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRSwiftUI.ActionMenuFallback",
+    "fields": [
+     "_presented",
+     "actionGroups"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.ActionMenuFallbackPointModifier",
+    "fields": [
+     "_actionMenuFallback"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.CircleTag",
+    "fields": [
+     "containerColor",
+     "contentColor",
+     "content: () -> A"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.PopoverActionView",
+    "fields": [
+     "_presented",
+     "groups"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.PopoverSheetButton",
+    "fields": [
+     "_presented",
+     "action: <MRSwiftUI.Action>",
+     "__hovered",
+     "_imageWidth",
+     "_minActionHeight"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.ArrayBuilder",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.AutoSplitViewMetrics",
+    "fields": [
+     "widthOfA",
+     "visibilityOfB: Swift.Bool"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.AutoSplitViewMetricsPreferenceKey",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.AutoSplitView",
+    "fields": [
+     "idealWidthOfA",
+     "minimumWidthOfB",
+     "a: () -> A",
+     "b: () -> B"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.BackButtonInjectionModifier",
+    "fields": [
+     "identifier: Swift.String",
+     "placement",
+     "_shouldInjectBackButton"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.BackButtonInjectionKey",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.InjectedBackButton",
+    "fields": [
+     "identifier: Swift.String",
+     "_dismiss"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.HoveredBackgroundViewModifier",
+    "fields": [
+     "hoveredBackground: (Swift.Bool) -> A",
+     "__hovered"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.ButtonStepper",
+    "fields": [
+     "_value",
+     "range: Swift.ClosedRange<A>",
+     "label: () -> B"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.CapsulePicker",
+    "fields": [
+     "_selection",
+     "content: () -> B",
+     "_colorScheme",
+     "_controlSize",
+     "_namespace"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.CapsulePickerChoice",
+    "fields": [
+     "value: A",
+     "content: () -> B",
+     "_namespace",
+     "_selection",
+     "_action",
+     "_colorScheme",
+     "_controlSize"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.CapsulePickerAction",
+    "fields": [
+     "id: A",
+     "action: (Any) -> ()"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.__Key_capsulePickerNamespace",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.__Key_capsulePickerSelection",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.__Key_capsulePickerAction",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.CollectionLayout",
+    "fields": [
+     "metrics: <MRSwiftUI.CollectionLayout.Metrics>"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.CollectionLayout.Metrics",
+    "fields": [
+     "itemHeight",
+     "minItemWidth",
+     "interItemSpacing",
+     "alignment"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.CompactTextMultilineHeightFix",
+    "fields": [
+     "_textHeight"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.CompactTextMultilineHeightFix.ContentLengthPreference",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.CustomEditButton",
+    "fields": [
+     "_editMode"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.DialogViewModifier",
+    "fields": [
+     "_isPresented",
+     "dialogBody: () -> A"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "MRSwiftUI.DismissButtonImage",
+    "fields": [
+     "done",
+     "close",
+     "back"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.DismissButton",
+    "fields": [
+     "styled: Swift.Bool",
+     "image: <MRSwiftUI.DismissButtonImage>",
+     "accessibilityIdentifier: Swift.String",
+     "dismissAction: (() -> ())?",
+     "_dismiss"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.DraggableButton",
+    "fields": [
+     "action: () -> ()",
+     "label: () -> A",
+     "__pressed"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.EqualWidthHStack",
+    "fields": [
+     "spacing"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.EqualWidthVStack",
+    "fields": []
+   },
+   {
+    "kind": "enum",
+    "name": "MRSwiftUI.ExecutableType",
+    "fields": [
+     "application",
+     "appExtension"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.__Key_executableType",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.__Key_floatingToolbarHorizontallyCompact",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.FloatingToolbar",
+    "fields": [
+     "content: () -> A",
+     "fab: () -> B",
+     "_verticalSizeClass",
+     "_pillHorizontalPadding",
+     "_height"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.FloatingToolbarButtonStyle",
+    "fields": [
+     "_horizontallyCompact",
+     "_labelPadding"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.FloatingToolbarConstants",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.FloatingToolbarProminentButtonStyle",
+    "fields": [
+     "_horizontallyCompact",
+     "_labelPadding",
+     "_highlightMargin"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.FloatingToolbarToggleStyle",
+    "fields": [
+     "_horizontallyCompact",
+     "_labelPadding",
+     "_highlightMargin"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.GravityHStack",
+    "fields": [
+     "leadingContent: () -> A",
+     "centerContent: () -> B",
+     "trailingContent: () -> C"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.GravityHStackLayout",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.GravityTranslucentToolbar",
+    "fields": [
+     "edge",
+     "insets",
+     "leadingContent: () -> A",
+     "centerContent: () -> B",
+     "trailingContent: () -> C",
+     "_defaultPadding"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.LegacyButtonBevelModifier",
+    "fields": [
+     "cornerRadius",
+     "_colorScheme"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.MRStepper",
+    "fields": [
+     "_value"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.ModalToolbarModifier",
+    "fields": [
+     "title: A",
+     "onConfirm: (() -> Swift.Bool)?",
+     "onCancel: (() -> Swift.Bool)?",
+     "_dismiss"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.NavigationStackWithBackButton",
+    "fields": [
+     "identifier: Swift.String",
+     "content: () -> A"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.OnboardingCellView",
+    "fields": [
+     "image",
+     "title",
+     "description"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.OnboardingView",
+    "fields": [
+     "banner",
+     "icon",
+     "title",
+     "onComplete: () -> ()",
+     "content: () -> A",
+     "__animationStep"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "MRSwiftUI.OnboardingView.AnimationStep",
+    "fields": [
+     "initial",
+     "titleAppears",
+     "contentAppears",
+     "continueButtonAppears",
+     "finished"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.OpenSettingsActionCompat",
+    "fields": [
+     "action: () -> ()"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRSwiftUI.Pasteboard",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.PopoverButtonWithBinding",
+    "fields": [
+     "_isPresented",
+     "deploymentDirection",
+     "contents: () -> B",
+     "label: () -> A"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.PopoverButtonWithState",
+    "fields": [
+     "deploymentDirection",
+     "contents: () -> B",
+     "label: () -> A",
+     "__isPresented"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "MRSwiftUI.PopoverDeploymentDirection",
+    "fields": [
+     "up",
+     "down"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.PoppingViewModifier",
+    "fields": [
+     "delay: Swift.Double",
+     "initialScale: Swift.Double",
+     "__visible"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.PresentationBackgroundIfAvailableModifier",
+    "fields": [
+     "shapeStyle: A"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.SheetButton",
+    "fields": [
+     "contents: () -> B",
+     "label: () -> A",
+     "__presented"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.TintedBorderedButtonStyle",
+    "fields": [
+     "color",
+     "labelColor",
+     "capsule: Swift.Bool",
+     "wide: Swift.Bool",
+     "prominent: Swift.Bool",
+     "glass: Swift.Bool",
+     "interactive: Swift.Bool",
+     "_isEnabled",
+     "_controlSize",
+     "_horizontalPadding",
+     "_verticalPadding",
+     "_cornerRadius",
+     "fontWeight"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.TipInlineView",
+    "fields": [
+     "onDismiss: (() -> ())?",
+     "iconColor",
+     "title: () -> A",
+     "message: () -> B"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.TipMessageView",
+    "fields": [
+     "onDismiss: (() -> ())?",
+     "iconColor",
+     "title: () -> A",
+     "message: () -> B",
+     "_verticalSizeClass",
+     "_horizontalSizeClass"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.TipPopoverContent",
+    "fields": [
+     "_isPresented",
+     "iconColor",
+     "title: () -> A",
+     "message: () -> B"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.TipSheetContent",
+    "fields": [
+     "iconColor",
+     "title: () -> A",
+     "message: () -> B",
+     "buttonContent: () -> C",
+     "_dismiss",
+     "_verticalSizeClass",
+     "_horizontalSizeClass"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.ToastCapsule",
+    "fields": [
+     "content: () -> A"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MRSwiftUI.Toaster",
+    "fields": [
+     "_isPresented",
+     "_toastContent"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.ToasterEnvironmentViewModifier",
+    "fields": [
+     "_toaster"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.ToastView",
+    "fields": [
+     "content: () -> A"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.ToolbarView",
+    "fields": [
+     "content: () -> A",
+     "background: () -> B",
+     "_toolbarHeight"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.TranslucentToolbar",
+    "fields": [
+     "edge",
+     "content: () -> A",
+     "_minimumBarHeight",
+     "_compactBarHeight",
+     "_verticalSizeClass"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "MRSwiftUI.UserInterfaceIdiom",
+    "fields": [
+     "phone",
+     "pad",
+     "mac",
+     "other"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.__Key_userInterfaceIdiom",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MRSwiftUI.WithLoadingScreen",
+    "fields": [
+     "contents: () -> A",
+     "loadingScreen: () -> B",
+     "__contentsReady"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "__C.StateValue",
+    "fields": [
+     "rawValue: Swift.Int"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "__C.ModifierFlags",
+    "fields": [
+     "rawValue: Swift.UInt"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MenuBuilder.CustomMenuItem",
+    "fields": [
+     "makeMenu: () -> A",
+     "modifiers: [(A) -> ()]"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MenuBuilder.IndentGroup",
+    "fields": [
+     "children: () -> [__C.NSMenuItem?]"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MenuBuilder.MenuBuilder",
+    "fields": []
+   },
+   {
+    "kind": "class",
+    "name": "MenuBuilder.MenuInvoker",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MenuBuilder.MenuItem",
+    "fields": [
+     "modifiers: [(__C.NSMenuItem) -> ()]"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "MenuBuilder.MenuItemView",
+    "fields": [
+     "effectView: __C.NSVisualEffectView",
+     "contentView: A",
+     "hostView",
+     "showsHighlight: Swift.Bool"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "MenuBuilder.HighlightedKey",
+    "fields": []
+   },
+   {
+    "kind": "struct",
+    "name": "MenuBuilder.SeparatorItem",
+    "fields": []
+   }
+  ],
+  "AUExt": [
+   {
+    "kind": "struct",
+    "name": "__C.AudioUnitParameterOptions",
+    "fields": [
+     "rawValue"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "__C.AudioUnitParameterUnit",
+    "fields": []
+   },
+   {
+    "kind": "class",
+    "name": "AudioUnitExtension.ObservableAUParameterNode",
+    "fields": []
+   },
+   {
+    "kind": "class",
+    "name": "AudioUnitExtension.ObservableAUParameterGroup",
+    "fields": [
+     "children: SDySS<AudioUnitExtension.ObservableAUParameterNode>G"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "AudioUnitExtension.ObservableAUParameter",
+    "fields": [
+     "parameter: weak __C.AUParameter?",
+     "observerToken: Swift.UnsafeMutableRawPointer?",
+     "editingState: <AudioUnitExtension.ObservableAUParameter.EditingState>",
+     "min: Swift.Float",
+     "max: Swift.Float",
+     "displayName: Swift.String",
+     "defaultValue: Swift.Float",
+     "unit: <__C.AudioUnitParameterUnit>",
+     "_value"
+    ]
+   },
+   {
+    "kind": "enum",
+    "name": "AudioUnitExtension.ObservableAUParameter.EditingState",
+    "fields": [
+     "inactive",
+     "began",
+     "active",
+     "ended",
+     "hostUpdate"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "AudioUnitExtension.ParameterGroupSpec",
+    "fields": [
+     "identifier: Swift.String",
+     "name: Swift.String",
+     "children: Say<AudioUnitExtension>_pG"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "AudioUnitExtension.ParameterTreeSpec",
+    "fields": [
+     "children: Say<AudioUnitExtension>_pG"
+    ]
+   },
+   {
+    "kind": "struct",
+    "name": "AudioUnitExtension.ParameterSpec",
+    "fields": [
+     "identifier: Swift.String",
+     "name: Swift.String",
+     "address",
+     "minValue: Swift.Float",
+     "maxValue: Swift.Float",
+     "defaultValue: Swift.Float",
+     "units: <__C.AudioUnitParameterUnit>",
+     "unitName: Swift.String?",
+     "flags: <__C.AudioUnitParameterOptions>",
+     "valueStrings: [Swift.String]?",
+     "dependentParameters: [__C.NSNumber]?"
+    ]
+   },
+   {
+    "kind": "class",
+    "name": "AudioUnitExtension.AudioUnitViewController",
+    "fields": [
+     "audioUnit: __C.AUAudioUnit?",
+     "hostingController: __C.NSViewController?",
+     "settingsModel: __C.MRSuggesterSettingsModel",
+     "documentModel: __C.MRSuggesterProDocumentModel",
+     "tech",
+     "exportQueue: __C.MIDIQueue"
+    ]
+   }
+  ]
+ }
+}

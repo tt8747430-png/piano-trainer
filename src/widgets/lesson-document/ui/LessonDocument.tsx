@@ -1,17 +1,11 @@
 import { Placeholder } from '@tiptap/extensions'
-import { EditorContent, ReactNodeViewRenderer, useEditor, type JSONContent } from '@tiptap/react'
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-  type RefObject,
-} from 'react'
+import { EditorContent, ReactNodeViewRenderer, useEditor } from '@tiptap/react'
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { About, Lesson } from '@/entities/lesson'
 import { i18n, type Locale } from '@/shared/i18n'
 import { cn, useKeyboardTop } from '@/shared/lib'
+import { fromEditorJson, toEditorJson } from '../model/doc-json'
 import { docExtensions } from '../model/doc-schema'
 import {
   aboutToDoc,
@@ -21,8 +15,7 @@ import {
   lessonToDoc,
   type DocNode,
 } from '../model/lesson-doc'
-import { BlockHandle } from './BlockHandle'
-import { DocToolbar, TextBubble } from './DocToolbar'
+import { DocToolbar } from './DocToolbar'
 import { DocLocale } from './doc-locale'
 import { ExampleView } from './ExampleView'
 import { SlashMenu, type SlashKeys } from './SlashMenu'
@@ -159,30 +152,26 @@ function BlocksDocument({
         }),
       ],
     }),
-    content: content as JSONContent,
+    content: toEditorJson(content),
     immediatelyRender: true,
     shouldRerenderOnTransaction: false,
     editorProps: {
       attributes: { class: 'lesson-doc', 'aria-label': label, lang: locale },
       handleKeyDown: (_, event) => slashKeys.current?.(event) ?? false,
     },
-    onUpdate: ({ editor: each }) => onDoc(each.getJSON() as DocNode),
+    onUpdate: ({ editor: each }) => onDoc(fromEditorJson(each.getJSON())),
   })
-  const toolbar = <DocToolbar editor={editor} locale={locale} />
+  const toolbar = <DocToolbar editor={editor} locale={locale} frame={frame} />
   return (
     <DocLocale value={locale}>
       <StyleBlock value={setStyling}>
         <ToolbarDock editorDom={frame}>{toolbar}</ToolbarDock>
         <div
           ref={frame}
-          className="relative pr-11 pb-28 md:pr-0 md:pl-20"
-          style={
-            { '--takeaway-label': JSON.stringify(words('edit.doc.takeaway')) } as CSSProperties
-          }
+          className="relative pb-28"
+          style={{ '--takeaway-label': JSON.stringify(words('edit.doc.takeaway')) }}
         >
           <EditorContent editor={editor} />
-          <BlockHandle editor={editor} frame={frame} />
-          <TextBubble editor={editor} />
           <SlashMenu editor={editor} locale={locale} frame={frame} keysRef={slashKeys} />
         </div>
         <BlockStyleSheet editor={editor} index={styling} onClose={() => setStyling(null)} />
@@ -237,10 +226,10 @@ function ToolbarDock({
     <div
       className={cn(
         'pointer-events-none fixed inset-x-0 bottom-[calc(var(--nav-bar)+0.5rem)] z-30 flex justify-center px-2',
-        'landscape-phone:left-rail lg:bottom-6 lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
+        'lg:bottom-6 lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed lg:group-data-[sidebar=focus]/main:left-0',
       )}
     >
-      <div className="pointer-events-auto max-w-full rounded-control border border-border bg-raised p-1 elevation-2">
+      <div className="pointer-events-auto max-w-full rounded-control border border-border bg-raised p-1 elevation-float">
         {children}
       </div>
     </div>

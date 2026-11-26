@@ -1,4 +1,5 @@
 import {
+  draftPickup,
   barAt,
   chordAt,
   notesAt,
@@ -9,7 +10,7 @@ import {
   type EditMode,
   type EditorState,
 } from '@/features/score-editor'
-import { printedChord, TICKS_PER_BEAT, writtenName, type Tick } from '@/shared/lib/music'
+import { barNumber, printedChord, TICKS_PER_BEAT, writtenName, type Tick } from '@/shared/lib/music'
 import type { Duration } from '@/shared/lib/notation'
 
 interface Place {
@@ -70,7 +71,7 @@ function placeSaid(
 ): CaretPlace {
   if (caret >= totalTicks(draft)) return { kind: 'end' }
   const { index, start } = barAt(draft, caret)
-  const at = { bar: index + 1, beat: beatOf(caret - start) }
+  const at = { bar: barNumber(index, draftPickup(draft)), beat: beatOf(caret - start) }
   if (layer === 'chords') {
     const chord = chordAt(draft, caret)
     // The chord as the sheet prints it over the bar (`C♯m7`).

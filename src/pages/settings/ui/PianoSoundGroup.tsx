@@ -1,8 +1,10 @@
 import { CircleCheck } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { ActionRow, SettingsGroup } from '@/shared/ui'
-import type { PianoSound } from '../model/use-piano-sound'
+import { useOnline } from '@/shared/lib'
+import { ActionRow, ConfirmDialog, DangerRow, SettingsGroup } from '@/shared/ui'
+import { usePianoSound } from '../model/use-piano-sound'
 
 /** Bytes as a learner reads them: megabytes to one decimal. */
 const megabytes = (bytes: number, locale: string) =>
@@ -13,50 +15,81 @@ const megabytes = (bytes: number, locale: string) =>
   }).format(bytes / 1_000_000)
 
 /**
- * Storage and backup's Piano sound (A27): how much of the recorded grand this device keeps, and
- * Download for offline, with its progress, until all of it is kept. Its Remove is in the page's
- * danger group. Where the browser keeps no caches, there is nothing to show.
+ * Storage and backup's Piano sound (the board's P_STORAGE; "the sound settings go to the storage and
+ * backup"): the grand, how much of it this device keeps and Download for offline use with its
+ * progress until all of it is kept (offline it waits, saying it needs the internet); removing it is
+ * the page's foot's (`RemovePianoRow`). Where the browser keeps no caches, nothing.
  */
-export function PianoSoundGroup({
-  sound,
-  onDownload,
-}: {
-  sound: PianoSound
-  onDownload: () => void
-}) {
-  const { t } = useTranslation('settings')
+export function PianoSoundGroup() {
+  const { t } = useTranslation(['settings', 'common', 'player'])
   const locale = useLocale()
-  if (sound.state === 'none') return null
+  const online = useOnline()
+  const piano = usePianoSound()
+  const { sound } = piano
   return (
-    <SettingsGroup flush title={t('pianoSound.label')} info={t('pianoSound.info')}>
+    <SettingsGroup flush title={t('piano.sound')} info={t('pianoSound.info')}>
       {sound.state === 'reading' ? (
-        <p className="px-4 py-3 text-muted-foreground">{t('pianoSound.reading')}</p>
-      ) : (
-        <>
-          <p className="px-4 pt-3 pb-1">
-            {t('pianoSound.kept', {
-              kept: megabytes(sound.kept, locale),
-              total: megabytes(sound.total, locale),
-            })}
+        // While the cache is read (a moment), the card's own shape with its values not yet in, so
+        // the page neither flashes a line of text nor moves when they come.
+        <div aria-busy className="flex flex-col gap-2 p-4">
+          <p className="flex items-baseline justify-between gap-3">
+            <span className="font-semibold">{t('player:pianoSheet.grand')}</span>
           </p>
-          {sound.kept >= sound.total ? (
-            <p role="status" className="flex items-center gap-2 px-4 pt-1 pb-3 font-medium">
-              <CircleCheck aria-hidden className="size-5 shrink-0 text-learned" />
-              {t('pianoSound.ready')}
+          <span aria-hidden className="h-1.5 rounded-pill bg-muted" />
+          <p className="text-sm text-muted-foreground">{t('pianoSound.reading')}</p>
+        </div>
+      ) : null}
+      {sound.state === 'reading' ? (
+        // Most learners have not kept the piano yet: its Download row holds its room, greyed.
+        <ActionRow title={t('pianoSound.download')} disabled onClick={() => undefined} />
+      ) : sound.state === 'known' ? (
+        <>
+          {/* The board's offline card: the grand and how much is kept, its bar, then where it stands. */}
+          <div className="flex flex-col gap-2 p-4">
+            <p className="flex items-baseline justify-between gap-3 tabular-nums">
+              <span className="font-semibold">{t('player:pianoSheet.grand')}</span>
+              <span className="text-sm whitespace-nowrap text-muted-foreground">
+                {t('pianoSound.kept', {
+                  kept: megabytes(sound.kept, locale),
+                  total: megabytes(sound.total, locale),
+                })}
+              </span>
             </p>
-          ) : (
+            <span aria-hidden className="h-1.5 overflow-hidden rounded-pill bg-muted">
+              <span
+                className="block h-full rounded-pill bg-learned"
+                style={{
+                  width: `${Math.min(100, (sound.kept / Math.max(1, sound.total)) * 100)}%`,
+                }}
+              />
+            </span>
+            {sound.kept >= sound.total ? (
+              <p role="status" className="flex items-center gap-2 text-sm font-medium">
+                <CircleCheck aria-hidden className="size-4 shrink-0 text-learned" />
+                {t('pianoSound.ready')}
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                {t(sound.kept > 0 ? 'pianoSound.partly' : 'pianoSound.none')}
+              </p>
+            )}
+          </div>
+          {sound.kept >= sound.total ? null : (
             <>
               <ActionRow
                 title={t('pianoSound.download')}
                 status={
-                  sound.downloading === null
-                    ? undefined
-                    : t('pianoSound.downloading', {
+                  sound.downloading !== null
+                    ? t('pianoSound.downloading', {
                         percent: Math.floor(sound.downloading * 100),
                       })
+                    : online
+                      ? undefined
+                      : t('pianoSound.needsInternet')
                 }
-                disabled={sound.downloading !== null}
-                onClick={onDownload}
+                // Offline it can only fail: it says what it needs and waits for the network.
+                disabled={sound.downloading !== null || !online}
+                onClick={() => void piano.download()}
               />
               {sound.failed ? (
                 <p role="alert" className="px-4 pt-1 pb-3 text-sm text-muted-foreground">
@@ -66,7 +99,32 @@ export function PianoSoundGroup({
             </>
           )}
         </>
-      )}
+      ) : null}
     </SettingsGroup>
+  )
+}
+
+/**
+ * Remove downloaded piano, the page's first loss (the board's P_STORAGE): a red row among the losses
+ * at its foot, never inside the download's group, asking first; shown once some of the grand is kept.
+ */
+export function RemovePianoRow() {
+  const { t } = useTranslation('settings')
+  const piano = usePianoSound()
+  const [removing, setRemoving] = useState(false)
+  if (piano.sound.state !== 'known' || piano.sound.kept === 0) return null
+  return (
+    <>
+      <DangerRow title={t('pianoSound.remove')} onClick={() => setRemoving(true)} />
+      <ConfirmDialog
+        open={removing}
+        onOpenChange={setRemoving}
+        title={t('pianoSound.title')}
+        body={t('pianoSound.body')}
+        action={t('pianoSound.confirm')}
+        cancel={t('pianoSound.cancel')}
+        onConfirm={() => void piano.remove()}
+      />
+    </>
   )
 }

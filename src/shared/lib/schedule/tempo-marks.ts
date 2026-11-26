@@ -89,7 +89,7 @@ export function tempoWarp(notes: Marked, written?: number): (tick: Tick) => numb
 }
 
 /** The tempo from a tick on, until the next step: its factor of the written tempo. */
-export interface TempoStep {
+interface TempoStep {
   readonly tick: Tick
   readonly factor: number
 }

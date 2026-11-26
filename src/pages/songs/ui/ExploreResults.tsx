@@ -1,109 +1,135 @@
-import { ArrowDownUp, SearchX } from 'lucide-react'
+import { SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { PublicSort } from '@/shared/api/public-library'
-import { BackMark, CardGrid, Dropdown, Said } from '@/shared/ui'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
+import { Said, SortMenu } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { ExploreCard } from '@/widgets/song-preview'
+import { EXPLORE_COLUMNS, ExploreFeedCard } from '@/widgets/song-preview'
 import { EXPLORE_SHELVES, type SongsHome } from '../model/explore-view'
-import { useExploreBrowse } from '../model/use-explore-browse'
-import { CardsLoading, ExploreEmpty, ExploreFailed } from './ExploreStates'
+import { ExplorePeople } from './ExplorePeople'
+import { ExploreEmpty, ExploreLoading, ExploreFailed } from './ExploreStates'
+import { useExploreFeed } from './use-explore-feed'
+
+type ExploreFeed = ReturnType<typeof useExploreFeed>
 
 /**
- * Explore searched, or a shelf's See all: a grid of cards, its count at its head and its order
- * (New, Most saved, Top rated) at the head's end; a shelf opened has the way back to the shelves.
- * While asked, grey cards; a search with no match says so, with Clear.
+ * The count and the order of Explore's songs (the board's EXSORTB): "8 songs", then New ⇅ in the link
+ * colour opening New, Most saved and Top rated; on the chips' row's right on a laptop, under them on
+ * a phone, never pushed off to the window's far edge.
  */
-export function ExploreResults({
+export function ExploreSort({
   home,
+  feed,
   onSort,
-  onClear,
-  onShelves,
+  counted = true,
 }: {
   home: SongsHome
+  feed: ExploreFeed
   onSort: (sort: PublicSort) => void
-  onClear: () => void
-  onShelves: () => void
+  /** The count beside it: a laptop's is in the place's bar. */
+  counted?: boolean
 }) {
   const { t } = useTranslation('songs')
+  if (feed.browse.kind !== 'found' || feed.entries.length === 0) return null
   const sort = home.shelf || 'new'
-  const { browse, retry } = useExploreBrowse({ cat: home.cat, sort, q: home.q })
   const patterns = home.cat === 'patterns'
-  const query = home.q.trim()
   return (
-    <section className="flex flex-col gap-2">
-      <div className="flex min-h-9 items-center justify-between gap-2">
-        {home.shelf && !query ? (
-          <Button variant="ghost" className="-ml-3" onClick={onShelves}>
-            <BackMark />
-            {t('explore.shelvesBack')}
-          </Button>
-        ) : (
-          <h2 className="font-sans text-sm font-semibold text-muted-foreground tabular-nums">
-            {browse.kind === 'found'
-              ? t(patterns ? 'explore.patternCount' : 'explore.songCount', {
-                  count: browse.entries.length,
-                })
-              : null}
-          </h2>
-        )}
-        <SortChoice value={sort} onChange={onSort} />
-      </div>
-      {browse.kind === 'loading' ? (
-        <CardsLoading count={6} />
-      ) : browse.kind === 'failed' ? (
-        <ExploreFailed reason={browse.reason} onRetry={retry} />
-      ) : browse.entries.length === 0 && query ? (
-        <Said
-          icon={SearchX}
-          title={t(patterns ? 'explore.noMatchPatterns' : 'explore.noMatch', { query })}
-          action={
-            <Button variant="soft" onClick={onClear}>
-              {t('explore.clear')}
-            </Button>
-          }
-        />
-      ) : browse.entries.length === 0 ? (
-        <ExploreEmpty />
-      ) : (
-        <CardGrid min="tile" label={t('explore.views.explore')}>
-          {browse.entries.map((entry) => (
-            <li key={entry.id}>
-              <ExploreCard entry={entry} />
-            </li>
-          ))}
-        </CardGrid>
-      )}
-    </section>
+    <div className="flex shrink-0 items-center justify-end gap-4 px-1">
+      {counted ? (
+        <span className="text-subhead font-semibold text-muted-foreground tabular-nums">
+          {t(patterns ? 'explore.patternCount' : 'explore.songCount', {
+            count: feed.entries.length,
+          })}
+        </span>
+      ) : null}
+      <SortMenu<PublicSort>
+        label={t('explore.sort')}
+        sort={sort}
+        sorts={EXPLORE_SHELVES.map((value) => ({
+          value,
+          label: t(`explore.shelves.${value}`),
+        }))}
+        onSort={onSort}
+      />
+    </div>
   )
 }
 
-/** The grid's order, at its head's end: its value in a word or two, every one in its list. */
-function SortChoice({
-  value,
-  onChange,
+/**
+ * Explore's feed (the Explore board): a picture card per item, two across on a phone and as many as
+ * fit from 16rem on a laptop; one person's alone where People opened them (`by`). People lists who
+ * publishes. While asked, its grey rows in the loaded shape; a search with no match says so, with Clear; nothing
+ * published, how to publish.
+ */
+export function ExploreResults({
+  home,
+  feed,
+  onClear,
 }: {
-  value: PublicSort
-  onChange: (sort: PublicSort) => void
+  home: SongsHome
+  feed: ExploreFeed
+  onClear: () => void
 }) {
   const { t } = useTranslation('songs')
-  return (
-    <Dropdown<PublicSort>
-      label={t('explore.sort')}
-      value={value}
-      onChange={onChange}
-      options={EXPLORE_SHELVES.map((sort) => ({
-        value: sort,
-        label: t(`explore.shelves.${sort}`),
-      }))}
-      bare
-      align="end"
-      face={(sort) => (
-        <span className="flex items-center gap-1.5">
-          <ArrowDownUp aria-hidden className="size-4 shrink-0 text-muted-foreground" />
-          <span className="whitespace-nowrap">{t(`explore.shelves.${sort}`)}</span>
+  const laptop = useMediaQuery(LAPTOP)
+  const { browse, retry, entries } = feed
+  const patterns = home.kind !== 'people' && home.cat === 'patterns'
+  const query = home.q.trim()
+  // The table's head, the same over the rows and over their grey shapes while Explore is asked.
+  const head = (
+    <div role="row" className={`${EXPLORE_COLUMNS} h-10 border-b border-border`}>
+      {(['title', 'composer', 'type', 'sharedBy', 'saves'] as const).map((column) => (
+        <span
+          key={column}
+          role="columnheader"
+          className="text-footnote font-semibold text-muted-foreground"
+        >
+          {t(`table.${column}`)}
         </span>
+      ))}
+      <span role="columnheader" aria-hidden />
+    </div>
+  )
+  return (
+    <section className="flex flex-col gap-3">
+      {browse.kind === 'loading' ? (
+        <ExploreLoading head={laptop ? head : undefined} rows={laptop ? 8 : 6} />
+      ) : browse.kind === 'failed' ? (
+        <ExploreFailed reason={browse.reason} onRetry={retry} />
+      ) : home.kind === 'people' ? (
+        <ExplorePeople entries={browse.entries} query={home.q} onClear={onClear} />
+      ) : entries.length === 0 && query ? (
+        <Said
+          quiet
+          icon={SearchX}
+          title={t(patterns ? 'explore.noMatchPatterns' : 'explore.noMatch', { query })}
+          action={<Button onClick={onClear}>{t('explore.clear')}</Button>}
+        />
+      ) : entries.length === 0 ? (
+        <ExploreEmpty />
+      ) : laptop ? (
+        // All songs' table (2026-11-17: "the pages change to much from the all songs to explore").
+        <div
+          role="table"
+          aria-label={t('explore.views.explore')}
+          className="border-t border-border"
+        >
+          {head}
+          {entries.map((entry) => (
+            <ExploreFeedCard key={entry.id} entry={entry} table />
+          ))}
+        </div>
+      ) : (
+        // One card holding the rows, the hairline from the title's edge (84: 12, the 56 tile, 16).
+        <ul
+          aria-label={t('explore.views.explore')}
+          className="card flex flex-col overflow-hidden [&>li+li]:relative [&>li+li]:before:absolute [&>li+li]:before:top-0 [&>li+li]:before:right-0 [&>li+li]:before:left-21 [&>li+li]:before:h-px [&>li+li]:before:bg-border [&>li+li]:before:content-['']"
+        >
+          {entries.map((entry) => (
+            <ExploreFeedCard key={entry.id} entry={entry} />
+          ))}
+        </ul>
       )}
-      className="h-9 gap-1.5 rounded-pill border-0 bg-transparent px-3 text-sm font-semibold text-muted-foreground shadow-none hover:bg-muted hover:text-foreground"
-    />
+    </section>
   )
 }

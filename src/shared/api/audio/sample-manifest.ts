@@ -1,3 +1,5 @@
+import { isRecord } from '@/shared/lib'
+
 /**
  * A recorded instrument's manifest (R29 SND, A27): `public/samples/<instrument>/manifest.json`, made by
  * its script under `scripts/samples/`. It names the set and its licence, the velocity layers from the
@@ -29,9 +31,6 @@ export interface SampleManifest {
   readonly samples: readonly SampleFile[]
 }
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
-
 function layerOf(value: unknown): SampleLayer | null {
   if (!isRecord(value) || typeof value.name !== 'string' || typeof value.upTo !== 'number')
     return null
@@ -61,13 +60,12 @@ export function parseManifest(value: unknown): SampleManifest | null {
   if (typeof instrument !== 'string' || typeof set !== 'string' || typeof licence !== 'string')
     return null
   if (!Array.isArray(layers) || !Array.isArray(samples)) return null
-  const read = layers.map(layerOf)
-  if (read.length === 0 || read.some((layer) => layer === null)) return null
-  const named = read as SampleLayer[]
+  const named = layers.map(layerOf).filter((layer) => layer !== null)
+  if (named.length === 0 || named.length !== layers.length) return null
   const names = new Set(named.map((layer) => layer.name))
-  const files = samples.map((sample) => fileOf(sample, names))
-  if (files.some((file) => file === null)) return null
-  return { instrument, set, licence, layers: named, samples: files as SampleFile[] }
+  const files = samples.map((sample) => fileOf(sample, names)).filter((file) => file !== null)
+  if (files.length !== samples.length) return null
+  return { instrument, set, licence, layers: named, samples: files }
 }
 
 /** The layer a velocity (0 to 1) strikes: the first whose bound is above it, else the loudest. */

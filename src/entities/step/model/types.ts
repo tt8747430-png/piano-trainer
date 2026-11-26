@@ -7,9 +7,14 @@ export const STAGES = ['beginner', 'intermediate', 'advanced', 'professional'] a
 export type Stage = (typeof STAGES)[number]
 export const isStage = isOneOf(STAGES)
 
+const STAGE_RANKS: Readonly<Record<Stage, 1 | 2 | 3 | 4>> = {
+  beginner: 1,
+  intermediate: 2,
+  advanced: 3,
+  professional: 4,
+}
 /** A stage's rank, 1 to 4, as a mark of rising pips draws it. */
-export const stageRank = (stage: Stage): 1 | 2 | 3 | 4 =>
-  (STAGES.indexOf(stage) + 1) as 1 | 2 | 3 | 4
+export const stageRank = (stage: Stage): 1 | 2 | 3 | 4 => STAGE_RANKS[stage]
 
 /**
  * One thing a learner learns and marks learned (ADR 0053): a lesson of the Lessons' journeys, a

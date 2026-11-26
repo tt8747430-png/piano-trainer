@@ -1,4 +1,6 @@
 import {
+  IN_HAND,
+  MOST_RECENT_SHEETS,
   MOST_SHEETS,
   NEW_ENTRY,
   sheetName,
@@ -19,9 +21,13 @@ export function saveAsMine(
   const { mine, nextId } = store.getState()
   if (!kept || mine.length >= MOST_SHEETS) return null
   const id = `sheet-${nextId}`
-  const { text, style, tempo, settings } = entry
+  const { text, draft, style, tempo, settings } = entry
   store.setState({
-    mine: [{ id, name: kept, text, style, tempo, settings }, ...mine],
+    // Saved as it is shown: a draft brought along becomes its chords.
+    mine: [
+      { id, name: kept, text: draft ?? text, draft: null, style, tempo, settings, online: null },
+      ...mine,
+    ],
     nextId: nextId + 1,
   })
   return id
@@ -45,7 +51,8 @@ export function duplicateSheet(store: ChordSheetsStore, id: string, name: string
   const original = mine[at]
   const kept = sheetName(name)
   if (!original || !kept || mine.length >= MOST_SHEETS) return null
-  const copy = { ...original, id: `sheet-${nextId}`, name: kept }
+  // A copy is the learner's own, never the shared sheet.
+  const copy = { ...original, id: `sheet-${nextId}`, name: kept, online: null }
   store.setState({
     mine: [...mine.slice(0, at + 1), copy, ...mine.slice(at + 1)],
     nextId: nextId + 1,
@@ -58,7 +65,20 @@ export function deleteSheet(store: ChordSheetsStore, id: string): void {
   store.setState((state) => ({ mine: state.mine.filter((sheet) => sheet.id !== id) }))
 }
 
+/**
+ * A sheet opened (R76): first among the recent sheets, the Chord player's bar's menu; the sheet in
+ * hand when `id` is none. Opened again while first, nothing changes.
+ */
+export function markOpened(store: ChordSheetsStore, id: string | undefined): void {
+  const opened = id ?? IN_HAND
+  const { recent } = store.getState()
+  if (recent[0] === opened) return
+  store.setState({
+    recent: [opened, ...recent.filter((each) => each !== opened)].slice(0, MOST_RECENT_SHEETS),
+  })
+}
+
 /** New (R29 CP5): an empty Verse in hand, in Pop 1 at 100. */
 export function startNew(store: ChordSheetsStore): void {
-  store.setState({ scratch: NEW_ENTRY })
+  store.setState({ scratch: NEW_ENTRY, scratchName: null })
 }

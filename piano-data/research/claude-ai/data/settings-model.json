@@ -1,0 +1,126 @@
+{
+ "source": "claude.ai build 0d4c697ee9; see CODE_SETTINGS_AND_PERSISTENCE.md",
+ "storageFormat": {
+  "prefix": "LSS-",
+  "value": "{value, tabId, timestamp}",
+  "crossTabSync": "storage event + synthetic StorageEvent in same tab"
+ },
+ "settings": [
+  {
+   "name": "theme",
+   "key": "LSS-userThemeMode",
+   "values": [
+    "auto",
+    "light",
+    "dark"
+   ],
+   "default": "auto",
+   "effect": "html[data-mode]"
+  },
+  {
+   "name": "reduceMotion",
+   "key": "LSS-appearance:reduceMotion",
+   "values": [
+    "system",
+    "reduce"
+   ],
+   "default": "system",
+   "effect": "html[data-reduce-motion=true]"
+  },
+  {
+   "name": "contrast",
+   "key": "LSS-persisted.kind-breeze",
+   "values": [
+    "off",
+    "on",
+    "held"
+   ],
+   "effect": "html[data-cds-contrast=more]"
+  },
+  {
+   "name": "popupsAutoHide",
+   "key": "LSS-persisted.snazzy-globe",
+   "type": "boolean",
+   "default": true
+  },
+  {
+   "name": "virtualizeChats",
+   "key": "LSS-persisted.velvet-rocket",
+   "type": "boolean",
+   "default": true
+  },
+  {
+   "name": "interfaceFont",
+   "key": "persisted.interface-font",
+   "values": [
+    "default",
+    "anthropic",
+    "system",
+    "dyslexic",
+    "atkinson"
+   ],
+   "effect": "html[data-font|data-dyslexic-font|data-atkinson-font]"
+  },
+  {
+   "name": "replyFont",
+   "key": "LSS-customStyles:chatFont",
+   "server": "PATCH /api/account/settings {chat_font}",
+   "effect": "html[data-reply-face]"
+  },
+  {
+   "name": "transcriptWidth",
+   "key": "epitaxy-editor-prefs (zustand) .transcriptWidthChoice",
+   "values": {
+    "s": 768,
+    "m": 960,
+    "l": 1280
+   },
+   "default": "s"
+  },
+  {
+   "name": "locale",
+   "keys": [
+    "spa:locale",
+    "spa:locale-source",
+    "spa:account-locale"
+   ],
+   "server": "PUT /api/account_profile",
+   "loading": "/i18n/s/<locale>.json, fallback /i18n/<locale>.json, no reload"
+  }
+ ],
+ "saving": {
+  "endpoints": [
+   "PATCH /api/account/settings",
+   "PATCH /api/organizations/{org}/notification/preferences",
+   "PUT /api/account_profile"
+  ],
+  "strategy": "optimistic update, per-field rollback guarded by write sequence number, error toast"
+ },
+ "search": {
+  "normalize": "NFKD",
+  "rank": {
+   "exact": 0,
+   "prefix": 1,
+   "wordPrefix": 2,
+   "substring": 3
+  },
+  "sectionScore": {
+   "nameMatch": "min rank",
+   "rowsOnly": "5+rank",
+   "keyword": 10
+  },
+  "rowsShownPerSection": 3
+ },
+ "usage": {
+  "barWarningAtPct": 75,
+  "barCriticalAtPct": 90,
+  "forecast": "runsOut = now + (100-p)*elapsed/p",
+  "states": [
+   "zero",
+   "fresh(<10%)",
+   "early(<12h)",
+   "heads_up",
+   "on_track"
+  ]
+ }
+}

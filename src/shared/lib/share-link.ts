@@ -19,10 +19,19 @@ export async function shareLink({
       await navigator.share({ title, url })
       return 'shared'
     }
-    await navigator.clipboard.writeText(url)
-    return 'copied'
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') return null
     return 'failed'
+  }
+  return (await copyText(url)) ? 'copied' : 'failed'
+}
+
+/** Copies a text (a link) to the clipboard: false where there is no clipboard or it refused. */
+export async function copyText(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch {
+    return false
   }
 }

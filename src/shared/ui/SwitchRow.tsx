@@ -9,7 +9,7 @@ import { Switch } from './primitives/switch'
  * `InfoTip` after the label's last word where it says more than its name (ADR 0096, never a line
  * under it), and the switch, named by the label alone. A tap anywhere on the row turns it, but on
  * the ⓘ. Greyed (`disabled`), it says why in its tooltip and to a screen reader (`reason`), never
- * in a line under it.
+ * in a line under it. It draws no line of its own: the list it stands in parts its rows (`rows-hairline`).
  */
 export function SwitchRow({
   icon,
@@ -65,7 +65,7 @@ export function SwitchRow({
       data-setting={setting}
       title={why}
       className={cn(
-        'relative isolate flex min-h-14 items-center justify-between gap-4 border-b border-border py-2 text-lg',
+        'relative isolate flex min-h-12 items-center justify-between gap-3 py-1.5 text-base',
         className,
       )}
     >

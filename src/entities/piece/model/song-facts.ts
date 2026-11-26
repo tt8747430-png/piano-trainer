@@ -53,19 +53,18 @@ export function withSongFacts<T extends FactsOf>(
   oneLanguage = false,
 ): T {
   const about = facts.about.trim()
-  const { note: _note, ...rest } = piece
-  return {
-    ...rest,
-    [titleField(piece, locale)]: facts.title.trim() || piece[titleField(piece, locale)],
-    ...(about
-      ? {
-          note:
-            piece.note && !oneLanguage
-              ? { ...piece.note, [locale]: about }
-              : { en: about, ru: about },
-        }
-      : {}),
-  } as T
+  const field = titleField(piece, locale)
+  const next = { ...piece }
+  // The copy's facts, written through: the note last, as a spread would put it.
+  const written: { -readonly [K in keyof FactsOf]: FactsOf[K] } = next
+  delete written.note
+  const title = facts.title.trim()
+  if (field === 'title') written.title = title || piece.title
+  else written[field] = title || piece[field]
+  if (about)
+    written.note =
+      piece.note && !oneLanguage ? { ...piece.note, [locale]: about } : { en: about, ru: about }
+  return next
 }
 
 /**
@@ -140,4 +139,20 @@ export function readNote(value: unknown): LocalText | undefined {
   return isRecord(value) && isText(value.en) && isText(value.ru)
     ? { en: value.en.slice(0, 2000), ru: value.ru.slice(0, 2000) }
     : undefined
+}
+
+/**
+ * What a score prints under its title (canvas, the Player's TITLE_BLOCK: "Words: John Newton · Music:
+ * New Britain"): the lines its score has, and where it has none, who wrote it as the song's credits
+ * name them. None where nothing is to be printed.
+ */
+export function printedHeader(piece: FactsOf): ScoreHeader | undefined {
+  const named = Object.fromEntries(
+    SONG_CREDITS.flatMap((field) => {
+      const names = songCredit(piece, field)
+      return names === '' ? [] : [[field, names]]
+    }),
+  )
+  const header: ScoreHeader = { ...named, ...piece.header }
+  return Object.keys(header).length > 0 ? header : undefined
 }
