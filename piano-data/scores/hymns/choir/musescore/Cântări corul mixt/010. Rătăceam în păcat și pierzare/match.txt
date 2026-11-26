@@ -4,7 +4,6 @@ title: 10 Rătăceam în păcat și pierzare
 lyricist: Valentin Popovici
 composer: John W. Peterson - Alfred B. Smith
 count-pickup
-spatium: 1.75
 systems: 1 7 14 20 | 26 32 38 44 49
 hide-tempo
 hide-names

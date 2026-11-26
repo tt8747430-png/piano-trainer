@@ -2,7 +2,6 @@
 title: 9 Eram jos în păcat
 lyricist: Valentin Popovici
 count-pickup
-spatium: 1.75
 systems: 1 4 6 8 | 10 12 14 16
 hide-tempo
 hide-names

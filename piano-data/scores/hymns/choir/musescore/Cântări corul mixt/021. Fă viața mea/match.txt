@@ -1,7 +1,6 @@
 # From 021. Fă viața mea.pdf (1 page) and the choir book, page 47.
 title: 21 Fă viața mea
 composer: Nicolae Moldoveanu
-spatium: 1.75
 systems: 1 5 9 13
 hide-tempo
 hide-names

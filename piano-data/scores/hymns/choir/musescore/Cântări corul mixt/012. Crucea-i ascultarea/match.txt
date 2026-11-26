@@ -2,7 +2,6 @@
 title: 12 Crucea'i ascultarea
 lyricist: Traian Dorz
 composer: Nicolae Moldoveanu
-spatium: 1.6
 systems: 1 7 12 17 24
 hide-tempo
 hide-names

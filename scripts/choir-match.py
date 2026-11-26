@@ -1,17 +1,19 @@
 """Makes a choir song's score match its printed sheet: the words, the title, the line and page breaks, the staff size.
 
-Each song may hold a `match.txt` beside its files, written from the song's PDF and its page in the choir's book:
+Each song may hold a `match.txt` beside its files, written from the song's PDF and its page in the choir's book.
+Once the score matches the sheet, the song's old MuseScore files are removed: match.txt then stays as the record of
+what was checked and written in, and the score is final. Its form:
 
     title: 1 Binecuvântat să fie Domnul
     composer: Valer Bogdan             the name printed at the right, under the title
     lyricist: Valentin Popovici        the name printed at the left (the words' author)
-    spatium: 1.9                       staff space in mm (the printed size)
+    spatium: 1.4                       staff space in mm, only where the house size (1.5) cannot keep the sheet's
+                                       pages (see HOUSE below)
     systems: 1 5 9 13 16 | 20 22 25    first bar of each line; | starts a new page
     hide-empty-staves                  a staff with nothing to sing in a line is left out, as printed
     hide-tempo                         the tempo mark is not printed (it still sets the speed)
     hide-names                         no voice names before the staves
-    staff-distance: 4.5                space between the staves, and system-distance: between the lines
-    lyrics-size: 11                    the words' size in points (Arial, as printed)
+    lyrics-size: 9                     the words' size in points, only where the house size does not fit
     count-pickup                       the sheet numbers its pickup as bar 1 (bars here follow the sheet)
     dashed: 20 22                      ties and slurs in these bars drawn dashed, as printed
     beams                              eighths beamed together (by default each has its own flag, as sung lines are)
@@ -27,6 +29,10 @@ Each song may hold a `match.txt` beside its files, written from the song's PDF a
                                        (< or > with its length in whole notes) at a bar (+ where in the bar), a
                                        fermata over the bar's first note at that point, a bold italic text
     hide-staff: Tenor 25-32            a voice's staff left out in those bars (an empty staff, as the sheet has it)
+    untie: Bass 38                     a tie the file has and the sheet does not, in that voice's bars (commas)
+    slur: Alto 13+1/2 +1/8, ...        a slur the sheet prints for a voice that sings words printed elsewhere
+                                       (a voice's own held syllables are slurred from its words): from a bar and
+                                       point in it to another, or + its length in whole notes
     segno: 54                          the segno stands at this bar
     text: 81 above bold italic D.S.% al Coda   printed text at a bar, above or below the top staff (% is the segno)
 
@@ -39,7 +45,9 @@ Each song may hold a `match.txt` beside its files, written from the song's PDF a
 
 Words are syllables in order, one per note the voice sings (a note that only continues a tie takes none, unless the
 syllable starts with `^`, as where one verse holds and another sings on): `--` joins the syllables of a word, `_`
-holds a syllable over the next note, `@N` moves to the first note of bar N (as the bar is numbered on the page). `python3 scripts/choir-match.py notes <score.mscz> <staff> <voice>` lists a
+holds a syllable over the next note, `*` passes over a note that is not sung to these words (an instrumental note), a syllable ending in `|` draws
+no line over the notes it holds (where the sheet prints none),
+`@N` moves to the first note of bar N (as the bar is numbered on the page). `python3 scripts/choir-match.py notes <score.mscz> <staff> <voice>` lists a
 voice's notes bar by bar, for writing the words against them. scripts/choir-scores.py applies the file.
 """
 
@@ -112,6 +120,18 @@ def parse(path):
                 bar, _, at = bar.partition('+')
                 spec.setdefault('marks', []).append(dict(bar=int(bar), at=Fraction(at) if at else Fraction(0),
                                                          what=what.strip()))
+        elif key == 'slur':
+            # slur: Alto 13+1/2 +1/8   a slur from a point (bar, + where in it) to another, or + its length
+            for item in value.split(','):
+                parts = item.split()
+                def point(t):
+                    b, _, a = t.partition('+')
+                    return (int(b) if b else None), (Fraction(a) if a else Fraction(0))
+                spec.setdefault('slurs', []).append((' '.join(parts[:-2]), point(parts[-2]), point(parts[-1])))
+        elif key == 'untie':
+            # untie: Bass 38   ties the file has and the sheet does not, in that voice's bars
+            name, _, bars = value.strip().rpartition(' ')
+            spec.setdefault('untie', []).append((name.strip(), [int(b) for b in bars.split(',')]))
         elif key == 'hide-staff':
             # hide-staff: Tenor 25-32   the voice's staff is not printed in those bars, as on the sheet
             name, _, rng = value.strip().rpartition(' ')
@@ -138,8 +158,6 @@ def parse(path):
             spec['hide_names'] = True
         elif key == 'count-pickup':
             spec['count_pickup'] = True
-        elif key in ('staff-distance', 'system-distance'):
-            spec[key.replace('-', '_')] = value.strip()
         else:
             raise SystemExit(f'{path}: cannot read: {line}')
     return spec
@@ -155,11 +173,20 @@ def syllables(tokens):
             out.append(('bar', int(t[1:])))
         elif t == '_':
             out.append(('hold',))
+        elif t == '*':
+            out.append(('skip',))
         elif t == '--':
             pass
         else:
-            joined_before = i > 0 and tokens[i - 1] == '--'
-            joined_after = i + 1 < len(tokens) and tokens[i + 1] == '--'
+            # A hold (`_`) may stand on either side of a word's hyphen: look past it.
+            b = i - 1
+            while b >= 0 and tokens[b] == '_':
+                b -= 1
+            a = i + 1
+            while a < len(tokens) and tokens[a] == '_':
+                a += 1
+            joined_before = b >= 0 and tokens[b] == '--'
+            joined_after = a < len(tokens) and tokens[a] == '--'
             kind = {(False, False): 'single', (False, True): 'begin', (True, True): 'middle',
                     (True, False): 'end'}[(joined_before, joined_after)]
             out.append(('word', t, kind))
@@ -179,6 +206,10 @@ def bar_numbers(measures, count_pickup=False):
         n += int(m.findtext('noOffset') or 0)
         out.append(n)
     return out
+
+
+# The chords a syllable is held onto (`_` in the words), for slurring each melisma as written.
+HELD = set()
 
 
 class Tied:
@@ -228,8 +259,11 @@ def place(slots_by_bar, tokens):
         slot = slot.el if isinstance(slot, Tied) else slot
         if t[0] == 'word':
             pairs.append([slot, t[1].lstrip('^'), t[2], 0])
+        elif t[0] == 'skip':
+            pass
         elif pairs:
             pairs[-1][3] += 1
+            HELD.add(id(slot))
         pos += 1
     return pairs
 
@@ -275,7 +309,9 @@ def lyrics_mscx(staff, voice, block, nums, clear=True):
         slots_all = {id(c) for chords in slots.values() for c in chords if not isinstance(c, Tied)}
         for chord, text, kind, holds in place(slots, tokens):
             ly = ET.Element('Lyrics')
-            if kind in ('end', 'single'):
+            no_line = text.endswith('|')
+            text = text.rstrip('|')
+            if kind in ('end', 'single') and not no_line:
                 # The line runs over the notes the syllable is held on: its holds, and any note tied on.
                 k = next(i for i, (c, _) in enumerate(sequence) if c is chord)
                 own = sequence[k][1]
@@ -413,8 +449,11 @@ def layout_mscx(score, spec):
         v.insert(at, st)
     # Each eighth and sixteenth on its own flag, as the choir's sheets print a sung line (a triplet keeps its beam).
     if not spec.get('beams'):
+        # A bar some staff sings in is sung by all: only a bar no one sings in (instrumental) keeps its beams.
+        sung = {k for st in staffs for k, m in enumerate(st.findall('Measure')) if m.find('.//Lyrics') is not None}
         for st in staffs:
-            for v in st.iter('voice'):
+            worded = [m for k, m in enumerate(st.findall('Measure')) if k in sung]
+            for v in (v for m in worded for v in m.findall('voice')):
                 in_tuplet = False
                 for el in v:
                     if el.tag == 'Tuplet':
@@ -465,18 +504,45 @@ def layout_mscx(score, spec):
             v.text = '0'
 
 
+# The house style of every matched song, from professional engraving practice:
+# - staff: 6 mm high (a 1.5 mm space), Gould's rastral 5, between her sizes for songs and for choral music
+#   (Elaine Gould, Behind Bars, p. 483, as tabled by Donemus: rastral 4 = 6.5 mm songs, 6 = 5.5 mm choral);
+# - words: Arial, the sans the choir's sheets use, with their x-height one staff space (Gould for choral text):
+#   Arial's x-height is 0.519 of its size, so 1.5 mm takes 8.2 pt; set at 9 pt, a little above, for choirs reading
+#   at arm's length;
+# - margins: 15 mm on every side, the minimum engravers give a printed page (MuseScore engraving guidance), the
+#   lines spread down the page between them;
+# - title 20 pt, composer and lyricist 10 pt, a bar number at each line's start.
+HOUSE = {
+    'spatium': '1.5', 'lyrics_size': '9', 'title_size': '20', 'credit_size': '10', 'margin_mm': 15.0,
+}
+
+
 def style_mss(data, spec):
-    """The staff size and hidden empty staves, in the score's style."""
+    """The house style, the line spacing and the sheet's own choices (hidden empty staves, every bar numbered,
+    a footer) in the score's style."""
     text = data.decode('utf-8')
     values = {}
-    if spec['spatium']:
-        values['spatium'] = spec['spatium']
-    # The words in the printed sheets' sans type, at one size whatever the staff size.
+    values['spatium'] = spec['spatium'] or HOUSE['spatium']
+    inch = lambda v: '%.4f' % (v / 25.4)
+    margin = HOUSE['margin_mm']
+    values['pageWidth'] = inch(210)
+    values['pageHeight'] = inch(297)
+    values['pagePrintableWidth'] = inch(210 - 2 * margin)
+    for side in ('Even', 'Odd'):
+        for edge in ('Left', 'Top', 'Bottom'):
+            values[f'page{side}{edge}Margin'] = inch(margin)
+    values['pageTwosided'] = '0'
     for side in ('Odd', 'Even'):
         values[f'lyrics{side}FontFace'] = 'Arial'
-        values[f'lyrics{side}FontSize'] = spec.get('lyrics_size') or '11'
+        values[f'lyrics{side}FontSize'] = spec.get('lyrics_size') or HOUSE['lyrics_size']
         values[f'lyrics{side}FontSpatiumDependent'] = '0'
-    # A bar number only at the start of each line; the title and names in the sheets' sans type.
+    for el in ('title', 'subTitle', 'composer', 'lyricist'):
+        values[f'{el}FontFace'] = 'Arial'
+        values[f'{el}FontSpatiumDependent'] = '0'
+    values['titleFontSize'] = HOUSE['title_size']
+    values['composerFontSize'] = HOUSE['credit_size']
+    values['lyricistFontSize'] = HOUSE['credit_size']
     values['showMeasureNumber'] = '1'
     if spec.get('bar_numbers') == 'every':
         values['measureNumberSystem'] = '0'
@@ -484,30 +550,28 @@ def style_mss(data, spec):
     else:
         values['measureNumberSystem'] = '1'
         values['measureNumberInterval'] = '1000'
-    for el in ('title', 'subTitle', 'composer', 'lyricist'):
-        values[f'{el}FontFace'] = 'Arial'
-    # Staves and lines as close as the printed sheets set them.
-    values['staffDistance'] = spec.get('staff_distance') or '5'
-    values['akkoladeDistance'] = spec.get('staff_distance') or '5'
-    values['minSystemDistance'] = spec.get('system_distance') or '5.5'
-    values['maxSystemDistance'] = str(float(spec.get('system_distance') or '5.5') + 3)
-    # The printed sheets have no footer and narrow top and bottom margins (inches).
+    # The two staves of a system 5 spaces apart, the systems at least 6, spread evenly down a full page.
+    values['staffDistance'] = '5'
+    values['akkoladeDistance'] = '5'
+    values['minSystemDistance'] = '6'
+    values['maxSystemDistance'] = '12'
+    values['enableVerticalSpread'] = '1'
+    values['minSystemSpread'] = '6'
+    values['maxSystemSpread'] = '24'
+    values['minStaffSpread'] = '5'
+    values['maxStaffSpread'] = '8'
+    values['spreadSystem'] = '2.5'
+    values['staffUpperBorder'] = '5'
+    values['staffLowerBorder'] = '5'
+    values['lyricsMinTopDistance'] = '1'
+    values['lyricsMinBottomDistance'] = '1.5'
+    values['lyricsLineHeight'] = '1'
     values['showFooter'] = '1' if spec.get('footer') else '0'
     if spec.get('footer'):
         for side in ('odd', 'even'):
             values[f'{side}FooterC'] = spec['footer']
             values[f'{side}FooterL'] = ''
             values[f'{side}FooterR'] = ''
-    for side in ('Even', 'Odd'):
-        values[f'page{side}TopMargin'] = '0.35'
-        values[f'page{side}BottomMargin'] = '0.35'
-    values['staffUpperBorder'] = '3'
-    values['staffLowerBorder'] = '3'
-    values['lyricsMinTopDistance'] = '0.5'
-    values['lyricsMinBottomDistance'] = '0.5'
-    values['lyricsLineHeight'] = '0.95'
-    values['minSystemSpread'] = values['minSystemDistance']
-    values['maxSystemSpread'] = values['maxSystemDistance']
     if spec['hide_empty']:
         values['hideEmptyStaves'] = '1'
         values['dontHideStavesInFirstSystem'] = '1'
@@ -718,6 +782,7 @@ def lyrics_xml(score, part_index, staff, voice, block, count_pickup=False, clear
                 el.remove(l)
     for verse, tokens in sorted(block['verses'].items()):
         for note, text, kind, _ in place(slots, tokens):
+            text = text.rstrip('|')
             ly = ET.Element('lyric', number=str(verse))
             ET.SubElement(ly, 'syllabic').text = kind
             t = ET.SubElement(ly, 'text')
@@ -833,9 +898,12 @@ def marks_mscx(score, spec, nums):
                         t2 = chord_at_voice(m2, vi, mk['at'])
                         if t2 is None:
                             continue
+                        idx = list(v2).index(t2)
+                        if any(x.tag == 'Fermata' for x in list(v2)[max(0, idx - 3):idx]):
+                            continue  # the file has it already
                         f = ET.Element('Fermata')
                         ET.SubElement(f, 'subtype').text = 'fermataAbove' if vi == 0 else 'fermataBelow'
-                        v2.insert(list(v2).index(t2), f)
+                        v2.insert(idx, f)
                     break
         elif what.startswith('text:'):
             st = ET.Element('StaffText')
@@ -862,3 +930,214 @@ def hide_staff(score, spec, info, nums):
                                 vis = ET.Element('visible')
                                 el.insert(0, vis)
                             vis.text = '0'
+
+
+
+def bar_lengths(staff):
+    """Each measure's length in whole notes: its own (`len`, a pickup or split bar) or its time signature's."""
+    out, sig = [], Fraction(1)
+    for m in staff.findall('Measure'):
+        ts = m.find('.//TimeSig')
+        if ts is not None and ts.findtext('sigN'):
+            sig = Fraction(int(ts.findtext('sigN')), int(ts.findtext('sigD')))
+        out.append(Fraction(m.get('len')) if m.get('len') else sig)
+    return out
+
+
+def staff_events(staff, voice):
+    """A voice's chords and rests through the staff, each with its start (whole notes from the beginning) and its
+    bar's index."""
+    out, t = [], Fraction(0)
+    for k, (m, bar) in enumerate(zip(staff.findall('Measure'), bar_lengths(staff))):
+        tv = t
+        for el, length in chord_lengths(m, voice):
+            out.append((el, tv, k))
+            tv += length if el.findtext('durationType') != 'measure' else bar
+        t += bar
+    return out
+
+
+def tied_on(chord):
+    notes = chord.findall('Note')
+    return bool(notes) and all(n.find("Spanner[@type='Tie']/prev") is not None for n in notes)
+
+
+def onsets_of(staff, voice):
+    """The moments a voice of a staff starts a syllable, and the bars it has words in."""
+    ev = staff_events(staff, voice)
+    return ({t for el, t, k in ev if el.tag == 'Chord' and el.find('Lyrics') is not None},
+            {k for el, t, k in ev if el.tag == 'Chord' and el.find('Lyrics') is not None})
+
+
+def melisma_slurs(staff, voices, fallback=None):
+    """Slurs where a syllable is sung across several notes, as vocal music is engraved: a note that starts no
+    syllable and is not tied on is slurred, with the notes before it, to the note that began its syllable.
+
+    Each voice, bar by bar, sings the words under it: its own where it has them, else its staff's first voice's,
+    else (fallback: the top staff's onsets and worded bars) those printed above, but only where it moves with them
+    (every syllable there falls on one of its notes or in one of its rests). In a bar with none of these the file's
+    own slurs stay; elsewhere they give way."""
+    events = {v: staff_events(staff, v) for v in voices}
+    onsets = {v: onsets_of(staff, v)[0] for v in voices}
+    worded = {v: onsets_of(staff, v)[1] for v in voices}
+    if fallback is not None:
+        onsets['top'], worded['top'] = fallback
+    lead = voices[0]
+
+    def source(v, k):
+        if k in worded[v]:
+            return v, 'own'
+        if k in worded[lead]:
+            return (lead, 'own') if lead == v else (lead, 'moves')
+        if 'top' in worded and k in worded['top']:
+            starts = {t for el, t, kk in events[v] if kk == k and el.tag == 'Chord'}
+            rests = [(t, t2) for (el, t, kk), (_, t2, _) in zip(events[v], events[v][1:] + [(None, None, None)])
+                     if kk == k and el.tag == 'Rest' and t2 is not None]
+            bar = [t for el, t, kk in events[v] if kk == k]
+            lo, hi = (min(bar), max(bar)) if bar else (0, 0)
+            sy = [t for t in onsets['top'] if lo <= t <= hi]
+            if all(t in starts or any(a <= t < b for a, b in rests) for t in sy):
+                return 'top', 'moves'
+        return None
+
+    for v in voices:
+        drop = set()
+        for el, t, k in events[v]:
+            for sp in el.findall("Spanner[@type='Slur']"):
+                nx = sp.find('next/location/fractions')
+                if nx is not None and source(v, k) is not None:
+                    drop.add((t, t + Fraction(nx.text)))
+        for el, t, k in events[v]:
+            for sp in el.findall("Spanner[@type='Slur']"):
+                nx = sp.find('next/location/fractions')
+                pv = sp.find('prev/location/fractions')
+                if nx is not None and (t, t + Fraction(nx.text)) in drop:
+                    el.remove(sp)
+                elif pv is not None and (t + Fraction(pv.text), t) in drop:
+                    el.remove(sp)
+        run = []
+
+        def close():
+            if len(run) > 1:
+                (c0, t0), (c1, t1) = run[0], run[-1]
+                f = t1 - t0
+                for c, kind, frac in ((c0, 'next', f), (c1, 'prev', -f)):
+                    sp = ET.Element('Spanner', type='Slur')
+                    if kind == 'next':
+                        ET.SubElement(sp, 'Slur')
+                    loc = ET.SubElement(ET.SubElement(sp, kind), 'location')
+                    ET.SubElement(loc, 'fractions').text = f'{frac.numerator}/{frac.denominator}'
+                    c.insert(0, sp)
+
+        for el, t, k in events[v]:
+            if el.tag == 'Rest':
+                close()
+                run = []
+                continue
+            if tied_on(el):
+                continue
+            got = source(v, k)
+            if got is None:
+                close()
+                run = []
+                continue
+            src, how = got
+            if how != 'own':
+                # A voice singing words printed under another: its slurs are copied from the sheet (slur:), as an
+                # engraver places them by ear; none are guessed.
+                close()
+                run = []
+                continue
+            # Under its own words a note joins a melisma only where the words hold a syllable onto it.
+            starts = el.find('Lyrics') is not None
+            held = id(el) in HELD
+            if starts:
+                close()
+                run = [(el, t)]
+            elif held and run:
+                run.append((el, t))
+            else:
+                close()
+                run = []
+        close()
+
+
+def untie_mscx(score, spec, info, nums):
+    """Ties the choir's file has where the sheet has none."""
+    staffs = [s for s in score.findall('Staff') if s.find('Measure') is not None]
+    for name, bars in spec.get('untie', []):
+        p = next(x for x in info if x['name'] == name)
+        voice = (int(p['voice']) - 1) % 4
+        ms = staffs[p['mstaff']].findall('Measure')
+        for k, (m, n) in enumerate(zip(ms, nums)):
+            if n not in bars:
+                continue
+            vs = m.findall('voice')
+            if voice < len(vs):
+                for note in vs[voice].iter('Note'):
+                    for sp in note.findall("Spanner[@type='Tie']"):
+                        note.remove(sp)
+            # a tie from the bar's last note ends on the next bar's first chord
+            if k + 1 < len(ms):
+                nv = ms[k + 1].findall('voice')
+                first = next((c for c in nv[voice] if c.tag == 'Chord'), None) if voice < len(nv) else None
+                if first is not None:
+                    for note in first.findall('Note'):
+                        for sp in note.findall("Spanner[@type='Tie']"):
+                            if sp.find('prev') is not None:
+                                note.remove(sp)
+
+
+def slur_pairs(staff, voice):
+    """A voice's slurs as (start, end) moments."""
+    out = []
+    for el, t, k in staff_events(staff, voice):
+        for sp in el.findall("Spanner[@type='Slur']"):
+            nx = sp.find('next/location/fractions')
+            if nx is not None:
+                out.append((t, t + Fraction(nx.text)))
+    return out
+
+
+def copy_slurs(part_staff, pairs):
+    """A part's slurs made the main score's for its voice."""
+    ev = staff_events(part_staff, 0)
+    for el, t, k in ev:
+        for sp in el.findall("Spanner[@type='Slur']"):
+            el.remove(sp)
+    at = {t: el for el, t, k in ev if el.tag == 'Chord'}
+    for t0, t1 in pairs:
+        if t0 in at and t1 in at:
+            f = t1 - t0
+            for c, kind, frac in ((at[t0], 'next', f), (at[t1], 'prev', -f)):
+                sp = ET.Element('Spanner', type='Slur')
+                if kind == 'next':
+                    ET.SubElement(sp, 'Slur')
+                loc = ET.SubElement(ET.SubElement(sp, kind), 'location')
+                ET.SubElement(loc, 'fractions').text = f'{frac.numerator}/{frac.denominator}'
+                c.insert(0, sp)
+
+
+def slurs_mscx(score, spec, info, nums):
+    """The sheet's slurs for voices without words of their own."""
+    staffs = [s for s in score.findall('Staff') if s.find('Measure') is not None]
+    starts, t = {}, Fraction(0)
+    for bar, n in zip(bar_lengths(staffs[0]), nums):
+        starts.setdefault(n, t)
+        t += bar
+    for name, (b1, a1), (b2, a2) in spec.get('slurs', []):
+        p = next(x for x in info if x['name'] == name)
+        voice = (int(p['voice']) - 1) % 4
+        t0 = starts[b1] + a1
+        t1 = t0 + a2 if b2 is None else starts[b2] + a2
+        at = {tt: el for el, tt, k in staff_events(staffs[p['mstaff']], voice) if el.tag == 'Chord'}
+        if t0 not in at or t1 not in at:
+            raise SystemExit(f'slur {name} {b1}+{a1}: no note there')
+        f = t1 - t0
+        for c, kind, frac in ((at[t0], 'next', f), (at[t1], 'prev', -f)):
+            sp = ET.Element('Spanner', type='Slur')
+            if kind == 'next':
+                ET.SubElement(sp, 'Slur')
+            loc = ET.SubElement(ET.SubElement(sp, kind), 'location')
+            ET.SubElement(loc, 'fractions').text = f'{frac.numerator}/{frac.denominator}'
+            c.insert(0, sp)

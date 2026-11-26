@@ -1,6 +1,5 @@
 # From 004. Ce poate fi mai minunat.pdf (1 page) and the choir book, page 9.
 title: 4 Ce poate fi mai minunat?
-spatium: 1.75
 systems: 1 5 9 13
 hide-tempo
 hide-names

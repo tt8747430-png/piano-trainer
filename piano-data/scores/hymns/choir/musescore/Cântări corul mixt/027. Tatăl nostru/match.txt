@@ -3,7 +3,6 @@
 # one staff (the men's staff is left out there, as printed).
 title: 27 Tatăl nostru
 composer: Ciprian Porumbescu
-spatium: 1.75
 systems: 1 6 10 14 | 19 22 25 28 33 36
 hide-tempo
 hide-names

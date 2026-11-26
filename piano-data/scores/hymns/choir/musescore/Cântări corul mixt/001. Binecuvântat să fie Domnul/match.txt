@@ -1,19 +1,20 @@
 # From 001. Binecuvantat sa fie Domnul.pdf (5 pages) and the choir book, page 2.
 title: 1 Binecuvântat să fie Domnul
-spatium: 1.6
-staff-distance: 4.5
-system-distance: 4.5
 systems: 1 5 9 13 16 | 20 22 25 28 30 | 33 37 41 45 49 | 54 58 62 66 | 69 73 78 81 84
 hide-empty-staves
 hide-tempo
 hide-names
 segno: 54
+untie: Bass 38
+untie: Alto 69
+slur: Alto 4+3/4 +1/12, Tenor 4+3/4 +1/12, Bass 4+3/4 +1/12, Tenor 13 +1/8, Tenor 14 +1/8, Tenor 15 +1/8, Tenor 15+1/4 +1/8, Tenor 15+1/2 +1/8, Alto 13+1/2 +1/8, Soprano 52 53, Alto 58+3/8 +1/8, Alto 60+3/8 +1/8, Bass 61+3/8 +1/8, Alto 62+3/8 +1/8, Alto 64 +1/8, Alto 64+3/8 +1/8, Alto 66 +1/8, Alto 66+3/8 +1/8, Alto 68 +1/8, Bass 62+3/8 +1/8, Bass 63+3/8 +1/8, Bass 65+3/8 +1/8, Bass 67 +1/8, Tenor 79+3/8 +1/8, Alto 85 +5/8, Tenor 85 +5/8, Alto 88 +3/8, Tenor 88 +3/8, Bass 88 +3/8
+marks: 40+1/2 fermata
 text: 54 below bold Pian
 text: 81 above bold italic D.S.% al Coda
 text: 82 above bold italic Coda
 
 [Soprano]
-1: @1 Bi -- ne -- cu -- vân -- tat să fi -- e Dom -- nul, bi -- ne -- cu -- vân -- tat să fi -- e'n veci, în mă -- _
+1: @1 Bi -- ne -- cu -- vân -- tat să fi -- e Dom -- nul, bi -- ne -- cu -- vân -- tat să fi -- e'n veci, în| _ mă --
 1: @5 ri -- re și glo -- rie noi sla -- vă'n veci Îți vom cân -- ta.
 1: @9 Bi -- ne -- cu -- vân -- tat să fi -- e Dom -- nul în cer și pe pă -- mânt, De
 1: @13 toți _ în -- ge -- rii, de toți _ oa -- me -- nii în veci _ să _ fii _ lă -- u --
@@ -23,37 +24,38 @@ text: 82 above bold italic Coda
 1: @26 sfânt sân -- ge -- le Lui de pe Cal -- var. O
 1: @28 ru -- gă -- ciu -- ne Doam -- ne'Ţi î -- năl -- țăm fă -- ră -- de -- le -- gea noas -- tră să ne'o ierți,
 1: @31 _ pri -- meș -- te -- ne din nou în ha -- rul Tău, Să fim păr -- tași cu Ti -- ne o I --
-1: @35 sus O @36 sus. O I -- su -- se, o, I -- su -- se, ru -- gă -- ciu -- nea noas -- tră să ne'o as -- cul -- ți, O, I --
+1: @35 sus O @36 sus. O I -- su -- se, o, I -- su -- se, ru -- gă -- ciu -- nea noas -- tră să _ ne'o as -- culți, O, I --
 1: @41 su -- se o, I -- su -- se ru -- gă -- ciu -- nea să a -- jun -- gă sus.
-1: @51 Ier -- ta -- re
-1: @55 Ier -- ta -- re Îți ce -- rem o Doam -- _ ne _ pen -- tru tre -- cu -- tul nos -- tru, _
-1: @60 pen -- tru vi -- a -- _ ța noas -- tră ră -- tă -- cind în pă -- _ cat Ri --
-1: @64 di -- că -- ne o Doam -- _ ne _ pe ca _ -- lea Ta _ a -- cum și spa _ -- lă -- ne _ în
-1: @69 sân -- ge -- le Tău _ _ să fim din nou _ _ cu -- rați și sfinți @72 rați.
-1: @81 Ier @82 Sla -- vă Ți -- e Doam -- ne pu -- ru -- rea în veci de veci! A -- min, @88 A _ -- min.
+1: @51 Ier -- ta
+1: @55 * * Ier -- ta -- re Îți ce -- rem o Doam -- ne pen -- tru tre -- cu -- tul nos -- tru,
+1: @60 pen -- tru vi -- a -- _ ța noas -- tră ră -- tă -- cind în| _ pă -- cat| Ri --
+1: @64 di _ -- că -- ne| _ o Doam -- ne pe ca _ -- lea Ta _ a -- cum| și spa _ -- lă -- ne _ în
+1: @69 sân -- ge -- le Tău _ _ să fim din nou| _ * cu -- rați și sfinți @72 rați.
+1: @81 Ier @82 Sla -- vă Ți -- e Doam -- ne pu -- ru -- rea în veci de veci! A -- min,| @88 A _ -- min.
 2: @18 bi -- ru -- in -- ța noas -- tră prin Hrist' cru -- ci -- fi -- cat, și bol -- dul mor -- ți'ai frânt _ prin
 
 [Tenor italic]
-1: @13 De toți _ în -- ge -- rii de _ toți oa -- me -- nii'n veci _ să _ fii _ lău _ dat. _ _ Căci
+1: @17 _ Căci
 1: @18 Tu ne'ai dat ier -- ta -- re Tu ne'ai dat ier -- ta -- re cru -- ce la Cal -- var da cru -- ce la Cal -- var
 1: @22 via -- ță Tu ne'ai dat da via -- ță Tu ne'ai dat vi -- a -- ță veș -- ni -- că da via -- ță veș -- ni -- că. _
 1: @28 Doam -- ne, Doam -- ne, Doam -- ne, Doam -- ne, Doam -- ne, Doam -- ne Doam -- ne, Doam -- ne, Doam -- ne, Doam -- ne,
 1: @33 Doam -- ne, Doam -- ne Doam -- ne, Doam -- ne, Doam -- ne. @36 Doam -- ne. Miel Di -- vin Miel Di -- vin
 1: @41 O I -- sus o I -- sus
 1: @45 Şi'm -- pre -- u -- nă cu cei sfinți să te'n -- tâm -- pi -- năm pe Tin' în văz -- du -- hul cris -- ta -- lin
-1: @52 Ier -- ta re
+1: @52 Ier -- ta
 1: @56 Doam -- ne ier -- ta -- re Îți ce -- rem Doam -- ne pen -- tru tre -- cu -- tul nost' Doam -- ne pen -- tru vi -- a -- ța
-1: @62 ră -- tă -- cind în pă -- cat și pier -- za -- re _ _ Doam -- ne ri -- di -- că -- ne _ o
-1: @66 Doam -- ne pe _ ca -- lea Ta _ Doam -- ne, Doam -- ne, Doam -- ne _
-1: @73 Um ple -- ne Doam -- ne I -- su -- se cu Du -- hul Tău cel _ Sfânt pu -- te -- rea Ta _ cea
-1: @78 ma -- re re -- var -- să ne -- în -- ce -- tat. @81 tat.
-2: @73 Şi i -- ni -- mi -- le noas -- tre Ţi -- e îți vor cân -- ta, _ căci ma -- re'i mi -- la _ Ta
-2: @78 Doam -- ne pe noi a ne _ ier -- ta. @81 ta.
+1: @62 ră -- tă -- cind în| _ pă -- cat și pier -- za _ -- re Doam -- ne ri -- di -- că -- ne| _ o
+1: @66 Doam -- ne pe| _ ca -- lea Ta _ Doam -- ne, Doam -- ne, Doam -- ne
+1: @73 Um ple -- ne Doam -- ne I -- su -- se cu Du -- hul Tău cel| _ Sfânt pu -- te -- rea Ta| _ cea
+1: @78 ma -- re re -- var -- să ne -- în -- ce -- tat. @81 tat.|
+2: @73 Şi i -- ni -- mi -- le noas -- tre Ţi -- e îți vor cân -- ta,| _ căci ma -- re'i mi -- la| _ Ta
+2: @78 Doam -- ne pe noi a ne _ ier -- ta.| @81 ta.|
 2: @18 bi -- ru -- in -- ța noas -- tră, bi -- ru -- in -- ța noas -- tră Hrist cru -- ci -- fi -- cat da Hrist cru -- ci -- fi -- cat
 2: @22 bol -- dul mor -- ții a frânt bol -- dul mor -- ții'a -- frânt prin
 
 [Alto italic]
-1: @52 Ier -- ta
+1: @52 Ier -- ta -- re
 
 [Bass italic]
-1: @52 Ier -- ta -- re
+1: @13 De toți _ în -- ge -- @14 rii de toți oa -- me -- nii'n @15 veci să fii lău -- @16 dat.
+1: @52 Ier -- ta _ -- re

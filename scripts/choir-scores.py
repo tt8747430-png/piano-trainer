@@ -8,7 +8,8 @@ for every voice (Soprano, Alto, Tenor, Bass; Tenor 1, Tenor 2, Baritone, Bass) s
 voice of the score, with the words under it. A song with no full score but a one-voice file for every voice gets a
 two-staff score put together from those files.
 
-Needs MuseScore Studio 4 as `mscore` (on a server, under xvfb-run). The voices are split by scripts/choir-parts.py;
+Once a song matches its printed sheet (its match.txt) its old MuseScore files are removed: its score is then final,
+and this script leaves it as it is. Needs MuseScore Studio 4 as `mscore` (on a server, under xvfb-run). The voices are split by scripts/choir-parts.py;
 songs it cannot make are listed with the reason.
 """
 
@@ -87,6 +88,10 @@ def main():
             if not os.path.isdir(song_dir) or (wanted and d not in wanted):
                 continue
             files = [f for f in song_files(song_dir) if f' ({tag}).mscz' not in f]
+            if not files and os.path.exists(os.path.join(song_dir, f'{d} ({tag}).mscz')):
+                # Matched to its sheet and its old files cleared: the score is final and is left as it is.
+                songs.append(dict(d=d, sub=sub, why='final: matched to its sheet, its old files cleared'))
+                continue
             if not files:
                 songs.append(dict(d=d, sub=sub, why='only a PDF: to be written in by hand'))
                 continue
@@ -347,6 +352,14 @@ def compose(s, dst, imported):
         nums = match.bar_numbers(staffs[0].findall('Measure'), spec.get('count_pickup'))
         match.marks_mscx(score, spec, nums)
         match.hide_staff(score, spec, info, nums)
+        match.untie_mscx(score, spec, info, nums)
+        # Slurs where a syllable spans several notes: each staff's voices sing its words, a voice with words of
+        # its own in a bar sings those.
+        top = match.onsets_of(staffs[0], 0)
+        for k, ps in by_staff.items():
+            vs = sorted({(int(p['voice']) - 1) % 4 for p in ps})
+            match.melisma_slurs(staffs[k], vs, None if k == 0 else top)
+        match.slurs_mscx(score, spec, info, nums)
         files['score_style.mss'] = match.style_mss(files['score_style.mss'], spec)
     files[mname] = b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root, encoding='utf-8')
     if imported:
@@ -365,6 +378,9 @@ def compose(s, dst, imported):
         pscore.insert(pos, name_el)
         track = p['mstaff'] * 4 + (int(p['voice']) - 1) % 4
         pscore.insert(pos + 1, ET.Element('Tracklist', sTrack=str(track), dstTrack='0'))
+        if spec:
+            match.copy_slurs(pscore.find('Staff'),
+                             match.slur_pairs(staffs[p['mstaff']], (int(p['voice']) - 1) % 4))
         base = f"{i}_{p['name'].replace(' ', '_')}"
         files[f'Excerpts/{base}/{base}.mscx'] = drop_repeated_marks(
             b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(proot, encoding='utf-8'))

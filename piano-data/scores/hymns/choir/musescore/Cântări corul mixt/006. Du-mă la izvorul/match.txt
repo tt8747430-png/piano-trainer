@@ -1,7 +1,6 @@
 # From 006. Du-mă la izvorul.pdf (1 page) and the choir book, page 11.
 title: 6 Du-mă la izvorul
 composer: Alfred Bierli
-spatium: 1.75
 systems: 1 5 9 13
 hide-tempo
 hide-names

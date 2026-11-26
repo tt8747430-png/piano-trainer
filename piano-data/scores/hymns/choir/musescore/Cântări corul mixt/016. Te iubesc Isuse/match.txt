@@ -3,7 +3,6 @@
 title: 16 Te iubesc Isuse
 composer: A. J. Gordon
 count-pickup
-spatium: 1.75
 systems: 1 6 11 15
 hide-names
 bar-numbers: every
