@@ -139,9 +139,12 @@ def main():
                 s['corrected'] = True
             if s['spec']:
                 # The words as printed go under their voices before the split, so every part carries them.
+                done_voices = set()
                 for block in s['spec']['blocks']:
                     p = next(x for x in info if x['name'] == block['voice'])
-                    match.lyrics_xml(score, p['part'], p['staff'], p['voice'], block, s['spec'].get('count_pickup'))
+                    match.lyrics_xml(score, p['part'], p['staff'], p['voice'], block, s['spec'].get('count_pickup'),
+                                     clear=block['voice'] not in done_voices)
+                    done_voices.add(block['voice'])
                 out, info = parts.build(score, s['kind'], [])
         except SystemExit as e:
             s['why'] = f'not made: {e}'
@@ -325,10 +328,13 @@ def compose(s, dst, imported):
     spec = s.get('spec')
     if spec:
         match = load('choir-match')
+        done_voices = set()
         for block in spec['blocks']:
             p = next(x for x in info if x['name'] == block['voice'])
             match.lyrics_mscx(staffs[p['mstaff']], (int(p['voice']) - 1) % 4, block,
-                              match.bar_numbers(staffs[0].findall('Measure'), spec.get('count_pickup')))
+                              match.bar_numbers(staffs[0].findall('Measure'), spec.get('count_pickup')),
+                              clear=block['voice'] not in done_voices)
+            done_voices.add(block['voice'])
         match.layout_mscx(score, spec)
         files['score_style.mss'] = match.style_mss(files['score_style.mss'], spec)
     files[mname] = b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root, encoding='utf-8')

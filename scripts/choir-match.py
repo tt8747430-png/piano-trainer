@@ -22,6 +22,7 @@ Each song may hold a `match.txt` beside its files, written from the song's PDF a
     1: @1 Bi -- ne -- cu -- vân -- tat să fi -- e Dom -- nul, ...
     2: @18 bi -- ru -- in -- ța ...
     [Tenor italic]                     printed in italics, as the men's own words often are
+    [Soprano above]                    printed above the staff (a voice's own words over a shared staff)
     1: @14 De toți _ în -- ge -- rii ...
 
 Words are syllables in order, one per note the voice sings (a note that only continues a tie takes none, unless the
@@ -52,10 +53,10 @@ def parse(path):
             words = m.group(1).split()
             italic = 'italic' in words
             is_notes = 'notes' in words
-            name = ' '.join(w for w in words if w not in ('italic', 'notes'))
+            name = ' '.join(w for w in words if w not in ('italic', 'notes', 'above'))
             if name not in VOICES:
                 raise SystemExit(f'{path}: unknown voice {name}')
-            block = dict(voice=name, italic=italic, verses={})
+            block = dict(voice=name, italic=italic, above='above' in words, verses={})
             spec['notes' if is_notes else 'blocks'].append(block)
             continue
         m = re.match(r'\s*(\d+):\s*(.*)$', line)
@@ -213,14 +214,15 @@ def chord_lengths(measure, voice):
     return out
 
 
-def lyrics_mscx(staff, voice, block, nums):
+def lyrics_mscx(staff, voice, block, nums, clear=True):
     """Writes a block's words under a voice of a staff of the main score, in place of any it had. The bar numbers
     are the top staff's: only it marks a pickup bar."""
     measures = staff.findall('Measure')
     slots = {}
     for m, n in zip(measures, nums):
         slots.setdefault(n, []).extend(sung_chords(m, voice, with_ties=True))
-    for chords in slots.values():
+    # A voice's words are cleared once, before its first block (a voice may have several: words above and below).
+    for chords in slots.values() if clear else ():
         for c in chords:
             c = c.el if isinstance(c, Tied) else c
             for l in c.findall('Lyrics'):
@@ -253,6 +255,8 @@ def lyrics_mscx(staff, voice, block, nums):
                     ET.SubElement(ly, 'ticks_f').text = f'{held.numerator}/{held.denominator}'
             if verse > 1:
                 ET.SubElement(ly, 'no').text = str(verse - 1)
+            if block['above']:
+                ET.SubElement(ly, 'placement').text = 'above'
             if kind != 'single':
                 ET.SubElement(ly, 'syllabic').text = kind
             t = ET.SubElement(ly, 'text')
@@ -520,7 +524,7 @@ def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=
                 el.remove(notations)
             tied = nd['tie']
 
-def lyrics_xml(score, part_index, staff, voice, block, count_pickup=False):
+def lyrics_xml(score, part_index, staff, voice, block, count_pickup=False, clear=True):
     part = score.findall('part')[part_index]
     slots = {}
     n = 0
@@ -538,7 +542,7 @@ def lyrics_xml(score, part_index, staff, voice, block, count_pickup=False):
                 continue
             notes.append(el)
         slots.setdefault(n, []).extend(notes)
-    for notes in slots.values():
+    for notes in slots.values() if clear else ():
         for el in notes:
             el = el.el if isinstance(el, Tied) else el
             for l in el.findall('lyric'):

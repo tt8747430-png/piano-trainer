@@ -1,0 +1,28 @@
+# From 013. Trece Isus pe-aici.pdf (1 page) and the choir book, page 25.
+title: 13 Trece Isus pe-aici
+composer: W. S. Martin
+spatium: 1.75
+systems: 1 3 6 10 13
+hide-tempo
+hide-names
+
+[Soprano]
+1: @1 1.De ești tru -- dit și ți'e grea po -- va -- ra, Nu vrei chiar as -- tăzi să te ri -- dici?
+1: @5 Ia -- tă, e cli -- pa ho -- tă -- râ -- toa -- re: Tre -- ce I -- sus pe'a -- ici.
+1: @13 Chea -- mă'L și ce -- re'l în -- du -- ra -- re: Tre -- ce I -- sus pe'a -- ici.
+2: @1 2.Vei re -- fu -- za ma -- rea Sa iu -- bi -- re? Sau vei ve -- ni du -- pă har să strigi,
+2: @5 Ia -- tă că al -- ții gă -- sesc sal -- va -- re: Tre -- ce I -- sus pe'a -- ici.
+3: @1 3.Ce vrei să'ți fac? azi I -- sus te'n -- trea -- bă, A a -- u -- zit tris -- tul tău of -- tat,
+3: @5 Vi -- no și spu -- ne'l ce te a -- pa -- să, Să fii e -- li -- be -- rat.
+
+[Soprano above italic]
+1: @9 Tre -- ce El,
+
+[Alto]
+1: @9 Tre -- ce pe a -- ici, _ Tre -- ce El.
+
+[Tenor above italic]
+1: @9 Ia -- tă că tre -- ce El @11 Ia -- tă că tre -- ce El.
+
+[Bass italic]
+1: @9 Tre -- ce I -- sus pe'a -- ici, pe'a -- ici, _ Ia -- tă că tre -- ce I -- sus pe'a -- ici.
