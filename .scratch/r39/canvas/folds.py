@@ -23,7 +23,7 @@ def folds(h, stem):
     def one(m):
         i = n[0]; n[0] += 1
         # the 44 button is 20 taller than the 24 line: its row's margin gives back 10 above and below, so the words stay put
-        return ('<div data-foldhead data-folded="{{fold%d}}" style="display: flex; align-items: center; justify-content: space-between; margin: 6px 0 -14px">'
+        return ('<div data-foldhead data-folded="{{fold%d}}" style="display: flex; align-items: center; justify-content: space-between; margin: 8px 0 -16px">'
                 '<h2 style="%s"><button type="button" data-foldbtn aria-expanded="{{foldOpen%d}}" onClick="{{foldT%d}}" '
                 'style="min-height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; display: inline-flex; align-items: center; gap: 8px; cursor: pointer">'
                 '%s%s</button></h2>' % (i, m.group(1), i, i, m.group(2), _FOLDCHEV))

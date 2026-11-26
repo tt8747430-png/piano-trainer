@@ -132,8 +132,8 @@ def DOC(lap=False):
           f'<button type="button" aria-label="Play" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAY.replace('width="22" height="22"', 'width="20" height="20"')}</button>'
           f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openEx}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {INK}; color: {SHEET}; font: inherit; font-size: 15px; font-weight: 700">Edit</button></sc-if></div>'
           f'{KEYSOF(kbn, kh)}</figure></sc-if>'
-          f'<sc-if value="{{{{s.isQ}}}}" hint-placeholder-val="{{{{false}}}}"><figure style="margin: 8px 0 0; display: flex; flex-direction: column; gap: 12px">'
-          f'<div style="display: flex; align-items: center; gap: 8px; margin-bottom: -8px"><span data-q style="flex: 1; min-height: 44px; display: flex; align-items: center; font-size: 17px; font-weight: 700">Play the D major scale</span><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openEx}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {INK}; color: {SHEET}; font: inherit; font-size: 15px; font-weight: 700">Edit</button></sc-if></div>'
+          f'<sc-if value="{{{{s.isQ}}}}" hint-placeholder-val="{{{{false}}}}"><figure style="margin: 0; display: flex; flex-direction: column; gap: 12px">'
+          f'<div style="display: flex; align-items: center; gap: 8px; margin-bottom: -8px"><span data-q style="flex: 1; display: flex; align-items: center; font-size: 17px; font-weight: 700">Play the D major scale</span><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openEx}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {INK}; color: {SHEET}; font: inherit; font-size: 15px; font-weight: 700">Edit</button></sc-if></div>'
           f'<span style="font-size: 14px; color: {SOFT}">Choose on the keys</span>{KEYSOF(qn, kh)}<div style="display: flex; align-items: center; gap: 8px"><span style="flex: 1; font-size: 14px; font-weight: 600; color: {{{{qInk}}}}">{{{{qLine}}}}</span>'
           f'<button type="button" onClick="{{{{resetQ}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">Again</button><sc-if value="{{{{notRight}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{showAns}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 700">Show the answer</button></sc-if></div></figure></sc-if>')
     # on a laptop a section's keyboard runs the page's width under its words, three octaves at a real key's proportion, as the Player's (owner, 2026-11-17: "these keyboards dont make
@@ -150,6 +150,7 @@ def DOC(lap=False):
     out = STEPSCSS
     for i, sd in enumerate(LESSON['secs']):
         S = f'S{i}'
+        links = ''
         body = f'<h2 data-sec contenteditable="{{{{editing}}}}" style="margin: 0; scroll-margin-top: 16px; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; outline: none">{{{{{S}.h}}}}</h2>'
         for j, b in enumerate(sd['blocks']):
             k = b[0]
@@ -172,9 +173,12 @@ def DOC(lap=False):
                 body += QX.replace('<sc-if value="{{s.isQ}}" hint-placeholder-val="{{false}}">', '', 1)[:-len('</sc-if>')].replace('Play the D major scale', f'{{{{{S}.t{j}}}}}')
             elif k == 'link':
                 bg, ic = (SKY, LAYERSI) if b[3] == 'exercise' else (LILAC, CHECKSI)
-                body += (f'<a href="{("Exercise" if b[3] == "exercise" else "Check") + ("Laptop" if lap else "")}.dc.html" style="min-height: 60px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none">'
+                links += (f'<a href="{("Exercise" if b[3] == "exercise" else "Check") + ("Laptop" if lap else "")}.dc.html" style="min-height: 60px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none">'
                          f'<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {bg}; color: {INK}; display: flex; align-items: center; justify-content: center">{ic}</span>'
                          f'<span style="flex: 1; min-width: 0; font-size: 16px">{{{{{S}.t{j}}}}}</span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>')
+        # a section's links (Try it's practice) are their own list; on a laptop two across, so a row's chevron stands by its words
+        if links:
+            body += (f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px">{links}</div>' if lap else links)
         out += f'<section onClick="{{{{{S}.pick}}}}" style="position: relative; {secst}; border-radius: 8px; outline: 2px solid {{{{{S}.ring}}}}; outline-offset: 6px">{body}</section>'
     sec = out
     head = (f'<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600; color: #A8551F">{{{{place}}}} · Foundations</span>'

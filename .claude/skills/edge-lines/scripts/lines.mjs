@@ -204,7 +204,10 @@ async function analyse(page, scr, phone) {
     if ([a, c].some(centredWords)) continue
     if (near(a.x, c.x) && stacked) problems.push(`left edges miss by ${Math.abs(a.x - c.x)}px: ${a.tag} “${a.text}” at ${a.x}, ${c.tag} “${c.text}” at ${c.x}`)
     const side = a.b > c.y && c.b > a.y || Math.abs(a.y - c.y) <= 12
-    if (near(a.y, c.y) && side && (a.r <= c.x || c.r <= a.x)) problems.push(`tops miss by ${Math.abs(a.y - c.y)}px: ${a.tag} “${a.text}” at ${a.y}, ${c.tag} “${c.text}” at ${c.y}`)
+    // a heading's row (a fold's 44 button) beside a sibling column's: the h2 inside each meets the other's h2, so the
+    // wrapper against the bare h2 is no miss; like is compared with like
+    const twin = (w, o) => big.some((d) => d !== w && w.el.contains(d.el) && d.tag === o.tag && Math.abs(d.y - o.y) <= 1)
+    if (near(a.y, c.y) && side && (a.r <= c.x || c.r <= a.x) && !twin(a, c) && !twin(c, a)) problems.push(`tops miss by ${Math.abs(a.y - c.y)}px: ${a.tag} “${a.text}” at ${a.y}, ${c.tag} “${c.text}” at ${c.y}`)
   }
   const xs = [...new Set(big.map((b) => b.x))].sort((a, b) => a - b)
   for (const x of xs) lines.push({ kind: 'v', at: x, bad: xs.some((o) => near(o, x)) })
