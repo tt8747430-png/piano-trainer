@@ -8,10 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-26 · (this commit) · one honey fill in the laptop band (a looping Loop a honey-deep glyph on white, not a second honey circle); the Player's A4 page at 1.5, the editor's size, and the page's title-to-credits 16; the editor's Notation panel body 12 under its head (lines: EditorLaptop, EditorDraftLaptop, PlayerLaptop, PlayerLaptopLoop 0 problems) · PlayerDesk, EditorLaptop, EditorDraftLaptop, Editor, EditorDraft, PlayerApp · pending
-
 ## Changes
 
+- 2026-11-26 · d16c8696 · one honey fill in the laptop band (a looping Loop a honey-deep glyph on white, not a second honey circle); the Player's A4 page at 1.5, the editor's size, and the page's title-to-credits 16; the editor's Notation panel body 12 under its head (lines: EditorLaptop, EditorDraftLaptop, PlayerLaptop, PlayerLaptopLoop 0 problems) · PlayerDesk, EditorLaptop, EditorDraftLaptop, Editor, EditorDraft, PlayerApp · v776
 - 2026-11-26 · d5515f5a · laptop Diagrams, Grid and Lyrics on the panel's lines: the song's name on the panel head's top, the credits 4 under it, the grid's section heads 8 over their rows and 24 under the last section (lines tool: 8 problems → 0) · PlayerDesk (and its wrappers) · v775
 - 2026-11-26 · a0ec203a · R74 Edit kept across the views: the editor's Diagrams, Grid and Lyrics cards open those views in Edit (new boards EditorDiagrams/Grid/Lyrics, EditorDraft…, EditorLaptop…, EditorDraftLaptop…, and the Player's PlayerLaptopDiagrams/Grid/Lyrics), Edit's acts under the header, the Sheet card back to the editor, Practice | Edit keeping the view; the grid's section heads on the ☰ panel's edge · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop + 15 new · v775
 - 2026-11-26 · 61454867 · R74 phone: View beside ← (Parts a section of its page, View left ☰); every settings page a full page with ← Back to where it came from (☰, Song, the parent), under the status bar; view cards 12 apart · Editor, EditorDraft, PlayerApp, EditorLaptop, EditorDraftLaptop · v773
