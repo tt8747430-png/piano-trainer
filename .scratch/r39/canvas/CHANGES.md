@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-26 · PENDING · the Grid view's bar numbers at the 12px floor in soft ink (#685E56, 4.5:1 and over), not 10px in #A39A90 at 2.5:1; they still fit the phone's 16 gutter to bar 32 (lines: PlayerViewGrid, EditorGrid phone and 393, PlayerLaptopGrid, EditorLaptopGrid 0 problems) · PlayerApp, PlayerDesk, and the editor's Grid boards built from them · pending
 ## Changes
 
+- 2026-11-26 · 951b109e · the Grid view's bar numbers at the 12px floor in soft ink (#685E56, 4.5:1 and over), not 10px in #A39A90 at 2.5:1; they still fit the phone's 16 gutter to bar 32 (lines: PlayerViewGrid, EditorGrid phone and 393, PlayerLaptopGrid, EditorLaptopGrid 0 problems) · PlayerApp, PlayerDesk, and the editor's Grid boards built from them · v785
 - 2026-11-26 · ce32da08 · the laptop toolbar's Piano keys, while the keys show, a honey-deep glyph with no ink square, as the phone's and as Flat turns its keyboard glyph blue: the black-filled tile was a second heavy mark beside Play's one honey fill (lines: EditorLaptop, Editor 0 problems) · EditorLaptop, EditorDraftLaptop, Editor, EditorDraft · v784
 - 2026-11-26 · e29ccfda · the laptop toolbar's chosen duration and accidental white and lifted on the note-input pill, as a segmented control's chosen segment: the pressed tile was #EEE9E2 on the pill's #EEE9E2, so the pick did not show (lines: EditorLaptop, EditorDraftLaptop 0 problems) · EditorLaptop, EditorDraftLaptop, Editor, EditorDraft · v783
 - 2026-11-26 · 30c8b709 · Undo and Redo dimmed when there is nothing to undo or redo, as Flat's second row greys them (flat-score-editor 003, 005): the editor's from its marks, the Player's views in Edit from their own count; a disabled act at half strength with no pointer, the kit's one rule (DISABLED_CSS), which also dims the laptop's Zoom out at its least (lines: Editor, EditorGrid after Delete, EditorLaptop 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v782
