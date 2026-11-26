@@ -3,10 +3,9 @@
 The input is the song's full score as MuseScore exports it to MusicXML (any layout: two voices on a staff, one voice
 per staff, or two voices written as one chord). Each voice becomes its own part (Soprano, Alto, Tenor, Bass; for the
 men's choir Tenor 1, Tenor 2, Baritone, Bass), on its own staff with the usual clef, playing piano. A bar where a staff
-holds one line (the voices in unison) gives that line to both its voices. Words: each part keeps its own; a note
-without words takes those of a note starting at the same moment in another voice, the nearest voice first, so a lower
-voice singing the same rhythm carries the text. Other scores of the song (often a voice's practice file with the
-words) fill a part whose notes they match with their words.
+holds one line (the voices in unison) gives that line to both its voices. Each part keeps its own words; other scores
+of the song (often a voice's practice file with the words) fill a part whose notes they match. The words a part sings
+from another voice are given once the score is made (partwords.py).
 """
 
 import copy
@@ -197,7 +196,6 @@ def build(score, kind, sources):
 
     read = {pi: read_voices(p) for pi, p in enumerate(parts)}
     nmeas = len(read[0])
-    built = []
     def mean_of(line, other):
         ps = []
         for m, head, events, div in read[line[0]]:
@@ -312,12 +310,10 @@ def build(score, kind, sources):
                     n.find('rest').attrib.clear()
                 for d in n.findall('rest/display-step') + n.findall('rest/display-octave'):
                     n.find('rest').remove(d)
-                built.append((i, mi, ev.start, n, ev.rest))
                 nm.append(n)
             if marks:
                 advance(marks[-1][1], t)
         fill_words_from(part, sources, i)
-    share_words(out, built)
     # Which source staff and voice each part reads, and the octaves it was moved: the main score is corrected and its
     # parts are tied to its tracks from these.
     info = [dict(name=names[i][0], part=t[1][0], staff=t[1][1], voice=t[1][2], upper=(j == 0), shift=shifts[i],
@@ -328,31 +324,6 @@ def build(score, kind, sources):
 
 def words(note):
     return [l for l in note.findall('lyric') if l.findtext('text')]
-
-
-def share_words(out, built):
-    """A note without words takes those of a note starting at the same moment in the nearest other voice."""
-    index = {}
-    for i, mi, start, n, rest in built:
-        if not rest and n.find('tie[@type="stop"]') is None:
-            index[(i, mi, start)] = n
-    order = {0: [1, 2, 3], 1: [0, 2, 3], 2: [3, 1, 0], 3: [2, 1, 0]}
-    for i, mi, start, n, rest in built:
-        if rest or words(n) or n.find('tie[@type="stop"]') is not None:
-            continue
-        for j in order[i]:
-            other = index.get((j, mi, start))
-            if other is not None and words(other):
-                for l in words(other):
-                    lc = copy.deepcopy(l)
-                    for a in ('default-x', 'default-y', 'relative-y', 'relative-x', 'placement'):
-                        lc.attrib.pop(a, None)
-                    pos = len(n)
-                    for t, x in enumerate(n):
-                        if x.tag in ('notations',):
-                            pos = t + 1
-                    n.insert(pos, lc)
-                break
 
 
 def note_seq(part_el):

@@ -13,8 +13,11 @@ is written.
 2. Go through each system **voice by voice**: soprano, alto, tenor, bass. For each: every note, every word under
    it, every slur, tie, hold line, dynamic, hairpin, fermata, repeat and text.
 3. Check the PDF against the song's pages in the choir book (`Caiet de cor scanat`): same notes, words and marks.
-4. Fix, rebuild, and look again at every system changed, until a full pass finds nothing.
-5. Only then remove the song's old MuseScore files, commit, and go on to the next song.
+4. Check the parts: `python3 scripts/choir parts <song>` lists a part's note left unsung or a slur over a new
+   syllable; export them (`mscore -j` with `["out.pdf", ["part-", ".pdf"]]`) and read each part against the
+   sheet, its words above all.
+5. Fix, rebuild, and look again at every system changed, until a full pass finds nothing.
+6. Only then remove the song's old MuseScore files, commit, and go on to the next song.
 
 A song with only its PDF (song 3) is written in whole: every voice in `[Voice notes]` at the pitch it sounds, with
 `key:` and `time:`, built from the template's empty staves. Each pitch is measured, never guessed from a small view:
@@ -60,3 +63,9 @@ by hand.
   `spec.read`'s defaults), never a line copied into each `match.txt`.
 - **A source claimed and not opened.** A `match.txt` names the book's page only after the page was opened and seen
   to be the same printing (song 3: page 8).
+- **A part with another voice's words.** The sheet prints the words once; a part sings the words of the voice it
+  moves with, run by run. Shared note by note, song 1's tenor part had the basses' echo ("De toți") under the
+  sopranos' line in bar 13. `partwords.py` now chooses by rhythm, and `parts` checks every part.
+- **A syllable held in every voice.** Where both voices of a staff slur two notes, the syllable is held (`_`):
+  song 1, bar 58, "cu _ -- tul", not "cu -- tul" a note early.
+- **A part laid out apart from its score.** A part keeps the main score's line and page breaks.

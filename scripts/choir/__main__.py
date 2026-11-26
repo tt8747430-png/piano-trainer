@@ -6,6 +6,8 @@
     python3 scripts/choir heads <song> <page> <staff> [scan | ruler | x ...]
                                                       the printed sheet's noteheads named by pitch, for writing a
                                                       voice in from the sheet
+    python3 scripts/choir parts <song>                 what each part's words get wrong (a note not sung, a slur
+                                                      over a new syllable)
     python3 scripts/choir template                    write the empty SATB and TTBB scores in template/
     python3 scripts/choir index                       write INDEX.md
 
@@ -21,6 +23,7 @@ import compare
 import engrave
 import heads
 import index
+import partwords
 import template
 
 
@@ -47,6 +50,8 @@ def main(argv):
         notes(args)
     elif command == 'heads':
         heads.heads(args[0], args[1], args[2], args[3:])
+    elif command == 'parts':
+        partwords.report(compare.song(args[0])[1])
     elif command == 'template':
         template.write()
     elif command == 'index':

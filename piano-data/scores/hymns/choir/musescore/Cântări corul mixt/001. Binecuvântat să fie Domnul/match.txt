@@ -4,7 +4,7 @@ hide-empty-staves
 segno: 54
 untie: Bass 38
 untie: Alto 69
-slur: Alto 4+3/4 +1/12, Tenor 4+3/4 +1/12, Bass 4+3/4 +1/12, Tenor 13 +1/8, Tenor 14 +1/8, Tenor 15 +1/8, Tenor 15+1/4 +1/8, Tenor 15+1/2 +1/8, Alto 13+1/2 +1/8, Soprano 52 53, Alto 58+3/8 +1/8, Alto 60+3/8 +1/8, Bass 61+3/8 +1/8, Alto 62+3/8 +1/8, Alto 64 +1/8, Alto 64+3/8 +1/8, Alto 66 +1/8, Alto 66+3/8 +1/8, Alto 68 +1/8, Bass 62+3/8 +1/8, Bass 63+3/8 +1/8, Bass 65+3/8 +1/8, Bass 67 +1/8, Tenor 79+3/8 +1/8, Alto 85 +5/8, Tenor 85 +5/8, Alto 88 +3/8, Tenor 88 +3/8, Bass 88 +3/8
+slur: Alto 4+3/4 +1/12, Bass 8 +3/4, Tenor 4+3/4 +1/12, Bass 4+3/4 +1/12, Tenor 13 +1/8, Tenor 14 +1/8, Tenor 15 +1/8, Tenor 15+1/4 +1/8, Tenor 15+1/2 +1/8, Alto 13+1/2 +1/8, Soprano 52 53, Alto 58+3/8 +1/8, Alto 60+3/8 +1/8, Bass 61+3/8 +1/8, Alto 62+3/8 +1/8, Alto 64 +1/8, Alto 64+3/8 +1/8, Alto 66 +1/8, Alto 66+3/8 +1/8, Alto 68 +1/8, Bass 62+3/8 +1/8, Bass 63+3/8 +1/8, Bass 65+3/8 +1/8, Bass 67 +1/8, Tenor 79+3/8 +1/8, Alto 85 +5/8, Tenor 85 +5/8, Alto 88 +3/8, Tenor 88 +3/8, Bass 88 +3/8
 marks: 40+1/2 fermata
 text: 54 below bold Pian
 text: 81 above bold italic D.S.% al Coda
@@ -24,7 +24,7 @@ text: 82 above bold italic Coda
 1: @35 sus O @36 sus. O I -- su -- se, o, I -- su -- se, ru -- gă -- ciu -- nea noas -- tră să _ ne'o as -- culți, O, I --
 1: @41 su -- se o, I -- su -- se ru -- gă -- ciu -- nea să a -- jun -- gă sus.
 1: @51 Ier -- ta
-1: @55 * * Ier -- ta -- re Îți ce -- rem o Doam -- ne pen -- tru tre -- cu -- tul nos -- tru,
+1: @55 * * Ier -- ta -- re Îți ce -- rem o Doam -- ne pen -- tru tre -- cu _ -- tul nos -- tru,
 1: @60 pen -- tru vi -- a -- _ ța noas -- tră ră -- tă -- cind în| _ pă -- cat| Ri --
 1: @64 di _ -- că -- ne| _ o Doam -- ne pe ca _ -- lea Ta _ a -- cum| și spa _ -- lă -- ne _ în
 1: @69 sân -- ge -- le Tău _ _ să fim din nou| _ * cu -- rați și sfinți @72 rați.

@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 
 import engrave
 import house
+import partwords
 import slurs
 from common import (ORDER, SHORT, find_voice, main_name, read_mscz, set_text, voice_of, voices_of, write_mscz,
                     xml_bytes)
@@ -183,12 +184,13 @@ def compose(s, dst, imported):
         pscore.insert(pos, name_el)
         track = p['mstaff'] * 4 + (int(p['voice']) - 1) % 4
         pscore.insert(pos + 1, ET.Element('Tracklist', sTrack=str(track), dstTrack='0'))
-        if spec['matched']:
-            slurs.copy_slurs(pscore.find('Staff'), slurs.slur_pairs(staffs[p['mstaff']], voice_of(p)))
         base = f"{i}_{p['name'].replace(' ', '_')}"
         files[f'Excerpts/{base}/{base}.mscx'] = drop_repeated_marks(xml_bytes(proot))
         files[f'Excerpts/{base}/{base}.mss'] = house.apply(pf['score_style.mss'], spec)
         extra += [f'Excerpts/{base}/{base}.mss', f'Excerpts/{base}/{base}.mscx']
+
+    # Each part's words from the main score, bar by bar from the voice it moves with.
+    partwords.apply(files, spec['matched'])
 
     # The container lists the main score, then each part.
     out_name = os.path.basename(dst)[:-5] + '.mscx'

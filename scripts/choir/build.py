@@ -9,18 +9,21 @@ the score. A song with no full score but a one-voice file for every voice gets a
 those files.
 
 Once a song matches its printed sheet its old MuseScore files are removed: its made score is then final, and a build
-only brings its style level with the house's. A song with no MuseScore file at all, whose match.txt writes in every
+makes it again from those files as git keeps them (the commit before their removal), so a rule fixed in the builder
+reaches every finished song. A song with no MuseScore file at all, whose match.txt writes in every
 voice (with its `key:` and `time:`), is built from the house template's two empty staves. Songs that cannot be made are listed with the reason.
 """
 
 import copy
 import os
+import subprocess
 import sys
 import tempfile
 import xml.etree.ElementTree as ET
 
 import compose
 import house
+import partwords
 import sheet
 import spec as specs
 import template
@@ -40,10 +43,16 @@ def build(wanted=()):
             todo.append(dict(d=d, sub=sub, kind=kind, tag=tag, dir=song_dir, xmls=[], why=None, spec=spec,
                              from_template=True))
             continue
+        root = song_dir
         if not files and os.path.exists(final):
-            restyle(final, spec)
-            todo.append(dict(d=d, sub=sub, why='final: matched to its sheet, its old files cleared; restyled'))
-            continue
+            # Final: its old files were cleared once it matched its sheet. It is made again from them, as git
+            # keeps them, so every rule of the builder reaches the finished songs too.
+            root = os.path.join(work, f'history-{len(todo):03d}')
+            files = history_sources(song_dir, root)
+            if not files:
+                restyle(final, spec)
+                todo.append(dict(d=d, sub=sub, why='final, its sources not in git: restyled'))
+                continue
         if not files:
             todo.append(dict(d=d, sub=sub, why='only a PDF: to be written in by hand'))
             continue
@@ -52,7 +61,7 @@ def build(wanted=()):
             x = os.path.join(work, f'{len(todo):03d}-{i:02d}.musicxml')
             jobs.append((os.path.abspath(f), x))
             xmls.append((f, x))
-        todo.append(dict(d=d, sub=sub, kind=kind, tag=tag, dir=song_dir, xmls=xmls, why=None, spec=spec))
+        todo.append(dict(d=d, sub=sub, kind=kind, tag=tag, dir=song_dir, root=root, xmls=xmls, why=None, spec=spec))
     print(f'reading {len(jobs)} files', file=sys.stderr)
     done = set(mscore_job(jobs))
 
@@ -97,7 +106,7 @@ def split(s, done, work, n, second):
         score, s['from'] = template.skeleton(s['kind'], spec), 'the template, every voice from the sheet'
         full = [(None, score, 0, False)]
     elif full:
-        score, s['from'] = copy.deepcopy(full[0][1]), os.path.relpath(full[0][0], s['dir'])
+        score, s['from'] = copy.deepcopy(full[0][1]), os.path.relpath(full[0][0], s['root'])
     else:
         score, s['from'] = compose.assemble([(f, root, lines) for f, root, lines, lyr in infos], s['kind'])
     corrected = False
@@ -172,10 +181,30 @@ def enter_notes(score, kind, spec, lyric_srcs):
         sheet.notes_xml(score, part, staff, voice, block, sheet.has_staves(score, part), spec.get('count_pickup'))
 
 
+def history_sources(song_dir, root):
+    """A final song's MuseScore files as they were before they were removed, written under root."""
+    git = lambda *args: subprocess.run(['git', *args], capture_output=True, check=True).stdout
+    commit = git('log', '-1', '--diff-filter=D', '--format=%H', '--', song_dir).decode().strip()
+    if not commit:
+        return []
+    out = []
+    for path in git('ls-tree', '-r', '-z', '--name-only', f'{commit}^', '--', song_dir).decode().split('\0'):
+        rel = os.path.relpath(path, song_dir) if path else ''
+        if not rel.endswith(('.mscz', '.mscx')) or '.mscbackup' in rel or rel.endswith(('(SATB).mscz', '(TTBB).mscz')):
+            continue
+        dst = os.path.join(root, rel)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        with open(dst, 'wb') as fh:
+            fh.write(git('show', f'{commit}^:{path}'))
+        out.append(dst)
+    return sorted(out)
+
+
 def restyle(mscz, spec):
-    """A final score's style and its parts' made the house's, nothing else touched."""
+    """A final score's style and its parts' made the house's, and its parts' words taken again from its score."""
     files = read_mscz(mscz)
     for n in files:
         if n.endswith('.mss'):
             files[n] = house.apply(files[n], spec)
+    partwords.apply(files, spec['matched'])
     write_mscz(mscz, files, list(files))

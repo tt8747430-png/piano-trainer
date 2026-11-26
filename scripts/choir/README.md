@@ -9,6 +9,7 @@ python3 scripts/choir build [song ...]    # every song when none is named
 python3 scripts/choir compare 2           # each system of song 2's sheet above ours, as images
 python3 scripts/choir notes 2 [1 0]       # song 2's voices (or staff 1, voice 0) bar by bar
 python3 scripts/choir heads 3 1 1 scan    # song 3's sheet, page 1, staff 1: its noteheads by pitch, bar by bar
+python3 scripts/choir parts 1             # what song 1's parts' words get wrong
 python3 scripts/choir template            # template/Choir SATB.mscz and Choir TTBB.mscz
 python3 scripts/choir index               # INDEX.md
 ```
@@ -46,7 +47,12 @@ Every made score and each of its parts takes the house template, so no song need
    staff named for its voices, piano, and, for a matched song, `engrave.py` (words, title, breaks, marks, hidden
    staves, ties) and `slurs.py` (held syllables slurred, the sheet's own slurs, each part's slurs from its voice);
    then `house.py` gives the score and every part the house style.
-5. A song whose old files are removed is final: a build only brings its style level with the template.
+5. Each part is then made from the finished main score (`partwords.py`): its lines and pages are the score's, its
+   slurs its voice's, and its words the ones its voice sings: its own, or, run by run, those of the voice it moves
+   with (the tenors with the sopranos, the altos with the basses' echo), a word whole from one voice, a syllable it
+   holds over several notes slurred. `parts` lists what is still wrong.
+6. A song whose old files are removed is final: a build makes it again from them as git keeps them, so a rule
+   fixed in the builder reaches every finished song.
 
 A song that exists only as a PDF is written in whole from its sheet: its `match.txt` gives `key:`, `time:` and a
 `[Voice notes]` block for every voice, and the build starts from the template's two empty staves
@@ -64,6 +70,7 @@ an x ruler, `scan` lists every column of heads between the barlines, and x value
 | `engrave.py`| corrections in MuseScore's own file                                           |
 | `slurs.py`  | slurs                                                                         |
 | `house.py`  | the house style from `template/house.mss`                                     |
+| `partwords.py` | each part's lines, words and slurs from the main score, and their check    |
 | `template.py` | the empty template scores, and the two empty staves a sheet-only song starts on |
 | `compare.py`| the sheet and ours, system by system                                          |
 | `heads.py`  | the printed sheet's noteheads named by pitch                                  |
