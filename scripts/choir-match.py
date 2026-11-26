@@ -30,6 +30,7 @@ voice's notes bar by bar, for writing the words against them. scripts/choir-scor
 
 import re
 import sys
+from fractions import Fraction
 import xml.etree.ElementTree as ET
 import zipfile
 
@@ -38,7 +39,7 @@ VOICES = ['Soprano', 'Alto', 'Tenor', 'Bass', 'Tenor 1', 'Tenor 2', 'Baritone']
 
 def parse(path):
     spec = dict(title=None, spatium=None, systems=[], hide_empty=False, hide_tempo=False, hide_names=False, blocks=[],
-                texts=[], segno=None)
+                texts=[], segno=None, notes=[])
     block = None
     for raw in open(path, encoding='utf-8'):
         line = raw.split('#', 1)[0].rstrip() if not raw.lstrip().startswith(('1', '2', '3', '4', '5', '6')) else raw.rstrip()
@@ -48,11 +49,12 @@ def parse(path):
         if m:
             words = m.group(1).split()
             italic = 'italic' in words
-            name = ' '.join(w for w in words if w != 'italic')
+            is_notes = 'notes' in words
+            name = ' '.join(w for w in words if w not in ('italic', 'notes'))
             if name not in VOICES:
                 raise SystemExit(f'{path}: unknown voice {name}')
             block = dict(voice=name, italic=italic, verses={})
-            spec['blocks'].append(block)
+            spec['notes' if is_notes else 'blocks'].append(block)
             continue
         m = re.match(r'\s*(\d+):\s*(.*)$', line)
         if m and block is not None:
@@ -159,9 +161,33 @@ def place(slots_by_bar, tokens):
         if pos >= len(order):
             raise SystemExit(f'more words than notes, at {t}')
         if t[0] == 'word':
-            pairs.append((order[pos][1], t[1], t[2]))
+            pairs.append([order[pos][1], t[1], t[2], 0])
+        elif pairs:
+            pairs[-1][3] += 1
         pos += 1
     return pairs
+
+
+DURATIONS = {'whole': Fraction(1), 'half': Fraction(1, 2), 'quarter': Fraction(1, 4), 'eighth': Fraction(1, 8),
+             '16th': Fraction(1, 16), '32nd': Fraction(1, 32), 'breve': Fraction(2)}
+
+
+def chord_lengths(measure, voice):
+    """Every chord of a voice in a measure with its length as a fraction of a whole note (tuplets included)."""
+    vs = measure.findall('voice')
+    if voice >= len(vs):
+        return []
+    out, ratio = [], Fraction(1)
+    for el in vs[voice]:
+        if el.tag == 'Tuplet':
+            ratio = Fraction(int(el.findtext('normalNotes') or 2), int(el.findtext('actualNotes') or 3))
+        elif el.tag == 'endTuplet':
+            ratio = Fraction(1)
+        elif el.tag in ('Chord', 'Rest'):
+            base = DURATIONS.get(el.findtext('durationType'), Fraction(0))
+            dots = int(el.findtext('dots') or 0)
+            out.append((el, base * (2 - Fraction(1, 2 ** dots)) * ratio))
+    return out
 
 
 def lyrics_mscx(staff, voice, block, nums):
@@ -175,9 +201,32 @@ def lyrics_mscx(staff, voice, block, nums):
         for c in chords:
             for l in c.findall('Lyrics'):
                 c.remove(l)
+    # Each chord in order with its length, to draw a held syllable's line to the end of its last note.
+    sequence = [x for m in measures for x in chord_lengths(m, voice)]
     for verse, tokens in sorted(block['verses'].items()):
-        for chord, text, kind in place(slots, tokens):
+        slots_all = {id(c) for chords in slots.values() for c in chords}
+        for chord, text, kind, holds in place(slots, tokens):
             ly = ET.Element('Lyrics')
+            if kind in ('end', 'single'):
+                # The line runs over the notes the syllable is held on: its holds, and any note tied on.
+                k = next(i for i, (c, _) in enumerate(sequence) if c is chord)
+                own = sequence[k][1]
+                held = Fraction(0)
+                last = Fraction(0)
+                left = holds
+                for c, length in sequence[k + 1:]:
+                    if c.tag == 'Rest':
+                        break
+                    if id(c) in slots_all:
+                        if not left:
+                            break
+                        left -= 1
+                    held += length
+                    last = length
+                if held:
+                    # MuseScore draws the line from the syllable's note to the start of the last note it holds.
+                    held += own - last
+                    ET.SubElement(ly, 'ticks_f').text = f'{held.numerator}/{held.denominator}'
             if verse > 1:
                 ET.SubElement(ly, 'no').text = str(verse - 1)
             if kind != 'single':
@@ -328,7 +377,96 @@ def style_mss(data, spec):
     return text.encode('utf-8')
 
 
-# MusicXML, before the voices are split, so each part carries its words
+# MusicXML, before the voices are split, so each part carries its words and the notes entered from the sheet
+
+STEP_PC = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
+TYPES = {1: 'whole', 2: 'half', 4: 'quarter', 8: 'eighth', 16: '16th', 32: '32nd'}
+
+
+def note_tokens(tokens):
+    """Note tokens to [(bar, [note dict])]: `Eb4:8.` (pitch, octave, length, dots), `r:4` a rest, `~` after a length
+    ties to the next note, `t` after a length makes it a triplet's third."""
+    bars, cur = [], None
+    for t in tokens:
+        if t.startswith('@'):
+            cur = (int(t[1:]), [])
+            bars.append(cur)
+            continue
+        m = re.match(r'(r|[A-G](?:#|b)?\d):(\d+)(\.*)(t?)(~?)$', t)
+        if not m or cur is None:
+            raise SystemExit(f'cannot read note {t}')
+        pitch, length, dots, trip, tie = m.groups()
+        cur[1].append(dict(pitch=None if pitch == 'r' else pitch, length=int(length), dots=len(dots),
+                           triplet=bool(trip), tie=bool(tie)))
+    return bars
+
+
+def duration(n):
+    d = Fraction(4, n['length']) * (2 - Fraction(1, 2 ** n['dots']))
+    return d * Fraction(2, 3) if n['triplet'] else d
+
+
+def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=False):
+    """Writes a voice's notes, as entered from the sheet, into its bars, in place of what the voice had there."""
+    part = score.findall('part')[part_index]
+    measures = part.findall('measure')
+    nums, n = [], 0
+    for m in measures:
+        if count_pickup or m.get('implicit') != 'yes':
+            n += 1
+        nums.append(n)
+    div = int(next(a.findtext('divisions') for a in part.iter('attributes') if a.findtext('divisions')))
+    tied = False
+    for bar, notes in note_tokens(block['verses'].get(1, [])):
+        m = measures[nums.index(bar)]
+        for el in list(m):
+            if el.tag == 'note' and (el.findtext('staff') or '1') == staff and (el.findtext('voice') or '1') == voice:
+                m.remove(el)
+        length = Fraction(0)
+        t = Fraction(0)
+        for el in m:
+            if el.tag == 'backup':
+                t -= Fraction(int(el.findtext('duration')), div)
+            elif el.tag == 'forward' or (el.tag == 'note' and el.find('chord') is None):
+                t += Fraction(int(el.findtext('duration') or 0), div)
+            length = max(length, t)
+        if length:
+            bk = ET.SubElement(m, 'backup')
+            ET.SubElement(bk, 'duration').text = str(int(length * div))
+        for nd in notes:
+            el = ET.SubElement(m, 'note')
+            if nd['pitch'] is None:
+                ET.SubElement(el, 'rest')
+            else:
+                p = ET.SubElement(el, 'pitch')
+                ET.SubElement(p, 'step').text = nd['pitch'][0]
+                acc = nd['pitch'][1:-1]
+                if acc:
+                    ET.SubElement(p, 'alter').text = '1' if acc == '#' else '-1'
+                ET.SubElement(p, 'octave').text = nd['pitch'][-1]
+            ET.SubElement(el, 'duration').text = str(int(duration(nd) * div))
+            if tied and nd['pitch']:
+                ET.SubElement(el, 'tie', type='stop')
+            if nd['tie']:
+                ET.SubElement(el, 'tie', type='start')
+            ET.SubElement(el, 'voice').text = voice
+            ET.SubElement(el, 'type').text = TYPES[nd['length']]
+            for _ in range(nd['dots']):
+                ET.SubElement(el, 'dot')
+            if nd['triplet']:
+                tm = ET.SubElement(el, 'time-modification')
+                ET.SubElement(tm, 'actual-notes').text = '3'
+                ET.SubElement(tm, 'normal-notes').text = '2'
+            if multi_staff:
+                ET.SubElement(el, 'staff').text = staff
+            notations = ET.SubElement(el, 'notations')
+            if tied and nd['pitch']:
+                ET.SubElement(notations, 'tied', type='stop')
+            if nd['tie']:
+                ET.SubElement(notations, 'tied', type='start')
+            if not len(notations):
+                el.remove(notations)
+            tied = nd['tie']
 
 def lyrics_xml(score, part_index, staff, voice, block, count_pickup=False):
     part = score.findall('part')[part_index]
@@ -352,7 +490,7 @@ def lyrics_xml(score, part_index, staff, voice, block, count_pickup=False):
             for l in el.findall('lyric'):
                 el.remove(l)
     for verse, tokens in sorted(block['verses'].items()):
-        for note, text, kind in place(slots, tokens):
+        for note, text, kind, _ in place(slots, tokens):
             ly = ET.Element('lyric', number=str(verse))
             ET.SubElement(ly, 'syllabic').text = kind
             t = ET.SubElement(ly, 'text')

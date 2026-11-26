@@ -123,6 +123,20 @@ def main():
             out, info = parts.build(score, s['kind'], lyric_srcs)
             spec_path = os.path.join(s['dir'], 'match.txt')
             s['spec'] = match.parse(spec_path) if os.path.exists(spec_path) else None
+            if s['spec'] and s['spec']['notes']:
+                # Notes entered from the sheet (a voice the file left out) go in first; a voice that shared its
+                # staff's line takes the staff's next voice.
+                for block in s['spec']['notes']:
+                    p = next(x for x in info if x['name'] == block['voice'])
+                    voice = p['voice']
+                    if any(x is not p and (x['part'], x['staff'], x['voice']) == (p['part'], p['staff'], voice)
+                           for x in info):
+                        voice = str(int(voice) + 1)
+                    multi = max([int(x.text) for x in score.findall('part')[p['part']].iter('staves')] or [1]) > 1
+                    match.notes_xml(score, p['part'], p['staff'], voice, block, multi,
+                                    s['spec'].get('count_pickup'))
+                out, info = parts.build(score, s['kind'], lyric_srcs)
+                s['corrected'] = True
             if s['spec']:
                 # The words as printed go under their voices before the split, so every part carries them.
                 for block in s['spec']['blocks']:
@@ -139,9 +153,22 @@ def main():
             write_xml(single_part(out, i), x)
             s['parts'].append((x, x[:-9] + '.mscz'))
             second.append(s['parts'][-1])
-        if full:
+        if full and not s.get('corrected'):
             s['main_src'] = os.path.abspath(full[0][0])
             s['score_xml'] = score
+        elif full:
+            # Notes were entered: the main score is the corrected full score, read back by MuseScore.
+            x = os.path.join(work, f'{n:03d}-corrected.musicxml')
+            # Each staff's barlines its own, as the choir's sheets draw them.
+            for g in score.iter('part-group'):
+                for gb in g.findall('group-barline'):
+                    g.remove(gb)
+                if g.get('type') == 'start':
+                    ET.SubElement(g, 'group-barline').text = 'no'
+            write_xml(score, x)
+            s['main_src'] = x
+            s['score_xml'] = score
+            s['imported'] = True
         else:
             x = os.path.join(work, f'{n:03d}-closed.musicxml')
             write_xml(closed(out, s['kind']), x)
@@ -161,7 +188,7 @@ def main():
             results.append((s['sub'], s['d'], 'not made: MuseScore did not save it'))
             continue
         dst = os.path.join(s['dir'], f"{s['d']} ({s['tag']}).mscz")
-        compose(s, dst, imported='score_xml' not in s)
+        compose(s, dst, imported='score_xml' not in s or s.get('imported'))
         results.append((s['sub'], s['d'], f"made from {s['from']}"))
     for sub, d, msg in results:
         print(f'{sub} | {d} | {msg}')
