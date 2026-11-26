@@ -9,7 +9,8 @@ the score. A song with no full score but a one-voice file for every voice gets a
 those files.
 
 Once a song matches its printed sheet its old MuseScore files are removed: its made score is then final, and a build
-only brings its style level with the house's. Songs that cannot be made are listed with the reason.
+only brings its style level with the house's. A song with no MuseScore file at all, whose match.txt writes in every
+voice (with its `key:` and `time:`), is built from the house template's two empty staves. Songs that cannot be made are listed with the reason.
 """
 
 import copy
@@ -22,8 +23,9 @@ import compose
 import house
 import sheet
 import spec as specs
+import template
 import voices
-from common import made_name, mscore_job, read_mscz, song_files, songs, voices_of, write_mscz, write_xml
+from common import ORDER, made_name, mscore_job, read_mscz, song_files, songs, voices_of, write_mscz, write_xml
 
 
 def build(wanted=()):
@@ -32,8 +34,14 @@ def build(wanted=()):
     for sub, kind, tag, d, song_dir in songs(wanted):
         final = made_name(song_dir, tag)
         files = [f for f in song_files(song_dir) if f != final]
+        spec = specs.read(song_dir)
+        if not files and {b['voice'] for b in spec['notes']} == set(ORDER[kind]):
+            # Every voice written in from the sheet: the song starts from the house template.
+            todo.append(dict(d=d, sub=sub, kind=kind, tag=tag, dir=song_dir, xmls=[], why=None, spec=spec,
+                             from_template=True))
+            continue
         if not files and os.path.exists(final):
-            restyle(final, specs.read(song_dir))
+            restyle(final, spec)
             todo.append(dict(d=d, sub=sub, why='final: matched to its sheet, its old files cleared; restyled'))
             continue
         if not files:
@@ -44,8 +52,7 @@ def build(wanted=()):
             x = os.path.join(work, f'{len(todo):03d}-{i:02d}.musicxml')
             jobs.append((os.path.abspath(f), x))
             xmls.append((f, x))
-        todo.append(dict(d=d, sub=sub, kind=kind, tag=tag, dir=song_dir, xmls=xmls, why=None,
-                         spec=specs.read(song_dir)))
+        todo.append(dict(d=d, sub=sub, kind=kind, tag=tag, dir=song_dir, xmls=xmls, why=None, spec=spec))
     print(f'reading {len(jobs)} files', file=sys.stderr)
     done = set(mscore_job(jobs))
 
@@ -86,7 +93,10 @@ def split(s, done, work, n, second):
     full.sort(key=lambda t: (bool([v for v in voices_of(os.path.basename(t[0])) if v != 'All voices']),
                              -t[2], t[0].count(os.sep), len(t[0])))
     lyric_srcs = [root for f, root, lines, lyr in infos if lyr]
-    if full:
+    if s.get('from_template'):
+        score, s['from'] = template.skeleton(s['kind'], spec), 'the template, every voice from the sheet'
+        full = [(None, score, 0, False)]
+    elif full:
         score, s['from'] = copy.deepcopy(full[0][1]), os.path.relpath(full[0][0], s['dir'])
     else:
         score, s['from'] = compose.assemble([(f, root, lines) for f, root, lines, lyr in infos], s['kind'])

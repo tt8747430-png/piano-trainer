@@ -3,6 +3,9 @@
     python3 scripts/choir build [song folder ...]     make the songs' scores (every song when none is named)
     python3 scripts/choir compare <song> [out folder]  each system of the printed sheet above ours, as images
     python3 scripts/choir notes <song> [staff voice]   a voice's notes bar by bar (every voice when none is named)
+    python3 scripts/choir heads <song> <page> <staff> [scan | ruler | x ...]
+                                                      the printed sheet's noteheads named by pitch, for writing a
+                                                      voice in from the sheet
     python3 scripts/choir template                    write the empty SATB and TTBB scores in template/
     python3 scripts/choir index                       write INDEX.md
 
@@ -16,6 +19,7 @@ import sys
 import build
 import compare
 import engrave
+import heads
 import index
 import template
 
@@ -41,6 +45,8 @@ def main(argv):
         compare.compare(*args)
     elif command == 'notes':
         notes(args)
+    elif command == 'heads':
+        heads.heads(args[0], args[1], args[2], args[3:])
     elif command == 'template':
         template.write()
     elif command == 'index':

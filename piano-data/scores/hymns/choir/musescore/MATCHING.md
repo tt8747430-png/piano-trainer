@@ -16,6 +16,12 @@ is written.
 4. Fix, rebuild, and look again at every system changed, until a full pass finds nothing.
 5. Only then remove the song's old MuseScore files, commit, and go on to the next song.
 
+A song with only its PDF (song 3) is written in whole: every voice in `[Voice notes]` at the pitch it sounds, with
+`key:` and `time:`, built from the template's empty staves. Each pitch is measured, never guessed from a small view:
+`python3 scripts/choir heads <song> <page> <staff> scan` names every column of heads between the barlines, and an x
+from its `ruler` names the heads at one note; the lengths, ties, slurs and the key's flats are read from the sheet
+enlarged. Where the sheet prints one head for both voices of a staff, the lower writes `u:`.
+
 ## The house template (not the scans' sizes)
 
 Set once in `template/house.mss`, from engraving practice, and given to every score and each of its parts: a 6 mm
@@ -52,3 +58,5 @@ by hand.
   voice writes `u:` (song 2, bar 8: alto and bass under the soprano's and tenor's B♭), never the pitch again.
 - **A setting repeated in every song.** What every sheet shares belongs to the template (`template/house.mss`,
   `spec.read`'s defaults), never a line copied into each `match.txt`.
+- **A source claimed and not opened.** A `match.txt` names the book's page only after the page was opened and seen
+  to be the same printing (song 3: page 8).

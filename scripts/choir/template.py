@@ -11,6 +11,7 @@ import xml.etree.ElementTree as ET
 import compose
 import spec as specs
 from common import CHOIRS, ORDER, TEMPLATE, VOICES, mscore_job, write_xml
+from spec import note_tokens
 
 BARS = 16
 
@@ -59,6 +60,50 @@ def parts_xml(kind, bars=BARS, fifths=0, beats=4, beat_type=4):
             ET.SubElement(n, 'rest', measure='yes')
             ET.SubElement(n, 'duration').text = str(beats * 4 // beat_type)
             ET.SubElement(n, 'voice').text = '1'
+    return out
+
+
+def skeleton(kind, spec):
+    """The choir's two staves, empty, for a song written in from its sheet alone: its key and time, as many bars as
+    its notes fill, the upper pair of voices on the first staff and the lower on the second, each staff in its lower
+    voice's clef."""
+    bars = max(bar for block in spec['notes'] for bar, _ in note_tokens(block['verses'].get(1, [])))
+    beats, beat_type = spec.get('time', (4, 4))
+    out = ET.Element('score-partwise', version='4.0')
+    ET.SubElement(ET.SubElement(out, 'work'), 'work-title').text = spec['title'] or ''
+    ident = ET.SubElement(out, 'identification')
+    for role in ('composer', 'lyricist'):
+        if spec.get(role):
+            ET.SubElement(ident, 'creator', type=role).text = spec[role]
+    plist = ET.SubElement(out, 'part-list')
+    group = ET.SubElement(plist, 'part-group', type='start', number='1')
+    ET.SubElement(group, 'group-symbol').text = 'bracket'
+    ET.SubElement(group, 'group-barline').text = 'no'
+    pairs = (VOICES[kind][:2], VOICES[kind][2:])
+    for i, pair in enumerate(pairs):
+        sp = ET.SubElement(plist, 'score-part', id=f'P{i + 1}')
+        ET.SubElement(sp, 'part-name').text = ', '.join(v[0] for v in pair)
+    ET.SubElement(plist, 'part-group', type='stop', number='1')
+    for i, pair in enumerate(pairs):
+        clef = pair[1][2]
+        part = ET.SubElement(out, 'part', id=f'P{i + 1}')
+        for b in range(1, bars + 1):
+            m = ET.SubElement(part, 'measure', number=str(b))
+            if b == 1:
+                at = ET.SubElement(m, 'attributes')
+                ET.SubElement(at, 'divisions').text = '48'
+                ET.SubElement(ET.SubElement(at, 'key'), 'fifths').text = str(spec.get('key', 0))
+                t = ET.SubElement(at, 'time')
+                ET.SubElement(t, 'beats').text = str(beats)
+                ET.SubElement(t, 'beat-type').text = str(beat_type)
+                c = ET.SubElement(at, 'clef')
+                ET.SubElement(c, 'sign').text = clef[0]
+                ET.SubElement(c, 'line').text = str(clef[1])
+                if clef[2]:
+                    ET.SubElement(c, 'clef-octave-change').text = str(clef[2])
+        # The final barline (a repeat in match.txt may add its own).
+        bl = ET.SubElement(part.findall('measure')[-1], 'barline', location='right')
+        ET.SubElement(bl, 'bar-style').text = 'light-heavy'
     return out
 
 

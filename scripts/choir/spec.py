@@ -5,6 +5,9 @@ voice names before the staves, the tempo set but not printed, template/house.mss
     title: 4 Ce poate fi mai minunat?  the title as printed, where it is not the folder's name (its punctuation)
     composer: Valer Bogdan             the name printed at the right, under the title
     lyricist: Valentin Popovici        the name printed at the left (the words' author)
+    key: F                             the key (a major key's tonic, or a minor's with m: Dm), for a song written in
+                                       from its sheet alone (every voice in [Voice notes])
+    time: 6/8                          its time signature, likewise
     spatium: 1.4                       staff space in mm, only where the house size cannot keep the sheet's pages
     systems: 1 5 9 13 16 | 20 22 25    first bar of each line; | starts a new page
     hide-empty-staves                  a staff with nothing to sing in a line is left out, as printed
@@ -95,6 +98,11 @@ def read(song_dir):
             spec['title'] = value.strip()
         elif key in ('composer', 'lyricist'):
             spec[key] = value.strip()
+        elif key == 'key':
+            spec['key'] = FIFTHS[value.strip()]
+        elif key == 'time':
+            beats, _, beat_type = value.strip().partition('/')
+            spec['time'] = (int(beats), int(beat_type))
         elif key == 'spatium':
             spec['spatium'] = value.strip()
         elif key == 'lyrics-size':
@@ -158,6 +166,13 @@ def read(song_dir):
         else:
             raise SystemExit(f'{path}: cannot read: {line}')
     return spec
+
+
+# A key's place on the circle of fifths: sharps positive, flats negative.
+FIFTHS = {k: i - 7 for i, k in enumerate(['Cb', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F', 'C', 'G', 'D', 'A', 'E', 'B',
+                                          'F#', 'C#'])}
+FIFTHS.update({k + 'm': i - 7 for i, k in enumerate(['Ab', 'Eb', 'Bb', 'F', 'C', 'G', 'D', 'A', 'E', 'B', 'F#',
+                                                      'C#', 'G#', 'D#', 'A#'])})
 
 
 def folder_title(song_dir):

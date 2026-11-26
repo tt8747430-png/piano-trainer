@@ -25,7 +25,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 53 | 5 | 1 | 24 | 23 | 1 | 0 |
+| Mixed choir | 107 | 54 | 5 | 1 | 24 | 22 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -34,7 +34,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | --: | --- | --- | :-: | --- | :-: | --- | --- | --: | --: | --: | --- |
 | 1 | Binecuvântat să fie Domnul | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 |  |  | – |
 | 2 | Glas de trâmbiți a sunat | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 |  |  | – |
-| 3 | La Calvar | No MuseScore | – | – | – | – | – | 1 |  |  | – |
+| 3 | La Calvar | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 |  |  | – |
 | 4 | Ce poate fi mai minunat | Done: as printed (matched to its PDF) | 2 | 2 staves, voices 2/2, 16 bars, `4_Ce_poate_fi_mai_minunat_.mscz` | yes | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
 | 5 | Mărire Ție, Isuse | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 6 | Du-mă la izvorul | Done: as printed (matched to its PDF) | 2 | 2 staves, voices 2/2, 16 bars, `006.Du-mă la izvorul.mscz` | no | – | Alto | 1 |  |  | piano |

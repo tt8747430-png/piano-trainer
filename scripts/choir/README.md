@@ -8,6 +8,7 @@ the repo root, with MuseScore Studio 4 as `mscore` (on a server, under `xvfb-run
 python3 scripts/choir build [song ...]    # every song when none is named
 python3 scripts/choir compare 2           # each system of song 2's sheet above ours, as images
 python3 scripts/choir notes 2 [1 0]       # song 2's voices (or staff 1, voice 0) bar by bar
+python3 scripts/choir heads 3 1 1 scan    # song 3's sheet, page 1, staff 1: its noteheads by pitch, bar by bar
 python3 scripts/choir template            # template/Choir SATB.mscz and Choir TTBB.mscz
 python3 scripts/choir index               # INDEX.md
 ```
@@ -47,6 +48,11 @@ Every made score and each of its parts takes the house template, so no song need
    then `house.py` gives the score and every part the house style.
 5. A song whose old files are removed is final: a build only brings its style level with the template.
 
+A song that exists only as a PDF is written in whole from its sheet: its `match.txt` gives `key:`, `time:` and a
+`[Voice notes]` block for every voice, and the build starts from the template's two empty staves
+(`template.skeleton`), then runs as above. `heads` reads the sheet's noteheads for it: `ruler` saves a staff with
+an x ruler, `scan` lists every column of heads between the barlines, and x values name the heads there.
+
 | Module      | Holds                                                                         |
 | ----------- | ----------------------------------------------------------------------------- |
 | `common.py` | paths, the choirs and their voices, note values, MuseScore and its files      |
@@ -58,6 +64,7 @@ Every made score and each of its parts takes the house template, so no song need
 | `engrave.py`| corrections in MuseScore's own file                                           |
 | `slurs.py`  | slurs                                                                         |
 | `house.py`  | the house style from `template/house.mss`                                     |
-| `template.py` | the empty template scores                                                   |
+| `template.py` | the empty template scores, and the two empty staves a sheet-only song starts on |
 | `compare.py`| the sheet and ours, system by system                                          |
+| `heads.py`  | the printed sheet's noteheads named by pitch                                  |
 | `index.py`  | `INDEX.md`                                                                    |
