@@ -1,7 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { publishOnItsPage } from '@/shared/test/publish'
+import { publishInOneTap } from '@/shared/test/publish'
 import { renderApp } from '@/app/testing/render-app'
 import { COURSES, courseRecord } from '@/entities/course'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
@@ -30,9 +30,8 @@ async function rowAction(user: ReturnType<typeof userEvent.setup>, title: string
   await user.click(await screen.findByRole('menuitem', { name: action }))
 }
 
-/** Publishes the draft once it is saved: the bar's Publish, then the dialog's. */
-/** Publish, the one way: the bar's Publish opens the Publish page (R29 B6). */
-const publish = publishOnItsPage
+/** Publish, the one way: the bar's Publish, one tap, once there are changes. */
+const publish = publishInOneTap
 
 describe('the course editor (ADR 0116, round 12)', () => {
   it('puts the course into Edit from the pencil in its bar, its name over it', async () => {
@@ -63,9 +62,6 @@ describe('the course editor (ADR 0116, round 12)', () => {
     expect(title).toHaveValue(COURSE.title.en)
     await user.clear(title)
     await user.type(title, 'A new course title')
-    await user.click(screen.getByRole('button', { name: 'Publishing' }))
-    await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
-    expect(await field('Title')).toHaveValue(COURSE.title.ru)
     await user.type(await field('Summary'), '!')
     await publish(user)
     expect(
@@ -74,13 +70,9 @@ describe('the course editor (ADR 0116, round 12)', () => {
       ),
     ).toBeInTheDocument()
     expect(content.body('course', COURSE.id)).toEqual({
-      id: COURSE.id,
+      ...courseRecord(COURSE),
       title: { en: 'A new course title', ru: COURSE.title.ru },
-      summary: { en: COURSE.summary.en, ru: `${COURSE.summary.ru}!` },
-      lessons: COURSE.lessons.map((lesson) => lesson.id),
-      shelf: COURSE.shelf,
-      stage: COURSE.stage,
-      weeks: COURSE.weeks,
+      summary: { en: `${COURSE.summary.en}!`, ru: COURSE.summary.ru },
     })
   })
 
@@ -200,16 +192,20 @@ describe('the course editor (ADR 0116, round 12)', () => {
   it('makes a new course from a shelf’s New course in Edit mode, unpublished, and opens it in the course editor', async () => {
     const user = userEvent.setup()
     const content = editing()
-    const { router } = await renderApp('/?view=courses&edit=1', {
+    const { router } = await renderApp('/courses?edit=1', {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const shelf = await screen.findByRole('region', { name: 'Beginner courses' })
+    const shelf = await screen.findByRole('region', { name: 'Beginner' })
     await user.click(within(shelf).getByRole('button', { name: 'New course' }))
     const sheet = await screen.findByRole('dialog', { name: 'New course' })
     expect(within(sheet).getByRole('button', { name: 'Create course' })).toBeDisabled()
     await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Jazz voicings')
-    await user.click(within(sheet).getByRole('radio', { name: 'Intermediate' }))
+    await user.click(
+      within(within(sheet).getByRole('radiogroup', { name: 'Level' })).getByRole('radio', {
+        name: 'Intermediate',
+      }),
+    )
     await user.click(within(sheet).getByRole('button', { name: 'More weeks' }))
     await user.click(within(sheet).getByRole('button', { name: 'Create course' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/courses/jazz-voicings/edit'))
@@ -231,18 +227,15 @@ describe('the course editor (ADR 0116, round 12)', () => {
   })
 
   it('offers no new course to a learner', async () => {
-    await renderApp('/?view=courses&edit=1', { auth: await signedInAs('learner') })
-    await screen.findByRole('heading', { level: 1 })
-    // Only Your courses' own (R30-5): no shelf in Edit mode.
-    expect(screen.getAllByRole('button', { name: 'New course' })).toHaveLength(1)
-    expect(screen.getByRole('region', { name: 'Your courses' })).toContainElement(
-      screen.getByRole('button', { name: 'New course' }),
-    )
+    await renderApp('/courses?edit=1', { auth: await signedInAs('learner') })
+    await screen.findByRole('region', { name: 'Beginner' })
+    // The shelves read as ever: no Edit mode, so no shelf's New course.
+    expect(screen.queryByRole('button', { name: 'New course' })).not.toBeInTheDocument()
   })
 
   it('tells a learner it is an editor’s, with the way back', async () => {
     await renderApp(`/courses/${COURSE.id}/edit`, { auth: await signedInAs('learner') })
-    expect(await screen.findByText('Only an editor edits a course.')).toBeInTheDocument()
+    expect(await screen.findByText('Only an editor edits a course')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Back to the course' })).toHaveAttribute(
       'href',
       `/courses/${COURSE.id}`,

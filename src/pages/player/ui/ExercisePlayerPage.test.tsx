@@ -1,45 +1,71 @@
-import { screen, within } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { screen, waitFor, within } from '@testing-library/react'
+import userEvent, { type UserEvent } from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { menuOptions, pickMenu, pickerValue } from '@/shared/test/pickers'
 
-describe('An exercise in the Player', () => {
-  it('plays its rule as sheet music, titled by the exercise and what it is played on', async () => {
-    await renderApp('/play/exercise/scale?root=D&kind=dorian')
-    expect(await screen.findByRole('heading', { name: 'Scale: D Dorian' })).toBeInTheDocument()
-    expect(await screen.findByRole('button', { name: 'Bar 1: Dm' })).toBeInTheDocument()
-  })
+/** The run's Setup, open over it as it opens. */
+const setupSheet = () => screen.findByRole('dialog', { name: 'Setup' })
 
-  it('titles an arpeggio by its chord and a key’s exercise by its key', async () => {
-    await renderApp('/play/exercise/arpeggio?root=E&quality=m7')
-    expect(await screen.findByRole('heading', { name: 'Arpeggio: Em7' })).toBeInTheDocument()
+/** Start in the Setup: the run plays, the Setup closed. */
+async function start(user: UserEvent) {
+  await user.click(within(await setupSheet()).getByRole('button', { name: 'Start' }))
+}
+
+/** The run's floating Setup · Play · Tempo. */
+const transport = () => screen.getByRole('toolbar', { name: 'Setup, play and tempo' })
+
+describe('An exercise, a run of its own (the run boards)', () => {
+  it('plays its rule as sheet music, titled by the exercise and what it is played on', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/exercise/scale?root=D&kind=dorian')
+    await start(user)
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Scale: D Dorian' }),
+    ).toBeInTheDocument()
+    const sheet = screen.getByRole('region', { name: 'Sheet music' })
+    expect(within(sheet).getByRole('button', { name: 'Bar 1: Dm' })).toBeInTheDocument()
+    // Its key's place in the round Next key walks from C, by fifths: C G D.
+    expect(screen.getByRole('meter', { name: 'Key 3 of 12' })).toBeInTheDocument()
   })
 
   it('titles an arpeggio by its chord as the sheets print it', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/exercise/arpeggio?root=E&quality=m7')
+    await start(user)
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Arpeggio: Em7' }),
+    ).toBeInTheDocument()
+  })
+
+  it('titles a sharp’s arpeggio by its sign', async () => {
+    const user = userEvent.setup()
     await renderApp('/play/exercise/arpeggio?root=C%23&quality=m7')
-    expect(await screen.findByRole('heading', { name: 'Arpeggio: C♯m7' })).toBeInTheDocument()
+    await start(user)
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Arpeggio: C♯m7' }),
+    ).toBeInTheDocument()
   })
 
   it('plays and stops', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/exercise/hanon')
-    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    await start(user)
     expect(audio.played).toHaveLength(1)
-    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    await user.click(within(transport()).getByRole('button', { name: 'Stop' }))
     expect(audio.stops).toBeGreaterThan(0)
   })
 
   it('offers Next key after a pass, a fifth up, leaving the tempo to that key’s own', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/exercise/five-finger?tempo=100')
+    await start(user)
     expect(screen.queryByRole('button', { name: 'Next key' })).not.toBeInTheDocument()
-    await user.click(await screen.findByRole('button', { name: 'Play' }))
-    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    await user.click(within(transport()).getByRole('button', { name: 'Stop' }))
     await user.click(screen.getByRole('button', { name: 'Next key' }))
-    expect(router.state.location.search).toMatchObject({ root: 'G' })
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ root: 'G' }))
     expect(
-      await screen.findByRole('heading', { name: 'Five-finger position: G major' }),
+      await screen.findByRole('heading', { level: 1, name: 'Five-finger position: G major' }),
     ).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Next key' })).not.toBeInTheDocument()
     // No tempo carried over: the new key opens at the tempo it reached (its own in `tempos`).
@@ -47,97 +73,90 @@ describe('An exercise in the Player', () => {
   })
 
   it('prints no chord symbol and no staff name on an exercise’s score', async () => {
+    const user = userEvent.setup()
     await renderApp('/play/exercise/five-finger')
-    await screen.findByRole('heading', { name: 'Five-finger position: C major' })
-    expect(document.body).not.toHaveTextContent(/\bPiano\b/)
+    await start(user)
+    await screen.findByRole('heading', { level: 1, name: 'Five-finger position: C major' })
+    expect(screen.getByRole('region', { name: 'Sheet music' })).not.toHaveTextContent(/\bPiano\b/)
   })
 
-  it('offers only the choices its rule takes, and writes them to the URL', async () => {
+  it('offers only the choices its rule takes in its Setup, and writes them to the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/exercise/sixth-diminished-chords')
-    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    expect(screen.queryByRole('radiogroup', { name: 'Octaves' })).not.toBeInTheDocument()
-    await user.click(await screen.findByRole('radio', { name: 'Drop 2' }))
-    expect(router.state.location.search).toMatchObject({ voicing: 'drop2' })
-    await user.click(screen.getByRole('radio', { name: 'Minor' }))
-    expect(router.state.location.search).toMatchObject({ tonality: 'minor' })
-    await user.click(screen.getByRole('radio', { name: 'Close' }))
-    expect(router.state.location.search).not.toHaveProperty('voicing')
+    const setup = await setupSheet()
+    expect(within(setup).queryByRole('radiogroup', { name: 'Octaves' })).not.toBeInTheDocument()
+    await user.click(within(setup).getByRole('radio', { name: 'Drop 2' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ voicing: 'drop2' }))
+    await user.click(within(setup).getByRole('radio', { name: 'Minor' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ tonality: 'minor' }))
+    await user.click(within(setup).getByRole('radio', { name: 'Close' }))
+    await waitFor(() => expect(router.state.location.search).not.toHaveProperty('voicing'))
   })
 
-  it('names its mode on screen, and leaves no gap where it has no scale, chord or start', async () => {
-    const user = userEvent.setup()
+  it('names its mode in its Setup, and offers no scale, chord or start where it has none', async () => {
     await renderApp('/play/exercise/sixth-diminished')
-    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
-    expect(within(sheet).getByRole('radiogroup', { name: 'Major or minor' })).toBeInTheDocument()
-    expect(within(sheet).getByText('Major or minor')).toBeVisible()
-    expect(within(sheet).queryByRole('combobox')).not.toBeInTheDocument()
-    expect(sheet.querySelector('.flex-wrap:empty')).toBeNull()
+    const setup = await setupSheet()
+    expect(within(setup).getByRole('radiogroup', { name: 'Major or minor' })).toBeInTheDocument()
+    expect(within(setup).getByText('Major or minor')).toBeVisible()
+    expect(within(setup).queryByRole('combobox')).not.toBeInTheDocument()
   })
 
   it('starts a scale on another note, fingered from the thumb', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/exercise/scale')
-    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    await user.click(screen.getByRole('combobox', { name: /^Start on/ }))
+    const setup = await setupSheet()
+    await user.click(within(setup).getByRole('combobox', { name: /^Start on/ }))
     await user.click(await screen.findByRole('option', { name: /^E/ }))
-    expect(router.state.location.search).toMatchObject({ start: 2 })
-    expect(screen.getByRole('radio', { name: 'From the thumb' })).toBeChecked()
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ start: 2 }))
+    expect(within(setup).getByRole('radio', { name: 'From the thumb' })).toBeChecked()
   })
 
-  it('sets up a scale’s practice: hands, each hand’s start octave, tempo, metronome and a rest between loops', async () => {
+  it('sets up a scale’s practice: hands, each hand’s start octave, metronome and a rest between loops', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/exercise/scale')
-    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
+    const setup = await setupSheet()
     expect(pickerValue('Right hand starts on')).toBe('C4')
     // Two octaves from C7 run past the top C: not offered.
     expect(await menuOptions(user, 'Right hand starts on')).not.toContain('C7')
     await pickMenu(user, 'Right hand starts on', 'C5')
-    expect(router.state.location.search).toMatchObject({ rhOctave: 5 })
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ rhOctave: 5 }))
     expect(pickerValue('Left hand starts on')).toBe('C2')
-    await user.click(within(sheet).getByRole('radio', { name: 'Right' }))
-    expect(router.state.location.search).toMatchObject({ hands: 'rh' })
+    await user.click(within(setup).getByRole('radio', { name: 'Right' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ hands: 'rh' }))
     expect(
-      within(sheet).queryByRole('button', { name: /^Left hand starts on/ }),
+      within(setup).queryByRole('button', { name: /^Left hand starts on/ }),
     ).not.toBeInTheDocument()
-    const rest = within(sheet).getByRole('radiogroup', { name: 'Ticks between loops' })
+    const rest = within(setup).getByRole('radiogroup', { name: 'Ticks between loops' })
     await user.click(within(rest).getByRole('radio', { name: '2' }))
-    expect(router.state.location.search).toMatchObject({ rest: 2 })
-    await user.click(within(sheet).getByRole('switch', { name: /^Metronome/ }))
-    expect(within(sheet).getByRole('switch', { name: /^Metronome/ })).toBeChecked()
-    expect(within(sheet).getByRole('slider', { hidden: true })).toHaveAttribute(
-      'aria-valuenow',
-      '80',
-    )
-    expect(within(sheet).getByText('80 BPM')).toBeInTheDocument()
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ rest: 2 }))
+    await user.click(within(setup).getByRole('switch', { name: 'Metronome' }))
+    expect(within(setup).getByRole('switch', { name: 'Metronome' })).toBeChecked()
   })
 
   it('swings an exercise that is its own swing, and leaves it out of the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/exercise/two-five-one-scale')
-    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    const swing = screen.getByRole('radiogroup', { name: 'Swing' })
+    await user.click(within(await setupSheet()).getByRole('button', { name: 'Close' }))
+    await user.click(screen.getByRole('button', { name: 'Player settings' }))
+    const swing = await screen.findByRole('radiogroup', { name: 'Swing' })
     expect(within(swing).getByRole('radio', { name: 'Medium' })).toBeChecked()
     await user.click(within(swing).getByRole('radio', { name: 'Straight' }))
-    expect(router.state.location.search).toMatchObject({ swing: 'straight' })
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ swing: 'straight' }))
     await user.click(within(swing).getByRole('radio', { name: 'Medium' }))
-    expect(router.state.location.search).not.toHaveProperty('swing')
+    await waitFor(() => expect(router.state.location.search).not.toHaveProperty('swing'))
   })
 
   it('comes back with its swing as it was left, started again from its page', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/exercises')
-    await user.click(await screen.findByRole('link', { name: /^Arpeggios from the 3rd / }))
+    const { router } = await renderApp('/practice/exercises/from-third')
     await user.click(await screen.findByRole('link', { name: 'Start' }))
-    await screen.findByRole('heading', { name: /^Arpeggios from the 3rd: / })
+    await user.click(within(await setupSheet()).getByRole('button', { name: 'Close' }))
     await user.click(screen.getByRole('button', { name: 'Player settings' }))
     await user.click(await screen.findByRole('radio', { name: 'Light' }))
     await user.keyboard('{Escape}')
-    await user.click(await screen.findByRole('button', { name: 'Close' }))
+    await user.click(within(screen.getByRole('banner')).getByRole('button', { name: 'Close' }))
     await user.click(await screen.findByRole('link', { name: 'Start' }))
-    await screen.findByRole('heading', { name: /^Arpeggios from the 3rd: / })
+    await setupSheet()
     expect(router.state.location.pathname).toBe('/play/exercise/from-third')
     expect(router.state.location.search).toHaveProperty('swing')
   })

@@ -3,7 +3,6 @@
 # Terms of Service), every string from src/shared/i18n/locales/en/account.ts and legal.ts. Exec'd by r41.py last.
 
 GOOGLE = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"></path><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.6-2.5l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z"></path><path fill="#FBBC05" d="M6.4 13.9a6 6 0 0 1 0-3.8V7.5H3.1a10 10 0 0 0 0 9z"></path><path fill="#EA4335" d="M12 6c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.5l3.3 2.6C7.2 7.8 9.4 6 12 6z"></path></svg>'
-APPLE = f'<svg viewBox="0 0 24 24" width="20" height="20" fill="{INK}" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7a4.6 4.6 0 0 0-3.6-2c-1.5-.2-3 .9-3.7.9-.8 0-2-.9-3.2-.9a4.8 4.8 0 0 0-4 2.5c-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.1-1.2 2.9-2.4a10 10 0 0 0 1.3-2.7 4.2 4.2 0 0 1-2.3-3.9zM14 5.4A4.3 4.3 0 0 0 15 2.3a4.4 4.4 0 0 0-2.9 1.5 4.1 4.1 0 0 0-1 3 3.6 3.6 0 0 0 2.9-1.4z"></path></svg>'
 SI_JS = js(r'''
     const S = (o) => set(o), v = st.view ?? 'in', email = st.email ?? 'ana@example.com', pw = st.pw ?? '', name = st.name ?? '';
     const okEmail = /.+@.+\..+/.test(email), okPw = pw.length >= 8;
@@ -43,12 +42,16 @@ PW = INP('Password', 'pw', 'setPw', 'pwRing', 'ePw', 'Use at least 8 characters.
 ERRBOX = f'<sc-if value="{{{{hasErr}}}}" hint-placeholder-val="{{{{false}}}}"><div role="alert" style="border-radius: 12px; background: #F6DEDA; color: #8C1D17; padding: 12px 16px; font-size: 15px; line-height: 1.4">{{{{err}}}}</div></sc-if>'
 OFFBANNER = f'<sc-if value="{{{{offline}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="border-radius: 12px; background: {HONEY}; padding: 12px 16px; font-size: 15px">You’re offline. Signing in needs a connection.</div></sc-if>'
 SSO = (f'<button type="button" style="height: 50px; border: 0; border-radius: 25px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 12px">{GOOGLE}Continue with Google</button>'
-       f'<button type="button" aria-disabled="true" style="height: 50px; border: 0; border-radius: 25px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {SOFT}; font: inherit; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 12px; opacity: .6">{APPLE}Continue with Apple<span style="font-size: 13px; font-weight: 500">· Coming soon</span></button>'
        f'<div style="display: flex; align-items: center; gap: 12px; color: {SOFT}; font-size: 14px"><span style="flex: 1; height: 1px; background: {LINE}"></span>or<span style="flex: 1; height: 1px; background: {LINE}"></span></div>')
+# The account forms' head (owner, 2026-11-22: "make proper sign in screen"; Apple HIG, Onboarding: "explain the
+# benefits of creating an account"): the app's mark over one line saying what an account keeps, on both sizes; the
+# bar names the step. The ways in follow, Google first, then the form with its one honey act.
+SIHEAD = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 8px 0 8px; text-align: center"><span aria-hidden="true" style="width: 64px; height: 64px; border-radius: 16px; background: {INK}; color: {ACCENT}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 36px">𝄞</span>'
+          f'<span style="max-width: 320px; font-size: 16px; line-height: 1.45; color: {SOFT}; text-wrap: balance">Keep your songs and progress on all your devices.</span></div>')
 LINKB = lambda t, act: f'<button type="button" onClick="{{{{{act}}}}}" style="height: 44px; border: 0; background: transparent; padding: 0 4px; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">{t}</button>'
-V_IN = (f'<sc-if value="{{{{isIn}}}}" hint-placeholder-val="{{{{true}}}}">{SSO}{EMAIL}{PW}<div style="display: flex; justify-content: flex-end; margin-top: -8px">{LINKB("Forgot password?", "goForgot")}</div>{ERRBOX}'
+V_IN = (f'<sc-if value="{{{{isIn}}}}" hint-placeholder-val="{{{{true}}}}">{SIHEAD}{SSO}{EMAIL}{PW}<div style="display: flex; justify-content: flex-end; margin-top: -8px">{LINKB("Forgot password?", "goForgot")}</div>{ERRBOX}'
         f'<div style="display: flex">{BTN("Sign in", "submit", "", "primary", 50)}</div><div style="display: flex; align-items: center; justify-content: center; gap: 2px; font-size: 15px; color: {SOFT}">No account yet?{LINKB("Create an account", "goCreate")}</div></sc-if>')
-V_CREATE = (f'<sc-if value="{{{{isCreate}}}}" hint-placeholder-val="{{{{false}}}}">{SSO}{INP("Your name", "name", "setName", "nameRing", "eName", "Enter your name.", "name")}{EMAIL}'
+V_CREATE = (f'<sc-if value="{{{{isCreate}}}}" hint-placeholder-val="{{{{false}}}}">{SIHEAD}{SSO}{INP("Your name", "name", "setName", "nameRing", "eName", "Enter your name.", "name")}{EMAIL}'
             + INP('Password', 'pw', 'setPw', 'pwRing', 'ePw', 'Use at least 8 characters.', 'new-password', True, 'At least 8 characters. A longer phrase is stronger than a short, clever one.') + ERRBOX
             + f'<div style="display: flex">{BTN("Create account", "create", "", "primary", 50)}</div><p style="margin: 0; text-align: center; font-size: 14px; line-height: 1.45; color: {SOFT}">Creating an account, you agree to the <a href="Legal.dc.html" style="color: {LINK}; font-weight: 600">Terms</a> and the <a href="Legal.dc.html" style="color: {LINK}; font-weight: 600">Privacy notice</a></p>'
             f'<div style="display: flex; align-items: center; justify-content: center; gap: 2px; font-size: 15px; color: {SOFT}">Already have an account?{LINKB("Sign in", "goIn")}</div></sc-if>')
@@ -70,8 +73,7 @@ SIBODY = V_IN + V_CREATE + V_SENT + V_FORGOT + V_FSENT + V_NEW + V_SAVED + V_WOR
 # the bar holds the page's name beside Close, phone and laptop, as every page's (one bar shape; lines.mjs, an empty bar)
 siph = (f'{TOP("", "{{title}}", "", "Close", CLOSEB("Settings.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 48px; display: flex; flex-direction: column; gap: 16px">'
         f'{OFFBANNER}{SIBODY}</main>')
-silm = (f'{LPAD(TOP("", "{{title}}", "", "Close", CLOSEB("SettingsLaptop.dc.html")))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; justify-content: center; padding: 8px 0 48px"><div style="width: 440px; display: flex; flex-direction: column; gap: 16px">'
-        f'<span style="align-self: center; width: 64px; height: 64px; border-radius: 16px; background: {INK}; color: {ACCENT}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 36px">𝄞</span>'
+silm = (f'{LPAD(TOP("", "{{title}}", "", "Close", CLOSEB("SettingsLaptop.dc.html")))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; justify-content: center; padding: 32px 0 48px"><div style="width: 440px; display: flex; flex-direction: column; gap: 16px">'
         f'{OFFBANNER}{SIBODY.replace("Settings.dc.html", "SettingsLaptop.dc.html").replace("Legal.dc.html", "LegalLaptop.dc.html")}</div></main>')
 detail('SignIn', 'Sign in', SI_JS, SHOWSTATES() + siph, SHOWSTATES() + silm, '', '', '', 'Profile')
 

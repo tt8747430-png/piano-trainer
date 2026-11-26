@@ -1,7 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { publishOnItsPage } from '@/shared/test/publish'
+import { tickAndPublish } from '@/shared/test/publish'
 import { renderApp } from '@/app/testing/render-app'
 import { progressionById } from '@/entities/progression-library'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
@@ -17,14 +17,19 @@ async function signedInAs(role: AccountRole) {
 }
 
 describe('the progression editor (content as data)', () => {
-  it('is in an editor’s Progressions bar, never a learner’s', async () => {
+  it('is in an editor’s New on Progressions, beside New progression', async () => {
+    const user = userEvent.setup()
     await renderApp('/practice/progressions', { auth: await signedInAs('editor') })
+    await user.click(await screen.findByRole('button', { name: 'New' }))
     expect(await screen.findByRole('button', { name: 'New progression' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'New in the library' })).toBeInTheDocument()
   })
 
   it('is not in a learner’s', async () => {
+    const user = userEvent.setup()
     await renderApp('/practice/progressions', { auth: await signedInAs('learner') })
-    await screen.findByRole('heading', { level: 1 })
+    await user.click(await screen.findByRole('button', { name: 'New' }))
+    expect(await screen.findByRole('button', { name: 'New progression' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'New in the library' })).not.toBeInTheDocument()
   })
 
@@ -40,7 +45,11 @@ describe('the progression editor (content as data)', () => {
     const major = await screen.findByRole('textbox', { name: 'In a major key' })
     await user.clear(major)
     await user.type(major, 'I vi ii V')
-    await publishOnItsPage(user)
+    // The bar's Publish opens Publish in its Settings window, its draft kept first.
+    await screen.findByText('Saved · not published', {}, { timeout: 3000 })
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await screen.findByRole('dialog', { name: 'Publish' })
+    await tickAndPublish(user)
     await screen.findByText('Published. Learners will receive it the next time they open the app.')
     expect(content.body('progression', DOO_WOP.id)).toMatchObject({ major: 'I vi ii V' })
   })
@@ -52,7 +61,7 @@ describe('the progression editor (content as data)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.click(await screen.findByRole('button', { name: 'New progression' }))
+    await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New in the library' }))
     const sheet = await screen.findByRole('dialog', { name: 'New in the library' })
     await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Gospel walk')

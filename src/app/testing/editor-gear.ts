@@ -14,12 +14,9 @@ export async function openGear(user: UserEvent, ...rows: readonly RegExp[]): Pro
   return screen.findByRole('dialog')
 }
 
-/** Record a take from the gear's first page (R31-E): it records at once where it can. */
-export async function recordFromGear(user: UserEvent): Promise<void> {
-  await user.click(await screen.findByRole('button', { name: 'Score settings' }))
-  await user.click(
-    await within(await screen.findByRole('dialog')).findByRole('button', {
-      name: 'Record a take',
-    }),
-  )
+/** Record a take from the note band's Record, beside its Play (the boards): it records at once where it can. */
+export async function recordTake(user: UserEvent): Promise<void> {
+  const [band] = await screen.findAllByRole('group', { name: 'What the caret is on' })
+  if (!band) throw new Error('the note band')
+  await user.click(within(band).getByRole('button', { name: 'Record a take' }))
 }

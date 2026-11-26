@@ -18,12 +18,12 @@ import {
 /**
  * What to do next (ADR 0053), Learn's first card, the canvas's CONT: Continue and the level or course
  * it is on, the lesson it opens in the serif, which lesson of how many, the level's progress as a 6
- * track (`CONTBAR`, the same on both sizes), and a 56 round ink button with the lesson's book: Continue
- * is never honey, so the floating + stays the screen's one honey act. On a laptop (`CONTL`) the card is
- * one row: the words, then the track filling the room to the button with "Lesson 7 of 13" over its
- * right end (goal-gradient). Its next guided song opens on its page. The eyebrow's verb is the
- * board's: Start on a track with nothing learned, Continue on one begun, and Review once everything
- * is learned, opening the first journey's first lesson.
+ * track (`CONTBAR`, the same on both sizes), and a 56 round ink button with the lesson's book, so the
+ * floating + stays the screen's one honey act; on a first visit, the honey pill Start with the book.
+ * On a laptop (`CONTL`) the card is one row: the words, then the track filling the room to the button
+ * with "Lesson 7 of 13" over its right end (goal-gradient). Its next guided song opens on its page.
+ * The eyebrow's verb is the board's: Start on a track with nothing learned, Continue on one begun, and
+ * Review once everything is learned, opening the first journey's first lesson.
  */
 export function ContinueAction() {
   const { t } = useTranslation('learn')
@@ -42,6 +42,9 @@ export function ContinueAction() {
   const place = continuePlace(next, learned)
   const progress =
     'course' in next ? courseProgress(next.course, learned) : journeyProgress(next.journey, learned)
+  // A first visit (nothing learned anywhere): Start is the honey pill with its word, the screen's one
+  // honey act, and Learn's + steps back (2026-11-22; scan-first 8).
+  const firstVisit = Object.keys(learned).length === 0
   const verb = !open ? 'reviewTrack' : progress.done === 0 ? 'startTrack' : 'continue'
   const count =
     'n' in place
@@ -70,17 +73,25 @@ export function ContinueAction() {
         </span>
       </span>
       <span className="hidden min-w-40 flex-1 flex-col gap-2 pr-4 pl-8 lg:flex">
-        <span className="self-end text-footnote/4 text-muted-foreground tabular-nums">
-          {count}
-        </span>
+        <span className="self-end text-footnote/4 text-muted-foreground tabular-nums">{count}</span>
         {bar}
       </span>
-      <span
-        aria-hidden
-        className="grid size-14 shrink-0 place-items-center rounded-pill bg-foreground text-card transition-[filter] duration-200 ease-out group-hover:brightness-125 [&_svg]:size-5.5"
-      >
-        <Icon className={read ? undefined : 'fill-current'} />
-      </span>
+      {firstVisit ? (
+        <span
+          aria-hidden
+          className="flex h-12.5 shrink-0 items-center gap-2 rounded-pill bg-primary pr-5 pl-4 text-base font-bold text-primary-foreground transition-[filter] duration-200 ease-out group-hover:brightness-97 [&_svg]:size-5.5"
+        >
+          <Icon className={read ? undefined : 'fill-current'} />
+          {t('startTrack')}
+        </span>
+      ) : (
+        <span
+          aria-hidden
+          className="grid size-14 shrink-0 place-items-center rounded-pill bg-foreground text-card transition-[filter] duration-200 ease-out group-hover:brightness-125 [&_svg]:size-5.5"
+        >
+          <Icon className={read ? undefined : 'fill-current'} />
+        </span>
+      )}
     </>
   )
   const className =

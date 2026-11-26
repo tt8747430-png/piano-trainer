@@ -2,8 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { needsNote, openCategories, PALETTE_CATEGORIES } from './palette-categories'
 
 describe('the palette’s categories', () => {
-  it('holds every tool in one palette in Flat’s order, the fields’ keys among their kin (ADR 0096)', () => {
+  it('holds every tool in one palette in Flat’s order, the tools used last first, the fields’ keys among their kin (ADR 0096)', () => {
     expect(PALETTE_CATEGORIES).toEqual([
+      'recent',
       'notes',
       'pitch',
       'articulations',
@@ -20,7 +21,14 @@ describe('the palette’s categories', () => {
 
   it('shows what works where the caret writes: every tool on a staff, a single one too (ADR 0097)', () => {
     // What acts on bars; the chord symbols are typed where a tap on the chord row opens them (ADR 0114).
-    expect(openCategories('chords')).toEqual(['notes', 'measures', 'key', 'time', 'repeats'])
+    expect(openCategories('chords')).toEqual([
+      'recent',
+      'notes',
+      'measures',
+      'key',
+      'time',
+      'repeats',
+    ])
     expect(openCategories('staff0')).toEqual(PALETTE_CATEGORIES)
     expect(openCategories('lh')).toEqual(PALETTE_CATEGORIES)
   })

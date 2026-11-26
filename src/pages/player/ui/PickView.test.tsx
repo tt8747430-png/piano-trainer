@@ -31,6 +31,7 @@ function withSongOfNoChords(): Storage {
   const song = {
     id: 'my-1',
     title: 'Morning',
+    added: '2026-11-01T09:00:00.000Z',
     key: 'G',
     meter: '4/4',
     tempo: 90,
@@ -45,13 +46,17 @@ function withSongOfNoChords(): Storage {
   return storage
 }
 
-/** Opens Pick your view from the foot bar, named by the view shown. */
-async function openView(user: User, shown: string) {
+/** The bar's views as a pill (its canvas, PlayerDesk): Sheet · Diagrams · Grid · Lyrics. */
+const viewPill = (name = 'Show the music as') =>
+  within(screen.getByRole('banner')).getByRole('radiogroup', { name })
+
+/** Opens the bar's views as a menu, the phone's, named by the view shown. */
+async function openViewMenu(user: User, shown: string) {
   await user.click(await screen.findByRole('button', { name: `View: ${shown}` }))
-  return screen.findByRole('dialog', { name: 'Pick your view' })
+  return screen.findByRole('menu')
 }
 
-/** Opens the Player's Settings › Display: the view shown's own. */
+/** Opens the Player's Settings › Score view: the view shown's own. */
 async function openDisplay(user: User, settings = 'Player settings', display = 'Score view') {
   await user.click(await screen.findByRole('button', { name: settings }))
   const sheet = await screen.findByRole('dialog', { name: settings })
@@ -59,52 +64,51 @@ async function openDisplay(user: User, settings = 'Player settings', display = '
   return screen.findByRole('dialog', { name: display })
 }
 
-/** The menu's groups, top down, by name. */
-const groupsOf = (menu: HTMLElement) =>
-  within(menu)
+/** The page's groups, top down, by name. */
+const groupsOf = (page: HTMLElement) =>
+  within(page)
     .getAllByRole('region')
     .map((group) => group.getAttribute('aria-label'))
 
-/** A segmented choice's segments, by the name each prints, in order. */
+/** A segmented choice's segments, by name, in order. */
 const segmentsOf = (choice: HTMLElement) =>
   within(choice)
     .getAllByRole('radio')
-    .map((segment) => segment.textContent)
+    .map((segment) => segment.getAttribute('aria-label') ?? segment.textContent)
 
-/** The chips in a part of the menu (ADR 0115) are these, in order. */
-function chipsAre(part: HTMLElement, ...names: string[]) {
-  const chips = within(part)
-    .getAllByRole('button')
-    .filter((button) => button.hasAttribute('aria-pressed'))
-  expect(chips.map((chip) => chip.lastElementChild?.textContent)).toEqual(names)
+/** The switch rows in a part of the page (R43: an on or off is a switch row) are these, in order. */
+function switchesAre(part: HTMLElement, ...names: string[]) {
+  const all = within(part).getAllByRole('switch')
+  expect(all).toHaveLength(names.length)
+  names.forEach((name, place) =>
+    expect(within(part).getByRole('switch', { name })).toBe(all[place]),
+  )
 }
 
-/** A chip of the menu, by its name. */
-const chip = (part: HTMLElement, name: string) => within(part).getByRole('button', { name })
-
-describe('the foot bar’s View (ADR 0108, R31-P)', () => {
-  it('stands in the foot bar and names the view shown, opening Pick your view from there (R29)', async () => {
+describe('the bar’s views (ADR 0108, R31-P)', () => {
+  it('stands in the bar as a pill of the views, the one shown picked', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
-    const tools = await screen.findByRole('toolbar', { name: 'Practice tools' })
-    expect(tools.closest('[data-area="foot"]')).toBeInTheDocument()
-    const view = within(tools).getByRole('button', { name: 'View: Sheet' })
-    expect(view).toHaveTextContent('Sheet')
-    expect(view).toHaveAttribute('aria-haspopup')
-    await user.click(view)
-    const panel = await screen.findByRole('dialog', { name: 'Pick your view' })
-    expect(
-      segmentsOf(within(panel).getByRole('radiogroup', { name: 'Show the music as' })),
-    ).toEqual(['Sheet', 'Grid', 'Diagrams', 'Lyrics'])
-    await user.click(within(panel).getByRole('radio', { name: 'Diagrams' }))
+    await screen.findByRole('heading', { level: 1 })
+    const pill = viewPill()
+    expect(segmentsOf(pill)).toEqual(['Sheet', 'Diagrams', 'Grid', 'Lyrics'])
+    expect(within(pill).getByRole('radio', { name: 'Sheet' })).toBeChecked()
+    await user.click(within(pill).getByRole('radio', { name: 'Diagrams' }))
     expect(settingsStore.getState().scoreView.music).toBe('diagrams')
-    // A picture of the view chosen.
-    expect(panel.querySelector('[data-view-picture="diagrams"]')).toBeInTheDocument()
-    expect(within(tools).getByRole('button', { name: 'View: Diagrams' })).toHaveTextContent(
-      'Diagrams',
-    )
-    await user.click(within(panel).getByRole('button', { name: 'Done' }))
-    expect(screen.queryByRole('dialog', { name: 'Pick your view' })).not.toBeInTheDocument()
+    expect(within(musicArea()).getByRole('region', { name: 'Diagrams' })).toBeInTheDocument()
+  })
+
+  it('opens the views as a menu on a phone, named by the view shown, closed once one is picked', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/silent')
+    const menu = await openViewMenu(user, 'Sheet')
+    const items = within(menu).getAllByRole('menuitemradio')
+    expect(items.map((item) => item.textContent)).toEqual(['Sheet', 'Diagrams', 'Grid', 'Lyrics'])
+    expect(within(menu).getByRole('menuitemradio', { name: 'Sheet' })).toBeChecked()
+    await user.click(within(menu).getByRole('menuitemradio', { name: 'Grid' }))
+    expect(settingsStore.getState().scoreView.music).toBe('grid')
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'View: Grid' })).toBeInTheDocument()
   })
 })
 
@@ -113,32 +117,29 @@ describe('while Diagrams plays (ADR 0108)', () => {
   const bar = () => {
     const found = document.querySelector('header[data-area="bar"]')
     if (!found) throw new Error('bar')
-    return [found]
+    return found
   }
 
-  it('steps the bar aside, the transport and foot staying, back at a tap on the free room or once it stops', async () => {
+  it('steps the bar aside, the transport staying; a tap on the free room brings both, the next sends both aside', async () => {
     const user = userEvent.setup()
     await savedAs('diagrams', '/play/bz5')
     const transport = screen.getByRole('toolbar', { name: 'Playback' })
-    // The transport is docked in its own row, never floating: it does not step aside (R31-P).
-    const dock = transport.closest('[data-area="transport"]')
+    const dock = transport.closest('[data-area="dock"]')
     expect(dock).toBeInTheDocument()
     await user.click(within(transport).getByRole('button', { name: 'Play' }))
-    for (const area of bar()) {
-      expect(area).toHaveAttribute('data-hidden')
-      expect(area).toHaveAttribute('inert')
-    }
+    expect(bar()).toHaveAttribute('data-hidden')
+    expect(bar()).toHaveAttribute('inert')
     expect(dock).not.toHaveAttribute('data-hidden')
-    // A tap on the free room brings the bar back, and the next sends it aside again.
+    // A tap on the free room brings the bar back, and the next sends it aside with the transport.
     const title = screen.getByRole('heading', { level: 1 })
     await user.click(title)
-    for (const area of bar()) expect(area).not.toHaveAttribute('data-hidden')
+    expect(bar()).not.toHaveAttribute('data-hidden')
     await user.click(title)
-    for (const area of bar()) expect(area).toHaveAttribute('data-hidden')
-    expect(dock).not.toHaveAttribute('data-hidden')
+    expect(bar()).toHaveAttribute('data-hidden')
+    expect(dock).toHaveAttribute('data-hidden')
     // Stopped (Space), everything is back.
     await user.keyboard(' ')
-    for (const area of bar()) expect(area).not.toHaveAttribute('data-hidden')
+    expect(bar()).not.toHaveAttribute('data-hidden')
     expect(dock).not.toHaveAttribute('data-hidden')
   })
 
@@ -147,60 +148,51 @@ describe('while Diagrams plays (ADR 0108)', () => {
     await savedAs('grid', '/play/bz5')
     await user.click(screen.getByRole('button', { name: 'Play' }))
     expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
-    for (const area of bar()) expect(area).not.toHaveAttribute('data-hidden')
+    expect(bar()).not.toHaveAttribute('data-hidden')
     await user.click(screen.getByRole('button', { name: 'Stop' }))
   })
 })
 
-describe('Pick your view as a song opens (ADR 0108)', () => {
-  it('opens a song’s Player with Pick your view closed', async () => {
-    await renderApp('/play/bz5')
-    await screen.findByRole('button', { name: 'View: Sheet' })
-    expect(screen.queryByRole('dialog', { name: 'Pick your view' })).not.toBeInTheDocument()
-  })
-})
-
-describe('Pick your view greys a view the music cannot show (ADR 0108)', () => {
+describe('the views grey one the music cannot show (ADR 0108)', () => {
   it('greys Lyrics where the music has no words, saying why, and shows Diagrams in its place', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await savedAs('lyrics', '/play/bz5')
     expect(within(musicArea()).getByRole('region', { name: 'Diagrams' })).toBeInTheDocument()
-    const panel = await openView(user, 'Diagrams')
-    const lyrics = within(panel).getByRole('radio', { name: 'Lyrics' })
-    expect(lyrics).toHaveAttribute('aria-disabled', 'true')
+    const pill = viewPill()
+    const lyrics = within(pill).getByRole('radio', { name: 'Lyrics' })
+    expect(lyrics).toHaveAttribute('data-disabled')
     expect(lyrics).toHaveAttribute('title', 'Needs words')
-    expect(lyrics).toHaveAccessibleDescription('Needs words')
-    // Said in the panel too, for a phone, which shows no tooltip.
-    expect(panel).toHaveTextContent('Lyrics: Needs words')
-    expect(within(panel).getByRole('radio', { name: 'Diagrams' })).toBeChecked()
-    await user.click(lyrics)
+    expect(within(pill).getByRole('radio', { name: 'Diagrams' })).toBeChecked()
+    // The phone's menu says it too.
+    const menu = await openViewMenu(user, 'Diagrams')
+    const item = within(menu).getByRole('menuitemradio', { name: 'Lyrics' })
+    expect(item).toHaveAttribute('aria-disabled', 'true')
+    expect(item).toHaveAttribute('title', 'Needs words')
     // The view saved stays, for the songs that have words.
     expect(settingsStore.getState().scoreView.music).toBe('lyrics')
-    expect(within(musicArea()).getByRole('region', { name: 'Diagrams' })).toBeInTheDocument()
   })
 
   it('greys the chord views where the music has no chord symbols, and shows its sheet music', async () => {
-    const user = userEvent.setup()
     const { settingsStore } = await savedAs('grid', '/play/my-1', {
       storage: withSongOfNoChords(),
     })
     expect(within(musicArea()).getByRole('region', { name: 'Sheet music' })).toBeInTheDocument()
-    const panel = await openView(user, 'Sheet')
+    const pill = viewPill()
     for (const view of ['Lyrics', 'Diagrams', 'Grid']) {
-      const segment = within(panel).getByRole('radio', { name: view })
-      expect(segment).toHaveAttribute('aria-disabled', 'true')
-      expect(segment).toHaveAccessibleDescription('Needs chord symbols')
+      const segment = within(pill).getByRole('radio', { name: view })
+      expect(segment).toHaveAttribute('data-disabled')
+      expect(segment).toHaveAttribute('title', 'Needs chord symbols')
     }
-    expect(within(panel).getByRole('radio', { name: 'Sheet' })).toBeChecked()
+    expect(within(pill).getByRole('radio', { name: 'Sheet' })).toBeChecked()
     expect(settingsStore.getState().scoreView.music).toBe('grid')
   })
 
-  it('reads in Russian, its chip, its views and what a greyed one needs', async () => {
-    const user = userEvent.setup()
+  it('reads in Russian, its views and what a greyed one needs', async () => {
     await savedAs('lyrics', '/play/bz5', { locale: 'ru' })
-    await user.click(screen.getByRole('button', { name: 'Вид: Схемы' }))
-    const panel = await screen.findByRole('dialog', { name: 'Выберите вид' })
-    expect(within(panel).getByRole('radio', { name: 'Текст' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Вид: Схемы' })).toBeInTheDocument()
+    const pill = within(screen.getByRole('banner')).getAllByRole('radiogroup')[1]
+    if (!pill) throw new Error('the views’ pill')
+    expect(within(pill).getByRole('radio', { name: 'Текст' })).toHaveAttribute(
       'title',
       'Нужен текст',
     )
@@ -208,16 +200,15 @@ describe('Pick your view greys a view the music cannot show (ADR 0108)', () => {
   })
 })
 
-describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
-  it('holds the sheet music’s own: what it shows, its layout the sheet’s pill’s (R34)', async () => {
+describe('Settings › Score view, the view shown’s own (ADR 0108, R29)', () => {
+  it('holds the sheet music’s own: its layout, then what it shows', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
     const page = await openDisplay(user)
     expect(groupsOf(page)).toEqual(['Sheet music'])
     const sheet = within(page).getByRole('region', { name: 'Sheet music' })
-    expect(within(sheet).queryByRole('radiogroup', { name: 'Layout' })).not.toBeInTheDocument()
     expect(within(sheet).queryByRole('radiogroup', { name: 'Mode' })).not.toBeInTheDocument()
-    chipsAre(
+    switchesAre(
       within(sheet).getByRole('group', { name: 'Show' }),
       'Chord symbols',
       'Chord positions',
@@ -225,14 +216,8 @@ describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
       'Finger numbers',
       'Note names',
     )
-    await user.keyboard('{Escape}')
-    const pill = document.querySelector<HTMLElement>('[data-slot="sheet-pill"]')!
-    const layout = within(pill).getByRole('radiogroup', { name: 'Layout' })
-    expect(
-      within(layout)
-        .getAllByRole('radio')
-        .map((radio) => radio.ariaLabel),
-    ).toEqual(['Page view', 'Vertical scroll', 'Panorama'])
+    const layout = within(sheet).getByRole('radiogroup', { name: 'Layout' })
+    expect(segmentsOf(layout)).toEqual(['Page view', 'Vertical scroll', 'Panorama'])
     expect(within(layout).getByRole('radio', { name: 'Vertical scroll' })).toBeChecked()
     await user.click(within(layout).getByRole('radio', { name: 'Panorama' }))
     expect(settingsStore.getState().scoreView.layout).toBe('panorama')
@@ -247,24 +232,26 @@ describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
     const mode = within(diagrams).getByRole('radiogroup', { name: 'Mode' })
     expect(segmentsOf(mode)).toEqual(['Animated', 'Summary'])
     expect(within(mode).getByRole('radio', { name: 'Animated' })).toBeChecked()
-    chipsAre(diagrams, 'Lyrics')
+    switchesAre(diagrams, 'Lyrics')
     expect(within(page).queryByRole('radiogroup', { name: 'Layout' })).not.toBeInTheDocument()
     await user.click(within(mode).getByRole('radio', { name: 'Summary' }))
     expect(settingsStore.getState().scoreView.diagrams).toBe('summary')
     await user.click(within(diagrams).getByRole('button', { name: 'About Mode' }))
-    expect(await screen.findByRole('dialog', { name: 'Mode' })).toHaveTextContent(
-      'Animated: the chord sounding and the next, moving with the music. Summary: the song’s chords all at once, the one sounding marked.',
-    )
+    expect(
+      await screen.findByText(
+        'Animated: the chord sounding and the next, moving with the music. Summary: the song’s chords all at once, the one sounding marked.',
+      ),
+    ).toBeInTheDocument()
   })
 
-  it('holds Chords over lyrics’ own: its diagrams pinned and its text size', async () => {
+  it('holds Chords over lyrics’ own: its text size and its diagrams pinned', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await savedAs('lyrics', '/play/silent')
     const page = await openDisplay(user)
     expect(groupsOf(page)).toEqual(['Chords over lyrics'])
     const lyrics = within(page).getByRole('region', { name: 'Chords over lyrics' })
-    chipsAre(lyrics, 'Diagrams pinned')
-    await user.click(chip(lyrics, 'Diagrams pinned'))
+    switchesAre(lyrics, 'Diagrams pinned')
+    await user.click(within(lyrics).getByRole('switch', { name: 'Diagrams pinned' }))
     expect(settingsStore.getState().scoreView.pinned).toBe(false)
     const size = within(lyrics).getByRole('group', { name: 'Text size' })
     expect(size).toHaveTextContent('100%')
@@ -285,30 +272,33 @@ describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
     })
   })
 
-  it('holds the Grid’s own: its Lyrics, the words under its beats', async () => {
+  it('holds the Grid’s own: its bars per row, and its Lyrics, the words under its beats', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await savedAs('grid', '/play/silent')
     const page = await openDisplay(user)
     const grid = within(page).getByRole('region', { name: 'Grid' })
-    chipsAre(grid, 'Lyrics')
+    expect(within(grid).getByRole('radiogroup', { name: 'Bars per row' })).toBeInTheDocument()
+    switchesAre(grid, 'Lyrics')
     // The music under the sheet, out of reach while it is open.
     const bar = (name: string | RegExp) =>
       within(musicArea()).getByRole('button', { name, hidden: true })
     expect(bar(/^Bar 1: C · Silent$/)).toBeInTheDocument()
-    await user.click(chip(grid, 'Lyrics'))
+    await user.click(within(grid).getByRole('switch', { name: 'Lyrics' }))
     expect(settingsStore.getState().scoreView.lyrics).toBe(false)
     expect(bar('Bar 1: C')).toBeInTheDocument()
   })
 
-  it('greys the Lyrics of a song of no words, saying why in its tooltip', async () => {
-    const user = userEvent.setup()
+  it('greys the Lyrics of a song of no words, saying why', async () => {
     const { settingsStore } = await savedAs('grid', '/play/bz5')
-    const page = await openDisplay(user)
-    const lyrics = chip(page, 'Lyrics')
-    expect(lyrics).toBeDisabled()
-    expect(lyrics).toHaveAttribute('title', 'The music has no words')
+    const page = await openDisplay(userEvent.setup())
+    const lyrics = within(page).getByRole('switch', { name: 'Lyrics' })
+    expect(lyrics).toHaveAttribute('aria-disabled', 'true')
+    expect(lyrics).toHaveAccessibleDescription('The music has no words')
     act(() => setScoreView(settingsStore, { music: 'diagrams' }))
-    expect(chip(page, 'Lyrics')).toBeDisabled()
+    expect(within(page).getByRole('switch', { name: 'Lyrics' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
   })
 
   it('reads in Russian', async () => {
@@ -318,15 +308,10 @@ describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
     expect(within(page).getByRole('group', { name: 'Размер текста' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
     act(() => setScoreView(settingsStore, { music: 'grid' }))
-    expect(chip(page, 'Текст')).toHaveAttribute('aria-pressed')
+    expect(within(page).getByRole('switch', { name: 'Текст' })).toBeInTheDocument()
     act(() => setScoreView(settingsStore, { music: 'sheet' }))
-    const pill = document.querySelector<HTMLElement>('[data-slot="sheet-pill"]')!
-    const layout = within(pill).getByRole('radiogroup', { name: 'Расположение', hidden: true })
-    expect(
-      within(layout)
-        .getAllByRole('radio', { hidden: true })
-        .map((radio) => radio.ariaLabel),
-    ).toEqual(['Страницы', 'Прокрутка вниз', 'Панорама'])
+    const layout = within(page).getByRole('radiogroup', { name: 'Расположение' })
+    expect(segmentsOf(layout)).toEqual(['Страницы', 'Прокрутка вниз', 'Панорама'])
     expect(untranslated(document.body)).toEqual([])
   })
 })

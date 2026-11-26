@@ -16,17 +16,21 @@ describe('the Player’s settings, its gear their one home (B7, R32)', () => {
   it('sets how the Player always plays: the count-in, and the other hand’s look', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/bz5')
-    const playback = await openPage(user, /^Playback/)
-    await user.click(within(playback).getByRole('radio', { name: 'Silent' }))
-    await user.click(within(playback).getByRole('button', { name: 'Back' }))
-    // The hands' own page (R36): how the hand not practised shows.
-    await user.click(
-      within(await screen.findByRole('dialog')).getByRole('button', { name: /^Hands/ }),
-    )
-    const hands = await screen.findByRole('dialog')
-    await user.click(within(hands).getByRole('radio', { name: 'Hide' }))
-    expect(settingsStore.getState().playback).toMatchObject({ countdown: 'visual' })
-    expect(settingsStore.getState().otherHand).toEqual({ look: 'hide', play: true })
+    // The foot's Practice: its Metronome is the count-in's home (Off · Count-in · On).
+    await user.click(await screen.findByRole('button', { name: /^Practice:/ }))
+    const practice = await screen.findByRole('dialog', { name: 'Practice' })
+    const metronome = within(practice).getByRole('radiogroup', { name: 'Metronome' })
+    await user.click(within(metronome).getByRole('radio', { name: 'Off' }))
+    expect(settingsStore.getState().playback).toMatchObject({ countdown: 'none' })
+    await user.keyboard('{Escape}')
+    // The foot's Parts (R36): how the hand not practised shows.
+    await user.click(screen.getByRole('button', { name: /^Parts:/ }))
+    const parts = await screen.findByRole('dialog', { name: 'Parts' })
+    await user.click(within(parts).getByRole('switch', { name: 'Left hand: you play it' }))
+    const dim = within(parts).getByRole('switch', { name: 'Dim' })
+    const before = settingsStore.getState().otherHand.look
+    await user.click(dim)
+    expect(settingsStore.getState().otherHand.look).toBe(before === 'dim' ? 'show' : 'dim')
   })
 
   it('links to the Metronome, whose sound and beats the Player’s click plays', async () => {
@@ -61,17 +65,14 @@ describe('the Player as its settings say (B7, A27)', () => {
     expect(voices.slice(0, 2)).toEqual(['kick', 'hat'])
   })
 
-  it('marks the pedal it plays under; the drawn pedal stays up while stopped (A27, R31-P)', async () => {
-    await renderApp('/play/bz5')
+  it('marks the pedal it plays under; nothing sounds while stopped (A27, R31-P)', async () => {
+    const { audio } = await renderApp('/play/bz5')
     await waitFor(() =>
       expect(document.querySelector('style[data-slot="pedal-marks"]')?.textContent).toContain(
         '#ped-0',
       ),
     )
     // The score's pedal is down at the cursor, yet nothing plays: no pedal hangs.
-    expect(screen.getByRole('button', { name: /^Sustain pedal/ })).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    )
+    expect(audio.played).toEqual([])
   })
 })

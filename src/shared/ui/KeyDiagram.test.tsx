@@ -14,8 +14,11 @@ const keysIn = (diagram: Element, selector: string) =>
     .map((key) => Number(key.getAttribute('data-midi')))
     .sort((a, b) => a - b)
 
-const range = (from: number, to: number) =>
-  Array.from({ length: to - from + 1 }, (_, i) => from + i)
+/** The black keys from `from` to `to`, as midi numbers. */
+const blacks = (from: number, to: number) =>
+  Array.from({ length: to - from + 1 }, (_, i) => from + i).filter((key) =>
+    [1, 3, 6, 8, 10].includes(key % 12),
+  )
 
 describe('KeyDiagram', () => {
   it('is a picture named by its chord and notes', () => {
@@ -23,11 +26,13 @@ describe('KeyDiagram', () => {
     expect(screen.getByRole('img', { name: 'C♯m7: G# B C# E' })).toBeInTheDocument()
   })
 
-  it('draws the keys its caller gives, whatever the chord', () => {
+  it('draws the keys its caller gives, whatever the chord: the white parted by lines, the black inked', () => {
     const { rerender } = render(<KeyDiagram keys={KEYS} range={RANGE} label="C♯m7" />)
-    expect(keysIn(screen.getByRole('img'), '[data-midi]')).toEqual(range(53, 71))
+    expect(keysIn(screen.getByRole('img'), 'rect[data-midi]')).toEqual(blacks(53, 71))
+    expect(screen.getByRole('img').querySelectorAll('line')).toHaveLength(10)
     rerender(<KeyDiagram keys={KEYS} range={{ from: midi(48), to: midi(76) }} label="C♯m7" />)
-    expect(keysIn(screen.getByRole('img'), '[data-midi]')).toEqual(range(48, 76))
+    expect(keysIn(screen.getByRole('img'), 'rect[data-midi]')).toEqual(blacks(48, 76))
+    expect(screen.getByRole('img').querySelectorAll('line')).toHaveLength(16)
   })
 
   it('marks each key held with a dot, dark on a white key and light on a black one', () => {
@@ -35,8 +40,8 @@ describe('KeyDiagram', () => {
     const diagram = screen.getByRole('img')
     expect(keysIn(diagram, '[data-held]')).toEqual([56, 59, 61, 64])
     expect(diagram.querySelectorAll('[data-mark="dot"]')).toHaveLength(4)
-    expect(diagram.querySelector('[data-midi="56"] [data-mark]')).toHaveClass('fill-on-key-black')
-    expect(diagram.querySelector('[data-midi="59"] [data-mark]')).toHaveClass('fill-on-key-white')
+    expect(diagram.querySelector('[data-midi="56"][data-mark]')).toHaveClass('fill-on-key-black')
+    expect(diagram.querySelector('[data-midi="59"][data-mark]')).toHaveClass('fill-on-key-white')
   })
 
   it('rings the key it is asked to: a bass the chord has not', () => {
@@ -44,7 +49,7 @@ describe('KeyDiagram', () => {
       <KeyDiagram keys={[58, 60, 64, 67].map(midi)} ring={midi(58)} range={RANGE} label="C/B♭" />,
     )
     const diagram = screen.getByRole('img')
-    expect(diagram.querySelector('[data-midi="58"] [data-mark]')).toHaveAttribute(
+    expect(diagram.querySelector('[data-midi="58"][data-mark]')).toHaveAttribute(
       'data-mark',
       'ring',
     )

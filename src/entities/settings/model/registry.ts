@@ -33,7 +33,6 @@ export const NOT_PREFERENCES = [
   'paletteCategory',
   'editorMode',
   'foldedSections',
-  'welcomed',
   'practiceRecent',
   'paletteRecent',
   'chordFinder.chords',

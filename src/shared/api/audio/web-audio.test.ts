@@ -19,9 +19,9 @@ class FakeContext {
   readonly destination = {}
   readonly oscillators: { type: string; frequency: number; start: number; stop: number }[] = []
   readonly gains: {
-    disconnected: boolean
     targets: { value: number; at: number }[]
     ramps: { value: number; at: number }[]
+    fades: { value: number; at: number }[]
   }[] = []
   resume = vi.fn(async () => {
     this.state = 'running'
@@ -30,6 +30,7 @@ class FakeContext {
   private param(
     targets: { value: number; at: number }[] = [],
     ramps: { value: number; at: number }[] = [],
+    fades: { value: number; at: number }[] = [],
   ) {
     return {
       value: 0,
@@ -37,7 +38,7 @@ class FakeContext {
       exponentialRampToValueAtTime: vi.fn(
         (value: number, at: number) => void ramps.push({ value, at }),
       ),
-      linearRampToValueAtTime: vi.fn(),
+      linearRampToValueAtTime: vi.fn((value: number, at: number) => void fades.push({ value, at })),
       cancelScheduledValues: vi.fn(),
       setTargetAtTime: vi.fn((value: number, at: number) => void targets.push({ value, at })),
     }
@@ -54,20 +55,32 @@ class FakeContext {
 
   createGain() {
     const record = {
-      disconnected: false,
       targets: [] as { value: number; at: number }[],
       ramps: [] as { value: number; at: number }[],
+      fades: [] as { value: number; at: number }[],
     }
     this.gains.push(record)
-    const gain = this.param(record.targets, record.ramps)
-    const node = this.node({ gain })
-    node.disconnect = vi.fn(() => {
-      record.disconnected = true
-    })
-    return node
+    return this.node({ gain: this.param(record.targets, record.ramps, record.fades) })
   }
 
   readonly filters: { readonly frequency: { value: number } }[] = []
+
+  readonly limiters: {
+    readonly threshold: { value: number }
+    readonly ratio: { value: number }
+  }[] = []
+
+  createDynamicsCompressor() {
+    const limiter = this.node({
+      threshold: this.param(),
+      knee: this.param(),
+      ratio: this.param(),
+      attack: this.param(),
+      release: this.param(),
+    })
+    this.limiters.push(limiter)
+    return limiter
+  }
 
   createBiquadFilter() {
     const filter = this.node({ type: 'lowpass', frequency: this.param(), Q: this.param() })
@@ -166,6 +179,15 @@ describe('createWebAudioOutput', () => {
     const { createContext, audio } = setUp()
     expect(createContext).not.toHaveBeenCalled()
     expect(audio.now()).toBe(0)
+  })
+
+  it('sends every sound out through one limiter, made once for its context', () => {
+    const { context, audio } = setUp()
+    audio.play([A4], 0)
+    audio.play([A4], 1)
+    expect(context.limiters).toHaveLength(1)
+    expect(context.limiters[0]?.threshold.value).toBe(-3)
+    expect(context.limiters[0]?.ratio.value).toBe(20)
   })
 
   it('plays a note as three oscillators from the sound’s time', () => {
@@ -364,15 +386,18 @@ describe('createWebAudioOutput', () => {
     expect(context.resume).toHaveBeenCalledTimes(2)
   })
 
-  it('silences what sounds on stop, and stops its oscillators at once rather than at their end', () => {
+  it('fades what sounds on stop in a moment, and stops its oscillators there rather than at their end', () => {
     const { context, audio } = setUp()
     audio.play([A4, CLICK], 0)
     context.currentTime = 0.5
     audio.stop()
-    // Each voice's output: the note's envelope and the click's gain.
-    expect(context.gains.filter((g) => g.disconnected)).toHaveLength(2)
+    // Each voice's output: the note's envelope and the click's gain, faded out over 15 ms.
+    expect(context.gains.flatMap((g) => g.fades)).toEqual([
+      { value: 0, at: 0.515 },
+      { value: 0, at: 0.515 },
+    ])
     expect(context.oscillators).toHaveLength(4)
-    expect(context.oscillators.every((o) => o.stop === 0.5)).toBe(true)
+    expect(context.oscillators.every((o) => o.stop === 0.515)).toBe(true)
   })
 
   it('follows the keys sounding on the audio clock, frame by frame', () => {

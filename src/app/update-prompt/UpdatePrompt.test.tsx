@@ -20,7 +20,9 @@ describe('UpdatePrompt', () => {
     await waitFor(() =>
       expect(skipWaiting).toHaveBeenCalledExactlyOnceWith({ type: 'SKIP_WAITING' }),
     )
-    expect(screen.getByRole('button', { name: 'Restarting…' })).toBeDisabled()
+    // The band says it restarts, with nothing left to tap.
+    expect(screen.getByRole('status')).toHaveTextContent('Restarting…')
+    expect(screen.queryByRole('button', { name: 'Update' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Later' })).not.toBeInTheDocument()
   })
 

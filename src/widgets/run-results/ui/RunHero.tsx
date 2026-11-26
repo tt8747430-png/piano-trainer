@@ -22,7 +22,7 @@ export function RunHero({
       <span
         aria-hidden
         className={cn(
-          'grid size-24 place-items-center rounded-full [&_svg]:size-11',
+          'grid size-24 place-items-center rounded-pill [&_svg]:size-11',
           perfect ? 'bg-paint-yellow text-on-paint-yellow' : 'bg-paint-grass text-on-paint-grass',
         )}
       >

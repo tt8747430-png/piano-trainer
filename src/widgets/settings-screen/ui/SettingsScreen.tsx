@@ -53,7 +53,7 @@ export function SettingsScreen({
                 : { to: parent })}
               aria-label={back}
               title={back}
-              className="-ml-3 grid size-11 shrink-0 place-items-center rounded-full transition-colors duration-200 ease-out hover:bg-muted"
+              className="-ml-3 grid size-11 shrink-0 place-items-center rounded-pill transition-colors duration-200 ease-out hover:bg-muted"
             >
               <ChevronLeft aria-hidden className="size-5.5" />
             </Link>

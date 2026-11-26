@@ -108,7 +108,7 @@ export function SelectionStrip({ className }: { className?: string }) {
         >
           <span
             aria-hidden
-            className="size-4 rounded-full bg-destructive ring-[1.5px] ring-destructive ring-offset-[3px] ring-offset-card"
+            className="size-4 rounded-pill bg-destructive ring-[1.5px] ring-destructive ring-offset-[3px] ring-offset-card"
           />
         </Button>
       )}

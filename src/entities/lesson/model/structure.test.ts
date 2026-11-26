@@ -24,6 +24,7 @@ describe('the blocks an editor inserts', () => {
       'scale',
       'interval',
       'voicings',
+      'variants',
       'question',
       'link',
       'image',
@@ -36,5 +37,9 @@ describe('the blocks an editor inserts', () => {
     })
     expect(blankBlock('progression')).toMatchObject({ kind: 'progression', numerals: 'I IV V I' })
     expect(blankBlock('interval')).toMatchObject({ kind: 'interval', interval: 'P5' })
+    expect(blankBlock('variants')).toMatchObject({
+      kind: 'variants',
+      variants: [{ label: { en: 'Version 1' } }, { label: { en: 'Version 2' } }],
+    })
   })
 })

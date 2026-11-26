@@ -85,7 +85,7 @@ export function SongsPlaces() {
             aria-label={t('folder.new')}
             title={t('folder.new')}
             onClick={() => setMaking({ kind: 'new', parent: null })}
-            className="choice grid size-10 place-items-center pointer-coarse:size-11 rounded-full focus-visible:-outline-offset-3"
+            className="choice grid size-10 place-items-center pointer-coarse:size-11 rounded-pill focus-visible:-outline-offset-3"
           >
             <Plus aria-hidden className="size-4.5" />
           </button>

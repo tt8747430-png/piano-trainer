@@ -20,7 +20,7 @@ describe('keysOfChords', () => {
   })
 
   it('finds «Ромашковые поля» in D minor, though F major holds its chords too', () => {
-    expect(found('Dm7 Gm9 Asus4 Dm7').slice(0, 2)).toEqual(['Dm', 'F'])
+    expect(found('Dm7 Gm9 Asus4 Dm7').slice(0, 3)).toEqual(['Dm', 'Gm', 'F'])
     const verse =
       'Dm Gm Asus4 Dm Gm Csus4 Am D D/F# Gm Csus4 C F Bb Gm Em7b5 Asus4 A Dm Gm Csus2 C FMaj7 D7 Gm7 Dm/F Em7b5 A Dm6'
     expect(found(verse)[0]).toBe('Dm')
@@ -36,10 +36,10 @@ describe('keysOfChords', () => {
     expect(best).toMatchObject({ held: 4, score: 11 })
   })
 
-  it('counts a dominant that leads to the next chord as heard in the key', () => {
+  it('counts a dominant that leads to the next chord as heard in the key, and a V–I cadence twice', () => {
     const [withApplied] = keysOfChords(chords('C A7 Dm G7 C'))
     expect(keySymbol(withApplied?.key ?? D_MINOR)).toBe('C')
-    expect(withApplied).toMatchObject({ held: 4, score: 12 })
+    expect(withApplied).toMatchObject({ held: 4, score: 14 })
   })
 
   it('spells the key as the chords spell its tonic, where a signature writes it', () => {
@@ -48,8 +48,9 @@ describe('keysOfChords', () => {
     expect(found('Ebm Abm Bb Ebm')[0]).toBe('E♭m')
   })
 
-  it('goes to the key nearest C, then major, where scores tie', () => {
-    expect(found('F G')[0]).toBe('C')
+  it('goes to the key whose tonic chord sounds, then the key nearest C, then major, where scores tie', () => {
+    expect(found('F G').slice(0, 2)).toEqual(['G', 'C'])
+    expect(found('Dm Em F G').slice(1, 3)).toEqual(['C', 'Am'])
   })
 
   it('finds nothing in no chords', () => {

@@ -1,55 +1,65 @@
-import { screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { screen, waitFor, within } from '@testing-library/react'
+import userEvent, { type UserEvent } from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
-import { pickIn } from '@/shared/test/pickers'
 
-describe('The chromatic walk in the Player', () => {
+/** The run's Setup, open over it as it opens. */
+const setupSheet = () => screen.findByRole('dialog', { name: 'Setup' })
+
+/** Start in the Setup: the run plays, the Setup closed. */
+async function start(user: UserEvent) {
+  await user.click(within(await setupSheet()).getByRole('button', { name: 'Start' }))
+}
+
+describe('The chromatic walk, a run of its own (the run boards)', () => {
   it('titles a walk by its chords as the sheets print them', async () => {
+    const user = userEvent.setup()
     await renderApp('/play/chromatic?chords=min.m7&root=F%23')
+    await start(user)
     expect(
-      await screen.findByRole('heading', { name: 'Chromatic walk: F♯m · F♯m7' }),
+      await screen.findByRole('heading', { level: 1, name: 'Chromatically: F♯m · F♯m7' }),
     ).toBeInTheDocument()
   })
 
-  it('walks the chosen chords root by root as sheet music, titled by them', async () => {
-    await renderApp('/play/chromatic?chords=m9.maj9&root=G')
+  it('walks the chosen chords root by root, saying where it stands', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/play/chromatic?chords=m9.maj9&root=G')
+    await start(user)
     expect(
-      await screen.findByRole('heading', { name: 'Chromatic walk: Gm9 · GMaj9' }),
+      await screen.findByRole('heading', { level: 1, name: 'Chromatically: Gm9 · Gmaj9' }),
     ).toBeInTheDocument()
-    expect(await screen.findByRole('button', { name: 'Bar 1: Gm9' })).toBeInTheDocument()
-    // Each bar named by its chord as the sheet prints it.
-    expect(screen.getByRole('button', { name: 'Bar 3: G♯m9' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Bar 4: A♭Maj9' })).toBeInTheDocument()
+    expect(audio.played).toHaveLength(1)
+    // From G up the twelve keys to G again, each root's two chords.
+    expect(screen.getByRole('meter', { name: 'Key 1 of 13' })).toBeInTheDocument()
   })
 
-  it('plays and stops', async () => {
+  it('plays and stops from its floating Play', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/chromatic')
-    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    await start(user)
     expect(audio.played).toHaveLength(1)
-    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    const transport = screen.getByRole('toolbar', { name: 'Setup, play and tempo' })
+    await user.click(within(transport).getByRole('button', { name: 'Stop' }))
     expect(audio.stops).toBeGreaterThan(0)
   })
 
   it('ignores a loop past the end of a shorter walk, and still plays', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/chromatic?loop=20-24')
-    expect(await screen.findByRole('button', { name: 'Bar 13: C' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Play' }))
+    await start(user)
     expect(audio.played).toHaveLength(1)
   })
 
-  it('checks chord types in the Setup sheet, never unchecking the last', async () => {
+  it('checks chord types in its Setup, never unchecking the last', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/chromatic?chords=m9&root=G')
-    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    await user.click(await screen.findByRole('combobox', { name: 'Chord types' }))
+    const setup = await setupSheet()
+    await user.click(within(setup).getByRole('combobox', { name: 'Chord types' }))
     await user.click(await screen.findByRole('option', { name: '9 · Dominant 9th' }))
-    expect(router.state.location.search).toMatchObject({ chords: 'm9.n9' })
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ chords: 'm9.n9' }))
     await user.click(screen.getByRole('option', { name: 'm9 · Minor 9th' }))
-    expect(router.state.location.search).toMatchObject({ chords: 'n9' })
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ chords: 'n9' }))
     await user.click(screen.getByRole('option', { name: '9 · Dominant 9th' }))
     expect(router.state.location.search).toMatchObject({ chords: 'n9' })
     expect(screen.getByRole('option', { name: '9 · Dominant 9th' })).toHaveAttribute(
@@ -58,40 +68,43 @@ describe('The chromatic walk in the Player', () => {
     )
   })
 
-  it('names each chord type in the Setup sheet by its suffix as the sheets print it', async () => {
+  it('names each chord type in its Setup by its suffix as the sheets print it', async () => {
     const user = userEvent.setup()
     await renderApp('/play/chromatic?chords=m9&root=G')
-    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    await user.click(await screen.findByRole('combobox', { name: 'Chord types' }))
+    const setup = await setupSheet()
+    await user.click(within(setup).getByRole('combobox', { name: 'Chord types' }))
     expect(await screen.findByRole('option', { name: '7♯9 · 7th sharp 9' })).toBeInTheDocument()
   })
 
-  it('changes the direction and the root in the Setup sheet', async () => {
+  it('changes the direction and the root in its Setup', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/chromatic?chords=maj9&root=G')
-    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    await user.click(await screen.findByRole('radio', { name: 'Up and down' }))
-    expect(router.state.location.search).toMatchObject({ direction: 'both' })
-    await pickIn(user, 'Root', 'A♭')
-    expect(router.state.location.search).toMatchObject({ root: 'Ab' })
+    const setup = await setupSheet()
+    await user.click(within(setup).getByRole('radio', { name: 'Up and down' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ direction: 'both' }))
+    const roots = within(setup).getByRole('radiogroup', { name: 'Root' })
+    await user.click(within(roots).getByRole('radio', { name: 'A♭' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ root: 'Ab' }))
   })
 
-  it('closes the Chord flow: a chromatic walk has no key', async () => {
+  it('closes the Chord flow in its gear: a chromatic walk has no key', async () => {
     const user = userEvent.setup()
     await renderApp('/play/chromatic')
-    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    await start(user)
+    await user.click(screen.getByRole('button', { name: 'Player settings' }))
     await user.click(await screen.findByRole('button', { name: /^Pattern/ }))
-    expect(
-      screen.getByRole('option', {
-        name: (name) => name.includes(BUILT_IN_PATTERNS.require('flow').name.en),
-      }),
-    ).toHaveAttribute('aria-disabled', 'true')
+    const flow = screen.getByRole('button', {
+      name: (name) => name.startsWith(BUILT_IN_PATTERNS.require('flow').name.en),
+    })
+    expect(flow).toBeDisabled()
+    expect(flow).toHaveTextContent('Needs a key')
   })
 
   it('closes to Practice when opened directly', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/chromatic')
-    await user.click(await screen.findByRole('button', { name: 'Close' }))
-    expect(router.state.location.pathname).toBe('/practice')
+    await start(user)
+    await user.click(within(screen.getByRole('banner')).getByRole('button', { name: 'Close' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice'))
   })
 })

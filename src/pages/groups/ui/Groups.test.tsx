@@ -43,22 +43,21 @@ function sunday() {
 describe('groups and the folders shared with them (R30 S6)', () => {
   it('says groups need an account, signed out, with one Sign in', async () => {
     await renderApp('/songs/groups')
-    expect(await screen.findByText('Share folders with a group')).toBeInTheDocument()
+    expect(await screen.findByText('Share playlists with a group')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Sign in' })).toHaveAttribute(
       'href',
       '/account/sign-in',
     )
   })
 
-  it('makes a group from Songs’ +, opening its page with its invite link and its owner', async () => {
+  it('makes a group from Groups, opening its page with its invite link and its owner', async () => {
     const user = userEvent.setup()
     const groups = createFakeGroups()
-    const { router } = await renderApp('/songs', { auth: await signedIn(), groups })
-    await user.click(await screen.findByRole('button', { name: 'New' }))
+    const { router } = await renderApp('/songs/groups', { auth: await signedIn(), groups })
     await user.click(await screen.findByRole('button', { name: 'New group' }))
     const sheet = await screen.findByRole('dialog', { name: 'New group' })
     await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Choir')
-    await user.click(within(sheet).getByRole('button', { name: 'Create group' }))
+    await user.click(within(sheet).getByRole('button', { name: 'Create' }))
     await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/songs\/groups\/group-/))
     expect(await screen.findByRole('heading', { level: 1, name: 'Choir' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /^Share invite link/ })).toBeInTheDocument()
@@ -67,19 +66,20 @@ describe('groups and the folders shared with them (R30 S6)', () => {
     expect(within(members).getByText('(You)')).toBeInTheDocument()
   })
 
-  it('shares a folder with a group from its Settings, the row counting the groups', async () => {
+  it('shares a playlist with a group from its More menu', async () => {
     const user = userEvent.setup()
     const groups = createFakeGroups()
     await groups.create('Choir')
-    await renderApp('/songs/folders/folder-1/settings', {
+    await renderApp('/songs/folders/folder-1', {
       auth: await signedIn(),
       groups,
       storage: sunday(),
     })
-    await user.click(await screen.findByRole('button', { name: /^Share with a group/ }))
+    await user.click(await screen.findByRole('button', { name: 'More for Sunday' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Share with a group' }))
     const sheet = await screen.findByRole('dialog', { name: 'Share with a group' })
     await user.click(await within(sheet).findByRole('checkbox', { name: 'Choir' }))
-    await user.click(within(sheet).getByRole('button', { name: 'Done' }))
+    await user.click(within(sheet).getAllByRole('button', { name: 'Done' }).at(-1)!)
     await waitFor(() => expect(groups.store.shares).toHaveLength(1))
     expect(groups.store.shares[0]).toMatchObject({
       folderKey: 'folder-1',
@@ -92,7 +92,7 @@ describe('groups and the folders shared with them (R30 S6)', () => {
     })
   })
 
-  it('shows a member the folders shared with them, on Songs and on its own page', async () => {
+  it('shows a member the playlists shared with them, among Songs’ playlists and on its own page', async () => {
     const user = userEvent.setup()
     let me = 'mihai'
     const groups = createFakeGroups({ who: () => me })
@@ -112,8 +112,7 @@ describe('groups and the folders shared with them (R30 S6)', () => {
     me = 'ana'
     await groups.join(choir.value.inviteCode)
     await renderApp('/songs', { auth: await signedIn(), groups })
-    const shared = await screen.findByRole('region', { name: 'Shared with me' })
-    await user.click(await within(shared).findByRole('link', { name: /^Advent/ }))
+    await user.click(await screen.findByRole('link', { name: /^Advent/ }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Advent' })).toBeInTheDocument()
     expect(screen.getByText('View only')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Silent Night/ })).toHaveAttribute(
@@ -169,7 +168,8 @@ describe('groups and the folders shared with them (R30 S6)', () => {
     me = 'ana'
     const { router } = await renderApp('/songs/groups', { auth: await signedIn(), groups })
     expect(await screen.findByText('No groups yet')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Join with a link' }))
+    // The bar's link, and the empty list's: either opens the sheet.
+    await user.click(screen.getAllByRole('button', { name: 'Join with a link' })[0]!)
     const sheet = await screen.findByRole('dialog', { name: 'Join with a link' })
     const field = within(sheet).getByRole('textbox', { name: 'Invite link' })
     await user.type(field, 'join my choir{Enter}')
@@ -192,13 +192,15 @@ describe('groups and the folders shared with them (R30 S6)', () => {
     await renderApp('/songs/groups', { auth: await signedIn(), groups, storage: sunday() })
     await user.click(await screen.findByRole('link', { name: /^Choir/ }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Choir' })).toBeInTheDocument()
-    expect(screen.getByText('No folders have been shared with this group yet.')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Share a folder…' }))
-    const choose = await screen.findByRole('dialog', { name: 'Choose a folder' })
+    expect(
+      screen.getByText('No playlists have been shared with this group yet.'),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Share a playlist…' }))
+    const choose = await screen.findByRole('dialog', { name: 'Choose a playlist' })
     await user.click(within(choose).getByRole('button', { name: /^Sunday/ }))
     const sheet = await screen.findByRole('dialog', { name: 'Share with a group' })
     await user.click(await within(sheet).findByRole('checkbox', { name: 'Choir' }))
-    await user.click(within(sheet).getByRole('button', { name: 'Done' }))
+    await user.click(within(sheet).getAllByRole('button', { name: 'Done' }).at(-1)!)
     await waitFor(() => expect(groups.store.shares).toHaveLength(1))
     expect(await screen.findByRole('link', { name: /^Sunday/ })).toBeInTheDocument()
   })

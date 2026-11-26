@@ -8,20 +8,36 @@ const SRC = resolve(import.meta.dirname, '..')
 const MARKS = ['ChevronRight', 'ChevronLeft', 'ArrowLeft', 'ArrowRight']
 
 /**
- * Where they may be drawn: the shared marks (`NavMarks`, Back), and the controls that move rather
- * than navigate (R23): the transport's bar back and on, a lesson's previous
- * and next section, a lesson's previous and next lesson.
+ * Where they may be drawn: the shared marks (`NavMarks`, Back, See all), the controls that move
+ * rather than navigate (R23), the text links the boards draw with a trailing ›, the disclosures
+ * whose › turns down as they open, and the Settings window's own Back.
  */
 const ALLOWED = [
   'shared/ui/NavMarks.tsx',
   'shared/ui/BackButton.tsx',
+  // A section head's See all, its › after the count.
+  'shared/ui/ShowAll.tsx',
+  // The transport's bar back and on, a lesson's previous and next section.
   'widgets/practice-player/ui/Transport.tsx',
   'widgets/lesson-view/ui/LessonView.tsx',
-  'pages/lesson/ui/LessonLayout.tsx',
   // The Streak calendar's month back and on.
   'widgets/practice-days/ui/PracticeCalendar.tsx',
   // The loop's grips, ‹ at its start and › at its end, which move the loop.
   'shared/ui/LoopGrip.tsx',
+  // Text links with a trailing ›: an exercise's next key, a run's All practice, a key's place on the
+  // circle of fifths, the next chord's All.
+  'pages/player/ui/ExercisePlayerPage.tsx',
+  'widgets/run-results/ui/RunResults.tsx',
+  'widgets/scale-explorer/ui/KeyFifths.tsx',
+  'widgets/chord-explorer/ui/NextChordSheet.tsx',
+  // A folder's row on a phone, its › where a pointer shows its menu instead.
+  'widgets/song-library/ui/FolderRow.tsx',
+  // Disclosures, the › turning down as they open: your lessons in a course, a pattern's card.
+  'widgets/curriculum/ui/OwnLibrary.tsx',
+  'widgets/player-setup/ui/PatternFoldCard.tsx',
+  // The Settings window's Back to its list, on a laptop and in its nav.
+  'widgets/settings-screen/ui/SettingsScreen.tsx',
+  'widgets/settings-screen/ui/SettingsNav.tsx',
 ]
 
 function sources(dir: string): string[] {

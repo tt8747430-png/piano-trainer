@@ -82,7 +82,9 @@ export function RadioCards<V extends string>({
                   aria-hidden
                   className={cn(
                     'grid flex-none place-items-center bg-card text-foreground ring-1 ring-border',
-                    across ? 'h-10 w-11 rounded-md [&_svg]:size-5.5' : 'h-12 w-16 rounded-lg',
+                    across
+                      ? 'h-10 w-11 rounded-control [&_svg]:size-5.5'
+                      : 'h-12 w-16 rounded-control',
                   )}
                 >
                   {card.picture}
@@ -94,7 +96,7 @@ export function RadioCards<V extends string>({
               <span
                 aria-hidden
                 className={cn(
-                  'grid size-5.5 flex-none place-items-center rounded-full',
+                  'grid size-5.5 flex-none place-items-center rounded-pill',
                   chosen
                     ? 'bg-honey-ring text-card'
                     : 'shadow-[inset_0_0_0_2px_var(--color-border)]',

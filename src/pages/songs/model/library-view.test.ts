@@ -73,18 +73,20 @@ describe('libraryView', () => {
     expect(inHymns.groups[0]?.entries.map((e) => e.title)).toEqual(byTitle(songsOf('hymns')))
   })
 
-  it('at Home lists every song under the folders, in one list headed All songs', () => {
+  it('at Home lists every song under the folders, by name as the songs are, in one list headed All songs', () => {
     const home = libraryView(layout, null, NONE, 'title', 'ascending', lookups, {
       everySong: true,
     })
-    expect(home.folders.map((each) => each.folder.id)).toEqual(SONG_COLLECTIONS.map((c) => c.id))
+    expect(home.folders.map((each) => each.folder.id)).toEqual(
+      SONG_COLLECTIONS.map((c) => c.id).toSorted((a, b) => a.localeCompare(b, 'en')),
+    )
     expect(home.groups[0]?.heading).toBe('All songs')
     expect(ids(home.groups).toSorted()).toEqual(every.map((e) => e.id).toSorted())
   })
 
   it('counts a folder’s songs, folders and learned songs', () => {
-    const [first] = view().folders
-    expect(first).toMatchObject({ folders: 0, songs: songsOf('learning-songs').length })
+    const learning = view().folders.find((each) => each.folder.id === 'learning-songs')
+    expect(learning).toMatchObject({ folders: 0, songs: songsOf('learning-songs').length })
     const hymns = view({}, 'called-to-play', nestedLayout).folders
     expect(hymns.map((each) => [each.folder.id, each.folders])).toEqual([['hymns', 1]])
   })
@@ -105,7 +107,7 @@ describe('libraryView', () => {
 })
 
 describe('sortSongs', () => {
-  const songs = ['bz5', 'silent', 'h1'].flatMap((id) => entryById(id) ?? [])
+  const songs = ['bz5', 'silent', 'amazing'].flatMap((id) => entryById(id) ?? [])
   it('sorts by title either way', () => {
     const up = sortSongs(songs, 'title', 'ascending', lookups).map((e) => e.title)
     expect(up).toEqual(byTitle(songs))
@@ -118,20 +120,20 @@ describe('sortSongs', () => {
     expect(sortSongs(songs, 'played', 'descending', lookups).map((e) => e.id)).toEqual([
       'silent',
       'bz5',
-      'h1',
+      'amazing',
     ])
     expect(sortSongs(songs, 'played', 'ascending', lookups).map((e) => e.id)).toEqual([
       'bz5',
       'silent',
-      'h1',
+      'amazing',
     ])
   })
 
   it('sorts by when a song came in, the app’s songs after the learner’s', () => {
     const added = {
       ...lookups,
-      addedOf: (id: string) => (id === 'h1' ? '2026-11-04T10:00:00Z' : null),
+      addedOf: (id: string) => (id === 'amazing' ? '2026-11-04T10:00:00Z' : null),
     }
-    expect(sortSongs(songs, 'added', 'descending', added)[0]?.id).toBe('h1')
+    expect(sortSongs(songs, 'added', 'descending', added)[0]?.id).toBe('amazing')
   })
 })

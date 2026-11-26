@@ -35,10 +35,15 @@ function Level({ journey }: { journey: Journey }) {
       large
       titleOnPage="phone"
       back={<BackButton />}
-      tools={actions}
+      // The level's Publish, the glass word just before Done while editing (EDITR).
       edit={
         editable
-          ? { editing, onEdit: () => show({ edit: true }), onDone: () => show({ edit: false }) }
+          ? {
+              editing,
+              onEdit: () => show({ edit: true }),
+              onDone: () => show({ edit: false }),
+              publish: actions,
+            }
           : undefined
       }
     />

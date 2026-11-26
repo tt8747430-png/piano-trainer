@@ -43,7 +43,7 @@ describe('parseNumerals', () => {
   })
 
   it('writes them as a line to read, a dash between them', () => {
-    expect(numeralsLine(parseNumerals('bVII ii7 V7b9') ?? [])).toBe('♭VII–ii7–V7♭9')
+    expect(numeralsLine(parseNumerals('bVII ii7 V7b9') ?? [])).toBe('♭VII – ii7 – V7♭9')
   })
 
   it('reads a ♭9 written on a dominant 7th, and only there', () => {

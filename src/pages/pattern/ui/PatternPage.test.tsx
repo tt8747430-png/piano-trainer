@@ -26,21 +26,45 @@ const withOwn = () => {
 }
 
 describe('A pattern’s page', () => {
-  it('explains it: its idea, each hand’s figure, the source’s words and the music that plays it', async () => {
+  it('explains it: its name and book, its idea under its bar, where to practise it and where it is used', async () => {
     await renderApp('/practice/accompaniment/patterns/M1')
     expect(
-      await screen.findByRole('heading', { level: 1, name: '1 · Bass + chords' }),
+      await screen.findByRole('heading', { level: 2, name: '1 · Bass + chords' }),
     ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Pattern' })).toBeInTheDocument()
+    expect(screen.getByText('Called to Play')).toBeInTheDocument()
     expect(
       screen.getByText(
         'The right hand plays the chord on every beat over an octave held in the left.',
       ),
     ).toBeInTheDocument()
-    expect(screen.getByText('Chord on every beat')).toBeInTheDocument()
-    expect(screen.getByText('Octave, whole note')).toBeInTheDocument()
-    expect(screen.getByText(/The left hand plays the bass note as an octave/)).toBeInTheDocument()
-    expect(screen.getByText('Over a bar of C major')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 2, name: 'Used in' })).toBeInTheDocument()
+    // Round and round in C, then through the keys.
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'Practise in the Player' }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /^Chromatically, rising/ })).toHaveAttribute(
+      'href',
+      '/play/progression?pattern=M1&walk=semitones-up',
+    )
+    const used = screen.getByRole('heading', { level: 3, name: 'Used in' }).closest('section')
+    expect(
+      within(used ?? document.body).getByRole('link', { name: /^How Great Thou Art/ }),
+    ).toHaveAttribute('href', '/songs/hgta')
+  })
+
+  it('plays over a bar of C major, or a song it is used in, from Play over', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/accompaniment/patterns/M1')
+    await user.click(await screen.findByRole('button', { name: 'Play over' }))
+    const overs = await screen.findAllByRole('menuitemcheckbox')
+    expect(overs.map((each) => each.textContent)).toEqual([
+      'A bar of C major',
+      'How Great Thou Art',
+      'The Name of Jesus Is So Sweet',
+      'What a Friend We Have in Jesus',
+      'All Glory to God in This World',
+    ])
+    expect(screen.getByRole('menuitemcheckbox', { name: 'A bar of C major' })).toBeChecked()
   })
 
   it('plays its bar of C on the keys, and stops', async () => {
@@ -53,10 +77,13 @@ describe('A pattern’s page', () => {
 
   it('plays a tune pattern over a song with a tune, and opens it there in the Player', async () => {
     await renderApp('/practice/accompaniment/patterns/r5')
-    expect(await screen.findByText(/^Over the first line of /)).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Practise in the Player' })).toHaveAttribute(
+    const practise = (
+      await screen.findByRole('heading', { level: 3, name: 'Practise in the Player' })
+    ).closest('section')
+    // Its song's row, which plays the tune with the pattern under it.
+    expect(within(practise ?? document.body).getByRole('link')).toHaveAttribute(
       'href',
-      '/play/otche?pattern=r5',
+      '/play/posylaet?pattern=r5',
     )
   })
 
@@ -82,19 +109,19 @@ describe('A pattern’s page', () => {
 
   it('opens the progression Player with it', async () => {
     await renderApp('/practice/accompaniment/patterns/ballad')
-    expect(await screen.findByRole('link', { name: 'Practise in the Player' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: /^In C major/ })).toHaveAttribute(
       'href',
       '/play/progression?pattern=ballad',
     )
   })
 
-  it('shows the learner’s own, with Edit, Publish and Delete in More, and deletes it once asked', async () => {
+  it('shows the learner’s own, with Edit, Publish and Delete in More, deleted at once with Undo', async () => {
     const user = userEvent.setup()
     const { router, patternsStore } = await renderApp('/practice/accompaniment/patterns/my-1', {
       storage: withOwn(),
     })
-    expect(await screen.findByRole('heading', { level: 1, name: 'Sunday' })).toBeInTheDocument()
-    expect(screen.getByText('Charleston · Walking the triad 1–3–5–3')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 2, name: 'Sunday' })).toBeInTheDocument()
+    expect(screen.getByText('Your pattern')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'More' }))
     const more = await screen.findByRole('menu', { name: 'More' })
     expect(
@@ -103,11 +130,13 @@ describe('A pattern’s page', () => {
         .map((action) => action.textContent),
     ).toEqual(['Edit', 'Publish…', 'Delete'])
     await user.click(within(more).getByRole('menuitem', { name: 'Delete' }))
-    await user.click(await screen.findByRole('button', { name: 'Delete' }))
     await waitFor(() =>
       expect(router.state.location.href).toBe('/practice/accompaniment?place=mine'),
     )
     expect(patternsStore.getState()).toMatchObject({ own: [], favourites: [] })
+    expect(await screen.findByText('“Sunday” deleted')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    expect(patternsStore.getState().own).toHaveLength(1)
   })
 
   it.each([
@@ -142,7 +171,7 @@ describe('A pattern’s page', () => {
     const { patternsStore } = await renderApp('/practice/accompaniment/patterns/my-1', {
       storage: withOwn(),
     })
-    await screen.findByRole('heading', { level: 1, name: 'Sunday' })
+    await screen.findByRole('heading', { level: 2, name: 'Sunday' })
     act(() => deleteOwnPattern(patternsStore, 'my-1'))
     expect(await screen.findByRole('heading', { level: 1, name: /not found/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Go to Accompaniment' })).toHaveAttribute(
@@ -171,14 +200,15 @@ describe('a pattern of the learner’s own in the Public library (ADR 0116)', ()
     })
     await user.click(await screen.findByRole('button', { name: 'More' }))
     await user.click(await screen.findByRole('menuitem', { name: 'Publish…' }))
-    await screen.findByRole('heading', { level: 1, name: 'Publish' })
-    expect(router.state.location.pathname).toBe('/practice/accompaniment/patterns/my-1/publish')
+    // A window over the pattern, with no address of its own.
+    const window = await screen.findByRole('dialog', { name: 'Publish' })
+    expect(router.state.location.pathname).toBe('/practice/accompaniment/patterns/my-1')
     await user.type(
-      screen.getByRole('textbox', { name: 'Description' }),
+      within(window).getByRole('textbox', { name: 'Description' }),
       'A walking bass under jazz chords',
     )
-    await user.click(screen.getByRole('checkbox', { name: /I confirm/ }))
-    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await user.click(within(window).getByRole('checkbox', { name: /I confirm/ }))
+    await user.click(within(window).getByRole('button', { name: 'Publish' }))
     expect(await screen.findByText('Published to the Public library.')).toBeInTheDocument()
     const listed = await publicLibrary.browse({ kind: 'pattern', sort: 'new', query: '' })
     expect(listed).toMatchObject({

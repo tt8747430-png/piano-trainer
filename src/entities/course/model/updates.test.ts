@@ -38,10 +38,11 @@ describe('a course’s texts over the kept content (round 12)', () => {
   const kept = (body: unknown) =>
     keepContent([{ kind: 'course', id: course.id, version: 'v2', body }])
 
-  it('holds a course’s title, summary and lessons in order, as the database keeps them', () => {
+  it('holds a course’s title, line, summary and lessons in order, as the database keeps them', () => {
     expect(courseRecord(course)).toEqual({
       id: course.id,
       title: course.title,
+      line: course.line,
       summary: course.summary,
       lessons: course.lessons.map((lesson) => lesson.id),
       shelf: course.shelf,
@@ -154,6 +155,7 @@ describe('a course an editor made (content as data)', () => {
     id: 'made-course',
     title: { en: 'A made course', ru: 'Новый курс' },
     summary: { en: 'Made in the app', ru: 'Сделан в приложении' },
+    line: { en: 'Chords in a month', ru: 'Аккорды за месяц' },
     lessons: ['first'],
     shelf: 'chords',
     stage: 'intermediate',
@@ -170,6 +172,7 @@ describe('a course an editor made (content as data)', () => {
     const course = courseById('made-course')
     expect(course).toMatchObject({
       id: 'made-course',
+      line: made.line,
       shelf: 'chords',
       stage: 'intermediate',
       weeks: 3,
@@ -179,8 +182,9 @@ describe('a course an editor made (content as data)', () => {
     expect(coursesOn('chords').at(-1)).toBe(course)
   })
 
-  it('is not there without a shelf, a stage and its weeks', () => {
+  it('is not there without its line, a shelf, a stage and its weeks', () => {
     for (const body of [
+      { ...made, line: undefined },
       { ...made, shelf: 'nowhere' },
       { ...made, stage: undefined },
       { ...made, weeks: 0 },
@@ -190,10 +194,15 @@ describe('a course an editor made (content as data)', () => {
     }
   })
 
-  it('holds its shelf, stage and weeks in its record', () => {
+  it('holds its line, shelf, stage and weeks in its record', () => {
     keep(made)
     const course = courseById('made-course')
     if (!course) throw new Error('the made course is there')
-    expect(courseRecord(course)).toMatchObject({ shelf: 'chords', stage: 'intermediate', weeks: 3 })
+    expect(courseRecord(course)).toMatchObject({
+      line: made.line,
+      shelf: 'chords',
+      stage: 'intermediate',
+      weeks: 3,
+    })
   })
 })

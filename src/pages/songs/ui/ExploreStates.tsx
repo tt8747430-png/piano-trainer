@@ -69,7 +69,7 @@ export function ExploreLoading({ head, rows }: { head?: ReactNode; rows: number 
                 <span className={`h-3.5 w-1/2 ${bar}`} />
               </span>
               <span className={`h-3.5 w-3/5 ${bar}`} />
-              <span className="h-7 w-22 rounded-lg bg-muted" />
+              <span className="h-7 w-22 rounded-control bg-muted" />
               <span className={`h-3.5 w-3/5 ${bar}`} />
               <span className={`h-3.5 w-9 ${bar}`} />
               <span />
@@ -83,7 +83,7 @@ export function ExploreLoading({ head, rows }: { head?: ReactNode; rows: number 
         >
           {Array.from({ length: rows }, (_, i) => (
             <li key={i} className="flex h-22 items-center gap-4 py-3 ps-3 pe-1">
-              <span className="size-14 shrink-0 rounded-xl bg-muted" />
+              <span className="size-14 shrink-0 rounded-control bg-muted" />
               <span className="flex flex-1 flex-col gap-2">
                 <span className={`h-4 w-3/5 ${bar}`} />
                 <span className={`h-3.5 w-2/5 ${bar}`} />

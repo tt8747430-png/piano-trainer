@@ -38,17 +38,17 @@ function stubBrowser(kept: string[]) {
   return entries
 }
 
-describe('Storage and backup › Offline piano (A27)', () => {
+describe('Storage and backup › Piano sound (A27)', () => {
   it('shows the samples’ size and downloads them for offline', async () => {
     const user = userEvent.setup()
     const entries = stubBrowser(['/samples/piano/mf/A0.m4a'])
     await renderApp('/settings/storage')
-    const group = await screen.findByRole('region', { name: 'Offline piano' })
+    const group = await screen.findByRole('region', { name: 'Piano sound' })
     expect(await within(group).findByText('2.3 MB of 9.1 MB downloaded')).toBeVisible()
-    await user.click(within(group).getByRole('button', { name: /Download for offline/ }))
+    await user.click(within(group).getByRole('button', { name: /Download for offline use/ }))
     expect(await within(group).findByText('Available offline')).toBeVisible()
     expect(within(group).getByText('9.1 MB of 9.1 MB downloaded')).toBeVisible()
-    expect(within(group).queryByRole('button', { name: /Download for offline/ })).toBeNull()
+    expect(within(group).queryByRole('button', { name: /Download for offline use/ })).toBeNull()
     expect(entries.size).toBe(2)
   })
 
@@ -64,7 +64,7 @@ describe('Storage and backup › Offline piano (A27)', () => {
     })
     expect(dialog).toHaveTextContent('Offline, a lighter sampled piano plays')
     await user.click(within(dialog).getByRole('button', { name: 'Remove' }))
-    const group = screen.getByRole('region', { name: 'Offline piano' })
+    const group = screen.getByRole('region', { name: 'Piano sound' })
     expect(await within(group).findByText('0 MB of 9.1 MB downloaded')).toBeVisible()
     expect(entries.size).toBe(0)
     expect(screen.queryByRole('button', { name: 'Remove downloaded piano samples' })).toBeNull()
@@ -73,6 +73,6 @@ describe('Storage and backup › Offline piano (A27)', () => {
   it('shows no group where the browser keeps no caches', async () => {
     await renderApp('/settings/storage')
     await screen.findByRole('region', { name: 'Backup' })
-    expect(screen.queryByRole('region', { name: 'Offline piano' })).toBeNull()
+    expect(screen.queryByRole('region', { name: 'Piano sound' })).toBeNull()
   })
 })

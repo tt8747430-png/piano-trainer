@@ -7,20 +7,25 @@ import {
   selectOwnProgression,
   selectOwnProgressions,
 } from './selectors'
-import { createPracticeLibraryStore, PRACTICE_LIBRARY_STORAGE_KEY } from './store'
+import {
+  createPracticeLibraryStore,
+  PRACTICE_LIBRARY_STORAGE_KEY,
+  PRACTICE_LIBRARY_VERSION,
+} from './store'
 import { ownProgressionName } from './types'
 import { EMPTY_ARRANGEMENT as EMPTY } from './arrangement'
 
-const restored = (state: unknown, version = 2) => {
+const restored = (state: unknown, version = PRACTICE_LIBRARY_VERSION) => {
   const storage = createMemoryStorage()
   storage.setItem(PRACTICE_LIBRARY_STORAGE_KEY, JSON.stringify({ state, version }))
   return createPracticeLibraryStore({ storage, otherTabs: new EventTarget() }).getState()
 }
 
 const SAD = { id: 'mine-1', name: 'Sad loop', line: 'vi-IV-I-V', minor: false }
+const NONE_RECENT = { exercises: [], accompaniment: [], progressions: [] }
 
 describe('createPracticeLibraryStore', () => {
-  it('starts with no favourites of either kind and no progression of the learner’s own', () => {
+  it('starts with no favourites of either kind, no progression of the learner’s own and none used', () => {
     const storage = createMemoryStorage()
     const store = createPracticeLibraryStore({ storage, otherTabs: new EventTarget() })
     expect(store.getState()).toEqual({
@@ -29,6 +34,7 @@ describe('createPracticeLibraryStore', () => {
       nextOwn: 1,
       arrangements: { exercises: EMPTY, accompaniment: EMPTY, progressions: EMPTY },
       nextFolder: 1,
+      recent: NONE_RECENT,
     })
     store.setState({ favourites: { exercises: ['hanon'], progressions: [] } })
     expect(JSON.parse(storage.getItem('pt-practice-library') ?? 'null')).toEqual({
@@ -38,8 +44,9 @@ describe('createPracticeLibraryStore', () => {
         nextOwn: 1,
         arrangements: { exercises: EMPTY, accompaniment: EMPTY, progressions: EMPTY },
         nextFolder: 1,
+        recent: NONE_RECENT,
       },
-      version: 2,
+      version: PRACTICE_LIBRARY_VERSION,
     })
   })
 
@@ -66,6 +73,7 @@ describe('createPracticeLibraryStore', () => {
         progressions: EMPTY,
       },
       nextFolder: 2,
+      recent: { exercises: ['modes', 'hanon'], accompaniment: [], progressions: ['axis'] },
     }
     expect(restored(saved)).toEqual(saved)
   })
@@ -117,6 +125,13 @@ describe('createPracticeLibraryStore', () => {
       ],
     })
     expect(state.progressions).toEqual([SAD, { ...SAD, id: 'mine-5' }])
+  })
+
+  it('keeps each library’s recently used once, at most eight', () => {
+    const used = Array.from({ length: 10 }, (_, i) => `row-${i}`)
+    const state = restored({ recent: { exercises: ['hanon', 'hanon', 7, ...used] } })
+    expect(state.recent.exercises).toEqual(['hanon', ...used.slice(0, 7)])
+    expect(state.recent.progressions).toEqual([])
   })
 
   it('never reuses an id: the next is past every one kept', () => {

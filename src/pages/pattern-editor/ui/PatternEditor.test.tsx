@@ -4,6 +4,9 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import type { PatternRef } from '@/entities/pattern'
 
+/** Save, the phone's under the hands (a laptop's stands under the name; jsdom renders both). */
+const save = () => screen.getAllByRole('button', { name: 'Save' }).at(-1) ?? document.body
+
 describe('The pattern editor', () => {
   it('makes a pattern from another, saves it under the learner’s name and opens its page', async () => {
     const user = userEvent.setup()
@@ -12,15 +15,14 @@ describe('The pattern editor', () => {
     await user.click(await screen.findByRole('menuitem', { name: 'Make your own from it' }))
     const name = await screen.findByRole('textbox', { name: 'Name' })
     expect(name).toHaveValue('1 · Bass + chords (mine)')
-    await user.click(screen.getByRole('combobox', { name: 'Right hand' }))
-    await user.click(await screen.findByRole('option', { name: 'Charleston' }))
+    await user.click(screen.getByRole('radio', { name: 'Charleston' }))
     await user.clear(name)
     await user.type(name, 'Sunday')
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(save())
     await waitFor(() =>
       expect(router.state.location.pathname).toBe('/practice/accompaniment/patterns/my-1'),
     )
-    expect(await screen.findByRole('heading', { level: 1, name: 'Sunday' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 2, name: 'Sunday' })).toBeInTheDocument()
     expect(patternsStore.getState().own).toEqual([
       { id: 'my-1', name: 'Sunday', rh: 'jaz', lh: 'o' },
     ])
@@ -35,23 +37,29 @@ describe('The pattern editor', () => {
   it('makes one the Player’s picker offers, which plays its own figures', async () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/accompaniment/patterns/new?from=M1')
-    await user.click(await screen.findByRole('combobox', { name: 'Right hand' }))
-    await user.click(await screen.findByRole('option', { name: 'Charleston' }))
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(await screen.findByRole('radio', { name: 'Charleston' }))
+    await user.click(save())
     await waitFor(() =>
       expect(router.state.location.pathname).toBe('/practice/accompaniment/patterns/my-1'),
     )
     const playWith = async (pattern: PatternRef) => {
       await router.navigate({ to: '/play/progression', search: { p: 'ii-V-I', pattern } })
+      // The Player opens on its Setup, Play under it; the same Player again keeps it shut.
+      const setup = () => screen.queryByRole('dialog', { name: 'Setup' })
+      await waitFor(() =>
+        expect(setup() ?? screen.queryByRole('button', { name: 'Play' })).not.toBeNull(),
+      )
+      if (setup()) await user.keyboard('{Escape}')
       await user.click(await screen.findByRole('button', { name: 'Play' }))
       await user.click(screen.getByRole('button', { name: 'Stop' }))
       return audio.played.at(-1)?.sounds
     }
     const builtIn = await playWith('M1')
     await user.click(screen.getByRole('button', { name: 'Player settings' }))
-    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
-    const list = screen.getByRole('listbox', { name: 'Pattern' })
-    await user.click(within(list).getByRole('option', { name: /^1 · Bass \+ chords \(mine\)/ }))
+    await user.click(await screen.findByRole('button', { name: /^Pattern/ }))
+    // Its Pattern page lists the learner's own beside the books'.
+    await user.type(await screen.findByRole('searchbox', { name: 'Search patterns' }), '(mine)')
+    await user.click(await screen.findByRole('button', { name: /^1 · Bass \+ chords \(mine\)/ }))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ pattern: 'my-1' }))
     await user.keyboard('{Escape}')
     expect(await playWith('my-1')).not.toEqual(builtIn)
@@ -60,10 +68,10 @@ describe('The pattern editor', () => {
   it('saves nothing without a name', async () => {
     const user = userEvent.setup()
     const { patternsStore } = await renderApp('/practice/accompaniment/patterns/new')
-    const save = await screen.findByRole('button', { name: 'Save' })
-    expect(save).toBeDisabled()
+    await screen.findByRole('textbox', { name: 'Name' })
+    for (const each of screen.getAllByRole('button', { name: 'Save' })) expect(each).toBeDisabled()
     await user.type(screen.getByRole('textbox', { name: 'Name' }), '   ')
-    expect(save).toBeDisabled()
+    for (const each of screen.getAllByRole('button', { name: 'Save' })) expect(each).toBeDisabled()
     expect(patternsStore.getState().own).toEqual([])
   })
 
@@ -72,35 +80,37 @@ describe('The pattern editor', () => {
     const name = await screen.findByRole('textbox', { name: 'Name' })
     // 40 characters at most: the name the source has, cut at a word.
     expect(name).toHaveValue('3 · Arpeggio (3rd, then 5th +… (mine)')
-    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
+    expect(save()).toBeEnabled()
   })
 
-  it('plays the draft as it changes', async () => {
+  it('draws the draft as it changes, its roll named by its two figures', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/practice/accompaniment/patterns/new')
-    await user.click(await screen.findByRole('button', { name: 'Play' }))
-    await user.click(screen.getByRole('button', { name: 'Stop' }))
-    await user.click(screen.getByRole('combobox', { name: 'Right hand' }))
-    await user.click(await screen.findByRole('option', { name: 'Charleston' }))
-    await user.click(screen.getByRole('button', { name: 'Play' }))
-    const [plain, charleston] = audio.played
-    expect(audio.played).toHaveLength(2)
-    expect(charleston?.sounds).not.toEqual(plain?.sounds)
+    await renderApp('/practice/accompaniment/patterns/new?from=M1')
+    expect(
+      await screen.findByRole('img', {
+        name: 'Chord on every beat in the right hand, Octave, whole note in the left',
+      }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('radio', { name: 'Charleston' }))
+    expect(
+      screen.getByRole('img', {
+        name: 'Charleston in the right hand, Octave, whole note in the left',
+      }),
+    ).toBeInTheDocument()
   })
 
   it('changes the learner’s pattern in its place, and is not found for a built-in', async () => {
     const user = userEvent.setup()
     const { router, patternsStore } = await renderApp('/practice/accompaniment/patterns/new')
     await user.type(await screen.findByRole('textbox', { name: 'Name' }), 'Monday')
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(save())
     await user.click(await screen.findByRole('button', { name: 'More' }))
     await user.click(await screen.findByRole('menuitem', { name: 'Edit' }))
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Edit pattern' }),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('combobox', { name: 'Left hand' }))
-    await user.click(await screen.findByRole('option', { name: /^Root, then 5th/ }))
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(screen.getByRole('radio', { name: /^Root, then 5th/ }))
+    await user.click(save())
     await waitFor(() =>
       expect(router.state.location.pathname).toBe('/practice/accompaniment/patterns/my-1'),
     )
@@ -118,12 +128,12 @@ describe('The pattern editor', () => {
     const user = userEvent.setup()
     const { router, patternsStore } = await renderApp('/practice/accompaniment/patterns/new')
     await user.type(await screen.findByRole('textbox', { name: 'Name' }), 'Monday')
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(save())
     await user.click(await screen.findByRole('button', { name: 'More' }))
     await user.click(await screen.findByRole('menuitem', { name: 'Edit' }))
     await screen.findByRole('heading', { level: 1, name: 'Edit pattern' })
     act(() => patternsStore.setState({ own: [] }))
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(save())
     await waitFor(() =>
       expect(router.state.location.pathname).toBe('/practice/accompaniment/patterns/my-2'),
     )
@@ -133,10 +143,12 @@ describe('The pattern editor', () => {
   it('cancels back where it was opened from', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/accompaniment')
-    await user.click(await screen.findByRole('link', { name: 'New pattern' }))
+    await user.click(await screen.findByRole('button', { name: 'New' }))
+    await user.click(await screen.findByRole('button', { name: 'New pattern' }))
     const form = (await screen.findByRole('textbox', { name: 'Name' })).closest('form')
     if (!form) throw new Error('the editor is a form')
-    await user.click(within(form).getByRole('button', { name: 'Cancel' }))
+    // The phone's Cancel, under the hands (a laptop's stands under the name).
+    await user.click(within(form).getAllByRole('button', { name: 'Cancel' }).at(-1) ?? form)
     await waitFor(() => expect(router.state.location.pathname).toBe('/practice/accompaniment'))
   })
 })

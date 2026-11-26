@@ -25,7 +25,7 @@ import { holdTallestUnder } from './hold-tallest'
 const FLOATING_CARD = [
   'lg:max-w-110',
   'lg:data-[swipe-direction=down]:bottom-28',
-  'lg:data-[swipe-direction=down]:rounded-2xl',
+  'lg:data-[swipe-direction=down]:rounded-control',
   'lg:data-[swipe-direction=down]:border-0',
   'lg:data-[swipe-direction=down]:after:hidden',
   'lg:max-h-[calc(var(--app-height,100dvh)-9rem)]',

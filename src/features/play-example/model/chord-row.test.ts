@@ -9,7 +9,7 @@ describe('progressionRow', () => {
       { tonic: note('C'), minor: false },
       'sevenths',
     )
-    expect(row.map(({ chord }) => chordSymbol(chord))).toEqual(['Dm7', 'G7', 'CMaj7'])
+    expect(row.map(({ chord }) => chordSymbol(chord))).toEqual(['Dm7', 'G7', 'Cmaj7'])
     expect(row.map(({ caption }) => caption)).toEqual(['ii', 'V', 'I'])
   })
 

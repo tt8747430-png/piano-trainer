@@ -61,10 +61,11 @@ describe('libraryShown', () => {
     ])
   })
 
-  it('counts each place, the hidden apart from All', () => {
+  it('counts each place, the hidden apart from All, and the recently used', () => {
     expect(shown({}).counts).toEqual({
       all: 5,
       favourites: 1,
+      recent: 0,
       technique: 2,
       jonny: 2,
       mine: 1,

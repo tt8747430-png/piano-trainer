@@ -15,6 +15,7 @@ import {
 } from '@/entities/library'
 import { useRepertoire } from '@/entities/piece'
 import { editFolder, FolderEditPanel, type FolderEdit } from '@/features/manage-library'
+import { useGroupsData, useKeepSharesCurrent } from '@/features/share-folder'
 import { useSongDrop, useSongImport } from '@/features/song-files'
 import { cn, useMediaQuery, useSetSearch, LAPTOP } from '@/shared/lib'
 import { PLACE_COLUMN } from '@/widgets/song-library'
@@ -63,6 +64,9 @@ export function LibraryScreen({
   // Import, from New or a file dropped on the library, made where the learner is (ADR 0107).
   const songImport = useSongImport(folder?.id ?? null)
   const drop = useSongDrop(songImport.importFile)
+  // While the library is open the learner's shared folders follow their folders (R30 S6).
+  const groups = useGroupsData()
+  useKeepSharesCurrent(groups.data, groups.reload)
   // Clear search: the route fills its defaults, Favourites kept.
   const clear = () =>
     void navigate({ to: '.', search: (was) => ({ ...was, q: '' }), replace: true })

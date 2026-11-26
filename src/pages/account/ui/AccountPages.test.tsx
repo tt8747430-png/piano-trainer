@@ -45,15 +45,15 @@ describe('Sign in', () => {
     expect(signIn).not.toHaveBeenCalled()
   })
 
-  it('offers Google, and Apple as coming soon', async () => {
+  it('says what an account keeps and offers Google, with no way in that does not work yet', async () => {
     const user = userEvent.setup()
     const auth = createFakeAuth()
     const signInWith = vi.spyOn(auth, 'signInWith')
     await renderApp('/account/sign-in', { auth })
     await user.click(await screen.findByRole('button', { name: 'Continue with Google' }))
     expect(signInWith).toHaveBeenCalledWith('google')
-    expect(screen.getByRole('button', { name: /Continue with Apple/ })).toBeDisabled()
-    expect(screen.getByText('Coming soon')).toBeInTheDocument()
+    expect(screen.getByText('Keep your songs and progress on all your devices.')).toBeVisible()
+    expect(screen.queryByRole('button', { name: /Apple/ })).not.toBeInTheDocument()
   })
 
   it('waits for a connection, saying so, with nothing to press', async () => {

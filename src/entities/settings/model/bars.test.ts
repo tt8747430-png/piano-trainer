@@ -41,7 +41,7 @@ describe('the bars’ catalog (R29 B10, memory-palaces’ select toolbar)', () =
   })
 
   it('Reset gives the defaults', () => {
-    expect(barOf({}, 'select.songs')).toEqual(['favourite', 'move', 'archive', 'delete'])
+    expect(barOf({}, 'select.songs')).toEqual(['move', 'favourite', 'archive'])
     expect(barOf({ 'select.songs': ['delete', 'move'] }, 'select.songs')).toEqual([
       'delete',
       'move',

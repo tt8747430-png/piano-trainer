@@ -45,7 +45,8 @@ describe('feedbackOf', () => {
     )
     expect(feedback.notes.map((each) => each.verdict)).toEqual(['right', 'wrong', 'early', 'late'])
     expect(feedback.counts).toEqual({ right: 1, wrong: 1, missed: 0, early: 1, late: 1 })
-    expect(feedback.percent).toBe(25)
+    // Right whole, wrong nothing, early and late within a quarter beat each a third off.
+    expect(feedback.percent).toBe(59)
   })
 
   it('misses a note no key was played for', () => {

@@ -2,7 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { Editor } from '@tiptap/core'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { publishOnItsPage } from '@/shared/test/publish'
+import { publishInOneTap } from '@/shared/test/publish'
 import { renderApp } from '@/app/testing/render-app'
 import { COURSES } from '@/entities/course'
 import { LESSONS, lessonExamples, lessonPlace, type Lesson } from '@/entities/lesson'
@@ -29,9 +29,9 @@ const editing = () =>
     ],
   })
 
-/** The lesson's document, and the editor behind it. */
-async function lessonDoc() {
-  const doc = await screen.findByRole('textbox', { name: 'The lesson' })
+/** The lesson's document, and the editor behind it; `name` is its name in the app's language. */
+async function lessonDoc(name = 'The lesson') {
+  const doc = await screen.findByRole('textbox', { name })
   return { doc, editor: (doc as HTMLElement & { editor: Editor }).editor }
 }
 
@@ -52,9 +52,8 @@ async function chooseExample(kind: string, name: string) {
   return within(await screen.findByRole('toolbar', { name }))
 }
 
-/** Publishes the draft once it is saved: the bar's Publish, then the dialog's. */
-/** Publish, the one way: the bar's Publish opens the Publish page (R29 B6). */
-const publish = publishOnItsPage
+/** Publish, the one way: the bar's Publish, one tap, once there are changes. */
+const publish = publishInOneTap
 
 const saved = async (content: ReturnType<typeof editing>, id = LESSON.id) => {
   const draft = await content.draft('lesson', id)
@@ -84,7 +83,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     expect(screen.queryByRole('button', { name: 'Edit' })).not.toBeInTheDocument()
   })
 
-  it('opens the lesson as one document, its status and Publish in the bar', async () => {
+  it('opens the lesson as one document, Published in the bar until it changes', async () => {
     await renderApp(`/lessons/${LESSON.id}/edit`, {
       auth: await signedInAs('editor'),
       contentEditing: editing(),
@@ -92,12 +91,8 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     const { doc } = await lessonDoc()
     expect(line(doc, 'p[data-lesson-title]')).toHaveTextContent(LESSON.title.en)
     expect(doc.querySelectorAll('h2')).toHaveLength(LESSON.sections.length)
-    expect(screen.queryByText('Not published')).not.toBeInTheDocument()
-    // Publish opens the lesson's Publish page (R29 B6), the rights ticked there.
-    expect(screen.getByRole('link', { name: 'Publish' })).toHaveAttribute(
-      'href',
-      `/lessons/${LESSON.id}/publish`,
-    )
+    // Publish, one tap, reads Published and waits while the lesson is as published.
+    expect(screen.getByRole('button', { name: 'Published' })).toBeDisabled()
     expect(screen.queryByRole('radio', { name: 'Preview' })).not.toBeInTheDocument()
   })
 
@@ -124,17 +119,15 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     })
   })
 
-  it('writes Russian in the same document once the draft’s menu says so, the English left as it was', async () => {
+  it('writes Russian in the same document where the app speaks it, the English left as it was', async () => {
     const user = userEvent.setup()
     const content = editing()
     await renderApp(`/lessons/${LESSON.id}/edit`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
+      locale: 'ru',
     })
-    await lessonDoc()
-    await user.click(screen.getByRole('button', { name: 'Publishing' }))
-    await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
-    const { doc, editor } = await lessonDoc()
+    const { doc, editor } = await lessonDoc('Урок')
     expect(line(doc, 'p[data-lesson-title]')).toHaveTextContent(LESSON.title.ru)
     await caretAtEnd(editor, line(doc, 'h2'))
     await user.keyboard('!')
@@ -189,7 +182,8 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     })
     const { doc } = await lessonDoc()
     expect(line(doc, 'p[data-lesson-summary]')).toHaveTextContent('')
-    expect(screen.getByText('Not published')).toBeInTheDocument()
+    // Its changes are there to publish.
+    expect(screen.getByRole('button', { name: 'Publish' })).toBeEnabled()
   })
 
   it('edits a course’s lesson as the database keys it, by its course', async () => {
@@ -293,7 +287,8 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     await caretAtEnd(editor, line(doc, 'h2'))
     const toolbar = screen.getByRole('toolbar', { name: 'Formatting' })
     await user.click(within(toolbar).getByRole('button', { name: 'Insert' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Rule' }))
+    const insert = await screen.findByRole('dialog', { name: 'Insert' })
+    await user.click(within(insert).getByRole('button', { name: 'Rule' }))
     await user.keyboard('Play it slowly')
     await waitFor(
       async () =>
@@ -428,19 +423,6 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     await waitFor(() => expect(doc.querySelector(`p[data-placeholder="${hint}"]`)).toBeNull())
   })
 
-  it('adds a line under a block from its gutter’s +, the Insert menu open on it (round 28)', async () => {
-    const user = userEvent.setup()
-    await renderApp(`/lessons/${LESSON.id}/edit`, {
-      auth: await signedInAs('editor'),
-      contentEditing: editing(),
-    })
-    const { doc, editor } = await lessonDoc()
-    await caretAtEnd(editor, line(doc, 'h2'))
-    await user.click(screen.getByRole('button', { name: 'Add below' }))
-    const menu = await screen.findByRole('listbox', { name: 'Insert' })
-    expect(within(menu).getByRole('option', { name: /Progression/ })).toBeInTheDocument()
-  })
-
   it('duplicates and deletes an example from its toolbar, said with Undo (round 28)', async () => {
     const user = userEvent.setup()
     const lesson = LESSONS.find(
@@ -469,7 +451,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
 
   it('tells a learner it is an editor’s, with the way back', async () => {
     await renderApp(`/lessons/${LESSON.id}/edit`, { auth: await signedInAs('learner') })
-    expect(await screen.findByText('Only an editor edits a lesson.')).toBeInTheDocument()
+    expect(await screen.findByText('Only an editor edits a lesson')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Back to the lesson' })).toHaveAttribute(
       'href',
       `/lessons/${LESSON.id}`,

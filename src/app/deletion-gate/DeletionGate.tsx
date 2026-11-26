@@ -41,14 +41,14 @@ export function DeletionGate() {
   const date = purgeAfter === null ? '' : dateSaid(purgeAfter, locale)
   return (
     <AlertDialog open={account !== null && purgeAfter !== null}>
-      {/* The AppLayers board's gate, the welcome's box: 22 corners, 20 about, a 20 title, then Sign out
+      {/* The AppLayers board's gate, its dialog box: 22 corners, 20 about, a 20 title, then Sign out
           and Keep account side by side, Keep account the screen's one honey act. */}
       <AlertDialogContent className="gap-3 rounded-sheet p-5">
         <AlertDialogHeader className="gap-3">
           <AlertDialogTitle className="text-xl">{t('deletionGate.title')}</AlertDialogTitle>
           <AlertDialogDescription>{t('deletionGate.body', { date })}</AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="mt-1.5 flex gap-2 *:h-11 *:min-w-0 *:flex-1 *:rounded-full *:text-base *:font-bold">
+        <div className="mt-1.5 flex gap-2 *:h-11 *:min-w-0 *:flex-1 *:rounded-pill *:text-base *:font-bold">
           <AlertDialogCancel onClick={() => void auth.signOut()}>
             {t('deletionGate.signOut')}
           </AlertDialogCancel>

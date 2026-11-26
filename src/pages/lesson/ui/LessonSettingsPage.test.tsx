@@ -1,19 +1,12 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { tickAndPublish } from '@/shared/test/publish'
 import { renderApp } from '@/app/testing/render-app'
 import { COURSES } from '@/entities/course'
 import { LESSONS, lessonPlace } from '@/entities/lesson'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
 import { createFakeContentEditing } from '@/shared/api/content-editing'
-
-/** The screen bar's Settings (the gear), not the sidebar's. */
-async function openSettings(user: ReturnType<typeof userEvent.setup>) {
-  await screen.findByRole('heading', { level: 1 })
-  const bar = document.querySelector<HTMLElement>('[data-slot="screen-bar"]')!
-  await user.click(within(bar).getByRole('link', { name: 'Settings' }))
-}
+import { OPEN_SETTINGS } from '@/shared/lib'
 
 const LESSON = LESSONS.find((lesson) => lessonPlace(lesson.id))!
 const COURSE = COURSES.find((course) => course.lessons.length > 0)!
@@ -25,104 +18,97 @@ async function signedInAs(role: AccountRole) {
   return auth
 }
 
+/** A lesson's page with its Settings' window open over it, as its gear opens it. */
+async function settingsOf(path: string, options: Parameters<typeof renderApp>[1] = {}) {
+  const rendered = await renderApp(path, options)
+  await act(() => rendered.router.navigate({ href: path, state: OPEN_SETTINGS }))
+  return { ...rendered, window: await screen.findByRole('dialog', { name: 'Settings' }) }
+}
+
 describe('a lesson’s Settings (round 28)', () => {
-  it('opens from the lesson’s bar: its title, how lessons read, Share link, and its progress', async () => {
+  it('opens over the lesson from its bar’s gear: its name, its place, Share link and its progress', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp(`/lessons/${LESSON.id}`)
-    await openSettings(user)
-    await waitFor(() =>
-      expect(router.state.location.pathname).toBe(`/lessons/${LESSON.id}/settings`),
-    )
-    expect(await screen.findByText(LESSON.title.en)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Share link' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /^Reset progress/ })).toBeInTheDocument()
-    // An editor's rows are an editor's alone.
-    expect(screen.queryByRole('link', { name: /Level/ })).not.toBeInTheDocument()
-    expect(screen.queryByText('Written in')).not.toBeInTheDocument()
+    await screen.findByRole('heading', { level: 1 })
+    const bar = document.querySelector<HTMLElement>('[data-slot="screen-bar"]')!
+    await user.click(within(bar).getByRole('button', { name: 'Settings' }))
+    const window = await screen.findByRole('dialog', { name: 'Settings' })
+    // A window over the lesson, never a page of its own.
+    expect(router.state.location.pathname).toBe(`/lessons/${LESSON.id}`)
+    const place = lessonPlace(LESSON.id)!
+    expect(within(window).getByText(LESSON.title.en)).toBeInTheDocument()
+    expect(
+      within(window).getByText(`Lesson ${place.n} of ${place.total} · ${place.journey.title.en}`),
+    ).toBeInTheDocument()
+    expect(within(window).getByRole('button', { name: 'Share link' })).toBeInTheDocument()
+    expect(within(window).getByRole('button', { name: /^Reset progress/ })).toBeInTheDocument()
+    // An editor's Publishing is an editor's alone.
+    expect(within(window).queryByRole('region', { name: 'Publishing' })).not.toBeInTheDocument()
   })
 
-  it('resets the lesson’s progress once asked, and no other lesson’s', async () => {
+  it('links its Place to its level’s page, by level, chapter and number', async () => {
+    const { window } = await settingsOf(`/lessons/${LESSON.id}`)
+    const place = lessonPlace(LESSON.id)!
+    const row = within(window).getByRole('link', { name: /^Place/ })
+    expect(row).toHaveAttribute('href', `/levels/${place.journey.id}`)
+    expect(row).toHaveTextContent(
+      `${place.journey.title.en} · ${place.chapter.title.en} · Lesson ${place.n}`,
+    )
+  })
+
+  it('resets the lesson’s progress at once, and no other lesson’s, with Undo', async () => {
     const user = userEvent.setup()
     const other = LESSONS.find((each) => each.id !== LESSON.id && lessonPlace(each.id))!
-    const { progressStore } = await renderApp(`/lessons/${LESSON.id}/settings`)
-    progressStore.setState({
-      learned: { [`lesson:${LESSON.id}`]: '2026-10-01', [`lesson:${other.id}`]: '2026-10-01' },
-      read: { [`lesson:${LESSON.id}`]: [0, 1] },
-    })
-    // Reset progress loses no music: its own group, Progress, never a red row (R31-S).
-    expect(
-      within(await screen.findByRole('region', { name: 'Progress' })).getByRole('button', {
-        name: /^Reset progress/,
+    const { progressStore } = await settingsOf(`/lessons/${LESSON.id}`)
+    act(() =>
+      progressStore.setState({
+        learned: { [`lesson:${LESSON.id}`]: '2026-10-01', [`lesson:${other.id}`]: '2026-10-01' },
+        read: { [`lesson:${LESSON.id}`]: [0, 1] },
       }),
-    ).toBeVisible()
-    await user.click(await screen.findByRole('button', { name: /^Reset progress/ }))
-    const ask = await screen.findByRole('alertdialog', { name: 'Reset this lesson’s progress?' })
-    await user.click(within(ask).getByRole('button', { name: 'Reset' }))
+    )
+    // Reset progress loses no music: its own group, Your progress, never a red row (R31-S).
+    const window = await screen.findByRole('dialog', { name: 'Settings' })
+    const progress = within(window).getByRole('region', { name: 'Your progress' })
+    await user.click(within(progress).getByRole('button', { name: /^Reset progress/ }))
     expect(progressStore.getState().learned).toEqual({ [`lesson:${other.id}`]: '2026-10-01' })
     expect(progressStore.getState().read).toEqual({})
     expect(await screen.findByText('Progress reset')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    expect(progressStore.getState().learned[`lesson:${LESSON.id}`]).toBe('2026-10-01')
   })
 
   it('copies the lesson’s link where the browser has no share sheet', async () => {
     const user = userEvent.setup()
-    await renderApp(`/lessons/${LESSON.id}/settings`)
-    await user.click(await screen.findByRole('button', { name: 'Share link' }))
+    const { window } = await settingsOf(`/lessons/${LESSON.id}`)
+    await user.click(within(window).getByRole('button', { name: 'Share link' }))
     expect(await screen.findByText('Link copied')).toBeInTheDocument()
     expect(await navigator.clipboard.readText()).toBe(
-      `${window.location.origin}/lessons/${LESSON.id}`,
+      `${window.ownerDocument.location.origin}/lessons/${LESSON.id}`,
     )
   })
 
-  it('gives an editor its level and chapter, its languages, and the lessons to read first, published', async () => {
-    const user = userEvent.setup()
-    const content = createFakeContentEditing({
-      items: [{ kind: 'lesson', id: LESSON.id, body: LESSON, meta: {} }],
-    })
-    await renderApp(`/lessons/${LESSON.id}/settings`, {
+  it('gives an editor its Publishing', async () => {
+    const { window } = await settingsOf(`/lessons/${LESSON.id}`, {
       auth: await signedInAs('editor'),
-      contentEditing: content,
-    })
-    const place = lessonPlace(LESSON.id)!
-    expect(
-      await screen.findByRole('link', { name: new RegExp(`Level.*${place.journey.title.en}`) }),
-    ).toHaveAttribute('href', `/?journey=${place.journey.id}&edit=true`)
-    expect(screen.getByText(place.chapter.title.en)).toBeInTheDocument()
-    expect(await screen.findByText('English, Русский')).toBeInTheDocument()
-    const other = LESSONS.find((each) => each.id !== LESSON.id && !LESSON.after?.includes(each.id))!
-    await user.click(screen.getByRole('combobox', { name: 'Read first' }))
-    await user.click(await screen.findByRole('option', { name: other.title.en }))
-    await user.keyboard('{Escape}')
-    // Publish… says where it stands, and opens its Publish page (R29 B6).
-    const row = await screen.findByRole('link', { name: /^Publish…/ })
-    await waitFor(() => expect(row).toHaveTextContent('Has changes'), {
-      timeout: 3000,
-    })
-    await user.click(row)
-    await tickAndPublish(user)
-    await waitFor(() =>
-      expect(content.body('lesson', LESSON.id)).toMatchObject({
-        after: [...(LESSON.after ?? []), other.id],
-        sections: LESSON.sections,
+      contentEditing: createFakeContentEditing({
+        items: [{ kind: 'lesson', id: LESSON.id, body: LESSON, meta: {} }],
       }),
-    )
+    })
+    const publishing = await within(window).findByRole('region', { name: 'Publishing' })
+    expect(within(publishing).getByRole('button', { name: 'Versions' })).toBeInTheDocument()
   })
 
-  it('gives a course’s lesson its course, from its own bar', async () => {
-    const user = userEvent.setup()
+  it('gives a course’s lesson its course, published with its course', async () => {
     const lesson = COURSE.lessons[0]!
-    const { router } = await renderApp(`/courses/${COURSE.id}/${lesson.id}`, {
+    const { window } = await settingsOf(`/courses/${COURSE.id}/${lesson.id}`, {
       auth: await signedInAs('editor'),
       contentEditing: createFakeContentEditing({
         items: [{ kind: 'lesson', id: `${COURSE.id}/${lesson.id}`, body: lesson, meta: {} }],
       }),
     })
-    await openSettings(user)
-    await waitFor(() =>
-      expect(router.state.location.pathname).toBe(`/courses/${COURSE.id}/${lesson.id}/settings`),
-    )
-    expect(
-      await screen.findByRole('link', { name: new RegExp(`Course.*${COURSE.title.en}`) }),
-    ).toHaveAttribute('href', `/courses/${COURSE.id}/edit`)
-    expect(screen.queryByRole('combobox', { name: 'Read first' })).not.toBeInTheDocument()
+    const row = within(window).getByRole('link', { name: /^Course/ })
+    expect(row).toHaveTextContent(COURSE.title.en)
+    expect(row).toHaveAttribute('href', `/courses/${COURSE.id}/edit`)
+    expect(within(window).queryByRole('region', { name: 'Publishing' })).not.toBeInTheDocument()
   })
 })

@@ -72,7 +72,7 @@ describe('Back goes up, on every place', () => {
     await user.click(await screen.findByRole('link', { name: /^Chords / }))
     await screen.findByRole('heading', { level: 1, name: 'Chords' })
     await pickIn(user, 'Root', 'D')
-    await pickMenu(user, 'Chord', 'Dm')
+    await pickMenu(user, 'Chord type', 'DmMinor triad')
     await waitFor(() => expect(router.state.location.search).toMatchObject({ root: 'D' }))
     expect(at(router).entry).toBe(1)
     await back(user)
@@ -105,9 +105,9 @@ describe('Back goes up, on every place', () => {
 
   it('opened from a link, goes up to the parent and stays in the app', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/songs/bz5/settings')
+    const { router } = await renderApp('/songs/bz5')
     await back(user)
-    await waitFor(() => expect(at(router).path).toBe('/songs/bz5'))
+    await waitFor(() => expect(at(router).path).toBe('/songs/folders/bozhe-spasibo'))
     await back(user)
     await waitFor(() => expect(at(router).path).toMatch(/^\/songs/))
   })

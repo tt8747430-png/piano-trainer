@@ -4,10 +4,8 @@ import { ReloadOnRestore } from '@/features/backup-data'
 import { useFirstMidiSession } from '@/features/record-practised'
 import { ShortcutsHelp } from '@/features/shortcuts-help'
 import { useTrackAchievements } from '@/features/track-achievements'
-import { SKIP_WELCOME } from '@/shared/config'
 import { startKeyboardReveal, startKeyboardViewport } from '@/shared/lib'
 import { AppUpdateProvider, createAppUpdate } from '@/shared/lib/app-update'
-import { Welcome } from '@/widgets/welcome'
 import { DeletionGate } from './deletion-gate/DeletionGate'
 import { LearnerViewNotice } from './learner-view/LearnerViewNotice'
 import { Parents } from './providers/Parents'
@@ -24,10 +22,6 @@ export function RootLayout() {
   // An update waits while the Player or the Check has the screen: it would cut a practice off.
   const fullScreen = useRouterState({
     select: (state) => state.matches.some((match) => match.staticData.fullScreen === true),
-  })
-  // A link from an email (a confirmation, a password reset) lands on the account pages: no welcome there.
-  const onAccountPages = useRouterState({
-    select: ({ location }) => /^\/(account|auth)\//.test(location.pathname),
   })
   // The phone's keyboard, measured once for the whole app: what floats at the foot steps aside, and
   // a field focused is lifted clear of it.
@@ -54,7 +48,6 @@ export function RootLayout() {
         </div>
         <ReloadOnRestore />
         <DeletionGate />
-        <Welcome shown={!onAccountPages && !SKIP_WELCOME} />
       </ShortcutsHelp>
     </AppUpdateProvider>
   )

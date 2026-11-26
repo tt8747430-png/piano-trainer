@@ -95,9 +95,9 @@ describe('ChordSheet', () => {
   it('closes from its Close at its foot', async () => {
     const user = userEvent.setup()
     const { sheet, onOpenChange } = await openSheet()
-    const [, close] = within(sheet).getAllByRole('button', { name: 'Close' })
-    if (!close) throw new Error('a Close at the foot')
-    await user.click(close)
+    // The head's way out is Done; the foot's is Close, beside Play.
+    expect(within(sheet).getByRole('button', { name: 'Done' })).toBeInTheDocument()
+    await user.click(within(sheet).getByRole('button', { name: 'Close' }))
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })
 

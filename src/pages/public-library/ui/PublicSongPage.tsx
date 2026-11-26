@@ -221,7 +221,7 @@ export function PublicSongPage() {
     <>
       <Byline entry={entry} />
       <p className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span aria-hidden className="size-2 rounded-full bg-learned" />
+        <span aria-hidden className="size-2 rounded-pill bg-learned" />
         {owned ? t('explore.yours') : t('explore.notYours')}
       </p>
     </>

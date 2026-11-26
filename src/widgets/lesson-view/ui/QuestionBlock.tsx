@@ -1,4 +1,4 @@
-import { useId, useReducer } from 'react'
+import { useId, useReducer, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { LessonAnswer } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
@@ -22,7 +22,8 @@ import {
  * stands ("3 of 7 notes", Correct) with Again and Show the answer. The keys tapped are judged as
  * soon as they are as many notes as the answer's; the answer heard once it is right. The section
  * being read takes the MIDI keyboard's keys (`listening`). Its verdict's region stays in the page,
- * so its words are heard when they come.
+ * so its words are heard when they come. Show the answer goes once pressed, the focus passing to
+ * Again beside it, so a keyboard is never left on nothing.
  */
 export function QuestionBlock({
   ask,
@@ -42,6 +43,7 @@ export function QuestionBlock({
   const id = useId()
   const play = usePlay()
   const [state, dispatch] = useReducer(questionReducer, FRESH_QUESTION)
+  const again = useRef<HTMLButtonElement>(null)
   const keys = questionKeys(state, answer)
   const count = chosenOf(state.chosen, answer)
   const choose = (key: Midi) => {
@@ -85,6 +87,7 @@ export function QuestionBlock({
           {line}
         </p>
         <Button
+          ref={again}
           variant="ghost"
           className="px-3 text-subhead font-semibold text-link hover:bg-transparent"
           onClick={() => dispatch({ type: 'retry' })}
@@ -98,6 +101,7 @@ export function QuestionBlock({
             onClick={() => {
               dispatch({ type: 'reveal' })
               play(answerSounds(said, answer.keys))
+              again.current?.focus()
             }}
           >
             {t('question.show')}

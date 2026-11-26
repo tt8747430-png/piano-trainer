@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useLibrary } from '@/entities/library'
-import { entryTitles, isPiece, shownCredits, type Entry } from '@/entities/piece'
+import { entryTitles, isPiece, shownCredits, useCreditNames, type Entry } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import { incipitSteps } from '../model/incipit'
 import { PieceCover } from './PieceCover'
@@ -18,13 +18,15 @@ const TITLE_ROOM = 250
 
 /**
  * A song's cover on Songs' Continue shelf (canvas 133): its first page in small, a printed page in
- * both themes, its title centred in serif over who wrote it, then a staff with the clef and the
+ * both themes, its title centred in serif over who wrote it (a folk tune's word said in the
+ * learner's language), then a staff with the clef and the
  * tune's first notes. The picture the learner chose instead, where they chose one. Hidden from a
  * screen reader: the card names the song.
  */
 export function PieceShelfCover({ entry }: { entry: Entry }) {
   const locale = useLocale()
   const look = useLibrary((state) => state.songLooks[entry.id])
+  const said = useCreditNames()
   const steps = useMemo(() => (isPiece(entry) ? incipitSteps(entry, 7) : []), [entry])
   if (look) return <PieceCover entry={entry} decorative className="aspect-150/96 w-full" />
   const [writer] = isPiece(entry) ? shownCredits(entry) : []
@@ -48,7 +50,7 @@ export function PieceShelfCover({ entry }: { entry: Entry }) {
       </text>
       {writer && 'names' in writer ? (
         <text x={WIDTH / 2} y={32} textAnchor="middle" fontSize={7} className="fill-(--print-soft)">
-          {writer.names}
+          {said(writer.names)}
         </text>
       ) : null}
       {LINES.map((y) => (

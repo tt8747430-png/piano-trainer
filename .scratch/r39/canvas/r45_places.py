@@ -60,7 +60,7 @@ LEARN_JS = js(PLACES_PRE + r'''
       levels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional', 'Your lessons'], own ? 'Your lessons' : L.chip, (l) => set({ lv: ['Beginner', 'Intermediate', 'Advanced', 'Professional', 'Your lessons'].indexOf(l) })),
       tree: LV.map((x, i) => ({ l: x.chip, t: x.t, n: x.done + ' of ' + x.n, bg: i === lv ? '#E8E1D8' : 'transparent', fw: i === lv ? 700 : 500, pick: () => set({ lv: i, view: 'Lessons' }) })),
       isOwn: own, isJourney: !own, jt: L.t, goal: L.goal, learned: L.done + ' of ' + L.n + ' learned', meter: Math.round(100 * L.done / L.n) + '%', chapters,
-      nextT: nxt ? nxt.t : L.ch[0].rows[0].t, contT: (L.done === 0 ? 'Start · ' : L.done === L.n ? 'Review · ' : 'Continue · ') + L.t, states: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) })),
+      fresh: demo === 'fresh', begun: demo !== 'fresh', dialBg: demo === 'fresh' ? '#FEFDFB' : '#EDC684', dialRing: demo === 'fresh' ? ', 0 0 0 1px #E3DCD3' : '', nextT: nxt ? nxt.t : L.ch[0].rows[0].t, contT: (L.done === 0 ? 'Start · ' : L.done === L.n ? 'Review · ' : 'Continue · ') + L.t, states: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) })),
       crStates: [['fresh', 'First visit: nothing learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) })),
       edStates: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) }))
         .concat([{ l: 'Edited by an editor', bg: editing ? '#332921' : '#EEE9E2', pick: () => set({ editing: !editing }) }]),
@@ -99,14 +99,18 @@ METER = f'<span style="display: block; height: 6px; border-radius: 3px; backgrou
 CONTBAR = f'<div role="progressbar" aria-label="Level progress" style="margin-top: 0; height: 6px; border-radius: 3px; background: {FILL}; overflow: hidden"><div style="width: {{{{contBar}}}}; height: 100%; border-radius: 3px; background: #44684A"></div></div>'  # the phone and the laptop draw the level's progress alike
 CONTBAR6 = CONTBAR.replace('margin-top: 0', 'margin-top: 6px')
 CONT = CARD(f'<div style="display: flex; align-items: center; gap: 16px"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 600; color: #A8551F">{{{{contT}}}}</span><span style="font-family: {SERIF}; font-size: 22px">{{{{nextT}}}}</span><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{contSub}}}}</span>{CONTBAR6}</div>'
-            f'<a href="Lesson.dc.html" aria-label="Open the lesson" style="flex: none; width: 56px; height: 56px; border-radius: 28px; background: {INK}; color: {SHEET}; display: flex; align-items: center; justify-content: center">{BOOKI}</a></div>')
+            f'<sc-if value="{{{{fresh}}}}" hint-placeholder-val="{{{{false}}}}"><a href="Lesson.dc.html" style="flex: none; height: 50px; padding: 0 20px 0 16px; box-sizing: border-box; border-radius: 25px; background: {ACCENT}; color: {INK}; text-decoration: none; font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px">{BOOKI}Start</a></sc-if>'
+            f'<sc-if value="{{{{begun}}}}" hint-placeholder-val="{{{{true}}}}"><a href="Lesson.dc.html" aria-label="Open the lesson" style="flex: none; width: 56px; height: 56px; border-radius: 28px; background: {INK}; color: {SHEET}; display: flex; align-items: center; justify-content: center">{BOOKI}</a></sc-if></div>')
+# First visit (owner, 2026-11-22: "intentional highlighting of the right action"; scan-first 8, a first run points at
+# its one most important act): Start is the honey pill, its word beside the book, and the floating + steps back to
+# the paper; once a lesson is begun, Continue is the ink round button and the + the screen's honey act again
 # The laptop's Continue: the level's progress track fills the space between the words and the button, so the card
 # reads as one row (proximity; lines.mjs, a row cut in two) and the goal shows how near it is (goal-gradient)
 CONTL = CONT.replace('<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">', '<div style="flex: 0 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 4px">', 1).replace(f'<span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{contSub}}}}</span>' + CONTBAR6, '', 1).replace(
-    '<a href="Lesson.dc.html" aria-label="Open the lesson"',
+    '<sc-if value="{{fresh}}"',
     f'<div style="flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 8px; padding: 0 16px 0 32px"><span style="align-self: flex-end; font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{contSub}}}}</span>'
     + CONTBAR + '</div>'
-    '<a href="LessonLaptop.dc.html" aria-label="Open the lesson"', 1)
+    '<sc-if value="{{fresh}}"', 1).replace('href="Lesson.dc.html"', 'href="LessonLaptop.dc.html"')
 COURSEROWS = (f'<div style="display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; border-radius: 14px; background: {HONEY}"><span style="font-size: 13px; font-weight: 700; color: #8A5A1C">About the courses</span><p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 15px; line-height: 1.45; outline: none">Each course is a few weeks of lessons with songs to read at the end. Start with one on your shelf; the Lessons keep going beside it.</p></div>'
               f'<sc-for list="{{{{courses}}}}" as="g" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 16px; font-size: 14px; font-weight: 600; color: {SOFT}">{{{{g.h}}}}</h3><div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
               f'<sc-for list="{{{{g.cs}}}}" as="k" hint-placeholder-count="3"><a href="Course.dc.html" style="min-height: 80px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; text-decoration: none"><span style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {{{{k.tileBg}}}}; box-shadow: {{{{k.ring}}}}; display: flex; align-items: center; justify-content: center; color: {INK}"><sc-if value="{{{{k.done}}}}" hint-placeholder-val="{{{{false}}}}"><span style="display: flex; color: #44684A">{CHECKI}</span></sc-if><sc-if value="{{{{k.notDone}}}}" hint-placeholder-val="{{{{true}}}}">{FOLDI}</sc-if></span>'
@@ -180,9 +184,9 @@ MOREC = GROUP(('action', 'Edit', 'editOn'), ('action', 'New course', 'openNewCou
 
 # Learn: the overview
 lph = (SHOWSTATES() + f'{TITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 176px; display: flex; flex-direction: column; gap: 16px">'
-       f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALLH("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], 112)}{LTOAST}')
+       f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALLH("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], 112, bg='{{dialBg}}', ring='{{dialRing}}')}{LTOAST}')
 llm = (SHOWSTATES() + f'{LPLACEBAR("Learn")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">'
-       f'{CONTL}{H2("Levels")}{LEVELLIST(True)}{H2("Courses", SEEALLH("LearnCoursesLaptop.dc.html"))}{COURSEGRID}{OWNGROUP(True)}</main>{NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], 32)}{TOAST(28, laptop=True, hint='true')}')
+       f'{CONTL}{H2("Levels")}{LEVELLIST(True)}{H2("Courses", SEEALLH("LearnCoursesLaptop.dc.html"))}{COURSEGRID}{OWNGROUP(True)}</main>{NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], 32, bg='{{dialBg}}', ring='{{dialRing}}')}{TOAST(28, laptop=True, hint='true')}')
 detail('Learn', 'Learn', LEARN_JS, lph, llm, '', LSHEETS, LPOPS, 'Learn')
 
 # A level: its line of lessons

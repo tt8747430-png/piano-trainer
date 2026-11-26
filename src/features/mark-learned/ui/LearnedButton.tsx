@@ -37,7 +37,7 @@ export function LearnedButton({
         title={t('learned.done')}
         className={cn(
           // The board's LEARNEDT: the bar's glass word, a 44 capsule 16 in, the grass wash once learned.
-          'glass h-11 min-w-11 gap-2 rounded-full border-0 px-4 text-subhead font-semibold text-foreground hover:brightness-97 aria-pressed:bg-paint-grass! aria-pressed:text-on-paint-grass!',
+          'glass h-11 min-w-11 gap-2 rounded-pill border-0 px-4 text-subhead font-semibold text-foreground hover:brightness-97 aria-pressed:bg-paint-grass! aria-pressed:text-on-paint-grass!',
           !worded && 'max-sm:px-0',
         )}
       >

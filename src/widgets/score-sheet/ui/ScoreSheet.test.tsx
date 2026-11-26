@@ -366,12 +366,14 @@ describe('ScoreSheet', () => {
     const rows = [...document.querySelectorAll<HTMLElement>('[data-slot="line-labels"]')]
     // As the Player prints them (ADR 0097).
     expect(rows.map((row) => row.textContent)).toEqual([
-      '1 · Verse · \u{1D15F}= 90',
+      '1 · Verse · \u{1D15F} = 90',
       '3',
       '4 · Chorus',
     ])
     // The tempo in the row, not a row of its own over the staff (ADR 0087), a button there.
-    expect(screen.getByRole('button', { name: 'Tempo: 90 BPM' })).toHaveTextContent('\u{1D15F}= 90')
+    expect(screen.getByRole('button', { name: 'Tempo: 90 BPM' })).toHaveTextContent(
+      '\u{1D15F} = 90',
+    )
     // No chord names: the row holds a number alone, not the chords' room (ADR 0114).
     expect(rows.every((row) => row.style.height === '20px')).toBe(true)
   })

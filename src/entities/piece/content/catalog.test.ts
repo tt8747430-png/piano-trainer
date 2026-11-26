@@ -262,10 +262,10 @@ describe('the catalog', () => {
         'Csus4 C F | B♭ Gm',
         'Em7♭5 | Asus4 A',
       ],
-      ['Dm7 Gm7 | Csus2 C FMaj7 D7', 'Gm7 Dm/F | Em7♭5 Asus4 A'],
-      ['Dm7 Gm7 | Csus2 C FMaj7 D7', 'Gm7 Dm/F | Em7♭5 A Dm6'],
+      ['Dm7 Gm7 | Csus2 C Fmaj7 D7', 'Gm7 Dm/F | Em7♭5 Asus4 A'],
+      ['Dm7 Gm7 | Csus2 C Fmaj7 D7', 'Gm7 Dm/F | Em7♭5 A Dm6'],
     ])
-    expect(lines('ninths')[1]).toEqual(['Dm9 Gm9 | Csus2 C FMaj9 D7♭9', 'Gm9 Dm/F | Em7♭5 Asus4 A'])
+    expect(lines('ninths')[1]).toEqual(['Dm9 Gm9 | Csus2 C Fmaj9 D7♭9', 'Gm9 Dm/F | Em7♭5 Asus4 A'])
     expect(lines('triads')[1]).toEqual(['Dm Gm | Csus2 C F D', 'Gm Dm/F | E° Asus4 A'])
   })
 })

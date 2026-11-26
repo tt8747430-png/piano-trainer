@@ -24,14 +24,15 @@ describe('A course', () => {
       .getAllByRole('link')
       .map((link) => link.getAttribute('href'))
     expect(hrefs).toEqual(gorshkov.lessons.map((lesson) => `/courses/gorshkov/${lesson.id}`))
-    expect(screen.getByRole('link', { name: /^Start course/ })).toHaveAttribute('href', hrefs[0])
-    const total = gorshkov.lessons.length + gorshkov.songs.length
-    expect(screen.getByText(`0 of ${total} learned`)).toBeInTheDocument()
-    const facts = screen.getByRole('list', { name: 'About this course' })
-    expect(facts).toHaveTextContent(`Advanced`)
-    expect(facts).toHaveTextContent(`${gorshkov.weeks} weeks`)
-    expect(facts).toHaveTextContent(`${gorshkov.lessons.length} lessons`)
-    expect(facts).toHaveTextContent(`${gorshkov.songs.length} songs`)
+    expect(
+      screen.getByRole('link', { name: `Start: ${gorshkov.lessons[0]!.title.en}` }),
+    ).toHaveAttribute('href', hrefs[0])
+    // Its lessons counted; its guided songs are on its page, not in the count.
+    expect(screen.getByText(`0 of ${gorshkov.lessons.length} learned`)).toBeInTheDocument()
+    // Its facts in one soft line.
+    expect(
+      screen.getByText(`Advanced · ${gorshkov.songs.length} songs · ${gorshkov.weeks} weeks`),
+    ).toBeInTheDocument()
   })
 
   it('ends on its guided songs', async () => {
@@ -59,7 +60,7 @@ describe('A course', () => {
       'link',
     )
     expect(row).not.toHaveAttribute('aria-current')
-    expect(row).toHaveAccessibleName(/^Lesson 1:.*, learned$/)
+    expect(row).toHaveAccessibleName(new RegExp(`^${first?.title.en}, learned`))
     expect(secondRow).not.toHaveAccessibleName(/learned/)
     act(() =>
       progressStore.setState({
@@ -101,7 +102,7 @@ describe('A course', () => {
       }),
     )
     const rows = within(screen.getByRole('region', { name: 'Lessons' })).getAllByRole('link')
-    expect(rows[2]).toHaveAccessibleName(new RegExp(`, ${Math.round(100 / sections)}% read$`))
+    expect(rows[2]).toHaveAccessibleName(new RegExp(`, ${Math.round(100 / sections)}% read`))
     // The first is where Continue leads: its honey ring says so.
     expect(rows[0]).toHaveAttribute('aria-current', 'step')
   })
@@ -110,13 +111,14 @@ describe('A course', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/courses/gorshkov')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
-    expect(router.state.location.search).toMatchObject({ view: 'courses' })
+    await waitFor(() => expect(router.state.location.pathname).toBe('/courses'))
   })
 
   it('is not found for a course there is not, nor a lesson it does not have', async () => {
     await renderApp('/courses/nothing')
-    expect(await screen.findByText('Page not found')).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Page not found' }),
+    ).toBeInTheDocument()
   })
 
   it('reads in Russian, with nothing left in English', async () => {
@@ -202,45 +204,5 @@ describe('a course’s About (R29 B9)', () => {
       { timeout: 3000 },
     )
     expect(doc.querySelector('p[data-block-style]')).toHaveTextContent('Hi')
-  })
-
-  it('a learner sees the styled blocks', async () => {
-    keepContent([
-      {
-        kind: 'course',
-        id: gorshkov.id,
-        version: 'v2',
-        body: {
-          ...courseRecord(gorshkov),
-          about: [
-            {
-              heading: { en: 'Why this course', ru: 'Зачем этот курс' },
-              style: BLOCK_PRESETS.night,
-              blocks: [
-                {
-                  kind: 'text',
-                  text: { en: 'To play from the page.', ru: 'Чтобы играть с листа.' },
-                  style: BLOCK_PRESETS.soft,
-                },
-              ],
-            },
-          ],
-        },
-      },
-    ])
-    await renderApp('/courses/gorshkov')
-    const about = await screen.findByRole('region', { name: 'About' })
-    const heading = within(about).getByRole('heading', { level: 2, name: 'Why this course' })
-    const words = within(about).getByText('To play from the page.')
-    const styled = (element: HTMLElement) => element.closest<HTMLElement>('[data-block-style]')
-    expect(styled(heading)?.style.getPropertyValue('--block-surface')).toBe('#1d2130')
-    expect(styled(words)?.style.getPropertyValue('--block-radius')).toBe('var(--block-radius-4)')
-    expect(styled(words)?.style.getPropertyValue('--block-surface')).toBe('var(--paint-sky)')
-  })
-
-  it('shows nothing where it has none', async () => {
-    await renderApp('/courses/gorshkov')
-    await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('region', { name: 'About' })).not.toBeInTheDocument()
   })
 })

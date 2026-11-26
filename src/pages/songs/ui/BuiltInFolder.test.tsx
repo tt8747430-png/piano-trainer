@@ -4,7 +4,6 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { arrangeLibrary, libraryCatalog, placeIn, type LibraryState } from '@/entities/library'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
-import { confirmAsked } from '@/shared/test/confirm'
 
 const OWNER = { email: 'owner@example.com', name: 'Owner', password: 'correct horse' }
 
@@ -54,25 +53,12 @@ describe.each(['signed-out', 'learner', 'learner-view'] as const)(
       const user = userEvent.setup()
       await asLearner(how, user)
       expect(await moreOf(user, 'Silent Night')).toEqual([
-        'Play',
+        'Practise',
         'Edit score',
-        'Settings',
         'Add to Favourites',
-        'Share link',
-        'Export…',
+        'Settings',
         'Archive',
       ])
-    })
-
-    it('leaves the folder’s Settings with its place alone: no name, archive or delete', async () => {
-      const user = userEvent.setup()
-      await asLearner(how, user)
-      await user.click(await screen.findByRole('link', { name: 'Settings for Hymns' }))
-      await screen.findByRole('heading', { level: 1, name: 'Folder settings' })
-      expect(screen.getByRole('button', { name: /Move to folder/ })).toBeInTheDocument()
-      expect(screen.queryByRole('button', { name: /Name and look/ })).toBeNull()
-      expect(screen.queryByRole('button', { name: /Archive folder/ })).toBeNull()
-      expect(screen.queryByRole('button', { name: /Delete folder/ })).toBeNull()
     })
 
     it('shows Select’s bar without Move or Delete', async () => {
@@ -99,52 +85,60 @@ describe.each(['signed-out', 'learner', 'learner-view'] as const)(
     it('sorts the folder, and the sort is kept', async () => {
       const user = userEvent.setup()
       const { libraryStore } = await asLearner(how, user)
-      await user.click(await screen.findByRole('combobox', { name: /^Sort/ }))
-      await user.click(await screen.findByRole('option', { name: 'Name' }))
-      await waitFor(() => expect(libraryStore.getState().sort).toBe('name'))
+      await user.click(await screen.findByRole('button', { name: 'Sort by: Last played' }))
+      await user.click(await screen.findByRole('menuitemradio', { name: 'Title' }))
+      await waitFor(() => expect(libraryStore.getState().sort).toBe('title'))
     })
 
-    it('hides an archived song, under Archived (n), and brings it back', async () => {
+    it('hides an archived song at once, under Archived (n), and brings it back', async () => {
       const user = userEvent.setup()
       const { libraryStore, router } = await asLearner(how, user)
       await user.click(await screen.findByRole('button', { name: 'More for Silent Night' }))
       await user.click(await screen.findByRole('menuitem', { name: 'Archive' }))
-      await confirmAsked(user, 'Archive', 'Hide “Silent Night” from this folder?')
+      // A loss that can be undone: at once, Undo in its toast.
+      expect(await screen.findByText('“Silent Night” archived')).toBeInTheDocument()
       expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived')
       await user.click(await screen.findByRole('link', { name: 'Archived (1)' }))
       await waitFor(() =>
         expect(router.state.location.pathname).toBe('/songs/folders/hymns/archived'),
       )
-      await user.click(await screen.findByRole('button', { name: 'Unarchive Silent Night' }))
+      const archived = await screen.findByRole('list', { name: 'Archived' })
+      await user.click(within(archived).getByRole('button', { name: 'Restore' }))
       expect(placeOf(libraryStore.getState(), 'silent')).toMatchObject({ folder: 'hymns' })
     })
   },
 )
 
 describe('an editor in a built-in folder (R29 B4, D8)', () => {
-  it('adds and moves: + holds New song and Import, Select’s bar Move', async () => {
+  it('adds and moves: + holds New song and Import, a song’s ··· Add to a playlist', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/folders/hymns', { auth: await signedInAs('editor') })
     await user.click(await screen.findByRole('button', { name: 'New' }))
     expect(await screen.findByRole('button', { name: /^New song/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /^Import/ })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: /^New folder/ })).toBeNull()
+    expect(screen.queryByRole('button', { name: /^New playlist/ })).toBeNull()
     await user.keyboard('{Escape}')
-    expect(await moreOf(user, 'Silent Night')).toContain('Move to folder…')
+    expect(await moreOf(user, 'Silent Night')).toContain('Add to a playlist')
   })
 })
 
 describe('a learner at Home (R29 B4)', () => {
-  it('moves nothing into one of the app’s folders: the Move sheet greys them with why', async () => {
+  it('moves nothing into one of the app’s playlists: the Move sheet greys them with why', async () => {
     const user = userEvent.setup()
-    await renderApp('/songs')
-    await user.click(await screen.findByRole('button', { name: 'More for Hymns' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Move to folder…' }))
+    await renderApp('/songs/all')
+    await user.click(await screen.findByRole('button', { name: 'More for Hot Cross Buns' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Add to a playlist' }))
     const sheet = await screen.findByRole('dialog', { name: 'Move to' })
     const called = within(sheet).getAllByRole('button', { name: /^Called to Play/ })
     for (const each of called) {
       expect(each).toHaveAttribute('aria-disabled', 'true')
-      expect(each).toHaveAttribute('title', 'Only editors can add songs to built-in folders')
+      expect(each).toHaveAttribute('title', 'Only editors can add songs to built-in playlists')
     }
+    // Tapped, it says why, a phone having no hover for its title.
+    await user.click(called[0] as HTMLElement)
+    const toasts = screen.getByRole('region', { name: 'Notifications' })
+    expect(
+      await within(toasts).findByText('Only editors can add songs to built-in playlists'),
+    ).toBeInTheDocument()
   })
 })

@@ -49,7 +49,12 @@ export function ScaleExplorer({
         choice={
           <ScaleChoice
             scale={scale}
-            name={musicKey ? keyName(musicKey) : scaleName(root, scale.kind)}
+            // The key on the tonic as it is chosen: E♭ minor, never the circle's D♯ minor.
+            name={
+              musicKey
+                ? keyName({ tonic: root, minor: musicKey.minor })
+                : scaleName(root, scale.kind)
+            }
             onChange={choose}
           />
         }

@@ -19,12 +19,11 @@ describe('Songs’ Home search', () => {
     expect(readSongsHomeSearch({ cat: 'patterns' }).cat).toBe('patterns')
   })
 
-  it('keeps the library’s filters beside them', () => {
+  it('keeps the library’s search beside them, the favourites left to All songs', () => {
     expect(readSongsHomeSearch({ q: 'waltz', favourites: true })).toEqual({
       ...SONGS_HOME_DEFAULTS,
       ...SONGS_DEFAULTS,
       q: 'waltz',
-      favourites: true,
     })
   })
 })

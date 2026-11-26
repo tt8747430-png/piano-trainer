@@ -225,10 +225,18 @@ describe('canTie (R32-B)', () => {
     expect(canTie(draftOf({ staves: [{ notes: 'B4/2 B4/2' }] }), 'staff0', 0)).toBe(true)
   })
 
-  it('says none can where another key or nothing follows', () => {
-    const draft = draftOf({ staves: [{ notes: 'B4/2 A4/2' }] })
+  it('says none can where another key follows, or at the song’s end', () => {
+    const draft = draftOf({
+      sections: [{ kind: 'verse', lines: ['G'] }],
+      staves: [{ notes: 'B4/2 A4/2' }],
+    })
     expect(canTie(draft, 'staff0', 0)).toBe(false)
-    expect(canTie(draft, 'staff0', 2 * B)).toBe(false)
+    expect(canTie(draft, 'staff0', 4 * B)).toBe(false)
+  })
+
+  it('says one can at the caret, holding on the note written just before it (F5)', () => {
+    const draft = draftOf({ staves: [{ notes: 'B4/2 A4/2' }] })
+    expect(canTie(draft, 'staff0', 2 * B)).toBe(true)
   })
 })
 

@@ -19,7 +19,7 @@ const MUSIC: PieceMusic = {
   staves: [{ notes: 'B4/4' }],
   hands: { lh: 'B2/4 | - | - | -' },
 }
-const SONG = { id: 'my-1', title: 'Morning', ...MUSIC }
+const SONG = { id: 'my-1', title: 'Morning', added: '2026-11-01T09:00:00.000Z', ...MUSIC }
 
 describe('createPiecesStore', () => {
   it('starts with no versions and no songs, and saves under pt-pieces', () => {
@@ -317,7 +317,7 @@ describe('createPiecesStore', () => {
     expect(restored({ versions }).versions).toEqual({})
   })
 
-  it('keeps a song with a title of 1 to 80 characters and an own id, once', () => {
+  it('keeps a song with a title of 1 to 80 characters, an own id and when it came in, once', () => {
     const songs = [
       { ...SONG, title: '  Morning  ' },
       { ...SONG, id: 'my-2', title: '   ' },
@@ -325,6 +325,8 @@ describe('createPiecesStore', () => {
       { ...SONG, id: 'song-4' },
       { ...SONG, title: 'Twice' },
       { ...SONG, id: 'my-5', tempo: 10 },
+      { ...SONG, id: 'my-6', added: 'yesterday' },
+      { ...SONG, id: 'my-7', added: undefined },
     ]
     expect(restored({ songs, nextSong: 9 }).songs).toEqual([SONG])
   })

@@ -12,17 +12,29 @@ interface NewProps {
 
 /**
  * New on a phone (canvas 169: one dial on every library): the floating honey +, its card of rows
- * opening above it with the most made nearest the thumb. One thing to make is the + alone.
+ * opening above it with the most made nearest the thumb. One thing to make is the + alone. `quiet`, the
+ * + is paper with its hairline, while another act is the screen's honey one (Learn's first Start).
  */
-export function NewDial({ label, actions, className }: NewProps & { readonly className?: string }) {
+export function NewDial({
+  label,
+  actions,
+  quiet = false,
+  className,
+}: NewProps & { readonly quiet?: boolean; readonly className?: string }) {
   const shown = actions.filter((action) => !action.hidden)
   const only = shown.length === 1 ? shown[0] : undefined
   return (
     <FloatingActions className={className}>
       {only ? (
-        <Fab label={only.label} icon={Plus} onClick={only.onSelect} />
+        <Fab
+          label={only.label}
+          icon={Plus}
+          onClick={only.onSelect}
+          variant={quiet ? 'surface' : 'default'}
+          className={quiet ? 'border-border' : undefined}
+        />
       ) : (
-        <SpeedDial label={label} icon={Plus} main>
+        <SpeedDial label={label} icon={Plus} main quiet={quiet}>
           {shown.toReversed().map((action) => (
             <SpeedDialAction
               key={action.key}

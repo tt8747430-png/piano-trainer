@@ -13,10 +13,10 @@ describe('spellPitchClass', () => {
   it('names a pitch class from the chord it belongs to, else from the key', () => {
     const g = performance.chords.findIndex((chord) => chord.symbol === 'G')
     expect(spellPitchClass(performance, g, pitchClass(11))).toBe('B')
-    expect(spellPitchClass(performance, g, pitchClass(1))).toBe('C#')
+    expect(spellPitchClass(performance, g, pitchClass(1))).toBe('C♯')
   })
 
   it('names it from the key in a bar of no chord (ADR 0114)', () => {
-    expect(spellPitchClass(performance, undefined, pitchClass(6))).toBe('F#')
+    expect(spellPitchClass(performance, undefined, pitchClass(6))).toBe('F♯')
   })
 })

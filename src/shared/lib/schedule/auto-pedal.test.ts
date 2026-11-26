@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart, type Performance } from '@/shared/lib/arrangement'
-import { C_MAJOR, note, parseChordSymbol, TICKS_PER_BEAT } from '@/shared/lib/music'
+import { C_MAJOR, midi, note, parseChordSymbol, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { autoPedal, withPedal } from './auto-pedal'
 
 const B = TICKS_PER_BEAT
@@ -31,10 +31,22 @@ const perform = (...bars: string[][]): Performance => {
         ],
       },
     ],
-    pedal: [{ tick: 0, kind: 'down' }],
   }
   return arrange(chart, { tonic: note('C'), pattern: BLOCK })
 }
+
+/** The music with a written note of the right hand at the head of each bar given, from 0. */
+const withNotesIn = (performance: Performance, ...bars: number[]): Performance => ({
+  ...performance,
+  notes: bars.map((bar) => ({
+    midi: midi(60),
+    spelled: note('C'),
+    hand: 'rh',
+    startTick: bar * 4 * B,
+    durationTicks: B,
+    velocity: 80,
+  })),
+})
 
 const line = (performance: Performance) =>
   autoPedal(performance).map(({ tick, kind }) => `${kind}@${tick / B}`)
@@ -53,8 +65,20 @@ describe('autoPedal', () => {
     expect(line(perform(['C@4'], ['_'], ['F@4']))).toEqual(['down@0', 'up@4', 'down@8', 'up@12'])
   })
 
-  it('changes it at each bar where the music has no chord symbols', () => {
-    expect(line(perform(['_'], ['_'], ['_']))).toEqual(['down@0', 'change@4', 'change@8', 'up@12'])
+  it('changes it at each bar that sounds a note where the music has no chord symbols', () => {
+    const unsymbolled = perform(['_'], ['_'], ['_'])
+    expect(line(withNotesIn(unsymbolled, 0, 1, 2))).toEqual([
+      'down@0',
+      'change@4',
+      'change@8',
+      'up@12',
+    ])
+  })
+
+  it('leaves a bar of rests unpedalled, and a score with no notes yet with no pedal', () => {
+    const unsymbolled = perform(['_'], ['_'], ['_'])
+    expect(line(withNotesIn(unsymbolled, 0, 2))).toEqual(['down@0', 'up@4', 'down@8', 'up@12'])
+    expect(line(unsymbolled)).toEqual([])
   })
 })
 

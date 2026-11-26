@@ -89,7 +89,7 @@ describe('arpeggiosFromTheThird', () => {
   it('plays each chord’s 3-5-7-9 and the scale down, into the next chord’s 3rd', () => {
     const lines = arpeggiosFromTheThird({ root: C })
     expect(line(lines)).toBe('F A C E D C B A B D F A G F E D E G B D C B A G C')
-    expect(lines.chords.map((chord) => chord.symbol)).toEqual(['Dm9', 'G9', 'CMaj9', 'CMaj9'])
+    expect(lines.chords.map((chord) => chord.symbol)).toEqual(['Dm9', 'G9', 'Cmaj9', 'Cmaj9'])
     expect(onset(lines, 'lh', 0)).toBe('D C')
     expect(lines.bars).toHaveLength(4)
   })
@@ -100,7 +100,7 @@ describe('dropTwoSevenths', () => {
     const chords = dropTwoSevenths({ root: C, inversion: 0 })
     expect(onset(chords, 'rh', 0)).toBe('C E B')
     expect(onset(chords, 'lh', 0)).toBe('G')
-    expect(chords.chords.map((chord) => chord.symbol).slice(0, 3)).toEqual(['CMaj7', 'Dm7', 'Em7'])
+    expect(chords.chords.map((chord) => chord.symbol).slice(0, 3)).toEqual(['Cmaj7', 'Dm7', 'Em7'])
     expect(chords.chords).toHaveLength(15)
   })
 })

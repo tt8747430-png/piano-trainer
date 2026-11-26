@@ -135,7 +135,7 @@ describe('an item of Explore', () => {
     const user = userEvent.setup()
     const publicLibrary = withSong()
     await renderApp('/songs/public/public-1', { publicLibrary, auth: await signedIn() })
-    await user.click(await screen.findByRole('button', { name: 'Report' }))
+    await user.click(await screen.findByRole('button', { name: 'Report this song' }))
     const dialog = await screen.findByRole('alertdialog', { name: 'Report this song?' })
     await user.click(within(dialog).getByRole('radio', { name: 'Spam' }))
     await user.click(within(dialog).getByRole('button', { name: 'Send report' }))

@@ -21,7 +21,7 @@ describe('twoFiveOneScale', () => {
   it('runs the scale up over Dm7 and down over G7, home on C over its shell', () => {
     const exercise = twoFiveOneScale({ root: C })
     expect(line(exercise)).toBe('C D E F G A B C D C B A G F E D C')
-    expect(exercise.chords.map((chord) => chord.symbol)).toEqual(['Dm7', 'G7', 'CMaj7'])
+    expect(exercise.chords.map((chord) => chord.symbol)).toEqual(['Dm7', 'G7', 'Cmaj7'])
     expect([0, 1, 2].map((bar) => inBar(exercise, 'lh', bar))).toEqual(['D C', 'G F', 'C B'])
   })
 })
@@ -37,7 +37,7 @@ describe('innerVoice', () => {
         .slice(0, 3)
         .map((n) => n.finger),
     ).toEqual([2, 5, 1])
-    expect(exercise.chords.map((chord) => chord.symbol).slice(0, 2)).toEqual(['CMaj7', 'Dm7'])
+    expect(exercise.chords.map((chord) => chord.symbol).slice(0, 2)).toEqual(['Cmaj7', 'Dm7'])
   })
 })
 

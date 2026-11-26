@@ -17,7 +17,7 @@ function seeded(seed: number): () => number {
 }
 
 /** A line said as the books write it, a space between its chords. */
-const said = (line: Parameters<typeof numeralsLine>[0]) => numeralsLine(line).replaceAll('–', ' ')
+const said = (line: Parameters<typeof numeralsLine>[0]) => numeralsLine(line).replaceAll(' – ', ' ')
 
 const keyOf = (name: string): Key => {
   const key = parseKey(name)

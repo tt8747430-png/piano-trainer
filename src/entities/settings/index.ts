@@ -93,7 +93,6 @@ export {
   selectPaletteRecent,
   selectEditorMode,
   selectSidebar,
-  selectWelcomed,
   selectSound,
   selectTheme,
   selectTrainer,

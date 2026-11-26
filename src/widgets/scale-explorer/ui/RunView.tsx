@@ -220,7 +220,7 @@ export function RunView({
           <FloatingPieces label={t('practice:transport')}>
             <FloatingPiece
               label={`${t('practice:scales.tempo')}: ${t('music:bpm', { tempo: scale.tempo })}`}
-              caption="BPM"
+              caption={t('music:tempoField.bpm')}
               round
               aria-haspopup="dialog"
               onClick={() => setTempoOpen(true)}

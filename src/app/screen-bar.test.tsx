@@ -20,8 +20,6 @@ const SCREENS = [
   '/practice/accompaniment/patterns/new',
   '/practice/accompaniment/studies/ex3',
   '/practice/exercises',
-  '/practice/quiz',
-  '/practice/quiz/chords',
   '/practice/chord-finder',
   '/settings',
 ] as const

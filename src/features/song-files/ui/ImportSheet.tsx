@@ -55,9 +55,9 @@ export function ImportSheet({
         <button
           type="button"
           onClick={onChoose}
-          className="flex flex-col items-center gap-2 rounded-2xl bg-card px-4 py-7 text-foreground ring-[1.5px] ring-border ring-inset transition-colors hover:bg-foreground/[0.03]"
+          className="flex flex-col items-center gap-2 rounded-control bg-card px-4 py-7 text-foreground ring-[1.5px] ring-border ring-inset transition-colors hover:bg-foreground/[0.03]"
         >
-          <span className="flex size-12 items-center justify-center rounded-full bg-muted">
+          <span className="flex size-12 items-center justify-center rounded-pill bg-muted">
             <FileUp aria-hidden className="size-5" />
           </span>
           <span className="text-base font-bold">{t('import.choose')}</span>
@@ -75,7 +75,7 @@ export function ImportSheet({
       ) : state.kind === 'done' ? (
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4">
-            <span className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-paint-yellow text-foreground">
+            <span className="flex size-14 shrink-0 items-center justify-center rounded-control bg-paint-yellow text-foreground">
               <Music aria-hidden className="size-6" />
             </span>
             <span className="min-w-0 text-lg font-bold text-balance break-words">

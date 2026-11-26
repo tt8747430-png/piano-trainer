@@ -11,12 +11,12 @@ const read = (text: string, key: Key = C) => {
 describe('readProgression', () => {
   it('reads numerals as written, in the key shown', () => {
     expect(read('I–V–vi–IV')).toEqual({ numerals: ['I', 'V', 'vi', 'IV'], key: 'C' })
-    expect(read('IIm7 – V7 – Imaj7')).toEqual({ numerals: ['ii7', 'V7', 'IMaj7'], key: 'C' })
+    expect(read('IIm7 – V7 – Imaj7')).toEqual({ numerals: ['ii7', 'V7', 'Imaj7'], key: 'C' })
   })
 
   it('reads chords as their numerals in the key shown, where it holds them all', () => {
     expect(read('Am F C G')).toEqual({ numerals: ['vi', 'IV', 'I', 'V'], key: 'C' })
-    expect(read('Dm7, G7, CMaj7')).toEqual({ numerals: ['ii7', 'V7', 'IMaj7'], key: 'C' })
+    expect(read('Dm7, G7, CMaj7')).toEqual({ numerals: ['ii7', 'V7', 'Imaj7'], key: 'C' })
     expect(read('Dm7 G7 C6')).toEqual({ numerals: ['ii7', 'V7', 'I6'], key: 'C' })
   })
 

@@ -54,7 +54,7 @@ export function CheckResult({
       </div>
       {learned && newlyLearned ? (
         <div className="flex items-center gap-3 card p-4">
-          <span className="grid size-10 shrink-0 place-items-center rounded-full bg-paint-grass text-on-paint-grass">
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-paint-grass text-on-paint-grass">
             <Check aria-hidden className="size-5" />
           </span>
           <p className="font-semibold">{t('marked', { title })}</p>

@@ -22,7 +22,7 @@ export function NameHeart({
       title={label}
       aria-pressed={pressed}
       onClick={onToggle}
-      className="flex size-11 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted aria-pressed:text-heart [&_svg]:size-5.5 aria-pressed:[&_svg]:fill-current"
+      className="flex size-11 shrink-0 items-center justify-center rounded-pill text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted aria-pressed:text-heart [&_svg]:size-5.5 aria-pressed:[&_svg]:fill-current"
     >
       <Heart aria-hidden />
     </button>

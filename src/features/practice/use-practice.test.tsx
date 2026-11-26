@@ -353,12 +353,12 @@ describe('usePractice: Wait mode', () => {
 
   it('waits for the practised hand, then plays the other and moves on', () => {
     const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
-    expect(result.current.state.expected).toEqual([0, 4, 7])
+    expect(result.current.state.expected).toEqual([60, 64, 67])
     act(() => result.current.play())
     act(() => result.current.press(midi(60)))
-    act(() => keyboard.press(midi(76)))
+    act(() => keyboard.press(midi(64)))
     expect(audio.played).toHaveLength(0)
-    act(() => keyboard.press(midi(55)))
+    act(() => keyboard.press(midi(67)))
     expect(result.current.state.outcome).toBe('correct')
     expect(keysOf(audio.played[0]?.sounds ?? [])).toEqual([36, 48])
     wait(149)
@@ -370,6 +370,7 @@ describe('usePractice: Wait mode', () => {
   it('plays through a beat group the practised hand has nothing in', () => {
     const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'lh' })
     act(() => result.current.play())
+    act(() => result.current.press(midi(36)))
     act(() => result.current.press(midi(48)))
     wait(150)
     expect(result.current.state).toMatchObject({ beatGroup: 1, expected: [] })
@@ -377,7 +378,7 @@ describe('usePractice: Wait mode', () => {
     wait(999)
     expect(result.current.state.beatGroup).toBe(1)
     wait(1)
-    expect(result.current.state).toMatchObject({ beatGroup: 2, expected: [7] })
+    expect(result.current.state).toMatchObject({ beatGroup: 2, expected: [31, 43] })
   })
 
   it('plays the other hand once, however often Play is tapped meanwhile', () => {
@@ -395,6 +396,7 @@ describe('usePractice: Wait mode', () => {
   it('keeps a run of rests on the audio clock, each where the last ends', () => {
     const { result } = renderPractice(TWO_BARS, { mode: 'wait', hands: 'lh' })
     act(() => result.current.play())
+    act(() => keyboard.press(midi(36)))
     act(() => keyboard.press(midi(48)))
     wait(150)
     wait(1000)
@@ -420,7 +422,7 @@ describe('usePractice: Wait mode', () => {
     )
     const { result } = renderPractice(eighths, { mode: 'wait', hands: 'lh', swing: 'medium' })
     act(() => result.current.play())
-    act(() => keyboard.press(midi(48)))
+    act(() => keyboard.press(midi(36)))
     wait(150)
     wait(334)
     // The audio clock stands still here: the wait runs from the start of the chain.

@@ -86,7 +86,7 @@ export function RecordSheet({
       title={t('recording.title')}
       footer={
         <Button size="lg" className="w-full gap-3" onClick={start}>
-          <span aria-hidden className="size-3.5 rounded-full bg-destructive" />
+          <span aria-hidden className="size-3.5 rounded-pill bg-destructive" />
           {t('recording.start')}
         </Button>
       }

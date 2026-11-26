@@ -60,3 +60,6 @@ export function usePianoSound(files?: PianoDownload) {
 
   return { sound, download: start, remove }
 }
+
+/** The grand on this device and its acts: one per page, so every part of it reads the same. */
+export type PianoSoundControl = ReturnType<typeof usePianoSound>

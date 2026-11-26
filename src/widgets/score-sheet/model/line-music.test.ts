@@ -64,10 +64,11 @@ describe('the sheet’s lines', () => {
   })
 
   it('say what each bar’s label prints: a line’s first number, a section’s name, the tempo (ADR 0097)', () => {
+    // The song opens on a pickup: the bars are numbered from the first full one (`barNumber`).
     expect(linesOf(draft).map((line) => line.labels)).toEqual([
       [{ number: 1, section: 0, tempo: 90 }],
-      [{ number: 2 }, {}],
-      [{ number: 4, section: 1 }],
+      [{ number: 1 }, {}],
+      [{ number: 3, section: 1 }],
     ])
     // All of it as one line, across: each section named where it starts.
     expect(oneLine(draft)[0]?.labels).toEqual([

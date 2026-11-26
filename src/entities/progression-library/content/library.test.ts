@@ -146,10 +146,10 @@ describe('the progressions library', () => {
   })
 
   it('writes a progression’s line as it is read, in the mode it is shown in', () => {
-    expect(libraryLine(listed('jazz-cadence'), false)).toBe('ii–V–I')
-    expect(libraryLine(listed('jazz-cadence'), true)).toBe('ii°–V–i')
-    expect(libraryLine(listed('gospel-walk-up'), false)).toBe('♭VI–♭VII–I')
-    expect(libraryLine(listed('andalusian'), false)).toBe('i–VII–VI–V')
+    expect(libraryLine(listed('jazz-cadence'), false)).toBe('ii – V – I')
+    expect(libraryLine(listed('jazz-cadence'), true)).toBe('ii° – V – i')
+    expect(libraryLine(listed('gospel-walk-up'), false)).toBe('♭VI – ♭VII – I')
+    expect(libraryLine(listed('andalusian'), false)).toBe('i – VII – VI – V')
   })
 
   it('keeps the ♭9 the resolution teaches, into major and into minor', () => {
@@ -169,10 +169,10 @@ describe('the progressions library', () => {
     expect(PROGRESSION_LIBRARY.map((each) => each.name.en)).not.toContain('Louie Louie')
     expect(chordsOf('seven-three-six', C_MAJOR, 'sevenths')).toEqual([
       ...['Bm7♭5', 'E7', 'Am7'],
-      ...['Dm7', 'G7', 'CMaj7'],
+      ...['Dm7', 'G7', 'Cmaj7'],
     ])
     expect(chordsOf('round-the-circle', A_MINOR, 'sevenths').slice(1)).toEqual([
-      ...['Dm7', 'G7', 'CMaj7', 'FMaj7'],
+      ...['Dm7', 'G7', 'Cmaj7', 'Fmaj7'],
       ...['Bm7♭5', 'E7', 'Am7'],
     ])
   })
@@ -188,7 +188,7 @@ describe('the progressions library', () => {
 
   it('holds the borrowed ♭VII and the tritone substitution of the learning order', () => {
     expect(chordsOf('borrowed-flat-seven', C_MAJOR, 'triads')).toEqual(['C', 'B♭', 'F', 'C'])
-    expect(chordsOf('tritone-substitution', C_MAJOR, 'sevenths')).toEqual(['Dm7', 'D♭7', 'CMaj7'])
+    expect(chordsOf('tritone-substitution', C_MAJOR, 'sevenths')).toEqual(['Dm7', 'D♭7', 'Cmaj7'])
   })
 
   it('holds the Andalusian cadence the lessons teach: a minor key stepping down to its major V', () => {
@@ -198,7 +198,7 @@ describe('the progressions library', () => {
 
   it('plays the songs’ applied chords and the ii–V chain as the sheets write them', () => {
     expect(chordsOf('fly-me-to-the-moon', C_MAJOR, 'sevenths')).toEqual([
-      ...['Am7', 'Dm7', 'G7', 'CMaj7', 'C7', 'FMaj7', 'Bm7♭5', 'E7', 'Am7'],
+      ...['Am7', 'Dm7', 'G7', 'Cmaj7', 'C7', 'Fmaj7', 'Bm7♭5', 'E7', 'Am7'],
     ])
     expect(chordsOf('two-five-chain', { tonic: note('B', -1), minor: false }, 'sevenths')).toEqual([
       'Em7♭5',
@@ -218,13 +218,13 @@ describe('the progressions library', () => {
     expect(chordsOf('neapolitan', A_MINOR, 'triads')).toEqual(['Am', 'B♭/D', 'E', 'Am'])
     expect(chordsOf('lament', A_MINOR, 'triads')).toEqual(['Am', 'Em/G', 'Dm/F', 'E'])
     expect(chordsOf('line-cliche', A_MINOR, 'triads')).toEqual(['Am', 'Am(maj7)', 'Am7', 'Am6'])
-    expect(chordsOf('backdoor', C_MAJOR, 'triads')).toEqual(['Fm7', 'B♭7', 'CMaj7'])
+    expect(chordsOf('backdoor', C_MAJOR, 'triads')).toEqual(['Fm7', 'B♭7', 'Cmaj7'])
     expect(chordsOf('coltrane', C_MAJOR, 'triads')).toEqual([
-      ...['CMaj7', 'E♭7', 'A♭Maj7', 'B7', 'EMaj7', 'G7', 'CMaj7'],
+      ...['Cmaj7', 'E♭7', 'A♭maj7', 'B7', 'Emaj7', 'G7', 'Cmaj7'],
     ])
     expect(chordsOf('ragtime', C_MAJOR, 'triads')).toEqual(['E7', 'A7', 'D7', 'G7', 'C'])
     expect(chordsOf('diminished-turnaround', C_MAJOR, 'triads')).toEqual([
-      ...['CMaj7', 'C#°7', 'Dm7', 'G7'],
+      ...['Cmaj7', 'C#°7', 'Dm7', 'G7'],
     ])
     expect(chordsOf('quick-change', C_MAJOR, 'triads').slice(0, 4)).toEqual([
       ...['C7', 'F7', 'C7', 'C7'],

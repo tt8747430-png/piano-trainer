@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
-import { createMemoryStorage } from '@/shared/lib'
+import { createMemoryStorage, LANDSCAPE_PHONE } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
 import { FloatingHost } from '@/shared/ui'
@@ -15,7 +15,7 @@ import { PinnedKeyboard } from './PinnedKeyboard'
 function stubScreen(onSide: boolean) {
   vi.stubGlobal('matchMedia', (media: string) => ({
     media,
-    matches: onSide && media.includes('max-height: 500px'),
+    matches: onSide && media === LANDSCAPE_PHONE,
     onchange: null,
     addEventListener: () => {},
     removeEventListener: () => {},
@@ -84,16 +84,14 @@ describe('PinnedKeyboard', () => {
     expect(toggle()).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('folds hidden keys into a strip where they stood, nothing floating: a tap brings them back (R34)', async () => {
+  it('leaves nothing where hidden keys stood: the Piano sheet’s Keyboard brings them back', async () => {
     const user = userEvent.setup()
     renderPinned({ onSide: false })
     await user.click(toggle())
     expect(keys()).not.toBeInTheDocument()
-    const strip = screen.getByRole('button', { name: 'Show the keyboard' })
-    expect(strip).toHaveTextContent('Keyboard')
-    expect(strip.closest('[data-slot="docked"]')).not.toBeNull()
-    expect(screen.getAllByRole('button')).toEqual([toggle(), strip])
-    await user.click(strip)
+    expect(document.querySelector('[data-slot="docked"]')).toBeNull()
+    expect(screen.getAllByRole('button')).toEqual([toggle()])
+    await user.click(toggle())
     expect(keys()).toBeInTheDocument()
     expect(toggle()).toHaveAttribute('aria-pressed', 'true')
   })
@@ -119,12 +117,11 @@ describe('PinnedKeyboard', () => {
     expect(keys()).toBeInTheDocument()
   })
 
-  it('stands edge to edge, with nothing under its keys', () => {
+  it('stands edge to edge, with nothing under its keys and no divider over them', () => {
     renderPinned({ onSide: false })
     const docked = document.querySelector('[data-slot="docked"]')
     expect(docked).not.toHaveClass('px-gutter')
     expect(docked?.querySelectorAll('button:not([data-midi])')).toHaveLength(0)
-    // Its divider over the keys, facing the music.
-    expect(docked?.firstElementChild?.firstElementChild).toHaveAttribute('role', 'separator')
+    expect(docked?.querySelector('[role="separator"]')).toBeNull()
   })
 })

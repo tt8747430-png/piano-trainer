@@ -5,8 +5,7 @@ export const account = {
   name: 'Your name',
   or: 'or',
   google: 'Continue with Google',
-  apple: 'Continue with Apple',
-  soon: 'Coming soon',
+  why: 'Keep your songs and progress on all your devices.',
   offline: 'You’re offline. Your account needs a connection.',
   // The Profile: who is signed in, and what they have done.
   profile: {
@@ -274,13 +273,6 @@ export const account = {
     says: 'Your name and picture on songs you publish, and your profile in Explore. Off: published songs show “Piano Trainer learner”.',
     shown: 'Profile shown',
     hidden: 'Profile hidden',
-  },
-  welcome: {
-    title: 'Welcome to Piano Trainer',
-    says: 'Learn songs, chords and scales at the piano, at your own pace.',
-    language: 'Language',
-    start: 'Start playing',
-    signIn: 'Sign in',
   },
   signIn: {
     title: 'Sign in',

@@ -246,6 +246,7 @@ export function SpeedDial({
   label,
   icon: Icon = Ellipsis,
   main = false,
+  quiet = false,
   children,
 }: {
   /** What the folded button says: More, or what its actions are about. */
@@ -253,6 +254,8 @@ export function SpeedDial({
   icon?: LucideIcon
   /** The screen's main action (Songs' New): the honey 56px button, as every screen's main one. */
   main?: boolean
+  /** The main one on paper with its hairline, while another act is the screen's honey one (Learn's Start). */
+  quiet?: boolean
   /** Its `SpeedDialAction`s, the nearest last. */
   children: ReactNode
 }) {
@@ -286,14 +289,18 @@ export function SpeedDial({
         }}
       >
         <Button
-          variant={main ? 'default' : 'surface'}
+          variant={main && !quiet ? 'default' : 'surface'}
           size="icon"
           aria-label={name}
           title={name}
           aria-expanded={open}
           aria-controls={open ? id : undefined}
           onClick={() => (open ? close() : setShown('open'))}
-          className={cn(main ? FAB : MINI_FAB, open && !main && 'bg-muted')}
+          className={cn(
+            main ? FAB : MINI_FAB,
+            main && quiet && 'border-border',
+            open && !main && 'bg-muted',
+          )}
         >
           <Icon
             aria-hidden

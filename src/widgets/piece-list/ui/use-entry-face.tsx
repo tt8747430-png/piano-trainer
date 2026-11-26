@@ -1,7 +1,14 @@
 import { FilePenLine, GraduationCap, Music, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { entryAuthor, entryTitles, pieceChords, pieceKey, type Entry } from '@/entities/piece'
+import {
+  entryAuthor,
+  entryTitles,
+  pieceChords,
+  pieceKey,
+  useCreditNames,
+  type Entry,
+} from '@/entities/piece'
 import { selectIsLearned, useProgress } from '@/entities/progress'
 import { pieceStepId } from '@/entities/step'
 import { useKeyName, useLocale } from '@/shared/i18n'
@@ -52,7 +59,10 @@ export function useEntryFace(
   const { primary, secondary } = entryTitles(entry, locale)
   const learned = useProgress(selectIsLearned(pieceStepId(entry.id)))
   const chords = pieceChords(entry)
-  const author = entryAuthor(entry)
+  const credit = useCreditNames()
+  const written = entryAuthor(entry)
+  // A folk tune's word said in the learner's language; every name as printed.
+  const author = written === undefined ? undefined : credit(written)
   const said =
     entry.kind === 'listing'
       ? [t('noChart')]
