@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · pending-commit · the phone ☰'s Layout wears the rail's layout glyph, not the pen (Edit's glyph): one thing, one icon on both sizes · Editor, EditorDraft · pending
 - 2026-11-26 · d44c0ddd · the laptop Player's rail ends in Search for an act and Shortcuts as the editor's (Flat's rail actions), its own suggested acts (Play, Loop, Transpose, Mode, Hands) and keys (Playback · View · Panels); both cards from the kit (SEARCHCARD_F, KEYSCARD_F), the one scrim .32 (they were .18), each act's icon in a 24 box so the names share one edge (x 837 on both boards); the Player gains closeSheet · EditorLaptop, EditorDraftLaptop, PlayerDesk · v800
 - 2026-11-26 · 85f24113 · the editor's Shortcuts lists every key its tooltips teach, in Flat's groups (Playback · Notes · Editing · View, three columns, 960 wide): Go to start, Loop, Delete, Practice or Edit, Piano keys, Transpose, Actual size, Print and Shortcuts added; Zoom in's tooltip one key, ⌘+ (lines 0 problems) · EditorLaptop, EditorDraftLaptop · v799
 - 2026-11-26 · de694cc1 · the laptop rail moves with ArrowUp and ArrowDown, wrapping, as Flat's rail (§1.2) and a vertical tablist; the tablist named Panels (checked: EditorLaptop 6 tabs, PlayerDesk 3, Down then Up Up lands on Audio) · EditorLaptop, EditorDraftLaptop, PlayerDesk · v798

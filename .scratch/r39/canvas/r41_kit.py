@@ -808,7 +808,7 @@ FICONS = {
     'View': _FI('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle>'),
     'Tr': _FI('<path d="m21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16"></path>'),
     'Inst': _FI('<rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M8 5v8M12 5v14M16 5v8"></path>'),
-    'Lay': _FI('<path d="M21.17 6.81a1 1 0 0 0-3.99-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"></path>'),
+    'Lay': _FI('<rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 21V9"></path>'),  # the rail's Layout glyph; the pen is Edit's
     'Aud': _FI('<path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"></path>'),
     'Cred': _FI('<circle cx="12" cy="12" r="10"></circle><path d="m12 7 1.5 3 3.3.5-2.4 2.3.6 3.3L12 14.5l-3 1.6.6-3.3-2.4-2.3 3.3-.5z"></path>'),
     'Midi': _FI('<path d="M4 9a2 2 0 0 1-2-2V5h6v2a2 2 0 0 1-2 2Z"></path><path d="M3 5V3M7 5V3M19 15V6.5a3.5 3.5 0 0 0-7 0v11a3.5 3.5 0 0 1-7 0V9"></path><path d="M18 21v-2M22 21v-2M20 15a2 2 0 0 1 2 2v2h-6v-2a2 2 0 0 1 2-2Z"></path>'),
