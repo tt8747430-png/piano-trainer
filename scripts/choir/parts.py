@@ -1,4 +1,4 @@
-"""Each part from the main score as printed: its lines and pages, and its words: a voice sings its own words where it has them, and elsewhere,
+"""Each part from the main score as printed: its lines and pages, title frame, marks and tempo, and its words: a voice sings its own words where it has them, and elsewhere,
 bar by bar, the words of the voice it moves with, as a copyist writes a part.
 
 The sheet prints the words once for the voices that share them (between the staves, or under one staff). A part's
@@ -15,8 +15,8 @@ import copy
 import xml.etree.ElementTree as ET
 from fractions import Fraction
 
-from common import main_name, read_mscz, staves, xml_bytes
-from engrave import bar_numbers
+from common import hide, main_name, read_mscz, staves, xml_bytes
+from engrave import bar_numbers, sung_bars, unbeam
 from slurs import add_slur, copy_slurs, slur_pairs, staff_events, tied_on
 
 
@@ -191,11 +191,81 @@ def layout(main_staff, part_staff):
             pm.insert(i, copy.deepcopy(b))
 
 
-def apply(files, matched):
-    """Every part of a made file (its members by name) given its words from the main score; for a song matched to
-    its sheet, its slurs too: its voice's slurs in the score, and a slur over each syllable it takes from another
-    voice and holds."""
-    main = staves(ET.fromstring(files[main_name(files)]).find('Score'))
+MARKS = ('Dynamic', 'StaffText', 'Fermata')
+
+
+def marks_of(staff, voice):
+    """A voice's marks with the moment each stands at: dynamics, texts, hairpins and fermatas."""
+    at = {id(el): t for el, t, k in staff_events(staff, voice)}
+    out = []
+    for m in staff.findall('Measure'):
+        vs = m.findall('voice')
+        if voice >= len(vs):
+            continue
+        pending = []
+        for el in vs[voice]:
+            if el.tag in MARKS or (el.tag == 'Spanner' and el.get('type') == 'HairPin'):
+                pending.append(el)
+            elif el.tag in ('Chord', 'Rest') and id(el) in at:
+                out += [(at[id(el)], x) for x in pending]
+                pending = []
+    return out
+
+
+def marks(main_staffs, part_staff, track):
+    """The part's marks as the score's: the dynamics, hairpins and texts printed for the system (the top staff's,
+    and its own staff's), and the fermatas over its own voice."""
+    for v in part_staff.iter('voice'):
+        for el in list(v):
+            if el.tag in MARKS or (el.tag == 'Spanner' and el.get('type') == 'HairPin'):
+                v.remove(el)
+    wanted, seen = [], set()
+    sources = [(main_staffs[0], 0), (main_staffs[track // 4], 0), (main_staffs[track // 4], track % 4)]
+    for st, v in dict.fromkeys(sources):
+        for t, el in marks_of(st, v):
+            if el.tag == 'Fermata' and (st, v) != (main_staffs[track // 4], track % 4):
+                continue
+            key = (t, ET.tostring(el))
+            if key not in seen:
+                seen.add(key)
+                wanted.append((t, el))
+    slot = {t: el for el, t, k in staff_events(part_staff, 0)}
+    parent = {id(c): v for v in part_staff.iter('voice') for c in v}
+    for t, el in wanted:
+        target = slot.get(t)
+        if target is None:
+            continue
+        v = parent[id(target)]
+        el = copy.deepcopy(el)
+        for e in el.findall('eid') + el.findall('linkedTo'):
+            el.remove(e)
+        v.insert(list(v).index(target), el)
+
+
+def header(main_score, part_score, name):
+    """The part's title frame as the score's (title, composer, words' author), with the part's name."""
+    main_box = next(main_score.iter('VBox'), None)
+    box = next(part_score.iter('VBox'), None)
+    if main_box is None or box is None:
+        return
+    for t in box.findall('Text'):
+        box.remove(t)
+    for t in main_box.findall('Text'):
+        t = copy.deepcopy(t)
+        for e in t.findall('eid') + t.findall('linkedTo'):
+            t.remove(e)
+        box.append(t)
+    label = ET.SubElement(box, 'Text')
+    ET.SubElement(label, 'style').text = 'instrument_excerpt'
+    ET.SubElement(label, 'text').text = name
+
+
+def apply(files, spec):
+    """Every part of a made file (its members by name) made from its main score: its lines and pages, its title
+    frame, its marks, its tempo shown or hidden and its eighths flagged or beamed as the score's, its words; for a song matched to its sheet, its slurs
+    too: its voice's slurs in the score, and a slur over each syllable it takes from another voice and holds."""
+    main_score = ET.fromstring(files[main_name(files)]).find('Score')
+    main = staves(main_score)
     for n in list(files):
         if not (n.startswith('Excerpts/') and n.endswith('.mscx')):
             continue
@@ -206,7 +276,15 @@ def apply(files, matched):
             continue
         part = staves(score)[0]
         track = int(tl.get('sTrack'))
+        matched = spec['matched']
         layout(main[0], part)
+        header(main_score, score, score.findtext('name') or n.split('/')[1].split('_', 1)[1].replace('_', ' '))
+        marks(main, part, track)
+        if not spec.get('beams'):
+            unbeam([part], sung_bars(main))
+        if spec['hide_tempo']:
+            for tempo in score.iter('Tempo'):
+                hide(tempo)
         if matched:
             copy_slurs(part, slur_pairs(main[track // 4], track % 4))
         copied = part_words(main, part, track)

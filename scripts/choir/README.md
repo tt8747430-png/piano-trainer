@@ -47,8 +47,8 @@ Every made score and each of its parts takes the house template, so no song need
    staff named for its voices, piano, and, for a matched song, `engrave.py` (words, title, breaks, marks, hidden
    staves, ties) and `slurs.py` (held syllables slurred, the sheet's own slurs, each part's slurs from its voice);
    then `house.py` gives the score and every part the house style.
-5. Each part is then made from the finished main score (`partwords.py`): its lines and pages are the score's, its
-   slurs its voice's, and its words the ones its voice sings: its own, or, run by run, those of the voice it moves
+5. Each part is then made from the finished main score (`parts.py`): its lines and pages are the score's, its
+   title frame (with the part's name), marks and tempo too, its slurs its voice's, and its words the ones its voice sings: its own, or, run by run, those of the voice it moves
    with (the tenors with the sopranos, the altos with the basses' echo), a word whole from one voice, a syllable it
    holds over several notes slurred. `parts` lists what is still wrong.
 6. A song whose old files are removed is final: a build makes it again from them as git keeps them, so a rule
@@ -70,7 +70,7 @@ an x ruler, `scan` lists every column of heads between the barlines, and x value
 | `engrave.py`| corrections in MuseScore's own file                                           |
 | `slurs.py`  | slurs                                                                         |
 | `house.py`  | the house style from `template/house.mss`                                     |
-| `partwords.py` | each part's lines, words and slurs from the main score, and their check    |
+| `parts.py`  | each part from the main score: layout, title, marks, words, slurs; their check |
 | `template.py` | the empty template scores, and the two empty staves a sheet-only song starts on |
 | `compare.py`| the sheet and ours, system by system                                          |
 | `heads.py`  | the printed sheet's noteheads named by pitch                                  |

@@ -219,26 +219,8 @@ def layout_mscx(score, spec):
         inner.text = t['text'].replace('%', '\U0001D10B')
         at = next((k for k, el in enumerate(v) if el.tag in ('Chord', 'Rest')), len(v))
         v.insert(at, st)
-    # Each eighth and sixteenth on its own flag, as the choir's sheets print a sung line (a triplet keeps its beam).
     if not spec.get('beams'):
-        # A bar some staff sings in is sung by all: only a bar no one sings in (instrumental) keeps its beams.
-        sung = {k for st in staffs for k, m in enumerate(st.findall('Measure')) if m.find('.//Lyrics') is not None}
-        for st in staffs:
-            worded = [m for k, m in enumerate(st.findall('Measure')) if k in sung]
-            for v in (v for m in worded for v in m.findall('voice')):
-                in_tuplet = False
-                for el in v:
-                    if el.tag == 'Tuplet':
-                        in_tuplet = True
-                    elif el.tag == 'endTuplet':
-                        in_tuplet = False
-                    elif el.tag in ('Chord', 'Rest') and not in_tuplet:
-                        bm = el.find('BeamMode')
-                        if bm is None:
-                            bm = ET.Element('BeamMode')
-                            at = next((k for k, c in enumerate(el) if c.tag == 'durationType'), 0)
-                            el.insert(at, bm)
-                        bm.text = 'no'
+        unbeam(staffs)
     # Ties and slurs the sheet draws dashed (one verse holds where another sings on), in every staff of those bars.
     for bar in spec.get('dashed', []):
         for st in staffs:
@@ -270,6 +252,33 @@ def layout_mscx(score, spec):
     if spec['hide_tempo']:
         for t in score.iter('Tempo'):
             hide(t)
+
+
+def sung_bars(staffs):
+    """The bars some staff sings in (a bar sung by one voice is sung by all)."""
+    return {k for st in staffs for k, m in enumerate(st.findall('Measure')) if m.find('.//Lyrics') is not None}
+
+
+def unbeam(staffs, sung=None):
+    """Each eighth and sixteenth on its own flag, as the choir's sheets print a sung line (a triplet keeps its beam):
+    in every sung bar (only a bar no one sings in, an instrumental one, keeps its beams)."""
+    sung = sung_bars(staffs) if sung is None else sung
+    for st in staffs:
+        worded = [m for k, m in enumerate(st.findall('Measure')) if k in sung]
+        for v in (v for m in worded for v in m.findall('voice')):
+            in_tuplet = False
+            for el in v:
+                if el.tag == 'Tuplet':
+                    in_tuplet = True
+                elif el.tag == 'endTuplet':
+                    in_tuplet = False
+                elif el.tag in ('Chord', 'Rest') and not in_tuplet:
+                    bm = el.find('BeamMode')
+                    if bm is None:
+                        bm = ET.Element('BeamMode')
+                        at = next((k for k, c in enumerate(el) if c.tag == 'durationType'), 0)
+                        el.insert(at, bm)
+                    bm.text = 'no'
 
 
 def italicize(staff, voice):

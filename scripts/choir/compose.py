@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 
 import engrave
 import house
-import partwords
+import parts
 import slurs
 from common import (ORDER, SHORT, find_voice, main_name, read_mscz, set_text, voice_of, voices_of, write_mscz,
                     xml_bytes)
@@ -190,7 +190,7 @@ def compose(s, dst, imported):
         extra += [f'Excerpts/{base}/{base}.mss', f'Excerpts/{base}/{base}.mscx']
 
     # Each part's words from the main score, bar by bar from the voice it moves with.
-    partwords.apply(files, spec['matched'])
+    parts.apply(files, spec)
 
     # The container lists the main score, then each part.
     out_name = os.path.basename(dst)[:-5] + '.mscx'

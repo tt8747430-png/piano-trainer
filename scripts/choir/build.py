@@ -23,7 +23,7 @@ import xml.etree.ElementTree as ET
 
 import compose
 import house
-import partwords
+import parts
 import sheet
 import spec as specs
 import template
@@ -206,5 +206,5 @@ def restyle(mscz, spec):
     for n in files:
         if n.endswith('.mss'):
             files[n] = house.apply(files[n], spec)
-    partwords.apply(files, spec['matched'])
+    parts.apply(files, spec)
     write_mscz(mscz, files, list(files))

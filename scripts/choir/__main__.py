@@ -23,7 +23,7 @@ import compare
 import engrave
 import heads
 import index
-import partwords
+import parts
 import template
 
 
@@ -51,7 +51,7 @@ def main(argv):
     elif command == 'heads':
         heads.heads(args[0], args[1], args[2], args[3:])
     elif command == 'parts':
-        partwords.report(compare.song(args[0])[1])
+        parts.report(compare.song(args[0])[1])
     elif command == 'template':
         template.write()
     elif command == 'index':

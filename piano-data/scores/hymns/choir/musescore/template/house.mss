@@ -14,7 +14,8 @@
   - the two staves of a system 5 spaces apart, systems at least 6, spread evenly down a full page;
   - a part's words a whole space apart, their hyphens always drawn (many of the choir's files space them tightly);
   - one rest where both voices of a staff rest together, as the choir's sheets print it;
-  - no hyphen before a word's syllable that starts a line (the hyphen ends the line before it), as printed.
+  - no hyphen before a word's syllable that starts a line (the hyphen ends the line before it), as printed;
+  - a part's name printed once, at its top left, not again before its staff.
   Sizes are in inches, as MuseScore keeps them: 210 mm = 8.2677, 297 mm = 11.6929, 180 mm = 7.0866, 15 mm = 0.5906.
 -->
 <museScore version="4.70">
@@ -71,5 +72,6 @@
     <staffLowerBorder>5</staffLowerBorder>
     <showFooter>0</showFooter>
     <mergeMatchingRests>1</mergeMatchingRests>
+    <hideInstrumentNameIfOneInstrument>1</hideInstrumentNameIfOneInstrument>
   </Style>
 </museScore>

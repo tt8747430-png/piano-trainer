@@ -5,7 +5,7 @@ per staff, or two voices written as one chord). Each voice becomes its own part 
 men's choir Tenor 1, Tenor 2, Baritone, Bass), on its own staff with the usual clef, playing piano. A bar where a staff
 holds one line (the voices in unison) gives that line to both its voices. Each part keeps its own words; other scores
 of the song (often a voice's practice file with the words) fill a part whose notes they match. The words a part sings
-from another voice are given once the score is made (partwords.py).
+from another voice are given once the score is made (parts.py).
 """
 
 import copy
