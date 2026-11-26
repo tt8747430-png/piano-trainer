@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · (this commit) · the editor prints the score's credits on one line, as the Player prints the same score (two paddings left them 24 short, so "(American folk tune)" broke to a second line) · Editor, EditorDraft · v740
 - 2026-11-26 · (this commit) · clean: the Called to Play playlist reads 15 songs (its "· Book 1" was our own line; every playlist says its count and how many are learned) · Songs, SongsLaptop, AllSongs, AllSongsLaptop, Folder, FolderLaptop, SharedFolder, SharedFolderLaptop · v739
 - 2026-11-26 · (this commit) · one count for a lesson's place: Learn's Continue and Search's suggestion read Lesson 7 of 11, as the lesson's own eyebrow (they counted Foundations' 13 steps, its two checks among them, as lessons); the level's progress still counts the 13 steps · Learn, LearnLaptop, LearnLevel, LearnLevelLaptop, LearnCourses, LearnCoursesLaptop, AppLayers, AppLayersLaptop · v738
 - 2026-11-26 · (this commit) · a song's name heads its facts: 8 over Key, Time and Tempo and 16 under the cover (it stood 16 from both, read as the cover's end); its one-child wrapper left from the credits line went · Song, SongLaptop, SongSettings, SongSettingsLaptop · v737
