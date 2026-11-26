@@ -13,6 +13,7 @@ Each song may hold a `match.txt` beside its files, written from the song's PDF a
     staff-distance: 4.5                space between the staves, and system-distance: between the lines
     lyrics-size: 11                    the words' size in points (Arial, as printed)
     count-pickup                       the sheet numbers its pickup as bar 1 (bars here follow the sheet)
+    dashed: 20 22                      ties and slurs in these bars drawn dashed, as printed
     segno: 54                          the segno stands at this bar
     text: 81 above bold italic D.S.% al Coda   printed text at a bar, above or below the top staff (% is the segno)
 
@@ -22,9 +23,9 @@ Each song may hold a `match.txt` beside its files, written from the song's PDF a
     [Tenor italic]                     printed in italics, as the men's own words often are
     1: @14 De toți _ în -- ge -- rii ...
 
-Words are syllables in order, one per note the voice sings (a note that only continues a tie takes none): `--`
-joins the syllables of a word, `_` holds a syllable over the next note, `@N` moves to the first note of bar N (as
-the bar is numbered on the page). `python3 scripts/choir-match.py notes <score.mscz> <staff> <voice>` lists a
+Words are syllables in order, one per note the voice sings (a note that only continues a tie takes none, unless the
+syllable starts with `^`, as where one verse holds and another sings on): `--` joins the syllables of a word, `_`
+holds a syllable over the next note, `@N` moves to the first note of bar N (as the bar is numbered on the page). `python3 scripts/choir-match.py notes <score.mscz> <staff> <voice>` lists a
 voice's notes bar by bar, for writing the words against them. scripts/choir-scores.py applies the file.
 """
 
@@ -76,6 +77,8 @@ def parse(path):
             spec['hide_empty'] = True
         elif key == 'hide-tempo':
             spec['hide_tempo'] = True
+        elif key == 'dashed':
+            spec['dashed'] = [int(b) for b in value.split()]
         elif key == 'segno':
             spec['segno'] = int(value)
         elif key == 'text':
@@ -132,8 +135,17 @@ def bar_numbers(measures, count_pickup=False):
     return out
 
 
-def sung_chords(measure, voice):
-    """The chords a voice sings in a measure, in order: no grace note, no note that only continues a tie."""
+class Tied:
+    """A note that only continues a tie: it takes a syllable only when the words mark it (`^`), as a verse sung
+    where another holds (a dashed tie)."""
+
+    def __init__(self, el):
+        self.el = el
+
+
+def sung_chords(measure, voice, with_ties=False):
+    """The chords a voice sings in a measure, in order: no grace note, and no note that only continues a tie
+    (with_ties: those come wrapped in Tied)."""
     vs = measure.findall('voice')
     if voice >= len(vs):
         return []
@@ -144,6 +156,8 @@ def sung_chords(measure, voice):
             continue
         notes = c.findall('Note')
         if notes and all(n.find("Spanner[@type='Tie']/prev") is not None for n in notes):
+            if with_ties:
+                out.append(Tied(c))
             continue
         out.append(c)
     return out
@@ -158,10 +172,16 @@ def place(slots_by_bar, tokens):
         if t[0] == 'bar':
             pos = next((k for k, (b, s) in enumerate(order) if b >= t[1]), len(order))
             continue
+        on_tie = t[0] == 'word' and t[1].startswith('^')
+        # A tied-on note is passed over unless the syllable is marked for it.
+        while pos < len(order) and isinstance(order[pos][1], Tied) and not on_tie:
+            pos += 1
         if pos >= len(order):
             raise SystemExit(f'more words than notes, at {t}')
+        slot = order[pos][1]
+        slot = slot.el if isinstance(slot, Tied) else slot
         if t[0] == 'word':
-            pairs.append([order[pos][1], t[1], t[2], 0])
+            pairs.append([slot, t[1].lstrip('^'), t[2], 0])
         elif pairs:
             pairs[-1][3] += 1
         pos += 1
@@ -196,15 +216,16 @@ def lyrics_mscx(staff, voice, block, nums):
     measures = staff.findall('Measure')
     slots = {}
     for m, n in zip(measures, nums):
-        slots.setdefault(n, []).extend(sung_chords(m, voice))
+        slots.setdefault(n, []).extend(sung_chords(m, voice, with_ties=True))
     for chords in slots.values():
         for c in chords:
+            c = c.el if isinstance(c, Tied) else c
             for l in c.findall('Lyrics'):
                 c.remove(l)
     # Each chord in order with its length, to draw a held syllable's line to the end of its last note.
     sequence = [x for m in measures for x in chord_lengths(m, voice)]
     for verse, tokens in sorted(block['verses'].items()):
-        slots_all = {id(c) for chords in slots.values() for c in chords}
+        slots_all = {id(c) for chords in slots.values() for c in chords if not isinstance(c, Tied)}
         for chord, text, kind, holds in place(slots, tokens):
             ly = ET.Element('Lyrics')
             if kind in ('end', 'single'):
@@ -318,6 +339,17 @@ def layout_mscx(score, spec):
         inner.text = t['text'].replace('%', '\U0001D10B')
         at = next((k for k, el in enumerate(v) if el.tag in ('Chord', 'Rest')), len(v))
         v.insert(at, st)
+    # Ties and slurs the sheet draws dashed (one verse holds where another sings on), in every staff of those bars.
+    for bar in spec.get('dashed', []):
+        for st in staffs:
+            for m, n in zip(st.findall('Measure'), nums):
+                if n == bar:
+                    for el in m.iter():
+                        if el.tag in ('Tie', 'Slur'):
+                            lt = el.find('lineType')
+                            if lt is None:
+                                lt = ET.SubElement(el, 'lineType')
+                            lt.text = '2'
     if spec['hide_names']:
         for part in score.findall('Part'):
             for ins in part.findall('Instrument'):
@@ -482,11 +514,13 @@ def lyrics_xml(score, part_index, staff, voice, block, count_pickup=False):
             if el.find('chord') is not None or el.find('grace') is not None or el.find('rest') is not None:
                 continue
             if el.find("tie[@type='stop']") is not None and el.find("tie[@type='start']") is None:
+                notes.append(Tied(el))
                 continue
             notes.append(el)
         slots.setdefault(n, []).extend(notes)
     for notes in slots.values():
         for el in notes:
+            el = el.el if isinstance(el, Tied) else el
             for l in el.findall('lyric'):
                 el.remove(l)
     for verse, tokens in sorted(block['verses'].items()):

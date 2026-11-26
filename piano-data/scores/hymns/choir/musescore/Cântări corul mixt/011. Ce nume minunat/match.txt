@@ -1,0 +1,22 @@
+# From 011. Ce nume minunat.pdf (1 page) and the choir book, page 23 (11._Ce_nume_minunat!.pdf is a later MuseScore
+# export). The verse is sung twice: bars 1-5 carry four lines of words, then two.
+title: 11 Ce nume minunat!
+lyricist: Daniel Stăuceanu
+composer: A. Mieir
+spatium: 1.75
+systems: 1 6 13 21
+hide-tempo
+hide-names
+dashed: 20 22
+
+[Soprano]
+1: @1 1.Ce nu -- me mi -- nu -- nat, ce nu -- me mi -- nu -- nat, Ce nu -- me
+1: @6 mi -- nu -- nat es -- te I -- sus, @9 es -- te I -- sus. El e Păs -- to -- rul, e stân -- ca cea ta -- re,
+1: @15 A -- tot -- pu -- ter -- nic e. @19 Să'l dăm cin -- sti -- re, sla -- vă, mă -- ri -- re;
+1: @23 Nu -- me -- le lui I -- sus e mi -- nu -- nat.
+2: @1 El es -- te Dom -- nul meu, a toa -- te Cre -- a -- tor,
+2: @6 Dom -- nu -- lui e mi -- nu -- nat, @9 e mi -- nu -- nat. El e iu -- bi -- rea, El e mân -- tu -- i -- rea,
+2: @15 El e lu -- mi -- na mea. @19 Lui mă voi în -- ^chi -- na în -- trea -- gă via -- ^ța mea;
+2: @23 I -- sus e Dom -- nul meu: Ce mi -- nu -- nat!
+3: @1 2.Nu -- me -- le Dom -- nu -- lui, Nu -- me -- le Dom -- nu -- lui, Nu -- me -- le
+4: @1 Nu -- me -- le Dom -- nu -- lui, al Sal -- va -- to -- ru -- lui,
