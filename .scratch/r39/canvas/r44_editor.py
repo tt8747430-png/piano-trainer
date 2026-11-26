@@ -203,8 +203,8 @@ ACCBODY = ('<sc-if value="{{notDock}}" hint-placeholder-val="{{true}}">{0}</sc-i
 # the phone: the bar over the score, then the sheet: grabber, strip, categories, the tools, the keys
 SHEETP = (f'<section aria-label="Palette" data-strip style="flex: none; position: relative; z-index: 10; border-radius: 22px 22px 0 0; background: {SHEET}; box-shadow: 0 -1px 0 {LINE}, 0 -12px 28px -20px rgba(51,41,33,.5); display: flex; flex-direction: column">'
           f'<button type="button" class="edgrab" aria-label="{{{{openLabel}}}}" onClick="{{{{toggleOpen}}}}" style="align-self: center; width: 88px; height: 44px; margin: -12px 0; border: 0; padding: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></span></button>'
-          + STRIP() +
-          f'<sc-if value="{{{{folded}}}}" hint-placeholder-val="{{{{true}}}}"><div role="toolbar" aria-label="Tools" class="nos" style="display: flex; gap: 4px; overflow-x: auto; padding: 0 16px 8px"><sc-for list="{{{{tools}}}}" as="t" hint-placeholder-count="12">{TOOL}</sc-for></div></sc-if>'
+          + STRIP()[STRIP().index('<sc-if value="{{doneOn}}"'):] +
+          f'<sc-if value="{{{{folded}}}}" hint-placeholder-val="{{{{true}}}}"><div class="nos" style="display: flex; overflow-x: auto; padding: 8px 16px"><!--ESS--></div></sc-if>'
           f'<sc-if value="{{{{open}}}}" hint-placeholder-val="{{{{false}}}}"><div class="nos" style="max-height: 420px; overflow-y: auto; padding: 4px 16px 16px; display: flex; flex-direction: column; gap: 16px">' + ACCBODY.replace('{0}', ACCPANEL() + ED_SECTIONS()).replace('padding: 8px 16px 24px;', 'padding: 0;') + '</div></sc-if>'
           + CATBAR +
           f'<sc-if value="{{{{keysShown}}}}" hint-placeholder-val="{{{{true}}}}"><div style="padding: 0 0 26px">{KEYS(112, edge=True)}</div></sc-if>'
@@ -239,6 +239,7 @@ TSEP = f'<span aria-hidden="true" style="flex: none; width: 1px; height: 24px; m
 TTOOL = TOOL.replace('min-width: 48px; height: 48px; box-sizing: border-box; padding: 0 8px', 'min-width: 44px; height: 44px; box-sizing: border-box; padding: 0 6px')
 ESSENTIALS = (f'<div role="group" aria-label="Note input" style="flex: none; display: flex; align-items: center; padding: 2px; border-radius: 14px; background: {FILL}">'
               f'<sc-for list="{{{{tbDur}}}}" as="t" hint-placeholder-count="9">{TTOOL}</sc-for>{TSEP}<sc-for list="{{{{tbAcc}}}}" as="t" hint-placeholder-count="3">{TTOOL}</sc-for></div>')
+SHEETP = SHEETP.replace('<!--ESS-->', ESSENTIALS, 1)
 KEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-pressed="{{{{keysPressed}}}}" onClick="{{{{toggleKeys}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: {{{{keysBg}}}}; color: {{{{keysFg}}}}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>')
 CLIP = TBTN('Delete', DELI, 'delNote', 'Delete · ⌫') + TSEP + TBTN('Undo', UNDO, 'undo', 'Undo · ⌘Z') + TBTN('Redo', REDO, 'redo', 'Redo · ⇧⌘Z') + TSEP + TBTN('Copy', COPYI, 'copied', 'Copy · ⌘C') + TBTN('Cut', CUTI, 'cut', 'Cut · ⌘X') + TBTN('Paste', PASTEI, 'pasted', 'Paste · ⌘V')
 ZOOMG = (TBTN('Zoom out', ZOUTI, 'zoomOut', 'Zoom out · ⌘−', 'zoutDis') + f'<button type="button" aria-label="Reset the zoom" data-tip="Actual size · ⌘0" onClick="{{{{zoomReset}}}}" style="flex: none; position: relative; min-width: 56px; height: 44px; border: 0; padding: 0 4px; border-radius: 12px; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{zoomL}}}}</button>'
@@ -270,7 +271,14 @@ HGRIP = (f'<div role="separator" aria-orientation="horizontal" aria-label="Keybo
          f'style="flex: none; position: relative; z-index: 5; height: 13px; margin: -6px 0; cursor: row-resize; touch-action: none; display: flex; align-items: center; justify-content: center"><span aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 6px; height: 1px; background: {LINE}"></span><span aria-hidden="true" style="position: relative; width: 36px; height: 5px; border-radius: 3px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}"></span></div>')
 
 _PANELOLD = '<!--panel-->'
-eph4 = (TIP_CSS + EBAR('Songs.dc.html', 'Player.dc.html') + TOOLBAR_P
+# R74 on a phone (owner, 2026-11-26: "refactor the mobile version the same way and to be like the flat editor the
+# same"): the laptop's band in Flat's phone shape (flat-score-editor 017, 018; help.flat.io, Copy, cut and paste: "the
+# three buttons sit … after Undo and Redo", "the toolbar under the transport"): the dark band's two rows (PHBAND), then
+# the acts row as Flat's second row: Delete | Undo, Redo | Copy, Cut, Paste, the keys at its end. The note input moved
+# to the palette's folded row (Flat's palette sheet opens on the durations, 018); the view toggle went to ☰ › View.
+ACTS_P = (f'<div role="toolbar" aria-label="Edit" style="flex: none; height: 52px; box-sizing: border-box; padding: 0 8px; display: flex; align-items: center; gap: 0; box-shadow: inset 0 -1px 0 {LINE}">'
+          + CLIP + '<span style="flex: 1"></span>' + KEYSBTN + '</div>')
+eph4 = (TIP_CSS + PHBAND('edit', 'Songs.dc.html', 'Player.dc.html', 'Editor.dc.html') + ACTS_P
         + '<div class="edlay" style="flex: 1; min-height: 0; display: flex; flex-direction: column">'
         + SCOREAREA(DESK('12px') + PANO(0.95, '16px 16px 16px 12px')) + SHEETP + '</div>' + EDLAY_CSS)
 
@@ -284,21 +292,8 @@ elm4 = (TIP_CSS + EBAR('SongsLaptop.dc.html', 'PlayerLaptop.dc.html', title=True
 
 # ··· the score's menu, as Flat's ≡ (owner, 2026-11-16: "new completely new design"; flat-score-editor 083–090): what
 # the score does not print, one row each, then Publish as its own card. Credits and Instruments open their sheets.
-EYEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+EYEI22 = EYEI.replace('width="20" height="20"', 'width="22" height="22"')
 SOLOI = '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.6"></circle><text x="12" y="16.4" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">S</text></svg>'
-MENUCARD = lambda *rows: GROUP(*rows, bg=SHEET)
-# The menu as the app holds it (loop round 61): the score's acts, then its settings each by name, then its files.
-# Publishing is the song's Settings' (one way to each act), never a card in this menu.
-# Versions only on an editor's draft of a built-in song (the published versions it restores), and Export only on the
-# learner's own song or version, which it writes; a learner's song has no versions,
-# and the on-screen piano has no settings page to open, so neither row is drawn where it would open nothing.
-ED_MENU = lambda sfx, vh=None: (LAPMENU(sfx, vh) if 'Laptop' in sfx else MENUCARD(('link', 'Credits', '', 'openCredits'), ('link', 'Transpose', '{{hdKeyL}}', 'openTr'), ('link', 'Recordings', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
-                       + MENUCARD(('link', 'Instruments', '2', 'openInst'), ('link', 'Layout', 'A4', 'openLayout'), ('link', 'Audio', '', 'openAudio'))
-                       + MENUCARD(*(() if vh else (('link', 'Export', '', 'openExport'),)), ('action', 'Print', 'closeSheet', INK)))
-# the laptop's title menu, as Flat's (owner's screenshot): Credits, Export ›, Print, Keyboard shortcuts; Instruments,
-# Layout and the sound are the rail's panels, so they are not here
-LAPMENU = lambda sfx, vh=None: (MENUCARD(('link', 'Credits', '', 'openCredits'), ('link', 'Recordings', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
-                                + MENUCARD(*(() if vh else (('link', 'Export', '', 'openExport'),)), ('action', 'Print', 'closeSheet', INK)) + MENUCARD(('link', 'Keyboard shortcuts', '', 'openKeys')))
 EXPORTMENU = GROUP(('action', 'Printable PDF (.pdf)', 'closeSheet', INK), ('action', 'MusicXML (.mxl)', 'closeSheet', INK), ('action', 'MusicXML (.musicxml)', 'closeSheet', INK), ('action', 'MIDI (.mid)', 'closeSheet', INK), bg=SHEET)
 FIELD = lambda label, val: (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
                             f'<input {KB["title"]} value="{val}" placeholder="{label}" style="height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
@@ -337,7 +332,7 @@ _PIF = lambda c, inner, h='false': f'<sc-if value="{{{{{c}}}}}" hint-placeholder
 _IROW = lambda name, k: (f'<div style="display: flex; align-items: center; gap: 4px"><span aria-hidden="true" style="flex: none; width: 20px; color: {SOFT}; display: flex; justify-content: center; cursor: grab">{GRIPI}</span>'
                          f'<div style="flex: 1; min-width: 0; min-height: 48px; padding: 0 4px 0 12px; border-radius: 12px; background: {FILL}; display: flex; align-items: center; gap: 8px"><span style="flex: none; display: flex">{KEYSI}</span><span style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600">{name}</span>'
                          f'<button type="button" aria-label="Solo {name}" data-tip="Solo" aria-pressed="{{{{solo{k}On}}}}" onClick="{{{{toggleSolo{k}}}}}" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: {{{{solo{k}Bg}}}}; color: {{{{solo{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{SOLOI}</button>'
-                         f'<button type="button" aria-label="Show {name}" data-tip="Show" aria-pressed="{{{{show{k}On}}}}" onClick="{{{{toggleShow{k}}}}}" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {{{{show{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{EYEI}</button></div>'
+                         f'<button type="button" aria-label="Show {name}" data-tip="Show" aria-pressed="{{{{show{k}On}}}}" onClick="{{{{toggleShow{k}}}}}" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {{{{show{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{EYEI22}</button></div>'
                          f'<button type="button" aria-label="{name}: more" data-tip="More" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
 INST_BODY = (
                   f'<div style="display: flex; flex-direction: column; gap: 8px">' + _IROW('Voice', 'V') + _IROW('Piano', 'P') + _PIF('addedOn', _IROW('{{addedN}}', 'A')) + '</div>'
@@ -392,7 +387,7 @@ ED4 = ED4.replace('    return { ...common(st, set),', "    return { ...common(st
 # the Song panel's folds, the Player's (Versions, Accompaniment)
 ED4 = ED4.replace('    return { ...common(st, set),', '    return { ...common(st, set), ' + FOLDKEYS('st', 'set', ['Ver', 'Acc', 'View', 'Opts']) + ' ' + "viewCards: [['sheet', 'Sheet'], ['diagrams', 'Diagrams'], ['grid', 'Grid'], ['lyrics', 'Lyrics']].map(([id, label]) => { const here = id === 'sheet'; return { label, on: here ? 'true' : 'false', ring: here ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: here ? 600 : 500, isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', isHere: here, isAway: !here, href: 'PlayerLaptop.dc.html', pick: () => {} }; }), viewName: 'Sheet', isSheet: true, isDiagrams: false, isGrid: false, isLyrics: false, showChips: [['chords', 'Chord symbols', true], ['positions', 'Chord positions', false], ['lyrics', 'Lyrics', true], ['fingers', 'Finger numbers', false], ['names', 'Note names', false], ['annotations', 'Your annotations', true]].map(([id, name, d]) => { const on = (st.show ?? {})[id] ?? d; return { name, on: on ? 'true' : 'false', track: on ? '#7FB685' : '#DAD1C8', knob: on ? 22 : 2, sep: id === 'chords' ? '0' : '1px solid #E9E2D8', pick: () => set({ show: { ...(st.show ?? {}), [id]: !on } }) }; }), " + SELFROM('st', 'set', 'selLayout', "[['page', 'Page'], ['pano', 'Panorama']].map(([id, name]) => ({ name, on: (st.view ?? VIEW0) === id ? 'true' : 'false', pick: () => set({ view: id }) }))") + ' ', 1)
 ED4 = ED4.replace('    return { ...common(st, set),', PATCONSTS + ACCJS + '    return { ...common(st, set), ' + ACCKEYS + ' ' + PATIIFE + ',', 1)
-ED4 = ED4.replace('    return { ...common(st, set),', '    return { ...common(st, set), ' + SONGMENU_KEYS('st', 'set', lambda m, u: 'toast: ' + m + (" + ' · Undo'" if u else '')), 1)
+ED4 = ED4.replace('    return { ...common(st, set),', '    return { ...common(st, set), ' + SONGMENU_KEYS('st', 'set', lambda m, u: 'toast: ' + m + (" + ' · Undo'" if u else ''), close_others=', sheet: null'), 1)
 ED4 = ED4.replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['more', 'export'].includes(st.sheet), creditsOn: st.sheet === 'credits', layoutOn: st.sheet === 'layout', trSheetOn: st.sheet === 'tr', openTr: () => set({ sheet: 'tr' }), openLayout: () => set({ sheet: 'layout' }), instOn: st.sheet === 'inst', openCredits: () => set({ sheet: 'credits' }), openInst: () => set({ sheet: 'inst' }), audOn: st.sheet === 'audio', openAudio: () => set({ sheet: 'audio' }), "
                   + "".join(f"solo{k}On: st.solo === '{n}', toggleSolo{k}: () => set({{ solo: st.solo === '{n}' ? null : '{n}' }}), solo{k}Bg: st.solo === '{n}' ? '#332921' : 'transparent', solo{k}Fg: st.solo === '{n}' ? '#FEFDFB' : '#332921', show{k}On: !(st.hide || []).includes('{n}'), toggleShow{k}: () => set({{ hide: (st.hide || []).includes('{n}') ? (st.hide || []).filter((x) => x !== '{n}') : [...(st.hide || []), '{n}'] }}), show{k}Fg: (st.hide || []).includes('{n}') ? '#BFB3A7' : '#332921', " for k, n in (('P', 'Piano'), ('V', 'Voice'), ('A', 'Added'))) + "addedOn: !!st.added, addedN: st.added || '', addedS: { Cello: 'Bass staff', Organ: 'Treble, bass and pedal staves', Viola: 'Alto staff' }[st.added] || 'Treble staff', addInst: () => set({ sheet: 'pickInst' }), pickInstOn: st.sheet === 'pickInst', " + "".join(f"add{n}: () => set({{ added: '{n}', sheet: 'inst' }}), " for n in ['Violin', 'Viola', 'Cello', 'Flute', 'Clarinet', 'Guitar', 'Organ']), 1)
 
@@ -420,10 +415,23 @@ def full_laptop(fname, title, main, js_, pops=''):
 # score with the laptop panel's own body (one implementation), its controls at 44 for a finger
 _MH = 'calc(100% - 124px)'
 _P44 = lambda h: h.replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px')
-PHLAYERS = lambda menu, saved: (BSHEET('moreOn', 'Amazing Grace', saved + menu, maxh=_MH) + THINGPAGE('creditsOn', 'closeSheet', 'Credits', ED_CREDITS, False)
-                                + BSHEET('instOn', 'Instruments', _P44(INST_BODY), maxh=_MH) + BSHEET('pickInstOn', 'New instrument', ED_PICK, 'Cancel', maxh=_MH)
-                                + BSHEET('layoutOn', 'Layout', LAY_BODY, maxh=_MH) + BSHEET('trSheetOn', 'Transpose', TRROWS(True), maxh=_MH) + BSHEET('audOn', 'Audio', AUD_BODY_P, maxh=_MH) + BSHEET('exportOn', 'Export', EXPORTMENU, maxh=_MH))
-PHJS = lambda j: j.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1).replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: st.sheet === 'more',", 1)
+# ☰ as Flat's phone menu (help.flat.io's mobile menu: Credits, Manage instruments, Version history, Layout, Export):
+# the laptop rail's places, each a sheet with the laptop panel's own body; the song's acts are its name's menu, as on
+# the laptop; the band's popovers rise as sheets
+PH_PLACES = (('Song', 'Song', '{{verName}}', f'<div style="display: flex; flex-direction: column">{VERPANEL()}</div>', None),
+             ('View', 'View', '{{viewName}}', VIEWPANEL(links=True, inset=False), None),
+             ('Tr', 'Transpose', '{{hdKeyL}}', '', 'openTr'), ('Inst', 'Instruments', '2', '', 'openInst'),
+             ('Lay', 'Layout', 'A4', '', 'openLayout'), ('Aud', 'Audio', '', '', 'openAudio'), ('Cred', 'Credits', '', '', 'openCredits'),
+             ('Opts', 'Playback options', '', '', 'phOptsGo'), ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
+PHLAYERS = lambda saved, extra='': (PHMENU(PH_PLACES, 'Takes.dc.html', head=saved, extra=extra) + HDRPOPS(False, 0, 0, 0, phone=True) + THINGPAGE('creditsOn', 'closeSheet', 'Credits', ED_CREDITS, False)
+                          + BSHEET('instOn', 'Instruments', _P44(INST_BODY), maxh=_MH) + BSHEET('pickInstOn', 'New instrument', ED_PICK, 'Cancel', maxh=_MH)
+                          + BSHEET('layoutOn', 'Layout', LAY_BODY, maxh=_MH) + BSHEET('trSheetOn', 'Transpose', TRROWS(True), maxh=_MH) + BSHEET('audOn', 'Audio', AUD_BODY_P, maxh=_MH) + BSHEET('exportOn', 'Export', EXPORTMENU, maxh=_MH))
+# the ☰'s keys on the editor's own sheet state: the menu is the 'more' sheet, Song and View two more
+PHEDKEYS = ("phMenu: () => set({ sheet: st.sheet === 'more' ? null : 'more', hdPop: null, sm: false, exp: false }), phMenuOn: st.sheet === 'more', phMenuX: st.sheet === 'more' ? 'true' : 'false', "
+            "phMenuBg: st.sheet === 'more' ? 'rgba(254,253,251,.16)' : 'transparent', phClose: () => set({ sheet: null }), phSongOn: st.sheet === 'song', phSong: () => set({ sheet: 'song' }), phViewOn: st.sheet === 'view', phView: () => set({ sheet: 'view' }), phExpOn: st.sheet === 'phexp', phExp: () => set({ sheet: 'phexp' }), "
+            + PHACTS('set', 'sheet: null', lambda m, u: 'toast: ' + m + (" + ' · Undo'" if u else '')))
+PHJS = lambda j: (j.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1).replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: st.sheet === 'more', " + PHEDKEYS, 1)
+                   .replace("href: 'PlayerLaptop.dc.html', pick", "href: 'Player.dc.html', pick", 1))
 # the page prints the open version: with its piano accompaniment, or the melody alone (Original), in Edit as in Practice
 def VERPAGE(h):
     n = 0
@@ -434,7 +442,7 @@ def VERPAGE(h):
     assert n
     return h
 eph4, elm4 = VERPAGE(eph4), VERPAGE(elm4)
-phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, PHJS(ED4), PHLAYERS(ED_MENU('.dc.html'), ED_SAVED))
+phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, PHJS(ED4), PHLAYERS(ED_SAVED), dark=True)
 # Go to bar (research F11, Flat's and Dorico's ⌘G): a small card over the sheet's head, the bar's number and its count
 GOTO_FIELD = '<div style="display: flex; align-items: center; gap: 12px"><input value="9" aria-label="Bar" type="text" inputmode="numeric" enterkeyhint="go" style="width: 96px; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: 0 0 0 2px #332921; font: inherit; font-size: 17px; font-variant-numeric: tabular-nums; color: #332921; outline: none"><span style="font-size: 15px; color: #7A6E64; font-variant-numeric: tabular-nums">of 16</span></div>'
 ED4L = ED4.replace("['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]]", "['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }], ['Go to bar (⌘G)', st.sheet === 'goto', { sheet: 'goto' }, { sheet: null }]]").replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['more', 'export'].includes(st.sheet), gotoOn: st.sheet === 'goto',", 1)
@@ -450,7 +458,7 @@ elm4 = (elm4.replace(TOOLBAR_L, f'<sc-if value="{{{{notLayView}}}}" hint-placeho
         .replace(_PANELOLD, _PANEL, 1)
         .replace(f'<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', f'<sc-if value="{{{{layView}}}}" hint-placeholder-val="{{{{false}}}}">{PREVIEW}</sc-if><sc-if value="{{{{notLayView}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', 1)
         .replace('</sc-if></div></div>', '</sc-if></div></sc-if></div>', 1))
-LAPLAYERS = lambda sfx, vh=None, menu=None, saved=None: (RENAMEDLG() + HISTVIEW() + HDRPOPS(False, 294, 470, 576)
+LAPLAYERS = lambda sfx: (RENAMEDLG() + HISTVIEW() + HDRPOPS(False, 294, 470, 576)
                                      + POPOVER('exportOn', 'Export', EXPORTMENU, 'left: 400px; top: 300px', 300) + SEARCHCARD + KEYSCARD + THINGPAGE('creditsOn', 'closeSheet', 'Credits', _CRED(True), True))
 full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + CREDBTN(elm4), ED4L.replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - 76 - pw - 76 : 1710 - 76 - 64) / 794; const M = 'music'", 1), LAPLAYERS('Laptop.dc.html') + POPOVER('gotoOn', 'Go to bar', GOTO_FIELD, 'left: 665px; top: 76px; transform: translateX(-50%)', 260) )
 print('r44 editor ok')

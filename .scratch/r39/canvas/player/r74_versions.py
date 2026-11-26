@@ -142,29 +142,6 @@ def player_rail(t):
 # header pill after the title (‹ Play › | the pace, the loop | the hands, the keys), their popovers hang under it. The
 # pace says what it does: Listen (at a speed) or Wait. The phone keeps its floating capsules (owner: "dont change the
 # mobile version floating actions").
-# the phone's transport as published (v755); the owner: "dont change the mobile version floating actions"
-def one_transport(t):
-    i = t.index('aria-label="Transport"'); a = t.rindex('<div', 0, i); depth = 0
-    for m in re.finditer(r'<(/?)div\b[^>]*>', t[a:]):
-        depth += -1 if m.group(1) else 1
-        if depth == 0: b = a + m.end(); break
-    h = t[a:b]
-    h = re.sub(r'display: grid; grid-template-columns: minmax\(0, 1fr\) auto minmax\(0, 1fr\); align-items: center; gap: 8px', 'display: flex; justify-content: center; align-items: center', h, count=1)
-    cap = re.search(r'background: rgba\(254,253,251,\.86\);[^"]*', h).group(0).replace('; pointer-events: auto', '')
-    grp = re.compile(r'(<div role="group" aria-label="(Practice and loop|Play|Hands and keyboard)" style=")[^"]*(")')
-    h = grp.sub(lambda m: m.group(1) + 'display: flex; align-items: center; gap: 2px' + m.group(3), h)
-    sep = '<span aria-hidden="true" style="flex: none; width: 1px; height: 24px; margin: 0 6px; background: #DAD1C8"></span>'
-    h = h.replace('</div>\n<div role="group" aria-label="Play"', '</div>' + sep + '<div role="group" aria-label="Play"', 1)
-    h = h.replace('</div>\n<div role="group" aria-label="Hands and keyboard"', '</div>' + sep + '<div role="group" aria-label="Hands and keyboard"', 1)
-    h = h.replace('aria-label="{{playLabel}}" onClick="{{togglePlay}}" style="width: 48px; height: 48px; padding: 0; border: 0; border-radius: 24px; background: transparent;',
-                  'aria-label="{{playLabel}}" onClick="{{togglePlay}}" style="width: 48px; height: 48px; padding: 0; border: 0; border-radius: 24px; background: #EDC684; box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 0 0 1px rgba(176,122,42,.28);', 1)
-    o = h.index('>', h.index('aria-label="Transport"')) + 1
-    h = h[:o] + f'<div style="height: 56px; box-sizing: border-box; padding: 4px; display: flex; align-items: center; border-radius: 28px; {cap}; pointer-events: auto">' + h[o:-len('</div>')] + '</div></div>'
-    t = t[:a] + h + t[b:]
-    assert t.count("paceLabel: (mode === 'wait' ? 'Wait' : 'Play')") == 1
-    t = t.replace("paceCap: mode === 'wait' ? 'Wait' : 'Play'", "paceCap: mode === 'wait' ? 'Wait' : 'Listen'", 1).replace("doneMode: mode === 'wait' ? 'Wait' : 'Play'", "doneMode: mode === 'wait' ? 'Wait' : 'Listen'", 1)
-    return t.replace("paceLabel: (mode === 'wait' ? 'Wait' : 'Play')", "paceLabel: (mode === 'wait' ? 'Wait' : 'Listen')", 1)
-
 def _cut_el(t, start, tag):
     # removes the element that opens at start, by its depth
     depth = 0
@@ -232,6 +209,47 @@ def header_transport(t):
                    [('R', 'Right hand'), ('L', 'Left hand')])
     assert t.count('togglePlay: togglePlayNow,') >= 1
     return t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + keys)
+
+def phone_band(t):
+    # the phone as the laptop and Flat's phone editor (owner, 2026-11-26: "refactor the mobile version the same way and
+    # to be like the flat editor the same"): the glass bar and the floating capsule over the music go, with their old
+    # sheets (Practice, Hands, Piano, Settings, View, Views, Key); the kit's phone band (PHBAND) takes the top in two
+    # rows (✕, the song's menu, Practice | Edit, ☰; the transport and Piano keys), the band's popovers rise as sheets
+    # (HDRPOPS, phone), ☰ holds the laptop rail's places (Song, View, Transpose, Audio's levels are the Practice sheet's
+    # Hands), one implementation with the editor
+    t = _cut_el(t, t.rindex('<div', 0, t.index('aria-label="Transport"')), 'div')
+    for cond in ('isPace', 'isHands', 'isKeys', 'isMore', 'isView', 'isViews', 'isKey'):
+        t = _cut_el(t, t.index(f'<sc-if value="{{{{{cond}}}}}"'), 'sc-if')
+    h0 = t.index('<header'); h1 = t.index('</header>', h0) + len('</header>')
+    t = t[:h0] + PHBAND('play', 'Songs.dc.html', 'Player.dc.html', 'Editor.dc.html', over=True) + t[h1:]
+    # the status bar over the dark band, in paper (calm_kit's STATUS_DARK)
+    st = 'height: 54px; z-index: 5; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; padding: 6px 34px 0 50px; color: {{statusFg}};'
+    assert t.count(st) == 1; t = t.replace(st, st.replace('z-index: 5', 'z-index: 49').replace('{{statusFg}}', ONB), 1)
+    # the music starts under the band (62 + 56); the band stays while playing, as the laptop's
+    assert t.count('sheetTop: 124') == 1; t = t.replace('sheetTop: 124', 'sheetTop: 118', 1)
+    assert t.count('showControls: !playing,') == 1; t = t.replace('showControls: !playing,', 'showControls: true,', 1)
+    places = (('Song', 'Song', '{{verName}}', f'<div style="display: flex; flex-direction: column">{VERPANEL()}</div>', None),
+              ('View', 'View', '{{viewName}}', VIEWPANEL(inset=False), None),
+              ('Tr', 'Transpose', '{{hdKeyL}}', TRROWS(True), None),
+              ('Opts', 'Playback options', '', '', 'phOptsGo'), ('Keys', 'Piano keys', '', '', 'phKeysGo'), ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
+    t = t.replace('</main>', '</main>' + HDRPOPS(True, 0, 0, 0, keys_right=0, phone=True) + PHMENU(places, 'Takes.dc.html'), 1)
+    st_ = '(o) => this.setState(o)'
+    vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
+          "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', ...viewPress(id) }; }), "
+          + FOLDKEYS('s', st_, ['Ver', 'View', 'Opts']) + ' '
+          + SELFROM('s', st_, 'selLayout', "lopt('layout', layout, [['page', 'Page'], ['panorama', 'Panorama']])") + ' '
+          + SELFROM('s', st_, 'selPerRow', "lopt('perRow', perRow, [4, 8].map((n) => [n, n + ' bars']))") + ' '
+          + SELFROM('s', st_, 'selText', "lopt('text', s.text ?? 'm', [['s', 'Small'], ['m', 'Medium'], ['l', 'Large']])") + ' ')
+    assert t.count('views: VIEWS.map(') == 1; t = t.replace('views: VIEWS.map(', vk + 'views: VIEWS.map(', 1)
+    loop = "() => { if (loop) { this.setState({ loop: false, hdPop: null }); return; } const a = Math.floor((bar - 1) / 4) * 4 + 1; this.setState({ loop: true, loopA: a, loopB: Math.min(16, a + 3), hdPop: null }); }"
+    keys = HDRKEYS('s', st_, lambda m: 'sTo: ' + m + ', sUndo: false', 'togglePlayNow', 'playing', loop, 'loop',
+                   "loop ? 'Stop looping bars ' + loopA + '–' + loopB : 'Loop bars ' + (Math.floor((bar - 1) / 4) * 4 + 1) + '–' + Math.min(16, Math.floor((bar - 1) / 4) * 4 + 4)",
+                   [('R', 'Right hand'), ('L', 'Left hand')])
+    keys += ' ' + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}", close_others=', ph: null') + ' ' + PHKEYS('s', st_, ['Song', 'View', 'Tr'], lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}")
+    # Played through's Transpose opens the band's Transpose, the one implementation
+    assert t.count("openKey: pick({ open: 'key' })") == 1; t = t.replace("openKey: pick({ open: 'key' })", "openKey: () => this.setState({ open: 'none', ph: 'Tr' })", 1)
+    a = 'togglePlay: togglePlayNow,'; i = t.index(a)
+    return t[:i] + a + ' ' + keys + t[i + len(a):]
 
 # where each popover hangs (left of Playback options, left of Volume, right of Piano keys), measured from the header
 POPX = {'play': (294, 470, 576, 24), 'edit': (294, 470, 576)}
@@ -338,13 +356,6 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
               "renSave: () => { const n = ((this._rn && this._rn.value) || '').trim(); if (!n) return; this.setState({ vers: VS.map((v) => (v.id === VCID ? { ...v, name: n } : v)), ren: false, sTo: 'Renamed to ' + n, sUndo: false }); }, ")
     if name == 'PlayerDesk':
         t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}") + (' ' + SELKEYS('s', '((o) => this.setState(o))', [('selInv', [('Root', 'Root position'), ('1st', '1st inversion'), ('2nd', '2nd inversion'), ('3rd', '3rd inversion')], "acc('inv', 'Root')", "(id) => setAcc('inv', id, id === 'Root' ? 'root position' : id + ' inversion')"), ('selVoice', [('Voice-led', 'Voice-led'), ('Block', 'Block')], "acc('voice', 'Voice-led')", "(id) => setAcc('voice', id, id + ' voicing')")]) if name == 'PlayerDesk' else ''), 1)
-    if name == 'PlayerApp' and 'verName:' not in t:
-        assert "isMore: open === 'settings'," in t, name
-        t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + VERJS2, 1)
-        # the version's facts, worked out before the state object that reads them
-        r = t.rindex('const s = this.state || {};\n', 0, t.index('verName:')) + len('const s = this.state || {};\n')
-        t = t[:r] + ("const VS = s.vers ?? [{ id: 'orig', name: 'Original', sub: 'Melody, chords and words', piano: false }, { id: 'mine', name: 'My version', sub: 'With a piano accompaniment', piano: true }]; "
-                     "const VD = s.verDef ?? 'mine'; const VCID = VS.some((v) => v.id === s.verCur) ? s.verCur : VD; const VC = VS.find((v) => v.id === VCID) ?? VS[0];\n") + t[r:]
 
     # Rename…: a small form over the Player (ui-and-mockups: what a laptop shows centred is only a form), the name
     # chosen, Save at its foot
@@ -355,6 +366,6 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         f'<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px">' + btn('Cancel', 'renCancel', 'transparent', INK) + btn('Save', 'renSave', ACCENT, INK) + '</div>',
         close='renCancel', label='Rename version') + '</sc-if>')
     t = t.replace('</main>', '</main>' + (RENAMEDLG() if name == 'PlayerDesk' else ren), 1)
-    t = header_transport(player_rail(t)) if name == 'PlayerDesk' else one_transport(t)
+    t = header_transport(player_rail(t)) if name == 'PlayerDesk' else phone_band(t)
     p.write_text(t)
 print('r74 versions ok')

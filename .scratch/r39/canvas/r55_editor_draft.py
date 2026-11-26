@@ -19,9 +19,6 @@ DS_KEYS = r'''
 DJS = ED4.replace("    return { ...common(st, set),", DS_JS + "\n    return { ...common(st, set)," + DS_KEYS, 1)
 assert DJS != ED4
 
-def DMENU(sfx):
-    # nothing hangs under the bar (loop round 60): the draft's status and its publishing acts live in the bar's ··· menu
-    return ED_MENU(sfx, 'openVers') + GROUP(('link', 'Publish…', '', 'askPub'), ('action', 'Discard changes', 'askDisc', RED), bg=SHEET)
 DSAVED = f'<p role="status" style="margin: -8px 0 0; text-align: center; font-size: 13px; color: {{{{saveC}}}}">{{{{saveT}}}}</p>'
 ASKP = lambda c, t, b, ok, go: ASK(c, t, b, ok, go, danger=False)
 VROW = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{vers}}}}" as="v" hint-placeholder-count="3"><div style="min-height: 72px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 6px 6px 6px 16px; box-shadow: inset 0 -1px 0 {FILL}">'
@@ -53,15 +50,15 @@ DJS = DJS.replace("?? 'mine'; const VCID", "?? 'orig'; const VCID", 1)
 for k in ('askPub: () => {', 'askDisc: () => {'): DJS = DJS.replace(k, k + " set({ sm: false });", 1)
 DJS = DJS.replace("openVers: () => set({ sheet: 'vers' })", "openVers: () => set({ sm: false, sheet: 'vers' })", 1)
 DJS = DJS.replace("(st.pat ?? 'p1')", "(st.pat ?? 'none')", 1)
-edph = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'Player.dc.html', label='Original'), eph4, count=1, flags=re.S), 'true')
+edph = (IF('isLive', eph4.replace('href="Editor.dc.html" role="tab"', 'href="EditorDraft.dc.html" role="tab"', 1), 'true')
         + IF('notLive', GHEAD('Songs.dc.html') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("Songs.dc.html")}</main>')
         + STRIP('dsDemo') + STRIP('states') + '<div style="height: 22px; flex: none"></div>' + TOASTS)
 DJS = DJS.replace("isLive: live,", "isLive: live, notLive: !live,", 1)
 edlm = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'PlayerLaptop.dc.html', label='Original'), elm4, count=1, flags=re.S), 'true')
         + IF('notLive', GHEAD('SongsLaptop.dc.html').replace('padding: 8px 16px', 'padding: 12px 24px') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("SongsLaptop.dc.html")}</main>')
         + f'<div style="position: absolute; right: 24px; bottom: 188px; z-index: 40; width: 760px; padding-top: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 4px 14px -6px rgba(51,41,33,.25)">{STRIP("dsDemo")}{STRIP("states")}</div>' + TOASTL)
-DSH = PHLAYERS(DMENU('.dc.html'), DSAVED) + BSHEET('versOn', 'Publishing history', VERSBODY) + DASKS
-DSL = LAPLAYERS('Laptop.dc.html', menu=DMENU('Laptop.dc.html'), saved=DSAVED) + LAPSHEET(BSHEET('versOn', 'Publishing history', VERSBODY), 480) + DASKS
-phone('EditorDraft', 'Score editor, a built-in song’s draft (editors)', edph, PHJS(DJS), DSH)
+DSH = PHLAYERS(DSAVED, GROUP(('link', 'Publish…', '', 'askPub'), ('link', 'Publishing history', '', 'openVers'), ('action', 'Discard changes', 'askDisc', RED), bg=SHEET)) + BSHEET('versOn', 'Publishing history', VERSBODY) + DASKS
+DSL = LAPLAYERS('Laptop.dc.html') + LAPSHEET(BSHEET('versOn', 'Publishing history', VERSBODY), 480) + DASKS
+phone('EditorDraft', 'Score editor, a built-in song’s draft (editors)', edph, PHJS(DJS), DSH, dark=True)
 full_laptop('EditorDraftLaptop', 'Score editor, a built-in song’s draft (editors), laptop', edlm, DJS.replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - 76 - pw - 76 : 1710 - 76 - 64) / 794; const M = 'music'", 1), DSL)
 print('r55 editor draft ok')

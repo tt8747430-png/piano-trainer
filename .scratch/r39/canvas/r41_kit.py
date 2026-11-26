@@ -285,13 +285,13 @@ def ROOTGRID(lst='roots'):
                 f'<sc-for list="{{{{{lst}.{half}}}}}" as="r" hint-placeholder-count="6"><button type="button" role="radio" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" '
                 f'style="height: 44px; min-width: 0; padding: 0; border: 0; border-radius: 11px; background: {{{{r.bg}}}}; box-shadow: {{{{r.sh}}}}; color: {INK}; font: inherit; font-size: 18px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</button></sc-for></div>')
     return f'<div role="radiogroup" aria-label="Root" style="display: flex; flex-direction: column; gap: 8px">{track("a")}{track("b")}</div>'
-def _BSHEET(cond, title, body, done='Done'):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div><section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 16px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{closeSheet}}}}" style="position: absolute; right: 0; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
-def BSHEET(cond, title, body, done='Done', tall=False, back='', maxh=''):
+def _BSHEET(cond, title, body, done='Done', close='closeSheet'):
+    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div><section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 16px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{{close}}}}}" style="position: absolute; right: 0; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
+def BSHEET(cond, title, body, done='Done', tall=False, back='', maxh='', close='closeSheet'):
     # back: a sub-page's Back before its title; maxh: a cap other than 86% (a sheet over a bar that stays in reach)
     # done=None: a sheet whose foot closes it (Sort and filter's Show n) carries no second way out in its head;
     # tall: a sheet that keeps its full height while its list changes (Search, a chord type's list)
-    t = _BSHEET(cond, title, body, done or '')
+    t = _BSHEET(cond, title, body, done or '', close)
     if back:
         t = t.replace(f'<span style="font-size: 17px; font-weight: 600">{title}</span>', back + f'<span style="font-size: 17px; font-weight: 600">{title}</span>', 1)
     if maxh:
@@ -663,13 +663,13 @@ PLUSI_S = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="M12 5v1
 # styles"): one solid band across the window in the brand's dark, the title and the transport in paper on it; Go to
 # start and Play filled circles (Play the honey one), the metronome and the loop outlined circles that fill when on,
 # the mixer a bare icon, MIDI and the mode outlined pills; the toolbar a light row under it
-def SONGMENU(takes_href, extra=()):
+def SONGMENU(takes_href, extra=(), phone=False):
     it = lambda lab, act, fg='#332921', tail='': f'<button type="button" role="menuitem" onClick="{{{{{act}}}}}" style="{_SMROW}; color: {fg}">{_SMSLOT()}<span style="flex: 1">{lab}</span>{tail}</button>'
     vrow = (f'<sc-for list="{{{{verRows}}}}" as="v" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="{_SMROW}">'
             + _SMSLOT(f'<sc-if value="{{{{v.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK}</sc-if>')
             + f'<span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: {{{{v.fw}}}}">{{{{v.name}}}}</span>'
             + f'<sc-if value="{{{{v.isDef}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; font-size: 13px; color: {SOFT}">Default</span></sc-if></button></sc-for>')
-    exp = (f'<sc-if value="{{{{expOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="menu" aria-label="Export" style="{_SMBOX}; left: calc(100% + 4px); top: {{{{expTop}}}}px; width: 252px">'
+    exp = (f'<sc-if value="{{{{expOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="menu" aria-label="Export" style="{_SMBOX}; ' + ('left: 24px; top: calc({{expTop}}px + 92px)' if phone else 'left: calc(100% + 4px); top: {{expTop}}px') + '; width: 252px">'
            + ''.join(f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="{_SMROW}; padding-left: 16px">{l}</button>' for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))) + '</div></sc-if>')
     rows = (''
             + f'<a role="menuitem" href="{takes_href}" style="{_SMROW}">{_SMSLOT()}<span style="flex: 1">Recordings</span><span style="color: {SOFT}; font-variant-numeric: tabular-nums">3</span></a>'
@@ -677,7 +677,7 @@ def SONGMENU(takes_href, extra=()):
             + ''.join(_SMSEP + ''.join(it(*r) for r in grp) for grp in extra)
             + _SMSEP + it('Duplicate song', 'actDup') + it('Archive song', 'actArchive'))
     return (f'<div style="position: relative; flex: none; min-width: 0; pointer-events: auto">'
-            f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{smOn}}}}" onClick="{{{{toggleSm}}}}" data-tip="The song’s menu" style="height: 48px; max-width: 320px; padding: 0 10px 0 12px; border: 0; border-radius: 12px; background: {{{{smBg}}}}; color: {ONB}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
+            f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{smOn}}}}" onClick="{{{{toggleSm}}}}" data-tip="The song’s menu" style="height: 48px; max-width: {"100%" if phone else "320px"}; padding: 0 10px 0 12px; border: 0; border-radius: 12px; background: {{{{smBg}}}}; color: {ONB}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
             f'<span style="min-width: 0; display: flex; flex-direction: column"><h1 style="margin: 0; font-size: 17px; font-weight: 600; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</h1>'
             f'<span style="font-size: 13px; line-height: 16px; color: {ONB_SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{verName}}}}</span></span>'
             f'<span aria-hidden="true" style="flex: none; display: flex; color: {ONB_SOFT}">{CHEV_D}</span></button>'
@@ -715,6 +715,47 @@ def SONGMENU_KEYS(S, SET, TOAST, DEF='mine', close_others=''):
             f"actDup: () => {SET}({{ ...shut, {m5} }}), actArchive: () => {SET}({{ ...shut, {m6} }}), "
             f"expXml: () => {SET}({{ ...shut, {m7} }}), expMxl: () => {SET}({{ ...shut, {m8} }}), expMidi: () => {SET}({{ ...shut, {m9} }}) }}; }})(),")
 
+# The phone's header as Flat's (owner, 2026-11-26: "refactor the mobile version the same way and to be like the flat
+# editor the same"; "but the header should also be the same as the flat"): Flat's phone editor has one header row
+# (flat-score-editor 017, 018; help.flat.io's mobile screenshots: ←, the transport, the keyboard, ☰) and its menu
+# behind ☰ (Credits, Manage instruments, Version history, MIDI input, Layout, Export Score). Ours: ✕, the transport
+# (Go to start, Play, the metronome, Loop: 44 circles for a finger), Practice | Edit as glyph tabs, ☰; the song's name,
+# its versions and its acts are ☰'s (no title in the row, as Flat's); in Edit the acts row follows (the board's own).
+# over: laid over the screen from its very top, the status bar's 62 inside it (the Player's absolute layers)
+MENUI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M4 7h16M4 12h16M4 17h16"></path></svg>'
+def PHBAND(mode, close_href, practice_href, edit_href, over=False):
+    x = (f'<a href="{close_href}" aria-label="Close" data-tip="Close · Esc" style="flex: none; width: 44px; height: 44px; border-radius: 22px; color: {ONB}; display: flex; align-items: center; justify-content: center">'
+         '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></a>')
+    m = (f'<button type="button" aria-label="Menu" data-tip="Menu" aria-haspopup="dialog" aria-expanded="{{{{phMenuX}}}}" onClick="{{{{phMenu}}}}" style="flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px; '
+         f'background: {{{{phMenuBg}}}}; color: {ONB}; display: flex; align-items: center; justify-content: center; cursor: pointer">{MENUI}</button>')
+    pos = 'position: absolute; z-index: 48; left: 0; right: 0; top: 0; padding-top: 62px' if over else 'flex: none; position: relative; z-index: 20'
+    return (f'<header data-band style="{pos}; box-sizing: border-box; padding-left: 4px; padding-right: 4px; background: {BAND}; color: {ONB}">'
+            f'<div style="height: 56px; display: flex; align-items: center; gap: 4px">{x}{HDRTRANSPORT(phone=True)}<span style="flex: 1"></span>'
+            f'{MODESW(mode, practice_href, edit_href, compact=True)}{m}</div></header>')
+# ☰ on a phone, as Flat's menu: the song's name heads it; the laptop rail's places as rows, each opening its sheet with
+# the panel's own body (one implementation), then the song's acts (the laptop title menu's: Recordings, Share link,
+# Export, Print; Duplicate and Archive apart). places: (id, label, value, body, act): act, when given, is the board's own
+# opener; PHKEYS (or the board's own keys) give phMenu, phMenuOn, phMenuX, phMenuBg, phClose, ph{id}On, ph{id}, and
+# phShare, phPrint, phDup, phArch, phMidiGo, phKeysGo, phOptsGo; head: what stands over the rows (the save state)
+EXPROWS = lambda: GROUP(*(('action', l, a, INK) for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))), bg=SHEET)
+def PHMENU(places, takes_href, head='', extra='', title='Amazing Grace'):
+    rows = tuple(('link', lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places)
+    acts = GROUP(('link', 'Recordings', '3', takes_href), ('action', 'Share link', 'phShare', INK), ('link', 'Export', '', 'phExp'), ('action', 'Print', 'phPrint', INK), bg=SHEET)
+    loss = GROUP(('action', 'Duplicate song', 'phDup', INK), ('action', 'Archive song', 'phArch', INK), bg=SHEET)
+    out = BSHEET('phMenuOn', title, head + GROUP(*rows, bg=SHEET) + acts + extra + loss, close='phClose', maxh='calc(100% - 124px)')
+    for pid, lab, val, body, act in places:
+        if not act:
+            out += BSHEET(f'ph{pid}On', lab, body, close='phClose', maxh='calc(100% - 124px)')
+    return out + BSHEET('phExpOn', 'Export', EXPROWS(), close='phClose', maxh='calc(100% - 124px)')
+# the act rows close the menu and do what the title menu's rows do; SET a setter expression, shut what closes the menu
+def PHACTS(SET, shut, TOAST):
+    t = lambda m, u=False: TOAST(m, u)
+    return (f"phShare: () => ({SET})({{ {shut}, {t("'Link copied'")} }}), phPrint: () => ({SET})({{ {shut} }}), phDup: () => ({SET})({{ {shut}, {t("'Copy saved to My songs'")} }}), phArch: () => ({SET})({{ {shut}, {t("'Song archived'", True)} }}), "
+            f"phMidiGo: () => ({SET})({{ {shut}, hdPop: 'midi' }}), phKeysGo: () => ({SET})({{ {shut}, hdPop: 'keys' }}), phOptsGo: () => ({SET})({{ {shut}, hdPop: 'opts' }}), ")
+def PHKEYS(S, SET, ids, TOAST):
+    return ("...(() => { const P = " + S + ".ph ?? null; const o = { phMenu: () => (" + SET + ")({ ph: P === 'menu' ? null : 'menu', hdPop: null }), phMenuOn: P === 'menu', phMenuX: P === 'menu' ? 'true' : 'false', "
+            "phMenuBg: P === 'menu' ? 'rgba(254,253,251,.16)' : 'transparent', phClose: () => (" + SET + ")({ ph: null }), " + PHACTS(SET, 'ph: null', TOAST) + "}; for (const id of " + repr(list(ids) + ['Exp']) + ") { o['ph' + id + 'On'] = P === id; o['ph' + id] = () => (" + SET + ")({ ph: id }); } return o; })(),")
+
 # Rename version…: a small form, the one thing a laptop centres (ui-and-mockups)
 def RENAMEDLG():
     b = lambda l, h, bg: f'<button type="button" onClick="{{{{{h}}}}}" style="height: 44px; padding: 0 18px; border: 0; border-radius: 22px; background: {bg}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer">{l}</button>'
@@ -731,15 +772,17 @@ def RENAMEDLG():
 # filled; the same place in both modes so nothing moves; the toolbars and panels are what Edit adds
 _MSEG = 'height: 40px; box-sizing: border-box; padding: 0 14px 0 10px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap'
 MUSICI = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'
-def MODESW(on, practice_href, edit_href):
+def MODESW(on, practice_href, edit_href, compact=False):
     # Practice | Edit, two tabs side by side (owner, 2026-11-26: "make the switch between the player and the editor a tab
     # switch, not a combobox"): two exclusive modes of one screen are a segmented control, both always in sight (Apple
     # HIG, Segmented controls; Flat's Read-only | Edit pair in its band), never a menu that hides the other; the current
     # one filled white on the dark band, the other bare, each its glyph and word, P and E their keys; each tab the pill's
     # full 40 height, a dense laptop bar's least target (craft-details, Hit area), the ring round both
-    seg = lambda lab, ic, href, sel, key: (f'<a href="{href}" role="tab" aria-selected="{"true" if sel else "false"}" data-tip="{lab} · {key}" style="flex: none; height: 40px; box-sizing: border-box; padding: 0 14px; border-radius: 20px; '
-                                          f'background: {ONB if sel else "transparent"}; color: {BAND if sel else ONB}; text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600">{ic}<span>{lab}</span></a>')
-    return (f'<div role="tablist" aria-label="Mode" style="flex: none; height: 40px; box-sizing: border-box; padding: 0; border-radius: 20px; box-shadow: {ONB_RING}; display: flex; align-items: center; gap: 2px; pointer-events: auto">'
+    # compact (a phone's band, no room for the words beside the song's name): the two glyphs, each a 44 tab named by its
+    # word (aria-label and tip), as Flat's phone band carries its modes as glyphs
+    seg = lambda lab, ic, href, sel, key: (f'<a href="{href}" role="tab" aria-selected="{"true" if sel else "false"}"' + (f' aria-label="{lab}"' if compact else '') + f' data-tip="{lab} · {key}" style="flex: none; height: {44 if compact else 40}px; box-sizing: border-box; padding: 0 {13 if compact else 14}px; border-radius: {22 if compact else 20}px; '
+                                          f'background: {ONB if sel else "transparent"}; color: {BAND if sel else ONB}; text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600">{ic}' + ('' if compact else f'<span>{lab}</span>') + '</a>')
+    return (f'<div role="tablist" aria-label="Mode" style="flex: none; height: {44 if compact else 40}px; box-sizing: border-box; padding: 0; border-radius: {22 if compact else 20}px; box-shadow: {ONB_RING}; display: flex; align-items: center; gap: 2px; pointer-events: auto">'
             + seg('Practice', MUSICI, practice_href, on == 'play', 'P') + seg('Edit', PENI, edit_href, on == 'edit', 'E') + '</div>')
 
 # The transport in the header, as Flat's (the owner's Flat 26.11 band, the new header: the title, then go to start, Play with its options,
@@ -762,8 +805,9 @@ METI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M9 3h6l4 1
 _HB = 'flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer'
 CABLEI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1"></path><path d="M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9"></path><path d="M21 21v-2h-4"></path><path d="M3 5h4V3"></path><path d="M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3"></path></svg>'
 MIXI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg>'
-def HDRTRANSPORT():
-    b = lambda lab, tip, inner, act, look, extra='': f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{_HB}; {look}">{inner}</button>'
+def HDRTRANSPORT(phone=False):
+    hb = _HB.replace('width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px', 'width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px') if phone else _HB
+    b = lambda lab, tip, inner, act, look, extra='': f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{hb}; {look}">{inner}</button>'
     filled = f'background: {ONB}; color: {BAND}'
     # filled white as Flat's; Loop honey while it loops (the one sign it is on), the metronome crossed while off
     lit = lambda k: f'background: {{{{{k}Bg}}}}; color: {BAND}'
@@ -781,6 +825,12 @@ def HDRTRANSPORT():
     tr = (f'<button type="button" aria-label="Transpose: {{{{hdKeyL}}}}" data-tip="Transpose · T" aria-haspopup="dialog" aria-expanded="{{{{hdTrX}}}}" onClick="{{{{hdTr}}}}" style="flex: none; height: 40px; padding: 0 10px 0 14px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer">'
           f'{{{{hdKeyL}}}}<span aria-hidden="true" style="display: flex">{CHEV_D}</span></button>')
     midi = b('MIDI keyboard', 'MIDI keyboard', CABLEI, 'hdMidi', f'background: {{{{hdMidiBg}}}}; color: {ONB}', ' aria-haspopup="dialog" aria-expanded="{{hdMidiX}}"')
+    if phone:
+        # Flat's phone header (flat-score-editor 017; help.flat.io's mobile screenshots): one row, the transport its
+        # acts alone (Go to start, Play, the metronome, Loop); Playback options and MIDI are rows of its ☰ (Flat's
+        # "MIDI input"), the row having no room for a ▾ beside a finger's 44
+        play1 = b('{{hdPlayTip}}', '{{hdPlayTip}} · Space', '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="{{hdPlayD}}"></path></svg>', 'hdPlay', f'background: #EDC684; color: {BAND}')
+        return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 2px">{start}{play1}{met}{loop}</div>'
     return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 10px">{start}{play}{met}{loop}{tr}{midi}</div>'
 
 def BANDHDR(close_href, mode, practice_href, edit_href, right='', over=False):
@@ -799,7 +849,11 @@ def BANDHDR(close_href, mode, practice_href, edit_href, right='', over=False):
 # the editor's toolbar has its own) is the keys' view: 3D, 2D or Off, and their labels.
 _HPOP = f'position: absolute; z-index: 61; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 12px 8px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 4px'
 _HCAP = lambda t: f'<h3 style="margin: 0; font-size: 15px; font-weight: 600">{t}</h3>'
-def _HPOPOVER(cond, title, body, pos, w):
+def _HPOPOVER(cond, title, body, pos, w, phone=False):
+    if phone:
+        # on a phone the band's popovers are sheets rising from the foot (a choice made in context), the same rows in one card
+        body = body.replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px')
+        return BSHEET(cond, title, f'<div style="display: flex; flex-direction: column; overflow: hidden; padding: 0 12px; {_CARD}">{body}</div>', close='hdClose')
     return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{hdClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
             f'<section role="dialog" aria-label="{title}" style="{_HPOP}; {pos}; width: {w}px"><h2 style="margin: 0; padding: 4px 0 4px; font-size: 15px; font-weight: 600">{title}</h2>{body}</section></sc-if>')
 def _HVOLROW(i):
@@ -821,7 +875,7 @@ def TRROWS(big=False):
     # on a phone: one card as the sheet's other groups, the rows on its 16 inset, the − and + at 44 for a finger
     h = (semis + keyrow + back).replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px').replace('padding: 0 4px 0 12px', 'padding: 0 6px 0 16px').replace('padding: 0 12px', 'padding: 0 16px')
     return f'<div style="display: flex; flex-direction: column; overflow: hidden; {_CARD}">{h}</div>'
-def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None):
+def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=False):
     # rows, as every card's (VERPANEL, ACCPANEL): a value with its pop-up, a level with its slider; no segmented strip
     rows = lambda *r: f'<div style="display: flex; flex-direction: column; margin: 0 -12px">{"".join(r)}</div>'
     qb = lambda lab, act, svg: f'<button type="button" aria-label="{lab}" onClick="{{{{{act}}}}}" disabled="{{{{{act}Dis}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
@@ -829,7 +883,7 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None):
              f'<span style="flex: 1; font-size: 15px">Playback speed</span>' + qb('Slower', 'hdSlower', STEP_MINUS)
              + f'<span style="min-width: 44px; text-align: center; font-size: 15px; font-variant-numeric: tabular-nums">{{{{hdSpeedL}}}}</span>' + qb('Faster', 'hdFaster', STEP_PLUS) + '</div>')
     opts = rows(*((SELROW('Mode', 'selMode', False), SELROW('Hands', 'selHands')) if practice else ()), speed)
-    out = _HPOPOVER('hdOptsOn', 'Playback options', opts, f'left: {opts_left}px; top: 65px', 320)
+    out = _HPOPOVER('hdOptsOn', 'Playback options', opts, f'left: {opts_left}px; top: 65px', 320, phone)
     # MIDI keyboard, complete in its popover (owner, 2026-11-26: "the midi settings still go to the wrong settings page
     # … remove all the unneeded midi settings … i dont like this showing one settings and then things like all settings"):
     # as Flat's MIDI Settings popover in its band (FLAT_PLAYER_AND_PIANO §2.5: the input's device select with None, and
@@ -844,12 +898,12 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None):
            f'<span aria-hidden="true" style="flex: none; width: 12px; height: 12px; border-radius: {{{{hdRecR}}}}; background: #D2483A"></span><span style="flex: 1">{{{{hdRecL}}}}</span><span style="font-size: 13px; color: {SOFT}">R</span></button>')
     # Transpose: the semitones with − and + (a stepper for a frequent, precise value), the key it lands in, and the way
     # back to the written key when it moved; it changes the playback and the page at once (no Apply)
-    out += _HPOPOVER('hdTrOn', 'Transpose', TRROWS(), f'left: {tr_left}px; top: 65px', 300)
+    out += _HPOPOVER('hdTrOn', 'Transpose', TRROWS(), f'left: {tr_left}px; top: 65px', 300, phone)
     out += _HPOPOVER('hdMidiOn', 'MIDI keyboard', rows(SELROW('Keyboard', 'selMidi', False),
         f'<sc-if value="{{{{hdMidiAny}}}}" hint-placeholder-val="{{{{true}}}}">' + snd + rec + '</sc-if>',
-        f'<sc-if value="{{{{hdMidiNone}}}}" hint-placeholder-val="{{{{false}}}}">' + none + '</sc-if>'), f'left: {midi_left}px; top: 65px', 320)
+        f'<sc-if value="{{{{hdMidiNone}}}}" hint-placeholder-val="{{{{false}}}}">' + none + '</sc-if>'), f'left: {midi_left}px; top: 65px', 320, phone)
     if keys_right is not None:
-        out += _HPOPOVER('hdKeysOn', 'Piano keys', rows(SELROW('Piano', 'selKb', False), SELROW('Labels', 'selLab')), f'right: {keys_right}px; top: 65px', 320)
+        out += _HPOPOVER('hdKeysOn', 'Piano keys', rows(SELROW('Piano', 'selKb', False), SELROW('Labels', 'selLab')), f'right: {keys_right}px; top: 65px', 320, phone)
     return out
 # The Audio panel, Flat's (owner's Flat 26.11 screenshot of Audio: "Room", then Volume: a "Master volume" card, then a card per
 # instrument with its headphones (solo), its mute and its level), one implementation for Practice and Edit, opened from
