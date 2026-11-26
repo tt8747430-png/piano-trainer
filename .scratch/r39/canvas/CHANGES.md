@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · 8ac0fd94 · rail entries carry a tooltip only where it adds a shortcut (Search · ⌘K, Shortcuts · ?), not their own label again, as Flat's rail (lines: EditorLaptop, PlayerDesk 0 problems) · EditorLaptop, EditorDraftLaptop, PlayerDesk · v795
 - 2026-11-26 · 805a6262 · the laptop title menu sets Share link, Export and Print apart after a hairline under Recordings, as the phone's ☰; Export's submenu level with its row (lines: PlayerDesk menu and Export 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v794
 - 2026-11-26 · 7f999cab · no "Song" option: the phone ☰ lists every act in its own row (Versions › its own page, View, Instruments, Layout, MIDI keyboard, Transpose, Credits, Recordings, Version history, then Share link, Export, Print after a hairline), Back from each page to ☰; the laptop rail's Song entry is Versions (layers glyph), its panel titled Versions with no fold repeating it (lines: PlayerApp ☰ and Versions, Editor ☰, EditorDraft Transpose, PlayerDesk, EditorLaptop Versions 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v793
 - 2026-11-26 · 34fbc34e · reverted c7f616d1 (the Library rename, a misreading: the owner meant the Player's and editor's Song option); the 70 boards back to v791's · 70 boards · v793
