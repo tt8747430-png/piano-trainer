@@ -749,13 +749,16 @@ def PARTSECTION(inst=None):
           f'<sc-if value="{{{{c.shown}}}}" hint-placeholder-val="{{{{true}}}}">{eye}</sc-if><sc-if value="{{{{c.hidden}}}}" hint-placeholder-val="{{{{false}}}}">{EYEOFFI}</sc-if></button>')
     glyph = (f'<span aria-hidden="true" style="flex: none; width: 24px; display: flex; color: {{{{c.nameFg}}}}"><sc-if value="{{{{c.isVoice}}}}" hint-placeholder-val="{{{{false}}}}">{MICI.replace('width="20" height="20"', 'width="24" height="24"')}</sc-if>'
              f'<sc-if value="{{{{c.isKeys}}}}" hint-placeholder-val="{{{{true}}}}">{KEYSI.replace('width="22" height="22"', 'width="24" height="24"')}</sc-if></span>')
-    card = (f'<div style="min-height: 60px; box-sizing: border-box; padding: 0 6px 0 16px; border-radius: 14px; background: {PAGE}; display: flex; align-items: center; gap: 12px">{glyph}'
+    card = (f'<div style="min-height: 60px; box-sizing: border-box; padding: 0 6px 0 16px; {_CARD}; display: flex; align-items: center; gap: 12px">{glyph}'
             f'<span style="flex: 1; min-width: 0; font-size: 16px; color: {{{{c.nameFg}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{c.name}}}}</span>{sb}{vb}</div>')
     allrow = (f'<button type="button" role="switch" aria-checked="{{{{phAllOn}}}}" onClick="{{{{phAll}}}}" style="align-self: flex-start; min-height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; gap: 8px; cursor: pointer">'
               f'<span aria-hidden="true" style="flex: none; width: 44px; height: 26px; border-radius: 13px; background: {{{{phAllTrack}}}}; position: relative"><span style="position: absolute; top: 2px; left: {{{{phAllKnob}}}}px; width: 22px; height: 22px; border-radius: 11px; background: {SHEET}; box-shadow: 0 1px 3px rgba(51,41,33,.25)"></span></span>All</button>')
     foot = FROW('Inst', 'Edit instruments', '', inst) if inst else ''
-    return (f'<section aria-label="Parts" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 8px 0 0; font-size: 15px; font-weight: 600">Parts</h3>'
-            f'{allrow}<sc-for list="{{{{phPartRows}}}}" as="c" hint-placeholder-count="2">{card}</sc-for>' + (f'<div style="{_CARD}; overflow: hidden">{foot}</div>' if foot else '') + '</section>')
+    # a fold as the page's Views and options (Flat's panels), headed by the Instruments glyph (Flat's instruments sheet,
+    # the editor's rail); each part a filled card on the paper, as Flat's instruments sheet (004, 084)
+    body = (f'{allrow}<div style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{{{phPartRows}}}}" as="c" hint-placeholder-count="2">{card}</sc-for></div>'
+            + (f'<div style="{_CARD}; overflow: hidden">{foot}</div>' if foot else ''))
+    return FOLD('Parts', KEYSI.replace('width="22" height="22"', 'width="20" height="20"'), 'Parts', body)
 def PARTKEYS(S, SET, parts, solo='solo'):
     """the Parts sheet's rows over the board's hidden parts (S.hide, the Instruments panel's own) and its solo (S[solo],
     the Audio panel's own); parts: [(id, name)]; whether the Piano prints"""

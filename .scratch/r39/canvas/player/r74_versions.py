@@ -93,7 +93,7 @@ def player_rail(t):
     t = t.replace('aria-label="{{viewName}} settings"', 'aria-label="View"', 1)
     vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
           "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', ...viewPress(id) }; }), "
-          + FOLDKEYS('s', '(o) => this.setState(o)', ['Ver', 'Acc', 'View', 'Opts', 'Room', 'Vol']) + ' '
+          + FOLDKEYS('s', '(o) => this.setState(o)', ['Ver', 'Acc', 'View', 'Opts', 'Room', 'Vol', 'Parts']) + ' '
           + SELFROM('s', '(o) => this.setState(o)', 'selLayout', "lopt('layout', layout, [['page', 'Page'], ['panorama', 'Panorama']])") + ' '
           + SELFROM('s', '(o) => this.setState(o)', 'selPerRow', "lopt('perRow', perRow, [4, 8].map((n) => [n, n + ' bars']))") + ' '
           + SELFROM('s', '(o) => this.setState(o)', 'selText', "lopt('text', s.text ?? 'm', [['s', 'Small'], ['m', 'Medium'], ['l', 'Large']])") + ' ')
@@ -256,7 +256,7 @@ def phone_band(t):
     st_ = '(o) => this.setState(o)'
     vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
           "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', isHere: !(editing && id === 'sheet'), isAway: editing && id === 'sheet', href: p.editor ?? 'Editor.dc.html', ...viewPress(id) }; }), " + mk
-          + FOLDKEYS('s', st_, ['Ver', 'View', 'Opts']) + ' '
+          + FOLDKEYS('s', st_, ['Ver', 'View', 'Opts', 'Parts']) + ' '
           + SELFROM('s', st_, 'selLayout', "lopt('layout', layout, [['page', 'Page'], ['panorama', 'Panorama']])") + ' '
           + SELFROM('s', st_, 'selPerRow', "lopt('perRow', perRow, [4, 8].map((n) => [n, n + ' bars']))") + ' '
           + SELFROM('s', st_, 'selText', "lopt('text', s.text ?? 'm', [['s', 'Small'], ['m', 'Medium'], ['l', 'Large']])") + ' ')

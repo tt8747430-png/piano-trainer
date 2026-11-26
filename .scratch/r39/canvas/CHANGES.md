@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · pending · the View page's Parts a fold as Views and the view's options, headed by the Instruments glyph; each part a filled card on the paper, as Flat's instruments sheet (004, 084) and the ruling's "each part a filled card" (they had the page's own colour, so read as bare rows) (lines: Editor, EditorDraft, PlayerApp, PlayerHands with View open, PlayerDesk, EditorLaptop 0 problems) · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop · pending
 ## Changes
 
 - 2026-11-26 · 88d1edf3 · the phone palette's chosen duration a honey-deep glyph with no tile, the others ink, as Flat's turns its chosen one blue (flat-score-editor 003) and the header's open glyph turns honey-deep (lines: Editor, EditorDraft 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop · v780
