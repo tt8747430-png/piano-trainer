@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · (this commit) · clean ("do this for all"): a Practice library's All no longer opens on a Recently used shelf (it is the Recently used chip's place alone, never a list twice); a progression's tiles lose the root moves under them ("5th up →"), the staff shows the motion · Accompaniment, AccompanimentLaptop, FingerTechnique, FingerTechniqueLaptop, JazzVocabulary, JazzVocabularyLaptop, Progressions, ProgressionsLaptop, Progression, ProgressionLaptop · v727
 - 2026-11-26 · (this commit) · a level's and a course's lessons lose their "Lesson n" line (the spine and the chapter heads already number them); an unpublished lesson's line reads Not published yet alone · Learn, LearnLaptop, LearnLevel, LearnLevelLaptop, LearnCourses, LearnCoursesLaptop, Course, CourseLaptop, YourCourseSettings, YourCourseSettingsLaptop · v726
 - 2026-11-26 · (this commit) · a song's credits print once, in the score's head (the line under the title said them again) · Song, SongLaptop, SongSettings, SongSettingsLaptop · v725
 - 2026-11-26 · (this commit) · "remove all the things that i didnt asked for, make more clean interface": the Chords page shows one chord: the staff's + (Add a chord), its empty second bar and the run of chords go (a run of chords is the Chord player's), and the chord's name over the staff goes (the pickers above say it); on a laptop the staff and Practise in the Player stand side by side · Chords, ChordsLaptop · v724
