@@ -55,6 +55,12 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
   the owner's Flat screenshots put "✎ Edit ▾" in the title's group after the transport; pressed while editing, the
   same place in Play and Edit on both sizes; no Done.
 
+- **R74, Edit only with the Score; the views in the View panel** (owner, 2026-11-26: "the edit button belongs only to
+  the score view … we dont need this your version"; "the switch between the view sheet or diagramms … in the right
+  … doesnt make so much sense"): versions Accompaniment and Score; Edit beside the version only on Score; Your
+  arrangement and Edit the original gone; the accompaniment's settings and credit only with it. The view switch heads
+  the View panel as cards (chordify 002, "Pick your view"). Replaces "Arrangement … Your arrangement" above.
+
 - **R74, the laptop Player as the editor: rail and panel** (owner, 2026-11-26: "make the player like the editor with
   its sidebard"; "concentrate on the laptop version"): rail Song (Accompaniment: Pattern, inversion, voicing;
   Transpose; Sections) and View (the view's settings), 352 panels, Song open at first; no gear; the version only in

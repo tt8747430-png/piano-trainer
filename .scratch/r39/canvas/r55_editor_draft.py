@@ -41,11 +41,11 @@ GHEAD = lambda back: f'<header style="flex: none; height: 60px; display: flex; a
 
 # an editor edits the built-in accompaniment itself, so the version says Accompaniment (a regex: the kit's parts are
 # redefined between r44 and here, so the exact string no longer matches)
-edph = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'Player.dc.html', 'Accompaniment'), eph4, count=1, flags=re.S), 'true')
+edph = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'Player.dc.html'), eph4, count=1, flags=re.S), 'true')
         + IF('notLive', GHEAD('Songs.dc.html') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("Songs.dc.html")}</main>')
         + STRIP('dsDemo') + STRIP('states') + '<div style="height: 22px; flex: none"></div>' + TOASTS)
 DJS = DJS.replace("isLive: live,", "isLive: live, notLive: !live,", 1)
-edlm = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'PlayerLaptop.dc.html', 'Accompaniment'), elm4, count=1, flags=re.S), 'true')
+edlm = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'PlayerLaptop.dc.html'), elm4, count=1, flags=re.S), 'true')
         + IF('notLive', GHEAD('SongsLaptop.dc.html').replace('padding: 8px 16px', 'padding: 12px 24px') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("SongsLaptop.dc.html")}</main>')
         + f'<div style="position: absolute; right: 24px; bottom: 188px; z-index: 40; width: 760px; padding-top: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 4px 14px -6px rgba(51,41,33,.25)">{STRIP("dsDemo")}{STRIP("states")}</div>' + TOASTL)
 DSH = PHLAYERS(DMENU('.dc.html'), DSAVED) + BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY) + DASKS

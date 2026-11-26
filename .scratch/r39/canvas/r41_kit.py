@@ -39,31 +39,41 @@ GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; borde
 # R74, the version and Edit as two controls (owner, 2026-11-26: "make it more visible to the user that its an
 # accompaniment … easier to switch between the score and the accompaniment"; then "i dont like this edit button with this
 # accompaniment: dont you see how awful it look inside this control"): the version is its own glass menu button beside
-# the song's name (what is on the stand: Accompaniment, Arrangement where one is written, Your arrangement), and Edit is
+# the song's name (what is on the stand: the Accompaniment or the Score), and Edit is
 # its own glass button right beside it, as Flat's "✎ Edit ▾" stands in the title's group after the transport (the owner's
 # Flat screenshots), the same place in Play and in Edit, pressed on the sand wash while editing; a tap goes back to playing. A choice of
 # what to read and a mode switch are two acts, so they are two controls. The version button is as wide as its longest
-# name (Your arrangement), so Edit beside it holds its place between Play and Edit. The menu is a native disclosure.
+# name, so Edit beside it holds its place between Play and Edit. The menu is a native disclosure.
 PENI = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="M21.17 6.81a1 1 0 0 0-3.99-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"></path></svg>'
-VERSIONS = (('Accompaniment', 'From the chords · Bass + chords', 'Player'), ('Arrangement', 'None written for this song yet', ''), ('Your arrangement', 'Write your own, from this accompaniment', 'Editor'))
-def VERSW(on, other_href, label=None):
+VERSIONS = (('Accompaniment', 'Made from the chords, to play', 'Player'), ('Score', 'As written: melody, chords and words', 'EditorDraft'))
+# R74 (owner, 2026-11-26: "make more clear that the edit button belongs only to the score view and not in the
+# accompaniment view and also we dont need this your version"): two versions, the accompaniment made from the chords
+# (read and played, never edited) and the score as written; Edit stands beside the version only while it says Score.
+# In the Player the menu switches the page in place (`live`: its rows call pickAcc and pickScore and the summary reads
+# {{verName}}); in the editor it says Score and its Accompaniment row goes back to the Player.
+def VERSW(on, other_href, label=None, live=False):
     sfx = 'Laptop.dc.html' if 'Laptop' in other_href else '.dc.html'
-    shown = label or ('Accompaniment' if on == 'play' else 'Your arrangement')
+    shown = label or ('Accompaniment' if on == 'play' else 'Score')
     rows = []
     for name, sub, board in VERSIONS:
         cur = name == shown
-        st = f'width: 100%; min-height: 56px; box-sizing: border-box; padding: 8px 12px; border-radius: 10px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: {INK if board or cur else SOFT}'
-        body = (f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: {600 if cur else 500}">{name}</span>'
-                f'<span style="font-size: 13px; color: {SOFT}">{sub}</span></span><span style="flex: none; width: 16px; display: flex; color: {INK}">{CHECK if cur else ""}</span>')
-        if cur or not board:
-            rows.append(f'<span role="menuitemradio" aria-checked="{"true" if cur else "false"}" aria-disabled="{"false" if cur else "true"}" style="{st}">{body}</span>')
+        st = f'width: 100%; min-height: 56px; box-sizing: border-box; padding: 8px 12px; border: 0; background: transparent; font: inherit; text-align: left; cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: {INK}'
+        check = f'<span style="flex: none; width: 16px; display: flex; color: {INK}">' + (f'<sc-if value="{{{{ver{name[:3]}On}}}}" hint-placeholder-val="{{{{{str(cur).lower()}}}}}">{CHECK}</sc-if>' if live else (CHECK if cur else '')) + '</span>'
+        body = (f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{name}</span>'
+                f'<span style="font-size: 13px; color: {SOFT}">{sub}</span></span>{check}')
+        if live:
+            rows.append(f'<button type="button" role="menuitemradio" aria-checked="{{{{ver{name[:3]}On}}}}" onClick="{{{{pick{name[:3]}}}}}" style="{st}">{body}</button>')
+        elif cur:
+            rows.append(f'<span role="menuitemradio" aria-checked="true" style="{st}">{body}</span>')
         else:
             rows.append(f'<a role="menuitemradio" aria-checked="false" href="{board}{sfx}" style="{st}">{body}</a>')
     menu = (f'<div role="menu" aria-label="Versions" style="position: absolute; z-index: 61; top: 52px; left: 0; width: 320px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; flex-direction: column; text-align: left; font-weight: 400">{"".join(rows)}</div>')
-    summary = (f'<summary aria-label="Version: {shown}" data-tip="Versions" style="list-style: none; height: 44px; box-sizing: border-box; min-width: 184px; padding: 0 12px 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 6px; cursor: pointer; font-size: 15px; font-weight: 600; color: {INK}; white-space: nowrap">'
-               f'{shown}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_D}</span></summary>')
+    txt = '{{verName}}' if live else shown
+    summary = (f'<summary aria-label="Version: {txt}" data-tip="Versions" style="list-style: none; height: 44px; box-sizing: border-box; min-width: 168px; padding: 0 12px 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 6px; cursor: pointer; font-size: 15px; font-weight: 600; color: {INK}; white-space: nowrap">'
+               f'{txt}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_D}</span></summary>')
+    det = '<details class="vsw" ref="{{verRef}}" style="position: relative">' if live else '<details class="vsw" style="position: relative">'
     return (f'<div role="group" aria-label="Version" style="flex: none; position: relative; border-radius: 22px; {GLASSFX}; pointer-events: auto">'
-            f'<style>details.vsw > summary::-webkit-details-marker {{ display: none }}</style><details class="vsw" style="position: relative">{summary}{menu}</details></div>')
+            f'<style>details.vsw > summary::-webkit-details-marker {{ display: none }}</style>{det}{summary}{menu}</details></div>')
 def EDITB(on, other_href):
     edit = on == 'edit'
     tip = 'Stop editing · E' if edit else 'Edit · E'
