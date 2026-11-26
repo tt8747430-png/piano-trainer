@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · f7e4b106 · the phone palette's Recently used a clock pinned at the durations row's right end after a hairline, the row fading under it, as Flat's (017, 086), not the first category tab; the categories open on Notes; the row stays above the open palette (lines: Editor folded, Recent open, 393 open; EditorLaptop 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop · v786
 - 2026-11-26 · 951b109e · the Grid view's bar numbers at the 12px floor in soft ink (#685E56, 4.5:1 and over), not 10px in #A39A90 at 2.5:1; they still fit the phone's 16 gutter to bar 32 (lines: PlayerViewGrid, EditorGrid phone and 393, PlayerLaptopGrid, EditorLaptopGrid 0 problems) · PlayerApp, PlayerDesk, and the editor's Grid boards built from them · v785
 - 2026-11-26 · ce32da08 · the laptop toolbar's Piano keys, while the keys show, a honey-deep glyph with no ink square, as the phone's and as Flat turns its keyboard glyph blue: the black-filled tile was a second heavy mark beside Play's one honey fill (lines: EditorLaptop, Editor 0 problems) · EditorLaptop, EditorDraftLaptop, Editor, EditorDraft · v784
 - 2026-11-26 · e29ccfda · the laptop toolbar's chosen duration and accidental white and lifted on the note-input pill, as a segmented control's chosen segment: the pressed tile was #EEE9E2 on the pill's #EEE9E2, so the pick did not show (lines: EditorLaptop, EditorDraftLaptop 0 problems) · EditorLaptop, EditorDraftLaptop, Editor, EditorDraft · v783
