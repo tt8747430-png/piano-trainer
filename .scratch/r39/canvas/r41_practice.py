@@ -6,11 +6,11 @@ from bravura_glyphs import BRAVURA
 
 def PROW(p, t, s, v='', href='#'):
     return (f'<a href="{href}" style="min-height: 80px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">{pic(p)}'
-            f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{s}</span></span>'
+            f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span>' + (f'<span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{s}</span>' if s else '') + '</span>'
             f'<span style="font-size: 14px; color: {SOFT}; white-space: nowrap">{v}</span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a>')
 PLIST = lambda rows: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">' + ''.join(PROW(*r) for r in rows) + '</div>'
 def PCARD(p, t, s, v, href):
-    return f'<a href="{href}" style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 12px; color: {INK}; text-decoration: none">{pic(p, 96)}<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">{t}</span><span style="font-size: 14px; color: {SOFT}">{s}</span></span>' + (f'<span style="font-size: 13px; color: {SOFT}">{v}</span>' if v else '') + '</a>'
+    return f'<a href="{href}" style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 12px; color: {INK}; text-decoration: none">{pic(p, 96)}<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">{t}</span>' + (f'<span style="font-size: 14px; color: {SOFT}">{s}</span>' if s else '') + '</span>' + (f'<span style="font-size: 13px; color: {SOFT}">{v}</span>' if v else '') + '</a>'
 def L(href, lap):  # a phone board's laptop twin
     return href.replace('.dc.html', 'Laptop.dc.html') if lap and href != '#' else href
 def body(top, inner, dock='', pad_bottom=118):
@@ -24,14 +24,14 @@ SPACER = '<span style="flex: 1"></span>'
 # completely"; the Chord trainer goes; Q10 "why the accompaniment is not under theory and the chord player is not the same
 # as exercises"; Q10c "I dont like that exercises are under technique"): Theory, the pages that explain and are practised
 # where they are explained; Exercises, named for what they train; Tools, the instruments, the Chord player first.
-THEORY = [('keys', 'Chords', 'Chord types, voicings, inversions', '', 'Chords.dc.html'), ('staff', 'Scales and keys', 'Scales, fingerings, key signatures', '', 'Scales.dc.html'),
-          ('arc', 'Intervals', 'Minor 2nd to octave', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Pop, jazz and classical', '', 'Progressions.dc.html'),
-          ('roll', 'Accompaniment', 'Bass and chord patterns', '', 'Accompaniment.dc.html')]
+THEORY = [('keys', 'Chords', '', '', 'Chords.dc.html'), ('staff', 'Scales and keys', '', '', 'Scales.dc.html'),
+          ('arc', 'Intervals', '', '', 'Intervals.dc.html'), ('roman', 'Progressions', '', '', 'Progressions.dc.html'),
+          ('roll', 'Accompaniment', '', '', 'Accompaniment.dc.html')]
 # one row per page it opens (loop round 58: Barry Harris and Piano With Jonny were two rows onto the one Jazz vocabulary
 # page that holds both books)
 EXERCISES = [('drill', 'Finger technique', '2 exercises', '', 'FingerTechnique.dc.html'), ('sixdim', 'Jazz vocabulary', '10 exercises', '', 'JazzVocabulary.dc.html')]
-TOOLS = [('chart', 'Chord player', 'Lead sheets with backing', '', 'ChordPlayer.dc.html'), ('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'A4 = 440 Hz', '', 'Tuner.dc.html'),
-         ('lens', 'Chord finder', 'Last: Cmaj7', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Every key and its signature', '', 'CircleOfFifths.dc.html')]
+TOOLS = [('chart', 'Chord player', '', '', 'ChordPlayer.dc.html'), ('metro', 'Metronome', '', '', 'Metronome.dc.html'), ('needle', 'Tuner', '', '', 'Tuner.dc.html'),
+         ('lens', 'Chord finder', '', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', '', '', 'CircleOfFifths.dc.html')]
 MAIN = js(r"    return { ...common(st, set),"
            r" states: [['Theory and Exercises folded', !!(st.folds && st.folds[0] && st.folds[1]), { folds: { 0: true, 1: true } }, { folds: {} }]]"
            r".map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) })) };")
