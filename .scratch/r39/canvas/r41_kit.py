@@ -734,8 +734,20 @@ def PHTRANSPORT():
     met = b('{{hdMetTip}}', '{{hdMetTip}}', METI.replace('width="20" height="20"', 'width="22" height="22"') + '<sc-if value="{{hdMetOff}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="position: absolute; width: 24px; height: 1.5px; border-radius: 1px; background: currentColor; transform: rotate(-45deg)"></span></sc-if>', 'hdMet')
     return (f'<div role="toolbar" aria-label="Transport" style="flex: none; height: 48px; box-sizing: border-box; padding: 0 2px; border-radius: 24px; box-shadow: inset 0 0 0 1px {LINE}; display: flex; align-items: center">'
             f'{start}{play}{loop}{met}</div>')
+# Parts, beside ← as Flat's instrument glyph there (owner, 2026-11-26: "what about the button to show or not the parts
+# beside the back button"): a sheet of the song's parts, each with its switch; a hidden part leaves the page (Piano off:
+# the page prints the melody alone); the last part shown stays (a page of nothing reads nothing)
+PARTSI = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="M21 15V6"></path><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M12 12H3"></path><path d="M16 6H3"></path><path d="M12 18H3"></path></svg>'
+PHPARTSBTN = f'<button type="button" aria-label="Parts" data-tip="Parts" aria-haspopup="dialog" aria-expanded="{{{{phPartsX}}}}" onClick="{{{{phParts}}}}" style="{_PB}; background: {{{{phPartsBg}}}}">{PARTSI}</button>'
+def PARTSBODY():
+    return (f'<div style="{_CARD}"><sc-for list="{{{{phPartRows}}}}" as="c" hint-placeholder-count="2">'
+            + SWITCHROW('{{c.name}}', 'c.on', 'c.pick', 'c.track', 'c.knob').replace(f'border-top: 1px solid {LINE};', 'border-top: {{c.sep}};') + '</sc-for></div>')
+def PARTKEYS(S, SET, names):
+    """the Parts sheet's rows over the board's hidden parts (S.hide, the Instruments panel's own), and whether the Piano prints"""
+    return (f"...((H) => ({{ phPartRows: {names!r}.map((n, i) => {{ const on = !H.includes(n); const last = on && {names!r}.filter((m) => !H.includes(m)).length === 1; return {{ name: n, on: on ? 'true' : 'false', track: on ? '#7FB685' : '#DAD1C8', knob: on ? 22 : 2, sep: i ? '1px solid #E9E2D8' : '0', "
+            f"pick: () => {{ if (last) return; ({SET})({{ hide: on ? [...H, n] : H.filter((m) => m !== n) }}); }} }}; }}), pianoShown: !H.includes('Piano'), pianoHidden: H.includes('Piano') }}))({S}.hide || []),")
 def PHBAND(back_href, keys, over=False):
-    x = f'<a href="{back_href}" aria-label="Back" data-tip="Back · Esc" style="{_PB}; text-decoration: none">{ARROWLI}</a>'
+    x = f'<a href="{back_href}" aria-label="Back" data-tip="Back · Esc" style="{_PB}; text-decoration: none">{ARROWLI}</a>' + PHPARTSBTN
     m = f'<button type="button" aria-label="Menu" data-tip="Menu" aria-haspopup="dialog" aria-expanded="{{{{phMenuX}}}}" onClick="{{{{phMenu}}}}" style="{_PB}; background: {{{{phMenuBg}}}}">{MENUI}</button>'
     pos = 'position: absolute; z-index: 48; left: 0; right: 0; top: 0; padding-top: 62px' if over else 'flex: none; position: relative; z-index: 20'
     return (f'<header data-band style="box-sizing: border-box; padding: 0 8px; {pos}; background: {SHEET}; color: {INK}; box-shadow: inset 0 -1px 0 {LINE}">'
@@ -763,7 +775,7 @@ def PHMENU(places, takes_href, mode_html='', head='', extra='', title='Amazing G
     for pid, lab, val, body, act in places:
         if not act:
             out += BSHEET(f'ph{pid}On', lab, body, close='phClose', maxh='calc(100% - 124px)')
-    return out + BSHEET('phExpOn', 'Export', EXPROWS(), close='phClose', maxh='calc(100% - 124px)')
+    return out + BSHEET('phExpOn', 'Export', EXPROWS(), close='phClose', maxh='calc(100% - 124px)') + BSHEET('phPartsOn', 'Parts', PARTSBODY(), close='phClose', maxh='calc(100% - 124px)')
 # the act rows close the menu and do what the title menu's rows do; SET a setter expression, shut what closes the menu
 def PHACTS(SET, shut, TOAST):
     t = lambda m, u=False: TOAST(m, u)
@@ -771,7 +783,7 @@ def PHACTS(SET, shut, TOAST):
             f"phMidiGo: () => ({SET})({{ {shut}, hdPop: 'midi' }}), phKeysGo: () => ({SET})({{ {shut}, hdPop: 'keys' }}), phOptsGo: () => ({SET})({{ {shut}, hdPop: 'opts' }}), ")
 def PHKEYS(S, SET, ids, TOAST):
     return ("...(() => { const P = " + S + ".ph ?? null; const o = { phMenu: () => (" + SET + ")({ ph: P === 'menu' ? null : 'menu', hdPop: null }), phMenuOn: P === 'menu', phMenuX: P === 'menu' ? 'true' : 'false', "
-            "phMenuBg: P === 'menu' ? '#EEE9E2' : 'transparent', phClose: () => (" + SET + ")({ ph: null }), " + PHACTS(SET, 'ph: null', TOAST) + "}; for (const id of " + repr(list(ids) + ['Exp']) + ") { o['ph' + id + 'On'] = P === id; o['ph' + id] = () => (" + SET + ")({ ph: id }); } return o; })(),")
+            "phMenuBg: P === 'menu' ? '#EEE9E2' : 'transparent', phClose: () => (" + SET + ")({ ph: null }), " + PHACTS(SET, 'ph: null', TOAST) + "}; for (const id of " + repr(list(ids) + ['Exp', 'Parts']) + ") { o['ph' + id + 'On'] = P === id; o['ph' + id] = () => (" + SET + ")({ ph: P === id ? null : id, hdPop: null }); } o.phPartsX = P === 'Parts' ? 'true' : 'false'; o.phPartsBg = P === 'Parts' ? '#EEE9E2' : 'transparent'; return o; })(),")
 
 # Rename version…: a small form, the one thing a laptop centres (ui-and-mockups)
 def RENAMEDLG():

@@ -245,7 +245,7 @@ def phone_band(t):
     keys = HDRKEYS('s', st_, lambda m: 'sTo: ' + m + ', sUndo: false', 'togglePlayNow', 'playing', loop, 'loop',
                    "loop ? 'Stop looping bars ' + loopA + '–' + loopB : 'Loop bars ' + (Math.floor((bar - 1) / 4) * 4 + 1) + '–' + Math.min(16, Math.floor((bar - 1) / 4) * 4 + 4)",
                    [('R', 'Right hand'), ('L', 'Left hand')])
-    keys += ' ' + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}", close_others=', ph: null') + ' ' + PHKEYS('s', st_, ['Song', 'View', 'Tr'], lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}")
+    keys += ' ' + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}", close_others=', ph: null') + ' ' + PHKEYS('s', st_, ['Song', 'View', 'Tr'], lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}") + ' ' + PARTKEYS('s', st_, ['Melody', 'Piano'])
     # Played through's Transpose opens the band's Transpose, the one implementation
     assert t.count("openKey: pick({ open: 'key' })") == 1; t = t.replace("openKey: pick({ open: 'key' })", "openKey: () => this.setState({ open: 'none', ph: 'Tr' })", 1)
     a = 'togglePlay: togglePlayNow,'; i = t.index(a)
@@ -313,7 +313,10 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
             # the page as paper on the grey desk, as Flat's phone shows the page (flat-score-editor 021, 023): white,
             # its margins, its shadow; three bars a line so the staff stays a readable size
             # the open version's music: with its piano accompaniment, or the melody alone (a lead sheet)
-            body = head + ''.join(f'<sc-if value="{{{{{k}}}}}" hint-placeholder-val="{{{{{h}}}}}"><div style="margin: -4px 0 0">' + score_grand(470, [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11, 12]], sel=None, size=1.0, piano=pn) + '</div></sc-if>' for k, h, pn in (('isPiano', 'true', True), ('isLead', 'false', False)))
+            sg = lambda pn: '<div style="margin: -4px 0 0">' + score_grand(470, [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11, 12]], sel=None, size=1.0, piano=pn) + '</div>'
+            # the Parts sheet's Piano switch: hidden, the page prints the melody alone
+            body = head + ('<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}"><sc-if value="{{pianoShown}}" hint-placeholder-val="{{true}}">' + sg(True) + '</sc-if><sc-if value="{{pianoHidden}}" hint-placeholder-val="{{false}}">' + sg(False) + '</sc-if></sc-if>'
+                           + '<sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + sg(False) + '</sc-if>')
             body += f'<p style="margin: 24px 0 0; text-align: center; font-family: {SERIF}; font-size: 12px; color: {SOFT}">Public domain</p>'
             new = (f'<div data-r74 style="margin-top: {{{{sheetTop}}}}px; box-sizing: border-box; min-height: calc(100% - {{{{sheetTop}}}}px); padding: 4px 8px 140px; background: {FILL}">'
                    f'<article aria-label="Page 1" style="box-sizing: border-box; padding: 24px 16px 32px; background: {SHEET}; color: {INK}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28)">{body}</article></div>')

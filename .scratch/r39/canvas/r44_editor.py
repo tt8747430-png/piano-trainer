@@ -434,20 +434,23 @@ PHLAYERS = lambda saved, extra='', edit_href='Editor.dc.html': (PHMENU(PH_PLACES
                           + BSHEET('layoutOn', 'Layout', LAY_BODY, maxh=_MH) + BSHEET('trSheetOn', 'Transpose', TRROWS(True), maxh=_MH) + BSHEET('audOn', 'Audio', AUD_BODY_P, maxh=_MH) + BSHEET('exportOn', 'Export', EXPORTMENU, maxh=_MH))
 # the ☰'s keys on the editor's own sheet state: the menu is the 'more' sheet, Song and View two more
 PHEDKEYS = ("phMenu: () => set({ sheet: st.sheet === 'more' ? null : 'more', hdPop: null, sm: false, exp: false }), phMenuOn: st.sheet === 'more', phMenuX: st.sheet === 'more' ? 'true' : 'false', "
-            "phMenuBg: st.sheet === 'more' ? '#EEE9E2' : 'transparent', phClose: () => set({ sheet: null }), phSongOn: st.sheet === 'song', phSong: () => set({ sheet: 'song' }), phViewOn: st.sheet === 'view', phView: () => set({ sheet: 'view' }), phExpOn: st.sheet === 'phexp', phExp: () => set({ sheet: 'phexp' }), "
+            "phMenuBg: st.sheet === 'more' ? '#EEE9E2' : 'transparent', phClose: () => set({ sheet: null }), phSongOn: st.sheet === 'song', phSong: () => set({ sheet: 'song' }), phViewOn: st.sheet === 'view', phView: () => set({ sheet: 'view' }), phExpOn: st.sheet === 'phexp', phExp: () => set({ sheet: 'phexp' }), phPartsOn: st.sheet === 'parts', phParts: () => set({ sheet: st.sheet === 'parts' ? null : 'parts' }), phPartsX: st.sheet === 'parts' ? 'true' : 'false', phPartsBg: st.sheet === 'parts' ? '#EEE9E2' : 'transparent', "
+            + PARTKEYS('st', 'set', ['Voice', 'Piano']) + " "
             + PHACTS('set', 'sheet: null', lambda m, u: 'toast: ' + m + (" + ' · Undo'" if u else '')))
 PHJS = lambda j: (j.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1).replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: st.sheet === 'more', " + PHEDKEYS, 1)
                    .replace("href: 'PlayerLaptop.dc.html', pick", "href: 'Player.dc.html', pick", 1))
 # the page prints the open version: with its piano accompaniment, or the melody alone (Original), in Edit as in Practice
-def VERPAGE(h):
+def VERPAGE(h, ph=False):
+    # ph: on a phone the Parts sheet can hide the Piano, and the page then prints the melody alone
     n = 0
+    pia = (lambda a, b: '<sc-if value="{{pianoShown}}" hint-placeholder-val="{{true}}">' + a + '</sc-if><sc-if value="{{pianoHidden}}" hint-placeholder-val="{{false}}">' + b + '</sc-if>') if ph else (lambda a, b: a)
     for a, b in ((A4PAGE(), A4PAGE(piano=False)), (A4PAGE(sel=None), A4PAGE(sel=None, piano=False))) + tuple(
             (score_grand(0, [list(range(13))], sel=(3, 0), size=1.0, natural=sc).replace(ACCENT, '#85B8DC'),
              score_grand(0, [list(range(13))], sel=(3, 0), size=1.0, natural=sc, piano=False).replace(ACCENT, '#85B8DC')) for sc in (0.95, 1.15)):
-        n += h.count(a); h = h.replace(a, '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + a + '</sc-if><sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + b + '</sc-if>')
+        n += h.count(a); h = h.replace(a, '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + pia(a, b) + '</sc-if><sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + b + '</sc-if>')
     assert n
     return h
-eph4, elm4 = VERPAGE(eph4), VERPAGE(elm4)
+eph4, elm4 = VERPAGE(eph4, ph=True), VERPAGE(elm4)
 phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, PHJS(ED4), PHLAYERS(ED_SAVED), bar=SHEET)
 # Go to bar (research F11, Flat's and Dorico's ⌘G): a small card over the sheet's head, the bar's number and its count
 GOTO_FIELD = '<div style="display: flex; align-items: center; gap: 12px"><input value="9" aria-label="Bar" type="text" inputmode="numeric" enterkeyhint="go" style="width: 96px; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: 0 0 0 2px #332921; font: inherit; font-size: 17px; font-variant-numeric: tabular-nums; color: #332921; outline: none"><span style="font-size: 15px; color: #7A6E64; font-variant-numeric: tabular-nums">of 16</span></div>'
