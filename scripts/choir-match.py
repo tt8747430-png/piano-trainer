@@ -22,6 +22,11 @@ Each song may hold a `match.txt` beside its files, written from the song's PDF a
     brace                              the staves joined by a brace, as a sheet exported from MuseScore draws them
     italic: Tenor                      a voice's words already in the file, set in italics as printed
     hide-chords                        chord symbols the file has are left off, as the sheet prints none
+    marks: 1 pp, 2+1/4 <3/4, 14 fermata, 1 text:Moderato religioso
+                                       marks on the top staff as printed: a dynamic (pp p mp mf f ff), a hairpin
+                                       (< or > with its length in whole notes) at a bar (+ where in the bar), a
+                                       fermata over the bar's first note at that point, a bold italic text
+    hide-staff: Tenor 25-32            a voice's staff left out in those bars (an empty staff, as the sheet has it)
     segno: 54                          the segno stands at this bar
     text: 81 above bold italic D.S.% al Coda   printed text at a bar, above or below the top staff (% is the segno)
 
@@ -99,6 +104,19 @@ def parse(path):
             spec['footer'] = value.strip()
         elif key == 'brace':
             spec['brace'] = True
+        elif key == 'marks':
+            # marks: 1 pp, 2 <@1/4-3/4, 5 >, 14 fermata, 1 text:Moderato religioso
+            for item in value.split(','):
+                item = item.strip()
+                bar, _, what = item.partition(' ')
+                bar, _, at = bar.partition('+')
+                spec.setdefault('marks', []).append(dict(bar=int(bar), at=Fraction(at) if at else Fraction(0),
+                                                         what=what.strip()))
+        elif key == 'hide-staff':
+            # hide-staff: Tenor 25-32   the voice's staff is not printed in those bars, as on the sheet
+            name, _, rng = value.strip().rpartition(' ')
+            a, _, b = rng.partition('-')
+            spec.setdefault('hide_staff', []).append((name.strip(), int(a), int(b or a)))
         elif key == 'hide-chords':
             spec['hide_chords'] = True
         elif key == 'italic':
@@ -741,3 +759,106 @@ def italicize(staff, voice):
             tx.text = None
             i = ET.SubElement(tx, 'i')
             i.text = words
+
+
+def chord_at_voice(measure, voice, at):
+    t = Fraction(0)
+    for el, length in chord_lengths(measure, voice):
+        if t >= at:
+            return el
+        t += length
+    return None
+
+
+def chord_at(measure, at):
+    """The first chord or rest of the measure's first voice that starts at `at` (a fraction of a whole note)."""
+    t = Fraction(0)
+    for el, length in chord_lengths(measure, 0):
+        if t >= at:
+            return el
+        t += length
+    return None
+
+
+def marks_mscx(score, spec, nums):
+    """Dynamics, hairpins, fermatas and texts on the top staff, where the sheet prints them."""
+    staffs = [s for s in score.findall('Staff') if s.find('Measure') is not None]
+    by_bar = {}
+    for m, n in zip(staffs[0].findall('Measure'), nums):
+        by_bar.setdefault(n, m)
+    for mk in spec.get('marks', []):
+        m = by_bar[mk['bar']]
+        v = m.find('voice')
+        target = chord_at(m, mk['at'])
+        at_index = list(v).index(target) if target is not None else len(v)
+        what = mk['what']
+        if what in ('ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff', 'sf', 'sfz'):
+            d = ET.Element('Dynamic')
+            ET.SubElement(d, 'subtype').text = what
+            ET.SubElement(d, 'placement').text = 'above'
+            v.insert(at_index, d)
+        elif what.startswith('<') or what.startswith('>'):
+            length = Fraction(what[1:]) if what[1:] else Fraction(1, 2)
+            sp = ET.Element('Spanner', type='HairPin')
+            hp = ET.SubElement(sp, 'HairPin')
+            ET.SubElement(hp, 'subtype').text = '0' if what[0] == '<' else '1'
+            ET.SubElement(hp, 'placement').text = 'above'
+            nx = ET.SubElement(sp, 'next')
+            loc = ET.SubElement(nx, 'location')
+            ET.SubElement(loc, 'fractions').text = f'{length.numerator}/{length.denominator}'
+            v.insert(at_index, sp)
+            # its end, `length` later
+            end_bar, end_at = mk['bar'], mk['at'] + length
+            em = by_bar[end_bar]
+            sizes = [l for _, l in chord_lengths(em, 0)]
+            while end_at >= sum(sizes) and end_bar + 1 in by_bar:
+                end_at -= sum(sizes)
+                end_bar += 1
+                em = by_bar[end_bar]
+                sizes = [l for _, l in chord_lengths(em, 0)]
+            ev = em.find('voice')
+            et = chord_at(em, end_at)
+            end_sp = ET.Element('Spanner', type='HairPin')
+            pv = ET.SubElement(end_sp, 'prev')
+            loc = ET.SubElement(pv, 'location')
+            ET.SubElement(loc, 'fractions').text = f'-{length.numerator}/{length.denominator}'
+            ev.insert(list(ev).index(et) if et is not None else len(ev), end_sp)
+        elif what == 'fermata':
+            # On every staff of the bar, over the top voice and under the lower, as printed.
+            for st_ in staffs:
+                for m2, n2 in zip(st_.findall('Measure'), nums):
+                    if n2 != mk['bar']:
+                        continue
+                    for vi, v2 in enumerate(m2.findall('voice')[:2]):
+                        t2 = chord_at_voice(m2, vi, mk['at'])
+                        if t2 is None:
+                            continue
+                        f = ET.Element('Fermata')
+                        ET.SubElement(f, 'subtype').text = 'fermataAbove' if vi == 0 else 'fermataBelow'
+                        v2.insert(list(v2).index(t2), f)
+                    break
+        elif what.startswith('text:'):
+            st = ET.Element('StaffText')
+            tx = ET.SubElement(st, 'text')
+            b = ET.SubElement(tx, 'b')
+            i = ET.SubElement(b, 'i')
+            i.text = what[5:]
+            v.insert(at_index, st)
+
+
+def hide_staff(score, spec, info, nums):
+    """A voice's staff left out where the sheet prints it empty: those bars' notes hidden, the staff hidden as empty."""
+    staffs = [s for s in score.findall('Staff') if s.find('Measure') is not None]
+    for name, a, b in spec.get('hide_staff', []):
+        p = next(x for x in info if x['name'] == name)
+        st = staffs[p['mstaff']]
+        for m, n in zip(st.findall('Measure'), nums):
+            if a <= n <= b:
+                for v in m.findall('voice'):
+                    for el in list(v):
+                        if el.tag in ('Chord', 'Rest'):
+                            vis = el.find('visible')
+                            if vis is None:
+                                vis = ET.Element('visible')
+                                el.insert(0, vis)
+                            vis.text = '0'

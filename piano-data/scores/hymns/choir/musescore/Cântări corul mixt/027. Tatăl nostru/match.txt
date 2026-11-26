@@ -1,0 +1,24 @@
+# From 027. Tatăl nostru.pdf (2 pages) and the choir book, page 57. The choir's file has the notes alone: the
+# words, dynamics, hairpins and fermatas are written in from the sheet. Bars 25-32 are sung by the women alone, on
+# one staff (the men's staff is left out there, as printed).
+title: 27 Tatăl nostru
+composer: Ciprian Porumbescu
+spatium: 1.75
+systems: 1 6 10 14 | 19 22 25 28 33 36
+hide-tempo
+hide-names
+hide-empty-staves
+hide-staff: Tenor 25-32
+marks: 1 text:Moderato religioso, 1 pp, 1+1/2 <1/4, 2 >1/4, 2+1/2 <1/4, 3 >1/4, 4 p, 4+1/2 <1/2, 6 >1/4, 7+1/4 pp, 8 fermata, 8+1/2 p, 9 <1/4, 9+1/4 >1/4, 10 >1/4, 10+1/2 <1/2, 12+3/4 >1/4, 14 >1/4, 14 fermata, 17 pp, 18 <1/4, 18+1/2 >1/4, 19 <1/4, 19+1/4 >1/4, 20+1/2 p, 21 <1/4, 21+3/4 >1/4, 22 >1/4, 22+1/2 pp, 23 <1/2, 23+1/2 >1/2, 24 fermata, 25 p, 25 text:dolce, 26+1/2 <1/4, 33 mf, 33+1/2 <1/2, 34 >1/2, 35 <1, 36 <1/2, 37 f, 39 ff, 40 fermata
+
+[Soprano]
+1: @1 Ta -- tăl nos -- tru ca -- re @3 ești în _ @4 cer! Sfin -- țeas -- că -- se Nu -- me -- le
+1: @6 Tău, sfin -- țeas -- că -- se Nu -- me -- le @8 Tău; vi -- e'm -- pă -- ră -- @9 ți _ -- a
+1: @10 Ta; fa -- că -- se vo _ -- ia Ta, pre -- cum în cer și pe pă --
+1: @14 mânt. @17 Pâi -- nea noas -- tră cea de toa -- te zi -- le -- le, pâi -- nea noas -- tră cea de toa -- te zi -- le --
+1: @22 le dă -- ne'o no -- uă as -- tăzi; Și ne iar _ -- tă gre -- șe -- li -- le noas -- tre, pre -- cum și noi ier -- tăm
+1: @28 gre -- și -- ți -- lor noș -- tri; și nu ne du -- ce pe noi în is -- pi -- tă, ci ne mân -- tu -- ieș -- te,
+1: @35 ci ne mân -- tu -- ieș -- te de cel rău. A -- min!
+
+[Bass italic]
+1: @14 _ pre -- cum în cer și pe pă -- mânt.

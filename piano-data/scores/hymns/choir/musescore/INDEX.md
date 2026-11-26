@@ -51,13 +51,13 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 18 | Cineva se-ngrijește de mine | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 19 | Luceafărul Maranata (1 subfolders) | To do: its file leaves whole voices out; write them in from the PDF | 3 | 2 staves, voices 1/1, 136 bars, `19.Lucefarul-Sopran.mscz`, 102 chords | no | – | Soprano, Alto, Tenor | 1 |  |  | piano |
 | 20 | Dumnezeu e steagul meu | Single voices only, no full score | – | – | – | – | Tenor | 1 |  |  | – |
-| 21 | Fă viața mea | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 16 bars, `021. Fă viața mea.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
+| 21 | Fă viața mea | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 2/2, 16 bars, `021. Fă viața mea.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
 | 22 | Să-ngenunchezi | Single voices only, no full score | – | – | – | – | – | 1 |  |  | – |
 | 23 | O chemare vine din întunecimi | Single voices only, no full score | – | – | – | – | Alto | 1 |  |  | – |
-| 24 | Grație a lui Isus (1 subfolders) | Done: a part per voice | 2 | 2 staves, voices 2/2, 32 bars, `Gratie a lui Isus.mscz` | yes | Alto, Bass, Soprano, Soprano, Alto, Tenor, Tenor, Bass | Soprano, Alto, Tenor, Bass | 1 |  |  | other |
+| 24 | Grație a lui Isus (1 subfolders) | Done: as printed (matched to its PDF) | 2 | 2 staves, voices 2/2, 32 bars, `Gratie a lui Isus.mscz` | yes | Alto, Bass, Soprano, Soprano, Alto, Tenor, Tenor, Bass | Soprano, Alto, Tenor, Bass | 1 |  |  | other |
 | 25 | Isuse pentru mine | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 26 | Sub crucea Ta | Single voices only, no full score | – | – | – | – | Alto | 2 |  |  | – |
-| 27 | Tatăl nostru | Done: a part per voice (no words in any of its files) | 3 | 2 staves, voices 2/2, 40 bars, `027. Tatăl nostru.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
+| 27 | Tatăl nostru | Done: as printed (matched to its PDF) | 3 | 2 staves, voices 2/2, 40 bars, `027. Tatăl nostru.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
 | 28 | Deșteptare, strigă glasul Domnului | Done: a part per voice (no words in any of its files) | – | – | – | – | Soprano, Alto, Tenor, Bass | 1 |  |  | – |
 | 29 | Vine-o zi | Done: a part per voice (no words in any of its files) | – | – | – | – | Soprano, Alto, Tenor, Bass | 1 |  |  | – |
 | 30 | Laudă astăzi pe Domnul | Single voices only, no full score | – | – | – | – | Alto, Tenor | 1 |  |  | – |
