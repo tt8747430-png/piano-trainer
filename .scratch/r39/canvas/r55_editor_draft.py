@@ -30,9 +30,9 @@ DASKS = (ASKP('pubAskOn', 'Publish Amazing Grace?', 'All learners will receive t
          + ASK('discOn', 'Discard changes?', 'The score will revert to its published version, and your changes will be lost.', 'Discard', 'doDisc'))
 def GATES(back):
     return (EMPTY('isOpening', '…', 'Opening…', 'The original is fetched from the server, so this draft is the one other editors see.')
-            + EMPTY('isOpenOff', '⌁', 'You’re offline.', 'It will open when you reconnect.', f'{BTN("Back to Library", "", back, "quiet", 48, False)}')
+            + EMPTY('isOpenOff', '⌁', 'You’re offline.', 'It will open when you reconnect.', f'{BTN("Back to Songs", "", back, "quiet", 48, False)}')
             + EMPTY('isFailed', '!', 'It couldn’t be opened.', 'Check your connection, then try again.', f'{BTN("Try again", "retry", "", "primary", 48, False)}')
-            + EMPTY('isLearner', '✎', 'Only editors can modify this.', 'A built-in song is changed by the app’s editors. Make your own copy from its ··· menu.', f'{BTN("Back to Library", "", back, "primary", 48, False)}'))
+            + EMPTY('isLearner', '✎', 'Only editors can modify this.', 'A built-in song is changed by the app’s editors. Make your own copy from its ··· menu.', f'{BTN("Back to Songs", "", back, "primary", 48, False)}'))
 # the gates' Close is the editor bar's own glass Close, so the way out looks the same in every state
 GHEAD = lambda back: f'<header style="flex: none; height: 60px; display: flex; align-items: center; padding: 8px 16px"><a href="{back}" aria-label="Close the editor" style="width: 44px; height: 44px; border-radius: 22px; background: rgba(254,253,251,.86); -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, 0 1px 2px rgba(51,41,33,.10), 0 2px 6px -2px rgba(51,41,33,.10); color: {INK}; display: flex; align-items: center; justify-content: center">{XI}</a></header>'
 
@@ -60,7 +60,7 @@ edlm = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details
 # the draft's acts in ☰ as Flat's: Publishing history and Discard changes as rows, Publish as its card at the foot
 # (flat-score-editor 083: "Publish Score" over its Publish button)
 DPUB = (f'<div style="margin: 4px 4px 0; padding: 16px; border-radius: 16px; box-shadow: inset 0 0 0 1px {LINE}; display: flex; flex-direction: column; gap: 12px">'
-        f'<h3 style="margin: 0; font-size: 17px; font-weight: 600">Publish piece</h3><button type="button" onClick="{{{{askPub}}}}" style="height: 48px; border: 0; border-radius: 24px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">Publish…</button></div>')
+        f'<h3 style="margin: 0; font-size: 17px; font-weight: 600">Publish song</h3><button type="button" onClick="{{{{askPub}}}}" style="height: 48px; border: 0; border-radius: 24px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">Publish…</button></div>')
 DSH = PHLAYERS(DSAVED, (('Hist', 'Publishing history', '', 'openVers'), ('Disc', 'Discard changes', '', 'askDisc', RED)), DPUB, 'EditorDraft.dc.html') + FSHEET('versOn', 'Publishing history', VERSBODY, back='phToMenu') + DASKS
 DSL = LAPLAYERS('Laptop.dc.html') + LAPSHEET(BSHEET('versOn', 'Publishing history', VERSBODY), 480) + DASKS
 # the draft's views stay the draft's, in Edit (EditorDraftDiagrams, …), as the editor's

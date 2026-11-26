@@ -154,55 +154,46 @@ def phone(fname, title, body, js, sheets='', bg=PAGE, bar=None):
 """
     open(OUT + fname + '.dc.html', 'w').write(html)
 
-# The laptop sidebar (owner, 2026-11-26: "I dont like that teh option is called songs because a song actually is a
-# score with words but it can also be just a musical piece without words … and I dont like very much the all these
-# options are now hidden just under this option"): Learn and Practice, then the Library as its own section, always in
-# sight on every board, as Apple Music's and forScore's sidebars list the library's places and the playlists under
-# their heads (HIG Sidebars: a section head, items one level deep). Library: All pieces, Explore; Playlists with +;
-# then Archive and Trash apart under a hairline. Every item a 24 glyph slot at 12 and its name at 44, as Learn's.
-_SUBCUR = {'SongsLaptop': 'All pieces', 'AllSongsLaptop': 'All pieces', 'ExploreLaptop': 'Explore', 'FolderLaptop': 'Hymns', 'SharedFolderLaptop': 'Choir hymns', 'ArchiveLaptop': 'Archive', 'TrashLaptop': 'Trash'}
-_SUBPL = (('Favourites', '#F3D2C8', 'FolderLaptop.dc.html'), ('Songs to learn', '#F6E7C8', 'FolderLaptop.dc.html'), ('Hymns', '#D3E5F2', 'FolderLaptop.dc.html'), ('Called to Play', '#E4DCF1', 'FolderLaptop.dc.html'), ('Choir hymns', '#DCE9D6', 'SharedFolderLaptop.dc.html'), ('Grade 3 pieces', '#EEE3D3', 'SharedFolderLaptop.dc.html'))
-_G = lambda d: f'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{d}</svg>'
-_GLYPH = {
-    'All pieces': '<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>',
-    'Explore': '<circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"></path>',
-    'Archive': '<rect width="20" height="5" x="2" y="3" rx="1"></rect><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"></path><path d="M10 12h4"></path>',
-    'Trash': '<path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>'}
-def _PLACE(label, href, cur, n='', sq='', top=False):
-    on = label == cur
-    lead = (f'<span aria-hidden="true" style="flex: none; width: 20px; height: 20px; border-radius: 5px; background: {sq}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08)"></span>' if sq else _G(_GLYPH[label]))
-    h = 44
-    return (f'<a href="{href}"' + (' aria-current="page"' if on else '') + f' style="height: {h}px; flex: none; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; text-decoration: none; font-size: {16 if top else 15}px; '
-            + ('background: #EAE2D7; color: #1A1612; font-weight: 600' if on else 'background: transparent; color: #4A433C; font-weight: 500') + f'"><span style="flex: none; width: 20px; display: flex; justify-content: center">{lead}</span><span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{label}</span>'
-            + (f'<span style="color: #685E56; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums">{n}</span>' if n else '') + '</a>')
-def _HEAD(label, plus=False):
-    btn = ('<button type="button" aria-label="New playlist" data-tip="New playlist" onClick="{{openFolder}}" style="position: relative; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: #4A433C; display: flex; align-items: center; justify-content: center">'
-           '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>') if plus else ''
-    return f'<div style="flex: none; height: 40px; display: flex; align-items: center; padding: 0 2px 0 12px; margin-top: 6px"><span role="heading" aria-level="2" style="flex: 1; font-size: 13px; font-weight: 600; color: #685E56">{label}</span>{btn}</div>'
-def LIBRARY_SIDE(fname=''):
-    cur = _SUBCUR.get(fname or '', '')
-    rows = (_HEAD('Library') + _PLACE('All pieces', 'SongsLaptop.dc.html', cur, '8') + _PLACE('Explore', 'ExploreLaptop.dc.html', cur)
-            + _HEAD('Playlists', True) + ''.join(_PLACE(t, h, cur, '', c) for t, c, h in _SUBPL)
-            + '<div role="separator" style="flex: none; height: 1px; margin: 6px 12px; background: #E9E2D8"></div>'
-            + _PLACE('Archive', 'ArchiveLaptop.dc.html', cur, '3') + _PLACE('Trash', 'TrashLaptop.dc.html', cur, '2'))
-    return f'<div data-libside role="group" aria-label="Library" style="display: flex; flex-direction: column; gap: 2px">{rows}</div>'
-def SIDEBAR(section, fname=''):
+def SIDEBAR(section):
     """The app's laptop sidebar with its place current: one drawing for every laptop board."""
-    side = re.sub(r'<div data-libside.*?</div>(?=\s*<span style="flex: 1"></span>)', '', SIDE, count=1, flags=re.S)
-    tops = {}
-    for word, href in (('Learn', 'LearnLaptop'), ('Songs', 'SongsLaptop'), ('Practice', 'Laptop')):
-        m = re.search(r'<a href="' + href + r'\.dc\.html"[^>]*>((?:(?!</a>).)*?)</a>', side, re.S)
-        if m: tops[word] = m
-    def top(word, href):
+    side = SIDE
+    for word, href in (('Learn', 'LearnLaptop.dc.html'), ('Songs', 'SongsLaptop.dc.html'), ('Practice', 'Laptop.dc.html')):
         on = word == section
         st = ('background: #EAE2D7; color: #1A1612; text-decoration: none; font-size: 16px; font-weight: 600' if on else 'background: transparent; color: #4A433C; text-decoration: none; font-size: 16px; font-weight: 500')
-        svg = re.search(r'<svg.*?</svg>', tops[word].group(1), re.S).group(0)
-        return f'<a href="{href}.dc.html"' + (' aria-current="page"' if on else '') + f' style="height: 44px; flex: none; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; {st}">{svg}{word}</a>'
-    start = tops['Learn'].start(); end = max(m.end() for m in tops.values())
-    return side[:start] + top('Learn', 'LearnLaptop') + top('Practice', 'Laptop') + LIBRARY_SIDE(fname if section == 'Songs' else '') + side[end:]
+        side = re.sub(r'<a href="[^"]*"( aria-current="page")? style="(height: 44px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; )[^"]*">((?:(?!</a>).)*?)' + word + '</a>',
+                      lambda m: f'<a href="{href}"' + (' aria-current="page"' if on else '') + f' style="{m.group(2)}{st}">{m.group(3)}{word}</a>', side, count=1, flags=re.S)
+    return side
 
+# Songs' places are sub-items of Songs in the sidebar while Songs is current (owner, 2026-11-17: "what about
+# subdivisions in the sidebar"; Apple Music's sidebar, HIG Sidebars): All songs, Explore, the playlists under their
+# heading with +, then Archive and Trash apart under a hairline. Text on the Songs label's edge (44); the place shown
+# on the current wash, Songs itself then only bold. One drawing for every Songs laptop board.
+_SUBCUR = {'SongsLaptop': 'All songs', 'AllSongsLaptop': 'All songs', 'ExploreLaptop': 'Explore', 'FolderLaptop': 'Hymns', 'SharedFolderLaptop': 'Choir hymns', 'ArchiveLaptop': 'Archive', 'TrashLaptop': 'Trash'}
+_SUBPL = (('Favourites', '#F3D2C8', 'FolderLaptop.dc.html'), ('Songs to learn', '#F6E7C8', 'FolderLaptop.dc.html'), ('Hymns', '#D3E5F2', 'FolderLaptop.dc.html'), ('Called to Play', '#E4DCF1', 'FolderLaptop.dc.html'), ('Choir hymns', '#DCE9D6', 'SharedFolderLaptop.dc.html'), ('Grade 3 pieces', '#EEE3D3', 'SharedFolderLaptop.dc.html'))
+def SONGS_SUB(fname):
+    cur = _SUBCUR.get(fname, '')
+    def item(label, href, n='', sq=''):
+        on = label == cur
+        lead = f'<span aria-hidden="true" style="flex: none; width: 20px; height: 20px; margin-left: -28px; border-radius: 5px; background: {sq}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08)"></span>' if sq else ''
+        return (f'<a href="{href}"' + (' aria-current="page"' if on else '') + f' style="height: 40px; border-radius: 10px; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 44px; text-decoration: none; font-size: 15px; '
+                + ('background: #EAE2D7; color: #1A1612; font-weight: 600' if on else 'background: transparent; color: #4A433C; font-weight: 500') + f'">{lead}<span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{label}</span>'
+                + (f'<span style="color: #685E56; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums">{n}</span>' if n else '') + '</a>')
+    head = ('<div style="height: 40px; display: flex; align-items: center; padding: 0 0 0 44px; margin-top: 4px"><span style="flex: 1; font-size: 13px; font-weight: 600; color: #685E56">Playlists</span>'
+            '<button type="button" aria-label="New playlist" data-tip="New playlist" onClick="{{openFolder}}" style="position: relative; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: #4A433C; display: flex; align-items: center; justify-content: center">'
+            '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button></div>')
+    rows = (item('All songs', 'SongsLaptop.dc.html', '8') + item('Explore', 'ExploreLaptop.dc.html') + head
+            + ''.join(item(t, h, '', c) for t, c, h in _SUBPL).replace('padding: 0 12px 0 44px', 'padding: 0 12px 0 72px')
+            + '<div role="separator" style="height: 1px; margin: 6px 12px 6px 44px; background: #E9E2D8"></div>'
+            + item('Archive', 'ArchiveLaptop.dc.html', '3') + item('Trash', 'TrashLaptop.dc.html', '2'))
+    return f'<div role="group" aria-label="Songs" style="display: flex; flex-direction: column; gap: 2px; margin: 2px 0 4px">{rows}</div>', bool(cur)
 def laptop(fname, title, main, aside, js, pops='', section='Practice'):
-    side = SIDEBAR(section, fname)
+    side = SIDEBAR(section)
+    if section == 'Songs':
+        sub, here = SONGS_SUB(fname)
+        m = re.search(r'(<a href="SongsLaptop\.dc\.html" aria-current="page" style="[^"]*">.*?Songs</a>)', side, re.S)
+        if m:
+            songs = m.group(1).replace('background: #EAE2D7', 'background: transparent') if here else m.group(1)
+            side = side.replace(m.group(1), songs + sub, 1)
     asidehtml = f'<aside class="nos" style="min-height: 0; overflow-y: auto; background: {SHEET}; box-shadow: -1px 0 0 {LINE}; padding: 28px 28px 28px; display: flex; flex-direction: column; gap: 16px">{aside}</aside>' if aside else ''
     cols = 'minmax(0, 1fr) 440px' if aside else 'minmax(0, 1fr)'
     html = HEAD % title + LAPFRAME_TOP + f"""<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr)">

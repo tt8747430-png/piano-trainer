@@ -7,7 +7,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "Library, phone",
+      "title": "My songs, phone",
       "is_interactive": true,
       "page": "songs"
     },
@@ -16,7 +16,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "All pieces, Select, Sort, phone",
+      "title": "All songs, Select, Sort, phone",
       "is_interactive": true,
       "page": "songs"
     },
@@ -124,7 +124,7 @@
       "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "Library, laptop",
+      "title": "My songs, laptop",
       "is_interactive": true,
       "page": "songs"
     },
@@ -133,7 +133,7 @@
       "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "All pieces, Select, Sort, laptop",
+      "title": "All songs, Select, Sort, laptop",
       "is_interactive": true,
       "page": "songs"
     },
@@ -1495,7 +1495,7 @@
   "pages": [
     {
       "id": "songs",
-      "name": "Library"
+      "name": "Songs"
     },
     {
       "id": "player",

@@ -47,7 +47,7 @@ SSO = (f'<button type="button" style="height: 50px; border: 0; border-radius: 25
 # benefits of creating an account"): the app's mark over one line saying what an account keeps, on both sizes; the
 # bar names the step. The ways in follow, Google first, then the form with its one honey act.
 SIHEAD = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 8px 0 8px; text-align: center"><span aria-hidden="true" style="width: 64px; height: 64px; border-radius: 16px; background: {INK}; color: {ACCENT}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 36px">𝄞</span>'
-          f'<span style="max-width: 320px; font-size: 16px; line-height: 1.45; color: {SOFT}; text-wrap: balance">Keep your pieces and progress on all your devices.</span></div>')
+          f'<span style="max-width: 320px; font-size: 16px; line-height: 1.45; color: {SOFT}; text-wrap: balance">Keep your songs and progress on all your devices.</span></div>')
 LINKB = lambda t, act: f'<button type="button" onClick="{{{{{act}}}}}" style="height: 44px; border: 0; background: transparent; padding: 0 4px; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">{t}</button>'
 V_IN = (f'<sc-if value="{{{{isIn}}}}" hint-placeholder-val="{{{{true}}}}">{SIHEAD}{SSO}{EMAIL}{PW}<div style="display: flex; justify-content: flex-end; margin-top: -8px">{LINKB("Forgot password?", "goForgot")}</div>{ERRBOX}'
         f'<div style="display: flex">{BTN("Sign in", "submit", "", "primary", 50)}</div><div style="display: flex; align-items: center; justify-content: center; gap: 2px; font-size: 15px; color: {SOFT}">No account yet?{LINKB("Create an account", "goCreate")}</div></sc-if>')
