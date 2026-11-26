@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · R74 phone: View beside ← (Parts a section of its page, View left ☰); every settings page a full page with ← Back to where it came from (☰, Song, the parent), under the status bar; view cards 12 apart · Editor, EditorDraft, PlayerApp, EditorLaptop, EditorDraftLaptop · pending
+
 
 ## Changes
 

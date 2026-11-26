@@ -641,8 +641,8 @@ def HISTKEYS(S, SET, TOAST, HIST='HIST', restore='{}'):
 # own bar (Back, the title), the form in one centred column; never a popover, a sheet or a window (Flat's Credits, 087)
 def THINGPAGE(on, close, title, body, lap):
     pad = '24px' if lap else '16px'
-    return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; inset: 0; z-index: 61; background: {PAGE}; color: {INK}; display: flex; flex-direction: column">'
-            f'<header style="flex: none; height: {72 if lap else 60}px; margin-top: {0 if lap else 62}px; box-sizing: border-box; padding: 8px {pad}; display: grid; grid-template-columns: minmax(44px, 1fr) auto minmax(44px, 1fr); align-items: center">'
+    return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; inset: {0 if lap else 62}px 0 0; z-index: 61; background: {PAGE}; color: {INK}; display: flex; flex-direction: column">'
+            f'<header style="flex: none; height: {72 if lap else 60}px; box-sizing: border-box; padding: 8px {pad}; display: grid; grid-template-columns: minmax(44px, 1fr) auto minmax(44px, 1fr); align-items: center">'
             f'<button type="button" onClick="{{{{{close}}}}}" aria-label="Back" data-tip="Back · Esc" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: pointer">{CHEV_L}</button>'
             f'<h1 style="margin: 0; font-size: 17px; font-weight: 600">{title}</h1><span></span></header>'
             f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px {pad} 48px"><div style="width: min(560px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 16px">{body}</div></main></section></sc-if>')
@@ -735,15 +735,12 @@ def PHTRANSPORT():
 # Parts, beside ← as Flat's instrument glyph there (owner, 2026-11-26: "what about the button to show or not the parts
 # beside the back button"): a sheet of the song's parts, each with its switch; a hidden part leaves the page (Piano off:
 # the page prints the melody alone); the last part shown stays (a page of nothing reads nothing)
-PARTSI = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="M21 15V6"></path><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M12 12H3"></path><path d="M16 6H3"></path><path d="M12 18H3"></path></svg>'
-PHPARTSBTN = f'<button type="button" aria-label="Parts" data-tip="Parts" aria-haspopup="dialog" aria-expanded="{{{{phPartsX}}}}" onClick="{{{{phParts}}}}" style="{_PB}; color: {{{{phPartsFg}}}}">{PARTSI}</button>'
-# The Parts sheet as Flat's instruments sheet (help.flat.io's phone editor; flat-score-editor 004, 022, 084): no title and
-# no Done, the grabber and ✕; "All" with its switch first; each part a filled card with its glyph, its name, S (solo:
+# The song's parts on the View page, as Flat's instruments sheet (flat-score-editor 004, 022, 084): "All" with its switch first; each part a filled card with its glyph, its name, S (solo:
 # only this part sounds, the Audio panel's one state) and the eye (shown or hidden on the page: Piano hidden prints the
 # melody alone; the last part shown keeps its eye); "Edit instruments" at the foot's right where the board has an
 # Instruments sheet (inst: its opener), as Flat's
 EYEOFFI = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.7 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-2.2 3.2M6.6 6.6C3.9 8.4 2 12 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2M2 2l20 20"></path></svg>'
-def PARTSHEET(inst=None):
+def PARTSECTION(inst=None):
     eye = EYEI.replace('width="20" height="20"', 'width="24" height="24"')
     sb = (f'<button type="button" aria-label="Solo {{{{c.name}}}}" data-tip="Solo" aria-pressed="{{{{c.solo}}}}" onClick="{{{{c.doSolo}}}}" style="{_PB}; color: {{{{c.soloFg}}}}">'
           '<span aria-hidden="true" style="width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid currentColor; background: {{c.soloBg}}; color: {{c.soloTx}}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; line-height: 1">S</span></button>')
@@ -755,12 +752,9 @@ def PARTSHEET(inst=None):
             f'<span style="flex: 1; min-width: 0; font-size: 16px; color: {{{{c.nameFg}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{c.name}}}}</span>{sb}{vb}</div>')
     allrow = (f'<button type="button" role="switch" aria-checked="{{{{phAllOn}}}}" onClick="{{{{phAll}}}}" style="align-self: flex-start; min-height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; gap: 8px; cursor: pointer">'
               f'<span aria-hidden="true" style="flex: none; width: 44px; height: 26px; border-radius: 13px; background: {{{{phAllTrack}}}}; position: relative"><span style="position: absolute; top: 2px; left: {{{{phAllKnob}}}}px; width: 22px; height: 22px; border-radius: 11px; background: {SHEET}; box-shadow: 0 1px 3px rgba(51,41,33,.25)"></span></span>All</button>')
-    foot = (f'<div style="display: flex; justify-content: flex-end; padding-top: 16px"><button type="button" onClick="{{{{{inst}}}}}" style="height: 48px; padding: 0 24px; border: 0; border-radius: 24px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">Edit instruments</button></div>') if inst else ''
-    return (f'<sc-if value="{{{{phPartsOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{phClose}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div>'
-            f'<section role="dialog" aria-modal="true" aria-label="Parts" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; box-sizing: border-box; padding: 16px 16px 42px; border-radius: 22px 22px 0 0; background: {SHEET}; box-shadow: 0 -8px 32px rgba(51,41,33,.14); display: flex; flex-direction: column; gap: 8px">'
-            f'<div aria-hidden="true" style="position: absolute; left: 50%; top: 6px; transform: translateX(-50%); width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>'
-            f'<div style="display: flex; justify-content: flex-end; margin-right: -6px"><button type="button" onClick="{{{{phClose}}}}" aria-label="Close" data-tip="Close" style="{_PB}">{_WXI.replace('width="20" height="20"', 'width="24" height="24"')}</button></div>'
-            f'{allrow}<sc-for list="{{{{phPartRows}}}}" as="c" hint-placeholder-count="2">{card}</sc-for>{foot}</section></sc-if>')
+    foot = FROW('Inst', 'Edit instruments', '', inst) if inst else ''
+    return (f'<section aria-label="Parts" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 8px 0 0; font-size: 15px; font-weight: 600">Parts</h3>'
+            f'{allrow}<sc-for list="{{{{phPartRows}}}}" as="c" hint-placeholder-count="2">{card}</sc-for>' + (f'<div style="{_CARD}; overflow: hidden">{foot}</div>' if foot else '') + '</section>')
 def PARTKEYS(S, SET, parts, solo='solo'):
     """the Parts sheet's rows over the board's hidden parts (S.hide, the Instruments panel's own) and its solo (S[solo],
     the Audio panel's own); parts: [(id, name)]; whether the Piano prints"""
@@ -772,7 +766,10 @@ def PARTKEYS(S, SET, parts, solo='solo'):
             f"phAllOn: H.length ? 'false' : 'true', phAllTrack: H.length ? '#DAD1C8' : '#7FB685', phAllKnob: H.length ? 2 : 22, phAll: () => ({SET})({{ hide: H.length ? [] : {N}.slice(1) }}), "
             f"pianoShown: !H.includes('Piano'), pianoHidden: H.includes('Piano') }}; }})({S}.hide || [], {S}.{solo} ?? null),")
 def PHBAND(back_href, keys, over=False):
-    x = f'<a href="{back_href}" aria-label="Back" data-tip="Back · Esc" style="{_PB}; text-decoration: none">{ARROWLI}</a>' + PHPARTSBTN
+    # beside ← the View button (owner, 2026-11-26: "can we merge this parts button beside the back button with the view
+    # option"): the page of the views, their options and the song's parts, the one way to it on a phone
+    x = (f'<a href="{back_href}" aria-label="Back" data-tip="Back · Esc" style="{_PB}; text-decoration: none">{ARROWLI}</a>'
+         f'<button type="button" aria-label="View" data-tip="View" aria-haspopup="dialog" aria-expanded="{{{{phViewX}}}}" onClick="{{{{phView}}}}" style="{_PB}; color: {{{{phViewFg}}}}">{VIEWI.replace('width="20" height="20"', 'width="24" height="24"')}</button>')
     m = f'<button type="button" aria-label="Menu" data-tip="Menu" aria-haspopup="dialog" aria-expanded="{{{{phMenuX}}}}" onClick="{{{{phMenu}}}}" style="{_PB}; color: {{{{phMenuFg}}}}">{MENUI}</button>'
     pos = 'position: absolute; z-index: 48; left: 0; right: 0; top: 0; padding-top: 62px' if over else 'flex: none; position: relative; z-index: 20'
     return (f'<header data-band style="box-sizing: border-box; padding: 0 8px; {pos}; background: linear-gradient({LINE}, {LINE}) 8px 100% / calc(100% - 16px) 1px no-repeat, {SHEET}; color: {INK}">'
@@ -831,28 +828,25 @@ def FROW(icon, label, value, target, colour=INK, line=False):
     return f'<button type="button" onClick="{{{{{target}}}}}" style="{st}">{inner}</button>'
 def FROWS(items, lines=True):
     return '<div style="display: flex; flex-direction: column">' + ''.join(FROW(*it[:5], line=lines and i > 0) for i, it in enumerate(items)) + '</div>'
-def FSHEET(cond, title, body, close='closeSheet', back=None, maxh='calc(100% - 124px)', **_):
-    """a settings page on a phone as Flat's (005): ✕ at the left (← on a page inside, back its act), the title centred, no Done"""
-    btn = (f'<button type="button" onClick="{{{{{back or close}}}}}" aria-label="{"Back" if back else "Close"}" data-tip="{"Back" if back else "Close"}" style="{_PB}">'
-           + (ARROWLI if back else _WXI.replace('width="20" height="20"', 'width="24" height="24"')) + '</button>')
-    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div>'
-            f'<section role="dialog" aria-modal="true" aria-label="{title}" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: {maxh}; overflow-y: auto; box-sizing: border-box; padding: 6px 16px 40px; border-radius: 22px 22px 0 0; background: {PAGE}; box-shadow: 0 -8px 32px rgba(51,41,33,.14); display: flex; flex-direction: column; gap: 12px">'
-            f'<div aria-hidden="true" style="flex: none; align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>'
-            f'<div style="flex: none; display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; margin: 0 -6px"><span style="display: flex">{btn}</span><h2 style="margin: 0; text-align: center; font-size: 17px; font-weight: 600">{title}</h2><span></span></div>'
-            f'{body}</section></sc-if>')
+def FSHEET(cond, title, body, close='closeSheet', back=None, **_):
+    """a settings page on a phone (owner, 2026-11-26: "i don't like that all these options and settings have these
+    drawers with x button and not back button. fix all such inconsistencies"): the whole screen under the status bar,
+    ← Back at the left and the title centred, as Credits and every page of the app; Back goes where the page came from
+    (back: ☰, the Song page, the page above it), else closes it; never a drawer with ✕"""
+    return THINGPAGE(cond, back or close, title, body, False)
 def FRADIO(name):
     """a page's choices as rows, the current one checked (Flat's pages, iOS Settings); a pick stays on the page"""
     return (f'<div role="radiogroup" style="display: flex; flex-direction: column; overflow: hidden; {_CARD}"><sc-for list="{{{{{name}Opts}}}}" as="o" hint-placeholder-count="3">'
             f'<button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 52px; box-sizing: border-box; width: 100%; padding: 0 16px; border: 0; box-shadow: inset 0 1px 0 {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 17px; text-align: left; display: flex; align-items: center; gap: 12px; cursor: pointer">'
             f'<span style="flex: 1">{{{{o.l}}}}</span><span aria-hidden="true" style="display: flex; color: {INK}"><sc-if value="{{{{o.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK.replace("width=\"16\" height=\"16\"", "width=\"22\" height=\"22\"")}</sc-if></span></button></sc-for></div>')
 EXPROWS = lambda: GROUP(*(('action', l, a, INK) for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))), bg=SHEET)
-def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=None, title='Amazing Grace', song=(), hide=('Tr', 'Cred')):
+def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=None, title='Amazing Grace', song=(), hide=('Tr', 'Cred', 'View')):
     """song: rows the Song page adds before the song's acts (Transpose, Credits); hide: places reached from Song, not ☰"""
     # Song is the song's own page (owner, 2026-11-26: "the song option really has only the versions and no the other
     # things"): its versions (the laptop rail's Song panel), then the song's things as rows: the key it sounds in, its
     # credits, its recordings, and sharing, exporting and printing it (the laptop's name menu); ☰ keeps the places
     acts = list(song) + [('Rec', 'Recordings', '3', takes_href), ('Share', 'Share link', '', 'phShare'), ('Exp', 'Export', '', 'phExp'), ('Print', 'Print', '', 'phPrint')]
-    places = [(pid, lab, val, (body + f'<div style="{_CARD}; overflow: hidden">{FROWS(acts)}</div>') if pid == 'Song' else body, act) for pid, lab, val, body, act in places]
+    places = [(pid, lab, val, (body + f'<div style="{_CARD}; overflow: hidden">{FROWS(acts)}</div>') if pid == 'Song' else (body + PARTSECTION(inst)) if pid == 'View' else body, act) for pid, lab, val, body, act in places]
     items = [(pid, lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places if pid not in hide] + list(rows)
     panel = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{phClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
              f'<nav aria-label="{title}" class="nos" style="position: absolute; z-index: 61; top: 120px; right: 8px; left: 24px; max-height: calc(100% - 170px); overflow-y: auto; box-sizing: border-box; padding: 12px 8px; border-radius: 22px; background: {PAGE}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 18px 48px -12px rgba(51,41,33,.38); display: flex; flex-direction: column; gap: 8px">'
@@ -860,8 +854,8 @@ def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=Non
     out = panel
     for pid, lab, val, body, act in places:
         if not act:
-            out += FSHEET(f'ph{pid}On', lab, body, close='phClose')
-    return out + FSHEET('phExpOn', 'Export', EXPROWS(), close='phClose') + PARTSHEET(inst)
+            out += FSHEET(f'ph{pid}On', lab, body, close='phClose', back={'Song': 'phToMenu', 'View': None}.get(pid, 'phToSong'))
+    return out + FSHEET('phExpOn', 'Export', EXPROWS(), close='phClose', back='phToSong')
 # the version history on a phone (Flat's menu: Version history): a page of the saved moments, the chosen one's Restore
 # at its foot; the laptop's History view's rows and state (HISTKEYS), one implementation
 def PHHIST():
@@ -870,15 +864,16 @@ def PHHIST():
            f'<span style="display: flex; flex-wrap: wrap; gap: 4px"><sc-for list="{{{{h.what}}}}" as="w" hint-placeholder-count="1"><span style="height: 24px; padding: 0 8px; border-radius: 12px; background: {FILL}; font-size: 13px; display: flex; align-items: center; font-variant-numeric: tabular-nums">{{{{w}}}}</span></sc-for></span></button>')
     body = (f'<div role="listbox" aria-label="Saved moments" style="display: flex; flex-direction: column; overflow: hidden; {_CARD}"><sc-for list="{{{{histRows}}}}" as="h" hint-placeholder-count="4">{row}</sc-for></div>'
             f'<sc-if value="{{{{histOld}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{histRestore}}}}" style="height: 48px; border: 0; border-radius: 24px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">Restore this version</button></sc-if>')
-    return FSHEET('histOn', 'Version history', body, close='closeHist')
+    return FSHEET('histOn', 'Version history', body, close='closeHist', back='phHistBack')
 # the act rows close the menu and do what the title menu's rows do; SET a setter expression, shut what closes the menu
-def PHACTS(SET, shut, TOAST):
+def PHACTS(SET, shut, TOAST, menu, song):
+    """menu, song: what reopens ☰ and the Song page, for the pages' Back"""
     t = lambda m, u=False: TOAST(m, u)
-    return (f"phShare: () => ({SET})({{ {shut}, {t("'Link copied'")} }}), phPrint: () => ({SET})({{ {shut} }}), "
+    return (f"phToMenu: () => ({SET})({{ {menu}, hdPop: null }}), phToSong: () => ({SET})({{ {song} }}), hdMidiBack: () => ({SET})({{ hdPop: null, {menu} }}), phShare: () => ({SET})({{ {shut}, {t("'Link copied'")} }}), phPrint: () => ({SET})({{ {shut} }}), "
             f"phMidiGo: () => ({SET})({{ {shut}, hdPop: 'midi' }}), phKeysGo: () => ({SET})({{ {shut}, hdPop: 'keys' }}), phOptsGo: () => ({SET})({{ {shut}, hdPop: 'opts' }}), ")
 def PHKEYS(S, SET, ids, TOAST):
     return ("...(() => { const P = " + S + ".ph ?? null; const o = { phMenu: () => (" + SET + ")({ ph: P === 'menu' ? null : 'menu', hdPop: null }), phMenuOn: P === 'menu', phMenuX: P === 'menu' ? 'true' : 'false', "
-            "phMenuFg: P === 'menu' ? '#A8551F' : '#332921', phClose: () => (" + SET + ")({ ph: null }), " + PHACTS(SET, 'ph: null', TOAST) + "}; for (const id of " + repr(list(ids) + ['Exp', 'Parts']) + ") { o['ph' + id + 'On'] = P === id; o['ph' + id] = () => (" + SET + ")({ ph: P === id ? null : id, hdPop: null }); } o.phPartsX = P === 'Parts' ? 'true' : 'false'; o.phPartsFg = P === 'Parts' ? '#A8551F' : '#332921'; return o; })(),")
+            "phMenuFg: P === 'menu' ? '#A8551F' : '#332921', phClose: () => (" + SET + ")({ ph: null }), " + PHACTS(SET, 'ph: null', TOAST, "ph: 'menu'", "ph: 'Song'") + "}; for (const id of " + repr(list(ids) + ['Exp']) + ") { o['ph' + id + 'On'] = P === id; o['ph' + id] = () => (" + SET + ")({ ph: P === id ? null : id, hdPop: null }); } o.phViewX = P === 'View' ? 'true' : 'false'; o.phViewFg = P === 'View' ? '#A8551F' : '#332921'; return o; })(),")
 
 # Rename version…: a small form, the one thing a laptop centres (ui-and-mockups)
 def RENAMEDLG():
@@ -973,11 +968,11 @@ def BANDHDR(close_href, mode, practice_href, edit_href, right='', over=False):
 # the editor's toolbar has its own) is the keys' view: 3D, 2D or Off, and their labels.
 _HPOP = f'position: absolute; z-index: 61; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 12px 8px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 4px'
 _HCAP = lambda t: f'<h3 style="margin: 0; font-size: 15px; font-weight: 600">{t}</h3>'
-def _HPOPOVER(cond, title, body, pos, w, phone=False):
+def _HPOPOVER(cond, title, body, pos, w, phone=False, back=None):
     if phone:
         # on a phone the band's popovers are sheets rising from the foot (a choice made in context), the same rows in one card
         body = body.replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px')
-        return FSHEET(cond, title, f'<div style="display: flex; flex-direction: column; overflow: hidden; padding: 0 12px; {_CARD}">{body}</div>', close='hdClose')
+        return FSHEET(cond, title, f'<div style="display: flex; flex-direction: column; overflow: hidden; padding: 0 12px; {_CARD}">{body}</div>', close='hdClose', back=back)
     return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{hdClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
             f'<section role="dialog" aria-label="{title}" style="{_HPOP}; {pos}; width: {w}px"><h2 style="margin: 0; padding: 4px 0 4px; font-size: 15px; font-weight: 600">{title}</h2>{body}</section></sc-if>')
 def _HVOLROW(i):
@@ -1047,7 +1042,7 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=Fals
     out += _HPOPOVER('hdTrOn', 'Transpose', TRROWS(), f'left: {tr_left}px; top: 65px', 300, phone)
     out += _HPOPOVER('hdMidiOn', 'MIDI keyboard', rows(SELROW('Keyboard', 'selMidi', False),
         f'<sc-if value="{{{{hdMidiAny}}}}" hint-placeholder-val="{{{{true}}}}">' + snd + rec + '</sc-if>',
-        f'<sc-if value="{{{{hdMidiNone}}}}" hint-placeholder-val="{{{{false}}}}">' + none + '</sc-if>'), f'left: {midi_left}px; top: 65px', 320, phone)
+        f'<sc-if value="{{{{hdMidiNone}}}}" hint-placeholder-val="{{{{false}}}}">' + none + '</sc-if>'), f'left: {midi_left}px; top: 65px', 320, phone, back='hdMidiBack')
     if keys_right is not None:
         if phone:
             out += FSHEET('hdKeysMain', 'Piano keys', FROWS([('Kb', 'Piano', '{{selKbV}}', 'hdGoKb'), ('Lab', 'Labels', '{{selLabV}}', 'hdGoLab')]), close='hdClose')
@@ -1197,7 +1192,7 @@ VIEWI = _LI('<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 
 # inset=False where the panel's own section already holds the 16 gutter (the Player's), so the body sits on the head's edge
 def VIEWPANEL(links=False, inset=True):
     thumbs = ''.join(f'<sc-if value="{{{{v.{k}}}}}" hint-placeholder-val="{{{{false}}}}">{svg}</sc-if>' for k, svg in _THUMBS.items())
-    cards = (f'<div role="radiogroup" aria-label="View" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px">'
+    cards = (f'<div role="radiogroup" aria-label="View" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px">'
              f'<sc-for list="{{{{viewCards}}}}" as="v" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" '
              f'style="min-height: 96px; box-sizing: border-box; padding: 10px 10px 8px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: {{{{v.ring}}}}; color: {INK}; font: inherit; display: flex; flex-direction: column; gap: 6px; cursor: pointer">'
              f'{thumbs}<span style="font-size: 15px; font-weight: {{{{v.fw}}}}; text-align: left">{{{{v.label}}}}</span></button></sc-for></div>')
