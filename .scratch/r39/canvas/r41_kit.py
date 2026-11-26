@@ -913,10 +913,80 @@ def VERPANEL():
             + f'<button type="button" aria-label="{{{{v.name}}}}: more" aria-haspopup="menu" aria-expanded="{{{{v.menuX}}}}" onClick="{{{{v.menu}}}}" style="flex: none; width: 44px; height: 44px; margin-right: 4px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: pointer">{MORE.replace('width="24" height="24"', 'width="20" height="20"')}</button>'
             + menu + '</div></sc-for>')
     add = lambda lab, act: f'<button type="button" onClick="{{{{{act}}}}}" style="{_VPROW}; min-height: 44px; border-top: 1px solid {LINE}">{_SMSLOT(PLUSI_S)}<span style="flex: 1">{lab}</span></button>'
-    return (f'<section aria-label="Versions" style="flex: none; display: flex; flex-direction: column; gap: 8px; padding-top: 12px">'
-            f'<h3 style="margin: 0; font-size: 15px; font-weight: 600">Versions</h3>'
-            f'<div role="radiogroup" aria-label="Versions" style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{vrow}'
-            + add('New version', 'actNewVer') + '<sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + add('New version with accompaniment', 'actNewAcc') + '</sc-if></div></section>')
+    body = (f'<div role="radiogroup" aria-label="Versions" style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{vrow}'
+            + add('New version', 'actNewVer') + '<sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + add('New version with accompaniment', 'actNewAcc') + '</sc-if></div>')
+    return FOLD('Ver', LAYERSI, 'Versions', body, first=True)
+
+# A panel's sections as Flat's (the owner's Flat 26.11 screenshots: Layout's Templates, Pages, Staves, Measures; Audio's
+# Room, Playback, Volume): each a fold, its head a 56 row with the section's glyph, its name and a chevron at the right,
+# the body under it, a hairline between sections; open by default, the fold remembered per section (state fold). One
+# shape for the Song and View panels in Practice and Edit (owner, 2026-11-26: "improve and refactor the song and view
+# tabs completely: use best practices and examples")
+LAYERSI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="m12 2 10 5-10 5L2 7l10-5Z"></path><path d="m2 12 10 5 10-5"></path><path d="m2 17 10 5 10-5"></path></svg>'
+PIANOI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M8 4v9M12 4v9M16 4v9M8 13v7M12 13v7M16 13v7"></path></svg>'
+EYEI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+SLIDERSI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"></path></svg>'
+def FOLD(fid, icon, title, body, extra='', first=False):
+    chev = f'<span aria-hidden="true" style="display: flex; color: {SOFT}; transform: rotate({{{{f{fid}R}}}}); transition: transform .2s cubic-bezier(0.22, 1, 0.36, 1)">{CHEV_D}</span>'
+    return (f'<section aria-label="{title}" style="flex: none; display: flex; flex-direction: column;' + ('' if first else f' border-top: 1px solid {LINE}') + '">'
+            f'<div style="min-height: 56px; display: flex; align-items: center; gap: 4px">'
+            f'<button type="button" aria-expanded="{{{{f{fid}X}}}}" onClick="{{{{f{fid}Tg}}}}" style="flex: 1; min-width: 0; height: 56px; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer">'
+            f'<span aria-hidden="true" style="flex: none; display: flex; color: {SOFT}">{icon}</span><h3 style="flex: 1; min-width: 0; margin: 0; font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</h3></button>'
+            f'{extra}<button type="button" tabindex="-1" aria-hidden="true" onClick="{{{{f{fid}Tg}}}}" style="flex: none; width: 32px; height: 40px; padding: 0; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer">{chev}</button></div>'
+            f'<sc-if value="{{{{f{fid}On}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 12px; padding: 0 0 24px">{body}</div></sc-if></section>')
+def FOLDKEYS(S, SET, ids):
+    """the folds' state for the sections named in ids: f{id}On, f{id}X, f{id}R, f{id}Tg"""
+    return ("...(() => { const F = " + S + ".fold ?? {}; const o = {}; for (const id of " + repr(list(ids)) + ") { const on = F[id] ?? true;"
+            " o['f' + id + 'On'] = on; o['f' + id + 'X'] = on ? 'true' : 'false'; o['f' + id + 'R'] = on ? '180deg' : '0deg';"
+            " o['f' + id + 'Tg'] = () => (" + SET + ")({ fold: { ...F, [id]: !on } }); } return o; })(),")
+_CARD = f'border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}'
+def SWROW(lab, on, act, track, knob, line=True):
+    """a switch row as every card's: the label, the switch at the right; the row is the switch"""
+    return (f'<button type="button" role="switch" aria-checked="{{{{{on}}}}}" onClick="{{{{{act}}}}}" style="width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0;'
+            + (f' border-top: 1px solid {LINE};' if line else '') + f' background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer">'
+            f'<span style="flex: 1; min-width: 0">{lab}</span><span aria-hidden="true" style="flex: none; width: 44px; height: 26px; border-radius: 13px; background: {{{{{track}}}}}; position: relative">'
+            f'<span style="position: absolute; top: 2px; left: {{{{{knob}}}}}px; width: 22px; height: 22px; border-radius: 11px; background: {SHEET}; box-shadow: 0 1px 3px rgba(51,41,33,.25)"></span></span></button>')
+# The View panel (owner, 2026-11-26: "improve and refactor the song and view tabs completely"): the four ways to read
+# the song as picture cards (Chordify's "Pick your view", chordify 002, each view with its picture; Flat's Layout
+# templates, the chosen one ringed), the chosen one ringed in ink (not filled: one honey act per screen, Play); then
+# the chosen view's own options, each a row, a choice of a few values a pop-up (Apple HIG, Pop-up buttons), what shows
+# on the page switches in one card. Its state is the board's (views, layout, perRow, text, show, the strips)
+_TH = lambda inner: f'<svg viewBox="0 0 120 52" width="100%" height="52" aria-hidden="true" style="display: block; color: {SOFT}">{inner}</svg>'
+_THUMBS = {
+    'isSheet': _TH(''.join(f'<path d="M10 {y}h100" stroke="currentColor" stroke-width="1" opacity=".55"></path>' for y in (12, 18, 24, 30, 36))
+                   + '<ellipse cx="34" cy="27" rx="4" ry="3" fill="currentColor"></ellipse><path d="M38 27V9" stroke="currentColor" stroke-width="1.4"></path>'
+                   + '<ellipse cx="58" cy="21" rx="4" ry="3" fill="currentColor"></ellipse><path d="M62 21V5" stroke="currentColor" stroke-width="1.4"></path>'
+                   + '<ellipse cx="82" cy="30" rx="4" ry="3" fill="currentColor"></ellipse><path d="M86 30V13" stroke="currentColor" stroke-width="1.4"></path><path d="M100 12v24" stroke="currentColor" stroke-width="1.2"></path>'),
+    'isDia': _TH('<rect x="12" y="8" width="44" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.2"></rect>'
+                 + ''.join(f'<rect x="{17 + i * 7}" y="8" width="4" height="17" fill="currentColor"></rect>' for i in (0, 1, 3, 4, 5))
+                 + '<rect x="64" y="8" width="44" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.2"></rect>'
+                 + ''.join(f'<rect x="{69 + i * 7}" y="8" width="4" height="17" fill="currentColor"></rect>' for i in (0, 1, 3, 4, 5))
+                 + '<text x="34" y="50" font-size="10" font-weight="600" text-anchor="middle" fill="currentColor">G</text><text x="86" y="50" font-size="10" font-weight="600" text-anchor="middle" fill="currentColor">C</text>'),
+    'isGrid': _TH(''.join(f'<rect x="{10 + c * 26}" y="{6 + r * 22}" width="22" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="1.1"></rect>' for r in (0, 1) for c in range(4))
+                  + ''.join(f'<text x="{21 + c * 26}" y="{19 + r * 22}" font-size="9" font-weight="600" text-anchor="middle" fill="currentColor">{ch}</text>' for (r, c), ch in zip([(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3)], 'GGCGGGDD')) ),
+    'isLyr': _TH(''.join(f'<text x="{x}" y="{y}" font-size="8" font-weight="700" fill="currentColor">{ch}</text>' for x, y, ch in ((12, 12, 'G'), (52, 12, 'C'), (88, 12, 'G'), (20, 34, 'D'), (70, 34, 'G')))
+                 + '<rect x="12" y="16" width="96" height="5" rx="2.5" fill="currentColor" opacity=".55"></rect><rect x="12" y="38" width="76" height="5" rx="2.5" fill="currentColor" opacity=".55"></rect>'),
+}
+def VIEWPANEL():
+    thumbs = ''.join(f'<sc-if value="{{{{v.{k}}}}}" hint-placeholder-val="{{{{false}}}}">{svg}</sc-if>' for k, svg in _THUMBS.items())
+    cards = (f'<div role="radiogroup" aria-label="View" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px">'
+             f'<sc-for list="{{{{viewCards}}}}" as="v" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" '
+             f'style="min-height: 96px; box-sizing: border-box; padding: 10px 10px 8px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: {{{{v.ring}}}}; color: {INK}; font: inherit; display: flex; flex-direction: column; gap: 6px; cursor: pointer">'
+             f'{thumbs}<span style="font-size: 15px; font-weight: {{{{v.fw}}}}; text-align: left">{{{{v.label}}}}</span></button></sc-for></div>')
+    sheet = (f'<div style="{_CARD}">' + SELROW('Layout', 'selLayout', False) + '</div>'
+             f'<div style="display: flex; flex-direction: column; gap: 8px"><h4 style="margin: 0; font-size: 13px; font-weight: 600; color: {SOFT}">On the page</h4><div style="{_CARD}">'
+             f'<sc-for list="{{{{showChips}}}}" as="c" hint-placeholder-count="6">' + SWROW('{{c.name}}', 'c.on', 'c.pick', 'c.track', 'c.knob').replace(f'border-top: 1px solid {LINE};', 'border-top: {{c.sep}};') + '</sc-for></div></div>')
+    dia = f'<div style="{_CARD}">' + SWROW('Beat strip', 'dStripSw.on', 'dStripSw.flip', 'dStripSw.track', 'dStripSw.knob', False) + SWROW('Lyrics line', 'dLineSw.on', 'dLineSw.flip', 'dLineSw.track', 'dLineSw.knob') + '</div>'
+    grid = f'<div style="{_CARD}">' + SELROW('Bars per row', 'selPerRow', False) + '</div>'
+    lyr = (f'<div style="{_CARD}">' + SELROW('Text size', 'selText', False) + SWROW('Chord diagrams', 'lSumSw.on', 'lSumSw.flip', 'lSumSw.track', 'lSumSw.knob')
+           + SWROW('Beat strip', 'lStripSw.on', 'lStripSw.flip', 'lStripSw.track', 'lStripSw.knob') + '</div>')
+    opts = ''.join(f'<sc-if value="{{{{{k}}}}}" hint-placeholder-val="{{{{{d}}}}}">{b}</sc-if>' for k, d, b in (('isSheet', 'true', sheet), ('isDiagrams', 'false', dia), ('isGrid', 'false', grid), ('isLyrics', 'false', lyr)))
+    return (f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px; display: flex; flex-direction: column">'
+            + FOLD('View', EYEI, 'Views', cards, first=True) + FOLD('Opts', SLIDERSI, '{{viewName}} options', opts) + '</div>')
+def SELFROM(S, SET, name, expr):
+    """a pop-up row's keys (SELROW) from a list of {name, on, pick}, the board's own choices"""
+    return (f"...((L) => ({{ {name}V: (L.find((o) => o.on === 'true') || {{ name: '' }}).name, {name}On: {S}.selPop === '{name}', {name}X: {S}.selPop === '{name}' ? 'true' : 'false', {name}Bg: {S}.selPop === '{name}' ? '#EEE9E2' : 'transparent', "
+            f"{name}Tg: () => ({SET})({{ selPop: {S}.selPop === '{name}' ? null : '{name}' }}), {name}Opts: L.map((o) => ({{ l: o.name, cur: o.on === 'true', on: o.on, pick: () => {{ o.pick(); ({SET})({{ selPop: null }}); }} }})) }}))({expr}),")
 
 # a setting's row with its value and a pop-up of the values (Apple HIG, Pop-up buttons): the label at the left, the
 # value and ⌃⌄ at the right, the list of values under it with the current one checked; keys {name}V, {name}On,
@@ -943,11 +1013,10 @@ def SELKEYS(S, SET, specs):
 # pattern into chosen bars from its Notation panel instead
 def ACCREADONLY(practice_href):
     row = lambda lab, v, top: (f'<div aria-disabled="true" style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px;' + (f' border-top: 1px solid {LINE}' if top else '') + f'"><span style="flex: 1; font-size: 15px">{lab}</span><span style="font-size: 15px; color: {SOFT}">{v}</span></div>')
-    return (f'<sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}"><section aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px">'
-            f'<div style="display: flex; align-items: center; gap: 8px"><h3 style="flex: 1; margin: 0; font-size: 15px; font-weight: 600">Accompaniment</h3>'
-            f'<a href="{practice_href}" style="flex: none; min-height: 40px; margin: -8px -4px -8px 0; padding: 0 4px; display: flex; align-items: center; gap: 2px; color: #356890; font-size: 14px; text-decoration: none">Change in Practice<span aria-hidden="true" style="display: flex">{CHEV_R}</span></a></div>'
-            f'<div style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; opacity: .5">' + row('Pattern', 'Bass + chords', False) + row('First chord’s inversion', 'Root position', True) + row('Voicing', 'Voice-led', True) + '</div>'
-            f'<p style="margin: 0; font-size: 13px; line-height: 18px; color: {SOFT}">To write a pattern into chosen bars, use Notation.</p></section></sc-if>')
+    link = (f'<a href="{practice_href}" style="align-self: flex-start; min-height: 44px; margin: -8px 0; padding: 0; display: flex; align-items: center; gap: 2px; color: #356890; font-size: 14px; text-decoration: none">Change in Practice<span aria-hidden="true" style="display: flex">{CHEV_R}</span></a>')
+    body = (f'<div style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; opacity: .5">' + row('Pattern', 'Bass + chords', False) + row('First chord’s inversion', 'Root position', True) + row('Voicing', 'Voice-led', True) + '</div>'
+            f'<p style="margin: 0; font-size: 13px; line-height: 18px; color: {SOFT}">To write a pattern into chosen bars, use Notation.</p>' + link)
+    return '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + FOLD('Acc', PIANOI, 'Accompaniment', body) + '</sc-if>'
 # the whole-song accompaniment (a version with one) and the song's own pages, as rows in their cards
 def ACCPANEL():
     card = f'border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}'
@@ -957,8 +1026,7 @@ def ACCPANEL():
     info = (f'<button type="button" aria-label="How to change one part" data-tip="Click a chord or a bar on the page to change only that part" style="flex: none; width: 40px; height: 40px; margin: -10px -8px -10px 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: help">'
             '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg></button>')
     reset = (f'<sc-if value="{{{{accOwn}}}}" hint-placeholder-val="{{{{false}}}}">' + link('{{accResetL}}', '', 'accReset').replace('{line}', LINE).replace(f'<span style="display: flex">{CHEV_R}</span>', '').replace(f'color: {INK}; font: inherit', 'color: #356890; font: inherit', 1) + '</sc-if>')
-    acc = (f'<sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}"><section aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; gap: 8px"><h3 style="flex: 1; margin: 0; font-size: 15px; font-weight: 600">Accompaniment</h3>'
-           + f'<sc-if value="{{{{accWhole}}}}" hint-placeholder-val="{{{{true}}}}">{info}</sc-if><sc-if value="{{{{accPicked}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{clearPick}}}}" style="flex: none; height: 32px; margin: -6px -8px -6px 0; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: #356890; font: inherit; font-size: 14px; cursor: pointer">Clear selection</button></sc-if></div>'
-           + f'<sc-if value="{{{{accPicked}}}}" hint-placeholder-val="{{{{false}}}}">{SEGC("accScopes", 36, 14, True)}</sc-if>'
-           f'<div style="{card}">' + link('Pattern', '{{patternName}}', 'openPattern').replace('{line}', 'transparent') + SELROW('First chord’s inversion', 'selInv') + SELROW('Voicing', 'selVoice') + reset + '</div></section></sc-if>')
-    return acc
+    extra = (f'<sc-if value="{{{{accWhole}}}}" hint-placeholder-val="{{{{true}}}}">{info}</sc-if><sc-if value="{{{{accPicked}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{clearPick}}}}" style="flex: none; height: 32px; margin: -6px -8px -6px 0; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: #356890; font: inherit; font-size: 14px; cursor: pointer">Clear selection</button></sc-if>')
+    body = (f'<sc-if value="{{{{accPicked}}}}" hint-placeholder-val="{{{{false}}}}">{SEGC("accScopes", 36, 14, True)}</sc-if>'
+            f'<div style="{card}">' + link('Pattern', '{{patternName}}', 'openPattern').replace('{line}', 'transparent') + SELROW('First chord’s inversion', 'selInv') + SELROW('Voicing', 'selVoice') + reset + '</div>')
+    return '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + FOLD('Acc', PIANOI, 'Accompaniment', body, extra) + '</sc-if>'

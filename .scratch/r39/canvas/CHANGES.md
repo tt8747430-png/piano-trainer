@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · pending · R74: Song and View panels as Flat's: every section a fold (glyph, name, chevron; open by default, remembered); Song: Versions, Accompaniment (editor: read-only, Change in Practice under its note); View: Views as picture cards ringed in ink, then the view's options as pop-up rows (Layout Page/Panorama, Bars per row, Text size Small/Medium/Large) and On the page switches · PlayerDesk, EditorLaptop, EditorDraftLaptop, Editor, EditorDraft · pending
 
 ## Changes
 

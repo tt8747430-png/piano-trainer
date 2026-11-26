@@ -84,8 +84,19 @@ def player_rail(t):
              '<sc-for list="{{views}}" as="v" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{v.on}}" title="{{v.hint}}" onClick="{{v.pick}}" '
              'style="height: 56px; box-sizing: border-box; border: 0; border-radius: 12px; background: {{v.bg}}; color: {{v.fg}}; box-shadow: 0 0 0 1px rgba(51,41,33,.07); font: inherit; font-size: 15px; font-weight: {{v.fw}}; cursor: pointer">{{v.label}}</button></sc-for></div>')
     i = t.index('aria-label="{{viewName}} settings"'); h = t.index('</header>', i) + len('</header>')
-    t = t[:h] + cards + t[h:]
-    i = t.index('<section role="region" aria-label="{{viewName}} settings"'); j = t.rindex('<sc-if value="{{isView}}"', 0, i)
+    # the whole View panel rebuilt from the kit (owner, 2026-11-26: "improve and refactor the song and view tabs
+    # completely"): the views as picture cards, then the chosen view's options as rows, each section a fold
+    e = t.index('</section>', h); t = t[:h] + VIEWPANEL() + t[e:]
+    t = t.replace('aria-label="{{viewName}} settings"', 'aria-label="View"', 1)
+    vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
+          "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', ...viewPress(id) }; }), "
+          + FOLDKEYS('s', '(o) => this.setState(o)', ['Ver', 'Acc', 'View', 'Opts']) + ' '
+          + SELFROM('s', '(o) => this.setState(o)', 'selLayout', "lopt('layout', layout, [['page', 'Page'], ['panorama', 'Panorama']])") + ' '
+          + SELFROM('s', '(o) => this.setState(o)', 'selPerRow', "lopt('perRow', perRow, [4, 8].map((n) => [n, n + ' bars']))") + ' '
+          + SELFROM('s', '(o) => this.setState(o)', 'selText', "lopt('text', s.text ?? 'm', [['s', 'Small'], ['m', 'Medium'], ['l', 'Large']])") + ' ')
+    assert t.count('views: VIEWS.map(') == 1
+    t = t.replace('views: VIEWS.map(', vk + 'views: VIEWS.map(', 1)
+    i = t.index('<section role="region" aria-label="View"'); j = t.rindex('<sc-if value="{{isView}}"', 0, i)
     t = t[:j] + '<sc-if value="{{panelView}}"' + t[j + len('<sc-if value="{{isView}}"'):]
     # the keys centred in the room beside the panel (their left was set for the whole window)
     assert t.count('kbLeft: 305,') == 1
