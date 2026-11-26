@@ -8,8 +8,8 @@
                                                       voice in from the sheet
     python3 scripts/choir parts <song>                 what each part's words get wrong (a note not sung, a slur
                                                       over a new syllable)
-    python3 scripts/choir musicxml [song ...]           the MusicXML 4.0 file: the closed score, each voice its
-                                                      own instrument with its own linked part
+    python3 scripts/choir musicxml [song ...]           the MusicXML 4.0 file: the open score, a part per
+                                                      voice (Dorico condenses it to SA and TB)
     python3 scripts/choir template                    write the empty SATB and TTBB scores in template/
     python3 scripts/choir index                       write INDEX.md
 

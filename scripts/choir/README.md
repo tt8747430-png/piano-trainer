@@ -10,7 +10,7 @@ python3 scripts/choir compare 2           # each system of song 2's sheet above 
 python3 scripts/choir notes 2 [1 0]       # song 2's voices (or staff 1, voice 0) bar by bar
 python3 scripts/choir heads 3 1 1 scan    # song 3's sheet, page 1, staff 1: its noteheads by pitch, bar by bar
 python3 scripts/choir parts 1             # what song 1's parts' words get wrong
-python3 scripts/choir musicxml [song ...] # the MusicXML 4.0 file: closed score, a linked part per voice
+python3 scripts/choir musicxml [song ...] # the MusicXML 4.0 file: an open score, a part per voice
 python3 scripts/choir template            # template/Choir SATB.mscz and Choir TTBB.mscz
 python3 scripts/choir index               # INDEX.md
 ```
@@ -73,16 +73,15 @@ an x ruler, `scan` lists every column of heads between the barlines, and x value
 | `house.py`  | the house style from `template/house.mss`                                     |
 | `parts.py`  | each part from the main score: layout, title, marks, words, slurs; their check |
 | `template.py` | the empty template scores, and the two empty staves a sheet-only song starts on |
-| `mxl.py`    | the MusicXML 4.0 file (`<song> (SATB).mxl`): the closed score, each voice its own instrument (every note names its singers, both on a unison), each voice's part linked to it |
+| `mxl.py`    | the MusicXML 4.0 file (`<song> (SATB).mxl`): the open score, a part per voice |
 | `compare.py`| the sheet and ours, system by system                                          |
 | `heads.py`  | the printed sheet's noteheads named by pitch                                  |
 | `index.py`  | `INDEX.md`                                                                    |
 
 ## The MusicXML file
 
-`<song> (SATB).mxl` beside each made score is MusicXML 4.0, valid against its schema: the closed score as printed,
-each staff's part declaring one instrument per voice and every note naming the voice that sings it (both voices on a
-unison's one notehead), and each voice's part (`parts/Soprano.musicxml` …) tied to its voice by `<part-link>` and
-`<instrument-link>`. An application that reads the links shows the closed score and each voice's part from one file;
-MuseScore 4.7 reads the closed score and leaves the links aside. It is written after a build:
-`python3 scripts/choir musicxml`.
+`<song> (SATB).mxl` is MusicXML 4.0, valid against its schema, written by `python3 scripts/choir musicxml <song>`:
+the open score, a part per voice (Soprano, Alto, Tenor, Bass), each declared as that voice and holding its notes,
+words and marks as the made score's part, under the score's title, credits and page; each held syllable's line ends
+on its last note, the words in Arial 11. Dorico imports a player per voice with its own part and condenses them to the
+closed score (SA and TB) with condensing on; MuseScore shows the four staves. The `.mscz` stays the closed score.
