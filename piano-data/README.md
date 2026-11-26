@@ -133,8 +133,9 @@ and MIDI files and recordings. Names are the titles transliterated.
   `Cântări corul mixt/` (mixed choir) and `Cântări corul bărbătesc/` (men's choir), one numbered folder per song with
   its `.mscz` score, PDF and each voice's part, and the mixed choir's contents (`Cuprins 1-100.pdf`, alphabetical
   too); `MuseScore/` holds the alto and soprano parts (`MuseScore Alt`, `MuseScore Sopran`). MuseScore's own backups
-  (`.mscbackup`) are kept; the recordings and the 172 MB scanned choir book (`Caiet de cor scanat 1-100.pdf`) are
-  left out
+  (`.mscbackup`) are kept; the recordings are left out. The scanned choir book of songs 1–100, all of them in one
+  172 MB PDF over GitHub's 100 MB limit, is split in two at a song's start: `Caiet de cor scanat 1-45.pdf` (the
+  contents, then songs 1–45) and `Caiet de cor scanat 46-100.pdf`. Each song is also in its own folder; read it there
 - `hymns/songs/`: songs as sheets, choir and full scores
 - `hymns/ensembles/`: О. Цапук's arrangements for domra and piano, and cello and piano
 - `hymns/hymnals/`: _Песнь возрождения с нотами_, vol. 3; the _Free Worship Piano Collection_
