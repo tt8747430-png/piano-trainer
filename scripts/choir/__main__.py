@@ -8,6 +8,8 @@
                                                       voice in from the sheet
     python3 scripts/choir parts <song>                 what each part's words get wrong (a note not sung, a slur
                                                       over a new syllable)
+    python3 scripts/choir musicxml [song ...]           the MusicXML 4.0 file: the closed score, each voice its
+                                                      own instrument with its own linked part
     python3 scripts/choir template                    write the empty SATB and TTBB scores in template/
     python3 scripts/choir index                       write INDEX.md
 
@@ -23,6 +25,7 @@ import compare
 import engrave
 import heads
 import index
+import mxl
 import parts
 import template
 
@@ -52,6 +55,8 @@ def main(argv):
         heads.heads(args[0], args[1], args[2], args[3:])
     elif command == 'parts':
         parts.report(compare.song(args[0])[1])
+    elif command == 'musicxml':
+        mxl.export({os.path.basename(compare.song(a)[0]) for a in args})
     elif command == 'template':
         template.write()
     elif command == 'index':
