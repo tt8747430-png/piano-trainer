@@ -69,3 +69,8 @@ by hand.
 - **A syllable held in every voice.** Where both voices of a staff slur two notes, the syllable is held (`_`):
   song 1, bar 58, "cu _ -- tul", not "cu -- tul" a note early.
 - **A part laid out apart from its score.** A part keeps the main score's line and page breaks.
+- **A part that opens with another voice or instrument.** A part must carry its score instrument's id, its staff
+  linked to the score's staff, and its voice map as MuseScore 4.7 reads it (the voice's place within its staff).
+  Without them MuseScore added the whole men's staff to song 1's Bass part when it was opened. Check a part by
+  letting MuseScore open and save the file (`mscore made.mscz -o check.mscz`) and reading the parts' `Tracklist`:
+  the Tenor and Bass parts must come back as `sTrack` 4 and 5.

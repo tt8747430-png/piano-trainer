@@ -1,0 +1,51 @@
+# From 005. Mărire Ție, Isuse.pdf (1 page). The choir has no MuseScore file of it: every voice is written in from
+# the sheet, at the pitch it sounds, and the song is built from the house template. Where the sheet prints one
+# notehead for both voices of a staff (bars 1, 8, 11, 19) the lower voice writes `u:`. The basses echo the sopranos
+# in bars 13-18 with words of their own, printed in italics under their staff. Bar 13's B4 carries no syllable,
+# as printed (the sopranos' "te," is held there without a slur or line).
+key: A
+time: C
+systems: 1 6 12 17
+slur: Alto 2 +1/2, Alto 7 +1/2, Alto 11 +3/8, Alto 12 +3/8, Tenor 7 +1/2, Tenor 12 +3/8, Tenor 19 +1/4, Bass 19+1/4 +1/4
+
+[Soprano notes]
+1: @1 A4:2 C#5:4. D5:8 @2 E5:8 F#5:8 E5:8 D5:8 C#5:4 D5:4 @3 C#5:4 A4:4 B4:4 G#4:4 @4 A4:2. C#5:4
+1: @5 D5:4 C#5:4 B4:4 A4:4 @6 B4:2. B4:4 @7 C#5:8 B4:8 C#5:8 D5:8 E5:4 F#5:4 @8 E5:2 D#5:2 @9 E5:1
+1: @10 E5:2 E5:4 E5:4 @11 C#5:4. B4:8 A4:4 C#5:4 @12 D5:4. C#5:8 B4:4 A4:4 @13 B4:2. r:4 @14 r:2 r:4 C#5:4
+1: @15 D5:4 D5:4 D5:4 D5:4 @16 C#5:2. C#5:4 @17 B4:4 B4:4 B4:4 B4:4 @18 E5:2. E5:4
+1: @19 F#5:4 E5:4 D5:4 C#5:4 @20 B4:2. B4:4 @21 A4:1
+
+[Alto notes]
+1: @1 u:2 A4:4. B4:8 @2 C#5:8 D5:8 C#5:8 B4:8 A4:4 A4:4 @3 E4:2 E4:2 @4 E4:2. A4:4
+1: @5 B4:4 A4:4 G#4:4 F#4:4 @6 E4:2. G#4:4 @7 A4:8 G#4:8 A4:8 B4:8 A4:4 A4:4 @8 G#4:2 F#4:2 @9 G#4:1
+1: @10 A4:2 E4:4 E4:4 @11 A4:4. G#4:8 u:4 A4:4 @12 B4:4. A4:8 G#4:4 F#4:4 @13 G#4:2. r:4 @14 r:2 r:4 A4:4
+1: @15 G#4:4 G#4:4 G#4:4 G#4:4 @16 A4:2. A4:4 @17 G#4:4 G#4:4 G#4:4 G#4:4 @18 A4:2. A4:4
+1: @19 A4:2. A4:4 @20 G#4:2. G#4:4 @21 E4:1
+
+[Tenor notes]
+1: @1 C#4:2 E4:4. E4:8 @2 E4:2. F#4:4 @3 C#4:2 D4:2 @4 C#4:2. r:4 @5 r:1 @6 r:2 r:4 E4:4
+1: @7 E4:2 C#4:4 D4:4 @8 B3:2 B3:2 @9 B3:1 @10 C#4:2 C#4:4 B3:4 @11 C#4:2. C#4:4
+1: @12 F#4:4. E4:8 D4:4 C#4:4 @13 E4:2. r:4 @14 r:2 r:4 E4:4 @15 E4:4 E4:4 E4:4 E4:4 @16 E4:2. E4:4
+1: @17 E4:4 E4:4 E4:4 E4:4 @18 E4:2. C#4:4 @19 D4:4 C#4:2 E4:4 @20 E4:2. D4:4 @21 C#4:1
+
+[Bass notes]
+1: @1 A3:2 A3:4. E3:8 @2 A3:2. D3:4 @3 E3:2 E3:2 @4 A2:2. r:4 @5 r:1 @6 r:2 r:4 E3:4
+1: @7 A3:2. F#3:4 @8 u:2 B2:2 @9 E3:1 @10 A3:2 A3:4 G#3:4 @11 F#3:2. F#3:4
+1: @12 D3:2. F#3:4 @13 E3:2. E3:4 @14 A3:4 B3:4 C#4:4 A3:4 @15 E3:2. E3:4 @16 A3:4 A3:4 A3:4 A3:4
+1: @17 E3:2. E3:4 @18 A3:4 B3:4 C#4:4 A3:4 @19 u:4 C#4:4 B3:4 A3:4 @20 E3:2. E3:4 @21 A2:1
+
+[Soprano]
+1: @1 1.Mă -- ri -- re Ți _ _ _ _ -- e, I _ -- su _ -- se! Cel ce ai în -- vi -- at, Cel ce _ _ _ _ ai în -- vi -- at;
+1: @10 Al Tău po -- por _ _ Te mă _ -- reș -- te, * Că l'ai răs -- cum -- pă -- rat, Că l'ai răs -- cum -- pă -- rat,
+1: Că l'ai _ _ răs -- cum -- pă -- rat!
+2: @1 2.Soa -- re fru -- mos _ _ _ _ al drep _ -- tă _ -- ții! Mă -- reț 'mi Te i -- vești, Mă -- reț _ _ _ _ 'mi Te i -- vești;
+2: @10 Cel ce a -- lungi _ _ noap -- tea _ mor -- ții, * A -- cum tu stră -- lu -- cești, A -- cum tu stră -- lu -- cești,
+2: A -- cum _ _ Tu stră -- lu -- cești!
+3: @1 3.Doam -- ne, o -- da _ _ _ _ -- tă Te'oi _ ve _ -- dea! Pe tro -- nul Tău dom -- nesc, Pe tro _ _ _ _ -- nul Tău dom -- nesc;
+3: @10 Și'n hai -- ne al _ _ -- be Te'oi _ lău -- da, * Cu co -- rul cel ce -- resc, Cu co -- rul cel ce -- resc,
+3: Cu co _ _ -- rul cel ce -- resc!
+
+[Bass italic]
+1: @13 * Că l'ai răs -- cum -- pă -- rat, Că l'ai răs -- cum -- pă -- rat, Răs -- cum -- pă -- rat,
+2: @13 * A -- cum Tu stră -- lu -- cești, A -- cum Tu stră -- lu -- cești, Tu stră -- lu -- cești,
+3: @13 * Cu co -- rul cel ce -- resc, Cu co -- rul cel ce -- resc, Ce -- resc, ce -- resc,

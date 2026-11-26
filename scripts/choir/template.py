@@ -68,7 +68,7 @@ def skeleton(kind, spec):
     its notes fill, the upper pair of voices on the first staff and the lower on the second, each staff in its lower
     voice's clef."""
     bars = max(bar for block in spec['notes'] for bar, _ in note_tokens(block['verses'].get(1, [])))
-    beats, beat_type = spec.get('time', (4, 4))
+    beats, beat_type, symbol = spec.get('time', (4, 4, None))
     out = ET.Element('score-partwise', version='4.0')
     ET.SubElement(ET.SubElement(out, 'work'), 'work-title').text = spec['title'] or ''
     ident = ET.SubElement(out, 'identification')
@@ -93,7 +93,7 @@ def skeleton(kind, spec):
                 at = ET.SubElement(m, 'attributes')
                 ET.SubElement(at, 'divisions').text = '48'
                 ET.SubElement(ET.SubElement(at, 'key'), 'fifths').text = str(spec.get('key', 0))
-                t = ET.SubElement(at, 'time')
+                t = ET.SubElement(at, 'time', **({'symbol': symbol} if symbol else {}))
                 ET.SubElement(t, 'beats').text = str(beats)
                 ET.SubElement(t, 'beat-type').text = str(beat_type)
                 c = ET.SubElement(at, 'clef')

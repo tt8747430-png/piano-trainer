@@ -3,7 +3,7 @@ bar by bar, the words of the voice it moves with, as a copyist writes a part.
 
 The sheet prints the words once for the voices that share them (between the staves, or under one staff). A part's
 notes are its own where its voice has a syllable or holds one (its lyric line, its slur, a tie); every other run of
-notes, between rests and bar lines, takes the words of the voice whose notes start at the same moments over that
+notes, between rests and its own syllables, takes the words of the voice whose notes start at the same moments over that
 stretch: in song 1, bar 13, the tenors move with the sopranos and take their words, the altos with the basses' echo
 and take theirs; in bar 38 the tenors sing their own "Miel Divin", then the sopranos' "ru-gă". Where no voice moves
 exactly with it, a run takes the words of the voice whose syllables all fall on its notes, the most syllables first,
@@ -69,7 +69,7 @@ def part_words(main_staffs, part_staff, track):
     # the rest, in runs between rests, own syllables and bar lines: each takes the words of the voice it moves with
     runs, run = [], []
     for el, t, k in part:
-        if el.tag == 'Rest' or mine.get(t) is not None or (run and run[-1][2] != k):
+        if el.tag == 'Rest' or mine.get(t) is not None:
             if run:
                 runs.append(run)
             run = []
@@ -266,6 +266,7 @@ def apply(files, spec):
     too: its voice's slurs in the score, and a slur over each syllable it takes from another voice and holds."""
     main_score = ET.fromstring(files[main_name(files)]).find('Score')
     main = staves(main_score)
+    owner = [(p.get('id'), sd.findtext('eid')) for p in main_score.findall('Part') for sd in p.findall('Staff')]
     for n in list(files):
         if not (n.startswith('Excerpts/') and n.endswith('.mscx')):
             continue
@@ -276,6 +277,28 @@ def apply(files, spec):
             continue
         part = staves(score)[0]
         track = int(tl.get('sTrack'))
+        # The part's instrument is the score's instrument its voice belongs to, by id, as MuseScore makes a part from
+        # a voice: under another id MuseScore adds that instrument, the whole staff, to the part when it opens it.
+        score.find('Part').set('id', owner[track // 4][0])
+        ipi = score.find('initialPartId')
+        if ipi is None:
+            ipi = ET.Element('initialPartId')
+            score.insert(list(score).index(tl), ipi)
+        ipi.text = owner[track // 4][0]
+        # its staff linked to the score's staff, by the staff definition's element id, as MuseScore links them
+        sdef = score.find('Part').find('Staff')
+        link = sdef.find('linkedTo')
+        if link is None:
+            link = ET.Element('linkedTo')
+            at = list(sdef).index(sdef.find('eid')) + 1 if sdef.find('eid') is not None else 0
+            sdef.insert(at, link)
+        link.text = owner[track // 4][1]
+        # Its voice map as MuseScore reads it on opening: MuseScore 4.7 applies a part's Tracklist before it ties the
+        # part's staff to its own staff of the score, against the score's first staff, so the voice is given by its
+        # place within its staff (the basses, voice 2 of the second staff: sTrack 1). Opened, the part shows that
+        # voice of its own staff, and MuseScore saves it as sTrack 5. (A file MuseScore saved this way loses the
+        # choice on its next opening, MuseScore's own fault; the part still prints only its voice, as stored.)
+        tl.set('sTrack', str(track % 4))
         matched = spec['matched']
         layout(main[0], part)
         header(main_score, score, score.findtext('name') or n.split('/')[1].split('_', 1)[1].replace('_', ' '))

@@ -7,7 +7,7 @@ voice names before the staves, the tempo set but not printed, template/house.mss
     lyricist: Valentin Popovici        the name printed at the left (the words' author)
     key: F                             the key (a major key's tonic, or a minor's with m: Dm), for a song written in
                                        from its sheet alone (every voice in [Voice notes])
-    time: 6/8                          its time signature, likewise
+    time: 6/8                          its time signature, likewise (C common time, C| cut time, as printed)
     spatium: 1.4                       staff space in mm, only where the house size cannot keep the sheet's pages
     systems: 1 5 9 13 16 | 20 22 25    first bar of each line; | starts a new page
     hide-empty-staves                  a staff with nothing to sing in a line is left out, as printed
@@ -101,8 +101,12 @@ def read(song_dir):
         elif key == 'key':
             spec['key'] = FIFTHS[value.strip()]
         elif key == 'time':
-            beats, _, beat_type = value.strip().partition('/')
-            spec['time'] = (int(beats), int(beat_type))
+            v = value.strip()
+            if v in ('C', 'C|'):
+                spec['time'] = (4, 4, 'common') if v == 'C' else (2, 2, 'cut')
+            else:
+                beats, _, beat_type = v.partition('/')
+                spec['time'] = (int(beats), int(beat_type), None)
         elif key == 'spatium':
             spec['spatium'] = value.strip()
         elif key == 'lyrics-size':
