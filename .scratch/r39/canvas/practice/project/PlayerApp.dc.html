@@ -8158,7 +8158,7 @@ if (this._strip) this._strip.scrollTo({ left: Math.max(0, v.padX + v.posIndex * 
 if (this._diag) { this._auto = true; clearTimeout(this._autoT); this._diag.scrollTo({ left: v.chordIndex * v.slotW, behavior }); this._autoT = setTimeout(() => { this._auto = false; }, 700); }
 }
 renderVals() {
-const s = this.state || {};
+const s = { ...({ pace: { hdPop: 'opts' }, settings: { ph: 'menu' }, key: { ph: 'Tr' }, hands: { ph: 'View' }, view: { ph: 'View' } }[(this.props || {}).open] || {}), ...(this.state || {}) };
 const p = this.props || {};
 const open = s.open !== undefined ? s.open : (p.open ?? 'none');
 const playing = s.playing !== undefined ? s.playing : p.playing === 'yes';

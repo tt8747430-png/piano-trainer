@@ -277,7 +277,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "The Player, Parts, phone",
+      "title": "The Player: View and Parts; Audio, phone",
       "is_interactive": true,
       "page": "player"
     },
@@ -412,7 +412,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "The Player, Practice: Wait · Play, the tempo, the metronome, phone",
+      "title": "The Player, Playback options, phone",
       "is_interactive": true,
       "page": "player"
     },
@@ -421,7 +421,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "The Player, Diagrams settings, phone",
+      "title": "The Player, View, Diagrams, phone",
       "is_interactive": true,
       "page": "player"
     },
@@ -430,7 +430,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "The Player, Song settings: Arrangement or Accompaniment, phone",
+      "title": "The Player, Menu, phone",
       "is_interactive": true,
       "page": "player"
     },
@@ -484,7 +484,7 @@
       "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "The Player, Parts, laptop",
+      "title": "The Player: View and Parts; Audio, laptop",
       "is_interactive": true,
       "page": "player"
     },

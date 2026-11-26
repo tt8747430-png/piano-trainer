@@ -93,7 +93,7 @@ def player_rail(t):
     t = t.replace('aria-label="{{viewName}} settings"', 'aria-label="View"', 1)
     vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
           "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', ...viewPress(id) }; }), "
-          + FOLDKEYS('s', '(o) => this.setState(o)', ['Ver', 'Acc', 'View', 'Opts']) + ' '
+          + FOLDKEYS('s', '(o) => this.setState(o)', ['Ver', 'Acc', 'View', 'Opts', 'Room', 'Vol']) + ' '
           + SELFROM('s', '(o) => this.setState(o)', 'selLayout', "lopt('layout', layout, [['page', 'Page'], ['panorama', 'Panorama']])") + ' '
           + SELFROM('s', '(o) => this.setState(o)', 'selPerRow', "lopt('perRow', perRow, [4, 8].map((n) => [n, n + ' bars']))") + ' '
           + SELFROM('s', '(o) => this.setState(o)', 'selText', "lopt('text', s.text ?? 'm', [['s', 'Small'], ['m', 'Medium'], ['l', 'Large']])") + ' ')
@@ -111,7 +111,8 @@ def player_rail(t):
     rail = (f'<nav aria-label="Panels" style="position: absolute; z-index: 31; left: 0; top: 64px; bottom: 0; width: 76px; padding: 0 0 12px; box-sizing: border-box; background: #F7F3EE; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
             f'<div role="tablist" aria-orientation="vertical" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Song', SONGI, 'Song', 'Song') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div></nav>')
     # Audio, Flat's panel (the kit's AUDPANEL, the editor's too): the room and each part's level, the mixer's home
-    rail = (f'<sc-if value="{{{{panelAud}}}}" hint-placeholder-val="{{{{false}}}}"><section role="region" aria-label="Audio" style="{PANEL}">' + head('Audio') + AUDPANEL() + '</section></sc-if>') + rail
+    # after the rail in the tree, as the Song and View panels sit beside it (before it, the band read as the group it closed)
+    rail = rail + (f'<sc-if value="{{{{panelAud}}}}" hint-placeholder-val="{{{{false}}}}"><section role="region" aria-label="Audio" style="{PANEL}">' + head('Audio') + AUDPANEL() + '</section></sc-if>')
     e = t.index('</header>', t.index('aria-label="Mode"')) + len('</header>')
     t = t[:e] + rail + t[e:]
     # the bar: the name is the song's menu (its acts), the gear goes
@@ -311,6 +312,15 @@ def desk_views(t):
         t = t.replace(a, b, 1)
     return t
 
+def open_layers(t, phone):
+    # a layer board opens the layer that holds its thing today (the canvas's open= names the R37 sheets, gone): Practice
+    # opens Playback options, Song settings ☰, Transpose its page, Parts and the view's settings the View page; on a
+    # laptop Parts opens the Audio panel (each part's level) and the view's settings the View panel
+    m = ("{ pace: { hdPop: 'opts' }, settings: { ph: 'menu' }, key: { ph: 'Tr' }, hands: { ph: 'View' }, view: { ph: 'View' } }" if phone
+         else "{ hands: { rail: 'audio' }, view: { rail: 'view' } }")
+    assert t.count('const s = this.state || {};') == 1
+    return t.replace('const s = this.state || {};', f"const s = {{ ...({m}[(this.props || {{}}).open] || {{}}), ...(this.state || {{}}) }};", 1)
+
 # where each popover hangs (left of Playback options, left of Volume, right of Piano keys), measured from the header
 POPX = {'play': (294, 470, 576, 24), 'edit': (294, 470, 576)}
 
@@ -430,6 +440,6 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         f'<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px">' + btn('Cancel', 'renCancel', 'transparent', INK) + btn('Save', 'renSave', ACCENT, INK) + '</div>',
         close='renCancel', label='Rename version') + '</sc-if>')
     t = t.replace('</main>', '</main>' + (RENAMEDLG() if name == 'PlayerDesk' else ren), 1)
-    t = desk_views(desk_edit(header_transport(player_rail(t)))) if name == 'PlayerDesk' else phone_band(t)
+    t = open_layers(desk_views(desk_edit(header_transport(player_rail(t)))), False) if name == 'PlayerDesk' else open_layers(phone_band(t), True)
     p.write_text(t)
 print('r74 versions ok')

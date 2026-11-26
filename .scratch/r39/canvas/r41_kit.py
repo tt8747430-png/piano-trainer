@@ -94,6 +94,7 @@ def EDITB(on, other_href):
 _LI = lambda d: f'<svg viewBox="0 0 24 24" width="22" height="22" {I}>{d}</svg>'
 NOTATIONI = _LI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>')
 LAYOUTI = _LI('<rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 21V9"></path>')
+WAVESI = _LI('<path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>')
 AUDIOI = _LI('<path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"></path>')
 SEARCHI = _LI('<circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path>')
 KBDI = _LI('<rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"></path>')
@@ -1073,7 +1074,12 @@ def AUDPANEL(phone=False):
             f'<span style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{p.name}}}}</span>'
             + ib('Solo', 'doSolo', 'solo', HEADPHI) + ib('Mute', 'doMute', 'mute', MUTEI) + '</div>' + _ALEVEL('{{p.name}}', 'p.v', 'p.setV') + '</div>')
     parts = f'<section aria-label="Volume" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Volume</h3>{master}<sc-for list="{{{{hdParts}}}}" as="p" hint-placeholder-count="2">{part}</sc-for></section>'
-    return f'<div style="display: flex; flex-direction: column; gap: 24px; padding: {4 if phone else 16}px 0 0">{room}{parts}</div>'
+    if phone:
+        return f'<div style="display: flex; flex-direction: column; gap: 24px; padding: 4px 0 0">{room}{parts}</div>'
+    # a laptop panel's sections are folds, as Song, View and Notation (owner, 2026-11-26: every section of a panel a fold;
+    # Flat's Audio panel in the owner's 26.11 screenshots): Room (the reverb's waves), then Volume (the master, each part)
+    return ('<div style="display: flex; flex-direction: column">' + FOLD('Room', WAVESI, 'Room', SEGC('hdRooms', 36, 14, True), first=True)
+            + FOLD('Vol', AUDIOI, 'Volume', master + f'<sc-for list="{{{{hdParts}}}}" as="p" hint-placeholder-count="2">{part}</sc-for>') + '</div>')
 HDRKEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-haspopup="dialog" aria-expanded="{{{{hdKeysOn}}}}" onClick="{{{{hdKeys}}}}" style="{_HB}">'
               + KEYSI.replace('width="22" height="22"', 'width="20" height="20"') + '</button>').replace(f'style="{_HB}"', f'style="{_HB}; background: {{{{hdKeysBg}}}}; color: {ONB}"', 1)
 def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
