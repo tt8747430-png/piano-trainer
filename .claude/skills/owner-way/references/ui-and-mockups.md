@@ -56,6 +56,7 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 **Actions**
 
 - One way to each action. Adding a direct way removes the old one.
+- **Nothing the owner did not ask for** (owner, 2026-11-26: "remove all the thigns that i didnt asked for, make more clean interface"): a part stays when a ruling asked for it or the page cannot work without it; a feature drawn on our own initiative, a line that repeats what is beside it (a name over a staff the pickers name, credits printed twice, "Lesson n" under a numbered spine), or a second home for another page's job goes.
 - A screen's own actions go in its bar. **What creates or adds floats** (owner, 2026-11-17: "use proper floating
   actions and like add to library in this add buttons floating"; Flat's floating +): the + that creates on a library,
   and a detail page's one act (Add to my library, Open in my library) as the honey floating action at the bottom
