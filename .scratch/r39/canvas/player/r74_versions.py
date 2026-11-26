@@ -231,7 +231,7 @@ def phone_band(t):
     places = (('Song', 'Song', '{{verName}}', f'<div style="display: flex; flex-direction: column">{VERPANEL()}</div>', None),
               ('View', 'View', '{{viewName}}', VIEWPANEL(inset=False), None),
               ('Tr', 'Transpose', '{{hdKeyL}}', TRROWS(True), None),
-              ('Opts', 'Playback options', '', '', 'phOptsGo'), ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
+              ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
     t = t.replace('</main>', '</main>' + HDRPOPS(True, 0, 0, 0, keys_right=0, phone=True) + PHMENU(places, 'Takes.dc.html', PHMODE('play', 'Player.dc.html', 'Editor.dc.html')), 1)
     st_ = '(o) => this.setState(o)'
     vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
@@ -245,7 +245,7 @@ def phone_band(t):
     keys = HDRKEYS('s', st_, lambda m: 'sTo: ' + m + ', sUndo: false', 'togglePlayNow', 'playing', loop, 'loop',
                    "loop ? 'Stop looping bars ' + loopA + '–' + loopB : 'Loop bars ' + (Math.floor((bar - 1) / 4) * 4 + 1) + '–' + Math.min(16, Math.floor((bar - 1) / 4) * 4 + 4)",
                    [('R', 'Right hand'), ('L', 'Left hand')])
-    keys += ' ' + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}", close_others=', ph: null') + ' ' + PHKEYS('s', st_, ['Song', 'View', 'Tr'], lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}") + ' ' + PARTKEYS('s', st_, ['Melody', 'Piano'])
+    keys += ' ' + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}", close_others=', ph: null') + ' ' + PHKEYS('s', st_, ['Song', 'View', 'Tr'], lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}") + ' ' + PARTKEYS('s', st_, [('M', 'Melody'), ('P', 'Piano')], 'pSolo')
     # Played through's Transpose opens the band's Transpose, the one implementation
     assert t.count("openKey: pick({ open: 'key' })") == 1; t = t.replace("openKey: pick({ open: 'key' })", "openKey: () => this.setState({ open: 'none', ph: 'Tr' })", 1)
     a = 'togglePlay: togglePlayNow,'; i = t.index(a)
