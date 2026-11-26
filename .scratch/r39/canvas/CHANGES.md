@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · a laptop view's settings (Sheet, Diagrams, Grid, Lyrics) hang under the views and the gear on the bar's 24 edge, 76 down, as every laptop popover; they stood at offsets from the centre left from when the views pill sat there, under nothing · PlayerDesk (PlayerLaptopSheet) · **pending**
 ## Changes
 
 - 2026-11-26 · (this commit) · one count per folder: Choir hymns reads 4 songs wherever it is named (Groups, its folder page, Songs' shared shelf; it said 12 over a folder of four), and Settings' Swipe actions preview gives Hymns its 6 songs (it said 12) · Groups, GroupsLaptop, Songs, Settings, SettingsLaptop · v732

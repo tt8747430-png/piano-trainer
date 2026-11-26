@@ -153,6 +153,7 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **A laptop view's settings hang under the views (loop, 2026-11-26; "A laptop's settings hang where their bar is"):** Sheet, Diagrams, Grid and Lyrics settings opened at offsets from the window's centre, kept from when the views pill stood there, so the card hung under nothing; it hangs on the bar's 24 edge at the right, 76 down, under the views and the gear.
 - **Played through ends on its acts (owner, 2026-11-26: "remove all the thigns that i didnt asked for"):** the line under Play again, "4 min added to today’s practice · 23 days in a row ›", was our own (loop round 61) and said again what the Profile's streak says; it goes, on both sizes.
 - **The account menu leads each item with its picture, as Claude's (the owner's saved claude.ai, 2026-11-20):** Profile, Settings, Language, Sign out and Sign in each lead with their Lucide picture (16, ink), 12 before the word; Language keeps its value at the end. `lapwin.py` and `SidebarAccount`.
 - **Piano is a popover on a laptop, as PlayerLaptopKeyboard draws it (loop, the board-to-app port, 2026-11-20):** over the transport's Keyboard button, 380 wide, 16 round, 12 in, its title "Piano" at its left with no Done; it was the phone's bottom sheet across the laptop's foot. Practice and Piano share one kit layer (`TransportPopover`); on Chords and the Practice pages a laptop's Piano is the card hung at the bar's right, as their boards draw it. A phone keeps the sheet.
