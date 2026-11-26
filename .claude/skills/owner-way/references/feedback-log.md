@@ -126,6 +126,7 @@ owner's, typos fixed.
 - **The Player's small buttons reach 44 (2026-11-19, the lines; 44px targets):** on the phone and the laptop alike, the Practice sheet's − and + of the tempo and its Tap stood 40, as did a pattern row's heart and Listen and the Pattern sheet's Sort and filter; each is now 44, the size of every other touch target on the phone.
 
 ## Player and editor together
+- **Recently used where Flat keeps it (the loop, 2026-11-26):** the phone palette spent its first category tab on a clock; Flat pins its clock at the right end of the durations row, after a hairline, the row fading under it (flat-score-editor 017, 086). Ours does the same: the clock opens the palette on Recent (honey-deep while it shows), the categories start on Notes, and the durations row stays above the open palette as Flat's.
 - **The Grid's bar numbers readable (the loop, 2026-11-26):** they were 10px in #A39A90 (2.5:1), under the type floor; now 12px in soft ink, as every other secondary figure.
 - **Piano keys on, one sign on both sizes (the loop, 2026-11-26):** the laptop toolbar drew the keys' toggle as an ink-filled square while on, the phone a honey-deep glyph; both are the honey-deep glyph now (Flat's keyboard glyph turns blue), and no heavy fill competes with Play.
 - **The laptop's chosen tool shows (the loop, 2026-11-26):** the note-input pill's pressed tile was the pill's own colour, so the chosen duration was invisible; it is white and lifted now, the segmented control's chosen look.
