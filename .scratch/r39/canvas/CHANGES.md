@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · (this commit) · clean: the Called to Play playlist reads 15 songs (its "· Book 1" was our own line; every playlist says its count and how many are learned) · Songs, SongsLaptop, AllSongs, AllSongsLaptop, Folder, FolderLaptop, SharedFolder, SharedFolderLaptop · v739
 - 2026-11-26 · (this commit) · one count for a lesson's place: Learn's Continue and Search's suggestion read Lesson 7 of 11, as the lesson's own eyebrow (they counted Foundations' 13 steps, its two checks among them, as lessons); the level's progress still counts the 13 steps · Learn, LearnLaptop, LearnLevel, LearnLevelLaptop, LearnCourses, LearnCoursesLaptop, AppLayers, AppLayersLaptop · v738
 - 2026-11-26 · (this commit) · a song's name heads its facts: 8 over Key, Time and Tempo and 16 under the cover (it stood 16 from both, read as the cover's end); its one-child wrapper left from the credits line went · Song, SongLaptop, SongSettings, SongSettingsLaptop · v737
 - 2026-11-26 · (this commit) · clean: Practice's places name themselves alone: the Theory rows and cards lose their description lines ("Chord types, voicings, inversions" and the rest: the pictures show them), and the Tools lose theirs and their settings ("120 BPM · 4/4", "A4 = 440 Hz": each tool's own page holds them) and the Chord finder's "Last: Cmaj7" (its history went in v728); the Exercises keep their counts · Main, Laptop (Practice) · v736

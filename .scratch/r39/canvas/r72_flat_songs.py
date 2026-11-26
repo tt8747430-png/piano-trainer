@@ -16,7 +16,7 @@ SONGS_ALL = [  # title, composer · key, progress, last played, added order
     ('My first song', 'Written by you · C major', 'Not started', 'Added 23 Oct', 8),
 ]
 FOLDERS_ALL = [('Favourites', '2 songs', PEACH, 'heart'), ('Songs to learn', '23 songs · 4 learned', HONEY, ''), ('Hymns', '6 songs · 2 learned', SKY, ''),
-               ('Called to Play', '15 songs · Book 1', LILAC, '')]
+               ('Called to Play', '15 songs', LILAC, '')]
 _ROWS = [{'t': t, 's': s, 'v': v, 'when': w, 'add': a, 'pic': INCIPIT(INC.get(t, (2, 4)))} for t, s, v, w, a in SONGS_ALL]
 
 FL_JS = r'''
@@ -114,7 +114,7 @@ def SHAREDCARDS(href):
 # who, and opens itself, never Groups; New playlist is the last, dashed square.
 PLAYLISTS = [('Favourites', '2 songs', PEACH, 'heart', [], ''), ('Songs to learn', '23 songs · 4 learned', HONEY, '', ['Clair de lune', 'Für Elise', 'Let It Be', 'Jingle Bells'], ''),
              ('Hymns', '6 songs · 2 learned', SKY, '', ['Amazing Grace', 'Holy, Holy, Holy', 'Abide with Me', 'Be Thou My Vision'], ''),
-             ('Called to Play', '15 songs · Book 1', LILAC, '', ['Twinkle, Twinkle, Little Star', 'Ode to Joy', 'Jingle Bells', 'My first song'], ''),
+             ('Called to Play', '15 songs', LILAC, '', ['Twinkle, Twinkle, Little Star', 'Ode to Joy', 'Jingle Bells', 'My first song'], ''),
              ('Choir hymns', 'Maria Ionescu · 4 songs', SAGE, '', ['It Is Well', 'Great Is Thy Faithfulness', 'Silent Night', 'Amazing Grace'], 'M'),
              ('Grade 3 pieces', 'Daniel Rusu · 8 songs', '#EEE3D3', '', ['Für Elise', 'Clair de lune', 'Ode to Joy', 'Twinkle, Twinkle, Little Star'], 'D')]
 def PLCOVER(c, heart, songs, face, w=64):
