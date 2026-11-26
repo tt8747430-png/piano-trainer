@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · R74: Edit beside the version, as Flat's "✎ Edit ▾" in the title's group (not at the bar's end); the version button as wide as its longest name so Edit holds its place · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · pending
 
 ## Changes
 

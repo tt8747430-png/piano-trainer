@@ -60,6 +60,13 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
   like this"). A part with no answer to the first goes; a place with no answer to the second moves to where the part
   belongs: beside what it acts on or names (the version capsule beside the song's name, as Flat's bar), never centred,
   spread or set apart only to fill a bar or balance a row. The answer is the reference or the ruling, said in the spec.
+- **Before moving or placing anything, ask why, and check it against the examples** (owner, 2026-11-26: "but why did
+  you move it to the right: you always should ask you why i do this and does this comply to the examples and best
+  practices"): for every element moved or placed, answer in the spec, before building: why this place; which of the
+  owner's screenshots and reference apps shows it there (the owner's own images first, then `piano-data`, then Mobbin),
+  quoted by file; which guideline agrees. A general rule ("Edit trails the bar") never beats the example the owner
+  sent: Edit went to the bar's far end by Apple's rule while the owner's Flat screenshots show "✎ Edit ▾" in the
+  title's group, and it was wrong. No example and no reason: the element stays where it was.
 - One way to each action. Adding a direct way removes the old one.
 - **Nothing the owner did not ask for** (owner, 2026-11-26: "remove all the thigns that i didnt asked for, make more clean interface"): a part stays when a ruling asked for it or the page cannot work without it; a feature drawn on our own initiative, a line that repeats what is beside it (a name over a staff the pickers name, credits printed twice, "Lesson n" under a numbered spine), or a second home for another page's job goes.
 - A screen's own actions go in its bar. **What creates or adds floats** (owner, 2026-11-17: "use proper floating

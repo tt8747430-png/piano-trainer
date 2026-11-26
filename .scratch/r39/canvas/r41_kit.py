@@ -40,9 +40,10 @@ GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; borde
 # accompaniment … easier to switch between the score and the accompaniment"; then "i dont like this edit button with this
 # accompaniment: dont you see how awful it look inside this control"): the version is its own glass menu button beside
 # the song's name (what is on the stand: Accompaniment, Arrangement where one is written, Your arrangement), and Edit is
-# its own glass button at the bar's trailing end (Apple HIG: Edit trails; Flat's Edit stands apart from the title), the
-# same place in Play and in Edit, pressed on the sand wash while editing; a tap there goes back to playing. A choice of
-# what to read and a mode switch are two acts, so they are two controls. The menu is a native disclosure.
+# its own glass button right beside it, as Flat's "✎ Edit ▾" stands in the title's group after the transport (the owner's
+# Flat screenshots), the same place in Play and in Edit, pressed on the sand wash while editing; a tap goes back to playing. A choice of
+# what to read and a mode switch are two acts, so they are two controls. The version button is as wide as its longest
+# name (Your arrangement), so Edit beside it holds its place between Play and Edit. The menu is a native disclosure.
 PENI = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="M21.17 6.81a1 1 0 0 0-3.99-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"></path></svg>'
 VERSIONS = (('Accompaniment', 'From the chords · Bass + chords', 'Player'), ('Arrangement', 'None written for this song yet', ''), ('Your arrangement', 'Write your own, from this accompaniment', 'Editor'))
 def VERSW(on, other_href, label=None):
@@ -59,7 +60,7 @@ def VERSW(on, other_href, label=None):
         else:
             rows.append(f'<a role="menuitemradio" aria-checked="false" href="{board}{sfx}" style="{st}">{body}</a>')
     menu = (f'<div role="menu" aria-label="Versions" style="position: absolute; z-index: 61; top: 52px; left: 0; width: 320px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; flex-direction: column; text-align: left; font-weight: 400">{"".join(rows)}</div>')
-    summary = (f'<summary aria-label="Version: {shown}" data-tip="Versions" style="list-style: none; height: 44px; box-sizing: border-box; padding: 0 12px 0 16px; display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 15px; font-weight: 600; color: {INK}; white-space: nowrap">'
+    summary = (f'<summary aria-label="Version: {shown}" data-tip="Versions" style="list-style: none; height: 44px; box-sizing: border-box; min-width: 184px; padding: 0 12px 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 6px; cursor: pointer; font-size: 15px; font-weight: 600; color: {INK}; white-space: nowrap">'
                f'{shown}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_D}</span></summary>')
     return (f'<div role="group" aria-label="Version" style="flex: none; position: relative; border-radius: 22px; {GLASSFX}; pointer-events: auto">'
             f'<style>details.vsw > summary::-webkit-details-marker {{ display: none }}</style><details class="vsw" style="position: relative">{summary}{menu}</details></div>')

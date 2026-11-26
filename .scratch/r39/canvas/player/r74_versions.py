@@ -1,6 +1,6 @@
 # R74 (owner, 2026-11-26): the Player says plainly that it shows an accompaniment made from the chords, opens on it
 # (almost every song has only that), offers the learner's own arrangement where the versions are chosen, and its bar
-# holds the version (VERSW) beside the name and Edit (EDITB) at its end. Its one input is player/base (the Player pair as built before R74);
+# holds the version (VERSW) beside the name and Edit (EDITB) beside it. Its one input is player/base (the Player pair as built before R74);
 # it writes practice/project, so it runs any number of times. The Player's earlier builders are gone.
 import re, pathlib, sys; sys.path.insert(0, "/home/user/piano-trainer/.scratch/r39/canvas")
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/calm_kit.py').read())
@@ -24,11 +24,9 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         t = t.replace(sw, '<span></span>', 1)
         close = re.search(r'<a href="Songs?Laptop.dc.html" aria-label="Close".*?</a>', t, re.S).group(0)
         t = t.replace(close, close + f'<h1 style="margin: 0 30px 0 12px; padding: 0; font-size: 17px; font-weight: 600; white-space: nowrap; pointer-events: auto">Amazing Grace</h1>' + sw, 1)
-    # Edit trails the bar, its own button, at the editor's place (owner, 2026-11-26: "i dont like this edit button with
-    # this accompaniment … inside this control")
-    h = t.index('aria-label="Version"'); e = t.index('</header>', h)
-    k = t.rindex('</div>', h, e)
-    t = t[:k] + EDITB('play', 'Editor' + sfx) + t[k:]
+    # Edit its own button beside the version, as Flat's "✎ Edit ▾" after the name and transport (the owner's Flat
+    # screenshots; owner, 2026-11-26: "i dont like this edit button with this accompaniment … inside this control")
+    t = t.replace(sw, f'<div style="display: flex; align-items: center; gap: 8px; min-width: 0; pointer-events: auto">{sw}{EDITB("play", "Editor" + sfx)}</div>', 1)
     if name == 'PlayerApp':
         t = t.replace('padding: 8px 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; pointer-events: none', MODEBAR_P + '; pointer-events: none', 1)
     # Close goes back to the library the song was opened from (the song's own page is gone, R74)
