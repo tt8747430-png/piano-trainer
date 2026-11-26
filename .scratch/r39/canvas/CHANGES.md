@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · R74: the laptop Player's name menu holds the song's acts (Share link, Export › formats, Print | Duplicate, Archive), each with its toast; Settings and its window gone from the Player · PlayerDesk · pending
 
 ## Changes
 

@@ -55,6 +55,10 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
   the owner's Flat screenshots put "✎ Edit ▾" in the title's group after the transport; pressed while editing, the
   same place in Play and Edit on both sizes; no Done.
 
+- **R74, the song's acts in the name's menu** (owner, 2026-11-26: "fix the settings: it doenst make sense with this
+  window popup"): Share link, Export › (formats in a submenu), Print | Duplicate, Archive; a toast answers each,
+  Archive with Undo. No Settings row, no window over the Player.
+
 - **R74, Edit only with the Score; the views in the View panel** (owner, 2026-11-26: "the edit button belongs only to
   the score view … we dont need this your version"; "the switch between the view sheet or diagramms … in the right
   … doesnt make so much sense"): versions Accompaniment and Score; Edit beside the version only on Score; Your

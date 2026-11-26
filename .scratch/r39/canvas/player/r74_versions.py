@@ -87,9 +87,25 @@ def player_rail(t):
     gear = re.search(r'<div[^>]*><button type="button" aria-label="Settings" data-tip="Settings" aria-expanded="\{\{isMore\}\}".*?</button></div>', t, re.S)
     t = t.replace(gear.group(0), '', 1)
     h1 = re.search(r'<h1 style="margin: 0 30px 0 12px;[^"]*">Amazing Grace</h1>', t).group(0)
-    menu = acts.replace('right: 0; top: 54px;', 'left: 12px; top: 52px;', 1)
-    share = '<button type="button" role="menuitem" onClick="{{toggleSongActs}}" style="min-height: 44px; box-sizing: border-box; padding: 0 16px; display: flex; align-items: center; gap: 12px; width: 100%; border: 0; border-top: 1px solid #EFE9E1; background: transparent; color: #332921; font-size: 15px; text-align: left"><span style="width: 20px"></span><span>Share link</span></button>'
-    menu = menu.replace('</div></sc-if>', share + '</div></sc-if>', 1)
+    # the song's acts in the name's menu itself (owner, 2026-11-26: "fix the settings: it doenst make sense with this
+    # window popup: make proper controls or popup"): Settings and its centred window go; Share link, Export (a submenu
+    # of its formats, beside the menu, as macOS and Flat's File › Export), Print, then Duplicate and Archive after a
+    # hairline; each act answers in a toast, Archive with Undo
+    _ic = lambda d: f'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none">{d}</svg>'
+    _row = 'min-height: 44px; box-sizing: border-box; padding: 0 16px; display: flex; align-items: center; gap: 12px; width: 100%; border: 0; background: transparent; color: #332921; font: inherit; font-size: 15px; text-align: left; cursor: pointer'
+    _it = lambda ic, lab, act, extra='', tail='': f'<button type="button" role="menuitem" onClick="{{{{{act}}}}}" style="{_row}{extra}">{_ic(ic)}<span style="flex: 1">{lab}</span>{tail}</button>'
+    _box = 'position: absolute; z-index: 5; width: 232px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px rgba(26,22,18,0.08), 0 2px 4px rgba(26,22,18,0.10), 0 18px 40px -12px rgba(26,22,18,0.35); padding: 4px 0'
+    sub = ('<sc-if value="{{expOn}}" hint-placeholder-val="{{false}}"><div role="menu" aria-label="Export" style="' + _box + '; left: calc(100% + 4px); top: 48px; width: 252px">'
+           + ''.join(f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="{_row}">{l}</button>' for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))) + '</div></sc-if>')
+    menu = ('<sc-if value="{{songActsShow}}" hint-placeholder-val="{{false}}"><div role="menu" aria-label="Amazing Grace" style="' + _box + '; left: 12px; top: 52px">'
+            + _it('<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>', 'Share link', 'actShare')
+            + _it('<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path><path d="M12 15V3"></path>', 'Export', 'toggleExp', '; background: {{expBg}}', f'<span aria-hidden="true" style="display: flex; color: #685E56">{CHEVR}</span>')
+            + _it('<path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect>', 'Print', 'actPrint')
+            + '<div role="separator" style="height: 1px; margin: 4px 0; background: #EFE9E1"></div>'
+            + _it('<rect x="8" y="8" width="14" height="14" rx="2"></rect><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"></path>', 'Duplicate', 'actDup')
+            + _it('<rect x="2" y="3" width="20" height="5" rx="1"></rect><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"></path><path d="M10 12h4"></path>', 'Archive', 'actArchive')
+            + sub + '</div></sc-if>')
+    t = t.replace('</main>', TOAST(104, 'songUndo', z=60, laptop=True) + '</main>', 1)
     t = t.replace(h1, f'<div style="position: relative; margin: 0 18px 0 0; pointer-events: auto"><button type="button" aria-haspopup="menu" aria-expanded="{{{{songActsOn}}}}" onClick="{{{{toggleSongActs}}}}" data-tip="The song’s menu" style="height: 44px; padding: 0 8px 0 12px; border: 0; border-radius: 12px; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 4px; cursor: pointer"><h1 style="margin: 0; font-size: 17px; font-weight: 600; white-space: nowrap">Amazing Grace</h1><span style="display: flex; color: {SOFT}">{CHEV_D}</span></button>{menu}</div>', 1)
     # the music and the transport stand beside the panel
     t = t.replace('<main style="position: absolute; left: 0; right: 0; top: {{areaTop}}px;', '<main style="position: absolute; left: {{panelPad}}px; right: 0; top: {{areaTop}}px;', 1)
@@ -97,7 +113,13 @@ def player_rail(t):
     # the script: the rail's state, apart from the popovers' (Play closes a popover, never the panel)
     keys = ("isMore: open === 'settings', rail: s.rail ?? 'song', "
             "panelSong: (s.rail ?? 'song') === 'song' && !['pattern', 'patfilter', 'key'].includes(open), panelView: (s.rail ?? 'song') === 'view', "
-            "panelPad: (s.rail ?? 'song') === 'none' ? 76 : 428, foldPanel: () => this.setState({ rail: 'none', open: 'none' }), "
+            "panelPad: (s.rail ?? 'song') === 'none' ? 76 : 428, "
+            "expOn: !!s.exp, expBg: s.exp ? '#F3EEE8' : 'transparent', toggleExp: () => this.setState({ exp: !s.exp }), "
+            "toastOn: !!s.sTo, toastT: s.sTo || '', toastUndo: !!s.sUndo, songUndo: () => this.setState({ sTo: '', sUndo: false }), "
+            "actShare: () => this.setState({ songActs: false, exp: false, sTo: 'Link copied', sUndo: false }), actPrint: () => this.setState({ songActs: false, exp: false }), "
+            "actDup: () => this.setState({ songActs: false, exp: false, sTo: 'Copy saved to My songs', sUndo: false }), actArchive: () => this.setState({ songActs: false, exp: false, sTo: 'Song archived', sUndo: true }), "
+            "expXml: () => this.setState({ songActs: false, exp: false, sTo: 'Exported as MusicXML', sUndo: false }), expMxl: () => this.setState({ songActs: false, exp: false, sTo: 'Exported as compressed MusicXML', sUndo: false }), expMidi: () => this.setState({ songActs: false, exp: false, sTo: 'Exported as MIDI', sUndo: false }), "
+            "foldPanel: () => this.setState({ rail: 'none', open: 'none' }), "
             "pickSong: () => this.setState({ rail: (s.rail ?? 'song') === 'song' ? 'none' : 'song', open: 'none' }), pickView: () => this.setState({ rail: (s.rail ?? 'song') === 'view' ? 'none' : 'view', open: 'none' }), "
             "railSongOn: (s.rail ?? 'song') === 'song' ? 'true' : 'false', railSongBg: (s.rail ?? 'song') === 'song' ? '#E8DFD3' : 'transparent', railSongW: (s.rail ?? 'song') === 'song' ? 600 : 500, "
             "railViewOn: (s.rail ?? 'song') === 'view' ? 'true' : 'false', railViewBg: (s.rail ?? 'song') === 'view' ? '#E8DFD3' : 'transparent', railViewW: (s.rail ?? 'song') === 'view' ? 600 : 500,")
