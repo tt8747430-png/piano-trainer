@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · (this commit) · clean: a folder under Shared with me reads "4 songs · Maria Ionescu · Choir accompanists" (its "Shared by" said the heading over it again); the folder's own page keeps "Shared by Maria Ionescu" · Groups, GroupsLaptop · v741
 - 2026-11-26 · (this commit) · the editor prints the score's credits on one line, as the Player prints the same score (two paddings left them 24 short, so "(American folk tune)" broke to a second line) · Editor, EditorDraft · v740
 - 2026-11-26 · (this commit) · clean: the Called to Play playlist reads 15 songs (its "· Book 1" was our own line; every playlist says its count and how many are learned) · Songs, SongsLaptop, AllSongs, AllSongsLaptop, Folder, FolderLaptop, SharedFolder, SharedFolderLaptop · v739
 - 2026-11-26 · (this commit) · one count for a lesson's place: Learn's Continue and Search's suggestion read Lesson 7 of 11, as the lesson's own eyebrow (they counted Foundations' 13 steps, its two checks among them, as lessons); the level's progress still counts the 13 steps · Learn, LearnLaptop, LearnLevel, LearnLevelLaptop, LearnCourses, LearnCoursesLaptop, AppLayers, AppLayersLaptop · v738
