@@ -499,3 +499,14 @@ def A4PAGE(credit='', sel=(3, 0)):
             f'<div style="margin: 16px 0 0; font-family: {SERIF}; font-size: 13px; font-weight: 700; color: {INK}">Verse <span style="font-weight: 400"><svg role="img" aria-label="quarter note" viewBox="0 0 8 16" width="7" height="14" style="vertical-align: -2px"><ellipse cx="3.4" cy="13" rx="3.3" ry="2.3" transform="rotate(-20 3.4 13)" fill="{INK}"/><rect x="5.8" y="0" width="1" height="12.6" fill="{INK}"/></svg> = 80</span></div>'
             f'<div style="margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=sel, size=1.0).replace(ACCENT, '#85B8DC') + '</div>'
             f'<p style="position: absolute; left: 0; right: 0; bottom: 32px; margin: 0; text-align: center; font-family: {SERIF}; font-size: 11px; color: {SOFT}">Public domain</p></article>')
+
+# A page over a full-screen screen (the editor's Credits; owner, 2026-11-26: "it should open properly on a proper page
+# this credits like in the flat"; "why the credits are still a popup and not a proper page"): the whole screen, its
+# own bar (Back, the title), the form in one centred column; never a popover, a sheet or a window (Flat's Credits, 087)
+def THINGPAGE(on, close, title, body, lap):
+    pad = '24px' if lap else '16px'
+    return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; inset: 0; z-index: 61; background: {PAGE}; color: {INK}; display: flex; flex-direction: column">'
+            f'<header style="flex: none; height: {72 if lap else 60}px; margin-top: {0 if lap else 62}px; box-sizing: border-box; padding: 8px {pad}; display: grid; grid-template-columns: minmax(44px, 1fr) auto minmax(44px, 1fr); align-items: center">'
+            f'<button type="button" onClick="{{{{{close}}}}}" aria-label="Back" data-tip="Back · Esc" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: pointer">{CHEV_L}</button>'
+            f'<h1 style="margin: 0; font-size: 17px; font-weight: 600">{title}</h1><span></span></header>'
+            f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px {pad} 48px"><div style="width: min(560px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 16px">{body}</div></main></section></sc-if>')

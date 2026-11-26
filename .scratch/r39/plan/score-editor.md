@@ -49,14 +49,14 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
   and Edit share one place. The song opens on the accompaniment; the score prints "Accompaniment from the chords"
   in italic on its own line under the credits, as an engraver credits an arrangement, the music one line lower.
 
-- **R74, the editor's bar as Flat's, Credits a window** (owner, 2026-11-26: "port the flat editor more precisely also on
+- **R74, the editor's bar as Flat's, Credits a page** (owner, 2026-11-26: "port the flat editor more precisely also on
   the laptop. like the title in the header and clickin on its edit button with pen icon we go to the credits page";
   "it should open properly on a proper page this credits like in the flat, and be carefull when you use teh popups").
   Flat's top bar (`flat-score-editor` 099, 126): the score's name after the way out. On a laptop the bar reads ✕,
   Amazing Grace, a pen (Credits); the version-and-mode capsule in the middle; "Saved on this device" and ··· at the
-  end. The pen, the printed title and the menu's Title and credits open one Credits window: the 720 window over
-  the editor (THINGWIN, as a song's Settings), its fields and Save. It is never a popover. On a phone it is the
-  sheet, as Flat's (087). The Page view fits the score's width beside the palette and follows its width as it is
+  end. The pen, the printed title and the menu's Title and credits open one Credits page (owner, 2026-11-26: "why the credits are still a popup and not a proper page like i said?"):
+  the whole screen, its own bar (Back, Credits), the fields and Save in one centred 560 column (the kit's THINGPAGE),
+  on a laptop and a phone alike, as Flat's Credits (087). Never a popover, a sheet or a window. The Page view fits the score's width beside the palette and follows its width as it is
   dragged (Flat's auto-fit zoom); 100 % is that fit.
 - **R74, one engraving for every score** (owner, 2026-11-26: "this accompaniment sheet doesnt look like a
   professioanal score we talked about"; "on the phone the accompaniment doesnt look like a real sheet score"). The

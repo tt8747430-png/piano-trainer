@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-26 · (this commit) · R74 the editor's bar as Flat's (✕, the title and its pen to Credits, the save state at the end), Credits a window, the Page fitted to the width; the Player prints the editor's page (A4 on a laptop, a phone-width page on a phone), the accompaniment credited as an arrangement; the page a kit part (A4PAGE) · EditorLaptop, EditorDraftLaptop, Editor, EditorDraft, PlayerApp, PlayerDesk, every Player board · pending
+- 2026-11-26 · (this commit) · R74 the editor's bar as Flat's (✕, the title and its pen to Credits, the save state at the end), Credits a page of its own on both sizes (THINGPAGE), the Page fitted to the width; the Player prints the editor's page (A4 on a laptop, a phone-width page on a phone), the accompaniment credited as an arrangement; the page a kit part (A4PAGE) · EditorLaptop, EditorDraftLaptop, Editor, EditorDraft, PlayerApp, PlayerDesk, every Player board · pending
 - 2026-11-26 · (this commit) · R74 the song page gone: a song opens in the Player, Settings a window over it (the Player behind), Sections on Section, Edit the original in its menu; one "Version and mode" capsule (Accompaniment ▾ … Edit/Done) on the Player and editor; "Accompaniment from the chords" printed under the credits · Player boards (all), PlayerApp, PlayerDesk, SongSettings, SongSettingsLaptop, Editor*, EditorDraft*, Songs, AllSongs, Folder, Explore, Course, Progression, Pattern and their Laptops; Song and SongLaptop deleted · pending
 ## Changes
 
