@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · pending · the phone's Playback options opens on Flat's three rows in its order (Audio playback, Metronome, Playback speed), Practice's Mode and Hands after them, as the R74 ruling puts Audio first (lines: PlayerApp, PlayerPractice 0 problems; the 50 Player and editor boards 0 problems at both sizes) · PlayerApp · pending
 ## Changes
 
 - 2026-11-26 · 7326b28c · each layer board opens its own layer (Playback options, Menu, View and Parts, View on Diagrams; the laptop's Audio and View panels); the laptop Audio panel as Flat's, Room and Volume folds; the editor's Instruments, Layout and Audio panels render again (a section cut closed short nested them in Notation); Layout's preview page at 0.75 so its gaps land on the scale; index labels named for what each board shows (lines: EditorLaptop, EditorDraftLaptop Layout, PlayerLaptopParts, PlayerDesk Audio, PlayerPractice, PlayerSettings, PlayerHands, PlayerViewDiagrams 0 problems) · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop · v777
