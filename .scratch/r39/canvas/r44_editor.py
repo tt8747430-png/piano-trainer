@@ -330,12 +330,10 @@ _LROW = lambda k, v: f'<div style="min-height: 48px; display: flex; align-items:
 # FLAT_UI_SHELL_AND_MOTION §1.1–1.2: a 64 rail beside one 352 panel; Notation, Instruments, Layout, Audio, and Search and
 # Shortcuts at its foot as acts; the active entry clicked again folds the panel; Layout hides the toolbar and shows the
 # page whole, "Preview of your score"). Flat's Document settings dialog is its legacy and is not drawn.
-# the Song entry: the song's versions, as the Player's Song panel heads with them (one implementation, VERPANEL)
-SONGI_R = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15V6"></path><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M12 12H3"></path><path d="M16 6H3"></path><path d="M12 18H3"></path></svg>'
-PANEL_SONG = _PHEAD('Song') + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 12px 16px 24px; display: flex; flex-direction: column">{VERPANEL()}</div>'
+PANEL_SONG = _PHEAD('Versions') + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 12px 16px 24px; display: flex; flex-direction: column">{VERPANEL()}</div>'
 RAIL = (f'<nav aria-label="Panels" style="flex: none; width: 76px; padding: 0 0 12px; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
         f'<div role="tablist" aria-orientation="vertical" style="display: flex; flex-direction: column; gap: 4px">'
-        + _RAILBTN('Song', SONGI_R, 'Song', 'Song and its versions') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Notation', NOTATIONI, 'Not', 'Notation') + _RAILBTN('Instruments', KEYSI, 'Inst', 'Instruments') + _RAILBTN('Layout', LAYOUTI, 'Lay', 'Layout') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div>'
+        + _RAILBTN('Versions', LAYERSI, 'Song', 'Versions') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Notation', NOTATIONI, 'Not', 'Notation') + _RAILBTN('Instruments', KEYSI, 'Inst', 'Instruments') + _RAILBTN('Layout', LAYOUTI, 'Lay', 'Layout') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div>'
         + '<span style="flex: 1"></span>' + _RAILBTN('Search', SEARCHI, 'Srch', 'Search for an act · ⌘K', 'openSearch') + _RAILBTN('Shortcuts', KBDI, 'Keys', 'Shortcuts · ?', 'openKeys') + '</nav>')
 _PBODY = lambda inner, gap=16: f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: {gap}px">{inner}</div>'
 _PIF = lambda c, inner, h='false': f'<sc-if value="{{{{{c}}}}}" hint-placeholder-val="{{{{{h}}}}}">{inner}</sc-if>'
@@ -423,14 +421,14 @@ PH_PLACES = (('Song', 'Song', '{{verName}}', f'<div style="display: flex; flex-d
              ('Tr', 'Transpose', '{{hdKeyL}}', '', 'openTr'), ('Inst', 'Instruments', '2', '', 'openInst'),
              ('Lay', 'Layout', 'A4', '', 'openLayout'), ('Cred', 'Credits', '', '', 'openCredits'),
              ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
-PHLAYERS = lambda saved, rows=(), foot='', edit_href='Editor.dc.html': (PHMENU(PH_PLACES, 'Takes.dc.html', PHMODE('edit', 'Player.dc.html', edit_href), head=saved, rows=(('Hist', 'Version history', '{{histAgo}}', 'phHist'),) + tuple(rows), foot=foot, inst='openInst', song=(('Tr', 'Transpose', '{{hdKeyL}}', 'openTr'), ('Cred', 'Credits', '', 'openCredits'))) + PHHIST() + HDRPOPS(False, 0, 0, 0, phone=True) + THINGPAGE('creditsOn', 'phToSong', 'Credits', ED_CREDITS, False)
+PHLAYERS = lambda saved, rows=(), foot='', edit_href='Editor.dc.html': (PHMENU(PH_PLACES, 'Takes.dc.html', PHMODE('edit', 'Player.dc.html', edit_href), head=saved, rows=(('Hist', 'Version history', '{{histAgo}}', 'phHist'),) + tuple(rows), foot=foot, inst='openInst', song=(('Tr', 'Transpose', '{{hdKeyL}}', 'openTr'), ('Cred', 'Credits', '', 'openCredits'))) + PHHIST() + HDRPOPS(False, 0, 0, 0, phone=True) + THINGPAGE('creditsOn', 'phToMenu', 'Credits', ED_CREDITS, False)
                           + FSHEET('instOn', 'Instruments', _P44(INST_BODY), back='phToMenu') + FSHEET('pickInstOn', 'New instrument', ED_PICK, back='openInst')
-                          + FSHEET('layoutOn', 'Layout', LAY_BODY, back='phToMenu') + FSHEET('trSheetOn', 'Transpose', TRROWS(True), back='phToSong'))
+                          + FSHEET('layoutOn', 'Layout', LAY_BODY, back='phToMenu') + FSHEET('trSheetOn', 'Transpose', TRROWS(True), back='phToMenu'))
 # the ☰'s keys on the editor's own sheet state: the menu is the 'more' sheet, Song and View two more
 PHEDKEYS = ("phMenu: () => set({ sheet: st.sheet === 'more' ? null : 'more', hdPop: null, sm: false, exp: false }), phMenuOn: st.sheet === 'more', phMenuX: st.sheet === 'more' ? 'true' : 'false', "
             "phMenuFg: st.sheet === 'more' ? '#A8551F' : '#332921', phClose: () => set({ sheet: null }), phSongOn: st.sheet === 'song', phSong: () => set({ sheet: 'song' }), phViewOn: st.sheet === 'view', phView: () => set({ sheet: st.sheet === 'view' ? null : 'view', hdPop: null }), phExpOn: st.sheet === 'phexp', phExp: () => set({ sheet: 'phexp' }), phHist: () => set({ sheet: null, hist_on: true, histSel: null, hdPop: null }), phViewX: st.sheet === 'view' ? 'true' : 'false', phViewFg: st.sheet === 'view' ? '#A8551F' : '#332921', phHistBack: () => set({ hist_on: false, sheet: 'more' }), "
             + PARTKEYS('st', 'set', [('V', 'Voice'), ('P', 'Piano')]) + " "
-            + PHACTS('set', 'sheet: null', lambda m, u: 'toast: ' + m + (" + ' · Undo'" if u else ''), "sheet: 'more'", "sheet: 'song'"))
+            + PHACTS('set', 'sheet: null', lambda m, u: 'toast: ' + m + (" + ' · Undo'" if u else ''), "sheet: 'more'"))
 PHJS = lambda j: (j.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1).replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: st.sheet === 'more', " + PHEDKEYS, 1)
                    .replace("href: 'EditorLaptop' + label + '.dc.html', pick", "href: 'Editor' + label + '.dc.html', pick", 1))
 # the page prints the open version: with its piano accompaniment, or the melody alone (Original), in Edit as in Practice

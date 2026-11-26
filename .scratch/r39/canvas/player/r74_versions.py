@@ -18,7 +18,6 @@ CHEVR = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="cur
 # open on Song when the song opens; the active entry again folds it, as the editor's. The version is the bar's alone
 # (no Arrangement here); the song's acts (Settings, Print, Export, Share link)
 # are the name's menu, as the editor's title; the gear is gone, its jobs the rail's.
-SONGI = _LI('<path d="M21 15V6"></path><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M12 12H3"></path><path d="M16 6H3"></path><path d="M12 18H3"></path>')
 PANEL = 'position: absolute; z-index: 30; left: 76px; top: 64px; bottom: 0; width: 352px; padding: 0 16px 24px; border-radius: 0; box-sizing: border-box; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #FEFDFB; box-shadow: inset -1px 0 0 ' + LINE
 def _sect(t, label):
     d = t.index(f'role="dialog" aria-label="{label}"'); a = t.rindex('<section', 0, d); depth = 0
@@ -45,10 +44,10 @@ def player_rail(t):
     g1 = h.index('</div>', h.index('<a href="SectionLaptop.dc.html"', g0)) + len('</div>')
     h = h[:g0] + h[g1:]
     t = t[:a] + h + t[b:]
-    t = _dock(t, 'Settings', head('Song'))
+    t = _dock(t, 'Settings', head('Versions'))
     # the versions head the Song panel: the sidebar holds the switch and the new versions; the title, the song's acts
-    i = t.index('</header>', t.index('>Song</h2>')) + len('</header>')
-    t = t[:i] + VERPANEL() + t[i:]
+    i = t.index('</header>', t.index('>Versions</h2>')) + len('</header>')
+    t = t[:i] + '<div style="padding-top: 12px">' + VERPANEL() + '</div>' + t[i:]
     t = t.replace('<sc-if value="{{isMore}}"', '<sc-if value="{{panelSong}}"', 1)
     # the Song panel's own pages dock in its place, each with its Back
     # its Pattern page and Sort and filter go with it: they are the editor's Notation panel's now
@@ -90,7 +89,7 @@ def player_rail(t):
     t = t.replace('const KB_VALS = {\nareaTop: 0,', 'const KB_VALS = {\nareaTop: 0, viewBottom: keys ? 904 - (800 - bandH) + 16 : DEV.bottom,', 1)
     # the rail, under the bar, at the window's left edge
     rail = (f'<nav aria-label="Panels" style="position: absolute; z-index: 31; left: 0; top: 64px; bottom: 0; width: 76px; padding: 0 0 12px; box-sizing: border-box; background: #F7F3EE; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
-            f'<div role="tablist" aria-orientation="vertical" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Song', SONGI, 'Song', 'Song') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div></nav>')
+            f'<div role="tablist" aria-orientation="vertical" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Versions', LAYERSI, 'Song', 'Versions') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div></nav>')
     # Audio, Flat's panel (the kit's AUDPANEL, the editor's too): the room and each part's level, the mixer's home
     # after the rail in the tree, as the Song and View panels sit beside it (before it, the band read as the group it closed)
     rail = rail + (f'<sc-if value="{{{{panelAud}}}}" hint-placeholder-val="{{{{false}}}}"><section role="region" aria-label="Audio" style="{PANEL}">' + head('Audio') + AUDPANEL() + '</section></sc-if>')

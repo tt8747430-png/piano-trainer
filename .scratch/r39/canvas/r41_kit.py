@@ -800,7 +800,7 @@ def PHMODE(mode, practice_href, edit_href):
 # foot: what closes the panel (the draft's Publish card)
 _FI = lambda d: f'<svg viewBox="0 0 24 24" width="24" height="24" {I}>{d}</svg>'
 FICONS = {
-    'Song': _FI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>'),
+    'Song': _FI('<path d="m12 2 10 5-10 5L2 7l10-5Z"></path><path d="m2 12 10 5 10-5"></path><path d="m2 17 10 5 10-5"></path>'),
     'View': _FI('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle>'),
     'Tr': _FI('<path d="m21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16"></path>'),
     'Inst': _FI('<rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M8 5v8M12 5v14M16 5v8"></path>'),
@@ -846,21 +846,27 @@ def FRADIO(name):
             f'<span style="flex: 1">{{{{o.l}}}}</span><span aria-hidden="true" style="display: flex; color: {INK}"><sc-if value="{{{{o.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK.replace("width=\"16\" height=\"16\"", "width=\"22\" height=\"22\"")}</sc-if></span></button></sc-for></div>')
 EXPROWS = lambda: GROUP(*(('action', l, a, INK) for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))), bg=SHEET)
 def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=None, title='Amazing Grace', song=(), hide=('Tr', 'Cred', 'View')):
-    """song: rows the Song page adds before the song's acts (Transpose, Credits); hide: places reached from Song, not ☰"""
+    """song: the song's rows ☰ lists after its places (Transpose, Credits); hide: places ☰ lists through song, or the
+    header's View button opens"""
+    # ☰ lists every act in its own row (owner, 2026-11-26: "I dont like that the option is called songs … and I dont
+    # like very much the all these options are now hidden just under this option"), as Flat's ☰ lists Credits, Manage
+    # instruments, Version history, Layout, Export and Print each in its own row (flat-score-editor 083): the versions
+    # are a row named Versions with their own page; the song's key, credits and recordings follow; sharing, exporting
+    # and printing the file close the menu after a hairline, as Flat's Export and Print stand apart
     # Song is the song's own page (owner, 2026-11-26: "the song option really has only the versions and no the other
     # things"): its versions (the laptop rail's Song panel), then the song's things as rows: the key it sounds in, its
     # credits, its recordings, and sharing, exporting and printing it (the laptop's name menu); ☰ keeps the places
     acts = list(song) + [('Rec', 'Recordings', '3', takes_href), ('Share', 'Share link', '', 'phShare'), ('Exp', 'Export', '', 'phExp'), ('Print', 'Print', '', 'phPrint')]
-    places = [(pid, lab, val, (body + f'<div style="{_CARD}; overflow: hidden">{FROWS(acts)}</div>') if pid == 'Song' else (body + PARTSECTION(inst)) if pid == 'View' else body, act) for pid, lab, val, body, act in places]
-    items = [(pid, lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places if pid not in hide] + list(rows)
+    places = [(pid, 'Versions' if pid == 'Song' else lab, val, (body + PARTSECTION(inst)) if pid == 'View' else body, act) for pid, lab, val, body, act in places]
+    items = [(pid, lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places if pid not in hide] + acts[:-3] + list(rows)
     panel = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{phClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
              f'<nav aria-label="{title}" class="nos" style="position: absolute; z-index: 61; top: 120px; right: 8px; left: 24px; max-height: calc(100% - 170px); overflow-y: auto; box-sizing: border-box; padding: 12px 8px; border-radius: 22px; background: {PAGE}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 18px 48px -12px rgba(51,41,33,.38); display: flex; flex-direction: column; gap: 8px">'
-             + head + (f'<div style="padding: 0 4px 4px">{mode_html}</div>' if mode_html else '') + FROWS(items, lines=False) + foot + '</nav></sc-if>')
+             + head + (f'<div style="padding: 0 4px 4px">{mode_html}</div>' if mode_html else '') + FROWS(items, lines=False) + f'<div role="separator" style="height: 1px; margin: 0 12px; background: {LINE}"></div>' + FROWS(acts[-3:], lines=False) + foot + '</nav></sc-if>')
     out = panel
     for pid, lab, val, body, act in places:
         if not act:
-            out += FSHEET(f'ph{pid}On', lab, body, close='phClose', back={'Song': 'phToMenu', 'View': None}.get(pid, 'phToSong'))
-    return out + FSHEET('phExpOn', 'Export', EXPROWS(), close='phClose', back='phToSong')
+            out += FSHEET(f'ph{pid}On', lab, body, close='phClose', back={'View': None}.get(pid, 'phToMenu'))
+    return out + FSHEET('phExpOn', 'Export', EXPROWS(), close='phClose', back='phToMenu')
 # the version history on a phone (Flat's menu: Version history): a page of the saved moments, the chosen one's Restore
 # at its foot; the laptop's History view's rows and state (HISTKEYS), one implementation
 def PHHIST():
@@ -871,14 +877,14 @@ def PHHIST():
             f'<sc-if value="{{{{histOld}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{histRestore}}}}" style="height: 48px; border: 0; border-radius: 24px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">Restore this version</button></sc-if>')
     return FSHEET('histOn', 'Version history', body, close='closeHist', back='phHistBack')
 # the act rows close the menu and do what the title menu's rows do; SET a setter expression, shut what closes the menu
-def PHACTS(SET, shut, TOAST, menu, song):
-    """menu, song: what reopens ☰ and the Song page, for the pages' Back"""
+def PHACTS(SET, shut, TOAST, menu):
+    """menu: what reopens ☰, for its pages' Back"""
     t = lambda m, u=False: TOAST(m, u)
-    return (f"phToMenu: () => ({SET})({{ {menu}, hdPop: null }}), phToSong: () => ({SET})({{ {song} }}), hdMidiBack: () => ({SET})({{ hdPop: null, {menu} }}), phShare: () => ({SET})({{ {shut}, {t("'Link copied'")} }}), phPrint: () => ({SET})({{ {shut} }}), "
+    return (f"phToMenu: () => ({SET})({{ {menu}, hdPop: null }}), hdMidiBack: () => ({SET})({{ hdPop: null, {menu} }}), phShare: () => ({SET})({{ {shut}, {t("'Link copied'")} }}), phPrint: () => ({SET})({{ {shut} }}), "
             f"phMidiGo: () => ({SET})({{ {shut}, hdPop: 'midi' }}), phKeysGo: () => ({SET})({{ {shut}, hdPop: 'keys' }}), phOptsGo: () => ({SET})({{ {shut}, hdPop: 'opts' }}), ")
 def PHKEYS(S, SET, ids, TOAST):
     return ("...(() => { const P = " + S + ".ph ?? null; const o = { phMenu: () => (" + SET + ")({ ph: P === 'menu' ? null : 'menu', hdPop: null }), phMenuOn: P === 'menu', phMenuX: P === 'menu' ? 'true' : 'false', "
-            "phMenuFg: P === 'menu' ? '#A8551F' : '#332921', phClose: () => (" + SET + ")({ ph: null }), " + PHACTS(SET, 'ph: null', TOAST, "ph: 'menu'", "ph: 'Song'") + "}; for (const id of " + repr(list(ids) + ['Exp']) + ") { o['ph' + id + 'On'] = P === id; o['ph' + id] = () => (" + SET + ")({ ph: P === id ? null : id, hdPop: null }); } o.phViewX = P === 'View' ? 'true' : 'false'; o.phViewFg = P === 'View' ? '#A8551F' : '#332921'; return o; })(),")
+            "phMenuFg: P === 'menu' ? '#A8551F' : '#332921', phClose: () => (" + SET + ")({ ph: null }), " + PHACTS(SET, 'ph: null', TOAST, "ph: 'menu'") + "}; for (const id of " + repr(list(ids) + ['Exp']) + ") { o['ph' + id + 'On'] = P === id; o['ph' + id] = () => (" + SET + ")({ ph: P === id ? null : id, hdPop: null }); } o.phViewX = P === 'View' ? 'true' : 'false'; o.phViewFg = P === 'View' ? '#A8551F' : '#332921'; return o; })(),")
 
 # Rename version…: a small form, the one thing a laptop centres (ui-and-mockups)
 def RENAMEDLG():
@@ -1154,7 +1160,8 @@ def VERPANEL():
     add = lambda lab, act: f'<button type="button" onClick="{{{{{act}}}}}" style="{_VPROW}; min-height: 44px; border-top: 1px solid {LINE}">{_VSLOT(PLUSI_S)}<span style="flex: 1">{lab}</span></button>'
     body = (f'<div role="radiogroup" aria-label="Versions" style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{vrow}'
             + add('New version', 'actNewVer') + '<sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + add('New version with accompaniment', 'actNewAcc') + '</sc-if></div>')
-    return FOLD('Ver', LAYERSI, 'Versions', body, first=True)
+    # the Versions page or panel is titled Versions, so its body stands bare under that title, no fold head repeating it
+    return body
 
 # A panel's sections as Flat's (the owner's Flat 26.11 screenshots: Layout's Templates, Pages, Staves, Measures; Audio's
 # Room, Playback, Volume): each a fold, its head a 56 row with the section's glyph, its name and a chevron at the right,
