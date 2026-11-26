@@ -1,6 +1,7 @@
 # R74 (owner, 2026-11-26): the Player says plainly that it shows an accompaniment made from the chords, opens on it
 # (almost every song has only that), offers the learner's own arrangement where the versions are chosen, and its bar
-# holds the one version-and-mode control (MODESW). Run after r43_player.py, and by r41.py on the built boards; idempotent.
+# holds the one version-and-mode control (MODESW). Its input is the Player pair as committed before R74 (8fa29061~1:
+# git show it into practice/project, then run this); r43_player.py no longer runs on its base. Idempotent.
 import re, pathlib, sys; sys.path.insert(0, "/home/user/piano-trainer/.scratch/r39/canvas")
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/calm_kit.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_kit.py').read())
@@ -25,23 +26,33 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     t = t.replace("music ?? 'written'", "music ?? 'chords'")
     # printed under the credits, as an engraver credits an arrangement: what the learner reads is not the composer's score
     # its own line under the credits, centred as they are (on the tempo's line it ran into "1 · Verse · ♩ = 80" at 393)
-    # its own line under the credits, as an engraver prints an arrangement's credit (on the tempo's line it ran into
-    # "1 · Verse · ♩ = 80" at 393): the score under it moves down one line, its playhead and loop grips with it
+    # the score as an engraver prints it (owner, 2026-11-26: "this accompaniment sheet doesnt look like a professioanal
+    # score we talked about"): the kit's one engraving (Dorico's spacing, calm_parts.score_grand); on a laptop the
+    # editor's A4 page on its desk (A4PAGE), as Flat's player shows the page; on a phone the same engraving at the
+    # phone's width, the credits as the page prints them; the accompaniment credited under the music, as "Arr."
     phone = name == 'PlayerApp'
-    MARK = f'<p data-r74 style="position: absolute; left: 0; right: 0; top: {64 if phone else 90}px; margin: 0; text-align: center; font-size: 13px; line-height: 15px; font-style: italic; color: #685E56">Accompaniment from the chords</p>'
+    CREDIT = 'Accompaniment from the chords'
     if 'data-r74 ' not in t:
         a = t.index('margin-top: {{sheetTop}}px; padding: ')
         i = t.rindex('<div', 0, a); depth = 0
         for m in re.finditer(r'<(/?)div\b', t[i:]):
             depth += -1 if m.group(1) else 1
             if depth == 0: j = i + m.end(); break
-        seg = t[i:j]
-        pad = 75 if phone else 105
-        seg = seg.replace(f'margin-top: {{{{sheetTop}}}}px; padding: {pad}px', f'margin-top: {{{{sheetTop}}}}px; padding: {pad + 18}px', 1)
-        seg = re.sub(r'top: (\d+(?:\.\d+)?)px', lambda m: f'top: {float(m.group(1)) + 18:g}px' if float(m.group(1)) >= 70 else m.group(0), seg)
-        seg = re.sub(r'top: \{\{((?:lb|sheetGA|sheetGB|cur)\.y)\}\}px', r'top: calc({{\1}}px + 18px)', seg)
-        seg = seg.replace('Words: John Newton · Music: New Britain (American folk tune)</p>', 'Words: John Newton · Music: New Britain (American folk tune)</p>' + MARK, 1)
-        t = t[:i] + seg + t[j:]
+        if phone:
+            head = (f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: 24px; font-weight: 400; line-height: 1.1">Amazing Grace</h2>'
+                    f'<div style="margin: 12px 0 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; font-family: {SERIF}; font-size: 12px; line-height: 16px"><span>Words: John Newton</span>'
+                    f'<span style="text-align: right">Music: New Britain<br><i style="color: {SOFT}">{CREDIT}</i></span></div>'
+                    f'<div style="margin: 12px 0 0; font-family: {SERIF}; font-size: 12px; font-weight: 700">Verse <span style="font-weight: 400"><svg role="img" aria-label="quarter note" viewBox="0 0 8 16" width="6" height="12" style="vertical-align: -2px"><ellipse cx="3.4" cy="13" rx="3.3" ry="2.3" transform="rotate(-20 3.4 13)" fill="{INK}"/><rect x="5.8" y="0" width="1" height="12.6" fill="{INK}"/></svg> = 80</span></div>')
+            # the page as paper on the grey desk, as Flat's phone shows the page (flat-score-editor 021, 023): white,
+            # its margins, its shadow; three bars a line so the staff stays a readable size
+            body = head + '<div style="margin: -4px 0 0">' + score_grand(470, [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11, 12]], sel=None, size=1.0) + '</div>'
+            body += f'<p style="margin: 24px 0 0; text-align: center; font-family: {SERIF}; font-size: 12px; color: {SOFT}">Public domain</p>'
+            new = (f'<div data-r74 style="margin-top: {{{{sheetTop}}}}px; box-sizing: border-box; min-height: calc(100% - {{{{sheetTop}}}}px); padding: 4px 8px 140px; background: {FILL}">'
+                   f'<article aria-label="Page 1" style="box-sizing: border-box; padding: 24px 16px 32px; background: {SHEET}; color: {INK}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28)">{body}</article></div>')
+        else:
+            new = (f'<div data-r74 style="margin-top: {{{{sheetTop}}}}px; box-sizing: border-box; min-height: calc(100% - {{{{sheetTop}}}}px); padding: 24px 0 160px; background: {FILL}; display: flex; justify-content: center">'
+                   f'<div style="zoom: 1.4">{A4PAGE(CREDIT, None)}</div></div>')
+        t = t[:i] + new + t[j:]
     # the settings' Arrangement says it is not written for this song; Your arrangement is offered after the accompaniment
     if 'data-r74y' not in t:
         a = t.index('<span style="flex: 1; min-width: 0">Arrangement</span>')

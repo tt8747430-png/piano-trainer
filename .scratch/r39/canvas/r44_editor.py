@@ -69,7 +69,7 @@ ED4 = js(r'''
       tbDur: tb(['rest', 'w', 'h', 'q', 'e', 's', 'dot', 'tie', 'tup']), tbAcc: tb(['n', 'sh', 'b']),
       pageOn: view === 'page', panoOn: view === 'pano', viewL: view === 'page' ? 'Panorama' : 'Page view', toggleView: () => set({ view: view === 'page' ? 'pano' : 'page' }),
       views: seg(['Page', 'Panorama'], view === 'page' ? 'Page' : 'Panorama', (l) => set({ view: l === 'Page' ? 'page' : 'pano' })),
-      zoomL: zoom + '%', zf: (view === 'page' ? FIT : 1) * zoom / 100, zoomIn: () => set({ zoom: ZS[Math.min(ZS.length - 1, zi + 1)] }), zoomOut: () => set({ zoom: ZS[Math.max(0, zi - 1)] }), zoomReset: () => set({ zoom: 100 }),
+      zoomL: zoom + '%', zf: (view === 'page' ? (typeof FIT === 'function' ? FIT(pal, pw) : FIT) : 1) * zoom / 100, zoomIn: () => set({ zoom: ZS[Math.min(ZS.length - 1, zi + 1)] }), zoomOut: () => set({ zoom: ZS[Math.max(0, zi - 1)] }), zoomReset: () => set({ zoom: 100 }),
       zinDis: zi === ZS.length - 1 ? 'true' : 'false', zoutDis: zi === 0 ? 'true' : 'false',
       pw, kh, palOn: pal, palPressed: pal ? 'true' : 'false', togglePal: () => set({ pal: !pal }),
       dragPanel: drag((r, k, e) => set({ pw: Math.round(Math.max(280, Math.min(520, (e.clientX - r.left) / k))) })),
@@ -99,12 +99,18 @@ def GBTN(label, svg, act='', href='', tip=''):
     return f'<button type="button" aria-label="{label}"{t} onClick="{{{{{act}}}}}" style="{st}">{svg}</button>'
 def EBAR(close_href, play_href, title=False):
     left = f'<a href="{close_href}" aria-label="Close the editor" data-tip="Close · Esc" style="flex: none; width: 44px; height: 44px; border-radius: 22px; {GL}; color: {INK}; display: flex; align-items: center; justify-content: center; position: relative">{XI}</a>'
+    saved = ''
     if title:
-        left += f'<div style="display: flex; align-items: center; min-width: 0"><span style="font-size: 13px; color: {SOFT}">Saved on this device</span></div>'
+        # Flat's top bar (flat-score-editor 099, 126): the score's name after the way out, and the pen beside it opens
+        # its Credits (title, subtitle, words, music, arranged by, copyright; 087), as the printed title does
+        left += (f'<div style="display: flex; align-items: center; gap: 2px; min-width: 0"><h1 style="margin: 0 0 0 4px; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</h1>'
+                 f'<button type="button" aria-label="Edit the credits" data-tip="Credits" onClick="{{{{openCredits}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: pointer">{PENI}</button></div>')
+        # where the score is kept, at the bar's end before its menu, as Flat's "Last save …"
+        saved = f'<span role="status" style="font-size: 13px; color: {SOFT}; white-space: nowrap">Saved on this device</span>'
     # Undo and Redo are the toolbar's (Flat's actions: delete, history, clipboard); the bar keeps the score's menu
-    right = f'<div style="flex: none; display: flex; border-radius: 22px; {GL}">{GBTN("More", MORE, "openMore")}</div>'
+    right = saved + f'<div style="flex: none; display: flex; border-radius: 22px; {GL}">{GBTN("More", MORE, "openMore")}</div>'
     return (f'<header style="flex: none; position: relative; z-index: 20; {MODEBAR_P}">'
-            f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{left}</div>{MODESW("edit", play_href)}<div style="display: flex; justify-content: flex-end">{right}</div></header>')
+            f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{left}</div>{MODESW("edit", play_href)}<div style="display: flex; align-items: center; justify-content: flex-end; gap: 16px">{right}</div></header>')
 
 # the selection strip: what is chosen, and what acts on it
 def STRIP(play=True):
@@ -183,16 +189,6 @@ TOOLBAR_P = (f'<div role="toolbar" aria-label="Notation" style="flex: none; heig
              f'<div class="nos" style="flex: 1; min-width: 0; overflow-x: auto; display: flex; align-items: center; gap: 4px; padding: 0 0 0 16px">{ESSENTIALS}{CLIP}</div>'
              + TSEP + KEYSBTN + f'<button type="button" aria-label="{{{{viewL}}}}" data-tip="{{{{viewL}}}}" onClick="{{{{toggleView}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{pageOn}}}}" hint-placeholder-val="{{{{false}}}}">{PANOI}</sc-if><sc-if value="{{{{panoOn}}}}" hint-placeholder-val="{{{{true}}}}">{PAGEI}</sc-if></button></div>')
 
-# the page: A4 at 96 dpi (794 × 1123), 17.2 mm margins (65), a 7 mm staff (26.5 px: the kit's 32 units × 0.828)
-PG_W, PG_H, PG_M, PG_K = 794, 1123, 65, 26.5 / 32
-def A4PAGE():
-    cw = PG_W - 2 * PG_M
-    return (f'<article aria-label="Page 1" style="flex: none; position: relative; width: {PG_W}px; height: {PG_H}px; box-sizing: border-box; padding: {PG_M}px {PG_M}px 0; background: {SHEET}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28); display: flex; flex-direction: column">'
-            f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: 30px; font-weight: 400; line-height: 1.1; color: {INK}">Amazing Grace</h2>'
-            f'<div style="margin: 20px 0 0; display: flex; justify-content: space-between; gap: 24px; font-family: {SERIF}; font-size: 13px; color: {INK}"><span>Words: John Newton</span><span style="text-align: right">Music: New Britain (American folk tune)</span></div>'
-            f'<div style="margin: 16px 0 0; font-family: {SERIF}; font-size: 13px; font-weight: 700; color: {INK}">Verse <span style="font-weight: 400">♩ = 80</span></div>'
-            f'<div style="margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=(3, 0), size=1.0).replace(ACCENT, '#85B8DC') + '</div>'
-            f'<p style="position: absolute; left: 0; right: 0; bottom: 32px; margin: 0; text-align: center; font-family: {SERIF}; font-size: 11px; color: {SOFT}">Public domain</p></article>')
 # the desk the page lies on, as Flat's and Dorico's: a grey ground; the page scaled by the zoom (fit to the width on a phone)
 DESK = lambda pad: (f'<sc-if value="{{{{pageOn}}}}" hint-placeholder-val="{{{{true}}}}"><div class="nos" aria-label="Page view" style="position: absolute; inset: 0; overflow: auto; background: {FILL}"><div style="min-width: min-content; box-sizing: border-box; padding: {pad}; display: flex; justify-content: center">'
                     f'<div style="zoom: {{{{zf}}}}; display: flex; flex-direction: column; gap: 24px">{A4PAGE()}</div></div></div></sc-if>')
@@ -268,5 +264,5 @@ phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, ED4.replace("const M
 # Go to bar (research F11, Flat's and Dorico's ⌘G): a small card over the sheet's head, the bar's number and its count
 GOTO_FIELD = '<div style="display: flex; align-items: center; gap: 12px"><input value="9" aria-label="Bar" type="text" inputmode="numeric" enterkeyhint="go" style="width: 96px; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: 0 0 0 2px #332921; font: inherit; font-size: 17px; font-variant-numeric: tabular-nums; color: #332921; outline: none"><span style="font-size: 15px; color: #7A6E64; font-variant-numeric: tabular-nums">of 16</span></div>'
 ED4L = ED4.replace("['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]]", "['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }], ['Go to bar (⌘G)', st.sheet === 'goto', { sheet: 'goto' }, { sheet: null }]]").replace("moreOn: st.sheet === 'more',", "moreOn: st.sheet === 'more', gotoOn: st.sheet === 'goto',", 1)
-full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + elm4, ED4L.replace("const M = 'music'", "const VIEW0 = 'page', FIT = 1; const M = 'music'", 1), POPOVER('moreOn', 'Amazing Grace', ED_MENU('Laptop.dc.html'), 'right: 24px; top: 76px') + POPOVER('gotoOn', 'Go to bar', GOTO_FIELD, 'left: 665px; top: 76px; transform: translateX(-50%)', 260) + POPOVER('creditsOn', 'Credits', ED_CREDITS, 'right: 24px; top: 76px') + POPOVER('instOn', 'Instruments', ED_INST, 'right: 24px; top: 76px') + POPOVER('pickInstOn', 'Add an instrument', ED_PICK, 'right: 24px; top: 76px'))
+full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + elm4, ED4L.replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - pw - 76 : 1646) / 794; const M = 'music'", 1), POPOVER('moreOn', 'Amazing Grace', ED_MENU('Laptop.dc.html'), 'right: 24px; top: 76px') + POPOVER('gotoOn', 'Go to bar', GOTO_FIELD, 'left: 665px; top: 76px; transform: translateX(-50%)', 260) + THINGWIN(True, 'creditsOn', 'closeSheet', 'Credits', ED_CREDITS, shown='false', side=0) + POPOVER('instOn', 'Instruments', ED_INST, 'right: 24px; top: 76px') + POPOVER('pickInstOn', 'Add an instrument', ED_PICK, 'right: 24px; top: 76px'))
 print('r44 editor ok')

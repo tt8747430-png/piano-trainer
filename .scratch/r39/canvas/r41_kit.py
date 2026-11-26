@@ -266,15 +266,15 @@ def BSHEET(cond, title, body, done='Done', tall=False, back='', maxh=''):
 # it); on a phone a tall sheet (BSHEET's 86%, the grabber, Back, the title, Done). on/close: the state's names; title:
 # its markup's text ({{pageT}}); back: the Back of a page inside, shown by its own condition, or ''.
 _WXI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>'
-def THINGWIN(lap, on, close, title, body, back='', pad='32', shown='true'):
+def THINGWIN(lap, on, close, title, body, back='', pad='32', shown='true', side=248):  # side: the sidebar's width beside the page (0 on a full-screen page: the editor, the Player)
     if not lap:
         return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{{shown}}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div>'
                 f'<section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; height: 86%; box-sizing: border-box; border-radius: 22px 22px 0 0; background: {PAGE}; display: flex; flex-direction: column">'
                 f'<div style="flex: none; padding: 6px 16px 8px; display: flex; flex-direction: column; gap: 10px"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>'
                 f'<div style="display: grid; grid-template-columns: minmax(56px, 1fr) auto minmax(56px, 1fr); align-items: center; min-height: 44px"><div>{back}</div><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{{close}}}}}" style="justify-self: end; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">Done</button></div></div>'
                 f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{body}</div></section></sc-if>')
-    return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{{shown}}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; top: 0; bottom: 0; left: -248px; right: 0; z-index: 60; background: rgba(51, 41, 33, 0.32)"></div>'
-            f'<div role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; z-index: 61; left: 50%; top: 50%; transform: translate(calc(-50% - 124px), -50%); width: 720px; height: min(720px, calc(100% - 96px)); border-radius: 22px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, 0 24px 64px rgba(51, 41, 33, 0.28); display: flex; flex-direction: column; overflow: hidden">'
+    return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{{shown}}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; top: 0; bottom: 0; left: -{side}px; right: 0; z-index: 60; background: rgba(51, 41, 33, 0.32)"></div>'
+            f'<div role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; z-index: 61; left: 50%; top: 50%; transform: translate(calc(-50% - {side // 2}px), -50%); width: 720px; height: min(720px, calc(100% - 96px)); border-radius: 22px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, 0 24px 64px rgba(51, 41, 33, 0.28); display: flex; flex-direction: column; overflow: hidden">'
             f'<header style="flex: none; height: 56px; display: flex; align-items: center; gap: 4px; padding: 0 8px 0 {pad}px; box-shadow: inset 0 -1px 0 {LINE}">{back}<h1 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">{title}</h1>'
             f'<button type="button" onClick="{{{{{close}}}}}" aria-label="Close" data-tip="Close" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; display: flex; align-items: center; justify-content: center; color: {INK}">{_WXI}</button></header>'
             f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 20px 32px 32px; display: flex; flex-direction: column; gap: 16px">{body}</main></div></sc-if>')
@@ -485,3 +485,17 @@ KBPAGE_OPEN = '<div class="kbpage" style="flex: 1; min-height: 0; display: flex;
 
 # the link glyph: one icon for a link, on every board (Groups' Join with a link, a lesson's Share link)
 LINKI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>'
+
+# One printed page for every score the app shows (R74: the editor's Page view and the Player's sheet, owner 2026-11-26:
+# "this accompaniment sheet doesnt look like a professioanal score"); an arrangement is credited under the music's, as
+# an engraver prints "Arr." at the right
+# the page: A4 at 96 dpi (794 × 1123), 17.2 mm margins (65), a 7 mm staff (26.5 px: the kit's 32 units × 0.828)
+PG_W, PG_H, PG_M, PG_K = 794, 1123, 65, 26.5 / 32
+def A4PAGE(credit='', sel=(3, 0)):
+    cw = PG_W - 2 * PG_M
+    return (f'<article aria-label="Page 1" style="flex: none; position: relative; width: {PG_W}px; height: {PG_H}px; box-sizing: border-box; padding: {PG_M}px {PG_M}px 0; background: {SHEET}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28); display: flex; flex-direction: column">'
+            f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: 30px; font-weight: 400; line-height: 1.1; color: {INK}">Amazing Grace</h2>'
+            f'<div style="margin: 20px 0 0; display: flex; justify-content: space-between; gap: 24px; font-family: {SERIF}; font-size: 13px; color: {INK}"><span>Words: John Newton</span><span style="text-align: right">Music: New Britain (American folk tune)' + (f'<br><i style="color: {SOFT}">{credit}</i>' if credit else '') + f'</span></div>'
+            f'<div style="margin: 16px 0 0; font-family: {SERIF}; font-size: 13px; font-weight: 700; color: {INK}">Verse <span style="font-weight: 400"><svg role="img" aria-label="quarter note" viewBox="0 0 8 16" width="7" height="14" style="vertical-align: -2px"><ellipse cx="3.4" cy="13" rx="3.3" ry="2.3" transform="rotate(-20 3.4 13)" fill="{INK}"/><rect x="5.8" y="0" width="1" height="12.6" fill="{INK}"/></svg> = 80</span></div>'
+            f'<div style="margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=sel, size=1.0).replace(ACCENT, '#85B8DC') + '</div>'
+            f'<p style="position: absolute; left: 0; right: 0; bottom: 32px; margin: 0; text-align: center; font-family: {SERIF}; font-size: 11px; color: {SOFT}">Public domain</p></article>')
