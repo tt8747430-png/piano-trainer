@@ -20,7 +20,7 @@ CHEVR = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="cur
 # are the name's menu, as the editor's title; the gear is gone, its jobs the rail's.
 SONGI = _LI('<path d="M21 15V6"></path><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M12 12H3"></path><path d="M16 6H3"></path><path d="M12 18H3"></path>')
 VIEWI = _LI('<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 13h8M8 16h5"></path>')
-PANEL = 'position: absolute; z-index: 30; left: 76px; top: 72px; bottom: 0; width: 352px; padding: 0 16px 24px; border-radius: 0; box-sizing: border-box; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #FEFDFB; box-shadow: inset -1px 0 0 ' + LINE
+PANEL = 'position: absolute; z-index: 30; left: 76px; top: 64px; bottom: 0; width: 352px; padding: 0 16px 24px; border-radius: 0; box-sizing: border-box; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #FEFDFB; box-shadow: inset -1px 0 0 ' + LINE
 def _sect(t, label):
     d = t.index(f'role="dialog" aria-label="{label}"'); a = t.rindex('<section', 0, d); depth = 0
     for m in re.finditer(r'<(/?)section\b', t[a:]):
@@ -94,8 +94,10 @@ def player_rail(t):
     assert t.count('const KB_VALS = {\nareaTop: 0,') == 1
     t = t.replace('const KB_VALS = {\nareaTop: 0,', 'const KB_VALS = {\nareaTop: 0, viewBottom: keys ? 904 - (800 - bandH) + 16 : DEV.bottom,', 1)
     # the rail, under the bar, at the window's left edge
-    rail = (f'<nav aria-label="Panels" style="position: absolute; z-index: 31; left: 0; top: 72px; bottom: 0; width: 76px; padding: 0 0 12px; box-sizing: border-box; background: #F7F3EE; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
-            f'<div role="tablist" aria-orientation="vertical" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Song', SONGI, 'Song', 'Song') + _RAILBTN('View', VIEWI, 'View', 'View') + '</div></nav>')
+    rail = (f'<nav aria-label="Panels" style="position: absolute; z-index: 31; left: 0; top: 64px; bottom: 0; width: 76px; padding: 0 0 12px; box-sizing: border-box; background: #F7F3EE; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
+            f'<div role="tablist" aria-orientation="vertical" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Song', SONGI, 'Song', 'Song') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div></nav>')
+    # Audio, Flat's panel (the kit's AUDPANEL, the editor's too): the room and each part's level, the mixer's home
+    rail = (f'<sc-if value="{{{{panelAud}}}}" hint-placeholder-val="{{{{false}}}}"><section role="region" aria-label="Audio" style="{PANEL}">' + head('Audio') + AUDPANEL() + '</section></sc-if>') + rail
     e = t.index('</header>', t.index('aria-label="Mode"')) + len('</header>')
     t = t[:e] + rail + t[e:]
     # the bar: the name is the song's menu (its acts), the gear goes
@@ -113,8 +115,9 @@ def player_rail(t):
                         "toastOn: !!s.sTo, toastT: s.sTo || '', toastUndo: !!s.sUndo, songUndo: () => this.setState({ sTo: '', sUndo: false, ...(s.undoVer || {}), undoVer: null }), "
             "foldPanel: () => this.setState({ rail: 'none', open: 'none' }), "
             "pickSong: () => this.setState({ rail: (s.rail ?? 'song') === 'song' ? 'none' : 'song', open: 'none' }), pickView: () => this.setState({ rail: (s.rail ?? 'song') === 'view' ? 'none' : 'view', open: 'none' }), "
-            "railSongOn: (s.rail ?? 'song') === 'song' ? 'true' : 'false', railSongBg: (s.rail ?? 'song') === 'song' ? '#E8DFD3' : 'transparent', railSongW: (s.rail ?? 'song') === 'song' ? 600 : 500, "
-            "railViewOn: (s.rail ?? 'song') === 'view' ? 'true' : 'false', railViewBg: (s.rail ?? 'song') === 'view' ? '#E8DFD3' : 'transparent', railViewW: (s.rail ?? 'song') === 'view' ? 600 : 500,")
+            "railSongOn: (s.rail ?? 'song') === 'song' ? 'true' : 'false', railSongBg: (s.rail ?? 'song') === 'song' ? '#F6E7C8' : 'transparent', railSongW: (s.rail ?? 'song') === 'song' ? 600 : 500, "
+            "panelAud: (s.rail ?? 'song') === 'audio', pickAud: () => this.setState({ rail: (s.rail ?? 'song') === 'audio' ? 'none' : 'audio', open: 'none' }), railAudOn: (s.rail ?? 'song') === 'audio' ? 'true' : 'false', railAudBg: (s.rail ?? 'song') === 'audio' ? '#F6E7C8' : 'transparent', railAudW: (s.rail ?? 'song') === 'audio' ? 600 : 500, "
+            "railViewOn: (s.rail ?? 'song') === 'view' ? 'true' : 'false', railViewBg: (s.rail ?? 'song') === 'view' ? '#F6E7C8' : 'transparent', railViewW: (s.rail ?? 'song') === 'view' ? 600 : 500,")
     assert t.count("isMore: open === 'settings',") == 1
     t = t.replace("isMore: open === 'settings',", keys, 1)
     return t
@@ -165,13 +168,30 @@ def header_transport(t):
     for cond in ('isPace', 'isHands', 'isKeys'):
         t = _cut_el(t, t.index(f'<sc-if value="{{{{{cond}}}}}"'), 'sc-if')
     assert 'aria-label="Practice" style' not in t and 'aria-label="Parts"' not in t
-    t = t.replace('<details class="vsw"', HDRTRANSPORT('SettingsLaptop.dc.html') + '<details class="vsw"', 1)
-    i = t.index('</header>'); t = t[:i - len('</div>')] + HDRKEYSBTN + t[i - len('</div>'):]
+    # the band replaces the glass bar whole (owner, 2026-11-26, Flat 26.11: "the header … should follow the new styles"):
+    # one dark band over the screen's top, 64 high, holding its own transport; the music, rail and panels start under it
+    h0 = t.index('<header'); h1 = t.index('</header>', h0) + len('</header>')
+    wait = re.search(r'<sc-if value="\{\{waitNoPiano\}\}".*?</sc-if>', t[h0:h1], re.S).group(0).replace('color: #685E56', 'color: ' + ONB_SOFT)
+    t = t[:h0] + BANDHDR('SongsLaptop.dc.html', 'play', 'PlayerLaptop.dc.html', 'EditorLaptop.dc.html', right=wait + HDRKEYSBTN, over=True) + t[h1:]
+    assert t.count('sheetTop: 76') == 1; t = t.replace('sheetTop: 76', 'sheetTop: 64', 1)
+    # History in the band, before the keys (Flat's "Last save … ago" before its acts); its view over the whole screen
+    t = t.replace(wait + HDRKEYSBTN, wait + HISTBTN + HDRKEYSBTN, 1)
+    t = t.replace('</main>', '</main>' + HISTVIEW(), 1)
+    # the page's picking and the card's scope, worked out before the state object reads them
+    r = t.index('const s = this.state || {};\n') + len('const s = this.state || {};\n')
+    t = t[:r] + PICKJS('s', 'this.setState', lambda m: 'sTo: ' + m + ', sUndo: true') + '\n' + t[r:]
+    for a, b in (("patternName: (PAT_LIB.find((x) => x.id === (s.patId ?? 'M1')) || {}).name", "patternName: (PAT_LIB.find((x) => x.id === acc('pat', s.patId ?? 'M1')) || {}).name"),
+                 ("const cur = s.patId ?? 'M1';", "const cur = acc('pat', s.patId ?? 'M1');"),
+                 ("pick: () => this.setState({ patId: x.id, music: 'chords', open: 'settings', patRecent: [x.id, ...recent.filter((r) => r !== x.id)].slice(0, 3) })", "pick: () => setAcc('pat', x.id, x.name, { music: 'chords', open: 'settings', patRecent: [x.id, ...recent.filter((r) => r !== x.id)].slice(0, 3) })"),
+                 ("songUndo: () => this.setState({ sTo: '', sUndo: false, ...(s.undoVer || {}), undoVer: null })", "songUndo: () => this.setState({ sTo: '', sUndo: false, ...(s.undoVer || {}), undoVer: null, ...(s.undoOv ? { ovr: s.undoOv, hist: s.undoHist } : {}), undoOv: null })")):
+        assert t.count(a) == 1, a[:60]; t = t.replace(a, b, 1)
+    t = t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + PICKKEYS('s', 'this.setState') + ' ' + HISTKEYS('s', 'this.setState', lambda m: 'sTo: ' + m + ', sUndo: true', restore="(h) => ({ undoOv: OV, ovr: h.ov })"), 1)
     t = t.replace('</main>', '</main>' + HDRPOPS(True, *POPX['play']), 1)
     loop = "() => { if (loop) { this.setState({ loop: false, hdPop: null }); return; } const a = Math.floor((bar - 1) / 4) * 4 + 1; this.setState({ loop: true, loopA: a, loopB: Math.min(16, a + 3), hdPop: null }); }"
     keys = HDRKEYS('s', '(o) => this.setState(o)', lambda m: 'sTo: ' + m + ', sUndo: false', 'togglePlayNow', 'playing', loop, 'loop',
                    "loop ? 'Stop looping bars ' + loopA + '–' + loopB : 'Loop bars ' + (Math.floor((bar - 1) / 4) * 4 + 1) + '–' + Math.min(16, Math.floor((bar - 1) / 4) * 4 + 4)",
-                   [('R', 'Right hand'), ('L', 'Left hand')])
+                   [('R', 'Right hand'), ('L', 'Left hand')],
+                   "() => this.setState({ rail: (s.rail ?? 'song') === 'audio' ? 'none' : 'audio', open: 'none', hdPop: null })", "(s.rail ?? 'song') === 'audio'")
     assert t.count('togglePlay: togglePlayNow,') >= 1
     return t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + keys)
 
@@ -231,7 +251,7 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
                    f'<article aria-label="Page 1" style="box-sizing: border-box; padding: 24px 16px 32px; background: {SHEET}; color: {INK}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28)">{body}</article></div>')
         else:
             new = (f'<div data-r74 style="margin-top: {{{{sheetTop}}}}px; box-sizing: border-box; min-height: calc(100% - {{{{sheetTop}}}}px); padding: 24px 0 160px; background: {FILL}; display: flex; justify-content: center">'
-                   f'<div style="zoom: 1.4"><sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}">{A4PAGE("", None)}</sc-if><sc-if value="{{{{isLead}}}}" hint-placeholder-val="{{{{false}}}}">{A4PAGE("", None, piano=False)}</sc-if></div></div>')
+                   f'<div style="zoom: 1.4"><sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}">{A4PAGE("", None, pick="pick")}</sc-if><sc-if value="{{{{isLead}}}}" hint-placeholder-val="{{{{false}}}}">{A4PAGE("", None, piano=False)}</sc-if></div></div>' + PICKCSS)
         t = t[:i] + new + t[j:]
     # the settings' Arrangement says it is not written for this song
     if 'data-r74y' not in t:
@@ -267,7 +287,7 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
               "renOn: !!s.ren, renVal: VC.name, renRef: (el) => { this._rn = el; }, renCancel: () => this.setState({ ren: false }), "
               "renSave: () => { const n = ((this._rn && this._rn.value) || '').trim(); if (!n) return; this.setState({ vers: VS.map((v) => (v.id === VCID ? { ...v, name: n } : v)), ren: false, sTo: 'Renamed to ' + n, sUndo: false }); }, ")
     if name == 'PlayerDesk':
-        t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}") + (' ' + SELKEYS('s', '((o) => this.setState(o))', [('selInv', [('Root', 'Root position'), ('1st', '1st inversion'), ('2nd', '2nd inversion'), ('3rd', '3rd inversion')], "(s.plInv ?? 'Root')", '(id) => this.setState({ plInv: id })'), ('selVoice', [('Voice-led', 'Voice-led'), ('Block', 'Block')], "(s.plVoice ?? 'Voice-led')", '(id) => this.setState({ plVoice: id })')]) if name == 'PlayerDesk' else ''), 1)
+        t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}") + (' ' + SELKEYS('s', '((o) => this.setState(o))', [('selInv', [('Root', 'Root position'), ('1st', '1st inversion'), ('2nd', '2nd inversion'), ('3rd', '3rd inversion')], "acc('inv', 'Root')", "(id) => setAcc('inv', id, id === 'Root' ? 'root position' : id + ' inversion')"), ('selVoice', [('Voice-led', 'Voice-led'), ('Block', 'Block')], "acc('voice', 'Voice-led')", "(id) => setAcc('voice', id, id + ' voicing')")]) if name == 'PlayerDesk' else ''), 1)
     if name == 'PlayerApp' and 'verName:' not in t:
         assert "isMore: open === 'settings'," in t, name
         t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + VERJS2, 1)

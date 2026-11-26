@@ -98,10 +98,13 @@ GBARS = [
 def _step(p, clef):  # staff steps above the bottom line: E4 in the treble, G2 in the bass
     n = 'CDEFGAB'.index(p[0]) + 7 * int(p[1])
     return n - (('CDEFGAB'.index('E') + 28) if clef == 't' else ('CDEFGAB'.index('G') + 14))
+GEO = {}
 def score_grand(w, systems, sel=None, size=1.0, natural=False, piano=True):
     """The song's systems, each Melody over the Piano's grand staff (piano=False: the melody alone, a lead sheet with its
     chords and words, as a version without an accompaniment prints). systems: lists of bar indexes; sel: (bar, event)."""
     s = size; sp = 8 * s; out = []; gy = 0; H = 0
+    # where each bar and chord symbol lies, for a page that lets them be picked (GEO['last'], in the svg's units)
+    geo = {'bars': [], 'chords': []}
     ln = lambda d, sw=0.9, c=INK: out.append(f'<path d="{d}" stroke="{c}" stroke-width="{sw}" fill="none"></path>')
     def staff(top, x0, x1): ln(''.join(f'M{x0:.1f} {top + i * sp:.1f}H{x1:.1f}' for i in range(5)))
     def head(x, y, hollow, col):
@@ -160,6 +163,8 @@ def score_grand(w, systems, sel=None, size=1.0, natural=False, piano=True):
                 for j in range(len(pts) - 1):
                     if pts[j] <= t <= pts[j + 1]: return x + lead + cum[j] + (t - pts[j]) / (pts[j + 1] - pts[j]) * (cum[j + 1] - cum[j])
                 return x + lead + cum[-1]
+            geo['bars'].append((b, x, x + bw, mtop - 26 * s, bbase + 6 * s))
+            if ch: geo['chords'].append((b, ch, at(0) - 5 * s, mtop - 10 * s))
             if ch: out.append(f'<text x="{at(0) - 5 * s:.1f}" y="{mtop - 10 * s:.1f}" font-size="{15 * s:.0f}" font-weight="700" font-family="{SERIF}" fill="{INK}">{ch}</text>')
             t = 0; evx = []
             for ei, e in enumerate(mel):
@@ -224,6 +229,7 @@ def score_grand(w, systems, sel=None, size=1.0, natural=False, piano=True):
             ln(f'M{x:.1f} {mtop:.1f}V{mbase:.1f}' + (f'M{x:.1f} {ttop:.1f}V{bbase:.1f}' if piano else ''), 1.1 if end else 0.9)
         for t in ((mtop, ttop, btop) if piano else (mtop,)): staff(t, x0, x)  # the staves run to the system's last barline
         gy = bbase + 3.6 * sp + 22 * s; H = gy
+    geo['w'] = w; geo['h'] = H; GEO['last'] = geo
     return f'<svg viewBox="0 0 {w:.0f} {H:.0f}" width="{"%.0f" % (w * natural) if natural else "100%"}" role="img" aria-label="Amazing Grace, {"Melody and Piano" if piano else "Melody"}" style="display: block">' + ''.join(out) + '</svg>'
 
 # --- hanon

@@ -530,15 +530,112 @@ LINKI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="cur
 # an engraver prints "Arr." at the right
 # the page: A4 at 96 dpi (794 × 1123), 17.2 mm margins (65), a 7 mm staff (26.5 px: the kit's 32 units × 0.828)
 PG_W, PG_H, PG_M, PG_K = 794, 1123, 65, 26.5 / 32
-def A4PAGE(credit='', sel=(3, 0), piano=True):
+def A4PAGE(credit='', sel=(3, 0), piano=True, pick=None):
     cw = PG_W - 2 * PG_M
     return (f'<article aria-label="Page 1" style="flex: none; position: relative; width: {PG_W}px; height: {PG_H}px; box-sizing: border-box; padding: {PG_M}px {PG_M}px 0; background: {SHEET}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28); display: flex; flex-direction: column">'
             f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: 30px; font-weight: 400; line-height: 1.1; color: {INK}">Amazing Grace</h2>'
             f'<div style="margin: 20px 0 0; display: flex; justify-content: space-between; gap: 24px; font-family: {SERIF}; font-size: 13px; color: {INK}"><span>Words: John Newton</span><span style="text-align: right">Music: New Britain (American folk tune)' + (f'<br><i style="color: {SOFT}">{credit}</i>' if credit else '') + f'</span></div>'
             f'<div style="margin: 16px 0 0; font-family: {SERIF}; font-size: 13px; font-weight: 700; color: {INK}">Verse <span style="font-weight: 400"><svg role="img" aria-label="quarter note" viewBox="0 0 8 16" width="7" height="14" style="vertical-align: -2px"><ellipse cx="3.4" cy="13" rx="3.3" ry="2.3" transform="rotate(-20 3.4 13)" fill="{INK}"/><rect x="5.8" y="0" width="1" height="12.6" fill="{INK}"/></svg> = 80</span></div>'
-            f'<div style="margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=sel, size=1.0, piano=piano).replace(ACCENT, '#85B8DC') + '</div>'
+            f'<div style="position: relative; margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=sel, size=1.0, piano=piano).replace(ACCENT, '#85B8DC') + (PICKLAYER(GEO['last'], pick) if pick else '') + '</div>'
             f'<p style="position: absolute; left: 0; right: 0; bottom: 32px; margin: 0; text-align: center; font-family: {SERIF}; font-size: 11px; color: {SOFT}">Public domain</p></article>')
 
+
+# the header band's colours (below, BANDHDR): the brand's dark, paper on it
+BAND = '#332921'
+ONB = '#FEFDFB'
+ONB_SOFT = 'rgba(254,253,251,.72)'
+ONB_RING = 'inset 0 0 0 1.5px rgba(254,253,251,.55)'
+# The page you can pick from (owner, 2026-11-26: "in the player you should give possibility also to change each separate
+# section of the song and for each chord … the sheet is interactive. like the user selects a section or a chord and he
+# can change this only to these sections"): over the engraved page, each chord symbol is a button and each bar a target
+# for its phrase (a hymn verse's four lines of four bars, as the singer breathes); what is picked turns sky (the score's
+# selection colour), and the Song panel's Accompaniment then changes that chord or phrase alone (Band-in-a-Box's style
+# per bar range; Flat's selection then the panel). A chord or phrase with its own accompaniment carries a honey dot.
+# mode 'pick' (the Player), 'hist' (History: the bars a saved version changed, in honey, nothing to press)
+PHRASE = lambda b: max(1, (b - 1) // 4 + 1)
+def PICKLAYER(geo, mode='pick'):
+    W, H = geo['w'], geo['h']; pc = lambda v, d: f'{v / d * 100:.3f}%'; out = []
+    for b, x0, x1, y0, y1 in geo['bars']:
+        box = f'left: {pc(x0, W)}; top: {pc(y0, H)}; width: {pc(x1 - x0, W)}; height: {pc(y1 - y0, H)}'
+        if mode == 'hist':
+            out.append(f'<span aria-hidden="true" style="position: absolute; {box}; border-radius: 4px; background: {{{{hb{b}}}}}; pointer-events: none"></span>')
+            continue
+        p = PHRASE(b)
+        out.append(f'<button type="button" data-pk aria-label="Phrase {p}, bar {b}" onClick="{{{{pickP{p}}}}}" style="position: absolute; {box}; padding: 0; border: 0; border-radius: 4px; background: {{{{bandP{p}}}}}; box-shadow: {{{{bandC{b}}}}}; cursor: pointer"></button>')
+    if mode == 'pick':
+        for b, ch, x, y in geo['chords']:
+            w = 18 + 9 * len(ch)
+            box = f'left: calc({pc(x, W)} - 6px); top: calc({pc(y, H)} - 24px); width: {w}px; height: 32px'
+            out.append(f'<button type="button" data-pk aria-label="Chord {ch}, bar {b}" aria-pressed="{{{{chOn{b}}}}}" data-tip="{ch} · bar {b}" onClick="{{{{pickC{b}}}}}" style="position: absolute; {box}; padding: 0; border: 0; border-radius: 8px; background: {{{{chBg{b}}}}}; cursor: pointer">'
+                       f'<sc-if value="{{{{own{b}}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="position: absolute; left: 50%; bottom: -4px; width: 6px; height: 6px; margin-left: -3px; border-radius: 3px; background: #C98A1E"></span></sc-if></button>')
+        for p in sorted({PHRASE(b) for b, *_ in geo['bars']}):
+            b0 = next(g for g in geo['bars'] if PHRASE(g[0]) == p and g[0] > 0)
+            out.append(f'<sc-if value="{{{{ownP{p}}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" data-tip="Phrase {p} has its own accompaniment" style="position: absolute; left: calc({pc(b0[1], W)} + 4px); top: calc({pc(b0[3], H)} + 2px); width: 6px; height: 6px; border-radius: 3px; background: #C98A1E"></span></sc-if>')
+    return f'<div class="pick" style="position: absolute; inset: 0">{"".join(out)}</div>'
+PICKCSS = '<style data-pick>.pick [data-pk]:hover { outline: 2px solid rgba(133,184,220,.55); outline-offset: -2px } .pick [data-pk]:focus-visible { outline: 3px solid #356890; outline-offset: 1px }</style>'
+CHORDS_AT = {b: ch for b, (ch, _m, _p) in enumerate(GBARS) if ch}
+# the scope's script, the Player's (S and SET its state): the selection (selK: 'p2', 'c6'), the level the card edits
+# (scLv: chord, phrase or song), each scope's own settings (ovr) and their history (hist); acc(f, d) is what the card
+# shows, setAcc(f, v, label) what a change writes
+def PICKJS(S, SET, TOAST):
+    CH = repr({str(k): v for k, v in CHORDS_AT.items()})
+    return (f"const CHN = {CH}; const PH = (b) => 'p' + Math.max(1, Math.floor((b - 1) / 4) + 1); const SELK = {S}.selK ?? null; const OV = {S}.ovr ?? {{}};"
+            " const CB = SELK && SELK[0] === 'c' ? +SELK.slice(1) : null; const PK = CB !== null ? PH(CB) : (SELK && SELK[0] === 'p' ? SELK : null);"
+            f" const LV = {S}.scLv && (({S}.scLv === 'chord' && CB !== null) || ({S}.scLv === 'phrase' && PK) || {S}.scLv === 'song') ? {S}.scLv : (CB !== null ? 'chord' : PK ? 'phrase' : 'song');"
+            " const SCK = LV === 'chord' ? 'c' + CB : LV === 'phrase' ? PK : 'song';"
+            " const SCN = SCK === 'song' ? 'Whole song' : SCK[0] === 'p' ? 'Phrase ' + SCK.slice(1) : 'Bar ' + CB + ' · ' + CHN[CB];"
+            " const CHAIN = (k) => k[0] === 'c' ? [k, PH(+k.slice(1)), 'song'] : k[0] === 'p' ? [k, 'song'] : ['song'];"
+            " const acc = (f, d) => { for (const c of CHAIN(SCK)) if (OV[c] && OV[c][f] !== undefined) return OV[c][f]; return d; };"
+            f" const HIST0 = [{{ id: 'h4', t: 'Today at 13:42', what: ['+4 notes'], bars: [5, 6], ov: {{}} }}, {{ id: 'h3', t: '7 November at 15:11', what: ['Voicing: Block'], bars: [], ov: {{ song: {{ voice: 'Block' }} }} }}, {{ id: 'h2', t: '4 November at 17:16', what: ['+49 notes', '−37 notes'], bars: [1, 2, 3, 4, 9, 10, 11, 12], ov: {{}} }}, {{ id: 'h1', t: '3 November at 17:45', what: ['Created'], bars: [], ov: {{}} }}];"
+            f" const HIST = {S}.hist ?? HIST0;"
+            f" const setAcc = (f, v, label, more) => {{ const nv = {{ ...OV, [SCK]: {{ ...(OV[SCK] || {{}}), [f]: v }} }}; const bars = SCK === 'song' ? [] : SCK[0] === 'c' ? [CB] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].filter((b) => PH(b) === SCK); {SET}({{ ...(more || {{}}), ovr: nv, undoOv: OV, undoHist: HIST, hist: [{{ id: 'h' + Date.now(), t: 'Just now', what: [SCN + ': ' + label], bars, ov: nv }}, ...HIST], " + TOAST("SCN + ': ' + label") + " }); };")
+def PICKKEYS(S, SET):
+    bars = range(0, 13); ph = sorted({PHRASE(b) for b in bars})
+    k = []
+    for p in ph:
+        k.append(f"pickP{p}: () => {SET}({{ selK: SELK === 'p{p}' ? null : 'p{p}', scLv: null, open: 'none', rail: 'song' }}), bandP{p}: (PK === 'p{p}' && LV !== 'song') ? 'rgba(133,184,220,.16)' : 'transparent', ownP{p}: !!OV['p{p}'],")
+    for b in bars:
+        k.append(f"bandC{b}: CB === {b} && LV === 'chord' ? 'inset 0 0 0 2px rgba(133,184,220,.55)' : 'none',")
+    for b in CHORDS_AT:
+        k.append(f"pickC{b}: (e) => {{ e && e.stopPropagation && e.stopPropagation(); {SET}({{ selK: SELK === 'c{b}' ? null : 'c{b}', scLv: null, open: 'none', rail: 'song' }}); }}, chOn{b}: SELK === 'c{b}' ? 'true' : 'false', chBg{b}: SELK === 'c{b}' ? 'rgba(133,184,220,.45)' : 'transparent', own{b}: !!OV['c{b}'],")
+    k.append("accScopes: [['chord', CB !== null ? 'Bar ' + CB + ' · ' + CHN[CB] : null], ['phrase', PK ? 'Phrase ' + PK.slice(1) : null], ['song', 'Whole song']].filter((x) => x[1]).map(([id, l]) => ({ l, on: LV === id ? 'true' : 'false', bg: LV === id ? '#FEFDFB' : 'transparent', sh: LV === id ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: LV === id ? 600 : 500, pick: () => " + SET + "({ scLv: id }) })),")
+    k.append("accPicked: SELK !== null, accWhole: SELK === null, accOwn: SCK !== 'song' && !!OV[SCK], accResetL: SCK[0] === 'c' ? 'Use the phrase’s accompaniment' : 'Use the song’s accompaniment',")
+    k.append(f"accReset: () => {{ const nv = {{ ...OV }}; delete nv[SCK]; {SET}({{ ovr: nv, undoOv: OV, undoHist: HIST, hist: [{{ id: 'h' + Date.now(), t: 'Just now', what: [SCN + ': as before'], bars: [], ov: nv }}, ...HIST], sTo: SCN + ' follows ' + (SCK[0] === 'c' ? 'its phrase' : 'the song') + ' again', sUndo: true }}); }}, clearPick: () => {SET}({{ selK: null, scLv: null }}),")
+    return ' '.join(k)
+
+# History (owner, 2026-11-26: "make a proper version history also like the flat does and not only the undo and redo
+# actions"; Flat's "Last save about 2 hours ago" in its top bar, "Document History", opening the History view: the
+# band says "Close History View" and the saved moment, the page as it was, a Versions list at the right, each with its
+# time, who and what changed, +4 notes). Ours is named History (a song's Versions are its arrangements, R74): the band's
+# clock opens it in both modes; a row shows that moment's page with the bars it changed in honey; Restore this version
+# brings it back with Undo in its toast (a loss that can be undone happens at once, CLAUDE.md), Close history leaves.
+CLOCKI = _LI('<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>')
+HISTBTN = (f'<button type="button" aria-label="History: saved {{{{histAgo}}}}" data-tip="History" onClick="{{{{openHist}}}}" style="flex: none; height: 40px; box-sizing: border-box; padding: 0 14px 0 10px; border: 0; border-radius: 20px; background: transparent; box-shadow: {ONB_RING}; color: {ONB}; font: inherit; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; white-space: nowrap; cursor: pointer">'
+           f'{CLOCKI.replace("width=\"20\" height=\"20\"", "width=\"18\" height=\"18\"")}<span>Saved {{{{histAgo}}}}</span></button>')
+def HISTVIEW():
+    row = (f'<button type="button" role="option" aria-selected="{{{{h.on}}}}" onClick="{{{{h.pick}}}}" style="width: 100%; box-sizing: border-box; padding: 12px 16px; border: 0; border-bottom: 1px solid {LINE}; background: {{{{h.bg}}}}; color: {INK}; font: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px; cursor: pointer">'
+           f'<span style="display: flex; align-items: baseline; gap: 8px"><span style="flex: 1; font-size: 15px; font-weight: 600">{{{{h.t}}}}</span><sc-if value="{{{{h.cur}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; color: {SOFT}">Current</span></sc-if></span>'
+           f'<span style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: {SOFT}"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 4px; background: #356890"></span>You</span>'
+           f'<span style="display: flex; flex-wrap: wrap; gap: 4px"><sc-for list="{{{{h.what}}}}" as="w" hint-placeholder-count="1"><span style="height: 24px; padding: 0 8px; border-radius: 12px; background: {FILL}; font-size: 13px; display: flex; align-items: center; font-variant-numeric: tabular-nums">{{{{w}}}}</span></sc-for></span></button>')
+    band = (f'<header data-band style="flex: none; height: 64px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 12px; background: {BAND}; color: {ONB}">'
+            f'<button type="button" onClick="{{{{closeHist}}}}" data-tip="Close history · Esc" style="flex: none; height: 40px; padding: 0 16px 0 12px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>Close history</button>'
+            f'<h1 style="margin: 0 0 0 4px; font-size: 17px; font-weight: 600; white-space: nowrap">{{{{histT}}}}</h1>'
+            f'<span style="flex: 1"></span>'
+            f'<sc-if value="{{{{histOld}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{histRestore}}}}" style="flex: none; height: 40px; padding: 0 16px; border: 0; border-radius: 20px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer">Restore this version</button></sc-if></header>')
+    page = (f'<main class="nos" style="flex: 1; min-width: 0; overflow-y: auto; background: {FILL}; display: flex; justify-content: center; padding: 24px 0 48px">'
+            f'<div style="zoom: 1.2">{A4PAGE("", None, pick="hist")}</div></main>')
+    side = (f'<aside aria-label="History" style="flex: none; width: 352px; display: flex; flex-direction: column; background: {SHEET}; box-shadow: inset 1px 0 0 {LINE}">'
+            f'<h2 style="flex: none; margin: 0; height: 64px; box-sizing: border-box; padding: 0 16px; display: flex; align-items: center; font-size: 17px; font-weight: 600; box-shadow: inset 0 -1px 0 {LINE}">History</h2>'
+            f'<div role="listbox" aria-label="Saved moments" class="nos" style="flex: 1; min-height: 0; overflow-y: auto"><sc-for list="{{{{histRows}}}}" as="h" hint-placeholder-count="4">{row}</sc-for></div></aside>')
+    return (f'<sc-if value="{{{{histOn}}}}" hint-placeholder-val="{{{{false}}}}"><section role="dialog" aria-modal="true" aria-label="History" style="position: absolute; inset: 0; z-index: 66; display: flex; flex-direction: column; background: {PAGE}">'
+            f'{band}<div style="flex: 1; min-height: 0; display: flex">{page}{side}</div></section></sc-if>')
+def HISTKEYS(S, SET, TOAST, HIST='HIST', restore='{}'):
+    """HIST: the board's list of saved moments, newest first ({id, t, what, bars, ov}); restore(h): what Restore sets."""
+    hb = ' '.join(f"hb{b}: HSEL.bars.includes({b}) ? 'rgba(237,198,132,.38)' : 'transparent'," for b in range(13))
+    return ("...(() => { const H = " + HIST + "; const HSEL = H.find((h) => h.id === " + S + ".histSel) ?? H[0]; return { histOn: !!" + S + ".hist_on, openHist: () => " + SET + "({ hist_on: true, histSel: H[0].id, hdPop: null }), closeHist: () => " + SET + "({ hist_on: false }), "
+            "histAgo: H[0].t === 'Just now' ? 'just now' : 'today at 13:42', histT: HSEL.t, histOld: HSEL.id !== H[0].id, "
+            "histRows: H.map((h, i) => ({ t: h.t, what: h.what, cur: i === 0, on: h.id === HSEL.id ? 'true' : 'false', bg: h.id === HSEL.id ? '#F6E7C8' : 'transparent', pick: () => " + SET + "({ histSel: h.id }) })), "
+            + hb + " histRestore: () => " + SET + "({ ...(" + restore + ")(HSEL), hist_on: false, undoHist: H, hist: [{ id: 'h' + Date.now(), t: 'Just now', what: ['Restored ' + HSEL.t], bars: HSEL.bars, ov: HSEL.ov }, ...H], " + TOAST("'Restored the version of ' + HSEL.t") + " }) }; })(),")
 # A page over a full-screen screen (the editor's Credits; owner, 2026-11-26: "it should open properly on a proper page
 # this credits like in the flat"; "why the credits are still a popup and not a proper page"): the whole screen, its
 # own bar (Back, the title), the form in one centred column; never a popover, a sheet or a window (Flat's Credits, 087)
@@ -562,6 +659,10 @@ _SMBOX = 'position: absolute; z-index: 70; width: 288px; border-radius: 14px; ba
 _SMSEP = '<div role="separator" style="height: 1px; margin: 6px 0; background: #EFE9E1"></div>'
 _SMSLOT = lambda inner='': f'<span aria-hidden="true" style="flex: none; width: 20px; display: flex; justify-content: center; color: #332921">{inner}</span>'
 PLUSI_S = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="M12 5v14M5 12h14"></path></svg>'
+# Flat's header band (owner, 2026-11-26, Flat 26.11 screenshots: "the header and the sidebars should follow the new
+# styles"): one solid band across the window in the brand's dark, the title and the transport in paper on it; Go to
+# start and Play filled circles (Play the honey one), the metronome and the loop outlined circles that fill when on,
+# the mixer a bare icon, MIDI and the mode outlined pills; the toolbar a light row under it
 def SONGMENU(takes_href, extra=()):
     it = lambda lab, act, fg='#332921', tail='': f'<button type="button" role="menuitem" onClick="{{{{{act}}}}}" style="{_SMROW}; color: {fg}">{_SMSLOT()}<span style="flex: 1">{lab}</span>{tail}</button>'
     vrow = (f'<sc-for list="{{{{verRows}}}}" as="v" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="{_SMROW}">'
@@ -576,10 +677,10 @@ def SONGMENU(takes_href, extra=()):
             + ''.join(_SMSEP + ''.join(it(*r) for r in grp) for grp in extra)
             + _SMSEP + it('Duplicate song', 'actDup') + it('Archive song', 'actArchive'))
     return (f'<div style="position: relative; flex: none; min-width: 0; pointer-events: auto">'
-            f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{smOn}}}}" onClick="{{{{toggleSm}}}}" data-tip="The song’s menu" style="height: 48px; max-width: 320px; padding: 0 10px 0 12px; border: 0; border-radius: 12px; background: {{{{smBg}}}}; color: {INK}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
+            f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{smOn}}}}" onClick="{{{{toggleSm}}}}" data-tip="The song’s menu" style="height: 48px; max-width: 320px; padding: 0 10px 0 12px; border: 0; border-radius: 12px; background: {{{{smBg}}}}; color: {ONB}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
             f'<span style="min-width: 0; display: flex; flex-direction: column"><h1 style="margin: 0; font-size: 17px; font-weight: 600; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</h1>'
-            f'<span style="font-size: 13px; line-height: 16px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{verName}}}}</span></span>'
-            f'<span aria-hidden="true" style="flex: none; display: flex; color: {SOFT}">{CHEV_D}</span></button>'
+            f'<span style="font-size: 13px; line-height: 16px; color: {ONB_SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{verName}}}}</span></span>'
+            f'<span aria-hidden="true" style="flex: none; display: flex; color: {ONB_SOFT}">{CHEV_D}</span></button>'
             f'<sc-if value="{{{{smOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="menu" aria-label="Amazing Grace" style="{_SMBOX}; left: 0; top: 52px">{rows}{exp}</div></sc-if></div>')
 
 # its state, the same script in both: a spread of the keys it needs; S is the state's name, SET how it is set, TOAST
@@ -599,7 +700,7 @@ def SONGMENU_KEYS(S, SET, TOAST, DEF='mine', close_others=''):
     m9 = t("'Exported as MIDI'")
     return (f"...(() => {{ const VS = {S}.vers ?? [{{ id: 'orig', name: 'Original', piano: false }}, {{ id: 'mine', name: 'My version', piano: true }}]; "
             f"const VD = {S}.verDef ?? '{DEF}'; const VCID = VS.some((v) => v.id === {S}.verCur) ? {S}.verCur : VD; const VC = VS.find((v) => v.id === VCID) ?? VS[0]; const TG = VS.find((v) => v.id === ({S}.verMenu ?? {S}.renId)) ?? VC; const shut = {{ sm: false, exp: false, verMenu: null{close_others} }}; "
-            f"return {{ smOn: !!{S}.sm, smBg: {S}.sm ? '#EEE9E2' : 'transparent', toggleSm: () => {SET}({{ sm: !{S}.sm, exp: false }}), "
+            f"return {{ smOn: !!{S}.sm, smBg: {S}.sm ? 'rgba(254,253,251,.16)' : 'transparent', toggleSm: () => {SET}({{ sm: !{S}.sm, exp: false }}), "
             f"verName: VC.name, isPiano: !!VC.piano, isLead: !VC.piano, expOn: !!{S}.exp, expBg: {S}.exp ? '#F3EEE8' : 'transparent', expTop: 86, toggleExp: () => {SET}({{ exp: !{S}.exp }}), "
             f"verRows: VS.map((v, i) => ({{ name: v.name, sub: v.piano ? 'With accompaniment' : 'Melody, chords and words', line: i ? '{LINE}' : 'transparent', isDef: v.id === VD, cur: v.id === VCID, fw: v.id === VCID ? 600 : 400, on: v.id === VCID ? 'true' : 'false', pick: () => {SET}({{ ...shut, verCur: v.id, pat: v.piano ? 'p1' : 'none' }}), menuOn: {S}.verMenu === v.id, menuX: {S}.verMenu === v.id ? 'true' : 'false', menu: () => {SET}({{ verMenu: {S}.verMenu === v.id ? null : v.id }}), canDef: v.id !== VD, canDel: VS.length > 1 }})), "
             f"canSetDef: VCID !== VD, canDelVer: VS.length > 1, "
@@ -636,9 +737,9 @@ def MODESW(on, practice_href, edit_href):
     cur = ('Practice', MUSICI) if on == 'play' else ('Edit', PENI)
     row = lambda lab, ic, href, sel: (f'<a role="menuitemradio" aria-checked="{"true" if sel else "false"}" href="{href}" style="{_SMROW}">{_SMSLOT(CHECK if sel else "")}'
                                       f'<span style="display: flex; color: {INK}">{ic}</span><span style="flex: 1; font-weight: {600 if sel else 400}">{lab}</span><span style="font-size: 13px; color: {SOFT}">{"P" if lab == "Practice" else "E"}</span></a>')
-    return (f'<details class="vsw" style="position: relative; flex: none; pointer-events: auto"><summary aria-label="Mode: {cur[0]}" data-tip="Practice or edit" style="list-style: none; height: 44px; box-sizing: border-box; padding: 0 12px 0 14px; border-radius: 22px; {GLASSFX}; color: {INK}; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; cursor: pointer">'
-            f'{cur[1]}<span>{cur[0]}</span><span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_D}</span></summary>'
-            f'<div role="menu" aria-label="Mode" style="{_SMBOX}; left: 0; top: 52px; width: 220px">' + row('Practice', MUSICI, practice_href, on == 'play') + row('Edit', PENI, edit_href, on == 'edit') + '</div></details>')
+    return (f'<details class="vsw" style="position: relative; flex: none; pointer-events: auto"><summary aria-label="Mode: {cur[0]}" data-tip="Practice or edit" style="list-style: none; height: 40px; box-sizing: border-box; padding: 0 12px 0 14px; border-radius: 20px; background: transparent; box-shadow: {ONB_RING}; color: {ONB}; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; cursor: pointer">'
+            f'{cur[1]}<span>{cur[0]}</span><span aria-hidden="true" style="display: flex; color: {ONB_SOFT}">{CHEV_D}</span></summary>'
+            f'<div role="menu" aria-label="Mode" style="{_SMBOX}; left: 0; top: 48px; width: 220px">' + row('Practice', MUSICI, practice_href, on == 'play') + row('Edit', PENI, edit_href, on == 'edit') + '</div></details>')
 
 # The transport in the header, as Flat's (flat-score-editor 099, 143: the title, then go to start, Play with its options,
 # metronome, loop, volume, MIDI, then the mode): one glass pill after the title in both modes, nothing floating over the
@@ -657,21 +758,31 @@ HDRSEP = f'<span aria-hidden="true" style="flex: none; width: 1px; height: 20px;
 # the one honey circle. The keys every board supplies: hdStart, hdPlay, hdPlayTip, hdPlayD, hdOpts, hdOptsX, hdMet,
 # hdMetTip, hdMetBg, hdMetOff, hdLoop, hdLoopBg, hdLoopTip, hdVol, hdVolX, hdRec, hdRecBg, hdRecTip.
 METI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M9 3h6l4 18H5z"></path><path d="M7.5 15h9"></path><path d="m12 15 5-9"></path></svg>'
-_HB = f'flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px; {GLASSFX}; color: {INK}; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; pointer-events: auto'
+_HB = 'flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer'
+MIXI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg>'
 def HDRTRANSPORT(midi_href):
-    b = lambda lab, tip, inner, act, bg='', extra='': (f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{_HB}' + (f'; background: {bg}' if bg else '') + f'">{inner}</button>')
-    start = b('Go to start', 'Go to start · ⌃Space', f'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="2.5" height="14" rx="1"></rect><path d="M19 6.3v11.4a1 1 0 0 1-1.5.86L9.4 13.3a1.5 1.5 0 0 1 0-2.6l8.1-5.26A1 1 0 0 1 19 6.3z"></path></svg>', 'hdStart')
-    play = (f'<div role="group" aria-label="Play" style="flex: none; height: 44px; box-sizing: border-box; padding: 2px; border-radius: 22px; {GLASSFX}; display: flex; align-items: center; pointer-events: auto">'
-            f'<button type="button" aria-label="{{{{hdPlayTip}}}}" data-tip="{{{{hdPlayTip}}}} · Space" onClick="{{{{hdPlay}}}}" style="flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px; background: #EDC684; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: pointer">'
-            f'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="{{{{hdPlayD}}}}"></path></svg></button>'
-            f'<button type="button" aria-label="Playback options" data-tip="Playback options" aria-haspopup="dialog" aria-expanded="{{{{hdOptsX}}}}" onClick="{{{{hdOpts}}}}" style="flex: none; width: 28px; height: 40px; padding: 0; border: 0; border-radius: 0 20px 20px 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: pointer">{CHEV_D}</button></div>')
-    met = b('{{hdMetTip}}', '{{hdMetTip}} · press to change', METI + f'<sc-if value="{{{{hdMetOff}}}}" hint-placeholder-val="{{{{true}}}}"><span aria-hidden="true" style="position: absolute; width: 26px; height: 2px; border-radius: 1px; background: {INK}; transform: rotate(-45deg)"></span></sc-if>', 'hdMet', '{{hdMetBg}}')
-    loop = b('Loop', '{{hdLoopTip}} · L', '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>', 'hdLoop', '{{hdLoopBg}}', ' aria-pressed="{{hdLoopOn}}"')
-    vol = b('Volume', 'Volume', AUDIOI.replace('width="22" height="22"', 'width="20" height="20"'), 'hdVol', '', ' aria-haspopup="dialog" aria-expanded="{{hdVolX}}"')
-    midi = (f'<div role="group" aria-label="MIDI" style="flex: none; height: 44px; box-sizing: border-box; padding: 2px; border-radius: 22px; {GLASSFX}; display: flex; align-items: center; pointer-events: auto">'
-            f'<a href="{midi_href}" data-tip="MIDI keyboard" style="height: 40px; padding: 0 8px 0 12px; border-radius: 20px 0 0 20px; color: {INK}; text-decoration: none; font-size: 13px; font-weight: 700; letter-spacing: .02em; display: flex; align-items: center">MIDI</a>'
-            f'<button type="button" aria-label="{{{{hdRecTip}}}}" data-tip="{{{{hdRecTip}}}} · R" onClick="{{{{hdRec}}}}" style="flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px; background: {{{{hdRecBg}}}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><span aria-hidden="true" style="width: 14px; height: 14px; border-radius: 7px; background: #B84A3E"></span></button></div>')
-    return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 8px">{start}{play}{met}{loop}{vol}{midi}</div>'
+    b = lambda lab, tip, inner, act, look, extra='': f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{_HB}; {look}">{inner}</button>'
+    filled = f'background: {ONB}; color: {BAND}'
+    ring = lambda k: f'background: {{{{{k}Bg}}}}; color: {{{{{k}Fg}}}}; box-shadow: {ONB_RING}'
+    start = b('Go to start', 'Go to start · ⌃Space', '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="2.5" height="14" rx="1"></rect><path d="M19 6.3v11.4a1 1 0 0 1-1.5.86L9.4 13.3a1.5 1.5 0 0 1 0-2.6l8.1-5.26A1 1 0 0 1 19 6.3z"></path></svg>', 'hdStart', filled)
+    play = (f'<div role="group" aria-label="Play" style="flex: none; display: flex; align-items: center; gap: 2px">'
+            + b('{{hdPlayTip}}', '{{hdPlayTip}} · Space', '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="{{hdPlayD}}"></path></svg>', 'hdPlay', f'background: #EDC684; color: {BAND}')
+            + f'<button type="button" aria-label="Playback options" data-tip="Playback options" aria-haspopup="dialog" aria-expanded="{{{{hdOptsX}}}}" onClick="{{{{hdOpts}}}}" style="flex: none; width: 24px; height: 40px; padding: 0; border: 0; border-radius: 12px; background: {{{{hdOptsBg}}}}; color: {ONB}; display: flex; align-items: center; justify-content: center; cursor: pointer">{CHEV_D}</button></div>')
+    met = b('{{hdMetTip}}', '{{hdMetTip}} · press to change', METI.replace('width="20" height="20"', 'width="18" height="18"') + '<sc-if value="{{hdMetOff}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="position: absolute; width: 22px; height: 1.5px; border-radius: 1px; background: currentColor; transform: rotate(-45deg)"></span></sc-if>', 'hdMet', ring('hdMet'))
+    loop = b('Loop', '{{hdLoopTip}} · L', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>', 'hdLoop', ring('hdLoop'), ' aria-pressed="{{hdLoopOn}}"')
+    mix = b('Audio', 'Audio: room and volume', MIXI, 'hdVol', f'background: {{{{hdVolBg}}}}; color: {ONB}', ' aria-pressed="{{hdVolX}}"')
+    midi = (f'<div role="group" aria-label="MIDI" style="flex: none; height: 40px; box-sizing: border-box; padding: 0; border-radius: 20px; box-shadow: {ONB_RING}; display: flex; align-items: center">'
+            f'<a href="{midi_href}" data-tip="MIDI keyboard" style="height: 40px; min-width: 44px; box-sizing: border-box; padding: 0 4px 0 14px; color: {ONB}; text-decoration: none; font-size: 13px; font-weight: 700; letter-spacing: .02em; display: flex; align-items: center">MIDI</a>'
+            f'<button type="button" aria-label="{{{{hdRecTip}}}}" data-tip="{{{{hdRecTip}}}} · R" onClick="{{{{hdRec}}}}" style="flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px; background: {{{{hdRecBg}}}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 6px; background: #E5604F"></span></button></div>')
+    return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 10px">{start}{play}{met}{loop}{mix}{midi}</div>'
+
+def BANDHDR(close_href, mode, practice_href, edit_href, right='', over=False):
+    """The one header of the Player's screen, Practice and Edit alike: ✕, the song's menu, the transport, the mode.
+    over: laid over the screen at its top (the Player's absolute layers), else in the column's flow (the editor)."""
+    x = (f'<a href="{close_href}" aria-label="Close" data-tip="Close · Esc" style="flex: none; width: 40px; height: 40px; border-radius: 20px; color: {ONB}; display: flex; align-items: center; justify-content: center">'
+         '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></a>')
+    return (f'<header data-band style="{"position: absolute; z-index: 48; left: 0; right: 0; top: 0" if over else "flex: none; position: relative; z-index: 20"}; height: 64px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 12px; background: {BAND}; color: {ONB}">'
+            f'{x}{SONGMENU("TakesLaptop.dc.html")}{HDRTRANSPORT("SettingsLaptop.dc.html")}{MODESW(mode, practice_href, edit_href)}<span style="flex: 1"></span>{right}</header>')
 
 # The header's popovers, new and the same in both modes: each a card hung 8 under its button, a tap outside closing it
 # (the kit's popover card: 16 round, the page's paper, the hairline and the float shadow). Playback options holds what
@@ -707,13 +818,34 @@ def HDRPOPS(practice, opts_left, vol_left, keys_right=None):
     mu = ib('Mute', 'doMute', 'mute', '<span style="font-size: 13px; font-weight: 700">M</span>')
     vol = rows(lvl('Master', 'hdVolM', 'hdSetVolM', '<span style="flex: none; width: 88px"></span>').replace('{line}', 'transparent'),
                '<sc-for list="{{hdParts}}" as="p" hint-placeholder-count="2">' + lvl('{{p.name}}', 'p.v', 'p.setV', so + mu).replace('{line}', LINE) + '</sc-for>')
-    out = _HPOPOVER('hdOptsOn', 'Playback options', opts, f'left: {opts_left}px; top: 65px', 320) + _HPOPOVER('hdVolOn', 'Volume', vol, f'left: {vol_left}px; top: 65px', 380)
+    out = _HPOPOVER('hdOptsOn', 'Playback options', opts, f'left: {opts_left}px; top: 65px', 320)
     if keys_right is not None:
         out += _HPOPOVER('hdKeysOn', 'Piano keys', rows(SELROW('Piano', 'selKb', False), SELROW('Labels', 'selLab')), f'right: {keys_right}px; top: 65px', 320)
     return out
+# The Audio panel, Flat's (owner's Flat 26.11 screenshot of Audio: "Room", then a "Master volume" card, then a card per
+# instrument with its headphones (solo), its mute and its level), one implementation for Practice and Edit: the
+# header's mixer opens it, the rail's Audio too; the Volume popover is gone (one home). Each part a card because it is
+# a thing with its own acts among its siblings (edge-lines: a card is a thing among siblings); the room a segmented
+# control, four exclusive values side by side (Apple HIG, Segmented controls). The state is HDRKEYS's (hdRooms,
+# hdVolM, hdParts), so both modes read one model.
+MICI = _LI('<path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"></path><path d="M19 11a7 7 0 0 1-14 0M12 18v3"></path>')
+_ACARD = f'box-sizing: border-box; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 4px 8px 4px 16px; display: flex; flex-direction: column'
+def _ALEVEL(lab, val, setv):
+    return (f'<div style="display: flex; align-items: center; gap: 12px; padding-right: 8px"><input type="range" min="0" max="100" step="5" value="{{{{{val}}}}}" onChange="{{{{{setv}}}}}" aria-label="{lab} volume" style="flex: 1; min-width: 0; height: 40px; margin: 0; accent-color: {INK}">'
+            f'<span style="flex: none; width: 40px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">{{{{{val}}}}}%</span></div>')
+def AUDPANEL():
+    ib = lambda lab, act, on, svg: f'<button type="button" aria-label="{lab} {{{{p.name}}}}" data-tip="{lab}" aria-pressed="{{{{p.{on}}}}}" onClick="{{{{p.{act}}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: {{{{p.{on}Bg}}}}; color: {{{{p.{on}Fg}}}}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
+    room = f'<section aria-label="Room" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Room</h3>{SEGC("hdRooms", 36, 14, True)}</section>'
+    master = (f'<div style="{_ACARD}"><div style="min-height: 44px; display: flex; align-items: center"><span style="flex: 1; font-size: 15px; font-weight: 600">Master volume</span></div>'
+              + _ALEVEL('Master', 'hdVolM', 'hdSetVolM') + '</div>')
+    part = (f'<div style="{_ACARD}"><div style="min-height: 44px; display: flex; align-items: center; gap: 4px"><span aria-hidden="true" style="flex: none; display: flex; margin-right: 8px; color: {SOFT}"><sc-if value="{{{{p.isVoice}}}}" hint-placeholder-val="{{{{false}}}}">{MICI}</sc-if><sc-if value="{{{{p.isKeys}}}}" hint-placeholder-val="{{{{true}}}}">{KEYSI.replace('width="22" height="22"', 'width="20" height="20"')}</sc-if></span>'
+            f'<span style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{p.name}}}}</span>'
+            + ib('Solo', 'doSolo', 'solo', HEADPHI) + ib('Mute', 'doMute', 'mute', MUTEI) + '</div>' + _ALEVEL('{{p.name}}', 'p.v', 'p.setV') + '</div>')
+    parts = f'<section aria-label="Volume" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Volume</h3>{master}<sc-for list="{{{{hdParts}}}}" as="p" hint-placeholder-count="2">{part}</sc-for></section>'
+    return f'<div style="display: flex; flex-direction: column; gap: 24px; padding: 16px 0 0">{room}{parts}</div>'
 HDRKEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-haspopup="dialog" aria-expanded="{{{{hdKeysOn}}}}" onClick="{{{{hdKeys}}}}" style="{_HB}">'
-              + KEYSI.replace('width="22" height="22"', 'width="20" height="20"') + '</button>')
-def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
+              + KEYSI.replace('width="22" height="22"', 'width="20" height="20"') + '</button>').replace(f'style="{_HB}"', f'style="{_HB}; background: {{{{hdKeysBg}}}}; color: {ONB}"', 1)
+def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts, audio='() => {}', audio_on='false'):
     """The header's state, one for both modes. S, SET: the board's state and setter; TOAST(msg) its toast fields;
     play, loop: the board's own acts; playing, loop_on, loop_tip: its expressions; parts: [(id, name)]."""
     P = repr([list(x) for x in parts])
@@ -726,13 +858,14 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
             " return { hdClose: () => SET(shut), hdStart: () => SET({ bar: 1, beat: 1, ...shut }), hdPlay: " + play + ", hdPlayTip: (" + playing + ") ? 'Pause' : 'Play',"
             " hdPlayD: (" + playing + ") ? 'M7 4h4v16H7zM13 4h4v16h-4z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z',"
             " hdOpts: tg('opts'), hdOptsOn: pop === 'opts', hdOptsX: pop === 'opts' ? 'true' : 'false',"
-            " hdMet: () => { const n = NEXT[met]; SET({ metro: n === 'on', countBars: n === 'off' ? 0 : 1, " + TOAST("MN[n]") + " }); }, hdMetTip: MN[met], hdMetOff: met === 'off', hdMetBg: met === 'on' ? '#F6E3BC' : '',"
-            " hdLoop: " + loop + ", hdLoopOn: (" + loop_on + ") ? 'true' : 'false', hdLoopBg: (" + loop_on + ") ? '#F6E3BC' : '', hdLoopTip: " + loop_tip + ","
-            " hdVol: tg('vol'), hdVolOn: pop === 'vol', hdVolX: pop === 'vol' ? 'true' : 'false', hdKeys: tg('keys'), hdKeysOn: pop === 'keys',"
+            " hdMet: () => { const n = NEXT[met]; SET({ metro: n === 'on', countBars: n === 'off' ? 0 : 1, " + TOAST("MN[n]") + " }); }, hdMetTip: MN[met], hdMetOff: met === 'off', hdMetBg: met === 'off' ? 'transparent' : '#FEFDFB', hdMetFg: met === 'off' ? '#FEFDFB' : '#332921',"
+            " hdLoop: " + loop + ", hdLoopOn: (" + loop_on + ") ? 'true' : 'false', hdLoopBg: (" + loop_on + ") ? '#FEFDFB' : 'transparent', hdLoopFg: (" + loop_on + ") ? '#332921' : '#FEFDFB', hdLoopTip: " + loop_tip + ","
+            " hdVol: " + audio + ", hdVolX: (" + audio_on + ") ? 'true' : 'false', hdVolBg: (" + audio_on + ") ? 'rgba(254,253,251,.16)' : 'transparent', hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent',"
+            " hdRooms: ['Off', 'Studio', 'Hall', 'Cathedral'].map((l) => { const on = (S.room ?? 'Off') === l; return { l, on: on ? 'true' : 'false', bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: on ? 600 : 500, pick: () => SET({ room: l }) }; }), hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent',"
             " hdRec: () => SET({ rec: !rec, " + TOAST("rec ? 'Recording stopped · Recording 4 kept' : 'Recording · play on your keyboard'") + " }), hdRecTip: rec ? 'Stop recording' : 'Record', hdRecBg: rec ? '#F8D9C2' : 'transparent',"
             " hdSpeedL: (sp / 100).toFixed(1) + '×', hdSlower: () => SET({ speed: Math.max(20, sp - 10) }), hdFaster: () => SET({ speed: Math.min(200, sp + 10) }), hdSlowerDis: sp <= 20, hdFasterDis: sp >= 200,"
             " hdVolM: S.volM ?? 100, hdSetVolM: (e) => SET({ volM: Number(e.target.value) }),"
-            " hdParts: " + P + ".map(([id, name]) => { const so = solo === id, mu = mute.includes(id); const v = S['vol' + id] ?? 100; return { name, v, setV: (e) => SET({ ['vol' + id]: Number(e.target.value) }),"
+            " hdParts: " + P + ".map(([id, name]) => { const so = solo === id, mu = mute.includes(id); const v = S['vol' + id] ?? 100; return { name, isVoice: id === 'V', isKeys: id !== 'V', v, setV: (e) => SET({ ['vol' + id]: Number(e.target.value) }),"
             " solo: so ? 'true' : 'false', soloBg: so ? '#332921' : 'transparent', soloFg: so ? '#FEFDFB' : '#332921', mute: mu ? 'true' : 'false', muteBg: mu ? '#332921' : 'transparent', muteFg: mu ? '#FEFDFB' : '#332921',"
             " doSolo: () => SET({ solo: so ? null : id }), doMute: () => SET({ mute: mu ? mute.filter((m) => m !== id) : [...mute, id] }) }; }) }; })(), "
             + SELKEYS(S, '(' + SET + ')', [('selMode', [('play', 'Listen'), ('wait', 'Wait')], f"({S}.mode === 'wait' ? 'wait' : 'play')", f"(id) => ({SET})({{ mode: id }})"),
@@ -778,8 +911,8 @@ CHEV_UD = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m7 15 5
 def SELROW(label, name, line=True):
     return (f'<div style="position: relative; min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 4px 0 12px;' + (f' border-top: 1px solid {LINE}' if line else '') + '">'
             f'<span style="flex: 1; min-width: 0; font-size: 15px">{label}</span>'
-            f'<button type="button" aria-haspopup="listbox" aria-expanded="{{{{{name}X}}}}" aria-label="{label}: {{{{{name}V}}}}" onClick="{{{{{name}Tg}}}}" style="flex: none; height: 36px; padding: 0 8px 0 10px; border: 0; border-radius: 8px; background: {{{{{name}Bg}}}}; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 4px; cursor: pointer">{{{{{name}V}}}}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_UD}</span></button>'
-            f'<sc-if value="{{{{{name}On}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{name}Tg}}}}" style="position: fixed; inset: 0; z-index: 69"></div><div role="listbox" aria-label="{label}" style="{_SMBOX}; right: 4px; top: 40px; width: 200px">'
+            f'<button type="button" aria-haspopup="listbox" aria-expanded="{{{{{name}X}}}}" aria-label="{label}: {{{{{name}V}}}}" onClick="{{{{{name}Tg}}}}" style="flex: none; height: 40px; padding: 0 8px 0 10px; border: 0; border-radius: 8px; background: {{{{{name}Bg}}}}; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 4px; cursor: pointer">{{{{{name}V}}}}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_UD}</span></button>'
+            f'<sc-if value="{{{{{name}On}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{name}Tg}}}}" style="position: fixed; inset: 0; z-index: 69"></div><div role="listbox" aria-label="{label}" style="{_SMBOX}; right: 4px; top: 42px; width: 200px">'
             f'<sc-for list="{{{{{name}Opts}}}}" as="o" hint-placeholder-count="3"><button type="button" role="option" aria-selected="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="{_SMROW}">{_SMSLOT(f"<sc-if value=\"{{{{o.cur}}}}\" hint-placeholder-val=\"{{{{false}}}}\">{CHECK}</sc-if>")}<span style="flex: 1">{{{{o.l}}}}</span></button></sc-for></div></sc-if></div>')
 def SELKEYS(S, SET, specs):
     """specs: (name, [(id, label)], current expr, pick expr taking id): one pop-up open at a time (state selPop)."""
@@ -790,11 +923,29 @@ def SELKEYS(S, SET, specs):
                    f"{name}Tg: () => {SET}({{ selPop: {S}.selPop === '{name}' ? null : '{name}' }}), {name}Opts: {L}.map(([id, l]) => ({{ l, cur: id === c, on: id === c ? 'true' : 'false', pick: () => {{ ({pick})(id); {SET}({{ selPop: null }}); }} }})) }}))({cur}),")
     return ' '.join(out)
 
+# the whole-song accompaniment as the editor shows it (owner, 2026-11-26: "the accompaniment version should be shown as
+# disabled and said that this can only be changed in the player"): the same card, its rows read-only at half strength
+# (disabled: 50%, craft-details 6), and the head says where it is changed, a link to Practice; the editor writes a
+# pattern into chosen bars from its Notation panel instead
+def ACCREADONLY(practice_href):
+    row = lambda lab, v, top: (f'<div aria-disabled="true" style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px;' + (f' border-top: 1px solid {LINE}' if top else '') + f'"><span style="flex: 1; font-size: 15px">{lab}</span><span style="font-size: 15px; color: {SOFT}">{v}</span></div>')
+    return (f'<sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}"><section aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px">'
+            f'<div style="display: flex; align-items: center; gap: 8px"><h3 style="flex: 1; margin: 0; font-size: 15px; font-weight: 600">Accompaniment</h3>'
+            f'<a href="{practice_href}" style="flex: none; min-height: 40px; margin: -8px -4px -8px 0; padding: 0 4px; display: flex; align-items: center; gap: 2px; color: #356890; font-size: 14px; text-decoration: none">Change in Practice<span aria-hidden="true" style="display: flex">{CHEV_R}</span></a></div>'
+            f'<div style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; opacity: .5">' + row('Pattern', 'Bass + chords', False) + row('First chord’s inversion', 'Root position', True) + row('Voicing', 'Voice-led', True) + '</div>'
+            f'<p style="margin: 0; font-size: 13px; line-height: 18px; color: {SOFT}">To write a pattern into chosen bars, use Notation.</p></section></sc-if>')
 # the whole-song accompaniment (a version with one) and the song's own pages, as rows in their cards
 def ACCPANEL():
     card = f'border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}'
     link = lambda lab, inner, act='', href='': ((f'<a href="{href}"' if href else f'<button type="button" onClick="{{{{{act}}}}}"') + f' style="min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {{line}}; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; text-decoration: none; cursor: pointer"><span style="flex: 1">{lab}</span><span style="display: flex; align-items: center; gap: 4px; color: {SOFT}">{inner}<span style="display: flex">{CHEV_R}</span></span>' + ('</a>' if href else '</button>'))
-    acc = (f'<sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}"><section aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Accompaniment</h3>'
-           f'<div style="{card}">' + link('Pattern', '{{patternName}}', 'openPattern').replace('{line}', 'transparent') + SELROW('First chord’s inversion', 'selInv') + SELROW('Voicing', 'selVoice') + '</div></section></sc-if>')
+    # what it changes: the chord or phrase picked on the page, widened to the phrase or the song by the segments above
+    # the card (PICKLAYER); with nothing picked, the whole song, and the ⓘ says how to pick
+    info = (f'<button type="button" aria-label="How to change one part" data-tip="Click a chord or a bar on the page to change only that part" style="flex: none; width: 40px; height: 40px; margin: -10px -8px -10px 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: help">'
+            '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg></button>')
+    reset = (f'<sc-if value="{{{{accOwn}}}}" hint-placeholder-val="{{{{false}}}}">' + link('{{accResetL}}', '', 'accReset').replace('{line}', LINE).replace(f'<span style="display: flex">{CHEV_R}</span>', '').replace(f'color: {INK}; font: inherit', 'color: #356890; font: inherit', 1) + '</sc-if>')
+    acc = (f'<sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}"><section aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; gap: 8px"><h3 style="flex: 1; margin: 0; font-size: 15px; font-weight: 600">Accompaniment</h3>'
+           + f'<sc-if value="{{{{accWhole}}}}" hint-placeholder-val="{{{{true}}}}">{info}</sc-if><sc-if value="{{{{accPicked}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{clearPick}}}}" style="flex: none; height: 32px; margin: -6px -8px -6px 0; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: #356890; font: inherit; font-size: 14px; cursor: pointer">Clear selection</button></sc-if></div>'
+           + f'<sc-if value="{{{{accPicked}}}}" hint-placeholder-val="{{{{false}}}}">{SEGC("accScopes", 36, 14, True)}</sc-if>'
+           f'<div style="{card}">' + link('Pattern', '{{patternName}}', 'openPattern').replace('{line}', 'transparent') + SELROW('First chord’s inversion', 'selInv') + SELROW('Voicing', 'selVoice') + reset + '</div></section></sc-if>')
     song = (f'<div style="{card}">' + link('Transpose', '{{keyName}}', 'openKey').replace('{line}', 'transparent') + link('Sections', '', href='SectionLaptop.dc.html').replace('{line}', LINE) + '</div>')
     return acc + song
