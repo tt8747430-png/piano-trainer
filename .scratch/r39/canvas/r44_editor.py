@@ -233,15 +233,18 @@ PAGEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M6 2h9l5 
 PANOI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M2 8h20M2 11h20M2 14h20M2 17h20"></path></svg>'
 # a toolbar tool: the palette's TOOL, 44 square, in the essentials pill
 TTOOL = TOOL.replace('min-width: 48px; height: 48px; box-sizing: border-box; padding: 0 8px', 'min-width: 44px; height: 44px; box-sizing: border-box; padding: 0 6px')
-# ground: the laptop toolbar's pill; on a phone the folded palette's row is bare glyphs on the sheet, as Flat's (017,
-# 018: the durations over the category pill, no ground behind them)
-ESS = lambda ground=True: (f'<div role="group" aria-label="Note input" style="flex: none; display: flex; align-items: center; padding: 2px; border-radius: 14px; background: {FILL if ground else "transparent"}">'
-              f'<sc-for list="{{{{tbDur}}}}" as="t" hint-placeholder-count="9">{TTOOL}</sc-for>{TSEP}<sc-for list="{{{{tbAcc}}}}" as="t" hint-placeholder-count="3">{TTOOL}</sc-for></div>')
-# on the laptop pill (FILL, the old pressed tile's own colour, so the pick did not show) the chosen tool is white and
-# lifted, as a segmented control's chosen segment (SEGC, Practice | Edit)
-ESSENTIALS = ESS().replace('background: {{t.bg}}', 'background: {{t.lbg}}; box-shadow: {{t.lsh}}')
-# on a phone the chosen glyph is honey-deep with no tile, as Flat's turns blue and the header's open glyph turns honey-deep
-SHEETP = SHEETP.replace('<!--ESS-->', ESS(False).replace('background: {{t.bg}}; color: {{t.fg}}', 'background: transparent; color: {{t.pfg}}'), 1)
+# the note-input group in its two looks, one helper: the laptop's toolbar pill (FILL), its chosen tool white and lifted
+# as a segmented control's chosen segment (SEGC, Practice | Edit); the phone's folded palette row, bare glyphs on the
+# sheet as Flat's (017, 018), its chosen glyph honey-deep with no tile, as Flat's turns blue
+def ESS(look):
+    paint = ('background: {{t.lbg}}; box-shadow: {{t.lsh}}; color: {{t.fg}}' if look == 'laptop'
+             else 'background: transparent; color: {{t.pfg}}')
+    tool = TTOOL.replace('background: {{t.bg}}; color: {{t.fg}}', paint)
+    assert paint in tool
+    return (f'<div role="group" aria-label="Note input" style="flex: none; display: flex; align-items: center; padding: 2px; border-radius: 14px; background: {FILL if look == "laptop" else "transparent"}">'
+            f'<sc-for list="{{{{tbDur}}}}" as="t" hint-placeholder-count="9">{tool}</sc-for>{TSEP}<sc-for list="{{{{tbAcc}}}}" as="t" hint-placeholder-count="3">{tool}</sc-for></div>')
+ESSENTIALS = ESS('laptop')
+SHEETP = SHEETP.replace('<!--ESS-->', ESS('phone'), 1)
 KEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-pressed="{{{{keysPressed}}}}" onClick="{{{{toggleKeys}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: {{{{keysBg}}}}; color: {{{{keysFg}}}}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>')
 ZOOMG = (TBTN('Zoom out', ZOUTI, 'zoomOut', 'Zoom out · ⌘−', 'zoutDis') + f'<button type="button" aria-label="Reset the zoom" data-tip="Actual size · ⌘0" onClick="{{{{zoomReset}}}}" style="flex: none; position: relative; min-width: 56px; height: 44px; border: 0; padding: 0 4px; border-radius: 12px; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{zoomL}}}}</button>'
          + TBTN('Zoom in', ZINI, 'zoomIn', 'Zoom in · ⌘=', 'zinDis'))
