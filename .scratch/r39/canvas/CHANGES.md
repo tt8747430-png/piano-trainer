@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · pending · the laptop toolbar's Piano keys, while the keys show, a honey-deep glyph with no ink square, as the phone's and as Flat turns its keyboard glyph blue: the black-filled tile was a second heavy mark beside Play's one honey fill (lines: EditorLaptop, Editor 0 problems) · EditorLaptop, EditorDraftLaptop, Editor, EditorDraft · pending
 ## Changes
 
 - 2026-11-26 · e29ccfda · the laptop toolbar's chosen duration and accidental white and lifted on the note-input pill, as a segmented control's chosen segment: the pressed tile was #EEE9E2 on the pill's #EEE9E2, so the pick did not show (lines: EditorLaptop, EditorDraftLaptop 0 problems) · EditorLaptop, EditorDraftLaptop, Editor, EditorDraft · v783
