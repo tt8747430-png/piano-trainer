@@ -38,36 +38,17 @@ def player_rail(t):
     acts = re.search(r'<sc-if value="\{\{songActsShow\}\}".*?</sc-if>', h, re.S).group(0)
     r0 = h.index('<div style="flex: none; position: relative; display: flex; flex-wrap: wrap;'); r1 = h.index('<div role="radiogroup" aria-label="Score"')
     h = h[:r0] + h[r1:]
-    c0 = h.index('<div role="radiogroup" aria-label="Score"'); c1 = h.index('<div style="border-radius: 12px; background: {{acc.bg}}', c0)
-    h = h[:c0] + '<div role="group" aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px">' + h[c1:]
-    # the accompaniment's patterns leave the Player for the editor's palette, which writes one into the chosen bars
-    g0 = h.index('<div role="group" aria-label="Accompaniment"'); depth = 0
-    for m in re.finditer(r'<(/?)div\b[^>]*>', h[g0:]):
-        depth += -1 if m.group(1) else 1
-        if depth == 0: g1 = g0 + m.end(); break
-    # the accompaniment for the whole song, as before, shown only in a version that has one (owner, 2026-11-26: "in such
-    # version i can just change the accompaniment version as i want for the whole song like we did before"); the
-    # editor writes a pattern into chosen bars on top of it
-    grp = h[g0:g1]
-    # no longer a choice between two cards: a plain group headed by its name, as the panel's other groups
-    grp = grp.replace('background: {{acc.bg}}; overflow: hidden; box-shadow: inset 0 0 0 2px {{acc.line}}, 0 0 0 1px rgba(51,41,33,.07)', 'background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px #DAD1C8', 1)
-    b0 = grp.index('<button type="button" role="radio" aria-checked="{{acc.on}}"'); b1 = grp.index('</button>', b0) + len('</button>')
-    grp = grp[:b0] + grp[b1:]
-    grp = grp.replace('<div role="group" aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px">', '<div role="group" aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Accompaniment</h3>', 1)
-    grp = grp.replace('border-top: 1px solid #E9E2D8; margin-top: -1px;', 'border-top: 0;', 1)
-    h = h[:g0] + '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + grp + '</sc-if>' + h[g1:]
+    # the accompaniment leaves the Player for the editor's Notation (owner, 2026-11-26: "remove the accompaniment settings
+    # from the player and move to only to the notation. only there will they be"): the Song panel holds the versions
+    # alone; the cut runs from the old Score choice through the old Transpose and Sections card
+    g0 = h.index('<div role="radiogroup" aria-label="Score"')
+    g1 = h.index('</div>', h.index('<a href="SectionLaptop.dc.html"', g0)) + len('</div>')
+    h = h[:g0] + h[g1:]
     t = t[:a] + h + t[b:]
     t = _dock(t, 'Settings', head('Song'))
     # the versions head the Song panel: the sidebar holds the switch and the new versions; the title, the song's acts
     i = t.index('</header>', t.index('>Song</h2>')) + len('</header>')
     t = t[:i] + VERPANEL() + t[i:]
-    # the accompaniment and the song's pages rebuilt from the kit as rows in their cards (owner, 2026-11-26: "i dont like
-    # these buttons in these cards very much. refactor this also"): the docked card's segmented strips are deleted
-    s0 = t.index('<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}"><div role="group" aria-label="Accompaniment"')
-    s1 = t.index('</div>', t.index('<a href="SectionLaptop.dc.html"', s0)) + len('</div>')  # through the old Transpose and Sections card
-    # the accompaniment leaves the Player for the editor's Notation (owner, 2026-11-26: "remove the accompaniment settings
-    # from the player and move to only to the notation. only there will they be"): the Song panel holds the versions alone
-    t = t[:s0] + t[s1:]
     t = t.replace('<sc-if value="{{isMore}}"', '<sc-if value="{{panelSong}}"', 1)
     # the Song panel's own pages dock in its place, each with its Back
     # its Pattern page and Sort and filter go with it: they are the editor's Notation panel's now
