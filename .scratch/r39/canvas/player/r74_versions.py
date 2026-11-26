@@ -89,7 +89,7 @@ def player_rail(t):
     i = t.index('aria-label="{{viewName}} settings"'); h = t.index('</header>', i) + len('</header>')
     # the whole View panel rebuilt from the kit (owner, 2026-11-26: "improve and refactor the song and view tabs
     # completely"): the views as picture cards, then the chosen view's options as rows, each section a fold
-    e = t.index('</section>', h); t = t[:h] + VIEWPANEL(inset=False) + t[e:]
+    e = t.index('</section>', h); t = t[:h] + VIEWPANEL(links=True, inset=False) + t[e:]
     t = t.replace('aria-label="{{viewName}} settings"', 'aria-label="View"', 1)
     vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
           "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', ...viewPress(id) }; }), "
@@ -229,13 +229,32 @@ def phone_band(t):
     assert t.count('sheetTop: 124') == 1; t = t.replace('sheetTop: 124', 'sheetTop: 122', 1)
     assert t.count('showControls: !playing,') == 1; t = t.replace('showControls: !playing,', 'showControls: true,', 1)
     places = (('Song', 'Song', '{{verName}}', f'<div style="display: flex; flex-direction: column">{VERPANEL()}</div>', None),
-              ('View', 'View', '{{viewName}}', VIEWPANEL(inset=False), None),
+              ('View', 'View', '{{viewName}}', VIEWPANEL(links=True, inset=False), None),
               ('Tr', 'Transpose', '{{hdKeyL}}', TRROWS(True), None),
               ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
-    t = t.replace('</main>', '</main>' + HDRPOPS(True, 0, 0, 0, keys_right=0, phone=True) + PHMENU(places, 'Takes.dc.html', PHMODE('play', 'Player.dc.html', 'Editor.dc.html'), song=(('Tr', 'Transpose', '{{hdKeyL}}', 'phTr'),)), 1)
+    # Edit is a mode of the song, not of the Sheet (owner, 2026-11-26: "why from the view options in the edit mode i go to
+    # for example to the diagrams view and it doesn't work … when i switch back to the sheet view it is still in edit
+    # mode"): the board takes mode (play | edit) and, in Edit, the editor it came from; the mode tabs keep the view (the
+    # Player's Grid ↔ the editor's Grid), Edit's row of acts stands under the header as in the editor's Sheet, and the
+    # Sheet card goes back to the editor; Flat keeps its mode as its view changes
+    modes = (f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">' + PHMODE('edit', '{{modePlayHref}}', '{{modeEditHref}}') + '</sc-if>'
+             f'<sc-if value="{{{{notEditing}}}}" hint-placeholder-val="{{{{true}}}}">' + PHMODE('play', '{{modePlayHref}}', '{{modeEditHref}}') + '</sc-if>')
+    t = t.replace('</main>', '</main>' + f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; z-index: 30; left: 0; right: 0; top: 122px">{ACTS_P}</div></sc-if>'
+                  + HDRPOPS(True, 0, 0, 0, keys_right=0, phone=True) + PHMENU(places, 'Takes.dc.html', modes, song=(('Tr', 'Transpose', '{{hdKeyL}}', 'phTr'),)), 1)
+    assert t.count("const view = s.view ?? p.view ?? 'sheet';") == 1
+    t = t.replace("const view = s.view ?? p.view ?? 'sheet';", "const view = s.view ?? p.view ?? 'sheet';\nconst editing = p.mode === 'edit';", 1)
+    # the grid's section heads on the 20 edge the ☰ panel's rows start on (they sat 2 further in)
+    assert t.count('gridIndent: DEV.gutter + 6,') == 1; t = t.replace('gridIndent: DEV.gutter + 6,', 'gridIndent: DEV.gutter + 4,', 1)
+    assert t.count('areaTop: keys ? 260 : 0,') == 1; t = t.replace('areaTop: keys ? 260 : 0,', 'areaTop: (keys ? 260 : 0) + (editing ? 56 : 0),', 1)
+    ed = "{ sheet: p.editor ?? 'Editor.dc.html', diagrams: (p.editor === 'EditorDraft.dc.html' ? 'EditorDraft' : 'Editor') + 'Diagrams.dc.html', grid: (p.editor === 'EditorDraft.dc.html' ? 'EditorDraft' : 'Editor') + 'Grid.dc.html', lyrics: (p.editor === 'EditorDraft.dc.html' ? 'EditorDraft' : 'Editor') + 'Lyrics.dc.html' }"
+    mk = ("editing, notEditing: !editing, modePlayHref: { sheet: 'Player.dc.html', diagrams: 'PlayerDiagrams.dc.html', grid: 'PlayerViewGrid.dc.html', lyrics: 'PlayerViewLyrics.dc.html' }[view], "
+          f"modeEditHref: ({ed})[view], "
+          "delNote: () => this.setState({ sTo: 'Chord deleted', sUndo: true }), undo: () => this.setState({ sTo: 'Undone', sUndo: false }), redo: () => this.setState({ sTo: 'Redone', sUndo: false }), "
+          "copied: () => this.setState({ sTo: 'Copied', sUndo: false }), cut: () => this.setState({ sTo: 'Cut', sUndo: true }), pasted: () => this.setState({ sTo: 'Pasted', sUndo: true }), ")
+
     st_ = '(o) => this.setState(o)'
     vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
-          "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', ...viewPress(id) }; }), "
+          "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', isHere: !(editing && id === 'sheet'), isAway: editing && id === 'sheet', href: p.editor ?? 'Editor.dc.html', ...viewPress(id) }; }), " + mk
           + FOLDKEYS('s', st_, ['Ver', 'View', 'Opts']) + ' '
           + SELFROM('s', st_, 'selLayout', "lopt('layout', layout, [['page', 'Page'], ['panorama', 'Panorama']])") + ' '
           + SELFROM('s', st_, 'selPerRow', "lopt('perRow', perRow, [4, 8].map((n) => [n, n + ' bars']))") + ' '
@@ -250,6 +269,35 @@ def phone_band(t):
     assert t.count("openKey: pick({ open: 'key' })") == 1; t = t.replace("openKey: pick({ open: 'key' })", "openKey: () => this.setState({ open: 'none', ph: 'Tr' })", 1)
     a = 'togglePlay: togglePlayNow,'; i = t.index(a)
     return t[:i] + a + ' ' + keys + t[i + len(a):]
+
+def desk_edit(t):
+    # the laptop's views in Edit (owner, 2026-11-26: "why from the view options in the edit mode i go to for example to
+    # the diagrams view and it doesn't work"): the board takes mode and the editor it came from, as the phone's; the band's
+    # Practice | Edit keeps the view, Edit's toolbar holds the acts on what is chosen (the editor's Delete | Undo Redo |
+    # Copy Cut Paste, at its place at the toolbar's end), and the Sheet card goes back to the editor
+    assert t.count("const view = s.view ?? p.view ?? 'sheet';") == 1
+    t = t.replace("const view = s.view ?? p.view ?? 'sheet';", "const view = s.view ?? p.view ?? 'sheet';\nconst editing = p.mode === 'edit';", 1)
+    sw = MODESW("play", "PlayerLaptop.dc.html", "EditorLaptop.dc.html")
+    assert t.count(sw) == 1
+    t = t.replace(sw, '<sc-if value="{{editing}}" hint-placeholder-val="{{false}}">' + MODESW("edit", "{{modePlayHref}}", "{{modeEditHref}}") + '</sc-if>'
+                  '<sc-if value="{{notEditing}}" hint-placeholder-val="{{true}}">' + MODESW("play", "{{modePlayHref}}", "{{modeEditHref}}") + '</sc-if>', 1)
+    n = t.count('top: 64px; bottom: 0; width: ')
+    assert n == 4, n  # the rail and its three panels (Song, View, Audio)
+    t = t.replace('top: 64px; bottom: 0; width: ', 'top: {{edTop}}px; bottom: 0; width: ')
+    assert t.count('const areaTop = keys ? 288 : 0;') == 1 and t.count('areaTop: 0, viewBottom') == 1
+    t = t.replace('const areaTop = keys ? 288 : 0;', 'const areaTop = (keys ? 288 : 0) + (editing ? 56 : 0);', 1).replace('areaTop: 0, viewBottom', 'areaTop: editing ? 56 : 0, viewBottom', 1)
+    bar = (f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><div role="toolbar" aria-label="Edit" style="position: absolute; z-index: 30; left: 0; right: 0; top: 64px; height: 56px; box-sizing: border-box; '
+           f'padding: 0 24px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; background: {PAGE}; box-shadow: inset 0 -1px 0 {LINE}">{CLIP}</div></sc-if>')
+    t = t.replace('</main>', '</main>' + bar, 1)
+    ed = "{ sheet: p.editor ?? 'EditorLaptop.dc.html', diagrams: (p.editor ?? 'EditorLaptop.dc.html').replace('.dc.html', 'Diagrams.dc.html'), grid: (p.editor ?? 'EditorLaptop.dc.html').replace('.dc.html', 'Grid.dc.html'), lyrics: (p.editor ?? 'EditorLaptop.dc.html').replace('.dc.html', 'Lyrics.dc.html') }"
+    mk = ("editing, notEditing: !editing, edTop: editing ? 120 : 64, modePlayHref: { sheet: 'PlayerLaptop.dc.html', diagrams: 'PlayerLaptopDiagrams.dc.html', grid: 'PlayerLaptopGrid.dc.html', lyrics: 'PlayerLaptopLyrics.dc.html' }[view], "
+          f"modeEditHref: ({ed})[view], "
+          "delNote: () => this.setState({ sTo: 'Chord deleted', sUndo: true }), undo: () => this.setState({ sTo: 'Undone', sUndo: false }), redo: () => this.setState({ sTo: 'Redone', sUndo: false }), "
+          "copied: () => this.setState({ sTo: 'Copied', sUndo: false }), cut: () => this.setState({ sTo: 'Cut', sUndo: true }), pasted: () => this.setState({ sTo: 'Pasted', sUndo: true }), ")
+    old = "isLyr: id === 'lyrics', ...viewPress(id) }; }), "
+    assert t.count(old) == 1
+    t = t.replace(old, "isLyr: id === 'lyrics', isHere: !(editing && id === 'sheet'), isAway: editing && id === 'sheet', href: p.editor ?? 'EditorLaptop.dc.html', ...viewPress(id) }; }), " + mk, 1)
+    return t
 
 # where each popover hangs (left of Playback options, left of Volume, right of Piano keys), measured from the header
 POPX = {'play': (294, 470, 576, 24), 'edit': (294, 470, 576)}
@@ -369,6 +417,6 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         f'<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px">' + btn('Cancel', 'renCancel', 'transparent', INK) + btn('Save', 'renSave', ACCENT, INK) + '</div>',
         close='renCancel', label='Rename version') + '</sc-if>')
     t = t.replace('</main>', '</main>' + (RENAMEDLG() if name == 'PlayerDesk' else ren), 1)
-    t = header_transport(player_rail(t)) if name == 'PlayerDesk' else phone_band(t)
+    t = desk_edit(header_transport(player_rail(t))) if name == 'PlayerDesk' else phone_band(t)
     p.write_text(t)
 print('r74 versions ok')

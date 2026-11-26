@@ -9,7 +9,6 @@ import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); 
 
 GL = GLASSFX
 XI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M18 6 6 18M6 6l12 12"></path></svg>'
-DELI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M21 5H9l-7 7 7 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1Z"></path><path d="m17 9-6 6M11 9l6 6"></path></svg>'
 EXPI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="m18 15-6-6-6 6"></path></svg>'
 
 ED4 = js(r'''
@@ -224,17 +223,11 @@ EDLAY_CSS = ('<style data-edlay>[data-menuroot] { container-type: size } @contai
 # keys' height dragged. Two views only, as Flat's Page and Horizontal and Dorico's Page and Galley: Page lays the song
 # on A4 as an engraver does (17.2 mm margins, Flat's default; a 7 mm staff, rastral 3; title centred, Words left and
 # Music right over the first system; Public domain at the foot; no number on page 1), Panorama runs one system on.
-COPYI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></svg>'
-CUTI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"></path></svg>'
-PASTEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>'
 ZOUTI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M5 12h14"></path></svg>'
 ZINI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M5 12h14M12 5v14"></path></svg>'
 PANELI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path></svg>'
 PAGEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"></path><path d="M8 11h8M8 14h8M8 17h8"></path></svg>'
 PANOI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M2 8h20M2 11h20M2 14h20M2 17h20"></path></svg>'
-TBTN = lambda lab, svg, act, tip, dis=None, col=INK: (f'<button type="button" aria-label="{lab}" data-tip="{tip}"' + (f' aria-disabled="{{{{{dis}}}}}"' if dis else '') +
-    f' onClick="{{{{{act}}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: transparent; color: {col}; display: flex; align-items: center; justify-content: center">{svg}</button>')
-TSEP = f'<span aria-hidden="true" style="flex: none; width: 1px; height: 24px; margin: 0 4px; background: {LINE}"></span>'
 # a toolbar tool: the palette's TOOL, 44 square, in the essentials pill
 TTOOL = TOOL.replace('min-width: 48px; height: 48px; box-sizing: border-box; padding: 0 8px', 'min-width: 44px; height: 44px; box-sizing: border-box; padding: 0 6px')
 # ground: the laptop toolbar's pill; on a phone the folded palette's row is bare glyphs on the sheet, as Flat's (017,
@@ -244,7 +237,6 @@ ESS = lambda ground=True: (f'<div role="group" aria-label="Note input" style="fl
 ESSENTIALS = ESS()
 SHEETP = SHEETP.replace('<!--ESS-->', ESS(False), 1)
 KEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-pressed="{{{{keysPressed}}}}" onClick="{{{{toggleKeys}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: {{{{keysBg}}}}; color: {{{{keysFg}}}}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>')
-CLIP = TBTN('Delete', DELI, 'delNote', 'Delete · ⌫') + TSEP + TBTN('Undo', UNDO, 'undo', 'Undo · ⌘Z') + TBTN('Redo', REDO, 'redo', 'Redo · ⇧⌘Z') + TSEP + TBTN('Copy', COPYI, 'copied', 'Copy · ⌘C') + TBTN('Cut', CUTI, 'cut', 'Cut · ⌘X') + TBTN('Paste', PASTEI, 'pasted', 'Paste · ⌘V')
 ZOOMG = (TBTN('Zoom out', ZOUTI, 'zoomOut', 'Zoom out · ⌘−', 'zoutDis') + f'<button type="button" aria-label="Reset the zoom" data-tip="Actual size · ⌘0" onClick="{{{{zoomReset}}}}" style="flex: none; position: relative; min-width: 56px; height: 44px; border: 0; padding: 0 4px; border-radius: 12px; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{zoomL}}}}</button>'
          + TBTN('Zoom in', ZINI, 'zoomIn', 'Zoom in · ⌘=', 'zinDis'))
 TOOLBAR_L = (f'<div role="toolbar" aria-label="Notation" style="flex: none; height: 56px; box-sizing: border-box; padding: 0 24px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
@@ -283,8 +275,6 @@ _PANELOLD = '<!--panel-->'
 # "the three buttons sit … after Undo and Redo", "in the toolbar under the transport"); Flat's voice, measure and comment
 # buttons have nothing to act on here (one voice a staff, no comments), so they are not drawn
 # its glyphs soft ink as Flat's second row is quieter than its header, a soft shadow under it over the page (018)
-ACTS_P = (f'<div role="toolbar" aria-label="Edit" style="flex: none; position: relative; z-index: 19; height: 56px; box-sizing: border-box; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; background: {SHEET}; color: {SOFT}; box-shadow: 0 2px 6px rgba(51,41,33,.08)">'
-          + TBTN('Delete', DELI, 'delNote', 'Delete', col=SOFT) + TBTN('Undo', UNDO, 'undo', 'Undo', col=SOFT) + TBTN('Redo', REDO, 'redo', 'Redo', col=SOFT) + TBTN('Copy', COPYI, 'copied', 'Copy', col=SOFT) + TBTN('Cut', CUTI, 'cut', 'Cut', col=SOFT) + TBTN('Paste', PASTEI, 'pasted', 'Paste', col=SOFT) + '</div>')
 # the keys' switch in the header, as Flat's piano glyph: bare, a sand wash while the keys show
 PHKEYSED = KEYSBTN.replace('border-radius: 12px; background: {{keysBg}}; color: {{keysFg}}', 'border-radius: 22px; background: transparent; color: {{keysPh}}').replace('width="22" height="22"', 'width="24" height="24"')
 assert PHKEYSED != KEYSBTN
@@ -384,7 +374,7 @@ KEYSCARD = (_PIF('keysOn2', f'<div onClick="{{{{closeSheet}}}}" style="position:
             + _KROW('Undo', '⌘Z') + _KROW('Redo', '⇧⌘Z') + _KROW('Copy, cut, paste', '⌘C ⌘X ⌘V') + _KROW('Go to bar', '⌘G') + _KROW('Add a bar', '⌥Enter') + _KROW('Search', '⌘K') + _KROW('Fold the panel', '⌘\\') + _KROW('Zoom in or out', '⌘+ ⌘−') + '</div></section>'))
 ED4 = ED4.replace('    return { ...common(st, set),', "    return { ...common(st, set), " + HDRKEYS('st', 'set', lambda m: 'toast: ' + m, "() => set({ edPlaying: !st.edPlaying, hdPop: null, toast: st.edPlaying ? 'Stopped' : 'Playing from bar 4' })", 'st.edPlaying', "() => set({ edLoop: !st.edLoop, hdPop: null, toast: st.edLoop ? 'Loop off' : 'Looping bar 4' })", 'st.edLoop', "st.edLoop ? 'Stop looping' : 'Loop the selection'", [('V', 'Voice'), ('P', 'Piano')]) + " " + HISTKEYS('st', 'set', lambda m: 'toast: ' + m, HIST="(st.hist ?? [{ id: 'h5', t: 'Today at 13:42', what: ['+4 notes'], bars: [5, 6] }, { id: 'h4', t: '7 November at 15:11', what: ['Pattern in bars 9–12'], bars: [9, 10, 11, 12] }, { id: 'h3', t: '4 November at 17:16', what: ['+49 notes', '−37 notes'], bars: [1, 2, 3, 4, 9, 10, 11, 12] }, { id: 'h2', t: '3 November at 17:45', what: ['Created'], bars: [] }])", restore="(h) => ({})") + "", 1)
 # the Song panel's folds, the Player's (Versions, Accompaniment)
-ED4 = ED4.replace('    return { ...common(st, set),', '    return { ...common(st, set), ' + FOLDKEYS('st', 'set', ['Ver', 'Acc', 'View', 'Opts']) + ' ' + "viewCards: [['sheet', 'Sheet'], ['diagrams', 'Diagrams'], ['grid', 'Grid'], ['lyrics', 'Lyrics']].map(([id, label]) => { const here = id === 'sheet'; return { label, on: here ? 'true' : 'false', ring: here ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: here ? 600 : 500, isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', isHere: here, isAway: !here, href: 'PlayerLaptop.dc.html', pick: () => {} }; }), viewName: 'Sheet', isSheet: true, isDiagrams: false, isGrid: false, isLyrics: false, showChips: [['chords', 'Chord symbols', true], ['positions', 'Chord positions', false], ['lyrics', 'Lyrics', true], ['fingers', 'Finger numbers', false], ['names', 'Note names', false], ['annotations', 'Your annotations', true]].map(([id, name, d]) => { const on = (st.show ?? {})[id] ?? d; return { name, on: on ? 'true' : 'false', track: on ? '#7FB685' : '#DAD1C8', knob: on ? 22 : 2, sep: id === 'chords' ? '0' : '1px solid #E9E2D8', pick: () => set({ show: { ...(st.show ?? {}), [id]: !on } }) }; }), " + SELFROM('st', 'set', 'selLayout', "[['page', 'Page'], ['pano', 'Panorama']].map(([id, name]) => ({ name, on: (st.view ?? VIEW0) === id ? 'true' : 'false', pick: () => set({ view: id }) }))") + ' ', 1)
+ED4 = ED4.replace('    return { ...common(st, set),', '    return { ...common(st, set), ' + FOLDKEYS('st', 'set', ['Ver', 'Acc', 'View', 'Opts']) + ' ' + "viewCards: [['sheet', 'Sheet'], ['diagrams', 'Diagrams'], ['grid', 'Grid'], ['lyrics', 'Lyrics']].map(([id, label]) => { const here = id === 'sheet'; return { label, on: here ? 'true' : 'false', ring: here ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: here ? 600 : 500, isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', isHere: here, isAway: !here, href: 'EditorLaptop' + label + '.dc.html', pick: () => {} }; }), viewName: 'Sheet', isSheet: true, isDiagrams: false, isGrid: false, isLyrics: false, showChips: [['chords', 'Chord symbols', true], ['positions', 'Chord positions', false], ['lyrics', 'Lyrics', true], ['fingers', 'Finger numbers', false], ['names', 'Note names', false], ['annotations', 'Your annotations', true]].map(([id, name, d]) => { const on = (st.show ?? {})[id] ?? d; return { name, on: on ? 'true' : 'false', track: on ? '#7FB685' : '#DAD1C8', knob: on ? 22 : 2, sep: id === 'chords' ? '0' : '1px solid #E9E2D8', pick: () => set({ show: { ...(st.show ?? {}), [id]: !on } }) }; }), " + SELFROM('st', 'set', 'selLayout', "[['page', 'Page'], ['pano', 'Panorama']].map(([id, name]) => ({ name, on: (st.view ?? VIEW0) === id ? 'true' : 'false', pick: () => set({ view: id }) }))") + ' ', 1)
 ED4 = ED4.replace('    return { ...common(st, set),', PATCONSTS + ACCJS + '    return { ...common(st, set), ' + ACCKEYS + ' ' + PATIIFE + ',', 1)
 ED4 = ED4.replace('    return { ...common(st, set),', '    return { ...common(st, set), ' + SONGMENU_KEYS('st', 'set', lambda m, u: 'toast: ' + m + (" + ' · Undo'" if u else ''), close_others=', sheet: null'), 1)
 ED4 = ED4.replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['more', 'export'].includes(st.sheet), creditsOn: st.sheet === 'credits', layoutOn: st.sheet === 'layout', trSheetOn: st.sheet === 'tr', openTr: () => set({ sheet: 'tr' }), openLayout: () => set({ sheet: 'layout' }), instOn: st.sheet === 'inst', openCredits: () => set({ sheet: 'credits' }), openInst: () => set({ sheet: 'inst' }), "
@@ -431,7 +421,7 @@ PHEDKEYS = ("phMenu: () => set({ sheet: st.sheet === 'more' ? null : 'more', hdP
             + PARTKEYS('st', 'set', [('V', 'Voice'), ('P', 'Piano')]) + " "
             + PHACTS('set', 'sheet: null', lambda m, u: 'toast: ' + m + (" + ' · Undo'" if u else ''), "sheet: 'more'", "sheet: 'song'"))
 PHJS = lambda j: (j.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1).replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: st.sheet === 'more', " + PHEDKEYS, 1)
-                   .replace("href: 'PlayerLaptop.dc.html', pick", "href: 'Player.dc.html', pick", 1))
+                   .replace("href: 'EditorLaptop' + label + '.dc.html', pick", "href: 'Editor' + label + '.dc.html', pick", 1))
 # the page prints the open version: with its piano accompaniment, or the melody alone (Original), in Edit as in Practice
 def VERPAGE(h, ph=False):
     # ph: on a phone the Parts sheet can hide the Piano, and the page then prints the melody alone

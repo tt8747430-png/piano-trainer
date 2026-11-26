@@ -63,6 +63,7 @@ DPUB = (f'<div style="margin: 4px 4px 0; padding: 16px; border-radius: 16px; box
         f'<h3 style="margin: 0; font-size: 17px; font-weight: 600">Publish song</h3><button type="button" onClick="{{{{askPub}}}}" style="height: 48px; border: 0; border-radius: 24px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">Publish…</button></div>')
 DSH = PHLAYERS(DSAVED, (('Hist', 'Publishing history', '', 'openVers'), ('Disc', 'Discard changes', '', 'askDisc', RED)), DPUB, 'EditorDraft.dc.html') + FSHEET('versOn', 'Publishing history', VERSBODY, back='phToMenu') + DASKS
 DSL = LAPLAYERS('Laptop.dc.html') + LAPSHEET(BSHEET('versOn', 'Publishing history', VERSBODY), 480) + DASKS
-phone('EditorDraft', 'Score editor, a built-in song’s draft (editors)', edph, PHJS(DJS), DSH, bar=SHEET)
-full_laptop('EditorDraftLaptop', 'Score editor, a built-in song’s draft (editors), laptop', edlm, DJS.replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - 76 - pw - 76 : 1710 - 76 - 64) / 794; const M = 'music'", 1), DSL)
+# the draft's views stay the draft's, in Edit (EditorDraftDiagrams, …), as the editor's
+phone('EditorDraft', 'Score editor, a built-in song’s draft (editors)', edph, PHJS(DJS).replace("href: 'Editor' + label + '.dc.html', pick", "href: 'EditorDraft' + label + '.dc.html', pick", 1), DSH, bar=SHEET)
+full_laptop('EditorDraftLaptop', 'Score editor, a built-in song’s draft (editors), laptop', edlm, DJS.replace("href: 'EditorLaptop' + label + '.dc.html', pick", "href: 'EditorDraftLaptop' + label + '.dc.html', pick", 1).replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - 76 - pw - 76 : 1710 - 76 - 64) / 794; const M = 'music'", 1), DSL)
 print('r55 editor draft ok')

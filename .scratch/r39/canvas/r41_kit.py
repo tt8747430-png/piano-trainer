@@ -1188,7 +1188,7 @@ _THUMBS = {
                  + '<rect x="12" y="16" width="96" height="5" rx="2.5" fill="currentColor" opacity=".55"></rect><rect x="12" y="38" width="76" height="5" rx="2.5" fill="currentColor" opacity=".55"></rect>'),
 }
 VIEWI = _LI('<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 13h8M8 16h5"></path>')
-# links=True (the editor): the editor edits the sheet, so the other views open the song in Practice in that view, the card a link
+# links=True: a card that is another board (v.isAway) is a link to v.href, the view kept in the same mode
 # inset=False where the panel's own section already holds the 16 gutter (the Player's), so the body sits on the head's edge
 def VIEWPANEL(links=False, inset=True):
     thumbs = ''.join(f'<sc-if value="{{{{v.{k}}}}}" hint-placeholder-val="{{{{false}}}}">{svg}</sc-if>' for k, svg in _THUMBS.items())
@@ -1197,9 +1197,10 @@ def VIEWPANEL(links=False, inset=True):
              f'style="min-height: 96px; box-sizing: border-box; padding: 10px 10px 8px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: {{{{v.ring}}}}; color: {INK}; font: inherit; display: flex; flex-direction: column; gap: 6px; cursor: pointer">'
              f'{thumbs}<span style="font-size: 15px; font-weight: {{{{v.fw}}}}; text-align: left">{{{{v.label}}}}</span></button></sc-for></div>')
     if links:
-        # the Sheet stays a choice here; Diagrams, Grid and Lyrics open the song in Practice in that view, with a ↗ glyph
+        # a card that leaves the board is a link to the board of that view in the same mode (the editor's Diagrams, Grid,
+        # Lyrics; from those, the editor's Sheet)
         b0 = cards.index('<button type="button" role="radio"'); b1 = cards.index('</button>', b0) + len('</button>'); btn = cards[b0:b1]
-        a = (btn.replace('<button type="button" role="radio" aria-checked="{{v.on}}" onClick="{{v.pick}}"', '<a href="{{v.href}}" data-tip="Opens in Practice"', 1)[:-len('</button>')] + '</a>').replace('border: 0;', 'border: 0; text-decoration: none;', 1)
+        a = (btn.replace('<button type="button" role="radio" aria-checked="{{v.on}}" onClick="{{v.pick}}"', '<a href="{{v.href}}"', 1)[:-len('</button>')] + '</a>').replace('border: 0;', 'border: 0; text-decoration: none;', 1)
         cards = cards[:b0] + '<sc-if value="{{v.isHere}}" hint-placeholder-val="{{true}}">' + btn + '</sc-if><sc-if value="{{v.isAway}}" hint-placeholder-val="{{false}}">' + a + '</sc-if>' + cards[b1:]
     segh = lambda lab, name: (f'<div style="display: flex; flex-direction: column; gap: 8px"><h4 style="margin: 0; font-size: 13px; font-weight: 600; color: {SOFT}">{lab}</h4>'
                               + SEGC(name + 'Seg', 36, 14, True) + '</div>')
@@ -1256,3 +1257,17 @@ def ACCPANEL(first=True):
     reset = (f'<sc-if value="{{{{accOwn}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{accReset}}}}" style="min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: #356890; font: inherit; font-size: 15px; width: 100%; text-align: left; cursor: pointer">{{{{accResetL}}}}</button></sc-if>')
     body = SEGC('accScopes', 36, 14, True) + f'<div style="{_CARD}">' + link + SELROW('First chord’s inversion', 'selInv') + SELROW('Voicing', 'selVoice') + reset + '</div>'
     return '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + FOLD('Acc', PIANOI, 'Accompaniment', body, first=first) + '</sc-if>'
+
+# the editor's Edit row on a phone (Flat's second row, 018): Delete, Undo, Redo, Copy, Cut, Paste as soft-ink glyphs spread
+# across the width, a soft shadow under it; one implementation for the editor and the Player's views in Edit
+DELI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M21 5H9l-7 7 7 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1Z"></path><path d="m17 9-6 6M11 9l6 6"></path></svg>'
+COPYI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></svg>'
+CUTI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"></path></svg>'
+PASTEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>'
+TBTN = lambda lab, svg, act, tip, dis=None, col=INK: (f'<button type="button" aria-label="{lab}" data-tip="{tip}"' + (f' aria-disabled="{{{{{dis}}}}}"' if dis else '') +
+    f' onClick="{{{{{act}}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: transparent; color: {col}; display: flex; align-items: center; justify-content: center">{svg}</button>')
+ACTS_P = (f'<div role="toolbar" aria-label="Edit" style="flex: none; position: relative; z-index: 19; height: 56px; box-sizing: border-box; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; background: {SHEET}; color: {SOFT}; box-shadow: 0 2px 6px rgba(51,41,33,.08)">'
+          + TBTN('Delete', DELI, 'delNote', 'Delete', col=SOFT) + TBTN('Undo', UNDO, 'undo', 'Undo', col=SOFT) + TBTN('Redo', REDO, 'redo', 'Redo', col=SOFT) + TBTN('Copy', COPYI, 'copied', 'Copy', col=SOFT) + TBTN('Cut', CUTI, 'cut', 'Cut', col=SOFT) + TBTN('Paste', PASTEI, 'pasted', 'Paste', col=SOFT) + '</div>')
+# the laptop toolbar's acts on what is chosen (the editor's, and the Player's views in Edit): Delete | Undo Redo | Copy Cut Paste
+TSEP = f'<span aria-hidden="true" style="flex: none; width: 1px; height: 24px; margin: 0 4px; background: {LINE}"></span>'
+CLIP = TBTN('Delete', DELI, 'delNote', 'Delete · ⌫') + TSEP + TBTN('Undo', UNDO, 'undo', 'Undo · ⌘Z') + TBTN('Redo', REDO, 'redo', 'Redo · ⇧⌘Z') + TSEP + TBTN('Copy', COPYI, 'copied', 'Copy · ⌘C') + TBTN('Cut', CUTI, 'cut', 'Cut · ⌘X') + TBTN('Paste', PASTEI, 'pasted', 'Paste · ⌘V')

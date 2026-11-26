@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · R74 Edit kept across the views: the editor's Diagrams, Grid and Lyrics cards open those views in Edit (new boards EditorDiagrams/Grid/Lyrics, EditorDraft…, EditorLaptop…, EditorDraftLaptop…, and the Player's PlayerLaptopDiagrams/Grid/Lyrics), Edit's acts under the header, the Sheet card back to the editor, Practice | Edit keeping the view; the grid's section heads on the ☰ panel's edge · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop + 15 new · pending
+
 
 
 ## Changes

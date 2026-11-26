@@ -326,8 +326,89 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerPractice.dc.html": {
+    "PlayerDiagrams.dc.html": {
       "x": 5300,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Diagrams, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerViewGrid.dc.html": {
+      "x": 5830,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Grid, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerViewLyrics.dc.html": {
+      "x": 6360,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Lyrics, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorDiagrams.dc.html": {
+      "x": 6890,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The editor in Edit, Diagrams, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorGrid.dc.html": {
+      "x": 7420,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The editor in Edit, Grid, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorLyrics.dc.html": {
+      "x": 7950,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The editor in Edit, Lyrics, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorDraftDiagrams.dc.html": {
+      "x": 8480,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A draft in Edit, Diagrams, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorDraftGrid.dc.html": {
+      "x": 9010,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A draft in Edit, Grid, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorDraftLyrics.dc.html": {
+      "x": 9540,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A draft in Edit, Lyrics, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerPractice.dc.html": {
+      "x": 10070,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -336,7 +417,7 @@
       "page": "player"
     },
     "PlayerViewDiagrams.dc.html": {
-      "x": 5830,
+      "x": 10600,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -344,26 +425,8 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerViewGrid.dc.html": {
-      "x": 6360,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Grid settings, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerViewLyrics.dc.html": {
-      "x": 6890,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Lyrics settings, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
     "PlayerSettings.dc.html": {
-      "x": 7420,
+      "x": 11130,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -372,20 +435,11 @@
       "page": "player"
     },
     "PlayerKey.dc.html": {
-      "x": 7950,
+      "x": 11660,
       "y": 300,
       "w": 450,
       "h": 920,
       "title": "The Player, Transpose, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerDiagrams.dc.html": {
-      "x": 8480,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Diagrams, phone",
       "is_interactive": true,
       "page": "player"
     },
@@ -476,6 +530,87 @@
       "w": 2143,
       "h": 1299,
       "title": "The Player: an exercise, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopDiagrams.dc.html": {
+      "x": 22230,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Diagrams, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopGrid.dc.html": {
+      "x": 24453,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Grid, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopLyrics.dc.html": {
+      "x": 26676,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Lyrics, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorLaptopDiagrams.dc.html": {
+      "x": 28899,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The editor in Edit, Diagrams, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorLaptopGrid.dc.html": {
+      "x": 31122,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The editor in Edit, Grid, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorLaptopLyrics.dc.html": {
+      "x": 33345,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The editor in Edit, Lyrics, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorDraftLaptopDiagrams.dc.html": {
+      "x": 35568,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A draft in Edit, Diagrams, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorDraftLaptopGrid.dc.html": {
+      "x": 37791,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A draft in Edit, Grid, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "EditorDraftLaptopLyrics.dc.html": {
+      "x": 40014,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A draft in Edit, Lyrics, laptop",
       "is_interactive": true,
       "page": "player"
     },
@@ -1252,13 +1387,19 @@
     "PlayChromatic.dc.html",
     "PlayProgression.dc.html",
     "PlayExercise.dc.html",
-    "PlayerPractice.dc.html",
-    "PlayerViewDiagrams.dc.html",
+    "PlayerDiagrams.dc.html",
     "PlayerViewGrid.dc.html",
     "PlayerViewLyrics.dc.html",
+    "EditorDiagrams.dc.html",
+    "EditorGrid.dc.html",
+    "EditorLyrics.dc.html",
+    "EditorDraftDiagrams.dc.html",
+    "EditorDraftGrid.dc.html",
+    "EditorDraftLyrics.dc.html",
+    "PlayerPractice.dc.html",
+    "PlayerViewDiagrams.dc.html",
     "PlayerSettings.dc.html",
     "PlayerKey.dc.html",
-    "PlayerDiagrams.dc.html",
     "PlayerLaptop.dc.html",
     "PlayerLaptopLoop.dc.html",
     "PlayerLaptopKeyboard.dc.html",
@@ -1269,6 +1410,15 @@
     "PlayChromaticLaptop.dc.html",
     "PlayProgressionLaptop.dc.html",
     "PlayExerciseLaptop.dc.html",
+    "PlayerLaptopDiagrams.dc.html",
+    "PlayerLaptopGrid.dc.html",
+    "PlayerLaptopLyrics.dc.html",
+    "EditorLaptopDiagrams.dc.html",
+    "EditorLaptopGrid.dc.html",
+    "EditorLaptopLyrics.dc.html",
+    "EditorDraftLaptopDiagrams.dc.html",
+    "EditorDraftLaptopGrid.dc.html",
+    "EditorDraftLaptopLyrics.dc.html",
     "Main.dc.html",
     "Chords.dc.html",
     "PlayChord.dc.html",
