@@ -46,8 +46,8 @@ DJS = DJS.replace("isLive: live,", "isLive: live, notLive: !live,", 1)
 edlm = (IF('isLive', elm4.replace(MODESW('edit', 'PlayerLaptop.dc.html'), MODESW('edit', 'PlayerLaptop.dc.html', 'Accompaniment')), 'true')
         + IF('notLive', GHEAD('SongsLaptop.dc.html').replace('padding: 8px 16px', 'padding: 12px 24px') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("SongsLaptop.dc.html")}</main>')
         + f'<div style="position: absolute; right: 24px; bottom: 188px; z-index: 40; width: 760px; padding-top: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 4px 14px -6px rgba(51,41,33,.25)">{STRIP("dsDemo")}{STRIP("states")}</div>' + TOASTL)
-DSH = (BSHEET('moreOn', 'Amazing Grace', DSAVED + DMENU('.dc.html')) + THINGPAGE('creditsOn', 'closeSheet', 'Credits', ED_CREDITS, False) + THINGPAGE('layoutOn', 'closeSheet', 'Layout', ED_LAYOUT, False) + BSHEET('instOn', 'Instruments', ED_INST) + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel')).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1) + BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY) + DASKS
+DSH = PHLAYERS(DMENU('.dc.html'), DSAVED) + BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY) + DASKS
 DSL = LAPLAYERS('Laptop.dc.html', menu=DMENU('Laptop.dc.html'), saved=DSAVED) + LAPSHEET(BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY), 480) + DASKS
-phone('EditorDraft', 'Score editor, a built-in song’s draft (editors)', edph, DJS.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1), DSH)
+phone('EditorDraft', 'Score editor, a built-in song’s draft (editors)', edph, PHJS(DJS), DSH)
 full_laptop('EditorDraftLaptop', 'Score editor, a built-in song’s draft (editors), laptop', edlm, DJS.replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - 76 - pw - 76 : 1710 - 76 - 64) / 794; const M = 'music'", 1), DSL)
 print('r55 editor draft ok')

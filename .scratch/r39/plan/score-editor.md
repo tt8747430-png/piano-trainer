@@ -87,6 +87,10 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
     everywhere (a take, Recording 3; No recordings yet).
   - **The Player's laptop bar the same:** ✕, the song's name, the capsule beside it, at the editor's places, so Play and
     Edit move nothing (its song acts stay in its gear, so the name there is a title, not a menu).
+  - **No Done** (owner, 2026-11-26: "what is with this done button. why is it here"): the capsule ends in Edit on
+    both sizes and in both modes, pressed (sand) while editing; a tap goes back to playing. ✕ leaves the song.
+  - **The phone the same model:** its ··· sheet holds the title menu's rows with the rail's places (Instruments,
+    Layout, Audio) between them, each a sheet with the laptop panel's body; Export a sheet of the four files.
   - Not taken: Templates, Note heads, Music font (no difference a learner hears or needs), Tuning, Low-CPU playback.
 
 - **The editor's ··· is Flat's ≡ menu** (owner, 2026-11-16: "new completely new design"; `flat-score-editor` 083–090):

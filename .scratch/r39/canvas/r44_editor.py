@@ -225,9 +225,9 @@ MENUCARD = lambda *rows: GROUP(*rows, bg=SHEET)
 # Versions only on an editor's draft of a built-in song (the published versions it restores), and Export only on the
 # learner's own song or version, which it writes; a learner's song has no versions,
 # and the on-screen piano has no settings page to open, so neither row is drawn where it would open nothing.
-ED_MENU = lambda sfx, vh=None: (LAPMENU(sfx, vh) if 'Laptop' in sfx else MENUCARD(('link', 'Title and credits', 'Amazing Grace', 'openCredits'), ('link', 'Transpose', 'G major', ''), ('link', 'Recordings', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
-                       + MENUCARD(('link', 'Instruments', '2', 'openInst'), ('link', 'Layout', 'A4', 'openLayout'), ('link', 'Note input', '', ''), ('link', 'Recording', '', ''), ('link', 'MIDI keyboard', 'None', ''))
-                       + MENUCARD(*(() if vh else (('link', 'Export…', 'MusicXML, MIDI', ''),)), ('action', 'Print', 'closeSheet', INK)))
+ED_MENU = lambda sfx, vh=None: (LAPMENU(sfx, vh) if 'Laptop' in sfx else MENUCARD(('link', 'Credits', '', 'openCredits'), ('link', 'Transpose', 'G major', ''), ('link', 'Recordings', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
+                       + MENUCARD(('link', 'Instruments', '2', 'openInst'), ('link', 'Layout', 'A4', 'openLayout'), ('link', 'Audio', '', 'openAudio'))
+                       + MENUCARD(*(() if vh else (('link', 'Export', '', 'openExport'),)), ('action', 'Print', 'closeSheet', INK)))
 # the laptop's title menu, as Flat's (owner's screenshot): Credits, Export ›, Print, Keyboard shortcuts; Instruments,
 # Layout and the sound are the rail's panels, so they are not here
 LAPMENU = lambda sfx, vh=None: (MENUCARD(('link', 'Credits', '', 'openCredits'), ('link', 'Transpose', 'G major', ''), ('link', 'Recordings', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
@@ -235,13 +235,7 @@ LAPMENU = lambda sfx, vh=None: (MENUCARD(('link', 'Credits', '', 'openCredits'),
 EXPORTMENU = GROUP(('action', 'Printable PDF (.pdf)', 'closeSheet', INK), ('action', 'MusicXML (.mxl)', 'closeSheet', INK), ('action', 'MusicXML (.musicxml)', 'closeSheet', INK), ('action', 'MIDI (.mid)', 'closeSheet', INK), bg=SHEET)
 FIELD = lambda label, val: (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
                             f'<input {KB["title"]} value="{val}" placeholder="{label}" style="height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
-INSTROW = lambda name, staff, k: (f'<div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 6px 0 16px"><span style="flex: none; color: {INK}; display: flex">{KEYSI}</span>'
-                               f'<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{name}</span><span style="font-size: 13px; color: {SOFT}">{staff}</span></span>'
-                               f'<button type="button" aria-label="Solo {name}" data-tip="Solo" aria-pressed="{{{{solo{k}On}}}}" onClick="{{{{toggleSolo{k}}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {{{{solo{k}Bg}}}}; color: {{{{solo{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{SOLOI}</button>'
-                               f'<button type="button" aria-label="Show {name}" data-tip="Show" aria-pressed="{{{{show{k}On}}}}" onClick="{{{{toggleShow{k}}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {{{{show{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{EYEI}</button></div>')
 ED_PICK = GROUP(('action', 'Violin', 'addViolin'), ('action', 'Viola', 'addViola'), ('action', 'Cello', 'addCello'), ('action', 'Flute', 'addFlute'), ('action', 'Clarinet', 'addClarinet'), ('action', 'Guitar', 'addGuitar'), ('action', 'Organ', 'addOrgan'), bg=SHEET)
-ED_INST = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{INSTROW("Piano", "Treble and bass staves", "P")}<div style="height: 1px; margin-left: 52px; background: {FILL}"></div>{INSTROW("Voice", "Melody and words", "V")}<sc-if value="{{{{addedOn}}}}" hint-placeholder-val="{{{{false}}}}"><div style="height: 1px; margin-left: 52px; background: {FILL}"></div>{INSTROW("{{addedN}}", "{{addedS}}", "A")}</sc-if></div>'
-           f'<div style="display: flex">{BTN("Add an instrument", "addInst", kind="quiet", h=48)}</div>')
 # Credits, as Flat's Credits (flat-score-editor 087, 088; the owner's Document settings screenshot): Title, Subtitle,
 # Lyricist and Composer, Arranger, Licence text, Save at the foot's end. Creation type, tags, description and the
 # licence are the Publish page's (one home: r53's _SPL), as Flat keeps them for publishing
@@ -258,17 +252,7 @@ def _CRED(two):
 ED_CREDITS = _CRED(False)
 # Layout, as Flat's Layout and styles (the owner's screenshot): one folding section a kind, its name, what it holds,
 # its value; each opens in place (a details element), never a popover
-_LAYSEC = lambda name, what, val, body: (f'<details style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}"><summary style="list-style: none; min-height: 72px; box-sizing: border-box; padding: 12px 16px 12px 20px; display: flex; align-items: center; gap: 16px; cursor: pointer">'
-                                         f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 16px; font-weight: 600">{name}</span><span style="font-size: 14px; color: {SOFT}">{what}</span></span>'
-                                         f'<span style="font-size: 15px; color: {SOFT}; white-space: nowrap">{val}</span><span style="color: {SOFT}; display: flex">{CHEV_D}</span></summary>'
-                                         f'<div style="padding: 0 20px 16px; display: flex; flex-direction: column">{body}</div></details>')
 _LROW = lambda k, v: f'<div style="min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: inset 0 1px 0 {FILL}"><span style="font-size: 15px">{k}</span><span style="font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{v}</span></div>'
-ED_LAYOUT = (_LAYSEC('Pages', 'Size, orientation, margins and page numbers', 'A4', _LROW('Size', 'A4') + _LROW('Orientation', 'Portrait') + _LROW('Margins', '17.2 mm') + _LROW('Page numbers', 'From page 2'))
-             + _LAYSEC('Staves', 'Staff size and the space between staves', '7 mm', _LROW('Staff size', '7 mm (rastral 3)') + _LROW('Between staves', '8 spaces') + _LROW('Between systems', '12 spaces'))
-             + _LAYSEC('Measures', 'Measures a line and note spacing', '4 a line', _LROW('Measures a line', '4, the first 5') + _LROW('Note spacing', 'Normal') + _LROW('Last line justified', 'Past half full'))
-             + _LAYSEC('Measure numbers', 'Where the bars are numbered', 'Each line', _LROW('Show', 'At each line\'s start') + _LROW('Pickup', 'Not counted'))
-             + _LAYSEC('Chord symbols', 'How chord names are written', 'G7, Cmaj7', _LROW('Major seventh', 'maj7') + _LROW('Minor', 'm') + _LROW('Diminished', 'dim'))
-             + _LAYSEC('Text', 'The faces of the title, credits and words', 'Iowan Old Style', _LROW('Title', 'Iowan Old Style, 30') + _LROW('Credits', 'Iowan Old Style, 13') + _LROW('Words', 'Iowan Old Style, 13')))
 # The laptop editor as Flat's new editor (owner, 2026-11-26: "this now are the new settings … we dont need legacy settings";
 # FLAT_UI_SHELL_AND_MOTION §1.1–1.2: a 64 rail beside one 352 panel; Notation, Instruments, Layout, Audio, and Search and
 # Shortcuts at its foot as acts; the active entry clicked again folds the panel; Layout hides the toolbar and shows the
@@ -303,33 +287,36 @@ _IROW = lambda name, k: (f'<div style="display: flex; align-items: center; gap: 
                          f'<button type="button" aria-label="Solo {name}" data-tip="Solo" aria-pressed="{{{{solo{k}On}}}}" onClick="{{{{toggleSolo{k}}}}}" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: {{{{solo{k}Bg}}}}; color: {{{{solo{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{SOLOI}</button>'
                          f'<button type="button" aria-label="Show {name}" data-tip="Show" aria-pressed="{{{{show{k}On}}}}" onClick="{{{{toggleShow{k}}}}}" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {{{{show{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{EYEI}</button></div>'
                          f'<button type="button" aria-label="{name}: more" data-tip="More" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
-PANEL_INST = (_PIF('notPick', _PHEAD('Instruments') + _PBODY(
+INST_BODY = (
                   f'<div style="display: flex; flex-direction: column; gap: 8px">' + _IROW('Voice', 'V') + _IROW('Piano', 'P') + _PIF('addedOn', _IROW('{{addedN}}', 'A')) + '</div>'
-                  + f'<button type="button" onClick="{{{{addInst}}}}" style="align-self: flex-start; height: 44px; margin-left: 24px; padding: 0 14px; border: 0; border-radius: 22px; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer">{STEP_PLUS}New instrument</button>'), 'true')
+                  + f'<button type="button" onClick="{{{{addInst}}}}" style="align-self: flex-start; height: 44px; margin-left: 24px; padding: 0 14px; border: 0; border-radius: 22px; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer">{STEP_PLUS}New instrument</button>')
+PANEL_INST = (_PIF('notPick', _PHEAD('Instruments') + _PBODY(INST_BODY), 'true')
               + _PIF('pickInstOn', f'<header style="flex: none; height: 64px; box-sizing: border-box; padding: 0 16px 0 8px; display: flex; align-items: center; gap: 4px; box-shadow: inset 0 -1px 0 {LINE}"><button type="button" onClick="{{{{backInst}}}}" aria-label="Back to Instruments" data-tip="Back" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button><h2 style="margin: 0; font-size: 17px; font-weight: 600">New instrument</h2></header>' + _PBODY(ED_PICK)))
 # Layout, as Flat's Layout panel: the sections fold in the panel, each its icon, name and value; the page is the preview
 _LSEC = lambda name, val, body: (f'<details style="box-shadow: inset 0 -1px 0 {LINE}"><summary style="list-style: none; min-height: 48px; display: flex; align-items: center; gap: 12px; cursor: pointer">'
                                  f'<span style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600">{name}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap">{val}</span><span style="color: {SOFT}; display: flex">{CHEV_D}</span></summary>'
                                  f'<div style="padding: 0 0 12px; display: flex; flex-direction: column">{body}</div></details>')
-PANEL_LAY = _PHEAD('Layout') + _PBODY(
+LAY_BODY = (
     _LSEC('Pages', 'A4', _LROW('Size', 'A4') + _LROW('Orientation', 'Portrait') + _LROW('Margins', '17.2 mm') + _LROW('Page numbers', 'From page 2'))
     + _LSEC('Staves', '7 mm', _LROW('Staff size', '7 mm') + _LROW('Between staves', '8 spaces') + _LROW('Between systems', '12 spaces'))
     + _LSEC('Hide empty staves', 'Never', _LROW('Hide', 'Never'))
     + _LSEC('Measures', '4 a line', _LROW('Measures a line', '4, the first 5') + _LROW('Note spacing', 'Normal'))
     + _LSEC('Measure numbers', 'Each line', _LROW('Show', 'At each line’s start') + _LROW('Pickup', 'Not counted'))
     + _LSEC('Chord symbols', 'G7, Cmaj7', _LROW('Major seventh', 'maj7') + _LROW('Minor', 'm') + _LROW('Diminished', 'dim'))
-    + _LSEC('Text styles', 'Iowan Old Style', _LROW('Title', 'Iowan Old Style, 30') + _LROW('Credits', 'Iowan Old Style, 13') + _LROW('Words', 'Iowan Old Style, 13')), 0)
+    + _LSEC('Text styles', 'Iowan Old Style', _LROW('Title', 'Iowan Old Style, 30') + _LROW('Credits', 'Iowan Old Style, 13') + _LROW('Words', 'Iowan Old Style, 13')))
+PANEL_LAY = _PHEAD('Layout') + _PBODY(LAY_BODY, 0)
 _SLIDER = lambda lab, v: f'<input type="range" min="0" max="100" value="{v}" aria-label="{lab}" style="flex: 1; min-width: 0; height: 44px; margin: 0; accent-color: {INK}">'
 _AROW = lambda name, k: (f'<div style="display: flex; flex-direction: column; gap: 4px"><div style="min-height: 44px; display: flex; align-items: center; gap: 8px"><span style="flex: none; display: flex">{KEYSI}</span><span style="flex: 1; font-size: 15px; font-weight: 600">{name}</span>'
                          f'<button type="button" aria-label="Solo {name}" data-tip="Solo" aria-pressed="{{{{solo{k}On}}}}" onClick="{{{{toggleSolo{k}}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {{{{solo{k}Bg}}}}; color: {{{{solo{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{HEADPHI}</button>'
                          f'<button type="button" aria-label="Mute {name}" data-tip="Mute" aria-pressed="{{{{mute{k}On}}}}" onClick="{{{{toggleMute{k}}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {{{{mute{k}Bg}}}}; color: {{{{mute{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{MUTEI}</button></div>'
                          f'<div style="display: flex; align-items: center; gap: 12px; padding-left: 32px"><span style="font-size: 14px; color: {SOFT}">Volume</span>{_SLIDER(name + " volume", 100)}<span style="width: 28px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">100</span></div></div>')
-PANEL_AUD = _PHEAD('Audio') + _PBODY(
+AUD_BODY = (
     f'<section style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Room</h3>{SEGC("rooms", 36, 14, True)}</section>'
     + f'<div style="height: 1px; background: {LINE}"></div>'
     + f'<section style="display: flex; flex-direction: column; gap: 12px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Volume</h3>'
     + f'<div style="display: flex; align-items: center; gap: 12px"><span style="font-size: 15px">Master</span>{_SLIDER("Master volume", 100)}<span style="width: 28px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">100</span></div>'
-    + _AROW('Voice', 'V') + _AROW('Piano', 'P') + '</section>', 20)
+    + _AROW('Voice', 'V') + _AROW('Piano', 'P') + '</section>')
+PANEL_AUD = _PHEAD('Audio') + _PBODY(AUD_BODY, 20)
 PANEL_NOT = _PHEAD('Notation') + STRIP() + f'<div style="height: 1px; margin: 0 16px; background: {LINE}"></div>' + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 20px">{ED_SECTIONS()}</div>'
 # Search, as Flat's: a field over the score, the suggested acts under it, the keys to move and close at its foot
 _SACT = lambda icon, t, k: f'<button type="button" onClick="{{{{closeSheet}}}}" style="min-height: 48px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer"><span style="display: flex; color: {SOFT}">{icon}</span><span style="flex: 1; font-size: 15px">{t}</span><kbd style="font: inherit; font-size: 13px; color: {SOFT}">{k}</kbd></button>'
@@ -346,7 +333,7 @@ KEYSCARD = (_PIF('keysOn2', f'<div onClick="{{{{closeSheet}}}}" style="position:
             f'<div style="padding: 16px 24px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px">'
             + _KROW('Play or stop', 'Space') + _KROW('Note input', 'N') + _KROW('Whole to sixteenth', '7 6 5 4 3') + _KROW('Rest', '0') + _KROW('Dot', '.') + _KROW('Tie', ',') + _KROW('Sharp, flat, natural', '+ − =') + _KROW('Next or previous bar', '⌘→ ⌘←')
             + _KROW('Undo', '⌘Z') + _KROW('Redo', '⇧⌘Z') + _KROW('Copy, cut, paste', '⌘C ⌘X ⌘V') + _KROW('Go to bar', '⌘G') + _KROW('Add a bar', '⌥Enter') + _KROW('Search', '⌘K') + _KROW('Fold the panel', '⌘\\') + _KROW('Zoom in or out', '⌘+ ⌘−') + '</div></section>'))
-ED4 = ED4.replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['more', 'export'].includes(st.sheet), creditsOn: st.sheet === 'credits', layoutOn: st.sheet === 'layout', openLayout: () => set({ sheet: 'layout' }), instOn: st.sheet === 'inst', openCredits: () => set({ sheet: 'credits' }), openInst: () => set({ sheet: 'inst' }), "
+ED4 = ED4.replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['more', 'export'].includes(st.sheet), creditsOn: st.sheet === 'credits', layoutOn: st.sheet === 'layout', openLayout: () => set({ sheet: 'layout' }), instOn: st.sheet === 'inst', openCredits: () => set({ sheet: 'credits' }), openInst: () => set({ sheet: 'inst' }), audOn: st.sheet === 'audio', openAudio: () => set({ sheet: 'audio' }), "
                   + "".join(f"solo{k}On: st.solo === '{n}', toggleSolo{k}: () => set({{ solo: st.solo === '{n}' ? null : '{n}' }}), solo{k}Bg: st.solo === '{n}' ? '#332921' : 'transparent', solo{k}Fg: st.solo === '{n}' ? '#FEFDFB' : '#332921', show{k}On: !(st.hide || []).includes('{n}'), toggleShow{k}: () => set({{ hide: (st.hide || []).includes('{n}') ? (st.hide || []).filter((x) => x !== '{n}') : [...(st.hide || []), '{n}'] }}), show{k}Fg: (st.hide || []).includes('{n}') ? '#BFB3A7' : '#332921', " for k, n in (('P', 'Piano'), ('V', 'Voice'), ('A', 'Added'))) + "addedOn: !!st.added, addedN: st.added || '', addedS: { Cello: 'Bass staff', Organ: 'Treble, bass and pedal staves', Viola: 'Alto staff' }[st.added] || 'Treble staff', addInst: () => set({ sheet: 'pickInst' }), pickInstOn: st.sheet === 'pickInst', " + "".join(f"add{n}: () => set({{ added: '{n}', sheet: 'inst' }}), " for n in ['Violin', 'Viola', 'Cello', 'Flute', 'Clarinet', 'Guitar', 'Organ']), 1)
 
 def full_laptop(fname, title, main, js_, pops=''):
@@ -366,7 +353,15 @@ def full_laptop(fname, title, main, js_, pops=''):
 """
     open(OUT + fname + '.dc.html', 'w').write(html)
 
-phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, ED4.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1), BSHEET('moreOn', 'Amazing Grace', ED_SAVED + ED_MENU('.dc.html'), maxh='calc(100% - 124px)') + THINGPAGE('creditsOn', 'closeSheet', 'Credits', ED_CREDITS, False) + THINGPAGE('layoutOn', 'closeSheet', 'Layout', ED_LAYOUT, False) + BSHEET('instOn', 'Instruments', ED_INST, maxh='calc(100% - 124px)') + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel', maxh='calc(100% - 124px)'))
+# The phone's layers: the laptop title menu's rows and the rail's places in one sheet, each place a sheet over the
+# score with the laptop panel's own body (one implementation), its controls at 44 for a finger
+_MH = 'calc(100% - 124px)'
+_P44 = lambda h: h.replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px')
+PHLAYERS = lambda menu, saved: (BSHEET('moreOn', 'Amazing Grace', saved + menu, maxh=_MH) + THINGPAGE('creditsOn', 'closeSheet', 'Credits', ED_CREDITS, False)
+                                + BSHEET('instOn', 'Instruments', _P44(INST_BODY), maxh=_MH) + BSHEET('pickInstOn', 'New instrument', ED_PICK, 'Cancel', maxh=_MH)
+                                + BSHEET('layoutOn', 'Layout', LAY_BODY, maxh=_MH) + BSHEET('audOn', 'Audio', AUD_BODY, maxh=_MH) + BSHEET('exportOn', 'Export', EXPORTMENU, maxh=_MH))
+PHJS = lambda j: j.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1).replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: st.sheet === 'more',", 1)
+phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, PHJS(ED4), PHLAYERS(ED_MENU('.dc.html'), ED_SAVED))
 # Go to bar (research F11, Flat's and Dorico's ⌘G): a small card over the sheet's head, the bar's number and its count
 GOTO_FIELD = '<div style="display: flex; align-items: center; gap: 12px"><input value="9" aria-label="Bar" type="text" inputmode="numeric" enterkeyhint="go" style="width: 96px; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: 0 0 0 2px #332921; font: inherit; font-size: 17px; font-variant-numeric: tabular-nums; color: #332921; outline: none"><span style="font-size: 15px; color: #7A6E64; font-variant-numeric: tabular-nums">of 16</span></div>'
 ED4L = ED4.replace("['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]]", "['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }], ['Go to bar (⌘G)', st.sheet === 'goto', { sheet: 'goto' }, { sheet: null }]]").replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['more', 'export'].includes(st.sheet), gotoOn: st.sheet === 'goto',", 1)

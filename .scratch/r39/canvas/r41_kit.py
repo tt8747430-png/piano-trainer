@@ -43,7 +43,7 @@ GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; borde
 # the chords; Arrangement, written by hand, where the song has one; Your arrangement, the learner's own), and holds the
 # one way into and out of editing, as Flat's score page (read-only, Edit) and its editor (Done). Reading, its end is
 # Edit; editing, it names Your arrangement (the accompaniment is never written over: Edit starts the learner's copy)
-# and its end is Done, in ink. The menu is a native disclosure, so it opens on any board without the board's script.
+# and its end is the same Edit, pressed. The menu is a native disclosure, so it opens on any board without the board's script.
 PENI = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="M21.17 6.81a1 1 0 0 0-3.99-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"></path></svg>'
 VERSIONS = (('Accompaniment', 'From the chords · Bass + chords', 'Player'), ('Arrangement', 'None written for this song yet', ''), ('Your arrangement', 'Write your own, from this accompaniment', 'Editor'))
 def MODESW(on, other_href, label=None):
@@ -63,10 +63,15 @@ def MODESW(on, other_href, label=None):
     summary = (f'<summary aria-label="Version: {shown}" data-tip="Versions" style="list-style: none; height: 44px; box-sizing: border-box; padding: 0 8px 0 16px; display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 15px; font-weight: 600; color: {INK}; white-space: nowrap">'
                f'{shown}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_D}</span></summary>')
     seg_ = 'height: 44px; box-sizing: border-box; border-radius: 22px; display: flex; align-items: center; gap: 6px; font-size: 15px; text-decoration: none; white-space: nowrap; position: relative'
-    # a phone's bar has no room for the word: Edit is its pencil alone, named in its tip
-    end = ((f'<a href="{other_href}" aria-label="Edit" data-tip="Edit · E" style="{seg_}; padding: 0 16px 0 12px; color: {INK}; font-weight: 500">{PENI}Edit</a>' if 'Laptop' in other_href
-            else f'<a href="{other_href}" aria-label="Edit" data-tip="Edit" style="{seg_}; width: 48px; justify-content: center; color: {INK}">{PENI}</a>') if on == 'play'
-           else f'<a href="{other_href}" aria-label="Done" data-tip="Done · Esc" style="{seg_}; padding: 0 18px; color: {SHEET}; font-weight: 600; background: {INK}">Done</a>')
+    # a phone's bar has no room for the word: Edit is its pencil alone, named in its tip. Editing, the same Edit stays,
+    # pressed on the sand wash, and a tap goes back to playing (owner, 2026-11-26: "what is with this done button. why
+    # is it here"): one toggle in one place, as Flat's, never an ink "Done" that reads as a save the app already makes
+    edit = on == 'edit'
+    tip = 'Stop editing · E' if edit else 'Edit · E'
+    pressed = f' aria-pressed="{"true" if edit else "false"}"'
+    wash = f'; background: #E8DFD3' if edit else ''
+    end = (f'<a href="{other_href}" aria-label="Edit"{pressed} data-tip="{tip}" style="{seg_}; padding: 0 16px 0 12px; color: {INK}; font-weight: 500{wash}">{PENI}Edit</a>' if 'Laptop' in other_href
+           else f'<a href="{other_href}" aria-label="Edit"{pressed} data-tip="{tip}" style="{seg_}; width: 48px; justify-content: center; color: {INK}{wash}">{PENI}</a>')
     return (f'<div role="group" aria-label="Version and mode" style="position: relative; display: flex; align-items: center; border-radius: 22px; {GLASSFX}; pointer-events: auto">'
             f'<style>details.vsw > summary::-webkit-details-marker {{ display: none }}</style><details class="vsw" style="position: relative">{summary}{menu}</details>'
             f'<span aria-hidden="true" style="flex: none; width: 1px; height: 24px; background: {LINE}"></span>{end}</div>')
