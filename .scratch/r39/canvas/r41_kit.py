@@ -1123,7 +1123,10 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
 # version i can just change the accompaniment … for the whole song like we did before"): the versions as rows (the open
 # one checked, the default says so), then New version and New version with accompaniment, then the open version's
 # acts; one card as the panel's other groups, rows 44
-_VPROW = f'min-height: 52px; box-sizing: border-box; padding: 4px 4px 4px 12px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; cursor: pointer'
+# a version row's text on the column of a settings row (FROW: 12 in, a 24 glyph, 16 apart), so the Versions card and the
+# song's acts under it read as one list
+_VSLOT = lambda inner='': f'<span aria-hidden="true" style="flex: none; width: 24px; display: flex; justify-content: center; color: {INK}">{inner}</span>'
+_VPROW = f'min-height: 52px; box-sizing: border-box; padding: 4px 4px 4px 12px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 16px; width: 100%; text-align: left; cursor: pointer'
 # Inside a card, every control is a row (owner, 2026-11-26: "i dont like these buttons in these cards very much.
 # refactor this also"): no loose text buttons under the card and no grey segmented strip inside it. A version's own
 # acts sit behind its row's ··· (ui-and-mockups: "a row's own acts sit behind its ···"; Apple HIG, Pull-down buttons;
@@ -1138,12 +1141,12 @@ def VERPANEL():
             + '<sc-if value="{{v.canDel}}" hint-placeholder-val="{{true}}">' + _SMSEP + mi('Delete version', 'actDelVer', RED) + '</sc-if></div></sc-if>')
     vrow = (f'<sc-for list="{{{{verRows}}}}" as="v" hint-placeholder-count="2"><div style="position: relative; display: flex; align-items: center; border-top: 1px solid {{{{v.line}}}}">'
             f'<button type="button" role="radio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="{_VPROW}; flex: 1; min-width: 0; padding-right: 0">'
-            + _SMSLOT(f'<sc-if value="{{{{v.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK}</sc-if>')
+            + _VSLOT(f'<sc-if value="{{{{v.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK}</sc-if>')
             + f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-weight: {{{{v.fw}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{v.name}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{v.sub}}}}</span></span>'
             + f'<sc-if value="{{{{v.isDef}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; font-size: 13px; color: {SOFT}">Default</span></sc-if></button>'
             + f'<button type="button" aria-label="{{{{v.name}}}}: more" aria-haspopup="menu" aria-expanded="{{{{v.menuX}}}}" onClick="{{{{v.menu}}}}" style="flex: none; width: 44px; height: 44px; margin-right: 4px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: pointer">{MORE.replace('width="24" height="24"', 'width="20" height="20"')}</button>'
             + menu + '</div></sc-for>')
-    add = lambda lab, act: f'<button type="button" onClick="{{{{{act}}}}}" style="{_VPROW}; min-height: 44px; border-top: 1px solid {LINE}">{_SMSLOT(PLUSI_S)}<span style="flex: 1">{lab}</span></button>'
+    add = lambda lab, act: f'<button type="button" onClick="{{{{{act}}}}}" style="{_VPROW}; min-height: 44px; border-top: 1px solid {LINE}">{_VSLOT(PLUSI_S)}<span style="flex: 1">{lab}</span></button>'
     body = (f'<div role="radiogroup" aria-label="Versions" style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{vrow}'
             + add('New version', 'actNewVer') + '<sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + add('New version with accompaniment', 'actNewAcc') + '</sc-if></div>')
     return FOLD('Ver', LAYERSI, 'Versions', body, first=True)
