@@ -11,7 +11,7 @@ for li, j in enumerate(_J):
         rows = []
         for k, v in items:
             n += 1
-            if k == 'l': rows.append({'t': v, 'd': f'Lesson {n}', 'check': False})
+            if k == 'l': rows.append({'t': v, 'd': '', 'check': False})  # owner, 2026-11-26 ("remove all the thigns that i didnt asked for"): the spine numbers the lessons; no "Lesson n" under each
             else:
                 # a check is one scale, or one chord family, by its musician's name (the app's music strings), with
                 # what of it is known: a scale is known or not yet; a family counts its qualities
