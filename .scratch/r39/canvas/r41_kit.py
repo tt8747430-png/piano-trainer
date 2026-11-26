@@ -674,7 +674,8 @@ def SONGMENU(takes_href, extra=(), phone=False):
            + ''.join(f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="{_SMROW}; padding-left: 16px">{l}</button>' for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))) + '</div></sc-if>')
     rows = (''
             + f'<a role="menuitem" href="{takes_href}" style="{_SMROW}">{_SMSLOT()}<span style="flex: 1">Recordings</span><span style="color: {SOFT}; font-variant-numeric: tabular-nums">3</span></a>'
-            + it('Share link', 'actShare') + it('Export', 'toggleExp', '#332921; background: {{expBg}}', f'<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_R}</span>') + it('Print', 'actPrint')
+            # the file's acts apart after a hairline, as the phone's ☰ draws them (Flat's Export and Print stand apart)
+            + _SMSEP + it('Share link', 'actShare') + it('Export', 'toggleExp', '#332921; background: {{expBg}}', f'<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_R}</span>') + it('Print', 'actPrint')
             + ''.join(_SMSEP + ''.join(it(*r) for r in grp) for grp in extra))
     return (f'<div style="position: relative; flex: none; min-width: 0; pointer-events: auto">'
             f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{smOn}}}}" onClick="{{{{toggleSm}}}}" data-tip="The song’s menu" style="height: 48px; max-width: {"100%" if phone else "320px"}; padding: 0 10px 0 12px; border: 0; border-radius: 12px; background: {{{{smBg}}}}; color: {ONB}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
@@ -699,7 +700,7 @@ def SONGMENU_KEYS(S, SET, TOAST, DEF='mine', close_others=''):
     return (f"...(() => {{ const VS = {S}.vers ?? [{{ id: 'orig', name: 'Original', piano: false }}, {{ id: 'mine', name: 'My version', piano: true }}]; "
             f"const VD = {S}.verDef ?? '{DEF}'; const VCID = VS.some((v) => v.id === {S}.verCur) ? {S}.verCur : VD; const VC = VS.find((v) => v.id === VCID) ?? VS[0]; const TG = VS.find((v) => v.id === ({S}.verMenu ?? {S}.renId)) ?? VC; const shut = {{ sm: false, exp: false, verMenu: null{close_others} }}; "
             f"return {{ smOn: !!{S}.sm, smBg: {S}.sm ? 'rgba(254,253,251,.16)' : 'transparent', toggleSm: () => {SET}({{ sm: !{S}.sm, exp: false }}), "
-            f"verName: VC.name, isPiano: !!VC.piano, isLead: !VC.piano, expOn: !!{S}.exp, expBg: {S}.exp ? '#F3EEE8' : 'transparent', expTop: 86, toggleExp: () => {SET}({{ exp: !{S}.exp }}), "
+            f"verName: VC.name, isPiano: !!VC.piano, isLead: !VC.piano, expOn: !!{S}.exp, expBg: {S}.exp ? '#F3EEE8' : 'transparent', expTop: 99, toggleExp: () => {SET}({{ exp: !{S}.exp }}), "
             f"verRows: VS.map((v, i) => ({{ name: v.name, sub: v.piano ? 'With accompaniment' : 'Melody, chords and words', line: i ? '{LINE}' : 'transparent', isDef: v.id === VD, cur: v.id === VCID, fw: v.id === VCID ? 600 : 400, on: v.id === VCID ? 'true' : 'false', pick: () => {SET}({{ ...shut, verCur: v.id, pat: v.piano ? 'p1' : 'none' }}), menuOn: {S}.verMenu === v.id, menuX: {S}.verMenu === v.id ? 'true' : 'false', menu: () => {SET}({{ verMenu: {S}.verMenu === v.id ? null : v.id }}), canDef: v.id !== VD, canDel: VS.length > 1 }})), "
             f"canSetDef: VCID !== VD, canDelVer: VS.length > 1, "
             f"actNewVer: () => {{ const id = 'v' + Date.now(); {SET}({{ ...shut, vers: [...VS, {{ ...VC, id, name: VC.name + ' 2' }}], verCur: id, {m0} }}); }}, "
