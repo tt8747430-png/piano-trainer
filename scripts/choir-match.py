@@ -14,6 +14,7 @@ Each song may hold a `match.txt` beside its files, written from the song's PDF a
     lyrics-size: 11                    the words' size in points (Arial, as printed)
     count-pickup                       the sheet numbers its pickup as bar 1 (bars here follow the sheet)
     dashed: 20 22                      ties and slurs in these bars drawn dashed, as printed
+    beams                              eighths beamed together (by default each has its own flag, as sung lines are)
     segno: 54                          the segno stands at this bar
     text: 81 above bold italic D.S.% al Coda   printed text at a bar, above or below the top staff (% is the segno)
 
@@ -77,6 +78,8 @@ def parse(path):
             spec['hide_empty'] = True
         elif key == 'hide-tempo':
             spec['hide_tempo'] = True
+        elif key == 'beams':
+            spec['beams'] = True
         elif key == 'dashed':
             spec['dashed'] = [int(b) for b in value.split()]
         elif key == 'segno':
@@ -339,6 +342,23 @@ def layout_mscx(score, spec):
         inner.text = t['text'].replace('%', '\U0001D10B')
         at = next((k for k, el in enumerate(v) if el.tag in ('Chord', 'Rest')), len(v))
         v.insert(at, st)
+    # Each eighth and sixteenth on its own flag, as the choir's sheets print a sung line (a triplet keeps its beam).
+    if not spec.get('beams'):
+        for st in staffs:
+            for v in st.iter('voice'):
+                in_tuplet = False
+                for el in v:
+                    if el.tag == 'Tuplet':
+                        in_tuplet = True
+                    elif el.tag == 'endTuplet':
+                        in_tuplet = False
+                    elif el.tag in ('Chord', 'Rest') and not in_tuplet:
+                        bm = el.find('BeamMode')
+                        if bm is None:
+                            bm = ET.Element('BeamMode')
+                            at = next((k for k, c in enumerate(el) if c.tag == 'durationType'), 0)
+                            el.insert(at, bm)
+                        bm.text = 'no'
     # Ties and slurs the sheet draws dashed (one verse holds where another sings on), in every staff of those bars.
     for bar in spec.get('dashed', []):
         for st in staffs:

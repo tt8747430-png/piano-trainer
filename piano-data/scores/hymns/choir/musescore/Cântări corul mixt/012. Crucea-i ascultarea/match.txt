@@ -1,0 +1,20 @@
+# From 012. Crucea-i ascultarea.pdf (1 page) and the choir book, page 24.
+title: 12 Crucea'i ascultarea
+lyricist: Traian Dorz
+composer: Nicolae Moldoveanu
+spatium: 1.6
+systems: 1 7 12 17 24
+hide-tempo
+hide-names
+
+[Soprano]
+1: @1 1.Cru -- cea'i as -- cul -- ta -- rea Dom -- nu -- lui I -- sus, Cea mai 'nal -- tă jert -- fă ca -- re s'a a -- dus,
+1: @9 Da -- rul cel mai ma -- re, pre -- țul ne'n -- tre -- cut Ca să mân _ -- tu -- ias -- că ce e -- ra pier -- dut.
+1: @17 Cru -- cea'i sla -- va Ta, Cru -- cea'i pa -- cea mea, Din bles -- tem m'a scos Jert -- fa lui Hris -- tos,
+1: @25 Via -- ță mi'a a -- dus Cru -- cea lui I -- sus. Sla -- vă lui Hris -- tos, Sla -- vă lui I -- sus!
+2: @1 2.Cru -- cea e iu -- bi -- rea Dom -- nu -- lui I -- sus, Nu'i cu -- vânt să 'nal -- țe dra -- gos -- tea mai sus,
+2: @9 Nu'i ni -- mic s'a -- ra -- te'a -- tât de stră -- lu -- cit, Dra -- gos -- tea _ cu ca -- re Ta -- tăl ne'a iu -- bit.
+3: @1 3.Cru -- cea'i bi -- ru -- in -- ța Dom -- nu -- lui I -- sus, El a'n -- vins când sin -- gur mor -- ții S'a su -- pus,
+3: @9 Și'a zdro -- bit vrăj -- ma -- șul când S'a u -- mi -- lit, Prea -- mă -- rit _ e Mie -- lul fiind -- că S'a jert -- fit.
+4: @1 4.Cru -- cea es -- te sla -- va Dom -- nu -- lui I -- sus, Prin ea Și'a 'năl -- țat El Nu -- me -- le'l mai sus,
+4: @9 Ră -- ni -- le Lui sfin -- te veș -- nic vor pur -- ta Mân -- tu -- i _ -- rea noas -- tră și mă -- ri -- rea Sa.
