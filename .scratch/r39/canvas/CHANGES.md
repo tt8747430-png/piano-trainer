@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-26 · pending · the phone palette's chosen duration a honey-deep glyph with no tile, the others ink, as Flat's turns its chosen one blue (flat-score-editor 003) and the header's open glyph turns honey-deep (lines: Editor, EditorDraft 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop · pending
 ## Changes
 
+- 2026-11-26 · 88d1edf3 · the phone palette's chosen duration a honey-deep glyph with no tile, the others ink, as Flat's turns its chosen one blue (flat-score-editor 003) and the header's open glyph turns honey-deep (lines: Editor, EditorDraft 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop · v780
 - 2026-11-26 · fa73f06f · the laptop Player's old Transpose dialog (Down a half step, Back to Song) deleted: nothing opened it since Transpose moved to the band's popover, and it spoke of half steps where the popover says semitones (lines: PlayerDesk 0 problems, the band's Transpose popover opens) · PlayerDesk · v779
 - 2026-11-26 · 122cfe04 · the phone's Playback options opens on Flat's three rows in its order (Audio playback, Metronome, Playback speed), Practice's Mode and Hands after them, as the R74 ruling puts Audio first (lines: PlayerApp, PlayerPractice 0 problems; the 50 Player and editor boards 0 problems at both sizes) · PlayerApp · v778
 - 2026-11-26 · 7326b28c · each layer board opens its own layer (Playback options, Menu, View and Parts, View on Diagrams; the laptop's Audio and View panels); the laptop Audio panel as Flat's, Room and Volume folds; the editor's Instruments, Layout and Audio panels render again (a section cut closed short nested them in Notation); Layout's preview page at 0.75 so its gaps land on the scale; index labels named for what each board shows (lines: EditorLaptop, EditorDraftLaptop Layout, PlayerLaptopParts, PlayerDesk Audio, PlayerPractice, PlayerSettings, PlayerHands, PlayerViewDiagrams 0 problems) · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop · v777
