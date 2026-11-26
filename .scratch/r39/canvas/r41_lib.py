@@ -102,7 +102,7 @@ NEWNAME_L = lambda html: LAPSHEET(html)
 LFOLDERSHEET = NEWNAME('folderOn', 'New folder', 'Folder name', 'fname', 'named', 'closeSheet', 'createBg', 'createFg')
 LFOLDERSHEET_L = NEWNAME_L(LFOLDERSHEET)
 def library(stem, title, D, back='', back_l='', soft='', right_extra='', soft_href='', root='', section='Practice', shelf_phone='', shelf_laptop='', table_cols=(('Name', 't', 3), ('', 's', 4), ('', 'v', 1.4)), add_items=(), more_rows=(), arrange=False):
-    noun = {'My songs': 'songs', 'Accompaniment': 'patterns', 'Progressions': 'progressions'}.get(title, 'exercises')
+    noun = {'Library': 'songs', 'Accompaniment': 'patterns', 'Progressions': 'progressions'}.get(title, 'exercises')
     D = dict(D, noun=noun, miss='Chopin' if noun == 'songs' else 'Ragtime', hint='Check the spelling, or try a song’s title or its composer.' if noun == 'songs' else 'Check the spelling, or try another word.')
     script = js('    const D = ' + json.dumps(D, ensure_ascii=False) + ';\n' + LIBJS + '\n    };')
     # New is the floating honey + at the bottom right on a phone and a laptop alike, its menu opening over it (owner,

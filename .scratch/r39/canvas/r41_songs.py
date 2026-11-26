@@ -26,11 +26,11 @@ def S(t, s, v, i, c, places=(), tags=(), href='Player.dc.html', ic=INK):
     folder = href in ('#', 'Folder.dc.html') or t == 'Shared with me'
     pic = STACK(c) if folder else INCIPIT(INC.get(t, (2, 4)))
     return {'folder': folder, 'pic': pic, 't': t, 's': s, 'v': v, 'i': '' , 'c': c, 'ic': ic, 'href': href, 'places': list(places), 'tags': list(tags)}
-SONGS_D = {'emptyLib': {'t': 'Your library is empty', 'b': 'Create a song, or restore items from the archive.', 'btn': 'New song', 'arch': 'Archive.dc.html'}, 'places': ['All', 'Favourites', 'Learning', 'Learned'], 'sorts': ['Last played', 'Title', 'Composer', 'Added'], 'favs': ['Amazing Grace', 'Clair de lune'],
+SONGS_D = {'emptyLib': {'t': 'Your library is empty', 'b': 'Create a song, or restore items from the archive.', 'btn': 'New piece', 'arch': 'Archive.dc.html'}, 'places': ['All', 'Favourites', 'Learning', 'Learned'], 'sorts': ['Last played', 'Title', 'Composer', 'Added'], 'favs': ['Amazing Grace', 'Clair de lune'],
   'open': {'Folders': True, 'Songs': True},
   'filters': [{'name': 'Key', 'opts': [['C major', 4], ['G major', 2], ['D major', 1], ['A minor', 1], ['D♭ major', 1]]}, {'name': 'Level', 'opts': [['Beginner', 6], ['Intermediate', 2], ['Advanced', 1]]}],
   'sections': [
-    {'g': 'Folders', 'rows': [S('Songs to learn', '23 songs · 4 learned', '', '♪', HONEY, href='Folder.dc.html'), S('Hymns', '6 songs · 2 learned', '', '♪', SKY, href='Folder.dc.html'), S('Called to Play', '15 songs', '', '♪', LILAC, href='Folder.dc.html'), S('Shared with me', "4 songs · From Maria's group", '', '♪', SAGE, href='Groups.dc.html')]},
+    {'g': 'Folders', 'rows': [S('Songs to learn', '23 pieces · 4 learned', '', '♪', HONEY, href='Folder.dc.html'), S('Hymns', '6 pieces · 2 learned', '', '♪', SKY, href='Folder.dc.html'), S('Called to Play', '15 pieces', '', '♪', LILAC, href='Folder.dc.html'), S('Shared with me', "4 pieces · From Maria's group", '', '♪', SAGE, href='Groups.dc.html')]},
     {'g': 'Songs', 'rows': [
       S('Amazing Grace', 'John Newton · G major', 'Bar 9 of 16', 'G', HONEY, ('Recently played', 'Learning'), ('G major', 'Beginner')),
       S('Für Elise', 'Beethoven · A minor', 'Bar 3 of 24', 'Am', PEACH, ('Recently played', 'Learning'), ('A minor', 'Intermediate')),
@@ -40,10 +40,10 @@ SONGS_D = {'emptyLib': {'t': 'Your library is empty', 'b': 'Create a song, or re
       S('Ode to Joy', 'Beethoven · D major', 'Bar 5 of 12', 'D', LILAC, ('Recently played', 'Learning'), ('D major', 'Beginner')),
       S('Jingle Bells', 'James Lord Pierpont · G major', '', 'G', HONEY, (), ('G major', 'Beginner')),
       S('My first song', 'Written by you · C major', '', 'C', FILL, (), ('C major', 'Beginner'))]}]}
-library('Songs', 'My songs', SONGS_D, soft='Explore', soft_href='Explore', right_extra=IB('Archive', ARCHIVE, href='Archive.dc.html'), root='Songs', section='Songs',
+library('Songs', 'Library', SONGS_D, soft='Explore', soft_href='Explore', right_extra=IB('Archive', ARCHIVE, href='Archive.dc.html'), root='Songs', section='Songs',
         shelf_phone=shelf(132).replace('{SONG}', 'Player.dc.html'), shelf_laptop=shelf(170).replace('{SONG}', 'PlayerLaptop.dc.html').replace(f'<section', '<section style="margin-bottom: 14px"', 1).replace('style="margin-bottom: 14px" style=', 'style='),
         table_cols=(('Title', 't', 3), ('Composer and key', 's', 3), ('Progress', 'v', 1.4)),
-        add_items=(('New song', '#'), ('Record', '#'), ('New folder', '#'), ('Import', '#'), ('New group', 'Groups.dc.html')),
+        add_items=(('New piece', '#'), ('Record', '#'), ('New folder', '#'), ('Import', '#'), ('New group', 'Groups.dc.html')),
         more_rows=(('link', 'Select', ''), ('link', 'Export…', ''), ('link', 'Trash', '', '')))
 
 # ── a song's page ──

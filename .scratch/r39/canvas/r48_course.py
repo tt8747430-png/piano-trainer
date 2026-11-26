@@ -31,7 +31,7 @@ COVER = (f'<div aria-hidden="true" style="flex: none; height: 132px; margin-bott
          f'<svg viewBox="0 0 400 132" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><g stroke="#9DBA92" stroke-width="1.6">' + ''.join(f'<line x1="0" x2="400" y1="{44 + i * 11}" y2="{44 + i * 11}"></line>' for i in range(5)) + '</g>'
          + ''.join(f'<ellipse cx="{70 + i * 46}" cy="{88 - (i % 4) * 5.5}" rx="7.5" ry="5.6" fill="#3F6B45" transform="rotate(-20 {70 + i * 46} {88 - (i % 4) * 5.5})"></ellipse><line x1="{77 + i * 46}" x2="{77 + i * 46}" y1="{86 - (i % 4) * 5.5}" y2="{52 - (i % 4) * 5.5}" stroke="#3F6B45" stroke-width="1.6"></line>' for i in range(7)) + '</svg></div>')
 # the course's facts are a line, not chips: a chip is a value you change in place (scan-first 4; loop round 63)
-FACTS = f'<p style="margin: 0; font-size: 14px; color: {SOFT}">Beginner · 2 songs · 7 weeks</p>'
+FACTS = f'<p style="margin: 0; font-size: 14px; color: {SOFT}">Beginner · 2 pieces · 7 weeks</p>'
 GRIPS = '<span role="button" aria-label="Move: {{l.t}}" style="flex: none; width: 44px; height: 44px; color: #685E56; display: flex; align-items: center; justify-content: center; cursor: grab">' + GRIP + '</span>'
 # canvas 164: a course's lessons are the line a level's are (one spine through the tiles, no card round them)
 LROWS = (f'<div style="position: relative; margin-top: -12px"><span aria-hidden="true" style="position: absolute; left: 21px; top: 32px; bottom: 32px; width: 2px; background: #B9CDB3"></span><sc-for list="{{{{lessons}}}}" as="l" hint-placeholder-count="8"><a href="Lesson.dc.html" style="position: relative; min-height: 68px; display: flex; align-items: center; gap: 16px; padding: 0 8px 0 0; border-radius: 12px; color: {INK}; text-decoration: none">'

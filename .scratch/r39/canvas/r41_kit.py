@@ -371,12 +371,14 @@ _TI = 'viewBox="0 0 24 24" width="25" height="25" stroke="currentColor" stroke-w
 _BG = '#FBF8F4'
 TAB_ICONS = {
     'Learn': '<path fill="currentColor" d="M21.42 10.92a1 1 0 0 0-.02-1.84L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0z"></path><path fill="none" d="M22 10v6"></path><path fill="currentColor" d="M6 12.9V16a6 3 0 0 0 12 0v-3.1l-4.4 2a3.8 3.8 0 0 1-3.2 0z" stroke="none"></path>',
-    'Songs': '<path fill="none" stroke-width="2" d="M9 18V5l12-2v13"></path><circle fill="currentColor" cx="6" cy="18" r="3"></circle><circle fill="currentColor" cx="18" cy="16" r="3"></circle>',
+    'Library': '<path fill="none" stroke-width="2" d="M9 18V5l12-2v13"></path><circle fill="currentColor" cx="6" cy="18" r="3"></circle><circle fill="currentColor" cx="18" cy="16" r="3"></circle>',
     'Practice': f'<path fill="currentColor" d="M9.17 5.01a3 3 0 0 1 5.66 0L19.58 19.7A1 1 0 0 1 18.62 21H5.37a1 1 0 0 1-.95-1.3z"></path><path fill="none" stroke="{_BG}" stroke-width="1.7" d="M12 17 15.5 13.5"></path><path fill="none" stroke-width="1.7" d="m15.5 13.5 3.1-3.1"></path><circle fill="currentColor" cx="20" cy="9" r="2.1" stroke="none"></circle><path fill="none" stroke="{_BG}" stroke-width="1.6" d="M8.2 18h7.6"></path>',
     'Profile': '<circle fill="currentColor" cx="12" cy="8" r="5" stroke="none"></circle><path fill="currentColor" stroke="none" d="M3.5 21a8.5 7.5 0 0 1 17 0z"></path>',
 }
 def TABBAR(cur):
-    items = [('Learn', 'Learn.dc.html'), ('Songs', 'Songs.dc.html'), ('Practice', 'Main.dc.html'), ('Profile', 'Profile.dc.html')]
+    # the Library: a collection of pieces, songs with words and pieces without (owner, 2026-11-26), as Apple Music's and forScore's
+    cur = 'Library' if cur == 'Songs' else cur
+    items = [('Learn', 'Learn.dc.html'), ('Library', 'Songs.dc.html'), ('Practice', 'Main.dc.html'), ('Profile', 'Profile.dc.html')]
     def one(l, h):
         on = l == cur
         svg = f'<svg {_TI}>{TAB_ICONS[l]}</svg>'
@@ -429,7 +431,7 @@ NOTEPICK = '<div style="display: flex; flex-direction: column; gap: 4px">' + _tr
 # tab bar, it turns to a close, the page dims, a card of the actions grows from it with the nearest the thumb last.
 _LI = lambda d: f'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{d}</svg>'
 NEWICON = {
-  'New song': _LI('<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'),
+  'New piece': _LI('<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'),
   'Record': _LI('<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/>'),
   'New folder': _LI('<path d="M12 10v6M9 13h6"/><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>'),
   'Import': _LI('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6M15 15l-3-3-3 3"/>'),
@@ -505,7 +507,7 @@ def TOAST(bottom, undo='undo', z=50, laptop=False, always=False, hint='false'):
             f'color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px">'
             f'<span style="flex: 1">{{{{toastT}}}}</span>{btn}</div></sc-if>')
 
-# One centred form or note over a scrim (a laptop's New song, Report, the welcome): a 22-round card, 20 in, 12 between
+# One centred form or note over a scrim (a laptop's New piece, Report, the welcome): a 22-round card, 20 in, 12 between
 # its parts, at most 48 narrower than the screen. ASK is its question form.
 DIALOGBOX = lambda inner, w=372, close='closeSheet', label='': (f'<div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="dialog" aria-modal="true"' + (f' aria-label="{label}"' if label else '') + f' style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: {w}px; max-width: calc(100% - 48px); box-sizing: border-box; border-radius: 22px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{inner}</div>')
 # One question before a loss that cannot be undone, or an act that reaches other people (CLAUDE.md, ConfirmDialog):

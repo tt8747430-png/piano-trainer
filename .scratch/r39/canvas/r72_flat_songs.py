@@ -1,7 +1,7 @@
 # R72: Songs, new from Flat's library (owner, 2026-11-16: "look at the example apps and improve the design with no
 # backwards compatibility … I want new completely new design"; piano-data/reference-apps/flat-score-editor 091–097).
 #   Songs     — My songs as Flat's overview: Recently played (a shelf, See all), Folders as cards, Archive and Trash
-#   AllSongs  — every song: Back · All songs · Select; search; the count and a sort menu; rows as cards with ···;
+#   AllSongs  — every song: Back · All pieces · Select; search; the count and a sort menu; rows as cards with ···;
 #               Select with checkboxes and a selection bar; the floating New
 # Exec'd by r41.py last, so it replaces the library() drawing of Songs.
 
@@ -15,8 +15,8 @@ SONGS_ALL = [  # title, composer · key, progress, last played, added order
     ('Jingle Bells', 'James Lord Pierpont · G major', 'Not started', 'Added 28 Oct', 2),
     ('My first song', 'Written by you · C major', 'Not started', 'Added 23 Oct', 8),
 ]
-FOLDERS_ALL = [('Favourites', '2 songs', PEACH, 'heart'), ('Songs to learn', '23 songs · 4 learned', HONEY, ''), ('Hymns', '6 songs · 2 learned', SKY, ''),
-               ('Called to Play', '15 songs', LILAC, '')]
+FOLDERS_ALL = [('Favourites', '2 pieces', PEACH, 'heart'), ('Songs to learn', '23 pieces · 4 learned', HONEY, ''), ('Hymns', '6 pieces · 2 learned', SKY, ''),
+               ('Called to Play', '15 pieces', LILAC, '')]
 _ROWS = [{'t': t, 's': s, 'v': v, 'when': w, 'add': a, 'pic': INCIPIT(INC.get(t, (2, 4)))} for t, s, v, w, a in SONGS_ALL]
 
 FL_JS = r'''
@@ -28,10 +28,10 @@ FL_JS = r'''
     const rows = list.map((r) => { const on = picked.includes(r.t); return { ...r, on, ckBg: on ? '#332921' : 'transparent', ckLine: on ? '#332921' : '#BFB3A7', ckMark: on ? 1 : 0,
       tap: () => selOn ? S({ picked: on ? picked.filter((x) => x !== r.t) : [...picked, r.t] }) : null, more: (e) => S({ sheet: 'row', row: r.t, menuPos: ANCHOR(e, 300) }) }; });
     const menu = (L, cur, key) => L.map((l) => ({ l, on: l === cur, mark: l === cur ? 1 : 0, pick: () => S({ [key]: l, sheet: null }) }));
-    return { ...common(st, set), rows, guestOn, notGuest: !guestOn, count: bare ? '0 songs' : list.length + (list.length === 1 ? ' song' : ' songs'), sortL: sort,
+    return { ...common(st, set), rows, guestOn, notGuest: !guestOn, count: bare ? '0 pieces' : list.length + (list.length === 1 ? ' piece' : ' pieces'), sortL: sort,
       sortOn: st.sheet === 'sort', openSort: (e) => S({ sheet: 'sort', menuPos: ANCHOR(e, 280) }), sorts: ['Last played', 'Title', 'Composer', 'Added'].map((l) => ({ l, on: l === sort, mark: l === sort ? 1 : 0, pick: () => S({ sort: l, dir: l === 'Title' || l === 'Composer' ? 'Ascending' : 'Descending', sheet: null }) })), dirs: menu(['Ascending', 'Descending'], dir, 'dir'),
       rowOn: st.sheet === 'row', menuPos: st.menuPos ?? 'right: 16px; top: 120px', rowT: st.row ?? 'Amazing Grace', q: st.q ?? '', typed: (e) => S({ q: e.target.value }),
-      none: list.length === 0 && !bare, noneT: 'No songs match “' + (st.q ?? '') + '”', clear: () => S({ q: '' }), some: list.length > 0 && !bare, bare, notBare: !bare, canSel: !selOn && list.length > 0 && !bare,
+      none: list.length === 0 && !bare, noneT: 'No pieces match “' + (st.q ?? '') + '”', clear: () => S({ q: '' }), some: list.length > 0 && !bare, bare, notBare: !bare, canSel: !selOn && list.length > 0 && !bare,
       selOn, selOff: !selOn, toggleSel: () => S({ sel: !selOn, picked: [] }), selT: picked.length + ' selected', selNone: picked.length === 0, selSome: picked.length > 0,
       addOn: st.sheet === 'add', noAdd: st.sheet !== 'add', openAdd: (e) => S({ sheet: st.sheet === 'add' ? null : 'add', menuPos: ANCHOR(e, 240) }),
       folderOn: st.sheet === 'folder', openFolder: () => S({ sheet: 'folder' }), fname: st.fname ?? '', named: (e) => S({ fname: e.target.value }), createBg: (st.fname ?? '').trim() ? '#EDC684' : '#EEE9E2', createFg: (st.fname ?? '').trim() ? '#332921' : '#8A7F76', createDis: !(st.fname ?? '').trim(),
@@ -97,8 +97,8 @@ def FOLDERCARDS(href):
                    f'<span style="display: flex; flex-direction: column; gap: 2px; padding: 0 2px"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{s}</span></span></a>' for t, s, c, k in FOLDERS_ALL)
 # Shared with me, apart from the learner's own and louder (Google Drive's own place; Flat's Collaborations): each
 # folder a group shared, as a card with who shared it and the group's faces, so it is never taken for one's own.
-SHAREDF = [('Choir hymns', 'St Mary’s choir', 'Shared by Maria Ionescu · 4 songs', [('M', '#F3D2C8'), ('D', '#D3E5F2'), ('E', '#DCE9D6')], '+9'),
-           ('Grade 3 pieces', 'Ms Rusu’s class', 'Shared by Daniel Rusu · 8 songs', [('D', '#D3E5F2'), ('A', '#F3D2C8')], '+14')]
+SHAREDF = [('Choir hymns', 'St Mary’s choir', 'Shared by Maria Ionescu · 4 pieces', [('M', '#F3D2C8'), ('D', '#D3E5F2'), ('E', '#DCE9D6')], '+9'),
+           ('Grade 3 pieces', 'Ms Rusu’s class', 'Shared by Daniel Rusu · 8 pieces', [('D', '#D3E5F2'), ('A', '#F3D2C8')], '+14')]
 def SHAREDCARDS(href):
     face = lambda i, c, n: f'<span style="width: 32px; height: 32px; margin-left: {0 if n == 0 else -10}px; border-radius: 16px; background: {c}; box-shadow: 0 0 0 2px {SHEET}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">{i}</span>'
     return ''.join(f'<a href="{href}" style="{CARDROW}; min-width: 0; box-sizing: border-box; padding: 14px 12px 14px 14px; display: flex; align-items: center; gap: 16px; color: {INK}; text-decoration: none">'
@@ -112,11 +112,11 @@ def SHAREDCARDS(href):
 # paint holding its first four songs' openings as a 2×2 mosaic, so it shows the music inside, never a drawn folder;
 # Favourites the rose square with its heart; one shared with the learner wears the sharer's face at its corner and says
 # who, and opens itself, never Groups; New playlist is the last, dashed square.
-PLAYLISTS = [('Favourites', '2 songs', PEACH, 'heart', [], ''), ('Songs to learn', '23 songs · 4 learned', HONEY, '', ['Clair de lune', 'Für Elise', 'Let It Be', 'Jingle Bells'], ''),
-             ('Hymns', '6 songs · 2 learned', SKY, '', ['Amazing Grace', 'Holy, Holy, Holy', 'Abide with Me', 'Be Thou My Vision'], ''),
-             ('Called to Play', '15 songs', LILAC, '', ['Twinkle, Twinkle, Little Star', 'Ode to Joy', 'Jingle Bells', 'My first song'], ''),
-             ('Choir hymns', 'Maria Ionescu · 4 songs', SAGE, '', ['It Is Well', 'Great Is Thy Faithfulness', 'Silent Night', 'Amazing Grace'], 'M'),
-             ('Grade 3 pieces', 'Daniel Rusu · 8 songs', '#EEE3D3', '', ['Für Elise', 'Clair de lune', 'Ode to Joy', 'Twinkle, Twinkle, Little Star'], 'D')]
+PLAYLISTS = [('Favourites', '2 pieces', PEACH, 'heart', [], ''), ('Songs to learn', '23 pieces · 4 learned', HONEY, '', ['Clair de lune', 'Für Elise', 'Let It Be', 'Jingle Bells'], ''),
+             ('Hymns', '6 pieces · 2 learned', SKY, '', ['Amazing Grace', 'Holy, Holy, Holy', 'Abide with Me', 'Be Thou My Vision'], ''),
+             ('Called to Play', '15 pieces', LILAC, '', ['Twinkle, Twinkle, Little Star', 'Ode to Joy', 'Jingle Bells', 'My first song'], ''),
+             ('Choir hymns', 'Maria Ionescu · 4 pieces', SAGE, '', ['It Is Well', 'Great Is Thy Faithfulness', 'Silent Night', 'Amazing Grace'], 'M'),
+             ('Grade 3 pieces', 'Daniel Rusu · 8 pieces', '#EEE3D3', '', ['Für Elise', 'Clair de lune', 'Ode to Joy', 'Twinkle, Twinkle, Little Star'], 'D')]
 def PLCOVER(c, heart, songs, face, w=64):
     inset, gap, r = (max(4, w // 12), max(2, w // 24), max(3, w // 16))
     if heart:
@@ -142,8 +142,8 @@ def PLAYLISTROWS(href, shared_href, w=64, card=True):
                 + (f'<span style="flex: none; color: {SOFT}; display: flex">{CHEV_R}</span>' if card else '') + '</a>')
     return out
 # One New everywhere in Songs (owner, 2026-11-17: "the floating actions should also be consistent how they open"):
-# the same four rows from the phone's dial and the laptop's New ▾, on the overview, All songs and a playlist.
-_NEW = (('New song', 'openSong'), ('Record', 'openRec'), ('Import', 'openImp'), ('New playlist', 'openFolder'))
+# the same four rows from the phone's dial and the laptop's New ▾, on the overview, All pieces and a playlist.
+_NEW = (('New piece', 'openSong'), ('Record', 'openRec'), ('Import', 'openImp'), ('New playlist', 'openFolder'))
 FOLDERSHEET = LFOLDERSHEET  # the library kit's one New folder sheet (r41_lib)
 
 # ── Songs: one page (owner, 2026-11-17: "i dont like that the search leads to a whole new page … i dont like this tab
@@ -151,7 +151,7 @@ FOLDERSHEET = LFOLDERSHEET  # the library kit's one New folder sheet (r41_lib)
 # trash shouldnt be like that"): the title Songs; the search in place, its results on this page (Apple Music's Library,
 # Files: the field filters where you stand); the four ways to make a song as a strip at the top (Flat's and Google
 # Drive's "New" row, always in sight); Recently played, Folders, then Explore as a shelf with See all, its own page;
-# Archive and Trash in the bar's ··· with All songs, out of the page.
+# Archive and Trash in the bar's ··· with All pieces, out of the page.
 CHECKBOX = (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{r.ckLine}}}}; background: {{{{r.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{r.ckMark}}}}">{ICON(TICK, 14)}</span></span></sc-if>')
 # A song is a row of one list, not a card of its own (edge-lines' laws, NN/g and M3: homogeneous items are a list; on a
 # phone "consider swapping cards for lists"): the list is one card, each row's hairline from the title's edge (12 + the
@@ -168,7 +168,7 @@ def SONGROW(song):
             f'<span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.s}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.v}}}} · {{{{r.when}}}}</span></span></a>'
             f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" aria-label="More for {{{{r.t}}}}" data-tip="More" onClick="{{{{r.more}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></sc-if></div>')
 SEARCHFIELD = (SEARCHBOX()
-               + f'<input {KB["search"]} value="{{{{q}}}}" onInput="{{{{typed}}}}" placeholder="Search your songs" aria-label="Search your songs" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
+               + f'<input {KB["search"]} value="{{{{q}}}}" onInput="{{{{typed}}}}" placeholder="Search your library" aria-label="Search your library" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
 LIST = lambda song, grid: f'<sc-if value="{{{{some}}}}" hint-placeholder-val="{{{{true}}}}">' + SONGLIST(f'<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="8"><div style="position: relative">{SONGROW(song)}</div></sc-for>') + '</sc-if>'
 OVSEARCH = SEARCHFIELD  # the one search box (the kit's SEARCHBOX), on the overview as on every list
 # What a search found, on the page: the songs as cards, the folders, then the same words in Explore
@@ -180,7 +180,7 @@ QNONE = (f'<sc-if value="{{{{noneQ}}}}" hint-placeholder-val="{{{{false}}}}"><di
          f'<span style="font-size: 18px; font-weight: 700">{{{{noneT}}}}</span><span style="font-size: 15px; color: {SOFT}">Check the spelling, or look for it in Explore.</span>{BTN("Clear search", "clear", kind="quiet", h=44, grow=False)}</div></sc-if>')
 def RESULTS(song, folder, explore, grid):
     return (f'<sc-if value="{{{{hasQ}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; gap: 24px">{QNONE}'
-            f'<sc-if value="{{{{someQ}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH("Songs")}{LIST(song, grid)}</section></sc-if>'
+            f'<sc-if value="{{{{someQ}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH("Pieces")}{LIST(song, grid)}</section></sc-if>'
             f'<sc-if value="{{{{anyFold}}}}" hint-placeholder-val="{{{{false}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH("Folders")}<div style="{grid}">{FOLDHIT.replace("{FOLDER}", folder)}</div></section></sc-if>'
             f'<section style="display: flex; flex-direction: column; gap: 12px">{SECH("In Explore")}{EXHIT(explore)}</section></div></sc-if>')
 # Explore on Songs: what others share, newest first, as Explore's own covers; See all opens Explore
@@ -190,12 +190,12 @@ def EXSHELF(w, n, href):
                    f'<span style="width: {w}px">{cover(t, by, notes=INC.get(t, (2, 4, 3, 5, 4, 2, 0)))}</span>'
                    f'<span style="font-size: 15px; font-weight: 600; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{t}</span>'
                    f'<span style="font-size: 13px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{who}</span></a>' for t, by, who in EXPUB[:n])
-BAREP = EMPTY('bare', '♪', 'Your songs live here', 'Write one, record one at the piano, or import MusicXML or MIDI.', f'<a href="Explore.dc.html" style="min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Find a song in Explore</a>')  # the kit's one empty state, its next act a link
-BAREP_PH = EMPTY('bare', '♪', 'Your songs live here', 'Write one with +, record one at the piano, or import MusicXML or MIDI.')  # the phone's Explore shelf follows: no second way there
+BAREP = EMPTY('bare', '♪', 'Your pieces live here', 'Write one, record one at the piano, or import MusicXML or MIDI.', f'<a href="Explore.dc.html" style="min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Find a piece in Explore</a>')  # the kit's one empty state, its next act a link
+BAREP_PH = EMPTY('bare', '♪', 'Your pieces live here', 'Write one with +, record one at the piano, or import MusicXML or MIDI.')  # the phone's Explore shelf follows: no second way there
 def SONGSEC(song, allh, grid):
     rows = ''.join(f'<div style="position: relative">' + SONGROW(song).replace('{{r.t}}', t).replace('{{r.s}}', sub).replace('{{r.v}}', v).replace('{{r.when}}', w).replace('{{r.pic}}', INCIPIT(INC.get(t, (2, 4))).replace('"', "'")) + '</div>' for t, sub, v, w, _ in SONGS_ALL[:5])
-    return (f'<section style="display: flex; flex-direction: column; gap: 12px">{SECH("Songs")}<div style="{grid}">{rows}</div>'
-            f'<a href="{allh}" style="align-self: flex-start; min-height: 44px; display: flex; align-items: center; margin: 0 4px; color: {LINK}; text-decoration: none; font-size: 16px; font-weight: 600">All 8 songs</a></section>')
+    return (f'<section style="display: flex; flex-direction: column; gap: 12px">{SECH("Pieces")}<div style="{grid}">{rows}</div>'
+            f'<a href="{allh}" style="align-self: flex-start; min-height: 44px; display: flex; align-items: center; margin: 0 4px; color: {LINK}; text-decoration: none; font-size: 16px; font-weight: 600">All 8 pieces</a></section>')
 _SHELFPH = 'display: flex; gap: 12px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px'
 COUNTROW = (f'<div style="flex: none; display: flex; align-items: center; justify-content: space-between; margin: 0"><span style="font-size: 15px; font-weight: 600; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{count}}}}</span>'
             f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{sortOn}}}}" onClick="{{{{openSort}}}}" style="height: 44px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; gap: 8px; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600">{{{{sortL}}}}{SORTI}</button></div>')
@@ -205,15 +205,15 @@ ROWITEMS = lambda sfx: [('link', 'Practise', '', 'Player' + sfx), ('link', 'Edit
 # ── Songs as Flat's My scores (owner, 2026-11-17: "the mobile layout of the playlists is not the same as the flats
 # editor … the archive and trash doenst make sense to be there … the recently played is not the same as teh flat editor:
 # it has all scores"; Flat 091): the title; the floating + at the bottom right opening the ways to add (one New: _NEW);
-# the search; All songs, every song by when it was last played, with See all; Playlists; Archive and Trash as one card
+# the search; All pieces, every song by when it was last played, with See all; Playlists; Archive and Trash as one card
 # under them, as Flat's Trash; Explore's newest last.
 ADDBTN = IB('New', PLUS, 'openAdd')
 _ARCHCARD = lambda sfx: GROUP(('link', 'Archive', '3', 'Archive' + sfx), ('link', 'Trash', '2', 'Trash' + sfx), bg=SHEET)
-ovph = f'''{TITLEBAR('Songs')}
+ovph = f'''{TITLEBAR('Library')}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 176px; display: flex; flex-direction: column; gap: 32px">{SHOWSTATES()}
 <sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{OVSEARCH}</sc-if>{RESULTS('Player.dc.html', 'Folder.dc.html', 'Explore.dc.html', 'display: flex; flex-direction: column; gap: 12px').replace('SECH("Folders")', 'SECH("Playlists")').replace('>Folders<', '>Playlists<')}
 <sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{BAREP_PH}
-<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH('All songs', SEEALL('AllSongs.dc.html'))}<div class="nos" style="{_SHELFPH}">{RECENT(132, 8).replace('{SONG}', 'Player.dc.html')}</div></section>
+<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH('All pieces', SEEALL('AllSongs.dc.html'))}<div class="nos" style="{_SHELFPH}">{RECENT(132, 8).replace('{SONG}', 'Player.dc.html')}</div></section>
 <section style="display: flex; flex-direction: column; gap: 12px">{SECH('Playlists')}<div style="{CARDROW}; padding: 0 0 0 12px; display: flex; flex-direction: column">{PLAYLISTROWS('Folder.dc.html', 'SharedFolder.dc.html', 56, 'list')}</div></section>
 {_ARCHCARD('.dc.html')}
 </sc-if>
@@ -226,8 +226,8 @@ _PANEROW = lambda label, n, href: f'<a href="{href}" style="min-height: 44px; di
 # songs at the right under their count and sort, two across; Explore's newest under them.
 # The laptop is Flat's library (owner, 2026-11-17: "look how the layout bad is with the playlists and songs so bad
 # aligned … the layout of the songs in this grid layout i dont like"; flat.io/library): one grid from the top, a pane
-# at the left (All songs, Favourites, Explore; Playlists with + beside the heading; Archive and Trash at its foot) and
-# the list at the right under one header row (the title and its count, the search, Import · Record · New song), one
+# at the left (All pieces, Favourites, Explore; Playlists with + beside the heading; Archive and Trash at its foot) and
+# the list at the right under one header row (the title and its count, the search, Import · Record · New piece), one
 # song a row of a table whose columns head it; every edge shared.
 _TH = lambda l, w='', right=False: f'<span style="{w}font-size: 13px; font-weight: 600; color: {SOFT}{"; text-align: right" if right else ""}">{l}</span>'
 _LCOLS = 'display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.6fr) 140px 120px 44px; align-items: center; gap: 16px'
@@ -238,7 +238,7 @@ LROW = (f'<div style="{_LCOLS}; position: relative; box-sizing: border-box; padd
         f'<a href="PlayerLaptop.dc.html" style="min-width: 0; display: flex; align-items: center; gap: 16px; color: {INK}; text-decoration: none">{CHECKBOX}<span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 9px; background-image: {{{{r.pic}}}}; background-size: cover; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span><span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.t}}}}</span></a>'
         f'<span style="font-size: 15px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.s}}}}</span><span style="font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.v}}}}</span><span style="font-size: 15px; color: {SOFT}">{{{{r.when}}}}</span>'
         f'<button type="button" aria-label="More for {{{{r.t}}}}" data-tip="More" onClick="{{{{r.more}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
-LTABLE = f'<sc-if value="{{{{some}}}}" hint-placeholder-val="{{{{true}}}}"><div role="table" aria-label="All songs" style="border-top: 1px solid {LINE}">{_LTHEAD}<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="10">{LROW}</sc-for></div></sc-if>'
+LTABLE = f'<sc-if value="{{{{some}}}}" hint-placeholder-val="{{{{true}}}}"><div role="table" aria-label="All pieces" style="border-top: 1px solid {LINE}">{_LTHEAD}<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="10">{LROW}</sc-for></div></sc-if>'
 SELBAR = lambda bottom: (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(
     SELACT('Add to folder', 'closeSheet', ACTIC['Move']) + SELACT('Favourite', 'closeSheet', ACTIC['Favourite']) + SELACT('Archive', 'toggleSel', ACTIC['Archive'], RED), bottom) + '</sc-if>')
 SELTB = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
@@ -247,7 +247,7 @@ SELTB = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB(
 _PACTS = lambda more='': more + SELTB  # New floats at the bottom right (NEWPOP), as on a phone
 _PTITLE = lambda t: f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{t}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{{{{selT}}}}</sc-if>'
 _SELBAR_L = SELBAR(28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 50%; transform: translateX(-50%); width: 520px; bottom: 28px')
-ovlm = LPLACEBAR(_PTITLE('All songs'), '{{count}}', _PACTS(), PSEARCH('Search your songs', 'q', 'typed')) + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 120px; display: flex; flex-direction: column; gap: 24px">{SHOWSTATES()}
+ovlm = LPLACEBAR(_PTITLE('All pieces'), '{{count}}', _PACTS(), PSEARCH('Search your library', 'q', 'typed')) + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 120px; display: flex; flex-direction: column; gap: 24px">{SHOWSTATES()}
 <div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{RESULTS('PlayerLaptop.dc.html', 'FolderLaptop.dc.html', 'ExploreLaptop.dc.html', 'display: flex; flex-direction: column; gap: 8px').replace('SECH("Folders")', 'SECH("Playlists")').replace('>Folders<', '>Playlists<')}
 <sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{BAREP}<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><style>nav[aria-label=Main] a > span[style*="tabular-nums"] {{ display: none }} nav[aria-label=Main] a:has(> span[style*="margin-left: -28px"]) ~ a:has(> span[style*="margin-left: -28px"]) {{ display: none !important }}</style></sc-if><sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{LTABLE}</sc-if></sc-if></div>
 </main>{_SELBAR_L}'''
@@ -266,29 +266,29 @@ IMPFORM = (IF('impNot', f'<div style="display: flex; flex-direction: column; gap
     + IF('impDone', f'<div style="display: flex; flex-direction: column; gap: 16px"><div style="display: flex; gap: 16px; align-items: center">{COV("Fantaisie-Impromptu", HONEY, 56)}<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">Fantaisie-Impromptu</span><span style="font-size: 14px; color: {SOFT}">Chopin · C♯ minor · 2 staves · 138 bars</span></span></div>'
       + GROUP(('val', 'Notes, tuplets and ties', 'All'), ('val', 'Tempo and metre changes', '6'), ('val', 'Pedal marks', '41'), bg=SHEET)
       + f'<div style="border-radius: 14px; background: #F6E7C8; padding: 12px 16px; font-size: 15px; line-height: 1.45"><b>Kept as text: 2 marks.</b> The ossia in bars 83–84 and a fingering for the left hand print as written, not as notes.</div>'
-      + f'<a href="Player.dc.html" style="height: 50px; border-radius: 25px; background: {ACCENT}; color: {INK}; font-size: 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center">Open song</a></div>'))
+      + f'<a href="Player.dc.html" style="height: 50px; border-radius: 25px; background: {ACCENT}; color: {INK}; font-size: 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center">Open piece</a></div>'))
 RECFORM = (f'<div style="display: flex; flex-direction: column; gap: 16px">'
     + GROUP(('link', 'Input', 'Yamaha P-125', 'Settings.dc.html'), bg=SHEET)
     + GROUP(('step', 'Tempo', 'tempoV', 'tDn', 'tUp'), ('toggle', 'Click', 'clickOn', 'clickT'), ('seg', 'Count-in', 'cins'), bg=SHEET)
     + f'<a href="Editor.dc.html" style="height: 56px; border-radius: 28px; background: {ACCENT}; color: {INK}; font-size: 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 12px"><span style="width: 14px; height: 14px; border-radius: 7px; background: #B84A3E"></span>Start recording</a></div>')
 RECSHEET = BSHEET('recOn', 'Record', RECFORM, 'Cancel')
 IMPSHEET = BSHEET('impOn', 'Import', IMPFORM, 'Close')
-SONGSHEET = BSHEET('songOn', 'New song', SONGFORM, 'Cancel')
+SONGSHEET = BSHEET('songOn', 'New piece', SONGFORM, 'Cancel')
 _LAPSHEET = lambda h: LAPSHEET(h).replace('Editor.dc.html', 'EditorLaptop.dc.html')   # the library's one laptop sheet, links to the laptop editor
 NEWPOP = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">' + NEWDIAL(list(_NEW)[::-1], 32, 'addOn', 'noAdd', 'openAdd', 'closeSheet') + '</sc-if>'
 PLAYSHEET_L = LFOLDERSHEET_L.replace('New folder', 'New playlist')
 detail('Songs', 'Songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET.replace('New folder', 'New playlist') + SONGSHEET + IMPSHEET + RECSHEET, SORTMENU('{{menuPos}}') + NEWPOP + ROWMENU('rowOn', '{{rowT}}', ROWITEMS('Laptop.dc.html')) + PLAYSHEET_L + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Player.dc.html', 'PlayerLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 
-# ── All songs ──
+# ── All pieces ──
 NOMATCH = EMPTY('none', '⌕', '{{noneT}}', 'Check the spelling, or try a composer’s name.', BTN('Clear search', 'clear', kind='quiet', h=48, grow=False))
-FEMPTY = EMPTY('bare', '♪', 'Nothing in this playlist yet', 'The songs you put in this playlist show here.', f'<a href="{{ALL}}" style="min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Add songs from your library</a>')  # the kit's one empty state (r53's EMPTY): no box, 18 over 15
+FEMPTY = EMPTY('bare', '♪', 'Nothing in this playlist yet', 'The songs you put in this playlist show here.', f'<a href="{{ALL}}" style="min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Add pieces from your library</a>')  # the kit's one empty state (r53's EMPTY): no box, 18 over 15
 FOLDERITEMS = lambda sfx: [('action', 'Rename', 'closeSheet', INK), ('action', 'Colour', 'closeSheet', INK), ('link', 'Share', '', 'Groups' + sfx), ('action', 'Archive playlist', 'closeSheet', RED)]
 def LISTPAGE(stem, title, rows, back, backlabel, folder=False):
     head = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{title}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{{{{selT}}}}</sc-if>'
     more = IB('More', MORE, 'openMore') if folder else ''
     fe = lambda sfx: FEMPTY.replace('{ALL}', 'AllSongs' + sfx) if folder else ''
     ph = (TOP(back + '.dc.html', head, more + SELTB, backlabel, n=2 + folder)  # Select keeps the trailing place on every list, as the laptop's place bar (Jakob; edge-lines flows)
-          + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 124px; display: flex; flex-direction: column; gap: 12px">{SHOWSTATES()}{SEARCHFIELD.replace('Search your songs', 'Search this playlist') if folder else SEARCHFIELD}{COUNTROW}{NOMATCH}{fe('.dc.html')}{LIST('Player.dc.html', 'display: flex; flex-direction: column; gap: 12px')}</main>
+          + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 124px; display: flex; flex-direction: column; gap: 12px">{SHOWSTATES()}{SEARCHFIELD.replace('Search your library', 'Search this playlist') if folder else SEARCHFIELD}{COUNTROW}{NOMATCH}{fe('.dc.html')}{LIST('Player.dc.html', 'display: flex; flex-direction: column; gap: 12px')}</main>
 <sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{NEWDIAL([(l, g) for l, g in _NEW][::-1], 40, 'addOn', 'noAdd', 'openAdd', 'closeSheet')}</sc-if>{SELBAR(34)}{SORTMENU('{{menuPos}}')}''')
     lm = (LPLACEBAR(_PTITLE(title), '{{count}}', _PACTS(more), PSEARCH('Search ' + ('this playlist' if folder else 'your songs'), 'q', 'typed'))
           + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 120px; display: flex; flex-direction: column; gap: 20px">{SHOWSTATES()}{NOMATCH}{fe('Laptop.dc.html')}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{LTABLE}</sc-if></main>{_SELBAR_L}''')
@@ -297,10 +297,10 @@ def LISTPAGE(stem, title, rows, back, backlabel, folder=False):
     if folder:
         sheets += ROWMENU('moreOn', title, FOLDERITEMS('.dc.html')); pops += ROWMENU('moreOn', title, FOLDERITEMS('Laptop.dc.html'))
     detail(stem, title, FLJS(rows, 'An empty folder' if folder else 'A new learner'), ph, lm, '', sheets, pops + PLAYSHEET_L + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Player.dc.html', 'PlayerLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
-LISTPAGE('AllSongs', 'All songs', _ROWS, 'Songs', 'My songs')
+LISTPAGE('AllSongs', 'All pieces', _ROWS, 'Songs', 'Library')
 HYMNS = [('Amazing Grace', 'John Newton · G major', 'Bar 9 of 16', 'Today', 6), ('Holy, Holy, Holy', 'John B. Dykes · D major', 'Learned', '9 Nov', 5), ('Abide with Me', 'William H. Monk · E♭ major', 'Bar 4 of 12', '6 Nov', 4),
          ('Be Thou My Vision', 'Irish melody · E♭ major', 'Not started', 'Added 30 Oct', 3), ('It Is Well', 'Philip P. Bliss · C major', 'Learned', '21 Oct', 2), ('Great Is Thy Faithfulness', 'William M. Runyan · D major', 'Not started', 'Added 12 Oct', 1)]
-LISTPAGE('Folder', 'Hymns', [{'t': a, 's': b, 'v': c, 'when': d, 'add': e, 'pic': INCIPIT(INC.get(a, (2, 4)))} for a, b, c, d, e in HYMNS], 'Songs', 'My songs', folder=True)
+LISTPAGE('Folder', 'Hymns', [{'t': a, 's': b, 'v': c, 'when': d, 'add': e, 'pic': INCIPIT(INC.get(a, (2, 4)))} for a, b, c, d, e in HYMNS], 'Songs', 'Library', folder=True)
 
 # A playlist shared with the learner opens itself (owner, 2026-11-17: "i dont want misleading links that lead to
 # misleading pages"): its cover with the sharer's face, its name, who shared it in which group, View only, its songs.
@@ -313,13 +313,13 @@ LOCK = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="curr
 VIEWITEMS = lambda sfx: [('link', 'Practise', '', 'Player' + sfx), ('action', 'Add to a playlist', 'closeSheet', INK), ('action', 'Favourite', 'closeSheet', INK)]
 _SHHEAD = lambda w: (f'<div style="display: flex; align-items: center; gap: 16px"><span style="flex: none">{PLCOVER(SAGE, False, [t for t, *_ in CHOIR], "M", w)}</span>'
                      f'<span style="min-width: 0; display: flex; flex-direction: column; gap: 4px">'
-                     f'<span style="font-size: 15px; color: {SOFT}">Shared by Maria Ionescu in Choir accompanists</span><span style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: {SOFT}">{LOCK}View only · 4 songs</span></span></div>')
+                     f'<span style="font-size: 15px; color: {SOFT}">Shared by Maria Ionescu in Choir accompanists</span><span style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: {SOFT}">{LOCK}View only · 4 pieces</span></span></div>')
 # The playlist's name stands in the bar, as every playlist's does (edge-lines 8: an empty bar is a hole); the head
 # under it is the cover and who shared it.
 _SHOUT = EMPTY('guestOn', '◎', 'Sign in to see this playlist', 'A playlist shared with you in a group opens once you sign in.', f'{BTN("Sign in", "", "SignIn.dc.html", "primary", 48, False)}')  # signed out: the kit's one empty state, the app's words
-shph = (IF('guestOn', TOP('Songs.dc.html', 'Shared with me', '', 'Songs') + NARROW(_SHOUT)) + IF('notGuest', f'{TOP("Songs.dc.html", "Choir hymns", "", "Songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
+shph = (IF('guestOn', TOP('Songs.dc.html', 'Shared with me', '', 'Library') + NARROW(_SHOUT)) + IF('notGuest', f'{TOP("Songs.dc.html", "Choir hymns", "", "Library")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
         f'{_SHHEAD(112)}{SONGLIST(f'<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="4"><div style="position: relative">{SONGROW("Player.dc.html")}</div></sc-for>')}</main>', 'true') + SHOWSTATES())  # a playlist is opened from Songs: no tab bar, as every page off the four places
-shlm = (IF('guestOn', LTITLEBAR('Shared with me', '', 'SongsLaptop.dc.html') + LCOL(_SHOUT.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 880)) + IF('notGuest', f'{LPLACEBAR("Choir hymns", "4 songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 32px">'
-        f'{_SHHEAD(160)}{LTABLE.replace('aria-label="All songs"', 'aria-label="Choir hymns"', 1)}</main>', 'true') + SHOWSTATES())
+shlm = (IF('guestOn', LTITLEBAR('Shared with me', '', 'SongsLaptop.dc.html') + LCOL(_SHOUT.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 880)) + IF('notGuest', f'{LPLACEBAR("Choir hymns", "4 pieces")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 32px">'
+        f'{_SHHEAD(160)}{LTABLE.replace('aria-label="All pieces"', 'aria-label="Choir hymns"', 1)}</main>', 'true') + SHOWSTATES())
 detail('SharedFolder', 'Choir hymns', FLJS([{'t': a, 's': b, 'v': c, 'when': d, 'add': 0, 'pic': INCIPIT(INC.get(a, (2, 4)))} for a, b, c, d in CHOIR], guest=True), shph, shlm, '', ROWMENU('rowOn', '{{rowT}}', VIEWITEMS('.dc.html')), ROWMENU('rowOn', '{{rowT}}', VIEWITEMS('Laptop.dc.html')), 'Songs')
 print('flat songs ok')
