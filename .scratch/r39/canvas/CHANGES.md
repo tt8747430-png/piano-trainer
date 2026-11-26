@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · pending · the laptop toolbar's chosen duration and accidental white and lifted on the note-input pill, as a segmented control's chosen segment: the pressed tile was #EEE9E2 on the pill's #EEE9E2, so the pick did not show (lines: EditorLaptop, EditorDraftLaptop 0 problems) · EditorLaptop, EditorDraftLaptop, Editor, EditorDraft · pending
 ## Changes
 
 - 2026-11-26 · 30c8b709 · Undo and Redo dimmed when there is nothing to undo or redo, as Flat's second row greys them (flat-score-editor 003, 005): the editor's from its marks, the Player's views in Edit from their own count; a disabled act at half strength with no pointer, the kit's one rule (DISABLED_CSS), which also dims the laptop's Zoom out at its least (lines: Editor, EditorGrid after Delete, EditorLaptop 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v782
