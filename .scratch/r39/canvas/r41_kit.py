@@ -129,7 +129,7 @@ INFOI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="cur
 # 44 target; tapped, a small card anchored under it, paper, 16 corners, a ring and the float's shadow, closed by a tap
 # outside. Its parent is position: relative; pos places the card (left or right edge, top).
 def INFOB(label, act, on):
-    return f'<button type="button" aria-label="{label}" data-tip="{label}" aria-expanded="{{{{{on}}}}}" onClick="{{{{{act}}}}}" style="flex: none; width: 44px; height: 44px; margin: -12px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{INFOI.replace('width="22" height="22"', 'width="20" height="20"')}</button>'
+    return f'<button type="button" aria-label="{label}" data-tip="{label}" aria-expanded="{{{{{on}}}}}" onClick="{{{{{act}}}}}" style="flex: none; width: 44px; height: 44px; margin: -12px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{ICON(INFOI, 20)}</button>'
 def INFOTIP(on, close, label, body, pos='left: 0; top: 32px'):
     return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{close}}}}}" style="position: fixed; inset: 0; z-index: 60"></div>'
             f'<div role="dialog" aria-label="{label}" style="position: absolute; {pos}; z-index: 61; width: 300px; max-width: calc(100vw - 32px); box-sizing: border-box; padding: 16px; border-radius: 16px; background: {SHEET}; color: {INK}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; font-size: 15px; line-height: 1.45; text-wrap: pretty; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>')

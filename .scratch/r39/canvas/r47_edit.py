@@ -129,7 +129,7 @@ def DOC(lap=False):
     ex = (f'<sc-if value="{{{{s.isScale}}}}" hint-placeholder-val="{{{{true}}}}"><figure style="position: relative; margin: 8px 0 0; display: flex; flex-direction: column; gap: 12px">'
           f'<div style="display: flex; align-items: center; gap: 8px; margin-bottom: -8px"><span style="flex: 1; font-size: 17px; font-weight: 700">{{{{verName}}}}</span>'
           f''
-          f'<button type="button" aria-label="Play" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAY.replace('width="22" height="22"', 'width="20" height="20"')}</button>'
+          f'<button type="button" aria-label="Play" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{ICON(PLAY, 20)}</button>'
           f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openEx}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {INK}; color: {SHEET}; font: inherit; font-size: 15px; font-weight: 700">Edit</button></sc-if></div>'
           f'{KEYSOF(kbn, kh)}</figure></sc-if>'
           f'<sc-if value="{{{{s.isQ}}}}" hint-placeholder-val="{{{{false}}}}"><figure style="margin: 0; display: flex; flex-direction: column; gap: 12px">'

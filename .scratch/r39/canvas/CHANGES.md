@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · (this commit) · kit drift folded: eight icons resized by a `.replace()` on the glyph's markup now call the kit's `ICON(glyph, size)` (the laws' design-system layers); the boards build byte for byte the same · none · not published (no board changed)
 - 2026-11-26 · (this commit) · clean: a song's bar map loses "Played 6 times · 42 minutes" between Bar 1 and Bar 16 (our own stat, loop round 13; the practice history is the Profile's) · Song, SongLaptop, SongSettings, SongSettingsLaptop · v735
 - 2026-11-26 · (this commit) · ChordsLaptop back to one centred column (owner, 2026-11-16: "the practices on the right robs the focus"): the chord, its staff card 560 wide with the staff centred in it, then Practise in the Player two across under it (the side-by-side grid of v724 set the rows beside the chord, its staff overran a 360 card and its rows stood 300 bare); a practise row's line keeps to one line with an ellipsis; the staff card stands its staff level (8 less under it), phone and laptop; the lines tool reads a table row with an empty cell as the table's · Chords, ChordsLaptop · v734
 - 2026-11-26 · (this commit) · a laptop view's settings (Sheet, Diagrams, Grid, Lyrics) hang under the views and the gear on the bar's 24 edge, 76 down, as every laptop popover; they stood at offsets from the centre left from when the views pill sat there, under nothing · PlayerDesk (PlayerLaptopSheet) · v733
