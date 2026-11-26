@@ -6,10 +6,13 @@ Tenor 1, Tenor 2, Baritone, Bass), the words under every part, and piano as its 
 `scripts/choir-index.py` from the files; run it again after a change.
 
 That file is `<song> (SATB).mscz` in a mixed choir song's folder and `<song> (TTBB).mscz` in a men's, made by 
-`scripts/choir-scores.py` from the song's full score, or from its one-voice files when it has no full score. 
-A voice the choir's file wrote an octave away from its range is moved there (many files write the men an 
-octave high, as a piano would play them). A song with only a PDF, or without a file for every voice, is 
-still to be written in by hand.
+`scripts/choir-scores.py`. It looks as the choir's own full score does (its staves, layout and words, saved 
+by MuseScore Studio 4) and is corrected inside: each staff named for the voices it holds, every instrument 
+playing piano, each voice in the octave it sings (many files write the men an octave high; a plain treble 
+staff of men takes the tenor clef, so the page looks the same), and a part for every voice saved in the file, 
+tied to its voice of the score, with the words under it. A song with no full score but a one-voice file for 
+every voice gets a two-staff score put together from those files. A song with only a PDF, a full score left 
+unfinished, or no file for some voice is still to be written in by hand.
 
 Columns: **Score** the full MuseScore score (how many); **Shape** its staves, voices per staff and bars, and 
 "chords" where two voices are written as one chord; **Words** lyrics in the score; **Parts** separate voice parts 
@@ -21,7 +24,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 56 | 0 | 2 | 25 | 23 | 1 | 0 |
+| Mixed choir | 107 | 55 | 2 | 1 | 25 | 23 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -51,7 +54,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 21 | Fă viața mea | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 16 bars, `021. Fă viața mea.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
 | 22 | Să-ngenunchezi | Single voices only, no full score | – | – | – | – | – | 1 |  |  | – |
 | 23 | O chemare vine din întunecimi | Single voices only, no full score | – | – | – | – | Alto | 1 |  |  | – |
-| 24 | Grație a lui Isus (1 subfolders) | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 32 bars, `024. Grație a lui Isus.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
+| 24 | Grație a lui Isus (1 subfolders) | Done: a part per voice | 2 | 2 staves, voices 2/2, 32 bars, `Gratie a lui Isus.mscz` | yes | Alto, Bass, Soprano, Soprano, Alto, Tenor, Tenor, Bass | Soprano, Alto, Tenor, Bass | 1 |  |  | other |
 | 25 | Isuse pentru mine | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 26 | Sub crucea Ta | Single voices only, no full score | – | – | – | – | Alto | 2 |  |  | – |
 | 27 | Tatăl nostru | Done: a part per voice (no words in any of its files) | 3 | 2 staves, voices 2/2, 40 bars, `027. Tatăl nostru.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
@@ -70,7 +73,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 40 | Cat mai aproape de Tine | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 24 bars, `Cât mai aproape de Tine - toate vocile.mscz` | no | – | Soprano, Alto, Tenor, Bass, All voices | 1 |  |  | piano |
 | 41 | Psalmul 139 | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 42 | Zace-n rece mormânt | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 20 bars, `042. Zace-n rece mormânt.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
-| 43 | A înviat Hristos (1 subfolders) | To check: 6 voices (a voice divides), not four | 7 | 4 staves, voices 2/0/2/2, 27 bars, `043. A înviat Hristos.mscz` | no | – | Soprano, Tenor, Bass | 1 |  |  | piano |
+| 43 | A înviat Hristos (1 subfolders) | To do: unfinished, a staff has no notes | 7 | 4 staves, voices 2/0/2/2, 27 bars, `043. A înviat Hristos.mscz` | no | – | Soprano, Tenor, Bass | 1 |  |  | piano |
 | 44 | Psalmul 86 | Done: a part per voice | – | – | – | – | Soprano, Alto, Tenor, Bass | 1 |  |  | – |
 | 45 | Un rob | Single voices only, no full score | – | – | – | – | Tenor | 1 |  |  | – |
 | 46 | Să n-ai teamă | Single voices only, no full score | – | – | – | – | Soprano, Alto | 1 |  |  | – |
@@ -96,7 +99,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 66 | O, frunte-nsangerata | Single voices only, no full score | – | – | – | – | – | 2 |  |  | – |
 | 67 | Fiti tari | Done: a part per voice | 4 | 2 staves, voices 2/2, 114 bars, `Audio.mscz`, 14 chords | yes | – | Soprano, Alto, Tenor, Bass | 3 |  |  | piano |
 | 68 | Poate fi in orice clipa | Done: a part per voice (no words in any of its files) | – | – | – | – | Alto, Tenor | 1 | 1 |  | – |
-| 69 | N-am sa uit Isuse Doamne (1 subfolders) | Done: a part per voice (no words in any of its files) | 1 | 4 staves, voices 0/0/1/1, 39 bars, `N-am sa uit Isuse Doamne niciodata.mscz`, 5 chords | no | – | Soprano, Tenor, Bass | 2 |  |  | other |
+| 69 | N-am sa uit Isuse Doamne (1 subfolders) | To do: unfinished, a staff has no notes | 1 | 4 staves, voices 0/0/1/1, 39 bars, `N-am sa uit Isuse Doamne niciodata.mscz`, 5 chords | no | – | Soprano, Tenor, Bass | 2 |  |  | other |
 | 70 | Doamne Isuse ai indurare | Done: a part per voice | – | – | – | – | Soprano, Alto, Tenor, Bass | 2 |  | 2 | – |
 | 71 | Noi suntem frati | Single voices only, no full score | – | – | – | – | Soprano, Tenor | 1 |  |  | – |
 | 72 | Toata viata Doamne | Done: a part per voice (no words in any of its files) | – | – | – | – | Soprano, Alto, Tenor, Bass | 2 |  |  | – |

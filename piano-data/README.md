@@ -138,10 +138,12 @@ and MIDI files and recordings. Names are the titles transliterated.
   contents, then songs 1–45) and `Caiet de cor scanat 46-100.pdf`. Each song is also in its own folder; read it there.
   Its [`INDEX.md`](scores/hymns/choir/musescore/INDEX.md) lists every song with its files and the state of its full
   score, written by `scripts/choir-index.py`. Each song that has a full score, or a one-voice file for every voice,
-  also has `<song> (SATB).mscz` (mixed choir) or `<song> (TTBB).mscz` (men's choir): a part per voice, on its own
-  staff with the usual clef, the words under every part where any of the song's files has them, each voice in the
-  octave it sings, and piano as its sound. `scripts/choir-scores.py` makes them with MuseScore Studio 4
-  (`scripts/choir-parts.py` splits the voices)
+  also has `<song> (SATB).mscz` (mixed choir) or `<song> (TTBB).mscz` (men's choir): it looks as the choir's own
+  full score does, and inside each staff is named for its voices, every instrument plays piano, each voice sounds
+  in the octave it sings, and a part for every voice (with its words, where any of the song's files has them) is
+  saved in the file, tied to its voice of the score. `scripts/choir-scores.py` makes them with MuseScore Studio 4
+  (`scripts/choir-parts.py` splits the voices). Song 24's `Gratie a lui Isus.mscz` is the owner's corrected score,
+  its words included
 - `hymns/songs/`: songs as sheets, choir and full scores
 - `hymns/ensembles/`: О. Цапук's arrangements for domra and piano, and cello and piano
 - `hymns/hymnals/`: _Песнь возрождения с нотами_, vol. 3; the _Free Worship Piano Collection_

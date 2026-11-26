@@ -1,26 +1,36 @@
-"""Writes every choir song's score with a part per voice: `<song folder name> (SATB).mscz` in a mixed choir song's
-folder, `(TTBB)` in a men's choir song's. Run from the repo root: python3 scripts/choir-scores.py [song folder ...]
+"""Writes every choir song's corrected score: `<song folder name> (SATB).mscz` in a mixed choir song's folder,
+`(TTBB)` in a men's choir song's. Run from the repo root: python3 scripts/choir-scores.py [song folder ...]
 
-Needs MuseScore Studio 4 as `mscore` (on a server, run under xvfb-run). For each song: the full score is picked as
-scripts/choir-index.py picks it; with none, a score is put together from the song's one-voice files when there is one
-for each of the four voices. Every MuseScore file of the song is read as MusicXML, the full score is split by
-scripts/choir-parts.py (the others lend their words), and MuseScore saves the result. Songs it cannot make are listed
-with the reason; a song that has only a PDF has to be written in by hand.
+The score looks as the choir's own full score does (its staves, layout, words), saved by MuseScore Studio 4, and is
+corrected inside: each staff named for the voices it holds ("Soprano, Alto"), played by piano, each voice in the
+octave it sings (a voice of men on a plain treble staff takes the tenor clef, so the page looks the same), and a part
+for every voice (Soprano, Alto, Tenor, Bass; Tenor 1, Tenor 2, Baritone, Bass) saved in the file, each tied to its
+voice of the score, with the words under it. A song with no full score but a one-voice file for every voice gets a
+two-staff score put together from those files.
+
+Needs MuseScore Studio 4 as `mscore` (on a server, under xvfb-run). The voices are split by scripts/choir-parts.py;
+songs it cannot make are listed with the reason.
 """
 
 import copy
 import importlib.util
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
 import xml.etree.ElementTree as ET
+import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = 'piano-data/scores/hymns/choir/musescore'
 CHOIRS = [('Cântări corul mixt', 'mixed', 'SATB'), ('Cântări corul bărbătesc', 'men', 'TTBB')]
 ORDER = {'mixed': ['Soprano', 'Alto', 'Tenor', 'Bass'], 'men': ['Tenor 1', 'Tenor 2', 'Baritone', 'Bass']}
+SHORT = {'Soprano': 'S.', 'Alto': 'A.', 'Tenor': 'T.', 'Bass': 'B.', 'Tenor 1': 'T. 1', 'Tenor 2': 'T. 2',
+         'Baritone': 'Bar.'}
+# A part's words a whole space apart with their hyphens kept (many of the choir's files space them tightly).
+PART_STYLE = {'lyricsMinDistance': '1', 'lyricsDashForce': '1', 'lyricsDashMinLength': '0.4'}
 
 
 def load(name):
@@ -57,6 +67,12 @@ def song_files(song_dir):
     return sorted(out)
 
 
+def write_xml(root, path):
+    ET.indent(root)
+    with open(path, 'wb') as fh:
+        fh.write(b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root, encoding='utf-8'))
+
+
 def main():
     idx = load('choir-index')
     parts = load('choir-parts')
@@ -71,23 +87,25 @@ def main():
                 continue
             files = [f for f in song_files(song_dir) if f' ({tag}).mscz' not in f]
             if not files:
-                songs.append((d, sub, kind, tag, None, [], 'only a PDF: to be written in by hand'))
+                songs.append(dict(d=d, sub=sub, why='only a PDF: to be written in by hand'))
                 continue
             xmls = []
             for i, f in enumerate(files):
                 x = os.path.join(work, f'{len(songs):03d}-{i:02d}.musicxml')
                 jobs.append((os.path.abspath(f), x))
                 xmls.append((f, x))
-            songs.append((d, sub, kind, tag, song_dir, xmls, None))
-    print(f'converting {len(jobs)} files', file=sys.stderr)
+            songs.append(dict(d=d, sub=sub, kind=kind, tag=tag, dir=song_dir, xmls=xmls, why=None))
+    print(f'reading {len(jobs)} files', file=sys.stderr)
     done = set(mscore_job(jobs))
-    results, outs = [], []
-    for d, sub, kind, tag, song_dir, xmls, why in songs:
-        if why:
-            results.append((sub, d, why))
+
+    # Split each song's voices. The main score is the full score itself, saved again by MuseScore; a song with only
+    # one-voice files gets a two-staff score put together from its parts.
+    second = []
+    for n, s in enumerate(songs):
+        if s['why']:
             continue
         infos = []
-        for f, x in xmls:
+        for f, x in s['xmls']:
             if x in done:
                 root = ET.parse(x).getroot()
                 infos.append((f, x, {'root': root, 'lines': len(parts.lines_of(root)),
@@ -98,60 +116,261 @@ def main():
         lyric_srcs = [i['root'] for f, x, i in infos if i['lyr']]
         try:
             if full:
-                score = copy.deepcopy(full[0][2]['root'])
-                note = os.path.relpath(full[0][0], song_dir)
+                score, s['from'] = copy.deepcopy(full[0][2]['root']), os.path.relpath(full[0][0], s['dir'])
             else:
-                score, note = assemble(infos, kind, idx)
-            out = parts.build(score, kind, lyric_srcs)
+                score, s['from'] = assemble(infos, s['kind'], idx)
+            out, info = parts.build(score, s['kind'], lyric_srcs)
         except SystemExit as e:
-            results.append((sub, d, f'not made: {e}'))
+            s['why'] = f'not made: {e}'
             continue
-        ET.indent(out)
-        x = os.path.join(work, f'out-{len(outs):03d}.musicxml')
-        with open(x, 'wb') as fh:
-            fh.write(b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(out, encoding='utf-8'))
-        dst = os.path.abspath(os.path.join(song_dir, f'{d} ({tag}).mscz'))
-        if os.path.exists(dst):
-            os.remove(dst)
-        outs.append((x, dst))
-        results.append((sub, d, f'made from {note}'))
-    written = set(mscore_job(outs))
-    for w in written:
-        tidy(w)
+        s['info'] = info
+        s['parts'] = []
+        for i in range(len(out.findall('part'))):
+            x = os.path.join(work, f'{n:03d}-part{i}.musicxml')
+            write_xml(single_part(out, i), x)
+            s['parts'].append((x, x[:-9] + '.mscz'))
+            second.append(s['parts'][-1])
+        if full:
+            s['main_src'] = os.path.abspath(full[0][0])
+            s['score_xml'] = score
+        else:
+            x = os.path.join(work, f'{n:03d}-closed.musicxml')
+            write_xml(closed(out, s['kind']), x)
+            s['main_src'] = x
+            s['info'] = closed_info(info)
+        s['main'] = os.path.join(work, f'{n:03d}-main.mscz')
+        second.append((s['main_src'], s['main']))
+    print(f'saving {len(second)} scores and parts', file=sys.stderr)
+    done = set(mscore_job(second))
+
+    results = []
+    for s in songs:
+        if s['why']:
+            results.append((s['sub'], s['d'], s['why']))
+            continue
+        if s['main'] not in done or any(b not in done for a, b in s['parts']):
+            results.append((s['sub'], s['d'], 'not made: MuseScore did not save it'))
+            continue
+        dst = os.path.join(s['dir'], f"{s['d']} ({s['tag']}).mscz")
+        compose(s, dst, imported='score_xml' not in s)
+        results.append((s['sub'], s['d'], f"made from {s['from']}"))
     for sub, d, msg in results:
-        if msg.startswith('made') and not any(d in w for w in written):
-            msg = 'not made: MuseScore did not save it'
         print(f'{sub} | {d} | {msg}')
 
 
-# Words a whole space apart with their hyphens kept, in place of the tight spacing many of the choir's files carry;
-# the tempo and other marks above the top part only (MuseScore repeats them over a second staff of its choosing).
-STYLE = {'lyricsMinDistance': '1', 'lyricsDashForce': '1', 'lyricsDashMinLength': '0.4'}
+def single_part(out, i):
+    """The split score with only its i-th part: what MuseScore saves as that voice's part."""
+    one = copy.deepcopy(out)
+    plist = one.find('part-list')
+    keep = f'P{i + 1}'
+    for el in list(plist):
+        if el.tag != 'score-part' or el.get('id') != keep:
+            plist.remove(el)
+    for p in one.findall('part'):
+        if p.get('id') != keep:
+            one.remove(p)
+    return one
 
 
-def tidy(mscz):
-    import re
-    import shutil
-    import zipfile
-    tmp = mscz + '.tmp'
-    with zipfile.ZipFile(mscz) as zin, zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as zout:
-        for item in zin.infolist():
-            data = zin.read(item.filename)
-            if item.filename.endswith('.mscx') and '/' not in item.filename:
-                text = data.decode('utf-8')
-                text = re.sub(r'\s*<SystemObjects>.*?</SystemObjects>', '', text, flags=re.S)
-                text = re.sub(r'\s*<(Tempo|SystemText|RehearsalMark|Jump|Marker)>(?:(?!</\1>).)*?<linkedTo>.*?</\1>', '',
-                              text, flags=re.S)
-                data = text.encode('utf-8')
-            if item.filename == 'score_style.mss':
-                text = data.decode('utf-8')
-                for k, v in STYLE.items():
-                    text, n = re.subn(rf'<{k}>[^<]*</{k}>', f'<{k}>{v}</{k}>', text)
-                    if not n:
-                        text = text.replace('</Style>', f'  <{k}>{v}</{k}>\n    </Style>')
-                data = text.encode('utf-8')
-            zout.writestr(item, data)
-    shutil.move(tmp, mscz)
+def closed(out, kind):
+    """Two staves from the four parts, as a choir's score is printed: the upper voice of each pair on voice 1, the
+    lower on voice 2, the words under the upper."""
+    sc = copy.deepcopy(out)
+    plist = sc.find('part-list')
+    ps = sc.findall('part')
+    names = ORDER[kind]
+    for el in list(plist):
+        if el.tag == 'score-part' and el.get('id') in ('P2', 'P4'):
+            plist.remove(el)
+    for pid, pair in (('P1', names[:2]), ('P3', names[2:])):
+        sp = [e for e in plist.findall('score-part') if e.get('id') == pid][0]
+        sp.find('part-name').text = ', '.join(pair)
+        sp.find('part-abbreviation').text = ' '.join(SHORT[v] for v in pair)
+    for up, low in ((ps[0], ps[1]), (ps[2], ps[3])):
+        for mu, ml in zip(up.findall('measure'), low.findall('measure')):
+            length = sum(int(n.findtext('duration') or 0) for n in mu
+                         if n.tag in ('note', 'forward') and n.find('chord') is None)
+            bk = ET.SubElement(mu, 'backup')
+            ET.SubElement(bk, 'duration').text = str(length)
+            for el in ml:
+                if el.tag in ('note', 'forward'):
+                    el = copy.deepcopy(el)
+                    if el.tag == 'note':
+                        el.find('voice').text = '2'
+                        for l in el.findall('lyric'):
+                            el.remove(l)
+                    mu.append(el)
+        sc.remove(low)
+    return sc
+
+
+def closed_info(info):
+    """Where each part's voice sits in the put-together score: two staves, upper voice 1, lower voice 2."""
+    out = []
+    for i, p in enumerate(info):
+        q = dict(p)
+        q.update(part=i // 2, staff='1', voice=str(i % 2 + 1), shift=0, clef=('G', 0))
+        out.append(q)
+    return out
+
+
+def staff_index(score_xml, part, staff):
+    """A MusicXML (part, staff) as MuseScore's staff number, counting from 0 through the parts in order."""
+    n = 0
+    for pi, p in enumerate(score_xml.findall('part')):
+        count = max([int(s.text) for s in p.iter('staves')] or [1])
+        if pi == part:
+            return n + int(staff) - 1
+        n += count
+    raise ValueError(part)
+
+
+def read_mscz(path):
+    with zipfile.ZipFile(path) as z:
+        return {n: z.read(n) for n in z.namelist()}
+
+
+def main_name(files):
+    return next(n for n in files if n.endswith('.mscx') and '/' not in n)
+
+
+def compose(s, dst, imported):
+    """The song's file: its main score corrected, and a part per voice tied to its voice of the score."""
+    files = {n: v for n, v in read_mscz(s['main']).items() if not n.startswith('Excerpts/')}
+    mname = main_name(files)
+    root = ET.fromstring(files[mname])
+    score = root.find('Score')
+    for el in score.findall('Score'):
+        score.remove(el)
+    staffs = score.findall('Staff')
+    info = s['info']
+    sx = s.get('score_xml')
+    by_staff = {}
+    for p in info:
+        p['mstaff'] = staff_index(sx, p['part'], p['staff']) if sx is not None else p['part']
+        by_staff.setdefault(p['mstaff'], []).append(p)
+
+    # Octaves, staff by staff; a plain treble staff moved down for men's voices takes the tenor clef, so the notes
+    # stay where the page has them.
+    for k, ps in by_staff.items():
+        shift = ps[0]['shift']
+        if not shift:
+            continue
+        for note in staffs[k].iter('Note'):
+            note.find('pitch').text = str(int(note.findtext('pitch')) + 12 * shift)
+        for c in staffs[k].iter('Clef'):
+            for tag in ('concertClefType', 'transposingClefType'):
+                el = c.find(tag)
+                if el is not None:
+                    el.text = moved_clef(el.text, shift)
+        # The staff's own clef, set on its definition (or by its instrument) where the bars carry none.
+        sdef, ins_clef = staff_def(score, k)
+        cur = sdef.findtext('defaultClef') or ins_clef
+        new = moved_clef(cur, shift)
+        if new != cur:
+            set_text(sdef, 'defaultClef', new)
+
+    # Each staff's instrument named for the voices it holds; every instrument played by piano.
+    k = 0
+    for mp in score.findall('Part'):
+        n_staves = len(mp.findall('Staff'))
+        voices = [p['name'] for st in range(k, k + n_staves) for p in by_staff.get(st, [])]
+        k += n_staves
+        label = ', '.join(dict.fromkeys(voices))
+        if label:
+            set_text(mp, 'trackName', label)
+        for ins in mp.findall('Instrument'):
+            ins.set('id', 'piano')
+            if label:
+                set_text(ins, 'trackName', label)
+            set_text(ins, 'instrumentId', 'keyboard.piano')
+            for pr in ins.iter('program'):
+                pr.set('value', '0')
+    files[mname] = b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root, encoding='utf-8')
+    if imported:
+        files[mname] = drop_repeated_marks(files[mname])
+        files['score_style.mss'] = style(files['score_style.mss'])
+
+    # A part per voice, tied to its staff and voice of the main score.
+    extra = []
+    for i, (p, (x, part_mscz)) in enumerate(zip(info, s['parts'])):
+        pf = read_mscz(part_mscz)
+        proot = ET.fromstring(pf[main_name(pf)])
+        pscore = proot.find('Score')
+        pos = list(pscore).index(pscore.find('eid')) + 1 if pscore.find('eid') is not None else 0
+        name_el = ET.Element('name')
+        name_el.text = p['name']
+        pscore.insert(pos, name_el)
+        track = p['mstaff'] * 4 + (int(p['voice']) - 1) % 4
+        pscore.insert(pos + 1, ET.Element('Tracklist', sTrack=str(track), dstTrack='0'))
+        base = f"{i}_{p['name'].replace(' ', '_')}"
+        files[f'Excerpts/{base}/{base}.mscx'] = drop_repeated_marks(
+            b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(proot, encoding='utf-8'))
+        files[f'Excerpts/{base}/{base}.mss'] = style(pf['score_style.mss'])
+        extra += [f'Excerpts/{base}/{base}.mss', f'Excerpts/{base}/{base}.mscx']
+
+    # The container lists the main score, then each part.
+    out_name = os.path.basename(dst)[:-5] + '.mscx'
+    files[out_name] = files.pop(mname)
+    order = ['score_style.mss', out_name] + extra + [n for n in files if n.startswith('Thumbnails/')] + \
+        [n for n in ('automation.json', 'audiosettings.json', 'viewsettings.json') if n in files]
+    cont = ['<?xml version="1.0" encoding="UTF-8"?>', '<container>', '  <rootfiles>'] + \
+        [f'    <rootfile full-path="{n}"/>' for n in order] + ['    </rootfiles>', '  </container>', '']
+    files['META-INF/container.xml'] = '\n'.join(cont).encode('utf-8')
+    if os.path.exists(dst):
+        os.remove(dst)
+    with zipfile.ZipFile(dst, 'w', zipfile.ZIP_DEFLATED) as z:
+        for n in order + ['META-INF/container.xml']:
+            z.writestr(n, files[n])
+
+
+def moved_clef(clef, shift):
+    """The clef that keeps a staff's notes where the page has them once its voices move an octave down."""
+    return {('G', -1): 'G8vb', ('F8va', -1): 'F', ('G8va', -1): 'G', ('F15ma', -1): 'F8va'}.get((clef, shift), clef)
+
+
+def staff_def(score, k):
+    """The k-th staff's definition in its instrument's Part, and the clef its instrument gives it."""
+    n = 0
+    for mp in score.findall('Part'):
+        defs = mp.findall('Staff')
+        if k < n + len(defs):
+            local = k - n
+            ins = mp.find('Instrument')
+            clef = 'G'
+            if ins is not None:
+                for c in ins.findall('clef'):
+                    if int(c.get('staff') or 1) == local + 1:
+                        clef = c.text
+            return defs[local], clef
+        n += len(defs)
+    raise ValueError(k)
+
+
+def set_text(parent, tag, text):
+    el = parent.find(tag)
+    if el is None:
+        el = ET.SubElement(parent, tag)
+    el.text = text
+
+
+def drop_repeated_marks(data):
+    """The tempo and other marks above the top staff only (MuseScore repeats them over a staff of its choosing when it
+    reads MusicXML)."""
+    text = data.decode('utf-8')
+    text = re.sub(r'\s*<SystemObjects>.*?</SystemObjects>', '', text, flags=re.S)
+    text = re.sub(r'\s*<(Tempo|SystemText|RehearsalMark|Jump|Marker)>(?:(?!</\1>).)*?<linkedTo>.*?</\1>', '', text,
+                  flags=re.S)
+    return text.encode('utf-8')
+
+
+def style(data):
+    text = data.decode('utf-8')
+    for k, v in PART_STYLE.items():
+        text, n = re.subn(rf'<{k}>[^<]*</{k}>', f'<{k}>{v}</{k}>', text)
+        if not n:
+            text = text.replace('</Style>', f'  <{k}>{v}</{k}>\n    </Style>')
+    return text.encode('utf-8')
 
 
 def assemble(infos, kind, idx):
@@ -159,7 +378,7 @@ def assemble(infos, kind, idx):
     by_voice = {}
     for f, x, i in infos:
         vs = [v for v in idx.voices_of(os.path.basename(f)) if v != 'All voices']
-        name = {'Baritone': 'Baritone', 'Tenor': 'Tenor'}.get(vs[0], vs[0]) if len(vs) == 1 else None
+        name = vs[0] if len(vs) == 1 else None
         if name and i['lines'] == 1 and name not in by_voice:
             by_voice[name] = i['root']
     want = ORDER[kind]
@@ -171,8 +390,7 @@ def assemble(infos, kind, idx):
     score = None
     for n, v in enumerate(want):
         src = copy.deepcopy(by_voice[v])
-        sounding = [p for p in src.findall('part') if any(x.find('rest') is None for x in p.iter('note'))]
-        part = sounding[0]
+        part = [p for p in src.findall('part') if any(x.find('rest') is None for x in p.iter('note'))][0]
         staves = {x.findtext('staff') or '1' for x in part.iter('note') if x.find('rest') is None}
         if len(staves) == 1 and part.find('.//attributes/staves') is not None:
             keep = staves.pop()

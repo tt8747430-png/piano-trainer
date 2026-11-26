@@ -33,6 +33,12 @@ def inspect(path):
         if nm: ex.append(nm)
     progs = {pp.get('value') for pp in main.iter('program')}
     return dict(ver=r.get('version'), staves=len(st), vmax=vmax, bars=bars, chords=chords, lyr=lyr, ex=sorted(ex), lines=lines, path=path, piano=progs <= {'0'})
+def made_words(path):
+    """Whether the corrected score has words, in its main score or its parts."""
+    with zipfile.ZipFile(path) as z:
+        return dict(words=any(b'<Lyrics>' in z.read(n) for n in z.namelist() if n.endswith('.mscx')))
+
+
 def song_rows(base):
     rows = []
     for d in sorted(os.listdir(base)):
@@ -60,17 +66,18 @@ def song_rows(base):
         fulls.sort(key=lambda i: (-(len([e for e in i['ex'] if len(voices_of(e)) == 1]) >= 4), bool([v for v in voices_of(os.path.basename(i['path'])) if v != 'All voices']), -i['lines'], i['path'].count(os.sep), len(i['path'])))
         main = fulls[0] if fulls else None
         full = fulls
-        rows.append(dict(made=inspect(made[0]) if made else None, nr=nr, title=title, kinds=kinds, nfull=len(full), main=main, mainf=main['path'] if main else None,
+        rows.append(dict(made=made_words(made[0]) if made else None, nr=nr, title=title, kinds=kinds, nfull=len(full), main=main, mainf=main['path'] if main else None,
                          voices=voice_files, sub=[v for v in variants if v not in ('.',)], dir=d))
     return rows
 def status(r, men):
     if r.get('made'):
-        return 'Done: a part per voice' + ('' if r['made']['lyr'] else ' (no words in any of its files)')
+        return 'Done: a part per voice' + ('' if r['made']['words'] else ' (no words in any of its files)')
     m = r['main']
     if not m: return 'Single voices only, no full score' if r['kinds']['mscz'] else 'No MuseScore'
     want = 4
     single = [e for e in m['ex'] if len(voices_of(e)) == 1 and voices_of(e) != ['All voices']]
     if len(single) >= want: return 'Done: a part per voice'
+    if 0 in m['vmax']: return 'To do: unfinished, a staff has no notes'
     if m['lines'] > 4: return f"To check: {m['lines']} voices (a voice divides), not four"
     if m['chords']: return 'To do: voices written as chords'
     if m['staves'] >= 4: return 'To do: add parts (one voice per staff)'
@@ -92,10 +99,13 @@ def main():
     L.append('Tenor 1, Tenor 2, Baritone, Bass), the words under every part, and piano as its sound. Written by ')
     L.append('`scripts/choir-index.py` from the files; run it again after a change.\n')
     L.append('That file is `<song> (SATB).mscz` in a mixed choir song\'s folder and `<song> (TTBB).mscz` in a men\'s, made by ')
-    L.append('`scripts/choir-scores.py` from the song\'s full score, or from its one-voice files when it has no full score. ')
-    L.append('A voice the choir\'s file wrote an octave away from its range is moved there (many files write the men an ')
-    L.append('octave high, as a piano would play them). A song with only a PDF, or without a file for every voice, is ')
-    L.append('still to be written in by hand.\n')
+    L.append('`scripts/choir-scores.py`. It looks as the choir\'s own full score does (its staves, layout and words, saved ')
+    L.append('by MuseScore Studio 4) and is corrected inside: each staff named for the voices it holds, every instrument ')
+    L.append('playing piano, each voice in the octave it sings (many files write the men an octave high; a plain treble ')
+    L.append('staff of men takes the tenor clef, so the page looks the same), and a part for every voice saved in the file, ')
+    L.append('tied to its voice of the score, with the words under it. A song with no full score but a one-voice file for ')
+    L.append('every voice gets a two-staff score put together from those files. A song with only a PDF, a full score left ')
+    L.append('unfinished, or no file for some voice is still to be written in by hand.\n')
     L.append('Columns: **Score** the full MuseScore score (how many); **Shape** its staves, voices per staff and bars, and ')
     L.append('"chords" where two voices are written as one chord; **Words** lyrics in the score; **Parts** separate voice parts ')
     L.append('saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML** (MusicXML), **Img** counts; ')

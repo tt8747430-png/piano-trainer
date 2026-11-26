@@ -116,6 +116,20 @@ def clef_of(score):
     return out
 
 
+def empty_staves(score):
+    """Staves of the score holding no note at all (a file left unfinished), by their part's name."""
+    out = []
+    names = {sp.get('id'): (sp.findtext('part-name') or '').strip() for sp in score.iter('score-part')}
+    for part in score.findall('part'):
+        count = max([int(x.text) for x in part.iter('staves')] or [1])
+        sounding = {n.findtext('staff') or '1' for n in part.iter('note') if n.find('rest') is None}
+        for st in range(1, count + 1):
+            if str(st) not in sounding:
+                name = names.get(part.get('id')) or 'unnamed'
+                out.append(f'the {name} staff' + (f' {st}' if count > 1 else ''))
+    return out
+
+
 def staff_lines(score):
     """Group the score into its staves, each with the (voice, chord note) lines it carries, top staff first."""
     staves = {}
@@ -130,6 +144,9 @@ def plan(score):
     """Which source line each of the four parts reads, staff by staff: [(staff key, [line, ...])]. Four lines on any
     number of staves give one each; on two staves, a staff with one line gives it to both its voices (unison)."""
     staves = staff_lines(score)
+    empty = empty_staves(score)
+    if empty:
+        raise SystemExit('unfinished: ' + ' and '.join(empty) + (' have' if len(empty) > 1 else ' has') + ' no notes')
     if sum(len(s) for s in staves) == 4 and all(len(s) <= 2 for s in staves):
         return [(s[0][:2], s) for s in staves], [len(s) for s in staves]
     if len(staves) == 2:
@@ -210,10 +227,10 @@ def build(score, kind, sources):
     # The octave each voice sounds in. A choir reads a voice of men on a plain treble staff an octave lower, and a
     # clef marked an octave up (as a piano would play it) likewise; then a staff whose voices still average an octave
     # away from where those voices sing is moved there, its voices together.
-    clefs = clef_of(score)
+    staff_clefs = clef_of(score)
     shifts = []
     for i, (skey, line, other) in enumerate(targets):
-        sign_, change = clefs.get((line[0], line[1]), ('G', 0))
+        sign_, change = staff_clefs.get((line[0], line[1]), ('G', 0))
         men_voice = kind == 'men' and i < 2 or kind == 'mixed' and i == 2
         shifts.append(-1 if change > 0 or (men_voice and sign_ == 'G' and change == 0) else 0)
     for skey in dict.fromkeys(t[0] for t in targets):
@@ -314,7 +331,12 @@ def build(score, kind, sources):
                 advance(marks[-1][1], t)
         fill_words_from(part, sources, i)
     share_words(out, built)
-    return out
+    # Which source staff and voice each part reads, and the octaves it was moved: the main score is corrected and its
+    # parts are tied to its tracks from these.
+    info = [dict(name=names[i][0], part=t[1][0], staff=t[1][1], voice=t[1][2], upper=(j == 0), shift=shifts[i],
+                 clef=staff_clefs.get((t[1][0], t[1][1]), ('G', 0)))
+            for i, t in enumerate(targets) for j in [[x for x in targets if x[0] == t[0]].index(t)]]
+    return out, info
 
 
 def words(note):
@@ -378,7 +400,7 @@ def main():
     src, dst, kind = sys.argv[1:4]
     score = ET.parse(src).getroot()
     sources = [ET.parse(f).getroot() for f in sys.argv[4:]]
-    out = build(score, kind, sources)
+    out, info = build(score, kind, sources)
     ET.indent(out)
     with open(dst, 'wb') as f:
         f.write(b'<?xml version="1.0" encoding="UTF-8"?>\n')
