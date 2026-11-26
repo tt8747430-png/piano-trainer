@@ -13,10 +13,10 @@ describe('chordShown', () => {
 })
 
 describe('scaleShown', () => {
-  it('shows a scale’s keys, the tonic in its own colour, each with its degree', () => {
+  it('shows a scale’s keys, the tonic in its own colour, each named by its note (R34)', () => {
     const shown = scaleShown(placeScale(note('D'), 'dorian'))
     expect(shown.keys).toHaveLength(8)
-    expect(shown.marks.get(midi(62))).toEqual({ tone: 'tonic', label: '1', note: 'D' })
-    expect(shown.marks.get(midi(65))).toEqual({ tone: 'scale', label: '♭3', note: 'F' })
+    expect(shown.marks.get(midi(62))).toEqual({ tone: 'tonic', label: 'D' })
+    expect(shown.marks.get(midi(65))).toEqual({ tone: 'scale', label: 'F' })
   })
 })

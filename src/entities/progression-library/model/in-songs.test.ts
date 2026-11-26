@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { pieceById, PIECES, type Piece } from '@/entities/piece'
 import { testProgression, testSong } from '@/entities/piece/testing/test-pieces'
-import { keySymbol, parseNumerals } from '@/shared/lib/music'
+import { barNumber, keySymbol, parseNumerals } from '@/shared/lib/music'
 import { progressionPlaces, progressionsOf, songsWith } from './in-songs'
 
 const piece = (id: string): Piece => {
@@ -10,10 +10,11 @@ const piece = (id: string): Piece => {
   return found
 }
 const numerals = (line: string) => parseNumerals(line) ?? []
-/** Each place as its bars as printed, from 1, and its key: `1-4 G`. */
+/** Each place as its bars as printed (from the first full bar) and its key: `1-4 G`. */
 const places = (of: Piece, line: string, minor = false) =>
   progressionPlaces(of, numerals(line), minor).map(
-    ({ bars, key }) => `${bars.first + 1}-${bars.last + 1} ${keySymbol(key)}`,
+    ({ bars, key, pickup }) =>
+      `${barNumber(bars.first, pickup)}-${barNumber(bars.last, pickup)} ${keySymbol(key)}`,
   )
 const ids = (of: Piece) => progressionsOf(of).map(({ progression }) => progression.id)
 

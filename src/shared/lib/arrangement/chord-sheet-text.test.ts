@@ -42,7 +42,13 @@ describe('a chord sheet as text', () => {
     const read = textToSheet('c 4/4; CHORUS x3: B♭ zz Em7:2')
     expect(read?.key).toEqual(C_MAJOR)
     expect(read?.sections).toEqual([
-      { kind: 'chorus', repeats: 3, variation: 1, chords: [chord('Bb'), chord('Em7', 2)] },
+      {
+        kind: 'chorus',
+        repeats: 3,
+        variation: 1,
+        marks: NO_MARKS,
+        bars: [{ chords: [chord('Bb')] }, { chords: [chord('Em7', 2)] }],
+      },
     ])
   })
   it('is no sheet without a key, nor with no section', () => {
@@ -53,6 +59,10 @@ describe('a chord sheet as text', () => {
   it('keeps lengths and repeats in their range and the time to the sheet’s', () => {
     const read = textToSheet('C 7/8; verse x99 v9: C:40')
     expect(read?.meter).toBe('4/4')
-    expect(read?.sections[0]).toMatchObject({ repeats: 8, variation: 1, chords: [chord('C', 8)] })
+    expect(read?.sections[0]).toMatchObject({
+      repeats: 8,
+      variation: 1,
+      bars: [{ chords: [chord('C', 8)] }],
+    })
   })
 })

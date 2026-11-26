@@ -10,16 +10,11 @@ describe('the reference’s intervals', () => {
     ])
   })
 
-  it('go past the octave to the degrees a chord symbol writes', () => {
-    expect(INTERVAL_GROUPS.compound.map((name) => INTERVALS[name].degree)).toEqual([
-      '♭9',
-      '9',
-      '#9',
-      '11',
-      '#11',
-      '♭13',
-      '13',
+  it('go past the octave to the double octave, a semitone at a time, the tritone’s 11th and 12th both', () => {
+    expect(INTERVAL_GROUPS.compound.map((name) => INTERVALS[name].semitones)).toEqual([
+      13, 14, 15, 16, 17, 18, 18, 19, 20, 21, 22, 23, 24,
     ])
+    expect(INTERVALS.A11.degree).toBe('#11')
   })
 
   it('call the octave an 8th, twelve semitones up on the same letter', () => {
@@ -46,15 +41,21 @@ describe('consonanceOf', () => {
     ])
   })
 
-  it('hears a compound interval as its simple one, an augmented one as a dissonance', () => {
+  it('hears a compound interval as its simple one, an augmented or diminished one as a dissonance', () => {
     expect(INTERVAL_GROUPS.compound.map((name) => consonanceOf(INTERVALS[name]))).toEqual([
       'dissonance',
       'dissonance',
-      'dissonance',
+      'imperfect',
+      'imperfect',
       'perfect',
       'dissonance',
+      'dissonance',
+      'perfect',
       'imperfect',
       'imperfect',
+      'dissonance',
+      'dissonance',
+      'perfect',
     ])
   })
 })

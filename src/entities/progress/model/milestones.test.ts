@@ -12,16 +12,10 @@ describe('milestones', () => {
       firsts: { published: '2026-11-02' },
     }
     const figures = profileFigures(state, { ...KEPT, recordings: 1 })
-    expect(earnedKeys(figures)).toEqual([
-      'repertoire:1',
-      'first-song',
-      'first-recording',
-      'first-published',
-    ])
+    expect(earnedKeys(figures)).toEqual(['repertoire:1', 'first-recording', 'first-published'])
     const first = withEarned(state, figures, '2026-11-03')
     expect(first.earned).toEqual({
       'repertoire:1': '2026-11-03',
-      'first-song': '2026-11-03',
       'first-recording': '2026-11-03',
       'first-published': '2026-11-03',
     })

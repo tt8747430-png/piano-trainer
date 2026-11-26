@@ -45,7 +45,7 @@ describe('findChord', () => {
     expect(symbols([60, 63, 66])[0]).toBe('C°')
     expect(symbols([60, 64, 68])[0]).toBe('C+')
     expect(symbols([60, 65, 67])[0]).toBe('Csus4')
-    expect(symbols([60, 64, 67, 71])[0]).toBe('CMaj7')
+    expect(symbols([60, 64, 67, 71])[0]).toBe('Cmaj7')
     expect(symbols([60, 63, 66, 69])[0]).toBe('C°7')
     expect(symbols([60, 63, 66, 70])[0]).toBe('Cm7♭5')
     expect(symbols([60, 63, 67, 71])[0]).toBe('Cm(maj7)')
@@ -68,16 +68,19 @@ describe('findChord', () => {
 })
 
 describe('readings', () => {
-  it('marks each key of a reading by its role and degree', () => {
+  it('marks each key of a reading by its role, named by its note', () => {
     const found = findChord(keys(57, 60, 64, 67), C_MAJOR)
     if (found.kind !== 'chord') throw new Error('a chord')
     const am7 = readingMarks(found.readings[0], keys(57, 60, 64, 67))
-    expect(am7.get(midi(57))).toEqual({ tone: 'root', label: '1', note: 'A' })
+    expect(am7.get(midi(57))).toEqual({ tone: 'root', label: 'A' })
     const c6 = readingAt(
       found.readings,
       found.readings.findIndex((r) => r.symbol === 'C6/A'),
     )
-    expect(readingMarks(c6, keys(57, 60, 64, 67)).get(midi(57))?.label).toBe('6')
+    expect(readingMarks(c6, keys(57, 60, 64, 67)).get(midi(57))).toEqual({
+      tone: '13th',
+      label: 'A',
+    })
   })
 
   it('falls back to the best reading for a place it does not have', () => {

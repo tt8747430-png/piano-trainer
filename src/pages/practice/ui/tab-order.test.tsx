@@ -27,15 +27,21 @@ describe('Tab on Practice (A36)', () => {
     expect(names[0]).toBe('Skip to content')
     // The places before the page, as the sidebar stands left of it and the tab bar is the app's own.
     const learn = names.indexOf('Learn')
-    const row = (start: string) => names.findIndex((name) => name.startsWith(start))
+    // A row's name may follow its picture's own letters (IIVV, 6°).
+    const row = (words: string) => names.findIndex((name) => name.includes(words))
     expect(learn).toBeGreaterThan(0)
-    expect(row('Five-finger position')).toBeGreaterThan(learn)
-    // In the order the page is read (R32): Start here, Theory, Playing, Training, then the Tools.
-    expect(row('Five-finger position')).toBeLessThan(row('Chords Triads'))
-    expect(row('Chords Triads')).toBeLessThan(row('Progressions'))
+    expect(row('Theory')).toBeGreaterThan(learn)
+    // In the order the page is read (R32): Theory, the exercises' shelves, then the Tools, each
+    // group's heading before its rows.
+    expect(row('Theory')).toBeLessThan(row('Chords Chord types'))
+    expect(row('Chords Chord types')).toBeLessThan(row('Progressions'))
     expect(row('Progressions')).toBeLessThan(row('Accompaniment'))
     expect(row('Accompaniment')).toBeLessThan(row('Exercises'))
-    expect(row('Quiz')).toBeLessThan(row('Metronome'))
+    expect(row('Exercises')).toBeLessThan(row('Finger technique'))
+    expect(row('Finger technique')).toBeLessThan(row('Jazz vocabulary'))
+    expect(row('Jazz vocabulary')).toBeLessThan(row('Tools'))
+    expect(row('Tools')).toBeLessThan(row('Chord player'))
+    expect(row('Chord player')).toBeLessThan(row('Metronome'))
     expect(row('Metronome')).toBeLessThan(row('Circle of fifths'))
     // Every link and button on the screen is reached, none skipped and none trapping the walk.
     const reachable = [...document.querySelectorAll('a[href], button:not([disabled])')].filter(

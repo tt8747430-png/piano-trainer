@@ -16,7 +16,7 @@ describe('Settings › MIDI devices', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/settings')
     await screen.findByRole('region', { name: 'Piano' })
-    expect(midiRow()).toHaveTextContent(/MIDI devices\s*Off/)
+    expect(midiRow()).toHaveTextContent(/MIDI devices\s*Not connected/)
     await user.click(midiRow())
     expect(await screen.findByRole('heading', { level: 1, name: 'MIDI devices' })).toBeVisible()
     expect(router.state.location.pathname).toBe('/settings/connect-piano')
@@ -57,7 +57,12 @@ describe('Settings › MIDI devices', () => {
       user.click(
         within(screen.getByRole('radiogroup', { name: group })).getByRole('radio', { name: value }),
       )
-    await choose('Octave shift', '+1')
+    await user.click(
+      within(screen.getByRole('group', { name: 'Octave shift' })).getByRole('button', {
+        name: 'Octave up',
+      }),
+    )
+    expect(screen.getByRole('group', { name: 'Octave shift' })).toHaveTextContent('+1')
     await choose('Touch', 'Light')
     await choose('Pedal', 'Reversed')
     expect(settingsStore.getState().midi).toEqual({
@@ -116,8 +121,13 @@ describe('Settings › MIDI devices', () => {
       'true',
     )
     expect(
-      within(screen.getByRole('radiogroup', { name: 'Octave shift' })).getByRole('radio', {
-        name: '+1',
+      within(screen.getByRole('group', { name: 'Octave shift' })).getByRole('button', {
+        name: 'Octave up',
+      }),
+    ).toBeDisabled()
+    expect(
+      within(screen.getByRole('radiogroup', { name: 'Touch' })).getByRole('radio', {
+        name: 'Light',
       }),
     ).toHaveAttribute('data-disabled')
   })
@@ -165,7 +175,7 @@ describe('Settings › MIDI devices', () => {
 
   it('reads in Russian, with nothing left in English', async () => {
     await renderApp('/settings/connect-piano', { locale: 'ru' })
-    await screen.findByRole('radiogroup', { name: 'Сдвиг октавы' })
+    await screen.findByRole('group', { name: 'Сдвиг октавы' })
     expect(untranslated(document.body)).toEqual([])
   })
 })

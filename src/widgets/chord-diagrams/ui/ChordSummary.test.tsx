@@ -50,12 +50,9 @@ describe('ChordSummary', () => {
     const list = screen.getByRole('list', { name: 'Chords' })
     const chords = within(list).getAllByRole('button')
     expect(chords.map((chord) => chord.textContent)).toEqual(['C♯m7', 'EMaj7'])
-    expect(within(chords[0] as HTMLElement).getByRole('img')).toHaveAccessibleName(
-      'C♯m7: G# B C# E',
-    )
-    expect(within(chords[1] as HTMLElement).getByRole('img')).toHaveAccessibleName(
-      'EMaj7: G# B D# E',
-    )
+    // Each named by its symbol and its keys’ notes, the keys drawn inside it.
+    expect(chords[0]).toHaveAccessibleName('C♯m7: G# B C# E')
+    expect(chords[1]).toHaveAccessibleName('EMaj7: G# B D# E')
   })
 
   it('opens a chord’s sheet from its diagram, and closes it', async () => {
@@ -63,9 +60,7 @@ describe('ChordSummary', () => {
     renderSummary(CHORDS)
     await user.click(screen.getByRole('button', { name: 'EMaj7: G# B D# E' }))
     const sheet = await screen.findByRole('dialog', { name: 'EMaj7 chord' })
-    const [, close] = within(sheet).getAllByRole('button', { name: 'Close' })
-    if (!close) throw new Error('a Close at the foot')
-    await user.click(close)
+    await user.click(within(sheet).getByRole('button', { name: 'Close' }))
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
   })
 

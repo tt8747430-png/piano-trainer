@@ -40,7 +40,8 @@ describe('Settings › Connect a piano › Calibrate timing (R34)', () => {
     expect(settingsStore.getState().midi.latency).toBe(40)
     expect(screen.getByRole('button', { name: 'Measure again' })).toBeEnabled()
     await act(() => router.navigate({ to: '/settings/connect-piano' }))
-    expect(await screen.findByRole('link', { name: /Calibrate timing\s*40 ms/ })).toHaveAttribute(
+    expect(await screen.findByRole('heading', { level: 1, name: 'MIDI devices' })).toBeVisible()
+    expect(await screen.findByRole('link', { name: /Calibrate timing\s*40\sms/ })).toHaveAttribute(
       'href',
       '/settings/connect-piano/timing',
     )

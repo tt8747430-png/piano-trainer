@@ -18,22 +18,30 @@ const restored = (state: unknown, version = CHORD_SHEETS_VERSION) => {
 const MINE = {
   id: 'sheet-1',
   name: 'Sunday set',
-  text: 'G 4/4; verse x2: G D Em C; chorus v2: C G D:2 G:2',
+  text: 'G 4/4; verse x2: G | D | Em | C; chorus v2: C | G | D:2 G:2',
+  draft: null,
   style: 'worship-1',
   tempo: 72,
   settings: DEFAULT_SHEET_SETTINGS,
+  online: null,
 }
 
 describe('the chord sheets store (pt-chord-sheets)', () => {
   it('starts with an empty Verse in hand in Pop 1 at 100, and none of the learner’s own', () => {
     const storage = createMemoryStorage()
     const store = createChordSheetsStore({ storage, otherTabs: new EventTarget() })
-    expect(store.getState()).toEqual({ scratch: NEW_ENTRY, mine: [], nextId: 1, recent: [] })
+    expect(store.getState()).toEqual({
+      scratch: NEW_ENTRY,
+      scratchName: null,
+      mine: [],
+      nextId: 1,
+      recent: [],
+    })
     expect(NEW_ENTRY).toMatchObject({ text: 'C 4/4; verse:', style: 'pop-1', tempo: 100 })
     store.setState({ nextId: 2 })
-    expect(JSON.parse(storage.getItem('pt-chord-sheets') ?? 'null').version).toBe(2)
+    expect(JSON.parse(storage.getItem('pt-chord-sheets') ?? 'null').version).toBe(3)
   })
-  it('reads a version-2 save field by field', () => {
+  it('reads a version-3 save field by field', () => {
     const saved = { scratch: { ...MINE, id: undefined, name: undefined }, mine: [MINE], nextId: 2 }
     const state = restored(saved)
     expect(state.mine).toEqual([MINE])
@@ -43,6 +51,7 @@ describe('the chord sheets store (pt-chord-sheets)', () => {
   it('starts empty from any other version', () => {
     expect(restored({ mine: [MINE], nextId: 2 }, 0)).toEqual({
       scratch: NEW_ENTRY,
+      scratchName: null,
       mine: [],
       nextId: 1,
       recent: [],

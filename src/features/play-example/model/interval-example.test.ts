@@ -15,12 +15,12 @@ const written = (root: SpelledNote, name: IntervalName) =>
   intervalExample(root, name).music.notes.map((n) => [n.midi, noteName(n.spelled), n.startTick])
 
 describe('intervalExample', () => {
-  it('puts the lower note on the root in octave 4 and the upper its semitones above', () => {
+  it('puts the lower note on the root in octave 4 and the upper its semitones above, each named', () => {
     const third = intervalExample(note('C'), 'm3')
     expect([third.low, third.high]).toEqual([60, 63])
     expect(third.shown.keys).toEqual([60, 63])
-    expect(third.shown.marks.get(midi(60))).toEqual({ tone: 'tonic', label: '1' })
-    expect(third.shown.marks.get(midi(63))).toEqual({ tone: 'scale', label: '♭3' })
+    expect(third.shown.marks.get(midi(60))).toEqual({ tone: 'root', label: 'C' })
+    expect(third.shown.marks.get(midi(63))).toEqual({ tone: '5th', label: 'E♭' })
   })
 
   it('writes the two notes as half notes in one bar, the upper spelled by letters', () => {
@@ -36,16 +36,16 @@ describe('intervalExample', () => {
     expect(written(note('F'), 'A4')[1]).toEqual([71, 'B', 2 * B])
   })
 
-  it('shows a unison’s one key as the tonic', () => {
+  it('shows a unison’s one key in the root’s paint', () => {
     const unison = intervalExample(note('C'), 'r')
     expect(unison.shown.keys).toEqual([60])
-    expect(unison.shown.marks.get(midi(60))).toEqual({ tone: 'tonic', label: '1' })
+    expect(unison.shown.marks.get(midi(60))).toEqual({ tone: 'root', label: 'C' })
   })
 
   it('reaches past the octave for a compound interval', () => {
     const thirteenth = intervalExample(note('C'), 'M13')
     expect(thirteenth.high).toBe(81)
-    expect(thirteenth.shown.marks.get(midi(81))?.label).toBe('13')
+    expect(thirteenth.shown.marks.get(midi(81))?.label).toBe('A')
   })
 })
 
