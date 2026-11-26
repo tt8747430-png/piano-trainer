@@ -11,7 +11,10 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
    search for example images in internet"): find the thing by its file name in `piano-data/reference-apps`
    (`ls piano-data/reference-apps/*/ | grep -i <word>`: members, settings, folder, sheet, menu, toolbar, picker), open
    every match, then search the web for screenshots of the same control in shipped apps, and cite what was looked at
-   in the spec. Dorico and Flat (`dorico/`, `flat-score-editor/`) come first and are looked at most;
+   in the spec. **Mobbin** (the connector, `search_screens` and `search_flows`, iOS and web; owner, 2026-11-26) is
+   the screenshot library for shipped apps: search the screen by its kind and the app's kind ("music learning app
+   sign in screen"), look at the images, and cite each by its `mobbin_url`.
+   Dorico and Flat (`dorico/`, `flat-score-editor/`) come first and are looked at most;
    `piano-chords-and-scales-app/` is a welcome source for any screen. `music-theory-book-app/` is for its learning
    content only, never as a UI example. The app's own old screens are never an example.
 2. **Look at it today:** shoot the current screen before changing it, so you know what it does.
