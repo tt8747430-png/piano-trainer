@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · (this commit) · clean: a section's page heads with its bars alone, "Bars 1–16" (the bar names the section, the Chords list names its chords: "Verse" and "G · G7 · C · D · D7 · Em" said both again) · Section, SectionLaptop, SongSettings, SongSettingsLaptop · v731
 - 2026-11-26 · (this commit) · clean: Played through drops its "4 min added to today’s practice · 23 days in a row ›" line (the streak is the Profile's; the sheet ends on its three acts) · PlayerApp, PlayerDesk · v730
 - 2026-11-26 · (this commit) · clean: a take's piano roll drops its "212 notes" caption (only Playing from bar n while it plays) · Take, TakeLaptop · v729
 - 2026-11-26 · (this commit) · clean: the Chord finder drops its Played history (it names the chord in hand; Also read as and In these keys stay) · ChordFinder, ChordFinderLaptop · v728
