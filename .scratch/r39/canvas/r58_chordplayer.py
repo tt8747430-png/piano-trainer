@@ -90,7 +90,7 @@ CP_SHARE = (f'<p style="margin: 0 4px; font-size: 15px; line-height: 1.4; color:
 CP_SET58 = (LABELLED('Sound', GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'), ('link', 'Volume', '80%', '')))
             + LABELLED('Playing', GROUP(('link', 'Count-in', '1 bar', ''), ('seg', 'Voicing', 'cpVSeg', 200)))
             + LABELLED('Chart', GROUP(('link', 'Time signature', '4/4', ''), ('seg', 'Written as', 'namesSeg', 200)))
-            + LABELLED('MIDI', GROUP(('link', 'MIDI devices', 'Not connected', 'Settings.dc.html'), ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), ('val', 'Arranger', 'Genos · USB')))
+            + LABELLED('MIDI', GROUP(('link', 'MIDI keyboard', 'Not connected', 'Settings.dc.html'), ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), ('val', 'Arranger', 'Genos · USB')))
             + LABELLED('Layout', GROUP(('action', 'Edit layout', 'openLay'), ('action', 'Reset layout', 'resetLay'), ('link', 'Every page’s layout', '', 'Settings.dc.html'))))
 
 # ── R59 (owner, 2026-11-14, Musicca's chord player beside it: "make the ui of the chords like the musicca does";

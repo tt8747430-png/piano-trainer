@@ -732,14 +732,14 @@ def RENAMEDLG():
 _MSEG = 'height: 40px; box-sizing: border-box; padding: 0 14px 0 10px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap'
 MUSICI = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'
 def MODESW(on, practice_href, edit_href):
-    # as Flat's "✎ Edit ▾" in its header (the owner's Flat 26.11 band, the new header): the mode's name with its icon, a menu of the two
-    # modes under it; a native <details>, so it closes when one is chosen and opens anywhere it is drawn
-    cur = ('Practice', MUSICI) if on == 'play' else ('Edit', PENI)
-    row = lambda lab, ic, href, sel: (f'<a role="menuitemradio" aria-checked="{"true" if sel else "false"}" href="{href}" style="{_SMROW}">{_SMSLOT(CHECK if sel else "")}'
-                                      f'<span style="display: flex; color: {INK}">{ic}</span><span style="flex: 1; font-weight: {600 if sel else 400}">{lab}</span><span style="font-size: 13px; color: {SOFT}">{"P" if lab == "Practice" else "E"}</span></a>')
-    return (f'<details class="vsw" style="position: relative; flex: none; pointer-events: auto"><summary aria-label="Mode: {cur[0]}" data-tip="Practice or edit" style="list-style: none; height: 40px; box-sizing: border-box; padding: 0 12px 0 14px; border-radius: 20px; background: transparent; box-shadow: {ONB_RING}; color: {ONB}; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; cursor: pointer">'
-            f'{cur[1]}<span>{cur[0]}</span><span aria-hidden="true" style="display: flex; color: {ONB_SOFT}">{CHEV_D}</span></summary>'
-            f'<div role="menu" aria-label="Mode" style="{_SMBOX}; left: 0; top: 48px; width: 220px">' + row('Practice', MUSICI, practice_href, on == 'play') + row('Edit', PENI, edit_href, on == 'edit') + '</div></details>')
+    # Practice | Edit, two tabs side by side (owner, 2026-11-26: "make the switch between the player and the editor a tab
+    # switch, not a combobox"): two exclusive modes of one screen are a segmented control, both always in sight (Apple
+    # HIG, Segmented controls; Flat's Read-only | Edit pair in its band), never a menu that hides the other; the current
+    # one filled white on the dark band, the other bare, each its glyph and word, P and E their keys
+    seg = lambda lab, ic, href, sel, key: (f'<a href="{href}" role="tab" aria-selected="{"true" if sel else "false"}" data-tip="{lab} · {key}" style="flex: none; height: 32px; box-sizing: border-box; padding: 0 12px; border-radius: 16px; '
+                                          f'background: {ONB if sel else "transparent"}; color: {BAND if sel else ONB}; text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600">{ic}<span>{lab}</span></a>')
+    return (f'<div role="tablist" aria-label="Mode" style="flex: none; height: 40px; box-sizing: border-box; padding: 4px; border-radius: 20px; box-shadow: {ONB_RING}; display: flex; align-items: center; gap: 2px; pointer-events: auto">'
+            + seg('Practice', MUSICI, practice_href, on == 'play', 'P') + seg('Edit', PENI, edit_href, on == 'edit', 'E') + '</div>')
 
 # The transport in the header, as Flat's (the owner's Flat 26.11 band, the new header: the title, then go to start, Play with its options,
 # metronome, loop, volume, MIDI, then the mode): one glass pill after the title in both modes, nothing floating over the
@@ -751,8 +751,8 @@ HDRSEP = f'<span aria-hidden="true" style="flex: none; width: 1px; height: 20px;
 # there and just moved the location but didnt refactor them properly?"): Flat's new band (the owner's Flat 26.11 screenshots;
 # FLAT_PLAYER_AND_PIANO.md §1.1) is a row of single round buttons, each one act: Go to start (Ctrl+Space), Play with its
 # options under ▾ (Flat's "Audio options": playback speed), the metronome (one press cycles Count-in, On, Off: Flat's
-# "Change metronome mode"), Loop (L), then MIDI, a bare cable glyph (its popover: the keyboard, Record,
-# MIDI settings); Volume lives in the Audio panel alone. Ours are the same acts with the same keys in Practice and in Edit; the old capsule's ‹ › steps
+# "Change metronome mode"), Loop (L), then MIDI, a bare cable glyph (its popover: the keyboard, Sound from
+# the app, Record); Volume lives in the Audio panel alone. Ours are the same acts with the same keys in Practice and in Edit; the old capsule's ‹ › steps
 # (Go to start replaces them), its Listen/Wait label (Play's options) and its Hands and Keys labels (the Audio panel holds the
 # parts; the keys are the view's, at the bar's end as Flat's keyboard toggle) are gone. Each 44 round glass, Play
 # the one honey circle. The keys every board supplies: hdStart, hdPlay, hdPlayTip, hdPlayD, hdOpts, hdOptsX, hdMet,
@@ -773,7 +773,7 @@ def HDRTRANSPORT():
     met = b('{{hdMetTip}}', '{{hdMetTip}} · press to change', METI.replace('width="20" height="20"', 'width="18" height="18"') + '<sc-if value="{{hdMetOff}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="position: absolute; width: 22px; height: 1.5px; border-radius: 1px; background: currentColor; transform: rotate(-45deg)"></span></sc-if>', 'hdMet', filled)
     loop = b('Loop', '{{hdLoopTip}} · L', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>', 'hdLoop', lit('hdLoop'), ' aria-pressed="{{hdLoopOn}}"')
     # MIDI as Flat's new band draws it (the owner's Flat 26.11 screenshots): a bare cable glyph after Loop, no ring, no
-    # word; it opens its own popover under it (the keyboard in use, Record, MIDI settings ›), never a jump to Settings
+    # word; it opens its own popover under it (the keyboard in use, Sound from the app, Record), never a jump to Settings
     # (owner, 2026-11-26: "it doesnt make sense with these midi button goes to the settings popup"). Volume left the band
     # for the Audio panel, Record for this popover: Flat's band has neither
     # Transpose after Loop: what the whole song sounds in, named on the pill (the key), its popover under it
@@ -793,8 +793,8 @@ def BANDHDR(close_href, mode, practice_href, edit_href, right='', over=False):
 # The header's popovers, new and the same in both modes: each a card hung 8 under its button, a tap outside closing it
 # (the kit's popover card: 16 round, the page's paper, the hairline and the float shadow). Playback options holds what
 # Flat's ▾ holds, Playback speed (0.2× to 2.0×, by 0.1), and in Practice how you practise: Listen or Wait, and the
-# hands you play (flowkey's and Simply Piano's choice before a run). MIDI keyboard holds the keyboard in use, Record and
-# a row to MIDI settings; no Volume popover: Flat's band has no Volume, its Audio panel is the one home of the levels. Piano keys (Practice;
+# hands you play (flowkey's and Simply Piano's choice before a run). MIDI keyboard holds the keyboard in use, Sound from
+# the app and Record, complete there; no Volume popover: Flat's band has no Volume, its Audio panel is the one home of the levels. Piano keys (Practice;
 # the editor's toolbar has its own) is the keys' view: 3D, 2D or Off, and their labels.
 _HPOP = f'position: absolute; z-index: 61; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 12px 8px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 4px'
 _HCAP = lambda t: f'<h3 style="margin: 0; font-size: 15px; font-weight: 600">{t}</h3>'
@@ -816,11 +816,16 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None):
              + f'<span style="min-width: 44px; text-align: center; font-size: 15px; font-variant-numeric: tabular-nums">{{{{hdSpeedL}}}}</span>' + qb('Faster', 'hdFaster', STEP_PLUS) + '</div>')
     opts = rows(*((SELROW('Mode', 'selMode', False), SELROW('Hands', 'selHands')) if practice else ()), speed)
     out = _HPOPOVER('hdOptsOn', 'Playback options', opts, f'left: {opts_left}px; top: 65px', 320)
-    # MIDI keyboard: the keyboard the song listens to, a row's value with its pop-up, then a row to MIDI settings (one home
-    # for the rest: sound from the keyboard, latency), Flat's MIDI popover under its button; Record here, what you play on
-    # the keyboard taken as a recording (the editor's record-take), the red dot square while it records
-    setrow = (f'<a href="SettingsLaptop.dc.html" style="min-height: 44px; box-sizing: border-box; padding: 0 8px 0 12px; border-top: 1px solid {LINE}; color: {INK}; text-decoration: none; font-size: 15px; display: flex; align-items: center; gap: 8px">'
-              f'<span style="flex: 1">MIDI settings</span><span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_R}</span></a>')
+    # MIDI keyboard, complete in its popover (owner, 2026-11-26: "the midi settings still go to the wrong settings page
+    # … remove all the unneeded midi settings … i dont like this showing one settings and then things like all settings"):
+    # as Flat's MIDI Settings popover in its band (FLAT_PLAYER_AND_PIANO §2.5: the input's device select with None, and
+    # "No MIDI device plugged in"), what a learner at a piano needs and nothing after it: the Keyboard listened to; Sound
+    # from the app, off by default because a digital piano sounds itself (tiny-instrument's muteExternalMIDIAudio); Record.
+    # With no keyboard, the way to connect one instead. No link to Settings; output, octave shift, touch, latency and the
+    # log are gone (a piano needs none of them to play along)
+    snd = SWITCHROW('Sound from the app', 'hdSndOn', 'hdSnd', 'hdSndTr', 'hdSndKn')
+    none = (f'<div style="padding: 10px 12px 12px; border-top: 1px solid {LINE}; font-size: 15px; line-height: 1.4; color: {SOFT}">'
+            'Plug in a keyboard by USB or pair it by Bluetooth, then press a key.</div>')
     rec = (f'<button type="button" aria-pressed="{{{{hdRecOn}}}}" onClick="{{{{hdRec}}}}" style="width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 8px 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 10px; text-align: left; cursor: pointer">'
            f'<span aria-hidden="true" style="flex: none; width: 12px; height: 12px; border-radius: {{{{hdRecR}}}}; background: #D2483A"></span><span style="flex: 1">{{{{hdRecL}}}}</span><span style="font-size: 13px; color: {SOFT}">R</span></button>')
     # Transpose: the semitones with − and + (a stepper for a frequent, precise value), the key it lands in, and the way
@@ -831,7 +836,9 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None):
     keyrow = f'<div style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-top: 1px solid {LINE}"><span style="flex: 1; font-size: 15px">Key</span><span style="font-size: 15px; color: {SOFT}">{{{{hdKeyL}}}}</span></div>'
     back = (f'<sc-if value="{{{{hdTrMoved}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{hdTrReset}}}}" style="width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: #356A8C; font: inherit; font-size: 15px; text-align: left; cursor: pointer">Back to G major</button></sc-if>')
     out += _HPOPOVER('hdTrOn', 'Transpose', rows(semis, keyrow, back), f'left: {tr_left}px; top: 65px', 300)
-    out += _HPOPOVER('hdMidiOn', 'MIDI keyboard', rows(SELROW('Keyboard', 'selMidi', False), rec, setrow), f'left: {midi_left}px; top: 65px', 320)
+    out += _HPOPOVER('hdMidiOn', 'MIDI keyboard', rows(SELROW('Keyboard', 'selMidi', False),
+        f'<sc-if value="{{{{hdMidiAny}}}}" hint-placeholder-val="{{{{true}}}}">' + snd + rec + '</sc-if>',
+        f'<sc-if value="{{{{hdMidiNone}}}}" hint-placeholder-val="{{{{false}}}}">' + none + '</sc-if>'), f'left: {midi_left}px; top: 65px', 320)
     if keys_right is not None:
         out += _HPOPOVER('hdKeysOn', 'Piano keys', rows(SELROW('Piano', 'selKb', False), SELROW('Labels', 'selLab')), f'right: {keys_right}px; top: 65px', 320)
     return out
@@ -873,7 +880,7 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
             " hdOpts: tg('opts'), hdOptsOn: pop === 'opts', hdOptsX: pop === 'opts' ? 'true' : 'false',"
             " hdMet: () => { const n = NEXT[met]; SET({ metro: n === 'on', countBars: n === 'off' ? 0 : 1, " + TOAST("MN[n]") + " }); }, hdMetTip: MN[met], hdMetOff: met === 'off', "
             " hdLoop: " + loop + ", hdLoopOn: (" + loop_on + ") ? 'true' : 'false', hdLoopBg: (" + loop_on + ") ? '#EDC684' : '#FEFDFB', hdLoopTip: " + loop_tip + ","
-            " hdTr: tg('tr'), hdTrOn: pop === 'tr', hdTrX: pop === 'tr' ? 'true' : 'false', hdTrL: (tr > 0 ? '+' : tr < 0 ? '−' : '') + Math.abs(tr), hdKeyL: KEYS[((tr % 12) + 12) % 12], hdTrUp: () => SET({ trans: Math.min(11, tr + 1) }), hdTrDown: () => SET({ trans: Math.max(-11, tr - 1) }), hdTrUpDis: tr >= 11, hdTrDownDis: tr <= -11, hdTrMoved: tr !== 0, hdTrReset: () => SET({ trans: 0 }), hdMidi: tg('midi'), hdMidiOn: pop === 'midi', hdMidiX: pop === 'midi' ? 'true' : 'false', hdMidiBg: pop === 'midi' ? 'rgba(254,253,251,.16)' : 'transparent', hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent',"
+            " hdTr: tg('tr'), hdTrOn: pop === 'tr', hdTrX: pop === 'tr' ? 'true' : 'false', hdTrL: (tr > 0 ? '+' : tr < 0 ? '−' : '') + Math.abs(tr), hdKeyL: KEYS[((tr % 12) + 12) % 12], hdTrUp: () => SET({ trans: Math.min(11, tr + 1) }), hdTrDown: () => SET({ trans: Math.max(-11, tr - 1) }), hdTrUpDis: tr >= 11, hdTrDownDis: tr <= -11, hdTrMoved: tr !== 0, hdTrReset: () => SET({ trans: 0 }), hdMidi: tg('midi'), hdMidiAny: (S.midiDev ?? 'fp30') !== 'none', hdMidiNone: (S.midiDev ?? 'fp30') === 'none', hdSnd: () => SET({ midiSnd: !S.midiSnd }), hdSndOn: S.midiSnd ? 'true' : 'false', hdSndTr: S.midiSnd ? '#7FB685' : '#DAD1C8', hdSndKn: S.midiSnd ? 22 : 2, hdMidiOn: pop === 'midi', hdMidiX: pop === 'midi' ? 'true' : 'false', hdMidiBg: pop === 'midi' ? 'rgba(254,253,251,.16)' : 'transparent', hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent',"
             " hdRooms: ['Off', 'Studio', 'Hall', 'Cathedral'].map((l) => { const on = (S.room ?? 'Off') === l; return { l, on: on ? 'true' : 'false', bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: on ? 600 : 500, pick: () => SET({ room: l }) }; }),"
             " hdRec: () => SET({ rec: !rec, " + TOAST("rec ? 'Recording stopped · Recording 4 kept' : 'Recording · play on your keyboard'") + " }), hdRecOn: rec ? 'true' : 'false', hdRecL: rec ? 'Stop recording' : 'Record', hdRecR: rec ? '2px' : '6px',"
             " hdSpeedL: (sp / 100).toFixed(1) + '×', hdSlower: () => SET({ speed: Math.max(20, sp - 10) }), hdFaster: () => SET({ speed: Math.min(200, sp + 10) }), hdSlowerDis: sp <= 20, hdFasterDis: sp >= 200,"
@@ -885,7 +892,7 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
                                        ('selHands', [('both', 'Both hands'), ('rh', 'Right hand'), ('lh', 'Left hand')], f"(({S}.showR ?? 'show') === 'hide' ? 'lh' : ({S}.showL ?? 'show') === 'hide' ? 'rh' : 'both')", f"(id) => ({SET})({{ showR: id === 'lh' ? 'hide' : 'show', showL: id === 'rh' ? 'hide' : 'show' }})"),
                                        ('selKb', [('3d', '3D'), ('2d', '2D'), ('off', 'Off')], f"({S}.keys === false ? 'off' : ({S}.kbStyle ?? '3d'))", f"(id) => ({SET})(id === 'off' ? {{ keys: false }} : {{ keys: true, kbStyle: id }})"),
                                        ('selLab', [('none', 'None'), ('c', 'C only'), ('all', 'All notes')], f"({S}.kbLabels ?? 'c')", f"(id) => ({SET})({{ kbLabels: id }})"),
-                                       ('selMidi', [('none', 'None'), ('p125', 'Yamaha P-125')], f"({S}.midiDev ?? 'p125')", f"(id) => ({SET})({{ midiDev: id }})")]))
+                                       ('selMidi', [('fp30', 'Roland FP-30X'), ('none', 'None')], f"({S}.midiDev ?? 'fp30')", f"(id) => ({SET})({{ midiDev: id }})")]))
 
 # The song's versions in the sidebar (owner, 2026-11-26: "in the title are general options and in the sidebar there will
 # be the switch like change the versions or add a new version … add a version with this accompaniment. and in such
@@ -940,7 +947,7 @@ def FOLDKEYS(S, SET, ids):
             " o['f' + id + 'On'] = on; o['f' + id + 'X'] = on ? 'true' : 'false'; o['f' + id + 'R'] = on ? '180deg' : '0deg';"
             " o['f' + id + 'Tg'] = () => (" + SET + ")({ fold: { ...F, [id]: !on } }); } return o; })(),")
 _CARD = f'border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}'
-def SWROW(lab, on, act, track, knob, line=True):
+def SWITCHROW(lab, on, act, track, knob, line=True):
     """a switch row as every card's: the label, the switch at the right; the row is the switch"""
     return (f'<button type="button" role="switch" aria-checked="{{{{{on}}}}}" onClick="{{{{{act}}}}}" style="width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0;'
             + (f' border-top: 1px solid {LINE};' if line else '') + f' background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer">'
@@ -967,19 +974,26 @@ _THUMBS = {
     'isLyr': _TH(''.join(f'<text x="{x}" y="{y}" font-size="8" font-weight="700" fill="currentColor">{ch}</text>' for x, y, ch in ((12, 12, 'G'), (52, 12, 'C'), (88, 12, 'G'), (20, 34, 'D'), (70, 34, 'G')))
                  + '<rect x="12" y="16" width="96" height="5" rx="2.5" fill="currentColor" opacity=".55"></rect><rect x="12" y="38" width="76" height="5" rx="2.5" fill="currentColor" opacity=".55"></rect>'),
 }
-def VIEWPANEL():
+VIEWI = _LI('<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 13h8M8 16h5"></path>')
+# links=True (the editor): the editor edits the sheet, so the other views open the song in Practice in that view, the card a link
+def VIEWPANEL(links=False):
     thumbs = ''.join(f'<sc-if value="{{{{v.{k}}}}}" hint-placeholder-val="{{{{false}}}}">{svg}</sc-if>' for k, svg in _THUMBS.items())
     cards = (f'<div role="radiogroup" aria-label="View" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px">'
              f'<sc-for list="{{{{viewCards}}}}" as="v" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" '
              f'style="min-height: 96px; box-sizing: border-box; padding: 10px 10px 8px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: {{{{v.ring}}}}; color: {INK}; font: inherit; display: flex; flex-direction: column; gap: 6px; cursor: pointer">'
              f'{thumbs}<span style="font-size: 15px; font-weight: {{{{v.fw}}}}; text-align: left">{{{{v.label}}}}</span></button></sc-for></div>')
+    if links:
+        # the Sheet stays a choice here; Diagrams, Grid and Lyrics open the song in Practice in that view, with a ↗ glyph
+        b0 = cards.index('<button type="button" role="radio"'); b1 = cards.index('</button>', b0) + len('</button>'); btn = cards[b0:b1]
+        a = (btn.replace('<button type="button" role="radio" aria-checked="{{v.on}}" onClick="{{v.pick}}"', '<a href="{{v.href}}" data-tip="Opens in Practice"', 1)[:-len('</button>')] + '</a>').replace('border: 0;', 'border: 0; text-decoration: none;', 1)
+        cards = cards[:b0] + '<sc-if value="{{v.isHere}}" hint-placeholder-val="{{true}}">' + btn + '</sc-if><sc-if value="{{v.isAway}}" hint-placeholder-val="{{false}}">' + a + '</sc-if>' + cards[b1:]
     sheet = (f'<div style="{_CARD}">' + SELROW('Layout', 'selLayout', False) + '</div>'
              f'<div style="display: flex; flex-direction: column; gap: 8px"><h4 style="margin: 0; font-size: 13px; font-weight: 600; color: {SOFT}">On the page</h4><div style="{_CARD}">'
-             f'<sc-for list="{{{{showChips}}}}" as="c" hint-placeholder-count="6">' + SWROW('{{c.name}}', 'c.on', 'c.pick', 'c.track', 'c.knob').replace(f'border-top: 1px solid {LINE};', 'border-top: {{c.sep}};') + '</sc-for></div></div>')
-    dia = f'<div style="{_CARD}">' + SWROW('Beat strip', 'dStripSw.on', 'dStripSw.flip', 'dStripSw.track', 'dStripSw.knob', False) + SWROW('Lyrics line', 'dLineSw.on', 'dLineSw.flip', 'dLineSw.track', 'dLineSw.knob') + '</div>'
+             f'<sc-for list="{{{{showChips}}}}" as="c" hint-placeholder-count="6">' + SWITCHROW('{{c.name}}', 'c.on', 'c.pick', 'c.track', 'c.knob').replace(f'border-top: 1px solid {LINE};', 'border-top: {{c.sep}};') + '</sc-for></div></div>')
+    dia = f'<div style="{_CARD}">' + SWITCHROW('Beat strip', 'dStripSw.on', 'dStripSw.flip', 'dStripSw.track', 'dStripSw.knob', False) + SWITCHROW('Lyrics line', 'dLineSw.on', 'dLineSw.flip', 'dLineSw.track', 'dLineSw.knob') + '</div>'
     grid = f'<div style="{_CARD}">' + SELROW('Bars per row', 'selPerRow', False) + '</div>'
-    lyr = (f'<div style="{_CARD}">' + SELROW('Text size', 'selText', False) + SWROW('Chord diagrams', 'lSumSw.on', 'lSumSw.flip', 'lSumSw.track', 'lSumSw.knob')
-           + SWROW('Beat strip', 'lStripSw.on', 'lStripSw.flip', 'lStripSw.track', 'lStripSw.knob') + '</div>')
+    lyr = (f'<div style="{_CARD}">' + SELROW('Text size', 'selText', False) + SWITCHROW('Chord diagrams', 'lSumSw.on', 'lSumSw.flip', 'lSumSw.track', 'lSumSw.knob')
+           + SWITCHROW('Beat strip', 'lStripSw.on', 'lStripSw.flip', 'lStripSw.track', 'lStripSw.knob') + '</div>')
     opts = ''.join(f'<sc-if value="{{{{{k}}}}}" hint-placeholder-val="{{{{{d}}}}}">{b}</sc-if>' for k, d, b in (('isSheet', 'true', sheet), ('isDiagrams', 'false', dia), ('isGrid', 'false', grid), ('isLyrics', 'false', lyr)))
     return (f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px; display: flex; flex-direction: column">'
             + FOLD('View', EYEI, 'Views', cards, first=True) + FOLD('Opts', SLIDERSI, '{{viewName}} options', opts) + '</div>')
@@ -1011,22 +1025,17 @@ def SELKEYS(S, SET, specs):
 # disabled and said that this can only be changed in the player"): the same card, its rows read-only at half strength
 # (disabled: 50%, craft-details 6), and the head says where it is changed, a link to Practice; the editor writes a
 # pattern into chosen bars from its Notation panel instead
-def ACCREADONLY(practice_href):
-    row = lambda lab, v, top: (f'<div aria-disabled="true" style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px;' + (f' border-top: 1px solid {LINE}' if top else '') + f'"><span style="flex: 1; font-size: 15px">{lab}</span><span style="font-size: 15px; color: {SOFT}">{v}</span></div>')
-    link = (f'<a href="{practice_href}" style="align-self: flex-start; min-height: 44px; margin: -8px 0; padding: 0; display: flex; align-items: center; gap: 2px; color: #356890; font-size: 14px; text-decoration: none">Change in Practice<span aria-hidden="true" style="display: flex">{CHEV_R}</span></a>')
-    body = (f'<div style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; opacity: .5">' + row('Pattern', 'Bass + chords', False) + row('First chord’s inversion', 'Root position', True) + row('Voicing', 'Voice-led', True) + '</div>'
-            f'<p style="margin: 0; font-size: 13px; line-height: 18px; color: {SOFT}">To write a pattern into chosen bars, use Notation.</p>' + link)
-    return '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + FOLD('Acc', PIANOI, 'Accompaniment', body) + '</sc-if>'
-# the whole-song accompaniment (a version with one) and the song's own pages, as rows in their cards
-def ACCPANEL():
-    card = f'border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}'
-    link = lambda lab, inner, act='', href='': ((f'<a href="{href}"' if href else f'<button type="button" onClick="{{{{{act}}}}}"') + f' style="min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {{line}}; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; text-decoration: none; cursor: pointer"><span style="flex: 1">{lab}</span><span style="display: flex; align-items: center; gap: 4px; color: {SOFT}">{inner}<span style="display: flex">{CHEV_R}</span></span>' + ('</a>' if href else '</button>'))
-    # what it changes: the chord or phrase picked on the page, widened to the phrase or the song by the segments above
-    # the card (PICKLAYER); with nothing picked, the whole song, and the ⓘ says how to pick
-    info = (f'<button type="button" aria-label="How to change one part" data-tip="Click a chord or a bar on the page to change only that part" style="flex: none; width: 40px; height: 40px; margin: -10px -8px -10px 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: help">'
-            '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg></button>')
-    reset = (f'<sc-if value="{{{{accOwn}}}}" hint-placeholder-val="{{{{false}}}}">' + link('{{accResetL}}', '', 'accReset').replace('{line}', LINE).replace(f'<span style="display: flex">{CHEV_R}</span>', '').replace(f'color: {INK}; font: inherit', 'color: #356890; font: inherit', 1) + '</sc-if>')
-    extra = (f'<sc-if value="{{{{accWhole}}}}" hint-placeholder-val="{{{{true}}}}">{info}</sc-if><sc-if value="{{{{accPicked}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{clearPick}}}}" style="flex: none; height: 32px; margin: -6px -8px -6px 0; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: #356890; font: inherit; font-size: 14px; cursor: pointer">Clear selection</button></sc-if>')
-    body = (f'<sc-if value="{{{{accPicked}}}}" hint-placeholder-val="{{{{false}}}}">{SEGC("accScopes", 36, 14, True)}</sc-if>'
-            f'<div style="{card}">' + link('Pattern', '{{patternName}}', 'openPattern').replace('{line}', 'transparent') + SELROW('First chord’s inversion', 'selInv') + SELROW('Voicing', 'selVoice') + reset + '</div>')
-    return '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + FOLD('Acc', PIANOI, 'Accompaniment', body, extra) + '</sc-if>'
+# The accompaniment, one control, in the editor's Notation alone (owner, 2026-11-26: "i dont like that we have two
+# different controls to add a accompaniment: they should be the same … remove the accompaniment settings from the player
+# and move to only to the notation. only there will they be. and they should be like the players ones"): the Player's
+# rows, not the editor's old list of patterns. Where it writes heads it (the bar chosen on the score, its phrase, or the
+# whole song: Band-in-a-Box's style per bar range; Flat and Dorico select on the score, then the panel acts), then one
+# card: Pattern › with the pattern's name (its library docks in the panel's place with Back, as Flat's panel pages),
+# First chord's inversion and Voicing as pop-ups, and, once the scope has its own, the way back to the wider one's.
+# Keys: isPiano, accScopes, patternName, openPattern, selInv, selVoice, accOwn, accResetL, accReset, the fold's (Acc)
+def ACCPANEL(first=True):
+    link = (f'<button type="button" onClick="{{{{openPattern}}}}" style="min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; cursor: pointer">'
+            f'<span style="flex: 1">Pattern</span><span style="display: flex; align-items: center; gap: 4px; min-width: 0; color: {SOFT}"><span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{patternName}}}}</span><span style="display: flex">{CHEV_R}</span></span></button>')
+    reset = (f'<sc-if value="{{{{accOwn}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{accReset}}}}" style="min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: #356890; font: inherit; font-size: 15px; width: 100%; text-align: left; cursor: pointer">{{{{accResetL}}}}</button></sc-if>')
+    body = SEGC('accScopes', 36, 14, True) + f'<div style="{_CARD}">' + link + SELROW('First chord’s inversion', 'selInv') + SELROW('Voicing', 'selVoice') + reset + '</div>'
+    return '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + FOLD('Acc', PIANOI, 'Accompaniment', body, first=first) + '</sc-if>'

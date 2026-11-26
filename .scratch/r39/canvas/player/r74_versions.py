@@ -19,7 +19,6 @@ CHEVR = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="cur
 # (no Arrangement here); the song's acts (Settings, Print, Export, Share link)
 # are the name's menu, as the editor's title; the gear is gone, its jobs the rail's.
 SONGI = _LI('<path d="M21 15V6"></path><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M12 12H3"></path><path d="M16 6H3"></path><path d="M12 18H3"></path>')
-VIEWI = _LI('<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 13h8M8 16h5"></path>')
 PANEL = 'position: absolute; z-index: 30; left: 76px; top: 64px; bottom: 0; width: 352px; padding: 0 16px 24px; border-radius: 0; box-sizing: border-box; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #FEFDFB; box-shadow: inset -1px 0 0 ' + LINE
 def _sect(t, label):
     d = t.index(f'role="dialog" aria-label="{label}"'); a = t.rindex('<section', 0, d); depth = 0
@@ -66,10 +65,14 @@ def player_rail(t):
     # these buttons in these cards very much. refactor this also"): the docked card's segmented strips are deleted
     s0 = t.index('<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}"><div role="group" aria-label="Accompaniment"')
     s1 = t.index('</div>', t.index('<a href="SectionLaptop.dc.html"', s0)) + len('</div>')  # through the old Transpose and Sections card
-    t = t[:s0] + ACCPANEL() + t[s1:]
+    # the accompaniment leaves the Player for the editor's Notation (owner, 2026-11-26: "remove the accompaniment settings
+    # from the player and move to only to the notation. only there will they be"): the Song panel holds the versions alone
+    t = t[:s0] + t[s1:]
     t = t.replace('<sc-if value="{{isMore}}"', '<sc-if value="{{panelSong}}"', 1)
     # the Song panel's own pages dock in its place, each with its Back
-    for lab in ('Pattern', 'Sort and filter'): t = _dock(t, lab)
+    # its Pattern page and Sort and filter go with it: they are the editor's Notation panel's now
+    for lab in ('Pattern', 'Sort and filter'):
+        a, b = _sect(t, lab); t = t[:a] + t[b:]
     # View: the view's settings docked, headed by the view's name
     a, b = _sect(t, '{{viewName}} settings'); h = t[a:b]
     h = re.sub(r'<h2[^>]*>\{\{viewName\}\}</h2>', '', h, count=1); t = t[:a] + h + t[b:]
@@ -221,7 +224,7 @@ def header_transport(t):
     # controls while playing"): the transport, the mode and the panel are what the learner reaches for mid-play, as in
     # Flat's player; the phone keeps its auto-hide for its small screen
     assert t.count('showControls: !playing,') == 1; t = t.replace('showControls: !playing,', 'showControls: true,', 1)
-    t = t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + PICKKEYS('s', 'this.setState') + ' ' + HISTKEYS('s', 'this.setState', lambda m: 'sTo: ' + m + ', sUndo: true', restore="(h) => ({ undoOv: OV, ovr: h.ov })"), 1)
+    t = t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + HISTKEYS('s', 'this.setState', lambda m: 'sTo: ' + m + ', sUndo: true', restore="(h) => ({ undoOv: OV, ovr: h.ov })"), 1)
     t = t.replace('</main>', '</main>' + HDRPOPS(True, *POPX['play']), 1)
     loop = "() => { if (loop) { this.setState({ loop: false, hdPop: null }); return; } const a = Math.floor((bar - 1) / 4) * 4 + 1; this.setState({ loop: true, loopA: a, loopB: Math.min(16, a + 3), hdPop: null }); }"
     keys = HDRKEYS('s', '(o) => this.setState(o)', lambda m: 'sTo: ' + m + ', sUndo: false', 'togglePlayNow', 'playing', loop, 'loop',
@@ -268,6 +271,16 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     # editor's A4 page on its desk (A4PAGE), as Flat's player shows the page; on a phone the same engraving at the
     # phone's width, the credits as the page prints them; the accompaniment credited under the music, as "Arr."
     phone = name == 'PlayerApp'
+    if phone:
+        # the accompaniment leaves the phone Player too (owner, 2026-11-26: "remove the accompaniment settings from the player
+        # and move to only to the notation"): its Arrangement · Accompaniment cards, Pattern, inversion and voicing go from
+        # the Settings sheet, which keeps Transpose; the Pattern and Sort and filter sheets go with them; the floating
+        # actions are untouched
+        i = t.index('<div role="radiogroup" aria-label="Score"')
+        k = t.index('<div style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px rgba(51,41,33,.07)">\n<button type="button" onClick="{{openKey}}"', i)
+        t = t[:i] + t[k:]
+        for lab in ('Pattern', 'Sort and filter'):
+            a0, b0 = _sect(t, lab); t = t[:a0] + t[b0:]
     if 'data-r74 ' not in t:
         a = t.index('margin-top: {{sheetTop}}px; padding: ')
         i = t.rindex('<div', 0, a); depth = 0
@@ -288,10 +301,10 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
                    f'<article aria-label="Page 1" style="box-sizing: border-box; padding: 24px 16px 32px; background: {SHEET}; color: {INK}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28)">{body}</article></div>')
         else:
             new = (f'<div data-r74 style="margin-top: {{{{sheetTop}}}}px; box-sizing: border-box; min-height: calc(100% - {{{{sheetTop}}}}px); padding: 24px 0 160px; background: {FILL}; display: flex; justify-content: center">'
-                   f'<div style="zoom: 1.4"><sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}">{A4PAGE("", None, pick="pick")}</sc-if><sc-if value="{{{{isLead}}}}" hint-placeholder-val="{{{{false}}}}">{A4PAGE("", None, piano=False)}</sc-if></div></div>' + PICKCSS)
+                   f'<div style="zoom: 1.4"><sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}">{A4PAGE("", None)}</sc-if><sc-if value="{{{{isLead}}}}" hint-placeholder-val="{{{{false}}}}">{A4PAGE("", None, piano=False)}</sc-if></div></div>' + PICKCSS)
         t = t[:i] + new + t[j:]
     # the settings' Arrangement says it is not written for this song
-    if 'data-r74y' not in t:
+    if 'data-r74y' not in t and 'aria-label="Score"' in t:
         a = t.index('<span style="flex: 1; min-width: 0">Arrangement</span>')
         lv0 = t.index('<span>Level</span>', a); lv0 = t.rindex('<div ', 0, lv0)
         acc = t.index('<span style="flex: 1; min-width: 0">Accompaniment</span>', a); acc = t.rindex('<div style="border-radius: 12px; background: {{acc.bg}}', 0, acc)

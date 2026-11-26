@@ -402,7 +402,7 @@ def CP_KEYS(h):
 CP_SET = (LABELLED('Instruments', GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT')))
           + LABELLED('Playing', GROUP(('link', 'Count-in', '1 bar', ''), ('link', 'Volume', '80%', '')))
           + LABELLED('Music', GROUP(('link', 'Time signature', '4/4', ''), ('seg', 'Written as', 'namesSeg', 200), ('seg', 'Voicing', 'cpVSeg', 200)))
-          + GROUP(('link', 'MIDI devices', 'Not connected', 'Settings.dc.html')))
+          + GROUP(('link', 'MIDI keyboard', 'Not connected', 'Settings.dc.html')))
 _BACKP = f'<button type="button" aria-label="Back to Chord player settings" onClick="{{{{backSet}}}}" style="position: absolute; left: -8px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button>'
 _PBODY = PS.PIANO_SHEET(False, 3, 4)
 CP_PSHEET = BSHEET('pianoOn', 'Piano', _PBODY, back=_BACKP, maxh='calc(100% - 124px)')
@@ -489,7 +489,7 @@ CHIPL = lambda lst, k: f'<div style="display: flex; flex-wrap: wrap; gap: 8px"><
 CF_NOTES = f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{notes}}}}" as="n" hint-placeholder-count="4"><span style="height: 64px; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 22px; font-weight: 700">{{{{n.n}}}}</span><span style="font-size: 12px; color: {SOFT}">{{{{n.d}}}}</span></span></sc-for></div></sc-if>'
 CF_ROWS = GROUP(('link', 'Spelled in', 'C major', ''), ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Also read as</span>{CHIPL("alts", "a")}</div>'), ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Played</span>{CHIPL("played", "p")}</div>'))
 CF_SET = (CAPS('Chord names') + GROUP(('toggle', 'Slash chords for inversions', 'cfSlOn', 'cfSlT')) + CAPS('Analysis') + GROUP(('toggle', 'Keys that contain the chord', 'cfKOn', 'cfKT'), ('toggle', 'Key’s scale on the keyboard', 'cfScOn', 'cfScT'))
-          + CAPS('History') + GROUP(('toggle', 'Keep chord history', 'cfHOn', 'cfHT'), ('action', 'Forget the chords played', 'closeSheet')) + GROUP(('link', 'MIDI devices', 'Not connected', 'Settings.dc.html')))
+          + CAPS('History') + GROUP(('toggle', 'Keep chord history', 'cfHOn', 'cfHT'), ('action', 'Forget the chords played', 'closeSheet')) + GROUP(('link', 'MIDI keyboard', 'Not connected', 'Settings.dc.html')))
 ph = body(TOP('Main.dc.html', 'Chord finder', GEAR()), SUBJECT('{{name}}', '{{sub}}', 44) + CF_NOTES + CF_ROWS + '<div style="flex: 1"></div>' + KEYS(170), BTN('Clear the keys', 'clear', kind='quiet', grow=False) + BTN('Open in Chords', href='Chords.dc.html'))
 lm = lapbody(LTOP('Laptop.dc.html', GEAR(), 'Chord finder'), SUBJECT('{{name}}', '{{sub}}', 64) + CF_NOTES + '<div style="flex: 1"></div>' + KEYS(200, 'kbL'), CF_ROWS, BTN('Clear the keys', 'clear', kind='quiet', grow=False) + BTN('Open in Chords', href='ChordsLaptop.dc.html'))
 detail('ChordFinder', 'Chord finder', CF, ph, lm, '', BSHEET('setOn', 'Chord finder settings', CF_SET), POPOVER('setOn', 'Chord finder settings', CF_SET))

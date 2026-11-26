@@ -1,6 +1,6 @@
 # R49: Settings with every page drawn and working : the Account with Editorial access,
 # Sync, Sign out and Delete account; Edit profile, Change password, Privacy; General; Storage and backup; On-screen
-# piano; MIDI devices with its log and timing; Selection toolbar; Swipe actions; User guide; Report a problem; About.
+# piano; MIDI keyboard with its log and timing; Selection toolbar; Swipe actions; User guide; Report a problem; About.
 # Exact labels from src/shared/i18n/locales/en. Rebuilds the Settings boards drawn by r45_places.
 # Exec'd by r41.py after r48_course.
 
@@ -91,30 +91,20 @@ P_STORAGE = (SEC(S9CAPS('Device storage', 'store'), TIPCARD('store', 'This brows
 SHORTBODY = BOXG(*[f'<div style="min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 6px 16px"><span style="flex: 1; font-size: 16px">{a}</span><span style="display: flex; gap: 4px">' + ''.join(f'<kbd style="min-width: 28px; height: 28px; padding: 0 8px; box-sizing: border-box; border-radius: 6px; background: {FILL}; box-shadow: inset 0 -1px 0 {LINE}; font: inherit; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center">{k}</kbd>' for k in ks) + '</span></div>'
                    for a, ks in [('Play the white keys', ['A', 'S', 'D', 'F', '…']), ('Play the black keys', ['W', 'E', 'T', 'Y', 'U']), ('Octave down', ['Z']), ('Octave up', ['X']), ('Hold the sustain pedal', ['Space'])]])
 
-# ── MIDI devices, its log and timing ──
+# ── MIDI keyboard, its log and timing ──
 DEV = (f'<div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 16px"><span style="flex: none; width: 36px; height: 36px; border-radius: 10px; background: {SAGE}; color: #44684A; display: flex; align-items: center; justify-content: center">{ICON(KEYSI, 20)}</span>'
        f'<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">Roland FP-30X</span><span style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: {SOFT}">{DOT(GREEN)}Keys · Speaker</span></span></div>')
 DEV2 = f'<div style="min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 6px 16px"><span style="flex: 1; font-size: 16px; color: {SOFT}">Yamaha P-125</span><span style="font-size: 15px; color: {SOFT}">Not connected</span></div>'
 BTSTEPS = ''.join(f'<li style="display: flex; gap: 12px; align-items: flex-start"><span style="flex: none; width: 28px; height: 28px; border-radius: 14px; background: {FILL}; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{i + 1}</span><span style="font-size: 15px; line-height: 1.45; padding-top: 3px"><b>{h}</b> {t}</span></li>'
                   for i, (h, t) in enumerate([('Power.', 'Turn the keyboard on and put it in pairing mode (see its manual).'), ('Mac.', 'Audio MIDI Setup › Window › Show MIDI Studio › Bluetooth, then Connect.'), ('Windows.', 'Settings › Bluetooth and devices › Add device.'), ('Android.', 'Chrome finds it by itself: press a key once paired.'), ('iPhone and iPad.', 'Safari cannot reach Bluetooth MIDI; use a USB adapter.'), ('Back here.', 'Press a key: the device appears under Connected devices.')]))
 BTBODY = f'<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 16px">{BTSTEPS}</ol>'
-P_MIDI = (SEC(CAPS('MIDI keyboard'), GROUP(('toggle', 'MIDI input', 'minOn', 'minT'), ('toggle', 'MIDI output', 'moutOn', 'moutT'), ('toggle', 'MIDI input plays sound', 'mplayOn', 'mplayT'), bg=SHEET))
-          + SEC(S9CAPS('Connected devices', 'dev'), TIPCARD('dev', 'Any MIDI keyboard works: plug it in by USB, or pair it by Bluetooth, then press a key.'),
-                f'<sc-if value="{{{{minOn}}}}" hint-placeholder-val="{{{{true}}}}">{BOXG(DEV, DEV2)}</sc-if><sc-if value="{{{{minOff}}}}" hint-placeholder-val="{{{{false}}}}">{CARD(f"<span style=\"font-size: 15px; color: {SOFT}\">Turn on MIDI input to see your devices</span>")}</sc-if>')
-          + SEC(CAPS('Playing'), GROUP(('step', 'Octave shift', 'oct', 'octDn', 'octUp'), ('seg', 'Touch', 'touch'), ('seg', 'Pedal', 'pedal'), ('link', 'Calibrate timing', '{{latV}}', 'go_Calibrate_timing'), bg=SHEET))
-          + SEC(CAPS('Bluetooth'), GROUP(('link', 'Connect a Bluetooth MIDI keyboard', '', 'openBt'), bg=SHEET))
-          + SEC(CAPS('Troubleshooting'), GROUP(('link', 'MIDI log', '{{logN}}', 'go_MIDI_log'), bg=SHEET)))
-LOGROW = (f'<div style="min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 6px 16px; box-shadow: inset 0 -1px 0 {FILL}"><span style="flex: none; width: 64px; font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{m.t}}}}</span>'
-          f'<span style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">{{{{m.a}}}}</span><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{m.b}}}}</span></span></div>')
-P_LOG = (f'<div style="display: flex; gap: 8px">{BTN("{{pauseT}}", "pauseLog", "", "quiet", 44)}{BTN("Clear", "clearLog", "", "quiet", 44)}</div>'
-         + f'<sc-if value="{{{{logPaused}}}}" hint-placeholder-val="{{{{false}}}}">{CARD(f"<span style=\"font-size: 15px\">Paused: new messages are kept but not shown</span>", "12px 16px", f"background: {HONEY}; box-shadow: none")}</sc-if>'
-         + f'<sc-if value="{{{{logAny}}}}" hint-placeholder-val="{{{{true}}}}"><div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{log}}}}" as="m" hint-placeholder-count="6">{LOGROW}</sc-for></div></sc-if>'
-         + f'<sc-if value="{{{{logNone}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 48px 16px; text-align: center"><span style="width: 56px; height: 56px; border-radius: 28px; background: {FILL}; color: {SOFT}; display: flex; align-items: center; justify-content: center">{KEYSI}</span><span style="font-size: 16px; color: {SOFT}">Play a key or a pedal: each message shows here</span></div></sc-if>')
-P_TIMING = (CARD(f'<div style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 12px 0"><div role="img" aria-label="{{{{calA}}}}" style="display: flex; gap: 8px"><sc-for list="{{{{clicks}}}}" as="c" hint-placeholder-count="8"><span style="width: 22px; height: 22px; border-radius: 11px; background: {{{{c.bg}}}}"></span></sc-for></div>'
-                 f'<span style="font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; text-align: center">{{{{calT}}}}</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; text-align: center; max-width: 420px">{{{{calS}}}}</span>'
-                 f'<div style="display: flex; width: 100%; max-width: 320px">{BTN("{{calBtn}}", "calGo", "", "primary", 50)}</div></div>', '20px 16px')
-            + GROUP(('val', 'Kept', '{{latV}}'), bg=SHEET))
-
+# MIDI keyboard, the settings a learner at a piano needs and no more (owner, 2026-11-26: "remove all the unneeded midi
+# settings"): the keyboard listened to, Sound from the app (off: a digital piano sounds itself), and how to pair one by
+# Bluetooth; the same two the Player's and editor's MIDI popover holds. MIDI output, octave shift, touch, pedal,
+# Calibrate timing and the MIDI log are gone (Flat's MIDI Settings: the input's device and None, nothing else)
+P_MIDI = (SEC(S9CAPS('Keyboard', 'dev'), TIPCARD('dev', 'Any MIDI keyboard works: plug it in by USB, or pair it by Bluetooth, then press a key.'), BOXG(DEV, DEV2))
+          + SEC(CAPS('Sound'), GROUP(('toggle', 'Sound from the app', 'mplayOn', 'mplayT'), bg=SHEET))
+          + SEC(CAPS('Bluetooth'), GROUP(('link', 'Connect a Bluetooth MIDI keyboard', '', 'openBt'), bg=SHEET)))
 # ── Selection toolbar and Swipe actions ──
 ACTIC = {'Edit': PENCIL, 'Favourite': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path></svg>',
          'Move': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"></path></svg>',
@@ -147,7 +137,7 @@ GUIDE = [('Organise your library', ['Songs holds your library: folders first, th
          ('Play a song', ['View sets how the music is shown: sheet music, chords over lyrics, chord diagrams or a chord grid.', 'Transpose shifts the song up or down by semitones. Reset restores the original key.', 'Simplify plays each chord as a plain major or minor triad.', 'Sound holds the count-in, the metronome and each part’s volume.', 'Loop repeats a passage. Select it with Shift and a click, or hold a note and drag.', 'In the tempo menu, Wait mode pauses until you play each note.']),
          ('Learn a song', ['A song’s page shows its key, time signature, tempo, chords and sections.', 'A section’s page holds its lessons: its chords, its chord changes and its patterns.', 'A lesson opens the Player looping its bars. Play them through in Wait mode to complete it.', 'Learned marks a song once you know it.']),
          ('Edit a score', ['Edit opens the score editor at the current bar; Practise returns to the Player.', 'Replace overwrites the note at the caret, Insert shifts the following notes, Chord adds a note to the chord there.', 'The palette holds note values, articulations, clefs, key and time signatures and barlines. The ⓘ beside a section explains it.', 'Transpose shifts the whole song, its key or its chords in a single step that Undo reverses.']),
-         ('Play a MIDI keyboard', ['Connect a keyboard by USB or Bluetooth, then choose it with the MIDI button.', 'Settings › MIDI devices: MIDI input and output, local sound, the device the app listens to, octave shift and a MIDI log of incoming messages.', 'In Wait mode the Player listens for the notes you play; the Chord finder names the chord you hold.']),
+         ('Play a MIDI keyboard', ['Connect a keyboard by USB or Bluetooth, then choose it with the MIDI button.', 'The MIDI button in the Player and editor, or Settings › MIDI keyboard: the keyboard the app listens to, and whether the app sounds as you play.', 'In Wait mode the Player listens for the notes you play; the Chord finder names the chord you hold.']),
          ('Keep time', ['Practice › Metronome. Set the tempo with − and +, the slider or Tap tempo.', 'Choose clicks, beeps or a drum pattern, and the time signature. The downbeat of each bar is accented.', 'Space starts and stops it; ↑ and ↓ change the tempo.'])]
 GUIDEB = ''.join(f'<section style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><button type="button" aria-expanded="{{{{gOpen_{i}}}}}" onClick="{{{{gT_{i}}}}}" style="width: 100%; min-height: 56px; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left; display: flex; align-items: center; gap: 12px; padding: 8px 16px"><span style="flex: 1; font-size: 17px; font-weight: 600">{h}</span><span style="color: {SOFT}; display: flex; transform: {{{{gRot_{i}}}}}">{CHEV_D}</span></button>'
                  f'<sc-if value="{{{{gOpen_{i}}}}}" hint-placeholder-val="{{{{false}}}}"><div style="padding: 0 16px 16px; display: flex; flex-direction: column; gap: 8px">' + ''.join(f'<p style="margin: 0; font-size: 16px; line-height: 1.5; text-wrap: pretty; max-width: 65ch">{p}</p>' for p in ps) + '</div></sc-if></section>' for i, (h, ps) in enumerate(GUIDE))
@@ -169,9 +159,9 @@ P_LAYOUTS = (SEC(CAPS('Changed by you'), GROUP(_LAYROW('Chord player', 'layCP', 
              + SEC(GROUP(('action', 'Reset every page', 'resetAllLay'), bg=SHEET)))
 LAYSEC = SEC(CAPS('Layout'), GROUP(('link', 'Page layouts', '{{layN}}', 'go_Page_layouts'), bg=SHEET))
 PAGES = [('Account', P_ACCOUNT), ('Edit profile', P_EDITPROFILE), ('Email', P_EMAIL), ('Change password', P_PASSWORD), ('Privacy', P_PRIVACY), ('General', P_GENERAL), ('Appearance', ''), ('Storage and backup', P_STORAGE), 
-         ('MIDI devices', P_MIDI), ('MIDI log', P_LOG), ('Calibrate timing', P_TIMING), ('Selection toolbar', P_TOOLBAR), ('Page layouts', P_LAYOUTS), ('Keyboard shortcuts', SHORTBODY), ('Swipe actions', P_SWIPE), ('User guide', P_GUIDE), ('Report a problem', P_REPORT), ('About', P_ABOUT)]
+         ('MIDI keyboard', P_MIDI), ('Selection toolbar', P_TOOLBAR), ('Page layouts', P_LAYOUTS), ('Keyboard shortcuts', SHORTBODY), ('Swipe actions', P_SWIPE), ('User guide', P_GUIDE), ('Report a problem', P_REPORT), ('About', P_ABOUT)]
 SLUG = lambda p: p.replace(' ', '_').replace('-', '_')
-PARENT = {'Page layouts': 'General', 'Keyboard shortcuts': 'General', 'Edit profile': 'Account', 'Email': 'Account', 'Change password': 'Account', 'Privacy': 'Account', 'MIDI log': 'MIDI devices', 'Calibrate timing': 'MIDI devices'}
+PARENT = {'Page layouts': 'General', 'Keyboard shortcuts': 'General', 'Edit profile': 'Account', 'Email': 'Account', 'Change password': 'Account', 'Privacy': 'Account'}
 # On a laptop Appearance is claude.ai's: a section of rows, Theme with its three small screens and Language with two
 # choices, each at the row's end (owner, 2026-11-17, claude.ai's Settings › General › Appearance).
 _THUMB = (f'<sc-for list="{{{{themes}}}}" as="t" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{t.on}}}}" onClick="{{{{t.pick}}}}" style="border: 0; background: transparent; padding: 0; font: inherit; color: {INK}; display: flex; flex-direction: column; align-items: center; gap: 8px">'
@@ -204,14 +194,14 @@ SETTINGS_JS = js('const GROUPS = ' + json.dumps(SETGROUPS, ensure_ascii=False) +
     const signedIn = !st.out, prev = !!st.prev;
     // switches
     const tog = (k, def) => { const on = st[k] ?? def; v[k + 'On'] = on; v[k + 'OnBg'] = on ? '#44684A' : '#DAD1C8'; v[k + 'OnX'] = on ? 22 : 2; v[k + 'T'] = () => S({ [k]: !on }); return on; };
-    ['prot', 'chord', 'hl', 'ckb', 'mout', 'mplay', 'show'].forEach((k) => tog(k, k === 'prot' || k === 'chord' || k === 'show' || k === 'mplay'));
+    ['prot', 'chord', 'hl', 'ckb', 'mout', 'mplay', 'show'].forEach((k) => tog(k, k === 'prot' || k === 'chord' || k === 'show'));
     tog('pos', false); const minOn = tog('min', true); v.minOff = !minOn;
     v.prevOn = prev; v.prevOnBg = prev ? '#44684A' : '#DAD1C8'; v.prevOnX = prev ? 22 : 2; v.prevT = () => S({ prev: !prev });
     // ⓘ tips
     ['prev', 'sync', 'priv', 'store', 'offl', 'ckb', 'dev', 'swp'].forEach((k) => { v['tipOn_' + k] = st.tip === k; v['tip_' + k] = () => S({ tip: st.tip === k ? null : k }); });
     // pages
     PAGES.forEach((p) => { const s = p.replace(/[ -]/g, '_'); v['p_' + s] = page === p; v['l_' + s] = cur === p; v['go_' + s] = () => S({ page: p, tip: null }); });
-    const rows = (hl) => GROUPS.map(([h, rs]) => ({ h, rs: rs.map(([l, val]) => ({ l, v: l === 'Appearance' ? (st.theme ?? 'Match system') : l === 'General' ? (st.upd === 'avail' ? 'Update available' : '') : l === 'MIDI devices' ? (minOn ? 'Roland FP-30X' : 'Off') :  val, ic: ICONS[l].u, icc: ICONS[l].c, bg: hl && l === top ? '#E8E1D8' : 'transparent', fw: hl && l === top ? 600 : 400, open: () => S({ page: l, tip: null }) })) }));
+    const rows = (hl) => GROUPS.map(([h, rs]) => ({ h, rs: rs.map(([l, val]) => ({ l, v: l === 'Appearance' ? (st.theme ?? 'Match system') : l === 'General' ? (st.upd === 'avail' ? 'Update available' : '') : l === 'MIDI keyboard' ? 'Roland FP-30X' :  val, ic: ICONS[l].u, icc: ICONS[l].c, bg: hl && l === top ? '#E8E1D8' : 'transparent', fw: hl && l === top ? 600 : 400, open: () => S({ page: l, tip: null }) })) }));
     const theme = st.theme ?? 'Match system', lang = st.lang ?? 'English';
     const themes = ['Match system', 'Light', 'Dark'].map((t) => ({ t, on: t === theme, ring: t === theme ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', pick: () => S({ theme: t }), top: t === 'Dark' ? '#2A231E' : 'rgb(247,243,238)', bot: t === 'Light' ? 'rgb(247,243,238)' : '#2A231E', card: t === 'Dark' ? '#3A312A' : 'rgb(254,253,251)' }));
     // account and sync
@@ -238,18 +228,7 @@ SETTINGS_JS = js('const GROUPS = ' + json.dumps(SETGROUPS, ensure_ascii=False) +
     Object.assign(v, { offT: dl ? 'Downloading… ' + Math.round(off / 88 * 100) + '%' : off >= 88 ? 'Available offline' : off ? '' : 'Not downloaded', offHasT: dl || off >= 88 || !off, offN: off + ' of 88 downloaded', offW: Math.round(off / 88 * 100) + '%', offCan: off < 88 && !dl,
       download: () => { S({ dl: true, off: 62 }); setTimeout(() => S({ off: 76 }), 600); setTimeout(() => S({ dl: false, off: 88 }), 1300); } });
     // MIDI
-    const oct = st.oct ?? 0, lat = st.lat ?? 18;
-    Object.assign(v, { oct: (oct > 0 ? '+' : '') + oct, octDn: () => S({ oct: Math.max(-3, oct - 1) }), octUp: () => S({ oct: Math.min(3, oct + 1) }), touch: seg(['Light', 'Normal', 'Heavy'], st.touch ?? 'Normal', (x) => S({ touch: x })), pedal: seg(['Normal', 'Reversed'], st.pdl ?? 'Normal', (x) => S({ pdl: x })),
-      latV: lat + ' ms', openBt: () => S({ sheet: 'bt' }), btOn: st.sheet === 'bt' });
-    const LOG = [['14:02:11', 'Note on E4', 'Velocity 72 · Channel 1'], ['14:02:11', 'Note on C4', 'Velocity 68 · Channel 1'], ['14:02:11', 'Sustain down', 'Controller 64 · Channel 1'], ['14:02:12', 'Note off E4', 'Velocity 0 · Channel 1'], ['14:02:12', 'Note off C4', 'Velocity 0 · Channel 1'], ['14:02:12', 'Sustain up', 'Controller 64 · Channel 1'], ['14:02:13', 'Note on G4', 'Velocity 80 · Channel 1']];
-    const cleared = !!st.cleared;
-    Object.assign(v, { log: cleared ? [] : LOG.slice().reverse().map(([t, a, b]) => ({ t, a, b })), logAny: !cleared, logNone: cleared, logN: (cleared ? 0 : 214) + ' messages', logPaused: !!st.paused, pauseT: st.paused ? 'Resume' : 'Pause', pauseLog: () => S({ paused: !st.paused }), clearLog: () => S({ cleared: true }) });
-    const cal = st.cal ?? 'idle', clk = st.clk ?? 0;
-    Object.assign(v, { clicks: Array.from({ length: 8 }, (_, i) => ({ bg: cal === 'done' || i < clk ? '#44684A' : (cal === 'run' && i === clk ? '#F2B33D' : '#EEE9E2') })),
-      calT: cal === 'run' ? (clk < 2 ? 'Count-in: ' + (clk + 1) : 'Click ' + (clk - 1) + ' of 6') : cal === 'done' ? 'Your piano is heard 21 ms late' : 'Play a key with each click',
-      calS: cal === 'done' ? 'The app now hears your playing 21 ms earlier, so a note in time counts as in time.' : 'Press Start, then play any key on your MIDI keyboard each time you hear a click. Eight clicks, the first two a count-in.',
-      calA: cal === 'run' ? 'Click ' + (clk + 1) + ' of 8' : 'Eight clicks', calBtn: cal === 'run' ? 'Stop' : cal === 'done' ? 'Measure again' : 'Start',
-      calGo: () => { if (cal === 'run') { S({ cal: 'idle', clk: 0 }); return; } S({ cal: 'run', clk: 0 }); for (let i = 1; i <= 8; i++) setTimeout(() => S(i === 8 ? { cal: 'done', clk: 8, lat: 21 } : { clk: i }), i * 380); } });
+    Object.assign(v, { openBt: () => S({ sheet: 'bt' }), btOn: st.sheet === 'bt' });
     // selection toolbar
     const tb = st.tb ?? ['Favourite', 'Move', 'Archive', 'Delete'], full = tb.length >= 4;
     Object.assign(v, { tbOn: tb.map((l) => ({ l, ic: ACTIC[l], iop: 1, ink: l === 'Archive' || l === 'Delete' ? '#B3261E' : '#332921', rm: () => S({ tb: tb.filter((x) => x !== l) }) })), tbOff: ACTS.filter((a) => !tb.includes(a)).map((l) => ({ l, full, ic: ACTIC[l], iop: full ? 0.5 : 1, op: full ? 0.4 : 1, ink: full ? '#685E56' : '#332921', add: () => { if (!full) S({ tb: [...tb, l] }); } })),
