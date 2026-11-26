@@ -73,6 +73,27 @@ def EDITB(on, other_href):
     if 'Laptop' in other_href:
         return f'<a href="{other_href}" aria-label="Edit" aria-pressed="{"true" if edit else "false"}" data-tip="{tip}" style="{st}; padding: 0 16px 0 12px">{PENI}Edit</a>'
     return f'<a href="{other_href}" aria-label="Edit" aria-pressed="{"true" if edit else "false"}" data-tip="{tip}" style="{st}; width: 44px">{PENI}</a>'
+# The rail and its panel, Flat's new shell (FLAT_UI_SHELL_AND_MOTION §1.1–1.2), one implementation for the editor and the
+# Player (owner, 2026-11-26: "make the player like the editor with its sidebar"): a 76 rail of entries (icon box 40×32,
+# a 12 label), each opening one 352 panel headed by its name and a Fold.
+_LI = lambda d: f'<svg viewBox="0 0 24 24" width="22" height="22" {I}>{d}</svg>'
+NOTATIONI = _LI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>')
+LAYOUTI = _LI('<rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 21V9"></path>')
+AUDIOI = _LI('<path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"></path>')
+SEARCHI = _LI('<circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path>')
+KBDI = _LI('<rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"></path>')
+HEADPHI = _LI('<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path>')
+MUTEI = _LI('<path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="m22 9-6 6M16 9l6 6"></path>')
+GRIPI = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.5"></circle><circle cx="15" cy="6" r="1.5"></circle><circle cx="9" cy="12" r="1.5"></circle><circle cx="15" cy="12" r="1.5"></circle><circle cx="9" cy="18" r="1.5"></circle><circle cx="15" cy="18" r="1.5"></circle></svg>'
+FOLDI = _LI('<path d="m11 17-5-5 5-5M18 17l-5-5 5-5"></path>')
+def _RAILBTN(label, icon, k, tip, act=None):
+    sel = '' if act else f' role="tab" aria-selected="{{{{rail{k}On}}}}"'
+    return (f'<button type="button"{sel} data-tip="{tip}" onClick="{{{{{act or "pick" + k}}}}}" style="width: 76px; min-height: 64px; border: 0; padding: 6px 0; background: transparent; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer">'
+            f'<span style="width: 40px; height: 32px; border-radius: 10px; background: {{{{rail{k}Bg}}}}; display: flex; align-items: center; justify-content: center">{icon}</span>'
+            f'<span style="font-size: 12px; font-weight: {{{{rail{k}W}}}}; line-height: 1.2">{label}</span></button>')
+_PHEAD = lambda t: (f'<header style="flex: none; height: 64px; box-sizing: border-box; padding: 0 8px 0 16px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
+                    f'<h2 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">{t}</h2>'
+                    f'<button type="button" aria-label="Fold the panel" data-tip="Fold" onClick="{{{{foldPanel}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: pointer">{FOLDI}</button></header>')
 # a phone's bar: Close, then the version-and-mode capsule at the start (it is wider than a centred column leaves), the screen's group at the end
 MODEBAR_P = 'height: 60px; box-sizing: border-box; padding: 8px 16px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; justify-items: start; align-items: center; gap: 8px'
 MODEBAR_L = 'height: 72px; box-sizing: border-box; padding: 12px 24px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px'

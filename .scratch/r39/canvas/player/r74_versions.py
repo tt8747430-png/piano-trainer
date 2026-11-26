@@ -9,6 +9,80 @@ OUT = pathlib.Path('/home/user/piano-trainer/.scratch/r39/canvas/practice/projec
 BASE = pathlib.Path('/home/user/piano-trainer/.scratch/r39/canvas/player/base')  # the Player pair as built before R74; the one input
 OLDSW = re.compile(r'<div role="radiogroup" aria-label="Mode" style="display: flex; border-radius: 22px;.*?</div>', re.S)
 CHEVR = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>'
+
+# The laptop Player as the editor: a rail and one panel (owner, 2026-11-26: "i dont like that all that we have in the
+# player is hidden in the settings. like make the player like the editor with its sidebard"; "we added a easier way to
+# switch between the versions … and we stil have this in the settings"; "concentrate on the laptop version"). The rail's
+# entries are the song's own settings (Song: the accompaniment's Pattern, inversion and voicing, Transpose, Sections) and
+# the view's (View: what the Sheet, Diagrams, Grid or Lyrics show); each opens its panel at the left, beside the music,
+# open on Song when the song opens; the active entry again folds it, as the editor's. The version is the bar's alone
+# (no Arrangement or Your arrangement here); the song's acts (Settings, Edit the original, Print, Export, Share link)
+# are the name's menu, as the editor's title; the gear is gone, its jobs the rail's.
+SONGI = _LI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>')
+VIEWI = _LI('<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 13h8M8 16h5"></path>')
+PANEL = 'position: absolute; z-index: 30; left: 76px; top: 72px; bottom: 0; width: 352px; padding: 0 16px 24px; border-radius: 0; box-sizing: border-box; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #FEFDFB; box-shadow: inset -1px 0 0 ' + LINE
+def _sect(t, label):
+    d = t.index(f'role="dialog" aria-label="{label}"'); a = t.rindex('<section', 0, d); depth = 0
+    for m in re.finditer(r'<(/?)section\b', t[a:]):
+        depth += -1 if m.group(1) else 1
+        if depth == 0: return a, a + m.end()
+def _dock(t, label, head=None):
+    a, b = _sect(t, label); h = t[a:b]
+    h = re.sub(r'style="[^"]*"', f'style="{PANEL}"', h, count=1).replace('role="dialog"', 'role="region"', 1)
+    h = re.sub(r'<div aria-hidden="true" style="display: \{\{sheetGrab\}\};[^"]*"></div>', '', h, count=1)
+    if head: h = h.replace('>', '>' + head, 1)
+    return t[:a] + h + t[b:]
+def player_rail(t):
+    head = lambda name: _PHEAD(name).replace('padding: 0 8px 0 16px', 'margin: 0 -16px; padding: 0 8px 0 16px')
+    # Song: the Settings card docked; its header row's acts go to the name's menu; the version choice goes
+    a, b = _sect(t, 'Settings'); h = t[a:b]
+    acts = re.search(r'<sc-if value="\{\{songActsShow\}\}".*?</sc-if>', h, re.S).group(0)
+    r0 = h.index('<div style="flex: none; position: relative; display: flex; flex-wrap: wrap;'); r1 = h.index('<div role="radiogroup" aria-label="Score"')
+    h = h[:r0] + h[r1:]
+    c0 = h.index('<div role="radiogroup" aria-label="Score"'); c1 = h.index('<div style="border-radius: 12px; background: {{acc.bg}}', c0)
+    h = h[:c0] + '<div role="group" aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px">' + h[c1:]
+    rb = re.search(r'<button type="button" role="radio" aria-checked="\{\{acc.on\}\}".*?</button>', h, re.S).group(0)
+    h = h.replace(rb, f'<h3 style="margin: 0; padding: 12px 16px 4px; font-size: 15px; font-weight: 600">Accompaniment</h3>', 1)
+    h = h.replace('background: {{acc.bg}}; overflow: hidden; box-shadow: inset 0 0 0 2px {{acc.line}}, 0 0 0 1px rgba(51,41,33,.07)', 'background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px rgba(51,41,33,.07)', 1)
+    y = re.search(r'<a data-r74y href="[^"]*".*?</a>', h, re.S).group(0); h = h.replace(y, '', 1)
+    t = t[:a] + h + t[b:]
+    t = _dock(t, 'Settings', head('Song'))
+    t = t.replace('<sc-if value="{{isMore}}"', '<sc-if value="{{panelSong}}"', 1)
+    # the Song panel's own pages dock in its place, each with its Back
+    for lab in ('Pattern', 'Transpose', 'Sort and filter'): t = _dock(t, lab)
+    # View: the view's settings docked, headed by the view's name
+    a, b = _sect(t, '{{viewName}} settings'); h = t[a:b]
+    h = re.sub(r'<h2[^>]*>\{\{viewName\}\}</h2>', '', h, count=1); t = t[:a] + h + t[b:]
+    t = _dock(t, '{{viewName}} settings', head('{{viewName}}'))
+    i = t.index('<section role="region" aria-label="{{viewName}} settings"'); j = t.rindex('<sc-if value="{{isView}}"', 0, i)
+    t = t[:j] + '<sc-if value="{{panelView}}"' + t[j + len('<sc-if value="{{isView}}"'):]
+    # the rail, under the bar, at the window's left edge
+    rail = (f'<nav aria-label="Panels" style="position: absolute; z-index: 31; left: 0; top: 72px; bottom: 0; width: 76px; padding: 0 0 12px; box-sizing: border-box; background: #F7F3EE; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
+            f'<div role="tablist" aria-orientation="vertical" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Song', SONGI, 'Song', 'Song') + _RAILBTN('View', VIEWI, 'View', 'View') + '</div></nav>')
+    e = t.index('</header>', t.index('aria-label="Version"')) + len('</header>')
+    t = t[:e] + rail + t[e:]
+    # the bar: the name is the song's menu (its acts), the gear goes
+    gear = re.search(r'<div[^>]*><button type="button" aria-label="Settings" data-tip="Settings" aria-expanded="\{\{isMore\}\}".*?</button></div>', t, re.S)
+    t = t.replace(gear.group(0), '', 1)
+    h1 = re.search(r'<h1 style="margin: 0 30px 0 12px;[^"]*">Amazing Grace</h1>', t).group(0)
+    menu = acts.replace('right: 0; top: 54px;', 'left: 12px; top: 52px;', 1)
+    share = '<button type="button" role="menuitem" onClick="{{toggleSongActs}}" style="min-height: 44px; box-sizing: border-box; padding: 0 16px; display: flex; align-items: center; gap: 12px; width: 100%; border: 0; border-top: 1px solid #EFE9E1; background: transparent; color: #332921; font-size: 15px; text-align: left"><span style="width: 20px"></span><span>Share link</span></button>'
+    menu = menu.replace('</div></sc-if>', share + '</div></sc-if>', 1)
+    t = t.replace(h1, f'<div style="position: relative; margin: 0 18px 0 0; pointer-events: auto"><button type="button" aria-haspopup="menu" aria-expanded="{{{{songActsOn}}}}" onClick="{{{{toggleSongActs}}}}" data-tip="The song’s menu" style="height: 44px; padding: 0 8px 0 12px; border: 0; border-radius: 12px; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 4px; cursor: pointer"><h1 style="margin: 0; font-size: 17px; font-weight: 600; white-space: nowrap">Amazing Grace</h1><span style="display: flex; color: {SOFT}">{CHEV_D}</span></button>{menu}</div>', 1)
+    # the music and the transport stand beside the panel
+    t = t.replace('padding: 24px 0 160px; background:', 'padding: 24px 0 160px {{panelPad}}px; background:', 1)
+    t = t.replace('<div role="toolbar" aria-label="Transport" style="position: absolute; z-index: 40; left: 0;', '<div role="toolbar" aria-label="Transport" style="position: absolute; z-index: 40; left: {{panelPad}}px;', 1)
+    # the script: the rail's state, apart from the popovers' (Play closes a popover, never the panel)
+    keys = ("isMore: open === 'settings', rail: s.rail ?? 'song', "
+            "panelSong: (s.rail ?? 'song') === 'song' && !['pattern', 'patfilter', 'key'].includes(open), panelView: (s.rail ?? 'song') === 'view', "
+            "panelPad: (s.rail ?? 'song') === 'none' ? 76 : 428, foldPanel: () => this.setState({ rail: 'none', open: 'none' }), "
+            "pickSong: () => this.setState({ rail: (s.rail ?? 'song') === 'song' ? 'none' : 'song', open: 'none' }), pickView: () => this.setState({ rail: (s.rail ?? 'song') === 'view' ? 'none' : 'view', open: 'none' }), "
+            "railSongOn: (s.rail ?? 'song') === 'song' ? 'true' : 'false', railSongBg: (s.rail ?? 'song') === 'song' ? '#E8DFD3' : 'transparent', railSongW: (s.rail ?? 'song') === 'song' ? 600 : 500, "
+            "railViewOn: (s.rail ?? 'song') === 'view' ? 'true' : 'false', railViewBg: (s.rail ?? 'song') === 'view' ? '#E8DFD3' : 'transparent', railViewW: (s.rail ?? 'song') === 'view' ? 600 : 500,")
+    assert t.count("isMore: open === 'settings',") == 1
+    t = t.replace("isMore: open === 'settings',", keys, 1)
+    return t
+
 for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     p = OUT / f'{name}.dc.html'; t = (BASE / f'{name}.dc.html').read_text()
     NEWSW = re.compile(r'<div (?:data-sw )?role="group" aria-label="Version and mode".*?</a></div>', re.S)
@@ -90,5 +164,6 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         items = (f'<a data-r74m role="menuitem" href="SongSettings{sfx}" style="{st}">{GEAR}<span>Settings</span></a>'
                  f'<a role="menuitem" href="EditorDraft{sfx}" style="{st}; box-shadow: inset 0 1px 0 #EFE9E1">{PEN}<span>Edit the original</span></a>')
         t = t[:j] + items + t[j:].replace('border-top: 0"', 'border-top: 1px solid #EFE9E1"', 1)
+    if name == 'PlayerDesk': t = player_rail(t)
     p.write_text(t)
 print('r74 versions ok')

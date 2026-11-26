@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · R74: the laptop Player as the editor, a rail (Song, View) and one panel; the gear gone; the version only in the bar; the song's acts the name's menu; the rail parts in the kit · PlayerDesk · pending
 
 ## Changes
 

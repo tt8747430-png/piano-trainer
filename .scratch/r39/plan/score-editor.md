@@ -55,6 +55,12 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
   the owner's Flat screenshots put "✎ Edit ▾" in the title's group after the transport; pressed while editing, the
   same place in Play and Edit on both sizes; no Done.
 
+- **R74, the laptop Player as the editor: rail and panel** (owner, 2026-11-26: "make the player like the editor with
+  its sidebard"; "concentrate on the laptop version"): rail Song (Accompaniment: Pattern, inversion, voicing;
+  Transpose; Sections) and View (the view's settings), 352 panels, Song open at first; no gear; the version only in
+  the bar; the song's acts in "Amazing Grace ▾". Pattern, Transpose, Sort and filter are pages in the panel.
+  The phone is next, after the owner's word on the laptop.
+
 - **R74, the editor's bar as Flat's, Credits a page** (owner, 2026-11-26: "port the flat editor more precisely also on
   the laptop. like the title in the header and clickin on its edit button with pen icon we go to the credits page";
   "it should open properly on a proper page this credits like in the flat, and be carefull when you use teh popups").
