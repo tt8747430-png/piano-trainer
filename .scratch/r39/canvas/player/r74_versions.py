@@ -89,7 +89,7 @@ def player_rail(t):
     i = t.index('aria-label="{{viewName}} settings"'); h = t.index('</header>', i) + len('</header>')
     # the whole View panel rebuilt from the kit (owner, 2026-11-26: "improve and refactor the song and view tabs
     # completely"): the views as picture cards, then the chosen view's options as rows, each section a fold
-    e = t.index('</section>', h); t = t[:h] + VIEWPANEL() + t[e:]
+    e = t.index('</section>', h); t = t[:h] + VIEWPANEL(inset=False) + t[e:]
     t = t.replace('aria-label="{{viewName}} settings"', 'aria-label="View"', 1)
     vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
           "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', ...viewPress(id) }; }), "

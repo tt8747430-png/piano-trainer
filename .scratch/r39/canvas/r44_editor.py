@@ -246,7 +246,8 @@ ZOOMG = (TBTN('Zoom out', ZOUTI, 'zoomOut', 'Zoom out · ⌘−', 'zoutDis') + f
 TOOLBAR_L = (f'<div role="toolbar" aria-label="Notation" style="flex: none; height: 56px; box-sizing: border-box; padding: 0 24px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
 
              + ESSENTIALS + '<span style="flex: 1"></span>' + CLIP + TSEP + ZOOMG + TSEP
-             + f'<div style="flex: none; width: 216px">{SEGC("views", 40, 14)}</div>' + TSEP + KEYSBTN + TSEP
+             # Page · Panorama left the toolbar for the View panel (owner, 2026-11-26: "move the page panorama switch to the sidebar")
+             + KEYSBTN + TSEP
              # Flat's toolbar ends with its files: download and print (the owner's Flat 26.11 screenshots)
              + TBTN('Export', f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M12 15V3M7 10l5 5 5-5M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>', 'openExport', 'Export')
              + TBTN('Print', f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>', 'actPrint', 'Print · ⌘P') + '</div>')
@@ -369,7 +370,7 @@ AUD_BODY_P = (AUD_BODY + f'<div style="height: 1px; background: {LINE}"></div>'
     + _AROW('Voice', 'V') + _AROW('Piano', 'P') + '</section>')
 PANEL_AUD = _PHEAD('Audio') + _PBODY(AUDPANEL(), 20)
 # View, the Player's panel: the views as cards (the Sheet chosen; the others open in Practice), the Sheet's options: Layout is
-# the toolbar's Page · Panorama (one state, either place), On the page the same switches as the Player's
+# Page · Panorama here alone (it left the toolbar), On the page the same switches as the Player's
 PANEL_VIEW = _PHEAD('View') + VIEWPANEL(links=True)
 PANEL_NOT = ACCBODY.replace('{0}', _PHEAD('Notation') + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 24px; display: flex; flex-direction: column; gap: 20px">{ACCPANEL()}{ED_SECTIONS()}</div>')
 # Search, as Flat's: a field over the score, the suggested acts under it, the keys to move and close at its foot

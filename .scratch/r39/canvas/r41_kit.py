@@ -735,10 +735,11 @@ def MODESW(on, practice_href, edit_href):
     # Practice | Edit, two tabs side by side (owner, 2026-11-26: "make the switch between the player and the editor a tab
     # switch, not a combobox"): two exclusive modes of one screen are a segmented control, both always in sight (Apple
     # HIG, Segmented controls; Flat's Read-only | Edit pair in its band), never a menu that hides the other; the current
-    # one filled white on the dark band, the other bare, each its glyph and word, P and E their keys
-    seg = lambda lab, ic, href, sel, key: (f'<a href="{href}" role="tab" aria-selected="{"true" if sel else "false"}" data-tip="{lab} · {key}" style="flex: none; height: 32px; box-sizing: border-box; padding: 0 12px; border-radius: 16px; '
+    # one filled white on the dark band, the other bare, each its glyph and word, P and E their keys; each tab the pill's
+    # full 40 height, a dense laptop bar's least target (craft-details, Hit area), the ring round both
+    seg = lambda lab, ic, href, sel, key: (f'<a href="{href}" role="tab" aria-selected="{"true" if sel else "false"}" data-tip="{lab} · {key}" style="flex: none; height: 40px; box-sizing: border-box; padding: 0 14px; border-radius: 20px; '
                                           f'background: {ONB if sel else "transparent"}; color: {BAND if sel else ONB}; text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600">{ic}<span>{lab}</span></a>')
-    return (f'<div role="tablist" aria-label="Mode" style="flex: none; height: 40px; box-sizing: border-box; padding: 4px; border-radius: 20px; box-shadow: {ONB_RING}; display: flex; align-items: center; gap: 2px; pointer-events: auto">'
+    return (f'<div role="tablist" aria-label="Mode" style="flex: none; height: 40px; box-sizing: border-box; padding: 0; border-radius: 20px; box-shadow: {ONB_RING}; display: flex; align-items: center; gap: 2px; pointer-events: auto">'
             + seg('Practice', MUSICI, practice_href, on == 'play', 'P') + seg('Edit', PENI, edit_href, on == 'edit', 'E') + '</div>')
 
 # The transport in the header, as Flat's (the owner's Flat 26.11 band, the new header: the title, then go to start, Play with its options,
@@ -976,7 +977,8 @@ _THUMBS = {
 }
 VIEWI = _LI('<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 13h8M8 16h5"></path>')
 # links=True (the editor): the editor edits the sheet, so the other views open the song in Practice in that view, the card a link
-def VIEWPANEL(links=False):
+# inset=False where the panel's own section already holds the 16 gutter (the Player's), so the body sits on the head's edge
+def VIEWPANEL(links=False, inset=True):
     thumbs = ''.join(f'<sc-if value="{{{{v.{k}}}}}" hint-placeholder-val="{{{{false}}}}">{svg}</sc-if>' for k, svg in _THUMBS.items())
     cards = (f'<div role="radiogroup" aria-label="View" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px">'
              f'<sc-for list="{{{{viewCards}}}}" as="v" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" '
@@ -987,19 +989,22 @@ def VIEWPANEL(links=False):
         b0 = cards.index('<button type="button" role="radio"'); b1 = cards.index('</button>', b0) + len('</button>'); btn = cards[b0:b1]
         a = (btn.replace('<button type="button" role="radio" aria-checked="{{v.on}}" onClick="{{v.pick}}"', '<a href="{{v.href}}" data-tip="Opens in Practice"', 1)[:-len('</button>')] + '</a>').replace('border: 0;', 'border: 0; text-decoration: none;', 1)
         cards = cards[:b0] + '<sc-if value="{{v.isHere}}" hint-placeholder-val="{{true}}">' + btn + '</sc-if><sc-if value="{{v.isAway}}" hint-placeholder-val="{{false}}">' + a + '</sc-if>' + cards[b1:]
-    sheet = (f'<div style="{_CARD}">' + SELROW('Layout', 'selLayout', False) + '</div>'
+    segh = lambda lab, name: (f'<div style="display: flex; flex-direction: column; gap: 8px"><h4 style="margin: 0; font-size: 13px; font-weight: 600; color: {SOFT}">{lab}</h4>'
+                              + SEGC(name + 'Seg', 36, 14, True) + '</div>')
+    sheet = (segh('Layout', 'selLayout') +
              f'<div style="display: flex; flex-direction: column; gap: 8px"><h4 style="margin: 0; font-size: 13px; font-weight: 600; color: {SOFT}">On the page</h4><div style="{_CARD}">'
              f'<sc-for list="{{{{showChips}}}}" as="c" hint-placeholder-count="6">' + SWITCHROW('{{c.name}}', 'c.on', 'c.pick', 'c.track', 'c.knob').replace(f'border-top: 1px solid {LINE};', 'border-top: {{c.sep}};') + '</sc-for></div></div>')
     dia = f'<div style="{_CARD}">' + SWITCHROW('Beat strip', 'dStripSw.on', 'dStripSw.flip', 'dStripSw.track', 'dStripSw.knob', False) + SWITCHROW('Lyrics line', 'dLineSw.on', 'dLineSw.flip', 'dLineSw.track', 'dLineSw.knob') + '</div>'
-    grid = f'<div style="{_CARD}">' + SELROW('Bars per row', 'selPerRow', False) + '</div>'
-    lyr = (f'<div style="{_CARD}">' + SELROW('Text size', 'selText', False) + SWITCHROW('Chord diagrams', 'lSumSw.on', 'lSumSw.flip', 'lSumSw.track', 'lSumSw.knob')
+    grid = segh('Bars per row', 'selPerRow')
+    lyr = (segh('Text size', 'selText') + f'<div style="{_CARD}">' + SWITCHROW('Chord diagrams', 'lSumSw.on', 'lSumSw.flip', 'lSumSw.track', 'lSumSw.knob', False)
            + SWITCHROW('Beat strip', 'lStripSw.on', 'lStripSw.flip', 'lStripSw.track', 'lStripSw.knob') + '</div>')
     opts = ''.join(f'<sc-if value="{{{{{k}}}}}" hint-placeholder-val="{{{{{d}}}}}">{b}</sc-if>' for k, d, b in (('isSheet', 'true', sheet), ('isDiagrams', 'false', dia), ('isGrid', 'false', grid), ('isLyrics', 'false', lyr)))
-    return (f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px; display: flex; flex-direction: column">'
+    return (f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 {16 if inset else 0}px; display: flex; flex-direction: column">'
             + FOLD('View', EYEI, 'Views', cards, first=True) + FOLD('Opts', SLIDERSI, '{{viewName}} options', opts) + '</div>')
 def SELFROM(S, SET, name, expr):
     """a pop-up row's keys (SELROW) from a list of {name, on, pick}, the board's own choices"""
     return (f"...((L) => ({{ {name}V: (L.find((o) => o.on === 'true') || {{ name: '' }}).name, {name}On: {S}.selPop === '{name}', {name}X: {S}.selPop === '{name}' ? 'true' : 'false', {name}Bg: {S}.selPop === '{name}' ? '#EEE9E2' : 'transparent', "
+            f"{name}Seg: L.map((o) => ({{ l: o.name, on: o.on, bg: o.on === 'true' ? '#FEFDFB' : 'transparent', sh: o.on === 'true' ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: o.on === 'true' ? 600 : 500, pick: o.pick }})), "
             f"{name}Tg: () => ({SET})({{ selPop: {S}.selPop === '{name}' ? null : '{name}' }}), {name}Opts: L.map((o) => ({{ l: o.name, cur: o.on === 'true', on: o.on, pick: () => {{ o.pick(); ({SET})({{ selPop: null }}); }} }})) }}))({expr}),")
 
 # a setting's row with its value and a pop-up of the values (Apple HIG, Pop-up buttons): the label at the left, the
