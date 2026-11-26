@@ -85,6 +85,8 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
   - **Gone:** Flat's legacy Document settings page drawn earlier this day (tabs Credits, Instruments, Layout, Takes and
     a preview), the toolbar's Palette switch (the rail folds the panel), the laptop ···. "Takes" is "Recordings"
     everywhere (a take, Recording 3; No recordings yet).
+  - **The Player's laptop bar the same:** ✕, the song's name, the capsule beside it, at the editor's places, so Play and
+    Edit move nothing (its song acts stay in its gear, so the name there is a title, not a menu).
   - Not taken: Templates, Note heads, Music font (no difference a learner hears or needs), Tuning, Low-CPU playback.
 
 - **The editor's ··· is Flat's ≡ menu** (owner, 2026-11-16: "new completely new design"; `flat-score-editor` 083–090):

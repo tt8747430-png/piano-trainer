@@ -16,6 +16,13 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     else:
         t, n = OLDSW.subn(lambda m: MODESW('play', 'Editor' + sfx), t, count=1)
     assert n == 1, name
+    if name == 'PlayerDesk':
+        # the capsule beside the song's name, at the editor's place (owner, 2026-11-26: "I dont like how this arrangement is
+        # centered"; ui-and-mockups: every element answers why here): the name says which song, the capsule which version
+        sw = MODESW('play', 'Editor' + sfx)
+        t = t.replace(sw, '<span></span>', 1)
+        close = re.search(r'<a href="Songs?Laptop.dc.html" aria-label="Close".*?</a>', t, re.S).group(0)
+        t = t.replace(close, close + f'<h1 style="margin: 0 30px 0 12px; padding: 0; font-size: 17px; font-weight: 600; white-space: nowrap; pointer-events: auto">Amazing Grace</h1>' + sw.replace('<div', '<div data-sw', 1), 1)
     if name == 'PlayerApp':
         t = t.replace('padding: 8px 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; pointer-events: none', MODEBAR_P + '; pointer-events: none', 1)
     # Close goes back to the library the song was opened from (the song's own page is gone, R74)

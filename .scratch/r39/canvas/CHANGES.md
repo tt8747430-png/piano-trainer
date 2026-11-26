@@ -11,6 +11,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · (this commit) · the Player's laptop bar as the editor's: ✕, the song's name, the Version and mode capsule beside it, never centred; the name and capsule hold their place between Play and Edit (lines flow: no frame change) · PlayerDesk · v746
 - 2026-11-26 · (this commit) · second pass: the title menu's save line under the name, Keyboard shortcuts without a stray "?" · EditorLaptop, EditorDraftLaptop · v745
 - 2026-11-26 · (this commit) · R74 the laptop editor as Flat's new editor: a rail (Notation, Instruments, Layout, Audio; Search, Shortcuts) and one panel, the title a menu (Credits, Transpose, Recordings, Export ›, Print, Keyboard shortcuts), the capsule beside the title, Layout's preview; the legacy Document settings page gone; Takes named Recordings everywhere · EditorLaptop, EditorDraftLaptop, Takes, TakesLaptop, Take, TakeLaptop, Settings, SettingsLaptop, Profile, ProfileLaptop, Admin, AdminLaptop, AppLayers, AppLayersLaptop, Editor, EditorDraft · v744
 - 2026-11-26 · (this commit) · R74 the editor's bar as Flat's (✕, the title and its pen to Credits, the save state at the end), Credits a page of its own on both sizes (THINGPAGE), the Page fitted to the width; the Player prints the editor's page (A4 on a laptop, a phone-width page on a phone), the accompaniment credited as an arrangement; the page a kit part (A4PAGE) · EditorLaptop, EditorDraftLaptop, Editor, EditorDraft, PlayerApp, PlayerDesk, every Player board · v743
