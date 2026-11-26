@@ -89,7 +89,7 @@ def player_rail(t):
     t = t.replace('const KB_VALS = {\nareaTop: 0,', 'const KB_VALS = {\nareaTop: 0, viewBottom: keys ? 904 - (800 - bandH) + 16 : DEV.bottom,', 1)
     # the rail, under the bar, at the window's left edge
     rail = (f'<nav aria-label="Panels" style="position: absolute; z-index: 31; left: 0; top: 64px; bottom: 0; width: 76px; padding: 0 0 12px; box-sizing: border-box; background: #F7F3EE; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
-            f'<div role="tablist" aria-orientation="vertical" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Versions', LAYERSI, 'Song', 'Versions') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div></nav>')
+            f'<div role="tablist" aria-orientation="vertical" aria-label="Panels" onKeyDown="{{{{railKeys}}}}" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Versions', LAYERSI, 'Song', 'Versions') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div></nav>')
     # Audio, Flat's panel (the kit's AUDPANEL, the editor's too): the room and each part's level, the mixer's home
     # after the rail in the tree, as the Song and View panels sit beside it (before it, the band read as the group it closed)
     rail = rail + (f'<sc-if value="{{{{panelAud}}}}" hint-placeholder-val="{{{{false}}}}"><section role="region" aria-label="Audio" style="{PANEL}">' + head('Audio') + AUDPANEL() + '</section></sc-if>')
@@ -176,7 +176,7 @@ def header_transport(t):
     i = t.index('<sc-if value="{{kb2d}}" hint-placeholder-val="{{false}}">'); t = t[:i] + grip + t[i:]
     dk = ("gripTop: 904 - bandH - 6, dragKeys: (e) => { if (e.type === 'pointermove' && !e.buttons) return; if (e.type === 'pointerdown') { if (e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId); return; } "
           "const g = e.currentTarget.parentElement; const rr = g.getBoundingClientRect(), k = rr.width / g.offsetWidth; this.setState({ kh: Math.round(Math.max(96, Math.min(260, (rr.bottom - e.clientY) / k))) }); }, "
-          "keyKeys: (e) => { const d = { ArrowUp: 16, ArrowDown: -16 }[e.key]; if (d) this.setState({ kh: Math.max(96, Math.min(260, (s.kh ?? 150) + d)) }); }, ")
+          "railKeys: (e) => { const d = { ArrowDown: 1, ArrowUp: -1 }[e.key]; const t = [...e.currentTarget.querySelectorAll('[role=tab]')]; const i = t.indexOf(document.activeElement); if (!d || i < 0) return; e.preventDefault(); const n = t[(i + d + t.length) % t.length]; n.focus(); n.click(); }, keyKeys: (e) => { const d = { ArrowUp: 16, ArrowDown: -16 }[e.key]; if (d) this.setState({ kh: Math.max(96, Math.min(260, (s.kh ?? 150) + d)) }); }, ")
     t = t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + dk, 1)
     # a laptop keeps its band, rail and panel while playing (owner, 2026-11-26: "on laptop doesnt make sense to hide all
     # controls while playing"): the transport, the mode and the panel are what the learner reaches for mid-play, as in
