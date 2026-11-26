@@ -808,6 +808,19 @@ def _HVOLROW(i):
             + ib('Solo', 'doSolo', 'solo', '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>')
             + ib('Mute', 'doMute', 'mute', '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="m22 9-6 6M16 9l6 6"></path></svg>') + '</div>'
             + f'<div style="display: flex; align-items: center; gap: 12px"><input type="range" min="0" max="100" step="5" value="{{{{p.v}}}}" onChange="{{{{p.setV}}}}" aria-label="{{{{p.name}}}} volume" style="flex: 1; min-width: 0; height: 44px; margin: 0; accent-color: {INK}"><span style="width: 40px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">{{{{p.v}}}}%</span></div></div>')
+# Transpose's rows (Semitones with − and +, the Key it lands in, Back to G major once moved): one implementation, in
+# the band's popover on a laptop and in the phone editor's sheet (the hdTr* keys of HDRKEYS); `big` for a finger
+def TRROWS(big=False):
+    qb2 = lambda lab, act, svg: f'<button type="button" aria-label="{lab}" onClick="{{{{{act}}}}}" disabled="{{{{{act}Dis}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
+    semis = (f'<div style="min-height: 44px; display: flex; align-items: center; gap: 4px; padding: 0 4px 0 12px"><span style="flex: 1; font-size: 15px">Semitones</span>' + qb2('Down a semitone', 'hdTrDown', STEP_MINUS)
+             + f'<span style="min-width: 44px; text-align: center; font-size: 15px; font-variant-numeric: tabular-nums">{{{{hdTrL}}}}</span>' + qb2('Up a semitone', 'hdTrUp', STEP_PLUS) + '</div>')
+    keyrow = f'<div style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-top: 1px solid {LINE}"><span style="flex: 1; font-size: 15px">Key</span><span style="font-size: 15px; color: {SOFT}">{{{{hdKeyL}}}}</span></div>'
+    back = (f'<sc-if value="{{{{hdTrMoved}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{hdTrReset}}}}" style="width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: #356A8C; font: inherit; font-size: 15px; text-align: left; cursor: pointer">Back to G major</button></sc-if>')
+    if not big:
+        return f'<div style="display: flex; flex-direction: column; margin: 0 -12px">{semis}{keyrow}{back}</div>'
+    # on a phone: one card as the sheet's other groups, the rows on its 16 inset, the − and + at 44 for a finger
+    h = (semis + keyrow + back).replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px').replace('padding: 0 4px 0 12px', 'padding: 0 6px 0 16px').replace('padding: 0 12px', 'padding: 0 16px')
+    return f'<div style="display: flex; flex-direction: column; overflow: hidden; {_CARD}">{h}</div>'
 def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None):
     # rows, as every card's (VERPANEL, ACCPANEL): a value with its pop-up, a level with its slider; no segmented strip
     rows = lambda *r: f'<div style="display: flex; flex-direction: column; margin: 0 -12px">{"".join(r)}</div>'
@@ -831,12 +844,7 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None):
            f'<span aria-hidden="true" style="flex: none; width: 12px; height: 12px; border-radius: {{{{hdRecR}}}}; background: #D2483A"></span><span style="flex: 1">{{{{hdRecL}}}}</span><span style="font-size: 13px; color: {SOFT}">R</span></button>')
     # Transpose: the semitones with − and + (a stepper for a frequent, precise value), the key it lands in, and the way
     # back to the written key when it moved; it changes the playback and the page at once (no Apply)
-    qb2 = lambda lab, act, svg: f'<button type="button" aria-label="{lab}" onClick="{{{{{act}}}}}" disabled="{{{{{act}Dis}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
-    semis = (f'<div style="min-height: 44px; display: flex; align-items: center; gap: 4px; padding: 0 4px 0 12px"><span style="flex: 1; font-size: 15px">Semitones</span>' + qb2('Down a semitone', 'hdTrDown', STEP_MINUS)
-             + f'<span style="min-width: 44px; text-align: center; font-size: 15px; font-variant-numeric: tabular-nums">{{{{hdTrL}}}}</span>' + qb2('Up a semitone', 'hdTrUp', STEP_PLUS) + '</div>')
-    keyrow = f'<div style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-top: 1px solid {LINE}"><span style="flex: 1; font-size: 15px">Key</span><span style="font-size: 15px; color: {SOFT}">{{{{hdKeyL}}}}</span></div>'
-    back = (f'<sc-if value="{{{{hdTrMoved}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{hdTrReset}}}}" style="width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: #356A8C; font: inherit; font-size: 15px; text-align: left; cursor: pointer">Back to G major</button></sc-if>')
-    out += _HPOPOVER('hdTrOn', 'Transpose', rows(semis, keyrow, back), f'left: {tr_left}px; top: 65px', 300)
+    out += _HPOPOVER('hdTrOn', 'Transpose', TRROWS(), f'left: {tr_left}px; top: 65px', 300)
     out += _HPOPOVER('hdMidiOn', 'MIDI keyboard', rows(SELROW('Keyboard', 'selMidi', False),
         f'<sc-if value="{{{{hdMidiAny}}}}" hint-placeholder-val="{{{{true}}}}">' + snd + rec + '</sc-if>',
         f'<sc-if value="{{{{hdMidiNone}}}}" hint-placeholder-val="{{{{false}}}}">' + none + '</sc-if>'), f'left: {midi_left}px; top: 65px', 320)
