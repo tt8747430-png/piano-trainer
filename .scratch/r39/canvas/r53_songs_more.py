@@ -503,7 +503,6 @@ def LAPIFY(s):
 # a song's Settings in the one Settings shape (the 56 bar, the centred 1180 column 24 under it: YourLessonSettings); a section keeps its 88 head
 smlm = (IF('isSettings', LTOP('PlayerLaptop.dc.html', '', 'Settings'), 'true') + IF('isSection', LTOP('PlayerLaptop.dc.html', '', '{{pageT}}')) + IF('isPublish', LTITLEBAR('{{pageT}}', backact='back')) + FULLW(LAPIFY(SMBODY_L)) + LAPIFY(FAB).replace('bottom: 40px', 'bottom: 32px') + TOASTL)
 SM_LAP = LAPSHEET(SMSHEETS, 400)
-detail('Section', 'A section of a song', js(SM_SRC.replace('__ROOT__', "'section'")), smph, smlm, '', SMSHEETS, SM_LAP, 'Songs')
 # A thing's Settings opens over its page, never a page of its own (owner, 2026-11-20: "why dont we do such things like
 # the app settings in such popup window … the claude.ai doesn't make that"): on a laptop the app Settings' window
 # (SETDLG's shell: centred, 22 round, the page dimmed, a 56 bar with its title and ×) one pane wide, its Publish a page

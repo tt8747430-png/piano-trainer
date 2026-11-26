@@ -408,7 +408,7 @@ elm4 = (elm4.replace(TOOLBAR_L, f'<sc-if value="{{{{notLayView}}}}" hint-placeho
         .replace(_PANELOLD, _PANEL, 1)
         .replace(f'<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', f'<sc-if value="{{{{layView}}}}" hint-placeholder-val="{{{{false}}}}">{PREVIEW}</sc-if><sc-if value="{{{{notLayView}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', 1)
         .replace('</sc-if></div></div>', '</sc-if></div></sc-if></div>', 1))
-LAPLAYERS = lambda sfx, vh=None, menu=None, saved=None: (RENAMEDLG() + HISTVIEW() + HDRPOPS(False, 294, 470)
+LAPLAYERS = lambda sfx, vh=None, menu=None, saved=None: (RENAMEDLG() + HISTVIEW() + HDRPOPS(False, 294, 470, 576)
                                      + POPOVER('exportOn', 'Export', EXPORTMENU, 'left: 400px; top: 300px', 300) + SEARCHCARD + KEYSCARD + THINGPAGE('creditsOn', 'closeSheet', 'Credits', _CRED(True), True))
 full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + CREDBTN(elm4), ED4L.replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - 76 - pw - 76 : 1710 - 76 - 64) / 794; const M = 'music'", 1), LAPLAYERS('Laptop.dc.html') + POPOVER('gotoOn', 'Go to bar', GOTO_FIELD, 'left: 665px; top: 76px; transform: translateX(-50%)', 260) )
 print('r44 editor ok')

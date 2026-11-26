@@ -83,17 +83,8 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "Section.dc.html": {
-      "x": 4770,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "A section of a song, phone",
-      "is_interactive": true,
-      "page": "songs"
-    },
     "Editor.dc.html": {
-      "x": 5300,
+      "x": 4770,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -102,7 +93,7 @@
       "page": "songs"
     },
     "EditorDraft.dc.html": {
-      "x": 5830,
+      "x": 5300,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -111,7 +102,7 @@
       "page": "songs"
     },
     "Takes.dc.html": {
-      "x": 6360,
+      "x": 5830,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -120,7 +111,7 @@
       "page": "songs"
     },
     "Take.dc.html": {
-      "x": 6890,
+      "x": 6360,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -209,17 +200,8 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "SectionLaptop.dc.html": {
-      "x": 20007,
-      "y": 1720,
-      "w": 2143,
-      "h": 1299,
-      "title": "A section of a song, laptop",
-      "is_interactive": true,
-      "page": "songs"
-    },
     "EditorLaptop.dc.html": {
-      "x": 22230,
+      "x": 20007,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -228,7 +210,7 @@
       "page": "songs"
     },
     "EditorDraftLaptop.dc.html": {
-      "x": 24453,
+      "x": 22230,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -237,7 +219,7 @@
       "page": "songs"
     },
     "TakesLaptop.dc.html": {
-      "x": 26676,
+      "x": 24453,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -246,7 +228,7 @@
       "page": "songs"
     },
     "TakeLaptop.dc.html": {
-      "x": 28899,
+      "x": 26676,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -1243,7 +1225,6 @@
     "Trash.dc.html",
     "Groups.dc.html",
     "SongSettings.dc.html",
-    "Section.dc.html",
     "Editor.dc.html",
     "EditorDraft.dc.html",
     "Takes.dc.html",
@@ -1257,7 +1238,6 @@
     "TrashLaptop.dc.html",
     "GroupsLaptop.dc.html",
     "SongSettingsLaptop.dc.html",
-    "SectionLaptop.dc.html",
     "EditorLaptop.dc.html",
     "EditorDraftLaptop.dc.html",
     "TakesLaptop.dc.html",

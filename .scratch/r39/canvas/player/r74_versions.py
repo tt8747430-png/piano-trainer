@@ -65,11 +65,11 @@ def player_rail(t):
     # the accompaniment and the song's pages rebuilt from the kit as rows in their cards (owner, 2026-11-26: "i dont like
     # these buttons in these cards very much. refactor this also"): the docked card's segmented strips are deleted
     s0 = t.index('<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}"><div role="group" aria-label="Accompaniment"')
-    s1 = t.index('</div>', t.index('<a href="SectionLaptop.dc.html"', s0)) + len('</div>')
+    s1 = t.index('</div>', t.index('<a href="SectionLaptop.dc.html"', s0)) + len('</div>')  # through the old Transpose and Sections card
     t = t[:s0] + ACCPANEL() + t[s1:]
     t = t.replace('<sc-if value="{{isMore}}"', '<sc-if value="{{panelSong}}"', 1)
     # the Song panel's own pages dock in its place, each with its Back
-    for lab in ('Pattern', 'Transpose', 'Sort and filter'): t = _dock(t, lab)
+    for lab in ('Pattern', 'Sort and filter'): t = _dock(t, lab)
     # View: the view's settings docked, headed by the view's name
     a, b = _sect(t, '{{viewName}} settings'); h = t[a:b]
     h = re.sub(r'<h2[^>]*>\{\{viewName\}\}</h2>', '', h, count=1); t = t[:a] + h + t[b:]
@@ -220,7 +220,7 @@ def header_transport(t):
     return t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + keys)
 
 # where each popover hangs (left of Playback options, left of Volume, right of Piano keys), measured from the header
-POPX = {'play': (294, 470, 24), 'edit': (294, 470)}
+POPX = {'play': (294, 470, 576, 24), 'edit': (294, 470, 576)}
 
 for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     p = OUT / f'{name}.dc.html'; t = (BASE / f'{name}.dc.html').read_text()
@@ -244,7 +244,9 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         t = t.replace('padding: 8px 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; pointer-events: none', MODEBAR_P + '; pointer-events: none', 1)
     # Close goes back to the library the song was opened from (the song's own page is gone, R74)
     t = t.replace('href="Song.dc.html" aria-label="Close"', 'href="Songs.dc.html" aria-label="Close"').replace('href="SongLaptop.dc.html" aria-label="Close"', 'href="SongsLaptop.dc.html" aria-label="Close"')
-    t = t.replace('<a href="Song.dc.html" style', '<a href="Section.dc.html" style').replace('<a href="SongLaptop.dc.html" style', '<a href="SectionLaptop.dc.html" style')
+    # the Section page is gone (owner, 2026-11-26: "remove the section page completely"): its row goes from the song's card
+    t = re.sub(r'<a href="Song\.dc\.html" style[^>]*>.*?</a>', '', t, count=1, flags=re.S)
+    t = t.replace('<a href="SongLaptop.dc.html" style', '<a href="SectionLaptop.dc.html" style')  # the laptop's card is replaced whole below
     # the accompaniment first: it is what the song has; the arrangement only where one is written
     t = t.replace("(s.music !== 'chords'), acc:", "(s.music === 'written'), acc:").replace("}))(s.music === 'chords'), levelOpts", "}))(s.music !== 'written'), levelOpts")
     t = t.replace("music ?? 'written'", "music ?? 'chords'")

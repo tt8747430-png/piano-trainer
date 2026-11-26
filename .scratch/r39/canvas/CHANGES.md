@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · pending · R74: Transpose in the band after Loop (a pill naming the key; popover: Semitones − +, Key, Back to G major), in Practice and Edit; the Song panel's Transpose and Sections card gone; the Section page deleted (Section, SectionLaptop) with its rows · PlayerDesk, PlayerApp, EditorLaptop, EditorDraftLaptop, Main · pending
 
 ## Changes
 

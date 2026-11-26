@@ -776,8 +776,11 @@ def HDRTRANSPORT():
     # word; it opens its own popover under it (the keyboard in use, Record, MIDI settings ›), never a jump to Settings
     # (owner, 2026-11-26: "it doesnt make sense with these midi button goes to the settings popup"). Volume left the band
     # for the Audio panel, Record for this popover: Flat's band has neither
+    # Transpose after Loop: what the whole song sounds in, named on the pill (the key), its popover under it
+    tr = (f'<button type="button" aria-label="Transpose: {{{{hdKeyL}}}}" data-tip="Transpose · T" aria-haspopup="dialog" aria-expanded="{{{{hdTrX}}}}" onClick="{{{{hdTr}}}}" style="flex: none; height: 40px; padding: 0 10px 0 14px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer">'
+          f'{{{{hdKeyL}}}}<span aria-hidden="true" style="display: flex">{CHEV_D}</span></button>')
     midi = b('MIDI keyboard', 'MIDI keyboard', CABLEI, 'hdMidi', f'background: {{{{hdMidiBg}}}}; color: {ONB}', ' aria-haspopup="dialog" aria-expanded="{{hdMidiX}}"')
-    return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 10px">{start}{play}{met}{loop}{midi}</div>'
+    return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 10px">{start}{play}{met}{loop}{tr}{midi}</div>'
 
 def BANDHDR(close_href, mode, practice_href, edit_href, right='', over=False):
     """The one header of the Player's screen, Practice and Edit alike: ✕, the song's menu, the transport, the mode.
@@ -804,7 +807,7 @@ def _HVOLROW(i):
             + ib('Solo', 'doSolo', 'solo', '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>')
             + ib('Mute', 'doMute', 'mute', '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="m22 9-6 6M16 9l6 6"></path></svg>') + '</div>'
             + f'<div style="display: flex; align-items: center; gap: 12px"><input type="range" min="0" max="100" step="5" value="{{{{p.v}}}}" onChange="{{{{p.setV}}}}" aria-label="{{{{p.name}}}} volume" style="flex: 1; min-width: 0; height: 44px; margin: 0; accent-color: {INK}"><span style="width: 40px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">{{{{p.v}}}}%</span></div></div>')
-def HDRPOPS(practice, opts_left, midi_left, keys_right=None):
+def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None):
     # rows, as every card's (VERPANEL, ACCPANEL): a value with its pop-up, a level with its slider; no segmented strip
     rows = lambda *r: f'<div style="display: flex; flex-direction: column; margin: 0 -12px">{"".join(r)}</div>'
     qb = lambda lab, act, svg: f'<button type="button" aria-label="{lab}" onClick="{{{{{act}}}}}" disabled="{{{{{act}Dis}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
@@ -820,6 +823,14 @@ def HDRPOPS(practice, opts_left, midi_left, keys_right=None):
               f'<span style="flex: 1">MIDI settings</span><span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_R}</span></a>')
     rec = (f'<button type="button" aria-pressed="{{{{hdRecOn}}}}" onClick="{{{{hdRec}}}}" style="width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 8px 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 10px; text-align: left; cursor: pointer">'
            f'<span aria-hidden="true" style="flex: none; width: 12px; height: 12px; border-radius: {{{{hdRecR}}}}; background: #D2483A"></span><span style="flex: 1">{{{{hdRecL}}}}</span><span style="font-size: 13px; color: {SOFT}">R</span></button>')
+    # Transpose: the semitones with − and + (a stepper for a frequent, precise value), the key it lands in, and the way
+    # back to the written key when it moved; it changes the playback and the page at once (no Apply)
+    qb2 = lambda lab, act, svg: f'<button type="button" aria-label="{lab}" onClick="{{{{{act}}}}}" disabled="{{{{{act}Dis}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
+    semis = (f'<div style="min-height: 44px; display: flex; align-items: center; gap: 4px; padding: 0 4px 0 12px"><span style="flex: 1; font-size: 15px">Semitones</span>' + qb2('Down a semitone', 'hdTrDown', STEP_MINUS)
+             + f'<span style="min-width: 44px; text-align: center; font-size: 15px; font-variant-numeric: tabular-nums">{{{{hdTrL}}}}</span>' + qb2('Up a semitone', 'hdTrUp', STEP_PLUS) + '</div>')
+    keyrow = f'<div style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-top: 1px solid {LINE}"><span style="flex: 1; font-size: 15px">Key</span><span style="font-size: 15px; color: {SOFT}">{{{{hdKeyL}}}}</span></div>'
+    back = (f'<sc-if value="{{{{hdTrMoved}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{hdTrReset}}}}" style="width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: #356A8C; font: inherit; font-size: 15px; text-align: left; cursor: pointer">Back to G major</button></sc-if>')
+    out += _HPOPOVER('hdTrOn', 'Transpose', rows(semis, keyrow, back), f'left: {tr_left}px; top: 65px', 300)
     out += _HPOPOVER('hdMidiOn', 'MIDI keyboard', rows(SELROW('Keyboard', 'selMidi', False), rec, setrow), f'left: {midi_left}px; top: 65px', 320)
     if keys_right is not None:
         out += _HPOPOVER('hdKeysOn', 'Piano keys', rows(SELROW('Piano', 'selKb', False), SELROW('Labels', 'selLab')), f'right: {keys_right}px; top: 65px', 320)
@@ -856,13 +867,13 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
             " const sg = (list, cur, pick) => list.map(([id, l]) => ({ l, on: id === cur ? 'true' : 'false', bg: id === cur ? '#FEFDFB' : 'transparent', sh: id === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: id === cur ? 600 : 500, pick: () => pick(id) }));"
             " const sp = S.speed ?? 100; const met = S.metro ? 'on' : (S.countBars ?? 1) ? 'count' : 'off'; const NEXT = { count: 'on', on: 'off', off: 'count' }; const MN = { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' };"
             " const hands = (S.showR ?? 'show') === 'hide' ? 'lh' : (S.showL ?? 'show') === 'hide' ? 'rh' : 'both'; const rec = !!S.rec; const solo = S.solo ?? null; const mute = S.mute ?? [];"
-            " const kb = S.keys === false ? 'off' : (S.kbStyle ?? '3d');"
+            " const kb = S.keys === false ? 'off' : (S.kbStyle ?? '3d'); const tr = S.trans ?? 0; const KEYS = ['G major', 'A♭ major', 'A major', 'B♭ major', 'B major', 'C major', 'D♭ major', 'D major', 'E♭ major', 'E major', 'F major', 'F♯ major'];"
             " return { hdClose: () => SET(shut), hdStart: () => SET({ bar: 1, beat: 1, ...shut }), hdPlay: " + play + ", hdPlayTip: (" + playing + ") ? 'Pause' : 'Play',"
             " hdPlayD: (" + playing + ") ? 'M7 4h4v16H7zM13 4h4v16h-4z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z',"
             " hdOpts: tg('opts'), hdOptsOn: pop === 'opts', hdOptsX: pop === 'opts' ? 'true' : 'false',"
             " hdMet: () => { const n = NEXT[met]; SET({ metro: n === 'on', countBars: n === 'off' ? 0 : 1, " + TOAST("MN[n]") + " }); }, hdMetTip: MN[met], hdMetOff: met === 'off', "
             " hdLoop: " + loop + ", hdLoopOn: (" + loop_on + ") ? 'true' : 'false', hdLoopBg: (" + loop_on + ") ? '#EDC684' : '#FEFDFB', hdLoopTip: " + loop_tip + ","
-            " hdMidi: tg('midi'), hdMidiOn: pop === 'midi', hdMidiX: pop === 'midi' ? 'true' : 'false', hdMidiBg: pop === 'midi' ? 'rgba(254,253,251,.16)' : 'transparent', hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent',"
+            " hdTr: tg('tr'), hdTrOn: pop === 'tr', hdTrX: pop === 'tr' ? 'true' : 'false', hdTrL: (tr > 0 ? '+' : tr < 0 ? '−' : '') + Math.abs(tr), hdKeyL: KEYS[((tr % 12) + 12) % 12], hdTrUp: () => SET({ trans: Math.min(11, tr + 1) }), hdTrDown: () => SET({ trans: Math.max(-11, tr - 1) }), hdTrUpDis: tr >= 11, hdTrDownDis: tr <= -11, hdTrMoved: tr !== 0, hdTrReset: () => SET({ trans: 0 }), hdMidi: tg('midi'), hdMidiOn: pop === 'midi', hdMidiX: pop === 'midi' ? 'true' : 'false', hdMidiBg: pop === 'midi' ? 'rgba(254,253,251,.16)' : 'transparent', hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent',"
             " hdRooms: ['Off', 'Studio', 'Hall', 'Cathedral'].map((l) => { const on = (S.room ?? 'Off') === l; return { l, on: on ? 'true' : 'false', bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: on ? 600 : 500, pick: () => SET({ room: l }) }; }),"
             " hdRec: () => SET({ rec: !rec, " + TOAST("rec ? 'Recording stopped · Recording 4 kept' : 'Recording · play on your keyboard'") + " }), hdRecOn: rec ? 'true' : 'false', hdRecL: rec ? 'Stop recording' : 'Record', hdRecR: rec ? '2px' : '6px',"
             " hdSpeedL: (sp / 100).toFixed(1) + '×', hdSlower: () => SET({ speed: Math.max(20, sp - 10) }), hdFaster: () => SET({ speed: Math.min(200, sp + 10) }), hdSlowerDis: sp <= 20, hdFasterDis: sp >= 200,"
@@ -950,5 +961,4 @@ def ACCPANEL():
            + f'<sc-if value="{{{{accWhole}}}}" hint-placeholder-val="{{{{true}}}}">{info}</sc-if><sc-if value="{{{{accPicked}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{clearPick}}}}" style="flex: none; height: 32px; margin: -6px -8px -6px 0; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: #356890; font: inherit; font-size: 14px; cursor: pointer">Clear selection</button></sc-if></div>'
            + f'<sc-if value="{{{{accPicked}}}}" hint-placeholder-val="{{{{false}}}}">{SEGC("accScopes", 36, 14, True)}</sc-if>'
            f'<div style="{card}">' + link('Pattern', '{{patternName}}', 'openPattern').replace('{line}', 'transparent') + SELROW('First chord’s inversion', 'selInv') + SELROW('Voicing', 'selVoice') + reset + '</div></section></sc-if>')
-    song = (f'<div style="{card}">' + link('Transpose', '{{keyName}}', 'openKey').replace('{line}', 'transparent') + link('Sections', '', href='SectionLaptop.dc.html').replace('{line}', LINE) + '</div>')
-    return acc + song
+    return acc
