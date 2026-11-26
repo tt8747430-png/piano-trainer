@@ -299,6 +299,18 @@ def desk_edit(t):
     t = t.replace(old, "isLyr: id === 'lyrics', isHere: !(editing && id === 'sheet'), isAway: editing && id === 'sheet', href: p.editor ?? 'EditorLaptop.dc.html', ...viewPress(id) }; }), " + mk, 1)
     return t
 
+def desk_views(t):
+    # the laptop's Diagrams, Grid and Lyrics on the panel's lines (the lines tool, 2026-11-26): the song's name on the
+    # panel head's top (it sat 6 above "Song"), the credits 4 under it (6 was off the scale), the grid's first section head
+    # on the panel's first fold head, each head 8 over its rows and 24 under the last section (10 and 22 were off the scale)
+    for a, b in (('align-items: center; gap: 6px; pointer-events: none"><h2', 'align-items: center; gap: 4px; pointer-events: none"><h2'),
+                 ("viewTop: (keys ? DEV.topKeys : DEV.top) + 72, viewHeadTop: keys ? DEV.topKeys : DEV.top,", "viewTop: (keys ? DEV.topKeys : DEV.top) + 78, viewHeadTop: (keys ? DEV.topKeys : DEV.top) + 6,"),
+                 ('margin: {{g.mt}}px 0 6px {{gridIndent}}px', 'margin: {{g.mt}}px 0 4px {{gridIndent}}px'),
+                 ("mt: v === 1 ? 0 : 18,", "mt: v === 1 ? 0 : 20,")):
+        assert t.count(a) == 1, a
+        t = t.replace(a, b, 1)
+    return t
+
 # where each popover hangs (left of Playback options, left of Volume, right of Piano keys), measured from the header
 POPX = {'play': (294, 470, 576, 24), 'edit': (294, 470, 576)}
 
@@ -417,6 +429,6 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         f'<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px">' + btn('Cancel', 'renCancel', 'transparent', INK) + btn('Save', 'renSave', ACCENT, INK) + '</div>',
         close='renCancel', label='Rename version') + '</sc-if>')
     t = t.replace('</main>', '</main>' + (RENAMEDLG() if name == 'PlayerDesk' else ren), 1)
-    t = desk_edit(header_transport(player_rail(t))) if name == 'PlayerDesk' else phone_band(t)
+    t = desk_views(desk_edit(header_transport(player_rail(t)))) if name == 'PlayerDesk' else phone_band(t)
     p.write_text(t)
 print('r74 versions ok')

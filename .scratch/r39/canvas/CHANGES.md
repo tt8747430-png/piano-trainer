@@ -8,7 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-26 · (this commit) · R74 Edit kept across the views: the editor's Diagrams, Grid and Lyrics cards open those views in Edit (new boards EditorDiagrams/Grid/Lyrics, EditorDraft…, EditorLaptop…, EditorDraftLaptop…, and the Player's PlayerLaptopDiagrams/Grid/Lyrics), Edit's acts under the header, the Sheet card back to the editor, Practice | Edit keeping the view; the grid's section heads on the ☰ panel's edge · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop + 15 new · pending
+- 2026-11-26 · (this commit) · laptop Diagrams, Grid and Lyrics on the panel's lines: the song's name on the panel head's top, the credits 4 under it, the grid's section heads 8 over their rows and 24 under the last section (lines tool: 8 problems → 0) · PlayerDesk (and its wrappers) · pending
+
+- 2026-11-26 · (this commit) · R74 Edit kept across the views: the editor's Diagrams, Grid and Lyrics cards open those views in Edit (new boards EditorDiagrams/Grid/Lyrics, EditorDraft…, EditorLaptop…, EditorDraftLaptop…, and the Player's PlayerLaptopDiagrams/Grid/Lyrics), Edit's acts under the header, the Sheet card back to the editor, Practice | Edit keeping the view; the grid's section heads on the ☰ panel's edge · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop + 15 new · pending (a0ec203a; publish refused by the permission check)
 
 
 
