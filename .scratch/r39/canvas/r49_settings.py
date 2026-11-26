@@ -75,7 +75,7 @@ P_PRIVACY = (SEC(S9CAPS('Profile', 'priv'), TIPCARD('priv', 'Your name and pictu
 
 UPDSEC = SEC(CAPS('Software update'), GROUP(('raw', f'<div style="min-height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 6px 16px">{DOT("{{updDot}}")}<span style="flex: 1; font-size: 16px">{{{{updT}}}}</span></div>'),
                                             ('action', '{{updBtn}}', 'updGo'), bg=SHEET))
-P_GENERAL = THEMES + SEC(S9CAPS('Computer keyboard', 'ckb'), TIPCARD('ckb', 'The letter keys play the on-screen piano. Z and X shift the octave · Space holds the sustain pedal.'), GROUP(('toggle', 'Play with computer keyboard', 'ckbOn', 'ckbT'), ('link', 'Shortcuts', '', 'openShort'), bg=SHEET))
+P_GENERAL = THEMES + SEC(S9CAPS('Computer keyboard', 'ckb'), TIPCARD('ckb', 'The letter keys play the on-screen piano. Z and X shift the octave · Space holds the sustain pedal.'), GROUP(('toggle', 'Play with computer keyboard', 'ckbOn', 'ckbT'), ('link', 'Keyboard shortcuts', '', 'go_Keyboard_shortcuts'), bg=SHEET))
 
 # ── Storage and backup ──
 BAR = lambda w, c=GREEN: f'<span style="display: block; height: 8px; border-radius: 4px; background: {FILL}; overflow: hidden"><span style="display: block; width: {w}; height: 8px; border-radius: 4px; background: {c}"></span></span>'
@@ -169,9 +169,9 @@ P_LAYOUTS = (SEC(CAPS('Changed by you'), GROUP(_LAYROW('Chord player', 'layCP', 
              + SEC(GROUP(('action', 'Reset every page', 'resetAllLay'), bg=SHEET)))
 LAYSEC = SEC(CAPS('Layout'), GROUP(('link', 'Page layouts', '{{layN}}', 'go_Page_layouts'), bg=SHEET))
 PAGES = [('Account', P_ACCOUNT), ('Edit profile', P_EDITPROFILE), ('Email', P_EMAIL), ('Change password', P_PASSWORD), ('Privacy', P_PRIVACY), ('General', P_GENERAL), ('Appearance', ''), ('Storage and backup', P_STORAGE), 
-         ('MIDI devices', P_MIDI), ('MIDI log', P_LOG), ('Calibrate timing', P_TIMING), ('Selection toolbar', P_TOOLBAR), ('Page layouts', P_LAYOUTS), ('Swipe actions', P_SWIPE), ('User guide', P_GUIDE), ('Report a problem', P_REPORT), ('About', P_ABOUT)]
+         ('MIDI devices', P_MIDI), ('MIDI log', P_LOG), ('Calibrate timing', P_TIMING), ('Selection toolbar', P_TOOLBAR), ('Page layouts', P_LAYOUTS), ('Keyboard shortcuts', SHORTBODY), ('Swipe actions', P_SWIPE), ('User guide', P_GUIDE), ('Report a problem', P_REPORT), ('About', P_ABOUT)]
 SLUG = lambda p: p.replace(' ', '_').replace('-', '_')
-PARENT = {'Page layouts': 'General', 'Edit profile': 'Account', 'Email': 'Account', 'Change password': 'Account', 'Privacy': 'Account', 'MIDI log': 'MIDI devices', 'Calibrate timing': 'MIDI devices'}
+PARENT = {'Page layouts': 'General', 'Keyboard shortcuts': 'General', 'Edit profile': 'Account', 'Email': 'Account', 'Change password': 'Account', 'Privacy': 'Account', 'MIDI log': 'MIDI devices', 'Calibrate timing': 'MIDI devices'}
 # On a laptop Appearance is claude.ai's: a section of rows, Theme with its three small screens and Language with two
 # choices, each at the row's end (owner, 2026-11-17, claude.ai's Settings › General › Appearance).
 _THUMB = (f'<sc-for list="{{{{themes}}}}" as="t" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{t.on}}}}" onClick="{{{{t.pick}}}}" style="border: 0; background: transparent; padding: 0; font: inherit; color: {INK}; display: flex; flex-direction: column; align-items: center; gap: 8px">'
@@ -237,8 +237,6 @@ SETTINGS_JS = js('const GROUPS = ' + json.dumps(SETGROUPS, ensure_ascii=False) +
     const off = st.off ?? 54, dl = st.dl ?? false;
     Object.assign(v, { offT: dl ? 'Downloading… ' + Math.round(off / 88 * 100) + '%' : off >= 88 ? 'Available offline' : off ? '' : 'Not downloaded', offHasT: dl || off >= 88 || !off, offN: off + ' of 88 downloaded', offW: Math.round(off / 88 * 100) + '%', offCan: off < 88 && !dl,
       download: () => { S({ dl: true, off: 62 }); setTimeout(() => S({ off: 76 }), 600); setTimeout(() => S({ dl: false, off: 88 }), 1300); } });
-    Object.assign(v, {
-      openShort: () => S({ sheet: 'short' }), shortOn: st.sheet === 'short' });
     // MIDI
     const oct = st.oct ?? 0, lat = st.lat ?? 18;
     Object.assign(v, { oct: (oct > 0 ? '+' : '') + oct, octDn: () => S({ oct: Math.max(-3, oct - 1) }), octUp: () => S({ oct: Math.min(3, oct + 1) }), touch: seg(['Light', 'Normal', 'Heavy'], st.touch ?? 'Normal', (x) => S({ touch: x })), pedal: seg(['Normal', 'Reversed'], st.pdl ?? 'Normal', (x) => S({ pdl: x })),
@@ -296,9 +294,9 @@ S9ASKS = (ASK('signoutOn', 'Sign out?', 'Your songs and progress stay on this de
           + ASK('resetOn', 'Reset progress?', 'Learned steps, practised songs and quiz results on this device will be cleared.', 'Reset', 'doReset')
           + ASK('removeOn', 'Remove downloaded piano samples?', 'Offline, a lighter sampled piano plays until you download them again.', 'Remove', 'doRemove')
           + ASK('restoreOn', 'Restore this backup?', 'Everything on this device will be replaced with the backup from 8 November 2026. The app will then restart.', 'Restore', 'doRestore') + DELASK)
-S9SHEETS = BSHEET('photoOn', 'Change photo', PHOTOBODY) + BSHEET('btOn', 'Connect a Bluetooth MIDI keyboard', BTBODY) + BSHEET('shortOn', 'Shortcuts', SHORTBODY) + BSHEET('swOn', '{{swTitle}}', SWPICK)
+S9SHEETS = BSHEET('photoOn', 'Change photo', PHOTOBODY) + BSHEET('btOn', 'Connect a Bluetooth MIDI keyboard', BTBODY) + BSHEET('swOn', '{{swTitle}}', SWPICK)
 S9POPS = (POPOVER('photoOn', 'Change photo', PHOTOBODY, 'left: 760px; top: 160px', 420) + POPOVER('btOn', 'Connect a Bluetooth MIDI keyboard', BTBODY, 'left: 760px; top: 300px', 460)
-          + POPOVER('shortOn', 'Shortcuts', SHORTBODY, 'left: 760px; top: 420px', 420) + POPOVER('swOn', '{{swTitle}}', SWPICK, 'left: 760px; top: 260px', 380))
+          + POPOVER('swOn', '{{swTitle}}', SWPICK, 'left: 760px; top: 260px', 380))
 
 s9ph = (f'<sc-if value="{{{{isList}}}}" hint-placeholder-val="{{{{true}}}}">{TOP("Profile.dc.html", "Settings", "", "Profile")}'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 40px; display: flex; flex-direction: column; gap: 16px">{ACCT2}{SLIST("groups")}{ADMINGRP("Admin.dc.html")}</main></sc-if>'

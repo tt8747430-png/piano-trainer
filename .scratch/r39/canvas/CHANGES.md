@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · Settings' Shortcuts popover is now a Keyboard shortcuts page under General, with Back, as Page layouts · SettingsLaptop, Settings · pending
 
 ## Changes
 
