@@ -1,6 +1,6 @@
 """The one Piano sheet (R43 canvas 121; owner: "why the player doesnt have the hands on the keys setting and also the
 range selections and the chord player doesnt have the view from above or seat. merge them and make proper one piano
-settings"). Imported by the Chords page (r42_chords.py) and the Player (player/r43_player.py), so the two can never
+settings"). Imported by the Chords page (r42_chords.py); the Player boards carry the sheet it built (player/base), so the two can never
 drift again. Each page supplies the same bindings:
 
   pianoSw, kbHandsSw          switches: { on, track, knob, flip }

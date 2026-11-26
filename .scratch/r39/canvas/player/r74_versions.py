@@ -1,15 +1,16 @@
 # R74 (owner, 2026-11-26): the Player says plainly that it shows an accompaniment made from the chords, opens on it
 # (almost every song has only that), offers the learner's own arrangement where the versions are chosen, and its bar
-# holds the one version-and-mode control (MODESW). Its input is the Player pair as committed before R74 (8fa29061~1:
-# git show it into practice/project, then run this); r43_player.py no longer runs on its base. Idempotent.
+# holds the one version-and-mode control (MODESW). Its one input is player/base (the Player pair as built before R74);
+# it writes practice/project, so it runs any number of times. The Player's earlier builders are gone.
 import re, pathlib, sys; sys.path.insert(0, "/home/user/piano-trainer/.scratch/r39/canvas")
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/calm_kit.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_kit.py').read())
 OUT = pathlib.Path('/home/user/piano-trainer/.scratch/r39/canvas/practice/project')
+BASE = pathlib.Path('/home/user/piano-trainer/.scratch/r39/canvas/player/base')  # the Player pair as built before R74; the one input
 OLDSW = re.compile(r'<div role="radiogroup" aria-label="Mode" style="display: flex; border-radius: 22px;.*?</div>', re.S)
 CHEVR = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>'
 for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
-    p = OUT / f'{name}.dc.html'; t = p.read_text()
+    p = OUT / f'{name}.dc.html'; t = (BASE / f'{name}.dc.html').read_text()
     NEWSW = re.compile(r'<div role="group" aria-label="Version and mode".*?</a></div>', re.S)
     if 'aria-label="Version and mode"' in t:
         t, n = NEWSW.subn(lambda m: MODESW('play', 'Editor' + sfx), t, count=1)
