@@ -124,7 +124,7 @@ def player_rail(t):
 
 # The transport in the header on a laptop (owner, 2026-11-26: "the floating actions there on the laptop doesnt make
 # sense … doesnt follow the flat editor header and toolbars"): Flat's header carries the song's name, then the transport,
-# then the mode (flat-score-editor 099, 143); the three capsules floating over the music go, their buttons move into one
+# then the mode (the owner's Flat 26.11 band, the new header); the three capsules floating over the music go, their buttons move into one
 # header pill after the title (‹ Play › | the pace, the loop | the hands, the keys), their popovers hang under it. The
 # pace says what it does: Listen (at a speed) or Wait. The phone keeps its floating capsules (owner: "dont change the
 # mobile version floating actions").
@@ -185,18 +185,42 @@ def header_transport(t):
                  ("pick: () => this.setState({ patId: x.id, music: 'chords', open: 'settings', patRecent: [x.id, ...recent.filter((r) => r !== x.id)].slice(0, 3) })", "pick: () => setAcc('pat', x.id, x.name, { music: 'chords', open: 'settings', patRecent: [x.id, ...recent.filter((r) => r !== x.id)].slice(0, 3) })"),
                  ("songUndo: () => this.setState({ sTo: '', sUndo: false, ...(s.undoVer || {}), undoVer: null })", "songUndo: () => this.setState({ sTo: '', sUndo: false, ...(s.undoVer || {}), undoVer: null, ...(s.undoOv ? { ovr: s.undoOv, hist: s.undoHist } : {}), undoOv: null })")):
         assert t.count(a) == 1, a[:60]; t = t.replace(a, b, 1)
+    # the keys docked at the foot, the editor's strip (owner, 2026-11-26: "the piano should also be the same as the flat
+    # and should be the same in the editor and also in the player: but keep the 3d version"): the whole width beside the
+    # panel, square to the window's edges, a hairline above; 2D resized by its grip (96–260, as the editor's), 3D as tall
+    # as its picture at that width; the music ends 16 above it
+    r = t.index('const s = this.state || {};\n') + len('const s = this.state || {};\n')
+    t = t[:r] + "const DOCKL = (s.rail ?? 'song') === 'none' ? 76 : 428;\n" + t[r:]
+    # the strip's size once the board's KB is made (it is declared later in renderVals)
+    k = t.index('const KB = { top: 0,'); k = t.index('};\n', k) + 3
+    t = t[:k] + "KB.w = 1710 - DOCKL; KB.h = Math.max(96, Math.min(260, s.kh ?? 150));\n" + t[k:]
+    t, n = re.subn(r"kbTop: 800 - bandH, kbLeft: .*?, kbW: KB\.w,", "kbTop: 904 - bandH, kbLeft: DOCKL, kbW: KB.w,", t, count=1); assert n == 1
+    t = t.replace('viewBottom: keys ? 904 - (800 - bandH) + 16 : DEV.bottom,', 'viewBottom: keys ? bandH + 16 : DEV.bottom,', 1)
+    fl = 'border-radius: 20px; box-shadow: 0 0 0 1px rgba(51,41,33,.10), 0 2px 6px rgba(51,41,33,.14), 0 18px 40px -12px rgba(51,41,33,.40)'
+    assert t.count(fl) == 2; t = t.replace(fl, 'border-radius: 0; box-shadow: 0 -1px 0 #DAD1C8; z-index: 20')  # over the page, under the grip (21)
+    grip = ('<sc-if value="{{kb2d}}" hint-placeholder-val="{{false}}"><div role="separator" aria-orientation="horizontal" aria-label="Keyboard height" aria-valuenow="{{kbH}}" aria-valuemin="96" aria-valuemax="260" tabindex="0" data-tip="Drag to resize" onPointerDown="{{dragKeys}}" onPointerMove="{{dragKeys}}" onKeyDown="{{keyKeys}}" '
+            'style="position: absolute; z-index: 21; left: {{kbLeft}}px; width: {{kbW}}px; top: {{gripTop}}px; height: 13px; cursor: row-resize; touch-action: none; display: flex; align-items: center; justify-content: center">'
+            '<span aria-hidden="true" style="width: 36px; height: 5px; border-radius: 3px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8"></span></div></sc-if>')
+    i = t.index('<sc-if value="{{kb2d}}" hint-placeholder-val="{{false}}">'); t = t[:i] + grip + t[i:]
+    dk = ("gripTop: 904 - bandH - 6, dragKeys: (e) => { if (e.type === 'pointermove' && !e.buttons) return; if (e.type === 'pointerdown') { if (e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId); return; } "
+          "const g = e.currentTarget.parentElement; const rr = g.getBoundingClientRect(), k = rr.width / g.offsetWidth; this.setState({ kh: Math.round(Math.max(96, Math.min(260, (rr.bottom - e.clientY) / k))) }); }, "
+          "keyKeys: (e) => { const d = { ArrowUp: 16, ArrowDown: -16 }[e.key]; if (d) this.setState({ kh: Math.max(96, Math.min(260, (s.kh ?? 150) + d)) }); }, ")
+    t = t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + dk, 1)
+    # a laptop keeps its band, rail and panel while playing (owner, 2026-11-26: "on laptop doesnt make sense to hide all
+    # controls while playing"): the transport, the mode and the panel are what the learner reaches for mid-play, as in
+    # Flat's player; the phone keeps its auto-hide for its small screen
+    assert t.count('showControls: !playing,') == 1; t = t.replace('showControls: !playing,', 'showControls: true,', 1)
     t = t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + PICKKEYS('s', 'this.setState') + ' ' + HISTKEYS('s', 'this.setState', lambda m: 'sTo: ' + m + ', sUndo: true', restore="(h) => ({ undoOv: OV, ovr: h.ov })"), 1)
     t = t.replace('</main>', '</main>' + HDRPOPS(True, *POPX['play']), 1)
     loop = "() => { if (loop) { this.setState({ loop: false, hdPop: null }); return; } const a = Math.floor((bar - 1) / 4) * 4 + 1; this.setState({ loop: true, loopA: a, loopB: Math.min(16, a + 3), hdPop: null }); }"
     keys = HDRKEYS('s', '(o) => this.setState(o)', lambda m: 'sTo: ' + m + ', sUndo: false', 'togglePlayNow', 'playing', loop, 'loop',
                    "loop ? 'Stop looping bars ' + loopA + '–' + loopB : 'Loop bars ' + (Math.floor((bar - 1) / 4) * 4 + 1) + '–' + Math.min(16, Math.floor((bar - 1) / 4) * 4 + 4)",
-                   [('R', 'Right hand'), ('L', 'Left hand')],
-                   "() => this.setState({ rail: (s.rail ?? 'song') === 'audio' ? 'none' : 'audio', open: 'none', hdPop: null })", "(s.rail ?? 'song') === 'audio'")
+                   [('R', 'Right hand'), ('L', 'Left hand')])
     assert t.count('togglePlay: togglePlayNow,') >= 1
     return t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + keys)
 
 # where each popover hangs (left of Playback options, left of Volume, right of Piano keys), measured from the header
-POPX = {'play': (312, 497, 24), 'edit': (312, 497)}
+POPX = {'play': (294, 470, 24), 'edit': (294, 470)}
 
 for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     p = OUT / f'{name}.dc.html'; t = (BASE / f'{name}.dc.html').read_text()

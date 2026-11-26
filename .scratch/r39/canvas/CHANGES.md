@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · pending · R74: the band as the owner's five Flat 26.11 screenshots in the chat: ⏮ ▶▾ metronome Loop white-filled circles, MIDI a bare cable glyph opening its own popover (Keyboard, Record, MIDI settings ›) instead of jumping to Settings, no Volume and no Record in the band (the mixer and Volume popover gone; Audio holds Room, then Volume: Master volume and each part); a laptop keeps band, rail and panel while playing; the Player's keys docked as the editor's strip (2D grip 96–260, 3D); the editor's All patterns to Accompaniment at the board's size · PlayerDesk, EditorLaptop, EditorDraftLaptop, Editor, EditorDraft · pending
 
 ## Changes
 

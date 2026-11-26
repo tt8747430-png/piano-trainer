@@ -732,7 +732,7 @@ def RENAMEDLG():
 _MSEG = 'height: 40px; box-sizing: border-box; padding: 0 14px 0 10px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap'
 MUSICI = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'
 def MODESW(on, practice_href, edit_href):
-    # as Flat's "✎ Edit ▾" in its header (flat-score-editor 099, 143): the mode's name with its icon, a menu of the two
+    # as Flat's "✎ Edit ▾" in its header (the owner's Flat 26.11 band, the new header): the mode's name with its icon, a menu of the two
     # modes under it; a native <details>, so it closes when one is chosen and opens anywhere it is drawn
     cur = ('Practice', MUSICI) if on == 'play' else ('Edit', PENI)
     row = lambda lab, ic, href, sel: (f'<a role="menuitemradio" aria-checked="{"true" if sel else "false"}" href="{href}" style="{_SMROW}">{_SMSLOT(CHECK if sel else "")}'
@@ -741,40 +741,43 @@ def MODESW(on, practice_href, edit_href):
             f'{cur[1]}<span>{cur[0]}</span><span aria-hidden="true" style="display: flex; color: {ONB_SOFT}">{CHEV_D}</span></summary>'
             f'<div role="menu" aria-label="Mode" style="{_SMBOX}; left: 0; top: 48px; width: 220px">' + row('Practice', MUSICI, practice_href, on == 'play') + row('Edit', PENI, edit_href, on == 'edit') + '</div></details>')
 
-# The transport in the header, as Flat's (flat-score-editor 099, 143: the title, then go to start, Play with its options,
+# The transport in the header, as Flat's (the owner's Flat 26.11 band, the new header: the title, then go to start, Play with its options,
 # metronome, loop, volume, MIDI, then the mode): one glass pill after the title in both modes, nothing floating over the
 # music on a laptop; Play the one honey circle; the buttons 40 high, a dense laptop bar's size
 HDRPILL = f'flex: none; height: 48px; box-sizing: border-box; padding: 4px; border-radius: 24px; {GLASSFX}; display: flex; align-items: center; gap: 2px; pointer-events: auto'
 HDRSEP = f'<span aria-hidden="true" style="flex: none; width: 1px; height: 20px; margin: 0 4px; background: {LINE}"></span>'
 
 # Flat's header transport, refactored rather than moved (owner, 2026-11-26: "refactor properly: why did you put them
-# there and just moved the location but didnt refactor them properly?"): Flat's top bar (flat-score-editor 099, 143;
+# there and just moved the location but didnt refactor them properly?"): Flat's new band (the owner's Flat 26.11 screenshots;
 # FLAT_PLAYER_AND_PIANO.md §1.1) is a row of single round buttons, each one act: Go to start (Ctrl+Space), Play with its
 # options under ▾ (Flat's "Audio options": playback speed), the metronome (one press cycles Count-in, On, Off: Flat's
-# "Change metronome mode"), Loop (L), Volume (Flat's "Volume Settings" popover: the master and each part), MIDI with
-# its red Record. Ours are the same acts with the same keys in Practice and in Edit; the old capsule's ‹ › steps
-# (Go to start replaces them), its Listen/Wait label (Play's options) and its Hands and Keys labels (Volume holds the
+# "Change metronome mode"), Loop (L), then MIDI, a bare cable glyph (its popover: the keyboard, Record,
+# MIDI settings); Volume lives in the Audio panel alone. Ours are the same acts with the same keys in Practice and in Edit; the old capsule's ‹ › steps
+# (Go to start replaces them), its Listen/Wait label (Play's options) and its Hands and Keys labels (the Audio panel holds the
 # parts; the keys are the view's, at the bar's end as Flat's keyboard toggle) are gone. Each 44 round glass, Play
 # the one honey circle. The keys every board supplies: hdStart, hdPlay, hdPlayTip, hdPlayD, hdOpts, hdOptsX, hdMet,
-# hdMetTip, hdMetBg, hdMetOff, hdLoop, hdLoopBg, hdLoopTip, hdVol, hdVolX, hdRec, hdRecBg, hdRecTip.
+# hdMetTip, hdMetOff, hdLoop, hdLoopBg, hdLoopTip, hdMidi, hdMidiX, hdMidiBg.
 METI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M9 3h6l4 18H5z"></path><path d="M7.5 15h9"></path><path d="m12 15 5-9"></path></svg>'
 _HB = 'flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer'
+CABLEI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1"></path><path d="M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9"></path><path d="M21 21v-2h-4"></path><path d="M3 5h4V3"></path><path d="M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3"></path></svg>'
 MIXI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg>'
-def HDRTRANSPORT(midi_href):
+def HDRTRANSPORT():
     b = lambda lab, tip, inner, act, look, extra='': f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{_HB}; {look}">{inner}</button>'
     filled = f'background: {ONB}; color: {BAND}'
-    ring = lambda k: f'background: {{{{{k}Bg}}}}; color: {{{{{k}Fg}}}}; box-shadow: {ONB_RING}'
+    # filled white as Flat's; Loop honey while it loops (the one sign it is on), the metronome crossed while off
+    lit = lambda k: f'background: {{{{{k}Bg}}}}; color: {BAND}'
     start = b('Go to start', 'Go to start · ⌃Space', '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="2.5" height="14" rx="1"></rect><path d="M19 6.3v11.4a1 1 0 0 1-1.5.86L9.4 13.3a1.5 1.5 0 0 1 0-2.6l8.1-5.26A1 1 0 0 1 19 6.3z"></path></svg>', 'hdStart', filled)
     play = (f'<div role="group" aria-label="Play" style="flex: none; display: flex; align-items: center; gap: 2px">'
             + b('{{hdPlayTip}}', '{{hdPlayTip}} · Space', '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="{{hdPlayD}}"></path></svg>', 'hdPlay', f'background: #EDC684; color: {BAND}')
             + f'<button type="button" aria-label="Playback options" data-tip="Playback options" aria-haspopup="dialog" aria-expanded="{{{{hdOptsX}}}}" onClick="{{{{hdOpts}}}}" style="flex: none; width: 24px; height: 40px; padding: 0; border: 0; border-radius: 12px; background: {{{{hdOptsBg}}}}; color: {ONB}; display: flex; align-items: center; justify-content: center; cursor: pointer">{CHEV_D}</button></div>')
-    met = b('{{hdMetTip}}', '{{hdMetTip}} · press to change', METI.replace('width="20" height="20"', 'width="18" height="18"') + '<sc-if value="{{hdMetOff}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="position: absolute; width: 22px; height: 1.5px; border-radius: 1px; background: currentColor; transform: rotate(-45deg)"></span></sc-if>', 'hdMet', ring('hdMet'))
-    loop = b('Loop', '{{hdLoopTip}} · L', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>', 'hdLoop', ring('hdLoop'), ' aria-pressed="{{hdLoopOn}}"')
-    mix = b('Audio', 'Audio: room and volume', MIXI, 'hdVol', f'background: {{{{hdVolBg}}}}; color: {ONB}', ' aria-pressed="{{hdVolX}}"')
-    midi = (f'<div role="group" aria-label="MIDI" style="flex: none; height: 40px; box-sizing: border-box; padding: 0; border-radius: 20px; box-shadow: {ONB_RING}; display: flex; align-items: center">'
-            f'<a href="{midi_href}" data-tip="MIDI keyboard" style="height: 40px; min-width: 44px; box-sizing: border-box; padding: 0 4px 0 14px; color: {ONB}; text-decoration: none; font-size: 13px; font-weight: 700; letter-spacing: .02em; display: flex; align-items: center">MIDI</a>'
-            f'<button type="button" aria-label="{{{{hdRecTip}}}}" data-tip="{{{{hdRecTip}}}} · R" onClick="{{{{hdRec}}}}" style="flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px; background: {{{{hdRecBg}}}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 6px; background: #E5604F"></span></button></div>')
-    return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 10px">{start}{play}{met}{loop}{mix}{midi}</div>'
+    met = b('{{hdMetTip}}', '{{hdMetTip}} · press to change', METI.replace('width="20" height="20"', 'width="18" height="18"') + '<sc-if value="{{hdMetOff}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="position: absolute; width: 22px; height: 1.5px; border-radius: 1px; background: currentColor; transform: rotate(-45deg)"></span></sc-if>', 'hdMet', filled)
+    loop = b('Loop', '{{hdLoopTip}} · L', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>', 'hdLoop', lit('hdLoop'), ' aria-pressed="{{hdLoopOn}}"')
+    # MIDI as Flat's new band draws it (the owner's Flat 26.11 screenshots): a bare cable glyph after Loop, no ring, no
+    # word; it opens its own popover under it (the keyboard in use, Record, MIDI settings ›), never a jump to Settings
+    # (owner, 2026-11-26: "it doesnt make sense with these midi button goes to the settings popup"). Volume left the band
+    # for the Audio panel, Record for this popover: Flat's band has neither
+    midi = b('MIDI keyboard', 'MIDI keyboard', CABLEI, 'hdMidi', f'background: {{{{hdMidiBg}}}}; color: {ONB}', ' aria-haspopup="dialog" aria-expanded="{{hdMidiX}}"')
+    return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 10px">{start}{play}{met}{loop}{midi}</div>'
 
 def BANDHDR(close_href, mode, practice_href, edit_href, right='', over=False):
     """The one header of the Player's screen, Practice and Edit alike: ✕, the song's menu, the transport, the mode.
@@ -782,13 +785,13 @@ def BANDHDR(close_href, mode, practice_href, edit_href, right='', over=False):
     x = (f'<a href="{close_href}" aria-label="Close" data-tip="Close · Esc" style="flex: none; width: 40px; height: 40px; border-radius: 20px; color: {ONB}; display: flex; align-items: center; justify-content: center">'
          '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></a>')
     return (f'<header data-band style="{"position: absolute; z-index: 48; left: 0; right: 0; top: 0" if over else "flex: none; position: relative; z-index: 20"}; height: 64px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 12px; background: {BAND}; color: {ONB}">'
-            f'{x}{SONGMENU("TakesLaptop.dc.html")}{HDRTRANSPORT("SettingsLaptop.dc.html")}{MODESW(mode, practice_href, edit_href)}<span style="flex: 1"></span>{right}</header>')
+            f'{x}{SONGMENU("TakesLaptop.dc.html")}{HDRTRANSPORT()}{MODESW(mode, practice_href, edit_href)}<span style="flex: 1"></span>{right}</header>')
 
 # The header's popovers, new and the same in both modes: each a card hung 8 under its button, a tap outside closing it
 # (the kit's popover card: 16 round, the page's paper, the hairline and the float shadow). Playback options holds what
 # Flat's ▾ holds, Playback speed (0.2× to 2.0×, by 0.1), and in Practice how you practise: Listen or Wait, and the
-# hands you play (flowkey's and Simply Piano's choice before a run). Volume is Flat's Volume settings: Master, then each
-# part with Solo, Mute and its level; one home, so the editor's Audio panel keeps the room alone. Piano keys (Practice;
+# hands you play (flowkey's and Simply Piano's choice before a run). MIDI keyboard holds the keyboard in use, Record and
+# a row to MIDI settings; no Volume popover: Flat's band has no Volume, its Audio panel is the one home of the levels. Piano keys (Practice;
 # the editor's toolbar has its own) is the keys' view: 3D, 2D or Off, and their labels.
 _HPOP = f'position: absolute; z-index: 61; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 12px 8px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 4px'
 _HCAP = lambda t: f'<h3 style="margin: 0; font-size: 15px; font-weight: 600">{t}</h3>'
@@ -801,7 +804,7 @@ def _HVOLROW(i):
             + ib('Solo', 'doSolo', 'solo', '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>')
             + ib('Mute', 'doMute', 'mute', '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="m22 9-6 6M16 9l6 6"></path></svg>') + '</div>'
             + f'<div style="display: flex; align-items: center; gap: 12px"><input type="range" min="0" max="100" step="5" value="{{{{p.v}}}}" onChange="{{{{p.setV}}}}" aria-label="{{{{p.name}}}} volume" style="flex: 1; min-width: 0; height: 44px; margin: 0; accent-color: {INK}"><span style="width: 40px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">{{{{p.v}}}}%</span></div></div>')
-def HDRPOPS(practice, opts_left, vol_left, keys_right=None):
+def HDRPOPS(practice, opts_left, midi_left, keys_right=None):
     # rows, as every card's (VERPANEL, ACCPANEL): a value with its pop-up, a level with its slider; no segmented strip
     rows = lambda *r: f'<div style="display: flex; flex-direction: column; margin: 0 -12px">{"".join(r)}</div>'
     qb = lambda lab, act, svg: f'<button type="button" aria-label="{lab}" onClick="{{{{{act}}}}}" disabled="{{{{{act}Dis}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
@@ -809,22 +812,21 @@ def HDRPOPS(practice, opts_left, vol_left, keys_right=None):
              f'<span style="flex: 1; font-size: 15px">Playback speed</span>' + qb('Slower', 'hdSlower', STEP_MINUS)
              + f'<span style="min-width: 44px; text-align: center; font-size: 15px; font-variant-numeric: tabular-nums">{{{{hdSpeedL}}}}</span>' + qb('Faster', 'hdFaster', STEP_PLUS) + '</div>')
     opts = rows(*((SELROW('Mode', 'selMode', False), SELROW('Hands', 'selHands')) if practice else ()), speed)
-    lvl = lambda lab, val, setv, extra='': (f'<div style="min-height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 4px 0 12px; border-top: 1px solid {{line}}">'
-                                          f'<span style="flex: none; width: 92px; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{lab}</span>'
-                                          f'<input type="range" min="0" max="100" step="5" value="{{{{{val}}}}}" onChange="{{{{{setv}}}}}" aria-label="{lab} volume" style="flex: 1; min-width: 0; height: 36px; margin: 0; accent-color: {INK}">'
-                                          f'<span style="flex: none; width: 40px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">{{{{{val}}}}}%</span>{extra}</div>')
-    ib = lambda lab, act, on, svg: f'<button type="button" aria-label="{lab} {{{{p.name}}}}" data-tip="{lab}" aria-pressed="{{{{p.{on}}}}}" onClick="{{{{p.{act}}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: {{{{p.{on}Bg}}}}; color: {{{{p.{on}Fg}}}}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
-    so = ib('Solo', 'doSolo', 'solo', '<span style="font-size: 13px; font-weight: 700">S</span>')
-    mu = ib('Mute', 'doMute', 'mute', '<span style="font-size: 13px; font-weight: 700">M</span>')
-    vol = rows(lvl('Master', 'hdVolM', 'hdSetVolM', '<span style="flex: none; width: 88px"></span>').replace('{line}', 'transparent'),
-               '<sc-for list="{{hdParts}}" as="p" hint-placeholder-count="2">' + lvl('{{p.name}}', 'p.v', 'p.setV', so + mu).replace('{line}', LINE) + '</sc-for>')
     out = _HPOPOVER('hdOptsOn', 'Playback options', opts, f'left: {opts_left}px; top: 65px', 320)
+    # MIDI keyboard: the keyboard the song listens to, a row's value with its pop-up, then a row to MIDI settings (one home
+    # for the rest: sound from the keyboard, latency), Flat's MIDI popover under its button; Record here, what you play on
+    # the keyboard taken as a recording (the editor's record-take), the red dot square while it records
+    setrow = (f'<a href="SettingsLaptop.dc.html" style="min-height: 44px; box-sizing: border-box; padding: 0 8px 0 12px; border-top: 1px solid {LINE}; color: {INK}; text-decoration: none; font-size: 15px; display: flex; align-items: center; gap: 8px">'
+              f'<span style="flex: 1">MIDI settings</span><span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_R}</span></a>')
+    rec = (f'<button type="button" aria-pressed="{{{{hdRecOn}}}}" onClick="{{{{hdRec}}}}" style="width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 8px 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 10px; text-align: left; cursor: pointer">'
+           f'<span aria-hidden="true" style="flex: none; width: 12px; height: 12px; border-radius: {{{{hdRecR}}}}; background: #D2483A"></span><span style="flex: 1">{{{{hdRecL}}}}</span><span style="font-size: 13px; color: {SOFT}">R</span></button>')
+    out += _HPOPOVER('hdMidiOn', 'MIDI keyboard', rows(SELROW('Keyboard', 'selMidi', False), rec, setrow), f'left: {midi_left}px; top: 65px', 320)
     if keys_right is not None:
         out += _HPOPOVER('hdKeysOn', 'Piano keys', rows(SELROW('Piano', 'selKb', False), SELROW('Labels', 'selLab')), f'right: {keys_right}px; top: 65px', 320)
     return out
-# The Audio panel, Flat's (owner's Flat 26.11 screenshot of Audio: "Room", then a "Master volume" card, then a card per
-# instrument with its headphones (solo), its mute and its level), one implementation for Practice and Edit: the
-# header's mixer opens it, the rail's Audio too; the Volume popover is gone (one home). Each part a card because it is
+# The Audio panel, Flat's (owner's Flat 26.11 screenshot of Audio: "Room", then Volume: a "Master volume" card, then a card per
+# instrument with its headphones (solo), its mute and its level), one implementation for Practice and Edit, opened from
+# the rail's Audio; the band has no Volume (one home). Each part a card because it is
 # a thing with its own acts among its siblings (edge-lines: a card is a thing among siblings); the room a segmented
 # control, four exclusive values side by side (Apple HIG, Segmented controls). The state is HDRKEYS's (hdRooms,
 # hdVolM, hdParts), so both modes read one model.
@@ -845,7 +847,7 @@ def AUDPANEL():
     return f'<div style="display: flex; flex-direction: column; gap: 24px; padding: 16px 0 0">{room}{parts}</div>'
 HDRKEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-haspopup="dialog" aria-expanded="{{{{hdKeysOn}}}}" onClick="{{{{hdKeys}}}}" style="{_HB}">'
               + KEYSI.replace('width="22" height="22"', 'width="20" height="20"') + '</button>').replace(f'style="{_HB}"', f'style="{_HB}; background: {{{{hdKeysBg}}}}; color: {ONB}"', 1)
-def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts, audio='() => {}', audio_on='false'):
+def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
     """The header's state, one for both modes. S, SET: the board's state and setter; TOAST(msg) its toast fields;
     play, loop: the board's own acts; playing, loop_on, loop_tip: its expressions; parts: [(id, name)]."""
     P = repr([list(x) for x in parts])
@@ -858,11 +860,11 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts, audio=
             " return { hdClose: () => SET(shut), hdStart: () => SET({ bar: 1, beat: 1, ...shut }), hdPlay: " + play + ", hdPlayTip: (" + playing + ") ? 'Pause' : 'Play',"
             " hdPlayD: (" + playing + ") ? 'M7 4h4v16H7zM13 4h4v16h-4z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z',"
             " hdOpts: tg('opts'), hdOptsOn: pop === 'opts', hdOptsX: pop === 'opts' ? 'true' : 'false',"
-            " hdMet: () => { const n = NEXT[met]; SET({ metro: n === 'on', countBars: n === 'off' ? 0 : 1, " + TOAST("MN[n]") + " }); }, hdMetTip: MN[met], hdMetOff: met === 'off', hdMetBg: met === 'off' ? 'transparent' : '#FEFDFB', hdMetFg: met === 'off' ? '#FEFDFB' : '#332921',"
-            " hdLoop: " + loop + ", hdLoopOn: (" + loop_on + ") ? 'true' : 'false', hdLoopBg: (" + loop_on + ") ? '#FEFDFB' : 'transparent', hdLoopFg: (" + loop_on + ") ? '#332921' : '#FEFDFB', hdLoopTip: " + loop_tip + ","
-            " hdVol: " + audio + ", hdVolX: (" + audio_on + ") ? 'true' : 'false', hdVolBg: (" + audio_on + ") ? 'rgba(254,253,251,.16)' : 'transparent', hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent',"
-            " hdRooms: ['Off', 'Studio', 'Hall', 'Cathedral'].map((l) => { const on = (S.room ?? 'Off') === l; return { l, on: on ? 'true' : 'false', bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: on ? 600 : 500, pick: () => SET({ room: l }) }; }), hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent',"
-            " hdRec: () => SET({ rec: !rec, " + TOAST("rec ? 'Recording stopped · Recording 4 kept' : 'Recording · play on your keyboard'") + " }), hdRecTip: rec ? 'Stop recording' : 'Record', hdRecBg: rec ? '#F8D9C2' : 'transparent',"
+            " hdMet: () => { const n = NEXT[met]; SET({ metro: n === 'on', countBars: n === 'off' ? 0 : 1, " + TOAST("MN[n]") + " }); }, hdMetTip: MN[met], hdMetOff: met === 'off', "
+            " hdLoop: " + loop + ", hdLoopOn: (" + loop_on + ") ? 'true' : 'false', hdLoopBg: (" + loop_on + ") ? '#EDC684' : '#FEFDFB', hdLoopTip: " + loop_tip + ","
+            " hdMidi: tg('midi'), hdMidiOn: pop === 'midi', hdMidiX: pop === 'midi' ? 'true' : 'false', hdMidiBg: pop === 'midi' ? 'rgba(254,253,251,.16)' : 'transparent', hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent',"
+            " hdRooms: ['Off', 'Studio', 'Hall', 'Cathedral'].map((l) => { const on = (S.room ?? 'Off') === l; return { l, on: on ? 'true' : 'false', bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: on ? 600 : 500, pick: () => SET({ room: l }) }; }),"
+            " hdRec: () => SET({ rec: !rec, " + TOAST("rec ? 'Recording stopped · Recording 4 kept' : 'Recording · play on your keyboard'") + " }), hdRecOn: rec ? 'true' : 'false', hdRecL: rec ? 'Stop recording' : 'Record', hdRecR: rec ? '2px' : '6px',"
             " hdSpeedL: (sp / 100).toFixed(1) + '×', hdSlower: () => SET({ speed: Math.max(20, sp - 10) }), hdFaster: () => SET({ speed: Math.min(200, sp + 10) }), hdSlowerDis: sp <= 20, hdFasterDis: sp >= 200,"
             " hdVolM: S.volM ?? 100, hdSetVolM: (e) => SET({ volM: Number(e.target.value) }),"
             " hdParts: " + P + ".map(([id, name]) => { const so = solo === id, mu = mute.includes(id); const v = S['vol' + id] ?? 100; return { name, isVoice: id === 'V', isKeys: id !== 'V', v, setV: (e) => SET({ ['vol' + id]: Number(e.target.value) }),"
@@ -871,7 +873,8 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts, audio=
             + SELKEYS(S, '(' + SET + ')', [('selMode', [('play', 'Listen'), ('wait', 'Wait')], f"({S}.mode === 'wait' ? 'wait' : 'play')", f"(id) => ({SET})({{ mode: id }})"),
                                        ('selHands', [('both', 'Both hands'), ('rh', 'Right hand'), ('lh', 'Left hand')], f"(({S}.showR ?? 'show') === 'hide' ? 'lh' : ({S}.showL ?? 'show') === 'hide' ? 'rh' : 'both')", f"(id) => ({SET})({{ showR: id === 'lh' ? 'hide' : 'show', showL: id === 'rh' ? 'hide' : 'show' }})"),
                                        ('selKb', [('3d', '3D'), ('2d', '2D'), ('off', 'Off')], f"({S}.keys === false ? 'off' : ({S}.kbStyle ?? '3d'))", f"(id) => ({SET})(id === 'off' ? {{ keys: false }} : {{ keys: true, kbStyle: id }})"),
-                                       ('selLab', [('none', 'None'), ('c', 'C only'), ('all', 'All notes')], f"({S}.kbLabels ?? 'c')", f"(id) => ({SET})({{ kbLabels: id }})")]))
+                                       ('selLab', [('none', 'None'), ('c', 'C only'), ('all', 'All notes')], f"({S}.kbLabels ?? 'c')", f"(id) => ({SET})({{ kbLabels: id }})"),
+                                       ('selMidi', [('none', 'None'), ('p125', 'Yamaha P-125')], f"({S}.midiDev ?? 'p125')", f"(id) => ({SET})({{ midiDev: id }})")]))
 
 # The song's versions in the sidebar (owner, 2026-11-26: "in the title are general options and in the sidebar there will
 # be the switch like change the versions or add a new version … add a version with this accompaniment. and in such
