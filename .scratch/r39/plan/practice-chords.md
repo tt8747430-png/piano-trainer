@@ -5,6 +5,7 @@ spelling, staff, keys), every choice one tap away in a picker with its whole lis
 changes.
 
 ## The rulings as they stand
+- **One chord, a clean page** (owner, 2026-11-26: "remove all the thigns that i didnt asked for, make more clean interface"): the staff holds the one chord the pickers name, with no name over it, no + and no second bar; a run of chords is the Chord player's. On a laptop the staff and Practise in the Player stand side by side. Replaces the staff's + (Add a chord, the Next chord sheet) and "Practise these chords".
 
 - "every chord type, fingering by hand and inversion, voicings to choose. Add, add2, add9 named as chords are": the
   Chord picker lists Triads, Added notes (add2, add9, madd9, 6, m6), Sevenths and Extended (9 to 13), each by its symbol
