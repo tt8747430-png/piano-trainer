@@ -96,7 +96,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
     const cells = Array.from({ length: bars }, (_, i) => ({ n: i + 1, bg: i + 1 >= first && i + 1 <= last ? '#F6E7C8' : 'transparent', play: () => S({ from: i + 1, playing: true }) }));
     const states = [['playing', 'Playing from bar 4', !!st.playing, { playing: !st.playing, from: 4 }], ['kept', 'Bars 3–10 kept', kept, { kept: !kept }], ['deleted', 'Deleted', deleted, { deleted: !deleted }]]
       .map(([k, l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', fg: on ? '#FEFDFB' : '#332921', pick: () => S(o) }));
-    return { ...common(st, set), states, name: st.name ?? 'Take 3', setName: (e) => S({ name: e.target.value }), cells, fromT: st.playing ? 'Playing from bar ' + (st.from ?? 1) : '212 notes',
+    return { ...common(st, set), states, name: st.name ?? 'Take 3', setName: (e) => S({ name: e.target.value }), cells, fromT: st.playing ? 'Playing from bar ' + (st.from ?? 1) : '',
       firstV: String(first), lastV: String(last), keepL: 'Keep bars ' + first + '–' + last, fDn: () => S({ first: Math.max(1, first - 1) }), fUp: () => S({ first: Math.min(last, first + 1) }), lDn: () => S({ last: Math.max(first, last - 1) }), lUp: () => S({ last: Math.min(bars, last + 1) }),
       askKeep: () => S({ sheet: 'keep' }), keepOn: st.sheet === 'keep', keepT: 'Keep bars ' + first + '–' + last + '?', doKeep: () => { S({ sheet: null, kept: true }); toast('Kept bars ' + first + '–' + last); },
       download: () => toast('Take 3.mid saved'), del: () => { S({ deleted: true }); toast('Take 3 deleted', true); }, deleted, notDeleted: !deleted, lenT: kept ? '0:24 · 92 BPM' : '0:41 · 92 BPM',

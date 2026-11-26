@@ -2,7 +2,7 @@
 # the ChordFinder boards r41_practice writes). The bar of glass buttons (Back · Chord finder · Piano · Settings);
 # the keys edge to edge under it, the input; the chord's name large with what it is in words, and its numeral in the
 # key it is spelled in ("Imaj7 in C major ⌃"), the one home of that key (the settings no longer repeat it); its notes as tiles with their degrees, the bass marked; one group: Also
-# read as, Played, In these keys; one floating bar of glass pieces: Clear · Play (honey) · Chords (open it there).
+# read as, In these keys; one floating bar of glass pieces: Clear · Play (honey) · Chords (open it there).
 # Empty: Play a chord, the line saying how, three chords to try.
 CF66 = CF.replace("kb: calmKeys(48, 76, marks, 370, 170), kbL: calmKeys(36, 84, marks, 860, 200), clear: () => set({ held: [] }) };",
     "kb: calmKeys(48, 76, marks, 370, 170), kbE: calmKeys(48, 72, marks, 402, 150), kbLE: calmKeys(36, 84, marks, 1462, 180), clear: () => set({ held: [] }), "
@@ -35,11 +35,12 @@ TRY66 = (f'<sc-if value="{{{{empty}}}}" hint-placeholder-val="{{{{false}}}}"><di
          + '</div></sc-if>')
 NOTES66 = CF_NOTES.replace('height: 64px', 'height: 72px').replace('font-size: 22px', 'font-size: 24px')
 _ALSO66 = ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Also read as</span>{CHIPL("alts", "a")}</div>')
-_PLAYED66 = ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Played</span>{CHIPL("played", "p")}</div>')
+# owner, 2026-11-26 ("remove all the thigns that i didnt asked for"): no Played history; the finder names the chord in hand
+
 _KEYS66 = ('link', 'In these keys', '{{inKeys}}', '')
 # Also read as only for a chord with a second name, as the app shows it
-ROWS66 = (f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{true}}}}"><sc-if value="{{{{twoWays}}}}" hint-placeholder-val="{{{{false}}}}">' + GROUP(_ALSO66, _PLAYED66, _KEYS66, bg=SHEET)
-          + f'</sc-if><sc-if value="{{{{oneWay}}}}" hint-placeholder-val="{{{{true}}}}">' + GROUP(_PLAYED66, _KEYS66, bg=SHEET) + '</sc-if></sc-if>')
+ROWS66 = (f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{true}}}}"><sc-if value="{{{{twoWays}}}}" hint-placeholder-val="{{{{false}}}}">' + GROUP(_ALSO66, _KEYS66, bg=SHEET)
+          + f'</sc-if><sc-if value="{{{{oneWay}}}}" hint-placeholder-val="{{{{true}}}}">' + GROUP(_KEYS66, bg=SHEET) + '</sc-if></sc-if>')
 ERASEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"></path><path d="M22 21H7"></path><path d="m5 11 9 9"></path></svg>'
 CHORDSI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'
 PIECE66 = PIECE  # the kit's glass piece (r42): an icon over its caption

@@ -10,6 +10,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · (this commit) · clean: a take's piano roll drops its "212 notes" caption (only Playing from bar n while it plays) · Take, TakeLaptop · v729
+- 2026-11-26 · (this commit) · clean: the Chord finder drops its Played history (it names the chord in hand; Also read as and In these keys stay) · ChordFinder, ChordFinderLaptop · v728
 - 2026-11-26 · (this commit) · clean ("do this for all"): a Practice library's All no longer opens on a Recently used shelf (it is the Recently used chip's place alone, never a list twice); a progression's tiles lose the root moves under them ("5th up →"), the staff shows the motion · Accompaniment, AccompanimentLaptop, FingerTechnique, FingerTechniqueLaptop, JazzVocabulary, JazzVocabularyLaptop, Progressions, ProgressionsLaptop, Progression, ProgressionLaptop · v727
 - 2026-11-26 · (this commit) · a level's and a course's lessons lose their "Lesson n" line (the spine and the chapter heads already number them); an unpublished lesson's line reads Not published yet alone · Learn, LearnLaptop, LearnLevel, LearnLevelLaptop, LearnCourses, LearnCoursesLaptop, Course, CourseLaptop, YourCourseSettings, YourCourseSettingsLaptop · v726
 - 2026-11-26 · (this commit) · a song's credits print once, in the score's head (the line under the title said them again) · Song, SongLaptop, SongSettings, SongSettingsLaptop · v725
