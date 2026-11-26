@@ -104,7 +104,10 @@ GRIPI = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" ari
 FOLDI = _LI('<path d="m11 17-5-5 5-5M18 17l-5-5 5-5"></path>')
 def _RAILBTN(label, icon, k, tip, act=None):
     sel = '' if act else f' role="tab" aria-selected="{{{{rail{k}On}}}}"'
-    return (f'<button type="button"{sel} data-tip="{tip}" onClick="{{{{{act or "pick" + k}}}}}" style="width: 76px; min-height: 64px; border: 0; padding: 6px 0; background: transparent; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer">'
+    # a tooltip only where it says more than the label under the glyph (a shortcut), as Flat's rail shows one only for a
+    # label cut short (FLAT_UI_SHELL_AND_MOTION §1.2): "View" over View is said twice
+    tipa = f' data-tip="{tip}"' if tip != label else ''
+    return (f'<button type="button"{sel}{tipa} onClick="{{{{{act or "pick" + k}}}}}" style="width: 76px; min-height: 64px; border: 0; padding: 6px 0; background: transparent; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer">'
             f'<span style="width: 40px; height: 32px; border-radius: 10px; background: {{{{rail{k}Bg}}}}; display: flex; align-items: center; justify-content: center">{icon}</span>'
             f'<span style="font-size: 12px; font-weight: {{{{rail{k}W}}}}; line-height: 1.2">{label}</span></button>')
 _PHEAD = lambda t: (f'<header style="flex: none; height: 64px; box-sizing: border-box; padding: 0 8px 0 16px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
