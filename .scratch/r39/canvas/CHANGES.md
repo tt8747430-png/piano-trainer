@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · one honey fill in the laptop band (a looping Loop a honey-deep glyph on white, not a second honey circle); the Player's A4 page at 1.5, the editor's size, and the page's title-to-credits 16; the editor's Notation panel body 12 under its head (lines: EditorLaptop, EditorDraftLaptop, PlayerLaptop, PlayerLaptopLoop 0 problems) · PlayerDesk, EditorLaptop, EditorDraftLaptop, Editor, EditorDraft, PlayerApp · pending
+
 ## Changes
 
 - 2026-11-26 · d5515f5a · laptop Diagrams, Grid and Lyrics on the panel's lines: the song's name on the panel head's top, the credits 4 under it, the grid's section heads 8 over their rows and 24 under the last section (lines tool: 8 problems → 0) · PlayerDesk (and its wrappers) · v775

@@ -356,7 +356,7 @@ PANEL_AUD = _PHEAD('Audio') + _PBODY(AUDPANEL(), 20)
 # View, the Player's panel: the views as cards (the Sheet chosen; the others open in Practice), the Sheet's options: Layout is
 # Page · Panorama here alone (it left the toolbar), On the page the same switches as the Player's
 PANEL_VIEW = _PHEAD('View') + VIEWPANEL(links=True)
-PANEL_NOT = ACCBODY.replace('{0}', _PHEAD('Notation') + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 24px; display: flex; flex-direction: column; gap: 20px">{ACCPANEL()}{ED_SECTIONS()}</div>')
+PANEL_NOT = ACCBODY.replace('{0}', _PHEAD('Notation') + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 12px 16px 24px; display: flex; flex-direction: column; gap: 20px">{ACCPANEL()}{ED_SECTIONS()}</div>')
 # Search, as Flat's: a field over the score, the suggested acts under it, the keys to move and close at its foot
 _SACT = lambda icon, t, k: f'<button type="button" onClick="{{{{closeSheet}}}}" style="min-height: 48px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer"><span style="display: flex; color: {SOFT}">{icon}</span><span style="flex: 1; font-size: 15px">{t}</span><kbd style="font: inherit; font-size: 13px; color: {SOFT}">{k}</kbd></button>'
 SEARCHCARD = (_PIF('searchOn', f'<div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.18)"></div>'

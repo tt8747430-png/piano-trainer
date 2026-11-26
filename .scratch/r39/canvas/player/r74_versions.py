@@ -381,8 +381,9 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
             new = (f'<div data-r74 style="margin-top: {{{{sheetTop}}}}px; box-sizing: border-box; min-height: calc(100% - {{{{sheetTop}}}}px); padding: 4px 8px 140px; background: {FILL}">'
                    f'<article aria-label="Page 1" style="box-sizing: border-box; padding: 24px 16px 32px; background: {SHEET}; color: {INK}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28)">{body}</article></div>')
         else:
+            # the page at the editor's size (1.5, its fit beside the 352 panel is 1.52), so Practice and Edit print one page
             new = (f'<div data-r74 style="margin-top: {{{{sheetTop}}}}px; box-sizing: border-box; min-height: calc(100% - {{{{sheetTop}}}}px); padding: 24px 0 160px; background: {FILL}; display: flex; justify-content: center">'
-                   f'<div style="zoom: 1.4"><sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}">{A4PAGE("", None)}</sc-if><sc-if value="{{{{isLead}}}}" hint-placeholder-val="{{{{false}}}}">{A4PAGE("", None, piano=False)}</sc-if></div></div>' + PICKCSS)
+                   f'<div style="zoom: 1.5"><sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}">{A4PAGE("", None)}</sc-if><sc-if value="{{{{isLead}}}}" hint-placeholder-val="{{{{false}}}}">{A4PAGE("", None, piano=False)}</sc-if></div></div>' + PICKCSS)
         t = t[:i] + new + t[j:]
     # the settings' Arrangement says it is not written for this song
     if 'data-r74y' not in t and 'aria-label="Score"' in t:

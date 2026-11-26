@@ -534,7 +534,7 @@ def A4PAGE(credit='', sel=(3, 0), piano=True, pick=None):
     cw = PG_W - 2 * PG_M
     return (f'<article aria-label="Page 1" style="flex: none; position: relative; width: {PG_W}px; height: {PG_H}px; box-sizing: border-box; padding: {PG_M}px {PG_M}px 0; background: {SHEET}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28); display: flex; flex-direction: column">'
             f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: 30px; font-weight: 400; line-height: 1.1; color: {INK}">Amazing Grace</h2>'
-            f'<div style="margin: 20px 0 0; display: flex; justify-content: space-between; gap: 24px; font-family: {SERIF}; font-size: 13px; color: {INK}"><span>Words: John Newton</span><span style="text-align: right">Music: New Britain (American folk tune)' + (f'<br><i style="color: {SOFT}">{credit}</i>' if credit else '') + f'</span></div>'
+            f'<div style="margin: 16px 0 0; display: flex; justify-content: space-between; gap: 24px; font-family: {SERIF}; font-size: 13px; color: {INK}"><span>Words: John Newton</span><span style="text-align: right">Music: New Britain (American folk tune)' + (f'<br><i style="color: {SOFT}">{credit}</i>' if credit else '') + f'</span></div>'
             f'<div style="margin: 16px 0 0; font-family: {SERIF}; font-size: 13px; font-weight: 700; color: {INK}">Verse <span style="font-weight: 400"><svg role="img" aria-label="quarter note" viewBox="0 0 8 16" width="7" height="14" style="vertical-align: -2px"><ellipse cx="3.4" cy="13" rx="3.3" ry="2.3" transform="rotate(-20 3.4 13)" fill="{INK}"/><rect x="5.8" y="0" width="1" height="12.6" fill="{INK}"/></svg> = 80</span></div>'
             f'<div style="position: relative; margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=sel, size=1.0, piano=piano).replace(ACCENT, '#85B8DC') + (PICKLAYER(GEO['last'], pick) if pick else '') + '</div>'
             f'<p style="position: absolute; left: 0; right: 0; bottom: 32px; margin: 0; text-align: center; font-family: {SERIF}; font-size: 11px; color: {SOFT}">Public domain</p></article>')
@@ -919,7 +919,7 @@ HDRSEP = f'<span aria-hidden="true" style="flex: none; width: 1px; height: 20px;
 # (Go to start replaces them), its Listen/Wait label (Play's options) and its Hands and Keys labels (the Audio panel holds the
 # parts; the keys are the view's, at the bar's end as Flat's keyboard toggle) are gone. Each 44 round glass, Play
 # the one honey circle. The keys every board supplies: hdStart, hdPlay, hdPlayTip, hdPlayD, hdOpts, hdOptsX, hdMet,
-# hdMetTip, hdMetOff, hdLoop, hdLoopBg, hdLoopTip, hdMidi, hdMidiX, hdMidiBg.
+# hdMetTip, hdMetOff, hdLoop, hdLoopPh, hdLoopTip, hdMidi, hdMidiX, hdMidiBg.
 METI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M9 3h6l4 18H5z"></path><path d="M7.5 15h9"></path><path d="m12 15 5-9"></path></svg>'
 _HB = 'flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer'
 CABLEI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1"></path><path d="M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9"></path><path d="M21 21v-2h-4"></path><path d="M3 5h4V3"></path><path d="M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3"></path></svg>'
@@ -928,8 +928,9 @@ def HDRTRANSPORT(phone=False):
     hb = _HB.replace('width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px', 'width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px') if phone else _HB
     b = lambda lab, tip, inner, act, look, extra='': f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{hb}; {look}">{inner}</button>'
     filled = f'background: {ONB}; color: {BAND}'
-    # filled white as Flat's; Loop honey while it loops (the one sign it is on), the metronome crossed while off
-    lit = lambda k: f'background: {{{{{k}Bg}}}}; color: {BAND}'
+    # filled white as Flat's; Loop's glyph honey-deep while it loops (the one sign it is on; Play keeps the one honey fill,
+    # as the phone's lit glyphs), the metronome crossed while off
+    lit = lambda k: f'background: {ONB}; color: {{{{{k}Ph}}}}'
     start = b('Go to start', 'Go to start · ⌃Space', '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="2.5" height="14" rx="1"></rect><path d="M19 6.3v11.4a1 1 0 0 1-1.5.86L9.4 13.3a1.5 1.5 0 0 1 0-2.6l8.1-5.26A1 1 0 0 1 19 6.3z"></path></svg>', 'hdStart', filled)
     play = (f'<div role="group" aria-label="Play" style="flex: none; display: flex; align-items: center; gap: 2px">'
             + b('{{hdPlayTip}}', '{{hdPlayTip}} · Space', '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="{{hdPlayD}}"></path></svg>', 'hdPlay', f'background: #EDC684; color: {BAND}')
@@ -1089,7 +1090,7 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
             " hdPlayD: (" + playing + ") ? 'M7 4h4v16H7zM13 4h4v16h-4z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z',"
             " hdOpts: tg('opts'), hdOptsOn: pop === 'opts', hdOptsX: pop === 'opts' ? 'true' : 'false',"
             " hdMet: () => { const n = NEXT[met]; SET({ metro: n === 'on', countBars: n === 'off' ? 0 : 1, " + TOAST("MN[n]") + " }); }, hdMetTip: MN[met], hdMetOff: met === 'off', "
-            " hdLoop: " + loop + ", hdLoopOn: (" + loop_on + ") ? 'true' : 'false', hdLoopBg: (" + loop_on + ") ? '#EDC684' : '#FEFDFB', hdLoopPh: (" + loop_on + ") ? '#A8551F' : '#332921', hdLoopTip: " + loop_tip + ","
+            " hdLoop: " + loop + ", hdLoopOn: (" + loop_on + ") ? 'true' : 'false', hdLoopPh: (" + loop_on + ") ? '#A8551F' : '#332921', hdLoopTip: " + loop_tip + ","
             " hdTr: tg('tr'), hdTrOn: pop === 'tr', hdTrX: pop === 'tr' ? 'true' : 'false', hdTrL: (tr > 0 ? '+' : tr < 0 ? '−' : '') + Math.abs(tr), hdKeyL: KEYS[((tr % 12) + 12) % 12], hdTrUp: () => SET({ trans: Math.min(11, tr + 1) }), hdTrDown: () => SET({ trans: Math.max(-11, tr - 1) }), hdTrUpDis: tr >= 11, hdTrDownDis: tr <= -11, hdTrMoved: tr !== 0, hdTrReset: () => SET({ trans: 0 }), hdMidi: tg('midi'), hdMidiAny: (S.midiDev ?? 'fp30') !== 'none', hdMidiNone: (S.midiDev ?? 'fp30') === 'none', hdSnd: () => SET({ midiSnd: !S.midiSnd }), hdSndOn: S.midiSnd ? 'true' : 'false', hdSndTr: S.midiSnd ? '#7FB685' : '#DAD1C8', hdSndKn: S.midiSnd ? 22 : 2, hdMidiOn: pop === 'midi', hdMidiX: pop === 'midi' ? 'true' : 'false', hdMidiBg: pop === 'midi' ? 'rgba(254,253,251,.16)' : 'transparent', hdOptsBg: pop === 'opts' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeys: tg('keys'), hdKeysOn: pop === 'keys', hdKeysBg: pop === 'keys' ? 'rgba(254,253,251,.16)' : 'transparent', hdKeysPh: pop === 'keys' ? '#A8551F' : '#332921', hdOptsPh: pop === 'opts' ? '#A8551F' : '#332921',"
             " hdRooms: ['Off', 'Studio', 'Hall', 'Cathedral'].map((l) => { const on = (S.room ?? 'Off') === l; return { l, on: on ? 'true' : 'false', bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: on ? 600 : 500, pick: () => SET({ room: l }) }; }),"
             " hdRec: () => SET({ rec: !rec, " + TOAST("rec ? 'Recording stopped · Recording 4 kept' : 'Recording · play on your keyboard'") + " }), hdRecOn: rec ? 'true' : 'false', hdRecL: rec ? 'Stop recording' : 'Record', hdRecR: rec ? '2px' : '6px',"
