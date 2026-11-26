@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · pending · the phone palette's chosen duration a honey-deep glyph with no tile, the others ink, as Flat's turns its chosen one blue (flat-score-editor 003) and the header's open glyph turns honey-deep (lines: Editor, EditorDraft 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop · pending
 ## Changes
 
 - 2026-11-26 · fa73f06f · the laptop Player's old Transpose dialog (Down a half step, Back to Song) deleted: nothing opened it since Transpose moved to the band's popover, and it spoke of half steps where the popover says semitones (lines: PlayerDesk 0 problems, the band's Transpose popover opens) · PlayerDesk · v779
