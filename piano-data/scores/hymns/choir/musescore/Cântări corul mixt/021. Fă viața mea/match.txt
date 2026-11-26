@@ -1,0 +1,16 @@
+# From 021. Fă viața mea.pdf (1 page) and the choir book, page 47.
+title: 21 Fă viața mea
+composer: Nicolae Moldoveanu
+spatium: 1.75
+systems: 1 5 9 13
+hide-tempo
+hide-names
+repeat: 9 16
+
+[Soprano]
+1: @1 1.Fă via -- ța mea, I -- su -- se, o pâi -- ne'a tu -- tu -- ror, Să sa -- tu -- re în -- tru -- na pe toți a -- cei ce vor.
+1: @9 Mai fă -- ră păr -- ti -- ni -- re să fiu me -- reu de'a -- cum, A -- șa cum e fân -- tâ -- na la mar -- gi -- ne de drum.
+2: @1 2.Fă via -- ța mea o ca -- le să mear -- gă toți pe ea, Și fă -- ră gre -- u -- ta -- te să a -- fle Ca -- sa Ta.
+2: @9 S'a -- jun -- gă la vi -- a -- ța din fe -- ri -- ci -- tul Rai Și la dul -- cea -- ța pă -- cii, pe ca -- re Tu o dai.
+3: @1 3.Fă via -- ța mea scân -- te -- e de dra -- gos -- te și har, S'a -- prin -- dă i -- nimi stin -- se din ori -- și -- ce ho -- tar.
+3: @9 Să ar -- dă pen -- tru Ti -- ne, cu tot ce a -- re'n ea, A -- șa Te rog, I -- su -- se să faci vi -- a -- ța mea.

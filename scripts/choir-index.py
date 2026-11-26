@@ -34,9 +34,16 @@ def inspect(path):
     progs = {pp.get('value') for pp in main.iter('program')}
     return dict(ver=r.get('version'), staves=len(st), vmax=vmax, bars=bars, chords=chords, lyr=lyr, ex=sorted(ex), lines=lines, path=path, piano=progs <= {'0'})
 def made_words(path):
-    """Whether the corrected score has words, in its main score or its parts."""
+    """Whether the corrected score has words (in its main score or its parts), and how much of each voice's part
+    has notes: a voice the choir's file left out shows as a part with few."""
     with zipfile.ZipFile(path) as z:
-        return dict(words=any(b'<Lyrics>' in z.read(n) for n in z.namelist() if n.endswith('.mscx')))
+        names = z.namelist()
+        cover = []
+        for n in sorted(x for x in names if x.startswith('Excerpts/') and x.endswith('.mscx')):
+            st = ET.fromstring(z.read(n)).find('Score').find('Staff')
+            ms = st.findall('Measure')
+            cover.append(sum(1 for m in ms if m.find('.//Chord') is not None) / max(len(ms), 1))
+        return dict(words=any(b'<Lyrics>' in z.read(n) for n in names if n.endswith('.mscx')), cover=cover)
 
 
 def song_rows(base):
@@ -71,6 +78,8 @@ def song_rows(base):
                          voices=voice_files, sub=[v for v in variants if v not in ('.',)], dir=d))
     return rows
 def status(r, men):
+    if r.get('made') and r['made']['cover'] and min(r['made']['cover']) < 0.6:
+        return 'To do: its file leaves whole voices out; write them in from the PDF'
     if r.get('matched') and r.get('made'):
         return 'Done: as printed (matched to its PDF)'
     if r.get('made'):

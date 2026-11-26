@@ -24,7 +24,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 55 | 2 | 1 | 25 | 23 | 1 | 0 |
+| Mixed choir | 107 | 52 | 5 | 1 | 25 | 23 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -47,9 +47,9 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 14 | Când Duhul Sfânt S-a coborât (1 subfolders) | Single voices only, no full score | – | – | – | – | Alto, Tenor | 1 |  |  | – |
 | 15 | Cântați pe Isus cu iubire | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 16 | Te iubesc Isuse | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 1/2, 17 bars, `016. Te iubesc Isuse.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
-| 17 | Îmi ridic ochii spre munți | Done: a part per voice (no words in any of its files) | 2 | 2 staves, voices 1/1, 87 bars, `017. Îmi ridic ochii spre munți.mscz` | no | – | Tenor | 1 |  |  | piano |
+| 17 | Îmi ridic ochii spre munți | To do: its file leaves whole voices out; write them in from the PDF | 2 | 2 staves, voices 1/1, 87 bars, `017. Îmi ridic ochii spre munți.mscz` | no | – | Tenor | 1 |  |  | piano |
 | 18 | Cineva se-ngrijește de mine | No MuseScore | – | – | – | – | – | 1 |  |  | – |
-| 19 | Luceafărul Maranata (1 subfolders) | Done: a part per voice (no words in any of its files) | 3 | 2 staves, voices 1/1, 136 bars, `19.Lucefarul-Sopran.mscz`, 102 chords | no | – | Soprano, Alto, Tenor | 1 |  |  | piano |
+| 19 | Luceafărul Maranata (1 subfolders) | To do: its file leaves whole voices out; write them in from the PDF | 3 | 2 staves, voices 1/1, 136 bars, `19.Lucefarul-Sopran.mscz`, 102 chords | no | – | Soprano, Alto, Tenor | 1 |  |  | piano |
 | 20 | Dumnezeu e steagul meu | Single voices only, no full score | – | – | – | – | Tenor | 1 |  |  | – |
 | 21 | Fă viața mea | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 16 bars, `021. Fă viața mea.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
 | 22 | Să-ngenunchezi | Single voices only, no full score | – | – | – | – | – | 1 |  |  | – |
@@ -98,7 +98,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 65 | Cantati marire lui Isus | Single voices only, no full score | – | – | – | – | Alto | 1 |  |  | – |
 | 66 | O, frunte-nsangerata | Single voices only, no full score | – | – | – | – | – | 2 |  |  | – |
 | 67 | Fiti tari | Done: a part per voice | 4 | 2 staves, voices 2/2, 114 bars, `Audio.mscz`, 14 chords | yes | – | Soprano, Alto, Tenor, Bass | 3 |  |  | piano |
-| 68 | Poate fi in orice clipa | Done: a part per voice (no words in any of its files) | – | – | – | – | Alto, Tenor | 1 | 1 |  | – |
+| 68 | Poate fi in orice clipa | To do: its file leaves whole voices out; write them in from the PDF | – | – | – | – | Alto, Tenor | 1 | 1 |  | – |
 | 69 | N-am sa uit Isuse Doamne (1 subfolders) | To do: unfinished, a staff has no notes | 1 | 4 staves, voices 0/0/1/1, 39 bars, `N-am sa uit Isuse Doamne niciodata.mscz`, 5 chords | no | – | Soprano, Tenor, Bass | 2 |  |  | other |
 | 70 | Doamne Isuse ai indurare | Done: a part per voice | – | – | – | – | Soprano, Alto, Tenor, Bass | 2 |  | 2 | – |
 | 71 | Noi suntem frati | Single voices only, no full score | – | – | – | – | Soprano, Tenor | 1 |  |  | – |
