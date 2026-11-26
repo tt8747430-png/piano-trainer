@@ -124,9 +124,9 @@ def EBAR(close_href, play_href, title=False):
         # own Record and Play (Flat's play in its top bar), which stood in the Notation panel beside the chosen note
         left = (f'<a href="{close_href}" aria-label="Close" data-tip="Close · Esc" style="flex: none; width: 44px; height: 44px; border-radius: 22px; {GL}; color: {INK}; display: flex; align-items: center; justify-content: center; position: relative">{XI}</a>'
                 + f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{SONGMENU("TakesLaptop.dc.html")}{MODESW("edit", play_href, "EditorLaptop.dc.html")}</div>')
-        rec = f'<button type="button" aria-label="Record" data-tip="Record · R" style="flex: none; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 22px; {GL}; display: flex; align-items: center; justify-content: center; position: relative"><span aria-hidden="true" style="width: 14px; height: 14px; border-radius: 7px; background: #B84A3E"></span></button>'
-        ply = f'<button type="button" aria-label="Play" data-tip="Play from the selection · Space" style="flex: none; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center; position: relative">{PLAY}</button>'
-        right = f'<span role="status" data-save style="margin-right: 8px; font-size: 13px; color: {SOFT}; white-space: nowrap">Saved on this device</span>{rec}{ply}'
+        # Flat's header transport, the kit's one implementation with the Player (HDRTRANSPORT)
+        left = left.replace('<details class="vsw"', HDRTRANSPORT('SettingsLaptop.dc.html') + '<details class="vsw"', 1)
+        right = f'<span role="status" data-save style="margin-right: 8px; font-size: 13px; color: {SOFT}; white-space: nowrap">Saved on this device</span>'
         return (f'<header style="flex: none; position: relative; z-index: 20; {MODEBAR_P}">'
                 f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{left}</div><span></span><div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px">{right}</div></header>')
     vers = f'<div style="display: flex; align-items: center; gap: 8px; min-width: 0">{VERSW("edit", play_href)}{EDITB("edit", play_href)}</div>'
@@ -211,7 +211,10 @@ ZOOMG = (TBTN('Zoom out', ZOUTI, 'zoomOut', 'Zoom out · ⌘−', 'zoutDis') + f
 TOOLBAR_L = (f'<div role="toolbar" aria-label="Notation" style="flex: none; height: 56px; box-sizing: border-box; padding: 0 24px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
 
              + ESSENTIALS + '<span style="flex: 1"></span>' + CLIP + TSEP + ZOOMG + TSEP
-             + f'<div style="flex: none; width: 216px">{SEGC("views", 40, 14)}</div>' + TSEP + KEYSBTN + '</div>')
+             + f'<div style="flex: none; width: 216px">{SEGC("views", 40, 14)}</div>' + TSEP + KEYSBTN + TSEP
+             # Flat's toolbar ends with its files: download and print (flat-score-editor 099, 143)
+             + TBTN('Export', f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M12 15V3M7 10l5 5 5-5M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>', 'openExport', 'Export')
+             + TBTN('Print', f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>', 'actPrint', 'Print · ⌘P') + '</div>')
 # the phone's toolbar, as Flat's second row (flat-score-editor 017): the essentials scroll sideways; the keys and the view stay at its end
 TOOLBAR_P = (f'<div role="toolbar" aria-label="Notation" style="flex: none; height: 52px; display: flex; align-items: center; gap: 4px; padding: 0 8px 0 0">'
              f'<div class="nos" style="flex: 1; min-width: 0; overflow-x: auto; display: flex; align-items: center; gap: 4px; padding: 0 0 0 16px">{ESSENTIALS}{CLIP}</div>'
@@ -325,7 +328,9 @@ _AROW = lambda name, k: (f'<div style="display: flex; flex-direction: column; ga
                          f'<div style="display: flex; align-items: center; gap: 12px; padding-left: 32px"><span style="font-size: 14px; color: {SOFT}">Volume</span>{_SLIDER(name + " volume", 100)}<span style="width: 28px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">100</span></div></div>')
 AUD_BODY = (
     f'<section style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Room</h3>{SEGC("rooms", 36, 14, True)}</section>'
-    + f'<div style="height: 1px; background: {LINE}"></div>'
+)
+# the phone has no header Volume (its floating actions stay as published), so its Audio sheet keeps the volumes
+AUD_BODY_P = (AUD_BODY + f'<div style="height: 1px; background: {LINE}"></div>'
     + f'<section style="display: flex; flex-direction: column; gap: 12px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Volume</h3>'
     + f'<div style="display: flex; align-items: center; gap: 12px"><span style="font-size: 15px">Master</span>{_SLIDER("Master volume", 100)}<span style="width: 28px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">100</span></div>'
     + _AROW('Voice', 'V') + _AROW('Piano', 'P') + '</section>')
@@ -346,6 +351,7 @@ KEYSCARD = (_PIF('keysOn2', f'<div onClick="{{{{closeSheet}}}}" style="position:
             f'<div style="padding: 16px 24px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px">'
             + _KROW('Play or stop', 'Space') + _KROW('Note input', 'N') + _KROW('Whole to sixteenth', '7 6 5 4 3') + _KROW('Rest', '0') + _KROW('Dot', '.') + _KROW('Tie', ',') + _KROW('Sharp, flat, natural', '+ − =') + _KROW('Next or previous bar', '⌘→ ⌘←')
             + _KROW('Undo', '⌘Z') + _KROW('Redo', '⇧⌘Z') + _KROW('Copy, cut, paste', '⌘C ⌘X ⌘V') + _KROW('Go to bar', '⌘G') + _KROW('Add a bar', '⌥Enter') + _KROW('Search', '⌘K') + _KROW('Fold the panel', '⌘\\') + _KROW('Zoom in or out', '⌘+ ⌘−') + '</div></section>'))
+ED4 = ED4.replace('    return { ...common(st, set),', "    return { ...common(st, set), " + HDRKEYS('st', 'set', lambda m: 'toast: ' + m, "() => set({ edPlaying: !st.edPlaying, hdPop: null, toast: st.edPlaying ? 'Stopped' : 'Playing from bar 4' })", 'st.edPlaying', "() => set({ edLoop: !st.edLoop, hdPop: null, toast: st.edLoop ? 'Loop off' : 'Looping bar 4' })", 'st.edLoop', "st.edLoop ? 'Stop looping' : 'Loop the selection'", [('V', 'Voice'), ('P', 'Piano')]) + "", 1)
 ED4 = ED4.replace('    return { ...common(st, set),', '    return { ...common(st, set), ' + SONGMENU_KEYS('st', 'set', lambda m, u: 'toast: ' + m + (" + ' · Undo'" if u else '')), 1)
 ED4 = ED4.replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['more', 'export'].includes(st.sheet), creditsOn: st.sheet === 'credits', layoutOn: st.sheet === 'layout', openLayout: () => set({ sheet: 'layout' }), instOn: st.sheet === 'inst', openCredits: () => set({ sheet: 'credits' }), openInst: () => set({ sheet: 'inst' }), audOn: st.sheet === 'audio', openAudio: () => set({ sheet: 'audio' }), "
                   + "".join(f"solo{k}On: st.solo === '{n}', toggleSolo{k}: () => set({{ solo: st.solo === '{n}' ? null : '{n}' }}), solo{k}Bg: st.solo === '{n}' ? '#332921' : 'transparent', solo{k}Fg: st.solo === '{n}' ? '#FEFDFB' : '#332921', show{k}On: !(st.hide || []).includes('{n}'), toggleShow{k}: () => set({{ hide: (st.hide || []).includes('{n}') ? (st.hide || []).filter((x) => x !== '{n}') : [...(st.hide || []), '{n}'] }}), show{k}Fg: (st.hide || []).includes('{n}') ? '#BFB3A7' : '#332921', " for k, n in (('P', 'Piano'), ('V', 'Voice'), ('A', 'Added'))) + "addedOn: !!st.added, addedN: st.added || '', addedS: { Cello: 'Bass staff', Organ: 'Treble, bass and pedal staves', Viola: 'Alto staff' }[st.added] || 'Treble staff', addInst: () => set({ sheet: 'pickInst' }), pickInstOn: st.sheet === 'pickInst', " + "".join(f"add{n}: () => set({{ added: '{n}', sheet: 'inst' }}), " for n in ['Violin', 'Viola', 'Cello', 'Flute', 'Clarinet', 'Guitar', 'Organ']), 1)
@@ -376,7 +382,7 @@ _MH = 'calc(100% - 124px)'
 _P44 = lambda h: h.replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px')
 PHLAYERS = lambda menu, saved: (BSHEET('moreOn', 'Amazing Grace', saved + menu, maxh=_MH) + THINGPAGE('creditsOn', 'closeSheet', 'Credits', ED_CREDITS, False)
                                 + BSHEET('instOn', 'Instruments', _P44(INST_BODY), maxh=_MH) + BSHEET('pickInstOn', 'New instrument', ED_PICK, 'Cancel', maxh=_MH)
-                                + BSHEET('layoutOn', 'Layout', LAY_BODY, maxh=_MH) + BSHEET('audOn', 'Audio', AUD_BODY, maxh=_MH) + BSHEET('exportOn', 'Export', EXPORTMENU, maxh=_MH))
+                                + BSHEET('layoutOn', 'Layout', LAY_BODY, maxh=_MH) + BSHEET('audOn', 'Audio', AUD_BODY_P, maxh=_MH) + BSHEET('exportOn', 'Export', EXPORTMENU, maxh=_MH))
 PHJS = lambda j: j.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1).replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: st.sheet === 'more',", 1)
 # the page prints the open version: with its piano accompaniment, or the melody alone (Original), in Edit as in Practice
 def VERPAGE(h):
@@ -404,7 +410,7 @@ elm4 = (elm4.replace(TOOLBAR_L, f'<sc-if value="{{{{notLayView}}}}" hint-placeho
         .replace(_PANELOLD, _PANEL, 1)
         .replace(f'<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', f'<sc-if value="{{{{layView}}}}" hint-placeholder-val="{{{{false}}}}">{PREVIEW}</sc-if><sc-if value="{{{{notLayView}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', 1)
         .replace('</sc-if></div></div>', '</sc-if></div></sc-if></div>', 1))
-LAPLAYERS = lambda sfx, vh=None, menu=None, saved=None: (RENAMEDLG()
+LAPLAYERS = lambda sfx, vh=None, menu=None, saved=None: (RENAMEDLG() + HDRPOPS(False, 312, 497)
                                      + POPOVER('exportOn', 'Export', EXPORTMENU, 'left: 400px; top: 300px', 300) + SEARCHCARD + KEYSCARD + THINGPAGE('creditsOn', 'closeSheet', 'Credits', _CRED(True), True))
 full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + CREDBTN(elm4), ED4L.replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - 76 - pw - 76 : 1710 - 76 - 64) / 794; const M = 'music'", 1), LAPLAYERS('Laptop.dc.html') + POPOVER('gotoOn', 'Go to bar', GOTO_FIELD, 'left: 665px; top: 76px; transform: translateX(-50%)', 260) )
 print('r44 editor ok')

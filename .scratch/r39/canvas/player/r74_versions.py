@@ -114,11 +114,13 @@ def player_rail(t):
     t = t.replace("isMore: open === 'settings',", keys, 1)
     return t
 
-# The transport as one glass bar (owner, 2026-11-26: "you didnt refactor the floating actions in the player"): three
-# capsules of different fills floated apart over the music (Practice and loop, Play in honey, Hands and keyboard); one
-# bar now, as flowkey's and Chordify's single player bar, centred on the music: the pace and the loop, then Play, the
-# one honey control, as a circle between its steps, then the hands and the keys, the groups parted by hairlines. Its
-# pace says what it does: Listen (at a speed) or Wait, never "Play" beside the Play button.
+# The transport in the header on a laptop (owner, 2026-11-26: "the floating actions there on the laptop doesnt make
+# sense … doesnt follow the flat editor header and toolbars"): Flat's header carries the song's name, then the transport,
+# then the mode (flat-score-editor 099, 143); the three capsules floating over the music go, their buttons move into one
+# header pill after the title (‹ Play › | the pace, the loop | the hands, the keys), their popovers hang under it. The
+# pace says what it does: Listen (at a speed) or Wait. The phone keeps its floating capsules (owner: "dont change the
+# mobile version floating actions").
+# the phone's transport as published (v755); the owner: "dont change the mobile version floating actions"
 def one_transport(t):
     i = t.index('aria-label="Transport"'); a = t.rindex('<div', 0, i); depth = 0
     for m in re.finditer(r'<(/?)div\b[^>]*>', t[a:]):
@@ -140,6 +142,36 @@ def one_transport(t):
     assert t.count("paceLabel: (mode === 'wait' ? 'Wait' : 'Play')") == 1
     t = t.replace("paceCap: mode === 'wait' ? 'Wait' : 'Play'", "paceCap: mode === 'wait' ? 'Wait' : 'Listen'", 1).replace("doneMode: mode === 'wait' ? 'Wait' : 'Play'", "doneMode: mode === 'wait' ? 'Wait' : 'Listen'", 1)
     return t.replace("paceLabel: (mode === 'wait' ? 'Wait' : 'Play')", "paceLabel: (mode === 'wait' ? 'Wait' : 'Listen')", 1)
+
+def _cut_el(t, start, tag):
+    # removes the element that opens at start, by its depth
+    depth = 0
+    for m in re.finditer(r'<(/?)' + tag + r'\b[^>]*>', t[start:]):
+        depth += -1 if m.group(1) else 1
+        if depth == 0: return t[:start] + t[start + m.end():]
+    raise ValueError(tag)
+
+def header_transport(t):
+    # Flat's header, built new from the kit (owner, 2026-11-26: "refactor properly … just moved the location but didnt
+    # refactor them properly"; "dont use old kits or builders at all"): the floating capsules and their three old
+    # dialogs (Practice, Parts, Piano) are deleted, not moved; the kit's HDRTRANSPORT, HDRPOPS and HDRKEYS draw the
+    # transport, its popovers and their state, one implementation with the editor
+    t = _cut_el(t, t.rindex('<div', 0, t.index('aria-label="Transport"')), 'div')
+    for cond in ('isPace', 'isHands', 'isKeys'):
+        t = _cut_el(t, t.index(f'<sc-if value="{{{{{cond}}}}}"'), 'sc-if')
+    assert 'aria-label="Practice" style' not in t and 'aria-label="Parts"' not in t
+    t = t.replace('<details class="vsw"', HDRTRANSPORT('SettingsLaptop.dc.html') + '<details class="vsw"', 1)
+    i = t.index('</header>'); t = t[:i - len('</div>')] + HDRKEYSBTN + t[i - len('</div>'):]
+    t = t.replace('</main>', '</main>' + HDRPOPS(True, *POPX['play']), 1)
+    loop = "() => { if (loop) { this.setState({ loop: false, hdPop: null }); return; } const a = Math.floor((bar - 1) / 4) * 4 + 1; this.setState({ loop: true, loopA: a, loopB: Math.min(16, a + 3), hdPop: null }); }"
+    keys = HDRKEYS('s', '(o) => this.setState(o)', lambda m: 'sTo: ' + m + ', sUndo: false', 'togglePlayNow', 'playing', loop, 'loop',
+                   "loop ? 'Stop looping bars ' + loopA + '–' + loopB : 'Loop bars ' + (Math.floor((bar - 1) / 4) * 4 + 1) + '–' + Math.min(16, Math.floor((bar - 1) / 4) * 4 + 4)",
+                   [('R', 'Right hand'), ('L', 'Left hand')])
+    assert t.count('togglePlay: togglePlayNow,') >= 1
+    return t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + keys)
+
+# where each popover hangs (left of Playback options, left of Volume, right of Piano keys), measured from the header
+POPX = {'play': (312, 497, 24), 'edit': (312, 497)}
 
 for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     p = OUT / f'{name}.dc.html'; t = (BASE / f'{name}.dc.html').read_text()
@@ -248,7 +280,6 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         f'<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px">' + btn('Cancel', 'renCancel', 'transparent', INK) + btn('Save', 'renSave', ACCENT, INK) + '</div>',
         close='renCancel', label='Rename version') + '</sc-if>')
     t = t.replace('</main>', '</main>' + (RENAMEDLG() if name == 'PlayerDesk' else ren), 1)
-    if name == 'PlayerDesk': t = player_rail(t)
-    t = one_transport(t)
+    t = header_transport(player_rail(t)) if name == 'PlayerDesk' else one_transport(t)
     p.write_text(t)
 print('r74 versions ok')
