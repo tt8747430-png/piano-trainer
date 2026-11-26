@@ -231,7 +231,7 @@ ED_MENU = lambda sfx, vh=None: (LAPMENU(sfx, vh) if 'Laptop' in sfx else MENUCAR
 # the laptop's title menu, as Flat's (owner's screenshot): Credits, Export ›, Print, Keyboard shortcuts; Instruments,
 # Layout and the sound are the rail's panels, so they are not here
 LAPMENU = lambda sfx, vh=None: (MENUCARD(('link', 'Credits', '', 'openCredits'), ('link', 'Transpose', 'G major', ''), ('link', 'Recordings', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
-                                + MENUCARD(*(() if vh else (('link', 'Export', '', 'openExport'),)), ('action', 'Print', 'closeSheet', INK)) + MENUCARD(('link', 'Keyboard shortcuts', '?', 'openKeys')))
+                                + MENUCARD(*(() if vh else (('link', 'Export', '', 'openExport'),)), ('action', 'Print', 'closeSheet', INK)) + MENUCARD(('link', 'Keyboard shortcuts', '', 'openKeys')))
 EXPORTMENU = GROUP(('action', 'Printable PDF (.pdf)', 'closeSheet', INK), ('action', 'MusicXML (.mxl)', 'closeSheet', INK), ('action', 'MusicXML (.musicxml)', 'closeSheet', INK), ('action', 'MIDI (.mid)', 'closeSheet', INK), bg=SHEET)
 FIELD = lambda label, val: (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
                             f'<input {KB["title"]} value="{val}" placeholder="{label}" style="height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
@@ -381,7 +381,7 @@ elm4 = (elm4.replace(TOOLBAR_L, f'<sc-if value="{{{{notLayView}}}}" hint-placeho
         .replace(_PANELOLD, _PANEL, 1)
         .replace(f'<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', f'<sc-if value="{{{{layView}}}}" hint-placeholder-val="{{{{false}}}}">{PREVIEW}</sc-if><sc-if value="{{{{notLayView}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', 1)
         .replace('</sc-if></div></div>', '</sc-if></div></sc-if></div>', 1))
-LAPLAYERS = lambda sfx, vh=None, menu=None, saved=None: (POPOVER('moreOn', 'Amazing Grace', (saved or ED_SAVED).replace('text-align: center', 'text-align: left; padding-left: 16px') + (menu or ED_MENU(sfx, vh)), 'left: 72px; top: 68px', 320)
+LAPLAYERS = lambda sfx, vh=None, menu=None, saved=None: (POPOVER('moreOn', 'Amazing Grace', (saved or ED_SAVED).replace('text-align: center', 'text-align: left') + (menu or ED_MENU(sfx, vh)), 'left: 72px; top: 68px', 320)
                                      + POPOVER('exportOn', 'Export', EXPORTMENU, 'left: 400px; top: 300px', 300) + SEARCHCARD + KEYSCARD + THINGPAGE('creditsOn', 'closeSheet', 'Credits', _CRED(True), True))
 full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + elm4, ED4L.replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - 76 - pw - 76 : 1710 - 76 - 64) / 794; const M = 'music'", 1), LAPLAYERS('Laptop.dc.html') + POPOVER('gotoOn', 'Go to bar', GOTO_FIELD, 'left: 665px; top: 76px; transform: translateX(-50%)', 260) )
 print('r44 editor ok')
