@@ -1,5 +1,7 @@
 # R41: every Songs and Practice page refactored to its own reference, in the calm language. Run: python3 -I r41.py
-import json, re
+import json, re, subprocess, sys
+# the Player pair first, from its one base (player/base), so every later pass patches the R74 Player
+subprocess.run([sys.executable, '/home/user/piano-trainer/.scratch/r39/canvas/player/r74_versions.py'], check=True)
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_kit.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_lib.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_songs.py').read())

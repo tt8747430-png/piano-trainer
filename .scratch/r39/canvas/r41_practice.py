@@ -6,11 +6,11 @@ from bravura_glyphs import BRAVURA
 
 def PROW(p, t, s, v='', href='#'):
     return (f'<a href="{href}" style="min-height: 80px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">{pic(p)}'
-            f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{s}</span></span>'
+            f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span>' + (f'<span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{s}</span>' if s else '') + '</span>'
             f'<span style="font-size: 14px; color: {SOFT}; white-space: nowrap">{v}</span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a>')
 PLIST = lambda rows: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">' + ''.join(PROW(*r) for r in rows) + '</div>'
 def PCARD(p, t, s, v, href):
-    return f'<a href="{href}" style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 12px; color: {INK}; text-decoration: none">{pic(p, 96)}<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">{t}</span><span style="font-size: 14px; color: {SOFT}">{s}</span></span>' + (f'<span style="font-size: 13px; color: {SOFT}">{v}</span>' if v else '') + '</a>'
+    return f'<a href="{href}" style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 12px; color: {INK}; text-decoration: none">{pic(p, 96)}<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">{t}</span>' + (f'<span style="font-size: 14px; color: {SOFT}">{s}</span>' if s else '') + '</span>' + (f'<span style="font-size: 13px; color: {SOFT}">{v}</span>' if v else '') + '</a>'
 def L(href, lap):  # a phone board's laptop twin
     return href.replace('.dc.html', 'Laptop.dc.html') if lap and href != '#' else href
 def body(top, inner, dock='', pad_bottom=118):
@@ -24,14 +24,14 @@ SPACER = '<span style="flex: 1"></span>'
 # completely"; the Chord trainer goes; Q10 "why the accompaniment is not under theory and the chord player is not the same
 # as exercises"; Q10c "I dont like that exercises are under technique"): Theory, the pages that explain and are practised
 # where they are explained; Exercises, named for what they train; Tools, the instruments, the Chord player first.
-THEORY = [('keys', 'Chords', 'Chord types, voicings, inversions', '', 'Chords.dc.html'), ('staff', 'Scales and keys', 'Scales, fingerings, key signatures', '', 'Scales.dc.html'),
-          ('arc', 'Intervals', 'Minor 2nd to octave', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Pop, jazz and classical', '', 'Progressions.dc.html'),
-          ('roll', 'Accompaniment', 'Bass and chord patterns', '', 'Accompaniment.dc.html')]
+THEORY = [('keys', 'Chords', '', '', 'Chords.dc.html'), ('staff', 'Scales and keys', '', '', 'Scales.dc.html'),
+          ('arc', 'Intervals', '', '', 'Intervals.dc.html'), ('roman', 'Progressions', '', '', 'Progressions.dc.html'),
+          ('roll', 'Accompaniment', '', '', 'Accompaniment.dc.html')]
 # one row per page it opens (loop round 58: Barry Harris and Piano With Jonny were two rows onto the one Jazz vocabulary
 # page that holds both books)
 EXERCISES = [('drill', 'Finger technique', '2 exercises', '', 'FingerTechnique.dc.html'), ('sixdim', 'Jazz vocabulary', '10 exercises', '', 'JazzVocabulary.dc.html')]
-TOOLS = [('chart', 'Chord player', 'Lead sheets with backing', '', 'ChordPlayer.dc.html'), ('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'A4 = 440 Hz', '', 'Tuner.dc.html'),
-         ('lens', 'Chord finder', 'Last: Cmaj7', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Every key and its signature', '', 'CircleOfFifths.dc.html')]
+TOOLS = [('chart', 'Chord player', '', '', 'ChordPlayer.dc.html'), ('metro', 'Metronome', '', '', 'Metronome.dc.html'), ('needle', 'Tuner', '', '', 'Tuner.dc.html'),
+         ('lens', 'Chord finder', '', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', '', '', 'CircleOfFifths.dc.html')]
 MAIN = js(r"    return { ...common(st, set),"
            r" states: [['Theory and Exercises folded', !!(st.folds && st.folds[0] && st.folds[1]), { folds: { 0: true, 1: true } }, { folds: {} }]]"
            r".map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) })) };")
@@ -288,7 +288,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       keyL: NN[key] + ' major', roots: rootGrid(key, (i) => set({ key: i, sheet: null })), voiceSeg: seg(['Voice-led', 'Block'], st.voice ?? 'Voice-led', (l) => set({ voice: l })),
       bpm: (st.bpm ?? 96) + ' BPM', bpmDn: () => set({ bpm: (st.bpm ?? 96) - 4 }), bpmUp: () => set({ bpm: (st.bpm ?? 96) + 4 }),
       kb: calmKeys(48, 76, marks, 370, 110), kbL: calmKeys(41, 84, marks, 860, 160), loop, loopBg: loop ? '#332921' : '#EEE9E2', loopFg: loop ? '#FEFDFB' : '#332921', toggleLoop: () => set({ loop: !loop }) };''')
-TILES = (f'<div style="display: flex; align-items: stretch; gap: 8px"><sc-for list="{{{{tiles}}}}" as="t" hint-placeholder-count="4"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px"><button type="button" onClick="{{{{t.pick}}}}" style="width: 100%; height: 96px; border: 0; border-radius: 14px; background: {{{{t.bg}}}}; box-shadow: {{{{t.ring}}}}; color: {INK}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px"><span style="font-family: {SERIF}; font-size: 26px">{{{{t.n}}}}</span><span style="font-size: 15px; font-weight: 700">{{{{t.c}}}}</span></button><span style="font-size: 12px; color: {SOFT}; height: 14px">{{{{t.move}}}} →</span></div></sc-for></div>'
+TILES = (f'<div style="display: flex; align-items: stretch; gap: 8px"><sc-for list="{{{{tiles}}}}" as="t" hint-placeholder-count="4"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px"><button type="button" onClick="{{{{t.pick}}}}" style="width: 100%; height: 96px; border: 0; border-radius: 14px; background: {{{{t.bg}}}}; box-shadow: {{{{t.ring}}}}; color: {INK}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px"><span style="font-family: {SERIF}; font-size: 26px">{{{{t.n}}}}</span><span style="font-size: 15px; font-weight: 700">{{{{t.c}}}}</span></button></div></sc-for></div>'
          f'<div style="display: flex; gap: 16px; font-size: 13px; color: {SOFT}">' + ''.join(f'<span style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 5px; background: {c}; box-shadow: 0 0 0 1px {LINE}"></span>{l}</span>' for l, c in (('Tonic', PEACH), ('Predominant', SKY), ('Dominant', SAGE))) + '</div>')
 PR_ROWS = GROUP(('link', 'Key', '{{keyL}}', 'openRoot'), ('seg', 'Voicing', 'voiceSeg', 200), ('step', 'Tempo', 'bpm', 'bpmDn', 'bpmUp'))
 LOOPB = f'<button type="button" aria-pressed="{{{{loop}}}}" onClick="{{{{toggleLoop}}}}" style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {{{{loopBg}}}}; color: {{{{loopFg}}}}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px">{ICON(LOOP, 18)} Loop</button>'
@@ -402,7 +402,7 @@ def CP_KEYS(h):
 CP_SET = (LABELLED('Instruments', GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT')))
           + LABELLED('Playing', GROUP(('link', 'Count-in', '1 bar', ''), ('link', 'Volume', '80%', '')))
           + LABELLED('Music', GROUP(('link', 'Time signature', '4/4', ''), ('seg', 'Written as', 'namesSeg', 200), ('seg', 'Voicing', 'cpVSeg', 200)))
-          + GROUP(('link', 'MIDI devices', 'Not connected', 'Settings.dc.html')))
+          + GROUP(('link', 'MIDI keyboard', 'Not connected', 'Settings.dc.html')))
 _BACKP = f'<button type="button" aria-label="Back to Chord player settings" onClick="{{{{backSet}}}}" style="position: absolute; left: -8px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button>'
 _PBODY = PS.PIANO_SHEET(False, 3, 4)
 CP_PSHEET = BSHEET('pianoOn', 'Piano', _PBODY, back=_BACKP, maxh='calc(100% - 124px)')
@@ -489,7 +489,7 @@ CHIPL = lambda lst, k: f'<div style="display: flex; flex-wrap: wrap; gap: 8px"><
 CF_NOTES = f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{notes}}}}" as="n" hint-placeholder-count="4"><span style="height: 64px; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 22px; font-weight: 700">{{{{n.n}}}}</span><span style="font-size: 12px; color: {SOFT}">{{{{n.d}}}}</span></span></sc-for></div></sc-if>'
 CF_ROWS = GROUP(('link', 'Spelled in', 'C major', ''), ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Also read as</span>{CHIPL("alts", "a")}</div>'), ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Played</span>{CHIPL("played", "p")}</div>'))
 CF_SET = (CAPS('Chord names') + GROUP(('toggle', 'Slash chords for inversions', 'cfSlOn', 'cfSlT')) + CAPS('Analysis') + GROUP(('toggle', 'Keys that contain the chord', 'cfKOn', 'cfKT'), ('toggle', 'Key’s scale on the keyboard', 'cfScOn', 'cfScT'))
-          + CAPS('History') + GROUP(('toggle', 'Keep chord history', 'cfHOn', 'cfHT'), ('action', 'Forget the chords played', 'closeSheet')) + GROUP(('link', 'MIDI devices', 'Not connected', 'Settings.dc.html')))
+          + CAPS('History') + GROUP(('toggle', 'Keep chord history', 'cfHOn', 'cfHT'), ('action', 'Forget the chords played', 'closeSheet')) + GROUP(('link', 'MIDI keyboard', 'Not connected', 'Settings.dc.html')))
 ph = body(TOP('Main.dc.html', 'Chord finder', GEAR()), SUBJECT('{{name}}', '{{sub}}', 44) + CF_NOTES + CF_ROWS + '<div style="flex: 1"></div>' + KEYS(170), BTN('Clear the keys', 'clear', kind='quiet', grow=False) + BTN('Open in Chords', href='Chords.dc.html'))
 lm = lapbody(LTOP('Laptop.dc.html', GEAR(), 'Chord finder'), SUBJECT('{{name}}', '{{sub}}', 64) + CF_NOTES + '<div style="flex: 1"></div>' + KEYS(200, 'kbL'), CF_ROWS, BTN('Clear the keys', 'clear', kind='quiet', grow=False) + BTN('Open in Chords', href='ChordsLaptop.dc.html'))
 detail('ChordFinder', 'Chord finder', CF, ph, lm, '', BSHEET('setOn', 'Chord finder settings', CF_SET), POPOVER('setOn', 'Chord finder settings', CF_SET))

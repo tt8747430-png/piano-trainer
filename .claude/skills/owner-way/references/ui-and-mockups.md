@@ -11,7 +11,10 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
    search for example images in internet"): find the thing by its file name in `piano-data/reference-apps`
    (`ls piano-data/reference-apps/*/ | grep -i <word>`: members, settings, folder, sheet, menu, toolbar, picker), open
    every match, then search the web for screenshots of the same control in shipped apps, and cite what was looked at
-   in the spec. Dorico and Flat (`dorico/`, `flat-score-editor/`) come first and are looked at most;
+   in the spec. **Mobbin** (the connector, `search_screens` and `search_flows`, iOS and web; owner, 2026-11-26) is
+   the screenshot library for shipped apps: search the screen by its kind and the app's kind ("music learning app
+   sign in screen"), look at the images, and cite each by its `mobbin_url`.
+   Dorico and Flat (`dorico/`, `flat-score-editor/`) come first and are looked at most;
    `piano-chords-and-scales-app/` is a welcome source for any screen. `music-theory-book-app/` is for its learning
    content only, never as a UI example. The app's own old screens are never an example.
 2. **Look at it today:** shoot the current screen before changing it, so you know what it does.
@@ -52,7 +55,20 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 
 **Actions**
 
+- **Every element answers two questions: why is it here, and why is it placed here** (owner, 2026-11-26: "I dont like how
+  this arrangement is centered like this … all elements should answer a question: why is it there and why is it placed
+  like this"). A part with no answer to the first goes; a place with no answer to the second moves to where the part
+  belongs: beside what it acts on or names (the version capsule beside the song's name, as Flat's bar), never centred,
+  spread or set apart only to fill a bar or balance a row. The answer is the reference or the ruling, said in the spec.
+- **Before moving or placing anything, ask why, and check it against the examples** (owner, 2026-11-26: "but why did
+  you move it to the right: you always should ask you why i do this and does this comply to the examples and best
+  practices"): for every element moved or placed, answer in the spec, before building: why this place; which of the
+  owner's screenshots and reference apps shows it there (the owner's own images first, then `piano-data`, then Mobbin),
+  quoted by file; which guideline agrees. A general rule ("Edit trails the bar") never beats the example the owner
+  sent: Edit went to the bar's far end by Apple's rule while the owner's Flat screenshots show "✎ Edit ▾" in the
+  title's group, and it was wrong. No example and no reason: the element stays where it was.
 - One way to each action. Adding a direct way removes the old one.
+- **Nothing the owner did not ask for** (owner, 2026-11-26: "remove all the thigns that i didnt asked for, make more clean interface"): a part stays when a ruling asked for it or the page cannot work without it; a feature drawn on our own initiative, a line that repeats what is beside it (a name over a staff the pickers name, credits printed twice, "Lesson n" under a numbered spine), or a second home for another page's job goes.
 - A screen's own actions go in its bar. **What creates or adds floats** (owner, 2026-11-17: "use proper floating
   actions and like add to library in this add buttons floating"; Flat's floating +): the + that creates on a library,
   and a detail page's one act (Add to my library, Open in my library) as the honey floating action at the bottom

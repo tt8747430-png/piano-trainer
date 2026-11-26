@@ -11,7 +11,7 @@ for li, j in enumerate(_J):
         rows = []
         for k, v in items:
             n += 1
-            if k == 'l': rows.append({'t': v, 'd': f'Lesson {n}', 'check': False})
+            if k == 'l': rows.append({'t': v, 'd': '', 'check': False})  # owner, 2026-11-26 ("remove all the thigns that i didnt asked for"): the spine numbers the lessons; no "Lesson n" under each
             else:
                 # a check is one scale, or one chord family, by its musician's name (the app's music strings), with
                 # what of it is known: a scale is known or not yet; a family counts its qualities
@@ -64,7 +64,7 @@ LEARN_JS = js(PLACES_PRE + r'''
       crStates: [['fresh', 'First visit: nothing learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) })),
       edStates: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) }))
         .concat([{ l: 'Edited by an editor', bg: editing ? '#332921' : '#EEE9E2', pick: () => set({ editing: !editing }) }]),
-      contSub: 'Lesson ' + Math.min(L.done + 1, L.n) + ' of ' + L.n, contBar: Math.round(100 * L.done / L.n) + '%', levelSub: L.chip + ' · ' + L.done + ' of ' + L.n + ' learned', levelGo: (L.done === 0 ? 'Start: ' : L.done === L.n ? 'Review: ' : 'Continue: ') + (nxt ? nxt.t : L.ch[0].rows[0].t),
+      contSub: (() => { const all = L.ch.flatMap((c) => c.rows), k = all.slice(0, Math.min(L.done, all.length - 1) + 1).filter((r) => !r.check).length; return 'Lesson ' + Math.max(1, k) + ' of ' + all.filter((r) => !r.check).length; })(), contBar: Math.round(100 * L.done / L.n) + '%', levelSub: L.chip + ' · ' + L.done + ' of ' + L.n + ' learned', levelGo: (L.done === 0 ? 'Start: ' : L.done === L.n ? 'Review: ' : 'Continue: ') + (nxt ? nxt.t : L.ch[0].rows[0].t),
       levelsHome: LV.map((x, i) => ({ i: String(i + 1), l: x.chip, sub: x.t, got: x.done + ' of ' + x.n, ring: 'conic-gradient(#44684A ' + Math.round(100 * x.done / x.n) + '%, #E9E2D8 0)' })),
       coursesHome: CRS.flatMap(([h, cs], si) => cs.map(([t, sub, k]) => ({ t, s: sub, shelf: k === 'done' ? 'Done' : k === 'now' ? '3 of 8 lessons' : '8 lessons', now: k === 'now', later: k !== 'now', paint: ['#DCE9D6', '#D3E5F2', '#F3D2C8', '#F6E7C8', '#E4DCF1'][si] }))).sort((a, b) => (b.now ? 1 : 0) - (a.now ? 1 : 0)).slice(0, 5),
       infoOn: sh === 'info', openInfo: () => set({ sheet: 'info' }), editOn: () => set({ sheet: null, editing: true }),
@@ -280,15 +280,15 @@ def SQ(c, path):
     return f'<span style="flex: none; width: 30px; height: 30px; border-radius: 8px; background: {c}; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{path}</svg></span>'
 IC = {'Appearance': ('#8C7AB8', '<path d="M12 3a9 9 0 1 0 9 9A7 7 0 0 1 12 3z"></path>'), 'General': ('#5B8DB8', '<circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"></path>'),
       'Storage and backup': ('#5F8F62', '<ellipse cx="12" cy="6" rx="8" ry="3"></ellipse><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path>'),
-      'MIDI devices': ('#5B8DB8', '<path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0zM12 18v4"></path>'),
+      'MIDI keyboard': ('#5B8DB8', '<path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0zM12 18v4"></path>'),
       'Selection toolbar': ('#5B8DB8', '<rect x="3" y="14" width="18" height="6" rx="3"></rect><path d="M7 17h.01M12 17h.01M17 17h.01M5 4h14M5 9h9"></path>'),
       'Swipe actions': ('#B08A5B', '<path d="M4 12h12M12 8l4 4-4 4M20 5v14"></path>'),
       'User guide': ('#5B8DB8', '<circle cx="12" cy="12" r="10"></circle><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"></path>'),
       'Report a problem': ('#8C7AB8', '<path d="M12 9v4M12 17h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path>'),
       'About': ('#B08A5B', '<circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7h.01"></path>')}
-SETGROUPS = [('App', [('General', ''), ('Appearance', 'Match system'), ('Storage and backup', '')]), ('Piano', [('MIDI devices', 'Not connected')]), ('Library', [('Selection toolbar', ''), ('Swipe actions', '')]), ('Support', [('User guide', ''), ('Report a problem', ''), ('About', '')])]
+SETGROUPS = [('App', [('General', ''), ('Appearance', 'Match system'), ('Storage and backup', '')]), ('Piano', [('MIDI keyboard', 'Not connected')]), ('Library', [('Selection toolbar', ''), ('Swipe actions', '')]), ('Support', [('User guide', ''), ('Report a problem', ''), ('About', '')])]
 PANES = {'Storage and backup': [('Device storage', [('48 MB used on this device', ''), ('Protect from clearing', 'On')]), ('Backup', [('Save a backup', ''), ('Restore from a file', '')]), ('', [('Reset progress', 'danger')])],
-         'MIDI devices': [('', [('No piano connected', 'Connect one by USB or Bluetooth, then press a key.')])],
+         'MIDI keyboard': [('', [('No piano connected', 'Connect one by USB or Bluetooth, then press a key.')])],
          'Selection toolbar': [('', [('The actions it shows', 'Favourite, Move, Share, Archive')])], 'Swipe actions': [('', [('Swipe right', 'Favourite'), ('Swipe left', 'Archive')])],
          'User guide': [('', [('How to use Piano Trainer', '')])], 'Report a problem': [('', [('Describe what happened', '')])],
          'About': [('', [('Software update', 'Up to date'), ('Licence', 'All rights reserved')]), ('Legal', [('Privacy Policy', ''), ('Terms of Service', '')]), ('Acknowledgements', [('Music engraving', 'Verovio'), ('Piano samples', 'Salamander Grand')])]}

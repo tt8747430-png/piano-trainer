@@ -48,4 +48,4 @@ Glass), read 2026-11-16.
 - 2026-11-16: the Player's bar drops its band; Close is glass, View and Settings share one glass; the laptop's Close,
   Settings and view switch use the same glass. Then the rules above, from Apple's guidelines, held against every board.
 - 2026-11-16: the kit's `TOP` centred its title between the bar's sides; it now leads after Back or Close, 8 from its glass, on every board that draws it.
-- 2026-11-16, loop round 61: the round-54 glass bar had been a hand edit to the built boards and a rebuild lost it; now `player/r43_player.py` (`onebar`) builds it, the editor and the Player take one switch from the kit, and the song sheet's Edit score went.
+- 2026-11-16, loop round 61: the round-54 glass bar had been a hand edit to the built boards and a rebuild lost it; the Player's one base (`player/base`) holds it, the editor and the Player take one switch from the kit, and the song sheet's Edit score went.

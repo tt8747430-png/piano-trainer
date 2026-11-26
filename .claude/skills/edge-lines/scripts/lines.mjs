@@ -204,7 +204,10 @@ async function analyse(page, scr, phone) {
     if ([a, c].some(centredWords)) continue
     if (near(a.x, c.x) && stacked) problems.push(`left edges miss by ${Math.abs(a.x - c.x)}px: ${a.tag} “${a.text}” at ${a.x}, ${c.tag} “${c.text}” at ${c.x}`)
     const side = a.b > c.y && c.b > a.y || Math.abs(a.y - c.y) <= 12
-    if (near(a.y, c.y) && side && (a.r <= c.x || c.r <= a.x)) problems.push(`tops miss by ${Math.abs(a.y - c.y)}px: ${a.tag} “${a.text}” at ${a.y}, ${c.tag} “${c.text}” at ${c.y}`)
+    // a heading's row (a fold's 44 button) beside a sibling column's: the h2 inside each meets the other's h2, so the
+    // wrapper against the bare h2 is no miss; like is compared with like
+    const twin = (w, o) => big.some((d) => d !== w && w.el.contains(d.el) && d.tag === o.tag && Math.abs(d.y - o.y) <= 1)
+    if (near(a.y, c.y) && side && (a.r <= c.x || c.r <= a.x) && !twin(a, c) && !twin(c, a)) problems.push(`tops miss by ${Math.abs(a.y - c.y)}px: ${a.tag} “${a.text}” at ${a.y}, ${c.tag} “${c.text}” at ${c.y}`)
   }
   const xs = [...new Set(big.map((b) => b.x))].sort((a, b) => a - b)
   for (const x of xs) lines.push({ kind: 'v', at: x, bad: xs.some((o) => near(o, x)) })
@@ -305,7 +308,8 @@ async function analyse(page, scr, phone) {
     // a table's rows are read down their columns, under a header row whose labels stand on the rows' edges
     const leafL = (el) => [...el.querySelectorAll('*')].filter((e) => vis(e) && !e.children.length && e.textContent.trim() && e.getBoundingClientRect().width > 4).map((e) => Math.round(e.getBoundingClientRect().left))
     const heads = [...document.querySelectorAll('main *')].filter((h) => vis(h) && h.getBoundingClientRect().height < 40 && h.getBoundingClientRect().width > 420 && !h.closest('a, [role=button], li')).map(leafL).filter((l) => l.length >= 3)
-    const inTable = (row) => { const l = leafL(row); return heads.some((h) => h.filter((x) => l.some((y) => Math.abs(x - y) <= 3)).length >= 3) }
+    // a row with an empty cell (a rhythm style has no level) still stands on two of its header's columns
+    const inTable = (row) => { const l = leafL(row); return heads.some((h) => h.filter((x) => l.some((y) => Math.abs(x - y) <= 3)).length >= 2) }
     for (const row of document.querySelectorAll('main a, main [role=button], main li')) {
       if (!vis(row) || row.closest('nav, [role=dialog], [data-float]')) continue
       const r = row.getBoundingClientRect(); if (r.width < 420 || r.height > 120) continue
