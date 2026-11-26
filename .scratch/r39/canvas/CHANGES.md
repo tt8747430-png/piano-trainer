@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · pending · the laptop Player's old Transpose dialog (Down a half step, Back to Song) deleted: nothing opened it since Transpose moved to the band's popover, and it spoke of half steps where the popover says semitones (lines: PlayerDesk 0 problems, the band's Transpose popover opens) · PlayerDesk · pending
 ## Changes
 
 - 2026-11-26 · 122cfe04 · the phone's Playback options opens on Flat's three rows in its order (Audio playback, Metronome, Playback speed), Practice's Mode and Hands after them, as the R74 ruling puts Audio first (lines: PlayerApp, PlayerPractice 0 problems; the 50 Player and editor boards 0 problems at both sizes) · PlayerApp · v778
