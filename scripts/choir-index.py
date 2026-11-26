@@ -66,10 +66,13 @@ def song_rows(base):
         fulls.sort(key=lambda i: (-(len([e for e in i['ex'] if len(voices_of(e)) == 1]) >= 4), bool([v for v in voices_of(os.path.basename(i['path'])) if v != 'All voices']), -i['lines'], i['path'].count(os.sep), len(i['path'])))
         main = fulls[0] if fulls else None
         full = fulls
-        rows.append(dict(made=made_words(made[0]) if made else None, nr=nr, title=title, kinds=kinds, nfull=len(full), main=main, mainf=main['path'] if main else None,
+        rows.append(dict(matched=os.path.exists(os.path.join(p, 'match.txt')),
+                         made=made_words(made[0]) if made else None, nr=nr, title=title, kinds=kinds, nfull=len(full), main=main, mainf=main['path'] if main else None,
                          voices=voice_files, sub=[v for v in variants if v not in ('.',)], dir=d))
     return rows
 def status(r, men):
+    if r.get('matched') and r.get('made'):
+        return 'Done: as printed (matched to its PDF)'
     if r.get('made'):
         return 'Done: a part per voice' + ('' if r['made']['words'] else ' (no words in any of its files)')
     m = r['main']

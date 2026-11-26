@@ -31,22 +31,22 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Nr | Song | State | Score | Shape | Words | Parts | Voice files | PDF | XML | Img | Sound |
 | --: | --- | --- | :-: | --- | :-: | --- | --- | --: | --: | --: | --- |
-| 1 | Binecuvântat să fie Domnul | Done: a part per voice (no words in any of its files) | 6 | 2 staves, voices 2/2, 89 bars, `001. Binecuvântat să fie Domnul.mscz` | no | – | Soprano, Alto, Tenor, Bass, All voices | 1 |  |  | piano |
+| 1 | Binecuvântat să fie Domnul | Done: as printed (matched to its PDF) | 6 | 2 staves, voices 2/2, 89 bars, `001. Binecuvântat să fie Domnul.mscz` | no | – | Soprano, Alto, Tenor, Bass, All voices | 1 |  |  | piano |
 | 2 | Glas de trâmbiți a sunat | Single voices only, no full score | – | – | – | – | Tenor | 1 |  |  | – |
 | 3 | La Calvar | No MuseScore | – | – | – | – | – | 1 |  |  | – |
-| 4 | Ce poate fi mai minunat | Done: a part per voice | 2 | 2 staves, voices 2/2, 16 bars, `4_Ce_poate_fi_mai_minunat_.mscz` | yes | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
+| 4 | Ce poate fi mai minunat | Done: as printed (matched to its PDF) | 2 | 2 staves, voices 2/2, 16 bars, `4_Ce_poate_fi_mai_minunat_.mscz` | yes | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
 | 5 | Mărire Ție, Isuse | No MuseScore | – | – | – | – | – | 1 |  |  | – |
-| 6 | Du-mă la izvorul | Done: a part per voice (no words in any of its files) | 2 | 2 staves, voices 2/2, 16 bars, `006.Du-mă la izvorul.mscz` | no | – | Alto | 1 |  |  | piano |
+| 6 | Du-mă la izvorul | Done: as printed (matched to its PDF) | 2 | 2 staves, voices 2/2, 16 bars, `006.Du-mă la izvorul.mscz` | no | – | Alto | 1 |  |  | piano |
 | 7 | Nu nouă Doamne | Single voices only, no full score | – | – | – | – | Soprano, Bass | 1 |  |  | – |
 | 8 | De-atâția ani | Single voices only, no full score | – | – | – | – | Tenor | 1 |  |  | – |
-| 9 | Eram jos în păcat | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 17 bars, `009. Eram jos în păcat.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
-| 10 | Rătăceam în păcat și pierzare | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 1/2, 53 bars, `010. Rătăceam în păcat și pierzare.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
-| 11 | Ce nume minunat | Done: a part per voice (no words in any of its files) | 4 | 2 staves, voices 2/2, 26 bars, `011. Ce Nume minunat.mscz` | no | – | Soprano, Alto, Tenor, Bass | 2 |  |  | piano |
-| 12 | Crucea-i ascultarea | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 32 bars, `012. Crucea-i ascultarea.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
-| 13 | Trece Isus pe-aici | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 16 bars, `013. Trece Isus pe-aici.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
+| 9 | Eram jos în păcat | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 2/2, 17 bars, `009. Eram jos în păcat.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
+| 10 | Rătăceam în păcat și pierzare | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 1/2, 53 bars, `010. Rătăceam în păcat și pierzare.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
+| 11 | Ce nume minunat | Done: as printed (matched to its PDF) | 4 | 2 staves, voices 2/2, 26 bars, `011. Ce Nume minunat.mscz` | no | – | Soprano, Alto, Tenor, Bass | 2 |  |  | piano |
+| 12 | Crucea-i ascultarea | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 2/2, 32 bars, `012. Crucea-i ascultarea.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
+| 13 | Trece Isus pe-aici | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 2/2, 16 bars, `013. Trece Isus pe-aici.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
 | 14 | Când Duhul Sfânt S-a coborât (1 subfolders) | Single voices only, no full score | – | – | – | – | Alto, Tenor | 1 |  |  | – |
 | 15 | Cântați pe Isus cu iubire | No MuseScore | – | – | – | – | – | 1 |  |  | – |
-| 16 | Te iubesc Isuse | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 1/2, 17 bars, `016. Te iubesc Isuse.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
+| 16 | Te iubesc Isuse | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 1/2, 17 bars, `016. Te iubesc Isuse.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
 | 17 | Îmi ridic ochii spre munți | Done: a part per voice (no words in any of its files) | 2 | 2 staves, voices 1/1, 87 bars, `017. Îmi ridic ochii spre munți.mscz` | no | – | Tenor | 1 |  |  | piano |
 | 18 | Cineva se-ngrijește de mine | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 19 | Luceafărul Maranata (1 subfolders) | Done: a part per voice (no words in any of its files) | 3 | 2 staves, voices 1/1, 136 bars, `19.Lucefarul-Sopran.mscz`, 102 chords | no | – | Soprano, Alto, Tenor | 1 |  |  | piano |
