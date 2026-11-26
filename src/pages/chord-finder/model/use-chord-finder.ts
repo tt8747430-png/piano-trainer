@@ -89,14 +89,17 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
         : { ...EMPTY_LOG, chords: settings.chords },
   )
   const [heard, setHeard] = useState(opened ? downKey : '')
+  // Clear lets the chord shown go: the page is empty until a key goes down again.
+  const [cleared, setCleared] = useState(false)
   if (downKey !== heard) {
     setHeard(downKey)
     setLog((current) => logKeys(current, down))
+    if (down.length > 0) setCleared(false)
   }
 
   // Held keys show the chord as it grew: letting it go key by key never renames it on the way.
   const last = log.chords.at(-1) ?? []
-  const keys = held.size === 0 && tapped.length > 0 ? tapped : last
+  const keys = held.size > 0 ? last : tapped.length > 0 ? tapped : cleared ? [] : last
   const source: ChordSource = held.size > 0 ? 'held' : tapped.length > 0 ? 'tapped' : 'last'
   const musicKey = keyFromParam(view.key)
 
@@ -139,7 +142,10 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
           : keyListParam(toggled(tapped, key)),
       ),
     canClear: tapped.length > 0,
-    clear: () => write(''),
+    clear: () => {
+      setCleared(true)
+      write('')
+    },
     canForget: remember && log.chords.length > 0,
     forget: () => {
       const kept = log
