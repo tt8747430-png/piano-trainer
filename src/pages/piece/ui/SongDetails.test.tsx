@@ -25,7 +25,10 @@ const MUSIC = {
 
 const withSong = () => {
   const storage = createMemoryStorage()
-  const state = { songs: [{ id: 'my-1', title: 'Morning', ...MUSIC }], nextSong: 2 }
+  const state = {
+    songs: [{ id: 'my-1', title: 'Morning', added: '2026-11-01T09:00:00.000Z', ...MUSIC }],
+    nextSong: 2,
+  }
   storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: PIECES_VERSION }))
   return storage
 }
@@ -49,6 +52,13 @@ async function openProperty(user: ReturnType<typeof userEvent.setup>, name: stri
   return screen.findByRole('dialog', { name })
 }
 
+/** The property's own Done at the sheet's foot, which saves it (the sheet's head has a Done too). */
+function saveIn(sheet: HTMLElement) {
+  const done = within(sheet).getAllByRole('button', { name: 'Done' }).at(-1)
+  if (!done) throw new Error('the sheet has Done')
+  return done
+}
+
 describe('a song’s Details, edited where they stand (R32-C)', () => {
   it('writes an own song’s title and description from their properties', async () => {
     const user = userEvent.setup()
@@ -58,7 +68,7 @@ describe('a song’s Details, edited where they stand (R32-C)', () => {
     await user.type(title, 'Evening{Enter}')
     const about = await openProperty(user, 'Description')
     await user.type(within(about).getByRole('textbox', { name: 'Description' }), 'A lullaby')
-    await user.click(within(about).getByRole('button', { name: 'Done' }))
+    await user.click(saveIn(about))
     expect(piecesStore.getState().songs[0]).toMatchObject({
       title: 'Evening',
       note: { en: 'A lullaby', ru: 'A lullaby' },
@@ -78,7 +88,7 @@ describe('a song’s Details, edited where they stand (R32-C)', () => {
     expect(screen.getByRole('button', { name: /^Composer/ })).toHaveTextContent('Mary Smith')
     const again = await openProperty(user, 'Composer')
     await user.clear(within(again).getByRole('textbox', { name: 'Composer' }))
-    await user.click(within(again).getByRole('button', { name: 'Done' }))
+    await user.click(saveIn(again))
     expect(piecesStore.getState().songs[0]?.header).toEqual({})
   })
 
@@ -119,7 +129,7 @@ describe('a song’s Details, edited where they stand (R32-C)', () => {
     const field = within(about).getByRole('textbox', { name: 'Description' })
     await user.clear(field)
     await user.type(field, 'Sung at evening')
-    await user.click(within(about).getByRole('button', { name: 'Done' }))
+    await user.click(saveIn(about))
     await waitFor(
       async () => {
         const draft = await content.draft('piece', SONG.id)
@@ -129,9 +139,11 @@ describe('a song’s Details, edited where they stand (R32-C)', () => {
       },
       { timeout: 4000 },
     )
-    await user.click(await screen.findByRole('link', { name: 'Settings' }))
-    // Publish… says it changed since it was published (R29 B6).
-    const row = await screen.findByRole('link', { name: /^Publish…/ })
+    // Its Settings window, from More: Publish… says it changed since it was published (R29 B6).
+    await user.click(screen.getByRole('button', { name: 'More' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Settings' }))
+    const settings = await screen.findByRole('dialog', { name: 'Settings' })
+    const row = within(settings).getByRole('button', { name: /^Publish…/ })
     await waitFor(() => expect(row).toHaveTextContent('Has changes'))
   })
 })
