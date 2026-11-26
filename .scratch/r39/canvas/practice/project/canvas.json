@@ -115,7 +115,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "The takes, Review your recording, phone",
+      "title": "Recordings, Review your recording, phone",
       "is_interactive": true,
       "page": "songs"
     },
@@ -124,7 +124,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "A take, phone",
+      "title": "A recording, phone",
       "is_interactive": true,
       "page": "songs"
     },
@@ -241,7 +241,7 @@
       "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "The takes, Review your recording, laptop",
+      "title": "Recordings, Review your recording, laptop",
       "is_interactive": true,
       "page": "songs"
     },
@@ -250,7 +250,7 @@
       "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "A take, laptop",
+      "title": "A recording, laptop",
       "is_interactive": true,
       "page": "songs"
     },

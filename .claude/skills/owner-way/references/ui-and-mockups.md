@@ -55,6 +55,11 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 
 **Actions**
 
+- **Every element answers two questions: why is it here, and why is it placed here** (owner, 2026-11-26: "I dont like how
+  this arrangement is centered like this … all elements should answer a question: why is it there and why is it placed
+  like this"). A part with no answer to the first goes; a place with no answer to the second moves to where the part
+  belongs: beside what it acts on or names (the version capsule beside the song's name, as Flat's bar), never centred,
+  spread or set apart only to fill a bar or balance a row. The answer is the reference or the ruling, said in the spec.
 - One way to each action. Adding a direct way removes the old one.
 - **Nothing the owner did not ask for** (owner, 2026-11-26: "remove all the thigns that i didnt asked for, make more clean interface"): a part stays when a ruling asked for it or the page cannot work without it; a feature drawn on our own initiative, a line that repeats what is beside it (a name over a staff the pickers name, credits printed twice, "Lesson n" under a numbered spine), or a second home for another page's job goes.
 - A screen's own actions go in its bar. **What creates or adds floats** (owner, 2026-11-17: "use proper floating

@@ -34,7 +34,7 @@ ADMIN_DATA = {
   'accounts': [['Ana Popescu', 'ana@example.com', 'Administrator', 'Joined 2 March 2025 · last sign-in today'], ['Mihai Ionescu', 'mihai@example.com', 'Editor', 'Joined 9 May 2025 · last sign-in 8 Nov'],
                ['Elena Rusu', 'elena@example.com', 'Learner', 'Joined 1 October 2026 · last sign-in 10 Nov'], ['Dan Moraru', 'dan@example.com', 'Learner', 'Joined 3 November 2026 · never signed in']],
   'groups': [['Beta testers', '14 members', ['Elena Rusu', 'Dan Moraru']], ['Choir accompanists', '6 members', ['Mihai Ionescu']]],
-  'flags': [['public-library', 'The Public library in Songs', 'Everyone'], ['hands-3d', 'Hands at the keys, 3D', 'Groups'], ['record-take', 'Record a take in the editor', 'No one']],
+  'flags': [['public-library', 'The Public library in Songs', 'Everyone'], ['hands-3d', 'Hands at the keys, 3D', 'Groups'], ['record-take', 'Recording in the editor', 'No one']],
   'reports': [['Amazing Grace (jazz waltz)', 'by Dan Moraru', 'Copied from a book without credit', False], ['My first song', 'by Elena Rusu', 'Not a song', True]],
   'feedback': [['10 Nov', 'The metronome drifts after a few minutes on my old phone.'], ['8 Nov', 'Please add the soft pedal to the on-screen piano.'], ['2 Nov', 'Lesson 7’s example plays the wrong hand first.']],
   'errors': [['TypeError: cannot read “notes” of undefined', '12 times, on 3 screens', '10 Nov · /play/amazing-grace · build 4.12.0'], ['AudioContext was not allowed to start', 'Once, on 1 screen', '9 Nov · /practice/metronome · build 4.12.0']],

@@ -60,7 +60,7 @@ ED4 = js(r'''
     const sections = PALR.map(([c, ts]) => ({ c, t: TITLE[c] ?? c, tools: fill(ts.map(tile)), isOpen: !shut.includes(c), rot: shut.includes(c) ? '-90deg' : '0deg', fold: () => set({ shut: shut.includes(c) ? shut.filter((x) => x !== c) : [...shut, c] }) }));
     const NAME = Object.fromEntries(PAL.flatMap(([, ts]) => ts.map((t) => [t[0], t[3].toLowerCase()])));
     const noteL = rest ? DUR[dur].replace('note', 'rest') : 'G' + ACC[acc] + '4 · ' + DUR[dur].toLowerCase();
-    const view = st.view ?? VIEW0, zoom = st.zoom ?? 100, pw = st.pw ?? 352, kh = st.kh ?? 150, pal = st.pal ?? true;
+    const rail = st.rail ?? 'notation', view = st.view ?? VIEW0, zoom = st.zoom ?? 100, pw = st.pw ?? 352, kh = st.kh ?? 150, pal = st.pal ?? true;
     const ZS = [50, 75, 100, 125, 150, 200], zi = ZS.indexOf(zoom);
     const drag = (fn) => (e) => { if (e.type === 'pointermove' && !e.buttons) return; if (e.type === 'pointerdown') { if (e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId); return; }
       const g = e.currentTarget.closest('[data-edgrid]'); if (!g) return; const r = g.getBoundingClientRect(), k = r.width / g.offsetWidth; fn(r, k, e); };
@@ -71,7 +71,7 @@ ED4 = js(r'''
       views: seg(['Page', 'Panorama'], view === 'page' ? 'Page' : 'Panorama', (l) => set({ view: l === 'Page' ? 'page' : 'pano' })),
       zoomL: zoom + '%', zf: (view === 'page' ? (typeof FIT === 'function' ? FIT(pal, pw) : FIT) : 1) * zoom / 100, zoomIn: () => set({ zoom: ZS[Math.min(ZS.length - 1, zi + 1)] }), zoomOut: () => set({ zoom: ZS[Math.max(0, zi - 1)] }), zoomReset: () => set({ zoom: 100 }),
       zinDis: zi === ZS.length - 1 ? 'true' : 'false', zoutDis: zi === 0 ? 'true' : 'false',
-      pw, kh, palOn: pal, palPressed: pal ? 'true' : 'false', togglePal: () => set({ pal: !pal }),
+      pw, kh, palOn: pal, foldPanel: () => set({ pal: false }), railNotOn: rail === 'notation', railNotBg: rail === 'notation' && pal ? '#E8DFD3' : 'transparent', railNotW: rail === 'notation' ? 600 : 500, pickNot: () => set(rail === 'notation' && pal ? { pal: false } : { rail: 'notation', pal: true }), railInstOn: rail === 'instruments', railInstBg: rail === 'instruments' && pal ? '#E8DFD3' : 'transparent', railInstW: rail === 'instruments' ? 600 : 500, pickInst: () => set(rail === 'instruments' && pal ? { pal: false } : { rail: 'instruments', pal: true }), railLayOn: rail === 'layout', railLayBg: rail === 'layout' && pal ? '#E8DFD3' : 'transparent', railLayW: rail === 'layout' ? 600 : 500, pickLay: () => set(rail === 'layout' && pal ? { pal: false } : { rail: 'layout', pal: true }), railAudOn: rail === 'audio', railAudBg: rail === 'audio' && pal ? '#E8DFD3' : 'transparent', railAudW: rail === 'audio' ? 600 : 500, pickAud: () => set(rail === 'audio' && pal ? { pal: false } : { rail: 'audio', pal: true }), railSrchBg: 'transparent', railSrchW: 500, railKeysBg: 'transparent', railKeysW: 500, panelL: { notation: 'Notation', instruments: 'Instruments', layout: 'Layout', audio: 'Audio' }[rail], layView: rail === 'layout' && pal, notLayView: !(rail === 'layout' && pal), searchOn: st.sheet === 'search', openSearch: () => set({ sheet: 'search' }), keysOn2: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }), exportOn: st.sheet === 'export', openExport: () => set({ sheet: 'export' }), titleBg: ['more', 'export'].includes(st.sheet) ? '#E8DFD3' : 'transparent', notPick: st.sheet !== 'pickInst', backInst: () => set({ sheet: null }), rooms: seg(['Off', 'Studio', 'Hall', 'Cathedral'], st.room ?? 'Off', (l) => set({ room: l })), mutePOn: (st.mute || []).includes('Piano'), toggleMuteP: () => set({ mute: (st.mute || []).includes('Piano') ? st.mute.filter((x) => x !== 'Piano') : [...(st.mute || []), 'Piano'] }), mutePBg: (st.mute || []).includes('Piano') ? '#332921' : 'transparent', mutePFg: (st.mute || []).includes('Piano') ? '#FEFDFB' : '#332921', muteVOn: (st.mute || []).includes('Voice'), toggleMuteV: () => set({ mute: (st.mute || []).includes('Voice') ? st.mute.filter((x) => x !== 'Voice') : [...(st.mute || []), 'Voice'] }), muteVBg: (st.mute || []).includes('Voice') ? '#332921' : 'transparent', muteVFg: (st.mute || []).includes('Voice') ? '#FEFDFB' : '#332921', 
       dragPanel: drag((r, k, e) => set({ pw: Math.round(Math.max(280, Math.min(520, (e.clientX - r.left) / k))) })),
       keyPanel: (e) => { const d = { ArrowLeft: -16, ArrowRight: 16 }[e.key]; if (d) set({ pw: Math.max(280, Math.min(520, pw + d)) }); },
       dragKeys: drag((r, k, e) => set({ kh: Math.round(Math.max(96, Math.min(260, (r.bottom - e.clientY) / k))) })),
@@ -85,7 +85,7 @@ ED4 = js(r'''
       redo: () => { const u = st.undone ?? []; if (!u.length) return; const x = u[u.length - 1]; set(x.r ? { rest: true, undone: u.slice(0, -1) } : { marks: [...marks, x.m], undone: u.slice(0, -1) }); },
       delNote: () => set({ rest: true, undone: [] }),
       doneOn: !!st.done, doneL: st.done ? st.done + ': tap the score where it goes' : '', clearDone: () => set({ done: null }),
-      moreOn: st.sheet === 'more', openMore: () => set({ sheet: 'more' }),
+      moreOn: ['more', 'export'].includes(st.sheet), openMore: () => set({ sheet: 'more' }),
       states: [['The palette open', open, { open: true }, { open: false }], ['A rest chosen', rest, { rest: true }, { rest: false }], ['Crossed to the lower staff', marks.includes('xdn'), { marks: [...marks, 'xdn'] }, { marks: marks.filter((m) => m !== 'xdn') }], ['Voice 2 on', voice, { voice: true }, { voice: false }],
         ['A clef waiting for its place', st.done === 'Treble clef', { done: 'Treble clef' }, { done: null }], ['The piano hidden', !keys, { keys: false }, { keys: true }], [VIEW0 === 'page' ? 'Panorama' : 'Page view', view !== VIEW0, { view: VIEW0 === 'page' ? 'pano' : 'page' }, { view: VIEW0 }], ['Zoom 150%', zoom === 150, { zoom: 150 }, { zoom: 100 }],
         ['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]].map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => set(on2 ? off : o) })),
@@ -103,14 +103,14 @@ def EBAR(close_href, play_href, title=False):
     if title:
         # Flat's top bar (flat-score-editor 099, 126): the score's name after the way out, and the pen beside it opens
         # its Credits (title, subtitle, words, music, arranged by, copyright; 087), as the printed title does
-        left += (f'<div style="display: flex; align-items: center; gap: 2px; min-width: 0"><h1 style="margin: 0 0 0 4px; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</h1>'
-                 f'<button type="button" aria-label="Edit the credits" data-tip="Credits" onClick="{{{{openCredits}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: pointer">{PENI}</button></div>')
-        # where the score is kept, at the bar's end before its menu, as Flat's "Last save …"
-        saved = f'<span role="status" style="font-size: 13px; color: {SOFT}; white-space: nowrap">Saved on this device</span>'
+        # Flat's new top bar (owner's screenshots, 2026-11-26): the score's name with its chevron is the score's menu
+        # (its name and save state, Credits, Export ›, Print, Keyboard shortcuts); no pen, no ···, no status in the bar
+        left += (f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{moreOn}}}}" onClick="{{{{openMore}}}}" data-tip="The score’s menu" style="min-width: 0; height: 44px; padding: 0 8px 0 12px; border: 0; border-radius: 12px; background: {{{{titleBg}}}}; color: {INK}; font: inherit; display: flex; align-items: center; gap: 4px; cursor: pointer">'
+                 f'<h1 style="margin: 0; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</h1><span style="flex: none; display: flex; color: {SOFT}">{CHEV_D}</span></button>')
     # Undo and Redo are the toolbar's (Flat's actions: delete, history, clipboard); the bar keeps the score's menu
-    right = saved + f'<div style="flex: none; display: flex; border-radius: 22px; {GL}">{GBTN("More", MORE, "openMore")}</div>'
+    right = '' if title else f'<div style="flex: none; display: flex; border-radius: 22px; {GL}">{GBTN("More", MORE, "openMore")}</div>'
     return (f'<header style="flex: none; position: relative; z-index: 20; {MODEBAR_P}">'
-            f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{left}</div>{MODESW("edit", play_href)}<div style="display: flex; align-items: center; justify-content: flex-end; gap: 16px">{right}</div></header>')
+            f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{left}{MODESW("edit", play_href) if title else ""}</div>{"<span></span>" if title else MODESW("edit", play_href)}<div style="display: flex; align-items: center; justify-content: flex-end; gap: 16px">{right}</div></header>')
 
 # the selection strip: what is chosen, and what acts on it
 def STRIP(play=True):
@@ -119,7 +119,7 @@ def STRIP(play=True):
     return (f'<div role="toolbar" aria-label="The chosen note" style="flex: none; min-height: 60px; box-sizing: border-box; padding: 8px 8px 8px 16px; display: flex; align-items: center; gap: 4px">'
             f'<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap">{{{{noteL}}}}</span>'
             f'<span style="font-size: 13px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{whereL}}}}</span></div>'
-            f'<button type="button" aria-label="Record a take" data-tip="Record a take" style="flex: none; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 22px; background: transparent; display: flex; align-items: center; justify-content: center; position: relative"><span aria-hidden="true" style="width: 16px; height: 16px; border-radius: 8px; background: #B84A3E; box-shadow: 0 0 0 3px #FEFDFB, 0 0 0 4.5px #B84A3E"></span></button>'
+            f'<button type="button" aria-label="Record" data-tip="Record (R)" style="flex: none; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 22px; background: transparent; display: flex; align-items: center; justify-content: center; position: relative"><span aria-hidden="true" style="width: 16px; height: 16px; border-radius: 8px; background: #B84A3E; box-shadow: 0 0 0 3px #FEFDFB, 0 0 0 4.5px #B84A3E"></span></button>'
             f'{pb}</div>'
             f'<sc-if value="{{{{doneOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="flex: none; margin: 0 16px 8px; min-height: 44px; box-sizing: border-box; padding: 4px 4px 4px 12px; border-radius: 12px; background: #FBF1DD; display: flex; align-items: center; gap: 8px; font-size: 14px"><span style="flex: 1; min-width: 0">{{{{doneL}}}}</span><button type="button" onClick="{{{{clearDone}}}}" style="height: 36px; padding: 0 8px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">Cancel</button></div></sc-if>')
 
@@ -181,7 +181,7 @@ CLIP = TBTN('Delete', DELI, 'delNote', 'Delete · ⌫') + TSEP + TBTN('Undo', UN
 ZOOMG = (TBTN('Zoom out', ZOUTI, 'zoomOut', 'Zoom out · ⌘−', 'zoutDis') + f'<button type="button" aria-label="Reset the zoom" data-tip="Actual size · ⌘0" onClick="{{{{zoomReset}}}}" style="flex: none; position: relative; min-width: 56px; height: 44px; border: 0; padding: 0 4px; border-radius: 12px; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{zoomL}}}}</button>'
          + TBTN('Zoom in', ZINI, 'zoomIn', 'Zoom in · ⌘=', 'zinDis'))
 TOOLBAR_L = (f'<div role="toolbar" aria-label="Notation" style="flex: none; height: 56px; box-sizing: border-box; padding: 0 24px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
-             f'<button type="button" aria-label="Palette" data-tip="Palette · ⌘\\" aria-pressed="{{{{palPressed}}}}" onClick="{{{{togglePal}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{PANELI}</button>'
+
              + ESSENTIALS + '<span style="flex: 1"></span>' + CLIP + TSEP + ZOOMG + TSEP
              + f'<div style="flex: none; width: 216px">{SEGC("views", 40, 14)}</div>' + TSEP + KEYSBTN + '</div>')
 # the phone's toolbar, as Flat's second row (flat-score-editor 017): the essentials scroll sideways; the keys and the view stay at its end
@@ -202,19 +202,18 @@ VGRIP = (f'<div role="separator" aria-orientation="vertical" aria-label="Palette
 HGRIP = (f'<div role="separator" aria-orientation="horizontal" aria-label="Keyboard height" aria-valuenow="{{{{kh}}}}" aria-valuemin="96" aria-valuemax="260" tabindex="0" data-tip="Drag to resize" onPointerDown="{{{{dragKeys}}}}" onPointerMove="{{{{dragKeys}}}}" onKeyDown="{{{{keyKeys}}}}" '
          f'style="flex: none; position: relative; z-index: 5; height: 13px; margin: -6px 0; cursor: row-resize; touch-action: none; display: flex; align-items: center; justify-content: center"><span aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 6px; height: 1px; background: {LINE}"></span><span aria-hidden="true" style="position: relative; width: 36px; height: 5px; border-radius: 3px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}"></span></div>')
 
+_PANELOLD = '<!--panel-->'
 eph4 = (TIP_CSS + EBAR('Songs.dc.html', 'Player.dc.html') + TOOLBAR_P
         + '<div class="edlay" style="flex: 1; min-height: 0; display: flex; flex-direction: column">'
         + SCOREAREA(DESK('12px') + PANO(0.95, '16px 16px 16px 12px')) + SHEETP + '</div>' + EDLAY_CSS)
 
 # the laptop: the bar, the toolbar, then the palette at the left (resizable, collapsible), the score, the keys under it
-_PANEL = (f'<sc-if value="{{{{palOn}}}}" hint-placeholder-val="{{{{true}}}}"><aside aria-label="Palette" data-strip style="flex: none; width: {{{{pw}}}}px; min-height: 0; display: flex; flex-direction: column; background: {SHEET}">'
-          + STRIP() + f'<div style="height: 1px; margin: 0 16px; background: {LINE}"></div>'
-          f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 20px">{ED_SECTIONS()}</div></aside>{VGRIP}</sc-if>')
 elm4 = (TIP_CSS + EBAR('SongsLaptop.dc.html', 'PlayerLaptop.dc.html', title=True).replace(MODEBAR_P, MODEBAR_L) + TOOLBAR_L
-        + f'<div data-edgrid style="flex: 1; min-height: 0; display: flex">' + _PANEL
+        + f'<div data-edgrid style="flex: 1; min-height: 0; display: flex">' + _PANELOLD
         + f'<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">'
         + SCOREAREA(DESK('32px') + PANO(1.15, '24px 32px'))
         + f'<sc-if value="{{{{keysOn}}}}" hint-placeholder-val="{{{{true}}}}">{HGRIP}<div style="flex: none">{KEYS("{{kh}}", "kbL", edge=True, ring=False)}</div></sc-if></div></div>')
+
 
 # ··· the score's menu, as Flat's ≡ (owner, 2026-11-16: "new completely new design"; flat-score-editor 083–090): what
 # the score does not print, one row each, then Publish as its own card. Credits and Instruments open their sheets.
@@ -226,13 +225,16 @@ MENUCARD = lambda *rows: GROUP(*rows, bg=SHEET)
 # Versions only on an editor's draft of a built-in song (the published versions it restores), and Export only on the
 # learner's own song or version, which it writes; a learner's song has no versions,
 # and the on-screen piano has no settings page to open, so neither row is drawn where it would open nothing.
-ED_MENU = lambda sfx, vh=None: (MENUCARD(('link', 'Title and credits', 'Amazing Grace', 'openCredits'), ('link', 'Transpose', 'G major', ''), ('link', 'Takes', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
-                       + MENUCARD(('link', 'Instruments', '2', 'openInst'), ('link', 'Layout', '', ''), ('link', 'Note input', '', ''), ('link', 'Recording', '', ''), ('link', 'MIDI keyboard', 'None', ''), *((('link', 'Shortcuts', '?', ''),) if 'Laptop' in sfx else ()))
+ED_MENU = lambda sfx, vh=None: (LAPMENU(sfx, vh) if 'Laptop' in sfx else MENUCARD(('link', 'Title and credits', 'Amazing Grace', 'openCredits'), ('link', 'Transpose', 'G major', ''), ('link', 'Recordings', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
+                       + MENUCARD(('link', 'Instruments', '2', 'openInst'), ('link', 'Layout', 'A4', 'openLayout'), ('link', 'Note input', '', ''), ('link', 'Recording', '', ''), ('link', 'MIDI keyboard', 'None', ''))
                        + MENUCARD(*(() if vh else (('link', 'Export…', 'MusicXML, MIDI', ''),)), ('action', 'Print', 'closeSheet', INK)))
+# the laptop's title menu, as Flat's (owner's screenshot): Credits, Export ›, Print, Keyboard shortcuts; Instruments,
+# Layout and the sound are the rail's panels, so they are not here
+LAPMENU = lambda sfx, vh=None: (MENUCARD(('link', 'Credits', '', 'openCredits'), ('link', 'Transpose', 'G major', ''), ('link', 'Recordings', '3', 'Takes' + sfx), *((('link', 'Versions', '', vh),) if vh else ()))
+                                + MENUCARD(*(() if vh else (('link', 'Export', '', 'openExport'),)), ('action', 'Print', 'closeSheet', INK)) + MENUCARD(('link', 'Keyboard shortcuts', '?', 'openKeys')))
+EXPORTMENU = GROUP(('action', 'Printable PDF (.pdf)', 'closeSheet', INK), ('action', 'MusicXML (.mxl)', 'closeSheet', INK), ('action', 'MusicXML (.musicxml)', 'closeSheet', INK), ('action', 'MIDI (.mid)', 'closeSheet', INK), bg=SHEET)
 FIELD = lambda label, val: (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
                             f'<input {KB["title"]} value="{val}" placeholder="{label}" style="height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
-ED_CREDITS = (FIELD('Title', 'Amazing Grace') + FIELD('Subtitle', '') + FIELD('Words', 'John Newton') + FIELD('Music', 'New Britain (American folk tune)') + FIELD('Arranged by', 'Ana Popescu') + FIELD('Copyright', 'Public domain')
-              + f'<div style="display: flex">{BTN("Save", "closeSheet", h=48)}</div>')
 INSTROW = lambda name, staff, k: (f'<div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 6px 0 16px"><span style="flex: none; color: {INK}; display: flex">{KEYSI}</span>'
                                f'<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{name}</span><span style="font-size: 13px; color: {SOFT}">{staff}</span></span>'
                                f'<button type="button" aria-label="Solo {name}" data-tip="Solo" aria-pressed="{{{{solo{k}On}}}}" onClick="{{{{toggleSolo{k}}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {{{{solo{k}Bg}}}}; color: {{{{solo{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{SOLOI}</button>'
@@ -240,7 +242,111 @@ INSTROW = lambda name, staff, k: (f'<div style="min-height: 60px; display: flex;
 ED_PICK = GROUP(('action', 'Violin', 'addViolin'), ('action', 'Viola', 'addViola'), ('action', 'Cello', 'addCello'), ('action', 'Flute', 'addFlute'), ('action', 'Clarinet', 'addClarinet'), ('action', 'Guitar', 'addGuitar'), ('action', 'Organ', 'addOrgan'), bg=SHEET)
 ED_INST = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{INSTROW("Piano", "Treble and bass staves", "P")}<div style="height: 1px; margin-left: 52px; background: {FILL}"></div>{INSTROW("Voice", "Melody and words", "V")}<sc-if value="{{{{addedOn}}}}" hint-placeholder-val="{{{{false}}}}"><div style="height: 1px; margin-left: 52px; background: {FILL}"></div>{INSTROW("{{addedN}}", "{{addedS}}", "A")}</sc-if></div>'
            f'<div style="display: flex">{BTN("Add an instrument", "addInst", kind="quiet", h=48)}</div>')
-ED4 = ED4.replace("moreOn: st.sheet === 'more',", "moreOn: st.sheet === 'more', creditsOn: st.sheet === 'credits', instOn: st.sheet === 'inst', openCredits: () => set({ sheet: 'credits' }), openInst: () => set({ sheet: 'inst' }), "
+# Credits, as Flat's Credits (flat-score-editor 087, 088; the owner's Document settings screenshot): Title, Subtitle,
+# Lyricist and Composer, Arranger, Licence text, Save at the foot's end. Creation type, tags, description and the
+# licence are the Publish page's (one home: r53's _SPL), as Flat keeps them for publishing
+_LAB = lambda t: f'<span style="margin: 0 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{t}</span>'
+_IN = lambda label, val, ph: (f'<label style="min-width: 0; display: flex; flex-direction: column; gap: 6px">{_LAB(label)}'
+                              f'<input value="{val}" placeholder="{ph}" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}"></label>')
+_TXT = lambda label, ph: (f'<label style="display: flex; flex-direction: column; gap: 6px">{_LAB(label)}'
+                          f'<textarea rows="3" placeholder="{ph}" style="box-sizing: border-box; padding: 10px 12px; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}; resize: vertical"></textarea></label>')
+def _CRED(two):
+    return (_IN('Title', 'Amazing Grace', 'Title') + _IN('Subtitle', '', 'Subtitle')
+            + f'<div style="display: grid; grid-template-columns: repeat({2 if two else 1}, minmax(0, 1fr)); gap: 16px 24px">' + _IN('Lyricist', 'John Newton', 'Lyricist') + _IN('Composer', 'New Britain (American folk tune)', 'Composer') + '</div>'
+            + _IN('Arranger', 'Ana Popescu', 'Arranger') + _TXT('Licence text', 'Public domain')
+            + f'<div style="display: flex; justify-content: flex-end">{BTN("Save", "closeSheet", h=44, grow=False)}</div>')
+ED_CREDITS = _CRED(False)
+# Layout, as Flat's Layout and styles (the owner's screenshot): one folding section a kind, its name, what it holds,
+# its value; each opens in place (a details element), never a popover
+_LAYSEC = lambda name, what, val, body: (f'<details style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}"><summary style="list-style: none; min-height: 72px; box-sizing: border-box; padding: 12px 16px 12px 20px; display: flex; align-items: center; gap: 16px; cursor: pointer">'
+                                         f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 16px; font-weight: 600">{name}</span><span style="font-size: 14px; color: {SOFT}">{what}</span></span>'
+                                         f'<span style="font-size: 15px; color: {SOFT}; white-space: nowrap">{val}</span><span style="color: {SOFT}; display: flex">{CHEV_D}</span></summary>'
+                                         f'<div style="padding: 0 20px 16px; display: flex; flex-direction: column">{body}</div></details>')
+_LROW = lambda k, v: f'<div style="min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: inset 0 1px 0 {FILL}"><span style="font-size: 15px">{k}</span><span style="font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{v}</span></div>'
+ED_LAYOUT = (_LAYSEC('Pages', 'Size, orientation, margins and page numbers', 'A4', _LROW('Size', 'A4') + _LROW('Orientation', 'Portrait') + _LROW('Margins', '17.2 mm') + _LROW('Page numbers', 'From page 2'))
+             + _LAYSEC('Staves', 'Staff size and the space between staves', '7 mm', _LROW('Staff size', '7 mm (rastral 3)') + _LROW('Between staves', '8 spaces') + _LROW('Between systems', '12 spaces'))
+             + _LAYSEC('Measures', 'Measures a line and note spacing', '4 a line', _LROW('Measures a line', '4, the first 5') + _LROW('Note spacing', 'Normal') + _LROW('Last line justified', 'Past half full'))
+             + _LAYSEC('Measure numbers', 'Where the bars are numbered', 'Each line', _LROW('Show', 'At each line\'s start') + _LROW('Pickup', 'Not counted'))
+             + _LAYSEC('Chord symbols', 'How chord names are written', 'G7, Cmaj7', _LROW('Major seventh', 'maj7') + _LROW('Minor', 'm') + _LROW('Diminished', 'dim'))
+             + _LAYSEC('Text', 'The faces of the title, credits and words', 'Iowan Old Style', _LROW('Title', 'Iowan Old Style, 30') + _LROW('Credits', 'Iowan Old Style, 13') + _LROW('Words', 'Iowan Old Style, 13')))
+# The laptop editor as Flat's new editor (owner, 2026-11-26: "this now are the new settings … we dont need legacy settings";
+# FLAT_UI_SHELL_AND_MOTION §1.1–1.2: a 64 rail beside one 352 panel; Notation, Instruments, Layout, Audio, and Search and
+# Shortcuts at its foot as acts; the active entry clicked again folds the panel; Layout hides the toolbar and shows the
+# page whole, "Preview of your score"). Flat's Document settings dialog is its legacy and is not drawn.
+_LI = lambda d: f'<svg viewBox="0 0 24 24" width="22" height="22" {I}>{d}</svg>'
+NOTATIONI = _LI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>')
+LAYOUTI = _LI('<rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 21V9"></path>')
+AUDIOI = _LI('<path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"></path>')
+SEARCHI = _LI('<circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path>')
+KBDI = _LI('<rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"></path>')
+HEADPHI = _LI('<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path>')
+MUTEI = _LI('<path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="m22 9-6 6M16 9l6 6"></path>')
+GRIPI = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.5"></circle><circle cx="15" cy="6" r="1.5"></circle><circle cx="9" cy="12" r="1.5"></circle><circle cx="15" cy="12" r="1.5"></circle><circle cx="9" cy="18" r="1.5"></circle><circle cx="15" cy="18" r="1.5"></circle></svg>'
+FOLDI = _LI('<path d="m11 17-5-5 5-5M18 17l-5-5 5-5"></path>')
+def _RAILBTN(label, icon, k, tip, act=None):
+    sel = '' if act else f' role="tab" aria-selected="{{{{rail{k}On}}}}"'
+    return (f'<button type="button"{sel} data-tip="{tip}" onClick="{{{{{act or "pick" + k}}}}}" style="width: 76px; min-height: 64px; border: 0; padding: 6px 0; background: transparent; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer">'
+            f'<span style="width: 40px; height: 32px; border-radius: 10px; background: {{{{rail{k}Bg}}}}; display: flex; align-items: center; justify-content: center">{icon}</span>'
+            f'<span style="font-size: 12px; font-weight: {{{{rail{k}W}}}}; line-height: 1.2">{label}</span></button>')
+RAIL = (f'<nav aria-label="Panels" style="flex: none; width: 76px; padding: 0 0 12px; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
+        f'<div role="tablist" aria-orientation="vertical" style="display: flex; flex-direction: column; gap: 4px">'
+        + _RAILBTN('Notation', NOTATIONI, 'Not', 'Notation') + _RAILBTN('Instruments', KEYSI, 'Inst', 'Instruments') + _RAILBTN('Layout', LAYOUTI, 'Lay', 'Layout') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div>'
+        + '<span style="flex: 1"></span>' + _RAILBTN('Search', SEARCHI, 'Srch', 'Search for an act · ⌘K', 'openSearch') + _RAILBTN('Shortcuts', KBDI, 'Keys', 'Shortcuts · ?', 'openKeys') + '</nav>')
+_PHEAD = lambda t: (f'<header style="flex: none; height: 64px; box-sizing: border-box; padding: 0 8px 0 16px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
+                    f'<h2 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">{t}</h2>'
+                    f'<button type="button" aria-label="Fold the panel" data-tip="Fold" onClick="{{{{foldPanel}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: pointer">{FOLDI}</button></header>')
+_PBODY = lambda inner, gap=16: f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: {gap}px">{inner}</div>'
+_PIF = lambda c, inner, h='false': f'<sc-if value="{{{{{c}}}}}" hint-placeholder-val="{{{{{h}}}}}">{inner}</sc-if>'
+# Instruments, as Flat's panel: All, then each instrument's row (its handle, name, Solo, Show, ···), New instrument
+_IROW = lambda name, k: (f'<div style="display: flex; align-items: center; gap: 4px"><span aria-hidden="true" style="flex: none; width: 20px; color: {SOFT}; display: flex; justify-content: center; cursor: grab">{GRIPI}</span>'
+                         f'<div style="flex: 1; min-width: 0; min-height: 48px; padding: 0 4px 0 12px; border-radius: 12px; background: {FILL}; display: flex; align-items: center; gap: 8px"><span style="flex: none; display: flex">{KEYSI}</span><span style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600">{name}</span>'
+                         f'<button type="button" aria-label="Solo {name}" data-tip="Solo" aria-pressed="{{{{solo{k}On}}}}" onClick="{{{{toggleSolo{k}}}}}" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: {{{{solo{k}Bg}}}}; color: {{{{solo{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{SOLOI}</button>'
+                         f'<button type="button" aria-label="Show {name}" data-tip="Show" aria-pressed="{{{{show{k}On}}}}" onClick="{{{{toggleShow{k}}}}}" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {{{{show{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{EYEI}</button></div>'
+                         f'<button type="button" aria-label="{name}: more" data-tip="More" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
+PANEL_INST = (_PIF('notPick', _PHEAD('Instruments') + _PBODY(
+                  f'<div style="display: flex; flex-direction: column; gap: 8px">' + _IROW('Voice', 'V') + _IROW('Piano', 'P') + _PIF('addedOn', _IROW('{{addedN}}', 'A')) + '</div>'
+                  + f'<button type="button" onClick="{{{{addInst}}}}" style="align-self: flex-start; height: 44px; margin-left: 24px; padding: 0 14px; border: 0; border-radius: 22px; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer">{STEP_PLUS}New instrument</button>'), 'true')
+              + _PIF('pickInstOn', f'<header style="flex: none; height: 64px; box-sizing: border-box; padding: 0 16px 0 8px; display: flex; align-items: center; gap: 4px; box-shadow: inset 0 -1px 0 {LINE}"><button type="button" onClick="{{{{backInst}}}}" aria-label="Back to Instruments" data-tip="Back" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button><h2 style="margin: 0; font-size: 17px; font-weight: 600">New instrument</h2></header>' + _PBODY(ED_PICK)))
+# Layout, as Flat's Layout panel: the sections fold in the panel, each its icon, name and value; the page is the preview
+_LSEC = lambda name, val, body: (f'<details style="box-shadow: inset 0 -1px 0 {LINE}"><summary style="list-style: none; min-height: 48px; display: flex; align-items: center; gap: 12px; cursor: pointer">'
+                                 f'<span style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600">{name}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap">{val}</span><span style="color: {SOFT}; display: flex">{CHEV_D}</span></summary>'
+                                 f'<div style="padding: 0 0 12px; display: flex; flex-direction: column">{body}</div></details>')
+PANEL_LAY = _PHEAD('Layout') + _PBODY(
+    _LSEC('Pages', 'A4', _LROW('Size', 'A4') + _LROW('Orientation', 'Portrait') + _LROW('Margins', '17.2 mm') + _LROW('Page numbers', 'From page 2'))
+    + _LSEC('Staves', '7 mm', _LROW('Staff size', '7 mm') + _LROW('Between staves', '8 spaces') + _LROW('Between systems', '12 spaces'))
+    + _LSEC('Hide empty staves', 'Never', _LROW('Hide', 'Never'))
+    + _LSEC('Measures', '4 a line', _LROW('Measures a line', '4, the first 5') + _LROW('Note spacing', 'Normal'))
+    + _LSEC('Measure numbers', 'Each line', _LROW('Show', 'At each line’s start') + _LROW('Pickup', 'Not counted'))
+    + _LSEC('Chord symbols', 'G7, Cmaj7', _LROW('Major seventh', 'maj7') + _LROW('Minor', 'm') + _LROW('Diminished', 'dim'))
+    + _LSEC('Text styles', 'Iowan Old Style', _LROW('Title', 'Iowan Old Style, 30') + _LROW('Credits', 'Iowan Old Style, 13') + _LROW('Words', 'Iowan Old Style, 13')), 0)
+_SLIDER = lambda lab, v: f'<input type="range" min="0" max="100" value="{v}" aria-label="{lab}" style="flex: 1; min-width: 0; height: 44px; margin: 0; accent-color: {INK}">'
+_AROW = lambda name, k: (f'<div style="display: flex; flex-direction: column; gap: 4px"><div style="min-height: 44px; display: flex; align-items: center; gap: 8px"><span style="flex: none; display: flex">{KEYSI}</span><span style="flex: 1; font-size: 15px; font-weight: 600">{name}</span>'
+                         f'<button type="button" aria-label="Solo {name}" data-tip="Solo" aria-pressed="{{{{solo{k}On}}}}" onClick="{{{{toggleSolo{k}}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {{{{solo{k}Bg}}}}; color: {{{{solo{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{HEADPHI}</button>'
+                         f'<button type="button" aria-label="Mute {name}" data-tip="Mute" aria-pressed="{{{{mute{k}On}}}}" onClick="{{{{toggleMute{k}}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {{{{mute{k}Bg}}}}; color: {{{{mute{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{MUTEI}</button></div>'
+                         f'<div style="display: flex; align-items: center; gap: 12px; padding-left: 32px"><span style="font-size: 14px; color: {SOFT}">Volume</span>{_SLIDER(name + " volume", 100)}<span style="width: 28px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">100</span></div></div>')
+PANEL_AUD = _PHEAD('Audio') + _PBODY(
+    f'<section style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Room</h3>{SEGC("rooms", 36, 14, True)}</section>'
+    + f'<div style="height: 1px; background: {LINE}"></div>'
+    + f'<section style="display: flex; flex-direction: column; gap: 12px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Volume</h3>'
+    + f'<div style="display: flex; align-items: center; gap: 12px"><span style="font-size: 15px">Master</span>{_SLIDER("Master volume", 100)}<span style="width: 28px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">100</span></div>'
+    + _AROW('Voice', 'V') + _AROW('Piano', 'P') + '</section>', 20)
+PANEL_NOT = _PHEAD('Notation') + STRIP() + f'<div style="height: 1px; margin: 0 16px; background: {LINE}"></div>' + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 20px">{ED_SECTIONS()}</div>'
+# Search, as Flat's: a field over the score, the suggested acts under it, the keys to move and close at its foot
+_SACT = lambda icon, t, k: f'<button type="button" onClick="{{{{closeSheet}}}}" style="min-height: 48px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer"><span style="display: flex; color: {SOFT}">{icon}</span><span style="flex: 1; font-size: 15px">{t}</span><kbd style="font: inherit; font-size: 13px; color: {SOFT}">{k}</kbd></button>'
+SEARCHCARD = (_PIF('searchOn', f'<div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.18)"></div>'
+              f'<section role="dialog" aria-modal="true" aria-label="Search for an act" style="position: absolute; z-index: 61; left: 50%; top: 200px; width: 584px; transform: translateX(-50%); border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, 0 24px 48px -12px rgba(51,41,33,.35); display: flex; flex-direction: column">'
+              f'<label style="height: 60px; padding: 0 20px; display: flex; align-items: center; gap: 12px; box-shadow: inset 0 -1px 0 {LINE}"><span style="display: flex; color: {SOFT}">{SEARCHI}</span><input autofocus placeholder="Search for an act or a tool" style="flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; font: inherit; font-size: 17px; color: {INK}; outline: none"></label>'
+              f'<div style="padding: 8px 8px 12px; display: flex; flex-direction: column"><span style="padding: 8px 12px; font-size: 13px; font-weight: 600; color: {SOFT}">Suggested</span>'
+              + _SACT(UNDO, 'Undo', '⌘Z') + _SACT(REDO, 'Redo', '⇧⌘Z') + _SACT(COPYI, 'Copy', '⌘C') + _SACT(PASTEI, 'Paste', '⌘V') + _SACT(LAYOUTI, 'Layout', '') + '</div>'
+              f'<div style="height: 44px; padding: 0 20px; display: flex; align-items: center; gap: 16px; font-size: 13px; color: {SOFT}; box-shadow: inset 0 1px 0 {LINE}"><span>↑↓ to choose</span><span>Enter to do</span><span>Esc to close</span></div></section>'))
+_KROW = lambda t, k: f'<div style="min-height: 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: inset 0 -1px 0 {FILL}"><span style="font-size: 15px">{t}</span><kbd style="font: inherit; font-size: 14px; color: {SOFT}">{k}</kbd></div>'
+KEYSCARD = (_PIF('keysOn2', f'<div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.18)"></div>'
+            f'<section role="dialog" aria-modal="true" aria-label="Shortcuts" style="position: absolute; z-index: 61; left: 50%; top: 120px; width: 720px; transform: translateX(-50%); border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, 0 24px 48px -12px rgba(51,41,33,.35); display: flex; flex-direction: column">'
+            f'<header style="height: 64px; padding: 0 8px 0 24px; display: flex; align-items: center; box-shadow: inset 0 -1px 0 {LINE}"><h2 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">Shortcuts</h2><button type="button" aria-label="Close" data-tip="Close · Esc" onClick="{{{{closeSheet}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{XI}</button></header>'
+            f'<div style="padding: 16px 24px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px">'
+            + _KROW('Play or stop', 'Space') + _KROW('Note input', 'N') + _KROW('Whole to sixteenth', '7 6 5 4 3') + _KROW('Rest', '0') + _KROW('Dot', '.') + _KROW('Tie', ',') + _KROW('Sharp, flat, natural', '+ − =') + _KROW('Next or previous bar', '⌘→ ⌘←')
+            + _KROW('Undo', '⌘Z') + _KROW('Redo', '⇧⌘Z') + _KROW('Copy, cut, paste', '⌘C ⌘X ⌘V') + _KROW('Go to bar', '⌘G') + _KROW('Add a bar', '⌥Enter') + _KROW('Search', '⌘K') + _KROW('Fold the panel', '⌘\\') + _KROW('Zoom in or out', '⌘+ ⌘−') + '</div></section>'))
+ED4 = ED4.replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['more', 'export'].includes(st.sheet), creditsOn: st.sheet === 'credits', layoutOn: st.sheet === 'layout', openLayout: () => set({ sheet: 'layout' }), instOn: st.sheet === 'inst', openCredits: () => set({ sheet: 'credits' }), openInst: () => set({ sheet: 'inst' }), "
                   + "".join(f"solo{k}On: st.solo === '{n}', toggleSolo{k}: () => set({{ solo: st.solo === '{n}' ? null : '{n}' }}), solo{k}Bg: st.solo === '{n}' ? '#332921' : 'transparent', solo{k}Fg: st.solo === '{n}' ? '#FEFDFB' : '#332921', show{k}On: !(st.hide || []).includes('{n}'), toggleShow{k}: () => set({{ hide: (st.hide || []).includes('{n}') ? (st.hide || []).filter((x) => x !== '{n}') : [...(st.hide || []), '{n}'] }}), show{k}Fg: (st.hide || []).includes('{n}') ? '#BFB3A7' : '#332921', " for k, n in (('P', 'Piano'), ('V', 'Voice'), ('A', 'Added'))) + "addedOn: !!st.added, addedN: st.added || '', addedS: { Cello: 'Bass staff', Organ: 'Treble, bass and pedal staves', Viola: 'Alto staff' }[st.added] || 'Treble staff', addInst: () => set({ sheet: 'pickInst' }), pickInstOn: st.sheet === 'pickInst', " + "".join(f"add{n}: () => set({{ added: '{n}', sheet: 'inst' }}), " for n in ['Violin', 'Viola', 'Cello', 'Flute', 'Clarinet', 'Guitar', 'Organ']), 1)
 
 def full_laptop(fname, title, main, js_, pops=''):
@@ -260,9 +366,22 @@ def full_laptop(fname, title, main, js_, pops=''):
 """
     open(OUT + fname + '.dc.html', 'w').write(html)
 
-phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, ED4.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1), BSHEET('moreOn', 'Amazing Grace', ED_SAVED + ED_MENU('.dc.html'), maxh='calc(100% - 124px)') + THINGPAGE('creditsOn', 'closeSheet', 'Credits', ED_CREDITS, False) + BSHEET('instOn', 'Instruments', ED_INST, maxh='calc(100% - 124px)') + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel', maxh='calc(100% - 124px)'))
+phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, ED4.replace("const M = 'music'", "const VIEW0 = 'pano', FIT = 378 / 794; const M = 'music'", 1), BSHEET('moreOn', 'Amazing Grace', ED_SAVED + ED_MENU('.dc.html'), maxh='calc(100% - 124px)') + THINGPAGE('creditsOn', 'closeSheet', 'Credits', ED_CREDITS, False) + THINGPAGE('layoutOn', 'closeSheet', 'Layout', ED_LAYOUT, False) + BSHEET('instOn', 'Instruments', ED_INST, maxh='calc(100% - 124px)') + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel', maxh='calc(100% - 124px)'))
 # Go to bar (research F11, Flat's and Dorico's ⌘G): a small card over the sheet's head, the bar's number and its count
 GOTO_FIELD = '<div style="display: flex; align-items: center; gap: 12px"><input value="9" aria-label="Bar" type="text" inputmode="numeric" enterkeyhint="go" style="width: 96px; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: 0 0 0 2px #332921; font: inherit; font-size: 17px; font-variant-numeric: tabular-nums; color: #332921; outline: none"><span style="font-size: 15px; color: #7A6E64; font-variant-numeric: tabular-nums">of 16</span></div>'
-ED4L = ED4.replace("['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]]", "['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }], ['Go to bar (⌘G)', st.sheet === 'goto', { sheet: 'goto' }, { sheet: null }]]").replace("moreOn: st.sheet === 'more',", "moreOn: st.sheet === 'more', gotoOn: st.sheet === 'goto',", 1)
-full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + elm4, ED4L.replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - pw - 76 : 1646) / 794; const M = 'music'", 1), POPOVER('moreOn', 'Amazing Grace', ED_MENU('Laptop.dc.html'), 'right: 24px; top: 76px') + POPOVER('gotoOn', 'Go to bar', GOTO_FIELD, 'left: 665px; top: 76px; transform: translateX(-50%)', 260) + THINGPAGE('creditsOn', 'closeSheet', 'Credits', ED_CREDITS, True) + POPOVER('instOn', 'Instruments', ED_INST, 'right: 24px; top: 76px') + POPOVER('pickInstOn', 'Add an instrument', ED_PICK, 'right: 24px; top: 76px'))
+ED4L = ED4.replace("['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]]", "['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }], ['Go to bar (⌘G)', st.sheet === 'goto', { sheet: 'goto' }, { sheet: null }]]").replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['more', 'export'].includes(st.sheet), gotoOn: st.sheet === 'goto',", 1)
+_PANEL = (RAIL + f'<sc-if value="{{{{palOn}}}}" hint-placeholder-val="{{{{true}}}}"><aside aria-label="{{{{panelL}}}}" role="tabpanel" data-strip style="flex: none; width: {{{{pw}}}}px; min-height: 0; display: flex; flex-direction: column; background: {SHEET}">'
+          + _PIF('railNotOn', PANEL_NOT, 'true') + _PIF('railInstOn', PANEL_INST) + _PIF('railLayOn', PANEL_LAY) + _PIF('railAudOn', PANEL_AUD) + f'</aside>{VGRIP}</sc-if>')
+# Layout's view, as Flat's: the toolbar and keys give way, "Preview of your score" over the page, zoom at its corner
+PREVIEW = (f'<div class="nos" style="flex: 1; min-height: 0; overflow: auto; position: relative; background: {FILL}; display: flex; flex-direction: column; align-items: center; padding: 16px 32px 48px">'
+           f'<p style="margin: 0 0 24px; font-size: 14px; font-weight: 600; color: {SOFT}">Preview of your score</p>'
+           f'<div style="position: absolute; top: 12px; right: 24px; display: flex; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">' + TBTN('Zoom in', ZINI, 'zoomIn', 'Zoom in · ⌘+') + TBTN('Zoom out', ZOUTI, 'zoomOut', 'Zoom out · ⌘−') + '</div>'
+           f'<div style="zoom: 0.8">{A4PAGE(sel=None)}</div></div>')
+elm4 = (elm4.replace(TOOLBAR_L, f'<sc-if value="{{{{notLayView}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLBAR_L}</sc-if>', 1)
+        .replace(_PANELOLD, _PANEL, 1)
+        .replace(f'<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', f'<sc-if value="{{{{layView}}}}" hint-placeholder-val="{{{{false}}}}">{PREVIEW}</sc-if><sc-if value="{{{{notLayView}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', 1)
+        .replace('</sc-if></div></div>', '</sc-if></div></sc-if></div>', 1))
+LAPLAYERS = lambda sfx, vh=None, menu=None, saved=None: (POPOVER('moreOn', 'Amazing Grace', (saved or ED_SAVED).replace('text-align: center', 'text-align: left; padding-left: 16px') + (menu or ED_MENU(sfx, vh)), 'left: 72px; top: 68px', 320)
+                                     + POPOVER('exportOn', 'Export', EXPORTMENU, 'left: 400px; top: 300px', 300) + SEARCHCARD + KEYSCARD + THINGPAGE('creditsOn', 'closeSheet', 'Credits', _CRED(True), True))
+full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + elm4, ED4L.replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - 76 - pw - 76 : 1710 - 76 - 64) / 794; const M = 'music'", 1), LAPLAYERS('Laptop.dc.html') + POPOVER('gotoOn', 'Go to bar', GOTO_FIELD, 'left: 665px; top: 76px; transform: translateX(-50%)', 260) )
 print('r44 editor ok')

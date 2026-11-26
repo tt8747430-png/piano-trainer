@@ -64,6 +64,29 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
   phone a page of the phone's width on the desk, three bars a line, with the credits as the page prints them. The
   accompaniment is credited under the music's credit, in italic, at the right, as an engraver prints "Arr.".
 
+- **R74, the laptop editor as Flat's new editor: a rail, one panel, the title a menu** (owner, 2026-11-26: "this now are
+  the new settings, the images I sent you earlier were the legacy settings … we dont need legacy settings. refactor to
+  the new settings"; "the header look like this and the title like this with these options"; "I dont like how this
+  arrangement is centered"; "make proper wordings not takes"). Sources: the owner's Flat 26.11 screenshots (measured:
+  rail 64, panel 352, panel head 64, section rows 48 and a hairline, 16 inset, toolbar 56);
+  `FLAT_UI_SHELL_AND_MOTION.md` §1.1–1.2 (the rail's registry: Notation, Instruments, Layout, Audio; Search and
+  Shortcuts at its foot as acts; the active entry again folds the panel; Layout hides the toolbar for its preview);
+  `FLAT_SETTINGS_TOOLS_FLOWS.md` §1.3, §2.3.
+  - **Bar:** ✕, then "Amazing Grace ▾" (the score's menu) and the Version and mode capsule beside it, as Flat's title,
+    transport and Edit sit together; nothing centred, no pen, no ···, no status in the bar.
+  - **The title's menu:** the name and "Saved on this device"; Credits, Transpose, Recordings (Versions on a draft);
+    Export › (Printable PDF, MusicXML .mxl, MusicXML .musicxml, MIDI .mid), Print; Keyboard shortcuts. Credits opens the
+    Credits page (THINGPAGE). Instruments, Layout and the sound are the rail's, so not here.
+  - **Rail (76: its 12 labels need the room Flat's 11 do not):** Notation (the palette), Instruments (Voice, Piano:
+    handle, Solo, Show, ···; New instrument, its list in the panel with Back), Layout (Pages, Staves, Hide empty
+    staves, Measures, Measure numbers, Chord symbols, Text styles, each folding in place; the toolbar and keys give way
+    to "Preview of your score" with zoom), Audio (Room: Off, Studio, Hall, Cathedral; Volume: Master, then each
+    instrument's Solo, Mute and volume); Search (Flat's: a field over the score, Suggested acts) and Shortcuts.
+  - **Gone:** Flat's legacy Document settings page drawn earlier this day (tabs Credits, Instruments, Layout, Takes and
+    a preview), the toolbar's Palette switch (the rail folds the panel), the laptop ···. "Takes" is "Recordings"
+    everywhere (a take, Recording 3; No recordings yet).
+  - Not taken: Templates, Note heads, Music font (no difference a learner hears or needs), Tuning, Low-CPU playback.
+
 - **The editor's ··· is Flat's ≡ menu** (owner, 2026-11-16: "new completely new design"; `flat-score-editor` 083–090):
   headed by the song's name and its save status; one card of Credits, Instruments, Version history, Layout, Playback
   sound, MIDI keyboard and Takes, each with its value; one of Export and Print; then Publish in Explore as its own card
