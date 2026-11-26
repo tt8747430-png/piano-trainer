@@ -250,7 +250,8 @@ def phone_band(t):
     ed = "{ sheet: p.editor ?? 'Editor.dc.html', diagrams: (p.editor === 'EditorDraft.dc.html' ? 'EditorDraft' : 'Editor') + 'Diagrams.dc.html', grid: (p.editor === 'EditorDraft.dc.html' ? 'EditorDraft' : 'Editor') + 'Grid.dc.html', lyrics: (p.editor === 'EditorDraft.dc.html' ? 'EditorDraft' : 'Editor') + 'Lyrics.dc.html' }"
     mk = ("editing, notEditing: !editing, modePlayHref: { sheet: 'Player.dc.html', diagrams: 'PlayerDiagrams.dc.html', grid: 'PlayerViewGrid.dc.html', lyrics: 'PlayerViewLyrics.dc.html' }[view], "
           f"modeEditHref: ({ed})[view], "
-          "delNote: () => this.setState({ sTo: 'Chord deleted', sUndo: true }), undo: () => this.setState({ sTo: 'Undone', sUndo: false }), redo: () => this.setState({ sTo: 'Redone', sUndo: false }), "
+          "delNote: () => this.setState({ sTo: 'Chord deleted', sUndo: true, edN: (s.edN ?? 0) + 1, unN: 0 }), undo: () => { if (!(s.edN ?? 0)) return; this.setState({ sTo: 'Undone', sUndo: false, edN: s.edN - 1, unN: (s.unN ?? 0) + 1 }); }, redo: () => { if (!(s.unN ?? 0)) return; this.setState({ sTo: 'Redone', sUndo: false, edN: (s.edN ?? 0) + 1, unN: s.unN - 1 }); }, "
+          "undoDis: (s.edN ?? 0) ? 'false' : 'true', redoDis: (s.unN ?? 0) ? 'false' : 'true', "
           "copied: () => this.setState({ sTo: 'Copied', sUndo: false }), cut: () => this.setState({ sTo: 'Cut', sUndo: true }), pasted: () => this.setState({ sTo: 'Pasted', sUndo: true }), ")
 
     st_ = '(o) => this.setState(o)'
@@ -288,12 +289,13 @@ def desk_edit(t):
     assert t.count('const areaTop = keys ? 288 : 0;') == 1 and t.count('areaTop: 0, viewBottom') == 1
     t = t.replace('const areaTop = keys ? 288 : 0;', 'const areaTop = (keys ? 288 : 0) + (editing ? 56 : 0);', 1).replace('areaTop: 0, viewBottom', 'areaTop: editing ? 56 : 0, viewBottom', 1)
     bar = (f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><div role="toolbar" aria-label="Edit" style="position: absolute; z-index: 30; left: 0; right: 0; top: 64px; height: 56px; box-sizing: border-box; '
-           f'padding: 0 24px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; background: {PAGE}; box-shadow: inset 0 -1px 0 {LINE}">{CLIP}</div></sc-if>')
+           f'padding: 0 24px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; background: {PAGE}; box-shadow: inset 0 -1px 0 {LINE}">{CLIP}</div>{DISABLED_CSS}</sc-if>')
     t = t.replace('</main>', '</main>' + bar, 1)
     ed = "{ sheet: p.editor ?? 'EditorLaptop.dc.html', diagrams: (p.editor ?? 'EditorLaptop.dc.html').replace('.dc.html', 'Diagrams.dc.html'), grid: (p.editor ?? 'EditorLaptop.dc.html').replace('.dc.html', 'Grid.dc.html'), lyrics: (p.editor ?? 'EditorLaptop.dc.html').replace('.dc.html', 'Lyrics.dc.html') }"
     mk = ("editing, notEditing: !editing, edTop: editing ? 120 : 64, modePlayHref: { sheet: 'PlayerLaptop.dc.html', diagrams: 'PlayerLaptopDiagrams.dc.html', grid: 'PlayerLaptopGrid.dc.html', lyrics: 'PlayerLaptopLyrics.dc.html' }[view], "
           f"modeEditHref: ({ed})[view], "
-          "delNote: () => this.setState({ sTo: 'Chord deleted', sUndo: true }), undo: () => this.setState({ sTo: 'Undone', sUndo: false }), redo: () => this.setState({ sTo: 'Redone', sUndo: false }), "
+          "delNote: () => this.setState({ sTo: 'Chord deleted', sUndo: true, edN: (s.edN ?? 0) + 1, unN: 0 }), undo: () => { if (!(s.edN ?? 0)) return; this.setState({ sTo: 'Undone', sUndo: false, edN: s.edN - 1, unN: (s.unN ?? 0) + 1 }); }, redo: () => { if (!(s.unN ?? 0)) return; this.setState({ sTo: 'Redone', sUndo: false, edN: (s.edN ?? 0) + 1, unN: s.unN - 1 }); }, "
+          "undoDis: (s.edN ?? 0) ? 'false' : 'true', redoDis: (s.unN ?? 0) ? 'false' : 'true', "
           "copied: () => this.setState({ sTo: 'Copied', sUndo: false }), cut: () => this.setState({ sTo: 'Cut', sUndo: true }), pasted: () => this.setState({ sTo: 'Pasted', sUndo: true }), ")
     old = "isLyr: id === 'lyrics', ...viewPress(id) }; }), "
     assert t.count(old) == 1

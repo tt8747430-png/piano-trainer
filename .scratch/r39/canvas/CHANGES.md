@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · pending · Undo and Redo dimmed when there is nothing to undo or redo, as Flat's second row greys them (flat-score-editor 003, 005): the editor's from its marks, the Player's views in Edit from their own count; a disabled act at half strength with no pointer, the kit's one rule (DISABLED_CSS), which also dims the laptop's Zoom out at its least (lines: Editor, EditorGrid after Delete, EditorLaptop 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · pending
 ## Changes
 
 - 2026-11-26 · e7805746 · the View page's Parts a fold as Views and the view's options, headed by the Instruments glyph; each part a filled card on the paper, as Flat's instruments sheet (004, 084) and the ruling's "each part a filled card" (they had the page's own colour, so read as bare rows) (lines: Editor, EditorDraft, PlayerApp, PlayerHands with View open, PlayerDesk, EditorLaptop 0 problems) · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop · v781
