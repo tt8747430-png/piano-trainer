@@ -145,7 +145,16 @@ wins there.
   asks (refactor the settings, research Learn) taken for the whole task: once the list was done a summary was
   written. The asks of a message go to the front of the queue; when they are done the loop goes straight on to the
   next item below, in the same turn, with no summary between them. Finishing what was asked is never the end.
-- **Where the next item comes from when nothing is asked,** in this order, never "nothing left":
+- **The area in hand is finished before any other is touched** (owner, 2026-11-26: "we are now on the player and
+  editor not finished"; "fix all the instructions that made you go to other pages although you didnt finish the
+  player and editor"): what went wrong was an app-wide ask (the popups audit) and the list below, taken as leave to
+  move to Settings while the Player and editor still had dead rows and a phone menu unlike the laptop's. The area the
+  owner is working on (the last one their messages named) holds the loop: every board of it, phone and laptop, every
+  sheet, menu and state, the same model on both sizes, every row that opens something. An app-wide ask is done in that
+  area first and reaches the others only once it is finished. The list below starts only when the area is finished,
+  and the owner names the next one or the list's order does.
+- **Where the next item comes from when nothing is asked** and the area in hand is finished, in this order, never
+  "nothing left":
   1. the findings noted and not yet fixed (the lines tool's PROBLEM and NOTE lines, a breach seen in the code);
   2. the lines tool over every board, phone and laptop, one area after another (`edge-lines`), and every finding fixed;
   3. every board at 393, 744, 852×393 and 1024 (`testing.md`), and every sheet, menu and state opened;
