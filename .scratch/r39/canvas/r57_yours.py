@@ -161,7 +161,7 @@ def SETTINGS(lesson, lap, win=False):
     # the head names what these settings are for, as a song's Settings does (HEADCARD): its picture, its name, its kind;
     # a lesson wears Learn's lesson picture, a course its cover (picked below, as on the New course sheet)
     pic = (f'<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 32px; background: {SHEET}; box-shadow: inset 0 0 0 1px {LINE}; color: {INK}; display: flex; align-items: center; justify-content: center">{BOOKI}</span>' if lesson else
-           f'<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 14px; background: {{{{coverBg}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08); color: {INK}; display: flex; align-items: center; justify-content: center">{FOLDI.replace('width="20" height="20"', 'width="26" height="26"')}</span>')
+           f'<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 14px; background: {{{{coverBg}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08); color: {INK}; display: flex; align-items: center; justify-content: center">{ICON(FOLDI, 26)}</span>')
     sub = (f'<div style="display: flex; gap: 16px; align-items: center; padding: 4px 0">{pic}<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 20px; font-weight: 700">{name}</span>'
            f'<span style="font-size: 14px; color: {SOFT}">{"Your lesson · 2 sections" if lesson else "Your course · 4 lessons"}</span></div></div>')
     if not lesson:

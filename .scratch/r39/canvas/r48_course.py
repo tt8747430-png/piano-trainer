@@ -77,7 +77,7 @@ def CBODY(lap):
     return COVER + head + go + H2('Lessons') + LROWS + H2('Guided songs') + SONGROWS
 CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')
 CEDIT_R = IB('Settings', GEARI, 'openSettings') + EDITR()  # Edit becomes Done in its place
-COURSEPIC = f'<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 14px; background: {SAGE}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08); color: {INK}; display: flex; align-items: center; justify-content: center">{FOLDI.replace('width="20" height="20"', 'width="26" height="26"')}</span>'
+COURSEPIC = f'<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 14px; background: {SAGE}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08); color: {INK}; display: flex; align-items: center; justify-content: center">{ICON(FOLDI, 26)}</span>'
 CSET = THINGSET(THINGHEAD(COURSEPIC, 'Intro to Music Reading', 'Course · 7 lessons · Beginner'),
                 THINGSEC(CAPS('The course'), GROUP(('link', 'Shelf', 'Beginner', 'LearnCoursesLaptop.dc.html'), bg=SHEET)), 'course')
 CNEW = (f'{NAMEFIELD('Lesson name')}'
