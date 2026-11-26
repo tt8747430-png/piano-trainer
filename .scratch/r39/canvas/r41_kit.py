@@ -1012,7 +1012,12 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=Fals
     met = SELROW('Metronome', 'selMet', practice) if phone else ''
     if phone and not practice:
         speed = speed.replace('padding: 0 4px 0 12px;', f'padding: 0 4px 0 12px; border-top: 1px solid {LINE}', 1)
-    opts = rows(*((SELROW('Mode', 'selMode', False), SELROW('Hands', 'selHands')) if practice else ()), met, speed)
+    # the laptop's card in the phone page's order (Flat's 005: Playback speed, then in Practice Mode and Hands); its
+    # Audio and Metronome have their own buttons in the band
+    if phone:
+        opts = rows(*((SELROW('Mode', 'selMode', False), SELROW('Hands', 'selHands')) if practice else ()), met, speed)
+    else:
+        opts = rows(speed.replace(f' border-top: 1px solid {LINE}', '', 1), *((SELROW('Mode', 'selMode'), SELROW('Hands', 'selHands')) if practice else ()))
     if phone:
         # Flat's Playback options (005; owner, 2026-11-26: "refactor the hands setting and the metronome and other
         # settings"): a page of rows, each its glyph, name, value and arrow, each opening its own page of choices with ←

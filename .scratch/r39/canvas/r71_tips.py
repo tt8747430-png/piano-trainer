@@ -31,6 +31,11 @@ for _f in sorted(os.listdir(_d)):
     _n = _ctl.sub(_tip, _h)
     if 'content: attr(data-tip)' not in _n and 'data-tip=' in _n:
         _n = _n.replace('</style>', '</style>' + _TIPCSS, 1) if '</style>' in _n else _n.replace('</head>', _TIPCSS + '</head>', 1)
+    # a control whose own menu or popover is open names nothing over it: the open layer is its answer (HIG, help
+    # tags); one rule on every board, whichever copy of the tooltip style it carries
+    if 'data-tip=' in _n and 'data-tipopen' not in _n:
+        _rule = '<style data-tipopen>[data-tip][aria-expanded="true"]::after { display: none !important }</style>'
+        _n = _n.replace('</head>', _rule + '</head>', 1) if '</head>' in _n else _rule + _n
     if _n != _h:
         _n_ctl += _n.count('data-tip=') - _h.count('data-tip=')
         open(_d + _f, 'w').write(_n)
