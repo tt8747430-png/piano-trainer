@@ -952,8 +952,9 @@ def FOLD(fid, icon, title, body, extra='', first=False):
             f'<sc-if value="{{{{f{fid}On}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 12px; padding: 0 0 24px">{body}</div></sc-if></section>')
 def FOLDKEYS(S, SET, ids):
     """the folds' state for the sections named in ids: f{id}On, f{id}X, f{id}R, f{id}Tg"""
+    # the chevron as a disclosure's (Apple HIG, Disclosure controls) and the palette's sections: down while open, right while shut
     return ("...(() => { const F = " + S + ".fold ?? {}; const o = {}; for (const id of " + repr(list(ids)) + ") { const on = F[id] ?? true;"
-            " o['f' + id + 'On'] = on; o['f' + id + 'X'] = on ? 'true' : 'false'; o['f' + id + 'R'] = on ? '180deg' : '0deg';"
+            " o['f' + id + 'On'] = on; o['f' + id + 'X'] = on ? 'true' : 'false'; o['f' + id + 'R'] = on ? '0deg' : '-90deg';"
             " o['f' + id + 'Tg'] = () => (" + SET + ")({ fold: { ...F, [id]: !on } }); } return o; })(),")
 _CARD = f'border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}'
 def SWITCHROW(lab, on, act, track, knob, line=True):
