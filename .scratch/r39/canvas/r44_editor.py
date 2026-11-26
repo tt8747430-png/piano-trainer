@@ -312,15 +312,21 @@ ED_PICK = GROUP(('action', 'Violin', 'addViolin'), ('action', 'Viola', 'addViola
 # Lyricist and Composer, Arranger, Licence text, Save at the foot's end. Creation type, tags, description and the
 # licence are the Publish page's (one home: r53's _SPL), as Flat keeps them for publishing
 _LAB = lambda t: f'<span style="margin: 0 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{t}</span>'
-_IN = lambda label, val, ph: (f'<label style="min-width: 0; display: flex; flex-direction: column; gap: 6px">{_LAB(label)}'
-                              f'<input value="{val}" placeholder="{ph}" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}"></label>')
+_IN = lambda label, val, ph, cap='words', ek='next': (f'<label style="min-width: 0; display: flex; flex-direction: column; gap: 6px">{_LAB(label)}'
+                              f'<input value="{val}" placeholder="{ph}" autocapitalize="{cap}" enterkeyhint="{ek}" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}"></label>')
 _TXT = lambda label, ph: (f'<label style="display: flex; flex-direction: column; gap: 6px">{_LAB(label)}'
-                          f'<textarea rows="3" placeholder="{ph}" style="box-sizing: border-box; padding: 10px 12px; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}; resize: vertical"></textarea></label>')
+                          f'<textarea rows="3" placeholder="{ph}" autocapitalize="sentences" style="box-sizing: border-box; padding: 10px 12px; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}; resize: vertical"></textarea></label>')
 def _CRED(two):
     return (_IN('Title', 'Amazing Grace', 'Title') + _IN('Subtitle', '', 'Subtitle')
             + f'<div style="display: grid; grid-template-columns: repeat({2 if two else 1}, minmax(0, 1fr)); gap: 16px 24px">' + _IN('Lyricist', 'John Newton', 'Lyricist') + _IN('Composer', 'New Britain (American folk tune)', 'Composer') + '</div>'
             + _IN('Arranger', 'Ana Popescu', 'Arranger') + _TXT('Licence text', 'Public domain')
-            + f'<div style="display: flex; justify-content: flex-end">{BTN("Save", "closeSheet", h=44, grow=False)}</div>')
+            + ('' if two else f'<div style="display: flex; justify-content: flex-end">{BTN("Save", "closeSheet", h=44, grow=False)}</div>'))
+# On a laptop Credits is a form over the score, as Flat's "Edit Score Credits" dialog (FLAT_SETTINGS_TOOLS_FLOWS §1.3,
+# ContentDialog): a laptop centres only a form (ui-and-mockups), the page and its title stay in sight; Cancel and Save
+# at its foot as Rename version's (DLGFOOT)
+CREDDLG = lambda: ('<sc-if value="{{creditsOn}}" hint-placeholder-val="{{false}}">' + DIALOGBOX(
+    '<h2 style="margin: 0; font-size: 17px; font-weight: 600">Credits</h2>' + f'<div style="display: flex; flex-direction: column; gap: 16px">{_CRED(True)}</div>'
+    + DLGFOOT('closeSheet', 'closeSheet'), 640, 'closeSheet', 'Credits') + '</sc-if>')
 ED_CREDITS = _CRED(False)
 # Layout, as Flat's Layout and styles (the owner's screenshot): one folding section a kind, its name, what it holds,
 # its value; each opens in place (a details element), never a popover
@@ -378,8 +384,11 @@ ED4 = ED4.replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['m
                   + "".join(f"solo{k}On: st.solo === '{n}', toggleSolo{k}: () => set({{ solo: st.solo === '{n}' ? null : '{n}' }}), solo{k}Bg: st.solo === '{n}' ? '#332921' : 'transparent', solo{k}Fg: st.solo === '{n}' ? '#FEFDFB' : '#332921', show{k}On: !(st.hide || []).includes('{n}'), toggleShow{k}: () => set({{ hide: (st.hide || []).includes('{n}') ? (st.hide || []).filter((x) => x !== '{n}') : [...(st.hide || []), '{n}'] }}), show{k}Fg: (st.hide || []).includes('{n}') ? '#BFB3A7' : '#332921', " for k, n in (('P', 'Piano'), ('V', 'Voice'), ('A', 'Added'))) + "addedOn: !!st.added, addedN: st.added || '', addedS: { Cello: 'Bass staff', Organ: 'Treble, bass and pedal staves', Viola: 'Alto staff' }[st.added] || 'Treble staff', addInst: () => set({ sheet: 'pickInst' }), pickInstOn: st.sheet === 'pickInst', " + "".join(f"add{n}: () => set({{ added: '{n}', sheet: 'inst' }}), " for n in ['Violin', 'Viola', 'Cello', 'Flute', 'Clarinet', 'Guitar', 'Organ']), 1)
 
 # the printed title and credits open Credits, where they print (Flat's and Dorico's: everything printed is edited there)
-_CREDRE = re.compile(r'(<h2 style="margin: 0; text-align: center; font-family: [^"]*; font-size: 30px[^>]*>Amazing Grace</h2><div style="margin: 20px 0 0;.*?</span></div>)', re.S)
-CREDBTN = lambda h: _CREDRE.sub(lambda m: '<button type="button" onClick="{{openCredits}}" aria-label="Title and credits" data-tip="Edit the title and credits" style="display: block; width: calc(100% + 16px); margin: -4px -8px; padding: 4px 8px; border: 0; border-radius: 8px; background: transparent; font: inherit; color: inherit; text-align: inherit; cursor: text">' + m.group(1) + '</button>', h)
+_CREDRE = re.compile(r'(<h2 style="margin: 0; text-align: center; font-family: [^"]*; font-size: 30px[^>]*>Amazing Grace</h2><div style="margin: \d+px 0 0;.*?</span></div>)', re.S)
+def CREDBTN(h):
+    out, n = _CREDRE.subn(lambda m: '<button type="button" onClick="{{openCredits}}" aria-label="Title and credits" data-tip="Edit the title and credits" style="display: block; width: calc(100% + 16px); margin: -4px -8px; padding: 4px 8px; border: 0; border-radius: 8px; background: transparent; font: inherit; color: inherit; text-align: inherit; cursor: text">' + m.group(1) + '</button>', h)
+    if not n: raise SystemExit('CREDBTN: the printed title no longer matches; Credits would be unreachable')
+    return out
 def full_laptop(fname, title, main, js_, pops=''):
     html = HEAD % title + LAPFRAME_TOP + f"""<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: flex; flex-direction: column">
 {main}
@@ -448,6 +457,6 @@ elm4 = (elm4.replace(TOOLBAR_L, f'<sc-if value="{{{{notLayView}}}}" hint-placeho
         .replace(f'<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', f'<sc-if value="{{{{layView}}}}" hint-placeholder-val="{{{{false}}}}">{PREVIEW}</sc-if><sc-if value="{{{{notLayView}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">', 1)
         .replace('</sc-if></div></div>', '</sc-if></div></sc-if></div>', 1))
 LAPLAYERS = lambda sfx: (RENAMEDLG() + HISTVIEW() + HDRPOPS(False, 294, 470, 576)
-                                     + POPOVER('exportOn', 'Export', EXPORTMENU, 'left: 400px; top: 300px', 300) + SEARCHCARD + KEYSCARD + THINGPAGE('creditsOn', 'closeSheet', 'Credits', _CRED(True), True))
+                                     + POPOVER('exportOn', 'Export', EXPORTMENU, 'left: 400px; top: 300px', 300) + SEARCHCARD + KEYSCARD + CREDDLG())
 full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + CREDBTN(elm4), ED4L.replace("const M = 'music'", "const VIEW0 = 'page', FIT = (pal, pw) => (pal ? 1710 - 76 - pw - 76 : 1710 - 76 - 64) / 794; const M = 'music'", 1), LAPLAYERS('Laptop.dc.html') + POPOVER('gotoOn', 'Go to bar', GOTO_FIELD, 'left: 665px; top: 76px; transform: translateX(-50%)', 260) )
 print('r44 editor ok')

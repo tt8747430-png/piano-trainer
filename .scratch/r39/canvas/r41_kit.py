@@ -890,13 +890,15 @@ def PHKEYS(S, SET, ids, TOAST):
     return ("...(() => { const P = " + S + ".ph ?? null; const o = { phMenu: () => (" + SET + ")({ ph: P === 'menu' ? null : 'menu', hdPop: null }), phMenuOn: P === 'menu', phMenuX: P === 'menu' ? 'true' : 'false', "
             "phMenuFg: P === 'menu' ? '#A8551F' : '#332921', phClose: () => (" + SET + ")({ ph: null }), " + PHACTS(SET, 'ph: null', TOAST, "ph: 'menu'") + "}; for (const id of " + repr(list(ids) + ['Exp']) + ") { o['ph' + id + 'On'] = P === id; o['ph' + id] = () => (" + SET + ")({ ph: P === id ? null : id, hdPop: null }); } o.phViewX = P === 'View' ? 'true' : 'false'; o.phViewFg = P === 'View' ? '#A8551F' : '#332921'; return o; })(),")
 
+# A form's foot on a laptop dialog: Cancel, then Save in honey, at the right (Rename version, Credits)
+_DLGB = lambda l, h, bg: f'<button type="button" onClick="{{{{{h}}}}}" style="height: 44px; padding: 0 18px; border: 0; border-radius: 22px; background: {bg}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer">{l}</button>'
+DLGFOOT = lambda cancel, save: f'<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px">' + _DLGB('Cancel', cancel, 'transparent') + _DLGB('Save', save, ACCENT) + '</div>'
 # Rename version…: a small form, the one thing a laptop centres (ui-and-mockups)
 def RENAMEDLG():
-    b = lambda l, h, bg: f'<button type="button" onClick="{{{{{h}}}}}" style="height: 44px; padding: 0 18px; border: 0; border-radius: 22px; background: {bg}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer">{l}</button>'
     return ('<sc-if value="{{renOn}}" hint-placeholder-val="{{false}}">' + DIALOGBOX(
         f'<h2 style="margin: 0; font-size: 17px; font-weight: 600">Rename version</h2>'
-        f'<input ref="{{{{renRef}}}}" aria-label="Version name" value="{{{{renVal}}}}" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: inset 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}">'
-        f'<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px">' + b('Cancel', 'renCancel', 'transparent') + b('Save', 'renSave', ACCENT) + '</div>',
+        f'<input ref="{{{{renRef}}}}" aria-label="Version name" autocapitalize="sentences" enterkeyhint="done" value="{{{{renVal}}}}" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: inset 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}">'
+        + DLGFOOT('renCancel', 'renSave'),
         close='renCancel', label='Rename version') + '</sc-if>')
 
 # Practice · Edit: two modes of the one screen, never a separate page (owner, 2026-11-26: "i dont want the edit score to
@@ -1333,7 +1335,7 @@ _PIF = lambda c, inner, h='false': f'<sc-if value="{{{{{c}}}}}" hint-placeholder
 _SACT = lambda icon, t, k: f'<button type="button" onClick="{{{{closeSheet}}}}" style="min-height: 48px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer"><span style="flex: none; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: {SOFT}">{icon}</span><span style="flex: 1; font-size: 15px">{t}</span><kbd style="font: inherit; font-size: 13px; color: {SOFT}">{k}</kbd></button>'
 SEARCHCARD_F = lambda sugg: (_PIF('searchOn', f'<div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div>'
               f'<section role="dialog" aria-modal="true" aria-label="Search for an act" style="position: absolute; z-index: 61; left: 50%; top: 200px; width: 584px; transform: translateX(-50%); border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, 0 24px 48px -12px rgba(51,41,33,.35); display: flex; flex-direction: column">'
-              f'<label style="height: 60px; padding: 0 20px; display: flex; align-items: center; gap: 12px; box-shadow: inset 0 -1px 0 {LINE}"><span style="display: flex; color: {SOFT}">{SEARCHI}</span><input autofocus placeholder="Search for an act or a tool" style="flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; font: inherit; font-size: 17px; color: {INK}; outline: none"></label>'
+              f'<label style="height: 60px; padding: 0 20px; display: flex; align-items: center; gap: 12px; box-shadow: inset 0 -1px 0 {LINE}"><span style="display: flex; color: {SOFT}">{SEARCHI}</span><input type="search" autofocus aria-label="Search for an act" placeholder="Search for an act or a tool" enterkeyhint="search" autocapitalize="off" autocomplete="off" spellcheck="false" style="flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; font: inherit; font-size: 17px; color: {INK}; outline: none"></label>'
               f'<div style="padding: 8px 8px 12px; display: flex; flex-direction: column"><span style="padding: 8px 12px; font-size: 13px; font-weight: 600; color: {SOFT}">Suggested</span>'
               + ''.join(_SACT(*a) for a in sugg) + '</div>'
               f'<div style="height: 44px; padding: 0 20px; display: flex; align-items: center; gap: 16px; font-size: 13px; color: {SOFT}; box-shadow: inset 0 1px 0 {LINE}"><span>↑↓ to choose</span><span>Enter to do</span><span>Esc to close</span></div></section>'))

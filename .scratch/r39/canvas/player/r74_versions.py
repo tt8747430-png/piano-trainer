@@ -418,15 +418,7 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     if name == 'PlayerDesk':
         t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}") + (' ' + SELKEYS('s', '((o) => this.setState(o))', [('selInv', [('Root', 'Root position'), ('1st', '1st inversion'), ('2nd', '2nd inversion'), ('3rd', '3rd inversion')], "acc('inv', 'Root')", "(id) => setAcc('inv', id, id === 'Root' ? 'root position' : id + ' inversion')"), ('selVoice', [('Voice-led', 'Voice-led'), ('Block', 'Block')], "acc('voice', 'Voice-led')", "(id) => setAcc('voice', id, id + ' voicing')")]) if name == 'PlayerDesk' else ''), 1)
 
-    # Rename…: a small form over the Player (ui-and-mockups: what a laptop shows centred is only a form), the name
-    # chosen, Save at its foot
-    btn = lambda l, h, bg, fg: f'<button type="button" onClick="{{{{{h}}}}}" style="height: 44px; padding: 0 18px; border: 0; border-radius: 22px; background: {bg}; color: {fg}; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer">{l}</button>'
-    ren = ('<sc-if value="{{renOn}}" hint-placeholder-val="{{false}}">' + DIALOGBOX(
-        f'<h2 style="margin: 0; font-size: 17px; font-weight: 600">Rename version</h2>'
-        f'<input ref="{{{{renRef}}}}" aria-label="Version name" value="{{{{renVal}}}}" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: inset 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}">'
-        f'<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px">' + btn('Cancel', 'renCancel', 'transparent', INK) + btn('Save', 'renSave', ACCENT, INK) + '</div>',
-        close='renCancel', label='Rename version') + '</sc-if>')
-    t = t.replace('</main>', '</main>' + (RENAMEDLG() if name == 'PlayerDesk' else ren), 1)
+    t = t.replace('</main>', '</main>' + RENAMEDLG(), 1)
     t = open_layers(desk_views(desk_edit(header_transport(player_rail(t)))), False) if name == 'PlayerDesk' else open_layers(phone_band(t), True)
     p.write_text(t)
 print('r74 versions ok')

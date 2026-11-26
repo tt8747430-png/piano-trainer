@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · PENDING · each field brings the right keyboard (laws, a phone is not a small laptop, 5): Credits' names capitalise words and step Next, the licence capitalises sentences, Search for an act is a search field (Search key, no capitals or autocorrect), Version name capitalises and ends Done; the two Rename version dialogs are one (RENAMEDLG, its foot DLGFOOT); the laptop editor's printed title opens Credits again (CREDBTN's pattern had drifted from the 16 credits margin and silently matched nothing; it now fails the build when it misses), and there Credits is Flat's Edit Score Credits dialog, 640 wide over the score with Cancel and Save, not a page hiding the editor · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · pending
 ## Changes
 
 - 2026-11-26 · b4b435a3 · the phone ☰'s Layout wears the rail's layout glyph, not the pen (Edit's glyph): one thing, one icon on both sizes · Editor, EditorDraft · v801
