@@ -4,6 +4,7 @@ Each song may hold a `match.txt` beside its files, written from the song's PDF a
 
     title: 1 Binecuvântat să fie Domnul
     composer: Valer Bogdan             the name printed at the right, under the title
+    lyricist: Valentin Popovici        the name printed at the left (the words' author)
     spatium: 1.9                       staff space in mm (the printed size)
     systems: 1 5 9 13 16 | 20 22 25    first bar of each line; | starts a new page
     hide-empty-staves                  a staff with nothing to sing in a line is left out, as printed
@@ -11,6 +12,7 @@ Each song may hold a `match.txt` beside its files, written from the song's PDF a
     hide-names                         no voice names before the staves
     staff-distance: 4.5                space between the staves, and system-distance: between the lines
     lyrics-size: 11                    the words' size in points (Arial, as printed)
+    count-pickup                       the sheet numbers its pickup as bar 1 (bars here follow the sheet)
     segno: 54                          the segno stands at this bar
     text: 81 above bold italic D.S.% al Coda   printed text at a bar, above or below the top staff (% is the segno)
 
@@ -60,8 +62,8 @@ def parse(path):
         key = key.strip()
         if key == 'title':
             spec['title'] = value.strip()
-        elif key == 'composer':
-            spec['composer'] = value.strip()
+        elif key in ('composer', 'lyricist'):
+            spec[key] = value.strip()
         elif key == 'spatium':
             spec['spatium'] = value.strip()
         elif key == 'lyrics-size':
@@ -83,6 +85,8 @@ def parse(path):
                                       text=' '.join(words[2 + len(flags):])))
         elif key == 'hide-names':
             spec['hide_names'] = True
+        elif key == 'count-pickup':
+            spec['count_pickup'] = True
         elif key in ('staff-distance', 'system-distance'):
             spec[key.replace('-', '_')] = value.strip()
         else:
@@ -114,11 +118,12 @@ def syllables(tokens):
 
 # MuseScore's own file (.mscx)
 
-def bar_numbers(measures):
-    """Each measure's number as printed: a measure marked irregular (a pickup) is not counted."""
+def bar_numbers(measures, count_pickup=False):
+    """Each measure's number as printed: a measure marked irregular (a pickup) is not counted, unless the sheet counts
+    its pickup as bar 1."""
     out, n = [], 0
     for m in measures:
-        if m.findtext('irregular') != '1':
+        if count_pickup or m.findtext('irregular') != '1':
             n += 1
         n += int(m.findtext('noOffset') or 0)
         out.append(n)
@@ -159,10 +164,10 @@ def place(slots_by_bar, tokens):
     return pairs
 
 
-def lyrics_mscx(staff, voice, block):
-    """Writes a block's words under a voice of a staff of the main score, in place of any it had."""
+def lyrics_mscx(staff, voice, block, nums):
+    """Writes a block's words under a voice of a staff of the main score, in place of any it had. The bar numbers
+    are the top staff's: only it marks a pickup bar."""
     measures = staff.findall('Measure')
-    nums = bar_numbers(measures)
     slots = {}
     for m, n in zip(measures, nums):
         slots.setdefault(n, []).extend(sung_chords(m, voice))
@@ -206,9 +211,12 @@ def layout_mscx(score, spec):
                     else:
                         tx.text = spec['title']
             break
-    if spec.get('composer'):
+    for role in ('composer', 'lyricist'):
+        if not spec.get(role):
+            continue
         vb = next(score.iter('VBox'))
-        texts = [t for t in vb.findall('Text') if t.findtext('style') == 'composer']
+        styles = {'composer': ('composer',), 'lyricist': ('lyricist', 'poet')}[role]
+        texts = [t for t in vb.findall('Text') if t.findtext('style') in styles]
         if texts:
             t = texts[0]
             tx = t.find('text')
@@ -216,13 +224,18 @@ def layout_mscx(score, spec):
                 tx.remove(c)
         else:
             t = ET.SubElement(vb, 'Text')
-            ET.SubElement(t, 'style').text = 'composer'
+            ET.SubElement(t, 'style').text = role
             tx = ET.SubElement(t, 'text')
-        tx.text = spec['composer']
+        tx.text = spec[role]
     staffs = [s for s in score.findall('Staff') if s.find('Measure') is not None]
     first = staffs[0]
     measures = first.findall('Measure')
-    nums = bar_numbers(measures)
+    nums = bar_numbers(measures, spec.get('count_pickup'))
+    if spec.get('count_pickup'):
+        for st in staffs:
+            for m in st.findall('Measure'):
+                for el in m.findall('irregular'):
+                    m.remove(el)
     for m in measures:
         for b in m.findall('LayoutBreak'):
             m.remove(b)
@@ -317,12 +330,12 @@ def style_mss(data, spec):
 
 # MusicXML, before the voices are split, so each part carries its words
 
-def lyrics_xml(score, part_index, staff, voice, block):
+def lyrics_xml(score, part_index, staff, voice, block, count_pickup=False):
     part = score.findall('part')[part_index]
     slots = {}
     n = 0
     for m in part.findall('measure'):
-        if m.get('implicit') != 'yes':
+        if count_pickup or m.get('implicit') != 'yes':
             n += 1
         notes = []
         for el in m.findall('note'):
@@ -354,8 +367,8 @@ def notes(path, staff, voice):
     names = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']
     with zipfile.ZipFile(path) as z:
         root = ET.fromstring(z.read(next(n for n in z.namelist() if n.endswith('.mscx') and '/' not in n)))
-    st = [s for s in root.find('Score').findall('Staff') if s.find('Measure') is not None][staff]
-    for m, n in zip(st.findall('Measure'), bar_numbers(st.findall('Measure'))):
+    staffs = [s for s in root.find('Score').findall('Staff') if s.find('Measure') is not None]
+    for m, n in zip(staffs[staff].findall('Measure'), bar_numbers(staffs[0].findall('Measure'))):
         cs = sung_chords(m, voice)
         print(n, len(cs), ' '.join(names[int(c.find('Note').findtext('pitch')) % 12] for c in cs))
 

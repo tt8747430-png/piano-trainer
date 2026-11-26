@@ -1,0 +1,25 @@
+# From 009. Eram jos în păcat.pdf (2 pages) and the choir book, page 19. Bars as the sheet numbers them.
+title: 9 Eram jos în păcat
+lyricist: Valentin Popovici
+count-pickup
+spatium: 1.75
+systems: 1 4 6 8 | 10 12 14 16
+hide-tempo
+hide-names
+
+[Soprano]
+1: @1 1.E -- ram jos în pă -- cat, dar I -- sus m'a sal -- vat; Lu -- mi -- na Lui din cer în mi -- ne'a stră -- lu --
+1: @5 cit. Scăl -- dat în ha -- rul Său, eu am un nu -- me nou; Când stau de vor -- bă cu I -- sus sunt fe -- ri -- cit.
+1: @10 stai de vor -- bă azi cu I -- sus, spu -- ne'l Lui ce griji te'a -- pa -- să, ia al tău sus -- pin, pa -- cea Sa din plin,
+1: @14 vrei să stai în ru -- gă -- ciu -- ne, ar -- de'un dor și nu'l poți spu -- ne pe ge -- nunchi lân -- gă I -- sus ești fe -- ri -- cit,
+2: @1 2.Că -- ra -- rea când e grea și ra -- ze nu's pe ea, Și no -- rii de'n -- do -- ia -- lă soa -- re -- le'au um --
+2: @5 brit; Când cea -- ța de pă -- cat ce -- rul a'n -- tu -- ne -- cat, Eu stau de vor -- bă cu I -- sus și's fe -- ri -- cit.
+3: @1 3.Când um -- bre -- le se sting și o -- chii mei când plâng, a -- tunci I -- sus e'al meu pri -- e -- ten ne -- clin --
+3: @5 tit; În ru -- gă -- ciu -- ne ia po -- va -- ra mea ce grea, Când stau de vor -- bă cu I -- sus sunt fe -- ri -- cit.
+
+[Alto italic]
+2: @17 _ ești fe -- ri -- cit!
+
+[Bass italic]
+1: @9 _ Vi -- no și @10 _ _ _ _ _ _ _ _ Vi -- no, @11 _ _ _ _ _ _ _ _ El să
+1: @12 _ _ _ _ _ Și să'ți dea @13 _ _ _ _ _ Când simți că @14 _ _ _ _ _ _ _ _ Când te @15 _ _ _ _ _ _ _ _ Nu -- mai

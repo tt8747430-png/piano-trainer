@@ -127,7 +127,7 @@ def main():
                 # The words as printed go under their voices before the split, so every part carries them.
                 for block in s['spec']['blocks']:
                     p = next(x for x in info if x['name'] == block['voice'])
-                    match.lyrics_xml(score, p['part'], p['staff'], p['voice'], block)
+                    match.lyrics_xml(score, p['part'], p['staff'], p['voice'], block, s['spec'].get('count_pickup'))
                 out, info = parts.build(score, s['kind'], [])
         except SystemExit as e:
             s['why'] = f'not made: {e}'
@@ -300,7 +300,8 @@ def compose(s, dst, imported):
         match = load('choir-match')
         for block in spec['blocks']:
             p = next(x for x in info if x['name'] == block['voice'])
-            match.lyrics_mscx(staffs[p['mstaff']], (int(p['voice']) - 1) % 4, block)
+            match.lyrics_mscx(staffs[p['mstaff']], (int(p['voice']) - 1) % 4, block,
+                              match.bar_numbers(staffs[0].findall('Measure'), spec.get('count_pickup')))
         match.layout_mscx(score, spec)
         files['score_style.mss'] = match.style_mss(files['score_style.mss'], spec)
     files[mname] = b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root, encoding='utf-8')
