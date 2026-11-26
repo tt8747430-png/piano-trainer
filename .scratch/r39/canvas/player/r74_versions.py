@@ -1,6 +1,6 @@
 # R74 (owner, 2026-11-26): the Player says plainly that it shows an accompaniment made from the chords, opens on it
 # (almost every song has only that), offers the learner's own arrangement where the versions are chosen, and its bar
-# holds the one version-and-mode control (MODESW). Its one input is player/base (the Player pair as built before R74);
+# holds the version (VERSW) beside the name and Edit (EDITB) at its end. Its one input is player/base (the Player pair as built before R74);
 # it writes practice/project, so it runs any number of times. The Player's earlier builders are gone.
 import re, pathlib, sys; sys.path.insert(0, "/home/user/piano-trainer/.scratch/r39/canvas")
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/calm_kit.py').read())
@@ -11,19 +11,24 @@ OLDSW = re.compile(r'<div role="radiogroup" aria-label="Mode" style="display: fl
 CHEVR = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>'
 for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     p = OUT / f'{name}.dc.html'; t = (BASE / f'{name}.dc.html').read_text()
-    NEWSW = re.compile(r'<div role="group" aria-label="Version and mode".*?</a></div>', re.S)
+    NEWSW = re.compile(r'<div (?:data-sw )?role="group" aria-label="Version and mode".*?</a></div>', re.S)
+    sw = VERSW('play', 'Editor' + sfx)
     if 'aria-label="Version and mode"' in t:
-        t, n = NEWSW.subn(lambda m: MODESW('play', 'Editor' + sfx), t, count=1)
+        t, n = NEWSW.subn(lambda m: sw, t, count=1)
     else:
-        t, n = OLDSW.subn(lambda m: MODESW('play', 'Editor' + sfx), t, count=1)
+        t, n = OLDSW.subn(lambda m: sw, t, count=1)
     assert n == 1, name
     if name == 'PlayerDesk':
-        # the capsule beside the song's name, at the editor's place (owner, 2026-11-26: "I dont like how this arrangement is
-        # centered"; ui-and-mockups: every element answers why here): the name says which song, the capsule which version
-        sw = MODESW('play', 'Editor' + sfx)
+        # the version beside the song's name, at the editor's place (owner, 2026-11-26: "I dont like how this arrangement
+        # is centered"; ui-and-mockups: every element answers why here): the name says which song, the version which music
         t = t.replace(sw, '<span></span>', 1)
         close = re.search(r'<a href="Songs?Laptop.dc.html" aria-label="Close".*?</a>', t, re.S).group(0)
-        t = t.replace(close, close + f'<h1 style="margin: 0 30px 0 12px; padding: 0; font-size: 17px; font-weight: 600; white-space: nowrap; pointer-events: auto">Amazing Grace</h1>' + sw.replace('<div', '<div data-sw', 1), 1)
+        t = t.replace(close, close + f'<h1 style="margin: 0 30px 0 12px; padding: 0; font-size: 17px; font-weight: 600; white-space: nowrap; pointer-events: auto">Amazing Grace</h1>' + sw, 1)
+    # Edit trails the bar, its own button, at the editor's place (owner, 2026-11-26: "i dont like this edit button with
+    # this accompaniment … inside this control")
+    h = t.index('aria-label="Version"'); e = t.index('</header>', h)
+    k = t.rindex('</div>', h, e)
+    t = t[:k] + EDITB('play', 'Editor' + sfx) + t[k:]
     if name == 'PlayerApp':
         t = t.replace('padding: 8px 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; pointer-events: none', MODEBAR_P + '; pointer-events: none', 1)
     # Close goes back to the library the song was opened from (the song's own page is gone, R74)

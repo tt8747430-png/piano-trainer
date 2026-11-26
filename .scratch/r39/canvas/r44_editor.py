@@ -91,7 +91,7 @@ ED4 = js(r'''
         ['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]].map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => set(on2 ? off : o) })),
       kb: calmKeys(50, 76, { 67: ['#85B8DC', ''] }, 402, 112), kbL: calmKeys(36, 96, { 67: ['#85B8DC', ''] }, 1330, kh) };''')
 
-# the bar: ✕, the Play · Edit switch (the kit's MODESW), Undo · Redo · ··· (the Player's glass, CLAUDE.md "sharing its bar")
+# the bar: ✕, the version (the kit's VERSW), then at its end Edit, pressed (the kit's EDITB), as the Player's bar
 def GBTN(label, svg, act='', href='', tip=''):
     st = f'width: 44px; height: 44px; border: 0; padding: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; text-decoration: none; position: relative'
     t = f' data-tip="{tip or label}"'
@@ -108,9 +108,10 @@ def EBAR(close_href, play_href, title=False):
         left += (f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{moreOn}}}}" onClick="{{{{openMore}}}}" data-tip="The score’s menu" style="min-width: 0; height: 44px; padding: 0 8px 0 12px; border: 0; border-radius: 12px; background: {{{{titleBg}}}}; color: {INK}; font: inherit; display: flex; align-items: center; gap: 4px; cursor: pointer">'
                  f'<h1 style="margin: 0; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</h1><span style="flex: none; display: flex; color: {SOFT}">{CHEV_D}</span></button>')
     # Undo and Redo are the toolbar's (Flat's actions: delete, history, clipboard); the bar keeps the score's menu
-    right = '' if title else f'<div style="flex: none; display: flex; border-radius: 22px; {GL}">{GBTN("More", MORE, "openMore")}</div>'
+    # Edit trails the bar, at the Player's place, pressed while editing; the phone's ··· (no room for the title's menu) before it
+    right = ('' if title else f'<div style="flex: none; display: flex; border-radius: 22px; {GL}">{GBTN("More", MORE, "openMore")}</div>') + EDITB('edit', play_href)
     return (f'<header style="flex: none; position: relative; z-index: 20; {MODEBAR_P}">'
-            f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{left}{MODESW("edit", play_href) if title else ""}</div>{"<span></span>" if title else MODESW("edit", play_href)}<div style="display: flex; align-items: center; justify-content: flex-end; gap: 16px">{right}</div></header>')
+            f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{left}{VERSW("edit", play_href) if title else ""}</div>{"<span></span>" if title else VERSW("edit", play_href)}<div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px">{right}</div></header>')
 
 # the selection strip: what is chosen, and what acts on it
 def STRIP(play=True):

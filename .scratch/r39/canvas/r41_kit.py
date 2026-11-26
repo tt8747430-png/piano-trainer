@@ -36,17 +36,16 @@ GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; borde
 # both bars, the same pixels in each; each half 65 wide so nothing moves when the mode changes; the mode shown is ink.
 # MODEBAR is the bar both screens share: Close leading, the switch, the screen's own glass group trailing (its column
 # held to the editor's three buttons, so the switch stands where the editor's does).
-# R74 (owner, 2026-11-26: "the switch between the play and edit mode doesnt make any sense … make it more visible to the
-# user that its an accompaniment and not a real score and make easier to switch between the score and the accompaniment
-# something like how the flat editor switches between the readonly and the edit mode … maybe we can merge this two"):
-# one glass capsule at the bar's centre says what is on the stand and opens the versions (Accompaniment, made from
-# the chords; Arrangement, written by hand, where the song has one; Your arrangement, the learner's own), and holds the
-# one way into and out of editing, as Flat's score page (read-only, Edit) and its editor (Done). Reading, its end is
-# Edit; editing, it names Your arrangement (the accompaniment is never written over: Edit starts the learner's copy)
-# and its end is the same Edit, pressed. The menu is a native disclosure, so it opens on any board without the board's script.
+# R74, the version and Edit as two controls (owner, 2026-11-26: "make it more visible to the user that its an
+# accompaniment … easier to switch between the score and the accompaniment"; then "i dont like this edit button with this
+# accompaniment: dont you see how awful it look inside this control"): the version is its own glass menu button beside
+# the song's name (what is on the stand: Accompaniment, Arrangement where one is written, Your arrangement), and Edit is
+# its own glass button at the bar's trailing end (Apple HIG: Edit trails; Flat's Edit stands apart from the title), the
+# same place in Play and in Edit, pressed on the sand wash while editing; a tap there goes back to playing. A choice of
+# what to read and a mode switch are two acts, so they are two controls. The menu is a native disclosure.
 PENI = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="M21.17 6.81a1 1 0 0 0-3.99-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"></path></svg>'
 VERSIONS = (('Accompaniment', 'From the chords · Bass + chords', 'Player'), ('Arrangement', 'None written for this song yet', ''), ('Your arrangement', 'Write your own, from this accompaniment', 'Editor'))
-def MODESW(on, other_href, label=None):
+def VERSW(on, other_href, label=None):
     sfx = 'Laptop.dc.html' if 'Laptop' in other_href else '.dc.html'
     shown = label or ('Accompaniment' if on == 'play' else 'Your arrangement')
     rows = []
@@ -60,21 +59,19 @@ def MODESW(on, other_href, label=None):
         else:
             rows.append(f'<a role="menuitemradio" aria-checked="false" href="{board}{sfx}" style="{st}">{body}</a>')
     menu = (f'<div role="menu" aria-label="Versions" style="position: absolute; z-index: 61; top: 52px; left: 0; width: 320px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; flex-direction: column; text-align: left; font-weight: 400">{"".join(rows)}</div>')
-    summary = (f'<summary aria-label="Version: {shown}" data-tip="Versions" style="list-style: none; height: 44px; box-sizing: border-box; padding: 0 8px 0 16px; display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 15px; font-weight: 600; color: {INK}; white-space: nowrap">'
+    summary = (f'<summary aria-label="Version: {shown}" data-tip="Versions" style="list-style: none; height: 44px; box-sizing: border-box; padding: 0 12px 0 16px; display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 15px; font-weight: 600; color: {INK}; white-space: nowrap">'
                f'{shown}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_D}</span></summary>')
-    seg_ = 'height: 44px; box-sizing: border-box; border-radius: 22px; display: flex; align-items: center; gap: 6px; font-size: 15px; text-decoration: none; white-space: nowrap; position: relative'
-    # a phone's bar has no room for the word: Edit is its pencil alone, named in its tip. Editing, the same Edit stays,
-    # pressed on the sand wash, and a tap goes back to playing (owner, 2026-11-26: "what is with this done button. why
-    # is it here"): one toggle in one place, as Flat's, never an ink "Done" that reads as a save the app already makes
+    return (f'<div role="group" aria-label="Version" style="flex: none; position: relative; border-radius: 22px; {GLASSFX}; pointer-events: auto">'
+            f'<style>details.vsw > summary::-webkit-details-marker {{ display: none }}</style><details class="vsw" style="position: relative">{summary}{menu}</details></div>')
+def EDITB(on, other_href):
     edit = on == 'edit'
     tip = 'Stop editing · E' if edit else 'Edit · E'
-    pressed = f' aria-pressed="{"true" if edit else "false"}"'
-    wash = f'; background: #E8DFD3' if edit else ''
-    end = (f'<a href="{other_href}" aria-label="Edit"{pressed} data-tip="{tip}" style="{seg_}; padding: 0 16px 0 12px; color: {INK}; font-weight: 500{wash}">{PENI}Edit</a>' if 'Laptop' in other_href
-           else f'<a href="{other_href}" aria-label="Edit"{pressed} data-tip="{tip}" style="{seg_}; width: 48px; justify-content: center; color: {INK}{wash}">{PENI}</a>')
-    return (f'<div role="group" aria-label="Version and mode" style="position: relative; display: flex; align-items: center; border-radius: 22px; {GLASSFX}; pointer-events: auto">'
-            f'<style>details.vsw > summary::-webkit-details-marker {{ display: none }}</style><details class="vsw" style="position: relative">{summary}{menu}</details>'
-            f'<span aria-hidden="true" style="flex: none; width: 1px; height: 24px; background: {LINE}"></span>{end}</div>')
+    look = 'background: #E8DFD3; box-shadow: 0 0 0 1px ' + LINE if edit else GLASSFX
+    st = f'flex: none; height: 44px; box-sizing: border-box; border-radius: 22px; {look}; color: {INK}; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 15px; font-weight: 500; text-decoration: none; white-space: nowrap; position: relative; pointer-events: auto'
+    # a phone's bar has no room for the word: the pencil alone, named in its tip
+    if 'Laptop' in other_href:
+        return f'<a href="{other_href}" aria-label="Edit" aria-pressed="{"true" if edit else "false"}" data-tip="{tip}" style="{st}; padding: 0 16px 0 12px">{PENI}Edit</a>'
+    return f'<a href="{other_href}" aria-label="Edit" aria-pressed="{"true" if edit else "false"}" data-tip="{tip}" style="{st}; width: 44px">{PENI}</a>'
 # a phone's bar: Close, then the version-and-mode capsule at the start (it is wider than a centred column leaves), the screen's group at the end
 MODEBAR_P = 'height: 60px; box-sizing: border-box; padding: 8px 16px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; justify-items: start; align-items: center; gap: 8px'
 MODEBAR_L = 'height: 72px; box-sizing: border-box; padding: 12px 24px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px'

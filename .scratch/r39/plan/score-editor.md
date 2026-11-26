@@ -49,6 +49,11 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
   and Edit share one place. The song opens on the accompaniment; the score prints "Accompaniment from the chords"
   in italic on its own line under the credits, as an engraver credits an arrangement, the music one line lower.
 
+- **R74, the version and Edit two controls** (owner, 2026-11-26: "i dont like this edit button with this accompaniment
+  … inside this control"): replaces the one "Version and mode" capsule above. The version is a glass menu button
+  beside the name (kit `VERSW`); Edit a glass button at the bar's end (kit `EDITB`), pressed while editing, the same
+  place in Play and Edit on both sizes; no Done.
+
 - **R74, the editor's bar as Flat's, Credits a page** (owner, 2026-11-26: "port the flat editor more precisely also on
   the laptop. like the title in the header and clickin on its edit button with pen icon we go to the credits page";
   "it should open properly on a proper page this credits like in the flat, and be carefull when you use teh popups").

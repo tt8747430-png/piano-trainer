@@ -1,6 +1,6 @@
 # ════ The laptop Player's four views wear the Play · Edit switch's shape ════
 # Two segmented controls in one bar drew two shapes (the views 34 high in a 4px tray, each 112 wide; Play · Edit the
-# bar's full 44, hugging its word): similarity, one control one look. The views take the kit's MODESW values: segments
+# bar's full 44, hugging its word): similarity, one control one look. The views take the bar's segment values: segments
 # 44 high, hugging their word, 15 on 600 in ink, 15 off 500 in soft ink. The Player's own generator cannot be re-run
 # (later passes live on its boards), so this pass edits the built board, once.
 _f = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/PlayerDesk.dc.html'
