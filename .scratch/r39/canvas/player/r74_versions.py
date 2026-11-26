@@ -89,7 +89,11 @@ def player_rail(t):
     t = t.replace('const KB_VALS = {\nareaTop: 0,', 'const KB_VALS = {\nareaTop: 0, viewBottom: keys ? 904 - (800 - bandH) + 16 : DEV.bottom,', 1)
     # the rail, under the bar, at the window's left edge
     rail = (f'<nav aria-label="Panels" style="position: absolute; z-index: 31; left: 0; top: 64px; bottom: 0; width: 76px; padding: 0 0 12px; box-sizing: border-box; background: #F7F3EE; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
-            f'<div role="tablist" aria-orientation="vertical" aria-label="Panels" onKeyDown="{{{{railKeys}}}}" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Versions', LAYERSI, 'Song', 'Versions') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div></nav>')
+            f'<div role="tablist" aria-orientation="vertical" aria-label="Panels" onKeyDown="{{{{railKeys}}}}" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Versions', LAYERSI, 'Song', 'Versions') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div>'
+            # Flat's rail actions at its foot, the editor's too (FLAT_UI_SHELL_AND_MOTION §1.2): the Player's acts and keys
+            + '<span style="flex: 1"></span>' + _RAILBTN('Search', SEARCHI, 'Srch', 'Search for an act · ⌘K', 'openSearch') + _RAILBTN('Shortcuts', KBDI, 'Keys', 'Shortcuts · ?', 'openKeys') + '</nav>')
+    rail = rail + SEARCHCARD_F(((PLAY.replace('width="22" height="22"', 'width="20" height="20"'), 'Play', 'Space'), (LOOP, 'Loop', 'L'), (FICONS['Tr'], 'Transpose', 'T'), (FICONS['Mode'], 'Mode', ''), (FICONS['Hands'], 'Hands', '')))
+    rail = rail + KEYSCARD_F(((('Playback', (('Play or stop', 'Space'), ('Go to start', '⌃Space'), ('Loop', 'L'))),), (('View', (('Practice or Edit', 'P E'), ('Piano keys', 'K'), ('Transpose', 'T'))),), (('Panels', (('Search', '⌘K'), ('Shortcuts', '?'))),)), 840)
     # Audio, Flat's panel (the kit's AUDPANEL, the editor's too): the room and each part's level, the mixer's home
     # after the rail in the tree, as the Song and View panels sit beside it (before it, the band read as the group it closed)
     rail = rail + (f'<sc-if value="{{{{panelAud}}}}" hint-placeholder-val="{{{{false}}}}"><section role="region" aria-label="Audio" style="{PANEL}">' + head('Audio') + AUDPANEL() + '</section></sc-if>')
@@ -105,6 +109,7 @@ def player_rail(t):
     t = t.replace('<div role="toolbar" aria-label="Transport" style="position: absolute; z-index: 40; left: 0;', '<div role="toolbar" aria-label="Transport" style="position: absolute; z-index: 40; left: {{panelPad}}px;', 1)
     # the script: the rail's state, apart from the popovers' (Play closes a popover, never the panel)
     keys = ("isMore: open === 'settings', rail: s.rail ?? 'song', "
+            "searchOn: s.sheet === 'search', keysOn2: s.sheet === 'keys', openSearch: () => this.setState({ sheet: 'search', open: 'none' }), openKeys: () => this.setState({ sheet: 'keys', open: 'none' }), closeSheet: () => this.setState({ sheet: null }), railSrchBg: 'transparent', railSrchW: 500, railKeysBg: 'transparent', railKeysW: 500, "
             "panelSong: (s.rail ?? 'song') === 'song' && !['pattern', 'patfilter', 'key'].includes(open), panelView: (s.rail ?? 'song') === 'view', "
             "panelPad: (s.rail ?? 'song') === 'none' ? 76 : 428, "
                         "toastOn: !!s.sTo, toastT: s.sTo || '', toastUndo: !!s.sUndo, songUndo: () => this.setState({ sTo: '', sUndo: false, ...(s.undoVer || {}), undoVer: null }), "

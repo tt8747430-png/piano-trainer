@@ -1324,3 +1324,24 @@ PE_MOTION = ('<style data-motion>@keyframes pe-pop { from { opacity: 0; scale: .
              f'[style*="rgba(51,41,33,.32)"], [style*="rgba(51, 41, 33, 0.32)"] {{ animation: pe-fade 200ms ease-out }} '
              f'[role=status] {{ animation: pe-toast 220ms {_EO} }} '
              '@media (prefers-reduced-motion: reduce) { [data-dc-tpl], [role] { animation: none !important } }</style>')
+
+XI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M18 6 6 18M6 6l12 12"></path></svg>'
+# a layer shown only while its state key holds
+_PIF = lambda c, inner, h='false': f'<sc-if value="{{{{{c}}}}}" hint-placeholder-val="{{{{{h}}}}}">{inner}</sc-if>'
+# Search for an act and Shortcuts, Flat's rail actions (FLAT_UI_SHELL_AND_MOTION §1.2): the editor's and the Player's,
+# each with its own suggested acts and keys; the one scrim (.32)
+_SACT = lambda icon, t, k: f'<button type="button" onClick="{{{{closeSheet}}}}" style="min-height: 48px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer"><span style="flex: none; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: {SOFT}">{icon}</span><span style="flex: 1; font-size: 15px">{t}</span><kbd style="font: inherit; font-size: 13px; color: {SOFT}">{k}</kbd></button>'
+SEARCHCARD_F = lambda sugg: (_PIF('searchOn', f'<div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div>'
+              f'<section role="dialog" aria-modal="true" aria-label="Search for an act" style="position: absolute; z-index: 61; left: 50%; top: 200px; width: 584px; transform: translateX(-50%); border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, 0 24px 48px -12px rgba(51,41,33,.35); display: flex; flex-direction: column">'
+              f'<label style="height: 60px; padding: 0 20px; display: flex; align-items: center; gap: 12px; box-shadow: inset 0 -1px 0 {LINE}"><span style="display: flex; color: {SOFT}">{SEARCHI}</span><input autofocus placeholder="Search for an act or a tool" style="flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; font: inherit; font-size: 17px; color: {INK}; outline: none"></label>'
+              f'<div style="padding: 8px 8px 12px; display: flex; flex-direction: column"><span style="padding: 8px 12px; font-size: 13px; font-weight: 600; color: {SOFT}">Suggested</span>'
+              + ''.join(_SACT(*a) for a in sugg) + '</div>'
+              f'<div style="height: 44px; padding: 0 20px; display: flex; align-items: center; gap: 16px; font-size: 13px; color: {SOFT}; box-shadow: inset 0 1px 0 {LINE}"><span>↑↓ to choose</span><span>Enter to do</span><span>Esc to close</span></div></section>'))
+_KROW = lambda t, k: f'<div style="min-height: 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: inset 0 -1px 0 {FILL}"><span style="font-size: 15px">{t}</span><kbd style="font: inherit; font-size: 14px; color: {SOFT}">{k}</kbd></div>'
+# Flat's shortcut sheet in its groups (FLAT_SETTINGS_TOOLS_FLOWS §3.3), every key a tooltip teaches listed once here
+_KGRP = lambda head, *rows: f'<div style="break-inside: avoid; padding-top: 16px"><h3 style="margin: 0 0 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{head}</h3>' + ''.join(_KROW(t, k) for t, k in rows) + '</div>'
+KEYSCARD_F = lambda cols, w: (_PIF('keysOn2', f'<div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div>'
+            f'<section role="dialog" aria-modal="true" aria-label="Shortcuts" style="position: absolute; z-index: 61; left: 50%; top: 120px; width: {w}px; transform: translateX(-50%); border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, 0 24px 48px -12px rgba(51,41,33,.35); display: flex; flex-direction: column">'
+            f'<header style="height: 64px; padding: 0 8px 0 24px; display: flex; align-items: center; box-shadow: inset 0 -1px 0 {LINE}"><h2 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">Shortcuts</h2><button type="button" aria-label="Close" data-tip="Close · Esc" onClick="{{{{closeSheet}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{XI}</button></header>'
+            f'<div style="padding: 4px 24px 24px; display: grid; grid-template-columns: repeat({len(cols)}, 1fr); gap: 0 32px">' + ''.join('<div>' + ''.join(_KGRP(h, *rows) for h, rows in col) + '</div>' for col in cols)
+            + '</div></section>'))
