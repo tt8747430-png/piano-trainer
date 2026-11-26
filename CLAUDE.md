@@ -23,6 +23,7 @@ Vercel.
 | [docs/CONTENT.md](docs/CONTENT.md)                           | a piece, pattern, lesson or course                     |
 | [docs/INDEX.md](docs/INDEX.md)                               | every kit part, slice, token, utility, and who uses it |
 | [docs/adr/](docs/adr/README.md)                              | why an area is the way it is                           |
+| [`choir-scores`](.claude/skills/choir-scores/SKILL.md)       | the choir's songs in `piano-data`: scores, parts, sheets |
 
 Design work on the canvas loads these, each when its moment comes ([`redesigning-a-screen`](.claude/skills/redesigning-a-screen/SKILL.md) runs the loop):
 
