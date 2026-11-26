@@ -1,0 +1,29 @@
+# From 016. Te iubesc Isuse.pdf (1 page, exported from MuseScore) and the choir book, page 29. Bars as the sheet
+# numbers them. The choir's MuseScore files have no alto line: it is entered here from the sheet.
+title: 16 Te iubesc Isuse
+composer: A. J. Gordon
+count-pickup
+spatium: 1.75
+systems: 1 6 11 15
+hide-names
+bar-numbers: every
+footer: Corul Bisericii Maranata Nürnberg / Fürth
+brace
+repeat: 9+3/4 17
+tempo: 105
+
+[Alto notes]
+1: @1 F4:4 @2 F4:2 F4:4 F4:4 @3 F4:4. E4:8 D4:4 F4:4 @4 E4:2 C4:4 C4:4 @5 C4:2. F4:4
+1: @6 F4:2 F4:4 F4:4 @7 F4:4. E4:8 D4:4 F4:4 @8 E4:2 C4:4 C4:4 @9 C4:2. F4:4 @10 F4:2 F4:4 F4:4
+1: @11 E4:4 F4:4 C4:4 C4:4 @12 C4:2 D4:4 C4:4 @13 C4:2. F4:4 @14 F4:2 F4:4 F4:4
+1: @15 F4:4. E4:8 D4:4 F4:4 @16 F4:4 E4:4 F4:4 E4:4 @17 F4:2.
+
+[Soprano]
+1: @1 1.Te iu -- besc I -- su _ -- se, știu ca ești al meu; A lu -- mii pla -- ce _ -- re, n'o mai do -- resc eu.
+1: Mai @10 mul -- ta ca'n -- Ti _ -- ne, eu n'am _ sa ga -- sesc, _ De Te'am iu -- bit când _ -- va, a -- cum _ Te iu -- besc!
+2: @1 2.Ca sa ma ras -- cum _ -- peri, pe cru -- ce'ai mu -- rit; Te iu -- besc caci spi _ -- nii, a -- dânc Te'au ra -- nit.
+2: Te @10 iu -- besc, caci in _ -- tâi, chiar Tu _ m'ai iu -- bit! _ @14 Te'am iu -- bit când _ -- va, a -- cum _ si mai mult!
+3: @1 3.În via -- ta în moar _ -- te, Te vreau, Te do -- resc! Sa fiu al Tau, Doam _ -- ne, pe cât timp tra -- iesc!
+3: Când @10 moar -- tea ve -- ni _ -- va si'a -- tunci _ am sa zic: _ Mai mult ca pe Ti _ -- ne, n'am iu _ -- bit ni -- mic.
+4: @1 4.Al Tau chip de jert _ -- fa, de Miel în -- jun -- ghiat, M'a -- ju -- ta sa'n -- dur _ chi -- nul cel ne -- cur -- mat,
+4: Sa @10 uit ori -- ce ja _ -- le, ce'n ur _ -- ma pri -- vesc; _ Ma -- ndrept cu na -- dej _ -- de la tro _ -- nul ce -- resc.

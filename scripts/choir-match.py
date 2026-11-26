@@ -15,6 +15,11 @@ Each song may hold a `match.txt` beside its files, written from the song's PDF a
     count-pickup                       the sheet numbers its pickup as bar 1 (bars here follow the sheet)
     dashed: 20 22                      ties and slurs in these bars drawn dashed, as printed
     beams                              eighths beamed together (by default each has its own flag, as sung lines are)
+    bar-numbers: every                 a number over every bar (by default only at a line's start)
+    repeat: 9+3/4 17                   a repeat from bar 9, 3/4 in (the bar is split there, as printed), to bar 17
+    tempo: 105                         the tempo as printed
+    footer: Corul ...                  a line of text at the foot of each page
+    brace                              the staves joined by a brace, as a sheet exported from MuseScore draws them
     segno: 54                          the segno stands at this bar
     text: 81 above bold italic D.S.% al Coda   printed text at a bar, above or below the top staff (% is the segno)
 
@@ -79,6 +84,19 @@ def parse(path):
             spec['hide_empty'] = True
         elif key == 'hide-tempo':
             spec['hide_tempo'] = True
+        elif key == 'repeat':
+            # repeat: 9+3/4 17   from bar 9, three quarters in (the bar is split there), to the end of bar 17
+            a, b = value.split()
+            bar, _, at = a.partition('+')
+            spec['repeat'] = (int(bar), Fraction(at) if at else Fraction(0), int(b))
+        elif key == 'tempo':
+            spec['tempo'] = int(value)
+        elif key == 'bar-numbers':
+            spec['bar_numbers'] = value.strip()
+        elif key == 'footer':
+            spec['footer'] = value.strip()
+        elif key == 'brace':
+            spec['brace'] = True
         elif key == 'beams':
             spec['beams'] = True
         elif key == 'dashed':
@@ -131,8 +149,8 @@ def bar_numbers(measures, count_pickup=False):
     """Each measure's number as printed: a measure marked irregular (a pickup) is not counted, unless the sheet counts
     its pickup as bar 1."""
     out, n = [], 0
-    for m in measures:
-        if count_pickup or m.findtext('irregular') != '1':
+    for k, m in enumerate(measures):
+        if (count_pickup and k == 0) or m.findtext('irregular') != '1':
             n += 1
         n += int(m.findtext('noOffset') or 0)
         out.append(n)
@@ -269,6 +287,28 @@ def lyrics_mscx(staff, voice, block, nums, clear=True):
             chord.insert(at, ly)
 
 
+def mark_split(score, spec):
+    """The second half of a bar split for a repeat is not counted, as the sheet numbers it (MuseScore reads it from
+    MusicXML as a bar of its own)."""
+    if not spec.get('repeat') or not spec['repeat'][1]:
+        return
+    staffs = [s for s in score.findall('Staff') if s.find('Measure') is not None]
+    for st in staffs:
+        for m in st.findall('Measure')[1:]:
+            if m.get('len') and m.find('startRepeat') is not None:
+                if m.find('irregular') is None:
+                    m.insert(0, ET.Element('irregular'))
+                    m.find('irregular').text = '1'
+    # The lower staves follow the top staff's split bar.
+    top = staffs[0].findall('Measure')
+    for st in staffs[1:]:
+        for a, b in zip(top, st.findall('Measure')):
+            if a.find('irregular') is not None and b.find('irregular') is None:
+                el = ET.Element('irregular')
+                el.text = '1'
+                b.insert(0, el)
+
+
 def layout_mscx(score, spec):
     """The title, line and page breaks, and the hidden tempo, in the main score."""
     if spec['title']:
@@ -309,10 +349,11 @@ def layout_mscx(score, spec):
     measures = first.findall('Measure')
     nums = bar_numbers(measures, spec.get('count_pickup'))
     if spec.get('count_pickup'):
+        # The pickup counts as bar 1; a split bar later on stays uncounted.
         for st in staffs:
-            for m in st.findall('Measure'):
-                for el in m.findall('irregular'):
-                    m.remove(el)
+            first_m = st.find('Measure')
+            for el in first_m.findall('irregular'):
+                first_m.remove(el)
     for m in measures:
         for b in m.findall('LayoutBreak'):
             m.remove(b)
@@ -374,6 +415,12 @@ def layout_mscx(score, spec):
                             if lt is None:
                                 lt = ET.SubElement(el, 'lineType')
                             lt.text = '2'
+    if spec.get('brace'):
+        defs = [st for part in score.findall('Part') for st in part.findall('Staff')]
+        for d in defs:
+            for b in d.findall('bracket'):
+                d.remove(b)
+        ET.SubElement(defs[0], 'bracket', type='1', span=str(len(defs)), col='0', visible='1')
     if spec['hide_names']:
         for part in score.findall('Part'):
             for ins in part.findall('Instrument'):
@@ -402,8 +449,12 @@ def style_mss(data, spec):
         values[f'lyrics{side}FontSpatiumDependent'] = '0'
     # A bar number only at the start of each line; the title and names in the sheets' sans type.
     values['showMeasureNumber'] = '1'
-    values['measureNumberSystem'] = '1'
-    values['measureNumberInterval'] = '1000'
+    if spec.get('bar_numbers') == 'every':
+        values['measureNumberSystem'] = '0'
+        values['measureNumberInterval'] = '1'
+    else:
+        values['measureNumberSystem'] = '1'
+        values['measureNumberInterval'] = '1000'
     for el in ('title', 'subTitle', 'composer', 'lyricist'):
         values[f'{el}FontFace'] = 'Arial'
     # Staves and lines as close as the printed sheets set them.
@@ -412,7 +463,12 @@ def style_mss(data, spec):
     values['minSystemDistance'] = spec.get('system_distance') or '5.5'
     values['maxSystemDistance'] = str(float(spec.get('system_distance') or '5.5') + 3)
     # The printed sheets have no footer and narrow top and bottom margins (inches).
-    values['showFooter'] = '0'
+    values['showFooter'] = '1' if spec.get('footer') else '0'
+    if spec.get('footer'):
+        for side in ('odd', 'even'):
+            values[f'{side}FooterC'] = spec['footer']
+            values[f'{side}FooterL'] = ''
+            values[f'{side}FooterR'] = ''
     for side in ('Even', 'Odd'):
         values[f'page{side}TopMargin'] = '0.35'
         values[f'page{side}BottomMargin'] = '0.35'
@@ -462,15 +518,102 @@ def duration(n):
     return d * Fraction(2, 3) if n['triplet'] else d
 
 
+def numbered(measures, count_pickup):
+    """Each MusicXML measure's number as printed: a measure marked implicit (a pickup, or the second half of a split
+    bar) shares the number before it, unless the sheet counts its pickup as bar 1."""
+    nums, n = [], 0
+    for k, m in enumerate(measures):
+        if m.get('implicit') != 'yes' or (count_pickup and k == 0):
+            n += 1
+        nums.append(max(n, 1))
+    return nums
+
+
+def structure_xml(score, spec):
+    """The tempo and repeats as printed, in every part."""
+    if spec.get('tempo'):
+        for d in score.iter('direction'):
+            for pm in d.iter('per-minute'):
+                pm.text = str(spec['tempo'])
+            for snd in d.findall('sound'):
+                if snd.get('tempo'):
+                    snd.set('tempo', str(spec['tempo']))
+    if not spec.get('repeat'):
+        return
+    start, at, end = spec['repeat']
+    at = at * 4  # from a fraction of a whole note to beats (quarters), the unit of MusicXML durations here
+    for part in score.findall('part'):
+        measures = part.findall('measure')
+        nums = numbered(measures, spec.get('count_pickup'))
+        div = int(next(a.findtext('divisions') for a in part.iter('attributes') if a.findtext('divisions')))
+        first = measures[nums.index(start)]
+        if at:
+            # Split the bar: what sounds from `at` on goes to a new bar that the repeat opens.
+            second = ET.Element('measure', number=first.get('number') + 'X', implicit='yes')
+            t = Fraction(0)
+            keep, move = [], []
+            for el in list(first):
+                if el.tag == 'backup':
+                    t -= Fraction(int(el.findtext('duration')), div)
+                    continue
+                if el.tag == 'forward':
+                    t += Fraction(int(el.findtext('duration')), div)
+                    continue
+                if el.tag == 'note':
+                    if el.find('chord') is None:
+                        start_t = t
+                        t += Fraction(int(el.findtext('duration') or 0), div)
+                    (move if start_t >= at else keep).append(el)
+                elif el.tag in ('attributes', 'print'):
+                    keep.append(el)
+                else:
+                    keep.append(el)
+            for el in list(first):
+                first.remove(el)
+            def rebuild(m, els, length):
+                # Notes in voice order, each voice from the bar's start.
+                voices = {}
+                for el in els:
+                    if el.tag == 'note':
+                        voices.setdefault((el.findtext('staff') or '1', el.findtext('voice') or '1'), []).append(el)
+                    else:
+                        m.append(el)
+                for k, (key, ns) in enumerate(voices.items()):
+                    if k:
+                        bk = ET.SubElement(m, 'backup')
+                        ET.SubElement(bk, 'duration').text = str(int(length * div))
+                    for n in ns:
+                        m.append(n)
+            rebuild(first, keep, at)
+            # The second bar is as long as its first voice's notes.
+            first_voice = (move[0].findtext('staff') or '1', move[0].findtext('voice') or '1') if move else None
+            length2 = sum((Fraction(int(n.findtext('duration') or 0), div) for n in move if n.find('chord') is None
+                           and (n.findtext('staff') or '1', n.findtext('voice') or '1') == first_voice), Fraction(0))
+            rebuild(second, move, length2)
+            bl = ET.Element('barline', location='left')
+            ET.SubElement(bl, 'bar-style').text = 'heavy-light'
+            ET.SubElement(bl, 'repeat', direction='forward')
+            second.insert(0, bl)
+            idx = list(part).index(first)
+            part.insert(idx + 1, second)
+        else:
+            bl = ET.Element('barline', location='left')
+            ET.SubElement(bl, 'bar-style').text = 'heavy-light'
+            ET.SubElement(bl, 'repeat', direction='forward')
+            first.insert(0, bl)
+        measures = part.findall('measure')
+        nums = numbered(measures, spec.get('count_pickup'))
+        last = [m for m, n in zip(measures, nums) if n == end][-1]
+        bl = ET.SubElement(last, 'barline', location='right')
+        ET.SubElement(bl, 'bar-style').text = 'light-heavy'
+        ET.SubElement(bl, 'repeat', direction='backward')
+
+
 def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=False):
     """Writes a voice's notes, as entered from the sheet, into its bars, in place of what the voice had there."""
     part = score.findall('part')[part_index]
     measures = part.findall('measure')
-    nums, n = [], 0
-    for m in measures:
-        if count_pickup or m.get('implicit') != 'yes':
-            n += 1
-        nums.append(n)
+    nums = numbered(measures, count_pickup)
     div = int(next(a.findtext('divisions') for a in part.iter('attributes') if a.findtext('divisions')))
     tied = False
     for bar, notes in note_tokens(block['verses'].get(1, [])):
@@ -527,10 +670,7 @@ def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=
 def lyrics_xml(score, part_index, staff, voice, block, count_pickup=False, clear=True):
     part = score.findall('part')[part_index]
     slots = {}
-    n = 0
-    for m in part.findall('measure'):
-        if count_pickup or m.get('implicit') != 'yes':
-            n += 1
+    for m, n in zip(part.findall('measure'), numbered(part.findall('measure'), count_pickup)):
         notes = []
         for el in m.findall('note'):
             if (el.findtext('staff') or '1') != staff or (el.findtext('voice') or '1') != voice:

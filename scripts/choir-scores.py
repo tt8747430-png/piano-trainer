@@ -137,6 +137,10 @@ def main():
                                     s['spec'].get('count_pickup'))
                 out, info = parts.build(score, s['kind'], lyric_srcs)
                 s['corrected'] = True
+            if s['spec'] and (s['spec'].get('repeat') or s['spec'].get('tempo')):
+                # Repeats and tempo as printed, after any notes are entered (a repeat may split a bar).
+                match.structure_xml(score, s['spec'])
+                s['corrected'] = True
             if s['spec']:
                 # The words as printed go under their voices before the split, so every part carries them.
                 done_voices = set()
@@ -328,6 +332,7 @@ def compose(s, dst, imported):
     spec = s.get('spec')
     if spec:
         match = load('choir-match')
+        match.mark_split(score, spec)
         done_voices = set()
         for block in spec['blocks']:
             p = next(x for x in info if x['name'] == block['voice'])
