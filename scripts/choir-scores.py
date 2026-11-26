@@ -76,6 +76,7 @@ def write_xml(root, path):
 def main():
     idx = load('choir-index')
     parts = load('choir-parts')
+    match = load('choir-match')
     wanted = set(sys.argv[1:])
     work = tempfile.mkdtemp()
     jobs, songs = [], []
@@ -120,6 +121,14 @@ def main():
             else:
                 score, s['from'] = assemble(infos, s['kind'], idx)
             out, info = parts.build(score, s['kind'], lyric_srcs)
+            spec_path = os.path.join(s['dir'], 'match.txt')
+            s['spec'] = match.parse(spec_path) if os.path.exists(spec_path) else None
+            if s['spec']:
+                # The words as printed go under their voices before the split, so every part carries them.
+                for block in s['spec']['blocks']:
+                    p = next(x for x in info if x['name'] == block['voice'])
+                    match.lyrics_xml(score, p['part'], p['staff'], p['voice'], block)
+                out, info = parts.build(score, s['kind'], [])
         except SystemExit as e:
             s['why'] = f'not made: {e}'
             continue
@@ -286,6 +295,14 @@ def compose(s, dst, imported):
             set_text(ins, 'instrumentId', 'keyboard.piano')
             for pr in ins.iter('program'):
                 pr.set('value', '0')
+    spec = s.get('spec')
+    if spec:
+        match = load('choir-match')
+        for block in spec['blocks']:
+            p = next(x for x in info if x['name'] == block['voice'])
+            match.lyrics_mscx(staffs[p['mstaff']], (int(p['voice']) - 1) % 4, block)
+        match.layout_mscx(score, spec)
+        files['score_style.mss'] = match.style_mss(files['score_style.mss'], spec)
     files[mname] = b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root, encoding='utf-8')
     if imported:
         files[mname] = drop_repeated_marks(files[mname])
