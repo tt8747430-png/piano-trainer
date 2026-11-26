@@ -4,6 +4,8 @@ description: Build a full-screen, interactive canvas to explore existing UI comp
 disable-model-invocation: true
 ---
 
+**In a loop** (`owner-way`, Loops and refactors): what this skill calls a report is one line inside the turn, and the next item starts with the next tool call; it never ends the turn and never becomes a closing report.
+
 # Component canvas
 
 Build a canvas that shows the project's existing components as they really behave. The canvas wraps components. It never changes them.

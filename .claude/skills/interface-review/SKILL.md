@@ -3,6 +3,8 @@ name: interface-review
 description: Use in piano-trainer to review a canvas board or an app screen as one system (accessibility, layout, writing, typography, polish) and return one ranked findings table with a verdict; when the owner asks for a review, an audit, a QA pass, or says something looks off without saying what.
 ---
 
+**In a loop** (`owner-way`, Loops and refactors): what this skill calls a report is one line inside the turn, and the next item starts with the next tool call; it never ends the turn and never becomes a closing report.
+
 # Interface review
 
 A strong interface is not five independent audits stapled together. Position and spacing carry hierarchy before a word is read, the words themselves do the explaining, type makes them legible, and polish is what makes the result feel deliberate rather than assembled. Review the whole experience, then consolidate into one prioritized verdict.

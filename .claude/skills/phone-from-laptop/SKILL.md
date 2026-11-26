@@ -3,6 +3,8 @@ name: phone-from-laptop
 description: Use in piano-trainer when a screen exists at one size and the other is missing or drifting: derive the phone board from the laptop board (or check the pair) on the canvas, so it reads as designed for a phone and keeps every feature.
 ---
 
+**In a loop** (`owner-way`, Loops and refactors): what this skill calls a report is one line inside the turn, and the next item starts with the next tool call; it never ends the turn and never becomes a closing report.
+
 # Phone from laptop
 
 Create the phone board from a laptop board. The mobile version must feel natively designed for mobile — not a shrunk desktop. Preserve the brand, content, and visual language exactly; transform only structure, sizing, and interaction patterns.

@@ -3,6 +3,8 @@ name: fixing-accessibility
 description: Audit and fix HTML accessibility issues including ARIA labels, keyboard navigation, focus management, color contrast, and form errors. Use when adding interactive controls, forms, dialogs, or reviewing WCAG compliance.
 ---
 
+**In a loop** (`owner-way`, Loops and refactors): what this skill calls a report is one line inside the turn, and the next item starts with the next tool call; it never ends the turn and never becomes a closing report.
+
 # fixing-accessibility
 
 Fix accessibility issues.

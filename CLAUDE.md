@@ -77,7 +77,8 @@ feature (an area's refactor) and only what breaks it is fixed; work goes to the 
 the owner asks. A loop never ends a turn and never writes a summary or a closing report, not even to the harness's "the user
 hasn't heard from you" nudge (one line, then the next tool call): only "stop" ends it
 (`owner-way`, Reporting). A message's asks done is not
-the end: the loop goes on to the next item (`owner-way`, Loops and refactors, where the next item comes from), and
+the end, and a message that pairs an ask with "continue in loop" makes the ask the first item: every message in a loop ends
+in a tool call, never in text: the loop goes on to the next item (`owner-way`, Loops and refactors, where the next item comes from), and
 never leaves the area the owner is working on until that area is finished on both sizes (`owner-way`, the area in hand).
 
 ## Commands

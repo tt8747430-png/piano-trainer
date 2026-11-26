@@ -145,6 +145,7 @@ wins there.
   asks (refactor the settings, research Learn) taken for the whole task: once the list was done a summary was
   written. The asks of a message go to the front of the queue; when they are done the loop goes straight on to the
   next item below, in the same turn, with no summary between them. Finishing what was asked is never the end.
+- **An ask done is one line, then the next tool call** (owner, 2026-11-26: "why did you stop"; "fix all the rules or the instructions that made you stop"): what ended that turn was a message that named one fix and said "continue in loop": the fix was taken for the task, and once it was published a summary was written with no tool call after it. A message with an ask and "continue in loop" makes the ask the loop's first item, never its end. In a loop the last thing in every message is a tool call: an answer to the owner, a misreading undone, an ask finished, a publish, all are one line followed by the next tool call in the same turn. A reply that ends in text is a stop, and only the word "stop" allows one.
 - **The area in hand is finished before any other is touched** (owner, 2026-11-26: "we are now on the player and
   editor not finished"; "fix all the instructions that made you go to other pages although you didnt finish the
   player and editor"): what went wrong was an app-wide ask (the popups audit) and the list below, taken as leave to

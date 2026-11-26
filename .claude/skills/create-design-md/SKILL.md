@@ -4,6 +4,8 @@ description: Create or update a DESIGN.md from an existing product repository or
 disable-model-invocation: true
 ---
 
+**In a loop** (`owner-way`, Loops and refactors): what this skill calls a report is one line inside the turn, and the next item starts with the next tool call; it never ends the turn and never becomes a closing report.
+
 # Create DESIGN.md
 
 Create a `DESIGN.md` for one product or coherent website. Record the design language that governs it, not every value that happens to exist.
