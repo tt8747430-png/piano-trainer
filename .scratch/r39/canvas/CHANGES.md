@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · a song's Settings window stands over the Player as it is now (rail, Song panel, version beside the name); its backdrop was a picture of the old Player (capsule, gear, view switch at the right) · SongSettings, SongSettingsLaptop · pending
 
 ## Changes
 
