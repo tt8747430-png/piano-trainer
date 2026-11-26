@@ -135,7 +135,9 @@ and MIDI files and recordings. Names are the titles transliterated.
   too); `MuseScore/` holds the alto and soprano parts (`MuseScore Alt`, `MuseScore Sopran`). MuseScore's own backups
   (`.mscbackup`) are kept; the recordings are left out. The scanned choir book of songs 1–100, all of them in one
   172 MB PDF over GitHub's 100 MB limit, is split in two at a song's start: `Caiet de cor scanat 1-45.pdf` (the
-  contents, then songs 1–45) and `Caiet de cor scanat 46-100.pdf`. Each song is also in its own folder; read it there
+  contents, then songs 1–45) and `Caiet de cor scanat 46-100.pdf`. Each song is also in its own folder; read it there.
+  Its [`INDEX.md`](scores/hymns/choir/musescore/INDEX.md) lists every song with its files and the state of its full
+  score, written by `scripts/choir-index.py`
 - `hymns/songs/`: songs as sheets, choir and full scores
 - `hymns/ensembles/`: О. Цапук's arrangements for domra and piano, and cello and piano
 - `hymns/hymnals/`: _Песнь возрождения с нотами_, vol. 3; the _Free Worship Piano Collection_
