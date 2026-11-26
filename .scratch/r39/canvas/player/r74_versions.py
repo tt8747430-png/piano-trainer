@@ -18,7 +18,7 @@ CHEVR = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="cur
 # open on Song when the song opens; the active entry again folds it, as the editor's. The version is the bar's alone
 # (no Arrangement here); the song's acts (Settings, Print, Export, Share link)
 # are the name's menu, as the editor's title; the gear is gone, its jobs the rail's.
-SONGI = _LI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>')
+SONGI = _LI('<path d="M21 15V6"></path><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M12 12H3"></path><path d="M16 6H3"></path><path d="M12 18H3"></path>')
 VIEWI = _LI('<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 13h8M8 16h5"></path>')
 PANEL = 'position: absolute; z-index: 30; left: 76px; top: 72px; bottom: 0; width: 352px; padding: 0 16px 24px; border-radius: 0; box-sizing: border-box; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #FEFDFB; box-shadow: inset -1px 0 0 ' + LINE
 def _sect(t, label):
@@ -46,9 +46,22 @@ def player_rail(t):
     for m in re.finditer(r'<(/?)div\b[^>]*>', h[g0:]):
         depth += -1 if m.group(1) else 1
         if depth == 0: g1 = g0 + m.end(); break
-    h = h[:g0] + h[g1:]  # the accompaniment's patterns are the editor's now (its palette writes one into chosen bars)
+    # the accompaniment for the whole song, as before, shown only in a version that has one (owner, 2026-11-26: "in such
+    # version i can just change the accompaniment version as i want for the whole song like we did before"); the
+    # editor writes a pattern into chosen bars on top of it
+    grp = h[g0:g1]
+    # no longer a choice between two cards: a plain group headed by its name, as the panel's other groups
+    grp = grp.replace('background: {{acc.bg}}; overflow: hidden; box-shadow: inset 0 0 0 2px {{acc.line}}, 0 0 0 1px rgba(51,41,33,.07)', 'background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px #DAD1C8', 1)
+    b0 = grp.index('<button type="button" role="radio" aria-checked="{{acc.on}}"'); b1 = grp.index('</button>', b0) + len('</button>')
+    grp = grp[:b0] + grp[b1:]
+    grp = grp.replace('<div role="group" aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px">', '<div role="group" aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Accompaniment</h3>', 1)
+    grp = grp.replace('border-top: 1px solid #E9E2D8; margin-top: -1px;', 'border-top: 0;', 1)
+    h = h[:g0] + '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + grp + '</sc-if>' + h[g1:]
     t = t[:a] + h + t[b:]
     t = _dock(t, 'Settings', head('Song'))
+    # the versions head the Song panel: the sidebar holds the switch and the new versions; the title, the song's acts
+    i = t.index('</header>', t.index('>Song</h2>')) + len('</header>')
+    t = t[:i] + VERPANEL() + t[i:]
     t = t.replace('<sc-if value="{{isMore}}"', '<sc-if value="{{panelSong}}"', 1)
     # the Song panel's own pages dock in its place, each with its Back
     for lab in ('Pattern', 'Transpose', 'Sort and filter'): t = _dock(t, lab)
@@ -78,32 +91,13 @@ def player_rail(t):
     # the rail, under the bar, at the window's left edge
     rail = (f'<nav aria-label="Panels" style="position: absolute; z-index: 31; left: 0; top: 72px; bottom: 0; width: 76px; padding: 0 0 12px; box-sizing: border-box; background: #F7F3EE; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
             f'<div role="tablist" aria-orientation="vertical" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Song', SONGI, 'Song', 'Song') + _RAILBTN('View', VIEWI, 'View', 'View') + '</div></nav>')
-    e = t.index('</header>', t.index('aria-label="Version"')) + len('</header>')
+    e = t.index('</header>', t.index('aria-label="Mode"')) + len('</header>')
     t = t[:e] + rail + t[e:]
     # the bar: the name is the song's menu (its acts), the gear goes
     gear = re.search(r'<div[^>]*><button type="button" aria-label="Settings" data-tip="Settings" aria-expanded="\{\{isMore\}\}".*?</button></div>', t, re.S)
     t = t.replace(gear.group(0), '', 1)
-    h1 = re.search(r'<h1 style="margin: 0 30px 0 12px;[^"]*">Amazing Grace</h1>', t).group(0)
-    # the song's acts in the name's menu itself (owner, 2026-11-26: "fix the settings: it doenst make sense with this
-    # window popup: make proper controls or popup"): Settings and its centred window go; Share link, Export (a submenu
-    # of its formats, beside the menu, as macOS and Flat's File › Export), Print, then Duplicate and Archive after a
-    # hairline; each act answers in a toast, Archive with Undo
-    _ic = lambda d: f'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none">{d}</svg>'
-    _row = 'min-height: 44px; box-sizing: border-box; padding: 0 16px; display: flex; align-items: center; gap: 12px; width: 100%; border: 0; background: transparent; color: #332921; font: inherit; font-size: 15px; text-align: left; cursor: pointer'
-    _it = lambda ic, lab, act, extra='', tail='': f'<button type="button" role="menuitem" onClick="{{{{{act}}}}}" style="{_row}{extra}">{_ic(ic)}<span style="flex: 1">{lab}</span>{tail}</button>'
-    _box = 'position: absolute; z-index: 5; width: 232px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px rgba(26,22,18,0.08), 0 2px 4px rgba(26,22,18,0.10), 0 18px 40px -12px rgba(26,22,18,0.35); padding: 4px 0'
-    sub = ('<sc-if value="{{expOn}}" hint-placeholder-val="{{false}}"><div role="menu" aria-label="Export" style="' + _box + '; left: calc(100% + 4px); top: 48px; width: 252px">'
-           + ''.join(f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="{_row}">{l}</button>' for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))) + '</div></sc-if>')
-    menu = ('<sc-if value="{{songActsShow}}" hint-placeholder-val="{{false}}"><div role="menu" aria-label="Amazing Grace" style="' + _box + '; left: 12px; top: 52px">'
-            + _it('<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>', 'Share link', 'actShare')
-            + _it('<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path><path d="M12 15V3"></path>', 'Export', 'toggleExp', '; background: {{expBg}}', f'<span aria-hidden="true" style="display: flex; color: #685E56">{CHEVR}</span>')
-            + _it('<path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect>', 'Print', 'actPrint')
-            + '<div role="separator" style="height: 1px; margin: 4px 0; background: #EFE9E1"></div>'
-            + _it('<rect x="8" y="8" width="14" height="14" rx="2"></rect><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"></path>', 'Duplicate', 'actDup')
-            + _it('<rect x="2" y="3" width="20" height="5" rx="1"></rect><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"></path><path d="M10 12h4"></path>', 'Archive', 'actArchive')
-            + sub + '</div></sc-if>')
     t = t.replace('</main>', TOAST(104, 'songUndo', z=60, laptop=True) + '</main>', 1)
-    t = t.replace(h1, f'<div style="position: relative; margin: 0 18px 0 0; pointer-events: auto"><button type="button" aria-haspopup="menu" aria-expanded="{{{{songActsOn}}}}" onClick="{{{{toggleSongActs}}}}" data-tip="The song’s menu" style="height: 44px; padding: 0 8px 0 12px; border: 0; border-radius: 12px; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 4px; cursor: pointer"><h1 style="margin: 0; font-size: 17px; font-weight: 600; white-space: nowrap">Amazing Grace</h1><span style="display: flex; color: {SOFT}">{CHEV_D}</span></button>{menu}</div>', 1)
+    # the bar's title is the kit's SONGMENU, the same in Practice and Edit (set where the bar is built)
     # the music and the transport stand beside the panel
     t = t.replace('<main style="position: absolute; left: 0; right: 0; top: {{areaTop}}px;', '<main style="position: absolute; left: {{panelPad}}px; right: 0; top: {{areaTop}}px;', 1)
     t = t.replace('<div role="toolbar" aria-label="Transport" style="position: absolute; z-index: 40; left: 0;', '<div role="toolbar" aria-label="Transport" style="position: absolute; z-index: 40; left: {{panelPad}}px;', 1)
@@ -111,11 +105,7 @@ def player_rail(t):
     keys = ("isMore: open === 'settings', rail: s.rail ?? 'song', "
             "panelSong: (s.rail ?? 'song') === 'song' && !['pattern', 'patfilter', 'key'].includes(open), panelView: (s.rail ?? 'song') === 'view', "
             "panelPad: (s.rail ?? 'song') === 'none' ? 76 : 428, "
-            "expOn: !!s.exp, expBg: s.exp ? '#F3EEE8' : 'transparent', toggleExp: () => this.setState({ exp: !s.exp }), "
-            "toastOn: !!s.sTo, toastT: s.sTo || '', toastUndo: !!s.sUndo, songUndo: () => this.setState({ sTo: '', sUndo: false, ...(s.undoVer || {}), undoVer: null }), "
-            "actShare: () => this.setState({ songActs: false, exp: false, sTo: 'Link copied', sUndo: false }), actPrint: () => this.setState({ songActs: false, exp: false }), "
-            "actDup: () => this.setState({ songActs: false, exp: false, sTo: 'Copy saved to My songs', sUndo: false }), actArchive: () => this.setState({ songActs: false, exp: false, sTo: 'Song archived', sUndo: true }), "
-            "expXml: () => this.setState({ songActs: false, exp: false, sTo: 'Exported as MusicXML', sUndo: false }), expMxl: () => this.setState({ songActs: false, exp: false, sTo: 'Exported as compressed MusicXML', sUndo: false }), expMidi: () => this.setState({ songActs: false, exp: false, sTo: 'Exported as MIDI', sUndo: false }), "
+                        "toastOn: !!s.sTo, toastT: s.sTo || '', toastUndo: !!s.sUndo, songUndo: () => this.setState({ sTo: '', sUndo: false, ...(s.undoVer || {}), undoVer: null }), "
             "foldPanel: () => this.setState({ rail: 'none', open: 'none' }), "
             "pickSong: () => this.setState({ rail: (s.rail ?? 'song') === 'song' ? 'none' : 'song', open: 'none' }), pickView: () => this.setState({ rail: (s.rail ?? 'song') === 'view' ? 'none' : 'view', open: 'none' }), "
             "railSongOn: (s.rail ?? 'song') === 'song' ? 'true' : 'false', railSongBg: (s.rail ?? 'song') === 'song' ? '#E8DFD3' : 'transparent', railSongW: (s.rail ?? 'song') === 'song' ? 600 : 500, "
@@ -123,6 +113,33 @@ def player_rail(t):
     assert t.count("isMore: open === 'settings',") == 1
     t = t.replace("isMore: open === 'settings',", keys, 1)
     return t
+
+# The transport as one glass bar (owner, 2026-11-26: "you didnt refactor the floating actions in the player"): three
+# capsules of different fills floated apart over the music (Practice and loop, Play in honey, Hands and keyboard); one
+# bar now, as flowkey's and Chordify's single player bar, centred on the music: the pace and the loop, then Play, the
+# one honey control, as a circle between its steps, then the hands and the keys, the groups parted by hairlines. Its
+# pace says what it does: Listen (at a speed) or Wait, never "Play" beside the Play button.
+def one_transport(t):
+    i = t.index('aria-label="Transport"'); a = t.rindex('<div', 0, i); depth = 0
+    for m in re.finditer(r'<(/?)div\b[^>]*>', t[a:]):
+        depth += -1 if m.group(1) else 1
+        if depth == 0: b = a + m.end(); break
+    h = t[a:b]
+    h = re.sub(r'display: grid; grid-template-columns: minmax\(0, 1fr\) auto minmax\(0, 1fr\); align-items: center; gap: 8px', 'display: flex; justify-content: center; align-items: center', h, count=1)
+    cap = re.search(r'background: rgba\(254,253,251,\.86\);[^"]*', h).group(0).replace('; pointer-events: auto', '')
+    grp = re.compile(r'(<div role="group" aria-label="(Practice and loop|Play|Hands and keyboard)" style=")[^"]*(")')
+    h = grp.sub(lambda m: m.group(1) + 'display: flex; align-items: center; gap: 2px' + m.group(3), h)
+    sep = '<span aria-hidden="true" style="flex: none; width: 1px; height: 24px; margin: 0 6px; background: #DAD1C8"></span>'
+    h = h.replace('</div>\n<div role="group" aria-label="Play"', '</div>' + sep + '<div role="group" aria-label="Play"', 1)
+    h = h.replace('</div>\n<div role="group" aria-label="Hands and keyboard"', '</div>' + sep + '<div role="group" aria-label="Hands and keyboard"', 1)
+    h = h.replace('aria-label="{{playLabel}}" onClick="{{togglePlay}}" style="width: 48px; height: 48px; padding: 0; border: 0; border-radius: 24px; background: transparent;',
+                  'aria-label="{{playLabel}}" onClick="{{togglePlay}}" style="width: 48px; height: 48px; padding: 0; border: 0; border-radius: 24px; background: #EDC684; box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 0 0 1px rgba(176,122,42,.28);', 1)
+    o = h.index('>', h.index('aria-label="Transport"')) + 1
+    h = h[:o] + f'<div style="height: 56px; box-sizing: border-box; padding: 4px; display: flex; align-items: center; border-radius: 28px; {cap}; pointer-events: auto">' + h[o:-len('</div>')] + '</div></div>'
+    t = t[:a] + h + t[b:]
+    assert t.count("paceLabel: (mode === 'wait' ? 'Wait' : 'Play')") == 1
+    t = t.replace("paceCap: mode === 'wait' ? 'Wait' : 'Play'", "paceCap: mode === 'wait' ? 'Wait' : 'Listen'", 1).replace("doneMode: mode === 'wait' ? 'Wait' : 'Play'", "doneMode: mode === 'wait' ? 'Wait' : 'Listen'", 1)
+    return t.replace("paceLabel: (mode === 'wait' ? 'Wait' : 'Play')", "paceLabel: (mode === 'wait' ? 'Wait' : 'Listen')", 1)
 
 for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     p = OUT / f'{name}.dc.html'; t = (BASE / f'{name}.dc.html').read_text()
@@ -138,10 +155,10 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         # is centered"; ui-and-mockups: every element answers why here): the name says which song, the version which music
         t = t.replace(sw, '<span></span>', 1)
         close = re.search(r'<a href="Songs?Laptop.dc.html" aria-label="Close".*?</a>', t, re.S).group(0)
-        t = t.replace(close, close + f'<h1 style="margin: 0 30px 0 12px; padding: 0; font-size: 17px; font-weight: 600; white-space: nowrap; pointer-events: auto">Amazing Grace</h1>' + sw, 1)
+        t = t.replace(close, close + f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{SONGMENU("TakesLaptop.dc.html")}{MODESW("play", "PlayerLaptop.dc.html", "EditorLaptop.dc.html")}</div>', 1)
     # Edit its own button beside the version, as Flat's "✎ Edit ▾" after the name and transport (the owner's Flat
     # screenshots; owner, 2026-11-26: "i dont like this edit button with this accompaniment … inside this control")
-    t = t.replace(sw, f'<div style="display: flex; align-items: center; gap: 8px; min-width: 0; pointer-events: auto">{sw}{EDITB("play", "Editor" + sfx)}</div>', 1)
+    if name == 'PlayerApp': t = t.replace(sw, f'<div style="display: flex; align-items: center; gap: 8px; min-width: 0; pointer-events: auto">{sw}{EDITB("play", "Editor" + sfx)}</div>', 1)
     if name == 'PlayerApp':
         t = t.replace('padding: 8px 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; pointer-events: none', MODEBAR_P + '; pointer-events: none', 1)
     # Close goes back to the library the song was opened from (the song's own page is gone, R74)
@@ -212,7 +229,9 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
               "actDelVer: () => { if (VS.length < 2) return; if (this._ver) this._ver.open = false; const rest = VS.filter((v) => v.id !== VCID); const nd = VD === VCID ? rest[0].id : VD; this.setState({ undoVer: { vers: VS, verCur: VCID, verDef: VD }, vers: rest, verDef: nd, verCur: nd, sTo: VC.name + ' deleted', sUndo: true }); }, "
               "renOn: !!s.ren, renVal: VC.name, renRef: (el) => { this._rn = el; }, renCancel: () => this.setState({ ren: false }), "
               "renSave: () => { const n = ((this._rn && this._rn.value) || '').trim(); if (!n) return; this.setState({ vers: VS.map((v) => (v.id === VCID ? { ...v, name: n } : v)), ren: false, sTo: 'Renamed to ' + n, sUndo: false }); }, ")
-    if 'verName:' not in t:
+    if name == 'PlayerDesk':
+        t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}"), 1)
+    if name == 'PlayerApp' and 'verName:' not in t:
         assert "isMore: open === 'settings'," in t, name
         t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + VERJS2, 1)
         # the version's facts, worked out before the state object that reads them
@@ -228,7 +247,8 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         f'<input ref="{{{{renRef}}}}" aria-label="Version name" value="{{{{renVal}}}}" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: inset 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}">'
         f'<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px">' + btn('Cancel', 'renCancel', 'transparent', INK) + btn('Save', 'renSave', ACCENT, INK) + '</div>',
         close='renCancel', label='Rename version') + '</sc-if>')
-    t = t.replace('</main>', '</main>' + ren, 1)
+    t = t.replace('</main>', '</main>' + (RENAMEDLG() if name == 'PlayerDesk' else ren), 1)
     if name == 'PlayerDesk': t = player_rail(t)
+    t = one_transport(t)
     p.write_text(t)
 print('r74 versions ok')

@@ -549,3 +549,110 @@ def THINGPAGE(on, close, title, body, lap):
             f'<button type="button" onClick="{{{{{close}}}}}" aria-label="Back" data-tip="Back · Esc" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: pointer">{CHEV_L}</button>'
             f'<h1 style="margin: 0; font-size: 17px; font-weight: 600">{title}</h1><span></span></header>'
             f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px {pad} 48px"><div style="width: min(560px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 16px">{body}</div></main></section></sc-if>')
+
+# R74, one song menu in Play and in Edit (owner, 2026-11-26: "i dont like how this clicking on the title has diferent
+# options when switching the edit or non edit mode. i want the same options"; "i dont like this switch between the
+# songs version how it looks"): the bar's title is the song's name with the open version under it, one button, as a
+# document app's name and its state (Google Docs, Notion's page title; Flat's title menu, the owner's screenshots). Its
+# menu, the same rows wherever the song is open: the versions first (pick one; the default says so; New version), the
+# open version's acts, then the song's (Recordings, Share link, Export ›, Print), then Duplicate and Archive last.
+# Credits are not here: the editor edits them where they print (a tap on the printed title), the Player reads them.
+_SMROW = 'min-height: 40px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: transparent; color: #332921; font: inherit; font-size: 15px; text-align: left; text-decoration: none; cursor: pointer'
+_SMBOX = 'position: absolute; z-index: 70; width: 288px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px rgba(26,22,18,0.08), 0 2px 4px rgba(26,22,18,0.10), 0 18px 40px -12px rgba(26,22,18,0.35); padding: 6px 0'
+_SMSEP = '<div role="separator" style="height: 1px; margin: 6px 0; background: #EFE9E1"></div>'
+_SMSLOT = lambda inner='': f'<span aria-hidden="true" style="flex: none; width: 20px; display: flex; justify-content: center; color: #332921">{inner}</span>'
+PLUSI_S = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="M12 5v14M5 12h14"></path></svg>'
+def SONGMENU(takes_href, extra=()):
+    it = lambda lab, act, fg='#332921', tail='': f'<button type="button" role="menuitem" onClick="{{{{{act}}}}}" style="{_SMROW}; color: {fg}">{_SMSLOT()}<span style="flex: 1">{lab}</span>{tail}</button>'
+    vrow = (f'<sc-for list="{{{{verRows}}}}" as="v" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="{_SMROW}">'
+            + _SMSLOT(f'<sc-if value="{{{{v.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK}</sc-if>')
+            + f'<span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: {{{{v.fw}}}}">{{{{v.name}}}}</span>'
+            + f'<sc-if value="{{{{v.isDef}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; font-size: 13px; color: {SOFT}">Default</span></sc-if></button></sc-for>')
+    exp = (f'<sc-if value="{{{{expOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="menu" aria-label="Export" style="{_SMBOX}; left: calc(100% + 4px); top: {{{{expTop}}}}px; width: 252px">'
+           + ''.join(f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="{_SMROW}; padding-left: 16px">{l}</button>' for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))) + '</div></sc-if>')
+    rows = (''
+            + f'<a role="menuitem" href="{takes_href}" style="{_SMROW}">{_SMSLOT()}<span style="flex: 1">Recordings</span><span style="color: {SOFT}; font-variant-numeric: tabular-nums">3</span></a>'
+            + it('Share link', 'actShare') + it('Export', 'toggleExp', '#332921; background: {{expBg}}', f'<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_R}</span>') + it('Print', 'actPrint')
+            + ''.join(_SMSEP + ''.join(it(*r) for r in grp) for grp in extra)
+            + _SMSEP + it('Duplicate song', 'actDup') + it('Archive song', 'actArchive'))
+    return (f'<div style="position: relative; flex: none; min-width: 0; pointer-events: auto">'
+            f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{smOn}}}}" onClick="{{{{toggleSm}}}}" data-tip="The song’s menu" style="height: 48px; max-width: 320px; padding: 0 10px 0 12px; border: 0; border-radius: 12px; background: {{{{smBg}}}}; color: {INK}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
+            f'<span style="min-width: 0; display: flex; flex-direction: column"><h1 style="margin: 0; font-size: 17px; font-weight: 600; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</h1>'
+            f'<span style="font-size: 13px; line-height: 16px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{verName}}}}</span></span>'
+            f'<span aria-hidden="true" style="flex: none; display: flex; color: {SOFT}">{CHEV_D}</span></button>'
+            f'<sc-if value="{{{{smOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="menu" aria-label="Amazing Grace" style="{_SMBOX}; left: 0; top: 52px">{rows}{exp}</div></sc-if></div>')
+
+# its state, the same script in both: a spread of the keys it needs; S is the state's name, SET how it is set, TOAST
+# what a toast adds to that set (the Player's sTo and sUndo, the editor's toast), DEF the version that opens first
+def SONGMENU_KEYS(S, SET, TOAST, DEF='mine', close_others=''):
+    t = lambda m, u=False: TOAST(m, u)
+    mA = t("'New version with accompaniment'")
+    m0 = t("'New version from ' + VC.name")
+    m1 = t("VC.name + ' opens first now'")
+    m2 = t("VC.name + ' deleted'", True)
+    m3 = t("'Renamed to ' + n")
+    m4 = t("'Link copied'")
+    m5 = t("'Copy saved to My songs'")
+    m6 = t("'Song archived'", True)
+    m7 = t("'Exported as MusicXML'")
+    m8 = t("'Exported as compressed MusicXML'")
+    m9 = t("'Exported as MIDI'")
+    return (f"...(() => {{ const VS = {S}.vers ?? [{{ id: 'orig', name: 'Original', piano: false }}, {{ id: 'mine', name: 'My version', piano: true }}]; "
+            f"const VD = {S}.verDef ?? '{DEF}'; const VCID = VS.some((v) => v.id === {S}.verCur) ? {S}.verCur : VD; const VC = VS.find((v) => v.id === VCID) ?? VS[0]; const shut = {{ sm: false, exp: false{close_others} }}; "
+            f"return {{ smOn: !!{S}.sm, smBg: {S}.sm ? '#EEE9E2' : 'transparent', toggleSm: () => {SET}({{ sm: !{S}.sm, exp: false }}), "
+            f"verName: VC.name, isPiano: !!VC.piano, isLead: !VC.piano, expOn: !!{S}.exp, expBg: {S}.exp ? '#F3EEE8' : 'transparent', expTop: 86, toggleExp: () => {SET}({{ exp: !{S}.exp }}), "
+            f"verRows: VS.map((v, i) => ({{ name: v.name, sub: v.piano ? 'With accompaniment' : 'Melody, chords and words', line: i ? '{LINE}' : 'transparent', isDef: v.id === VD, cur: v.id === VCID, fw: v.id === VCID ? 600 : 400, on: v.id === VCID ? 'true' : 'false', pick: () => {SET}({{ ...shut, verCur: v.id, pat: v.piano ? 'p1' : 'none' }}) }})), "
+            f"canSetDef: VCID !== VD, canDelVer: VS.length > 1, "
+            f"actNewVer: () => {{ const id = 'v' + Date.now(); {SET}({{ ...shut, vers: [...VS, {{ ...VC, id, name: VC.name + ' 2' }}], verCur: id, {m0} }}); }}, "
+            f"actNewAcc: () => {{ const id = 'a' + Date.now(); {SET}({{ ...shut, vers: [...VS, {{ id, name: VC.name + ' with accompaniment', piano: true }}], verCur: id, pat: 'p1', {mA} }}); }}, "
+            f"actRename: () => {SET}({{ ...shut, ren: true }}), "
+            f"actSetDef: () => {{ if (VCID !== VD) {SET}({{ ...shut, verDef: VCID, {m1} }}); }}, "
+            f"actDelVer: () => {{ if (VS.length < 2) return; const rest = VS.filter((v) => v.id !== VCID); const nd = VD === VCID ? rest[0].id : VD; {SET}({{ ...shut, undoVer: {{ vers: VS, verCur: VCID, verDef: VD }}, vers: rest, verDef: nd, verCur: nd, {m2} }}); }}, "
+            f"renOn: !!{S}.ren, renVal: VC.name, renRef: (el) => {{ window.__rn = el; }}, renCancel: () => {SET}({{ ren: false }}), "
+            f"renSave: () => {{ const n = ((window.__rn && window.__rn.value) || '').trim(); if (!n) return; {SET}({{ vers: VS.map((v) => (v.id === VCID ? {{ ...v, name: n }} : v)), ren: false, {m3} }}); }}, "
+            f"actShare: () => {SET}({{ ...shut, {m4} }}), actPrint: () => {SET}({{ ...shut }}), "
+            f"actDup: () => {SET}({{ ...shut, {m5} }}), actArchive: () => {SET}({{ ...shut, {m6} }}), "
+            f"expXml: () => {SET}({{ ...shut, {m7} }}), expMxl: () => {SET}({{ ...shut, {m8} }}), expMidi: () => {SET}({{ ...shut, {m9} }}) }}; }})(),")
+
+# Rename version…: a small form, the one thing a laptop centres (ui-and-mockups)
+def RENAMEDLG():
+    b = lambda l, h, bg: f'<button type="button" onClick="{{{{{h}}}}}" style="height: 44px; padding: 0 18px; border: 0; border-radius: 22px; background: {bg}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer">{l}</button>'
+    return ('<sc-if value="{{renOn}}" hint-placeholder-val="{{false}}">' + DIALOGBOX(
+        f'<h2 style="margin: 0; font-size: 17px; font-weight: 600">Rename version</h2>'
+        f'<input ref="{{{{renRef}}}}" aria-label="Version name" value="{{{{renVal}}}}" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: inset 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}">'
+        f'<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px">' + b('Cancel', 'renCancel', 'transparent') + b('Save', 'renSave', ACCENT) + '</div>',
+        close='renCancel', label='Rename version') + '</sc-if>')
+
+# Practice · Edit: two modes of the one screen, never a separate page (owner, 2026-11-26: "i dont want the edit score to
+# be a separate workspace: i want it to be a mode like read only or edit mode"; "our app goal and main is not the editor
+# but practice"): a two-segment switch right after the title, as Flat's mode beside its name (the owner's Flat
+# screenshots) and Apple's segmented control for two exclusive modes; Practice first and the default, the chosen one
+# filled; the same place in both modes so nothing moves; the toolbars and panels are what Edit adds
+_MSEG = 'height: 40px; box-sizing: border-box; padding: 0 14px 0 10px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap'
+MUSICI = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'
+def MODESW(on, practice_href, edit_href):
+    seg = lambda lab, ic, href, cur: (f'<a href="{href}" role="radio" aria-checked="{"true" if cur else "false"}" data-tip="{lab} · {"P" if lab == "Practice" else "E"}" style="{_MSEG}; '
+                                      + (f'background: {INK}; color: #FEFDFB"' if cur else f'color: {INK}"') + f'>{ic}<span>{lab}</span></a>')
+    return (f'<div role="radiogroup" aria-label="Mode" style="flex: none; height: 48px; box-sizing: border-box; padding: 4px; border-radius: 24px; {GLASSFX}; display: flex; gap: 2px; pointer-events: auto">'
+            + seg('Practice', MUSICI, practice_href, on == 'play') + seg('Edit', PENI, edit_href, on == 'edit') + '</div>')
+
+# The song's versions in the sidebar (owner, 2026-11-26: "in the title are general options and in the sidebar there will
+# be the switch like change the versions or add a new version … add a version with this accompaniment. and in such
+# version i can just change the accompaniment … for the whole song like we did before"): the versions as rows (the open
+# one checked, the default says so), then New version and New version with accompaniment, then the open version's
+# acts; one card as the panel's other groups, rows 44
+_VPROW = f'min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; cursor: pointer'
+def VERPANEL():
+    vrow = (f'<sc-for list="{{{{verRows}}}}" as="v" hint-placeholder-count="2"><button type="button" role="radio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="{_VPROW}; border-top-color: {{{{v.line}}}}">'
+            + _SMSLOT(f'<sc-if value="{{{{v.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK}</sc-if>')
+            + f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-weight: {{{{v.fw}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{v.name}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{v.sub}}}}</span></span>'
+            + f'<sc-if value="{{{{v.isDef}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; font-size: 13px; color: {SOFT}">Default</span></sc-if></button></sc-for>')
+    add = lambda lab, act: f'<button type="button" onClick="{{{{{act}}}}}" style="{_VPROW}">{_SMSLOT(PLUSI_S)}<span style="flex: 1">{lab}</span></button>'
+    act = lambda lab, a, fg=INK: f'<button type="button" onClick="{{{{{a}}}}}" style="flex: none; height: 44px; padding: 0 12px; border: 0; border-radius: 22px; background: transparent; color: {fg}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">{lab}</button>'
+    return (f'<section aria-label="Versions" style="flex: none; display: flex; flex-direction: column; gap: 8px; padding-top: 12px">'
+            f'<h3 style="margin: 0; font-size: 15px; font-weight: 600">Versions</h3>'
+            f'<div role="radiogroup" aria-label="Versions" style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{vrow}'
+            + add('New version', 'actNewVer') + '<sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + add('New version with accompaniment', 'actNewAcc') + '</sc-if></div>'
+            f'<div style="display: flex; flex-wrap: wrap; margin: -4px -12px 0">' + act('Rename…', 'actRename')
+            + '<sc-if value="{{canSetDef}}" hint-placeholder-val="{{false}}">' + act('Set as default', 'actSetDef') + '</sc-if>'
+            + '<sc-if value="{{canDelVer}}" hint-placeholder-val="{{true}}">' + act('Delete', 'actDelVer', RED) + '</sc-if></div></section>')
