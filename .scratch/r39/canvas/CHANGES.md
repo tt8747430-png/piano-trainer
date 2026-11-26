@@ -8,12 +8,12 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-26 · (this commit) · R74: versions Accompaniment and Score, Edit only beside Score, Your arrangement and Edit the original gone, the accompaniment's settings and credit only with it; the view switch heads the View panel; every view sits beside the panel · PlayerDesk, PlayerApp, Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · pending
-- 2026-11-26 · e389ef96 · the editor's draft names its version Accompaniment again (the replace had stopped matching) · EditorDraft, EditorDraftLaptop · pending
-- 2026-11-26 · (this commit) · R74: the laptop Player as the editor, a rail (Song, View) and one panel; the gear gone; the version only in the bar; the song's acts the name's menu; the rail parts in the kit · PlayerDesk · pending
 
 ## Changes
 
+- 2026-11-26 · (this commit) · R74: versions Accompaniment and Score, Edit only beside Score, Your arrangement and Edit the original gone, the accompaniment's settings and credit only with it; the view switch heads the View panel; every view sits beside the panel · PlayerDesk, PlayerApp, Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · v750
+- 2026-11-26 · e389ef96 · the editor's draft names its version Accompaniment again (the replace had stopped matching) · EditorDraft, EditorDraftLaptop · v750
+- 2026-11-26 · (this commit) · R74: the laptop Player as the editor, a rail (Song, View) and one panel; the gear gone; the version only in the bar; the song's acts the name's menu; the rail parts in the kit · PlayerDesk · v750
 - 2026-11-26 · (this commit) · R74: Edit beside the version, as Flat's "✎ Edit ▾" in the title's group (not at the bar's end); the version button as wide as its longest name so Edit holds its place · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v749
 - 2026-11-26 · (this commit) · R74: the version and Edit two controls (VERSW beside the name, EDITB at the bar's end, pressed while editing); the capsule gone · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v748
 - 2026-11-26 · (this commit) · R74: no ink Done in the editor's bar (Edit stays, pressed); the phone editor's menu as the laptop's title menu plus the rail's places (Instruments, Layout, Audio, Export sheets from the panels' own bodies); dead rows and the old Layout page and Instruments card removed · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v747
