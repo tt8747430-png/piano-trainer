@@ -1,0 +1,34 @@
+# From 002. Glas de trâmbiți a sunat.pdf (1 page) and the choir book, page 7. The choir's MuseScore file has the
+# tenor alone: soprano, alto and bass are written in from the sheet. In bars 1-2 and 5-6 the women and the men sing
+# in unison (one line on each staff, as printed): the alto and bass are left out there and take the line above them.
+# The bass is written an octave above where it sounds, as the file writes its tenor; the build moves both down.
+systems: 1 5 10 13
+marks: 1 text:Marciale, 1 f, 3 pp, 5 f, 7 ff, 9 p, 11 pp, 12+1/2 fermata, 12+3/4 mf, 15 ff
+slur: Tenor 1+1/2 +1/8, Tenor 5+1/2 +1/8
+
+[Soprano notes]
+1: @1 Eb4:4 Eb4:4 Eb4:8 G4:8 Bb4:4 @2 C5:4. C5:8 Bb4:4 r:4 @3 Ab4:4. G4:8 F4:4 r:4 @4 G4:4. F4:8 Eb4:4 r:4
+1: @5 Eb4:4 Eb4:4 Eb4:8 G4:8 Bb4:4 @6 C5:4. C5:8 Bb4:4 r:4 @7 Eb5:4 Eb5:4 F5:4 D5:4 @8 Eb5:2 r:4 Bb4:4
+1: @9 Eb5:2 Eb5:4. C5:8 @10 Bb4:2 G4:2 @11 Ab4:4. G4:8 F4:4 r:4 @12 G4:4. F4:8 Eb4:4 Bb4:4
+1: @13 Eb5:2 Eb5:4. C5:8 @14 Bb4:2 G4:4 r:4 @15 Eb5:4 Eb5:4 F5:4 D5:4 @16 Eb5:2. r:4
+
+[Alto notes]
+1: @3 F4:4. Eb4:8 D4:4 r:4 @4 Eb4:4. D4:8 Eb4:4 r:4 @7 G4:4 G4:4 Ab4:4 F4:4 @8 G4:2 r:4 u:4
+1: @9 G4:2 G4:4. Ab4:8 @10 G4:2 Eb4:2 @11 F4:4. Eb4:8 D4:4 r:4 @12 Eb4:4. D4:8 Eb4:4 u:4
+1: @13 G4:2 G4:4. Ab4:8 @14 G4:2 Eb4:4 r:4 @15 G4:4 G4:4 Ab4:4 F4:4 @16 G4:2. r:4
+
+[Bass notes]
+1: @3 Bb3:4. Bb3:8 Bb3:4 r:4 @4 Eb4:4. Eb4:8 Eb4:4 r:4 @7 Bb3:4 Bb3:4 Bb3:4 Bb3:4 @8 Eb4:2 r:4 u:4
+1: @9 Eb4:2 Eb4:4. Eb4:8 @10 Eb4:2 Eb4:2 @11 D4:4. Eb4:8 Bb3:4 r:4 @12 Eb4:4. Eb4:8 Eb4:4 Eb4:4
+1: @13 Eb4:2 Eb4:4. Eb4:8 @14 Eb4:2 Eb4:4 r:4 @15 Bb3:4 Bb3:4 Bb3:4 Bb3:4 @16 Eb4:2. r:4
+
+[Soprano]
+1: @1 1.Glas de trâm _ -- biți a su -- nat! As -- cul -- tați, as -- cul -- tați!
+1: @5 Glas din cer _ a ră -- su -- nat: Vi -- ne iar I -- sus! Ce dul -- ce ves -- ti -- re,
+1: @11 As -- cul -- tați, as -- cul -- tați! E timp de tre -- zi -- re: Vi -- ne iar I -- sus!
+2: @1 2.Gla -- sul voi _ l'ați a -- u -- zit! As -- cul -- tați, as -- cul -- tați!
+2: @5 Ros -- tul său _ l'ați tăl -- mă -- cit: Vi -- ne iar I -- sus! Do -- rin -- ța iu -- bi -- tă,
+2: @11 As -- cul -- tați, as -- cul -- tați! Va fi îm -- pli -- ni -- tă: Vi -- ne iar I -- sus!
+3: @1 3.Glas de trâm _ -- biți au su -- nat! As -- cul -- tați, as -- cul -- tați!
+3: @5 Cea -- ta sfân _ -- tă s'a -- du -- nat: Vi -- ne iar I -- sus! E gla -- sul cre -- din -- ței,
+3: @11 As -- cul -- tați, as -- cul -- tați! Cân -- tând bi -- ru -- in -- ței: Vi -- ne iar I -- sus!
