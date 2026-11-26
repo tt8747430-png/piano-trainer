@@ -143,7 +143,10 @@ and MIDI files and recordings. Names are the titles transliterated.
   in the octave it sings, and a part for every voice (with its words, where any of the song's files has them) is
   saved in the file, tied to its voice of the score. `scripts/choir-scores.py` makes them with MuseScore Studio 4
   (`scripts/choir-parts.py` splits the voices). Song 24's `Gratie a lui Isus.mscz` is the owner's corrected score,
-  its words included
+  its words included. A song checked against its PDF and the choir book holds a `match.txt`, written from the
+  sheet: its words for every voice and verse, title and names, line and page breaks, staff size, printed marks, and
+  the notes of any voice the files left out; with it the score is the printed sheet, line for line
+  (`scripts/choir-match.py` says how to write one). The mixed choir's songs are being matched in order
 - `hymns/songs/`: songs as sheets, choir and full scores
 - `hymns/ensembles/`: О. Цапук's arrangements for domra and piano, and cello and piano
 - `hymns/hymnals/`: _Песнь возрождения с нотами_, vol. 3; the _Free Worship Piano Collection_
