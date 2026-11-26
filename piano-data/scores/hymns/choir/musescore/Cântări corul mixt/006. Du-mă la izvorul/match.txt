@@ -1,9 +1,6 @@
 # From 006. Du-mă la izvorul.pdf (1 page) and the choir book, page 11.
-title: 6 Du-mă la izvorul
 composer: Alfred Bierli
 systems: 1 5 9 13
-hide-tempo
-hide-names
 
 [Soprano]
 1: @1 1.Du -- mă la iz _ -- vo -- rul, un -- de Cur -- ge'a vi -- e -- ții a -- pă;

@@ -1,15 +1,16 @@
-"""Writes piano-data/scores/hymns/choir/musescore/INDEX.md: every choir song, its files and the state of its full
-MuseScore score. Run from the repo root: python3 scripts/choir-index.py (needs pdftotext for the contents list)."""
-import os, re, sys, zipfile, unicodedata, collections, subprocess
+"""Writes INDEX.md beside the songs: every choir song, its files and the state of its made score (needs pdftotext
+for the mixed choir's contents list)."""
+
+import collections
+import os
+import re
+import subprocess
 import xml.etree.ElementTree as ET
-root = 'piano-data/scores/hymns/choir/musescore'
-out = os.path.join(root, 'INDEX.md')
-def plain(s): return ''.join(c for c in unicodedata.normalize('NFD', s.lower()) if unicodedata.category(c) != 'Mn')
-VOICES = [('Soprano', r'sopran'), ('Alto', r'\balt'), ('Tenor 1', r'tenor ?_?1'), ('Tenor 2', r'tenor ?_?2'),
-          ('Tenor', r'tenor(?! ?_?[12])'), ('Baritone', r'bariton'), ('Bass', r'\bbas\b|\bbass\b|\bbasul\b'),
-          ('All voices', r'toate vocile|all voices|toate')]
-def voices_of(name):
-    p = plain(name); return [v for v, rx in VOICES if re.search(rx, p)]
+import zipfile
+
+from common import FILE_VOICES, ROOT, voices_of
+
+
 def inspect(path):
     try:
         z = zipfile.ZipFile(path); names = z.namelist()
@@ -66,7 +67,7 @@ def song_rows(base):
         files = [f for f in files if f not in made]
         msc = [f for f in files if f.endswith(('.mscz', '.mscx'))]
         voice_files = sorted({v for f in msc for v in voices_of(os.path.basename(f))},
-                             key=[v for v, _ in VOICES].index)
+                             key=[v for v, _ in FILE_VOICES].index)
         variants = sorted({os.path.relpath(os.path.dirname(f), p) for f in files} - {'.'})
         infos = [i for i in (inspect(f) for f in msc) if i]
         fulls = [i for i in infos if i['lines'] + (1 if i['chords'] else 0) >= 3]
@@ -102,29 +103,30 @@ def shape(m):
     if m['chords']: s += f", {m['chords']} chords"
     return s
 def main():
-    cuprins = subprocess.run(['pdftotext', '-layout', os.path.join(root, 'Cântări corul mixt', 'Cuprins 1-100.pdf'), '-'],
+    cuprins = subprocess.run(['pdftotext', '-layout', os.path.join(ROOT, 'Cântări corul mixt', 'Cuprins 1-100.pdf'), '-'],
                              capture_output=True, text=True, check=True).stdout.splitlines()
     L = []
     L.append('# The choir\'s songs: what each one has\n')
     L.append('Every song in this folder, with the files it has and the state of its full MuseScore score. The goal for each ')
     L.append('song is one MuseScore file with a separate part for each voice (Soprano, Alto, Tenor, Bass; for the men\'s choir ')
     L.append('Tenor 1, Tenor 2, Baritone, Bass), the words under every part, and piano as its sound. Written by ')
-    L.append('`scripts/choir-index.py` from the files; run it again after a change.\n')
+    L.append('`python3 scripts/choir index` from the files; run it again after a change.\n')
     L.append('That file is `<song> (SATB).mscz` in a mixed choir song\'s folder and `<song> (TTBB).mscz` in a men\'s, made by ')
-    L.append('`scripts/choir-scores.py`. It looks as the choir\'s own full score does (its staves, layout and words, saved ')
-    L.append('by MuseScore Studio 4) and is corrected inside: each staff named for the voices it holds, every instrument ')
+    L.append('`python3 scripts/choir build` (see `scripts/choir/README.md`). It is set in the house style ')
+    L.append('(`template/house.mss`) and corrected inside: each staff named for the voices it holds, every instrument ')
     L.append('playing piano, each voice in the octave it sings (many files write the men an octave high; a plain treble ')
     L.append('staff of men takes the tenor clef, so the page looks the same), and a part for every voice saved in the file, ')
     L.append('tied to its voice of the score, with the words under it. A song with no full score but a one-voice file for ')
-    L.append('every voice gets a two-staff score put together from those files. A song with only a PDF, a full score left ')
-    L.append('unfinished, or no file for some voice is still to be written in by hand.\n')
+    L.append('every voice gets a two-staff score put together from those files. A song matched to its printed sheet ')
+    L.append('(its `match.txt`, see `MATCHING.md`) has its words, notes, marks and line breaks as printed. A song with only ')
+    L.append('a PDF, a full score left unfinished, or no file for some voice has its voices written in from the sheet.\n')
     L.append('Columns: **Score** the full MuseScore score (how many); **Shape** its staves, voices per staff and bars, and ')
     L.append('"chords" where two voices are written as one chord; **Words** lyrics in the score; **Parts** separate voice parts ')
     L.append('saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML** (MusicXML), **Img** counts; ')
     L.append('**Sound** piano when every instrument plays piano.\n')
     summary = []
     for label, sub, men in (('Mixed choir', 'Cântări corul mixt', False), ("Men's choir", 'Cântări corul bărbătesc', True)):
-        rows = song_rows(os.path.join(root, sub))
+        rows = song_rows(os.path.join(ROOT, sub))
         if not men:
             titles = {}
             for line in cuprins:
@@ -154,8 +156,5 @@ def main():
         head.append(f"| {label} | {n} | " + ' | '.join(str(st.get(k, 0)) for k in ['Done', 'To do', 'To check', 'Single voices only, no full score', 'No MuseScore', 'No folder (in the book only)', 'Unreadable']) + ' |')
     at = next(i for i, l in enumerate(L) if l.startswith('**Sound**')) + 1
     L = L[:at] + head + L[at:]
-    open(out, 'w', encoding='utf-8').write('\n'.join(L) + '\n')
+    open(os.path.join(ROOT, 'INDEX.md'), 'w', encoding='utf-8').write('\n'.join(L) + '\n')
     print('\n'.join(head))
-
-if __name__ == '__main__':
-    main()

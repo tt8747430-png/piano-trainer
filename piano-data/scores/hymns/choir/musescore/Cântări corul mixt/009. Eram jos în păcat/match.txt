@@ -1,10 +1,7 @@
 # From 009. Eram jos în păcat.pdf (2 pages) and the choir book, page 19. Bars as the sheet numbers them.
-title: 9 Eram jos în păcat
 lyricist: Valentin Popovici
 count-pickup
 systems: 1 4 6 8 | 10 12 14 16
-hide-tempo
-hide-names
 
 [Soprano]
 1: @1 1.E -- ram jos în pă -- cat, dar I -- sus m'a sal -- vat; Lu -- mi -- na Lui din cer în mi -- ne'a stră -- lu --

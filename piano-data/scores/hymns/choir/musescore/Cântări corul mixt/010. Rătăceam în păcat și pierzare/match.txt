@@ -1,12 +1,9 @@
 # From 010. Rătăceam în păcat și pierzare.pdf (2 pages) and the choir book, page 21. Bars as the sheet numbers them.
 # The choir's MuseScore files have no alto line: it is entered here from the sheet.
-title: 10 Rătăceam în păcat și pierzare
 lyricist: Valentin Popovici
 composer: John W. Peterson - Alfred B. Smith
 count-pickup
 systems: 1 7 14 20 | 26 32 38 44 49
-hide-tempo
-hide-names
 
 [Alto notes]
 1: @1 Bb3:8. Bb3:16 @2 Bb3:4 Bb3:4 Bb3:4 @3 Eb4:4 Bb3:4 Bb3:4 @4 Ab3:4 C4:2~ @5 C4:2 C4:8. Bb3:16 @6 D4:4 D4:4 D4:4

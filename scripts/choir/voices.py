@@ -1,15 +1,12 @@
-"""Makes one choir song's score with a part for each voice.
-
-    python3 scripts/choir-parts.py <full-score.musicxml> <out.musicxml> <mixed|men> [lyrics-source.musicxml ...]
+"""Splits a choir song's full score into a part per voice.
 
 The input is the song's full score as MuseScore exports it to MusicXML (any layout: two voices on a staff, one voice
 per staff, or two voices written as one chord). Each voice becomes its own part (Soprano, Alto, Tenor, Bass; for the
 men's choir Tenor 1, Tenor 2, Baritone, Bass), on its own staff with the usual clef, playing piano. A bar where a staff
 holds one line (the voices in unison) gives that line to both its voices. Words: each part keeps its own; a note
 without words takes those of a note starting at the same moment in another voice, the nearest voice first, so a lower
-voice singing the same rhythm carries the text. Extra files given after the choir kind are other scores of the song
-(often a voice's practice file with the words): their words fill a part whose notes they match. The result is opened
-and saved by MuseScore (scripts/choir-scores.sh), which lays it out.
+voice singing the same rhythm carries the text. Other scores of the song (often a voice's practice file with the
+words) fill a part whose notes they match with their words.
 """
 
 import copy
@@ -17,24 +14,14 @@ import sys
 import xml.etree.ElementTree as ET
 from fractions import Fraction
 
-NAMES = {
-    'mixed': [('Soprano', 'S.', 'G', 2, 0), ('Alto', 'A.', 'G', 2, 0), ('Tenor', 'T.', 'G', 2, -1), ('Bass', 'B.', 'F', 4, 0)],
-    'men': [('Tenor 1', 'T. 1', 'G', 2, -1), ('Tenor 2', 'T. 2', 'G', 2, -1), ('Baritone', 'Bar.', 'F', 4, 0),
-            ('Bass', 'B.', 'F', 4, 0)],
-}
+from common import VOICES, midi
+
+# Each voice: name, abbreviation, its part's clef sign, line and octave change.
+NAMES = {kind: [(name, abbr, clef[0], clef[1], clef[2]) for name, abbr, clef, _ in vs] for kind, vs in VOICES.items()}
+MIDDLE = {kind: [v[3] for v in vs] for kind, vs in VOICES.items()}
 # Headings MuseScore puts in a new score that the choir's files left unfilled.
 PLACEHOLDERS = {'untertitel', 'subtitle', 'komponist', 'composer', 'texter', 'lyricist', 'titel', 'title', 'subtitlu',
                 'compozitor', 'textier'}
-# Each voice's usual middle (MIDI, as it sounds): a part whose notes average an octave away is moved there.
-MIDDLE = {'mixed': [69, 63, 58, 50], 'men': [61, 57, 52, 47]}
-STEPS = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
-
-
-def midi(note):
-    p = note.find('pitch')
-    if p is None:
-        return None
-    return 12 * (int(p.findtext('octave')) + 1) + STEPS[p.findtext('step')] + int(float(p.findtext('alter') or 0))
 
 
 class Event:
@@ -394,20 +381,3 @@ def fill_words_from(part, sources, i):
                                 lc.attrib.pop(at, None)
                             a.append(lc)
                     return
-
-
-def main():
-    src, dst, kind = sys.argv[1:4]
-    score = ET.parse(src).getroot()
-    sources = [ET.parse(f).getroot() for f in sys.argv[4:]]
-    out, info = build(score, kind, sources)
-    ET.indent(out)
-    with open(dst, 'wb') as f:
-        f.write(b'<?xml version="1.0" encoding="UTF-8"?>\n')
-        f.write(b'<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" '
-                b'"http://www.musicxml.org/dtds/partwise.dtd">\n')
-        f.write(ET.tostring(out, encoding='utf-8'))
-
-
-if __name__ == '__main__':
-    main()

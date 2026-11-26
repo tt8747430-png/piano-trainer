@@ -1,10 +1,9 @@
 # From 016. Te iubesc Isuse.pdf (1 page, exported from MuseScore) and the choir book, page 29. Bars as the sheet
 # numbers them. The choir's MuseScore files have no alto line: it is entered here from the sheet.
-title: 16 Te iubesc Isuse
 composer: A. J. Gordon
 count-pickup
 systems: 1 6 11 15
-hide-names
+show-tempo
 bar-numbers: every
 footer: Corul Bisericii Maranata Nürnberg / Fürth
 brace

@@ -1,10 +1,7 @@
 # From 024. Grație a lui Isus.pdf (2 pages) and the choir book, page 51. The words are the owner's corrected score's
 # (Gratie a lui Isus.mscz), checked against the sheet.
-title: 24 Grație a lui Isus
 composer: Haldor Lillenas
 systems: 1 5 9 13 18 | 20 23 25 27 29
-hide-tempo
-hide-names
 italic: Tenor
 hide-chords
 

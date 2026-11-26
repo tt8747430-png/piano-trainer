@@ -3,16 +3,17 @@
 Every song in this folder, with the files it has and the state of its full MuseScore score. The goal for each 
 song is one MuseScore file with a separate part for each voice (Soprano, Alto, Tenor, Bass; for the men's choir 
 Tenor 1, Tenor 2, Baritone, Bass), the words under every part, and piano as its sound. Written by 
-`scripts/choir-index.py` from the files; run it again after a change.
+`python3 scripts/choir index` from the files; run it again after a change.
 
 That file is `<song> (SATB).mscz` in a mixed choir song's folder and `<song> (TTBB).mscz` in a men's, made by 
-`scripts/choir-scores.py`. It looks as the choir's own full score does (its staves, layout and words, saved 
-by MuseScore Studio 4) and is corrected inside: each staff named for the voices it holds, every instrument 
+`python3 scripts/choir build` (see `scripts/choir/README.md`). It is set in the house style 
+(`template/house.mss`) and corrected inside: each staff named for the voices it holds, every instrument 
 playing piano, each voice in the octave it sings (many files write the men an octave high; a plain treble 
 staff of men takes the tenor clef, so the page looks the same), and a part for every voice saved in the file, 
 tied to its voice of the score, with the words under it. A song with no full score but a one-voice file for 
-every voice gets a two-staff score put together from those files. A song with only a PDF, a full score left 
-unfinished, or no file for some voice is still to be written in by hand.
+every voice gets a two-staff score put together from those files. A song matched to its printed sheet 
+(its `match.txt`, see `MATCHING.md`) has its words, notes, marks and line breaks as printed. A song with only 
+a PDF, a full score left unfinished, or no file for some voice has its voices written in from the sheet.
 
 Columns: **Score** the full MuseScore score (how many); **Shape** its staves, voices per staff and bars, and 
 "chords" where two voices are written as one chord; **Words** lyrics in the score; **Parts** separate voice parts 
@@ -24,7 +25,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 52 | 5 | 1 | 25 | 23 | 1 | 0 |
+| Mixed choir | 107 | 53 | 5 | 1 | 24 | 23 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -32,7 +33,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | Nr | Song | State | Score | Shape | Words | Parts | Voice files | PDF | XML | Img | Sound |
 | --: | --- | --- | :-: | --- | :-: | --- | --- | --: | --: | --: | --- |
 | 1 | Binecuvântat să fie Domnul | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 |  |  | – |
-| 2 | Glas de trâmbiți a sunat | Single voices only, no full score | – | – | – | – | Tenor | 1 |  |  | – |
+| 2 | Glas de trâmbiți a sunat | Done: as printed (matched to its PDF) | – | – | – | – | Tenor | 1 |  |  | – |
 | 3 | La Calvar | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 4 | Ce poate fi mai minunat | Done: as printed (matched to its PDF) | 2 | 2 staves, voices 2/2, 16 bars, `4_Ce_poate_fi_mai_minunat_.mscz` | yes | – | Soprano, Alto, Tenor, Bass | 1 |  |  | piano |
 | 5 | Mărire Ție, Isuse | No MuseScore | – | – | – | – | – | 1 |  |  | – |

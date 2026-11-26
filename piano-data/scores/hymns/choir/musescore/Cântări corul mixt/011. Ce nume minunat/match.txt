@@ -4,8 +4,6 @@ title: 11 Ce nume minunat!
 lyricist: Daniel Stăuceanu
 composer: A. Mieir
 systems: 1 6 13 21
-hide-tempo
-hide-names
 dashed: 20 22
 
 [Soprano]

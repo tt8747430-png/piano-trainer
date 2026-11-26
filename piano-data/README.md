@@ -136,17 +136,18 @@ and MIDI files and recordings. Names are the titles transliterated.
   (`.mscbackup`) are kept; the recordings are left out. The scanned choir book of songs 1–100, all of them in one
   172 MB PDF over GitHub's 100 MB limit, is split in two at a song's start: `Caiet de cor scanat 1-45.pdf` (the
   contents, then songs 1–45) and `Caiet de cor scanat 46-100.pdf`. Each song is also in its own folder; read it there.
-  Its [`INDEX.md`](scores/hymns/choir/musescore/INDEX.md) lists every song with its files and the state of its full
-  score, written by `scripts/choir-index.py`. Each song that has a full score, or a one-voice file for every voice,
-  also has `<song> (SATB).mscz` (mixed choir) or `<song> (TTBB).mscz` (men's choir): it looks as the choir's own
-  full score does, and inside each staff is named for its voices, every instrument plays piano, each voice sounds
-  in the octave it sings, and a part for every voice (with its words, where any of the song's files has them) is
-  saved in the file, tied to its voice of the score. `scripts/choir-scores.py` makes them with MuseScore Studio 4
-  (`scripts/choir-parts.py` splits the voices). Song 24's `Gratie a lui Isus.mscz` is the owner's corrected score,
-  its words included. A song checked against its PDF and the choir book holds a `match.txt`, written from the
-  sheet: its words for every voice and verse, title and names, line and page breaks, staff size, printed marks, and
-  the notes of any voice the files left out; with it the score is the printed sheet, line for line
-  (`scripts/choir-match.py` says how to write one). The mixed choir's songs are being matched in order
+  Its [`INDEX.md`](scores/hymns/choir/musescore/INDEX.md) lists every song with its files and the state of its made
+  score. Each song that has a full score, or a one-voice file for every voice, also has `<song> (SATB).mscz` (mixed
+  choir) or `<song> (TTBB).mscz` (men's choir): the sheet's two staves, a part per voice tied to its voice of the
+  score (with its words, where any of the song's files has them), each voice in the octave it sings, piano as the
+  sound, and the house template's look (`template/house.mss`, given to the score and every part). `template/` also
+  holds `Choir SATB.mscz` and `Choir TTBB.mscz`, empty scores in that look for writing a song by hand. One builder
+  makes them all with MuseScore Studio 4: `python3 scripts/choir` ([its README](../scripts/choir/README.md)). Song
+  24's `Gratie a lui Isus.mscz` is the owner's corrected score, its words included. A song checked against its PDF
+  and the choir book holds a `match.txt`, written from the sheet: its words for every voice and verse, line and page
+  breaks, printed marks, and the notes of any voice the files left out, with only what differs from the template;
+  with it the score is the printed sheet, line for line ([`MATCHING.md`](scores/hymns/choir/musescore/MATCHING.md)
+  says how). The mixed choir's songs are being matched in order
 - `hymns/songs/`: songs as sheets, choir and full scores
 - `hymns/ensembles/`: О. Цапук's arrangements for domra and piano, and cello and piano
 - `hymns/hymnals/`: _Песнь возрождения с нотами_, vol. 3; the _Free Worship Piano Collection_
