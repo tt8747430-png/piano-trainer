@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor, within } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
@@ -178,11 +178,15 @@ describe('Diagrams, its row of chords (ADR 0108, the Diagrams board)', () => {
     expect(practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
   })
 
-  it('takes the music to the chord a hand’s scroll rests on, once it settles', () => {
+  it('takes the music to the chord a hand’s scroll rests on, once it settles', async () => {
     vi.useFakeTimers()
     onTestFinished(() => void vi.useRealTimers())
     vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(150)
     const { practice, row } = renderRow(0)
+    // The row laid out (its size measured) and done sliding to the chord sounding, as a hand finds it.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(700)
+    })
     fireEvent.pointerDown(row)
     row.scrollLeft = 300
     fireEvent.scroll(row)
