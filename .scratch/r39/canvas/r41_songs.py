@@ -67,33 +67,6 @@ ACTS_OF = lambda pl: f'<div style="display: flex; gap: 8px">{BTN(ICON(PLAY, 18) 
 FIRST_OF = lambda pl: f'<sc-if value="{{{{fresh}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex">{BTN(ICON(PLAY, 18) + " Practise", href=pl)}</div></sc-if>'  # before a first play: one honey Practise, the column's width
 ACTS, ACTS_L = [f'<sc-if value="{{{{played}}}}" hint-placeholder-val="{{{{true}}}}">{ACTS_OF(p)}</sc-if>{FIRST_OF(p)}' for p in ('Player.dc.html', 'PlayerLaptop.dc.html')]
 SGSTRIP = f'<div aria-label="Canvas: show a state" style="display: none"><sc-for list="{{{{states}}}}" as="p" hint-placeholder-count="3"><button type="button" onClick="{{{{p.pick}}}}" style="background: {{{{p.bg}}}}">{{{{p.l}}}}</button></sc-for></div>'
-SECTS = GROUP(('link', 'Verse', 'bars 1–16', 'Section.dc.html'), bg=SHEET)  # the song's one section, as the app holds it
-PROGS = GROUP(('link', 'Gospel hymn', 'I – IV – I – V', 'Progression.dc.html'), ('link', 'Authentic cadence', 'I – V – I', 'Progression.dc.html'), ('link', 'Plagal cadence', 'I – IV – I', 'Progression.dc.html'), bg=SHEET)
-DETAILS = GROUP(('link', 'Level', 'Intermediate', ''), ('link', 'Genre', 'Not set', ''), ('link', 'Language', 'Not set', ''), ('link', 'Tags', 'Not set', ''), bg=SHEET)  # a built-in song's, as the app reads them: its course's level, the rest the learner's to set
-SONG_MORE = ROWMENU('moreOn', 'Amazing Grace', [('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Edit the original', '', 'EditorDraft.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html')])
-CREDITS = GROUP(('link', 'Title', 'Amazing Grace', ''), ('link', 'Words', 'John Newton', ''), ('link', 'Music', 'New Britain (American folk tune)', ''), bg=SHEET)
-ph = f'''{TOP('Songs.dc.html', '', LEARNED + HEARTB + DOTS())}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 60px; display: flex; flex-direction: column; gap: 16px">
-{COVER_BIG(330, 17)}{TITLE}{ACTS}
-{SGSTRIP}<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{H2('Chords')}{CHORDS_ROW}{PROGS}</section></sc-if>
-<section style="display: flex; flex-direction: column; gap: 12px">{H2('Sections')}{SECTS}</section>
-<section style="display: flex; flex-direction: column; gap: 12px">{H2('Details')}{DETAILS}</section>
-</main>'''
-sh = SONG_MORE + BSHEET('creditsOn', 'Title and credits', CREDITS)
-# one centred column (owner, 2026-11-16: "the page has one focus"): the song's cover beside its name and Continue as
-# the column's head, then its chords, sections and details under it, never a rival column beside it
-# the bar stands on the column's edges (scan-first 1): Back on its left edge, the acts ending on its right
-_SGBAR = TOP('SongsLaptop.dc.html', '', LEARNED + HEARTB + DOTS(), pad='0')
-lm = f'''<div style="flex: none; padding: 0 40px"><div style="width: min(880px, 100%); margin: 0 auto">{_SGBAR}</div></div>
-<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 40px 48px">
-<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 20px">
-<div style="display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 32px; align-items: end"><div>{COVER_BIG(348, 20)}</div><div style="display: flex; flex-direction: column; gap: 16px">{TITLE}{ACTS_L}</div></div>
-{SGSTRIP}<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{H2('Chords')}{CHORDS_ROW.replace('display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px', 'display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; padding: 2px')}{PROGS}</section></sc-if>
-<section style="display: flex; flex-direction: column; gap: 12px">{H2('Sections')}{SECTS.replace('Section.dc.html', 'SectionLaptop.dc.html')}</section>
-<section style="display: flex; flex-direction: column; gap: 12px">{H2('Details')}{DETAILS}</section>
-</div>
-</div>'''
-pl = SONG_MORE.replace('EditorDraft.dc.html', 'EditorDraftLaptop.dc.html').replace('Editor.dc.html', 'EditorLaptop.dc.html').replace('SongSettings.dc.html', 'SongSettingsLaptop.dc.html') + POPOVER('creditsOn', 'Title and credits', CREDITS, 'left: 120px; top: 520px', 420)
 SONG_SG = SG  # a song's Settings (r53, SETWIN) runs the song's script; its page went, it opens over the Player (owner, 2026-11-26)
 s = open(OUT + 'PlayerLaptop.dc.html').read().replace('href="Progression.dc.html"', 'href="ProgressionLaptop.dc.html"'); open(OUT + 'PlayerLaptop.dc.html', 'w').write(s)
 

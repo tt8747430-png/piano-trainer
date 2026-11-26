@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · clean: the old song page's writer in r41_songs (its sections, details and menu, built and shown nowhere) and the Section page's parts in r53 (its head, steps, Practise button, the 'section' branches and tips) deleted; every other board byte-identical, Song Settings renders the same · SongSettings, SongSettingsLaptop · pending
 
 ## Changes
 
