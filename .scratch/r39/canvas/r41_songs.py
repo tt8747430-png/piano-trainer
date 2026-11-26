@@ -97,45 +97,4 @@ pl = SONG_MORE.replace('EditorDraft.dc.html', 'EditorDraftLaptop.dc.html').repla
 SONG_SG = SG  # a song's Settings (r53, SETWIN) runs the song's script; its page went, it opens over the Player (owner, 2026-11-26)
 s = open(OUT + 'PlayerLaptop.dc.html').read().replace('href="Progression.dc.html"', 'href="ProgressionLaptop.dc.html"'); open(OUT + 'PlayerLaptop.dc.html', 'w').write(s)
 
-# ── the score editor ──
-ED = js(r'''
-    const CATS = ['Notes', 'Accidentals', 'Articulation', 'Dynamics', 'Bar', 'Text'];
-    const T = { Notes: ['𝄽', '𝅝', '𝅗𝅥', '𝅘𝅥', '𝅘𝅥𝅮', '𝅘𝅥𝅯', '·', 'Tie', '3'], Accidentals: ['𝄫', '♭', '♮', '♯', '𝄪'], Articulation: ['Staccato', 'Accent', 'Tenuto', 'Marcato', 'Fermata', 'Slur'],
-      Dynamics: ['ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff', 'cresc.', 'dim.'], Bar: ['3/4', 'Key', 'Clef', '𝄆', '𝄇', '𝄁', '+ Bar', '♩ ='], Text: ['Chord', 'Lyrics', 'Text', 'Roman', 'Mark'] };
-    const cat = st.cat ?? 'Notes', tool = st.tool ?? '𝅗𝅥', keys = st.keys ?? true, full = !!st.full;
-    const tiles = (c) => T[c].map((l) => ({ l, bg: l === tool ? '#332921' : '#FEFDFB', fg: l === tool ? '#FEFDFB' : '#332921', fs: l.length > 2 ? 13 : (/[a-z]/.test(l) ? 17 : 24), pick: () => set({ tool: l }) }));
-    const marks = { 67: ['#85B8DC', ''] };
-    return { ...common(st, set), cats: seg(CATS, cat, (l) => set({ cat: l })), tools: tiles(cat), all: CATS.map((c) => ({ c, tools: tiles(c) })),
-      keysOn: keys, keysBg: keys ? '#332921' : 'transparent', keysFg: keys ? '#FEFDFB' : '#332921', toggleKeys: () => set({ keys: !keys }), full, folded: !full, toggleFull: () => set({ full: !full }),
-      kb: calmKeys(48, 79, marks, 402, 150), kbL: calmKeys(36, 96, marks, 1462, 150) };''')
-def EDTOP(done):
-    return (f'<header style="flex: none; height: 44px; display: flex; align-items: center; gap: 2px; padding: 0 8px 0 16px"><a href="{done}" style="height: 44px; display: flex; align-items: center; color: {LINK}; text-decoration: none; font-size: 17px; font-weight: 600">Done</a><span style="flex: 1"></span>'
-            f'{IB("Undo", UNDO)}{IB("Redo", REDO)}<span style="width: 1px; height: 22px; background: {LINE}; margin: 0 6px"></span>'
-            f'<button type="button" aria-label="Piano keys" aria-pressed="{{{{keysOn}}}}" onClick="{{{{toggleKeys}}}}" style="width: 40px; height: 36px; border: 0; border-radius: 10px; background: {{{{keysBg}}}}; color: {{{{keysFg}}}}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>'
-            f'<span style="width: 4px"></span>{PLAYBTN(36, (16, 15))}{DOTS()}</header>')
-# The score lies on the page as the Player's does, no sheet of paper under it: Play and Edit keep it in place (loop round 62).
-def SCOREPAGE(w, size, pad):
-    lap = size > 1.1  # the Player's heading, value for value: one heading on the score in Play and in Edit
-    t, c, v, g = (36, 15, 14, 24) if lap else (24, 13, 12, 16)
-    return (f'<div style="padding: {pad}; display: flex; flex-direction: column">'
-            f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: {t}px; font-weight: 400; line-height: 1.1; color: {INK}">Amazing Grace</h2>'
-            f'<p style="margin: {"8px 0 0" if lap else "8px -20px 0; white-space: nowrap"}; text-align: center; font-size: {c}px; color: {SOFT}">Words: John Newton · Music: New Britain (American folk tune)</p>'  # on a phone the credits span the page into its margins, on one line, as the Player's
-            f'<div style="margin: {g}px 0 4px; font-size: {v}px; font-variant-numeric: tabular-nums; color: {SOFT}">1 · Verse · <svg aria-hidden="true" width="8" height="13" viewBox="0 0 8 13" style="display: inline-block; vertical-align: -1px; margin: 0 2px"><ellipse cx="3.4" cy="10.6" rx="3.3" ry="2.3" transform="rotate(-20 3.4 10.6)" fill="currentColor"></ellipse><path d="M6.3 10V0.5" stroke="currentColor" stroke-width="1.2"></path></svg>= 80</div>'
-            + score_grand(w, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]] if lap else [[0, 1], [2, 3], [4, 5]], sel=(3, 0), size=size).replace(ACCENT, '#85B8DC') + '</div>')
-TILE = f'<button type="button" onClick="{{{{t.pick}}}}" style="flex: none; min-width: 46px; height: 46px; padding: 0 8px; border: 0; border-radius: 11px; background: {{{{t.bg}}}}; color: {{{{t.fg}}}}; box-shadow: 0 0 0 1px {LINE}; font-family: \'Noto Music\', {FONT}; font-size: {{{{t.fs}}}}px; font-weight: 600">{{{{t.l}}}}</button>'
-PALETTE = (f'<div style="flex: none; border-radius: 18px 18px 0 0; background: {SHEET}; box-shadow: 0 -1px 0 {LINE}, 0 -10px 24px -18px rgba(51,41,33,.4); padding: 4px 0 6px; display: flex; flex-direction: column; gap: 8px">'
-           f'<button type="button" aria-label="Open the palette" onClick="{{{{toggleFull}}}}" style="align-self: center; width: 60px; height: 18px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></span></button>'
-           f'<sc-if value="{{{{folded}}}}" hint-placeholder-val="{{{{true}}}}"><div class="nos" style="display: flex; gap: 8px; overflow-x: auto; padding: 0 12px"><sc-for list="{{{{tools}}}}" as="t" hint-placeholder-count="9">{TILE}</sc-for></div><div class="nos" style="overflow-x: auto; padding: 0 12px"><div style="width: 560px">{SEGC("cats", 44, 14)}</div></div></sc-if>'
-           f'<sc-if value="{{{{full}}}}" hint-placeholder-val="{{{{false}}}}"><div class="nos" style="max-height: 330px; overflow-y: auto; padding: 0 12px; display: flex; flex-direction: column; gap: 12px"><sc-for list="{{{{all}}}}" as="a" hint-placeholder-count="6">{CAPS("{{a.c}}")}<div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{a.tools}}}}" as="t" hint-placeholder-count="6">{TILE}</sc-for></div></sc-for></div></sc-if></div>')
-PIANO = lambda k, h: f'<sc-if value="{{{{keysOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: none; background: {SHEET}; padding: 0 0 26px">{KEYS(h, k, edge=True)}</div></sc-if>'
-ED_MORE = GROUP(('link', 'Instruments and staves', 'Piano', ''), ('link', 'Page layout', '', ''), ('link', 'Playback sound', 'Grand piano', ''), ('link', 'MIDI keyboard', 'Not connected', ''), bg=SHEET)
-eph = f'''{EDTOP('Player.dc.html')}
-<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 6px 10px 12px">{SCOREPAGE(360, 0.95, '14px 12px 8px')}</div>
-{PALETTE}{PIANO('kb', 130)}'''
-elm = f'''<header style="flex: none; height: 64px; display: flex; align-items: center; gap: 2px; padding: 0 24px 0 40px"><a href="PlayerLaptop.dc.html" style="height: 44px; display: flex; align-items: center; color: {LINK}; text-decoration: none; font-size: 17px; font-weight: 600">Done</a><span style="flex: 1"></span>{EDTOP('PlayerLaptop.dc.html').split('<span style="flex: 1"></span>')[1].replace('</header>', '')}</header>
-<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 340px">
-<div class="nos" style="min-height: 0; overflow-y: auto; padding: 8px 48px 24px; display: flex; justify-content: center"><div style="width: 760px">{SCOREPAGE(720, 1.25, '32px 40px 16px')}</div></div>
-<aside class="nos" aria-label="Palette" style="min-height: 0; overflow-y: auto; background: {SHEET}; box-shadow: -1px 0 0 {LINE}; padding: 20px 18px; display: flex; flex-direction: column; gap: 12px"><sc-for list="{{{{all}}}}" as="a" hint-placeholder-count="6">{CAPS("{{a.c}}")}<div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{a.tools}}}}" as="t" hint-placeholder-count="6">{TILE}</sc-for></div></sc-for></aside>
-</div>{PIANO('kbL', 150).replace('padding: 0 0 26px', 'padding: 0; box-shadow: 0 -1px 0 ' + LINE)}'''
-detail('Editor', 'Score editor', ED, eph, elm, '', BSHEET('moreOn', 'Score settings', ED_MORE), POPOVER('moreOn', 'Score settings', ED_MORE), 'Songs')
 print('songs ok')

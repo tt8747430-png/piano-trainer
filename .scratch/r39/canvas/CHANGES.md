@@ -11,6 +11,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · (this commit) · clean: r41_songs' old Editor board writer (ED, EDTOP, PALETTE, ED_MORE, the Score settings sheet) removed; r44 is the Editor boards' one writer; every board rebuilds unchanged · none · —
 - 2026-11-26 · (this commit) · clean: the Player's stale builders (r43_player, r46_score, merge_player, capture_score and its captures) deleted; the pre-R74 pair is player/base, r74_versions its one pass, run first by r41.py; every board rebuilds unchanged · none · —
 - 2026-11-26 · (this commit) · the Player's laptop bar as the editor's: ✕, the song's name, the Version and mode capsule beside it, never centred; the name and capsule hold their place between Play and Edit (lines flow: no frame change) · PlayerDesk · v746
 - 2026-11-26 · (this commit) · second pass: the title menu's save line under the name, Keyboard shortcuts without a stray "?" · EditorLaptop, EditorDraftLaptop · v745
