@@ -41,15 +41,12 @@ def player_rail(t):
     h = h[:r0] + h[r1:]
     c0 = h.index('<div role="radiogroup" aria-label="Score"'); c1 = h.index('<div style="border-radius: 12px; background: {{acc.bg}}', c0)
     h = h[:c0] + '<div role="group" aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px">' + h[c1:]
-    # the accompaniment's own settings show only while the accompaniment is on the stand (the Score is as written)
+    # the accompaniment's patterns leave the Player for the editor's palette, which writes one into the chosen bars
     g0 = h.index('<div role="group" aria-label="Accompaniment"'); depth = 0
     for m in re.finditer(r'<(/?)div\b[^>]*>', h[g0:]):
         depth += -1 if m.group(1) else 1
         if depth == 0: g1 = g0 + m.end(); break
-    h = h[:g0] + '<sc-if value="{{isAcc}}" hint-placeholder-val="{{true}}">' + h[g0:g1] + '</sc-if>' + h[g1:]
-    rb = re.search(r'<button type="button" role="radio" aria-checked="\{\{acc.on\}\}".*?</button>', h, re.S).group(0)
-    h = h.replace(rb, f'<h3 style="margin: 0; padding: 12px 16px 4px; font-size: 15px; font-weight: 600">Accompaniment</h3>', 1)
-    h = h.replace('background: {{acc.bg}}; overflow: hidden; box-shadow: inset 0 0 0 2px {{acc.line}}, 0 0 0 1px rgba(51,41,33,.07)', 'background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px rgba(51,41,33,.07)', 1)
+    h = h[:g0] + h[g1:]  # the accompaniment's patterns are the editor's now (its palette writes one into chosen bars)
     t = t[:a] + h + t[b:]
     t = _dock(t, 'Settings', head('Song'))
     t = t.replace('<sc-if value="{{isMore}}"', '<sc-if value="{{panelSong}}"', 1)
@@ -115,7 +112,7 @@ def player_rail(t):
             "panelSong: (s.rail ?? 'song') === 'song' && !['pattern', 'patfilter', 'key'].includes(open), panelView: (s.rail ?? 'song') === 'view', "
             "panelPad: (s.rail ?? 'song') === 'none' ? 76 : 428, "
             "expOn: !!s.exp, expBg: s.exp ? '#F3EEE8' : 'transparent', toggleExp: () => this.setState({ exp: !s.exp }), "
-            "toastOn: !!s.sTo, toastT: s.sTo || '', toastUndo: !!s.sUndo, songUndo: () => this.setState({ sTo: '', sUndo: false }), "
+            "toastOn: !!s.sTo, toastT: s.sTo || '', toastUndo: !!s.sUndo, songUndo: () => this.setState({ sTo: '', sUndo: false, ...(s.undoVer || {}), undoVer: null }), "
             "actShare: () => this.setState({ songActs: false, exp: false, sTo: 'Link copied', sUndo: false }), actPrint: () => this.setState({ songActs: false, exp: false }), "
             "actDup: () => this.setState({ songActs: false, exp: false, sTo: 'Copy saved to My songs', sUndo: false }), actArchive: () => this.setState({ songActs: false, exp: false, sTo: 'Song archived', sUndo: true }), "
             "expXml: () => this.setState({ songActs: false, exp: false, sTo: 'Exported as MusicXML', sUndo: false }), expMxl: () => this.setState({ songActs: false, exp: false, sTo: 'Exported as compressed MusicXML', sUndo: false }), expMidi: () => this.setState({ songActs: false, exp: false, sTo: 'Exported as MIDI', sUndo: false }), "
@@ -144,7 +141,7 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         t = t.replace(close, close + f'<h1 style="margin: 0 30px 0 12px; padding: 0; font-size: 17px; font-weight: 600; white-space: nowrap; pointer-events: auto">Amazing Grace</h1>' + sw, 1)
     # Edit its own button beside the version, as Flat's "✎ Edit ▾" after the name and transport (the owner's Flat
     # screenshots; owner, 2026-11-26: "i dont like this edit button with this accompaniment … inside this control")
-    t = t.replace(sw, f'<div style="display: flex; align-items: center; gap: 8px; min-width: 0; pointer-events: auto">{sw}<sc-if value="{{{{isScore}}}}" hint-placeholder-val="{{{{false}}}}">{EDITB("play", "EditorDraft" + sfx)}</sc-if></div>', 1)
+    t = t.replace(sw, f'<div style="display: flex; align-items: center; gap: 8px; min-width: 0; pointer-events: auto">{sw}{EDITB("play", "Editor" + sfx)}</div>', 1)
     if name == 'PlayerApp':
         t = t.replace('padding: 8px 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; pointer-events: none', MODEBAR_P + '; pointer-events: none', 1)
     # Close goes back to the library the song was opened from (the song's own page is gone, R74)
@@ -160,7 +157,6 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     # editor's A4 page on its desk (A4PAGE), as Flat's player shows the page; on a phone the same engraving at the
     # phone's width, the credits as the page prints them; the accompaniment credited under the music, as "Arr."
     phone = name == 'PlayerApp'
-    CREDIT = 'Accompaniment from the chords'
     if 'data-r74 ' not in t:
         a = t.index('margin-top: {{sheetTop}}px; padding: ')
         i = t.rindex('<div', 0, a); depth = 0
@@ -170,17 +166,18 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         if phone:
             head = (f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: 24px; font-weight: 400; line-height: 1.1">Amazing Grace</h2>'
                     f'<div style="margin: 12px 0 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; font-family: {SERIF}; font-size: 12px; line-height: 16px"><span>Words: John Newton</span>'
-                    f'<span style="text-align: right">Music: New Britain<br><i style="color: {SOFT}">{CREDIT}</i></span></div>'
+                    f'<span style="text-align: right">Music: New Britain</span></div>'
                     f'<div style="margin: 12px 0 0; font-family: {SERIF}; font-size: 12px; font-weight: 700">Verse <span style="font-weight: 400"><svg role="img" aria-label="quarter note" viewBox="0 0 8 16" width="6" height="12" style="vertical-align: -2px"><ellipse cx="3.4" cy="13" rx="3.3" ry="2.3" transform="rotate(-20 3.4 13)" fill="{INK}"/><rect x="5.8" y="0" width="1" height="12.6" fill="{INK}"/></svg> = 80</span></div>')
             # the page as paper on the grey desk, as Flat's phone shows the page (flat-score-editor 021, 023): white,
             # its margins, its shadow; three bars a line so the staff stays a readable size
-            body = head + '<div style="margin: -4px 0 0">' + score_grand(470, [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11, 12]], sel=None, size=1.0) + '</div>'
+            # the open version's music: with its piano accompaniment, or the melody alone (a lead sheet)
+            body = head + ''.join(f'<sc-if value="{{{{{k}}}}}" hint-placeholder-val="{{{{{h}}}}}"><div style="margin: -4px 0 0">' + score_grand(470, [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11, 12]], sel=None, size=1.0, piano=pn) + '</div></sc-if>' for k, h, pn in (('isPiano', 'true', True), ('isLead', 'false', False)))
             body += f'<p style="margin: 24px 0 0; text-align: center; font-family: {SERIF}; font-size: 12px; color: {SOFT}">Public domain</p>'
             new = (f'<div data-r74 style="margin-top: {{{{sheetTop}}}}px; box-sizing: border-box; min-height: calc(100% - {{{{sheetTop}}}}px); padding: 4px 8px 140px; background: {FILL}">'
                    f'<article aria-label="Page 1" style="box-sizing: border-box; padding: 24px 16px 32px; background: {SHEET}; color: {INK}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28)">{body}</article></div>')
         else:
             new = (f'<div data-r74 style="margin-top: {{{{sheetTop}}}}px; box-sizing: border-box; min-height: calc(100% - {{{{sheetTop}}}}px); padding: 24px 0 160px; background: {FILL}; display: flex; justify-content: center">'
-                   f'<div style="zoom: 1.4">{A4PAGE(CREDIT, None)}</div></div>')
+                   f'<div style="zoom: 1.4"><sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}">{A4PAGE("", None)}</sc-if><sc-if value="{{{{isLead}}}}" hint-placeholder-val="{{{{false}}}}">{A4PAGE("", None, piano=False)}</sc-if></div></div>')
         t = t[:i] + new + t[j:]
     # the settings' Arrangement says it is not written for this song
     if 'data-r74y' not in t:
@@ -205,14 +202,33 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         PEN = PENI.replace('width="18" height="18"', 'width="20" height="20"')
         items = (f'<a data-r74m role="menuitem" href="SongSettings{sfx}" style="{st}">{GEAR}<span>Settings</span></a>')
         t = t[:j] + items + t[j:].replace('border-top: 0"', 'border-top: 1px solid #EFE9E1"', 1)
-    VERJS = ("verName: (s.ver ?? 'acc') === 'score' ? 'Score' : 'Accompaniment', isScore: (s.ver ?? 'acc') === 'score', isAcc: (s.ver ?? 'acc') !== 'score', "
-             "verAccOn: (s.ver ?? 'acc') !== 'score', verScoOn: (s.ver ?? 'acc') === 'score', "
-             "verRef: (el) => { this._ver = el; }, pickAcc: () => { if (this._ver) this._ver.open = false; this.setState({ ver: 'acc' }); }, pickSco: () => { if (this._ver) this._ver.open = false; this.setState({ ver: 'score' }); }, ")
+    # a song's versions (kit VERSW): the open one, the default, each one's name; New version copies the open one
+    VERJS2 = ("verName: VC.name, isPiano: !!VC.piano, isLead: !VC.piano, "
+              "verRows: VS.map((v) => ({ name: v.name, sub: v.sub, isDef: v.id === VD, cur: v.id === VCID, on: v.id === VCID ? 'true' : 'false', pick: () => { if (this._ver) this._ver.open = false; this.setState({ verCur: v.id }); } })), "
+              "verRef: (el) => { this._ver = el; }, setDefFg: VCID === VD ? '#685E56' : '#332921', delVerFg: VS.length < 2 ? '#685E56' : '#B3261E', "
+              "actNewVer: () => { if (this._ver) this._ver.open = false; const id = 'v' + VS.length + Date.now(); this.setState({ vers: [...VS, { ...VC, id, name: VC.name + ' 2' }], verCur: id, sTo: 'New version from ' + VC.name, sUndo: false }); }, "
+              "actRename: () => { if (this._ver) this._ver.open = false; this.setState({ ren: true }); }, "
+              "actSetDef: () => { if (this._ver) this._ver.open = false; if (VCID !== VD) this.setState({ verDef: VCID, sTo: VC.name + ' opens first now', sUndo: false }); }, "
+              "actDelVer: () => { if (VS.length < 2) return; if (this._ver) this._ver.open = false; const rest = VS.filter((v) => v.id !== VCID); const nd = VD === VCID ? rest[0].id : VD; this.setState({ undoVer: { vers: VS, verCur: VCID, verDef: VD }, vers: rest, verDef: nd, verCur: nd, sTo: VC.name + ' deleted', sUndo: true }); }, "
+              "renOn: !!s.ren, renVal: VC.name, renRef: (el) => { this._rn = el; }, renCancel: () => this.setState({ ren: false }), "
+              "renSave: () => { const n = ((this._rn && this._rn.value) || '').trim(); if (!n) return; this.setState({ vers: VS.map((v) => (v.id === VCID ? { ...v, name: n } : v)), ren: false, sTo: 'Renamed to ' + n, sUndo: false }); }, ")
     if 'verName:' not in t:
         assert "isMore: open === 'settings'," in t, name
-        t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + VERJS, 1)
-    t, n = re.subn(r'(<br><i style="color: #685E56">Accompaniment from the chords</i>)', r'<sc-if value="{{isAcc}}" hint-placeholder-val="{{true}}">\1</sc-if>', t)
-    assert n >= 1, name
+        t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + VERJS2, 1)
+        # the version's facts, worked out before the state object that reads them
+        r = t.rindex('const s = this.state || {};\n', 0, t.index('verName:')) + len('const s = this.state || {};\n')
+        t = t[:r] + ("const VS = s.vers ?? [{ id: 'orig', name: 'Original', sub: 'Melody, chords and words', piano: false }, { id: 'mine', name: 'My version', sub: 'With a piano accompaniment', piano: true }]; "
+                     "const VD = s.verDef ?? 'mine'; const VCID = VS.some((v) => v.id === s.verCur) ? s.verCur : VD; const VC = VS.find((v) => v.id === VCID) ?? VS[0];\n") + t[r:]
+
+    # Rename…: a small form over the Player (ui-and-mockups: what a laptop shows centred is only a form), the name
+    # chosen, Save at its foot
+    btn = lambda l, h, bg, fg: f'<button type="button" onClick="{{{{{h}}}}}" style="height: 44px; padding: 0 18px; border: 0; border-radius: 22px; background: {bg}; color: {fg}; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer">{l}</button>'
+    ren = ('<sc-if value="{{renOn}}" hint-placeholder-val="{{false}}">' + DIALOGBOX(
+        f'<h2 style="margin: 0; font-size: 17px; font-weight: 600">Rename version</h2>'
+        f'<input ref="{{{{renRef}}}}" aria-label="Version name" value="{{{{renVal}}}}" style="height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: inset 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}">'
+        f'<div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px">' + btn('Cancel', 'renCancel', 'transparent', INK) + btn('Save', 'renSave', ACCENT, INK) + '</div>',
+        close='renCancel', label='Rename version') + '</sc-if>')
+    t = t.replace('</main>', '</main>' + ren, 1)
     if name == 'PlayerDesk': t = player_rail(t)
     p.write_text(t)
 print('r74 versions ok')

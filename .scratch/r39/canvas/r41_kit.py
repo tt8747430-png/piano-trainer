@@ -45,31 +45,36 @@ GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; borde
 # what to read and a mode switch are two acts, so they are two controls. The version button is as wide as its longest
 # name, so Edit beside it holds its place between Play and Edit. The menu is a native disclosure.
 PENI = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="M21.17 6.81a1 1 0 0 0-3.99-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"></path></svg>'
-VERSIONS = (('Accompaniment', 'Made from the chords, to play', 'Player'), ('Score', 'As written: melody, chords and words', 'EditorDraft'))
-# R74 (owner, 2026-11-26: "make more clear that the edit button belongs only to the score view and not in the
-# accompaniment view and also we dont need this your version"): two versions, the accompaniment made from the chords
-# (read and played, never edited) and the score as written; Edit stands beside the version only while it says Score.
-# In the Player the menu switches the page in place (`live`: its rows call pickAcc and pickScore and the summary reads
-# {{verName}}); in the editor it says Score and its Accompaniment row goes back to the Player.
+VERSIONS = (('Original', 'Melody, chords and words'), ('My version', 'With a piano accompaniment'))
+VER_DEFAULT = 'My version'
+# R74, a song's versions (owner, 2026-11-26: "now we have a song and a song can have multiple versions of itself like
+# just a score or my own version of this score with accompaniment: and when opening a songs now it open the default
+# version. this versions can be edited as the user wants and the title of this versions"): the menu beside the name
+# lists them (the default marked, the open one checked), then acts on the open one: New version (a copy of it),
+# Rename…, Set as default, Delete version (crimson, last, with Undo). Edit beside it edits whichever is open. In the
+# Player the list is live (`live`: rows from {{verRows}}, the summary {{verName}}); in the editor it switches by link.
 def VERSW(on, other_href, label=None, live=False):
     sfx = 'Laptop.dc.html' if 'Laptop' in other_href else '.dc.html'
-    shown = label or ('Accompaniment' if on == 'play' else 'Score')
-    rows = []
-    for name, sub, board in VERSIONS:
-        cur = name == shown
-        st = f'width: 100%; min-height: 56px; box-sizing: border-box; padding: 8px 12px; border: 0; background: transparent; font: inherit; text-align: left; cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: {INK}'
-        check = f'<span style="flex: none; width: 16px; display: flex; color: {INK}">' + (f'<sc-if value="{{{{ver{name[:3]}On}}}}" hint-placeholder-val="{{{{{str(cur).lower()}}}}}">{CHECK}</sc-if>' if live else (CHECK if cur else '')) + '</span>'
-        body = (f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{name}</span>'
-                f'<span style="font-size: 13px; color: {SOFT}">{sub}</span></span>{check}')
-        if live:
-            rows.append(f'<button type="button" role="menuitemradio" aria-checked="{{{{ver{name[:3]}On}}}}" onClick="{{{{pick{name[:3]}}}}}" style="{st}">{body}</button>')
-        elif cur:
-            rows.append(f'<span role="menuitemradio" aria-checked="true" style="{st}">{body}</span>')
-        else:
-            rows.append(f'<a role="menuitemradio" aria-checked="false" href="{board}{sfx}" style="{st}">{body}</a>')
-    menu = (f'<div role="menu" aria-label="Versions" style="position: absolute; z-index: 61; top: 52px; left: 0; width: 320px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; flex-direction: column; text-align: left; font-weight: 400">{"".join(rows)}</div>')
-    txt = '{{verName}}' if live else shown
-    summary = (f'<summary aria-label="Version: {txt}" data-tip="Versions" style="list-style: none; height: 44px; box-sizing: border-box; min-width: 168px; padding: 0 12px 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 6px; cursor: pointer; font-size: 15px; font-weight: 600; color: {INK}; white-space: nowrap">'
+    shown = label or VER_DEFAULT
+    st = f'width: 100%; min-height: 56px; box-sizing: border-box; padding: 8px 12px; border: 0; background: transparent; font: inherit; text-align: left; cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: {INK}'
+    chip = f'<span style="flex: none; height: 20px; padding: 0 6px; border-radius: 6px; background: #EEE9E2; color: {SOFT}; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center">Default</span>'
+    body = lambda name, sub, d, chk: (f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600">{name}{d}</span>'
+                                      f'<span style="font-size: 13px; color: {SOFT}">{sub}</span></span><span style="flex: none; width: 16px; display: flex; color: {INK}">{chk}</span>')
+    act = f'min-height: 40px; box-sizing: border-box; padding: 0 12px; border: 0; background: transparent; font: inherit; font-size: 15px; text-align: left; cursor: pointer; border-radius: 10px; display: flex; align-items: center; width: 100%; color: {INK}'
+    if live:
+        rows = ('<sc-for list="{{verRows}}" as="v" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{v.on}}" onClick="{{v.pick}}" style="' + st + '">'
+                + body('{{v.name}}', '{{v.sub}}', f'<sc-if value="{{{{v.isDef}}}}" hint-placeholder-val="{{{{false}}}}">{chip}</sc-if>', f'<sc-if value="{{{{v.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK}</sc-if>') + '</button></sc-for>')
+        acts = (f'<div role="separator" style="height: 1px; margin: 6px 6px; background: {LINE}"></div>'
+                + ''.join(f'<button type="button" role="menuitem" onClick="{{{{{h}}}}}" style="{act}{c}">{l}</button>' for l, h, c in (
+                    ('New version', 'actNewVer', ''), ('Rename…', 'actRename', ''), ('Set as default', 'actSetDef', '; color: {{setDefFg}}'), ('Delete version', 'actDelVer', '; color: {{delVerFg}}'))))
+        txt = '{{verName}}'
+    else:
+        rows = ''.join((f'<span role="menuitemradio" aria-checked="true" style="{st}">' if n == shown else f'<a role="menuitemradio" aria-checked="false" href="{other_href.replace("Player", "Editor") if on == "edit" else other_href}" style="{st}">')
+                       + body(n, sub, chip if n == VER_DEFAULT else '', CHECK if n == shown else '') + ('</span>' if n == shown else '</a>') for n, sub in VERSIONS)
+        acts = ''
+        txt = shown
+    menu = (f'<div role="menu" aria-label="Versions" style="position: absolute; z-index: 61; top: 52px; left: 0; width: 320px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; flex-direction: column; text-align: left; font-weight: 400">{rows}{acts}</div>')
+    summary = (f'<summary aria-label="Version: {txt}" data-tip="Versions" style="list-style: none; height: 44px; box-sizing: border-box; min-width: 148px; padding: 0 12px 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 6px; cursor: pointer; font-size: 15px; font-weight: 600; color: {INK}; white-space: nowrap">'
                f'{txt}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_D}</span></summary>')
     det = '<details class="vsw" ref="{{verRef}}" style="position: relative">' if live else '<details class="vsw" style="position: relative">'
     return (f'<div role="group" aria-label="Version" style="flex: none; position: relative; border-radius: 22px; {GLASSFX}; pointer-events: auto">'
@@ -525,13 +530,13 @@ LINKI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="cur
 # an engraver prints "Arr." at the right
 # the page: A4 at 96 dpi (794 × 1123), 17.2 mm margins (65), a 7 mm staff (26.5 px: the kit's 32 units × 0.828)
 PG_W, PG_H, PG_M, PG_K = 794, 1123, 65, 26.5 / 32
-def A4PAGE(credit='', sel=(3, 0)):
+def A4PAGE(credit='', sel=(3, 0), piano=True):
     cw = PG_W - 2 * PG_M
     return (f'<article aria-label="Page 1" style="flex: none; position: relative; width: {PG_W}px; height: {PG_H}px; box-sizing: border-box; padding: {PG_M}px {PG_M}px 0; background: {SHEET}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28); display: flex; flex-direction: column">'
             f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: 30px; font-weight: 400; line-height: 1.1; color: {INK}">Amazing Grace</h2>'
             f'<div style="margin: 20px 0 0; display: flex; justify-content: space-between; gap: 24px; font-family: {SERIF}; font-size: 13px; color: {INK}"><span>Words: John Newton</span><span style="text-align: right">Music: New Britain (American folk tune)' + (f'<br><i style="color: {SOFT}">{credit}</i>' if credit else '') + f'</span></div>'
             f'<div style="margin: 16px 0 0; font-family: {SERIF}; font-size: 13px; font-weight: 700; color: {INK}">Verse <span style="font-weight: 400"><svg role="img" aria-label="quarter note" viewBox="0 0 8 16" width="7" height="14" style="vertical-align: -2px"><ellipse cx="3.4" cy="13" rx="3.3" ry="2.3" transform="rotate(-20 3.4 13)" fill="{INK}"/><rect x="5.8" y="0" width="1" height="12.6" fill="{INK}"/></svg> = 80</span></div>'
-            f'<div style="margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=sel, size=1.0).replace(ACCENT, '#85B8DC') + '</div>'
+            f'<div style="margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=sel, size=1.0, piano=piano).replace(ACCENT, '#85B8DC') + '</div>'
             f'<p style="position: absolute; left: 0; right: 0; bottom: 32px; margin: 0; text-align: center; font-family: {SERIF}; font-size: 11px; color: {SOFT}">Public domain</p></article>')
 
 # A page over a full-screen screen (the editor's Credits; owner, 2026-11-26: "it should open properly on a proper page

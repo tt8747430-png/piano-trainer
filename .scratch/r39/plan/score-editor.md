@@ -7,6 +7,7 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
 
 ## Rulings (feedback-log "Score editor")
 
+- **R74, versions and the accompaniment in the editor** (owner, 2026-11-26: "a song can have multiple versions of itself … we should merge the accompaniment paterns in the editor so that the user can add a pattern for this specific measure that he has selected"). Why each place: the version menu stays beside the name (Flat's version list under the title; the owner's earlier ruling "the version beside the name"); its acts after a hairline, the loss last in crimson (ROWMENU's rule); Rename a centred form, the one thing a laptop centres (ui-and-mockups); the patterns at the head of the Notation panel because they act on the selection the strip above names (proximity; Band-in-a-Box's style per bar range, Flat's Insert on a selection), one row each as the Pattern library's rows, 44 high; Edit on every version since any version can now be written. Replaces "versions Accompaniment and Score, Edit only beside Score". Boards: PlayerDesk, PlayerApp, Editor, EditorLaptop, EditorDraft, EditorDraftLaptop.
 - **R74, the editor as Flat's: a toolbar, panes that resize, Page and Panorama only** (owner, 2026-11-26: "reserach
   the flat editor workflow and its ui … we need real toolbar like on the laptop, real resizable interactions … remove
   the vertical scroll and leave only the page and panorama view and make proper layout for the sheet. reserach how a

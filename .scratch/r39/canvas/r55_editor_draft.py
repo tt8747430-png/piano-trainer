@@ -39,13 +39,24 @@ def GATES(back):
 # the gates' Close is the editor bar's own glass Close, so the way out looks the same in every state
 GHEAD = lambda back: f'<header style="flex: none; height: 60px; display: flex; align-items: center; padding: 8px 16px"><a href="{back}" aria-label="Close the editor" style="width: 44px; height: 44px; border-radius: 22px; background: rgba(254,253,251,.86); -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, 0 1px 2px rgba(51,41,33,.10), 0 2px 6px -2px rgba(51,41,33,.10); color: {INK}; display: flex; align-items: center; justify-content: center">{XI}</a></header>'
 
-# an editor edits the built-in accompaniment itself, so the version says Accompaniment (a regex: the kit's parts are
+# an editor edits the built-in song's Original (melody, chords and words), so the version says Original and the page
+# prints the melody alone, as the Player's Original; its Accompaniment starts at None (a regex: the kit's parts are
 # redefined between r44 and here, so the exact string no longer matches)
-edph = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'Player.dc.html'), eph4, count=1, flags=re.S), 'true')
+def _LEAD(h):
+    n = 0
+    for a, b in ((A4PAGE(), A4PAGE(piano=False)), (A4PAGE(sel=None), A4PAGE(sel=None, piano=False))) + tuple(
+            (score_grand(0, [list(range(13))], sel=(3, 0), size=1.0, natural=sc).replace(ACCENT, '#85B8DC'),
+             score_grand(0, [list(range(13))], sel=(3, 0), size=1.0, natural=sc, piano=False).replace(ACCENT, '#85B8DC')) for sc in (0.95, 1.15)):
+        n += h.count(a); h = h.replace(a, b)
+    assert n, 'the draft found no score to make a lead sheet of'
+    return h
+eph4, elm4 = _LEAD(eph4), _LEAD(elm4)
+DJS = DJS.replace("(st.pat ?? 'p1')", "(st.pat ?? 'none')", 1)
+edph = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'Player.dc.html', label='Original'), eph4, count=1, flags=re.S), 'true')
         + IF('notLive', GHEAD('Songs.dc.html') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("Songs.dc.html")}</main>')
         + STRIP('dsDemo') + STRIP('states') + '<div style="height: 22px; flex: none"></div>' + TOASTS)
 DJS = DJS.replace("isLive: live,", "isLive: live, notLive: !live,", 1)
-edlm = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'PlayerLaptop.dc.html'), elm4, count=1, flags=re.S), 'true')
+edlm = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'PlayerLaptop.dc.html', label='Original'), elm4, count=1, flags=re.S), 'true')
         + IF('notLive', GHEAD('SongsLaptop.dc.html').replace('padding: 8px 16px', 'padding: 12px 24px') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("SongsLaptop.dc.html")}</main>')
         + f'<div style="position: absolute; right: 24px; bottom: 188px; z-index: 40; width: 760px; padding-top: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 4px 14px -6px rgba(51,41,33,.25)">{STRIP("dsDemo")}{STRIP("states")}</div>' + TOASTL)
 DSH = PHLAYERS(DMENU('.dc.html'), DSAVED) + BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY) + DASKS
