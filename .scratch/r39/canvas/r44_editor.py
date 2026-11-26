@@ -101,7 +101,8 @@ def EBAR(close_href, play_href, title=False):
     left = f'<a href="{close_href}" aria-label="Close the editor" data-tip="Close · Esc" style="flex: none; width: 44px; height: 44px; border-radius: 22px; {GL}; color: {INK}; display: flex; align-items: center; justify-content: center; position: relative">{XI}</a>'
     if title:
         left += f'<div style="display: flex; align-items: center; min-width: 0"><span style="font-size: 13px; color: {SOFT}">Saved on this device</span></div>'
-    right = f'<div style="flex: none; display: flex; border-radius: 22px; {GL}">{GBTN("Undo", UNDO, "undo", tip="Undo · ⌘Z")}{GBTN("Redo", REDO, "redo", tip="Redo · ⇧⌘Z")}{GBTN("More", MORE, "openMore")}</div>'
+    # Undo and Redo are the toolbar's (Flat's actions: delete, history, clipboard); the bar keeps the score's menu
+    right = f'<div style="flex: none; display: flex; border-radius: 22px; {GL}">{GBTN("More", MORE, "openMore")}</div>'
     return (f'<header style="flex: none; position: relative; z-index: 20; {MODEBAR_P}">'
             f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{left}</div>{MODESW("edit", play_href)}<div style="display: flex; justify-content: flex-end">{right}</div></header>')
 
@@ -170,7 +171,7 @@ TTOOL = TOOL.replace('min-width: 48px; height: 48px; box-sizing: border-box; pad
 ESSENTIALS = (f'<div role="group" aria-label="Note input" style="flex: none; display: flex; align-items: center; padding: 2px; border-radius: 14px; background: {FILL}">'
               f'<sc-for list="{{{{tbDur}}}}" as="t" hint-placeholder-count="9">{TTOOL}</sc-for>{TSEP}<sc-for list="{{{{tbAcc}}}}" as="t" hint-placeholder-count="3">{TTOOL}</sc-for></div>')
 KEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-pressed="{{{{keysPressed}}}}" onClick="{{{{toggleKeys}}}}" style="flex: none; position: relative; width: 44px; height: 44px; border: 0; padding: 0; border-radius: 12px; background: {{{{keysBg}}}}; color: {{{{keysFg}}}}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>')
-CLIP = TBTN('Delete', DELI, 'delNote', 'Delete · ⌫') + TSEP + TBTN('Copy', COPYI, 'copied', 'Copy · ⌘C') + TBTN('Cut', CUTI, 'cut', 'Cut · ⌘X') + TBTN('Paste', PASTEI, 'pasted', 'Paste · ⌘V')
+CLIP = TBTN('Delete', DELI, 'delNote', 'Delete · ⌫') + TSEP + TBTN('Undo', UNDO, 'undo', 'Undo · ⌘Z') + TBTN('Redo', REDO, 'redo', 'Redo · ⇧⌘Z') + TSEP + TBTN('Copy', COPYI, 'copied', 'Copy · ⌘C') + TBTN('Cut', CUTI, 'cut', 'Cut · ⌘X') + TBTN('Paste', PASTEI, 'pasted', 'Paste · ⌘V')
 ZOOMG = (TBTN('Zoom out', ZOUTI, 'zoomOut', 'Zoom out · ⌘−', 'zoutDis') + f'<button type="button" aria-label="Reset the zoom" data-tip="Actual size · ⌘0" onClick="{{{{zoomReset}}}}" style="flex: none; position: relative; min-width: 56px; height: 44px; border: 0; padding: 0 4px; border-radius: 12px; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{zoomL}}}}</button>'
          + TBTN('Zoom in', ZINI, 'zoomIn', 'Zoom in · ⌘=', 'zinDis'))
 TOOLBAR_L = (f'<div role="toolbar" aria-label="Notation" style="flex: none; height: 56px; box-sizing: border-box; padding: 0 24px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'

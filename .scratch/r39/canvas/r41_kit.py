@@ -36,14 +36,42 @@ GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; borde
 # both bars, the same pixels in each; each half 65 wide so nothing moves when the mode changes; the mode shown is ink.
 # MODEBAR is the bar both screens share: Close leading, the switch, the screen's own glass group trailing (its column
 # held to the editor's three buttons, so the switch stands where the editor's does).
-def MODESW(on, other_href):
-    seg_ = 'width: 65px; height: 44px; padding: 0; box-sizing: border-box; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 15px; text-decoration: none; border: 0; font-family: inherit'
-    def half(label):
-        if label.lower() == on:
-            return f'<span role="radio" aria-checked="true" style="{seg_}; color: {SHEET}; font-weight: 600; background: {INK}">{label}</span>'
-        return f'<a href="{other_href}" role="radio" aria-checked="false" style="{seg_}; color: {SOFT}; font-weight: 500; background: transparent">{label}</a>'
-    return f'<div role="radiogroup" aria-label="Mode" style="display: flex; border-radius: 22px; {GLASSFX}; pointer-events: auto">{half("Play")}{half("Edit")}</div>'
-MODEBAR_P = 'height: 60px; box-sizing: border-box; padding: 8px 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px'
+# R74 (owner, 2026-11-26: "the switch between the play and edit mode doesnt make any sense … make it more visible to the
+# user that its an accompaniment and not a real score and make easier to switch between the score and the accompaniment
+# something like how the flat editor switches between the readonly and the edit mode … maybe we can merge this two"):
+# one glass capsule at the bar's centre says what is on the stand and opens the versions (Accompaniment, made from
+# the chords; Arrangement, written by hand, where the song has one; Your arrangement, the learner's own), and holds the
+# one way into and out of editing, as Flat's score page (read-only, Edit) and its editor (Done). Reading, its end is
+# Edit; editing, it names Your arrangement (the accompaniment is never written over: Edit starts the learner's copy)
+# and its end is Done, in ink. The menu is a native disclosure, so it opens on any board without the board's script.
+PENI = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="M21.17 6.81a1 1 0 0 0-3.99-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"></path></svg>'
+VERSIONS = (('Accompaniment', 'From the chords · Bass + chords', 'Player'), ('Arrangement', 'None written for this song yet', ''), ('Your arrangement', 'Write your own, from this accompaniment', 'Editor'))
+def MODESW(on, other_href, label=None):
+    sfx = 'Laptop.dc.html' if 'Laptop' in other_href else '.dc.html'
+    shown = label or ('Accompaniment' if on == 'play' else 'Your arrangement')
+    rows = []
+    for name, sub, board in VERSIONS:
+        cur = name == shown
+        st = f'width: 100%; min-height: 56px; box-sizing: border-box; padding: 8px 12px; border-radius: 10px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: {INK if board or cur else SOFT}'
+        body = (f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: {600 if cur else 500}">{name}</span>'
+                f'<span style="font-size: 13px; color: {SOFT}">{sub}</span></span><span style="flex: none; width: 16px; display: flex; color: {INK}">{CHECK if cur else ""}</span>')
+        if cur or not board:
+            rows.append(f'<span role="menuitemradio" aria-checked="{"true" if cur else "false"}" aria-disabled="{"false" if cur else "true"}" style="{st}">{body}</span>')
+        else:
+            rows.append(f'<a role="menuitemradio" aria-checked="false" href="{board}{sfx}" style="{st}">{body}</a>')
+    menu = (f'<div role="menu" aria-label="Versions" style="position: absolute; z-index: 61; top: 52px; left: 0; width: 320px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; flex-direction: column; text-align: left; font-weight: 400">{"".join(rows)}</div>')
+    summary = (f'<summary aria-label="Version: {shown}" data-tip="Versions" style="list-style: none; height: 44px; box-sizing: border-box; padding: 0 8px 0 16px; display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 15px; font-weight: 600; color: {INK}; white-space: nowrap">'
+               f'{shown}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_D}</span></summary>')
+    seg_ = 'height: 44px; box-sizing: border-box; border-radius: 22px; display: flex; align-items: center; gap: 6px; font-size: 15px; text-decoration: none; white-space: nowrap; position: relative'
+    # a phone's bar has no room for the word: Edit is its pencil alone, named in its tip
+    end = ((f'<a href="{other_href}" aria-label="Edit" data-tip="Edit · E" style="{seg_}; padding: 0 16px 0 12px; color: {INK}; font-weight: 500">{PENI}Edit</a>' if 'Laptop' in other_href
+            else f'<a href="{other_href}" aria-label="Edit" data-tip="Edit" style="{seg_}; width: 48px; justify-content: center; color: {INK}">{PENI}</a>') if on == 'play'
+           else f'<a href="{other_href}" aria-label="Done" data-tip="Done · Esc" style="{seg_}; padding: 0 18px; color: {SHEET}; font-weight: 600; background: {INK}">Done</a>')
+    return (f'<div role="group" aria-label="Version and mode" style="position: relative; display: flex; align-items: center; border-radius: 22px; {GLASSFX}; pointer-events: auto">'
+            f'<style>details.vsw > summary::-webkit-details-marker {{ display: none }}</style><details class="vsw" style="position: relative">{summary}{menu}</details>'
+            f'<span aria-hidden="true" style="flex: none; width: 1px; height: 24px; background: {LINE}"></span>{end}</div>')
+# a phone's bar: Close, then the version-and-mode capsule at the start (it is wider than a centred column leaves), the screen's group at the end
+MODEBAR_P = 'height: 60px; box-sizing: border-box; padding: 8px 16px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; justify-items: start; align-items: center; gap: 8px'
 MODEBAR_L = 'height: 72px; box-sizing: border-box; padding: 12px 24px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px'
 # The one bar (owner, 2026-11-15: "the headers" inconsistent; Apple HIG, Toolbars: "Use the standard Back and Close
 # buttons … consistently implement it throughout your app"; iOS 26 draws bar items as glass): every bar's buttons

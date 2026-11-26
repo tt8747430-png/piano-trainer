@@ -74,17 +74,8 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "Song.dc.html": {
-      "x": 4240,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "A song, phone",
-      "is_interactive": true,
-      "page": "songs"
-    },
     "SongSettings.dc.html": {
-      "x": 4770,
+      "x": 4240,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -93,7 +84,7 @@
       "page": "songs"
     },
     "Section.dc.html": {
-      "x": 5300,
+      "x": 4770,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -102,7 +93,7 @@
       "page": "songs"
     },
     "Editor.dc.html": {
-      "x": 5830,
+      "x": 5300,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -111,7 +102,7 @@
       "page": "songs"
     },
     "EditorDraft.dc.html": {
-      "x": 6360,
+      "x": 5830,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -120,7 +111,7 @@
       "page": "songs"
     },
     "Takes.dc.html": {
-      "x": 6890,
+      "x": 6360,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -129,7 +120,7 @@
       "page": "songs"
     },
     "Take.dc.html": {
-      "x": 7420,
+      "x": 6890,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -209,17 +200,8 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "SongLaptop.dc.html": {
-      "x": 17784,
-      "y": 1720,
-      "w": 2143,
-      "h": 1299,
-      "title": "A song, laptop",
-      "is_interactive": true,
-      "page": "songs"
-    },
     "SongSettingsLaptop.dc.html": {
-      "x": 20007,
+      "x": 17784,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -228,7 +210,7 @@
       "page": "songs"
     },
     "SectionLaptop.dc.html": {
-      "x": 22230,
+      "x": 20007,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -237,7 +219,7 @@
       "page": "songs"
     },
     "EditorLaptop.dc.html": {
-      "x": 24453,
+      "x": 22230,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -246,7 +228,7 @@
       "page": "songs"
     },
     "EditorDraftLaptop.dc.html": {
-      "x": 26676,
+      "x": 24453,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -255,7 +237,7 @@
       "page": "songs"
     },
     "TakesLaptop.dc.html": {
-      "x": 28899,
+      "x": 26676,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -264,7 +246,7 @@
       "page": "songs"
     },
     "TakeLaptop.dc.html": {
-      "x": 31122,
+      "x": 28899,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -1260,7 +1242,6 @@
     "Archive.dc.html",
     "Trash.dc.html",
     "Groups.dc.html",
-    "Song.dc.html",
     "SongSettings.dc.html",
     "Section.dc.html",
     "Editor.dc.html",
@@ -1275,7 +1256,6 @@
     "ArchiveLaptop.dc.html",
     "TrashLaptop.dc.html",
     "GroupsLaptop.dc.html",
-    "SongLaptop.dc.html",
     "SongSettingsLaptop.dc.html",
     "SectionLaptop.dc.html",
     "EditorLaptop.dc.html",

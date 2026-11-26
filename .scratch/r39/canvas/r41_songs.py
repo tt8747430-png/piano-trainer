@@ -22,7 +22,7 @@ def STACK(c):
     pg = lambda x, y, r: f'<g transform="rotate({r} {x + 12} {y + 15})"><rect x="{x}" y="{y}" width="24" height="30" rx="3" fill="#FFFFFF" stroke="#332921" stroke-opacity=".18"/>' + ''.join(f'<path d="M{x + 4} {y + 12 + i * 3}H{x + 20}" stroke="#332921" stroke-width=".6" opacity=".45"/>' for i in range(5)) + '</g>'
     return 'url("data:image/svg+xml,' + _q(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" fill="{c}"/>{pg(6, 9, -10)}{pg(14, 7, 8)}</svg>') + '")'
 INC = {'Holy, Holy, Holy': (2, 2, 4, 4, 5, 5), 'Abide with Me': (4, 4, 3, 2, 3), 'Be Thou My Vision': (2, 2, 3, 4, 3, 2), 'It Is Well': (4, 4, 3, 2, 2), 'Great Is Thy Faithfulness': (0, 2, 4, 4, 5), 'Silent Night': (4, 5, 4, 2), 'Amazing Grace': (0, 3, 5, 4, 5), 'Für Elise': (6, 5, 6, 5, 6, 3), 'Let It Be': (3, 3, 3, 4, 2), 'Clair de lune': (5, 5, 3, 2, 1), 'Twinkle, Twinkle, Little Star': (0, 0, 4, 4, 5, 5), 'Ode to Joy': (2, 2, 3, 4, 4, 3), 'Jingle Bells': (2, 2, 2, 2, 2, 2), 'My first song': (0, 2, 4, 2)}
-def S(t, s, v, i, c, places=(), tags=(), href='Song.dc.html', ic=INK):
+def S(t, s, v, i, c, places=(), tags=(), href='Player.dc.html', ic=INK):
     folder = href in ('#', 'Folder.dc.html') or t == 'Shared with me'
     pic = STACK(c) if folder else INCIPIT(INC.get(t, (2, 4)))
     return {'folder': folder, 'pic': pic, 't': t, 's': s, 'v': v, 'i': '' , 'c': c, 'ic': ic, 'href': href, 'places': list(places), 'tags': list(tags)}
@@ -41,7 +41,7 @@ SONGS_D = {'emptyLib': {'t': 'Your library is empty', 'b': 'Create a song, or re
       S('Jingle Bells', 'James Lord Pierpont · G major', '', 'G', HONEY, (), ('G major', 'Beginner')),
       S('My first song', 'Written by you · C major', '', 'C', FILL, (), ('C major', 'Beginner'))]}]}
 library('Songs', 'My songs', SONGS_D, soft='Explore', soft_href='Explore', right_extra=IB('Archive', ARCHIVE, href='Archive.dc.html'), root='Songs', section='Songs',
-        shelf_phone=shelf(132).replace('{SONG}', 'Song.dc.html'), shelf_laptop=shelf(170).replace('{SONG}', 'SongLaptop.dc.html').replace(f'<section', '<section style="margin-bottom: 14px"', 1).replace('style="margin-bottom: 14px" style=', 'style='),
+        shelf_phone=shelf(132).replace('{SONG}', 'Player.dc.html'), shelf_laptop=shelf(170).replace('{SONG}', 'PlayerLaptop.dc.html').replace(f'<section', '<section style="margin-bottom: 14px"', 1).replace('style="margin-bottom: 14px" style=', 'style='),
         table_cols=(('Title', 't', 3), ('Composer and key', 's', 3), ('Progress', 'v', 1.4)),
         add_items=(('New song', '#'), ('Record', '#'), ('New folder', '#'), ('Import', '#'), ('New group', 'Groups.dc.html')),
         more_rows=(('link', 'Select', ''), ('link', 'Export…', ''), ('link', 'Trash', '', '')))
@@ -94,9 +94,8 @@ lm = f'''<div style="flex: none; padding: 0 40px"><div style="width: min(880px, 
 </div>
 </div>'''
 pl = SONG_MORE.replace('EditorDraft.dc.html', 'EditorDraftLaptop.dc.html').replace('Editor.dc.html', 'EditorLaptop.dc.html').replace('SongSettings.dc.html', 'SongSettingsLaptop.dc.html') + POPOVER('creditsOn', 'Title and credits', CREDITS, 'left: 120px; top: 520px', 420)
-detail('Song', 'A song', SG, ph, lm, '', sh, pl, 'Songs')
-SONG_PH, SONG_LM, SONG_SG, SONG_SH, SONG_PL = ph, lm, SG, sh, pl  # a song's Settings opens over this page (r53, SETWIN)
-s = open(OUT + 'SongLaptop.dc.html').read().replace('href="Progression.dc.html"', 'href="ProgressionLaptop.dc.html"'); open(OUT + 'SongLaptop.dc.html', 'w').write(s)
+SONG_SG = SG  # a song's Settings (r53, SETWIN) runs the song's script; its page went, it opens over the Player (owner, 2026-11-26)
+s = open(OUT + 'PlayerLaptop.dc.html').read().replace('href="Progression.dc.html"', 'href="ProgressionLaptop.dc.html"'); open(OUT + 'PlayerLaptop.dc.html', 'w').write(s)
 
 # ── the score editor ──
 ED = js(r'''
@@ -130,10 +129,10 @@ PALETTE = (f'<div style="flex: none; border-radius: 18px 18px 0 0; background: {
            f'<sc-if value="{{{{full}}}}" hint-placeholder-val="{{{{false}}}}"><div class="nos" style="max-height: 330px; overflow-y: auto; padding: 0 12px; display: flex; flex-direction: column; gap: 12px"><sc-for list="{{{{all}}}}" as="a" hint-placeholder-count="6">{CAPS("{{a.c}}")}<div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{a.tools}}}}" as="t" hint-placeholder-count="6">{TILE}</sc-for></div></sc-for></div></sc-if></div>')
 PIANO = lambda k, h: f'<sc-if value="{{{{keysOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: none; background: {SHEET}; padding: 0 0 26px">{KEYS(h, k, edge=True)}</div></sc-if>'
 ED_MORE = GROUP(('link', 'Instruments and staves', 'Piano', ''), ('link', 'Page layout', '', ''), ('link', 'Playback sound', 'Grand piano', ''), ('link', 'MIDI keyboard', 'Not connected', ''), bg=SHEET)
-eph = f'''{EDTOP('Song.dc.html')}
+eph = f'''{EDTOP('Player.dc.html')}
 <div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 6px 10px 12px">{SCOREPAGE(360, 0.95, '14px 12px 8px')}</div>
 {PALETTE}{PIANO('kb', 130)}'''
-elm = f'''<header style="flex: none; height: 64px; display: flex; align-items: center; gap: 2px; padding: 0 24px 0 40px"><a href="SongLaptop.dc.html" style="height: 44px; display: flex; align-items: center; color: {LINK}; text-decoration: none; font-size: 17px; font-weight: 600">Done</a><span style="flex: 1"></span>{EDTOP('SongLaptop.dc.html').split('<span style="flex: 1"></span>')[1].replace('</header>', '')}</header>
+elm = f'''<header style="flex: none; height: 64px; display: flex; align-items: center; gap: 2px; padding: 0 24px 0 40px"><a href="PlayerLaptop.dc.html" style="height: 44px; display: flex; align-items: center; color: {LINK}; text-decoration: none; font-size: 17px; font-weight: 600">Done</a><span style="flex: 1"></span>{EDTOP('PlayerLaptop.dc.html').split('<span style="flex: 1"></span>')[1].replace('</header>', '')}</header>
 <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 340px">
 <div class="nos" style="min-height: 0; overflow-y: auto; padding: 8px 48px 24px; display: flex; justify-content: center"><div style="width: 760px">{SCOREPAGE(720, 1.25, '32px 40px 16px')}</div></div>
 <aside class="nos" aria-label="Palette" style="min-height: 0; overflow-y: auto; background: {SHEET}; box-shadow: -1px 0 0 {LINE}; padding: 20px 18px; display: flex; flex-direction: column; gap: 12px"><sc-for list="{{{{all}}}}" as="a" hint-placeholder-count="6">{CAPS("{{a.c}}")}<div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{a.tools}}}}" as="t" hint-placeholder-count="6">{TILE}</sc-for></div></sc-for></aside>

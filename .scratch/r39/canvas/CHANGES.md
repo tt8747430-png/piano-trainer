@@ -8,9 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-26 · (this commit) · R74 the song page gone: a song opens in the Player, Settings a window over it (the Player behind), Sections on Section, Edit the original in its menu; one "Version and mode" capsule (Accompaniment ▾ … Edit/Done) on the Player and editor; "Accompaniment from the chords" printed under the credits · Player boards (all), PlayerApp, PlayerDesk, SongSettings, SongSettingsLaptop, Editor*, EditorDraft*, Songs, AllSongs, Folder, Explore, Course, Progression, Pattern and their Laptops; Song and SongLaptop deleted · pending
 ## Changes
 
-- 2026-11-26 · (this commit) · R74 the editor as Flat's: a 56 toolbar (note-input pill; Delete, Copy, Cut, Paste, zoom, Page · Panorama, keys), the palette a left panel dragged 280–520 and hidden by its switch, the keys dragged 96–260; Page view on A4 (17.2 mm margins, 7 mm staff, credits left and right) and Panorama only, the vertical view gone; Dorico's note spacing in the kit's engraver · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · **pending**
+- 2026-11-26 · (this commit) · R74 the editor as Flat's: a 56 toolbar (note-input pill; Delete, Copy, Cut, Paste, zoom, Page · Panorama, keys), the palette a left panel dragged 280–520 and hidden by its switch, the keys dragged 96–260; Page view on A4 (17.2 mm margins, 7 mm staff, credits left and right) and Panorama only, the vertical view gone; Dorico's note spacing in the kit's engraver · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · v742
 - 2026-11-26 · (this commit) · clean: a folder under Shared with me reads "4 songs · Maria Ionescu · Choir accompanists" (its "Shared by" said the heading over it again); the folder's own page keeps "Shared by Maria Ionescu" · Groups, GroupsLaptop · v741
 - 2026-11-26 · (this commit) · the editor prints the score's credits on one line, as the Player prints the same score (two paddings left them 24 short, so "(American folk tune)" broke to a second line) · Editor, EditorDraft · v740
 - 2026-11-26 · (this commit) · clean: the Called to Play playlist reads 15 songs (its "· Book 1" was our own line; every playlist says its count and how many are learned) · Songs, SongsLaptop, AllSongs, AllSongsLaptop, Folder, FolderLaptop, SharedFolder, SharedFolderLaptop · v739

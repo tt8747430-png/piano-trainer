@@ -268,7 +268,7 @@ GPAGE = (f'<label style="display: flex; flex-direction: column; gap: 8px"><span 
          + SEC(CAPS('Members'), f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{members}}}}" as="m" hint-placeholder-count="4">{MEMROW}</sc-for></div>')
          + GROUP(('action', 'Delete group', 'askDel', RED), bg=SHEET))
 FPAGE = (f'<div style="display: flex; gap: 16px; align-items: center">{COV("", HONEY, 72, folder=True)}<div style="display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font-size: 26px; font-weight: 700">Choir hymns</h1><span style="font-size: 14px; color: {SOFT}">Shared by Maria Ionescu · 4 songs · View only</span></div></div>'
-         + BOXG(*[f'<a href="Song.dc.html" style="min-height: 76px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 16px; color: {INK}; text-decoration: none">{COV("", c, 40)}<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 13px; color: {SOFT}">{s}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>'
+         + BOXG(*[f'<a href="Player.dc.html" style="min-height: 76px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 16px; color: {INK}; text-decoration: none">{COV("", c, 40)}<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 13px; color: {SOFT}">{s}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>'
                   for t, s, c in [('Amazing Grace', 'John Newton · G major', HONEY), ('Be Thou My Vision', 'Irish hymn · E♭ major', HONEY), ('Holy, Holy, Holy', 'Dykes · D major', HONEY), ('It Is Well', 'Bliss · C major', HONEY)]])
          + SEC(GROUP(('action', 'Stop sharing', 'askStop', RED), bg=SHEET)))
 JPAGE = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 32px 16px; text-align: center"><span style="width: 88px; height: 88px; border-radius: 24px; background: {LILAC}; font-size: 36px; font-weight: 700; display: flex; align-items: center; justify-content: center">C</span>'
@@ -294,7 +294,7 @@ GPAGE_L = (f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) 42
            f'<div style="display: flex; flex-direction: column; gap: 16px">{GPAGE[_GSPLIT:]}</div></div>')
 grlm = (IF('isList', LTITLEBAR('Groups', IF('joinOk', f'<button type="button" onClick="{{{{openJoin}}}}" style="{TBST}">Join with a link</button>', 'true') + IF('canNew', f'<span style="width: 8px"></span>{BTN("New group", "openNew", "", "primary", 44, False)}', 'true'), back='SongsLaptop.dc.html') + LCOL(GLIST_L.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 880) + STRIP(), 'true')
         + IF('isGroup', PAGEHEAD_L('back', 'Groups', '') + WIDE(GPAGE_L, 1180))
-        + IF('isFolder', PAGEHEAD_L('back', 'Shared with me') + WIDE(FPAGE.replace('Song.dc.html', 'SongLaptop.dc.html'), 704))
+        + IF('isFolder', PAGEHEAD_L('back', 'Shared with me') + WIDE(FPAGE.replace('Player.dc.html', 'PlayerLaptop.dc.html'), 704))
         + IF('isJoin', PAGEHEAD_L('back', 'Groups') + WIDE(JPAGE, 480)) + TOASTL)
 detail('Groups', 'Groups', GR_JS, grph, grlm, '', GR_SHEETS, LAPSHEET(GR_SHEETS, 460), 'Songs')
 print('r53 explore, groups ok')
@@ -343,7 +343,7 @@ SP_SRC = (r'''
       prevOn: seg(['Phone', 'Laptop'], st.pv ?? 'Phone', (x) => S({ pv: x })), isList: lay === 'List', isGrid: lay !== 'List', cardBg: { Plain: '#FEFDFB', Soft: '#F6E7C8', Bold: '#332921', Paper: '#F4EEE4' }[cs], cardInk: cs === 'Bold' ? '#FEFDFB' : '#332921',
       openApply: () => S({ sheet: 'apply' }), applyOn: st.sheet === 'apply', applyThis: () => { S({ sheet: null }); toast('Style applied to 1 place'); }, askAll: () => S({ sheet: 'all' }), allOn: st.sheet === 'all', doAll: () => { S({ sheet: null }); toast('Style applied to 9 places'); }, resetStyle: () => S({ cs: 'Soft', lay: 'List' }),
       addOn: st.sheet === 'add', noAdd: st.sheet !== 'add', openAdd: () => S({ sheet: st.sheet === 'add' ? null : 'add' }), closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null, arch: st.last ?? null }) };''')
-SROW2 = lambda t, s, c: f'<a href="Song.dc.html" style="min-height: 80px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 16px; color: {INK}; text-decoration: none">{COV(t, c, 44)}<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 13px; color: {SOFT}">{s}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>'
+SROW2 = lambda t, s, c: f'<a href="Player.dc.html" style="min-height: 80px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 16px; color: {INK}; text-decoration: none">{COV(t, c, 44)}<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 13px; color: {SOFT}">{s}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>'
 MUSICN = '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'
 FOLDER = (f'<div style="display: flex; gap: 16px; align-items: center">{COV("", SKY, 64, True)}<div style="display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font-size: 28px; font-weight: 700">Hymns</h1><span style="font-size: 14px; color: {SOFT}">{{{{fCount}}}}</span></div></div>'
           + SHOWSTATES() + IF('fFull', BOXG(SROW2('Amazing Grace', 'John Newton · G major', HONEY), SROW2('Be Thou My Vision', 'Irish hymn · E♭ major', HONEY), SROW2('It Is Well', 'Bliss · C major', HONEY), SROW2('Great Is Thy Faithfulness', 'Runyan · E♭ major', HONEY), SROW2('Holy, Holy, Holy', 'Dykes · D major', HONEY), SROW2('Abide with Me', 'Monk · E♭ major', HONEY),
@@ -495,13 +495,13 @@ SMSHEETS = (ASK('unpubOn', 'Unpublish it?', 'It leaves the Public library at onc
             + BSHEET('licOn', 'Licence', f'<div role="radiogroup" style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{lics}}}}" as="o" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="width: 100%; min-height: 48px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; font: inherit; font-size: 16px; text-align: left; display: flex; align-items: center; padding: 6px 16px"><span style="flex: 1">{{{{o.l}}}}</span><span style="color: {INK}; font-weight: 700">{{{{o.mark}}}}</span></button></sc-for></div>')
             + BSHEET('exportOn', 'Export', GROUP(('action', 'MusicXML', 'exported'), ('action', 'MIDI', 'exported'), bg=SHEET)))
 FAB = f'<sc-if value="{{{{isSection}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; right: 16px; bottom: 40px; z-index: 30">{BTN(ICON(PLAY, 18) + " Practise", "", "Player.dc.html", "primary", 56, False)}</div></sc-if>'
-smph = (IF('backHref', TOP('Song.dc.html', '{{pageT}}', '', 'Amazing Grace'), 'true') + IF('isPublish', TOP('', '{{pageT}}', '', 'Settings', IB('Settings', CHEV_L, 'back'))) + NARROW(SMBODY).replace('padding: 8px 16px 48px', 'padding: 8px 16px 120px', 1) + FAB + TOASTS)
-LSM = {'Song.dc.html': 'SongLaptop.dc.html', 'Legal.dc.html': 'LegalLaptop.dc.html', 'Explore.dc.html': 'ExploreLaptop.dc.html', 'Chords.dc.html': 'ChordsLaptop.dc.html', 'Player.dc.html': 'PlayerLaptop.dc.html', 'Accompaniment.dc.html': 'AccompanimentLaptop.dc.html'}
+smph = (IF('backHref', TOP('Player.dc.html', '{{pageT}}', '', 'Amazing Grace'), 'true') + IF('isPublish', TOP('', '{{pageT}}', '', 'Settings', IB('Settings', CHEV_L, 'back'))) + NARROW(SMBODY).replace('padding: 8px 16px 48px', 'padding: 8px 16px 120px', 1) + FAB + TOASTS)
+LSM = {'Player.dc.html': 'PlayerLaptop.dc.html', 'Legal.dc.html': 'LegalLaptop.dc.html', 'Explore.dc.html': 'ExploreLaptop.dc.html', 'Chords.dc.html': 'ChordsLaptop.dc.html', 'Player.dc.html': 'PlayerLaptop.dc.html', 'Accompaniment.dc.html': 'AccompanimentLaptop.dc.html'}
 def LAPIFY(s):
     for a, b in LSM.items(): s = s.replace(a, b)
     return s
 # a song's Settings in the one Settings shape (the 56 bar, the centred 1180 column 24 under it: YourLessonSettings); a section keeps its 88 head
-smlm = (IF('isSettings', LTOP('SongLaptop.dc.html', '', 'Settings'), 'true') + IF('isSection', LTOP('SongLaptop.dc.html', '', '{{pageT}}')) + IF('isPublish', LTITLEBAR('{{pageT}}', backact='back')) + FULLW(LAPIFY(SMBODY_L)) + LAPIFY(FAB).replace('bottom: 40px', 'bottom: 32px') + TOASTL)
+smlm = (IF('isSettings', LTOP('PlayerLaptop.dc.html', '', 'Settings'), 'true') + IF('isSection', LTOP('PlayerLaptop.dc.html', '', '{{pageT}}')) + IF('isPublish', LTITLEBAR('{{pageT}}', backact='back')) + FULLW(LAPIFY(SMBODY_L)) + LAPIFY(FAB).replace('bottom: 40px', 'bottom: 32px') + TOASTL)
 SM_LAP = LAPSHEET(SMSHEETS, 400)
 detail('Section', 'A section of a song', js(SM_SRC.replace('__ROOT__', "'section'")), smph, smlm, '', SMSHEETS, SM_LAP, 'Songs')
 # A thing's Settings opens over its page, never a page of its own (owner, 2026-11-20: "why dont we do such things like
@@ -525,8 +525,15 @@ SFOLDER = GROUP(('action', '{{lLib}}', 'pickLib', INK), ('action', '{{lHym}}', '
 SNEWPL = (f'<div style="display: flex; flex-direction: column; gap: 24px">' + NAMEFIELD('Playlist name', 'plName', 'typePl') +
           f'<button type="button" aria-disabled="{{{{plDis}}}}" onClick="{{{{makePl}}}}" style="height: 50px; border: 0; border-radius: 25px; background: {{{{plBg}}}}; color: {{{{plFg}}}}; font: inherit; font-size: 16px; font-weight: 700">Create</button></div>')
 _SWBODY = SHOWSTATES() + IF('isSettings', SSET, 'true') + IF('isPublish', SPUB) + IF('isExport', SEXPORT) + IF('isFolderP', SFOLDER) + IF('isNewPl', SNEWPL)
-swph = SONG_PH + SETWIN_P(_SWBODY) + TOAST(40, z=70)  # the toast over the window it answers
-swlm = SONG_LM + LAPIFY(SETWIN_L(_SWBODY)) + TOAST(28, z=70, laptop=True)
-detail('SongSettings', 'A song’s Settings, over the song', SETWIN_JS, swph, swlm, '', SONG_SH + SMSHEETS, SONG_PL + SM_LAP, 'Songs')
+# a song's Settings opens over the Player, the song's one page (owner, 2026-11-26: "remove the song overview page"):
+# the Player as it stands under the window, a picture of its own board, the window and its scrim over it
+import base64 as _b64
+def _BACKDROP(f, lap):
+    d = _b64.b64encode(open('/home/user/piano-trainer/.scratch/r39/canvas/' + f, 'rb').read()).decode()
+    at = 'top: 0; left: -248px; width: 1710px; height: 904px' if lap else 'inset: 0; width: 100%; height: 100%'
+    return f'<img src="data:image/jpeg;base64,{d}" alt="" aria-hidden="true" style="position: absolute; {at}; z-index: 50; object-fit: cover; pointer-events: none">'
+swph = _BACKDROP('player_bg_phone.jpg', False) + SETWIN_P(_SWBODY) + TOAST(40, z=70)  # the toast over the window it answers
+swlm = _BACKDROP('player_bg_laptop.jpg', True) + LAPIFY(SETWIN_L(_SWBODY)) + TOAST(28, z=70, laptop=True)
+detail('SongSettings', 'A song’s Settings, over the Player', SETWIN_JS, swph, swlm, '', SMSHEETS, SM_LAP, 'Songs')
 s = open(OUT + 'SongSettingsLaptop.dc.html').read().replace('href="Progression.dc.html"', 'href="ProgressionLaptop.dc.html"'); open(OUT + 'SongSettingsLaptop.dc.html', 'w').write(s)
 print('r53 songs places, song pages ok')

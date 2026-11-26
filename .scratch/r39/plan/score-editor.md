@@ -38,6 +38,17 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
   - Replaces "Laptop: no sidebar; the palette docked at the right (380)" (canvas 123) and the palette's place at the
     right in round 34.
 
+- **R74, one song page, the Player; its version and mode in one control** (owner, 2026-11-26: "remove the song overview
+  page"; "we currently have only the accompaniment for almost all the songs … make it more visible to the user that its
+  an accompaniment and not a real score and make easier to switch between the score and the accompaniment something
+  like how the flat editor switches between the readonly and the edit mode … somehow maybe we can merge this two").
+  The Song boards are gone; a song opens in the Player, its Settings a window over it, its Sections on the Section
+  page, Edit the original in the song's menu. The bar's middle is one capsule, "Version and mode": the version's name
+  with a chevron (a menu: Accompaniment, Arrangement "None written for this song yet", Your arrangement, Simplified,
+  Easy) and, at its end, Edit (the pen, and its word on a laptop), which becomes Done in the editor, as Flat's View
+  and Edit share one place. The song opens on the accompaniment; the score prints "Accompaniment from the chords"
+  in italic on its own line under the credits, as an engraver credits an arrangement, the music one line lower.
+
 - **The editor's ··· is Flat's ≡ menu** (owner, 2026-11-16: "new completely new design"; `flat-score-editor` 083–090):
   headed by the song's name and its save status; one card of Credits, Instruments, Version history, Layout, Playback
   sound, MIDI keyboard and Takes, each with its value; one of Export and Print; then Publish in Explore as its own card
