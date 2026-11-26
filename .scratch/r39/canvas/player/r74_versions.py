@@ -62,6 +62,11 @@ def player_rail(t):
     # the versions head the Song panel: the sidebar holds the switch and the new versions; the title, the song's acts
     i = t.index('</header>', t.index('>Song</h2>')) + len('</header>')
     t = t[:i] + VERPANEL() + t[i:]
+    # the accompaniment and the song's pages rebuilt from the kit as rows in their cards (owner, 2026-11-26: "i dont like
+    # these buttons in these cards very much. refactor this also"): the docked card's segmented strips are deleted
+    s0 = t.index('<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}"><div role="group" aria-label="Accompaniment"')
+    s1 = t.index('</div>', t.index('<a href="SectionLaptop.dc.html"', s0)) + len('</div>')
+    t = t[:s0] + ACCPANEL() + t[s1:]
     t = t.replace('<sc-if value="{{isMore}}"', '<sc-if value="{{panelSong}}"', 1)
     # the Song panel's own pages dock in its place, each with its Back
     for lab in ('Pattern', 'Transpose', 'Sort and filter'): t = _dock(t, lab)
@@ -262,7 +267,7 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
               "renOn: !!s.ren, renVal: VC.name, renRef: (el) => { this._rn = el; }, renCancel: () => this.setState({ ren: false }), "
               "renSave: () => { const n = ((this._rn && this._rn.value) || '').trim(); if (!n) return; this.setState({ vers: VS.map((v) => (v.id === VCID ? { ...v, name: n } : v)), ren: false, sTo: 'Renamed to ' + n, sUndo: false }); }, ")
     if name == 'PlayerDesk':
-        t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}"), 1)
+        t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}") + (' ' + SELKEYS('s', '((o) => this.setState(o))', [('selInv', [('Root', 'Root position'), ('1st', '1st inversion'), ('2nd', '2nd inversion'), ('3rd', '3rd inversion')], "(s.plInv ?? 'Root')", '(id) => this.setState({ plInv: id })'), ('selVoice', [('Voice-led', 'Voice-led'), ('Block', 'Block')], "(s.plVoice ?? 'Voice-led')", '(id) => this.setState({ plVoice: id })')]) if name == 'PlayerDesk' else ''), 1)
     if name == 'PlayerApp' and 'verName:' not in t:
         assert "isMore: open === 'settings'," in t, name
         t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + VERJS2, 1)

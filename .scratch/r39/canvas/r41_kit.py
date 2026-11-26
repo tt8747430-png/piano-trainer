@@ -588,8 +588,8 @@ def SONGMENU_KEYS(S, SET, TOAST, DEF='mine', close_others=''):
     t = lambda m, u=False: TOAST(m, u)
     mA = t("'New version with accompaniment'")
     m0 = t("'New version from ' + VC.name")
-    m1 = t("VC.name + ' opens first now'")
-    m2 = t("VC.name + ' deleted'", True)
+    m1 = t("TG.name + ' opens first now'")
+    m2 = t("TG.name + ' deleted'", True)
     m3 = t("'Renamed to ' + n")
     m4 = t("'Link copied'")
     m5 = t("'Copy saved to My songs'")
@@ -598,18 +598,18 @@ def SONGMENU_KEYS(S, SET, TOAST, DEF='mine', close_others=''):
     m8 = t("'Exported as compressed MusicXML'")
     m9 = t("'Exported as MIDI'")
     return (f"...(() => {{ const VS = {S}.vers ?? [{{ id: 'orig', name: 'Original', piano: false }}, {{ id: 'mine', name: 'My version', piano: true }}]; "
-            f"const VD = {S}.verDef ?? '{DEF}'; const VCID = VS.some((v) => v.id === {S}.verCur) ? {S}.verCur : VD; const VC = VS.find((v) => v.id === VCID) ?? VS[0]; const shut = {{ sm: false, exp: false{close_others} }}; "
+            f"const VD = {S}.verDef ?? '{DEF}'; const VCID = VS.some((v) => v.id === {S}.verCur) ? {S}.verCur : VD; const VC = VS.find((v) => v.id === VCID) ?? VS[0]; const TG = VS.find((v) => v.id === ({S}.verMenu ?? {S}.renId)) ?? VC; const shut = {{ sm: false, exp: false, verMenu: null{close_others} }}; "
             f"return {{ smOn: !!{S}.sm, smBg: {S}.sm ? '#EEE9E2' : 'transparent', toggleSm: () => {SET}({{ sm: !{S}.sm, exp: false }}), "
             f"verName: VC.name, isPiano: !!VC.piano, isLead: !VC.piano, expOn: !!{S}.exp, expBg: {S}.exp ? '#F3EEE8' : 'transparent', expTop: 86, toggleExp: () => {SET}({{ exp: !{S}.exp }}), "
-            f"verRows: VS.map((v, i) => ({{ name: v.name, sub: v.piano ? 'With accompaniment' : 'Melody, chords and words', line: i ? '{LINE}' : 'transparent', isDef: v.id === VD, cur: v.id === VCID, fw: v.id === VCID ? 600 : 400, on: v.id === VCID ? 'true' : 'false', pick: () => {SET}({{ ...shut, verCur: v.id, pat: v.piano ? 'p1' : 'none' }}) }})), "
+            f"verRows: VS.map((v, i) => ({{ name: v.name, sub: v.piano ? 'With accompaniment' : 'Melody, chords and words', line: i ? '{LINE}' : 'transparent', isDef: v.id === VD, cur: v.id === VCID, fw: v.id === VCID ? 600 : 400, on: v.id === VCID ? 'true' : 'false', pick: () => {SET}({{ ...shut, verCur: v.id, pat: v.piano ? 'p1' : 'none' }}), menuOn: {S}.verMenu === v.id, menuX: {S}.verMenu === v.id ? 'true' : 'false', menu: () => {SET}({{ verMenu: {S}.verMenu === v.id ? null : v.id }}), canDef: v.id !== VD, canDel: VS.length > 1 }})), "
             f"canSetDef: VCID !== VD, canDelVer: VS.length > 1, "
             f"actNewVer: () => {{ const id = 'v' + Date.now(); {SET}({{ ...shut, vers: [...VS, {{ ...VC, id, name: VC.name + ' 2' }}], verCur: id, {m0} }}); }}, "
             f"actNewAcc: () => {{ const id = 'a' + Date.now(); {SET}({{ ...shut, vers: [...VS, {{ id, name: VC.name + ' with accompaniment', piano: true }}], verCur: id, pat: 'p1', {mA} }}); }}, "
-            f"actRename: () => {SET}({{ ...shut, ren: true }}), "
-            f"actSetDef: () => {{ if (VCID !== VD) {SET}({{ ...shut, verDef: VCID, {m1} }}); }}, "
-            f"actDelVer: () => {{ if (VS.length < 2) return; const rest = VS.filter((v) => v.id !== VCID); const nd = VD === VCID ? rest[0].id : VD; {SET}({{ ...shut, undoVer: {{ vers: VS, verCur: VCID, verDef: VD }}, vers: rest, verDef: nd, verCur: nd, {m2} }}); }}, "
-            f"renOn: !!{S}.ren, renVal: VC.name, renRef: (el) => {{ window.__rn = el; }}, renCancel: () => {SET}({{ ren: false }}), "
-            f"renSave: () => {{ const n = ((window.__rn && window.__rn.value) || '').trim(); if (!n) return; {SET}({{ vers: VS.map((v) => (v.id === VCID ? {{ ...v, name: n }} : v)), ren: false, {m3} }}); }}, "
+            f"actRename: () => {SET}({{ ...shut, ren: true, renId: TG.id }}), "
+            f"actSetDef: () => {{ if (TG.id !== VD) {SET}({{ ...shut, verDef: TG.id, {m1} }}); }}, "
+            f"actDelVer: () => {{ if (VS.length < 2) return; const rest = VS.filter((v) => v.id !== TG.id); const nd = VD === TG.id ? rest[0].id : VD; {SET}({{ ...shut, undoVer: {{ vers: VS, verCur: VCID, verDef: VD }}, vers: rest, verDef: nd, verCur: TG.id === VCID ? nd : VCID, {m2} }}); }}, "
+            f"renOn: !!{S}.ren, renVal: TG.name, renRef: (el) => {{ window.__rn = el; }}, renCancel: () => {SET}({{ ren: false, renId: null }}), "
+            f"renSave: () => {{ const n = ((window.__rn && window.__rn.value) || '').trim(); if (!n) return; {SET}({{ vers: VS.map((v) => (v.id === TG.id ? {{ ...v, name: n }} : v)), ren: false, renId: null, {m3} }}); }}, "
             f"actShare: () => {SET}({{ ...shut, {m4} }}), actPrint: () => {SET}({{ ...shut }}), "
             f"actDup: () => {SET}({{ ...shut, {m5} }}), actArchive: () => {SET}({{ ...shut, {m6} }}), "
             f"expXml: () => {SET}({{ ...shut, {m7} }}), expMxl: () => {SET}({{ ...shut, {m8} }}), expMidi: () => {SET}({{ ...shut, {m9} }}) }}; }})(),")
@@ -679,11 +679,11 @@ def HDRTRANSPORT(midi_href):
 # hands you play (flowkey's and Simply Piano's choice before a run). Volume is Flat's Volume settings: Master, then each
 # part with Solo, Mute and its level; one home, so the editor's Audio panel keeps the room alone. Piano keys (Practice;
 # the editor's toolbar has its own) is the keys' view: 3D, 2D or Off, and their labels.
-_HPOP = f'position: absolute; z-index: 61; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 16px'
+_HPOP = f'position: absolute; z-index: 61; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 12px 8px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 4px'
 _HCAP = lambda t: f'<h3 style="margin: 0; font-size: 15px; font-weight: 600">{t}</h3>'
 def _HPOPOVER(cond, title, body, pos, w):
     return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{hdClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
-            f'<section role="dialog" aria-label="{title}" style="{_HPOP}; {pos}; width: {w}px"><h2 style="margin: 0; font-size: 17px; font-weight: 600">{title}</h2>{body}</section></sc-if>')
+            f'<section role="dialog" aria-label="{title}" style="{_HPOP}; {pos}; width: {w}px"><h2 style="margin: 0; padding: 4px 0 4px; font-size: 15px; font-weight: 600">{title}</h2>{body}</section></sc-if>')
 def _HVOLROW(i):
     ib = lambda lab, act, on, svg: f'<button type="button" aria-label="{lab} {{{{p.name}}}}" data-tip="{lab}" aria-pressed="{{{{p.{on}}}}}" onClick="{{{{p.{act}}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {{{{p.{on}Bg}}}}; color: {{{{p.{on}Fg}}}}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
     return (f'<div style="display: flex; flex-direction: column"><div style="min-height: 44px; display: flex; align-items: center; gap: 4px"><span style="flex: 1; font-size: 15px; font-weight: 600">{{{{p.name}}}}</span>'
@@ -691,18 +691,25 @@ def _HVOLROW(i):
             + ib('Mute', 'doMute', 'mute', '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="m22 9-6 6M16 9l6 6"></path></svg>') + '</div>'
             + f'<div style="display: flex; align-items: center; gap: 12px"><input type="range" min="0" max="100" step="5" value="{{{{p.v}}}}" onChange="{{{{p.setV}}}}" aria-label="{{{{p.name}}}} volume" style="flex: 1; min-width: 0; height: 44px; margin: 0; accent-color: {INK}"><span style="width: 40px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">{{{{p.v}}}}%</span></div></div>')
 def HDRPOPS(practice, opts_left, vol_left, keys_right=None):
-    speed = (f'<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px"><span style="font-size: 15px">Playback speed</span>'
-             f'{STEPPER("hdSpeedL", "hdSlower", "hdFaster", 64, True)}</div>')
-    opts = ((f'<section style="display: flex; flex-direction: column; gap: 8px">{_HCAP("Mode")}{SEGC("hdModeSeg", 44, 14, True)}</section>'
-             f'<section style="display: flex; flex-direction: column; gap: 8px">{_HCAP("Hands")}{SEGC("hdHandSeg", 44, 14, True)}</section>') if practice else '') + speed
-    vol = (f'<div style="display: flex; align-items: center; gap: 12px"><span style="flex: none; font-size: 15px; font-weight: 600">Master</span>'
-           f'<input type="range" min="0" max="100" step="5" value="{{{{hdVolM}}}}" onChange="{{{{hdSetVolM}}}}" aria-label="Master volume" style="flex: 1; min-width: 0; height: 44px; margin: 0; accent-color: {INK}"><span style="width: 40px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">{{{{hdVolM}}}}%</span></div>'
-           f'<div style="height: 1px; background: {LINE}"></div><sc-for list="{{{{hdParts}}}}" as="p" hint-placeholder-count="2">{_HVOLROW(0)}</sc-for>')
-    out = _HPOPOVER('hdOptsOn', 'Playback options', opts, f'left: {opts_left}px; top: 65px', 320) + _HPOPOVER('hdVolOn', 'Volume', vol, f'left: {vol_left}px; top: 65px', 320)
+    # rows, as every card's (VERPANEL, ACCPANEL): a value with its pop-up, a level with its slider; no segmented strip
+    rows = lambda *r: f'<div style="display: flex; flex-direction: column; margin: 0 -12px">{"".join(r)}</div>'
+    qb = lambda lab, act, svg: f'<button type="button" aria-label="{lab}" onClick="{{{{{act}}}}}" disabled="{{{{{act}Dis}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
+    speed = (f'<div style="min-height: 44px; display: flex; align-items: center; gap: 4px; padding: 0 4px 0 12px;' + (f' border-top: 1px solid {LINE}' if practice else '') + '">'
+             f'<span style="flex: 1; font-size: 15px">Playback speed</span>' + qb('Slower', 'hdSlower', STEP_MINUS)
+             + f'<span style="min-width: 44px; text-align: center; font-size: 15px; font-variant-numeric: tabular-nums">{{{{hdSpeedL}}}}</span>' + qb('Faster', 'hdFaster', STEP_PLUS) + '</div>')
+    opts = rows(*((SELROW('Mode', 'selMode', False), SELROW('Hands', 'selHands')) if practice else ()), speed)
+    lvl = lambda lab, val, setv, extra='': (f'<div style="min-height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 4px 0 12px; border-top: 1px solid {{line}}">'
+                                          f'<span style="flex: none; width: 92px; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{lab}</span>'
+                                          f'<input type="range" min="0" max="100" step="5" value="{{{{{val}}}}}" onChange="{{{{{setv}}}}}" aria-label="{lab} volume" style="flex: 1; min-width: 0; height: 36px; margin: 0; accent-color: {INK}">'
+                                          f'<span style="flex: none; width: 40px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">{{{{{val}}}}}%</span>{extra}</div>')
+    ib = lambda lab, act, on, svg: f'<button type="button" aria-label="{lab} {{{{p.name}}}}" data-tip="{lab}" aria-pressed="{{{{p.{on}}}}}" onClick="{{{{p.{act}}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: {{{{p.{on}Bg}}}}; color: {{{{p.{on}Fg}}}}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
+    so = ib('Solo', 'doSolo', 'solo', '<span style="font-size: 13px; font-weight: 700">S</span>')
+    mu = ib('Mute', 'doMute', 'mute', '<span style="font-size: 13px; font-weight: 700">M</span>')
+    vol = rows(lvl('Master', 'hdVolM', 'hdSetVolM', '<span style="flex: none; width: 88px"></span>').replace('{line}', 'transparent'),
+               '<sc-for list="{{hdParts}}" as="p" hint-placeholder-count="2">' + lvl('{{p.name}}', 'p.v', 'p.setV', so + mu).replace('{line}', LINE) + '</sc-for>')
+    out = _HPOPOVER('hdOptsOn', 'Playback options', opts, f'left: {opts_left}px; top: 65px', 320) + _HPOPOVER('hdVolOn', 'Volume', vol, f'left: {vol_left}px; top: 65px', 380)
     if keys_right is not None:
-        keys = (f'<section style="display: flex; flex-direction: column; gap: 8px">{_HCAP("Piano")}{SEGC("hdKbSeg", 44, 14, True)}</section>'
-                f'<section style="display: flex; flex-direction: column; gap: 8px">{_HCAP("Labels")}{SEGC("hdLabSeg", 44, 14, True)}</section>')
-        out += _HPOPOVER('hdKeysOn', 'Piano keys', keys, f'right: {keys_right}px; top: 65px', 320)
+        out += _HPOPOVER('hdKeysOn', 'Piano keys', rows(SELROW('Piano', 'selKb', False), SELROW('Labels', 'selLab')), f'right: {keys_right}px; top: 65px', 320)
     return out
 HDRKEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-haspopup="dialog" aria-expanded="{{{{hdKeysOn}}}}" onClick="{{{{hdKeys}}}}" style="{_HB}">'
               + KEYSI.replace('width="22" height="22"', 'width="20" height="20"') + '</button>')
@@ -724,32 +731,70 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
             " hdVol: tg('vol'), hdVolOn: pop === 'vol', hdVolX: pop === 'vol' ? 'true' : 'false', hdKeys: tg('keys'), hdKeysOn: pop === 'keys',"
             " hdRec: () => SET({ rec: !rec, " + TOAST("rec ? 'Recording stopped · Recording 4 kept' : 'Recording · play on your keyboard'") + " }), hdRecTip: rec ? 'Stop recording' : 'Record', hdRecBg: rec ? '#F8D9C2' : 'transparent',"
             " hdSpeedL: (sp / 100).toFixed(1) + '×', hdSlower: () => SET({ speed: Math.max(20, sp - 10) }), hdFaster: () => SET({ speed: Math.min(200, sp + 10) }), hdSlowerDis: sp <= 20, hdFasterDis: sp >= 200,"
-            " hdModeSeg: sg([['play', 'Listen'], ['wait', 'Wait']], S.mode === 'wait' ? 'wait' : 'play', (id) => SET({ mode: id })),"
-            " hdHandSeg: sg([['both', 'Both'], ['rh', 'Right'], ['lh', 'Left']], hands, (id) => SET({ showR: id === 'lh' ? 'hide' : 'show', showL: id === 'rh' ? 'hide' : 'show' })),"
-            " hdKbSeg: sg([['3d', '3D'], ['2d', '2D'], ['off', 'Off']], kb, (id) => SET(id === 'off' ? { keys: false } : { keys: true, kbStyle: id })),"
-            " hdLabSeg: sg([['none', 'None'], ['c', 'C only'], ['all', 'All notes']], S.kbLabels ?? 'c', (id) => SET({ kbLabels: id })),"
             " hdVolM: S.volM ?? 100, hdSetVolM: (e) => SET({ volM: Number(e.target.value) }),"
             " hdParts: " + P + ".map(([id, name]) => { const so = solo === id, mu = mute.includes(id); const v = S['vol' + id] ?? 100; return { name, v, setV: (e) => SET({ ['vol' + id]: Number(e.target.value) }),"
             " solo: so ? 'true' : 'false', soloBg: so ? '#332921' : 'transparent', soloFg: so ? '#FEFDFB' : '#332921', mute: mu ? 'true' : 'false', muteBg: mu ? '#332921' : 'transparent', muteFg: mu ? '#FEFDFB' : '#332921',"
-            " doSolo: () => SET({ solo: so ? null : id }), doMute: () => SET({ mute: mu ? mute.filter((m) => m !== id) : [...mute, id] }) }; }) }; })(),")
+            " doSolo: () => SET({ solo: so ? null : id }), doMute: () => SET({ mute: mu ? mute.filter((m) => m !== id) : [...mute, id] }) }; }) }; })(), "
+            + SELKEYS(S, '(' + SET + ')', [('selMode', [('play', 'Listen'), ('wait', 'Wait')], f"({S}.mode === 'wait' ? 'wait' : 'play')", f"(id) => ({SET})({{ mode: id }})"),
+                                       ('selHands', [('both', 'Both hands'), ('rh', 'Right hand'), ('lh', 'Left hand')], f"(({S}.showR ?? 'show') === 'hide' ? 'lh' : ({S}.showL ?? 'show') === 'hide' ? 'rh' : 'both')", f"(id) => ({SET})({{ showR: id === 'lh' ? 'hide' : 'show', showL: id === 'rh' ? 'hide' : 'show' }})"),
+                                       ('selKb', [('3d', '3D'), ('2d', '2D'), ('off', 'Off')], f"({S}.keys === false ? 'off' : ({S}.kbStyle ?? '3d'))", f"(id) => ({SET})(id === 'off' ? {{ keys: false }} : {{ keys: true, kbStyle: id }})"),
+                                       ('selLab', [('none', 'None'), ('c', 'C only'), ('all', 'All notes')], f"({S}.kbLabels ?? 'c')", f"(id) => ({SET})({{ kbLabels: id }})")]))
 
 # The song's versions in the sidebar (owner, 2026-11-26: "in the title are general options and in the sidebar there will
 # be the switch like change the versions or add a new version … add a version with this accompaniment. and in such
 # version i can just change the accompaniment … for the whole song like we did before"): the versions as rows (the open
 # one checked, the default says so), then New version and New version with accompaniment, then the open version's
 # acts; one card as the panel's other groups, rows 44
-_VPROW = f'min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; cursor: pointer'
+_VPROW = f'min-height: 52px; box-sizing: border-box; padding: 4px 4px 4px 12px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; cursor: pointer'
+# Inside a card, every control is a row (owner, 2026-11-26: "i dont like these buttons in these cards very much.
+# refactor this also"): no loose text buttons under the card and no grey segmented strip inside it. A version's own
+# acts sit behind its row's ··· (ui-and-mockups: "a row's own acts sit behind its ···"; Apple HIG, Pull-down buttons;
+# Flat's version list), the loss last in red after a hairline; a choice among a few values is the row's value with a
+# pop-up of the values (Apple HIG, Pop-up buttons: "a setting in a list, the current value shown"; iOS Settings,
+# Flat's Layout panel), never a strip of equal buttons
 def VERPANEL():
-    vrow = (f'<sc-for list="{{{{verRows}}}}" as="v" hint-placeholder-count="2"><button type="button" role="radio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="{_VPROW}; border-top-color: {{{{v.line}}}}">'
+    mi = lambda lab, act, fg=INK: f'<button type="button" role="menuitem" onClick="{{{{{act}}}}}" style="{_SMROW}; color: {fg}">{_SMSLOT("")}<span style="flex: 1">{lab}</span></button>'
+    menu = (f'<sc-if value="{{{{v.menuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{v.menu}}}}" style="position: fixed; inset: 0; z-index: 69"></div>'
+            f'<div role="menu" aria-label="{{{{v.name}}}}" style="{_SMBOX}; right: 4px; top: 48px; width: 220px">' + mi('Rename…', 'actRename')
+            + '<sc-if value="{{v.canDef}}" hint-placeholder-val="{{true}}">' + mi('Set as default', 'actSetDef') + '</sc-if>'
+            + '<sc-if value="{{v.canDel}}" hint-placeholder-val="{{true}}">' + _SMSEP + mi('Delete version', 'actDelVer', RED) + '</sc-if></div></sc-if>')
+    vrow = (f'<sc-for list="{{{{verRows}}}}" as="v" hint-placeholder-count="2"><div style="position: relative; display: flex; align-items: center; border-top: 1px solid {{{{v.line}}}}">'
+            f'<button type="button" role="radio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="{_VPROW}; flex: 1; min-width: 0; padding-right: 0">'
             + _SMSLOT(f'<sc-if value="{{{{v.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK}</sc-if>')
             + f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-weight: {{{{v.fw}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{v.name}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{v.sub}}}}</span></span>'
-            + f'<sc-if value="{{{{v.isDef}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; font-size: 13px; color: {SOFT}">Default</span></sc-if></button></sc-for>')
-    add = lambda lab, act: f'<button type="button" onClick="{{{{{act}}}}}" style="{_VPROW}">{_SMSLOT(PLUSI_S)}<span style="flex: 1">{lab}</span></button>'
-    act = lambda lab, a, fg=INK: f'<button type="button" onClick="{{{{{a}}}}}" style="flex: none; height: 44px; padding: 0 12px; border: 0; border-radius: 22px; background: transparent; color: {fg}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">{lab}</button>'
+            + f'<sc-if value="{{{{v.isDef}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; font-size: 13px; color: {SOFT}">Default</span></sc-if></button>'
+            + f'<button type="button" aria-label="{{{{v.name}}}}: more" aria-haspopup="menu" aria-expanded="{{{{v.menuX}}}}" onClick="{{{{v.menu}}}}" style="flex: none; width: 44px; height: 44px; margin-right: 4px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: pointer">{MORE.replace('width="24" height="24"', 'width="20" height="20"')}</button>'
+            + menu + '</div></sc-for>')
+    add = lambda lab, act: f'<button type="button" onClick="{{{{{act}}}}}" style="{_VPROW}; min-height: 44px; border-top: 1px solid {LINE}">{_SMSLOT(PLUSI_S)}<span style="flex: 1">{lab}</span></button>'
     return (f'<section aria-label="Versions" style="flex: none; display: flex; flex-direction: column; gap: 8px; padding-top: 12px">'
             f'<h3 style="margin: 0; font-size: 15px; font-weight: 600">Versions</h3>'
-            f'<div role="radiogroup" aria-label="Versions" style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{vrow}'
-            + add('New version', 'actNewVer') + '<sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + add('New version with accompaniment', 'actNewAcc') + '</sc-if></div>'
-            f'<div style="display: flex; flex-wrap: wrap; margin: -4px -12px 0">' + act('Rename…', 'actRename')
-            + '<sc-if value="{{canSetDef}}" hint-placeholder-val="{{false}}">' + act('Set as default', 'actSetDef') + '</sc-if>'
-            + '<sc-if value="{{canDelVer}}" hint-placeholder-val="{{true}}">' + act('Delete', 'actDelVer', RED) + '</sc-if></div></section>')
+            f'<div role="radiogroup" aria-label="Versions" style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{vrow}'
+            + add('New version', 'actNewVer') + '<sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + add('New version with accompaniment', 'actNewAcc') + '</sc-if></div></section>')
+
+# a setting's row with its value and a pop-up of the values (Apple HIG, Pop-up buttons): the label at the left, the
+# value and ⌃⌄ at the right, the list of values under it with the current one checked; keys {name}V, {name}On,
+# {name}Tg and {name}Opts (each l, on, pick), from SELKEYS
+CHEV_UD = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m7 15 5 5 5-5M7 9l5-5 5 5"></path></svg>'
+def SELROW(label, name, line=True):
+    return (f'<div style="position: relative; min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 4px 0 12px;' + (f' border-top: 1px solid {LINE}' if line else '') + '">'
+            f'<span style="flex: 1; min-width: 0; font-size: 15px">{label}</span>'
+            f'<button type="button" aria-haspopup="listbox" aria-expanded="{{{{{name}X}}}}" aria-label="{label}: {{{{{name}V}}}}" onClick="{{{{{name}Tg}}}}" style="flex: none; height: 36px; padding: 0 8px 0 10px; border: 0; border-radius: 8px; background: {{{{{name}Bg}}}}; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 4px; cursor: pointer">{{{{{name}V}}}}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_UD}</span></button>'
+            f'<sc-if value="{{{{{name}On}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{name}Tg}}}}" style="position: fixed; inset: 0; z-index: 69"></div><div role="listbox" aria-label="{label}" style="{_SMBOX}; right: 4px; top: 40px; width: 200px">'
+            f'<sc-for list="{{{{{name}Opts}}}}" as="o" hint-placeholder-count="3"><button type="button" role="option" aria-selected="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="{_SMROW}">{_SMSLOT(f"<sc-if value=\"{{{{o.cur}}}}\" hint-placeholder-val=\"{{{{false}}}}\">{CHECK}</sc-if>")}<span style="flex: 1">{{{{o.l}}}}</span></button></sc-for></div></sc-if></div>')
+def SELKEYS(S, SET, specs):
+    """specs: (name, [(id, label)], current expr, pick expr taking id): one pop-up open at a time (state selPop)."""
+    out = []
+    for name, opts, cur, pick in specs:
+        L = repr([list(x) for x in opts])
+        out.append(f"...((c) => ({{ {name}V: ({L}.find((o) => o[0] === c) || [0, ''])[1], {name}On: {S}.selPop === '{name}', {name}X: {S}.selPop === '{name}' ? 'true' : 'false', {name}Bg: {S}.selPop === '{name}' ? '#EEE9E2' : 'transparent', "
+                   f"{name}Tg: () => {SET}({{ selPop: {S}.selPop === '{name}' ? null : '{name}' }}), {name}Opts: {L}.map(([id, l]) => ({{ l, cur: id === c, on: id === c ? 'true' : 'false', pick: () => {{ ({pick})(id); {SET}({{ selPop: null }}); }} }})) }}))({cur}),")
+    return ' '.join(out)
+
+# the whole-song accompaniment (a version with one) and the song's own pages, as rows in their cards
+def ACCPANEL():
+    card = f'border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}'
+    link = lambda lab, inner, act='', href='': ((f'<a href="{href}"' if href else f'<button type="button" onClick="{{{{{act}}}}}"') + f' style="min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {{line}}; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; text-decoration: none; cursor: pointer"><span style="flex: 1">{lab}</span><span style="display: flex; align-items: center; gap: 4px; color: {SOFT}">{inner}<span style="display: flex">{CHEV_R}</span></span>' + ('</a>' if href else '</button>'))
+    acc = (f'<sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}"><section aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Accompaniment</h3>'
+           f'<div style="{card}">' + link('Pattern', '{{patternName}}', 'openPattern').replace('{line}', 'transparent') + SELROW('First chord’s inversion', 'selInv') + SELROW('Voicing', 'selVoice') + '</div></section></sc-if>')
+    song = (f'<div style="{card}">' + link('Transpose', '{{keyName}}', 'openKey').replace('{line}', 'transparent') + link('Sections', '', href='SectionLaptop.dc.html').replace('{line}', LINE) + '</div>')
+    return acc + song
