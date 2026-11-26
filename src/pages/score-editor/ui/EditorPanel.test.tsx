@@ -16,6 +16,7 @@ const withSong = () => {
           {
             id: 'my-1',
             title: 'Morning',
+            added: '2026-11-01T09:00:00.000Z',
             key: 'G',
             meter: '4/4',
             tempo: 90,
@@ -37,12 +38,14 @@ describe('the editor’s palette (R31-E)', () => {
     const user = userEvent.setup()
     const storage = withSong()
     const first = await renderApp('/edit/my-1', { storage })
-    // The Notes first: Notation's tools in the folded row.
-    const kinds = await screen.findByRole('toolbar', { name: 'Palette categories' })
-    expect(within(kinds).getByRole('button', { name: 'Note' })).toHaveAttribute(
+    // Recent first, the tools last used; then Note's in the folded row.
+    const [kinds] = await screen.findAllByRole('toolbar', { name: 'Palette categories' })
+    if (!kinds) throw new Error('the palette’s categories')
+    expect(within(kinds).getByRole('button', { name: 'Recent' })).toHaveAttribute(
       'aria-current',
       'true',
     )
+    await user.click(within(kinds).getByRole('button', { name: 'Note' }))
     expect(
       within(screen.getByRole('region', { name: 'Note' })).getByRole('button', {
         name: 'Add note',
@@ -62,15 +65,21 @@ describe('the editor’s palette (R31-E)', () => {
   it('unfolds to every tool of the category as titled grids, and folds again', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await user.click(await screen.findByRole('button', { name: 'Expand palette' }))
+    const [kinds] = await screen.findAllByRole('toolbar', { name: 'Palette categories' })
+    if (!kinds) throw new Error('the palette’s categories')
+    await user.click(within(kinds).getByRole('button', { name: 'Note' }))
+    const [expand] = screen.getAllByRole('button', { name: 'Expand palette' })
+    if (!expand) throw new Error('Expand palette')
+    await user.click(expand)
     const notes = await screen.findByRole('region', { name: 'Note' })
     expect(within(notes).getByRole('group', { name: 'Input mode' })).toBeInTheDocument()
     expect(within(notes).getByRole('heading', { name: 'Notation' })).toBeInTheDocument()
     expect(settingsStore.getState().paletteFolded).toBe(false)
-    await user.click(screen.getByRole('button', { name: 'Collapse palette' }))
-    await waitFor(() =>
-      expect(screen.queryByRole('group', { name: 'Input mode' })).not.toBeInTheDocument(),
-    )
+    const [collapse] = screen.getAllByRole('button', { name: 'Collapse palette' })
+    if (!collapse) throw new Error('Collapse palette')
+    await user.click(collapse)
+    // Folded, the grids' titles go: one row of the category's tools.
+    await waitFor(() => expect(screen.queryAllByRole('heading', { name: 'Notation' })).toEqual([]))
     expect(settingsStore.getState().paletteFolded).toBe(true)
   })
 })
@@ -97,12 +106,11 @@ describe('the editor’s Instruments (A40)', () => {
     await user.click(screen.getByRole('button', { name: 'New instrument' }))
     await user.click(await screen.findByRole('menuitem', { name: 'Tenor' }))
     expect(await within(list).findByText('Tenor')).toBeInTheDocument()
-    // Delete, asked first; the eye's choice goes with its staff.
+    // Delete at once, Undo in its toast; the eye's choice goes with its staff.
     await user.click(screen.getByRole('button', { name: 'More for Voice' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Delete…' }))
-    const asked = await screen.findByRole('alertdialog', { name: 'Delete Voice?' })
-    await user.click(within(asked).getByRole('button', { name: 'Delete' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Delete' }))
     await waitFor(() => expect(within(list).queryByText('Voice')).toBeNull())
+    expect(await screen.findByText('Deleted Voice')).toBeInTheDocument()
     expect(router.state.location.search).not.toHaveProperty('staves')
   })
 })

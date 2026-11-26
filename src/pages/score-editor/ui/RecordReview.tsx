@@ -28,8 +28,8 @@ const gridName = (key: string) => `1/${key}`
  * Review your recording (A40, Flat's): the take as it would be written, engraved, over its piano roll
  * (the notes as played faint, as snapped in the accent, Hide raw notes leaving the snapped alone);
  * Quantize, the shortest note it is snapped to; the split point, dragged on the roll, where the hands
- * part on the piano's staves; Into, for a score of other staves; Discard (asked first) and Save to
- * score, writing it from the caret's bar.
+ * part on the piano's staves; Into, for a score of other staves; Discard (at once, Undo in its
+ * toast) and Save to score, writing it from the caret's bar.
  */
 export function RecordReview({ take }: { take: Take }) {
   const { t } = useTranslation('editor')

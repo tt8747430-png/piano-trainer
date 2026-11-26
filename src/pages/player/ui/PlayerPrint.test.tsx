@@ -15,16 +15,16 @@ const catchPrint = () => {
   return print
 }
 
-/** The Player open in a view of the music, the foot's More › Print chosen (R31-P); the print render once printed. */
+/** The Player open in a view of the music, the gear's More › Print chosen (R31-P); the print render once printed. */
 async function printed(user: User, path: string, music: MusicView, locale?: 'ru') {
   const print = catchPrint()
   const { settingsStore } = await renderApp(path, locale ? { locale } : undefined)
   await screen.findByRole('heading', { level: 1 })
   act(() => setScoreView(settingsStore, { music }))
-  const foot = await screen.findByRole('toolbar', {
-    name: locale ? 'Инструменты занятия' : 'Practice tools',
-  })
-  await user.click(within(foot).getByRole('button', { name: locale ? 'Ещё' : 'More' }))
+  const gear = locale ? 'Настройки плеера' : 'Player settings'
+  await user.click(screen.getByRole('button', { name: gear }))
+  const sheet = await screen.findByRole('dialog', { name: gear })
+  await user.click(within(sheet).getByRole('button', { name: locale ? 'Ещё' : 'More' }))
   const menu = await screen.findByRole('menu')
   await user.click(within(menu).getByRole('menuitem', { name: locale ? 'Печать' : 'Print' }))
   await waitFor(() => expect(print).toHaveBeenCalledTimes(1), { timeout: 10_000 })

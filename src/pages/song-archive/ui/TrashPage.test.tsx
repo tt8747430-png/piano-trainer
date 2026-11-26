@@ -14,6 +14,7 @@ const song = (id: string, title: string) => ({
   tempo: 90,
   pattern: 'r1',
   sections: [{ kind: 'verse', lines: ['G C D G'] }],
+  added: '2026-11-01T09:00:00.000Z',
 })
 
 /** A device whose Trash holds two of the learner's songs, one deleted from Home. */
@@ -31,8 +32,8 @@ function trashed() {
     JSON.stringify({
       state: {
         trash: [
-          { id: 'my-1', from: { folder: null, index: 0 } },
-          { id: 'my-2', from: { folder: null, index: 1 } },
+          { id: 'my-1', from: { folder: null, index: 0 }, at: 2000 },
+          { id: 'my-2', from: { folder: null, index: 1 }, at: 1000 },
         ],
       },
       version: LIBRARY_VERSION,
@@ -52,7 +53,7 @@ const savedSongs = (storage: Storage): string[] =>
   ).state.songs.map((each) => each.id)
 
 describe('The Trash (R34)', () => {
-  it('lists the songs deleted, newest first, and restores one where it stood', async () => {
+  it('lists the songs deleted, newest first, and restores one where it stood from its ···', async () => {
     const storage = trashed()
     await renderApp('/songs/trash', { storage })
     expect(await screen.findByRole('heading', { level: 1, name: 'Trash' })).toBeInTheDocument()
@@ -61,23 +62,30 @@ describe('The Trash (R34)', () => {
       expect.stringMatching(/^Morning/),
       expect.stringMatching(/^Evening/),
     ])
-    await userEvent.click(screen.getByRole('button', { name: 'Restore Morning' }))
+    await userEvent.click(
+      within(rows[0] as HTMLElement).getByRole('button', { name: 'More for Morning' }),
+    )
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'Restore' }))
     await waitFor(() =>
       expect(savedLibrary(storage).trash.map((each) => each.id)).toEqual(['my-2']),
     )
     expect(savedLibrary(storage).home).toContain('my-1')
   })
 
-  it('deletes one for good, asked first, and empties the rest, asked first', async () => {
+  it('deletes one for good from its ···, asked first, and empties the rest from Select, asked first', async () => {
     const storage = trashed()
     await renderApp('/songs/trash', { storage })
     const rows = within(await screen.findByRole('list', { name: 'Trash' })).getAllByRole('listitem')
-    await userEvent.click(within(rows[0] as HTMLElement).getByRole('button', { name: 'More' }))
+    await userEvent.click(
+      within(rows[0] as HTMLElement).getByRole('button', { name: 'More for Morning' }),
+    )
     await userEvent.click(await screen.findByRole('menuitem', { name: 'Delete permanently' }))
     const ask = await screen.findByRole('alertdialog', { name: 'Delete “Morning” permanently?' })
     await userEvent.click(within(ask).getByRole('button', { name: 'Delete permanently' }))
     await waitFor(() => expect(savedSongs(storage)).toEqual(['my-2']))
-    await userEvent.click(screen.getByRole('button', { name: 'Empty Trash' }))
+    // Select with nothing picked acts on all: Delete all empties the Trash.
+    await userEvent.click(screen.getByRole('button', { name: 'Select' }))
+    await userEvent.click(await screen.findByRole('button', { name: 'Delete all' }))
     const emptying = await screen.findByRole('alertdialog', { name: 'Empty the Trash?' })
     expect(emptying).toHaveTextContent(
       'Songs (1) and their recordings will be permanently deleted.',

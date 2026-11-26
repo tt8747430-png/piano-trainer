@@ -27,6 +27,13 @@ const editing = () =>
     items: [{ kind: 'piece', id: SONG.id, body: pieceRecordBody(SONG), meta: {} }],
   })
 
+/** A song's Settings, opened from its page's More: a window over the page. */
+async function openSongSettings(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(await screen.findByRole('button', { name: 'More' }))
+  await user.click(await screen.findByRole('menuitem', { name: 'Settings' }))
+  return screen.findByRole('dialog', { name: 'Settings' })
+}
+
 async function writeChord(user: ReturnType<typeof userEvent.setup>, symbol: string) {
   await user.click(await screen.findByRole('button', { name: /^Bar 1(:|$)/ }))
   const field = await screen.findByRole('textbox', { name: 'Chord symbol' })
@@ -37,10 +44,13 @@ async function writeChord(user: ReturnType<typeof userEvent.setup>, symbol: stri
 
 describe('an editor’s draft of a built-in song’s original (ADR 0116)', () => {
   it('is the song’s one Edit for an editor: Settings shows changes only while some are unpublished', async () => {
-    await renderApp(`/songs/${SONG.id}/settings`, { auth: await signedInAs('editor') })
-    await screen.findByRole('heading', { level: 1, name: 'Settings' })
-    expect(screen.queryByRole('link', { name: /Edit the original/ })).not.toBeInTheDocument()
-    expect(screen.queryByText('Unpublished changes')).not.toBeInTheDocument()
+    const user = userEvent.setup()
+    await renderApp(`/songs/${SONG.id}`, { auth: await signedInAs('editor') })
+    const settings = await openSongSettings(user)
+    expect(
+      within(settings).queryByRole('link', { name: /Edit the original/ }),
+    ).not.toBeInTheDocument()
+    expect(within(settings).queryByText('Unpublished changes')).not.toBeInTheDocument()
   })
 
   it('is an editor’s alone: a learner edits their own version, with no draft', async () => {
@@ -61,8 +71,8 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
     // the draft while the song is as published (round 28).
     const gear = await openGear(user)
     expect(within(gear).getByRole('button', { name: 'Publish…' })).toBeInTheDocument()
-    expect(within(gear).queryByRole('status')).not.toBeInTheDocument()
-    await user.click(within(gear).getByRole('button', { name: 'Close' }))
+    expect(within(gear).queryByText(/not published/i)).not.toBeInTheDocument()
+    await user.click(within(gear).getByRole('button', { name: 'Done' }))
 
     await writeChord(user, 'Dm7')
     // Where the draft stands, beside the gear's title.
@@ -111,11 +121,13 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
       meta: {},
     })
     await content.publish('piece', SONG.id)
-    // Versions are the Publish page's (R29 B6); a restore asks first.
-    await renderApp(`/songs/${SONG.id}/publish`, {
+    // Versions are the Publish page's (R29 B6), a page of the song's Settings; a restore asks first.
+    await renderApp(`/songs/${SONG.id}`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
+    const settings = await openSongSettings(user)
+    await user.click(within(settings).getByRole('button', { name: /^Publish/ }))
     await user.click(await screen.findByRole('button', { name: 'Versions' }))
     const versions = await screen.findByRole('alertdialog')
     expect(within(versions).getByText('Newest')).toBeInTheDocument()
@@ -135,9 +147,8 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
       auth: await signedInAs('admin'),
       contentEditing: content,
     })
-    expect(
-      await screen.findByText('You’re offline. It will open when you reconnect.'),
-    ).toBeInTheDocument()
+    expect(await screen.findByText('You’re offline')).toBeInTheDocument()
+    expect(screen.getByText('It will open when you reconnect.')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument()
   })
 })

@@ -32,11 +32,9 @@ describe('a new song in a collection’s folder (content as data, round 26: one 
     const sheet = await newSong(user)
     // No hint under the name: Flat's new score says nothing there.
     expect(within(sheet).queryByText(/unpublished until/)).toBeNull()
-    await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Abide with me')
-    // Flat's three steps: the name, the instruments, the setup.
-    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
-    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
-    await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
+    await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Abide with me')
+    // One sheet, R72's: the name and how it starts, then Create.
+    await user.click(within(sheet).getByRole('button', { name: 'Create' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/abide-with-me'))
     const draft = await content.draft('piece', 'abide-with-me')
     expect(draft.ok && draft.value?.body).toMatchObject({

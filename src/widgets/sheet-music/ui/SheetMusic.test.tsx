@@ -232,7 +232,7 @@ describe('SheetMusic', () => {
         shown: { layout, chordNames: true, lyrics: true, hidden: [] },
       })
       await screen.findByRole('button', { name: 'Bar 2: G' })
-      const bands = document.querySelectorAll<HTMLElement>('[data-mark="band"]')
+      const bands = document.querySelectorAll<HTMLElement>('[data-mark="loop"]')
       expect(bands).toHaveLength(1)
       expect(bands[0]).toHaveAttribute('data-slot', 'loop')
       // As tall as the playhead is over the same staves: every staff, never a box round notes.
@@ -266,7 +266,7 @@ describe('SheetMusic', () => {
     )
     const { rerender } = render(sheet(4))
     await screen.findByRole('button', { name: 'Bar 2: G' })
-    expect(document.querySelectorAll('[data-mark="band"]')).toHaveLength(1)
+    expect(document.querySelectorAll('[data-mark="loop"]')).toHaveLength(1)
     expect(document.querySelector('[data-slot="playhead"]')).toHaveClass('invisible')
     rerender(sheet(5))
     expect(document.querySelector('[data-slot="playhead"]')).not.toHaveClass('invisible')

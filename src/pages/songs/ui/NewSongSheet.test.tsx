@@ -12,39 +12,40 @@ async function openNewSong() {
   return { user, sheet }
 }
 
-describe('New song (A34)', () => {
-  it('names its steps', async () => {
+describe('New song (R72’s one sheet)', () => {
+  it('asks a name, the staves, tempo and bars, a key and a time, creating once named', async () => {
     const { user, sheet } = await openNewSong()
-    const steps = within(sheet).getByRole('list', { name: 'Steps' })
-    expect(
-      within(steps)
-        .getAllByRole('listitem')
-        .map((step) => step.textContent),
-    ).toEqual(['Title', 'Instruments', 'Time and key'])
-    expect(within(steps).getByText('Title').closest('li')).toHaveAttribute('aria-current', 'step')
-    await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Dawn')
-    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
-    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
-    expect(within(steps).getByText('Time and key').closest('li')).toHaveAttribute(
-      'aria-current',
-      'step',
-    )
-    // Its fields by their names, Flat's.
-    for (const name of ['Time signature', 'Key signature', 'Tempo', 'Number of bars'])
-      expect(within(sheet).getByRole('heading', { name })).toBeInTheDocument()
-    // The pickup is the time signature's own wheel, beside Current (R31-E).
-    expect(within(sheet).getByRole('spinbutton', { name: 'Pickup beats' })).toBeInTheDocument()
+    for (const name of ['Staves', 'Key', 'Time'])
+      expect(within(sheet).getByRole('radiogroup', { name })).toBeInTheDocument()
+    for (const name of ['Tempo', 'Bars'])
+      expect(within(sheet).getByRole('group', { name })).toBeInTheDocument()
+    // The piano, C major and 4/4 to start, as Flat’s new score.
+    expect(within(sheet).getByRole('radio', { name: /^Piano/ })).toBeChecked()
+    expect(within(sheet).getByRole('radio', { name: '4/4' })).toBeChecked()
+    expect(within(sheet).getByText('C major · no sharps or flats')).toBeInTheDocument()
+    expect(within(sheet).getByRole('button', { name: 'Create' })).toBeDisabled()
+    await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Dawn')
+    expect(within(sheet).getByRole('button', { name: 'Create' })).toBeEnabled()
   })
 
-  it('one way to add an instrument', async () => {
+  it('steps the tempo and the bars it starts with', async () => {
     const { user, sheet } = await openNewSong()
-    await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Dawn')
-    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
-    // An instrument not in the score: its + alone; added, it counts with − 1 +.
-    expect(within(sheet).queryByRole('button', { name: 'One Alto fewer' })).not.toBeInTheDocument()
-    await user.click(within(sheet).getByRole('button', { name: 'One more Alto' }))
-    expect(within(sheet).getByRole('status', { name: 'Alto: 1' })).toBeInTheDocument()
-    expect(within(sheet).getAllByRole('button', { name: 'One Alto fewer' })).toHaveLength(1)
-    expect(within(sheet).getAllByRole('button', { name: 'One more Alto' })).toHaveLength(1)
+    const tempo = within(sheet).getByRole('group', { name: 'Tempo' })
+    const bars = within(sheet).getByRole('group', { name: 'Bars' })
+    expect(within(tempo).getByRole('status')).toHaveTextContent('♩ = 80')
+    expect(within(bars).getByRole('status')).toHaveTextContent('8')
+    await user.click(within(tempo).getByRole('button', { name: 'Faster' }))
+    await user.click(within(bars).getByRole('button', { name: 'One bar fewer' }))
+    expect(within(tempo).getByRole('status')).toHaveTextContent('♩ = 84')
+    expect(within(bars).getByRole('status')).toHaveTextContent('7')
+  })
+
+  it('names the key chosen by its signature, the tile tapped again going back to C major', async () => {
+    const { user, sheet } = await openNewSong()
+    await user.click(within(sheet).getByRole('radio', { name: 'G major' }))
+    expect(within(sheet).getByRole('radio', { name: 'G major' })).toBeChecked()
+    expect(within(sheet).getByText('G major')).toBeInTheDocument()
+    await user.click(within(sheet).getByRole('radio', { name: 'G major' }))
+    expect(within(sheet).getByText('C major · no sharps or flats')).toBeInTheDocument()
   })
 })

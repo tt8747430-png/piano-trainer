@@ -73,9 +73,9 @@ describe('credits and source', () => {
         credits={[{ role: 'words-and-music', names: 'Надежда Боброва' }, { role: 'unknown' }]}
       />,
     )
-    expect(screen.getByText('Words and music:')).toBeInTheDocument()
-    expect(screen.getByText('Надежда Боброва')).toBeInTheDocument()
-    expect(screen.getByText('Author unknown')).toBeInTheDocument()
+    expect(
+      screen.getByText('Words and music: Надежда Боброва · Author unknown'),
+    ).toBeInTheDocument()
   })
 
   it('cites the book, number and page', () => {

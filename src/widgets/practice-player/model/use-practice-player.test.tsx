@@ -115,15 +115,13 @@ describe('usePracticePlayer', () => {
     expect(result.current.inView).toEqual({ from: Math.min(...keys), to: Math.max(...keys) })
   })
 
-  it('takes a tapped key as an answer in Wait mode once playing, and leaves the sound to the keyboard', () => {
+  it('takes a tapped key as an answer in Wait mode, the first right one starting it, and leaves the sound to the keyboard', () => {
     const { result, audio } = renderPlayer({ mode: 'wait' })
     const [key] = result.current.marks.keys()
     if (key === undefined) throw new Error('nothing to play')
+    expect(result.current.practice.state.playing).toBe(false)
     act(() => result.current.tapKey(key))
-    expect(result.current.practice.state.received).toEqual([])
-    act(() => result.current.practice.play())
-    act(() => result.current.tapKey(key))
-    expect(result.current.practice.state.received).toContain(key % 12)
+    expect(result.current.practice.state).toMatchObject({ playing: true, received: [key] })
     expect(audio.played.flatMap((play) => play.sounds)).toEqual([])
   })
 })

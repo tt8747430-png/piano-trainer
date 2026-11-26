@@ -12,7 +12,8 @@ describe('HandsSheet, the Parts sheet (loop round 24)', () => {
   it('has a card for each hand, the right first, each switched on where it is played', () => {
     renderWithSettings(sheet({ hands: 'rh' }))
     expect(screen.getByRole('dialog', { name: 'Parts' })).toBeInTheDocument()
-    expect(screen.getAllByRole('group').map((group) => group.getAttribute('aria-label'))).toEqual([
+    const cards = screen.getAllByRole('group', { name: /hand$/ })
+    expect(cards.map((card) => card.getAttribute('aria-label'))).toEqual([
       'Right hand',
       'Left hand',
     ])
@@ -37,6 +38,7 @@ describe('HandsSheet, the Parts sheet (loop round 24)', () => {
 
   it('sets each hand’s volume on its staff', () => {
     renderWithSettings(sheet())
-    expect(screen.getAllByRole('slider')).toHaveLength(2)
+    // A Base UI slider's thumb is hidden from the tree jsdom lays out.
+    expect(screen.getAllByRole('slider', { hidden: true })).toHaveLength(2)
   })
 })

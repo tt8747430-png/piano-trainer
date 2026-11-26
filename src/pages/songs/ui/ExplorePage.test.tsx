@@ -36,33 +36,40 @@ const explore = (...items: readonly (string | Item)[]) =>
     }),
   })
 
+/** Explore's list on a phone: one card of rows, each a link with its opening chord and its title. */
+const listed = () => screen.findByRole('list', { name: 'Explore' })
+
 const titlesIn = (list: HTMLElement) =>
   within(list)
     .getAllByRole('link')
-    .map((card) => within(card).getByText(/\w/, { selector: '.font-display' }).textContent)
+    .map((row) => row.querySelector('.line-clamp-2')?.textContent)
 
 afterEach(() => vi.restoreAllMocks())
 
 describe('Explore', () => {
-  it('shelves the newest, the most saved and the top rated, each a card with its author and stars', async () => {
+  it('lists the newest first, each with who shared it and its saves, and sorts by saves or rating', async () => {
+    const user = userEvent.setup()
     const publicLibrary = explore('One', { title: 'Two', stars: [5, 4, 4] }, 'Three', {
       title: 'Four',
       stars: [5],
     })
     await publicLibrary.save('public-1')
-    await renderApp('/songs?view=explore', { publicLibrary })
-    const newest = await screen.findByRole('region', { name: 'New' })
-    expect(titlesIn(within(newest).getByRole('list'))).toEqual(['Four', 'Three', 'Two', 'One'])
-    expect(
-      titlesIn(within(screen.getByRole('region', { name: 'Most saved' })).getByRole('list')),
-    ).toEqual(['One'])
-    const rated = screen.getByRole('region', { name: 'Top rated' })
-    const card = within(rated).getByRole('link', { name: /Two/ })
-    // Its author named as their profile is public; the stars over three ratings, said in words.
-    expect(card).toHaveTextContent('Bo')
-    expect(card).toHaveTextContent('Rated 4.3 out of 5')
-    // Under three ratings, no average.
-    expect(within(newest).getByRole('link', { name: /Four/ })).not.toHaveTextContent('Rated')
+    const { router } = await renderApp('/songs?view=explore', { publicLibrary })
+    const list = await listed()
+    expect(titlesIn(list)).toEqual(['Four', 'Three', 'Two', 'One'])
+    expect(document.body).toHaveTextContent('4 songs')
+    // Who shared it, named as their profile is public, and its saves said in words.
+    const one = within(list).getByRole('link', { name: /One/ })
+    expect(one).toHaveTextContent('Bo')
+    expect(one).toHaveTextContent('1 save')
+    // The order, one menu: Newest, Most saved, Top rated (three ratings or more ahead).
+    await user.click(screen.getByRole('button', { name: 'Sort: Newest' }))
+    await user.click(await screen.findByRole('menuitemradio', { name: 'Most saved' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ shelf: 'saved' }))
+    await waitFor(async () => expect(titlesIn(await listed())[0]).toBe('One'))
+    await user.click(screen.getByRole('button', { name: 'Sort: Most saved' }))
+    await user.click(await screen.findByRole('menuitemradio', { name: 'Top rated' }))
+    await waitFor(async () => expect(titlesIn(await listed())[0]).toBe('Two'))
   })
 
   it('names an author whose profile is private a Piano Trainer learner', async () => {
@@ -72,8 +79,7 @@ describe('Explore', () => {
       ],
     })
     await renderApp('/songs?view=explore', { publicLibrary })
-    const newest = await screen.findByRole('region', { name: 'New' })
-    expect(within(newest).getByRole('link', { name: /Quiet/ })).toHaveTextContent(
+    expect(within(await listed()).getByRole('link', { name: /Quiet/ })).toHaveTextContent(
       'Piano Trainer learner',
     )
   })
@@ -86,14 +92,10 @@ describe('Explore', () => {
         { title: 'Ballad', tags: ['Pop'] },
       ),
     })
-    await screen.findByRole('region', { name: 'New' })
+    await listed()
     await user.click(screen.getByRole('radio', { name: 'Classical' }))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ cat: 'classical' }))
-    await waitFor(() =>
-      expect(
-        titlesIn(within(screen.getByRole('region', { name: 'New' })).getByRole('list')),
-      ).toEqual(['Minuet']),
-    )
+    await waitFor(async () => expect(titlesIn(await listed())).toEqual(['Minuet']))
   })
 
   it('Patterns shows patterns', async () => {
@@ -124,23 +126,6 @@ describe('Explore', () => {
     await waitFor(() => expect(screen.queryByRole('link', { name: /A song/ })).toBeNull())
   })
 
-  it('See all opens the shelf, a grid in its order, and the way back to the shelves', async () => {
-    const user = userEvent.setup()
-    const publicLibrary = explore('Quiet', 'Loved')
-    await publicLibrary.save('public-1')
-    const { router } = await renderApp('/songs?view=explore', { publicLibrary })
-    const saved = await screen.findByRole('region', { name: 'Most saved' })
-    const before = router.history.length
-    await user.click(within(saved).getByRole('button', { name: 'See all' }))
-    await waitFor(() => expect(router.state.location.search).toMatchObject({ shelf: 'saved' }))
-    expect(router.history.length).toBe(before)
-    const grid = await screen.findByRole('list', { name: 'Explore' })
-    expect(titlesIn(grid)).toEqual(['Quiet', 'Loved'])
-    expect(screen.getByRole('combobox', { name: /^Sort/ })).toHaveTextContent('Most saved')
-    await user.click(screen.getByRole('button', { name: 'All shelves' }))
-    expect(await screen.findByRole('region', { name: 'New' })).toBeVisible()
-  })
-
   it('offline says when online, and offers My songs, which are all here', async () => {
     vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
     const user = userEvent.setup()
@@ -157,12 +142,12 @@ describe('Explore', () => {
     const user = userEvent.setup()
     await renderApp('/songs?view=explore', { publicLibrary: explore('Morning', 'Evening') })
     await user.type(
-      await screen.findByRole('searchbox', { name: 'Search songs and patterns' }),
+      await screen.findByRole('searchbox', { name: 'Search songs and people' }),
       'zzz',
     )
     expect(await screen.findByText('No songs match “zzz”.')).toBeVisible()
     await user.click(screen.getByRole('button', { name: 'Clear' }))
-    expect(await screen.findByRole('region', { name: 'New' })).toBeVisible()
+    expect(titlesIn(await listed())).toEqual(['Evening', 'Morning'])
   })
 
   it('shows grey cards while asked, and says when nothing is published yet', async () => {
@@ -178,7 +163,7 @@ describe('Explore', () => {
 
   it('reads in Russian', async () => {
     await renderApp('/songs?view=explore', { locale: 'ru', publicLibrary: explore('Morning') })
-    await screen.findByRole('region', { name: 'Новое' })
+    await screen.findByRole('list', { name: 'Обзор' })
     expect(untranslated(document.body)).toEqual([])
   })
 })

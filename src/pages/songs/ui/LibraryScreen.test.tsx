@@ -1,39 +1,37 @@
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 
-describe('Songs’ switch', () => {
-  it('no Public library row', async () => {
+describe('Songs and its Explore (D1)', () => {
+  it('has no Public library row', async () => {
     await renderApp('/songs')
-    await screen.findByRole('radiogroup', { name: 'My songs or Explore' })
+    await screen.findByRole('heading', { level: 1, name: 'Songs' })
     expect(screen.queryByRole('link', { name: /Public library/ })).toBeNull()
   })
 
-  it('My songs · Explore switches without pushing history', async () => {
+  it('opens Explore from its shelf’s See all without pushing history, Back coming home', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/songs?q=waltz')
-    await screen.findByRole('radiogroup', { name: 'My songs or Explore' })
-    expect(screen.getByRole('radio', { name: 'My songs' })).toBeChecked()
+    const { router } = await renderApp('/songs')
+    const shelf = await screen.findByRole('region', { name: 'Explore' })
     const before = router.history.length
-    await user.click(screen.getByRole('radio', { name: 'Explore' }))
+    await user.click(within(shelf).getByRole('button', { name: 'See all' }))
     await waitFor(() => expect(router.state.location.search).toEqual({ view: 'explore' }))
     expect(router.history.length).toBe(before)
-    expect(
-      await screen.findByRole('searchbox', { name: 'Search songs and patterns' }),
-    ).toBeVisible()
-    await user.click(screen.getByRole('radio', { name: 'My songs' }))
+    expect(await screen.findByRole('searchbox', { name: 'Search songs and people' })).toBeVisible()
+    await user.click(screen.getByRole('button', { name: 'Songs' }))
     await waitFor(() => expect(router.state.location.search).toEqual({}))
-    expect(await screen.findByRole('radio', { name: 'My songs' })).toBeChecked()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Songs' })).toBeInTheDocument()
   })
 
-  it('comes back to Explore when Songs opens plainly, the view remembered', async () => {
+  it('opens on Songs when Songs opens plainly: Explore is never remembered', async () => {
     const user = userEvent.setup()
-    const { router, viewsStore } = await renderApp('/songs?view=explore')
-    await screen.findByRole('searchbox', { name: 'Search songs and patterns' })
-    expect(viewsStore.getState().views['/songs']).toEqual({ view: 'explore' })
+    const { router } = await renderApp('/songs?view=explore')
+    await screen.findByRole('searchbox', { name: 'Search songs and people' })
     await router.navigate({ to: '/practice' })
     await user.click((await screen.findAllByRole('link', { name: 'Songs' }))[0]!)
-    await waitFor(() => expect(router.state.location.search).toEqual({ view: 'explore' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))
+    expect(router.state.location.search).toEqual({})
+    expect(await screen.findByRole('heading', { level: 1, name: 'Songs' })).toBeInTheDocument()
   })
 })

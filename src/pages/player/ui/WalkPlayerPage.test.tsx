@@ -1,70 +1,60 @@
-import { act, screen, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { setScoreView } from '@/features/set-preference'
-import { pickIn } from '@/shared/test/pickers'
 
-describe('Walk the chords in the Player', () => {
-  it('walks a scale’s chords as sheet music, titled by its scale', async () => {
-    await renderApp('/play/walk?root=D&kind=dorian')
+describe('Walk the chords, a run of its own (the run boards)', () => {
+  it('opens on its Setup, titled by its scale; Start plays it, saying where it stands', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/play/walk?root=D&kind=dorian')
+    const setup = await screen.findByRole('dialog', { name: 'Setup' })
+    await user.click(within(setup).getByRole('button', { name: 'Start' }))
     expect(
-      await screen.findByRole('heading', { name: 'Walk the chords in D Dorian' }),
+      await screen.findByRole('heading', { level: 1, name: 'Walk the chords in D Dorian' }),
     ).toBeInTheDocument()
-    expect(await screen.findByRole('button', { name: 'Bar 1: Dm' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Bar 8: Dm' })).toBeInTheDocument()
+    expect(screen.queryByRole('dialog', { name: 'Setup' })).not.toBeInTheDocument()
+    expect(audio.played).toHaveLength(1)
+    // Up the scale's seven chords to the tonic's octave and back.
+    expect(screen.getByRole('meter', { name: 'Chord 1 of 15' })).toBeInTheDocument()
   })
 
-  it('shows its chords in the views of them, its one section named nowhere (ADR 0108)', async () => {
-    const { settingsStore } = await renderApp('/play/walk?root=D&kind=dorian')
-    const title = { level: 1, name: 'Walk the chords in D Dorian' }
-    await screen.findByRole('heading', title)
-    act(() => setScoreView(settingsStore, { music: 'grid' }))
-    expect(screen.queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
-    const grid = screen.getByRole('region', { name: 'Grid' })
-    expect(within(grid).getByRole('heading', title)).toBeInTheDocument()
-    expect(within(grid).queryByRole('heading', { level: 2 })).not.toBeInTheDocument()
-    expect(within(grid).getByRole('button', { name: 'Bar 1: Dm' })).toHaveAttribute(
-      'aria-current',
-      'step',
+  it('changes the root and the chord size in its Setup', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/walk?root=D&kind=dorian')
+    const setup = await screen.findByRole('dialog', { name: 'Setup' })
+    await user.click(within(setup).getByRole('radio', { name: '7ths' }))
+    await waitFor(() =>
+      expect(router.state.location.search).toMatchObject({ chordSize: 'sevenths' }),
     )
-    act(() => setScoreView(settingsStore, { music: 'diagrams' }))
-    const diagrams = screen.getByRole('region', { name: 'Diagrams' })
-    expect(within(diagrams).getAllByRole('img')[0]).toHaveAccessibleName(/^Dm: /)
+    const roots = within(setup).getByRole('radiogroup', { name: 'Root' })
+    await user.click(within(roots).getByRole('radio', { name: 'E' }))
+    await waitFor(() =>
+      expect(router.state.location.search).toMatchObject({ root: 'E', kind: 'dorian' }),
+    )
   })
 
-  it('plays and stops', async () => {
+  it('plays and stops from its floating Play, and opens its Setup again from Tempo', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/walk')
-    await user.click(await screen.findByRole('button', { name: 'Play' }))
-    expect(audio.played).toHaveLength(1)
-    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    await user.click(
+      within(await screen.findByRole('dialog', { name: 'Setup' })).getByRole('button', {
+        name: 'Start',
+      }),
+    )
+    const transport = screen.getByRole('toolbar', { name: 'Setup, play and tempo' })
+    await user.click(within(transport).getByRole('button', { name: 'Stop' }))
     expect(audio.stops).toBeGreaterThan(0)
+    await user.click(within(transport).getByRole('button', { name: 'Tempo' }))
+    expect(await screen.findByRole('dialog', { name: 'Setup' })).toBeInTheDocument()
   })
 
-  it('changes the root, the chord size and the pattern in the Setup sheet', async () => {
+  it('closes to the scale’s page when opened directly', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/walk?root=D&kind=dorian')
-    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    await user.click(await screen.findByRole('radio', { name: '7ths' }))
-    expect(router.state.location.search).toMatchObject({ chordSize: 'sevenths' })
-    // The sheet is modal: the sheet music behind it is hidden from the accessibility tree.
-    expect(
-      await screen.findByRole('button', { name: 'Bar 1: Dm7', hidden: true }),
-    ).toBeInTheDocument()
-    await pickIn(user, 'Root', 'E')
-    expect(router.state.location.search).toMatchObject({ root: 'E', kind: 'dorian' })
-  })
-
-  it('closes to the scale’s Chords view when opened directly', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/play/walk?root=D&kind=dorian')
-    await user.click(await screen.findByRole('button', { name: 'Close' }))
-    expect(router.state.location.pathname).toBe('/practice/scales')
-    expect(router.state.location.search).toMatchObject({
-      root: 'D',
-      kind: 'dorian',
-      show: 'chords',
-    })
+    const setup = await screen.findByRole('dialog', { name: 'Setup' })
+    await user.click(within(setup).getByRole('button', { name: 'Close' }))
+    await user.click(within(screen.getByRole('banner')).getByRole('button', { name: 'Close' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/scales'))
+    expect(router.state.location.search).toMatchObject({ root: 'D', kind: 'dorian' })
   })
 })

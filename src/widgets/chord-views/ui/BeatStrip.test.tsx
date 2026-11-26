@@ -1,10 +1,9 @@
-import { fireEvent, render, waitFor } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice, playedBeatCells, type PlayedBeat } from '@/features/practice'
-import { stubResizeObserver } from '@/shared/test/resize'
 import { BeatStrip } from './BeatStrip'
 
 const B = TICKS_PER_BEAT
@@ -46,40 +45,26 @@ function renderStrip(beat: PlayedBeat) {
   return { onBeat, strip, cells, rerender }
 }
 
-describe('the beat strip, a page at a time (R29, Chordify’s)', () => {
-  it('shows the line the beat is in, the beat sounding its black box', () => {
+describe('the beat strip, every beat in one row (ADR 0108, the Diagrams board)', () => {
+  it('draws every beat as played in one row, the beat sounding filled', () => {
     const { strip, cells } = renderStrip(at(1, 2))
-    expect(cells()).toEqual([...Array(16).keys()])
+    expect(cells()).toEqual([...Array(32).keys()])
     expect(strip().querySelector('[data-sounding]')).toHaveAttribute('data-cell', '6')
   })
 
-  it('moves the box a beat at a time, the strip still', () => {
+  it('moves the box a beat at a time, the row the same', () => {
     const { strip, cells, rerender } = renderStrip(at(0, 0))
     rerender(at(0, 1))
     expect(strip().querySelector('[data-sounding]')).toHaveAttribute('data-cell', '1')
-    expect(cells()[0]).toBe(0)
-  })
-
-  it('turns to the next line once the box reaches it', () => {
-    const { strip, cells, rerender } = renderStrip(at(3, 3))
-    expect(strip()).toHaveAttribute('data-page', '0')
     rerender(at(4, 0))
-    expect(strip()).toHaveAttribute('data-page', '1')
-    expect(cells()).toEqual([...Array(16).keys()].map((beat) => beat + 16))
+    expect(strip().querySelector('[data-sounding]')).toHaveAttribute('data-cell', '16')
+    expect(cells()).toEqual([...Array(32).keys()])
   })
 
-  it('never turns for a loop inside a page', () => {
-    const { strip, rerender } = renderStrip(at(2, 3))
-    rerender(at(1, 0))
-    expect(strip()).toHaveAttribute('data-page', '0')
-  })
-
-  it('splits a line into pages of whole bars where the room is short', async () => {
-    // Room for ten beats of 40px: two bars a page.
-    stubResizeObserver({ width: 400 })
-    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(40)
-    const { cells } = renderStrip(at(2, 0))
-    await waitFor(() => expect(cells()).toEqual([8, 9, 10, 11, 12, 13, 14, 15]))
+  it('is a picture of where the music is, hidden from a screen reader, its beats out of the tab order', () => {
+    const { strip } = renderStrip(at(0, 0))
+    expect(strip()).toHaveAttribute('aria-hidden', 'true')
+    expect(strip().querySelector('[data-cell="0"]')).toHaveAttribute('tabindex', '-1')
   })
 
   it('takes the cursor to a beat tapped', () => {

@@ -48,6 +48,7 @@ describe('entryWords', () => {
       'Мир, душа, храни',
       'Still, my soul, be still',
       '',
+      '',
       'Keith Getty',
     ])
   })

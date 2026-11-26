@@ -75,11 +75,15 @@ describe('shortcutOf', () => {
     })
   })
 
-  it('edits bars by Flat’s keys: Cmd Shift Enter adds one, Cmd Backspace deletes, Cmd Enter breaks the line, [ ] repeat', () => {
+  it('edits bars by Flat’s keys: Alt Enter adds one after, Cmd Shift Enter one at the end, Cmd Backspace deletes, Cmd Enter breaks the line, [ ] repeat', () => {
     const mod = { metaKey: true }
-    expect(shortcutOf(press('Enter', 'Enter', { ...mod, shiftKey: true }), 'rh')).toEqual({
+    expect(shortcutOf(press('Enter', 'Enter', { altKey: true }), 'rh')).toEqual({
       type: 'bars',
       edit: 'insert',
+    })
+    expect(shortcutOf(press('Enter', 'Enter', { ...mod, shiftKey: true }), 'rh')).toEqual({
+      type: 'bars',
+      edit: 'insertEnd',
     })
     expect(shortcutOf(press('Backspace', 'Backspace', mod), 'chords')).toEqual({
       type: 'bars',
@@ -99,19 +103,20 @@ describe('shortcutOf', () => {
     })
   })
 
-  it('moves the caret: a step, Alt a bar, Home and End or Cmd to the ends, Shift choosing bars', () => {
+  it('moves the caret: a step, Cmd a bar, Home and End to the ends, Shift choosing bars (F10)', () => {
     expect(shortcutOf(press('ArrowRight', 'ArrowRight'), 'staff0')).toEqual({
       type: 'move',
       by: 'step',
       direction: 1,
       extend: false,
     })
-    expect(shortcutOf(press('ArrowLeft', 'ArrowLeft', { altKey: true }), 'chords')).toEqual({
+    expect(shortcutOf(press('ArrowLeft', 'ArrowLeft', { metaKey: true }), 'chords')).toEqual({
       type: 'move',
       by: 'bar',
       direction: -1,
       extend: false,
     })
+    expect(shortcutOf(press('ArrowLeft', 'ArrowLeft', { altKey: true }), 'chords')).toBeNull()
     expect(shortcutOf(press('ArrowRight', 'ArrowRight', { shiftKey: true }), 'chords')).toEqual({
       type: 'move',
       by: 'step',
@@ -129,7 +134,7 @@ describe('shortcutOf', () => {
       direction: 1,
       extend: false,
     })
-    expect(shortcutOf(press('ArrowLeft', 'ArrowLeft', { metaKey: true }), 'staff0')).toEqual({
+    expect(shortcutOf(press('Home', 'Home'), 'staff0')).toEqual({
       type: 'move',
       by: 'end',
       direction: -1,
@@ -205,7 +210,7 @@ describe('shortcutOf', () => {
     })
   })
 
-  it('extends what is chosen with Shift: a note, Alt a bar, Cmd or Home and End to an end (ADR 0096)', () => {
+  it('extends what is chosen with Shift: a note, Cmd a bar, Home and End to an end (ADR 0096)', () => {
     const shift = { shiftKey: true }
     expect(shortcutOf(press('ArrowLeft', 'ArrowLeft', shift), 'rh')).toEqual({
       type: 'move',
@@ -213,12 +218,9 @@ describe('shortcutOf', () => {
       direction: -1,
       extend: true,
     })
-    expect(shortcutOf(press('ArrowRight', 'ArrowRight', { ...shift, altKey: true }), 'rh')).toEqual(
-      { type: 'move', by: 'bar', direction: 1, extend: true },
-    )
     expect(
       shortcutOf(press('ArrowRight', 'ArrowRight', { ...shift, metaKey: true }), 'staff0'),
-    ).toEqual({ type: 'move', by: 'end', direction: 1, extend: true })
+    ).toEqual({ type: 'move', by: 'bar', direction: 1, extend: true })
     expect(shortcutOf(press('Home', 'Home', shift), 'lh')).toEqual({
       type: 'move',
       by: 'end',

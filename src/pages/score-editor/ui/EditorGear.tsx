@@ -253,7 +253,7 @@ function PageBody({ page }: { page: Exclude<GearPage, 'main'> }) {
  * card hung under the bar's ··· on a laptop (EditorLaptop's popover), closed by a click outside. Its first page holds the score's
  * acts and its Settings; each row turns to its page in the same sheet, every page with Back to the
  * first, so a sheet never opens over a sheet; Title and credits, opened from the title on the score,
- * stands alone. An original's draft says where it stands
+ * too, Back to the first page whose first row it is. An original's draft says where it stands
  * beside the title.
  */
 export function EditorGear({

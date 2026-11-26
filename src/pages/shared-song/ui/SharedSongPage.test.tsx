@@ -30,10 +30,8 @@ describe('A shared song', () => {
     const data = await linkOf(SONG)
     const { router, piecesStore } = await renderApp(`/songs/shared?song=${data}`)
     expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
-    // Its facts as the song page's, a line of chips.
-    expect(screen.getByText('Key').nextElementSibling).toHaveTextContent('G')
-    expect(screen.getByText('Time').nextElementSibling).toHaveTextContent('3/4')
-    expect(screen.getByText('Tempo').nextElementSibling).toHaveTextContent('84 BPM')
+    // Its facts in one line over its chart: its key, time and tempo.
+    expect(screen.getByText(/· 3\/4 ·/)).toHaveTextContent('G major · 3/4 · 84 BPM')
     expect(screen.getByRole('button', { name: /^Bar 1: G$/ })).toBeInTheDocument()
     expect(piecesStore.getState().songs).toEqual([])
     await user.click(screen.getByRole('button', { name: 'Add to the library' }))
@@ -44,15 +42,15 @@ describe('A shared song', () => {
   it('writes its key as the song page does, a flat as a flat', async () => {
     const data = await linkOf({ ...SONG, music: { ...SONG.music, key: 'Db' } })
     await renderApp(`/songs/shared?song=${data}`)
-    expect((await screen.findByText('Key')).nextElementSibling).toHaveTextContent('D♭')
+    expect(await screen.findByText(/· 3\/4 ·/)).toHaveTextContent(/^D♭ major ·/)
   })
 
-  it('floats Add, and plays a tapped bar on its keys before it is added', async () => {
+  it('floats Add, and plays a tapped bar before it is added, with no keyboard', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp(`/songs/shared?song=${await linkOf(SONG)}`)
     const add = await screen.findByRole('button', { name: 'Add to the library' })
     expect(add.closest('[data-slot="floating-actions"]')).not.toBeNull()
-    expect(screen.getByRole('group', { name: 'Keyboard' })).toBeInTheDocument()
+    expect(screen.queryByRole('group', { name: 'Keyboard' })).toBeNull()
     const bar = screen.getByRole('button', { name: /^Bar 2: C$/ })
     await user.click(bar)
     expect(audio.played).toHaveLength(1)
@@ -78,9 +76,8 @@ describe('A shared song', () => {
 
   it('says so when the link holds no song', async () => {
     await renderApp('/songs/shared?song=cut-short')
-    expect(
-      await screen.findByText('This link holds no song: it may be cut short.'),
-    ).toBeInTheDocument()
+    expect(await screen.findByText('This link holds no song')).toBeInTheDocument()
+    expect(screen.getByText('It may have been cut short when it was copied.')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'To Songs' })).toHaveAttribute('href', '/songs')
   })
 

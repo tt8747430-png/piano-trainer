@@ -37,6 +37,9 @@ describe('waitFeedback', () => {
       kind: 'finished',
       score: 100,
       hardest: null,
+      slips: {},
+      pauses: {},
+      bars: performance.bars.length,
     })
   })
 
@@ -48,13 +51,13 @@ describe('waitFeedback', () => {
       expect(feedback.notes.every((n) => ['G', 'B', 'D'].includes(n))).toBe(true)
   })
 
-  it('names the notes lowest first, as the hands play them', () => {
+  it('names each key lowest first, as the hands play them, an octave doubled twice', () => {
     const bz1 = pieceById('bz1')
     if (!bz1) throw new Error('bz1')
     const bm = arrangePiece(bz1, ownChoice(bz1), BUILT_IN_PATTERNS)
     const playing = practiceReducer(initialPractice(bm, 'wait', 'both'), { type: 'play' })
-    // Thank you, God opens on Bm: B in the bass, then D and F♯ above it.
-    expect(waitFeedback(bm, playing)).toEqual({ kind: 'play', notes: ['B', 'D', 'F#'] })
+    // Thank you, God opens on Bm: B in octaves in the bass, then B, D and F♯ above it.
+    expect(waitFeedback(bm, playing)).toEqual({ kind: 'play', notes: ['B', 'B', 'B', 'D', 'F#'] })
   })
 
   it('orders the notes by the practised hand alone, not the bass under it', () => {
@@ -84,13 +87,16 @@ describe('waitFeedback', () => {
   it('names a wrong key, and says when a group is right or the piece is finished', () => {
     expect(waitFeedback(performance, { ...waiting, outcome: 'wrong', wrong: midi(61) })).toEqual({
       kind: 'not',
-      note: 'C#',
+      note: 'C♯',
     })
     expect(waitFeedback(performance, { ...waiting, outcome: 'correct' })).toEqual({ kind: 'right' })
     expect(waitFeedback(performance, { ...waiting, outcome: 'finished' })).toEqual({
       kind: 'finished',
       score: 100,
       hardest: null,
+      slips: {},
+      pauses: {},
+      bars: performance.bars.length,
     })
   })
 })

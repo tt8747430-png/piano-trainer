@@ -8,16 +8,22 @@ import { createMemoryStorage } from '@/shared/lib'
 
 type User = ReturnType<typeof userEvent.setup>
 
-/** Opens the foot's More and finds its Sections. */
+/** Opens the gear's More and gives its menu. */
+async function openMore(user: User, gear = 'Player settings', more = 'More') {
+  await user.click(await screen.findByRole('button', { name: gear }))
+  const sheet = await screen.findByRole('dialog', { name: gear })
+  await user.click(within(sheet).getByRole('button', { name: more }))
+  return screen.findByRole('menu')
+}
+
+/** Opens the gear's More and finds its Sections. */
 async function sectionsAction(
   user: User,
-  foot = 'Practice tools',
+  gear = 'Player settings',
   more = 'More',
   name = 'Sections',
 ) {
-  const bar = await screen.findByRole('toolbar', { name: foot })
-  await user.click(within(bar).getByRole('button', { name: more }))
-  return within(await screen.findByRole('menu')).getByRole('menuitem', { name })
+  return within(await openMore(user, gear, more)).getByRole('menuitem', { name })
 }
 
 /** The sheet's sections, each its name and where it starts. */
@@ -39,7 +45,8 @@ describe('the Player’s Sections (ADR 0107)', () => {
       expect(screen.queryByRole('dialog', { name: 'Sections' })).not.toBeInTheDocument(),
     )
     // The cursor at the chorus's first bar: the editor opens there from it (ADR 0115).
-    await user.click(screen.getByRole('button', { name: 'Edit' }))
+    while (screen.queryByRole('dialog')) await user.keyboard('{Escape}')
+    await user.click(screen.getByRole('radio', { name: 'Edit' }))
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 9, beat 1/))
   })
 
@@ -57,7 +64,7 @@ describe('the Player’s Sections (ADR 0107)', () => {
     )
   })
 
-  it('is greyed for a song of one section, saying why', async () => {
+  it('leaves Sections out for a song of one section', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     storage.setItem(
@@ -68,6 +75,7 @@ describe('the Player’s Sections (ADR 0107)', () => {
             {
               id: 'my-1',
               title: 'Morning',
+              added: '2026-11-01T09:00:00.000Z',
               key: 'G',
               meter: '4/4',
               tempo: 90,
@@ -81,15 +89,15 @@ describe('the Player’s Sections (ADR 0107)', () => {
       }),
     )
     await renderApp('/play/my-1', { storage })
-    const sections = await sectionsAction(user)
-    expect(sections).toHaveAttribute('aria-disabled', 'true')
-    expect(sections).toHaveAccessibleDescription('This song has one section.')
+    const menu = await openMore(user)
+    expect(within(menu).queryByRole('menuitem', { name: 'Sections' })).not.toBeInTheDocument()
+    expect(within(menu).getByRole('menuitem', { name: 'Print' })).toBeInTheDocument()
   })
 
   it('reads in Russian', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5', { locale: 'ru' })
-    await user.click(await sectionsAction(user, 'Инструменты занятия', 'Ещё', 'Разделы'))
+    await user.click(await sectionsAction(user, 'Настройки плеера', 'Ещё', 'Разделы'))
     const sheet = await screen.findByRole('dialog', { name: 'Разделы' })
     expect(sectionsIn(sheet)).toEqual(['Куплет Такт 1', 'Припев Такт 9', 'Окончание Такт 19'])
     expect(untranslated(sheet)).toEqual([])

@@ -4,60 +4,51 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { stubMatchMedia } from '@/shared/test/match-media'
 
-describe('Songs on a laptop: the tree and the table (R30 S2)', () => {
+const songsIn = (table: HTMLElement) =>
+  within(table)
+    .getAllByRole('row')
+    .slice(1)
+    .map((row) => within(row).getAllByRole('cell')[0]?.textContent ?? '')
+
+describe('Songs on a laptop: the table (R72, the AllSongsLaptop and FolderLaptop boards)', () => {
   // Every media query matches: the laptop's width among them.
-  beforeEach(() => void stubMatchMedia({ dark: false }))
+  beforeEach(() => void stubMatchMedia({ dark: true }))
 
-  it('shows the library’s tree beside every song, All songs current', async () => {
-    stubMatchMedia({ dark: true })
-    await renderApp('/songs')
-    const tree = await screen.findByRole('navigation', { name: 'Library' })
-    expect(within(tree).getByRole('link', { name: /^All songs/ })).toHaveAttribute(
-      'aria-current',
-      'page',
-    )
-    expect(within(tree).getByRole('link', { name: /^Hymns/ })).not.toHaveAttribute('aria-current')
-    const table = screen.getByRole('table', { name: 'Songs' })
-    // Every song, the folders' too, in one list: Amazing Grace is a hymn.
-    expect(within(table).getByRole('rowheader', { name: /Amazing Grace/ })).toBeInTheDocument()
+  it('lists every song in one table, the folders’ too', async () => {
+    await renderApp('/songs/all')
+    const table = await screen.findByRole('table', { name: 'Songs' })
+    // Amazing Grace is a hymn.
+    expect(within(table).getByRole('link', { name: 'Amazing Grace' })).toBeInTheDocument()
+    expect(
+      within(table)
+        .getAllByRole('columnheader')
+        .map((head) => head.textContent),
+    ).toEqual(['Title', 'Composer and key', 'Progress', 'Last played'])
   })
 
-  it('marks the folder open in the tree, not All songs, and lists its songs', async () => {
-    stubMatchMedia({ dark: true })
+  it('lists a folder’s songs under its name', async () => {
     await renderApp('/songs/folders/hymns')
-    const tree = await screen.findByRole('navigation', { name: 'Library' })
-    expect(within(tree).getByRole('link', { name: /^Hymns/ })).toHaveAttribute(
-      'aria-current',
-      'page',
-    )
-    expect(within(tree).getByRole('link', { name: /^All songs/ })).not.toHaveAttribute(
-      'aria-current',
-    )
-    const rows = within(screen.getByRole('table', { name: 'Songs' })).getAllByRole('rowheader')
-    expect(rows.map((row) => row.textContent)).toContain('Amazing Grace')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Hymns' })).toBeInTheDocument()
+    const table = screen.getByRole('table', { name: 'Songs' })
+    expect(songsIn(table)).toContain('Amazing Grace')
+    expect(songsIn(table)).toHaveLength(5)
   })
 
-  it('sorts by a column’s heading, and back to the learner’s order', async () => {
-    stubMatchMedia({ dark: true })
+  it('sorts from its fourth column’s heading, and the sort is kept', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/folders/hymns')
     const table = await screen.findByRole('table', { name: 'Songs' })
-    const title = within(table).getByRole('columnheader', { name: 'Title' })
-    await user.click(within(title).getByRole('button', { name: 'Title' }))
-    expect(libraryStore.getState().sort).toBe('name')
-    expect(title).toHaveAttribute('aria-sort', 'ascending')
-    const names = within(table)
-      .getAllByRole('rowheader')
-      .map((row) => row.querySelector('span')?.textContent ?? '')
+    await user.click(within(table).getByRole('button', { name: 'Sort by: Last played' }))
+    await user.click(await screen.findByRole('menuitemradio', { name: 'Title' }))
+    await waitFor(() => expect(libraryStore.getState().sort).toBe('title'))
+    const names = songsIn(screen.getByRole('table', { name: 'Songs' }))
     expect(names).toEqual(names.toSorted((a, b) => a.localeCompare(b, 'en')))
-    await user.click(within(title).getByRole('button', { name: 'Title' }))
-    await waitFor(() => expect(libraryStore.getState().sort).toBe('manual'))
   })
 
-  it('keeps the phone’s list, with no tree, below the laptop’s width', async () => {
-    await renderApp('/songs')
-    await screen.findByRole('heading', { level: 1, name: 'Songs' })
-    expect(screen.queryByRole('navigation', { name: 'Library' })).toBeNull()
+  it('keeps the phone’s list, with no table, below the laptop’s width', async () => {
+    stubMatchMedia({ dark: false })
+    await renderApp('/songs/folders/hymns')
+    await screen.findByRole('heading', { level: 1, name: 'Hymns' })
     expect(screen.queryByRole('table')).toBeNull()
   })
 })

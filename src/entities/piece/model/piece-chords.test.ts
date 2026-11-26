@@ -25,7 +25,7 @@ describe('pieceChords', () => {
     expect(pieceChords(testProgression('ii:min:4 V:dom:4 I:maj:8', { key: 'F' }))).toEqual([
       'Gm7',
       'C7',
-      'FMaj7',
+      'Fmaj7',
     ])
   })
 

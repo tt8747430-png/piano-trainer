@@ -17,6 +17,7 @@ import { createMemoryStorage } from '@/shared/lib'
 const MORNING = {
   id: 'my-1',
   title: 'Morning',
+  added: '2026-11-01T09:00:00.000Z',
   key: 'G',
   meter: '4/4',
   tempo: 90,
@@ -62,7 +63,7 @@ describe('The archive (ADR 0106)', () => {
     expect(rows.map((row) => row.textContent)).toEqual([
       expect.stringMatching(/^Silent Night/),
       expect.stringMatching(/^Morning/),
-      expect.stringMatching(/^Gorshkov’s songs 4 songs/),
+      expect.stringMatching(/^Gorshkov’s songs Playlist · 4 songs/),
     ])
     // An archived song still opens.
     expect(
@@ -73,10 +74,14 @@ describe('The archive (ADR 0106)', () => {
   it('restores a song where it stood, and a folder at Home, last, with its songs', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/archive', { storage: archived() })
-    await user.click(await screen.findByRole('button', { name: 'Restore Silent Night' }))
+    // The app's song and the playlist have one act, Restore, a button of its own.
+    const rows = within(await screen.findByRole('list', { name: 'Archive' })).getAllByRole(
+      'listitem',
+    )
+    await user.click(within(rows[0] as HTMLElement).getByRole('button', { name: 'Restore' }))
     expect(placeOf(libraryStore.getState(), 'silent')).toEqual({ folder: 'hymns', index: 2 })
     expect(await screen.findByText('“Silent Night” restored to the library')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Restore Gorshkov’s songs' }))
+    await user.click(within(rows[2] as HTMLElement).getByRole('button', { name: 'Restore' }))
     const { folders } = arrangeLibrary(
       libraryStore.getState(),
       libraryCatalog({ ownSongs: [{ id: 'my-1' }] }),
@@ -85,24 +90,32 @@ describe('The archive (ADR 0106)', () => {
     expect(folders.at(-1)?.songs).toHaveLength(4)
   })
 
-  it('restores everything by Restore all, then says it is empty', async () => {
+  it('restores everything from Select by Restore all, then says it is empty', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/archive', { storage: archived() })
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
     await user.click(await screen.findByRole('button', { name: 'Restore all' }))
     expect(libraryStore.getState().archive).toEqual([])
     expect(await screen.findByText('Nothing archived')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Restore all' })).toBeNull()
   })
 
-  it('moves the learner’s own song to the Trash; the app’s has no Delete', async () => {
+  it('moves the learner’s own song to the Trash from its ···; the app’s has only Restore', async () => {
     const user = userEvent.setup()
     const { piecesStore, libraryStore } = await renderApp('/songs/archive', { storage: archived() })
     const rows = within(await screen.findByRole('list', { name: 'Archive' })).getAllByRole(
       'listitem',
     )
-    expect(within(rows[0] as HTMLElement).queryByRole('button', { name: 'More' })).toBeNull()
-    await user.click(within(rows[1] as HTMLElement).getByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Delete' }))
+    expect(
+      within(rows[0] as HTMLElement).queryByRole('button', { name: 'More for Silent Night' }),
+    ).toBeNull()
+    expect(
+      within(rows[0] as HTMLElement).getByRole('button', { name: 'Restore' }),
+    ).toBeInTheDocument()
+    await user.click(
+      within(rows[1] as HTMLElement).getByRole('button', { name: 'More for Morning' }),
+    )
+    await user.click(await screen.findByRole('menuitem', { name: 'Move to Trash' }))
     expect(await screen.findByText('“Morning” moved to the Trash')).toBeInTheDocument()
     expect(libraryStore.getState().trash.map((each) => each.id)).toEqual(['my-1'])
     expect(

@@ -20,14 +20,14 @@ const SUNDAY = {
 } as const
 
 describe('createLibraryStore', () => {
-  it('starts holding nothing the learner changed, saved as pt-library version 6', () => {
+  it('starts holding nothing the learner changed, saved as pt-library version 9', () => {
     const storage = createMemoryStorage()
     const store = createLibraryStore({ storage, otherTabs: new EventTarget() })
     expect(store.getState()).toEqual(INITIAL_LIBRARY)
     store.setState({ favourites: ['bz5'] })
     expect(JSON.parse(storage.getItem('pt-library') ?? 'null')).toEqual({
       state: { ...INITIAL_LIBRARY, favourites: ['bz5'] },
-      version: 6,
+      version: 9,
     })
   })
 
@@ -40,7 +40,7 @@ describe('createLibraryStore', () => {
       home: ['my-1'],
       favourites: ['silent'],
       archive: [
-        { kind: 'song', id: 'my-2', from: { folder: 'folder-1', index: 1 } },
+        { kind: 'song', id: 'my-2', from: { folder: 'folder-1', index: 1 }, at: 1_700_000_000_000 },
         {
           kind: 'folder',
           folder: {
@@ -62,10 +62,12 @@ describe('createLibraryStore', () => {
             },
           ],
           index: 2,
+          at: 1_700_000_100_000,
         },
       ],
-      trash: [{ id: 'my-5', from: { folder: null, index: 0 } }],
-      sort: 'recent',
+      trash: [{ id: 'my-5', from: { folder: null, index: 0 }, at: 1_700_000_200_000 }],
+      sort: 'title',
+      direction: 'ascending',
       nextFolder: 4,
       songLooks: { bz5: { picture: 'piano', paint: 'grass' } },
       songDetails: {
@@ -107,7 +109,9 @@ describe('createLibraryStore', () => {
     })
     expect(state.folders[0]?.songs).toEqual(['bz5', 'silent'])
     expect(state.home).toEqual(['my-1'])
-    expect(state.archive).toEqual([{ kind: 'song', id: 'my-2', from: { folder: null, index: 0 } }])
+    expect(state.archive).toEqual([
+      { kind: 'song', id: 'my-2', from: { folder: null, index: 0 }, at: 0 },
+    ])
   })
 
   it('keeps each folder once, an own one only with a name, a look that does not read as its default', () => {

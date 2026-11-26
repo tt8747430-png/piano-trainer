@@ -10,6 +10,7 @@ import { createMemoryStorage } from '@/shared/lib'
 const SONG = {
   id: 'my-1',
   title: 'Morning',
+  added: '2026-11-01T09:00:00.000Z',
   key: 'G',
   meter: '4/4',
   tempo: 120,
@@ -61,16 +62,17 @@ describe('A take’s page', () => {
     },
   )
 
-  it('names its song under its own name', async () => {
+  it('holds its name in its Name field, and says its song and day under Play', async () => {
     await renderApp('/edit/my-1/takes/take-1', { storage: withTake() })
-    expect(await screen.findByRole('heading', { level: 1, name: 'First go' })).toBeInTheDocument()
-    expect(screen.getByText('Morning')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Take' })).toBeInTheDocument()
+    expect(screen.getByRole('textbox', { name: 'Name' })).toHaveValue('First go')
+    expect(screen.getByText(/^Morning · recorded /)).toBeInTheDocument()
   })
 
   it('plays the take, or from a bar tapped on its roll', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/edit/my-1/takes/take-1', { storage: withTake() })
-    expect(await screen.findByRole('heading', { level: 1, name: 'First go' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Take' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Play' }))
     expect(keysOf(audio.played.at(-1)?.sounds)).toEqual([55, 59, 62, 67])
     await user.click(screen.getByRole('button', { name: 'Play from bar 3' }))
@@ -86,21 +88,22 @@ describe('A take’s page', () => {
     await user.tab()
     expect(takesStore.getState().takes[0]?.name).toBe('Verse, slower')
     await user.click(screen.getByRole('button', { name: 'Back' }))
-    const sheet = await screen.findByRole('dialog', { name: 'Takes' })
+    const sheet = await screen.findByRole('region', { name: 'Takes' })
     expect(within(sheet).getByRole('link', { name: 'Verse, slower' })).toBeInTheDocument()
   })
 
   it('keeps the bars chosen, once asked', async () => {
     const user = userEvent.setup()
     const { takesStore } = await renderApp('/edit/my-1/takes/take-1', { storage: withTake() })
-    const keep = await screen.findByRole('button', { name: 'Keep' })
-    expect(keep).toBeDisabled()
-    await user.click(screen.getByRole('combobox', { name: 'First bar' }))
-    await user.click(await screen.findByRole('option', { name: '2' }))
-    await user.click(screen.getByRole('combobox', { name: 'Last bar' }))
-    await user.click(await screen.findByRole('option', { name: '3' }))
-    expect(screen.getByRole('button', { name: 'Play from bar 1' })).toHaveAttribute('data-dimmed')
-    await user.click(keep)
+    const whole = await screen.findByRole('button', { name: /^Keep bars 1–/ })
+    expect(whole).toBeDisabled()
+    await user.click(screen.getByRole('button', { name: 'First bar +' }))
+    while (!screen.queryByRole('button', { name: 'Keep bars 2–3' }))
+      await user.click(screen.getByRole('button', { name: 'Last bar −' }))
+    // The bars kept marked on the roll, the rest not.
+    expect(screen.getByRole('button', { name: 'Play from bar 1' })).not.toHaveAttribute('data-kept')
+    expect(screen.getByRole('button', { name: 'Play from bar 2' })).toHaveAttribute('data-kept')
+    await user.click(screen.getByRole('button', { name: 'Keep bars 2–3' }))
     const asking = await screen.findByRole('alertdialog', { name: 'Keep bars 2–3?' })
     await user.click(within(asking).getByRole('button', { name: 'Keep' }))
     await waitFor(() =>
@@ -111,12 +114,12 @@ describe('A take’s page', () => {
     expect(screen.queryByRole('button', { name: 'Play from bar 1' })).not.toBeInTheDocument()
   })
 
-  it('downloads the take from its actions, and deletes it once asked, back to the takes', async () => {
+  it('downloads the take from its bar, and deletes it at once, back to the takes, Undo in its toast', async () => {
     const user = userEvent.setup()
     const { router, takesStore } = await renderApp('/edit/my-1/takes/take-1', {
       storage: withTake(),
     })
-    await screen.findByRole('heading', { level: 1, name: 'First go' })
+    await screen.findByRole('heading', { level: 1, name: 'Take' })
     vi.stubGlobal(
       'URL',
       class extends URL {
@@ -130,23 +133,20 @@ describe('A take’s page', () => {
     ) {
       saved.push(this.download)
     })
-    await user.click(screen.getByRole('button', { name: 'More actions' }))
-    await user.click(await screen.findByRole('button', { name: 'Download' }))
+    await user.click(screen.getByRole('button', { name: 'Download' }))
     expect(saved[0]).toMatch(/^Morning .*\.mid$/)
 
-    await user.click(screen.getByRole('button', { name: 'More actions' }))
-    await user.click(await screen.findByRole('button', { name: 'Delete' }))
-    const asking = await screen.findByRole('alertdialog', { name: 'Delete this take?' })
-    await user.click(within(asking).getByRole('button', { name: 'Delete' }))
+    await user.click(screen.getByRole('button', { name: 'Delete' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     expect(router.state.location.search).toEqual({ takes: true })
-    expect(takesStore.getState().takes).toEqual([])
+    await waitFor(() => expect(takesStore.getState().takes).toEqual([]))
+    expect(await screen.findByText('Take deleted')).toBeInTheDocument()
   })
 
   it('opens from its row in the takes', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/edit/my-1?takes=true', { storage: withTake() })
-    const sheet = await screen.findByRole('dialog', { name: 'Takes' })
+    const sheet = await screen.findByRole('region', { name: 'Takes' })
     await user.click(within(sheet).getByRole('link', { name: 'First go' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1/takes/take-1'))
   })

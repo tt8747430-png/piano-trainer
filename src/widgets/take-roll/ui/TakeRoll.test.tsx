@@ -27,7 +27,7 @@ const TAKE: Take = {
   pedals: [],
 }
 
-function setUp(extra: { kept?: { first: number; last: number } } = {}) {
+function setUp(extra: { kept?: { first: number; last: number }; bars?: boolean } = {}) {
   const onPlayFrom = vi.fn()
   const wrap = (ui: ReactNode) => (
     <ServicesProvider
@@ -48,9 +48,9 @@ describe('TakeRoll', () => {
     expect(screen.getByRole('img', { name: 'Notes: 2 · bars: 4' })).toBeInTheDocument()
   })
 
-  it('plays from a bar tapped, each named by its number in the piece', async () => {
+  it('on a take’s page, plays from a bar’s number tapped, each named by its number in the piece', async () => {
     const user = userEvent.setup()
-    const { onPlayFrom } = setUp()
+    const { onPlayFrom } = setUp({ bars: true })
     expect(screen.getAllByRole('button').map((bar) => bar.getAttribute('aria-label'))).toEqual([
       'Play from bar 5',
       'Play from bar 6',
@@ -61,12 +61,22 @@ describe('TakeRoll', () => {
     expect(onPlayFrom).toHaveBeenCalledExactlyOnceWith(2)
   })
 
-  it('dims the bars Keep bars would cut', () => {
-    setUp({ kept: { first: 1, last: 2 } })
-    const dimmed = (n: number) => screen.getByRole('button', { name: `Play from bar ${n}` })
-    expect(dimmed(5)).toHaveAttribute('data-dimmed')
-    expect(dimmed(6)).not.toHaveAttribute('data-dimmed')
-    expect(dimmed(7)).not.toHaveAttribute('data-dimmed')
-    expect(dimmed(8)).toHaveAttribute('data-dimmed')
+  it('marks the bars Keep bars keeps', () => {
+    setUp({ bars: true, kept: { first: 1, last: 2 } })
+    const bar = (n: number) => screen.getByRole('button', { name: `Play from bar ${n}` })
+    expect(bar(5)).not.toHaveAttribute('data-kept')
+    expect(bar(6)).toHaveAttribute('data-kept')
+    expect(bar(7)).toHaveAttribute('data-kept')
+    expect(bar(8)).not.toHaveAttribute('data-kept')
+  })
+
+  it('says how many notes it holds under a take’s page’s bars', () => {
+    setUp({ bars: true })
+    expect(screen.getByRole('status')).toHaveTextContent('2 notes')
+  })
+
+  it('has no bar buttons in Review your recording, where a tap on the roll plays', () => {
+    setUp()
+    expect(screen.queryByRole('button')).toBeNull()
   })
 })

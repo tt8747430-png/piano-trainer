@@ -38,7 +38,7 @@ describe('SheetLabels', () => {
         tempos={[84]}
       />,
     )
-    expect(labelsOf(container)).toEqual(['1 · Verse 1 · \u{1D15F}= 84'])
+    expect(labelsOf(container)).toEqual(['1 · Verse 1 · \u{1D15F} = 84'])
   })
 
   it('numbers a line’s first bar only, as LilyPond numbers a system’s start (each bar still tapped)', () => {
@@ -58,7 +58,7 @@ describe('SheetLabels', () => {
     expect(screen.getByText('5')).toBeInTheDocument()
     expect(screen.queryByText('6')).not.toBeInTheDocument()
     // A tempo on a later bar of the line is still said there, without the bar's number.
-    expect(container).toHaveTextContent(/^5\u{1D15F}= 72$/u)
+    expect(container).toHaveTextContent(/^5\u{1D15F} = 72$/u)
   })
 
   it('prints a chord name’s sharps and flats as signs, and a 6/8 tempo by its dotted quarter', () => {
@@ -76,7 +76,7 @@ describe('SheetLabels', () => {
       />,
     )
     expect(screen.getByText('F♯m/B♭')).toBeInTheDocument()
-    expect(container).toHaveTextContent('\u{1D15F}\u{1D16D}= 58')
+    expect(container).toHaveTextContent('\u{1D15F}\u{1D16D} = 58')
   })
 
   it('says how the right hand plays each chord after its name, with Chord positions', () => {

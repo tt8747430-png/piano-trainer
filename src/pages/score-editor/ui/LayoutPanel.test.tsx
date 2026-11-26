@@ -16,6 +16,7 @@ const withSong = () => {
           {
             id: 'my-1',
             title: 'Morning',
+            added: '2026-11-01T09:00:00.000Z',
             key: 'G',
             meter: '4/4',
             tempo: 90,
@@ -64,12 +65,12 @@ describe('the editor’s Layout (A40)', () => {
     await user.type(top, '2{Enter}')
     const bravura = clefOutline()
     expect(bravura).toBeTruthy()
-    // Measures: two a system; Measure numbers: every measure; Music font: Leland.
-    await user.click(screen.getByRole('button', { name: 'Measures' }))
-    await user.click(screen.getByRole('button', { name: 'More measures per system' }))
-    await user.click(screen.getByRole('button', { name: 'More measures per system' }))
-    await user.click(screen.getByRole('button', { name: 'Measure numbers' }))
-    await user.click(screen.getByRole('radio', { name: 'Every measure' }))
+    // Bars: two a system; Bar numbers: every bar; Music font: Leland.
+    await user.click(screen.getByRole('button', { name: 'Bars' }))
+    await user.click(screen.getByRole('button', { name: 'More bars per system' }))
+    await user.click(screen.getByRole('button', { name: 'More bars per system' }))
+    await user.click(screen.getByRole('button', { name: 'Bar numbers' }))
+    await user.click(screen.getByRole('radio', { name: 'Every bar' }))
     await user.click(screen.getByRole('button', { name: 'Music font' }))
     await user.click(screen.getByRole('radio', { name: 'Leland' }))
     await user.click(screen.getByRole('button', { name: 'Hide empty staves' }))
