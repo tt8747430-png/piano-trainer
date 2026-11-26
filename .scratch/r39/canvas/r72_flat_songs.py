@@ -97,7 +97,7 @@ def FOLDERCARDS(href):
                    f'<span style="display: flex; flex-direction: column; gap: 2px; padding: 0 2px"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{s}</span></span></a>' for t, s, c, k in FOLDERS_ALL)
 # Shared with me, apart from the learner's own and louder (Google Drive's own place; Flat's Collaborations): each
 # folder a group shared, as a card with who shared it and the group's faces, so it is never taken for one's own.
-SHAREDF = [('Choir hymns', 'St Mary’s choir', 'Shared by Maria Ionescu · 12 songs', [('M', '#F3D2C8'), ('D', '#D3E5F2'), ('E', '#DCE9D6')], '+9'),
+SHAREDF = [('Choir hymns', 'St Mary’s choir', 'Shared by Maria Ionescu · 4 songs', [('M', '#F3D2C8'), ('D', '#D3E5F2'), ('E', '#DCE9D6')], '+9'),
            ('Grade 3 pieces', 'Ms Rusu’s class', 'Shared by Daniel Rusu · 8 songs', [('D', '#D3E5F2'), ('A', '#F3D2C8')], '+14')]
 def SHAREDCARDS(href):
     face = lambda i, c, n: f'<span style="width: 32px; height: 32px; margin-left: {0 if n == 0 else -10}px; border-radius: 16px; background: {c}; box-shadow: 0 0 0 2px {SHEET}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">{i}</span>'
@@ -115,7 +115,7 @@ def SHAREDCARDS(href):
 PLAYLISTS = [('Favourites', '2 songs', PEACH, 'heart', [], ''), ('Songs to learn', '23 songs · 4 learned', HONEY, '', ['Clair de lune', 'Für Elise', 'Let It Be', 'Jingle Bells'], ''),
              ('Hymns', '6 songs · 2 learned', SKY, '', ['Amazing Grace', 'Holy, Holy, Holy', 'Abide with Me', 'Be Thou My Vision'], ''),
              ('Called to Play', '15 songs · Book 1', LILAC, '', ['Twinkle, Twinkle, Little Star', 'Ode to Joy', 'Jingle Bells', 'My first song'], ''),
-             ('Choir hymns', 'Maria Ionescu · 12 songs', SAGE, '', ['It Is Well', 'Great Is Thy Faithfulness', 'Silent Night', 'Amazing Grace'], 'M'),
+             ('Choir hymns', 'Maria Ionescu · 4 songs', SAGE, '', ['It Is Well', 'Great Is Thy Faithfulness', 'Silent Night', 'Amazing Grace'], 'M'),
              ('Grade 3 pieces', 'Daniel Rusu · 8 songs', '#EEE3D3', '', ['Für Elise', 'Clair de lune', 'Ode to Joy', 'Twinkle, Twinkle, Little Star'], 'D')]
 def PLCOVER(c, heart, songs, face, w=64):
     inset, gap, r = (max(4, w // 12), max(2, w // 24), max(3, w // 16))
