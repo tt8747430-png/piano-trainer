@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · (this commit) · a song's name heads its facts: 8 over Key, Time and Tempo and 16 under the cover (it stood 16 from both, read as the cover's end); its one-child wrapper left from the credits line went · Song, SongLaptop, SongSettings, SongSettingsLaptop · v737
 - 2026-11-26 · (this commit) · clean: Practice's places name themselves alone: the Theory rows and cards lose their description lines ("Chord types, voicings, inversions" and the rest: the pictures show them), and the Tools lose theirs and their settings ("120 BPM · 4/4", "A4 = 440 Hz": each tool's own page holds them) and the Chord finder's "Last: Cmaj7" (its history went in v728); the Exercises keep their counts · Main, Laptop (Practice) · v736
 - 2026-11-26 · (this commit) · kit drift folded: fourteen icons resized by a `.replace()` on the glyph's markup now call the kit's `ICON(glyph, size)` (the laws' design-system layers); the boards build byte for byte the same · none · not published (no board changed)
 - 2026-11-26 · (this commit) · clean: a song's bar map loses "Played 6 times · 42 minutes" between Bar 1 and Bar 16 (our own stat, loop round 13; the practice history is the Profile's) · Song, SongLaptop, SongSettings, SongSettingsLaptop · v735
