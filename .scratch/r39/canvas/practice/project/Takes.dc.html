@@ -102,7 +102,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       undo: () => S({ toast: null, gone: st.lastMany ? gone.filter((g) => !st.lastMany.includes(g)) : gone.filter((g) => g !== st.last), lastMany: null }),
       atN: at.n, atD: at.d,
       grids: seg(['1/4', '1/8', '1/16', '1/4t', '1/8t'], grid, (l) => S({ grid: l })),
-      rawOn: raw, rawOnBg: raw ? '#7FB685' : '#DAD1C8', rawOnX: raw ? 22 : 2, toggleRaw: () => S({ hideRaw: !raw }),
+      rawOn: raw, rawOnBg: raw ? '#44684A' : '#DAD1C8', rawOnX: raw ? 22 : 2, toggleRaw: () => S({ hideRaw: !raw }),
       intoV: into, openInto: () => S({ sheet: 'into' }), intoOn: st.sheet === 'into',
       intoList: ['Both staves', 'Right hand', 'Left hand', 'Melody'].map((l) => ({ l, mark: l === into ? '✓' : '', pick: () => S({ into: l, sheet: null }) })),
       discard: () => drop(at.id), save: () => S({ page: null, toast: 'Written into bars 3–10', toastUndo: false }) };

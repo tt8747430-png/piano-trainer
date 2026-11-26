@@ -527,15 +527,15 @@ return {
   invItems: Array.from({ length: invN }, (_, i) => { const v = voice(root, q, i, voicing, 'Right'); RL = rLet; return { t: INV[i], s: v.map((x) => x.name).join(' '), on: i === inv, mark: i === inv ? '✓' : '', pick: () => change({ inv: i, sheet: null }) }; }),
   chips: ns.filter((x, i, a) => a.findIndex((y) => y.name === x.name) === i).sort((a, b) => ORD.indexOf(a.deg) - ORD.indexOf(b.deg)).map((x) => ({ n: x.name, c: ROLE[x.deg] || C.accent })),
   isStaff: true, isInv: false, isFing: false, isTones: false, voicingLabel: voicing,
-  kbShow, kbOn: kbShow, kbOnBg: kbShow ? '#7FB685' : C.line, kbOnX: kbShow ? 22 : 2, toggleKb: () => set({ kbOn: !kbOnS }), kbDimOp: kbShow ? 1 : 0.4, kbPE: kbShow ? 'auto' : 'none', kbOffA: !kbShow,
+  kbShow, kbOn: kbShow, kbOnBg: kbShow ? '#44684A' : C.line, kbOnX: kbShow ? 22 : 2, toggleKb: () => set({ kbOn: !kbOnS }), kbDimOp: kbShow ? 1 : 0.4, kbPE: kbShow ? 'auto' : 'none', kbOffA: !kbShow,
   // Piano settings (R42, canvas 85): a switch turns the piano on or off (Apple HIG, toggles: a switch for a pair of
   // opposing states, in a list row); View is two radio cards, 3D holding its own Hands switch (the owner's radio-card rule)
-  kbHandsOn: kbHands, kbHandsOnBg: kbHands ? '#7FB685' : C.line, kbHandsOnX: kbHands ? 22 : 2, toggleKbHands: () => set({ kbHands: !kbHands }),
+  kbHandsOn: kbHands, kbHandsOnBg: kbHands ? '#44684A' : C.line, kbHandsOnX: kbHands ? 22 : 2, toggleKbHands: () => set({ kbHands: !kbHands }),
   viewCards: [['3d', '3D piano'], ['2d', '2D keys']].map(([id, name]) => { const on = id === kbView; return { name, on, is3d: id === '3d', is2d: id === '2d', hasHands: id === '3d' && on, fw: on ? 700 : 500,
     bg: on ? '#DAD1C8' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px ' + C.line, dotBg: on ? '#4B4038' : 'transparent', dotRing: on ? 'none' : 'inset 0 0 0 2px ' + C.line, mark: on ? '✓' : '', pick: () => set({ kbView: id }) }; }),
-  bassOnBg: bassOn ? '#7FB685' : C.line, bassOnX: bassOn ? 22 : 2, toggleBass: () => change({ bass: !bassOn }), bassOn,
-  fingOnBg: fingOn ? '#7FB685' : C.line, fingOnX: fingOn ? 22 : 2, toggleFing: () => set({ fing: !fingOn }), fingOn,
-  fingKeysOn: fingKeys, fingKeysOnBg: fingKeys ? '#7FB685' : C.line, fingKeysOnX: fingKeys ? 22 : 2, toggleFingKeys: () => set({ fingKeys: !fingKeys }),
+  bassOnBg: bassOn ? '#44684A' : C.line, bassOnX: bassOn ? 22 : 2, toggleBass: () => change({ bass: !bassOn }), bassOn,
+  fingOnBg: fingOn ? '#44684A' : C.line, fingOnX: fingOn ? 22 : 2, toggleFing: () => set({ fing: !fingOn }), fingOn,
+  fingKeysOn: fingKeys, fingKeysOnBg: fingKeys ? '#44684A' : C.line, fingKeysOnX: fingKeys ? 22 : 2, toggleFingKeys: () => set({ fingKeys: !fingKeys }),
   handSeg: seg(['Right', 'Left', 'Both'], hands, (l) => change({ hand: l })),
   kbAngleSeg: seg(['Seat', 'Above'], kbAngle === 'above' ? 'Above' : 'Seat', (l) => set({ kbAngle: l === 'Above' ? 'above' : 'seat' })),
   pianoSw: ''' + PS.SW_JS('kbOnS', '() => set({ kbOn: !kbOnS })') + ''', kbHandsSw: ''' + PS.SW_JS('kbHands', '() => set({ kbHands: !kbHands })') + r''',
@@ -559,8 +559,8 @@ return {
     const nm = (m) => NN[m % 12] + (Math.floor(m / 12) - 1);
     return { bl, x: (x0 || 0).toFixed(1), w: (x1 - (x0 || 0)).toFixed(1), cap: nm(lo) + ' – ' + nm(hi) }; })(),
   kbTiles: [['hands', '3D with hands'], ['3d', '3D keys'], ['2d', '2D keys'], ['off', 'Off']].map(([id, name]) => { const on = id === kbMode; return { name, on, line: on ? '#4B4038' : 'transparent', bg: on ? '#DAD1C8' : '#FEFDFB', isOff: id === 'off', is2d: id === '2d', is3d: id === '3d' || id === 'hands', isHands: id === 'hands', pick: () => set({ kbMode: id }) }; }),
-  rhOn: hands !== 'Left', rhOnBg: hands !== 'Left' ? '#7FB685' : C.line, rhOnX: hands !== 'Left' ? 22 : 2,
-  lhOn: hands !== 'Right', lhOnBg: hands !== 'Right' ? '#7FB685' : C.line, lhOnX: hands !== 'Right' ? 22 : 2,
+  rhOn: hands !== 'Left', rhOnBg: hands !== 'Left' ? '#44684A' : C.line, rhOnX: hands !== 'Left' ? 22 : 2,
+  lhOn: hands !== 'Right', lhOnBg: hands !== 'Right' ? '#44684A' : C.line, lhOnX: hands !== 'Right' ? 22 : 2,
   // the hands sit beside their staves: R.H. by the treble, L.H. by the bass; the last one on only plays
   // the hands drawn as they lie on the keys, each finger lit in the colour of the note it plays, its name on the
   // fingertip and its number below; tap a hand to add or drop it; Bass only leaves the root to the left hand (R42 v72)
@@ -668,7 +668,7 @@ return {
   lhBg: hands !== 'Right' ? '#DAD1C8' : 'transparent', lhFg: hands !== 'Right' ? '#5E3F10' : C.soft, lhRing: hands !== 'Right' ? 'none' : '0 0 0 1.5px ' + C.line,
   fgBg: fingOn ? '#DAD1C8' : 'transparent', fgFg: fingOn ? '#5E3F10' : C.soft, fgRing: fingOn ? 'none' : '0 0 0 1.5px ' + C.line,
   hTopT: 'calc(40px + (100% - 40px) * ' + ((50 - sv.vt) / (sv.vbot - sv.vt)).toFixed(4) + ')', hTopB: 'calc(40px + (100% - 40px) * ' + ((130 - sv.vt) / (sv.vbot - sv.vt)).toFixed(4) + ')',
-  namesOn: names, namesOnBg: names ? '#7FB685' : C.line, namesOnX: names ? 22 : 2, toggleNames: () => set({ names: !names }),
+  namesOn: names, namesOnBg: names ? '#44684A' : C.line, namesOnX: names ? 22 : 2, toggleNames: () => set({ names: !names }),
   arpOn: arp, arpBg: arp ? '#DAD1C8' : 'transparent', arpInk: arp ? '#7A5418' : C.ink, openSound: () => set({ sheet: 'sound' }), isSound: sh === 'sound',
   playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => st.playing ? set({ playing: false }) : play(false),
   playing: !!st.playing, notPlaying: !st.playing, playWord: scope === 'All' ? 'Play all' : (playMode === 'Block' ? 'Play chord' : 'Arpeggiate'),

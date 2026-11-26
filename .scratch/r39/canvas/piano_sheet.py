@@ -92,7 +92,7 @@ def CARD_JS(on, pick):
     return (f"((on) => ({{ on, bg: on ? '#DAD1C8' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px rgba(51,41,33,.07)', dot: on ? '#4B4038' : 'transparent', "
             f"dotRing: on ? 'none' : 'inset 0 0 0 2px #DAD1C8', mk: on ? 1 : 0, fw: on ? 600 : 500, pick: {pick} }}))({on})")
 def SW_JS(on, flip):
-    return f"((on) => ({{ on, track: on ? '#7FB685' : '#DAD1C8', knob: on ? 22 : 2, flip: {flip} }}))({on})"
+    return f"((on) => ({{ on, track: on ? '#44684A' : '#DAD1C8', knob: on ? 22 : 2, flip: {flip} }}))({on})"
 SEG_JS = ("(list, cur, pick) => list.map(([id, l]) => ({ l, on: id === cur, bg: id === cur ? '#FEFDFB' : 'transparent', "
           "sh: id === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: id === cur ? 600 : 500, pick: () => pick(id) }))")
 
