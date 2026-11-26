@@ -674,8 +674,7 @@ def SONGMENU(takes_href, extra=(), phone=False):
     rows = (''
             + f'<a role="menuitem" href="{takes_href}" style="{_SMROW}">{_SMSLOT()}<span style="flex: 1">Recordings</span><span style="color: {SOFT}; font-variant-numeric: tabular-nums">3</span></a>'
             + it('Share link', 'actShare') + it('Export', 'toggleExp', '#332921; background: {{expBg}}', f'<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_R}</span>') + it('Print', 'actPrint')
-            + ''.join(_SMSEP + ''.join(it(*r) for r in grp) for grp in extra)
-            + _SMSEP + it('Duplicate song', 'actDup') + it('Archive song', 'actArchive'))
+            + ''.join(_SMSEP + ''.join(it(*r) for r in grp) for grp in extra))
     return (f'<div style="position: relative; flex: none; min-width: 0; pointer-events: auto">'
             f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{smOn}}}}" onClick="{{{{toggleSm}}}}" data-tip="The song’s menu" style="height: 48px; max-width: {"100%" if phone else "320px"}; padding: 0 10px 0 12px; border: 0; border-radius: 12px; background: {{{{smBg}}}}; color: {ONB}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
             f'<span style="min-width: 0; display: flex; flex-direction: column"><h1 style="margin: 0; font-size: 17px; font-weight: 600; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</h1>'
@@ -693,8 +692,6 @@ def SONGMENU_KEYS(S, SET, TOAST, DEF='mine', close_others=''):
     m2 = t("TG.name + ' deleted'", True)
     m3 = t("'Renamed to ' + n")
     m4 = t("'Link copied'")
-    m5 = t("'Copy saved to My songs'")
-    m6 = t("'Song archived'", True)
     m7 = t("'Exported as MusicXML'")
     m8 = t("'Exported as compressed MusicXML'")
     m9 = t("'Exported as MIDI'")
@@ -712,7 +709,6 @@ def SONGMENU_KEYS(S, SET, TOAST, DEF='mine', close_others=''):
             f"renOn: !!{S}.ren, renVal: TG.name, renRef: (el) => {{ window.__rn = el; }}, renCancel: () => {SET}({{ ren: false, renId: null }}), "
             f"renSave: () => {{ const n = ((window.__rn && window.__rn.value) || '').trim(); if (!n) return; {SET}({{ vers: VS.map((v) => (v.id === TG.id ? {{ ...v, name: n }} : v)), ren: false, renId: null, {m3} }}); }}, "
             f"actShare: () => {SET}({{ ...shut, {m4} }}), actPrint: () => {SET}({{ ...shut }}), "
-            f"actDup: () => {SET}({{ ...shut, {m5} }}), actArchive: () => {SET}({{ ...shut, {m6} }}), "
             f"expXml: () => {SET}({{ ...shut, {m7} }}), expMxl: () => {SET}({{ ...shut, {m8} }}), expMidi: () => {SET}({{ ...shut, {m9} }}) }}; }})(),")
 
 # The phone's header as Flat's phone editor draws it (owner, 2026-11-26: "the header and the toolbar doesnt look like
@@ -790,25 +786,81 @@ def PHMODE(mode, practice_href, edit_href):
                                       f'box-shadow: {"0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)" if sel else "none"}; color: {INK}; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: {600 if sel else 500}">{ic}{lab}</a>')
     return (f'<div role="tablist" aria-label="Mode" style="display: flex; gap: 2px; padding: 2px; border-radius: 12px; background: {FILL}">'
             + seg('Practice', MUSICI, practice_href, mode == 'play') + seg('Edit', PENI, edit_href, mode == 'edit') + '</div>')
-# ☰ on a phone, as Flat's menu: the song's name heads it; the laptop rail's places as rows, each opening its sheet with
-# the panel's own body (one implementation), then the song's acts (the laptop title menu's: Recordings, Share link,
-# Export, Print; Duplicate and Archive apart). places: (id, label, value, body, act): act, when given, is the board's own
-# opener; PHKEYS (or the board's own keys) give phMenu, phMenuOn, phMenuX, phMenuFg, phClose, ph{id}On, ph{id}, and
-# phShare, phPrint, phDup, phArch, phMidiGo, phKeysGo, phOptsGo; head: what stands over the rows (the save state)
+# ☰ on a phone, as Flat's menu (flat-score-editor 083; owner, 2026-11-26: "and also the settings pages, and also remove
+# the duplicate and archive the song"): a panel dropping from ☰ under the header, never a bottom sheet; Practice | Edit
+# at its top as Flat's top card; then a row per place and act, its glyph, its name and an arrow (Flat: Credits, Manage
+# instruments, Version history, Layout, MIDI Options, Export Score), no groups and no lines; the draft's Publish as
+# Flat's Publish card at its foot. Each row opens its settings page: a sheet with ✕ at the left and the title centred
+# (Flat's Playback options, 005), no Done. Duplicate and Archive are gone (the song's library row keeps them).
+# places: (id, label, value, body, act): act, when given, is the board's own opener; PHKEYS (or the board's own keys)
+# give phMenu, phMenuOn, phMenuX, phMenuFg, phClose, ph{id}On, ph{id}, phShare, phPrint, phMidiGo, phKeysGo, phOptsGo;
+# head: what stands over the rows (the save state); rows: more (icon, label, value, target[, colour]) after the acts;
+# foot: what closes the panel (the draft's Publish card)
+_FI = lambda d: f'<svg viewBox="0 0 24 24" width="24" height="24" {I}>{d}</svg>'
+FICONS = {
+    'Song': _FI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>'),
+    'View': _FI('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle>'),
+    'Tr': _FI('<path d="m21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16"></path>'),
+    'Inst': _FI('<rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M8 5v8M12 5v14M16 5v8"></path>'),
+    'Lay': _FI('<path d="M21.17 6.81a1 1 0 0 0-3.99-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"></path>'),
+    'Aud': _FI('<path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"></path>'),
+    'Cred': _FI('<circle cx="12" cy="12" r="10"></circle><path d="m12 7 1.5 3 3.3.5-2.4 2.3.6 3.3L12 14.5l-3 1.6.6-3.3-2.4-2.3 3.3-.5z"></path>'),
+    'Midi': _FI('<path d="M4 9a2 2 0 0 1-2-2V5h6v2a2 2 0 0 1-2 2Z"></path><path d="M3 5V3M7 5V3M19 15V6.5a3.5 3.5 0 0 0-7 0v11a3.5 3.5 0 0 1-7 0V9"></path><path d="M18 21v-2M22 21v-2M20 15a2 2 0 0 1 2 2v2h-6v-2a2 2 0 0 1 2-2Z"></path>'),
+    'Rec': _FI('<path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"></path><path d="M19 11a7 7 0 0 1-14 0M12 18v3"></path>'),
+    'Share': _FI('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path>'),
+    'Exp': _FI('<path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path>'),
+    'Print': _FI('<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect>'),
+    'Hist': _FI('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5M12 7v5l4 2"></path>'),
+    'Disc': _FI('<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"></path>'),
+    'Mode': _FI('<path d="M5 22h14M5 2h14M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2"></path>'),
+    'Hands': _FI('<path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8"></path><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path>'),
+    'Met': _FI('<path d="M9 3h6l4 18H5z"></path><path d="M7.5 15h9"></path><path d="m12 15 5-9"></path>'),
+    'Speed': _FI('<path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path>'),
+    'Kb': _FI('<rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M8 5v8M12 5v14M16 5v8"></path>'),
+    'Lab': _FI('<path d="M4 7V4h16v3M9 20h6M12 4v16"></path>'),
+}
+_ARROWR = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M5 12h14M12 5l7 7-7 7"></path></svg>'
+def FROW(icon, label, value, target, colour=INK, line=False):
+    """a settings row as Flat's: the glyph, the name, the value soft, the arrow; target a page (…html) or an act"""
+    inner = (f'<span aria-hidden="true" style="flex: none; display: flex; color: {colour}">{FICONS.get(icon, icon)}</span><span style="flex: 1; min-width: 0; font-size: 17px; color: {colour}">{label}</span>'
+             + (f'<span style="flex: none; font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{value}</span>' if value else '')
+             + f'<span aria-hidden="true" style="flex: none; display: flex; color: {colour}">{_ARROWR}</span>')
+    st = f'min-height: 56px; box-sizing: border-box; width: 100%; padding: 0 12px; border: 0;{" border-top: 1px solid " + LINE + ";" if line else ""} border-radius: 0; background: transparent; font: inherit; text-align: left; text-decoration: none; display: flex; align-items: center; gap: 16px; cursor: pointer'
+    if target.endswith('.html'):
+        return f'<a href="{target}" style="{st}">{inner}</a>'
+    return f'<button type="button" onClick="{{{{{target}}}}}" style="{st}">{inner}</button>'
+def FROWS(items, lines=True):
+    return '<div style="display: flex; flex-direction: column">' + ''.join(FROW(*it[:5], line=lines and i > 0) for i, it in enumerate(items)) + '</div>'
+def FSHEET(cond, title, body, close='closeSheet', back=None, maxh='calc(100% - 124px)', **_):
+    """a settings page on a phone as Flat's (005): ✕ at the left (← on a page inside, back its act), the title centred, no Done"""
+    btn = (f'<button type="button" onClick="{{{{{back or close}}}}}" aria-label="{"Back" if back else "Close"}" data-tip="{"Back" if back else "Close"}" style="{_PB}">'
+           + (ARROWLI if back else _WXI.replace('width="20" height="20"', 'width="24" height="24"')) + '</button>')
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div>'
+            f'<section role="dialog" aria-modal="true" aria-label="{title}" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: {maxh}; overflow-y: auto; box-sizing: border-box; padding: 6px 16px 40px; border-radius: 22px 22px 0 0; background: {PAGE}; box-shadow: 0 -8px 32px rgba(51,41,33,.14); display: flex; flex-direction: column; gap: 12px">'
+            f'<div aria-hidden="true" style="flex: none; align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>'
+            f'<div style="flex: none; display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; margin: 0 -6px"><span style="display: flex">{btn}</span><h2 style="margin: 0; text-align: center; font-size: 17px; font-weight: 600">{title}</h2><span></span></div>'
+            f'{body}</section></sc-if>')
+def FRADIO(name):
+    """a page's choices as rows, the current one checked (Flat's pages, iOS Settings); a pick stays on the page"""
+    return (f'<div role="radiogroup" style="display: flex; flex-direction: column; overflow: hidden; {_CARD}"><sc-for list="{{{{{name}Opts}}}}" as="o" hint-placeholder-count="3">'
+            f'<button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 52px; box-sizing: border-box; width: 100%; padding: 0 16px; border: 0; box-shadow: inset 0 1px 0 {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 17px; text-align: left; display: flex; align-items: center; gap: 12px; cursor: pointer">'
+            f'<span style="flex: 1">{{{{o.l}}}}</span><span aria-hidden="true" style="display: flex; color: {INK}"><sc-if value="{{{{o.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK.replace("width=\"16\" height=\"16\"", "width=\"22\" height=\"22\"")}</sc-if></span></button></sc-for></div>')
 EXPROWS = lambda: GROUP(*(('action', l, a, INK) for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))), bg=SHEET)
-def PHMENU(places, takes_href, mode_html='', head='', extra='', title='Amazing Grace', inst=None):
-    rows = tuple(('link', lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places)
-    acts = GROUP(('link', 'Recordings', '3', takes_href), ('action', 'Share link', 'phShare', INK), ('link', 'Export', '', 'phExp'), ('action', 'Print', 'phPrint', INK), bg=SHEET)
-    loss = GROUP(('action', 'Duplicate song', 'phDup', INK), ('action', 'Archive song', 'phArch', INK), bg=SHEET)
-    out = BSHEET('phMenuOn', title, head + mode_html + GROUP(*rows, bg=SHEET) + acts + extra + loss, close='phClose', maxh='calc(100% - 124px)')
+def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=None, title='Amazing Grace'):
+    items = [(pid, lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places]
+    items += [('Rec', 'Recordings', '3', takes_href), ('Share', 'Share link', '', 'phShare'), ('Exp', 'Export', '', 'phExp'), ('Print', 'Print', '', 'phPrint')] + list(rows)
+    panel = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{phClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
+             f'<nav aria-label="{title}" class="nos" style="position: absolute; z-index: 61; top: 120px; right: 8px; left: 24px; max-height: calc(100% - 170px); overflow-y: auto; box-sizing: border-box; padding: 12px 8px; border-radius: 22px; background: {PAGE}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 18px 48px -12px rgba(51,41,33,.38); display: flex; flex-direction: column; gap: 8px">'
+             + head + (f'<div style="padding: 0 4px 4px">{mode_html}</div>' if mode_html else '') + FROWS(items, lines=False) + foot + '</nav></sc-if>')
+    out = panel
     for pid, lab, val, body, act in places:
         if not act:
-            out += BSHEET(f'ph{pid}On', lab, body, close='phClose', maxh='calc(100% - 124px)')
-    return out + BSHEET('phExpOn', 'Export', EXPROWS(), close='phClose', maxh='calc(100% - 124px)') + PARTSHEET(inst)
+            out += FSHEET(f'ph{pid}On', lab, body, close='phClose')
+    return out + FSHEET('phExpOn', 'Export', EXPROWS(), close='phClose') + PARTSHEET(inst)
 # the act rows close the menu and do what the title menu's rows do; SET a setter expression, shut what closes the menu
 def PHACTS(SET, shut, TOAST):
     t = lambda m, u=False: TOAST(m, u)
-    return (f"phShare: () => ({SET})({{ {shut}, {t("'Link copied'")} }}), phPrint: () => ({SET})({{ {shut} }}), phDup: () => ({SET})({{ {shut}, {t("'Copy saved to My songs'")} }}), phArch: () => ({SET})({{ {shut}, {t("'Song archived'", True)} }}), "
+    return (f"phShare: () => ({SET})({{ {shut}, {t("'Link copied'")} }}), phPrint: () => ({SET})({{ {shut} }}), "
             f"phMidiGo: () => ({SET})({{ {shut}, hdPop: 'midi' }}), phKeysGo: () => ({SET})({{ {shut}, hdPop: 'keys' }}), phOptsGo: () => ({SET})({{ {shut}, hdPop: 'opts' }}), ")
 def PHKEYS(S, SET, ids, TOAST):
     return ("...(() => { const P = " + S + ".ph ?? null; const o = { phMenu: () => (" + SET + ")({ ph: P === 'menu' ? null : 'menu', hdPop: null }), phMenuOn: P === 'menu', phMenuX: P === 'menu' ? 'true' : 'false', "
@@ -911,7 +963,7 @@ def _HPOPOVER(cond, title, body, pos, w, phone=False):
     if phone:
         # on a phone the band's popovers are sheets rising from the foot (a choice made in context), the same rows in one card
         body = body.replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px')
-        return BSHEET(cond, title, f'<div style="display: flex; flex-direction: column; overflow: hidden; padding: 0 12px; {_CARD}">{body}</div>', close='hdClose')
+        return FSHEET(cond, title, f'<div style="display: flex; flex-direction: column; overflow: hidden; padding: 0 12px; {_CARD}">{body}</div>', close='hdClose')
     return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{hdClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
             f'<section role="dialog" aria-label="{title}" style="{_HPOP}; {pos}; width: {w}px"><h2 style="margin: 0; padding: 4px 0 4px; font-size: 15px; font-weight: 600">{title}</h2>{body}</section></sc-if>')
 def _HVOLROW(i):
@@ -946,7 +998,20 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=Fals
     if phone and not practice:
         speed = speed.replace('padding: 0 4px 0 12px;', f'padding: 0 4px 0 12px; border-top: 1px solid {LINE}', 1)
     opts = rows(*((SELROW('Mode', 'selMode', False), SELROW('Hands', 'selHands')) if practice else ()), met, speed)
-    out = _HPOPOVER('hdOptsOn', 'Playback options', opts, f'left: {opts_left}px; top: 65px', 320, phone)
+    if phone:
+        # Flat's Playback options (005; owner, 2026-11-26: "refactor the hands setting and the metronome and other
+        # settings"): a page of rows, each its glyph, name, value and arrow, each opening its own page of choices with ←
+        # (iOS Settings, Flat's Audio playback, Metronome, Playback speed); a pick shows at once and stays on the page
+        items = ([('Mode', 'Mode', '{{selModeV}}', 'hdGoMode'), ('Hands', 'Hands', '{{selHandsV}}', 'hdGoHands')] if practice else []) + [('Met', 'Metronome', '{{selMetV}}', 'hdGoMet'), ('Speed', 'Playback speed', '{{hdSpeedL}}', 'hdGoSpeed')]
+        out = FSHEET('hdOptsMain', 'Playback options', FROWS(items), close='hdClose')
+        sp = speed.replace(f' border-top: 1px solid {LINE}', '').replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px').replace('padding: 0 4px 0 12px', 'padding: 0 6px 0 16px').replace('Playback speed', 'Speed')
+        if practice:
+            out += FSHEET('hdSubModeOn', 'Mode', FRADIO('selMode'), close='hdClose', back='hdSubBack')
+            out += FSHEET('hdSubHandsOn', 'Hands', FRADIO('selHands'), close='hdClose', back='hdSubBack')
+        out += FSHEET('hdSubMetOn', 'Metronome', FRADIO('selMet'), close='hdClose', back='hdSubBack')
+        out += FSHEET('hdSubSpeedOn', 'Playback speed', f'<div style="display: flex; flex-direction: column; overflow: hidden; {_CARD}">{sp}</div>' + FRADIO('selSpeed'), close='hdClose', back='hdSubBack')
+    else:
+        out = _HPOPOVER('hdOptsOn', 'Playback options', opts, f'left: {opts_left}px; top: 65px', 320, phone)
     # MIDI keyboard, complete in its popover (owner, 2026-11-26: "the midi settings still go to the wrong settings page
     # … remove all the unneeded midi settings … i dont like this showing one settings and then things like all settings"):
     # as Flat's MIDI Settings popover in its band (FLAT_PLAYER_AND_PIANO §2.5: the input's device select with None, and
@@ -966,7 +1031,11 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=Fals
         f'<sc-if value="{{{{hdMidiAny}}}}" hint-placeholder-val="{{{{true}}}}">' + snd + rec + '</sc-if>',
         f'<sc-if value="{{{{hdMidiNone}}}}" hint-placeholder-val="{{{{false}}}}">' + none + '</sc-if>'), f'left: {midi_left}px; top: 65px', 320, phone)
     if keys_right is not None:
-        out += _HPOPOVER('hdKeysOn', 'Piano keys', rows(SELROW('Piano', 'selKb', False), SELROW('Labels', 'selLab')), f'right: {keys_right}px; top: 65px', 320, phone)
+        if phone:
+            out += FSHEET('hdKeysMain', 'Piano keys', FROWS([('Kb', 'Piano', '{{selKbV}}', 'hdGoKb'), ('Lab', 'Labels', '{{selLabV}}', 'hdGoLab')]), close='hdClose')
+            out += FSHEET('hdSubKbOn', 'Piano', FRADIO('selKb'), close='hdClose', back='hdSubBack') + FSHEET('hdSubLabOn', 'Labels', FRADIO('selLab'), close='hdClose', back='hdSubBack')
+        else:
+            out += _HPOPOVER('hdKeysOn', 'Piano keys', rows(SELROW('Piano', 'selKb', False), SELROW('Labels', 'selLab')), f'right: {keys_right}px; top: 65px', 320, phone)
     return out
 # The Audio panel, Flat's (owner's Flat 26.11 screenshot of Audio: "Room", then Volume: a "Master volume" card, then a card per
 # instrument with its headphones (solo), its mute and its level), one implementation for Practice and Edit, opened from
@@ -995,13 +1064,13 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
     """The header's state, one for both modes. S, SET: the board's state and setter; TOAST(msg) its toast fields;
     play, loop: the board's own acts; playing, loop_on, loop_tip: its expressions; parts: [(id, name)]."""
     P = repr([list(x) for x in parts])
-    return ('...(() => { const S = ' + S + ', SET = ' + SET + '; const pop = S.hdPop ?? null; const shut = { hdPop: null };'
-            " const tg = (k) => () => SET({ hdPop: pop === k ? null : k });"
+    return ('...(() => { const S = ' + S + ', SET = ' + SET + '; const pop = S.hdPop ?? null; const sub = pop ? (S.hdSub ?? null) : null; const shut = { hdPop: null, hdSub: null };'
+            " const tg = (k) => () => SET({ hdPop: pop === k ? null : k, hdSub: null }); const SUBS = {}; for (const k of ['Mode', 'Hands', 'Met', 'Speed', 'Kb', 'Lab']) { SUBS['hdSub' + k + 'On'] = sub === k; SUBS['hdGo' + k] = () => SET({ hdSub: k }); }"
             " const sg = (list, cur, pick) => list.map(([id, l]) => ({ l, on: id === cur ? 'true' : 'false', bg: id === cur ? '#FEFDFB' : 'transparent', sh: id === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: id === cur ? 600 : 500, pick: () => pick(id) }));"
             " const sp = S.speed ?? 100; const met = S.metro ? 'on' : (S.countBars ?? 1) ? 'count' : 'off'; const NEXT = { count: 'on', on: 'off', off: 'count' }; const MN = { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' };"
             " const hands = (S.showR ?? 'show') === 'hide' ? 'lh' : (S.showL ?? 'show') === 'hide' ? 'rh' : 'both'; const rec = !!S.rec; const solo = S.solo ?? null; const mute = S.mute ?? [];"
             " const kb = S.keys === false ? 'off' : (S.kbStyle ?? '3d'); const tr = S.trans ?? 0; const KEYS = ['G major', 'A♭ major', 'A major', 'B♭ major', 'B major', 'C major', 'D♭ major', 'D major', 'E♭ major', 'E major', 'F major', 'F♯ major'];"
-            " return { hdClose: () => SET(shut), hdStart: () => SET({ bar: 1, beat: 1, ...shut }), hdPlay: " + play + ", hdPlayTip: (" + playing + ") ? 'Pause' : 'Play',"
+            " return { ...SUBS, hdSubBack: () => SET({ hdSub: null }), hdOptsMain: pop === 'opts' && !sub, hdKeysMain: pop === 'keys' && !sub, hdClose: () => SET(shut), hdStart: () => SET({ bar: 1, beat: 1, ...shut }), hdPlay: " + play + ", hdPlayTip: (" + playing + ") ? 'Pause' : 'Play',"
             " hdPlayD: (" + playing + ") ? 'M7 4h4v16H7zM13 4h4v16h-4z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z',"
             " hdOpts: tg('opts'), hdOptsOn: pop === 'opts', hdOptsX: pop === 'opts' ? 'true' : 'false',"
             " hdMet: () => { const n = NEXT[met]; SET({ metro: n === 'on', countBars: n === 'off' ? 0 : 1, " + TOAST("MN[n]") + " }); }, hdMetTip: MN[met], hdMetOff: met === 'off', "
@@ -1019,6 +1088,7 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
                                        ('selKb', [('3d', '3D'), ('2d', '2D'), ('off', 'Off')], f"({S}.keys === false ? 'off' : ({S}.kbStyle ?? '3d'))", f"(id) => ({SET})(id === 'off' ? {{ keys: false }} : {{ keys: true, kbStyle: id }})"),
                                        ('selLab', [('none', 'None'), ('c', 'C only'), ('all', 'All notes')], f"({S}.kbLabels ?? 'c')", f"(id) => ({SET})({{ kbLabels: id }})"),
                                        ('selMidi', [('fp30', 'Roland FP-30X'), ('none', 'None')], f"({S}.midiDev ?? 'fp30')", f"(id) => ({SET})({{ midiDev: id }})"),
+                                       ('selSpeed', [(50, '0.5×'), (75, '0.75×'), (100, '1.0×')], f"({S}.speed ?? 100)", f"(id) => ({SET})({{ speed: id }})"),
                                        ('selMet', [('count', 'Count-in'), ('on', 'On'), ('off', 'Off')], f"({S}.metro ? 'on' : ({S}.countBars ?? 1) ? 'count' : 'off')", f"(id) => ({SET})({{ metro: id === 'on', countBars: id === 'off' ? 0 : 1 }})")]))
 
 # The song's versions in the sidebar (owner, 2026-11-26: "in the title are general options and in the sidebar there will
