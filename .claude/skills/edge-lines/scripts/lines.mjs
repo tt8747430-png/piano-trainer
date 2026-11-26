@@ -308,7 +308,8 @@ async function analyse(page, scr, phone) {
     // a table's rows are read down their columns, under a header row whose labels stand on the rows' edges
     const leafL = (el) => [...el.querySelectorAll('*')].filter((e) => vis(e) && !e.children.length && e.textContent.trim() && e.getBoundingClientRect().width > 4).map((e) => Math.round(e.getBoundingClientRect().left))
     const heads = [...document.querySelectorAll('main *')].filter((h) => vis(h) && h.getBoundingClientRect().height < 40 && h.getBoundingClientRect().width > 420 && !h.closest('a, [role=button], li')).map(leafL).filter((l) => l.length >= 3)
-    const inTable = (row) => { const l = leafL(row); return heads.some((h) => h.filter((x) => l.some((y) => Math.abs(x - y) <= 3)).length >= 3) }
+    // a row with an empty cell (a rhythm style has no level) still stands on two of its header's columns
+    const inTable = (row) => { const l = leafL(row); return heads.some((h) => h.filter((x) => l.some((y) => Math.abs(x - y) <= 3)).length >= 2) }
     for (const row of document.querySelectorAll('main a, main [role=button], main li')) {
       if (!vis(row) || row.closest('nav, [role=dialog], [data-float]')) continue
       const r = row.getBoundingClientRect(); if (r.width < 420 || r.height > 120) continue
