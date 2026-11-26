@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-26 · (this commit) · a song's Settings window stands over the Player as it is now (rail, Song panel, version beside the name); its backdrop was a picture of the old Player (capsule, gear, view switch at the right) · SongSettings, SongSettingsLaptop · pending
 
 ## Changes
 
+- 2026-11-26 · (this commit) · a song's Settings window stands over the Player as it is now (rail, Song panel, version beside the name); its backdrop was a picture of the old Player (capsule, gear, view switch at the right) · SongSettings, SongSettingsLaptop · v752
 - 2026-11-26 · (this commit) · the laptop Player's keys centre in the room beside the panel; Diagrams, Grid and Lyrics end 16 above the keys when they show (the lyrics ran under them) · PlayerDesk · v751
 - 2026-11-26 · (this commit) · R74: versions Accompaniment and Score, Edit only beside Score, Your arrangement and Edit the original gone, the accompaniment's settings and credit only with it; the view switch heads the View panel; every view sits beside the panel · PlayerDesk, PlayerApp, Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · v750
 - 2026-11-26 · e389ef96 · the editor's draft names its version Accompaniment again (the replace had stopped matching) · EditorDraft, EditorDraftLaptop · v750
