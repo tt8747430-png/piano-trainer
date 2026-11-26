@@ -40,3 +40,4 @@ exec(open("/home/user/piano-trainer/.scratch/r39/canvas/r75_player_views.py").re
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r73_laptop_links.py').read())
 exec(open("/home/user/piano-trainer/.scratch/r39/canvas/r71_tips.py").read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r70_scrim.py').read())
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r76_motion.py').read())

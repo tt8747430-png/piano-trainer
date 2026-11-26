@@ -1307,3 +1307,20 @@ ACTS_P = (DISABLED_CSS + f'<div role="toolbar" aria-label="Edit" style="flex: no
 # the laptop toolbar's acts on what is chosen (the editor's, and the Player's views in Edit): Delete | Undo Redo | Copy Cut Paste
 TSEP = f'<span aria-hidden="true" style="flex: none; width: 1px; height: 24px; margin: 0 4px; background: {LINE}"></span>'
 CLIP = TBTN('Delete', DELI, 'delNote', 'Delete · ⌫') + TSEP + TBTN('Undo', UNDO, 'undo', 'Undo · ⌘Z', 'undoDis') + TBTN('Redo', REDO, 'redo', 'Redo · ⇧⌘Z', 'redoDis') + TSEP + TBTN('Copy', COPYI, 'copied', 'Copy · ⌘C') + TBTN('Cut', CUTI, 'cut', 'Cut · ⌘X') + TBTN('Paste', PASTEI, 'pasted', 'Paste · ⌘V')
+
+# One motion for the Player and the editor (the loop, 2026-11-26; FLAT_UI_SHELL_AND_MOTION §3; craft-details, Motion):
+# a menu grows from its button (the title's from the left, ☰'s from the right), a popover from the button above it, a
+# centred dialog from .96, a page slides in from the right edge as Flat's PanelStack pushes, the toast rises, the scrim
+# fades; only opacity, scale and translate move, on the app's one curve; leaving is instant; nothing moves under
+# reduced motion
+_EO = 'cubic-bezier(.22,1,.36,1)'
+PE_MOTION = ('<style data-motion>@keyframes pe-pop { from { opacity: 0; scale: .96 } } @keyframes pe-push { from { translate: 100% 0 } } '
+             '@keyframes pe-fade { from { opacity: 0 } } @keyframes pe-toast { from { opacity: 0; translate: 0 12px } } '
+             f'[role=menu] {{ animation: pe-pop 160ms {_EO}; transform-origin: top left }} '
+             f'nav[style*="right: 8px"] {{ animation: pe-pop 180ms {_EO}; transform-origin: top right }} '
+             f'section[role=dialog][style*="border-radius: 16px"] {{ animation: pe-pop 180ms {_EO}; transform-origin: top center }} '
+             f'[role=dialog][style*="translateX(-50%)"] {{ animation: pe-pop 200ms {_EO}; transform-origin: center }} '
+             f'section[role=dialog][style*="inset: 62px 0"], section[role=dialog][style*="inset: 0"] {{ animation: pe-push 300ms {_EO} }} '
+             f'[style*="rgba(51,41,33,.32)"], [style*="rgba(51, 41, 33, 0.32)"] {{ animation: pe-fade 200ms ease-out }} '
+             f'[role=status] {{ animation: pe-toast 220ms {_EO} }} '
+             '@media (prefers-reduced-motion: reduce) { [data-dc-tpl], [role] { animation: none !important } }</style>')

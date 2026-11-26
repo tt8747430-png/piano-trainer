@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-26 · pending-commit · one motion for the Player and editor (kit PE_MOTION, r76_motion): a menu grows from its button (title menu from the left, ☰ from the right), a band popover from its button, a centred dialog from .96, a page slides in from the right as Flat's PanelStack, the toast rises, the scrim fades; leaving instant; none under reduced motion (frames at 40–90ms checked on PlayerApp ☰ and Transpose, PlayerDesk title menu) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · pending
 - 2026-11-26 · f1cae2a6 · a disabled tool stays hoverable and says why (Undo: nothing to undo; Redo; Zoom in: at the largest size; Zoom out; a staff's eye: the last staff shown), dimmed by its icon so its tooltip is not buried (Flat §2.2; lines hover: EditorLaptop, Editor 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v796
 - 2026-11-26 · 8ac0fd94 · rail entries carry a tooltip only where it adds a shortcut (Search · ⌘K, Shortcuts · ?), not their own label again, as Flat's rail (lines: EditorLaptop, PlayerDesk 0 problems) · EditorLaptop, EditorDraftLaptop, PlayerDesk · v795
 - 2026-11-26 · 805a6262 · the laptop title menu sets Share link, Export and Print apart after a hairline under Recordings, as the phone's ☰; Export's submenu level with its row (lines: PlayerDesk menu and Export 0 problems) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v794
