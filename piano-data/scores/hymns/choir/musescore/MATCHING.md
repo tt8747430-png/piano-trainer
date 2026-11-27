@@ -92,3 +92,13 @@ by hand.
 - **A fermata in one part only.** The sheet prints a fermata once per staff (above the upper voice, below the lower);
   both voices of that staff hold. Each part now takes its staff's fermata over its own staff (song 8, bar 17; song 7,
   bars 45 and 61), never below the notes.
+- **An echo's holds drawn as lines.** Where a voice sings its own words only now and then (song 9, bars 9-15: the
+  basses' "Vi-no", "El să"), the notes between are passed with `*`, never held with `_`: a hold draws a line and a
+  slur over notes sung to the other voices' words.
+- **A short last bar filled with a rest.** After a pickup the last bar is printed short (song 9, bar 17): `bar-length:`
+  leaves out the file's trailing rest.
+- **A part's bars counted apart from its score's, its header over its name.** A part counts a pickup the sheet counts
+  (song 9: bar 4 at the second line, as the score), and a title frame text keeps the style's alignment (song 9's
+  words' author stood over the part's name).
+- **A part's borrowed line over its own words.** A syllable a part takes from a voice that holds it ends its line at
+  the part's own next syllable (song 9, bar 17: the altos' "cit," then their "ești fe-ri-cit!").

@@ -55,6 +55,8 @@ def structure_xml(score, spec):
         repeat_xml(score, spec, start, at * 4, end)  # at: from a fraction of a whole note to beats (quarters)
     for first, last, number in spec.get('endings', []):
         ending_xml(score, spec, first, last, number, closed=(first, last, number) != spec['endings'][-1])
+    for bar, length in spec.get('bar_lengths', []):
+        cut_bar(score, spec, bar, length * 4)
     for bar in spec.get('doubles', []):
         for part in score.findall('part'):
             measures = part.findall('measure')
@@ -63,6 +65,44 @@ def structure_xml(score, spec):
             if bl.find('bar-style') is None:
                 bl.insert(0, ET.Element('bar-style'))
                 bl[0].text = 'light-light'
+
+
+def cut_bar(score, spec, bar, length):
+    """A bar printed shorter than its time (the last bar after a pickup): the rests after `length` (in quarters)
+    dropped from every voice, each voice again from the bar's start, so MuseScore reads the bar as that long."""
+    for part in score.findall('part'):
+        measures = part.findall('measure')
+        nums = numbered(measures, spec.get('count_pickup'))
+        m = [x for x, n in zip(measures, nums) if n == bar][-1]
+        div = int(next(a.findtext('divisions') for a in part.iter('attributes') if a.findtext('divisions')))
+        t, keep, voices = Fraction(0), [], {}
+        for el in list(m):
+            m.remove(el)
+            if el.tag == 'backup':
+                t -= Fraction(int(el.findtext('duration')), div)
+            elif el.tag == 'forward':
+                t += Fraction(int(el.findtext('duration')), div)
+            elif el.tag == 'note':
+                start = t
+                if el.find('chord') is None:
+                    t += Fraction(int(el.findtext('duration') or 0), div)
+                if el.find('rest') is not None and start >= length:
+                    continue
+                voices.setdefault((el.findtext('staff') or '1', el.findtext('voice') or '1'), []).append(el)
+            else:
+                keep.append(el)
+        for el in keep:
+            if el.tag != 'barline':
+                m.append(el)
+        for k, ns in enumerate(voices.values()):
+            if k:
+                bk = ET.SubElement(m, 'backup')
+                ET.SubElement(bk, 'duration').text = str(int(length * div))
+            for n in ns:
+                m.append(n)
+        for el in keep:
+            if el.tag == 'barline':
+                m.append(el)
 
 
 def right_barline(m):

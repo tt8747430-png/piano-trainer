@@ -22,6 +22,8 @@ voice names before the staves, the tempo set but not printed, template/house.mss
                                        several, by commas
     ending: 69-70 1, 71-72 2           first and second endings over those bars (the last left open, as printed)
     double: 28 45                      a double barline at the end of these bars, as printed
+    bar-length: 17 7/8                 a bar printed shorter than its time (the last after a pickup), its trailing
+                                       rests left out
     time-change: 91 6/8                a new time signature from that bar (as `time:`)
     tempo: 105                         the tempo as printed
     footer: Corul ...                  a line of text at the foot of each page
@@ -134,6 +136,10 @@ def read(song_dir):
                 bar, _, at = a.partition('+')
                 spec.setdefault('repeats', []).append((int(bar), Fraction(at) if at else Fraction(0), int(b)))
             spec['repeat'] = spec['repeats'][0]
+        elif key == 'bar-length':
+            for item in value.split(','):
+                bar, length = item.split()
+                spec.setdefault('bar_lengths', []).append((int(bar), Fraction(length)))
         elif key == 'double':
             spec['doubles'] = [int(b) for b in value.split()]
         elif key == 'ending':

@@ -159,6 +159,25 @@ def part_words(main_staffs, part_staff, track):
                 ly.remove(p)  # a part's words stand under its own staff
             el.insert(at, ly)
             at += 1
+    # A syllable taken from another voice holds its line only until the part's own next syllable, in any verse (the
+    # sopranos hold "cit," while the altos sing on: song 9, bar 17, the altos' "cit," then "ești fe-ri-cit!").
+    own_at = {t for t, o in mine.items() if o is not None}
+    chords = [(el, t) for el, t, k in part if el.tag == 'Chord' and not tied_on(el)]
+    for i, (el, t) in enumerate(chords):
+        if id(el) not in copied:
+            continue
+        for ly in el.findall('Lyrics'):
+            f = ly.find('ticks_f')
+            if f is None:
+                continue
+            nxt = next((u for e, u in chords[i + 1:] if u in own_at and e.find('Lyrics') is not None), None)
+            if nxt is None or t + Fraction(f.text) < nxt:
+                continue
+            last = max((u for e, u in chords[i + 1:] if u < nxt), default=None)
+            if last is None:
+                ly.remove(f)
+            else:
+                f.text = str(last - t)
     return copied
 
 
@@ -262,7 +281,10 @@ def header(main_score, part_score, name):
         box.remove(t)
     for t in main_box.findall('Text'):
         t = copy.deepcopy(t)
-        for e in t.findall('eid') + t.findall('linkedTo'):
+        # the style's alignment for each text (the words' author at the bottom left, under the part's name), never
+        # a file's own (song 9's "left,top" put it over the part's name); a text moved where the sheet prints it
+        # keeps its offset
+        for e in t.findall('eid') + t.findall('linkedTo') + t.findall('align'):
             t.remove(e)
         box.append(t)
     label = ET.SubElement(box, 'Text')
@@ -310,6 +332,13 @@ def apply(files, spec):
         # choice on its next opening, MuseScore's own fault; the part still prints only its voice, as stored.)
         tl.set('sTrack', str(track % 4))
         matched = spec['matched']
+        # Its bars counted as the score's (a pickup the sheet counts as bar 1 is counted in the part too).
+        for pm, sm in zip(part.findall('Measure'), main[0].findall('Measure')):
+            for el in pm.findall('irregular'):
+                pm.remove(el)
+            if sm.find('irregular') is not None:
+                pm.insert(list(pm).index(pm.find('eid')) + 1 if pm.find('eid') is not None else 0,
+                          copy.deepcopy(sm.find('irregular')))
         layout(main[0], part)
         header(main_score, score, score.findtext('name') or n.split('/')[1].split('_', 1)[1].replace('_', ' '))
         marks(main, part, track)

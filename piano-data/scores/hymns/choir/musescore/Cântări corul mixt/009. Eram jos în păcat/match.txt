@@ -2,6 +2,9 @@
 lyricist: Valentin Popovici
 count-pickup
 systems: 1 4 6 8 | 10 12 14 16
+marks: 17+1/2 fermata/Soprano, 17+1/2 fermata/Bass
+bar-length: 17 7/8
+slur: Tenor 9 +1/2
 
 [Soprano]
 1: @1 1.E -- ram jos în pă -- cat, dar I -- sus m'a sal -- vat; Lu -- mi -- na Lui din cer în mi -- ne'a stră -- lu --
@@ -17,5 +20,5 @@ systems: 1 4 6 8 | 10 12 14 16
 2: @17 _ ești fe -- ri -- cit!
 
 [Bass italic]
-1: @9 _ Vi -- no și @10 _ _ _ _ _ _ _ _ Vi -- no, @11 _ _ _ _ _ _ _ _ El să
-1: @12 _ _ _ _ _ Și să'ți dea @13 _ _ _ _ _ Când simți că @14 _ _ _ _ _ _ _ _ Când te @15 _ _ _ _ _ _ _ _ Nu -- mai
+1: @9 * Vi -- no și @10 * * * * * * * * Vi -- no, @11 * * * * * * * * El să
+1: @12 * * * * * Și să'ți dea @13 * * * * * Când simți că @14 * * * * * * * * Când te @15 * * * * * * * * Nu -- mai

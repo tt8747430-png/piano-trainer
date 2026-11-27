@@ -114,7 +114,7 @@ def split(s, done, work, n, second):
     if entering:
         enter_notes(score, s['kind'], spec, lyric_srcs)
         corrected = True
-    if spec.get('repeat') or spec.get('endings') or spec.get('doubles') or spec.get('tempo'):
+    if spec.get('repeat') or spec.get('endings') or spec.get('doubles') or spec.get('bar_lengths') or spec.get('tempo'):
         # Repeats and tempo as printed, after any notes are entered (a repeat may split a bar).
         sheet.structure_xml(score, spec)
         corrected = True
