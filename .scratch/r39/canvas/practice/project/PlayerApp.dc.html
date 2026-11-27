@@ -8415,7 +8415,7 @@ let b = st.bar ?? 1, bt = st.beat ?? 1, verse = st.verse ?? 0;
 const lp = st.loop ?? false, la = st.loopA ?? 5, lb = st.loopB ?? 8;
 if (engine.__fresh) { engine.__fresh = false; if (st.start ?? st.bar === undefined) { b = 1; bt = 1; } if (lp && (b < la || b > lb)) { b = la; bt = 1; } }
 else { bt += 1; if (bt > 3) { bt = 1; b += 1; } if (lp && b > lb) b = la; if (b > 16) { { engine.setState({ playing: false, start: true, bar: 1, beat: 1, verse: 0, open: 'done' }); return; } } }
-engine.setState({ start: false, bar: b, beat: bt, verse });
+engine.setState({ start: false, bar: b, beat: bt, verse }); requestAnimationFrame(() => { const l = [...document.querySelectorAll('[data-ph]')].find((e) => e.style.display === 'block' && e.offsetParent); if (!l) return; let s = l.parentElement; const can = (e) => { const c = getComputedStyle(e); return (/auto|scroll/.test(c.overflowY) && e.scrollHeight > e.clientHeight) || (/auto|scroll/.test(c.overflowX) && e.scrollWidth > e.clientWidth); }; while (s && !can(s)) s = s.parentElement; if (!s) return; const r = l.getBoundingClientRect(), q = s.getBoundingClientRect(); const x = Math.max(q.left + 1, Math.min(q.right - 1, r.left)), mine = (y) => s.contains(document.elementFromPoint(x, y)); let top = q.top + 1, bot = q.bottom - 1; while (top < bot && !mine(top)) top += 4; while (bot > top && !mine(bot)) bot -= 4; const dx = r.left < q.left + 24 || r.right > q.right - 24 ? r.left - (q.left + q.width / 2) : 0; const dy = r.top < top || r.bottom > bot ? r.top - top - 24 : 0; if (dx || dy) s.scrollBy({ left: dx, top: dy, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); });
 sound(b, bt);
 engine.__t = setTimeout(tick, beatMs());
 };

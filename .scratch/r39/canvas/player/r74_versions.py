@@ -426,6 +426,9 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     t = t.replace('</main>', '</main>' + RENAMEDLG(), 1)
     # the States box beside the frame, as every board's (owner, 2026-11-15): the Player's own moments, each one tap
     # (states_tool lifts these out of the screen into the dashed States menu)
+    # the page follows the playhead as each beat sounds
+    a = 'engine.setState({ start: false, bar: b, beat: bt, verse });'; assert t.count(a) == 1
+    t = t.replace(a, a + ' ' + PHFOLLOW, 1)
     sts = (('playing', 'hdPlay'), ('looping', 'hdLoop'), ('recording from the keyboard', 'hdRec'), ('transposed up a semitone', 'hdTrUp'), ('Playback options open', 'hdOpts'))
     sts += (('the menu open', 'phMenu'),) if name == 'PlayerApp' else (('Version history open', 'openHist'),)
     t = t.replace('</main>', '</main>' + ''.join(f'<button type="button" onClick="{{{{{a}}}}}" style="display: none">CANVAS · {l}</button>' for l, a in sts), 1)

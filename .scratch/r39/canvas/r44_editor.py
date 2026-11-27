@@ -78,7 +78,7 @@ ED4 = js(r'''
       copied: () => set({ toast: 'Copied' }), cut: () => set({ toast: 'Cut · Undo' }), pasted: () => set({ toast: 'Pasted' }),
       cats: seg(PALR.map((p) => p[0]), cat, (l) => set({ cat: l })), catsI: PALR.filter(([c]) => c !== 'Recent').map(([c]) => { const [g, f] = CATI[c]; return { c, t: TITLE[c] ?? c, g, ff: FF[f], fs: f === 'music' ? 22 : f === 'serif' ? 18 : 15, fst: f === 'serif' ? 'italic' : 'normal', fw: f === 'serif' ? 700 : 600, on: c === cat ? 'true' : 'false', bg: c === cat ? '#FEFDFB' : 'transparent', sh: c === cat ? '0 1px 2px rgba(51,41,33,.12)' : 'none', fg: c === cat ? '#332921' : '#685E56', pick: () => { set({ cat: c, shut: shut.filter((x) => x !== c) }); if (open) jump(c); } }; }), tools: sections.find((s) => s.c === cat).tools, sections,
       open, folded: !open, toggleOpen: () => set({ open: !open }), openLabel: open ? 'Fold the palette' : 'Open the palette', recentOn: open && cat === 'Recent' ? 'true' : 'false', recentFg: open && cat === 'Recent' ? '#A8551F' : '#332921', openRecent: () => { if (open && cat === 'Recent') { set({ open: false }); return; } set({ cat: 'Recent', open: true, shut: shut.filter((x) => x !== 'Recent') }); jump('Recent'); }, openRot: open ? '180deg' : '0deg',
-      noteL, whereL: 'Bar 4 · beat 1 · “sweet”' + (voice ? ' · voice 2' : '') + (marks.length ? ' · ' + marks.map((m) => NAME[m]).join(', ') : ''),
+      noteL, whereL: 'Bar 3 · beat 1 · “sweet”' + (voice ? ' · voice 2' : '') + (marks.length ? ' · ' + marks.map((m) => NAME[m]).join(', ') : ''),
       keysOn: keys, keysPressed: keys ? 'true' : 'false', keysBg: 'transparent', keysPh: keys ? '#A8551F' : '#332921', keysFg: keys ? '#A8551F' : '#332921', toggleKeys: () => set({ keys: !keys }),
       undoDis: marks.length || rest ? 'false' : 'true', redoDis: (st.undone ?? []).length ? 'false' : 'true',
       undo: () => { if (marks.length) set({ marks: marks.slice(0, -1), undone: [...(st.undone ?? []), { m: marks[marks.length - 1] }] }); else if (rest) set({ rest: false, undone: [...(st.undone ?? []), { r: true }] }); },
@@ -167,15 +167,15 @@ assert 'this.' not in PATIIFE and not _re.search(r'(?<![\w.])s\.', PATIIFE)
 ACCJS = r"""
     const ASC = st.accSc ?? 'bar'; const AOV = st.accOv ?? {}; const ACHAIN = ASC === 'bar' ? ['bar', 'phrase', 'song'] : ASC === 'phrase' ? ['phrase', 'song'] : ['song'];
     const ACCV = (f, d) => { for (const c of ACHAIN) if (AOV[c] && AOV[c][f] !== undefined) return AOV[c][f]; return d; };
-    const ASCN = { bar: 'bar 4', phrase: 'phrase 1', song: 'the whole song' }[ASC];
+    const ASCN = { bar: 'bar 3', phrase: 'phrase 1', song: 'the whole song' }[ASC];
     const setAcc = (f, v, label, more) => set({ accOv: { ...AOV, [ASC]: { ...(AOV[ASC] || {}), [f]: v } }, accUndo: AOV, toast: label + ' in ' + ASCN + ' · Undo', ...(more || {}) });
     const pick = (patch) => () => set(patch);
 """
-ACCKEYS = (" accScopes: [['bar', 'Bar 4'], ['phrase', 'Phrase 1'], ['song', 'Whole song']].map(([id, l]) => ({ l, on: ASC === id ? 'true' : 'false', bg: ASC === id ? '#FEFDFB' : 'transparent', sh: ASC === id ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: ASC === id ? 600 : 500, pick: () => set({ accSc: id }) })),"
+ACCKEYS = (" accScopes: [['bar', 'Bar 3'], ['phrase', 'Phrase 1'], ['song', 'Whole song']].map(([id, l]) => ({ l, on: ASC === id ? 'true' : 'false', bg: ASC === id ? '#FEFDFB' : 'transparent', sh: ASC === id ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: ASC === id ? 600 : 500, pick: () => set({ accSc: id }) })),"
            " patternName: ((PAT_LIB.find((x) => x.id === ACCV('pat', 'M1')) || {}).name || '').replace(/^[^A-Za-z]+/, ''), openPattern: () => set({ dock: 'pattern' }), patBack: () => set({ dock: null }),"
            " notDock: !st.dock, dockPat: st.dock === 'pattern', dockFilt: st.dock === 'patfilter',"
            " accOwn: ASC !== 'song' && !!AOV[ASC], accResetL: ASC === 'bar' ? 'Use the phrase’s accompaniment' : 'Use the song’s accompaniment',"
-           " accReset: () => { const nv = { ...AOV }; delete nv[ASC]; set({ accOv: nv, accUndo: AOV, toast: (ASC === 'bar' ? 'Bar 4 follows its phrase' : 'Phrase 1 follows the song') + ' · Undo' }); }, "
+           " accReset: () => { const nv = { ...AOV }; delete nv[ASC]; set({ accOv: nv, accUndo: AOV, toast: (ASC === 'bar' ? 'Bar 3 follows its phrase' : 'Phrase 1 follows the song') + ' · Undo' }); }, "
            + SELKEYS('st', 'set', [('selInv', [('Root', 'Root position'), ('1st', '1st inversion'), ('2nd', '2nd inversion'), ('3rd', '3rd inversion')], "ACCV('inv', 'Root')", "(id) => setAcc('inv', id, 'First chord: ' + ({ Root: 'root position', '1st': '1st inversion', '2nd': '2nd inversion', '3rd': '3rd inversion' })[id])"),
                                    ('selVoice', [('Voice-led', 'Voice-led'), ('Block', 'Block')], "ACCV('voice', 'Voice-led')", "(id) => setAcc('voice', id, 'Voicing: ' + id.toLowerCase())")]))
 ACCBODY = ('<sc-if value="{{notDock}}" hint-placeholder-val="{{true}}">{0}</sc-if>'
@@ -244,10 +244,14 @@ TOOLBAR_P = (f'<div role="toolbar" aria-label="Notation" style="flex: none; heig
 
 # the desk the page lies on, as Flat's and Dorico's: a grey ground; the page scaled by the zoom (fit to the width on a phone)
 DESK = lambda pad: (f'<sc-if value="{{{{pageOn}}}}" hint-placeholder-val="{{{{true}}}}"><div class="nos" aria-label="Page view" style="position: absolute; inset: 0; overflow: auto; background: {FILL}"><div style="min-width: min-content; box-sizing: border-box; padding: {pad}; display: flex; justify-content: center">'
-                    f'<div style="zoom: {{{{zf}}}}; display: flex; flex-direction: column; gap: 24px">{A4PAGE()}</div></div></div></sc-if>')
+                    f'<div style="zoom: {{{{zf}}}}; display: flex; flex-direction: column; gap: 24px">{A4PAGE(head=True)}</div></div></div></sc-if>')
 # Panorama (Dorico's galley, Flat's horizontal): one system as long as the song, its natural spacing, never justified
 PANO = lambda sc, pad: (f'<sc-if value="{{{{panoOn}}}}" hint-placeholder-val="{{{{false}}}}"><div class="nos" aria-label="Panorama" style="position: absolute; inset: 0; overflow-x: auto; overflow-y: hidden; background: {PAGE}; display: flex; align-items: center">'
-                        f'<div style="flex: none; padding: {pad}; zoom: {{{{zf}}}}">' + score_grand(0, [list(range(13))], sel=(3, 0), size=1.0, natural=sc).replace(ACCENT, '#85B8DC') + '</div></div></sc-if>')
+                        f'<div style="flex: none; padding: {pad}; zoom: {{{{zf}}}}">' + PANOSC(sc) + '</div></div></sc-if>')
+# Panorama's one system with the playhead over it (the kit's PLAYHEAD, the Player's line)
+def PANOSC(sc, piano=True):
+    s = score_grand(0, [list(range(13))], sel=(3, 0), size=1.0, natural=sc, piano=piano).replace(ACCENT, '#85B8DC')
+    return '<div style="position: relative">' + s + PLAYHEAD(GEO['last']) + '</div>'
 SCOREAREA = lambda inner: f'<div data-score style="flex: 1; min-height: 0; position: relative">{inner}</div>'
 # the grips: a hairline with a pill, the whole band draggable and focusable (Arrow keys), as Flat's and Dorico's panes
 VGRIP = (f'<div role="separator" aria-orientation="vertical" aria-label="Palette width" aria-valuenow="{{{{pw}}}}" aria-valuemin="280" aria-valuemax="520" tabindex="0" data-tip="Drag to resize" onPointerDown="{{{{dragPanel}}}}" onPointerMove="{{{{dragPanel}}}}" onKeyDown="{{{{keyPanel}}}}" '
@@ -356,7 +360,7 @@ SEARCHCARD = SEARCHCARD_F(((UNDO, 'Undo', '⌘Z'), (REDO, 'Redo', '⇧⌘Z'), (C
 KEYSCARD = KEYSCARD_F(((('Playback', (('Play or stop', 'Space'), ('Go to start', '⌃Space'), ('Loop', 'L'))), ('Notes', (('Note input', 'N'), ('Whole to sixteenth', '7 6 5 4 3'), ('Rest', '0'), ('Dot', '.'), ('Tie', ','), ('Sharp, flat, natural', '+ − =')))),
                        (('Editing', (('Undo', '⌘Z'), ('Redo', '⇧⌘Z'), ('Copy, cut, paste', '⌘C ⌘X ⌘V'), ('Delete', '⌫'), ('Next or previous bar', '⌘→ ⌘←'), ('Go to bar', '⌘G'), ('Add a bar', '⌥Enter'))),),
                        (('View', (('Practice or Edit', 'P E'), ('Piano keys', 'K'), ('Transpose', 'T'), ('Zoom in or out', '⌘+ ⌘−'), ('Actual size', '⌘0'), ('Fold the panel', '⌘\\'), ('Search', '⌘K'), ('Print', '⌘P'), ('Shortcuts', '?'))),)), 960)
-ED4 = ED4.replace('    return { ...common(st, set),', "    return { ...common(st, set), " + HDRKEYS('st', 'set', lambda m: 'toast: ' + m, "() => set({ edPlaying: !st.edPlaying, hdPop: null, toast: st.edPlaying ? 'Stopped' : 'Playing from bar 4' })", 'st.edPlaying', "() => set({ edLoop: !st.edLoop, hdPop: null, toast: st.edLoop ? 'Loop off' : 'Looping bar 4' })", 'st.edLoop', "st.edLoop ? 'Stop looping' : 'Loop the selection'", [('V', 'Voice'), ('P', 'Piano')]) + " " + HISTKEYS('st', 'set', lambda m: 'toast: ' + m, HIST="(st.hist ?? [{ id: 'h5', t: 'Today at 13:42', what: ['+4 notes'], bars: [5, 6] }, { id: 'h4', t: '7 Nov 2026, 15:11', what: ['Pattern in bars 9–12'], bars: [9, 10, 11, 12] }, { id: 'h3', t: '4 Nov 2026, 17:16', what: ['+49 notes', '−37 notes'], bars: [1, 2, 3, 4, 9, 10, 11, 12] }, { id: 'h2', t: '3 Nov 2026, 17:45', what: ['Created'], bars: [] }])", restore="(h) => ({})") + "", 1)
+ED4 = ED4.replace('    return { ...common(st, set),', "    return { ...common(st, set), " + EDPLAYHEAD_KEYS + ' ' + HDRKEYS('st', 'set', lambda m: 'toast: ' + m, "() => { clearInterval(window.__edT); if (st.edPlaying) { set({ edPlaying: false, hdPop: null, toast: 'Stopped' }); return; } let n = st.edPos ?? 0; set({ edPlaying: true, hdPop: null, toast: n ? 'Playing from bar ' + (3 + Math.floor(n / 3)) : 'Playing from bar 3' }); window.__edT = setInterval(() => { n += 1; if (n >= 30) { clearInterval(window.__edT); set({ edPlaying: false, edPos: 0 }); return; } set({ edPos: n }); " + PHFOLLOW + " }, 750); }", 'st.edPlaying', "() => set({ edLoop: !st.edLoop, hdPop: null, toast: st.edLoop ? 'Loop off' : 'Looping bar 3' })", 'st.edLoop', "st.edLoop ? 'Stop looping' : 'Loop the selection'", [('V', 'Voice'), ('P', 'Piano')]) + " " + HISTKEYS('st', 'set', lambda m: 'toast: ' + m, HIST="(st.hist ?? [{ id: 'h5', t: 'Today at 13:42', what: ['+4 notes'], bars: [5, 6] }, { id: 'h4', t: '7 Nov 2026, 15:11', what: ['Pattern in bars 9–12'], bars: [9, 10, 11, 12] }, { id: 'h3', t: '4 Nov 2026, 17:16', what: ['+49 notes', '−37 notes'], bars: [1, 2, 3, 4, 9, 10, 11, 12] }, { id: 'h2', t: '3 Nov 2026, 17:45', what: ['Created'], bars: [] }])", restore="(h) => ({})") + "", 1)
 # the Song panel's folds, the Player's (Versions, Accompaniment)
 ED4 = ED4.replace('    return { ...common(st, set),', '    return { ...common(st, set), ' + FOLDKEYS('st', 'set', ['Ver', 'Acc', 'View', 'Opts', 'Room', 'Vol', 'Parts']) + ' ' + "viewCards: [['sheet', 'Sheet'], ['diagrams', 'Diagrams'], ['grid', 'Grid'], ['lyrics', 'Lyrics']].map(([id, label]) => { const here = id === 'sheet'; return { label, on: here ? 'true' : 'false', ring: here ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: here ? 600 : 500, isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', isHere: here, isAway: !here, href: 'EditorLaptop' + label + '.dc.html', pick: () => {} }; }), viewName: 'Sheet', isSheet: true, isDiagrams: false, isGrid: false, isLyrics: false, showChips: [['chords', 'Chord symbols', true], ['positions', 'Chord positions', false], ['lyrics', 'Lyrics', true], ['fingers', 'Finger numbers', false], ['names', 'Note names', false], ['annotations', 'Your annotations', true]].map(([id, name, d]) => { const on = (st.show ?? {})[id] ?? d; return { name, on: on ? 'true' : 'false', track: on ? '#44684A' : '#DAD1C8', knob: on ? 22 : 2, sep: id === 'chords' ? '0' : '1px solid #DAD1C8', pick: () => set({ show: { ...(st.show ?? {}), [id]: !on } }) }; }), " + SELFROM('st', 'set', 'selLayout', "[['page', 'Page'], ['pano', 'Panorama']].map(([id, name]) => ({ name, on: (st.view ?? VIEW0) === id ? 'true' : 'false', pick: () => set({ view: id }) }))") + ' ', 1)
 ED4 = ED4.replace('    return { ...common(st, set),', PATCONSTS + ACCJS + '    return { ...common(st, set), ' + ACCKEYS + ' ' + PATIIFE + ',', 1)
@@ -413,9 +417,9 @@ def VERPAGE(h, ph=False):
     # ph: on a phone the Parts sheet can hide the Piano, and the page then prints the melody alone
     n = 0
     pia = (lambda a, b: '<sc-if value="{{pianoShown}}" hint-placeholder-val="{{true}}">' + a + '</sc-if><sc-if value="{{pianoHidden}}" hint-placeholder-val="{{false}}">' + b + '</sc-if>') if ph else (lambda a, b: a)
-    for a, b in ((A4PAGE(), A4PAGE(piano=False)), (A4PAGE(sel=None), A4PAGE(sel=None, piano=False))) + tuple(
-            (score_grand(0, [list(range(13))], sel=(3, 0), size=1.0, natural=sc).replace(ACCENT, '#85B8DC'),
-             score_grand(0, [list(range(13))], sel=(3, 0), size=1.0, natural=sc, piano=False).replace(ACCENT, '#85B8DC')) for sc in (0.95, 1.15)):
+    for a, b in ((A4PAGE(head=True), A4PAGE(piano=False, head=True)), (A4PAGE(sel=None), A4PAGE(sel=None, piano=False))) + tuple(
+            (PANOSC(sc),
+             PANOSC(sc, False)) for sc in (0.95, 1.15)):
         n += h.count(a); h = h.replace(a, '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + pia(a, b) + '</sc-if><sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + b + '</sc-if>')
     assert n
     return h

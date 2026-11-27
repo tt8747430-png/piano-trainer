@@ -570,6 +570,20 @@ def PLAYHEAD(geo):
 # its note (past the clef and time), a bar's beat at its onset; bars past the page (13–16, page 2) show none
 PLAYHEAD_KEYS = ("phF: atStart ? 0.3 : (beat - 1 + 0.3) / 3, ...Object.fromEntries(Array.from({ length: 13 }, (_, b) => ['phB' + b,"
                  " (playing || !atStart) && (atStart ? b === 0 : bar === b) ? 'block' : 'none'])),")
+# the editor's: its clock counts beats from the selection (bar 3, beat 1) while Play sounds, the line left where a
+# pause leaves it, gone at the end
+# the page follows the line (Flat scrolls the score to its cursor, FLAT_PLAYER_AND_PIANO §1.11): the shown line is
+# brought into view a system at a time down the page or along Panorama's one line, below what floats over the score
+# (the glass header, the keys), found by what covers the scroller's edges
+PHFOLLOW = ("requestAnimationFrame(() => { const l = [...document.querySelectorAll('[data-ph]')].find((e) => e.style.display === 'block' && e.offsetParent); if (!l) return;"
+            " let s = l.parentElement; const can = (e) => { const c = getComputedStyle(e); return (/auto|scroll/.test(c.overflowY) && e.scrollHeight > e.clientHeight) || (/auto|scroll/.test(c.overflowX) && e.scrollWidth > e.clientWidth); };"
+            " while (s && !can(s)) s = s.parentElement; if (!s) return; const r = l.getBoundingClientRect(), q = s.getBoundingClientRect();"
+            " const x = Math.max(q.left + 1, Math.min(q.right - 1, r.left)), mine = (y) => s.contains(document.elementFromPoint(x, y)); let top = q.top + 1, bot = q.bottom - 1;"
+            " while (top < bot && !mine(top)) top += 4; while (bot > top && !mine(bot)) bot -= 4;"
+            " const dx = r.left < q.left + 24 || r.right > q.right - 24 ? r.left - (q.left + q.width / 2) : 0; const dy = r.top < top || r.bottom > bot ? r.top - top - 24 : 0;"
+            " if (dx || dy) s.scrollBy({ left: dx, top: dy, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); });")
+EDPLAYHEAD_KEYS = ("...(() => { const n = st.edPos ?? 0, b = 3 + Math.floor(n / 3); return { phF: (n % 3 + 0.3) / 3,"
+                   " ...Object.fromEntries(Array.from({ length: 13 }, (_, i) => ['phB' + i, (st.edPlaying || n > 0) && i === b ? 'block' : 'none'])) }; })(),")
 def PICKLAYER(geo, mode='pick'):
     W, H = geo['w'], geo['h']; pc = lambda v, d: f'{v / d * 100:.3f}%'; out = []
     for b, x0, x1, y0, y1 in geo['bars']:
