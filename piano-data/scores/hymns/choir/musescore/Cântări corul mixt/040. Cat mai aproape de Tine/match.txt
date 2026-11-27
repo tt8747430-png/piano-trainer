@@ -1,0 +1,28 @@
+# From 40. Cat mai aproape de Tine.pdf (2 pages, the choir's own MuseScore print) and the choir book, pages 73-74
+# (the same print). The words, both verses of the second part and the men's own words, are written in from the sheet.
+# The full file is the choir's; the bars where it differs from the sheet (8, 10, 16, 17, 23, the altos' 4) are
+# written in from the sheet.
+title: 40 Cât mai aproape de Tine
+footer: Corul Bisericii Maranata Nürnberg / Fürth
+systems: 1 4 8 | 11 15 18 22
+show-tempo
+tempo: 120
+beams
+ending: 7-8 1
+slur: Soprano 12 +1/8, Alto 12 +1/8, Tenor 12 +1/8, Bass 12 +1/8, Soprano 13+1/2 +1/8, Alto 13+1/2 +1/8
+slur: Tenor 13+1/2 +1/8, Bass 13+1/2 +1/8, Soprano 16+1/2 +1/8, Alto 16+1/2 +1/8, Soprano 17 +1/2, Alto 17 +1/2
+
+[Soprano notes]
+1: @8 A4:8 A4:8 Bb4:8 A4:8~ A4:8 A4:8~ A4:4 @10 D4:8 D4:8 A3:8 D4:8~ D4:8 D4:8~ D4:4 @16 G4:4 G4:8 G4:8 G4:8 F4:8 G4:16 A4:16 A4:8~ @17 A4:2 A4:2 @23 G4:4 G4:8 G4:8 G4:8 F4:8 G4:16 A4:16 A4:8~
+[Alto notes]
+1: @4 E4:4. E4:8 F4:8 G4:8 F4:8 E4:8 @8 E4:8 E4:8 F4:8 E4:8~ E4:8 E4:8~ E4:4 @10 A3:8 A3:8 A3:8 A3:8~ A3:8 A3:8~ A3:4 @23 D4:4 D4:8 D4:8 D4:8 D4:8 D4:8 D4:8~
+[Bass notes]
+1: @8 A2:8 A2:8 A2:8 A2:8~ A2:8 A2:8~ A2:4 @10 D3:8 D3:8 D3:8 D3:8~ D3:8 D3:8~ D3:4
+
+[Soprano]
+1: @1 Cât mai a -- proa -- pe de Ti -- @2 ne aş vrea să pot ve -- @3 ni şi nici -- când să nu plec @4 Tu ştii că su -- fle -- @5 tul nu'şi gă -- seş -- te o -- dih -- @6 na De @7 par -- te de -- @8 par -- te de Ti -- ne @9 par -- te de -- @10 par -- te de Ti -- ne
+1: @11 Câ -- te do -- ruri as -- cun -- @12 se @13 nu -- mai Tu le cu -- noşti @15 Nu -- mai Tu poţi răs -- pun -- @16 de'aş -- tep -- tă -- ri -- lor _ me -- @17 le. @18 Eşti pă -- rin -- te -- le meu @20 Bu -- nă -- ta _ -- tea Ta @22 Îmi dă ia -- răşi pu -- teri @23 ca să Te pot ur _ -- ma.
+2: @11 Sunt a -- tât de'n -- se -- tat! _ @13 de Cu -- vân _ -- tul Tău @15 Vrea să sorb cu ne -- sat @16 din iz -- vo _ -- rul _ Tău _ @18 Fă I -- su -- se să fiu @20 lo -- cu -- in _ -- ţa Ta @22 Ţi -- e Îţi dă -- ru -- iesc @23 tot ce sunt, tot ce _ am.
+
+[Tenor]
+1: @1 Mai a -- @2 proa -- pe să @3 pot ve -- @4 ni Nici -- @5 când să @6 plec de -- @7 par -- te de -- @8 par -- te de Ti -- ne @9 par -- te, de -- @10 par -- te de Ti -- ne
