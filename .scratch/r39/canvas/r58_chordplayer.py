@@ -442,7 +442,8 @@ GDOCK77 = (f'<sc-if value="{{{{cpGDock}}}}" hint-placeholder-val="{{{{false}}}}"
 lm77 = (f'<div data-menuroot style="position: absolute; inset: 0; display: flex; flex-direction: column">' + BAND77
         + '<div style="flex: 1; min-height: 0; display: flex">' + RAIL77 + PANELS77
         + '<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">'
-        + '<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 40px 24px">' + SHOWSTATES() + CHARTL77 + '</div>'
+        # the chart's first section level with the panel's title: 22, the kit's head centring its 20 title in 64
+        + '<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 22px 40px 24px">' + SHOWSTATES() + CHARTL77 + '</div>'
         + GDOCK77 + f'<sc-if value="{{{{cpKeysOn}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS76((110, 170, 240), False, True)}</sc-if>'
         + '</div></div></div>')
 
