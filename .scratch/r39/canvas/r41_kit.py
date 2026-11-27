@@ -1081,9 +1081,10 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=Fals
     if keys_right is not None:
         if phone:
             # both choices on one page, as the laptop's popover shows them together: a short list each, no page under a
-            # page (laws, Hick: three options need no page of their own), the screen not left empty under two rows
+            # page (laws, Hick: three options need no page of their own), the screen not left empty under two rows; each list
+            # headed as its sibling Audio page heads Room and Volume (15 semibold), one section head on the phone's pages
             out += FSHEET('hdKeysMain', 'Piano keys', '<div style="display: flex; flex-direction: column; gap: 24px">'
-                          + LABELLED('Piano', FRADIO('selKb')) + LABELLED('Labels', FRADIO('selLab')) + '</div>', close='hdClose')
+                          + ''.join(f'<section aria-label="{t}" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">{t}</h3>{FRADIO(k)}</section>' for t, k in (('Piano', 'selKb'), ('Labels', 'selLab'))) + '</div>', close='hdClose')
         else:
             out += _HPOPOVER('hdKeysOn', 'Piano keys', rows(SELROW('Piano', 'selKb', False), SELROW('Labels', 'selLab')), f'right: {keys_right}px; top: 65px', 320, phone)
     return out
