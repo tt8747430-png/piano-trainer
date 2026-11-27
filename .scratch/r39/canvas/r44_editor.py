@@ -108,12 +108,15 @@ def STRIP(play=True):
             f'{pb}</div>'
             f'<sc-if value="{{{{doneOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="flex: none; margin: 0 16px 8px; min-height: 44px; box-sizing: border-box; padding: 4px 4px 4px 12px; border-radius: 12px; background: #FBF1DD; display: flex; align-items: center; gap: 8px; font-size: 14px"><span style="flex: 1; min-width: 0">{{{{doneL}}}}</span><button type="button" onClick="{{{{clearDone}}}}" style="height: 36px; padding: 0 8px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">Cancel</button></div></sc-if>')
 
-TOOL = (f'<button type="button" aria-hidden="{{{{t.hid}}}}" tabindex="{{{{t.ti}}}}" aria-label="{{{{t.name}}}}" aria-pressed="{{{{t.on}}}}" data-tip="{{{{t.tip}}}}" onClick="{{{{t.pick}}}}" style="flex: none; position: relative; min-width: 48px; height: 48px; box-sizing: border-box; padding: 0 8px; border: 0; border-radius: 12px; '
-        f'background: {{{{t.bg}}}}; color: {{{{t.fg}}}}; font-family: {{{{t.ff}}}}; font-size: {{{{t.fs}}}}px; font-style: {{{{t.fst}}}}; font-weight: {{{{t.fw}}}}; line-height: 1; white-space: nowrap; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{t.isSvg}}}}" hint-placeholder-val="{{{{false}}}}"><svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="{{{{t.hd}}}}" fill="{{{{t.hf}}}}" stroke="currentColor" stroke-width="1.6"></path><path d="{{{{t.sd}}}}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></sc-if><sc-if value="{{{{t.isTxt}}}}" hint-placeholder-val="{{{{true}}}}"><span>{{{{t.g}}}}</span></sc-if></button>')
+# a palette tool, one helper: mw, h, pad and r size it; paint is its fill and ink (the palette's 48 square, the
+# toolbar's 44, the grid's cells)
+def TOOLB(mw='48px', h=48, pad=8, r=12, paint='background: {{t.bg}}; color: {{t.fg}}'):
+    return (f'<button type="button" aria-hidden="{{{{t.hid}}}}" tabindex="{{{{t.ti}}}}" aria-label="{{{{t.name}}}}" aria-pressed="{{{{t.on}}}}" data-tip="{{{{t.tip}}}}" onClick="{{{{t.pick}}}}" style="flex: none; position: relative; min-width: {mw}; height: {h}px; box-sizing: border-box; padding: 0 {pad}px; border: 0; border-radius: {r}px; '
+        f'{paint}; font-family: {{{{t.ff}}}}; font-size: {{{{t.fs}}}}px; font-style: {{{{t.fst}}}}; font-weight: {{{{t.fw}}}}; line-height: 1; white-space: nowrap; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{t.isSvg}}}}" hint-placeholder-val="{{{{false}}}}"><svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="{{{{t.hd}}}}" fill="{{{{t.hf}}}}" stroke="currentColor" stroke-width="1.6"></path><path d="{{{{t.sd}}}}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></sc-if><sc-if value="{{{{t.isTxt}}}}" hint-placeholder-val="{{{{true}}}}"><span>{{{{t.g}}}}</span></sc-if></button>')
 # a section head sits nearer its own tools than the section above (laws, spacing: 1.5–3× above what is below): the
 # 44 head reaches 10 into the gap under it
 def ED_SECTIONS(gap=16):
-    cell = TOOL.replace('min-width: 48px', 'min-width: 0; grid-column: span {{t.span}}').replace('border-radius: 12px; ', 'border-radius: 0; ').replace('background: {{t.bg}}', 'background: {{t.gbg}}; box-shadow: 1px 0 0 '+LINE+', 0 1px 0 '+LINE)
+    cell = TOOLB(mw='0; grid-column: span {{t.span}}', r=0, paint='background: {{t.gbg}}; box-shadow: 1px 0 0 ' + LINE + ', 0 1px 0 ' + LINE + '; color: {{t.fg}}')
     return (f'<sc-for list="{{{{sections}}}}" as="a" hint-placeholder-count="7"><section data-pal="{{{{a.c}}}}" style="display: flex; flex-direction: column; gap: 8px; scroll-margin-top: 4px"><h3 style="margin: 0"><button type="button" aria-expanded="{{{{a.isOpen}}}}" onClick="{{{{a.fold}}}}" style="width: 100%; min-height: 44px; margin: -6px 0 -10px; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: space-between">{{{{a.t}}}}<span style="color: {SOFT}; display: flex; transform: rotate({{{{a.rot}}}}); transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1)">{CHEV_D}</span></button></h3>'
             f'<sc-if value="{{{{a.isOpen}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); background: {SHEET}; border: 1px solid {LINE}; border-radius: 12px; overflow: hidden"><sc-for list="{{{{a.tools}}}}" as="t" hint-placeholder-count="8">{cell}</sc-for></div></sc-if></section></sc-for>')
 # the tooltip itself is the app's one (r71_tips: a 500ms wait, a fade, 8 under its control); the editor adds only where
@@ -212,16 +215,13 @@ ZINI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M5 12h14M1
 PANELI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path></svg>'
 PAGEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"></path><path d="M8 11h8M8 14h8M8 17h8"></path></svg>'
 PANOI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M2 8h20M2 11h20M2 14h20M2 17h20"></path></svg>'
-# a toolbar tool: the palette's TOOL, 44 square, in the essentials pill
-TTOOL = TOOL.replace('min-width: 48px; height: 48px; box-sizing: border-box; padding: 0 8px', 'min-width: 44px; height: 44px; box-sizing: border-box; padding: 0 6px')
 # the note-input group in its two looks, one helper: the laptop's toolbar pill (FILL), its chosen tool white and lifted
 # as a segmented control's chosen segment (SEGC, Practice | Edit); the phone's folded palette row, bare glyphs on the
 # sheet as Flat's (017, 018), its chosen glyph honey-deep with no tile, as Flat's turns blue
 def ESS(look):
     paint = ('background: {{t.lbg}}; box-shadow: {{t.lsh}}; color: {{t.fg}}' if look == 'laptop'
              else 'background: transparent; color: {{t.pfg}}')
-    tool = TTOOL.replace('background: {{t.bg}}; color: {{t.fg}}', paint)
-    assert paint in tool
+    tool = TOOLB('44px', 44, 6, paint=paint)  # a toolbar tool, 44 square, in the essentials pill
     return (f'<div role="group" aria-label="Note input" style="flex: none; display: flex; align-items: center; padding: 2px; border-radius: 14px; background: {FILL if look == "laptop" else "transparent"}">'
             f'<sc-for list="{{{{tbDur}}}}" as="t" hint-placeholder-count="9">{tool}</sc-for>{TSEP}<sc-for list="{{{{tbAcc}}}}" as="t" hint-placeholder-count="3">{tool}</sc-for></div>')
 ESSENTIALS = ESS('laptop')
@@ -286,7 +286,7 @@ elm4 = (TIP_CSS + EBAR('SongsLaptop.dc.html', 'PlayerLaptop.dc.html') + TOOLBAR_
 
 # ··· the score's menu, as Flat's ≡ (owner, 2026-11-16: "new completely new design"; flat-score-editor 083–090): what
 # the score does not print, one row each, then Publish as its own card. Credits and Instruments open their sheets.
-EYEI22 = EYEI.replace('width="20" height="20"', 'width="22" height="22"')
+EYEI22 = SZ(EYEI, 22)
 SOLOI = '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.6"></circle><text x="12" y="16.4" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">S</text></svg>'
 EXPORTMENU = GROUP(('action', 'Printable PDF (.pdf)', 'closeSheet', INK), ('action', 'MusicXML (.mxl)', 'closeSheet', INK), ('action', 'MusicXML (.musicxml)', 'closeSheet', INK), ('action', 'MIDI (.mid)', 'closeSheet', INK), bg=SHEET)
 FIELD = lambda label, val: (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
@@ -333,7 +333,7 @@ _IROW = lambda name, k, b=40, glyph=KEYSI: (f'<div style="display: flex; align-i
                          f'<button type="button" aria-label="{name}: more" data-tip="More" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
 # the Instruments page's rows: Solo and Show 40 in the laptop's dense panel, 44 on a phone (craft-details, Hit area)
 INSTBODY = lambda b=40: (
-                  f'<div style="display: flex; flex-direction: column; gap: 8px">' + _IROW('Voice', 'V', b, MICI.replace('width="20" height="20"', 'width="22" height="22"')) + _IROW('Piano', 'P', b) + _PIF('addedOn', _IROW('{{addedN}}', 'A', b, MUSICI.replace('width="18" height="18"', 'width="22" height="22"'))) + '</div>'
+                  f'<div style="display: flex; flex-direction: column; gap: 8px">' + _IROW('Voice', 'V', b, SZ(MICI, 22)) + _IROW('Piano', 'P', b) + _PIF('addedOn', _IROW('{{addedN}}', 'A', b, SZ(MUSICI, 22))) + '</div>'
                   + f'<button type="button" onClick="{{{{addInst}}}}" style="align-self: flex-start; height: 44px; margin-left: 24px; padding: 0 14px; border: 0; border-radius: 22px; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer">{STEP_PLUS}New instrument</button>')
 PANEL_INST = (_PIF('notPick', _PHEAD('Instruments') + _PBODY(INSTBODY()), 'true')
               + _PIF('pickInstOn', f'<header style="flex: none; height: 64px; box-sizing: border-box; padding: 0 16px 0 8px; display: flex; align-items: center; gap: 4px; box-shadow: inset 0 -1px 0 {LINE}"><button type="button" onClick="{{{{backInst}}}}" aria-label="Back to Instruments" data-tip="Back" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button><h2 style="margin: 0; font-size: 17px; font-weight: 600">New instrument</h2></header>' + _PBODY(ED_PICK)))

@@ -584,6 +584,12 @@ PHFOLLOW = ("requestAnimationFrame(() => { const l = [...document.querySelectorA
             " if (dx || dy) s.scrollBy({ left: dx, top: dy, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); });")
 EDPLAYHEAD_KEYS = ("...(() => { const n = st.edPos ?? 0, b = 3 + Math.floor(n / 3); return { phF: (n % 3 + 0.3) / 3,"
                    " ...Object.fromEntries(Array.from({ length: 13 }, (_, i) => ['phB' + i, (st.edPlaying || n > 0) && i === b ? 'block' : 'none'])) }; })(),")
+# a glyph at another size: its width and height set together (one helper, never a hand-written .replace of its numbers)
+def SZ(svg, n):
+    import re as _re
+    out, k = _re.subn(r'width="\d+" height="\d+"', f'width="{n}" height="{n}"', svg, count=1)
+    assert k, svg[:80]
+    return out
 def PICKLAYER(geo, mode='pick'):
     W, H = geo['w'], geo['h']; pc = lambda v, d: f'{v / d * 100:.3f}%'; out = []
     for b, x0, x1, y0, y1 in geo['bars']:
@@ -775,13 +781,13 @@ def PHTRANSPORT():
 # Instruments sheet (inst: its opener), as Flat's
 EYEOFFI = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.7 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-2.2 3.2M6.6 6.6C3.9 8.4 2 12 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2M2 2l20 20"></path></svg>'
 def PARTSECTION(inst=None):
-    eye = EYEI.replace('width="20" height="20"', 'width="24" height="24"')
+    eye = SZ(EYEI, 24)
     sb = (f'<button type="button" aria-label="Solo {{{{c.name}}}}" data-tip="Solo" aria-pressed="{{{{c.solo}}}}" onClick="{{{{c.doSolo}}}}" style="{_PB}; color: {{{{c.soloFg}}}}">'
           '<span aria-hidden="true" style="width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid currentColor; background: {{c.soloBg}}; color: {{c.soloTx}}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; line-height: 1">S</span></button>')
     vb = (f'<button type="button" aria-label="{{{{c.eyeL}}}}" data-tip="{{{{c.eyeL}}}}" aria-pressed="{{{{c.on}}}}" aria-disabled="{{{{c.last}}}}" data-tip-dis="{{{{c.eyeL}}}}: the last staff shown" onClick="{{{{c.pick}}}}" style="{_PB}; color: {{{{c.eyeFg}}}}">'
           f'<sc-if value="{{{{c.shown}}}}" hint-placeholder-val="{{{{true}}}}">{eye}</sc-if><sc-if value="{{{{c.hidden}}}}" hint-placeholder-val="{{{{false}}}}">{EYEOFFI}</sc-if></button>')
-    glyph = (f'<span aria-hidden="true" style="flex: none; width: 24px; display: flex; color: {{{{c.nameFg}}}}"><sc-if value="{{{{c.isVoice}}}}" hint-placeholder-val="{{{{false}}}}">{MICI.replace('width="20" height="20"', 'width="24" height="24"')}</sc-if>'
-             f'<sc-if value="{{{{c.isKeys}}}}" hint-placeholder-val="{{{{true}}}}">{KEYSI.replace('width="22" height="22"', 'width="24" height="24"')}</sc-if></span>')
+    glyph = (f'<span aria-hidden="true" style="flex: none; width: 24px; display: flex; color: {{{{c.nameFg}}}}"><sc-if value="{{{{c.isVoice}}}}" hint-placeholder-val="{{{{false}}}}">{SZ(MICI, 24)}</sc-if>'
+             f'<sc-if value="{{{{c.isKeys}}}}" hint-placeholder-val="{{{{true}}}}">{SZ(KEYSI, 24)}</sc-if></span>')
     card = (f'<div style="min-height: 60px; box-sizing: border-box; padding: 0 6px 0 16px; {_CARD}; display: flex; align-items: center; gap: 12px">{glyph}'
             f'<span style="flex: 1; min-width: 0; font-size: 16px; color: {{{{c.nameFg}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{c.name}}}}</span>{sb}{vb}</div>')
     # the kit's switch at the row's end, as every switch row (TOGGLE, GROUP's 'toggle'), not a smaller one of its own
@@ -792,7 +798,7 @@ def PARTSECTION(inst=None):
     # the editor's rail); each part a filled card on the paper, as Flat's instruments sheet (004, 084)
     body = (f'{allrow}<div style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{{{phPartRows}}}}" as="c" hint-placeholder-count="2">{card}</sc-for></div>'
             + (f'<div style="{_CARD}; overflow: hidden">{foot}</div>' if foot else ''))
-    return FOLD('Parts', KEYSI.replace('width="22" height="22"', 'width="20" height="20"'), 'Parts', body)
+    return FOLD('Parts', SZ(KEYSI, 20), 'Parts', body)
 def PARTKEYS(S, SET, parts, solo='solo'):
     """the Parts sheet's rows over the board's hidden parts (S.hide, the Instruments panel's own) and its solo (S[solo],
     the Audio panel's own); parts: [(id, name)]; whether the Piano prints"""
@@ -807,12 +813,12 @@ def PHBAND(back_href, keys, over=False):
     # beside ← the View button (owner, 2026-11-26: "can we merge this parts button beside the back button with the view
     # option"): the page of the views, their options and the song's parts, the one way to it on a phone
     x = (f'<a href="{back_href}" aria-label="Back" data-tip="Back · Esc" style="{_PB}; text-decoration: none">{ARROWLI}</a>'
-         f'<button type="button" aria-label="View" data-tip="View" aria-haspopup="dialog" aria-expanded="{{{{phViewX}}}}" onClick="{{{{phView}}}}" style="{_PB}; color: {{{{phViewFg}}}}">{VIEWI.replace('width="20" height="20"', 'width="24" height="24"')}</button>')
+         f'<button type="button" aria-label="View" data-tip="View" aria-haspopup="dialog" aria-expanded="{{{{phViewX}}}}" onClick="{{{{phView}}}}" style="{_PB}; color: {{{{phViewFg}}}}">{SZ(VIEWI, 24)}</button>')
     m = f'<button type="button" aria-label="Menu" data-tip="Menu" aria-haspopup="dialog" aria-expanded="{{{{phMenuX}}}}" onClick="{{{{phMenu}}}}" style="{_PB}; color: {{{{phMenuFg}}}}">{MENUI}</button>'
     pos = 'position: absolute; z-index: 48; left: 0; right: 0; top: 0; padding-top: 62px' if over else 'flex: none; position: relative; z-index: 20'
     return (f'<header data-band style="box-sizing: border-box; padding: 0 8px; {pos}; background: linear-gradient({LINE}, {LINE}) 8px 100% / calc(100% - 16px) 1px no-repeat, {SHEET}; color: {INK}">'
             f'<div style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 4px">{x}{PHTRANSPORT()}{keys}{m}</div></header>')
-KEYSI24 = KEYSI.replace('width="22" height="22"', 'width="24" height="24"')  # a phone band's glyphs are 24
+KEYSI24 = SZ(KEYSI, 24)  # a phone band's glyphs are 24
 PHKEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys" aria-haspopup="dialog" aria-expanded="{{{{hdKeysOn}}}}" onClick="{{{{hdKeys}}}}" style="{_PB}; color: {{{{hdKeysPh}}}}">'
              + KEYSI24 + '</button>')
 # Practice | Edit at the top of ☰ (the owner: "not in the header but in the setting or in the menu"), as Flat's menu
@@ -1000,7 +1006,7 @@ def HDRTRANSPORT(phone=False):
     play = (f'<div role="group" aria-label="Play" style="flex: none; display: flex; align-items: center; gap: 2px">'
             + b('{{hdPlayTip}}', '{{hdPlayTip}} · Space', '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="{{hdPlayD}}"></path></svg>', 'hdPlay', f'background: #EDC684; color: {BAND}')
             + f'<button type="button" aria-label="Playback options" data-tip="Playback options" aria-haspopup="dialog" aria-expanded="{{{{hdOptsX}}}}" onClick="{{{{hdOpts}}}}" style="flex: none; width: 24px; height: 40px; padding: 0; border: 0; border-radius: 12px; background: {{{{hdOptsBg}}}}; color: {ONB}; display: flex; align-items: center; justify-content: center; cursor: pointer">{CHEV_D}</button></div>')
-    met = b('{{hdMetTip}}', '{{hdMetTip}} · press to change', METI.replace('width="20" height="20"', 'width="18" height="18"') + '<sc-if value="{{hdMetOff}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="position: absolute; width: 22px; height: 1.5px; border-radius: 1px; background: currentColor; transform: rotate(-45deg)"></span></sc-if>', 'hdMet', filled)
+    met = b('{{hdMetTip}}', '{{hdMetTip}} · press to change', SZ(METI, 18) + '<sc-if value="{{hdMetOff}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="position: absolute; width: 22px; height: 1.5px; border-radius: 1px; background: currentColor; transform: rotate(-45deg)"></span></sc-if>', 'hdMet', filled)
     loop = b('Loop', '{{hdLoopTip}} · L', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>', 'hdLoop', lit('hdLoop'), ' aria-pressed="{{hdLoopOn}}"')
     # MIDI as Flat's new band draws it (the owner's Flat 26.11 screenshots): a bare cable glyph after Loop, no ring, no
     # word; it opens its own popover under it (the keyboard in use, Sound from the app, Record), never a jump to Settings
@@ -1145,7 +1151,7 @@ def AUDPANEL(phone=False):
     room = f'<section aria-label="Room" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Room</h3>{SEGC("hdRooms", 36, 14, True)}</section>'
     master = (f'<div style="{_ACARD}"><div style="min-height: 44px; display: flex; align-items: center"><span style="flex: 1; font-size: 15px; font-weight: 600">Master volume</span></div>'
               + _ALEVEL('Master', 'hdVolM', 'hdSetVolM') + '</div>')
-    part = (f'<div style="{_ACARD}"><div style="min-height: 44px; display: flex; align-items: center; gap: 4px"><span aria-hidden="true" style="flex: none; display: flex; margin-right: 8px; color: {SOFT}"><sc-if value="{{{{p.isVoice}}}}" hint-placeholder-val="{{{{false}}}}">{MICI}</sc-if><sc-if value="{{{{p.isKeys}}}}" hint-placeholder-val="{{{{true}}}}">{KEYSI.replace('width="22" height="22"', 'width="20" height="20"')}</sc-if></span>'
+    part = (f'<div style="{_ACARD}"><div style="min-height: 44px; display: flex; align-items: center; gap: 4px"><span aria-hidden="true" style="flex: none; display: flex; margin-right: 8px; color: {SOFT}"><sc-if value="{{{{p.isVoice}}}}" hint-placeholder-val="{{{{false}}}}">{MICI}</sc-if><sc-if value="{{{{p.isKeys}}}}" hint-placeholder-val="{{{{true}}}}">{SZ(KEYSI, 20)}</sc-if></span>'
             f'<span style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{p.name}}}}</span>'
             + ib('Solo', 'doSolo', 'solo', SOLOS) + ib('Mute', 'doMute', 'mute', MUTEI) + '</div>' + _ALEVEL('{{p.name}}', 'p.v', 'p.setV') + '</div>')
     parts = f'<section aria-label="Volume" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Volume</h3>{master}<sc-for list="{{{{hdParts}}}}" as="p" hint-placeholder-count="2">{part}</sc-for></section>'
@@ -1156,7 +1162,7 @@ def AUDPANEL(phone=False):
     return ('<div style="display: flex; flex-direction: column">' + FOLD('Room', WAVESI, 'Room', SEGC('hdRooms', 36, 14, True), first=True)
             + FOLD('Vol', AUDIOI, 'Volume', master + f'<sc-for list="{{{{hdParts}}}}" as="p" hint-placeholder-count="2">{part}</sc-for>') + '</div>')
 HDRKEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys · K" aria-haspopup="dialog" aria-expanded="{{{{hdKeysOn}}}}" onClick="{{{{hdKeys}}}}" style="{_HB}">'
-              + KEYSI.replace('width="22" height="22"', 'width="20" height="20"') + '</button>').replace(f'style="{_HB}"', f'style="{_HB}; background: {{{{hdKeysBg}}}}; color: {ONB}"', 1)
+              + SZ(KEYSI, 20) + '</button>').replace(f'style="{_HB}"', f'style="{_HB}; background: {{{{hdKeysBg}}}}; color: {ONB}"', 1)
 def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
     """The header's state, one for both modes. S, SET: the board's state and setter; TOAST(msg) its toast fields;
     play, loop: the board's own acts; playing, loop_on, loop_tip: its expressions; parts: [(id, name)]."""

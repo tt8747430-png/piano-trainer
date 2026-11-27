@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · (this commit) · two drifts folded into helpers, nothing seen changes (laws, the design system as layers): the palette tool's three copies made by `.replace()` on its markup (the palette's 48, the toolbar's 44, the grid's cells) are one `TOOLB(mw, h, pad, r, paint)`; thirteen hand-written icon-size patches are the kit's `SZ(icon, n)`, which fails the build if a glyph has no size to set · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop (a `0` read `0px`) · pending
+
 - 2026-11-27 · (this commit) · the recording's bar chips are 32 to see and 44 to touch, their reach a pseudo-element rather than transparent borders held in by a −6 margin (which the roll's sideways scroller could clip); they stand the column's 8 under the roll, the card 12 at top and foot · Take, TakeLaptop · pending
 
 ## Changes
