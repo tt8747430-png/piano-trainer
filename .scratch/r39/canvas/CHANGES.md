@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · HASH · Solo wears one glyph: the Audio panel and its phone page soloed a part with headphones while the Parts sheet and the Instruments page used the ruled S; the kit's SOLOS is now the one Solo everywhere (one icon, one meaning) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · **pending**
 ## Changes
 
 - 2026-11-27 · bfdca2a9 · the laptop's Version history drops "You" under every saved moment, a song having one author (the line said nothing, and the phone's rows never had it): each moment is its time and what changed · EditorLaptop, EditorDraftLaptop, PlayerDesk · v827

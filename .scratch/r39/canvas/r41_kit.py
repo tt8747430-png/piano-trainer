@@ -98,7 +98,8 @@ WAVESI = _LI('<path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0
 AUDIOI = _LI('<path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"></path>')
 SEARCHI = _LI('<circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path>')
 KBDI = _LI('<rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"></path>')
-HEADPHI = _LI('<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path>')
+# Solo, one glyph app-wide (the Parts sheet's S, Flat's instruments sheet): never headphones beside it elsewhere
+SOLOS = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"></circle><text x="12" y="16.4" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">S</text></svg>'
 MUTEI = _LI('<path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="m22 9-6 6M16 9l6 6"></path>')
 GRIPI = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.5"></circle><circle cx="15" cy="6" r="1.5"></circle><circle cx="9" cy="12" r="1.5"></circle><circle cx="15" cy="12" r="1.5"></circle><circle cx="9" cy="18" r="1.5"></circle><circle cx="15" cy="18" r="1.5"></circle></svg>'
 FOLDI = _LI('<path d="m11 17-5-5 5-5M18 17l-5-5 5-5"></path>')
@@ -1005,7 +1006,7 @@ def _HPOPOVER(cond, title, body, pos, w, phone=False, back=None):
 def _HVOLROW(i):
     ib = lambda lab, act, on, svg: f'<button type="button" aria-label="{lab} {{{{p.name}}}}" data-tip="{lab}" aria-pressed="{{{{p.{on}}}}}" onClick="{{{{p.{act}}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {{{{p.{on}Bg}}}}; color: {{{{p.{on}Fg}}}}; display: flex; align-items: center; justify-content: center; cursor: pointer">{svg}</button>'
     return (f'<div style="display: flex; flex-direction: column"><div style="min-height: 44px; display: flex; align-items: center; gap: 4px"><span style="flex: 1; font-size: 15px; font-weight: 600">{{{{p.name}}}}</span>'
-            + ib('Solo', 'doSolo', 'solo', '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>')
+            + ib('Solo', 'doSolo', 'solo', SOLOS)
             + ib('Mute', 'doMute', 'mute', '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="m22 9-6 6M16 9l6 6"></path></svg>') + '</div>'
             + f'<div style="display: flex; align-items: center; gap: 12px"><input type="range" min="0" max="100" step="5" value="{{{{p.v}}}}" onChange="{{{{p.setV}}}}" aria-label="{{{{p.name}}}} volume" style="flex: 1; min-width: 0; height: 44px; margin: 0; accent-color: {INK}"><span style="width: 40px; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums">{{{{p.v}}}}%</span></div></div>')
 # Transpose's rows (Semitones with − and +, the Key it lands in, Back to G major once moved): one implementation, in
@@ -1108,7 +1109,7 @@ def AUDPANEL(phone=False):
               + _ALEVEL('Master', 'hdVolM', 'hdSetVolM') + '</div>')
     part = (f'<div style="{_ACARD}"><div style="min-height: 44px; display: flex; align-items: center; gap: 4px"><span aria-hidden="true" style="flex: none; display: flex; margin-right: 8px; color: {SOFT}"><sc-if value="{{{{p.isVoice}}}}" hint-placeholder-val="{{{{false}}}}">{MICI}</sc-if><sc-if value="{{{{p.isKeys}}}}" hint-placeholder-val="{{{{true}}}}">{KEYSI.replace('width="22" height="22"', 'width="20" height="20"')}</sc-if></span>'
             f'<span style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{p.name}}}}</span>'
-            + ib('Solo', 'doSolo', 'solo', HEADPHI) + ib('Mute', 'doMute', 'mute', MUTEI) + '</div>' + _ALEVEL('{{p.name}}', 'p.v', 'p.setV') + '</div>')
+            + ib('Solo', 'doSolo', 'solo', SOLOS) + ib('Mute', 'doMute', 'mute', MUTEI) + '</div>' + _ALEVEL('{{p.name}}', 'p.v', 'p.setV') + '</div>')
     parts = f'<section aria-label="Volume" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Volume</h3>{master}<sc-for list="{{{{hdParts}}}}" as="p" hint-placeholder-count="2">{part}</sc-for></section>'
     if phone:
         return f'<div style="display: flex; flex-direction: column; gap: 24px; padding: 4px 0 0">{room}{parts}</div>'
