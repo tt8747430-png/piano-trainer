@@ -8,11 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · c60ac471 · the phone Player's keys docked at the foot as the laptop's and the editor's (the whole width, square, a hairline above, over the page, the music ending 16 above them); the floating keyboard's frame (Move the piano, its resize corners), which floated its grips over the music with the keys hidden under the page, is gone on both sizes · PlayerApp, PlayerDesk · pending
-- 2026-11-27 · c60ac471 · the printed bar numbers at 12, never under the type floor (they were 11 on a phone's page and on the run boards' staves) · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayChord, PlayExercise · pending
-
 ## Changes
 
+- 2026-11-27 · c60ac471 · the phone Player's keys docked at the foot as the laptop's and the editor's (the whole width, square, a hairline above, over the page, the music ending 16 above them); the floating keyboard's frame (Move the piano, its resize corners), which floated its grips over the music with the keys hidden under the page, is gone on both sizes · PlayerApp, PlayerDesk · v859
+- 2026-11-27 · c60ac471 · the printed bar numbers at 12, never under the type floor (they were 11 on a phone's page and on the run boards' staves) · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayChord, PlayExercise · v859
 - 2026-11-27 · 5fd48353 · the section's Genos sheet and Share in the Player's shape: sentence-case heads over segmented controls 24 apart, no grey groups, no MAIN caption in capitals, no explanation line (passes read Main, 1st time; Ending before the way into the next section on the last) · ChordPlayer, ChordPlayerLaptop · v858
 - 2026-11-27 · 412d6452 · the Chord player’s name menu: a hairline between its sheets and New sheet, All chord sheets (kit ROWMENU gains a `sep` row) · ChordPlayer, ChordPlayerLaptop · v857
 - 2026-11-27 · cba24201 · the chord's sheet: Chord, Bass note, Duration in the white card, Suggested chords a sentence-case head · ChordPlayer, ChordPlayerLaptop · v856
