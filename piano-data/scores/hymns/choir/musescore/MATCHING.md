@@ -89,3 +89,6 @@ by hand.
 - **What the sheet prints and the builder lacked.** Song 7 needed first and second endings, two repeats, a change of
   time (6/8 and back), double barlines and divided voices; each is now a `match.txt` line (`spec.py`), never a hand
   edit.
+- **A fermata in one part only.** The sheet prints a fermata once per staff (above the upper voice, below the lower);
+  both voices of that staff hold. Each part now takes its staff's fermata over its own staff (song 8, bar 17; song 7,
+  bars 45 and 61), never below the notes.

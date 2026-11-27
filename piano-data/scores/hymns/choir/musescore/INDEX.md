@@ -25,7 +25,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 56 | 5 | 1 | 23 | 21 | 1 | 0 |
+| Mixed choir | 107 | 57 | 5 | 1 | 22 | 21 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -39,7 +39,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 5 | Mărire Ție, Isuse | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 6 | Du-mă la izvorul | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 7 | Nu nouă Doamne | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 8 | De-atâția ani | Single voices only, no full score | – | – | – | – | Tenor | 1 |  |  | – |
+| 8 | De-atâția ani | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 9 | Eram jos în păcat | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 2/2, 17 bars, `009. Eram jos în păcat.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
 | 10 | Rătăceam în păcat și pierzare | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 1/2, 53 bars, `010. Rătăceam în păcat și pierzare.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
 | 11 | Ce nume minunat | Done: as printed (matched to its PDF) | 4 | 2 staves, voices 2/2, 26 bars, `011. Ce Nume minunat.mscz` | no | – | Soprano, Alto, Tenor, Bass | 2 | 1 |  | piano |

@@ -214,21 +214,29 @@ def marks_of(staff, voice):
 
 def marks(main_staffs, part_staff, track):
     """The part's marks as the score's: the dynamics, hairpins and texts printed for the system (the top staff's,
-    and its own staff's), and the fermatas over its own voice."""
+    and its own staff's), and the fermatas over its own voice or printed once for its staff."""
     for v in part_staff.iter('voice'):
         for el in list(v):
             if el.tag in MARKS or (el.tag == 'Spanner' and el.get('type') == 'HairPin'):
                 v.remove(el)
     wanted, seen = [], set()
-    sources = [(main_staffs[0], 0), (main_staffs[track // 4], 0), (main_staffs[track // 4], track % 4)]
+    own = (main_staffs[track // 4], track % 4)
+    sources = [(main_staffs[0], 0), (main_staffs[track // 4], 0), own]
     for st, v in dict.fromkeys(sources):
         for t, el in marks_of(st, v):
-            if el.tag == 'Fermata' and (st, v) != (main_staffs[track // 4], track % 4):
+            if el.tag == 'Fermata' and (st, v) != own:
                 continue
             key = (t, ET.tostring(el))
             if key not in seen:
                 seen.add(key)
                 wanted.append((t, el))
+    # A fermata printed once over a staff (above its upper voice or below its lower) holds both its voices: the
+    # voice without one of its own takes it, where it sings or rests at that moment too.
+    held = {t for t, el in wanted if el.tag == 'Fermata'}
+    for t, el in marks_of(own[0], 1 - own[1]):
+        if el.tag == 'Fermata' and t not in held:
+            held.add(t)
+            wanted.append((t, el))
     slot = {t: el for el, t, k in staff_events(part_staff, 0)}
     parent = {id(c): v for v in part_staff.iter('voice') for c in v}
     for t, el in wanted:
@@ -239,6 +247,8 @@ def marks(main_staffs, part_staff, track):
         el = copy.deepcopy(el)
         for e in el.findall('eid') + el.findall('linkedTo'):
             el.remove(e)
+        if el.tag == 'Fermata' and el.find('subtype') is not None:
+            el.find('subtype').text = 'fermataAbove'  # a part's one voice: over the staff
         v.insert(list(v).index(target), el)
 
 
