@@ -1,0 +1,62 @@
+# From 020. Dumnezeu e steagul meu.pdf (2 pages). The choir's files hold only the tenors and basses' refrain (bars
+# 9-13, the basses' line in the tenors' voice); every voice is written in from the sheet and the song is built from
+# the template. The basses sing their own words in bars 9-13 (italics, under their staff); four verses.
+lyricist: Costache Ioanid
+composer: Nicolae Moldoveanu
+key: Bb
+time: C
+count-pickup
+beamed: 4, 8
+bar-length: 21 3/4
+systems: 1 6 10 13 | 15 17 19
+marks: 1 text:Maestoso, 17+1/2 fermata, 18+1/4 fermata, 18+3/8 fermata, 18+1/2 fermata, 19+1/2 fermata
+slur: Alto 9 +1/2, Alto 20 +1/2, Tenor 4+3/4 +1/8, Tenor 8 +7/8, Tenor 9 +1/2, Tenor 20 +3/4, Bass 5+7/8 +1/16, Bass 6 +1/8, Bass 6+7/8 +1/16, Bass 7 +1/8, Bass 8 +1/2, Bass 20 +3/4
+
+[Soprano notes]
+1: @1 Bb3:8. D4:16 @2 F4:4. D4:8 Eb4:4 C4:4 @3 Bb3:2. F4:8. A4:16 @4 C5:4. A4:8 Bb4:4 G4:4 @5 F4:2. F4:8. F4:16
+1: @6 Bb4:4 Bb4:2 G4:8. G4:16 @7 C5:4 C5:2 Eb5:8. Eb5:16 @8 D5:4 Bb4:8 D5:8 C5:4 A4:8 C5:8 @9 Bb4:2. r:4
+1: @10 r:4 G4:8. G4:16 G4:8 r:8 r:4 @11 r:4 A4:8. A4:16 A4:8 r:8 r:4 @12 r:4 A4:8. A4:16 A4:8 r:8 r:4
+1: @13 r:4 G4:8. G4:16 G4:8 r:8 F4:8. F4:16 @14 Bb4:8. F4:16 D4:8 F4:8 Bb4:4 G4:8. G4:16
+1: @15 C5:8. G4:16 Eb4:8 G4:8 C5:4 Eb5:8. Eb5:16 @16 D5:8 C5:8 Bb4:8 G4:8 F4:4 G4:8. G4:16
+1: @17 G4:8 G4:8 A4:8 Bb4:8 C5:4 F4:8. F4:16 @18 Eb5:8 C5:8 Bb4:8 A4:8 Bb4:4 Bb4:8. Bb4:16
+1: @19 Bb4:2 Bb4:4 Bb4:8. Bb4:16 @20 D5:4 C5:4 Bb4:4 A4:4 @21 Bb4:2.
+
+[Alto notes]
+1: @1 u:8. u:16 @2 u:4. u:8 u:4 u:4 @3 u:2. u:8. F4:16 @4 A4:4. F4:8 G4:4 E4:4 @5 C4:2. u:8. u:16
+1: @6 F4:4 D4:2 u:8. u:16 @7 G4:4 Eb4:2 G4:8. G4:16 @8 F4:1 @9 F4:4 G4:4 F4:4 r:4
+1: @10 r:4 D4:8. D4:16 D4:8 r:8 r:4 @11 r:4 F#4:8. F#4:16 F#4:8 r:8 r:4 @12 r:4 F#4:8. F#4:16 F#4:8 r:8 r:4
+1: @13 r:4 u:8. u:16 u:8 r:8 u:8. u:16 @14 u:8. u:16 u:8 u:8 D4:4 u:8. u:16
+1: @15 u:8. u:16 u:8 u:8 Eb4:4 G4:8. G4:16 @16 F4:8 F4:8 D4:8 Eb4:8 D4:4 Eb4:8. Eb4:16
+1: @17 Eb4:8 Eb4:8 Eb4:8 Eb4:8 Eb4:4 u:8. u:16 @18 F4:8 F4:8 F4:8 F4:8 F4:4 F4:8. F4:16
+1: @19 G4:2 F4:4 F4:8. F4:16 @20 F4:4 G4:4 F4:2 @21 F4:2.
+
+[Tenor notes]
+1: @1 Bb2:8. D3:16 @2 F3:4. D3:8 Eb3:4 C3:4 @3 Bb2:2. A3:8. C4:16 @4 F4:4. C4:8 C4:4 C4:8 Bb3:8 @5 A3:2. F3:8. F3:16
+1: @6 F3:4 F3:2 G3:8. G3:16 @7 G3:4 G3:2 C4:8. C4:16 @8 Bb3:4 D4:8 Bb3:8 A3:4 C4:8 Eb4:8 @9 D4:4 Eb4:4 D4:4 r:4
+1: @10 r:4 Bb3:8. Bb3:16 Bb3:8 r:8 r:4 @11 r:4 D4:8. D4:16 D4:8 r:8 r:4 @12 r:4 D4:8. D4:16 D4:8 r:8 r:4
+1: @13 r:4 C4:8. C4:16 C4:8 r:8 F3:8. F3:16 @14 Bb3:8. F3:16 D3:8 A3:8 Bb3:4 G3:8. G3:16
+1: @15 C4:8. G3:16 Eb3:8 B3:8 C4:4 C4:8. C4:16 @16 Bb3:8 A3:8 Bb3:8 Bb3:8 Bb3:4 Bb3:8. Bb3:16
+1: @17 C4:8 C4:8 C4:8 C4:8 A3:4 F3:8. F3:16 @18 C4:8 Eb4:8 D4:8 C4:8 D4:4 D4:8. D4:16
+1: @19 Eb4:2 D4:4 D4:8. D4:16 @20 Bb3:2 D4:4 Eb4:4 @21 D4:2.
+
+[Bass notes]
+1: @1 u:8. u:16 @2 u:4. u:8 u:4 u:4 @3 u:2. F3:8. F3:16 @4 F3:4. F3:8 C3:4 C3:4 @5 F3:2. F3:8 F3:16 E3:16
+1: @6 D3:8 C3:8 Bb2:2 G3:8 G3:16 F3:16 @7 Eb3:8 D3:8 C3:2 A2:8. A2:16 @8 Bb2:2 F3:2 @9 Bb2:2. D3:8. D3:16
+1: @10 G3:2~ G3:8 G3:8 D3:8. D3:16 @11 Bb3:4 A3:2 D3:8. D3:16 @12 A3:2~ A3:8 A3:8 D3:8. D3:16
+1: @13 C4:4 Bb3:2 u:8. u:16 @14 u:8. u:16 u:8 C3:8 Bb2:4 u:8. u:16
+1: @15 u:8. u:16 u:8 D3:8 C3:4 A2:8. A2:16 @16 Bb2:8 F3:8 G3:8 Eb3:8 Bb2:4 Eb3:8. Eb3:16
+1: @17 C3:8 C3:8 C3:8 C3:8 F3:4 u:8. u:16 @18 F3:8 F3:8 Bb2:8 F3:8 Bb2:4 Bb2:8. Bb2:16
+1: @19 Bb2:2 Bb2:4 Bb2:8. Bb2:16 @20 Bb2:4 Eb3:4 F3:4 F2:4 @21 Bb2:2.
+
+[Soprano]
+1: @1 Dum -- ne -- zeu e Stea -- gul meu, Dum -- ne -- zeu e Stea -- gul meu! A -- le -- lu -- ia, A -- le -- lu -- ia, A -- le -- lu _ _ _ _ _ ia!
+1: @10 El mi'e Steag El, I -- sus Eu Îl port El, I -- sus Cu cât vân -- tu'i mai se -- meţ, cu'a -- tât Stea -- gu'i mai mă -- reţ. Mic şi slab ste -- gar sunt eu, în -- să Stea -- gu'i Dum -- ne -- zeu! În -- să Stea -- gu'i Dum -- ne -- zeu! A -- le -- lu -- ia, A -- le -- lu _ _ _ ia.
+2: @10 El mi'e Steag El, I -- sus Plin de răni El, I -- sus Plin de spi -- nii lui Ce -- zar, plin de stropi de pe Cal -- var! Scrum şi pul -- be -- re sunt eu, în -- să Stea -- gu'i Dum -- ne -- zeu! În -- să Stea -- gu'i Dum -- ne -- zeu! A -- le -- lu -- ia, A -- le -- lu _ _ _ ia.
+3: @10 Şa -- se mii El, I -- sus S'a lup -- tat El, I -- sus Când cu ma -- rea'n clo -- cot viu, când cu şer -- pii în pus -- tiu, când cu flă -- cări, când cu lei, când cu oa -- meni, când cu zei, când cu în -- şişi pa -- şii mei. A -- le -- lu -- ia, A -- le -- lu _ _ _ ia.
+4: @10 Da -- că tu Ochi des -- chişi Da -- că tu În I -- sus Ia -- tă Stea -- gul! Al -- tul nu'i! Plea -- că frun -- tea'n fa -- ţa Lui. Tu eşti lut şi lut sunt eu, în -- să Stea -- gu'i Dum -- ne -- zeu! În -- să Stea -- gu'i Dum -- ne -- zeu! A -- le -- lu -- ia, A -- le -- lu _ _ _ ia.
+
+[Bass italic]
+1: @9 * El mi'e Steag şi El mi'e soar -- tă eu Îl port, dar El mă poar -- tă
+2: @9 * Ia -- tă Stea -- gul în vâl -- toa -- re, plin de răni şi de o -- noa -- re,
+3: @9 * Şa -- se mii de ani în lu -- me, S'a lup -- tat ca să ne'a -- du -- ne;
+4: @9 * Da -- că tu ai ochi să va -- dă, da -- că tu ai duh să crea -- dă.

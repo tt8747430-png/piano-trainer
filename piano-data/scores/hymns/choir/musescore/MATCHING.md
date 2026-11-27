@@ -131,3 +131,15 @@ by hand.
   as an instrumental bar; the sheet flags each note as sung. `flagged:` names such bars.
 - **A bar broken across two lines left whole.** Where the sheet breaks a bar over a line's end (song 19: bars 17-18,
   48-49, 57-58, 80-81) each half is a printed bar, and each gets its `bar-length:`, as does a short last bar (141).
+- **A part's held tie given another voice's syllable.** Where a part holds a tied note of its own and another voice
+  sings a new syllable there (song 17, bars 64-78: the soloist holds while the others sing on; song 19, bars 20-26),
+  the part took that syllable onto its tie. A tie after a part's own syllable now holds it; only a tie in a run the
+  part borrows (song 11's dashed tie) takes the voice's verse-on syllable. The same fault doubled a bass's own word on
+  its tie (song 20, bars 10 and 12: "Steag Steag").
+- **Fermatas in a row dropped.** Fermatas on consecutive eighths (song 20, bar 18: "Dum-ne-zeu") were taken for the
+  file's own after the first, and only one was drawn; a chord's own fermata is now looked for only among its own
+  marks.
+- **A melisma's eighths flagged.** Song 20 beams the eighths sung to one syllable (bars 4 and 8) and flags the rest;
+  `beamed:` names those bars.
+- **A part's words printed in the score.** Words given to a second voice that moves with the first (song 20's altos,
+  bar 9) print twice in the score; the parts take them from the voice they move with, so no block is written.

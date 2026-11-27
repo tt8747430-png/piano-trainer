@@ -30,7 +30,7 @@ Every made score and each of its parts takes the house template, so no song need
 - **The defaults** (`spec.read`): the title from the folder's name with its number in bold (`002. Glas de trâmbiți a
   sunat` is **2** Glas de trâmbiți a sunat), no voice names before the staves, the tempo set but not printed, each
   sung eighth on its own flag (in bars with words, and in bars the sheet prints sung without words, a choir humming:
-  `flagged: 1-8`). A `match.txt` says only where its sheet differs (`title:` for punctuation, `show-tempo`,
+  `flagged: 1-8`), and beamed where the sheet beams a melisma (`beamed: 4, 8`). A `match.txt` says only where its sheet differs (`title:` for punctuation, `show-tempo`,
   `show-names`, `beams`).
 - **`template/Choir SATB.mscz`, `Choir TTBB.mscz`**: empty scores made the same way, for writing a song in
   MuseScore by hand: Soprano and Alto on a treble staff, Tenor and Bass on a bass staff (Tenor 1 and 2 on a tenor

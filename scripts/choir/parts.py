@@ -169,7 +169,10 @@ def part_words(main_staffs, part_staff, track):
             src = next((e for e, u, kk in voices[last_from] if u == t and e.find('Lyrics') is not None), None)
         if src is None:
             continue
-        if t in take_from:
+        # the voice the part last moved with; none after a syllable of its own (a tie after it holds that syllable)
+        if src is mine.get(t):
+            last_from = None
+        elif t in take_from:
             last_from = take_from[t]
         if src is take.get(t):
             copied.add(id(el))

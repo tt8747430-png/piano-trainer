@@ -261,11 +261,15 @@ def layout_mscx(score, spec):
 
 def sung_bars(staffs, spec=None):
     """The bars some staff sings in (a bar sung by one voice is sung by all), and the bars the sheet prints as sung
-    though it gives them no words (`flagged:`, a choir humming)."""
+    though it gives them no words (`flagged:`, a choir humming); less the bars it beams (`beamed:`, a melisma's
+    eighths beamed as printed)."""
     sung = {k for st in staffs for k, m in enumerate(st.findall('Measure')) if m.find('.//Lyrics') is not None}
     if spec and spec.get('flagged'):
         nums = bar_numbers(staffs[0].findall('Measure'), spec.get('count_pickup'))
         sung |= {k for k, n in enumerate(nums) if n in spec['flagged']}
+    if spec and spec.get('beamed'):
+        nums = bar_numbers(staffs[0].findall('Measure'), spec.get('count_pickup'))
+        sung -= {k for k, n in enumerate(nums) if n in spec['beamed']}
     return sung
 
 
@@ -382,7 +386,11 @@ def marks_mscx(score, spec, nums):
                         if t2 is None:
                             continue
                         idx = list(v2).index(t2)
-                        if any(x.tag == 'Fermata' for x in list(v2)[max(0, idx - 3):idx]):
+                        before = list(v2)[:idx]
+                        own = []  # the chord's own marks: those after the voice's previous chord or rest
+                        while before and before[-1].tag not in ('Chord', 'Rest'):
+                            own.append(before.pop())
+                        if any(x.tag == 'Fermata' for x in own):
                             continue  # the file has it already
                         f = ET.Element('Fermata')
                         ET.SubElement(f, 'subtype').text = 'fermataAbove' if vi == 0 else 'fermataBelow'
