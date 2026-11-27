@@ -18,15 +18,17 @@ import {
 } from '@/entities/settings'
 import { useMidiSummary } from '@/features/connect-midi'
 import { setChordPlayer } from '@/features/set-preference'
-import { formatPercent, localText, useKeyName, useLocale } from '@/shared/i18n'
+import { formatPercent, localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { relayMeter, SHEET_METERS, type SheetMeter } from '@/shared/lib/arrangement'
+import { pitchClassOf } from '@/shared/lib/music'
 import {
   BackButton,
   GroupRow,
   GroupRows,
   GroupSegmented,
   GroupSwitch,
+  RootGrid,
   RowButton,
   sayUndo,
   Segmented,
@@ -347,29 +349,21 @@ export function PlaybackBody({
   )
 }
 
-/** The key the sheet is heard in: Transpose, and the key it moves to said. */
+/**
+ * The key the sheet is heard in (the board's Key, a wheel of keys): the twelve in sight (the kit's
+ * `RootGrid`), in the sheet's own mode; a key taken moves the sheet there the short way (−5 to +6).
+ */
 export function KeyBody({ hand }: { hand: ChordSheetInHand }) {
   const { t } = useTranslation('practice')
-  const keyName = useKeyName()
   return (
-    <div className="flex flex-col items-center gap-3">
-      <Stepper
-        label={t('chordPlayer.settings.transpose')}
-        value={hand.entry.settings.transpose}
-        min={TRANSPOSE_RANGE.min}
-        max={TRANSPOSE_RANGE.max}
-        format={(count) => (count > 0 ? `+${count}` : count < 0 ? `−${-count}` : '0')}
-        decrease={t('chordPlayer.settings.down')}
-        increase={t('chordPlayer.settings.up')}
-        onChange={(next) => hand.setSettings({ transpose: next })}
-      />
-      <p className="text-muted-foreground" aria-live="polite">
-        {t('chordPlayer.settings.transposeTo', {
-          from: keyName(hand.sheet.key),
-          to: keyName(hand.shown.key),
-        })}
-      </p>
-    </div>
+    <RootGrid
+      label={t('chordPlayer.dock.key')}
+      value={hand.shown.key.tonic}
+      onChange={(root) => {
+        const up = (pitchClassOf(root) - pitchClassOf(hand.sheet.key.tonic) + 12) % 12
+        hand.setSettings({ transpose: up > TRANSPOSE_RANGE.max ? up - 12 : up })
+      }}
+    />
   )
 }
 

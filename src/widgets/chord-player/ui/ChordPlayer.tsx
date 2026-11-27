@@ -70,7 +70,6 @@ import {
   numeralsParam,
   parseNumerals,
   printedChord,
-  printedNote,
   type Numeral,
 } from '@/shared/lib/music'
 import { useShortcuts } from '@/shared/lib/shortcuts'
@@ -427,7 +426,6 @@ export function ChordPlayer({
 
   /** Import chart's file picker, the system's. */
   const chartPicker = useRef<HTMLInputElement>(null)
-  const shortKey = `${printedNote(shown.key.tonic)}${shown.key.minor ? 'm' : ''}`
   const practiceLibrary = usePracticeLibraryStoreApi()
   const styleName = localText(style.name, locale)
   const playLabel = playing ? t('chordPlayer.stop') : t('chordPlayer.play')
@@ -897,7 +895,7 @@ export function ChordPlayer({
               trigger={
                 <BandPill
                   label={t('chordPlayer.dock.key')}
-                  value={shortKey}
+                  value={keyName(shown.key)}
                   aria-label={`${t('chordPlayer.dock.key')}: ${keyName(shown.key)}`}
                   aria-expanded={popped === 'key'}
                 />

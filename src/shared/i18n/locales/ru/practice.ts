@@ -1101,10 +1101,6 @@ export const practice: LocaleResources['practice'] = {
       time: 'Размер',
       timeInfo:
         'Аккорд на целые такты остаётся на целые такты нового размера; остальные сохраняют свои доли.',
-      transpose: 'Транспонировать',
-      transposeTo: '{{from}} → {{to}}',
-      down: 'На полутон ниже',
-      up: 'На полутон выше',
       writtenAs: 'Запись',
       names: {
         chords: 'Буквы',

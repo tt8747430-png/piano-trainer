@@ -1110,10 +1110,6 @@ export const practice = {
       time: 'Time signature',
       timeInfo:
         'A chord of whole bars stays whole bars in the new time; any other keeps its beats.',
-      transpose: 'Transpose',
-      transposeTo: '{{from}} → {{to}}',
-      down: 'Down a semitone',
-      up: 'Up a semitone',
       writtenAs: 'Written as',
       names: {
         chords: 'Chords',
