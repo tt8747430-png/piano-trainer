@@ -784,8 +784,9 @@ def PHBAND(back_href, keys, over=False):
     pos = 'position: absolute; z-index: 48; left: 0; right: 0; top: 0; padding-top: 62px' if over else 'flex: none; position: relative; z-index: 20'
     return (f'<header data-band style="box-sizing: border-box; padding: 0 8px; {pos}; background: linear-gradient({LINE}, {LINE}) 8px 100% / calc(100% - 16px) 1px no-repeat, {SHEET}; color: {INK}">'
             f'<div style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 4px">{x}{PHTRANSPORT()}{keys}{m}</div></header>')
+KEYSI24 = KEYSI.replace('width="22" height="22"', 'width="24" height="24"')  # a phone band's glyphs are 24
 PHKEYSBTN = (f'<button type="button" aria-label="Piano keys" data-tip="Piano keys" aria-haspopup="dialog" aria-expanded="{{{{hdKeysOn}}}}" onClick="{{{{hdKeys}}}}" style="{_PB}; color: {{{{hdKeysPh}}}}">'
-             + KEYSI.replace('width="22" height="22"', 'width="24" height="24"') + '</button>')
+             + KEYSI24 + '</button>')
 # Practice | Edit at the top of ☰ (the owner: "not in the header but in the setting or in the menu"), as Flat's menu
 # opens on its editor switch: one segmented control, the whole width, each a glyph and its word, the current one white
 def PHMODE(mode, practice_href, edit_href):

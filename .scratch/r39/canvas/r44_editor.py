@@ -288,8 +288,8 @@ _PANELOLD = '<!--panel-->'
 # buttons have nothing to act on here (one voice a staff, no comments), so they are not drawn
 # its glyphs soft ink as Flat's second row is quieter than its header, a soft shadow under it over the page (018)
 # the keys' switch in the header, as Flat's piano glyph: bare, a sand wash while the keys show
-PHKEYSED = KEYSBTN.replace('border-radius: 12px; background: {{keysBg}}; color: {{keysFg}}', 'border-radius: 22px; background: transparent; color: {{keysPh}}').replace('width="22" height="22"', 'width="24" height="24"')
-assert PHKEYSED != KEYSBTN
+# the phone band's piano button: the band's 44 round glyph (as the Player's), here a toggle of the keys as the laptop toolbar's
+PHKEYSED = f'<button type="button" aria-label="Piano keys" data-tip="Piano keys" aria-pressed="{{{{keysPressed}}}}" onClick="{{{{toggleKeys}}}}" style="{_PB}; color: {{{{keysPh}}}}">{KEYSI24}</button>'
 eph4 = (TIP_CSS + PHBAND('Songs.dc.html', PHKEYSED) + ACTS_P
         + '<div class="edlay" style="flex: 1; min-height: 0; display: flex; flex-direction: column">'
         + SCOREAREA(DESK('12px') + PANO(0.95, '16px 16px 16px 12px')) + SHEETP + '</div>' + EDLAY_CSS)
@@ -344,15 +344,16 @@ RAIL = (f'<nav aria-label="Panels" style="flex: none; width: 76px; padding: 0 0 
         + '<span style="flex: 1"></span>' + _RAILBTN('Search', SEARCHI, 'Srch', 'Search for an act · ⌘K', 'openSearch') + _RAILBTN('Shortcuts', KBDI, 'Keys', 'Shortcuts · ?', 'openKeys') + '</nav>')
 _PBODY = lambda inner, gap=16: f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: {gap}px">{inner}</div>'
 # Instruments, as Flat's panel: All, then each instrument's row (its handle, name, Solo, Show, ···), New instrument
-_IROW = lambda name, k: (f'<div style="display: flex; align-items: center; gap: 4px"><span aria-hidden="true" style="flex: none; width: 20px; color: {SOFT}; display: flex; justify-content: center; cursor: grab">{GRIPI}</span>'
+_IROW = lambda name, k, b=40: (f'<div style="display: flex; align-items: center; gap: 4px"><span aria-hidden="true" style="flex: none; width: 20px; color: {SOFT}; display: flex; justify-content: center; cursor: grab">{GRIPI}</span>'
                          f'<div style="flex: 1; min-width: 0; min-height: 48px; padding: 0 4px 0 12px; border-radius: 12px; background: {FILL}; display: flex; align-items: center; gap: 8px"><span style="flex: none; display: flex">{KEYSI}</span><span style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600">{name}</span>'
-                         f'<button type="button" aria-label="Solo {name}" data-tip="Solo" aria-pressed="{{{{solo{k}On}}}}" onClick="{{{{toggleSolo{k}}}}}" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: {{{{solo{k}Bg}}}}; color: {{{{solo{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{SOLOI}</button>'
-                         f'<button type="button" aria-label="Show {name}" data-tip="Show" aria-pressed="{{{{show{k}On}}}}" onClick="{{{{toggleShow{k}}}}}" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {{{{show{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{EYEI22}</button></div>'
+                         f'<button type="button" aria-label="Solo {name}" data-tip="Solo" aria-pressed="{{{{solo{k}On}}}}" onClick="{{{{toggleSolo{k}}}}}" style="width: {b}px; height: {b}px; border: 0; border-radius: {b // 2}px; background: {{{{solo{k}Bg}}}}; color: {{{{solo{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{SOLOI}</button>'
+                         f'<button type="button" aria-label="Show {name}" data-tip="Show" aria-pressed="{{{{show{k}On}}}}" onClick="{{{{toggleShow{k}}}}}" style="width: {b}px; height: {b}px; border: 0; border-radius: {b // 2}px; background: transparent; color: {{{{show{k}Fg}}}}; display: flex; align-items: center; justify-content: center">{EYEI22}</button></div>'
                          f'<button type="button" aria-label="{name}: more" data-tip="More" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
-INST_BODY = (
-                  f'<div style="display: flex; flex-direction: column; gap: 8px">' + _IROW('Voice', 'V') + _IROW('Piano', 'P') + _PIF('addedOn', _IROW('{{addedN}}', 'A')) + '</div>'
+# the Instruments page's rows: Solo and Show 40 in the laptop's dense panel, 44 on a phone (craft-details, Hit area)
+INSTBODY = lambda b=40: (
+                  f'<div style="display: flex; flex-direction: column; gap: 8px">' + _IROW('Voice', 'V', b) + _IROW('Piano', 'P', b) + _PIF('addedOn', _IROW('{{addedN}}', 'A', b)) + '</div>'
                   + f'<button type="button" onClick="{{{{addInst}}}}" style="align-self: flex-start; height: 44px; margin-left: 24px; padding: 0 14px; border: 0; border-radius: 22px; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer">{STEP_PLUS}New instrument</button>')
-PANEL_INST = (_PIF('notPick', _PHEAD('Instruments') + _PBODY(INST_BODY), 'true')
+PANEL_INST = (_PIF('notPick', _PHEAD('Instruments') + _PBODY(INSTBODY()), 'true')
               + _PIF('pickInstOn', f'<header style="flex: none; height: 64px; box-sizing: border-box; padding: 0 16px 0 8px; display: flex; align-items: center; gap: 4px; box-shadow: inset 0 -1px 0 {LINE}"><button type="button" onClick="{{{{backInst}}}}" aria-label="Back to Instruments" data-tip="Back" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button><h2 style="margin: 0; font-size: 17px; font-weight: 600">New instrument</h2></header>' + _PBODY(ED_PICK)))
 # Layout, as Flat's Layout panel: the sections fold in the panel, each its icon, name and value; the page is the preview
 _LSEC = lambda name, val, body: (f'<details style="box-shadow: inset 0 -1px 0 {LINE}"><summary style="list-style: none; min-height: 48px; display: flex; align-items: center; gap: 12px; cursor: pointer">'
@@ -411,7 +412,6 @@ def full_laptop(fname, title, main, js_, pops=''):
 # The phone's layers: the laptop title menu's rows and the rail's places in one sheet, each place a sheet over the
 # score with the laptop panel's own body (one implementation), its controls at 44 for a finger
 _MH = 'calc(100% - 124px)'
-_P44 = lambda h: h.replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px')
 # ☰ as Flat's phone menu (help.flat.io's mobile menu: Credits, Manage instruments, Version history, Layout, Export):
 # the laptop rail's places, each a sheet with the laptop panel's own body; the song's acts are its name's menu, as on
 # the laptop; the band's popovers rise as sheets
@@ -421,7 +421,7 @@ PH_PLACES = (('Song', 'Song', '{{verName}}', f'<div style="display: flex; flex-d
              ('Lay', 'Layout', 'A4', '', 'openLayout'), ('Cred', 'Credits', '', '', 'openCredits'),
              ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
 PHLAYERS = lambda saved, rows=(), foot='', edit_href='Editor.dc.html', loss=(), pub=(): (PHMENU(PH_PLACES, 'Takes.dc.html', PHMODE('edit', 'Player.dc.html', edit_href), head=saved, rows=(('Hist', 'Version history', '{{histAgoV}}', 'phHist'),) + tuple(rows), foot=foot, loss=loss, pub=pub, inst='openInst', song=(('Tr', 'Transpose', '{{hdKeyL}}', 'openTr'), ('Cred', 'Credits', '', 'openCredits'))) + PHHIST() + HDRPOPS(False, 0, 0, 0, phone=True) + THINGPAGE('creditsOn', 'phToMenu', 'Credits', ED_CREDITS, False)
-                          + FSHEET('instOn', 'Instruments', _P44(INST_BODY), back='phToMenu') + FSHEET('pickInstOn', 'New instrument', ED_PICK, back='openInst')
+                          + FSHEET('instOn', 'Instruments', INSTBODY(44), back='phToMenu') + FSHEET('pickInstOn', 'New instrument', ED_PICK, back='openInst')
                           + FSHEET('layoutOn', 'Layout', LAY_BODY, back='phToMenu') + FSHEET('trSheetOn', 'Transpose', TRROWS(True), back='phToMenu'))
 # the ☰'s keys on the editor's own sheet state: the menu is the 'more' sheet, Song and View two more
 PHEDKEYS = ("phMenu: () => set({ sheet: st.sheet === 'more' ? null : 'more', hdPop: null, sm: false, exp: false }), phMenuOn: st.sheet === 'more', phMenuX: st.sheet === 'more' ? 'true' : 'false', "
