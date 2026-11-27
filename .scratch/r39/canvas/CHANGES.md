@@ -11,6 +11,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-27 · (this commit) · the Chord player's name menu: a hairline between its sheets and New sheet, All chord sheets (kit ROWMENU gains a `sep` row) · ChordPlayer, ChordPlayerLaptop · **pending**
 - 2026-11-27 · cba24201 · the chord's sheet: Chord, Bass note, Duration in the white card, Suggested chords a sentence-case head · ChordPlayer, ChordPlayerLaptop · v856
 - 2026-11-27 · 54cf23aa · the Genos lamps lose their crimson (chosen: the rail's wash and an ink ring; next: a honey-deep ring), the paragraph under Follow goes, Follow is the white card; MIDI is the Player's popover (Keyboard, how to connect, Follow), with no link to Settings · ChordPlayer, ChordPlayerLaptop · v855
 - 2026-11-27 · bd65e1c1 · the Chord player's Audio and Chart take the Player's page shape (white card, sentence-case head over its segmented control) on both sizes; ☰'s Style is a page of checked rows, not a wheel sheet · ChordPlayer, ChordPlayerLaptop · v855

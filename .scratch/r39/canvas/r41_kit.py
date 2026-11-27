@@ -335,6 +335,10 @@ def ROWMENU(cond, label, items, posvar='menuPos', w=240):
     out, seen_red = [], False
     for t in items:
         kind, l = t[0], t[1]
+        # a hairline between a list of things and the acts on them (ui-and-mockups, Actions: the acts after a hairline)
+        if kind == 'sep':
+            out.append(f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div>')
+            continue
         col = t[3] if kind == 'action' and len(t) > 3 and t[3] else INK
         if col == RED and not seen_red and out:
             out.append(f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div>')
