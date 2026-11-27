@@ -8,11 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · 5fd48353 · the section's Genos sheet and Share in the Player's shape: sentence-case heads over segmented controls 24 apart, no grey groups, no MAIN caption in capitals, no explanation line (passes read Main, 1st time; Ending before the way into the next section on the last) · ChordPlayer, ChordPlayerLaptop · pending
-
-
 ## Changes
 
+- 2026-11-27 · 5fd48353 · the section's Genos sheet and Share in the Player's shape: sentence-case heads over segmented controls 24 apart, no grey groups, no MAIN caption in capitals, no explanation line (passes read Main, 1st time; Ending before the way into the next section on the last) · ChordPlayer, ChordPlayerLaptop · v858
 - 2026-11-27 · 412d6452 · the Chord player’s name menu: a hairline between its sheets and New sheet, All chord sheets (kit ROWMENU gains a `sep` row) · ChordPlayer, ChordPlayerLaptop · v857
 - 2026-11-27 · cba24201 · the chord's sheet: Chord, Bass note, Duration in the white card, Suggested chords a sentence-case head · ChordPlayer, ChordPlayerLaptop · v856
 - 2026-11-27 · 54cf23aa · the Genos lamps lose their crimson (chosen: the rail's wash and an ink ring; next: a honey-deep ring), the paragraph under Follow goes, Follow is the white card; MIDI is the Player's popover (Keyboard, how to connect, Follow), with no link to Settings · ChordPlayer, ChordPlayerLaptop · v855
