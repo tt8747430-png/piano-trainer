@@ -197,7 +197,7 @@ async function analyse(page, scr, phone) {
     if (!vis(el) || !isCard(el) || blocks.some((b) => b.el === el) || (MODAL && !MODAL.contains(el))) continue
     const r = el.getBoundingClientRect()
     if (r.top > scr.y + scr.h || r.left > scr.x + scr.w || r.right < scr.x) continue
-    blocks.push({ el, tag: 'card', text: (el.innerText || '').trim().split('\n')[0].slice(0, 32), x: Math.round(r.left), y: Math.round(r.top), r: Math.round(r.right), b: Math.round(r.bottom), card: true, floating: false })
+    blocks.push({ el, tag: 'card', text: (el.innerText || '').trim().split('\n')[0].slice(0, 32), x: Math.round(r.left), y: Math.round(r.top), r: Math.round(r.right), b: Math.round(r.bottom), card: true, floating: ['absolute', 'fixed'].includes(getComputedStyle(el).position) })
   }
   const centredWords = (b) => { for (let e = b.el, i = 0; e && i < 2; e = e.parentElement, i++) { const cs = getComputedStyle(e); if (cs.textAlign === 'center' || /flex/.test(cs.display) && cs.flexDirection.startsWith('column') && cs.alignItems === 'center') return b.x - e.getBoundingClientRect().left > 8 } return false }
   const lines = []
@@ -447,7 +447,8 @@ async function analyse(page, scr, phone) {
   }
   // Headings: closer to what they head than to what comes before them (proximity).
   for (const hd of document.querySelectorAll('h1, h2, h3, [role=heading]')) {
-    if (!vis(hd)) continue
+    // A heading inside a button is a disclosure's label (a fold's head row, 56 tall to be tapped): a control, not a section's heading.
+    if (!vis(hd) || hd.closest('button')) continue
     // The heading's own row (a heading beside its + or See all) is the unit.
     let unit = hd
     for (let i = 0; i < 3 && unit.parentElement; i++) {
@@ -531,7 +532,9 @@ async function analyse(page, scr, phone) {
   if (accents.length > 1) problems.push(`Von Restorff: ${accents.length} honey acts on one screen (${accents.slice(0, 3).map((e) => '“' + (e.innerText || e.getAttribute('aria-label') || '').trim().slice(0, 16) + '”').join(', ')}): one is the focus, the rest go quiet`)
   // ── Contrast: text against what it sits on, 4.5:1 (3:1 at 18px bold or 24px).
   const lum = (c) => { const m = c.match(/\d+(\.\d+)?/g).map(Number); const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4 }; return 0.2126 * f(m[0]) + 0.7152 * f(m[1]) + 0.0722 * f(m[2]) }
-  const under = (el) => { for (let e = el; e; e = e.parentElement) { const c = getComputedStyle(e).backgroundColor; if (opaque(c) && !/rgba\(.*,\s*0?\.\d+\)$/.test(c)) return c } return 'rgb(255, 255, 255)' }
+  // Glass (a blurred, mostly opaque layer: a menu, a sheet) is what its text sits on, wherever it hangs in the DOM: a
+  // menu hung from the dark band floats over the light page, never over the band's ink.
+  const under = (el) => { for (let e = el; e; e = e.parentElement) { const st = getComputedStyle(e), c = st.backgroundColor; const al = +((c.match(/[\d.]+/g) || [])[3] ?? 1); if (opaque(c) && (al >= 0.99 || (st.backdropFilter && st.backdropFilter !== 'none' && al >= 0.7))) return c } return 'rgb(255, 255, 255)' }
   const faint = []
   const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.textContent.trim().length > 1 ? 1 : 3) })
   for (let n = tw.nextNode(); n; n = tw.nextNode()) {
