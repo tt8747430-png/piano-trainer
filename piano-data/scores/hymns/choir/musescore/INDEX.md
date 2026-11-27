@@ -63,7 +63,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 29 | Vine-o zi | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 30 | Laudă astăzi pe Domnul | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 31 | Stai pe loc și te gândește | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 32 | Purtam in suflet dor de vesnicii | Done: a part per voice | 3 | 2 staves, voices 2/2, 17 bars, `Purtăm_în_suflet_dor_de_veșnicii.mscz` | yes | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
+| 32 | Purtam in suflet dor de vesnicii | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 33 | Când vrei să vii | Single voices only, no full score | – | – | – | – | Soprano, Tenor, Bass | 1 |  |  | – |
 | 34 | Ascultați imnul slăvirii | Single voices only, no full score | – | – | – | – | Soprano, Tenor | 1 |  |  | – |
 | 35 | Doamne binecuvântă | No MuseScore | – | – | – | – | – | 1 |  |  | – |
