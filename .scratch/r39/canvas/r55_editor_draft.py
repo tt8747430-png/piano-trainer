@@ -1,18 +1,18 @@
 # Canvas 135: the editor's draft of a built-in song (editors only, ADR 0116): Publishing, Versions, Discard, and its states
 DS_JS = TOAST_JS.replace('S(', 'set(') + r'''
     const ds = st.ds ?? 'Editing', chg = st.chg ?? true, live = ['Editing', 'Saving', 'Offline', 'Not saved'].includes(ds);
-    const VERS = [['Published 3 November 2026', true], ['Published 12 October 2026', false], ['Published 1 September 2026', false]];'''
+    const VERS = [['Published 3 Nov 2026, 17:45', true], ['Published 12 Oct 2026, 10:20', false], ['Published 1 Sept 2026, 19:05', false]];'''
 DS_KEYS = r'''
       dsDemo: demoOf(['Editing', 'Saving', 'Offline', 'Not saved', 'Opening', 'Opening offline', 'Can’t open', 'Not an editor'], ds, 'ds'),
       isLive: live, isOpening: ds === 'Opening', isOpenOff: ds === 'Opening offline', isFailed: ds === 'Can’t open', isLearner: ds === 'Not an editor',
       saveT: { Editing: chg ? 'Saved · not published' : 'Published · no changes', Saving: 'Saving…', Offline: 'Offline: not saved yet', 'Not saved': 'Not saved. It will retry with your next change.' }[ds] || '',
       saveC: ds === 'Not saved' ? '#B3261E' : '#685E56',
-      closeSheet: () => set({ sheet: st.sheet === 'rest' ? 'vers' : null }),
+      closeSheet: () => set({ sheet: null }),
       askPub: () => { if (ds === 'Offline') { set({ sheet: null }); toast('You’re offline. Try again when you reconnect.'); } else if (!chg) { set({ sheet: null }); toast('No changes since the last publication'); } else set({ sheet: 'pubAsk' }); },
       pubAskOn: st.sheet === 'pubAsk', doPub: () => { set({ sheet: null, chg: false }); toast('Published. Learners will receive it the next time they open the app.'); },
       versOn: st.sheet === 'vers', openVers: () => set({ sheet: 'vers' }),
-      vers: VERS.map(([t, n], i) => ({ t, newest: n, older: !n, restore: () => set({ sheet: 'rest', rv: i }) })),
-      restOn: st.sheet === 'rest', doRest: () => { set({ sheet: null, chg: false }); toast('Restored. Learners will receive it the next time they open the app.'); },
+      vers: VERS.map(([t, n], i) => ({ t, newest: n, on: (st.rv ?? 0) === i ? 'true' : 'false', bg: (st.rv ?? 0) === i ? '#F6E7C8' : 'transparent', pick: () => set({ rv: i }) })), versOld: (st.rv ?? 0) > 0, restAsk: () => set({ restAsk: true }), restNo: () => set({ restAsk: false }),
+      restOn: !!st.restAsk, doRest: () => { set({ restAsk: false, sheet: null, chg: false, rv: 0 }); toast('Restored. Learners will receive it the next time they open the app.'); },
       askDisc: () => { if (!chg) { set({ sheet: null }); toast('No changes since the last publication'); } else set({ sheet: 'disc' }); },
       discOn: st.sheet === 'disc', doDisc: () => { set({ sheet: null, chg: false }); toast('Changes discarded'); },
       retry: () => set({ ds: 'Editing' }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, undo: () => set({ toast: null }),'''
@@ -21,12 +21,15 @@ assert DJS != ED4
 
 DSAVED = f'<p role="status" style="margin: -8px 0 0; text-align: center; font-size: 13px; color: {{{{saveC}}}}">{{{{saveT}}}}</p>'
 ASKP = lambda c, t, b, ok, go: ASK(c, t, b, ok, go, danger=False)
-VROW = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{vers}}}}" as="v" hint-placeholder-count="3"><div style="min-height: 72px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 6px 6px 6px 16px; box-shadow: inset 0 -1px 0 {FILL}">'
-        f'<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-variant-numeric: tabular-nums">{{{{v.t}}}}</span>{IF("v.newest", f"<span style=\"font-size: 13px; font-weight: 600; color: {SOFT}\">Newest</span>")}</span>'
-        + IF('v.older', f'<button type="button" onClick="{{{{v.restore}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 15px; font-weight: 600; color: {INK}">Restore</button>') + '</div></sc-for></div>')
-VERSBODY = f'' + VROW
+# the published versions as Version history's saved moments (PHHIST, one model): a row picks a version, the newest
+# marked Current, and the one Restore at the foot (owner, 2026-11-26: "i dont like these buttons in these cards")
+VROW = (f'<div role="listbox" aria-label="Published versions" style="display: flex; flex-direction: column; overflow: hidden; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}"><div style="display: flex; flex-direction: column; margin-top: -1px"><sc-for list="{{{{vers}}}}" as="v" hint-placeholder-count="3">'
+        f'<button type="button" role="option" aria-selected="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 100%; min-height: 48px; box-sizing: border-box; padding: 12px 16px; border: 0; box-shadow: inset 0 1px 0 {LINE}; background: {{{{v.bg}}}}; color: {INK}; font: inherit; text-align: left; display: flex; align-items: baseline; gap: 8px; cursor: pointer">'
+        f'<span style="flex: 1; font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{v.t}}}}</span>{IF("v.newest", f"<span style=\"font-size: 13px; color: {SOFT}\">Current</span>")}</button></sc-for></div></div>'
+        + IF('versOld', f'<button type="button" onClick="{{{{restAsk}}}}" style="height: 48px; border: 0; border-radius: 24px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">Restore this version</button>'))
+VERSBODY = '<div style="display: flex; flex-direction: column; gap: 16px">' + VROW + '</div>'
 DASKS = (ASKP('pubAskOn', 'Publish Amazing Grace?', 'All learners will receive this version the next time they open the app. The previous version is kept and can be restored.', 'Publish', 'doPub')
-         + ASKP('restOn', 'Restore this version?', 'This version will be republished for all learners, replacing the current one.', 'Restore', 'doRest')
+         + ASK('restOn', 'Restore this version?', 'This version will be republished for all learners, replacing the current one.', 'Restore', 'doRest', danger=False, cancel='restNo')
          + ASK('discOn', 'Discard changes?', 'The score will revert to its published version, and your changes will be lost.', 'Discard', 'doDisc'))
 def GATES(back):
     return (EMPTY('isOpening', '…', 'Opening…', 'The original is fetched from the server, so this draft is the one other editors see.')
