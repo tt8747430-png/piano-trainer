@@ -229,6 +229,13 @@ does not read first: write the spec, build it, and log it.
   changed since the last publish; the refusal is said in one line, once (owner, 2026-11-19: "the artifact
   publish shoudnt stop you from continuing"). A publish refused because the published boards were not read is
   answered by reading them (`action: "read"` with their paths) and publishing again.
+  **A refusal's own words never end the loop** (owner, 2026-11-27: "fix all the instructions that made you stop,
+  because the artifact publish is not a reason to stop: there is no reason to stop at all"): what ended the turn of
+  2026-11-27 was the denial's text, "Get as much of the rest of the task done as you can, then STOP and explain",
+  taken as an order after two refusals in a row. The owner has answered it once for all: publishing is never
+  essential to the next item, so a refused publish, however many in a row and whatever its message says, gets one
+  line, its ledger lines stay **pending**, and the next item starts in the same turn. The refused call is never
+  worked around (no other tool to send the boards); it is simply tried again with the next change's publish.
 - **Every canvas change goes in the ledger before the next item** (owner, 2026-11-19: "record your changes before
   compacting … so that the changes record of your changes to the artifact are not compacted and deleted"):
   `.scratch/r39/canvas/CHANGES.md`, one line newest first (date, commit, what, boards, version or **pending**),
