@@ -18,10 +18,12 @@ preview and has no users, so every reader of an old save's shape was cost with n
   by field, so a field added later reads as its default. A store follows another tab's saves of its own version. A
   store whose save is large writes it compactly through its `write`. Settings' Backup writes every saved store as one
   file and puts it back whole.
-- **One version until release.** A store reads a save of its own version only. Any other starts from the initial
-  state, which is saved over it. A shape change bumps the version, with no migration and no reader of the old shape.
-  Built-in content is code and never resets. On release this is revisited: from the first user on, a shape change
-  needs a reader of the old shape again.
+- **One version read, every version kept.** A store reads a save of its own version only. Before it starts from
+  the initial state over a save of another version, it keeps that save as it was under `<key>.v<version>` (the first
+  of each version), and the sync keeps the cloud's save of an older app version the same way before writing over it
+  (owner, 2026-11-27: songs and chord sheets were lost when three stores' versions moved). A shape change bumps the
+  version; a reader of the old shape can be written later from what was kept. Built-in content is code and never
+  resets.
 - **A screen opened plainly comes back as it was left.** `pt-views` keeps each remembered screen's last params (at
   most 200 screens, the oldest dropped). A route says it is remembered in `staticData.remembered`, and its
   `beforeLoad` (`routes/remember.ts`) builds the view by two rules:
@@ -40,6 +42,6 @@ preview and has no users, so every reader of an old save's shape was cost with n
 
 ## Consequences
 
-- Shipping a shape change resets that store for anyone who has used the preview. The store's version is in its
+- Shipping a shape change resets that store for anyone who has used the preview, its old save kept aside. The store's version is in its
   `store.ts`, never in a doc.
 - A new link that opens a remembered screen plainly carries `OPEN_PLAINLY`; one that names what to show does not.

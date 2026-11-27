@@ -63,6 +63,29 @@ describe('createSavedStore', () => {
     expect(counter(storage).store.getState()).toEqual({ count: 4 })
   })
 
+  it.each([1, 3])('keeps a version-%i save aside under its own key, never losing it', (version) => {
+    const storage = createMemoryStorage()
+    const json = save(storage, { count: 4 }, version)
+    counter(storage)
+    expect(storage.getItem(`${KEY}.v${version}`)).toBe(json)
+  })
+
+  it('keeps the first save of a version aside, not a later one over it', () => {
+    const storage = createMemoryStorage()
+    const first = save(storage, { count: 4 }, 1)
+    counter(storage)
+    save(storage, { count: 9 }, 1)
+    counter(storage)
+    expect(storage.getItem(`${KEY}.v1`)).toBe(first)
+  })
+
+  it('keeps nothing aside for a save of its own version', () => {
+    const storage = createMemoryStorage()
+    save(storage, { count: 4 }, 2)
+    counter(storage)
+    expect(storage.getItem(`${KEY}.v2`)).toBeNull()
+  })
+
   it.each([1, 3])(
     'starts from its initial state over a version-%i save, and saves that',
     (version) => {

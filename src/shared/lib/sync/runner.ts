@@ -152,6 +152,17 @@ export function createSyncRunner({
     announce(key)
   }
 
+  /**
+   * The cloud's save of an older app version, about to be written over by this device's newer one,
+   * kept as it was under `<key>.v<version>` (the first of each version), as `createSavedStore` keeps a
+   * local one: what the learner made under the older app is never lost to an update.
+   */
+  const keepAside = (key: string, document: SyncDocument) => {
+    const { [VERSION_FIELD]: version, ...state } = document.data
+    const aside = `${key}.v${versionOf(document)}`
+    if (storage.getItem(aside) === null) storage.setItem(aside, JSON.stringify({ state, version }))
+  }
+
   async function syncSave({ table, key }: SyncedSave): Promise<SyncOutcome> {
     const entry = entryOf(table)
     const local = saveOf(storage.getItem(key))
@@ -179,6 +190,7 @@ export function createSyncRunner({
       record(table, { base: theirs, changedAt: entry.changedAt })
       return 'synced'
     }
+    if (theirs && local && versionOf(theirs) < local.version) keepAside(key, theirs)
     const merged = (target: SyncDocument, other: SyncDocument, base: SyncDocument | null) =>
       versionOf(other) === versionOf(target)
         ? mergeDocuments(target, other, base ?? EMPTY).document

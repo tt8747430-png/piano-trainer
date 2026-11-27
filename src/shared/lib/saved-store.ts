@@ -43,10 +43,31 @@ function savesIn(storage: Storage): PersistStorage<unknown> {
 }
 
 /**
+ * A save of another version is never lost: before the store starts from its initial state and saves
+ * that over it, the save's JSON is kept as it was under `<key>.v<version>`, the first one of each
+ * version kept, so a later migration or a restore can still read what the learner made.
+ */
+function keepOtherVersion(storage: Storage, key: string, version: number) {
+  const json = storage.getItem(key)
+  if (json === null) return
+  let saved: unknown
+  try {
+    saved = JSON.parse(json)
+  } catch {
+    saved = null
+  }
+  const savedVersion = isRecord(saved) ? saved.version : undefined
+  if (savedVersion === version) return
+  const aside = `${key}.v${typeof savedVersion === 'number' ? savedVersion : 'unknown'}`
+  if (storage.getItem(aside) === null) storage.setItem(aside, json)
+}
+
+/**
  * A store saved under `key` in `version` (ADR 0038). Stored JSON is untrusted, so `read` turns a save
  * of this version into its state, field by field, taking `current`'s value for what it cannot read: a
  * field added later reads as its default. A save of another version is not read, and the store starts
- * from `initial`: a shape that changes is a new version. What is saved is the state, or what `write`
+ * from `initial`: a shape that changes is a new version. The other version's save is kept aside first
+ * (`keepOtherVersion`). What is saved is the state, or what `write`
  * makes of it (a compact form); `read` reads that back. The store follows another tab's saves of its
  * version (`followOtherTabs`), so one tab never writes over another's, until `signal` aborts.
  */
@@ -66,6 +87,7 @@ export function createSavedStore<State>(
   },
   { storage = safeLocalStorage(), otherTabs = window, signal }: SavingOptions = {},
 ): StoreApi<State> {
+  keepOtherVersion(storage, key, version)
   const store = createStore<State>()(
     persist<State, [], [], unknown>(() => initial, {
       name: key,

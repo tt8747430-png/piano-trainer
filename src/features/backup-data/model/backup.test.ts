@@ -154,6 +154,7 @@ describe('backup', () => {
       'pt-settings',
       'pt-progress',
       'pt-pieces',
+      'pt-chord-sheets',
       'pt-patterns',
       'pt-takes',
       'pt-views',

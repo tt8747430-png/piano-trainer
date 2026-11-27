@@ -115,6 +115,20 @@ describe('a sync', () => {
     })
   })
 
+  it('keeps the cloud’s save of an older app version aside before writing over it', async () => {
+    const cloud = createFakeCloud()
+    const old = device(cloud)
+    old.save('pt-pieces', { songs: [{ id: 's1', title: 'One' }] }, 1)
+    await old.runner.syncNow()
+    const updated = device(cloud, 30)
+    updated.save('pt-pieces', { songs: [] }, 2)
+    await updated.runner.syncNow()
+    expect(updated.saved('pt-pieces.v1')).toEqual({
+      state: { songs: [{ id: 's1', title: 'One' }] },
+      version: 1,
+    })
+  })
+
   it('says offline and keeps its changes for the next sync', async () => {
     let online = false
     const cloud = createFakeCloud({ online: () => online })

@@ -50,8 +50,9 @@ Contradicting an ADR: say so, then amend it. A refactor does not read the ADRs (
 - **One implementation of a thing,** used everywhere. A changed pattern changes everywhere it occurs.
 - **New code copies the nearest slice's shape.** Writes are feature commands, reads are selectors, pure logic is in
   `shared/lib` or `entities/*/model` with a colocated test.
-- **Saved stores read one version.** Every store is a `createSavedStore`. The app has no users until release, so a shape
-  change bumps the version with no migration.
+- **Saved stores read one version and lose none.** Every store is a `createSavedStore`. A shape change bumps the
+  version; the save of the other version is kept as it was under `<key>.v<version>`, locally and from the cloud, never
+  written over (ADR 0038).
 - **Staged work is deliberate.** Never `checkout`, `restore`, `stash` or `reset` the owner's work unprompted. Stage by
   path, never `git add .`.
 - **Secrets and config never enter git.** Config is Vercel's environment variables, `.env.local` on a machine, names in
