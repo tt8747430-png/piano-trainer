@@ -108,7 +108,7 @@ def _RAILBTN(label, icon, k, tip, act=None):
     # label cut short (FLAT_UI_SHELL_AND_MOTION §1.2): "View" over View is said twice
     tipa = f' data-tip="{tip}"' if tip != label else ''
     return (f'<button type="button"{sel}{tipa} onClick="{{{{{act or "pick" + k}}}}}" style="width: 76px; min-height: 64px; border-radius: 12px; border: 0; padding: 6px 0; background: transparent; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer">'
-            f'<span style="width: 40px; height: 32px; border-radius: 9px; background: {{{{rail{k}Bg}}}}; display: flex; align-items: center; justify-content: center">{icon}</span>'
+            f'<span style="width: 40px; height: 32px; border-radius: 10px; background: {{{{rail{k}Bg}}}}; display: flex; align-items: center; justify-content: center">{icon}</span>'
             f'<span style="font-size: 12px; font-weight: {{{{rail{k}W}}}}; line-height: 1.2">{label}</span></button>')
 _PHEAD = lambda t: (f'<header style="flex: none; height: 64px; box-sizing: border-box; padding: 0 8px 0 16px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
                     f'<h2 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">{t}</h2>'
@@ -216,7 +216,7 @@ CAPS = lambda t, inset=16: f'<h3 style="margin: 0 0 0 {inset}px; font-size: 13px
 # ── controls ──
 def SEGC(lst, h=32, fs=14, fill=False):
     """A segmented choice; fill=True when it takes its row's width (a mode switch across a bar)."""
-    return f'<div role="radiogroup" style="flex: {'1' if fill else 'none'}; display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: {FILL}"><sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: 9px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: {fs}px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.l}}}}</button></sc-for></div>'
+    return f'<div role="radiogroup" style="flex: {'1' if fill else 'none'}; display: flex; gap: 2px; padding: 2px; border-radius: 12px; background: {FILL}"><sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: 10px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: {fs}px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.l}}}}</button></sc-for></div>'
 def CHIPS(lst, wrap=False, bleed=True):
     # a row of chips scrolls to the screen's edges (bleed); in a sheet or beside a control the row wraps, never cut at its edge
     lay = 'flex-wrap: wrap; row-gap: 0; margin: -4px 0' if wrap else 'overflow-x: auto; margin: -4px -16px; padding: 0 16px' if bleed else 'overflow-x: auto; margin: -4px 0; padding: 0'
@@ -1260,7 +1260,7 @@ CHEV_UD = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m7 15 5
 def SELROW(label, name, line=True):
     return (f'<div style="position: relative; min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 4px 0 12px;' + (f' border-top: 1px solid {LINE}' if line else '') + '">'
             f'<span style="flex: 1; min-width: 0; font-size: 15px">{label}</span>'
-            f'<button type="button" aria-haspopup="listbox" aria-expanded="{{{{{name}X}}}}" aria-label="{label}: {{{{{name}V}}}}" onClick="{{{{{name}Tg}}}}" style="flex: none; height: 40px; padding: 0 8px 0 12px; border: 0; border-radius: 9px; background: {{{{{name}Bg}}}}; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 4px; cursor: pointer">{{{{{name}V}}}}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_UD}</span></button>'
+            f'<button type="button" aria-haspopup="listbox" aria-expanded="{{{{{name}X}}}}" aria-label="{label}: {{{{{name}V}}}}" onClick="{{{{{name}Tg}}}}" style="flex: none; height: 40px; padding: 0 8px 0 12px; border: 0; border-radius: 12px; background: {{{{{name}Bg}}}}; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 4px; cursor: pointer">{{{{{name}V}}}}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_UD}</span></button>'
             f'<sc-if value="{{{{{name}On}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{name}Tg}}}}" style="position: fixed; inset: 0; z-index: 69"></div><div role="listbox" aria-label="{label}" style="{_SMBOX}; right: 4px; top: 42px; width: 200px">'
             f'<sc-for list="{{{{{name}Opts}}}}" as="o" hint-placeholder-count="3"><button type="button" role="option" aria-selected="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="{_SMROW}">{_SMSLOT(f"<sc-if value=\"{{{{o.cur}}}}\" hint-placeholder-val=\"{{{{false}}}}\">{CHECK}</sc-if>")}<span style="flex: 1">{{{{o.l}}}}</span></button></sc-for></div></sc-if></div>')
 def SELKEYS(S, SET, specs):
