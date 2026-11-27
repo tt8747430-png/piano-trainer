@@ -22,7 +22,7 @@
     if (d && !d.contains(document.activeElement)) { opener = opener || document.activeElement; const f = d.querySelector('[autofocus]') || d.querySelector('input, textarea, select, button, [href], [tabindex]:not([tabindex="-1"])'); if (f) f.focus({ preventScroll: true }); }
     else if (!d && opener) { if (document.contains(opener)) opener.focus({ preventScroll: true }); opener = null; }
   }).observe(document.documentElement, { childList: true, subtree: true });
-})();</script></head>
+})();</script><script data-keyscroll>(() => { const go = () => document.querySelectorAll('[data-keyscroll]:not([data-done])').forEach((e) => { if (e.clientWidth) { e.scrollLeft = Number(e.dataset.keyscroll); e.dataset.done = '1'; } }); new MutationObserver(go).observe(document.documentElement, { childList: true, subtree: true, attributes: true }); })();</script></head>
 <body>
 <x-dc>
 <helmet>

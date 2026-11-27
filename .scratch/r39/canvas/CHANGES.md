@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · {c} · the phone editor's keys reach four octaves, C2 to C6, swiped sideways and opened centred on the chosen note (G4), as Flat's on-screen piano (FLAT_PLAYER_AND_PIANO §2.2); they showed D3 to E5 alone, so the song's bass (G2) could not be typed; the head script that opens a strip on its note runs on every Player and editor board (PE_KEYSCROLL) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · v824
 - 2026-11-27 · c94a7420 · Notation's section heads (Accompaniment, Recent, Note, …) sat as far from their own tools as from the section above, 19 over and 15 under ink to ink; each 44 head now reaches 10 into the gap under it, so a head reads with what it names (laws, spacing: 1.5–3× above what is below; the lines tool's note gone) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · v823
 - 2026-11-27 · 8a4c9fa0 · the phone's Piano keys heads its two lists as its sibling Audio page heads Room and Volume (15 semibold at the card's edge), not in small capitals, a third head style; the ruling recorded in the score-editor spec · PlayerApp · v822
 - 2026-11-27 · 039a15a6 · the phone's MIDI keyboard page drops Record's key "R", a phone having no keyboard to press it on (as its tooltips drop their keys); the laptop's popover keeps it · Editor, EditorDraft, PlayerApp · v821

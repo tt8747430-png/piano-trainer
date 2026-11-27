@@ -89,7 +89,7 @@ ED4 = js(r'''
       states: [['The palette open', open, { open: true }, { open: false }], ['A rest chosen', rest, { rest: true }, { rest: false }], ['Crossed to the lower staff', marks.includes('xdn'), { marks: [...marks, 'xdn'] }, { marks: marks.filter((m) => m !== 'xdn') }], ['Voice 2 on', voice, { voice: true }, { voice: false }],
         ['A clef waiting for its place', st.done === 'Treble clef', { done: 'Treble clef' }, { done: null }], ['The piano hidden', !keys, { keys: false }, { keys: true }], [VIEW0 === 'page' ? 'Panorama' : 'Page view', view !== VIEW0, { view: VIEW0 === 'page' ? 'pano' : 'page' }, { view: VIEW0 }], ['Zoom 150%', zoom === 150, { zoom: 150 }, { zoom: 100 }],
         ['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]].map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => set(on2 ? off : o) })),
-      kb: calmKeys(50, 76, { 67: ['#85B8DC', ''] }, 402, 112), kbL: calmKeys(36, 96, { 67: ['#85B8DC', ''] }, 1330, kh) };''')
+      kb: calmKeys(36, 84, { 67: ['#85B8DC', ''] }, 728, 112), kbL: calmKeys(36, 96, { 67: ['#85B8DC', ''] }, 1330, kh) };''')
 
 def EBAR(close_href, play_href):
     # Edit is a mode of the Player's screen (owner, 2026-11-26: "i want it to be a mode like read only or edit mode"):
@@ -118,6 +118,12 @@ def ED_SECTIONS(gap=16):
             f'<sc-if value="{{{{a.isOpen}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); background: {SHEET}; border: 1px solid {LINE}; border-radius: 12px; overflow: hidden"><sc-for list="{{{{a.tools}}}}" as="t" hint-placeholder-count="8">{cell}</sc-for></div></sc-if></section></sc-for>')
 # the tooltip itself is the app's one (r71_tips: a 500ms wait, a fade, 8 under its control); the editor adds only where
 # its palette and strip name themselves above, a disabled tool's reason, and no tooltip for an empty name
+# the phone's keys as Flat's on-screen piano (FLAT_PLAYER_AND_PIANO §2.2: a sideways scroller over the octaves,
+# centred on the selected note): four octaves, C2 to C6, each white key 25 wide as before, the strip swiped sideways
+# and opened on the chosen G4 (its centre at the screen's), so a bass note in the second octave is in reach; the keys
+# cut at both edges say there are more; the kit's PE_KEYSCROLL opens it there
+PHKEYS = (f'<div class="nos" data-keyscroll="263" aria-label="Piano keys, C2 to C6" style="overflow-x: auto; overscroll-behavior-x: contain">'
+          f'<div style="width: 728px">{KEYS(112, edge=True)}</div></div>')
 TIP_CSS = ('<style data-r44>[aria-disabled="true"] { cursor: not-allowed } [aria-disabled="true"] svg { opacity: .5 } '
            '[aria-label="Palette"] [data-tip]::after, [data-strip] [data-tip]::after { top: auto; bottom: calc(100% + 8px); translate: -50% -4px } '
            '[aria-disabled="true"][data-tip-dis]::after { content: attr(data-tip-dis) } [data-tip=""]::after { display: none } [role=dialog] > * { flex: none } [aria-label="Categories"] > button::before { content: ""; position: absolute; inset: -2px 0 }</style>')
@@ -184,7 +190,7 @@ SHEETP = (f'<section aria-label="Palette" data-strip style="flex: none; position
           f'<button type="button" aria-label="Recently used" aria-pressed="{{{{recentOn}}}}" data-tip="Recently used" onClick="{{{{openRecent}}}}" style="flex: none; position: relative; width: 44px; height: 48px; border: 0; padding: 0; background: transparent; color: {{{{recentFg}}}}; display: flex; align-items: center; justify-content: center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg></button></div>'
           f'<sc-if value="{{{{open}}}}" hint-placeholder-val="{{{{false}}}}"><div class="nos" style="max-height: 420px; overflow-y: auto; padding: 4px 16px 16px; display: flex; flex-direction: column; gap: 16px">' + ACCBODY.replace('{0}', ACCPANEL() + ED_SECTIONS()).replace('padding: 8px 16px 24px;', 'padding: 0;') + '</div></sc-if>'
           + CATBAR +
-          f'<sc-if value="{{{{keysShown}}}}" hint-placeholder-val="{{{{true}}}}"><div style="padding: 0 0 26px">{KEYS(112, edge=True)}</div></sc-if>'
+          f'<sc-if value="{{{{keysShown}}}}" hint-placeholder-val="{{{{true}}}}"><div style="padding: 0 0 26px">{PHKEYS}</div></sc-if>'
           f'<sc-if value="{{{{notKeys}}}}" hint-placeholder-val="{{{{false}}}}"><div style="height: 26px"></div></sc-if></section>')
 # the phone's bar has no room for the save status the laptop shows beside Close: it heads the ··· sheet (a status goes in the bar or its menu)
 ED_SAVED = f'<p role="status" style="margin: -8px 0 0; text-align: center; font-size: 13px; color: {SOFT}">Saved on this device</p>'

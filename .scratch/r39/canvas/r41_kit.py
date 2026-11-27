@@ -1385,6 +1385,11 @@ PE_FOCUS = ('<style data-focus>:focus-visible { outline: 3px solid #356890; outl
 # does. In order: the topmost scrim or click-catcher laid over the frame (a menu, popover, dialog, sheet), else a
 # control whose tooltip names Esc (Close version history), else the open page's Back or Close.
 # Focus moves with preventScroll: a page still sliding in from the right would otherwise scroll the screen sideways.
+# a sideways strip of keys opens on its chosen note (Flat's on-screen piano, FLAT_PLAYER_AND_PIANO §2.2): an element
+# with data-keyscroll is scrolled to that many px once it is laid out; a script in the head, as a board's body is set as
+# markup and its scripts never run
+PE_KEYSCROLL = ("<script data-keyscroll>(() => { const go = () => document.querySelectorAll('[data-keyscroll]:not([data-done])').forEach((e) => { if (e.clientWidth) { e.scrollLeft = Number(e.dataset.keyscroll); e.dataset.done = '1'; } });"
+                " new MutationObserver(go).observe(document.documentElement, { childList: true, subtree: true, attributes: true }); })();</script>")
 PE_ESC = """<script data-esc>document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape' || e.defaultPrevented) return;
   const shown = (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== 'hidden'; };
