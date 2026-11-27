@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · HASH · Solo wears one glyph: the Audio panel and its phone page soloed a part with headphones while the Parts sheet and the Instruments page used the ruled S; the kit's SOLOS is now the one Solo everywhere (one icon, one meaning) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · **pending**
 ## Changes
 
+- 2026-11-27 · f109ec64 · Solo wears one glyph: the Audio panel and its phone page soloed a part with headphones while the Parts sheet and the Instruments page used the ruled S; the kit's SOLOS is now the one Solo everywhere (one icon, one meaning) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · v828
 - 2026-11-27 · bfdca2a9 · the laptop's Version history drops "You" under every saved moment, a song having one author (the line said nothing, and the phone's rows never had it): each moment is its time and what changed · EditorLaptop, EditorDraftLaptop, PlayerDesk · v827
 - 2026-11-27 · 67403b29 · Layout loses "Measures · 4 a line", a second home for View's Bars per row (one home per setting); its fold is Note spacing (Spacing, Stretch last line: past half full, Dorico's rule); "Measure numbers" is Bar numbers, the app's word everywhere else · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · v826
 - 2026-11-27 · 11f3f815 · the Instruments page gives each part its own glyph, as the Parts sheet does (the voice's microphone, the piano's keys, an added part a note), where every row wore the keys; New instrument's list reads in ink, a list to pick from, not blue action links · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · v825
