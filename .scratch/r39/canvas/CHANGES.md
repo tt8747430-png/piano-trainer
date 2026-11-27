@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · (this commit) · the loop's ends dragged on the page: while Loop is on, a honey-deep grip stands at its first bar's left and its last bar's right; either is dragged onto any bar of the page (the ends never cross) or moved a bar by the arrow keys, its value said as Bar n, as Flat drags its loop's ends on the score · PlayerApp, PlayerDesk · **pending**
 ## Changes
 
+- 2026-11-27 · 72609412 · the loop's ends dragged on the page: while Loop is on, a honey-deep grip stands at its first bar's left and its last bar's right; either is dragged onto any bar of the page (the ends never cross) or moved a bar by the arrow keys, its value said as Bar n, as Flat drags its loop's ends on the score · PlayerApp, PlayerDesk · v841
 - 2026-11-27 · e3e5a47c · the loop washed on the page: while Loop is on, its bars (1–4 in the Player, the selection's bar 3 in the editor) carry a honey wash behind the notes, as Flat tints its loop's measures, so the page shows what repeats and not only the band's lit glyph · PlayerApp, PlayerDesk, Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · v840
 - 2026-11-27 · 12b9ad26 · the editor's keys sound as the Player's: while Play runs, each beat's notes light in the hands' paints (coral right, lavender left) from the Player's own NOTES table, as Flat's keyboard shows what plays; at rest the chosen note keeps its sky · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · v839
 - 2026-11-27 · (see git log) · two more patches folded, nothing seen changes: the Player rail's panel head reaching past its padded body is `_PHEAD(name, bleed)`, the band's Play glyph `SZ(PLAY, 20)` · no board changed · —
