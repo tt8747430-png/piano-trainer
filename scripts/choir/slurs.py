@@ -140,6 +140,24 @@ def melisma_slurs(staff, voices, held, fallback=None):
         close()
 
 
+def drop_slurs(staffs, bars):
+    """No slur starting in these measures (by index), in any voice: the sheet draws none there."""
+    for st in staffs:
+        for v in range(4):
+            for el, t, k in staff_events(st, v):
+                if k not in bars:
+                    continue
+                for sp in el.findall("Spanner[@type='Slur']"):
+                    if sp.find('next') is not None:
+                        el.remove(sp)
+                        nx = Fraction(sp.findtext('next/location/fractions'))
+                        end = next((e for e, u, kk in staff_events(st, v) if u == t + nx and e.tag == 'Chord'), None)
+                        for ep in (end.findall("Spanner[@type='Slur']") if end is not None else []):
+                            if ep.find('prev') is not None and Fraction(ep.findtext('prev/location/fractions')) == -nx:
+                                end.remove(ep)
+                                break
+
+
 def slur_pairs(staff, voice):
     """A voice's slurs as (start, end) moments."""
     out = []

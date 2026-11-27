@@ -60,7 +60,7 @@ def chord_lengths(measure, voice):
     return out
 
 
-def lyrics_mscx(staff, voice, block, nums, clear=True, held_chords=None):
+def lyrics_mscx(staff, voice, block, nums, clear=True, held_chords=None, lined=()):
     """Writes a block's words under a voice of a staff of the main score, in place of any it had. The bar numbers
     are the top staff's: only it marks a pickup bar. The chords a syllable is held onto are added to `held_chords`,
     for slurring each melisma as written."""
@@ -82,8 +82,11 @@ def lyrics_mscx(staff, voice, block, nums, clear=True, held_chords=None):
             ly = ET.Element('Lyrics')
             no_line = text.endswith('|')
             text = text.rstrip('|')
-            if kind in ('end', 'single') and not no_line:
-                # The line runs over the notes the syllable is held on: its holds, and any note tied on.
+            bar_of = next((n for n, chords in slots.items() for c in chords if c is chord), None)
+            if (kind in ('end', 'single') and not no_line) or (kind in ('begin', 'middle') and bar_of in lined):
+                # The line runs over the notes the syllable is held on: its holds, and any note tied on. Inside a
+                # word it does so only in bars the sheet leaves unslurred, where the line alone shows the hold (and
+                # tells a part the notes are the voice's own: song 34).
                 k = next(i for i, (c, _) in enumerate(sequence) if c is chord)
                 own = sequence[k][1]
                 held = Fraction(0)

@@ -20,6 +20,8 @@ voice names before the staves, the tempo set but not printed, template/house.mss
     beams                              eighths beamed together (by default each has its own flag, as sung lines are)
     flagged: 1-9, 35-36                bars sung without words (a choir humming), flagged as the sung bars are
     beamed: 4, 8                       sung bars whose eighths the sheet beams (a melisma), beamed as MuseScore groups them
+    unslurred: 1-21                    bars where the sheet draws no slur over a held syllable (its beams show it): none
+                                       is made there, in the score or a part (a `slur:` line still draws one)
     bar-numbers: every                 a number over every bar (by default only at a line's start)
     repeat: 9+3/4 17, 63 70            a repeat from bar 9, 3/4 in (the bar is split there, as printed), to bar 17;
                                        several, by commas
@@ -191,7 +193,7 @@ def read(song_dir):
             spec['italic'] = value.split(',')
         elif key == 'beams':
             spec['beams'] = True
-        elif key in ('flagged', 'beamed'):
+        elif key in ('flagged', 'beamed', 'unslurred'):
             for item in value.split(','):
                 a, _, b = item.strip().partition('-')
                 spec.setdefault(key, set()).update(range(int(a), int(b or a) + 1))

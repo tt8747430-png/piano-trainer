@@ -215,23 +215,24 @@ def part_words(main_staffs, part_staff, track):
     return copied
 
 
-def melismas(part_staff, copied):
+def melismas(part_staff, copied, unslurred=()):
     """A slur over each syllable the part sings across several notes, where it took the syllable from another
     voice (its own syllables have their slurs from the score)."""
     run = []
 
     def close():
-        if len(run) > 1 and id(run[0][0]) in copied and run[0][0].find("Spanner[@type='Slur']/next") is None:
+        if len(run) > 1 and id(run[0][0]) in copied and run[0][0].find("Spanner[@type='Slur']/next") is None \
+                and run[0][2] not in unslurred:
             add_slur(run[0][0], run[-1][0], run[-1][1] - run[0][1])
 
     for el, t, k in staff_events(part_staff, 0):
         if el.tag == 'Rest' or el.find('Lyrics') is not None:
             close()
-            run = [(el, t)] if el.tag == 'Chord' else []
+            run = [(el, t, k)] if el.tag == 'Chord' else []
         elif tied_on(el):
             continue
         elif run:
-            run.append((el, t))
+            run.append((el, t, k))
     close()
 
 
@@ -385,7 +386,8 @@ def apply(files, spec):
             copy_slurs(part, slur_pairs(main[track // 4], track % 4))
         copied = part_words(main, part, track)
         if matched:
-            melismas(part, copied)
+            nums = bar_numbers(main[0].findall('Measure'), spec.get('count_pickup'))
+            melismas(part, copied, {k for k, n in enumerate(nums) if n in spec.get('unslurred', ())})
         files[n] = xml_bytes(root)
 
 

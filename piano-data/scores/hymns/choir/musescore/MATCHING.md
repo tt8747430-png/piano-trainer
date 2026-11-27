@@ -185,3 +185,6 @@ by hand.
 - **A held note given the next voice's new word.** Song 34's tenors hold a tied note into bar 5 while the sopranos
   strike a new one there ("vers,"); the part took that word onto its tie. A part's tie takes a word from the voice it
   moves with only where that voice's own note is tied too (a verse sung on, song 11).
+- **Slurs the sheet does not draw.** Song 34's sheet shows its held syllables by beams and lines, no slurs; the
+  builder slurred every held syllable. `unslurred:` names such bars: no slur is made there (in the score or a part),
+  and a syllable held inside a word draws its line so the hold still shows and the parts still know it.

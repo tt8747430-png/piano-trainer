@@ -149,7 +149,8 @@ def compose(s, dst, imported):
         for block in spec['blocks']:
             p = find_voice(info, block['voice'])
             engrave.lyrics_mscx(staffs[p['mstaff']], voice_of(p), block, nums,
-                                clear=block['voice'] not in done_voices, held_chords=held)
+                                clear=block['voice'] not in done_voices, held_chords=held,
+                                lined=spec.get('unslurred', ()))
             done_voices.add(block['voice'])
         for name in spec.get('italic', []):
             p = find_voice(info, name)
@@ -166,6 +167,8 @@ def compose(s, dst, imported):
         for k, ps in by_staff.items():
             vs = sorted({voice_of(p) for p in ps})
             slurs.melisma_slurs(staffs[k], vs, held, None if k == 0 else top)
+        if spec.get('unslurred'):
+            slurs.drop_slurs(staffs, {k for k, n in enumerate(nums) if n in spec['unslurred']})
         slurs.slurs_mscx(score, spec, info, nums)
     files['score_style.mss'] = house.apply(files['score_style.mss'], spec)
     files[mname] = xml_bytes(root)
