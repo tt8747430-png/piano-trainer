@@ -1,0 +1,20 @@
+# From 028. Deșteptare, strigă glasul Domnului.pdf (2 pages). The choir's files hold the four voices without words:
+# the words, four verses and the men's own words in italics, are written in from the sheet. The pickup is bar 0,
+# as the sheet numbers its bars; the basses' bars 14-15 are corrected (their eighths ran 3/8 early).
+key: D
+bar-length: 24 3/4
+systems: 0 4 7 11 | 15 18 21
+slur: Alto 16 +1/2
+
+[Bass notes]
+1: @14 B3:4 B3:4. r:8 r:4 @15 r:8 E3:8 E3:8 E3:8 E3:8 E3:8 E3:8. E3:16
+
+[Soprano]
+1: @0 "Deş -- tep -- @1 ta -- re," stri -- gă @2 gla -- sul Dom -- nu -- lui. Ri -- di -- @3 ca -- ţi -- vă stră -- @4 jeri Şi su -- @5 naţi din trâm -- biţi @6 lau -- dă Dom -- nu -- lui, Dum -- ne -- @7 zeu ne dă pu -- @8 teri. _
+1: @8 * Ie -- ho -- va @9 Ni -- si! A -- le -- @10 lu _ -- ia şi Dum -- ne -- @11 zeu es -- te cu @12 noi. Să stri -- ge @13 ia _ -- dul şi să @14 gea -- mă. Sa -- tan cu @15 rând va fi le -- @16 gat, Căci Dum -- ne -- @17 zeu din cer dom -- @18 neş -- te. Dom -- ni -- a @19 Lui va ţi -- ne'n @20 veci; În veci cu @21 sla -- vă, în veci cu @22 sla -- vă, Ie -- ho -- va @23 Ni -- si, sla -- vă @24 Lui!
+2: @2 * * * * * Şi în @3 lup -- tă să por -- @4 niţi. Oas -- tea @5 ce -- lui rău prin @6 I -- sus s'o zdro -- biţi, Dum -- ne -- @7 zeu dă bi -- ru -- @8 inţi. _
+3: @2 * * * * * Ve -- ri -- @3 fi -- că -- te po -- @4 por. Mâini cu -- @5 ra -- te ri -- di -- @6 caţi spre Dum -- ne -- zeu, Căci El @7 vi -- ne'n a -- ju -- @8 tor. _
+4: @2 * * * * * E -- van -- @3 ghe -- li -- a ves -- @4 tiţi. Ru -- gă -- @5 ciu -- nea'i ar -- ma @6 cre -- din -- cio -- su -- lui Ce dă'n @7 lup -- te bi -- ru -- @8 inţi. _
+
+[Tenor italic]
+1: @13 Să stri -- ge ia -- dul şi să @14 gea -- mă. @15 Sa -- tan cu -- rând va fi le -- @16 gat, @17 Căci Dum -- ne -- zeu din cer dom -- @18 neş -- te. @19 Dom -- ni -- a Lui va ţi -- ne'n @20 veci, în veci de veci; _ _ _

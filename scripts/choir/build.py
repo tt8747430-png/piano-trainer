@@ -99,7 +99,12 @@ def split(s, done, work, n, second):
     entering = bool(spec['notes'])
     # The full score: the fullest file that names no single voice (a song whose voices are written in from the
     # sheet starts from its fullest file, however few voices it has).
-    full = [t for t in infos if t[2] >= (1 if entering else 3)]
+    full = [t for t in infos if t[2] >= 3]
+    named = {v for f, root, lines, lyr in infos for v in voices_of(os.path.basename(f))}
+    if entering and not full and not set(ORDER[s['kind']]) <= named:
+        # a voice or two in a file, the rest written in from the sheet; a one-voice file for every voice is
+        # assembled instead (song 28: four, one voice's bars corrected)
+        full = [t for t in infos if t[2] >= 1]
     full.sort(key=lambda t: (bool([v for v in voices_of(os.path.basename(t[0])) if v != 'All voices']),
                              -t[2], t[0].count(os.sep), len(t[0])))
     lyric_srcs = [root for f, root, lines, lyr in infos if lyr]
@@ -165,6 +170,7 @@ def enter_notes(score, kind, spec, lyric_srcs):
     """The notes match.txt enters from the sheet, each voice in its place: on the choir's two staves where the file
     has too few voices to split, else where the split finds the voice (a voice that shared its staff's line takes
     the staff's next voice)."""
+    shifts = {}
     if len(voices.lines_of(score)) < 4:
         places = {b['voice']: sheet.default_place(score, kind, b['voice']) for b in spec['notes']}
     else:
@@ -177,9 +183,13 @@ def enter_notes(score, kind, spec, lyric_srcs):
                    for x in info):
                 voice = str(int(voice) + 1)
             places[block['voice']] = (p['part'], p['staff'], voice)
+            # the octave the split will move the file's voice by (one written an octave up): the entered notes,
+            # at the pitch they sound, are written where the move brings them back (song 28's basses)
+            shifts[block['voice']] = p['shift']
     for block in spec['notes']:
         part, staff, voice = places[block['voice']]
-        sheet.notes_xml(score, part, staff, voice, block, sheet.has_staves(score, part), spec.get('count_pickup'))
+        sheet.notes_xml(score, part, staff, voice, block, sheet.has_staves(score, part), spec.get('count_pickup'),
+                        octave=-shifts.get(block['voice'], 0))
 
 
 def history_sources(song_dir, root):

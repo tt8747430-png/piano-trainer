@@ -157,3 +157,12 @@ by hand.
   shifts every later word (song 23, bars 3, 20, 24). Hold only over notes that are struck again.
 - **Shared words in the middle verse.** Song 23 prints "Lu-mi-naţi!" in bars 6-8 only on verse 2's line; written
   under verse 1 it moved to the wrong line. The words stand on the line the sheet prints them on.
+- **A voice's corrected bars written before the bar's start.** Entering notes in place of a voice that a file wrote
+  second in its bar left the file's backup and added another, so the notes stood before the bar (song 28, bars
+  14-15, the basses lost; song 11's altos' bar 7 in their part). The entry now backs up from where the bar's last
+  element leaves off.
+- **A voice's corrected bars an octave off.** Notes entered into a file that writes a voice an octave up were moved
+  down with the rest of the voice (song 28's basses). The entry now writes them where that move brings them to the
+  pitch they sound.
+- **Four one-voice files read as one voice.** A song whose files are one per voice and whose sheet corrects a few
+  bars of one voice started from a single file (song 28); the files are assembled first when they hold every voice.

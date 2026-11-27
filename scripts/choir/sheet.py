@@ -39,7 +39,7 @@ def numbered(measures, count_pickup):
         if m.get('implicit') != 'yes' or (count_pickup and k == 0):
             n += 1
         # a pickup the sheet leaves unnumbered, written in as bar 0 (`@0`), keeps its 0
-        nums.append(0 if k == 0 and m.get('number') == '0' else max(n, 1))
+        nums.append(0 if k == 0 and m.get('number') == '0' and not count_pickup else max(n, 1))
     return nums
 
 
@@ -203,6 +203,11 @@ def repeat_xml(score, spec, start, at, end):
         ET.SubElement(bl, 'repeat', direction='backward')
 
 
+def moved(name, octave):
+    """A pitch name (`C#5`) moved by whole octaves."""
+    return name[:-1] + str(int(name[-1]) + octave) if octave else name
+
+
 def pitch_xml(el, name, at=None):
     """A note's pitch (`C#5`, `Bb4`) into a MusicXML note, first or at a given place among its children."""
     p = ET.Element('pitch')
@@ -214,8 +219,9 @@ def pitch_xml(el, name, at=None):
     el.insert(len(el) if at is None else at, p)
 
 
-def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=False):
-    """Writes a voice's notes, as entered from the sheet, into its bars, in place of what the voice had there."""
+def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=False, octave=0):
+    """Writes a voice's notes, as entered from the sheet, into its bars, in place of what the voice had there
+    (`octave`: octaves added to each, where the file writes the voice away from its sounding pitch)."""
     part = score.findall('part')[part_index]
     measures = part.findall('measure')
     nums = numbered(measures, count_pickup)
@@ -226,17 +232,17 @@ def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=
         for el in list(m):
             if el.tag == 'note' and (el.findtext('staff') or '1') == staff and (el.findtext('voice') or '1') == voice:
                 m.remove(el)
-        length = Fraction(0)
         t = Fraction(0)
         for el in m:
             if el.tag == 'backup':
                 t -= Fraction(int(el.findtext('duration')), div)
             elif el.tag == 'forward' or (el.tag == 'note' and el.find('chord') is None):
                 t += Fraction(int(el.findtext('duration') or 0), div)
-            length = max(length, t)
-        if length:
+        if t:
+            # back to the bar's start from where the measure's last element leaves off (a backup left by the voice
+            # just removed already brought it there: song 28, bar 14)
             bk = ET.SubElement(m, 'backup')
-            ET.SubElement(bk, 'duration').text = str(int(length * div))
+            ET.SubElement(bk, 'duration').text = str(int(t * div))
         for nd in notes:
             el = ET.SubElement(m, 'note')
             if nd['pitch'] is None:
@@ -248,7 +254,7 @@ def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=
                     if nd.get('hidden'):
                         el.set('rest-kept', 'yes')  # the voice's part keeps its rest (read by voices.voice_events)
             else:
-                pitch_xml(el, nd['pitch'])
+                pitch_xml(el, moved(nd['pitch'], octave))
             ET.SubElement(el, 'duration').text = str(int(duration(nd) * div))
             if tied and nd['pitch']:
                 ET.SubElement(el, 'tie', type='stop')
@@ -278,7 +284,7 @@ def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=
                     if x.tag in ('pitch', 'lyric'):
                         ch.remove(x)
                 ch.insert(0, ET.Element('chord'))
-                pitch_xml(ch, other, at=1)
+                pitch_xml(ch, moved(other, octave), at=1)
                 m.append(ch)
             tied = nd['tie']
 
