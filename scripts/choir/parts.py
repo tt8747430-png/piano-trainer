@@ -389,6 +389,8 @@ verse's held syllable, where another sings on, stands)."""
         name = n.split('/')[1].split('_', 1)[1].replace('_', ' ')
         part = staves(ET.fromstring(files[n]).find('Score'))[0]
         verses = {ly.findtext('no') or '0' for ly in part.iter('Lyrics')}
+        if not verses and any(True for st in main for _ in st.iter('Lyrics')):
+            problems.append((name, 1, '0', 'no words at all, where the score has words'))
         for verse in sorted(verses):
             held_any, slur_start, slur_end, started = (Fraction(-1),) * 3 + (False,)
             for el, t, k in events(part, 0):
