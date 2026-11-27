@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · (this commit) · the loop's ends dragged on the page: while Loop is on, a honey-deep grip stands at its first bar's left and its last bar's right; either is dragged onto any bar of the page (the ends never cross) or moved a bar by the arrow keys, its value said as Bar n, as Flat drags its loop's ends on the score · PlayerApp, PlayerDesk · **pending**
 ## Changes
 
 - 2026-11-27 · e3e5a47c · the loop washed on the page: while Loop is on, its bars (1–4 in the Player, the selection's bar 3 in the editor) carry a honey wash behind the notes, as Flat tints its loop's measures, so the page shows what repeats and not only the band's lit glyph · PlayerApp, PlayerDesk, Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · v840

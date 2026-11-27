@@ -542,7 +542,7 @@ def A4PAGE(credit='', sel=(3, 0), piano=True, pick=None, head=False):
             f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: 30px; font-weight: 400; line-height: 1.1; color: {INK}">Amazing Grace</h2>'
             f'<div style="margin: 16px 0 0; display: flex; justify-content: space-between; gap: 24px; font-family: {SERIF}; font-size: 13px; color: {INK}"><span>Words: John Newton</span><span style="text-align: right">Music: New Britain (American folk tune)' + (f'<br><i style="color: {SOFT}">{credit}</i>' if credit else '') + f'</span></div>'
             f'<div style="margin: 16px 0 0; font-family: {SERIF}; font-size: 13px; font-weight: 700; color: {INK}">Verse <span style="font-weight: 400"><svg role="img" aria-label="quarter note" viewBox="0 0 8 16" width="7" height="14" style="vertical-align: -2px"><ellipse cx="3.4" cy="13" rx="3.3" ry="2.3" transform="rotate(-20 3.4 13)" fill="{INK}"/><rect x="5.8" y="0" width="1" height="12.6" fill="{INK}"/></svg> = 80</span></div>'
-            f'<div style="position: relative; margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=sel, size=1.0, piano=piano).replace(ACCENT, '#85B8DC') + (PICKLAYER(GEO['last'], pick) if pick else '') + (PLAYHEAD(GEO['last']) if head else '') + '</div>'
+            f'<div style="position: relative; margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=sel, size=1.0, piano=piano).replace(ACCENT, '#85B8DC') + (PICKLAYER(GEO['last'], pick) if pick else '') + (PLAYHEAD(GEO['last'], head == 'grips') if head else '') + '</div>'
             f'<p style="position: absolute; left: 0; right: 0; bottom: 32px; margin: 0; text-align: center; font-family: {SERIF}; font-size: 11px; color: {SOFT}">Public domain</p></article>')
 
 
@@ -563,10 +563,15 @@ PHRASE = lambda b: max(1, (b - 1) // 4 + 1)
 # as Flat marks its loop on the score: a line at the beat that sounds,
 # from its system's top staff line to its bottom one, in the keys' Deep Sky (a key down, the score's selection), so
 # the keys and the page light the same colour; shown while playing and where a pause left it (Flat's cursor)
-def PLAYHEAD(geo):
+def PLAYHEAD(geo, grips=False):
     W, H = geo['w'], geo['h']; pc = lambda v, d: f'{v / d * 100:.3f}%'; out = []
     for b, x0, x1, y0, y1 in geo['bars']:  # the loop's bars first, under the line: the range wash History and the Take use
-        out.append(f'<span aria-hidden="true" style="position: absolute; left: {pc(x0, W)}; top: {pc(y0, H)}; width: {pc(x1 - x0, W)}; height: {pc(y1 - y0, H)}; border-radius: 4px; background: {{{{lpB{b}}}}}; pointer-events: none"></span>')
+        out.append(f'<span aria-hidden="true" data-lb="{b}" style="position: absolute; left: {pc(x0, W)}; top: {pc(y0, H)}; width: {pc(x1 - x0, W)}; height: {pc(y1 - y0, H)}; border-radius: 4px; background: {{{{lpB{b}}}}}; pointer-events: none"></span>')
+    # the loop's two grips (the Player's): a honey-deep bar at its first bar's left and its last bar's right, 44 to
+    # touch, dragged onto any bar of the page or moved by the arrow keys, as Flat drags its loop's ends on the score
+    for b, x0, x1, y0, y1 in (geo['bars'] if grips else ()):
+        for e, x in (('a', x0), ('b', x1)):
+            out.append(f'<span role="slider" tabindex="0" data-edge="{e}" aria-label="Loop {"start" if e == "a" else "end"}" aria-valuemin="1" aria-valuemax="12" aria-valuenow="{{{{loop{e.upper()}}}}}" aria-valuetext="Bar {{{{loop{e.upper()}}}}}" data-tip="Drag to change the loop" onPointerDown="{{{{loopGrip}}}}" onPointerMove="{{{{loopGrip}}}}" onKeyDown="{{{{loopGripKey}}}}" style="position: absolute; display: {{{{lg{e.upper()}{b}}}}}; left: calc({pc(x, W)} - 22px); top: {pc(y0, H)}; height: {pc(y1 - y0, H)}; width: 44px; cursor: ew-resize; touch-action: none; z-index: 2"><span aria-hidden="true" style="position: absolute; left: 20px; top: 0; bottom: 0; width: 4px; border-radius: 2px; background: #A8551F"></span></span>')
     for b, x0, x1, y0, y1 in geo['bars']:
         out.append(f'<span aria-hidden="true" data-ph style="position: absolute; display: {{{{phB{b}}}}}; left: calc({pc(x0, W)} + {pc(x1 - x0, W)} * {{{{phF}}}} - 1px); top: {pc(y0 + 18, H)}; height: {pc(y1 - y0 - 24, H)}; width: 2px; border-radius: 1px; background: #85B8DC; pointer-events: none"></span>')
     return ''.join(out)
@@ -574,7 +579,14 @@ def PLAYHEAD(geo):
 # its note (past the clef and time), a bar's beat at its onset; bars past the page (13–16, page 2) show none
 PLAYHEAD_KEYS = ("phF: atStart ? 0.3 : (beat - 1 + 0.3) / 3, ...Object.fromEntries(Array.from({ length: 13 }, (_, b) => ['phB' + b,"
                  " (playing || !atStart) && (atStart ? b === 0 : bar === b) ? 'block' : 'none'])),"
-                 " ...Object.fromEntries(Array.from({ length: 13 }, (_, b) => ['lpB' + b, loop && b >= loopA && b <= loopB ? 'rgba(237,198,132,.38)' : 'transparent'])),")
+                 " ...Object.fromEntries(Array.from({ length: 13 }, (_, b) => ['lpB' + b, loop && b >= loopA && b <= loopB ? 'rgba(237,198,132,.38)' : 'transparent'])),"
+                 " ...Object.fromEntries(Array.from({ length: 13 }, (_, b) => [['lgA' + b, loop && b === loopA ? 'block' : 'none'], ['lgB' + b, loop && b === loopB ? 'block' : 'none']]).flat()),")
+# the grips' acts: a drag lands its end on the bar under the pointer (the ends never cross), the arrows move it a bar
+LOOPGRIP_KEYS = ("loopGrip: (e) => { if (e.type === 'pointermove' && !e.buttons) return; if (e.type === 'pointerdown') { if (e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId); return; }"
+                 " const edge = e.currentTarget.dataset.edge, wash = [...e.currentTarget.parentElement.querySelectorAll('[data-lb]')]; let best = null, d = 1e9;"
+                 " for (const w of wash) { const r = w.getBoundingClientRect(); if (!r.width) continue; const dy = e.clientY < r.top ? r.top - e.clientY : e.clientY > r.bottom ? e.clientY - r.bottom : 0, dx = e.clientX < r.left ? r.left - e.clientX : e.clientX > r.right ? e.clientX - r.right : 0, k = dy * 4 + dx; if (k < d) { d = k; best = +w.dataset.lb; } }"
+                 " if (best === null || best < 1) return; if (edge === 'a') this.setState({ loopA: Math.min(best, loopB) }); else this.setState({ loopB: Math.max(best, loopA) }); },"
+                 " loopGripKey: (e) => { const d = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key]; if (!d) return; e.preventDefault(); if (e.currentTarget.dataset.edge === 'a') this.setState({ loopA: Math.max(1, Math.min(loopB, loopA + d)) }); else this.setState({ loopB: Math.min(12, Math.max(loopA, loopB + d)) }); },")
 # the editor's: its clock counts beats from the selection (bar 3, beat 1) while Play sounds, the line left where a
 # pause leaves it, gone at the end
 # the page follows the line (Flat scrolls the score to its cursor, FLAT_PLAYER_AND_PIANO §1.11): the shown line is

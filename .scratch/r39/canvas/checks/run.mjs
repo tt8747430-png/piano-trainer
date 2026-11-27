@@ -21,6 +21,7 @@ for (const s of JSON.parse(steps)) {
   if (s.click) { const l = page.locator(s.click).first(); console.log('click', s.click, await l.count()); await l.click({ timeout: 3000 }).catch((e) => console.log('ERR', e.message.slice(0, 200))) }
   if (s.hover) { await page.locator(s.hover).first().hover({ timeout: 3000 }).catch((e) => console.log('ERR', e.message.slice(0, 200))) }
   if (s.fill) await page.locator(s.fill[0]).first().fill(s.fill[1]).catch((e) => console.log('ERR', e.message.slice(0, 200)))
+  if (s.drag) { const b = await page.locator(s.drag[0]).first().boundingBox(); if (!b) console.log('ERR no box', s.drag[0]); else { await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2); await page.mouse.down(); await page.mouse.move(s.drag[1], s.drag[2], { steps: 8 }); await page.mouse.up() } }
   if (s.wait) await page.waitForTimeout(s.wait)
   if (s.shot) await page.screenshot({ path: out + '-' + (i++) + '.png' })
   if (s.eval) console.log(await page.evaluate(s.eval))
