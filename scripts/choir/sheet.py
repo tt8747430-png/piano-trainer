@@ -38,7 +38,8 @@ def numbered(measures, count_pickup):
     for k, m in enumerate(measures):
         if m.get('implicit') != 'yes' or (count_pickup and k == 0):
             n += 1
-        nums.append(max(n, 1))
+        # a pickup the sheet leaves unnumbered, written in as bar 0 (`@0`), keeps its 0
+        nums.append(0 if k == 0 and m.get('number') == '0' else max(n, 1))
     return nums
 
 

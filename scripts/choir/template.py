@@ -42,9 +42,11 @@ def parts_xml(kind, bars=BARS, fifths=0, beats=4, beat_type=4):
     ET.SubElement(plist, 'part-group', type='stop', number='1')
     for i, (name, abbr, clef, _) in enumerate(VOICES[kind]):
         part = ET.SubElement(out, 'part', id=f'P{i + 1}')
-        for b in range(1, bars + 1):
-            m = ET.SubElement(part, 'measure', number=str(b))
-            if b == 1:
+        first = min(bar for block in spec['notes'] for bar, _ in note_tokens(block['verses'].get(1, [])))
+        for b in range(min(first, 1), bars + 1):
+            # bar 0: a pickup the sheet leaves unnumbered
+            m = ET.SubElement(part, 'measure', number=str(b), **({'implicit': 'yes'} if b == 0 else {}))
+            if b == min(first, 1):
                 at = ET.SubElement(m, 'attributes')
                 ET.SubElement(at, 'divisions').text = '1'
                 ET.SubElement(ET.SubElement(at, 'key'), 'fifths').text = str(fifths)
@@ -87,9 +89,11 @@ def skeleton(kind, spec):
     for i, pair in enumerate(pairs):
         clef = pair[1][2]
         part = ET.SubElement(out, 'part', id=f'P{i + 1}')
-        for b in range(1, bars + 1):
-            m = ET.SubElement(part, 'measure', number=str(b))
-            if b == 1:
+        first = min(bar for block in spec['notes'] for bar, _ in note_tokens(block['verses'].get(1, [])))
+        for b in range(min(first, 1), bars + 1):
+            # bar 0: a pickup the sheet leaves unnumbered
+            m = ET.SubElement(part, 'measure', number=str(b), **({'implicit': 'yes'} if b == 0 else {}))
+            if b == min(first, 1):
                 at = ET.SubElement(m, 'attributes')
                 ET.SubElement(at, 'divisions').text = '48'
                 ET.SubElement(ET.SubElement(at, 'key'), 'fifths').text = str(spec.get('key', 0))
@@ -105,14 +109,14 @@ def skeleton(kind, spec):
             # a new key signature from that bar, as printed
             at = ET.Element('attributes')
             ET.SubElement(ET.SubElement(at, 'key'), 'fifths').text = str(fifths)
-            part.findall('measure')[bar - 1].insert(0, at)
+            part.findall("measure")[bar - min(first, 1)].insert(0, at)
         for bar, (b, bt, sym) in spec.get('time_changes', []):
             # a new time signature from that bar, as printed
             at = ET.Element('attributes')
             tm = ET.SubElement(at, 'time', **({'symbol': sym} if sym else {}))
             ET.SubElement(tm, 'beats').text = str(b)
             ET.SubElement(tm, 'beat-type').text = str(bt)
-            part.findall('measure')[bar - 1].insert(0, at)
+            part.findall("measure")[bar - min(first, 1)].insert(0, at)
         # The final barline (a repeat in match.txt may add its own).
         bl = ET.SubElement(part.findall('measure')[-1], 'barline', location='right')
         ET.SubElement(bl, 'bar-style').text = 'light-heavy'

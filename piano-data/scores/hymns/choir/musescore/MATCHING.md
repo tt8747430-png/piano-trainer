@@ -151,3 +151,9 @@ by hand.
   most words in it was taken, though the part's staff-mate sang its own words in the run's last bar (song 22, bar 9:
   the tenors took the sopranos' held "La" and lost the basses' "Lui,"; song 1, bar 16: the altos took the basses'
   echo "dat." and the tenors the sopranos'). Such a run is now matched bar by bar.
+- **An unnumbered pickup in a song written from its sheet.** Song 23's sheet numbers its first full bar 1; the
+  template could only count the pickup as bar 1. A pickup is now written as bar 0 (`@0`, `systems: 0 …`).
+- **Holds written over tied notes.** A tied note takes no syllable, so a `_` after a syllable that runs on a tie
+  shifts every later word (song 23, bars 3, 20, 24). Hold only over notes that are struck again.
+- **Shared words in the middle verse.** Song 23 prints "Lu-mi-naţi!" in bars 6-8 only on verse 2's line; written
+  under verse 1 it moved to the wrong line. The words stand on the line the sheet prints them on.

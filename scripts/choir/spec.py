@@ -9,7 +9,8 @@ voice names before the staves, the tempo set but not printed, template/house.mss
                                        from its sheet alone (every voice in [Voice notes])
     time: 6/8                          its time signature, likewise (C common time, C| cut time, as printed)
     spatium: 1.4                       staff space in mm, only where the house size cannot keep the sheet's pages
-    systems: 1 5 9 13 16 | 20 22 25    first bar of each line; | starts a new page
+    systems: 1 5 9 13 16 | 20 22 25    first bar of each line; | starts a new page (0: a pickup the sheet leaves
+                                       unnumbered, written in as `@0`)
     hide-empty-staves                  a staff with nothing to sing in a line is left out, as printed
     show-tempo                         the tempo mark printed, as a sheet exported from MuseScore has it
     show-names                         the voice names printed before the staves

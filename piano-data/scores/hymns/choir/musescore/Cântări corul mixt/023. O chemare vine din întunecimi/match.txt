@@ -1,0 +1,67 @@
+# From 023. O chemare vine din întunecimi.pdf (2 pages). The choir's file holds only the altos; every voice is
+# written in from the sheet and the song is built from the template. Three verses, then the refrain (bars 9-24) with
+# the men's own words in italics under their staff.
+lyricist: Valentin Popovici
+composer: Chas H. Gabriel
+key: Ab
+time: 4/4
+systems: 0 3 6 9 | 11 13 16 19 22
+slur: Bass 9 +1/2
+marks: 8+1/2 fermata, 16+1/2 fermata, 24+1/2 fermata
+
+[Soprano notes]
+1: @0 Eb4:8. Eb4:16 @1 Ab4:4 Ab4:4 Ab4:8. Eb4:16 Ab4:8. Bb4:16 @2 C5:4 C5:4 C5:4 Db5:8. C5:16
+1: @3 Bb4:2~ Bb4:4 C5:8. Bb4:16 @4 Ab4:2. Eb4:8. Eb4:16 @5 Ab4:4 Ab4:4 Ab4:8. Eb4:16 Ab4:8. Bb4:16
+1: @6 C5:4 C5:4 C5:4 Db5:8. C5:16 @7 Bb4:2~ Bb4:4 C5:8. Bb4:16 @8 Ab4:2~ Ab4:4 r:4
+1: @9 r:4 Eb4:8. Eb4:16 Eb4:4 Eb4:4 @10 Eb4:8. Eb4:16 Eb4:8. Eb4:16 Eb4:4 r:4
+1: @11 r:4 Eb4:8. Eb4:16 Eb4:4 Eb4:4 @12 Eb4:8. Eb4:16 Eb4:8. Eb4:16 Eb4:4 r:4
+1: @13 r:4 Ab4:8. Ab4:16 Ab4:4 Ab4:4 @14 Ab4:8. Ab4:16 Ab4:8. Ab4:16 Ab4:4 r:4 @15 r:4 Ab4:8. Ab4:16 Ab4:4 Ab4:4
+1: @16 Bb4:8. Bb4:16 C5:8. C5:16 Db5:4 C5:8. Db5:16 @17 Db5:2 Eb5:8. F5:16 Eb5:8. Db5:16 @18 C5:4 C5:4 C5:4 Db5:8. C5:16
+1: @19 Bb4:2 Bb4:8. Db5:16 C5:8. Bb4:16 @20 Ab4:2~ Ab4:4 C5:8. C5:16 @21 Db5:2 Eb5:8. F5:16 Eb5:8. Db5:16
+1: @22 C5:4 C5:4 C5:4 Db5:8. C5:16 @23 Bb4:2 Bb4:8. Db5:16 C5:8. Bb4:16 @24 Ab4:2~ Ab4:4 r:4
+
+[Alto notes]
+1: @0 C4:8. C4:16 @1 C4:4 C4:4 C4:8. C4:16 C4:8. Db4:16 @2 Eb4:4 Eb4:4 Eb4:4 F4:8. Eb4:16
+1: @3 Db4:2~ Db4:4 Eb4:8. Db4:16 @4 C4:2. C4:8. C4:16 @5 C4:4 C4:4 C4:8. C4:16 C4:8. Db4:16
+1: @6 Eb4:4 Eb4:4 Eb4:4 F4:8. Eb4:16 @7 Db4:2~ Db4:4 Eb4:8. Db4:16 @8 C4:2~ C4:4 r:4
+1: @9 r:4 C4:8. C4:16 C4:4 C4:4 @10 C4:8. C4:16 C4:8. C4:16 C4:4 r:4
+1: @11 r:4 Bb3:8. Bb3:16 Bb3:4 Bb3:4 @12 u:8. u:16 u:8. u:16 u:4 r:4
+1: @13 r:4 Db4:8. Db4:16 Db4:4 Db4:4 @14 C4:8. Db4:16 Eb4:8. Eb4:16 Eb4:4 r:4 @15 r:4 F4:8. F4:16 Eb4:4 u:4
+1: @16 G4:8. G4:16 Ab4:8. Ab4:16 Bb4:4 Ab4:8. Bb4:16 @17 C5:2~ C5:8. Db5:16 C5:8. Bb4:16 @18 Ab4:4 Ab4:4 Ab4:4 Bb4:8. Ab4:16
+1: @19 G4:2~ G4:8. F4:16 Eb4:8. Db4:16 @20 C4:2~ C4:4 Ab4:8. Bb4:16 @21 C5:2~ C5:8. Db5:16 C5:8. Bb4:16
+1: @22 Ab4:4 Ab4:4 Ab4:4 Bb4:8. Ab4:16 @23 G4:2~ G4:8. F4:16 Eb4:8. Db4:16 @24 C4:8. F4:16 Eb4:8. Db4:16 C4:4 r:4
+
+[Tenor notes]
+1: @0 Ab3:8. Ab3:16 @1 Eb3:4 Eb3:4 Eb3:8. Ab3:16 Ab3:8. Ab3:16 @2 Ab3:4 Ab3:4 Ab3:4 r:4
+1: @3 r:4 F3:8. F3:16 F3:4 r:4 @4 r:4 Eb3:8. Eb3:16 Eb3:4 Ab3:8. Ab3:16 @5 Eb3:4 Eb3:4 Eb3:8. Ab3:16 Ab3:8. Ab3:16
+1: @6 Ab3:4 Ab3:4 Ab3:4 r:4 @7 r:4 F3:8. F3:16 F3:4 r:4 @8 r:4 Eb3:8. Eb3:16 Eb3:4 r:4
+1: @9 r:4 Ab3:8. Ab3:16 Ab3:4 Ab3:4 @10 Ab3:8. Ab3:16 Ab3:8. Ab3:16 Ab3:4 r:4
+1: @11 r:4 G3:8. G3:16 G3:4 G3:4 @12 Ab3:8. Ab3:16 Ab3:8. Ab3:16 Ab3:4 r:4
+1: @13 r:4 Ab3:8. Ab3:16 Ab3:4 Ab3:4 @14 Ab3:8. Bb3:16 C4:8. C4:16 C4:4 r:4 @15 r:4 D4:8. D4:16 Eb4:4 D4:4
+1: @16 Eb4:8. Eb4:16 Eb4:8. Eb4:16 Eb4:4 r:4 @17 r:4 Eb4:8. Eb4:16 Eb4:4 Eb4:4 @18 Eb4:8. Eb4:16 Eb4:8. Eb4:16 Eb4:4 r:4
+1: @19 r:4 Eb4:8. Eb4:16 Eb4:4 r:4 @20 r:8. Eb4:16 Eb4:8. Eb4:16 Eb4:4 r:4 @21 r:4 Eb4:8. Eb4:16 Eb4:4 Eb4:4
+1: @22 Eb4:8. Eb4:16 Eb4:8. Eb4:16 Eb4:4 r:4 @23 r:4 Eb4:8. Eb4:16 Eb4:4 r:4 @24 r:8. Ab3:16 G3:8. F3:16 Eb3:4 r:4
+
+[Bass notes]
+1: @0 Ab2:8. Ab2:16 @1 Ab2:4 Ab2:4 Ab2:8. Ab2:16 Ab2:8. Ab2:16 @2 u:4 u:4 u:4 r:4
+1: @3 r:4 Db3:8. Db3:16 Db3:4 r:4 @4 r:4 Ab2:8. Ab2:16 Ab2:4 Ab2:8. Ab2:16 @5 Ab2:4 Ab2:4 Ab2:8. Ab2:16 Ab2:8. Ab2:16
+1: @6 u:4 u:4 u:4 r:4 @7 r:4 Db3:8. Db3:16 Db3:4 r:4 @8 r:4 Ab2:8. Ab2:16 Ab2:4 Db3:8. Eb3:16
+1: @9 Db3:2 Db3:8. C4:16 Bb3:8. Bb3:16 @10 Eb3:4 Eb3:4 Eb3:4 F3:8. Eb3:16
+1: @11 Db3:2 Db3:8. F3:16 Eb3:8. Bb2:16 @12 C3:2~ C3:4 Db3:8. Db3:16
+1: @13 Db3:2 F3:8. Db3:16 F3:8. G3:16 @14 Ab3:4 Ab3:4 Ab3:4 C4:8. C4:16 @15 Bb3:4 Ab3:4 G3:4 F3:4
+1: @16 Eb3:2~ Eb3:4 r:4 @17 r:4 Ab3:8. Ab3:16 Ab3:4 Ab3:4 @18 Ab3:8. Ab3:16 Ab3:8. Ab3:16 Ab3:4 r:4
+1: @19 r:4 Eb3:8. Eb3:16 Eb3:4 r:4 @20 r:8. Ab3:16 Ab3:8. Ab3:16 Ab3:4 r:4 @21 r:4 Ab3:8. Ab3:16 Ab3:4 Ab3:4
+1: @22 Ab3:8. Ab3:16 Ab3:8. Ab3:16 Ab3:4 r:4 @23 r:4 Eb3:8. Eb3:16 Eb3:4 r:4 @24 r:8. Ab2:16 Ab2:8. Ab2:16 Ab2:4 r:4
+
+[Soprano]
+1: @0 1.O che -- ma -- re vi -- ne din în -- tu -- ne -- cimi: "Lu -- mi -- naţi!" "Lu -- mi naţi!" Stri -- gă su -- fle -- te pier -- du -- te'n a -- dân -- cimi,
+1: @9 Fra -- ţii voş -- trii în pă -- ca -- te mor, Ră -- tă -- cind me -- reu în noap -- tea grea Dum -- ne -- zeu vrea mân -- tu -- i -- rea lor, Nu'i lă -- saţi pier -- duţi, pier -- duţi să stea; Lu -- mi -- naţi, _ a -- prin -- deţi fo -- cul sfânt, Pe pă -- mânt _ lu -- mini să fiţi; Lu -- mi -- naţi, _ a -- prin -- deţi fo -- cul sfânt, Pe pă -- mânt _ să stră -- lu -- ciţi.
+2: @0 2.Ha -- rul sânt să fi -- e pes -- te toţi bo -- gat, Lu -- mi -- naţi! Lu -- mi -- naţi! Şi'n iu -- bi -- re să ră -- mâ -- neţi ne'n -- ce -- tat, Lu -- mi -- naţi! Lu -- mi -- naţi!
+3: @0 3.Nici -- când să nu o -- bo -- siţi în lu -- crul sfânt, Lu -- mi -- naţi! Lu -- mi -- naţi! Răs -- pân -- diţi lu -- mi -- na voas -- tră pe pă -- mânt,
+
+[Tenor italic]
+1: @3 Lu -- mi -- naţi! @4 Lu -- mi -- naţi! @7 Lu -- mi -- naţi! @8 Lu -- mi -- naţi!
+1: @15 Nu'i lă -- saţi pier -- duţi, pier -- duţi să stea; @17 Lu -- mi -- naţi, a -- prin -- deţi fo -- cul sfânt, @19 Pe pă -- mânt @20 lu -- mini să fiţi; @21 Lu -- mi -- naţi, a -- prin -- deţi fo -- cul sfânt, @23 Pe pă -- mânt @24 să stră -- lu -- ciţi.
+
+[Bass italic]
+1: @3 Lu -- mi -- naţi! @4 Lu -- mi -- naţi! @7 Lu -- mi -- naţi! @8 Lu -- mi -- naţi! Fra -- ţii voş -- trii în pă -- ca -- te mor, Ră -- tă -- cind _ _ în noap -- tea grea. Dum -- ne -- zeu vrea mân -- tu _ -- i -- rea lor, Nu'i lă -- saţi pier -- duţi să stea. @17 Lu -- mi -- naţi, a -- prin -- deţi fo -- cul sfânt, @19 Pe pă -- mânt @20 lu -- mini să fiţi; @21 Lu -- mi -- naţi, a -- prin -- deţi fo -- cul sfânt, @23 Pe pă -- mânt @24 să stră -- lu -- ciţi.
