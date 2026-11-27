@@ -659,9 +659,10 @@ def THINGPAGE(on, close, title, body, lap):
 # menu, the same rows wherever the song is open: the versions first (pick one; the default says so; New version), the
 # open version's acts, then the song's (Recordings, Share link, Export ›, Print), then Duplicate and Archive last.
 # Credits are not here: the editor edits them where they print (a tap on the printed title), the Player reads them.
-_SMROW = 'min-height: 40px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: transparent; color: #332921; font: inherit; font-size: 15px; text-align: left; text-decoration: none; cursor: pointer'
-_SMBOX = 'position: absolute; z-index: 70; width: 288px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px rgba(26,22,18,0.08), 0 2px 4px rgba(26,22,18,0.10), 0 18px 40px -12px rgba(26,22,18,0.35); padding: 6px 0'
-_SMSEP = f'<div role="separator" style="height: 1px; margin: 6px 0; background: {LINE}"></div>'
+_SMROW = 'min-height: 40px; box-sizing: border-box; padding: 0 10px 0 6px; display: flex; align-items: center; gap: 8px; width: 100%; border: 0; border-radius: 10px; background: transparent; color: #332921; font: inherit; font-size: 15px; text-align: left; text-decoration: none; cursor: pointer'
+# a menu's box, the kit's one (ROWMENU's): 16 round, 6 in, the floating glass; rows 10 round inside it (16 − 6)
+_SMBOX = f'position: absolute; z-index: 70; box-sizing: border-box; padding: 6px; border-radius: 16px; {GLASSFX}'
+_SMSEP = f'<div role="separator" style="height: 1px; margin: 6px 6px; background: {LINE}"></div>'
 _SMSLOT = lambda inner='': f'<span aria-hidden="true" style="flex: none; width: 20px; display: flex; justify-content: center; color: #332921">{inner}</span>'
 PLUSI_S = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="M12 5v14M5 12h14"></path></svg>'
 # Flat's header band (owner, 2026-11-26, Flat 26.11 screenshots: "the header and the sidebars should follow the new
@@ -686,7 +687,7 @@ def SONGMENU(takes_href, extra=(), phone=False):
             f'<span style="min-width: 0; display: flex; flex-direction: column"><h1 style="margin: 0; font-size: 17px; font-weight: 600; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</h1>'
             f'<span style="font-size: 13px; line-height: 16px; color: {ONB_SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{verName}}}}</span></span>'
             f'<span aria-hidden="true" style="flex: none; display: flex; color: {ONB_SOFT}">{CHEV_D}</span></button>'
-            f'<sc-if value="{{{{smOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="menu" aria-label="Amazing Grace" style="{_SMBOX}; left: 0; top: 52px">{rows}{exp}</div></sc-if></div>')
+            f'<sc-if value="{{{{smOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="menu" aria-label="Amazing Grace" style="{_SMBOX}; left: 0; top: 52px; width: 288px">{rows}{exp}</div></sc-if></div>')
 
 # its state, the same script in both: a spread of the keys it needs; S is the state's name, SET how it is set, TOAST
 # what a toast adds to that set (the Player's sTo and sUndo, the editor's toast), DEF the version that opens first
@@ -1333,6 +1334,7 @@ _EO = 'cubic-bezier(.22,1,.36,1)'
 PE_MOTION = ('<style data-motion>@keyframes pe-pop { from { opacity: 0; scale: .96 } } @keyframes pe-push { from { translate: 100% 0 } } '
              '@keyframes pe-fade { from { opacity: 0 } } @keyframes pe-toast { from { opacity: 0; translate: 0 12px } } '
              f'[role=menu] {{ animation: pe-pop 160ms {_EO}; transform-origin: top left }} '
+             f'[role=menu][style*="right: 4px"], [role=listbox][style*="right: 4px"] {{ animation: pe-pop 160ms {_EO}; transform-origin: top right }} '
              f'nav[style*="right: 8px"] {{ animation: pe-pop 180ms {_EO}; transform-origin: top right }} '
              f'section[role=dialog][style*="border-radius: 16px"] {{ animation: pe-pop 180ms {_EO}; transform-origin: top center }} '
              f'[role=dialog][style*="translateX(-50%)"] {{ animation: pe-pop 200ms {_EO}; transform-origin: center }} '
