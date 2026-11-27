@@ -89,6 +89,10 @@ wins there.
   measured, not glanced at: the board and the app screen are both measured in the browser (computed size, padding,
   radius, colour of each part) and every number matches; a screenshot side by side is the last check, not the only
   one.
+- **The Chord player alone, canvas and app** (owner, 2026-11-27: "now you work only on the chords player: implement the new
+  design in the app and continue in loop only on the chords player"): the loop holds the Chord player only; its board
+  (R77, `r58_chordplayer.py`) is ported to the app value for value, item by item in the spec's port table, then the
+  loop goes on improving the Chord player's board and app together. This lifts "Design only" for the Chord player alone.
 - **Design only, for now** (owner, 2026-11-15: "now you need to work only on the design and no app implementation at
   all. fix all the inconsistencies in the design"): until the owner says otherwise, the loop changes the canvas alone
   and no app code. Each round finds the canvas's inconsistencies across every board (the keyboard and the floating
