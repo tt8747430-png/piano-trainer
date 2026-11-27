@@ -347,7 +347,7 @@ lm58 = (LTOP('Laptop.dc.html', BARR) + TRAY.replace('padding: 0 16px 8px', 'padd
         + ZONE('zTop', 'toTop', 'At the top', 'left: 400px; right: 380px; top: 110px; height: 100px')
         + ZONE('zFloat', 'toFloat', 'Floating', 'left: 400px; right: 380px; bottom: 270px; height: 100px')
         + ZONE('zBot', 'toBot', 'At the bottom', 'left: 400px; right: 380px; bottom: 150px; height: 100px') + DRAGHINT)
-SH58 = lambda B, P, D=None: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + (D or B)('styleOn', 'Style', WHEEL([('wStyle', 1)])) + (D or B)('keyOn', 'Key', WHEEL([('wKey', 1)])) + (D or B)('tempoOn', 'Tempo', WHEEL([('wTempo', 1)])) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + P + '')
+SH58 = lambda B, P, D=None: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + (D or B)('styleOn', 'Style', WHEEL([('wStyle', 1)])) + (D or B)('keyOn', 'Key', ROOTGRID('keyRoots')) + (D or B)('tempoOn', 'Tempo', WHEEL([('wTempo', 1)])) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + P + '')
 _MI = lambda l, a, col=INK: f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left">{l}</button>'
 TOAST76 = TOAST(256, z=56)
 
@@ -515,6 +515,8 @@ _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'O
       metSw: st.met77 === 'on' ? 'true' : 'false', metSwBg: st.met77 === 'on' ? '#44684A' : '#DAD1C8', metSwX: st.met77 === 'on' ? 22 : 2, metTog: () => set({ met77: st.met77 === 'on' ? 'count' : 'on' }),
       hdMet: () => { const n = { count: 'on', on: 'off', off: 'count' }[st.met77 ?? 'count']; set({ met77: n, toastT: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[n] }); }, hdMetTip: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[st.met77 ?? 'count'], hdMetOff: (st.met77 ?? 'count') === 'off',
       hdLoop: () => set({ loop77: !st.loop77, toastT: st.loop77 ? 'Loop off' : 'Looping the Verse' }), hdLoopOn: st.loop77 ? 'true' : 'false', hdLoopPh: st.loop77 ? '#A8551F' : '#332921', hdLoopTip: st.loop77 ? 'Stop looping the Verse' : 'Loop the Verse',
+      // Key, the twelve in sight as the app's (the kit's ROOTGRID, a key one of the pickers): a key taken moves the chart
+      keyRoots: rootGrid(k, (i) => set({ key: i, sheet: null, secs: SECS.map(([m, n, r, bars]) => [m, n, r, bars.map((cs) => cs.map((c) => trp(c, i - k)))]) })),
       randomize: () => set({ sheet: null, toastT: 'New chords in ' + KEYS[k] + ' major' }),
       hdTr: () => set({ sheet: st.sheet === 'key' ? null : 'key' }), hdTrX: st.sheet === 'key' ? 'true' : 'false', hdKeyL: KEYS[k] + ' major',
       hdMidi: () => set({ sheet: st.sheet === 'midi' ? null : 'midi' }), hdMidiOn: st.sheet === 'midi', hdMidiX: st.sheet === 'midi' ? 'true' : 'false', hdMidiBg: st.sheet === 'midi' ? 'rgba(254,253,251,.14)' : 'transparent',
