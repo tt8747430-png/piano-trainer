@@ -47,7 +47,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 13 | Trece Isus pe-aici | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 14 | Când Duhul Sfânt S-a coborât | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 15 | Cântați pe Isus cu iubire | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 16 | Te iubesc Isuse | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 1/2, 17 bars, `016. Te iubesc Isuse.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
+| 16 | Te iubesc Isuse | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 17 | Îmi ridic ochii spre munți | To do: its file leaves whole voices out; write them in from the PDF | 2 | 2 staves, voices 1/1, 87 bars, `017. Îmi ridic ochii spre munți.mscz` | no | – | Tenor | 1 | 1 |  | piano |
 | 18 | Cineva se-ngrijește de mine | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 19 | Luceafărul Maranata (1 subfolders) | To do: its file leaves whole voices out; write them in from the PDF | 3 | 2 staves, voices 1/1, 136 bars, `19.Lucefarul-Sopran.mscz`, 102 chords | no | – | Soprano, Alto, Tenor | 1 | 1 |  | piano |
