@@ -143,3 +143,7 @@ by hand.
   `beamed:` names those bars.
 - **A part's words printed in the score.** Words given to a second voice that moves with the first (song 20's altos,
   bar 9) print twice in the score; the parts take them from the voice they move with, so no block is written.
+- **A finished song restyled instead of rebuilt.** Built in the same turn as its old files were removed (song 21),
+  the builder found no sources and only restyled the earlier made file, which kept its old slurs and part ids. A song
+  whose score comes from files is rebuilt from history after the removal is committed, and that build is compared
+  again.
