@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · (this commit) · the loop's grips reach into the loop: each grip's 44 reach lies inward from its barline (6 out, 34 in) rather than centred on it, so a loop ending on a system's last bar never reaches past the page's margin, and the two ends' reaches never meet across a barline · PlayerApp, PlayerDesk · **pending**
 - 2026-11-27 · 112c9807 · the editor's Loop loops: with Loop on, Play turns back to the selection's first beat at the end of bar 3 instead of running on to the end of the song (the Player's engine already wraps inside its loop) · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · **pending**
 ## Changes
 
