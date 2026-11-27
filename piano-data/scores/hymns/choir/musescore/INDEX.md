@@ -41,7 +41,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 7 | Nu nouă Doamne | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 8 | De-atâția ani | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 9 | Eram jos în păcat | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 10 | Rătăceam în păcat și pierzare | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 1/2, 53 bars, `010. Rătăceam în păcat și pierzare.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
+| 10 | Rătăceam în păcat și pierzare | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 11 | Ce nume minunat | Done: as printed (matched to its PDF) | 4 | 2 staves, voices 2/2, 26 bars, `011. Ce Nume minunat.mscz` | no | – | Soprano, Alto, Tenor, Bass | 2 | 1 |  | piano |
 | 12 | Crucea-i ascultarea | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 2/2, 32 bars, `012. Crucea-i ascultarea.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
 | 13 | Trece Isus pe-aici | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 2/2, 16 bars, `013. Trece Isus pe-aici.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |

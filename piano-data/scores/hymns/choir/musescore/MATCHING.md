@@ -102,3 +102,9 @@ by hand.
   words' author stood over the part's name).
 - **A part's borrowed line over its own words.** A syllable a part takes from a voice that holds it ends its line at
   the part's own next syllable (song 9, bar 17: the altos' "cit," then their "ești fe-ri-cit!").
+- **The words' author beside the title.** A file's own alignment for its credits ("left,top") put the words' author
+  beside the title instead of on the line under it, level with the composer (songs 9 and 10): the house style places
+  the credits, never a file.
+- **A hold missing after a held word.** In song 10, bars 20, 28 and 44, "vor" is held over two notes; written without
+  its `_`, every later syllable fell one note early ("ța" held over "mea"). Count the syllables of each line against
+  its notes before building.

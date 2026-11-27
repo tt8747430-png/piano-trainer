@@ -170,6 +170,10 @@ def layout_mscx(score, spec):
             tx = t.find('text')
             for c in list(tx):
                 tx.remove(c)
+            # where the house style puts it, on the line under the title (a file's own alignment, "left,top", put
+            # the words' author beside the title: songs 9 and 10)
+            for a in t.findall('align'):
+                t.remove(a)
         else:
             t = ET.SubElement(vb, 'Text')
             ET.SubElement(t, 'style').text = role
