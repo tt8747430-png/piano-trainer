@@ -1305,7 +1305,7 @@ def ACCPANEL():
     body = SEGC('accScopes', 36, 14, True) + f'<div style="{_CARD}">' + link + SELROW('First chord’s inversion', 'selInv') + SELROW('Voicing', 'selVoice') + reset + '</div>'
     # headed as the palette's sections it sits above (Recent, Note, …): one head in one panel, 15 semibold, its chevron at
     # the right edge, no icon (the FOLD with its icon was the Player's Song panel's, and drew a second head in Notation)
-    head = (f'<h3 style="margin: 0"><button type="button" aria-expanded="{{{{fAccX}}}}" onClick="{{{{fAccTg}}}}" style="width: 100%; min-height: 44px; margin: -6px 0; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; cursor: pointer">Accompaniment'
+    head = (f'<h3 style="margin: 0"><button type="button" aria-expanded="{{{{fAccX}}}}" onClick="{{{{fAccTg}}}}" style="width: 100%; min-height: 44px; margin: -6px 0 -10px; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; cursor: pointer">Accompaniment'
             f'<span style="color: {SOFT}; display: flex; transform: rotate({{{{fAccR}}}}); transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1)">{CHEV_D}</span></button></h3>')
     return ('<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}"><section aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px">' + head
             + '<sc-if value="{{fAccOn}}" hint-placeholder-val="{{true}}"><div style="display: flex; flex-direction: column; gap: 8px">' + body + '</div></sc-if></section></sc-if>')

@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · {c} · Notation's section heads (Accompaniment, Recent, Note, …) sat as far from their own tools as from the section above, 19 over and 15 under ink to ink; each 44 head now reaches 10 into the gap under it, so a head reads with what it names (laws, spacing: 1.5–3× above what is below; the lines tool's note gone) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · v823
 - 2026-11-27 · 8a4c9fa0 · the phone's Piano keys heads its two lists as its sibling Audio page heads Room and Volume (15 semibold at the card's edge), not in small capitals, a third head style; the ruling recorded in the score-editor spec · PlayerApp · v822
 - 2026-11-27 · 039a15a6 · the phone's MIDI keyboard page drops Record's key "R", a phone having no keyboard to press it on (as its tooltips drop their keys); the laptop's popover keeps it · Editor, EditorDraft, PlayerApp · v821
 - 2026-11-27 · 899fa6f4 · the phone's Piano keys is one page: Piano (3D, 2D, Off) and Labels (None, C only, All notes) as two headed lists, as the laptop's popover shows them together, where two rows each opened a page of three choices over an empty screen (laws, Hick: a short list needs no page of its own; one model on both sizes) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · v820
