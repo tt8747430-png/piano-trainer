@@ -1009,8 +1009,14 @@ export const practice = {
       endingLabel: 'Ending',
       intoLabel: 'Into the next section',
       strip: '{{device}}: style controls',
-      waiting: '{{device}} · waiting for Start',
-      notLeading: '{{device}} · {{state}}. The sheet plays by itself',
+      stopped: '{{device}} · stopped',
+      // With no arranger connected the app's band stands in for it.
+      alone: {
+        noDevice: 'No Genos found. The app’s band plays the style’s sections.',
+        denied: 'MIDI access was blocked. The app’s band plays the style’s sections.',
+        unsupported:
+          'This browser can’t connect a Genos: Chrome or Edge can. The app’s band plays the style’s sections.',
+      },
       playing: '{{device}} · playing',
       playingMain: '{{device}} · playing Main {{main}}',
       style: 'Style',
@@ -1099,7 +1105,7 @@ export const practice = {
       relaid: 'Laid out in {{meter}}',
       follow: 'Follow a MIDI arranger',
       followInfo:
-        'The Genos leads: its Start, Stop and clock move the sheet, which plays no sound and sends the Genos the sections you set. Chrome or Edge on a Mac or PC, connected by USB.',
+        'Play leads: the Genos starts on the sheet’s first chord and plays to its clock, taking the sections you set at their bars; it never gets a chord, it follows the chords you play. With no Genos connected, the app’s band plays the style’s sections. On the Genos, Menu › MIDI › System: Clock USB, Start/Stop Style, System Exclusive Message Receive On. Chrome or Edge on a Mac or PC, connected by USB.',
       arranger: 'Arranger',
       arrangerState: {
         connected: '{{device}} · USB',

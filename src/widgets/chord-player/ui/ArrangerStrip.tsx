@@ -3,8 +3,9 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ARRANGER_NUMBERS, MAINS, mainOf, SECTION } from '@/shared/lib/arrangement'
 import { cn } from '@/shared/lib'
-import type { ArrangerFollow } from '../model/use-arranger-follow'
 import { Toolbar } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
+import type { ArrangerPanel } from '../model/use-arranger-play'
 
 const ROMAN = { 1: 'I', 2: 'II', 3: 'III' } as const
 
@@ -28,7 +29,7 @@ function Lamp({
   label: ReactNode
   spoken?: string
   className?: string
-  /** No arranger connected: nothing to press. */
+  /** Start/Stop on a sheet with no chords. */
   disabled?: boolean
   onClick(): void
 }) {
@@ -90,16 +91,17 @@ function Group({
 
 /**
  * The arranger's style controls (canvas R76), a panel of the page while the Chord player follows
- * it, in one of three sizes changed from its own head at any time, edit or not: **Full**, every
- * control in view (its state and Start/Stop on its head; Main A–D, pressed again while playing its
+ * an arranger, in one of three sizes changed from its own head at any time, edit or not: **Full**,
+ * every control in view (the style playing and Start/Stop on its head, the connection under it as
+ * the MIDI keyboard's popover says it, with Try again; Main A–D, pressed again while playing its
  * Fill-in, and Break; Intro I–III and Ending/rit. I–III; two rows on a phone, one row of groups on a
  * laptop's wide strip, `wide`); **Compact**, Start/Stop and Main A–D in one 64 row; **Minimized**, a
- * glass pill ("Genos · Main A") that opens it in full. Each lamp lit as the panel's. Only what the
- * Genos takes over MIDI is here (Yamaha's Rhythm Start and Stop, Section Control). `flat` draws it
- * without its shadow, in a laptop's side column; `children` is what Edit layout draws over it.
+ * glass pill ("Genos · Main A") that opens it in full. Each lamp lit as the panel's. `device` names
+ * who plays: the Genos, or the style the app's band plays in its place. `flat` draws it without its
+ * shadow, in a laptop's side column; `children` is what Edit layout draws over it.
  */
 export function ArrangerStrip({
-  follow,
+  panel,
   device,
   size,
   wide = false,
@@ -107,7 +109,7 @@ export function ArrangerStrip({
   onSize,
   children,
 }: {
-  follow: ArrangerFollow
+  panel: ArrangerPanel
   device: string
   size: GenosSize
   wide?: boolean
@@ -115,40 +117,46 @@ export function ArrangerStrip({
   onSize(size: GenosSize): void
   children?: ReactNode
 }) {
-  const { t } = useTranslation('practice')
-  const section = follow.section
+  const { t } = useTranslation(['practice', 'common'])
+  const section = panel.section
   const main = section === null ? null : mainOf(section)
-  const state = follow.status?.state
-  // With none connected the sheet plays itself: the head says why, and the panel's buttons rest.
-  const off = state === 'no-device' || state === 'denied' || state === 'unsupported'
-  const title = off
-    ? t('chordPlayer.arranger.notLeading', {
-        device,
-        state: t(
-          `chordPlayer.settings.arrangerState.${state === 'no-device' ? 'noDevice' : state}`,
-        ),
-      })
-    : follow.running
-      ? main
-        ? t('chordPlayer.arranger.playingMain', { device, main })
-        : t('chordPlayer.arranger.playing', { device })
-      : t('chordPlayer.arranger.waiting', { device })
+  const status = panel.status
+  const title = panel.running
+    ? main
+      ? t('chordPlayer.arranger.playingMain', { device, main })
+      : t('chordPlayer.arranger.playing', { device })
+    : t('chordPlayer.arranger.stopped', { device })
+  // The connection in a line, as the MIDI keyboard's popover says it; with none the app's band plays.
+  const line =
+    status === null
+      ? t('common:midi.connecting')
+      : status.state === 'connected'
+        ? t('common:midi.connected', { devices: status.device })
+        : t(
+            `chordPlayer.arranger.alone.${status.state === 'no-device' ? 'noDevice' : status.state}`,
+          )
+  const retry =
+    status?.state === 'no-device' || status?.state === 'denied' ? (
+      <Button variant="soft" onClick={panel.reconnect} className="shrink-0">
+        {t('common:midi.retry')}
+      </Button>
+    ) : null
   const dot = (
     <span
       aria-hidden
       className={cn(
         'size-2 shrink-0 rounded-pill',
-        follow.running ? 'bg-learned' : 'bg-muted-foreground',
+        panel.running ? 'bg-learned' : 'bg-muted-foreground',
       )}
     />
   )
   const startStop = (
     <Lamp
-      disabled={off}
-      on={follow.running}
+      disabled={!panel.playable}
+      on={panel.running}
       label={t('chordPlayer.arranger.startStop')}
       className="min-w-22 shrink-0 px-3"
-      onClick={follow.toggle}
+      onClick={panel.toggle}
     />
   )
   const minimize = (
@@ -158,13 +166,12 @@ export function ArrangerStrip({
   )
   const mainLamps = MAINS.map((each) => (
     <Lamp
-      disabled={off}
       key={each}
       on={main === each}
       label={each}
       spoken={t('chordPlayer.arranger.main', { main: each })}
       onClick={() =>
-        follow.press(main === each && follow.running ? SECTION.fill[each] : SECTION.main[each])
+        panel.press(main === each && panel.running ? SECTION.fill[each] : SECTION.main[each])
       }
     />
   ))
@@ -200,12 +207,12 @@ export function ArrangerStrip({
       >
         {/* A phone's 341 holds Main A–D at 44 only with Start/Stop as its glyph; its lamp says it runs. */}
         <Lamp
-          disabled={off}
-          on={follow.running}
-          label={follow.running ? <Square aria-hidden /> : <Play aria-hidden />}
+          disabled={!panel.playable}
+          on={panel.running}
+          label={panel.running ? <Square aria-hidden /> : <Play aria-hidden />}
           spoken={t('chordPlayer.arranger.startStop')}
           className="grid w-11 shrink-0 place-items-center [&_svg]:size-5"
-          onClick={follow.toggle}
+          onClick={panel.toggle}
         />
         <div
           role="group"
@@ -227,12 +234,11 @@ export function ArrangerStrip({
     <Group label={t('chordPlayer.arranger.introLabel')} columns={3} grow={3}>
       {ARRANGER_NUMBERS.map((n) => (
         <Lamp
-          disabled={off}
           key={n}
           on={section === SECTION.intro[n]}
           label={ROMAN[n]}
           spoken={t('chordPlayer.arranger.intro', { n: ROMAN[n] })}
-          onClick={() => follow.press(SECTION.intro[n])}
+          onClick={() => panel.press(SECTION.intro[n])}
         />
       ))}
     </Group>
@@ -241,10 +247,9 @@ export function ArrangerStrip({
     <Group label={t('chordPlayer.arranger.mainLabel')} columns={5} grow={5}>
       {mainLamps}
       <Lamp
-        disabled={off}
         on={section === SECTION.break}
         label={t('chordPlayer.arranger.into.break')}
-        onClick={() => follow.press(SECTION.break)}
+        onClick={() => panel.press(SECTION.break)}
       />
     </Group>
   )
@@ -252,12 +257,11 @@ export function ArrangerStrip({
     <Group label={t('chordPlayer.arranger.endingRit')} columns={3} grow={3}>
       {ARRANGER_NUMBERS.map((n) => (
         <Lamp
-          disabled={off}
           key={n}
           on={section === SECTION.ending[n]}
           label={ROMAN[n]}
           spoken={t('chordPlayer.arranger.ending', { n: ROMAN[n] })}
-          onClick={() => follow.press(SECTION.ending[n])}
+          onClick={() => panel.press(SECTION.ending[n])}
         />
       ))}
     </Group>
@@ -272,17 +276,20 @@ export function ArrangerStrip({
     >
       <div className="flex min-h-10 items-center gap-2">
         {dot}
-        <span
-          className="line-clamp-2 min-w-0 flex-1 text-sm font-semibold text-pretty"
-          aria-live="polite"
-        >
+        <span className="line-clamp-2 min-w-0 flex-1 text-sm font-semibold text-pretty">
           {title}
         </span>
-        {off ? null : startStop}
+        {startStop}
         <HeadButton label={t('chordPlayer.arranger.compact')} onClick={() => onSize('compact')}>
           <ChevronDown aria-hidden />
         </HeadButton>
         {minimize}
+      </div>
+      <div className="-mt-1 flex min-h-11 items-center gap-3">
+        <p aria-live="polite" className="min-w-0 flex-1 text-sm text-pretty text-muted-foreground">
+          {line}
+        </p>
+        {retry}
       </div>
       {wide ? (
         <div className="flex gap-4">

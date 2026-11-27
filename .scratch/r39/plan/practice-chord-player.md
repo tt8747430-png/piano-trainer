@@ -56,7 +56,22 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     chord dragged out of its section drops into any other, between any two chords or at a section's end, by finger,
     mouse and keyboard; it keeps its own length, and neither section retimes (a bar that no longer adds up takes its !).
     An empty section still takes a drop.
-  - **Follow a MIDI arranger (Yamaha Genos): the Genos leads** (owner, 2026-11-13: "I dont want my chords to be
+  - **Play leads; the Genos gets only its sections; with no Genos the app's band plays them** (owner, 2026-11-27:
+    "the chords are only for the display and the timing, the mode with the aranger should work the same as with no,
+    the only difference should be that on the right timing it sends to the genos what styles to play or what intro
+    or what ending and so on, or the count in and such things … the chords are not sent to the genos … the chords
+    that i actually play are being detected automatically by the genos"; then "can you imitate the styles when no
+    genos is connected and let me play even if no genos is connected, and the status no connection is like in this
+    midi menu that we have"). This replaces "the Genos leads" below. Play (and the panel's Start/Stop) works in
+    every mode, as without an arranger: count-in, the lit sheet, its tempo. A connected Genos gets MIDI Start on
+    the first chord, the app's clock, each bar's Section Control as it begins, Stop at Stop; never a chord or a
+    note; the band is silent. With none connected the app's band imitates the panel: Main A–D its variations 1–4,
+    Fill-in, Break, Ending (struck and held, the run ends) and Intro I–III (the sheet's last 2, 4, 8 bars played in),
+    each pressed section taken at the next bar. The panel's head says who plays (Genos, or the style's name) and
+    whether it plays; under it the connection as the MIDI keyboard's popover says it ("No Genos found. The app's
+    band plays the style's sections." with Try again). Sources: Yamaha Genos Reference Manual, MIDI › System (Clock,
+    Start/Stop); the Genos Data List's Section Control.
+  - *(Superseded 2026-11-27, above.)* **Follow a MIDI arranger (Yamaha Genos): the Genos leads** (owner, 2026-11-13: "I dont want my chords to be
     played. just to sync the timing", then "when I start on the genos it should sync with genos and understand that
     it started and our app automatically starts"): the app sends nothing and plays no chords. It listens on the
     Genos's USB TO HOST: MIDI Start (FA) starts the Chord player from its first bar (Continue, FB, from where it

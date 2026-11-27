@@ -11,11 +11,19 @@ import {
 } from '@/shared/lib'
 import {
   arrangeStyle,
+  imitatedOrder,
+  imitatedPlay,
+  MAINS,
   NO_MARKS,
+  playOrder,
+  type ArrangerPress,
   type Band,
+  type BandBar,
   type ChordSheet,
   type DrumVoice,
+  type ImitatedBar,
   type PlayedBar,
+  VARIATIONS,
 } from '@/shared/lib/arrangement'
 import {
   barTicks,
@@ -38,6 +46,16 @@ export interface PlayPlan {
   readonly settings: ChordSheetSettings
   /** The piano's chords in root position, not voice-led (Settings' Voicing). */
   readonly block?: boolean
+  /** A connected arranger plays: the band keeps the time in silence, the count-in still heard. */
+  readonly silent?: boolean
+  /** The band stands in for an arranger none is connected for: its sections as the sheet and the panel set them. */
+  readonly arranger?: ArrangerTake
+}
+
+/** The panel's sections pressed for the band standing in for an arranger: before Start, and while it plays. */
+export interface ArrangerTake {
+  readonly start: readonly number[]
+  readonly presses: readonly ArrangerPress[]
 }
 
 /** A box: its section and its index there. */
@@ -51,6 +69,8 @@ export interface TransportState {
   readonly lit: BoxPlace | null
   /** The beat of its bar sounding now, from 0, while it plays: the bar's tick lit. */
   readonly beat: number | null
+  /** The panel's section lit for the bar sounding, while the band stands in for an arranger. */
+  readonly lamp: number | null
 }
 
 /** How far ahead a chord is queued. */
@@ -162,27 +182,57 @@ function windowSounds(
     .sort((a, b) => a.at - b.at)
 }
 
-/** The band arranged for a plan, kept while its sheet and style are the same objects. */
+/** The band arranged for a plan, kept while its sheet, style and panel are the same objects. */
 interface Arranged {
   readonly sheet: ChordSheet
   readonly style: Style
   readonly block: boolean
+  readonly take: ArrangerTake | undefined
   readonly band: Band & { readonly bassInstrument: Style['bass'] }
   readonly windows: readonly Window[]
+  /** Each bar's sections, while the band stands in for an arranger. */
+  readonly marks: readonly ImitatedBar[] | null
+  /** The bars before the sheet's first that are the Intro's. */
+  readonly intro: number
 }
 
 function arranged(plan: PlayPlan, last: Arranged | null): Arranged {
   const block = plan.block === true
-  if (last && last.sheet === plan.sheet && last.style === plan.style && last.block === block)
+  const take = plan.arranger
+  if (
+    last &&
+    last.sheet === plan.sheet &&
+    last.style === plan.style &&
+    last.block === block &&
+    last.take === take
+  )
     return last
-  const parts = plan.sheet.sections.map((section) => variationParts(plan.style, section.variation))
-  const band = arrangeStyle(plan.sheet, parts, { swing: plan.style.swing, block })
+  const { sheet, style } = plan
+  const order = take ? imitatedOrder(sheet, imitatedPlay(sheet, take.start, take.presses)) : null
+  const bars = order?.bars ?? playOrder(sheet)
+  const plays = bars.map((bar, at): BandBar => {
+    const marks = order?.marks[at]
+    const section = sheet.sections[bar.section]
+    // Main A to D play variations 1 to 4.
+    const variation =
+      (marks?.main ? VARIATIONS[MAINS.indexOf(marks.main)] : undefined) ?? section?.variation ?? 1
+    return {
+      parts: variationParts(style, variation),
+      fill: marks ? marks.fill : bar.fill,
+      break: marks?.break === true,
+      ending: marks?.ending === true,
+    }
+  })
+  const band = arrangeStyle(sheet, bars, plays, { swing: style.swing, block })
   return {
-    sheet: plan.sheet,
-    style: plan.style,
+    sheet,
+    style,
     block,
-    band: { ...band, bassInstrument: plan.style.bass },
+    take,
+    band: { ...band, bassInstrument: style.bass },
     windows: windowsOf(band.bars),
+    marks: order?.marks ?? null,
+    intro: order?.intro ?? 0,
   }
 }
 
@@ -310,22 +360,31 @@ export function createChordEngine({
   ticker,
   plan,
   onChange = () => {},
+  onBar = () => {},
 }: {
   audio: Pick<AudioOutput, 'play' | 'stop' | 'now' | 'isPlaying' | 'unlock'>
   ticker: Ticker
   plan: () => PlayPlan
   onChange?: () => void
+  /** A bar in play order queued to begin at `at` (the audio clock's seconds): a followed arranger's cue. */
+  onBar?: (bar: number, at: number) => void
 }) {
-  let state: TransportState = { playing: false, lit: null, beat: null }
+  let state: TransportState = { playing: false, lit: null, beat: null, lamp: null }
   let cache: Arranged | null = null
   let stopTicker: (() => void) | null = null
   /** The next window to queue, by its bar in play order and its start in that bar, in beats. */
   let next: { bar: number; beat: number } | null = null
   let nextAt = 0
   let loop: number | null = null
-  /** Each window queued: when it sounds, its box, its first beat in its bar and a beat's seconds. */
-  let queued: { at: number; box: BoxPlace; beat: number; perBeat: number; handle: PlayHandle }[] =
-    []
+  /** Each window queued: when it sounds, its box, its first beat in its bar, a beat's seconds and the panel's section lit. */
+  let queued: {
+    at: number
+    box: BoxPlace
+    beat: number
+    perBeat: number
+    lamp: number | null
+    handle: PlayHandle
+  }[] = []
   let fading: { from: number; seconds: number } | null = null
   let ending: number | null = null
   /** The times through the sheet finished in this run. */
@@ -336,7 +395,8 @@ export function createChordEngine({
     if (
       changed.playing === state.playing &&
       sameBox(changed.lit, state.lit) &&
-      changed.beat === state.beat
+      changed.beat === state.beat &&
+      changed.lamp === state.lamp
     )
       return
     state = changed
@@ -347,7 +407,9 @@ export function createChordEngine({
     const into = audio.now() - fading.from
     return Math.max(0, 1 - into / fading.seconds)
   }
-  const gain = (sound: Sound) => mixGain(plan().settings, sound) * fade()
+  // A connected arranger plays the style: the band is silent, the count-in's click still heard.
+  const gain = (sound: Sound) =>
+    (plan().silent && sound.kind !== 'click' ? 0 : mixGain(plan().settings, sound)) * fade()
 
   const finish = () => {
     stopTicker?.()
@@ -356,15 +418,16 @@ export function createChordEngine({
     queued = []
     fading = null
     ending = null
-    set({ playing: false, lit: null, beat: null })
+    set({ playing: false, lit: null, beat: null, lamp: null })
   }
 
-  /** The bars a pass may play: the whole sheet's, or the looped section's. */
-  const range = (bars: readonly PlayedBar[]) => {
-    if (loop === null) return { first: 0, last: bars.length - 1 }
-    const first = bars.findIndex((bar) => bar.section === loop)
-    const last = bars.findLastIndex((bar) => bar.section === loop)
-    return first < 0 ? { first: 0, last: bars.length - 1 } : { first, last }
+  /** The bars a pass may play: the whole sheet's after any Intro, or the looped section's. */
+  const range = ({ band, intro }: Arranged) => {
+    const whole = { first: intro, last: band.bars.length - 1 }
+    if (loop === null) return whole
+    const first = band.bars.findIndex((bar, at) => at >= intro && bar.section === loop)
+    const last = band.bars.findLastIndex((bar) => bar.section === loop)
+    return first < 0 ? whole : { first, last }
   }
 
   /** Queues every window due within the look-ahead. */
@@ -372,11 +435,13 @@ export function createChordEngine({
     while (next && nextAt <= audio.now() + LOOKAHEAD) {
       const current = plan()
       cache = arranged(current, cache)
-      const { band, windows } = cache
-      const { first, last } = range(band.bars)
+      const { band, windows, marks } = cache
+      const { first, last } = range(cache)
       if (band.bars.length === 0) return finish()
       const at = next
-      if (at.bar > last || at.bar < first) next = { bar: first, beat: 0 }
+      // The Intro plays before the first pass; anywhere else outside the pass goes back to its start.
+      const inIntro = at.bar < cache.intro && loop === null
+      if (at.bar > last || (at.bar < first && !inIntro)) next = { bar: first, beat: 0 }
       const cursor = next
       const window =
         windows.find(
@@ -388,9 +453,13 @@ export function createChordEngine({
       const seconds = (ticks: Tick) => (ticks * 60) / (current.tempo * TICKS_PER_BEAT)
       const isLast = window.bar === last && windows.at(-1) === window && loop === null
       const plays = current.settings.plays
-      const ringing = isLast && plays > 0 && pass >= plays - 1
+      const following = windows[windows.indexOf(window) + 1]
+      // The Ending's bar is the last: its chord rings on, and the run ends.
+      const ended = marks?.[window.bar]?.ending === true && following?.bar !== window.bar
+      const ringing = ended || (isLast && plays > 0 && pass >= plays - 1)
       const sounds = windowSounds(band, window, seconds, current.style.swing, ringing ? TAIL : 0)
       const handle = audio.play(sounds, nextAt, gain)
+      if (window.from === band.bars[window.bar]?.startTick) onBar(window.bar, nextAt)
       queued = [
         ...queued.filter((each) => each.at > audio.now() - 10),
         {
@@ -398,11 +467,11 @@ export function createChordEngine({
           box: window.box,
           beat: (window.from - (band.bars[window.bar]?.startTick ?? 0)) / TICKS_PER_BEAT,
           perBeat: seconds(TICKS_PER_BEAT),
+          lamp: marks?.[window.bar]?.lamp ?? null,
           handle,
         },
       ]
       const length = seconds(window.to - window.from)
-      const following = windows[windows.indexOf(window) + 1]
       nextAt += length
       if (ringing) {
         ending = nextAt + TAIL
@@ -438,27 +507,40 @@ export function createChordEngine({
       beat: sounding
         ? sounding.beat + Math.floor(Math.max(0, now - sounding.at) / sounding.perBeat)
         : null,
+      lamp: sounding?.lamp ?? null,
     })
   }
 
   return {
-    /** Plays from the top, the looped section's first bar, or a chord (Play from here), round and round. */
-    play({ loop: section = null, from }: { loop?: number | null; from?: BoxPlace } = {}) {
+    /**
+     * Plays from the top, the looped section's first bar, or a chord (Play from here), round and round;
+     * from `at` on the audio clock where given (a followed arranger's Main), else at once. Returns when its
+     * first chord sounds, after any count-in.
+     */
+    play({
+      loop: section = null,
+      from,
+      at: given,
+    }: { loop?: number | null; from?: BoxPlace; at?: number } = {}): number {
       if (stopTicker) finish()
       void audio.unlock()
       audio.stop()
       loop = section
       const current = plan()
       cache = arranged(current, cache)
-      const { first } = range(cache.band.bars)
-      const start = from ? cache.windows.find((each) => sameBox(each.box, from)) : undefined
+      const { first } = range(cache)
+      const { intro, windows } = cache
+      const start = from
+        ? windows.find((each) => each.bar >= intro && sameBox(each.box, from))
+        : undefined
+      // From the top, an Intro plays first; from a chord or a looped section, none does.
       next = start
         ? {
             bar: start.bar,
             beat: (start.from - (cache.band.bars[start.bar]?.startTick ?? 0)) / TICKS_PER_BEAT,
           }
-        : { bar: first, beat: 0 }
-      const at = audio.now() + PLAY_DELAY
+        : { bar: loop === null ? 0 : first, beat: 0 }
+      const at = Math.max(given ?? 0, audio.now() + PLAY_DELAY)
       nextAt = at
       if (current.settings.countIn) {
         const beats = beatsPerBar(current.sheet.meter)
@@ -474,10 +556,16 @@ export function createChordEngine({
       ending = null
       pass = 0
       queued = []
-      state = { playing: true, lit: null, beat: null }
+      state = { playing: true, lit: null, beat: null, lamp: null }
       queue()
-      set({ playing: true, lit: queued[0]?.box ?? null, beat: queued[0]?.beat ?? null })
+      set({
+        playing: true,
+        lit: queued[0]?.box ?? null,
+        beat: queued[0]?.beat ?? null,
+        lamp: queued[0]?.lamp ?? null,
+      })
       stopTicker = ticker(tick)
+      return queued[0]?.at ?? nextAt
     },
     /** Stops: the sound fades over two beats, then is silenced. */
     stop() {
@@ -485,7 +573,15 @@ export function createChordEngine({
       const tempo = plan().tempo
       fading = { from: audio.now(), seconds: (FADE_BEATS * 60) / tempo }
       next = null
-      set({ playing: false, lit: null, beat: null })
+      set({ playing: false, lit: null, beat: null, lamp: null })
+    },
+    /**
+     * The first bar in the sheet's play order still to be queued: where a section pressed on the panel
+     * of the band standing in for an arranger is taken (the first bar, while the Intro plays).
+     */
+    nextBar(): number {
+      if (!next || !cache) return 0
+      return Math.max(0, next.bar + (next.beat > 0 ? 1 : 0) - cache.intro)
     },
     /** Loops a section (its index), or the whole sheet again (null), from the next chord on. */
     loop(section: number | null) {

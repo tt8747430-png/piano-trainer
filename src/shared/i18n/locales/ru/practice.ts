@@ -989,8 +989,14 @@ export const practice: LocaleResources['practice'] = {
       endingLabel: 'Концовка',
       intoLabel: 'Переход к следующему разделу',
       strip: '{{device}}: управление стилем',
-      waiting: '{{device}} · ждёт Start',
-      notLeading: '{{device}} · {{state}}. Лист играет сам',
+      stopped: '{{device}} · стоит',
+      // Без подключённого аранжировщика его заменяет оркестр приложения.
+      alone: {
+        noDevice: 'Genos не найден. Разделы стиля играет оркестр приложения.',
+        denied: 'Доступ к MIDI запрещён. Разделы стиля играет оркестр приложения.',
+        unsupported:
+          'Этот браузер не подключает Genos, а Chrome и Edge подключают. Разделы стиля играет оркестр приложения.',
+      },
       playing: '{{device}} · играет',
       playingMain: '{{device}} · играет Main {{main}}',
       style: 'Стиль',
@@ -1090,7 +1096,7 @@ export const practice: LocaleResources['practice'] = {
       relaid: 'Переписано в размере {{meter}}',
       follow: 'Следовать за MIDI-аранжировщиком',
       followInfo:
-        'Ведёт Genos: его Start, Stop и клок двигают лист, который сам не звучит и отправляет Genos выбранные вами разделы. Chrome или Edge на Mac или ПК, подключение по USB.',
+        'Ведёт Play: Genos вступает с первым аккордом листа и играет по его клоку, а выбранные вами разделы получает в их тактах; аккордов он не получает, а следует тем, что играете вы. Без Genos разделы стиля играет оркестр приложения. На Genos: Menu › MIDI › System: Clock USB, Start/Stop Style, System Exclusive Message Receive On. Chrome или Edge на Mac или ПК, подключение по USB.',
       arranger: 'Аранжировщик',
       arrangerState: {
         connected: '{{device}} · USB',

@@ -96,11 +96,10 @@ import { bandMidi, type BoxPlace } from '../model/engine'
 import type { ChordSheetInHand } from '../model/use-chord-sheet'
 import { keyChords } from '../model/key-chords'
 import { CHORD_PLAYER_KEYS, CHORD_PLAYER_LAPTOP_KEYS, litKeys } from '../model/lit-keys'
-import { useArrangerFollow } from '../model/use-arranger-follow'
+import { useArrangerPlay } from '../model/use-arranger-play'
 import { useChordLayout, useResetChordLayout, type ChordPanel } from '../model/use-chord-layout'
 import { LayoutEditContext, useLayoutEdit } from '../model/use-layout-edit'
 import { useOnlineSheet } from '../model/use-online-sheet'
-import { useChordTransport } from '../model/use-chord-transport'
 import { dropMove, readDragId, sectionDragId, landsOn } from '../model/sheet-dnd'
 import { ArrangerSheet } from './ArrangerSheet'
 import { marksLine } from './marks-line'
@@ -241,21 +240,17 @@ export function ChordPlayer({
   const { shown, entry } = hand
   const style = book.get(entry.style)
   const variations = styleVariations(style)
-  const transport = useChordTransport({
+  // Play leads: alone, or a Genos followed (it plays the style), or the app's band standing in for one.
+  const band = useArrangerPlay({
     sheet: shown,
     style,
     tempo: entry.tempo,
     settings: entry.settings,
     block: prefs.voicing === 'block',
+    follow: prefs.follow,
+    styleName: localText(style.name, locale),
   })
-  // Following a MIDI arranger (a Genos): its clock lights the sheet, its Start/Stop is Play.
-  const follow = useArrangerFollow(shown, prefs.follow)
-  const device = follow.status?.state === 'connected' ? follow.status.device : 'Genos'
-  // The arranger leads only while one is connected: with Follow on and none there, the sheet plays itself.
-  const led = prefs.follow && follow.status?.state === 'connected'
-  const playing = led ? follow.running : transport.playing
-  const ownLit = led ? follow.lit : transport.lit
-  const ownBeat = led ? follow.beat : transport.beat
+  const { playing, lit: ownLit, beat: ownBeat } = band
   // Shared live: what this copy plays goes out; while it is stopped, the chord another copy plays lights.
   const online = useOnlineSheet(sheetId, playing ? ownLit : null, playing ? ownBeat : null)
   const theirs = playing ? null : online.remote
@@ -331,12 +326,7 @@ export function ChordPlayer({
 
   const numerals = sheetNumerals(shown)
   const hasChords = shown.sections.some((section) => section.bars.length > 0)
-  const toggle = () =>
-    led
-      ? follow.toggle()
-      : transport.playing
-        ? transport.stop()
-        : transport.play(transport.looped, picked && chordAt(picked) ? picked : undefined)
+  const toggle = () => band.toggle(picked && chordAt(picked) ? picked : undefined)
 
   useShortcuts(t('chordPlayer.shortcuts.group'), [
     { label: t('chordPlayer.shortcuts.playStop'), combo: { key: ' ' }, run: toggle },
@@ -455,8 +445,8 @@ export function ChordPlayer({
   /** The Genos panel, in its size; its tag on its full and compact cards (the pill has none). */
   const genosPanel = (where: 'over' | 'side') => (
     <ArrangerStrip
-      follow={follow}
-      device={device}
+      panel={band.panel}
+      device={band.device}
       size={genosSize}
       wide={wideSide && where === 'over'}
       flat={where === 'side'}
@@ -493,8 +483,8 @@ export function ChordPlayer({
           />
           <FloatingBarValue
             label={t('chordPlayer.tempo')}
-            value={String(follow.tempo ?? entry.tempo)}
-            spoken={t('chordPlayer.bpm', { count: follow.tempo ?? entry.tempo })}
+            value={String(entry.tempo)}
+            spoken={t('chordPlayer.bpm', { count: entry.tempo })}
             onClick={() => setDock('tempo')}
           />
           <FloatingBarValue
@@ -975,9 +965,7 @@ export function ChordPlayer({
             onBeats={(beats) => acts.resize(dialog.place, beats)}
             onPlayFrom={() => {
               setDialog(null)
-              // A connected arranger keeps the time: the chord is only picked; elsewhere the band plays from it.
-              if (led) setPicked(dialog.place)
-              else transport.play(transport.looped, dialog.place)
+              band.playFrom(dialog.place)
             }}
             onDuplicate={() => {
               inSection(dialog.place.section, (each) => duplicateChord(each, dialog.place.index))
@@ -999,8 +987,8 @@ export function ChordPlayer({
               setOpened(null)
             }}
             onDelete={() => deleteSection(opened)}
-            looped={transport.looped === opened}
-            onLoop={(on) => transport.setLoop(on ? opened : null)}
+            looped={band.looped === opened}
+            onLoop={(on) => band.setLoop(on ? opened : null)}
           />
         ) : null}
         {tagged !== null && shown.sections[tagged] ? (

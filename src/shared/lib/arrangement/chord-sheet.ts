@@ -494,11 +494,14 @@ export function playOrder(sheet: ChordSheet): PlayedBar[] {
   return played
 }
 
-/** A chart of the bars in play order (`arrange`'s input): each section's each time round a section of it, four bars a line. */
-export function sheetToChart(sheet: ChordSheet): Chart {
+/**
+ * A chart of the bars as played (`arrange`'s input), the sheet's play order unless given: each
+ * section's each time round a section of it, four bars a line.
+ */
+export function sheetToChart(sheet: ChordSheet, bars: readonly PlayedBar[] = playOrder(sheet)): Chart {
   // Each section's each time round, its bars in order.
   const rounds = new Map<string, ChartBar[]>()
-  for (const bar of playOrder(sheet)) {
+  for (const bar of bars) {
     const round = `${bar.section}.${bar.repeat}`
     rounds.set(round, [
       ...(rounds.get(round) ?? []),

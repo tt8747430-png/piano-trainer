@@ -14,13 +14,13 @@ import {
   type Tick,
 } from '@/shared/lib/music'
 import { arrange } from './arrange'
-import { playOrder, sheetToChart, type ChordSheet, type PlayedBar } from './chord-sheet'
-import type { Pattern, Performance } from './types'
+import { sheetToChart, type ChordSheet, type PlayedBar } from './chord-sheet'
+import type { Pattern, Performance, PerformanceNote } from './types'
 
 /**
  * A style over a chord sheet (R29 CP3): the piano's pattern, the bass's line and the drums' groove,
- * each a bar of 16 steps (a 4/4 bar in 16ths) with a velocity a step, a fill for the section's last
- * bar on its last repeat and a crash on its first beat, as a band plays a lead sheet.
+ * each a bar of 16 steps (a 4/4 bar in 16ths) with a velocity a step, a fill for a section's last
+ * bar and a crash on its first beat, as a band plays a lead sheet.
  */
 
 /** The kit's pieces a groove strikes: the drum sounds' own (`KitPiece`), named here for the kernel. */
@@ -273,48 +273,84 @@ function drumsOf(
   return hits.sort((a, b) => a.tick - b.tick)
 }
 
+/** A bar as the band plays it: its parts (its variation's), and whether it is a Fill-in, a Break or the Ending. */
+export interface BandBar {
+  readonly parts: StyleParts
+  readonly fill: boolean
+  readonly break: boolean
+  readonly ending: boolean
+}
+
+/** A Break's or the Ending's stroke on the bar's first beat: the crash and the kick, the rest silent. */
+const stroke = (bar: PlayedBar): DrumHit[] => [
+  { voice: 'crash', tick: bar.startTick, velocity: 0.9 },
+  { voice: 'kick', tick: bar.startTick, velocity: 1 },
+]
+
 /**
- * The band over a sheet: each section in its parts (`parts`, by the section's index), every bar as
- * played. The piano by its pattern (`arrange`); the bass by its line on the chord sounding, changing
- * with every chord struck; the drums by their grid; the fill on a section's last bar its last time
- * round and the crash on its first beat. `swing` plays the 16ths on triplets; `block` voices
- * the piano's chords in root position.
+ * The band over bars as played (`playOrder`'s, or an Intro's before them), each bar in its parts
+ * (`plays`, bar for bar). The piano by its pattern (`arrange`, once a pattern over the whole chart,
+ * each bar taking its own pattern's notes); the bass by its line on the chord sounding, changing with
+ * every chord struck; the drums by their grid, the crash on a section's first beat. A Fill-in plays
+ * the parts' fill; a Break strikes the bar's first beat and rests; the Ending strikes it and holds it
+ * to the bar's end. `swing` plays the 16ths on triplets; `block` voices the piano's chords in root
+ * position.
  */
 export function arrangeStyle(
   sheet: ChordSheet,
-  parts: readonly StyleParts[],
+  bars: readonly PlayedBar[],
+  plays: readonly BandBar[],
   options: { readonly swing?: boolean; readonly block?: boolean },
 ): Band {
   const swing = options.swing === true
-  const bars = playOrder(sheet)
-  const totalTicks = bars.length * barTicks(sheet.meter)
+  const totalTicks = bars.reduce((sum, bar) => sum + beatsToTicks(bar.beats), 0)
   if (bars.length === 0) return { bars, totalTicks, piano: null, bass: [], drums: [] }
-  // Each time round a section is a section of the chart: its pattern is its section's.
-  const rounds = [...new Set(bars.map((bar) => `${bar.section}.${bar.repeat}`))].map((round) =>
-    Number(round.split('.')[0]),
-  )
-  const patterns = rounds.map((section) => parts[section]?.piano ?? undefined)
-  const first = patterns.find((pattern) => pattern !== undefined)
-  const piano = first
-    ? arrange(sheetToChart(sheet), {
+  const chart = sheetToChart(sheet, bars)
+  const patterns = [
+    ...new Set(plays.flatMap((play) => (play.parts.piano ? [play.parts.piano] : []))),
+  ]
+  const performances = new Map(
+    patterns.map((pattern) => [
+      pattern,
+      arrange(chart, {
         tonic: sheet.key.tonic,
-        pattern: first,
-        sections: patterns,
+        pattern,
         // Blocks: every chord in root position; else each voice-led from the one before.
         ...(options.block ? { inversion: 0, nearest: false } : {}),
-      })
-    : null
+      }),
+    ]),
+  )
   const bass: BassNote[] = []
   const drums: DrumHit[] = []
+  const notes: PerformanceNote[] = []
   bars.forEach((bar, i) => {
-    const own = parts[bar.section]
-    if (!own) return
+    const play = plays[i]
+    if (!play) return
+    const own = play.parts
+    const start = bar.startTick
+    const end = start + beatsToTicks(bar.beats)
+    const struck = play.break || play.ending
+    // Struck on the first beat: a Break's note lasts a beat at most, the Ending's to the bar's end.
+    const held = <T extends { readonly durationTicks: Tick }>(note: T): T => ({
+      ...note,
+      durationTicks: play.ending ? end - start : Math.min(note.durationTicks, TICKS_PER_BEAT),
+    })
+    const performance = own.piano ? performances.get(own.piano) : undefined
+    const piano = (performance?.notes ?? []).filter(
+      (note) => note.startTick >= start && note.startTick < (struck ? start + 1 : end),
+    )
+    notes.push(...(struck ? piano.map(held) : piano))
     const after = bars[i + 1]?.chords[0]?.chord
-    const line = (bar.fill ? own.fill?.bass : undefined) ?? own.bass
-    if (line) bass.push(...bassOf(bar, line, sheet.meter, swing, after))
-    const grid = (bar.fill ? own.fill?.drums : undefined) ?? own.drums
-    if (grid)
+    const line = (play.fill ? own.fill?.bass : undefined) ?? own.bass
+    if (line) {
+      const played = bassOf(bar, line, sheet.meter, swing, after)
+      bass.push(...(struck ? played.filter((note) => note.startTick === start).map(held) : played))
+    }
+    const grid = (play.fill ? own.fill?.drums : undefined) ?? own.drums
+    if (grid && struck) drums.push(...stroke(bar))
+    else if (grid)
       drums.push(...drumsOf(bar, grid, sheet.meter, swing, own.crash === true && bar.sectionStart))
   })
-  return { bars, totalTicks, piano, bass, drums }
+  const [first] = performances.values()
+  return { bars, totalTicks, piano: first ? { ...first, notes } : null, bass, drums }
 }

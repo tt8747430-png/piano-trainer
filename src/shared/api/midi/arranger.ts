@@ -23,9 +23,10 @@ export type ArrangerStatus =
   | { readonly state: 'unsupported' }
 
 /**
- * A MIDI arranger (a Yamaha Genos) followed by its clock: its Start, Continue, Stop and clock (24 a
- * beat) heard from its USB TO HOST, and Yamaha's style messages sent to it (Section Control, Start,
- * Stop). Never a note or a chord. Built once in app/composition-root.ts.
+ * A MIDI arranger (a Yamaha Genos) on its USB TO HOST, led by the app's clock: MIDI Start, clock (24 a
+ * beat) and Stop sent to it, Yamaha's Section Control sent at the bar each section falls on, and its
+ * panel's section changes heard back. Never a note or a chord: the learner plays those, and the
+ * arranger detects the chords itself. Built once in app/composition-root.ts.
  */
 export interface ArrangerPort {
   /** Asks for MIDI with SysEx (the browser's prompt) and listens to the arranger. */
@@ -34,8 +35,8 @@ export interface ArrangerPort {
   current(): ArrangerStatus | null
   onStatus(listener: (status: ArrangerStatus) => void): () => void
   onTransport(listener: (event: ArrangerEvent) => void): () => void
-  /** A message to the arranger, as bytes; nothing where none is connected. */
-  send(bytes: readonly number[]): void
+  /** A message to the arranger, as bytes, at `at` on the page's clock (ms) or at once; nothing where none is connected. */
+  send(bytes: readonly number[], at?: number): void
 }
 
 /** MIDI's real-time bytes an arranger's transport sends. */
@@ -132,8 +133,8 @@ export function createWebArranger(
     current: () => current,
     onStatus: statuses.add,
     onTransport: transport.add,
-    send(bytes) {
-      linked?.output?.send([...bytes])
+    send(bytes, at) {
+      linked?.output?.send([...bytes], at)
     },
   }
 }
@@ -145,6 +146,8 @@ export interface FakeArranger extends ArrangerPort {
   /** Its panel switched to section `ss`. */
   section(ss: number, time?: number): void
   readonly sent: readonly (readonly number[])[]
+  /** When each sent message was to leave, as `send` was given it. */
+  readonly times: readonly (number | undefined)[]
 }
 
 export function createFakeArranger(
@@ -154,6 +157,7 @@ export function createFakeArranger(
   const transport = createListeners<ArrangerEvent>()
   let current: ArrangerStatus | null = null
   const sent: (readonly number[])[] = []
+  const times: (number | undefined)[] = []
   return {
     async connect() {
       current = status
@@ -166,8 +170,10 @@ export function createFakeArranger(
     current: () => current,
     onStatus: statuses.add,
     onTransport: transport.add,
-    send(bytes) {
-      if (current?.state === 'connected') sent.push([...bytes])
+    send(bytes, at) {
+      if (current?.state !== 'connected') return
+      sent.push([...bytes])
+      times.push(at)
     },
     play(kind, time = performance.now()) {
       transport.emit({ kind, time })
@@ -176,5 +182,6 @@ export function createFakeArranger(
       transport.emit({ kind: 'section', section, time })
     },
     sent,
+    times,
   }
 }

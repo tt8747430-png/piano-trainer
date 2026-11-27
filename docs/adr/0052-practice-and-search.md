@@ -181,6 +181,23 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     phone's 341 holds the four only so; the lamp lit says it runs, so the dot goes), Full and Minimize at its end;
     Full adds Intro, Main, Break and Ending under its head; Minimized is a glass pill ("Genos · Main A", the
     arranger alone before a section is chosen) that opens it Full. Its head minimizes it at any time, edit or not.
+  - **Play leads, with or without a Genos** (owner, 2026-11-27: "the mode with the aranger should work the same as
+    with no, the only difference should be that on the right timing it sends to the genos what styles to play …
+    the chords are not sent to the genos"; "imitate the styles when no genos is connected and let me play even if
+    no genos is connected, and the status no connection is like in this midi menu"). `useArrangerPlay` drives Play
+    and the panel in every mode. With a Genos connected the band keeps the time in silence (the count-in heard)
+    and `useArrangerFollow` sends it MIDI Start on the sheet's first chord, the app's clock (24 a beat, handed to
+    the browser 120 ms ahead), each bar's Section Control as the bar begins (`arrangerCues`), Stop at Stop, and
+    after an Ending lets it play out before Stop; a sheet with an Intro waits for the Genos's first Main heard.
+    Never a chord or a note: the Genos detects the chords played. With none connected the app's band stands in
+    (`imitatedPlay`, `imitatedOrder`): Main A–D play variations 1–4, a Fill-in plays the style's fill in its bar,
+    Break strikes its bar's first beat and rests, an Ending strikes its bar and holds it, the run ending there, and
+    Intro I–III plays the sheet's last 2, 4 or 8 bars before the first; a section pressed while it plays is taken
+    at the first bar not yet queued, one pressed while stopped is where the next Start begins. The head says who
+    plays (the Genos, or the style by name) and whether it plays; under it the connection in a line as the MIDI
+    keyboard's popover says it, with Try again for a refused prompt or no Genos found. Start/Stop rests on a sheet
+    with no chords, as Play. On the Genos: Menu › MIDI › System, Clock USB, Start/Stop Style, System Exclusive
+    Message Receive On.
   - **Reset:** the Settings page's Reset layout, with Undo (`useResetChordLayout`); Settings › General › Layout ›
     Page layouts (`/settings/general/layouts`, General showing "n changed" or "As they came") lists each page,
     what changed ("Keys at the top + 3 more", or "As it came") and its Reset, then Reset every page, each with
