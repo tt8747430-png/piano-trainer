@@ -426,7 +426,7 @@ _PBODY77 = lambda inner: f'<div class="nos" style="flex: 1; min-height: 0; overf
 _PANEL = lambda k, title, inner: f'<sc-if value="{{{{rail{k}On}}}}" hint-placeholder-val="{{{{{"true" if k == "Ch" else "false"}}}}}"><section aria-label="{title}" style="flex: none; width: 352px; min-height: 0; display: flex; flex-direction: column; box-shadow: inset -1px 0 0 {LINE}">{_PHEAD77(title)}{_PBODY77(inner)}</section></sc-if>'
 GENOSPANEL = (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">'
               + HEAD77 + ARLINE77 + f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div></div></sc-if>' + FOLLOW77)
-PANELS77 = (_PANEL('Ch', '{{keyHead}}', _DRAGB + f'<p style="margin: 0; font-size: 14px; color: {SOFT}">Tap a chord to put it in the chosen place, or drag it into a bar.</p>')
+PANELS77 = (_PANEL('Ch', '{{keyHead}}', _DRAGB)
             + _PANEL('St', 'Styles', STYLEROWS) + _PANEL('Ge', 'Genos', GENOSPANEL) + _PANEL('So', 'Audio', SOUND77) + _PANEL('Ca', 'Chart', CHART77))
 
 # the chart, its name in the band on a laptop (the chart starts on its first section); the phone keeps it over the chart
