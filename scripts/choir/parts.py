@@ -173,7 +173,10 @@ def part_words(main_staffs, part_staff, track):
         src = mine.get(t) or take.get(t)
         if src is None and tied_on(el) and last_from is not None:
             # a tied note where the voice it moves with sings a verse on (a dashed tie: song 11, bar 20, "în-chi-na")
-            src = next((e for e, u, kk in voices[last_from] if u == t and e.find('Lyrics') is not None), None)
+            # (only where that voice's own note is tied there too: a voice that strikes a new note sings its own
+            # syllable, which the part's held note does not take; song 34, bar 5)
+            src = next((e for e, u, kk in voices[last_from] if u == t and e.find('Lyrics') is not None
+                        and tied_on(e)), None)
         if src is None:
             continue
         # the voice the part last moved with; none after a syllable of its own (a tie after it holds that syllable)

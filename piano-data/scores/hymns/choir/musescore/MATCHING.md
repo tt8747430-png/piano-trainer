@@ -182,3 +182,6 @@ by hand.
 - **A pickup's length miscounted.** Song 33's pickup (an eighth, a dotted eighth, a sixteenth) is three eighths, not
   half a bar; written with half-bar rests for the men, every part's bar lines fell an eighth off and the parts lost
   their words. Add each bar's lengths before writing it, the pickup above all.
+- **A held note given the next voice's new word.** Song 34's tenors hold a tied note into bar 5 while the sopranos
+  strike a new one there ("vers,"); the part took that word onto its tie. A part's tie takes a word from the voice it
+  moves with only where that voice's own note is tied too (a verse sung on, song 11).

@@ -1,0 +1,56 @@
+# From 034. Ascultați imnul slăvirii.pdf (1 page). The choir's files hold the sopranos and the tenors (an octave
+# high) without words: the altos, the basses, four verses, the men's own words and the refrain are read from the
+# sheet, and the song is built from the template. Bar 6 is the organ's (printed small in the sheet, "ORGA").
+title: 34 Ascultați imnul slăvirii!
+composer: Simion Buzduga
+key: C
+time: C
+spatium: 1.3
+beams
+systems: 1 5 9 13 17
+marks: 1 text:Marciale, 6+3/8 text:(ORGA), 11+1/2 text:Cor:
+slur: Soprano 6+5/8 +1/4, Tenor 6+5/8 +1/4
+
+[Soprano notes]
+1: @1 C5:4. G4:8 A4:8 G4:8 F4:8 E4:8 @2 D4:4 C4:8 E4:8 G4:4 G4:4 @3 A4:4. B4:8 C5:4 D5:8 C5:8 @4 B4:4 A4:4 G4:4 B4:8 C5:8
+1: @5 D5:1~ @6 D5:4 r:8 r:4 G4:8 A4:8 B4:8 @7 C5:4. G4:8 A4:8 G4:8 F4:8 E4:8 @8 D4:4 C4:8 E4:8 G4:4 G4:4
+1: @9 D4:4. E4:8 F4:4 G4:8 F4:8 @10 E4:4 D4:4 C4:2~ @11 C4:2~ C4:8 G4:8 G4:8. G4:16 @12 C5:4 C5:4. B4:8 C5:8. A4:16
+1: @13 G4:2~ G4:8 G4:8 C5:8. B4:16 @14 A4:4 G4:4 B4:4 C5:4 @15 D5:4. D5:8 C5:2 @16 r:8 G4:8 C5:8. D5:16 E5:2
+1: @17 E5:4. E5:8 F5:4 E5:4 @18 C5:2~ C5:8 G4:8 C5:8. D5:16 @19 E5:4. E5:8 E5:2 @20 F5:2 E5:2 @21 D5:2 C5:2
+
+[Alto notes]
+1: @1 u:4. u:8 u:8 u:8 u:8 u:8 @2 u:4 u:8 u:8 u:4 u:4 @3 F4:4. F4:8 F4:4 F#4:4 @4 G4:4 F#4:4 u:4 G4:8 G4:8
+1: @5 B4:1~ @6 B4:4 r:8 r:4 u:8 u:8 u:8 @7 u:4. u:8 u:8 u:8 u:8 u:8 @8 u:4 u:8 u:8 u:4 u:4
+1: @9 B3:4. C4:8 D4:4 D4:8 D4:8 @10 C4:4 B3:4 u:2~ @11 u:2~ u:8 E4:8 E4:8. E4:16 @12 E4:4 E4:4. E4:8 E4:8. F4:16
+1: @13 E4:2~ E4:8 E4:8 E4:8. E4:16 @14 F4:4 E4:4 D4:4 E4:4 @15 F4:4. F4:8 E4:2 @16 r:8 E4:8 E4:8. E4:16 G4:2
+1: @17 G4:4. G4:8 A4:4 G4:4 @18 E4:2~ E4:8 E4:8 E4:8. F4:16 @19 G4:4. G4:8 G4:2 @20 A4:2 G4:2 @21 F4:2 E4:2
+
+[Tenor notes]
+1: @1 C4:4. G3:8 A3:8 G3:8 F3:8 E3:8 @2 D3:4 C3:8 E3:8 G3:4 G3:4 @3 C4:4. B3:8 A3:4 A3:4 @4 D4:4 C4:4 B3:2~
+1: @5 B3:4 D4:8 E4:8 F4:2~ @6 F4:4 r:8 r:4 G3:8 A3:8 B3:8 @7 C4:4. G3:8 A3:8 G3:8 F3:8 E3:8 @8 D3:4 C3:8 E3:8 G3:4 G3:4
+1: @9 G3:4. G3:8 G3:4 B3:8 A3:8 @10 G3:4 F3:4 E3:2~ @11 E3:2~ E3:8 r:8 r:4 @12 r:8 G3:8 G3:8. G3:16 G3:8 r:8 r:4
+1: @13 r:8 C4:8 C4:8. C4:16 C4:8 r:8 r:4 @14 r:8 C4:8 G3:8. G3:16 B3:8 B3:8 B3:8 B3:8 @15 B3:4. B3:8 G3:2 @16 r:8 C4:8 G3:8. G3:16 C4:2
+1: @17 C4:4. C4:8 C4:4 C4:4 @18 G3:2~ G3:8 r:8 r:4 @19 C4:8. C4:16 C4:8. C4:16 C4:2 @20 C4:2 C4:2 @21 B3:2 G3:2
+
+[Bass notes]
+1: @1 u:4. u:8 u:8 u:8 u:8 u:8 @2 u:4 u:8 u:8 u:4 u:4 @3 F3:4. F3:8 C3:4 D3:4 @4 D3:4 D3:4 G3:2~
+1: @5 G3:4 B3:8 C4:8 D4:2~ @6 D4:4 r:8 r:4 u:8 u:8 u:8 @7 u:4. u:8 u:8 u:8 u:8 u:8 @8 u:4 u:8 u:8 u:4 u:4
+1: @9 G2:4. G2:8 G2:4 G2:8 G2:8 @10 G2:4 G2:4 C3:2~ @11 C3:2~ C3:8 r:8 r:4 @12 r:8 C3:8 C3:8. C3:16 C3:8 r:8 r:4
+1: @13 r:8 C3:8 C3:8. C3:16 C3:8 r:8 r:4 @14 r:8 C3:8 C3:8. C3:16 G3:8 G3:8 G3:8 G3:8 @15 G3:4. G3:8 C3:2 @16 r:8 C3:8 C3:8. C3:16 C3:2
+1: @17 C3:4. C3:8 C3:4 C3:4 @18 C3:2~ C3:8 r:8 r:4 @19 C3:8. C3:16 C3:8. C3:16 C3:2 @20 F3:2 G3:2 @21 G2:2 C3:2
+
+[Soprano]
+1: @1 1.As -- cul -- taţi _ im _ -- @2 nul slă _ -- vi -- rii @3 in -- to -- nat de _ @4 u -- ni -- vers, u -- ni -- @5 vers, @7 Es -- te gla _ -- sul _ @8 prea -- mă _ -- ri -- rii @9 a cre -- a -- ţi _ -- @10 ei prin vers.
+1: @11 Lău -- daţi pe @12 Dom -- nul, toţi să'l cân -- @13 tăm A Dom -- nu -- @14 lui să fi -- e @15 glo -- ri -- a. @16 Cu toţi din su -- @17 flet să'L a -- do -- @18 răm E Dum -- ne -- @19 zeu în veci, @20 A -- le -- @21 lu -- ia!
+2: @1 2.Ste -- le -- le, _ ce _ -- @2 rul, pă _ -- mân -- tul, @3 râ -- uri, munţi, o _ -- @4 cea -- ne -- le cân -- tă'n @5 cor, @7 Pă -- sări, fia _ -- re, _ @8 tot văz _ -- du -- hul @9 îţi slă -- vesc pe _ @10 Cre -- a -- tor.
+3: @1 3.Prin Cu -- vânt _ au _ @2 luat fi _ -- in -- ţă @3 toa -- te Doam -- ne _ @4 ce'ai cre -- at, ai cre -- @5 at, @7 Im -- nul sfânt _ de _ @8 bi -- ru _ -- in -- ţă @9 îţi ră -- su -- nă _ @10 ne'n -- ce -- tat.
+4: @1 4.Să cân -- tăm _ im _ -- @2 nu'n -- fră _ -- ţi -- rii @3 toţi ce aş -- tep _ -- @4 tăm o zi, ma -- rea @5 zi, @7 Când la trâm _ -- bi _ -- @8 ţa ră _ -- pi -- rii @9 la li -- man ne'om _ @10 în -- tâl -- ni.
+
+[Tenor above]
+1: @5 u -- ni -- vers.
+2: @5 cân -- tă'n cor.
+3: @5 ai cre -- at.
+4: @5 ma -- rea zi.
+
+[Tenor]
+1: @12 Lău -- da -- ţi'L toţi, @13 toţi să'l cân -- tăm @14 A Dom -- nu -- lui să fi -- e @15 glo -- ri -- a. @16 Cu toţi din su -- @17 flet să'L a -- do -- @18 răm. @19 Dum -- ne -- zeu în veci, @20 A -- le -- @21 lu -- ia!
