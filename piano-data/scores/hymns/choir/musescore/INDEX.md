@@ -25,7 +25,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 72 | 3 | 1 | 13 | 17 | 1 | 0 |
+| Mixed choir | 107 | 73 | 3 | 1 | 13 | 16 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -67,7 +67,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 33 | Când vrei să vii | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 34 | Ascultați imnul slăvirii | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 35 | Doamne binecuvântă | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 36 | O, izvor al fericirii | No MuseScore | – | – | – | – | – | 1 |  |  | – |
+| 36 | O, izvor al fericirii | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 37 | Nu te teme | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/1, 16 bars, `037. Nu te teme.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
 | 38 | Mărețul har (1 subfolders) | Single voices only, no full score | – | – | – | – | Soprano, Tenor | 1 |  |  | – |
 | 39 | Cânta-voi Domnului | Done: a part per voice (no words in any of its files) | 3 | 2 staves, voices 2/2, 17 bars, `039. Cânta-voi Domnului - toate vocile.mscz` | no | – | Soprano, Alto, Tenor, Bass, All voices | 1 | 1 |  | piano |

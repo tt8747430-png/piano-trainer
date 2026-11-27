@@ -1,0 +1,41 @@
+# From 036. O, izvor al fericirii.pdf (1 page). The choir has only the PDF: every voice is written in from the
+# sheet and the song is built from the template. Four verses, then the refrain twice, the men's "A - a - vi-no" in
+# italics under their staff.
+title: 36 O, izvor al fericirii
+key: D
+time: 4/4
+systems: 1 5 9 13
+marks: 9 text:Refren:
+
+[Soprano notes]
+1: @1 A4:4 A4:4 A4:4 A4:4 @2 B4:8 C#5:8 D5:8 B4:8 B4:8 A4:8 A4:4 @3 D5:4 D5:4 A4:4 B4:8 G4:8 @4 F#4:4 E4:4 D4:2
+1: @5 A4:4 A4:4 A4:4 A4:4 @6 B4:8 C#5:8 D5:8 B4:8 B4:8 A4:8 A4:4 @7 D5:4 D5:4 A4:4 B4:8 G4:8 @8 F#4:4 E4:4 D4:4 F#4:8 E4:8
+1: @9 D4:4 D4:8 F#4:8 E4:4 D4:8 E4:8 @10 F#4:4 D4:8 F#4:8 A4:4 A4:4 @11 D5:4 D5:4 A4:4 B4:8 G4:8 @12 F#4:4 E4:4 D4:4 F#4:8 E4:8
+1: @13 D4:4 D4:8 F#4:8 E4:4 D4:8 E4:8 @14 F#4:4 D4:8 F#4:8 A4:4 A4:4 @15 D5:4 D5:4 A4:4 B4:8 G4:8 @16 F#4:4 E4:4 D4:2
+
+[Alto notes]
+1: @1 F#4:4 G4:4 F#4:4 F#4:4 @2 G4:8 A4:8 B4:8 G4:8 G4:8 F#4:8 F#4:4 @3 F#4:4 G4:4 F#4:4 D4:4 @4 D4:4 C#4:4 A3:2
+1: @5 F#4:4 G4:4 F#4:4 F#4:4 @6 G4:8 A4:8 B4:8 G4:8 G4:8 F#4:8 F#4:4 @7 F#4:4 G4:4 F#4:4 D4:4 @8 D4:4 C#4:4 u:4 r:4
+1: @9 D4:2 C#4:2 @10 D4:2 E4:4 E4:4 @11 F#4:4 G4:4 F#4:4 D4:4 @12 D4:4 C#4:4 u:4 r:4
+1: @13 D4:2 C#4:2 @14 D4:2 E4:4 E4:4 @15 F#4:4 G4:4 F#4:4 D4:4 @16 D4:4 C#4:4 A3:2
+
+[Tenor notes]
+1: @1 D4:4 C#4:4 D4:4 D4:4 @2 D4:4 D4:4 D4:4 D4:4 @3 D4:4 D4:4 D4:4 B3:4 @4 A3:4 G3:4 F#3:2
+1: @5 D4:4 C#4:4 D4:4 D4:4 @6 D4:4 D4:4 D4:4 D4:4 @7 D4:4 D4:4 D4:4 B3:4 @8 A3:4 G3:4 F#3:4 r:4
+1: @9 A3:2 A3:2 @10 A3:4 B3:4 C#4:8 D4:8 E4:8 C#4:8 @11 D4:4 D4:4 D4:4 B3:4 @12 A3:4 G3:4 F#3:4 r:4
+1: @13 A3:2 A3:2 @14 A3:4 B3:4 C#4:8 D4:8 E4:8 C#4:8 @15 D4:4 D4:4 D4:4 B3:4 @16 A3:4 G3:4 F#3:2
+
+[Bass notes]
+1: @1 D3:4 E3:4 F#3:4 D3:4 @2 G2:8 A2:8 B2:8 C#3:8 D3:4 D3:4 @3 D3:4 E3:4 F#3:4 G3:4 @4 u:4 A2:4 D3:2
+1: @5 D3:4 E3:4 F#3:4 D3:4 @6 G2:8 A2:8 B2:8 C#3:8 D3:4 D3:4 @7 D3:4 E3:4 F#3:4 G3:4 @8 u:4 A2:4 D3:4 r:4
+1: @9 D3:2 A2:2 @10 D3:4 B2:4 A2:8 B2:8 C#3:4 @11 D3:4 E3:4 F#3:4 G3:4 @12 u:4 A2:4 D3:4 r:4
+1: @13 D3:2 A2:2 @14 D3:4 B2:4 A2:8 B2:8 C#3:4 @15 D3:4 E3:4 F#3:4 G3:4 @16 u:4 A2:4 D3:2
+
+[Soprano]
+1: @1 1.O, iz -- vor al @2 fe _ -- ri _ -- ci _ -- rii, @3 Doam -- ne ma -- re _ @4 Te slă -- vim, @5 Pes -- te noi re -- @6 var _ -- să _ ha _ -- rul @7 Ves -- nic să Te _ @8 prea -- mă -- rim. Eu a -- @9 lerg că -- tre cer, hai şi @10 tu, as -- tăzi, vi -- no, @11 A -- le -- lu -- ia _ @12 Dom -- nu -- lui, Eu a -- @13 lerg că -- tre cer, hai şi @14 tu, as -- tăzi, vi -- no, @15 A -- le -- lu -- ia _ @16 Dom -- nu -- lui!
+2: @1 2.El ne mus -- tră @2 cu _ răb _ -- da _ -- re, @3 Nu ţi -- ne mâ _ -- @4 ni -- a'n veci, @5 Mi -- los -- tiv dă @6 în _ -- du _ -- ra _ -- re, @7 Pe că -- ra -- rea _ @8 un -- de treci.
+3: @1 3.O, ce mi -- lă @2 ne _ -- cu _ -- prin _ -- să, @3 Lu -- mii'n -- tregi a _ @4 a -- ră -- tat, @5 Mâ -- na Lui şi @6 azi _ e'n _ -- tin _ -- să, @7 Dă ier -- ta -- re _ @8 de pă -- cat.
+4: @1 4.El a -- du -- ce @2 în _ -- fră _ -- ţi _ -- re, @3 El a -- prin -- de _ @4 dra -- gos -- tea, @5 Ia -- tă i -- ni -- @6 ma _ mea _ Doam _ -- ne, @7 Pu -- ne'i Tu pe _ -- @8 ce -- tea Ta.
+
+[Bass italic]
+1: @9 A a @10 a _ vi _ -- no, @13 A a @14 a _ vi _ -- no,
