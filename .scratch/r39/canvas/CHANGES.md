@@ -8,10 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · (this commit) · a recording plays with the playhead: the Take's piano roll carries the Player's line, beat by beat from the bar chosen, the roll following it sideways on a phone; the bar strip is a working slider (arrow keys, Home and End, its value said); the "Playing from bar 4" line under it, which the line now shows, is gone · Take, TakeLaptop · pending
-
 ## Changes
 
+- 2026-11-27 · 469beddf · a recording plays with the playhead: the Take's piano roll carries the Player's line, beat by beat from the bar chosen, the roll following it sideways on a phone; the bar strip is a working slider (arrow keys, Home and End, its value said); the "Playing from bar 4" line under it, which the line now shows, is gone · Take, TakeLaptop · v837
 - 2026-11-27 · 93f3a838 · the editor plays with the playhead too: Play counts beats from the selection (bar 3, as Flat plays from what is chosen), the kit's line over the Page view and Panorama, left where a pause leaves it; the page follows the line on both screens (a system at a time down the page, along Panorama's one line, below the glass header), by its own scroller only; the selection is named bar 3, the bar the page prints, where Notation's scope, its toasts and Play's toast said bar 4 · PlayerApp, PlayerDesk, Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · v836
 - 2026-11-27 · a9dd61ff · the Player draws its playhead: one Deep Sky line (the keys' colour while they sound) at the beat that sounds, across its system's staves, moving with the beat while playing and left where a pause leaves it, none at rest; from the engraving's own bar boxes (kit PLAYHEAD, as PICKLAYER), the page's 1.5 on a laptop and its width on a phone · PlayerApp, PlayerDesk · v835
 - 2026-11-27 · 2505bbb3 · the Player's two boards carry the States box beside the frame, as every other board (owner, 2026-11-15): Playing, Looping, Recording from the keyboard, Transposed up a semitone, Playback options open, and the menu (phone) or Version history (laptop) open, each one tap · PlayerApp, PlayerDesk · v834
