@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · (this commit) · one name for the version history (laws, Information architecture 6: one thing, one label on every screen): the phone's ☰ said Version history (the owner's word) and the laptop's band, tooltip, view and list said History; all say Version history now, Close version history in the band; its page was drawn at zoom 1.2 where Practice and Edit draw it at 1.5, so its 24s fell to 19; it is 1.5, one page at one size in all three · EditorDraftLaptop, EditorLaptop, PlayerDesk · **pending**
+
 ## Changes
 
 - 2026-11-27 · 481f4365 · a panel fades in as Flat's (FLAT_UI_SHELL_AND_MOTION §3: the panel column's content, opacity, .2s): opening or switching a rail panel now fades its content in over 200ms on the one curve, a fold inside it does not replay it, and under reduced motion it is instant; the Player's docked panels were a section named "Settings" whatever they showed, so they are now the editor's aside, a tabpanel named Versions, View or Audio (one implementation) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · v811

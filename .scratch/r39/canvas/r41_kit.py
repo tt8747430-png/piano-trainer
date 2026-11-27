@@ -610,11 +610,12 @@ def PICKKEYS(S, SET):
 # History (owner, 2026-11-26: "make a proper version history also like the flat does and not only the undo and redo
 # actions"; Flat's "Last save about 2 hours ago" in its top bar, "Document History", opening the History view: the
 # band says "Close History View" and the saved moment, the page as it was, a Versions list at the right, each with its
-# time, who and what changed, +4 notes). Ours is named History (a song's Versions are its arrangements, R74): the band's
+# time, who and what changed, +4 notes). Ours is named Version history, the owner's word, on both sizes: the band's
 # clock opens it in both modes; a row shows that moment's page with the bars it changed in honey; Restore this version
-# brings it back with Undo in its toast (a loss that can be undone happens at once, CLAUDE.md), Close history leaves.
+# brings it back with Undo in its toast (a loss that can be undone happens at once, CLAUDE.md), Close version history leaves;
+# its page at the Player's zoom (1.5), one page at one size in Practice, Edit and here.
 CLOCKI = _LI('<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>')
-HISTBTN = (f'<button type="button" aria-label="History: saved {{{{histAgo}}}}" data-tip="History" onClick="{{{{openHist}}}}" style="flex: none; height: 40px; box-sizing: border-box; padding: 0 16px 0 12px; border: 0; border-radius: 20px; background: transparent; box-shadow: {ONB_RING}; color: {ONB}; font: inherit; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; white-space: nowrap; cursor: pointer">'
+HISTBTN = (f'<button type="button" aria-label="Version history: saved {{{{histAgo}}}}" data-tip="Version history" onClick="{{{{openHist}}}}" style="flex: none; height: 40px; box-sizing: border-box; padding: 0 16px 0 12px; border: 0; border-radius: 20px; background: transparent; box-shadow: {ONB_RING}; color: {ONB}; font: inherit; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; white-space: nowrap; cursor: pointer">'
            f'{CLOCKI.replace("width=\"20\" height=\"20\"", "width=\"18\" height=\"18\"")}<span>Saved {{{{histAgo}}}}</span></button>')
 def HISTVIEW():
     row = (f'<button type="button" role="option" aria-selected="{{{{h.on}}}}" onClick="{{{{h.pick}}}}" style="width: 100%; box-sizing: border-box; padding: 12px 16px; border: 0; border-bottom: 1px solid {LINE}; background: {{{{h.bg}}}}; color: {INK}; font: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px; cursor: pointer">'
@@ -622,16 +623,16 @@ def HISTVIEW():
            f'<span style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: {SOFT}"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 4px; background: #356890"></span>You</span>'
            f'<span style="display: flex; flex-wrap: wrap; gap: 4px"><sc-for list="{{{{h.what}}}}" as="w" hint-placeholder-count="1"><span style="height: 24px; padding: 0 8px; border-radius: 12px; background: {FILL}; font-size: 13px; display: flex; align-items: center; font-variant-numeric: tabular-nums">{{{{w}}}}</span></sc-for></span></button>')
     band = (f'<header data-band style="flex: none; height: 64px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 12px; background: {BAND}; color: {ONB}">'
-            f'<button type="button" onClick="{{{{closeHist}}}}" data-tip="Close history · Esc" style="flex: none; height: 40px; padding: 0 16px 0 12px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>Close history</button>'
+            f'<button type="button" onClick="{{{{closeHist}}}}" data-tip="Close version history · Esc" style="flex: none; height: 40px; padding: 0 16px 0 12px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>Close version history</button>'
             f'<h1 style="margin: 0 0 0 4px; font-size: 17px; font-weight: 600; white-space: nowrap">{{{{histT}}}}</h1>'
             f'<span style="flex: 1"></span>'
             f'<sc-if value="{{{{histOld}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{histRestore}}}}" style="flex: none; height: 40px; padding: 0 16px; border: 0; border-radius: 20px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer">Restore this version</button></sc-if></header>')
     page = (f'<main class="nos" style="flex: 1; min-width: 0; overflow-y: auto; background: {FILL}; display: flex; justify-content: center; padding: 24px 0 48px">'
-            f'<div style="zoom: 1.2">{A4PAGE("", None, pick="hist")}</div></main>')
-    side = (f'<aside aria-label="History" style="flex: none; width: 352px; display: flex; flex-direction: column; background: {SHEET}; box-shadow: inset 1px 0 0 {LINE}">'
-            f'<h2 style="flex: none; margin: 0; height: 64px; box-sizing: border-box; padding: 0 16px; display: flex; align-items: center; font-size: 17px; font-weight: 600; box-shadow: inset 0 -1px 0 {LINE}">History</h2>'
+            f'<div style="zoom: 1.5">{A4PAGE("", None, pick="hist")}</div></main>')
+    side = (f'<aside aria-label="Version history" style="flex: none; width: 352px; display: flex; flex-direction: column; background: {SHEET}; box-shadow: inset 1px 0 0 {LINE}">'
+            f'<h2 style="flex: none; margin: 0; height: 64px; box-sizing: border-box; padding: 0 16px; display: flex; align-items: center; font-size: 17px; font-weight: 600; box-shadow: inset 0 -1px 0 {LINE}">Version history</h2>'
             f'<div role="listbox" aria-label="Saved moments" class="nos" style="flex: 1; min-height: 0; overflow-y: auto"><sc-for list="{{{{histRows}}}}" as="h" hint-placeholder-count="4">{row}</sc-for></div></aside>')
-    return (f'<sc-if value="{{{{histOn}}}}" hint-placeholder-val="{{{{false}}}}"><section role="dialog" aria-modal="true" aria-label="History" style="position: absolute; inset: 0; z-index: 66; display: flex; flex-direction: column; background: {PAGE}">'
+    return (f'<sc-if value="{{{{histOn}}}}" hint-placeholder-val="{{{{false}}}}"><section role="dialog" aria-modal="true" aria-label="Version history" style="position: absolute; inset: 0; z-index: 66; display: flex; flex-direction: column; background: {PAGE}">'
             f'{band}<div style="flex: 1; min-height: 0; display: flex">{page}{side}</div></section></sc-if>')
 def HISTKEYS(S, SET, TOAST, HIST='HIST', restore='{}'):
     """HIST: the board's list of saved moments, newest first ({id, t, what, bars, ov}); restore(h): what Restore sets."""
