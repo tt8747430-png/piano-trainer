@@ -193,7 +193,7 @@ def PV_INV(w, bars, first):
         out += ''.join(f'<text x="58" y="{y}" text-anchor="middle" font-family="Noto Music, serif" font-size="19" font-weight="700" fill="{INK}">4</text>' for y in (31, 47, 119, 135))
         x0 = 72
     else:
-        out += f'<text x="14" y="4" font-size="11" fill="{SOFT}">{first + 1}</text>'
+        out += f'<text x="14" y="4" font-size="12" fill="{SOFT}">{first + 1}</text>'
     bw = (w - x0) / bars
     def chord(x, steps, y, mid, ledgers):
         up = sum(steps) / len(steps) < mid           # under the middle line the stem goes up, as an engraver sets it
@@ -288,7 +288,7 @@ def PV_HANON(w, bars, first):
         out += ''.join(f'<text x="58" y="{y}" text-anchor="middle" font-family="Noto Music, serif" font-size="19" font-weight="700" fill="{INK}">{d}</text>' for y, d in ((31, 2), (47, 4), (119, 2), (135, 4)))
         x0 = 72
     else:
-        out += f'<text x="14" y="4" font-size="11" fill="{SOFT}">{first + 1}</text>'
+        out += f'<text x="14" y="4" font-size="12" fill="{SOFT}">{first + 1}</text>'
     bw = (w - x0) / bars
     for b in range(bars):
         bx = x0 + b * bw

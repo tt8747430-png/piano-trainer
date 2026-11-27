@@ -141,6 +141,13 @@ def _cut_el(t, start, tag):
         if depth == 0: return t[:start] + t[start + m.end():]
     raise ValueError(tag)
 
+def _no_float_frame(t):
+    # the floating keyboard's frame (Move the piano and its resize corners) went with the floating keyboard: the keys
+    # are docked at the foot on both sizes, so the grips floated over the music with nothing to move
+    k = '<sc-if value="{{kbOn}}" hint-placeholder-val="{{false}}"><div aria-hidden="true" style="position: absolute; z-index: 20;'
+    assert t.count(k) == 1, 'float frame'
+    return _cut_el(t, t.index(k), 'sc-if')
+
 def header_transport(t):
     # Flat's header, built new from the kit (owner, 2026-11-26: "refactor properly … just moved the location but didnt
     # refactor them properly"; "dont use old kits or builders at all"): the floating capsules and their three old
@@ -180,6 +187,7 @@ def header_transport(t):
     t = t.replace('viewBottom: keys ? 904 - (800 - bandH) + 16 : DEV.bottom,', 'viewBottom: keys ? bandH + 16 : DEV.bottom,', 1)
     fl = 'border-radius: 20px; box-shadow: 0 0 0 1px rgba(51,41,33,.10), 0 2px 6px rgba(51,41,33,.14), 0 18px 40px -12px rgba(51,41,33,.40)'
     assert t.count(fl) == 2; t = t.replace(fl, 'border-radius: 0; box-shadow: 0 -1px 0 #DAD1C8; z-index: 20')  # over the page, under the grip (21)
+    t = _no_float_frame(t)
     grip = ('<sc-if value="{{kb2d}}" hint-placeholder-val="{{false}}"><div role="separator" aria-orientation="horizontal" aria-label="Keyboard height" aria-valuenow="{{kbH}}" aria-valuemin="96" aria-valuemax="260" tabindex="0" data-tip="Drag to resize" onPointerDown="{{dragKeys}}" onPointerMove="{{dragKeys}}" onKeyDown="{{keyKeys}}" '
             'style="position: absolute; z-index: 21; left: {{kbLeft}}px; width: {{kbW}}px; top: {{gripTop}}px; height: 13px; cursor: row-resize; touch-action: none; display: flex; align-items: center; justify-content: center">'
             '<span aria-hidden="true" style="width: 36px; height: 5px; border-radius: 3px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8"></span></div></sc-if>')
@@ -209,6 +217,19 @@ def phone_band(t):
     # (HDRPOPS, phone), ☰ holds the laptop rail's places (Song, View, Transpose, Audio's levels are the Practice sheet's
     # Hands), one implementation with the editor
     t = _cut_el(t, t.rindex('<div', 0, t.index('aria-label="Transport"')), 'div')
+    # the keys docked at the foot as the laptop's and the editor's (owner, 2026-11-26: "the piano should also be the
+    # same as the flat and should be the same in the editor and also in the player: but keep the 3d version"): the
+    # phone's whole width, square, a hairline above, over the page; the music ends 16 above them; under the home
+    # indicator the keys' own paper runs on (the editor's foot reaches the screen's edge)
+    t = _no_float_frame(t)
+    assert t.count('kbTop: 762 - bandH, kbLeft: 8,') == 1
+    t = t.replace('kbTop: 762 - bandH, kbLeft: 8,', 'kbTop: 874 - bandH, kbLeft: 0,', 1)
+    k = t.index('const KB = { top: 0,'); k = t.index('};\n', k) + 3
+    t = t[:k] + "KB.w = 402;\n" + t[k:]
+    fl = 'border-radius: 20px; box-shadow: 0 0 0 1px rgba(51,41,33,.10), 0 2px 6px rgba(51,41,33,.14), 0 18px 40px -12px rgba(51,41,33,.40)'
+    assert t.count(fl) == 2; t = t.replace(fl, 'border-radius: 0; box-shadow: 0 -1px 0 #DAD1C8; z-index: 20')
+    b = t.index('const bandH = '); b = t.index(';\n', b) + 2
+    t = t[:b] + 'VIEW_VALS.viewBottom = keys ? bandH + 16 : DEV.bottom;\n' + t[b:]
     for cond in ('isPace', 'isHands', 'isKeys', 'isMore', 'isView', 'isViews', 'isKey'):
         t = _cut_el(t, t.index(f'<sc-if value="{{{{{cond}}}}}"'), 'sc-if')
     h0 = t.index('<header'); h1 = t.index('</header>', h0) + len('</header>')

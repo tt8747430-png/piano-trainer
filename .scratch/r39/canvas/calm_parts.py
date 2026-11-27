@@ -126,7 +126,7 @@ def score_grand(w, systems, sel=None, size=1.0, natural=False, piano=True):
             out.append(f'<text x="{x0 - 8 * s:.1f}" y="{mtop + 2 * sp + 5 * s:.1f}" text-anchor="end" font-size="{14 * s:.0f}" font-style="italic" font-family="{SERIF}" fill="{INK}">Melody</text>')
             if piano: out.append(f'<text x="{x0 - 15 * s:.1f}" y="{my + 5 * s:.1f}" text-anchor="end" font-size="{14 * s:.0f}" font-family="{SERIF}" fill="{INK}">Piano</text>')
         else:
-            out.append(f'<text x="{x0:.1f}" y="{mtop - 22 * s:.1f}" font-size="{11 * s:.0f}" fill="{SOFT}">{bars[0]}</text>')
+            out.append(f'<text x="{x0:.1f}" y="{mtop - 22 * s:.1f}" font-size="{12 * s:.0f}" fill="{SOFT}">{bars[0]}</text>')
         x = x0 + 4 * s
         for top, clef in (((mtop, 't'), (ttop, 't'), (btop, 'b')) if piano else ((mtop, 't'),)):
             if clef == 't': out.append(f'<text x="{x:.1f}" y="{top + 4 * sp:.1f}" font-size="{4 * sp:.0f}" font-family="Noto Music, serif" fill="{INK}">𝄞</text>')
