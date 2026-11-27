@@ -245,6 +245,30 @@ def layout(main_staff, part_staff):
             pm.insert(i, copy.deepcopy(b))
 
 
+def system_marks(main_staff, part_staff):
+    """The score's endings, Fine and D.C. or D.S. marks in the part, at the same bars (song 40): they stand on the
+    score's top staff alone, so a part from any other staff had none."""
+    def bare(el):
+        el = copy.deepcopy(el)
+        for e in list(el.iter()):
+            for x in e.findall('eid') + e.findall('linkedTo'):
+                e.remove(x)
+        return el
+    for mm, pm in zip(main_staff.findall('Measure'), part_staff.findall('Measure')):
+        for el in pm.findall('Marker') + pm.findall('Jump'):
+            pm.remove(el)
+        pv = pm.find('voice')
+        for el in [x for x in pv if x.tag == 'Spanner' and x.get('type') == 'Volta']:
+            pv.remove(el)
+        at = next((i for i, x in enumerate(pm) if x.tag == 'voice'), len(pm))
+        for el in mm.findall('Marker') + mm.findall('Jump'):
+            pm.insert(at, bare(el))
+            at += 1
+        mv = mm.find('voice')
+        for i, el in enumerate(x for x in mv if x.tag == 'Spanner' and x.get('type') == 'Volta'):
+            pv.insert(i, bare(el))
+
+
 MARKS = ('Dynamic', 'StaffText', 'Fermata')
 
 
@@ -375,6 +399,7 @@ def apply(files, spec):
                 pm.insert(list(pm).index(pm.find('eid')) + 1 if pm.find('eid') is not None else 0,
                           copy.deepcopy(sm.find('irregular')))
         layout(main[0], part)
+        system_marks(main[0], part)
         header(main_score, score, score.findtext('name') or n.split('/')[1].split('_', 1)[1].replace('_', ' '))
         marks(main, part, track)
         if not spec.get('beams'):

@@ -193,3 +193,41 @@ by hand.
   parts' words fell an eighth off. A silent voice in a short bar now keeps one rest of the bar's length.
 - **Triplets slurred in the sheet, tied in the file.** Where the men sing a syllable on each note of a slurred
   triplet (song 39, bars 6, 10, 11), the file's tie is removed (`untie:`) and the slur drawn (`slur:`).
+- **A syllable put on a tie.** Song 40's "Ti-ne" ends on a tied eighth whose tie runs on: written `^ne _`, the
+  syllable stood on the tie's second note and a slur was drawn; the sheet sings it on the next struck note (bars 2,
+  6, 8, 10, 12). `^` is only for a verse sung where another holds; count each bar's struck notes first.
+- **A few bars corrected in every voice taken for a song written in whole.** Song 40 corrects bars of all four
+  voices; the builder then started from the empty template and the score lost every other bar. Only a voice written
+  in for every bar makes a song from the template.
+- **A voice's corrected bar after a voice that came first.** Removing song 40's sopranos from bar 8 left the
+  file's backup at the bar's start, so the entered notes stood a bar late (bars 8, 10, 16, 23 twice as long). The
+  backup now goes back only to the bar's start.
+- **The file's endings kept beside the sheet's, and each over both staves.** Song 40's file has a second ending the
+  sheet does not print, and an ending written for every staff stood over each (song 7 too). The sheet's endings now
+  replace the file's and stand over the top staff, and every part takes them.
+- **Fine and D.C. al Fine as loose words.** The files' own marks came through MusicXML as plain text over a beat
+  (song 40), not set at the bar's end and not played; they are made MuseScore's marks again, in the parts too.
+- **Entered bars flagged where the sheet beams.** A song printed with beams (`beams`) showed its entered bars
+  flagged (song 40, bars 8, 10, 16, 23); entered notes are now beamed as MuseScore groups them.
+- **A verse's line cut by another verse.** Verse 2's "Tău" held through bar 17 where verse 1 sings "le."; its line
+  stopped at verse 1's syllable. A line now ends at its own verse's next syllable.
+- **A slur placed a beat off where a voice starts late.** Song 40's altos and basses begin bar 13 after a gap the
+  file leaves (the sopranos' rest); the gap was not counted and the `slur:` stood a beat late.
+- **The second verse's slurs.** The sheet slurs the notes the second verse holds where the first sings on (song 40,
+  bars 12, 13, 16, 17), thinly; the builder slurs the first verse's holds only, so they are `slur:` lines.
+- **A tie taken for a slur.** Song 39's men hold a tied C in the triplets of bars 6, 10 and 11 (the arc joins two
+  notes of one pitch); read as a slur, the file's tie was removed (`untie:`) and every later syllable of their verse
+  moved a note. An arc between two heads of one pitch is a tie unless the sheet sets a syllable under the second.
+- **Words placed before the file's ties were removed.** `untie:` acted after the words were set, so the untied
+  note was still passed over and two syllables fell on one note (song 39, bar 7: "i" and "re,"). The ties go first.
+- **A verse a syllable late after a triplet.** Song 39's verses 1 and 2 held "lui" and "tea" over the whole triplet
+  of bar 2, where the sheet sings "mă" and "di" on its last note and "re," and "nă," on the long note of bar 3. Read
+  each verse's syllables against the notes, and the long notes against the phrase's ends.
+- **An echo's words from the voice's first note.** The men of song 39 sing with the women in bar 11 and start their
+  own "o voi 'năl-ţa" on the eighth after: the notes before are passed (`* *`), and "ţa" falls on bar 12.
+- **Lines the sheet leaves out.** A held syllable whose line the sheet does not print (song 39, "Lui," in bars 4 and
+  5 where the men answer, the last "Lui." and "ta.") ends in `|`.
+- **Bars written in from the sheet flagged where it beams a melisma.** Song 34's sheet beams the eighths sung to one
+  syllable (bars 1-4, beat by beat, as beamed by hand) and flags the rest; its notes, all written in, carried no
+  beams, so `beamed:` could not show them. Entered notes now carry beams (MuseScore's grouping, or `beat-beams`),
+  and a sung bar is flagged unless the sheet beams it.

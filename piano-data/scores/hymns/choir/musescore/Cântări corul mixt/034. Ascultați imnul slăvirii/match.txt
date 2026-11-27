@@ -6,7 +6,8 @@ composer: Simion Buzduga
 key: C
 time: C
 spatium: 1.3
-beams
+beat-beams
+beamed: 1-4
 unslurred: 1-21
 systems: 1 5 9 13 17
 marks: 1 text:Marciale, 6+3/8 text:(ORGA), 11+1/2 text:Cor:

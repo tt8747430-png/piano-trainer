@@ -38,7 +38,8 @@ def staff_events(staff, voice):
     for k, (m, bar) in enumerate(zip(staff.findall('Measure'), bar_lengths(staff))):
         tv = t
         for el, length in chord_lengths(m, voice):
-            out.append((el, tv, k))
+            if el.tag != 'location':
+                out.append((el, tv, k))
             tv += length if el.findtext('durationType') != 'measure' else bar
         t += bar
     return out

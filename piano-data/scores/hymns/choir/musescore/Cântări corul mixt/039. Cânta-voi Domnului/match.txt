@@ -1,23 +1,20 @@
 # From 039. Cânta-voi Domnului.pdf (2 pages). The choir's full file holds the four voices without words: three
 # verses for the women and the men's own words (in italics under their staff) are written in from the sheet. The
-# sheet counts its pickup as bar 1 and prints it short; where the men's triplets are slurred, not tied, they sing
-# a syllable on each note (bars 6, 10, 11).
+# sheet counts its pickup as bar 1 and prints it short.
 composer: Nicolae Moldoveanu
 count-pickup
 spatium: 1.2
 bar-length: 1 3/8
 systems: 1 4 6 8 | 10 13 15
-untie: Tenor 6,10,11
-untie: Bass 6,10,11
-slur: Tenor 6+3/4 +1/12, Bass 6+3/4 +1/12, Tenor 10+3/4 +1/12, Bass 10+3/4 +1/12, Tenor 11+3/4 +1/12, Bass 11+3/4 +1/12
 marks: 17+1/2 fermata
+slur: Soprano 2+3/4 +1/12, Soprano 6+3/4 +1/12, Soprano 10+3/4 +1/12, Soprano 11+3/4 +1/12
 
 [Soprano]
-1: @1 1.Cân -- ta -- voi @2 Dom -- nu -- lui _ _ @3 mă -- ri -- re, cân -- ta -- voi @4 Lui, cân -- ta _ voi @5 Lui, pen -- tru de -- @6 pli -- na mân -- tu -- i -- @7 re, _ cân -- ta _ voi @8 Lui, cân -- ta _ voi @9 Lui, A mea _ cân -- @10 ta -- re în săr -- bă -- toa -- @11 re, _ o voi 'năl -- ţa @12 me -- reu spre sla -- va Dom -- nu _ -- @13 lui, cân -- ta -- voi @14 Nu -- me -- le _ Său @15 Ma -- re, cân -- ta _ voi @16 Lui, cân -- ta _ voi @17 Lui.
-2: @1 2.Cân -- ta -- voi @2 dra -- gos -- tea _ _ @3 di -- vi -- nă, o voi cân -- @4 ta, o voi _ cân -- @5 ta, căci mi'a a -- @6 dus a ei _ lu -- @7 mi -- nă, o voi _ cân -- @8 ta, o voi _ cân -- @9 ta! Cu stă _ -- ru -- @10 in -- ţă şi cu _ cre -- @11 din -- ţă, iu -- bi -- rea'n cân -- @12 tec pu _ -- ru -- rea o voi 'năl -- @13 ţa, cân -- ta -- rea @14 ei e bi _ -- ru -- @15 in -- ţă, o voi _ cân -- @16 ta, o voi _ cân -- @17 ta.
-3: @1 3.Cân -- ta -- voi @2 jert -- fa prea -- sfin -- ţi -- @3 tă, _ o voi _ cân -- @4 ta, o voi _ cân -- @5 ta, prin ea mi'e @6 via -- ţa'n -- drep -- tă -- ţi -- @7 tă, _ o voi _ cân -- @8 ta, o voi _ cân -- @9 ta! A mea'n _ fi -- @10 e -- re şi mân -- gâ -- e -- @11 re, _ mi'a câş -- ti -- ga -- @12 t'o Dom -- nul, _ sus pe Gol -- go -- @13 ta, cân -- ta -- voi @14 ma -- rea Lui _ pu -- @15 te -- re, o voi _ cân -- @16 ta, o voi _ cân -- @17 ta.
+1: @1 1.Cân -- ta -- voi @2 Dom -- nu -- lui _ mă -- @3 ri -- re, cân -- ta _ -- voi @4 Lui,| cân -- ta _ voi @5 Lui,| pen -- tru de -- @6 pli -- na mân -- tu -- i -- @7 re,| _ cân -- ta _ voi @8 Lui, cân -- ta _ voi @9 Lui, A mea _ cân -- @10 ta -- re în săr -- bă -- toa -- @11 re,| _ o voi _ 'năl -- @12 ţa me -- reu spre sla -- va Dom -- nu -- @13 lui, cân -- ta -- voi @14 Nu -- me -- le _ Său @15 Ma -- re, cân -- ta _ voi @16 Lui, cân -- ta _ voi @17 Lui.|
+2: @1 2.Cân -- ta -- voi @2 dra -- gos -- tea _ di -- @3 vi -- nă, o voi _ cân -- @4 ta,| o voi _ cân -- @5 ta,| căci mi'a a -- @6 dus a ei _ lu -- @7 mi -- nă, o voi _ cân -- @8 ta, o voi _ cân -- @9 ta! Cu stă _ -- ru -- @10 in -- ţă şi cu _ cre -- @11 din -- ţă, iu -- bi -- rea'n cân -- @12 tec pu _ -- ru -- rea o voi 'năl -- @13 ţa, cân -- ta -- rea @14 ei e bi _ -- ru -- @15 in -- ţă, o voi _ cân -- @16 ta, o voi _ cân -- @17 ta.|
+3: @1 3.Cân -- ta -- voi @2 jert -- fa prea -- sfin -- ţi -- @3 tă,| _ o voi _ cân -- @4 ta,| o voi _ cân -- @5 ta,| prin ea mi'e @6 via -- ţa'n -- drep -- tă -- ţi -- @7 tă,| _ o voi _ cân -- @8 ta, o voi _ cân -- @9 ta! A mea'n _ fi -- @10 e -- re şi mân -- gâ -- e -- @11 re,| _ mi'a câş -- ti -- ga -- @12 t'o Dom -- nul, _ sus pe Gol -- go -- @13 ta, cân -- ta -- voi @14 ma -- rea Lui _ pu -- @15 te -- re, o voi _ cân -- @16 ta, o voi _ cân -- @17 ta.|
 
 [Tenor italic]
-1: @2 Cân -- ta -- voi Dom -- nu -- lui mă -- @3 ri -- re @4 cân -- ta -- voi Lui, @5 cân -- ta -- voi Lui @6 pen -- tru de -- pli -- na mâ -- tu -- i -- @7 re, cân -- ta _ voi @8 Lui, cân -- ta -- voi Lui, cân -- ta -- voi Lui @9 cân _ ta voi Lui @11 o voi 'năl -- ţa @13 spre sla -- va Lui @14 cân -- ta -- voi nu -- me -- le Său @15 Ma -- re cân -- ta -- voi @16 Lui, cân -- ta -- voi Lui, cân -- ta -- voi @17 Lui cân -- ta -- voi Lui.
-2: @2 Cân -- ta -- voi dra -- gos -- tea di -- @3 vi -- nă @4 o voi cân -- ta, @5 o voi cân -- ta @6 căci mi'a a -- dus a ei lu -- mi -- @7 nă, o voi _ cân -- @8 ta, o voi cân -- ta, o voi cân -- ta @9 o _ voi cân -- ta @11 iu -- bi -- rea mea @13 o voi 'năl -- ţa @14 cân -- ta -- rea ei e bi -- ru -- @15 in -- ţă, o voi cân -- @16 ta, o voi cân -- ta, o voi cân -- @17 ta, o voi cân -- ta!
-3: @2 Cân -- ta -- voi jert -- fa prea -- sfin -- @3 ţi -- tă @4 o voi cân -- ta, @5 o voi cân -- ta @6 prin ea mi'e via -- ţa'n -- drep -- tă -- ţi -- @7 tă, o voi _ cân -- @8 ta, o voi cân -- ta, o voi cân -- ta @9 o _ voi cân -- ta @11 mi'a câş -- ti -- gat @13 pe Gol -- go -- ta @14 cân -- ta -- voi ma -- rea Lui pu -- @15 te -- re, o voi cân -- @16 ta, o voi cân -- ta, o voi cân -- @17 ta, o voi cân -- ta!
+1: @2 Cân -- ta -- voi Dom -- nu -- lui mă -- @3 ri -- re @4 cân -- ta -- voi Lui, @5 cân -- ta -- voi Lui @6 pen -- tru de -- pli -- na mâ -- tu -- @7 i -- re, cân -- ta voi @8 Lui, cân -- ta -- voi Lui, cân -- ta -- voi Lui @9 cân -- ta -- voi Lui @11 * * o voi 'năl -- @12 ţa @13 spre sla -- va Lui @14 cân -- ta -- voi nu -- me -- le Său @15 Ma -- re cân -- ta -- voi @16 Lui, cân -- ta -- voi Lui, cân -- ta -- voi @17 Lui cân -- ta -- voi Lui.
+2: @2 Cân -- ta -- voi dra -- gos -- tea di -- @3 vi -- nă @4 o voi cân -- ta, @5 o voi cân -- ta @6 căci mi'a a -- dus a ei lu -- @7 mi -- nă, o voi cân -- @8 ta, o voi cân -- ta, o voi cân -- ta @9 o voi cân -- ta @11 * * iu -- bi -- rea @12 mea @13 o voi 'năl -- ţa @14 cân -- ta -- rea ei e bi -- ru -- @15 in -- ţă, o voi cân -- @16 ta, o voi cân -- ta, o voi cân -- @17 ta, o voi cân -- ta!
+3: @2 Cân -- ta -- voi jert -- fa prea -- sfin -- @3 ţi -- tă @4 o voi cân -- ta, @5 o voi cân -- ta @6 prin ea mi'e via -- ţa'n -- drep -- tă -- @7 ţi -- tă, o voi cân -- @8 ta, o voi cân -- ta, o voi cân -- ta @9 o voi cân -- ta @11 * * mi'a câş -- ti -- @12 gat @13 pe Gol -- go -- ta @14 cân -- ta -- voi ma -- rea Lui pu -- @15 te -- re, o voi cân -- @16 ta, o voi cân -- ta, o voi cân -- @17 ta, o voi cân -- ta!

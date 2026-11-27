@@ -54,8 +54,18 @@ def structure_xml(score, spec):
                     snd.set('tempo', str(spec['tempo']))
     for start, at, end in spec.get('repeats', []):
         repeat_xml(score, spec, start, at * 4, end)  # at: from a fraction of a whole note to beats (quarters)
+    if spec.get('endings'):
+        # the sheet's endings replace the file's own
+        for bl in list(score.iter('barline')):
+            for e in bl.findall('ending'):
+                bl.remove(e)
+        for m in score.iter('measure'):
+            for bl in m.findall('barline'):
+                if not len(bl) and bl.get('location') == 'left':
+                    m.remove(bl)
     for first, last, number in spec.get('endings', []):
-        ending_xml(score, spec, first, last, number, closed=(first, last, number) != spec['endings'][-1])
+        ending_xml(score, spec, first, last, number,
+                   closed=len(spec['endings']) == 1 or (first, last, number) != spec['endings'][-1])
     for bar, length in spec.get('bar_lengths', []):
         cut_bar(score, spec, bar, length * 4)
     for bar in spec.get('doubles', []):
@@ -132,8 +142,10 @@ def right_barline(m):
 
 
 def ending_xml(score, spec, first, last, number, closed):
-    """A first or second ending's bracket over its bars; the last is left open at its end, as printed."""
-    for part in score.findall('part'):
+    """A first or second ending's bracket over its bars; the last is left open at its end, as printed. Written in
+    the first part alone: MuseScore draws a part's ending over that part's staff, and a bracket in every part stood
+    over each staff (songs 7 and 40)."""
+    for part in score.findall('part')[:1]:
         measures = part.findall('measure')
         nums = numbered(measures, spec.get('count_pickup'))
         a = measures[nums.index(first)]
@@ -236,7 +248,7 @@ def pitch_xml(el, name, at=None):
     el.insert(len(el) if at is None else at, p)
 
 
-def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=False, octave=0):
+def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=False, octave=0, by_beat=False):
     """Writes a voice's notes, as entered from the sheet, into its bars, in place of what the voice had there
     (`octave`: octaves added to each, where the file writes the voice away from its sounding pitch)."""
     part = score.findall('part')[part_index]
@@ -244,15 +256,26 @@ def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=
     nums = numbered(measures, count_pickup)
     div = int(next(a.findtext('divisions') for a in part.iter('attributes') if a.findtext('divisions')))
     tied = False
+    time = next(a.find('time') for a in part.iter('attributes') if a.find('time') is not None)
+    beat = Fraction(4, int(time.findtext('beat-type')))
     for bar, notes in note_tokens(block['verses'].get(1, [])):
+        # beamed as MuseScore groups them (a sung bar is flagged later, unless the sheet beams it)
+        groups = beam_groups(notes, beat, int(time.findtext('beats')), by_beat)
         m = measures[nums.index(bar)]
         for el in list(m):
             if el.tag == 'note' and (el.findtext('staff') or '1') == staff and (el.findtext('voice') or '1') == voice:
                 m.remove(el)
         t = Fraction(0)
-        for el in m:
+        for el in list(m):
             if el.tag == 'backup':
-                t -= Fraction(int(el.findtext('duration')), div)
+                # a backup to before the bar's start, left where the removed voice came first (song 40, bar 8),
+                # goes back only to the start
+                back = min(Fraction(int(el.findtext('duration')), div), t)
+                if not back:
+                    m.remove(el)
+                    continue
+                el.find('duration').text = str(int(back * div))
+                t -= back
             elif el.tag == 'forward' or (el.tag == 'note' and el.find('chord') is None):
                 t += Fraction(int(el.findtext('duration') or 0), div)
         if t:
@@ -260,7 +283,7 @@ def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=
             # just removed already brought it there: song 28, bar 14)
             bk = ET.SubElement(m, 'backup')
             ET.SubElement(bk, 'duration').text = str(int(t * div))
-        for nd in notes:
+        for nd, beam in zip(notes, groups):
             el = ET.SubElement(m, 'note')
             if nd['pitch'] is None:
                 ET.SubElement(el, 'rest')
@@ -287,6 +310,8 @@ def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=
                 ET.SubElement(tm, 'normal-notes').text = '2'
             if multi_staff:
                 ET.SubElement(el, 'staff').text = staff
+            if beam:
+                ET.SubElement(el, 'beam', number='1').text = beam
             notations = ET.SubElement(el, 'notations')
             if tied and nd['pitch']:
                 ET.SubElement(notations, 'tied', type='stop')
@@ -304,6 +329,39 @@ def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=
                 pitch_xml(ch, moved(other, octave), at=1)
                 m.append(ch)
             tied = nd['tie']
+
+
+def beam_groups(notes, beat, beats, by_beat=False):
+    """The beams of a bar's entered notes, as MuseScore groups them (an entered bar beamed like the file's, song 40):
+    eighths by the half bar in 4/4, by the beat otherwise (a compound time's dotted beat), by the beat where a
+    sixteenth is among them, or always (`by_beat`, a sheet beamed by hand, song 34); a rest breaks a group. A
+    value per note: begin, continue, end or None."""
+    window = beat * 3 if beat < 1 and beats % 3 == 0 else beat if by_beat else beat * 2 if beats == 4 and beat == 1 \
+        else beat
+    starts, t = [], Fraction(0)
+    for nd in notes:
+        starts.append(t)
+        t += duration(nd)
+    short = [nd['pitch'] is not None and nd['length'] >= 8 for nd in notes]
+
+    def key(i):
+        w = window
+        if w > beat and any(s and notes[j]['length'] >= 16 and starts[j] // w == starts[i] // w
+                            for j, s in enumerate(short)):
+            w = beat
+        return w, starts[i] // w
+    out = [None] * len(notes)
+    i = 0
+    while i < len(notes):
+        j = i
+        while j + 1 < len(notes) and short[i] and short[j + 1] and key(j + 1) == key(i):
+            j += 1
+        if j > i:
+            out[i], out[j] = 'begin', 'end'
+            for k in range(i + 1, j):
+                out[k] = 'continue'
+        i = j + 1
+    return out
 
 
 def lyrics_xml(score, part_index, staff, voice, block, count_pickup=False, clear=True):

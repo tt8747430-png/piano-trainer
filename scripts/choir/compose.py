@@ -145,6 +145,9 @@ def compose(s, dst, imported):
     if spec['matched']:
         engrave.mark_split(score, spec)
         nums = engrave.bar_numbers(staffs[0].findall('Measure'), spec.get('count_pickup'))
+        # the file's ties the sheet has not, gone before the words are placed: an untied note takes its syllable
+        # (song 39, bars 6, 10 and 11: the men's triplets)
+        engrave.untie_mscx(score, spec, info, nums)
         done_voices, held = set(), set()
         for block in spec['blocks']:
             p = find_voice(info, block['voice'])
@@ -160,7 +163,6 @@ def compose(s, dst, imported):
         nums = engrave.bar_numbers(staffs[0].findall('Measure'), spec.get('count_pickup'))
         engrave.marks_mscx(score, spec, nums)
         engrave.hide_staff(score, spec, info, nums)
-        engrave.untie_mscx(score, spec, info, nums)
         # Slurs where a syllable spans several notes: each staff's voices sing its words, a voice with words of
         # its own in a bar sings those.
         top = slurs.onsets_of(staffs[0], 0)

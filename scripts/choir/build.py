@@ -38,7 +38,7 @@ def build(wanted=()):
         final = made_name(song_dir, tag)
         files = [f for f in song_files(song_dir) if f != final]
         spec = specs.read(song_dir)
-        if {b['voice'] for b in spec['notes']} == set(ORDER[kind]):
+        if {b['voice'] for b in spec['notes']} == set(ORDER[kind]) and whole(spec['notes']):
             # Every voice written in from the sheet: the song starts from the house template (its files, if any,
             # were only read to write it).
             todo.append(dict(d=d, sub=sub, kind=kind, tag=tag, dir=song_dir, xmls=[], why=None, spec=spec,
@@ -86,6 +86,15 @@ def build(wanted=()):
             compose.compose(s, made_name(s['dir'], s['tag']), imported='score_xml' not in s or s.get('imported'))
             msg = f"made from {s['from']}"
         print(f"{s['sub']} | {s['d']} | {msg}")
+
+
+def whole(blocks):
+    """Every voice written in for every bar from the first (not a few bars corrected in each, song 40)."""
+    bars = {}
+    for b in blocks:
+        bars.setdefault(b['voice'], set()).update(bar for bar, _ in sheet.note_tokens(b['verses'].get(1, [])))
+    last = max(max(v) for v in bars.values())
+    return all(v >= set(range(min(v), last + 1)) and min(v) <= 1 for v in bars.values())
 
 
 def split(s, done, work, n, second):
@@ -189,7 +198,7 @@ def enter_notes(score, kind, spec, lyric_srcs):
     for block in spec['notes']:
         part, staff, voice = places[block['voice']]
         sheet.notes_xml(score, part, staff, voice, block, sheet.has_staves(score, part), spec.get('count_pickup'),
-                        octave=-shifts.get(block['voice'], 0))
+                        octave=-shifts.get(block['voice'], 0), by_beat=spec.get('beat_beams', False))
 
 
 def history_sources(song_dir, root):

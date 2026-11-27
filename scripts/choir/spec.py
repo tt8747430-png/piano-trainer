@@ -18,6 +18,8 @@ voice names before the staves, the tempo set but not printed, template/house.mss
     count-pickup                       the sheet numbers its pickup as bar 1 (bars here follow the sheet)
     dashed: 20 22                      ties and slurs in these bars drawn dashed, as printed
     beams                              eighths beamed together (by default each has its own flag, as sung lines are)
+    beat-beams                         entered eighths beamed beat by beat, as a sheet beamed by hand (by default as
+                                       MuseScore groups them)
     flagged: 1-9, 35-36                bars sung without words (a choir humming), flagged as the sung bars are
     beamed: 4, 8                       sung bars whose eighths the sheet beams (a melisma), beamed as MuseScore groups them
     unslurred: 1-21                    bars where the sheet draws no slur over a held syllable (its beams show it): none
@@ -25,7 +27,8 @@ voice names before the staves, the tempo set but not printed, template/house.mss
     bar-numbers: every                 a number over every bar (by default only at a line's start)
     repeat: 9+3/4 17, 63 70            a repeat from bar 9, 3/4 in (the bar is split there, as printed), to bar 17;
                                        several, by commas
-    ending: 69-70 1, 71-72 2           first and second endings over those bars (the last left open, as printed)
+    ending: 69-70 1, 71-72 2           first and second endings over those bars, in place of the file's (the last left
+                                       open, as printed, unless it is the only one)
     double: 28 45                      a double barline at the end of these bars, as printed
     bar-length: 17 7/8                 a bar printed shorter than its time (the last after a pickup), its trailing
                                        rests left out
@@ -193,6 +196,8 @@ def read(song_dir):
             spec['italic'] = value.split(',')
         elif key == 'beams':
             spec['beams'] = True
+        elif key == 'beat-beams':
+            spec['beat_beams'] = True
         elif key in ('flagged', 'beamed', 'unslurred'):
             for item in value.split(','):
                 a, _, b = item.strip().partition('-')

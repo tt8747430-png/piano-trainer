@@ -43,7 +43,8 @@ def sung_chords(measure, voice, with_ties=False):
 
 
 def chord_lengths(measure, voice):
-    """Every chord of a voice in a measure with its length as a fraction of a whole note (tuplets included)."""
+    """Every chord of a voice in a measure with its length as a fraction of a whole note (tuplets included), and
+    each gap the voice leaves (a `location`, song 40's altos after the sopranos' rest) with its length."""
     vs = measure.findall('voice')
     if voice >= len(vs):
         return []
@@ -53,6 +54,8 @@ def chord_lengths(measure, voice):
             ratio = Fraction(int(el.findtext('normalNotes') or 2), int(el.findtext('actualNotes') or 3))
         elif el.tag == 'endTuplet':
             ratio = Fraction(1)
+        elif el.tag == 'location' and el.findtext('fractions'):
+            out.append((el, Fraction(el.findtext('fractions'))))
         elif el.tag in ('Chord', 'Rest'):
             base = DURATIONS.get(el.findtext('durationType'), Fraction(0))
             dots = int(el.findtext('dots') or 0)
@@ -195,6 +198,7 @@ def layout_mscx(score, spec):
         for off in ly.findall('offset'):
             ly.remove(off)
     clamp_lines(staffs)
+    repeat_marks(staffs)
     first = staffs[0]
     measures = first.findall('Measure')
     nums = bar_numbers(measures, spec.get('count_pickup'))
@@ -285,12 +289,52 @@ def clamp_lines(staffs):
                     f = ly.find('ticks_f')
                     if f is None:
                         continue
-                    nxt = next((u for e, u in chords[i + 1:] if e.find('Lyrics') is not None), None)
+                    # the verse's own next syllable: another verse's syllable on a held note does not end the line
+                    # (song 40, bar 17: verse 2's "Tău" held where verse 1 sings "le."); after a verse's last
+                    # syllable, the next one sung
+                    no = ly.findtext('no') or '0'
+                    nxt = next((u for e, u in chords[i + 1:]
+                                if any((x.findtext('no') or '0') == no for x in e.findall('Lyrics'))),
+                               next((u for e, u in chords[i + 1:] if e.find('Lyrics') is not None), None))
                     last = max((u for e, u in chords[i + 1:] if nxt is None or u < nxt), default=None)
                     if last is None:
                         ly.remove(f)
                     elif t + Fraction(f.text) > last:
                         f.text = str(last - t)
+
+
+JUMPS = {'dc al fine': ('start', 'fine', ''), 'ds al fine': ('segno', 'fine', ''),
+         'dc al coda': ('start', 'coda', 'codab'), 'ds al coda': ('segno', 'coda', 'codab'),
+         'dc': ('start', 'end', ''), 'ds': ('segno', 'end', '')}
+
+
+def repeat_marks(staffs):
+    """Fine and D.C. or D.S. al Fine or al Coda, which a file's MusicXML brings as plain words over a beat, made the
+    marks MuseScore plays and sets at the bar's end, as the sheets print them (song 40)."""
+    for k, m in enumerate(staffs[0].findall('Measure')):
+        for st in staffs:
+            sm = st.findall('Measure')[k]
+            for v in sm.findall('voice'):
+                for el in v.findall('StaffText'):
+                    words = ''.join(el.find('text').itertext()).strip()
+                    key = ' '.join(words.lower().replace('.', ' ').replace('d c', 'dc').replace('d s', 'ds').split())
+                    if key == 'fine':
+                        mark = ET.Element('Marker')
+                        ET.SubElement(mark, 'style').text = 'Repeat Text Right'
+                        ET.SubElement(mark, 'text').text = words
+                        ET.SubElement(mark, 'label').text = 'fine'
+                    elif key in JUMPS:
+                        mark = ET.Element('Jump')
+                        ET.SubElement(mark, 'style').text = 'Repeat Text Right'
+                        ET.SubElement(mark, 'text').text = words
+                        for tag, value in zip(('jumpTo', 'playUntil', 'continueAt'), JUMPS[key]):
+                            ET.SubElement(mark, tag).text = value
+                    else:
+                        continue
+                    v.remove(el)
+                    if st is staffs[0]:
+                        at = next((i for i, x in enumerate(m) if x.tag == 'voice'), len(m))
+                        m.insert(at, mark)
 
 
 def sung_bars(staffs, spec=None):
@@ -351,7 +395,7 @@ def chord_at(measure, at, voice=0):
     """The first chord or rest of a voice of the measure that starts at `at` (a fraction of a whole note) or later."""
     t = Fraction(0)
     for el, length in chord_lengths(measure, voice):
-        if t >= at:
+        if t >= at and el.tag != 'location':
             return el
         t += length
     return None
