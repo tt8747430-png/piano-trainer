@@ -76,22 +76,10 @@ CP_TAG = (f'<sc-if value="{{{{tagIsFirst}}}}" hint-placeholder-val="{{{{true}}}}
           + f'<div style="border-radius: 12px; background: {FILL}">' + SEGROW('Into the next section', 'intoSeg') + '</div>'
           + f'<p style="margin: 0 4px; font-size: 14px; color: {SOFT}">None sends nothing: the Genos plays as its panel says.</p>')
 
-# ── ··· : the draft, sharing, the sheets ──
-CP_MORE58 = (f'<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><div style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
-             + ACTROW(ICON(CHECK, 20), 'Save', 'saveDraft', LINK) + f'<div style="height: 1px; margin-left: 48px; background: {LINE}"></div>' + ACTROW(UNDO, 'Discard draft', 'discardDraft', '#B3261E') + '</div></sc-if>'
-             + GROUP(('link', 'Share', 'View only', 'openShare'), ('action', 'Save to my progressions', 'saveProg'), ('link', 'Open in Progressions', '', 'Progressions.dc.html'), bg=SHEET))
 CP_SHARE = (f'<p style="margin: 0 4px; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Everyone with the link sees each change as it is made, and the chord playing.</p>'
             + f'<div style="border-radius: 12px; background: {FILL}">' + SEGROW('People with the link', 'shareSeg') + '</div>'
             + BTN('{{copyL}}', 'copyLink', kind='primary', h=50))
 
-# ── settings: Follow a MIDI arranger beside Connect a piano ──
-# R76 (owner, 2026-11-18: "teh settinsg should be refactored"): by how often each is wanted (ux-principles, Order by
-# relevance): what sounds, how it plays, how the chart is written, what it listens to, then the page's layout
-CP_SET58 = (LABELLED('Sound', GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'), ('link', 'Volume', '80%', '')))
-            + LABELLED('Playing', GROUP(('link', 'Count-in', '1 bar', ''), ('seg', 'Voicing', 'cpVSeg', 200)))
-            + LABELLED('Chart', GROUP(('link', 'Time signature', '4/4', ''), ('seg', 'Written as', 'namesSeg', 200)))
-            + LABELLED('MIDI', GROUP(('link', 'MIDI keyboard', 'Not connected', 'Settings.dc.html'), ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), ('val', 'Arranger', 'Genos · USB')))
-            + LABELLED('Layout', GROUP(('action', 'Edit layout', 'openLay'), ('action', 'Reset layout', 'resetLay'), ('link', 'Every page’s layout', '', 'Settings.dc.html'))))
 
 # ── R59 (owner, 2026-11-14, Musicca's chord player beside it: "make the ui of the chords like the musicca does";
 # "one tap on the chord selects it and plays from there when I play and double click opens this chord settings";
@@ -364,7 +352,7 @@ lm58 = (LTOP('Laptop.dc.html', BARR) + TRAY.replace('padding: 0 16px 8px', 'padd
         + ZONE('zTop', 'toTop', 'At the top', 'left: 400px; right: 380px; top: 110px; height: 100px')
         + ZONE('zFloat', 'toFloat', 'Floating', 'left: 400px; right: 380px; bottom: 270px; height: 100px')
         + ZONE('zBot', 'toBot', 'At the bottom', 'left: 400px; right: 380px; bottom: 150px; height: 100px') + DRAGHINT)
-SH58 = lambda B, P, D=None: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + (D or B)('styleOn', 'Style', WHEEL([('wStyle', 1)])) + (D or B)('keyOn', 'Key', WHEEL([('wKey', 1)])) + (D or B)('tempoOn', 'Tempo', WHEEL([('wTempo', 1)])) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + B('setOn', 'Chord player settings', CP_SET58) + P + '')
+SH58 = lambda B, P, D=None: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + (D or B)('styleOn', 'Style', WHEEL([('wStyle', 1)])) + (D or B)('keyOn', 'Key', WHEEL([('wKey', 1)])) + (D or B)('tempoOn', 'Tempo', WHEEL([('wTempo', 1)])) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + P + '')
 _MI = lambda l, a, col=INK: f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left">{l}</button>'
 MORE76 = MENUSHELL('moreOn', 'Chord sheet', f'<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}">' + _MI('Save', 'saveDraft') + _MI('Discard draft', 'discardDraft', RED) + f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div></sc-if>'
                    + _MI('Share…', 'openShare') + _MI('Import chart…', 'importChart') + _MI('Export MIDI', 'exportMidi') + _MI('Export chart', 'exportChart') + _MI('Edit layout', 'openLay') + _MI('Save to my progressions', 'saveProg')
@@ -526,6 +514,5 @@ assert CP77.count(_r) == 1, CP77.count(_r)
 CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 # the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
 _SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else 'left: 640px; top: 160px', 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 729px; top: 72px', 'keyOn': 'left: 505px; top: 72px', 'tempoOn': 'left: 616px; top: 72px', 'repOn': 'left: 380px; top: 72px'}[c], 320)).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')
-_SHL = _SHL.replace(BSHEET('setOn', 'Chord player settings', CP_SET58), '') if BSHEET('setOn', 'Chord player settings', CP_SET58) in _SHL else _SHL
 phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('hdOptsOn', 'Playback options', _OPTS, close='closeSheet'), bar=SHEET)
 full_laptop('ChordPlayerLaptop', 'Chord player, laptop', lm77 + TOAST(296, z=56, laptop=True), CP77, _SHL + POPS77L + NAMEMENU77L)
