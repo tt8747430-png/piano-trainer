@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · HASH · Layout loses "Measures · 4 a line", a second home for View's Bars per row (one home per setting); its fold is Note spacing (Spacing, Stretch last line: past half full, Dorico's rule); "Measure numbers" is Bar numbers, the app's word everywhere else · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · **pending**
 ## Changes
 
+- 2026-11-27 · 67403b29 · Layout loses "Measures · 4 a line", a second home for View's Bars per row (one home per setting); its fold is Note spacing (Spacing, Stretch last line: past half full, Dorico's rule); "Measure numbers" is Bar numbers, the app's word everywhere else · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · v826
 - 2026-11-27 · 11f3f815 · the Instruments page gives each part its own glyph, as the Parts sheet does (the voice's microphone, the piano's keys, an added part a note), where every row wore the keys; New instrument's list reads in ink, a list to pick from, not blue action links · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · v825
 - 2026-11-27 · 9760eb7c · the phone editor's keys reach four octaves, C2 to C6, swiped sideways and opened centred on the chosen note (G4), as Flat's on-screen piano (FLAT_PLAYER_AND_PIANO §2.2); they showed D3 to E5 alone, so the song's bass (G2) could not be typed; the head script that opens a strip on its note runs on every Player and editor board (PE_KEYSCROLL) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · v824
 - 2026-11-27 · c94a7420 · Notation's section heads (Accompaniment, Recent, Note, …) sat as far from their own tools as from the section above, 19 over and 15 under ink to ink; each 44 head now reaches 10 into the gap under it, so a head reads with what it names (laws, spacing: 1.5–3× above what is below; the lines tool's note gone) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · v823
