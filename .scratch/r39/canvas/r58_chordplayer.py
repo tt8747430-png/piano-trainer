@@ -109,7 +109,7 @@ CP58 = CP58.replace("    return { ...common(st, set), draftOn:", r"""    const S
             ticks: Array.from({ length: L }, (_, k) => ({ bg: now && f0 + k === beatNow ? '#332921' : '#C9BFB5', h: now && f0 + k === beatNow ? '10px' : '6px' })),
             picked, bg: now ? '#F6E7C8' : '#FEFDFB', ring: now || picked ? '0 0 0 2px #B98A32' : '0 0 0 1px #DAD1C8',
             wrong: wrong && ci === cs.length - 1, wrongTip: 'Bar ' + (bi + 1) + ' holds ' + sum + ' beats, not 4',
-            tap: () => set(picked ? { sheet: 'chord', sel: [si, bi], selC: ci, selB59: [si, bi, ci], pop: null } : { sel: [si, bi], selC: ci, selB59: [si, bi, ci] }) });
+            tap: (e) => set(picked ? { sheet: 'chord', sel: [si, bi], selC: ci, selB59: [si, bi, ci], pop: null, chordPos: ANCHOR(e, 420) } : { sel: [si, bi], selC: ci, selB59: [si, bi, ci] }) });
           from += L; }); });
       return { m, name, rep: '× ' + rep, vari: 'Variation ' + (VARS[si] ?? 1), tag: follow ? tagLine(TAGS[si] || { mains: [] }) : '', tagOn: follow, openTag: () => set({ sheet: 'tag', tagAt: si }), boxes,
         repUp: () => editSecs((x) => { x[si][2] = (x[si][2] % 4) + 1; }), varUp: () => set({ vars: SECS.map((_, i) => (i === si ? ((VARS[i] ?? 1) % 4) + 1 : VARS[i] ?? 1)), draft: true }),
@@ -510,7 +510,7 @@ _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'O
       cpStartD: st.playing ? 'M7 5h10v14H7z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z', cpArTitle: st.playing ? dev + ' · playing Main ' + MAINL : dev + ' · stopped', cpAlone: !!st.alone, cpArLine: st.alone ? 'No Genos found. The app’s band plays the style’s sections.' : 'Connected: Genos', cpRetry: () => set({ alone: false, toastT: 'Connected: Genos' }),
       cpMidiL: (st.follow ?? false) ? (st.alone ? 'No Genos found' : 'Genos') : 'Not connected', cpGDock: !!(st.follow ?? false) && RAIL77 !== 'Ge',
       cpSubL: st.draft ? 'Draft' : st.fresh ? 'New' : 'Live', sheetsX: st.sheet === 'sheets' ? 'true' : 'false', sheetsBg: st.sheet === 'sheets' ? 'rgba(254,253,251,.14)' : 'transparent',
-      tempoX: st.sheet === 'tempo' ? 'true' : 'false', styleX: st.sheet === 'style' ? 'true' : 'false', namesL: st.names ?? 'Chords',
+      tempoX: st.sheet === 'tempo' ? 'true' : 'false', styleX: st.sheet === 'style' ? 'true' : 'false', namesL: st.names ?? 'Chords', chordPos: st.chordPos ?? 'left: 640px; top: 160px',
       hdStart: () => set({ playing: false, at: [0, 0], toastT: 'From the top' }), hdPlay: () => set(st.playing ? { playing: false } : { playing: true }), hdPlayTip: st.playing ? 'Stop' : 'Play', hdPlayD: st.playing ? 'M7 5h10v14H7z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z',
       hdOpts: () => set({ sheet: st.sheet === 'opts' ? null : 'opts' }), hdOptsOn: st.sheet === 'opts', hdOptsX: st.sheet === 'opts' ? 'true' : 'false', hdOptsBg: st.sheet === 'opts' ? 'rgba(254,253,251,.14)' : 'transparent',
       hdMet: () => { const n = { count: 'on', on: 'off', off: 'count' }[st.met77 ?? 'count']; set({ met77: n, toastT: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[n] }); }, hdMetTip: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[st.met77 ?? 'count'], hdMetOff: (st.met77 ?? 'count') === 'off',
@@ -525,7 +525,7 @@ _r = "    return { ...common(st, set),"
 assert CP77.count(_r) == 1, CP77.count(_r)
 CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 # the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
-_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, 'left: 640px; top: 160px', 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 729px; top: 72px', 'keyOn': 'left: 505px; top: 72px', 'tempoOn': 'left: 616px; top: 72px', 'repOn': 'left: 380px; top: 72px'}[c], 320)).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')
+_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else 'left: 640px; top: 160px', 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 729px; top: 72px', 'keyOn': 'left: 505px; top: 72px', 'tempoOn': 'left: 616px; top: 72px', 'repOn': 'left: 380px; top: 72px'}[c], 320)).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')
 _SHL = _SHL.replace(BSHEET('setOn', 'Chord player settings', CP_SET58), '') if BSHEET('setOn', 'Chord player settings', CP_SET58) in _SHL else _SHL
 phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('hdOptsOn', 'Playback options', _OPTS, close='closeSheet'), bar=SHEET)
 full_laptop('ChordPlayerLaptop', 'Chord player, laptop', lm77 + TOAST(296, z=56, laptop=True), CP77, _SHL + POPS77L + NAMEMENU77L)

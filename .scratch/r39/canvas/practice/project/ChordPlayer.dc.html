@@ -222,7 +222,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
             ticks: Array.from({ length: L }, (_, k) => ({ bg: now && f0 + k === beatNow ? '#332921' : '#C9BFB5', h: now && f0 + k === beatNow ? '10px' : '6px' })),
             picked, bg: now ? '#F6E7C8' : '#FEFDFB', ring: now || picked ? '0 0 0 2px #B98A32' : '0 0 0 1px #DAD1C8',
             wrong: wrong && ci === cs.length - 1, wrongTip: 'Bar ' + (bi + 1) + ' holds ' + sum + ' beats, not 4',
-            tap: () => set(picked ? { sheet: 'chord', sel: [si, bi], selC: ci, selB59: [si, bi, ci], pop: null } : { sel: [si, bi], selC: ci, selB59: [si, bi, ci] }) });
+            tap: (e) => set(picked ? { sheet: 'chord', sel: [si, bi], selC: ci, selB59: [si, bi, ci], pop: null, chordPos: ANCHOR(e, 420) } : { sel: [si, bi], selC: ci, selB59: [si, bi, ci] }) });
           from += L; }); });
       return { m, name, rep: '× ' + rep, vari: 'Variation ' + (VARS[si] ?? 1), tag: follow ? tagLine(TAGS[si] || { mains: [] }) : '', tagOn: follow, openTag: () => set({ sheet: 'tag', tagAt: si }), boxes,
         repUp: () => editSecs((x) => { x[si][2] = (x[si][2] % 4) + 1; }), varUp: () => set({ vars: SECS.map((_, i) => (i === si ? ((VARS[i] ?? 1) % 4) + 1 : VARS[i] ?? 1)), draft: true }),
@@ -255,7 +255,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       cpStartD: st.playing ? 'M7 5h10v14H7z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z', cpArTitle: st.playing ? dev + ' · playing Main ' + MAINL : dev + ' · stopped', cpAlone: !!st.alone, cpArLine: st.alone ? 'No Genos found. The app’s band plays the style’s sections.' : 'Connected: Genos', cpRetry: () => set({ alone: false, toastT: 'Connected: Genos' }),
       cpMidiL: (st.follow ?? false) ? (st.alone ? 'No Genos found' : 'Genos') : 'Not connected', cpGDock: !!(st.follow ?? false) && RAIL77 !== 'Ge',
       cpSubL: st.draft ? 'Draft' : st.fresh ? 'New' : 'Live', sheetsX: st.sheet === 'sheets' ? 'true' : 'false', sheetsBg: st.sheet === 'sheets' ? 'rgba(254,253,251,.14)' : 'transparent',
-      tempoX: st.sheet === 'tempo' ? 'true' : 'false', styleX: st.sheet === 'style' ? 'true' : 'false', namesL: st.names ?? 'Chords',
+      tempoX: st.sheet === 'tempo' ? 'true' : 'false', styleX: st.sheet === 'style' ? 'true' : 'false', namesL: st.names ?? 'Chords', chordPos: st.chordPos ?? 'left: 640px; top: 160px',
       hdStart: () => set({ playing: false, at: [0, 0], toastT: 'From the top' }), hdPlay: () => set(st.playing ? { playing: false } : { playing: true }), hdPlayTip: st.playing ? 'Stop' : 'Play', hdPlayD: st.playing ? 'M7 5h10v14H7z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z',
       hdOpts: () => set({ sheet: st.sheet === 'opts' ? null : 'opts' }), hdOptsOn: st.sheet === 'opts', hdOptsX: st.sheet === 'opts' ? 'true' : 'false', hdOptsBg: st.sheet === 'opts' ? 'rgba(254,253,251,.14)' : 'transparent',
       hdMet: () => { const n = { count: 'on', on: 'off', off: 'count' }[st.met77 ?? 'count']; set({ met77: n, toastT: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[n] }); }, hdMetTip: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[st.met77 ?? 'count'], hdMetOff: (st.met77 ?? 'count') === 'off',
