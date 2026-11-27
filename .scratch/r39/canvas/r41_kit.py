@@ -559,18 +559,22 @@ ONB_RING = 'inset 0 0 0 1.5px rgba(254,253,251,.55)'
 # per bar range; Flat's selection then the panel). A chord or phrase with its own accompaniment carries a honey dot.
 # mode 'pick' (the Player), 'hist' (History: the bars a saved version changed, in honey, nothing to press)
 PHRASE = lambda b: max(1, (b - 1) // 4 + 1)
-# the playhead (ui-and-mockups, The score: one line across the staves in sight): a line at the beat that sounds,
+# the playhead (ui-and-mockups, The score: one line across the staves in sight), over the loop's bars washed in honey
+# as Flat marks its loop on the score: a line at the beat that sounds,
 # from its system's top staff line to its bottom one, in the keys' Deep Sky (a key down, the score's selection), so
 # the keys and the page light the same colour; shown while playing and where a pause left it (Flat's cursor)
 def PLAYHEAD(geo):
     W, H = geo['w'], geo['h']; pc = lambda v, d: f'{v / d * 100:.3f}%'; out = []
+    for b, x0, x1, y0, y1 in geo['bars']:  # the loop's bars first, under the line: the range wash History and the Take use
+        out.append(f'<span aria-hidden="true" style="position: absolute; left: {pc(x0, W)}; top: {pc(y0, H)}; width: {pc(x1 - x0, W)}; height: {pc(y1 - y0, H)}; border-radius: 4px; background: {{{{lpB{b}}}}}; pointer-events: none"></span>')
     for b, x0, x1, y0, y1 in geo['bars']:
         out.append(f'<span aria-hidden="true" data-ph style="position: absolute; display: {{{{phB{b}}}}}; left: calc({pc(x0, W)} + {pc(x1 - x0, W)} * {{{{phF}}}} - 1px); top: {pc(y0 + 18, H)}; height: {pc(y1 - y0 - 24, H)}; width: 2px; border-radius: 1px; background: #85B8DC; pointer-events: none"></span>')
     return ''.join(out)
 # its state, for a board whose engine keeps bar, beat, playing and atStart (the Player's): the pickup's one beat on
 # its note (past the clef and time), a bar's beat at its onset; bars past the page (13–16, page 2) show none
 PLAYHEAD_KEYS = ("phF: atStart ? 0.3 : (beat - 1 + 0.3) / 3, ...Object.fromEntries(Array.from({ length: 13 }, (_, b) => ['phB' + b,"
-                 " (playing || !atStart) && (atStart ? b === 0 : bar === b) ? 'block' : 'none'])),")
+                 " (playing || !atStart) && (atStart ? b === 0 : bar === b) ? 'block' : 'none'])),"
+                 " ...Object.fromEntries(Array.from({ length: 13 }, (_, b) => ['lpB' + b, loop && b >= loopA && b <= loopB ? 'rgba(237,198,132,.38)' : 'transparent'])),")
 # the editor's: its clock counts beats from the selection (bar 3, beat 1) while Play sounds, the line left where a
 # pause leaves it, gone at the end
 # the page follows the line (Flat scrolls the score to its cursor, FLAT_PLAYER_AND_PIANO §1.11): the shown line is
@@ -584,7 +588,8 @@ PHFOLLOW = ("requestAnimationFrame(() => { const l = [...document.querySelectorA
             " const dx = r.left < q.left + 24 || r.right > q.right - 24 ? r.left - (q.left + q.width / 2) : 0; const dy = r.top < top || r.bottom > bot ? r.top - top - 24 : 0;"
             " if (dx || dy) s.scrollBy({ left: dx, top: dy, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); });")
 EDPLAYHEAD_KEYS = ("...(() => { const n = st.edPos ?? 0, b = 3 + Math.floor(n / 3); return { phF: (n % 3 + 0.3) / 3,"
-                   " ...Object.fromEntries(Array.from({ length: 13 }, (_, i) => ['phB' + i, (st.edPlaying || n > 0) && i === b ? 'block' : 'none'])) }; })(),")
+                   " ...Object.fromEntries(Array.from({ length: 13 }, (_, i) => ['phB' + i, (st.edPlaying || n > 0) && i === b ? 'block' : 'none'])),"
+                   " ...Object.fromEntries(Array.from({ length: 13 }, (_, i) => ['lpB' + i, st.edLoop && i === 3 ? 'rgba(237,198,132,.38)' : 'transparent'])) }; })(),")
 # a glyph at another size: its width and height set together (one helper, never a hand-written .replace of its numbers)
 def SZ(svg, n):
     import re as _re
