@@ -831,31 +831,42 @@ FICONS = {
     'Lab': _FI('<path d="M4 7V4h16v3M9 20h6M12 4v16"></path>'),
 }
 _ARROWR = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M5 12h14M12 5l7 7-7 7"></path></svg>'
-def FROW(icon, label, value, target, colour=INK, page=True, line=False, h=56):
+def FROW(icon, label, value, target, colour=INK, page=True, line=False, h=56, fs=17):
     """a settings row as Flat's: the glyph, the name, the value soft, the arrow; target a page (…html) or an act.
     page=False for a row that acts where it stands (copies, prints, asks): no arrow, as Apple's menu items carry a
     chevron only into a submenu (laws, Which component 14: a link never acts)"""
-    inner = (f'<span aria-hidden="true" style="flex: none; display: flex; color: {colour}">{FICONS.get(icon, icon)}</span><span style="flex: 1; min-width: 0; font-size: 17px; color: {colour}">{label}</span>'
+    inner = (f'<span aria-hidden="true" style="flex: none; display: flex; color: {colour}">{FICONS.get(icon, icon)}</span><span style="flex: 1; min-width: 0; font-size: {fs}px; color: {colour}">{label}</span>'
              + (f'<span style="flex: none; font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{value}</span>' if value else '')
              + (f'<span aria-hidden="true" style="flex: none; display: flex; color: {colour}">{_ARROWR}</span>' if page else ''))
     st = f'min-height: {h}px; box-sizing: border-box; width: 100%; padding: 0 12px; border: 0;{" border-top: 1px solid " + LINE + ";" if line else ""} border-radius: 0; background: transparent; font: inherit; text-align: left; text-decoration: none; display: flex; align-items: center; gap: 16px; cursor: pointer'
     if target.endswith('.html'):
         return f'<a href="{target}" style="{st}">{inner}</a>'
     return f'<button type="button" onClick="{{{{{target}}}}}" style="{st}">{inner}</button>'
-def FROWS(items, lines=True, h=56):
-    # a page's rows 56 (iOS Settings, Flat's pages); a menu's 48, so ☰ in Edit shows its last row on a phone (11 rows)
-    return '<div style="display: flex; flex-direction: column">' + ''.join(FROW(*it[:6], line=lines and i > 0, h=h) for i, it in enumerate(items)) + '</div>'
+def FROWS(items, lines=True, h=48, fs=17):
+    # a menu's rows 48 at 17 (Apple's menus), so ☰ in Edit shows its last row on a phone; a page's rows 48 at 16, the
+    # app's settings row (Settings, a song's Settings), in a card
+    return '<div style="display: flex; flex-direction: column">' + ''.join(FROW(*it[:6], line=lines and i > 0, h=h, fs=fs) for i, it in enumerate(items)) + '</div>'
+# the phone's settings row (owner's articles, a phone is not a small laptop: type and targets no smaller): the band's
+# popover rows (44 tall, 15, a 12 inset, 40 buttons) drawn at a finger's size on a phone page, 48 tall, 16, the 16
+# inset and 44 buttons, the app's settings row (GROUP), one transform for every page FSHEET opens
+def PHROWS(html):
+    for a, b in (('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px'),
+                 ('min-height: 44px', 'min-height: 48px'), ('font-size: 15px', 'font-size: 16px'),
+                 ('padding: 0 4px 0 12px', 'padding: 0 6px 0 16px'), ('padding: 0 8px 0 12px', 'padding: 0 8px 0 16px'), ('padding: 0 12px', 'padding: 0 16px')):
+        html = html.replace(a, b)
+    return html
 def FSHEET(cond, title, body, close='closeSheet', back=None, **_):
     """a settings page on a phone (owner, 2026-11-26: "i don't like that all these options and settings have these
     drawers with x button and not back button. fix all such inconsistencies"): the whole screen under the status bar,
     ← Back at the left and the title centred, as Credits and every page of the app; Back goes where the page came from
     (back: ☰, the Song page, the page above it), else closes it; never a drawer with ✕"""
-    return THINGPAGE(cond, back or close, title, body, False)
+    return THINGPAGE(cond, back or close, title, PHROWS(body), False)
 def FRADIO(name):
     """a page's choices as rows, the current one checked (Flat's pages, iOS Settings); a pick stays on the page"""
-    return (f'<div role="radiogroup" style="display: flex; flex-direction: column; overflow: hidden; {_CARD}"><sc-for list="{{{{{name}Opts}}}}" as="o" hint-placeholder-count="3">'
-            f'<button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 52px; box-sizing: border-box; width: 100%; padding: 0 16px; border: 0; box-shadow: inset 0 1px 0 {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 17px; text-align: left; display: flex; align-items: center; gap: 12px; cursor: pointer">'
-            f'<span style="flex: 1">{{{{o.l}}}}</span><span aria-hidden="true" style="display: flex; color: {INK}"><sc-if value="{{{{o.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK.replace("width=\"16\" height=\"16\"", "width=\"22\" height=\"22\"")}</sc-if></span></button></sc-for></div>')
+    # each row's hairline is above it; the card clips the first one by the list's -1 (no line doubling the card's edge)
+    return (f'<div role="radiogroup" style="display: flex; flex-direction: column; overflow: hidden; {_CARD}"><div style="display: flex; flex-direction: column; margin-top: -1px"><sc-for list="{{{{{name}Opts}}}}" as="o" hint-placeholder-count="3">'
+            f'<button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; box-sizing: border-box; width: 100%; padding: 0 16px; border: 0; box-shadow: inset 0 1px 0 {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 16px; text-align: left; display: flex; align-items: center; gap: 12px; cursor: pointer">'
+            f'<span style="flex: 1">{{{{o.l}}}}</span><span aria-hidden="true" style="display: flex; color: {INK}"><sc-if value="{{{{o.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK.replace("width=\"16\" height=\"16\"", "width=\"22\" height=\"22\"")}</sc-if></span></button></sc-for></div></div>')
 EXPROWS = lambda: GROUP(*(('action', l, a, INK) for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))), bg=SHEET)
 def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=None, title='Amazing Grace', song=(), hide=('Tr', 'Cred', 'View'), loss=(), pub=()):
     """pub: a draft's publishing rows, a group of their own before the loss, as the laptop's name menu;
@@ -1000,8 +1011,8 @@ _HCAP = lambda t: f'<h3 style="margin: 0; font-size: 15px; font-weight: 600">{t}
 def _HPOPOVER(cond, title, body, pos, w, phone=False, back=None):
     if phone:
         # on a phone the band's popovers are sheets rising from the foot (a choice made in context), the same rows in one card
-        body = body.replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px')
-        return FSHEET(cond, title, f'<div style="display: flex; flex-direction: column; overflow: hidden; padding: 0 12px; {_CARD}">{body}</div>', close='hdClose', back=back)
+        # (the rows reach past the card's 12 by their own margin, so the card's padding is not a row's: PHROWS keeps it)
+        return FSHEET(cond, title, f'<div style="display: flex; flex-direction: column; overflow: hidden; padding-inline: 12px; {_CARD}">{body}</div>', close='hdClose', back=back)
     return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{hdClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
             f'<section role="dialog" aria-label="{title}" style="{_HPOP}; {pos}; width: {w}px"><h2 style="margin: 0; padding: 4px 0 4px; font-size: 15px; font-weight: 600">{title}</h2>{body}</section></sc-if>')
 def _HVOLROW(i):
@@ -1020,9 +1031,8 @@ def TRROWS(big=False):
     back = (f'<sc-if value="{{{{hdTrMoved}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{hdTrReset}}}}" style="width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: #356A8C; font: inherit; font-size: 15px; text-align: left; cursor: pointer">Back to G major</button></sc-if>')
     if not big:
         return f'<div style="display: flex; flex-direction: column; margin: 0 -12px">{semis}{keyrow}{back}</div>'
-    # on a phone: one card as the sheet's other groups, the rows on its 16 inset, the − and + at 44 for a finger
-    h = (semis + keyrow + back).replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px').replace('padding: 0 4px 0 12px', 'padding: 0 6px 0 16px').replace('padding: 0 12px', 'padding: 0 16px')
-    return f'<div style="display: flex; flex-direction: column; overflow: hidden; {_CARD}">{h}</div>'
+    # on a phone: one card as the page's other groups; FSHEET's PHROWS gives it the 16 inset and 44 buttons
+    return f'<div style="display: flex; flex-direction: column; overflow: hidden; {_CARD}">{semis}{keyrow}{back}</div>'
 def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=False):
     # rows, as every card's (VERPANEL, ACCPANEL): a value with its pop-up, a level with its slider; no segmented strip
     rows = lambda *r: f'<div style="display: flex; flex-direction: column; margin: 0 -12px">{"".join(r)}</div>'
@@ -1048,8 +1058,8 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=Fals
         # Flat's three first, in its order (005; the R74 ruling "its first row as Flat's"), then Practice's own two
         items = [('Aud', 'Audio', '{{hdRoomL}}', 'hdGoAud'), ('Met', 'Metronome', '{{selMetV}}', 'hdGoMet'), ('Speed', 'Playback speed', '{{hdSpeedL}}', 'hdGoSpeed')] + ([('Mode', 'Mode', '{{selModeV}}', 'hdGoMode'), ('Hands', 'Hands', '{{selHandsV}}', 'hdGoHands')] if practice else [])
         # its rows in one card, as every other phone settings page (MIDI keyboard, Versions, Transpose, Audio): one shape
-        out = FSHEET('hdOptsMain', 'Playback options', f'<div style="overflow: hidden; {_CARD}">' + FROWS(items) + '</div>', close='hdClose')
-        sp = speed.replace(f' border-top: 1px solid {LINE}', '').replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px').replace('padding: 0 4px 0 12px', 'padding: 0 6px 0 16px').replace('Playback speed', 'Speed')
+        out = FSHEET('hdOptsMain', 'Playback options', f'<div style="overflow: hidden; {_CARD}">' + FROWS(items, fs=16) + '</div>', close='hdClose')
+        sp = speed.replace(f' border-top: 1px solid {LINE}', '').replace('Playback speed', 'Speed')
         if practice:
             out += FSHEET('hdSubModeOn', 'Mode', FRADIO('selMode'), close='hdClose', back='hdSubBack')
             out += FSHEET('hdSubHandsOn', 'Hands', FRADIO('selHands'), close='hdClose', back='hdSubBack')
