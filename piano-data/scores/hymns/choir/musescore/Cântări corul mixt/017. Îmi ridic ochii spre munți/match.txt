@@ -1,0 +1,130 @@
+# From 017. Îmi ridic ochii spre munți.pdf (5 pages). The choir's files hold only the tenors (an octave high, and
+# not always as printed): every voice is written in from the sheet, at the pitch it sounds, and the song is built
+# from the template. Bars 64-80 are printed on three staves (a solo above the accompaniment); here they stay on the
+# choir's two, each voice in its own part.
+composer: S. Dan Micu
+key: Am
+time: 4/4
+systems: 1 6 11 16 21 | 26 31 36 40 43 | 46 49 52 55 59 | 64 67 70 73 | 76 78 81 84
+slur: Alto 47+1/2 +1/4, Tenor 47+1/2 +1/4, Tenor 51+1/2 +1/4, Tenor 71+1/2 +1/4, Bass 71+1/2 +1/4, Tenor 75+1/2 +1/4, Bass 75+1/2 +1/4, Bass 77+1/2 +1/4, Tenor 84 +1/4, Tenor 85 +1/4, Tenor 86 +1/4, Tenor 87 +3/8
+marks: 7 fermata/Soprano, 7 fermata/Bass, 13 fermata/Soprano, 13 fermata/Bass, 19 fermata/Soprano, 19 fermata/Bass, 33+1/2 fermata/Soprano, 33+1/2 fermata/Bass, 87+1/2 fermata/Soprano, 87+1/2 fermata/Bass
+text: 56 above bold Duet: alto+tenor
+text: 64 above bold Solo sopran
+text: 72 above bold Solo alto
+
+[Soprano notes]
+1: @1 x:2 E4:4 E4:4 @2 A4:2. A4:4 @3 C5:4 C5:4 E5:2~ @4 E5:4 D5:4 C5:2 @5 B4:4 A4:4 B4:4 C5:4
+1: @6 A4:8 B4:8 C5:8 D5:8 E5:2 @7 E5:2 E4:4 E4:4 @8 A4:2. A4:4 @9 C5:4 C5:4 E5:2~ @10 E5:4 D5:4 C5:2 @11 B4:4 A4:4 B4:4 C5:4
+1: @12 A4:8 B4:8 C5:8 D5:8 E5:2 @13 B4:2. r:4 @14 E4:4 E4:4 A4:4 A4:4 @15 C5:4 C5:4 E5:2~ @16 E5:4 D5:4 C5:2 @17 B4:4 A4:4 B4:4 C5:4
+1: @18 A4:8 B4:8 C5:8 A4:8 B4:2 @19 A4:2. G4:8. G4:16 @20 C5:2 G4:4. G4:8 @21 D5:2 G4:4. G4:16 G4:16 @22 E5:2 D5:2 @23 C5:2. G4:8. G4:16 @24 D5:2 G4:4. G4:8 @25 F5:2 D5:4. E5:16 F5:16
+1: @26 E5:2 D5:8 C5:8 D5:4 @27 C5:2. r:4 @28 F5:8 F5:8 r:8 F5:16 F5:16 E5:4 r:4 @29 D5:8 D5:8 D5:8 D5:8 E5:4 D5:4 @30 D5:2 C5:2
+1: @31 F5:8 F5:8 r:8 F5:16 F5:16 E5:4 r:4 @32 D5:8 D5:8 D5:8 D5:8 E5:4 C5:4 @33 D5:4. C5:8 C5:2 @34 B4:2 A4:4 G#4:4 @35 A4:2. C5:4
+1: @36 E5:4 C5:8 E5:8 D5:8 C5:8 B4:8 A4:8 @37 B4:2. r:4 @38 r:1 @39 r:1 @40 A4:8 A4:8 A4:8 B4:8 C5:4 A4:4
+1: @41 B4:8 B4:8 B4:8 B4:8 B4:2 @42 B4:8 B4:8 B4:8 C5:8 D5:4 B4:4 @43 C5:8 C5:8 C5:8 C5:8 C5:2 @44 C5:8 C5:8 C5:8 D5:8 E5:4 C5:4 @45 D5:8 D5:8 D5:8 D5:8 D5:2
+1: @46 D5:8 D5:8 D5:8 E5:8 F5:4 D5:4 @47 E5:8 E5:8 E5:8 E5:8 E5:2 @48 A4:8 A4:8 A4:8 A4:8 A4:4 A4:4 @49 A4:8 A4:8 A4:8 A4:8 B4:2 @50 G4:8 G4:8 G4:8 G4:8 G4:4 G4:4 @51 G4:8 G4:8 G4:8 G4:8 G4:4 G#4:4
+1: @52 A4:8 A4:8 A4:8 A4:8 A4:4 A4:4 @53 D5:8 D5:8 D5:8 D5:8 C5:2 @54 E5:8 E5:8 E5:8 E5:8 E5:4 B4:4
+1: @55 A4:8 A4:8 A4:8 A4:8 A4:2 @56 r:1 @57 r:1 @58 r:1 @59 r:1 @60 r:1 @61 r:1 @62 r:1 @63 r:1
+1: @64 A4:2~ A4:8 C5:8 B4:8 G4:8 @65 B4:2 B4:2 @66 B4:2~ B4:8 D5:8 C5:8 B4:8 @67 C5:2. r:4 @68 C5:2~ C5:8 E5:8 D5:8 C5:8 @69 D5:2 D5:2 @70 D5:2~ D5:8 F5:8 E5:8 D5:8 @71 E5:2. r:4
+1: @72 A4:8 A4:8 A4:8 A4:8 A4:4 A4:4 @73 A4:8 A4:8 A4:8 A4:8 A4:2 @74 G4:8 G4:8 G4:8 G4:8 G4:4 G4:4 @75 G4:8 G4:8 G4:8 G4:8 G4:4 G#4:4
+1: @76 A4:8 A4:8 A4:8 A4:8 A4:4 A4:4 @77 D5:8 D5:8 D5:8 D5:8 C5:2 @78 E5:8 E5:8 E5:8 E5:8 E5:4 B4:4 @79 A4:8 A4:8 A4:8 A4:8 A4:2 @80 A4:8 C5:8 B4:8 A4:8 B4:4 B4:4 @81 B4:8 D5:8 C5:8 B4:8 C5:4 C5:4
+1: @82 C5:8 E5:8 D5:8 C5:8 D5:4 D5:4 @83 D5:8 F5:8 E5:8 D5:8 E5:4 E5:4 @84 F5:8 E5:8 D5:8 C5:8 D5:4 D5:4 @85 E5:8 D5:8 C5:8 B4:8 C5:4 C5:4 @86 D5:8 C5:8 B4:8 A4:8 B4:4 B4:4 @87 C5:8 B4:8 A4:8 G#4:8 A4:2
+
+[Alto notes]
+1: @1 x:2 r:4 r:4 @2 E4:4 D4:4 C4:4 C4:4 @3 C4:4 C4:4 E4:2~ @4 E4:4 D4:4 E4:2 @5 F4:4 E4:4 D4:4 E4:4
+1: @6 E4:8 G#4:8 A4:8 G#4:8 G#4:2 @7 G#4:2 r:4 r:4 @8 E4:4 D4:4 C4:4 C4:4 @9 C4:4 C4:4 E4:2~ @10 E4:4 D4:4 E4:2 @11 F4:4 E4:4 D4:4 E4:4
+1: @12 E4:8 G#4:8 A4:8 G#4:8 G#4:2 @13 G#4:2. r:4 @14 u:4 D4:4 C4:4 C4:4 @15 C4:4 C4:4 E4:2~ @16 E4:4 D4:4 E4:2 @17 F4:4 E4:4 D4:4 E4:4
+1: @18 E4:4 E4:4 G#4:4 E4:4 @19 E4:2. E4:8. E4:16 @20 E4:2 E4:4. E4:8 @21 F4:2 F4:4. F4:16 F4:16 @22 G4:2 F4:2 @23 E4:2. E4:8. E4:16 @24 F4:2 F4:4. F4:8 @25 G4:2 G4:4. G4:16 A4:16
+1: @26 G4:2 F4:8 E4:8 F4:4 @27 E4:2. r:4 @28 A4:8 A4:8 r:8 A4:16 A4:16 G4:4 r:4 @29 F4:8 F4:8 F4:8 F4:8 G4:4 F4:4 @30 F4:2 E4:2
+1: @31 A4:8 A4:8 r:8 A4:16 A4:16 G4:4 r:4 @32 F4:8 F4:8 F4:8 F4:8 G4:4 F4:4 @33 F4:4. E4:8 E4:2 @34 E4:2 F4:4 D4:4 @35 E4:2. A4:4
+1: @36 C5:4 A4:8 C5:8 B4:8 A4:8 F4:8 E4:8 @37 G#4:2. r:4 @38 r:1 @39 r:1 @40 E4:8 E4:8 E4:8 E4:8 E4:4 E4:4
+1: @41 G#4:8 G#4:8 G#4:8 G#4:8 G#4:2 @42 G#4:8 G#4:8 G#4:8 G#4:8 G#4:4 G#4:4 @43 A4:8 A4:8 A4:8 A4:8 A4:2 @44 E4:8 E4:8 E4:8 G#4:8 A4:4 E4:4 @45 F4:8 F4:8 F4:8 F4:8 F4:2
+1: @46 G4:8 G4:8 G4:8 G4:8 G4:4 G4:4 @47 G4:8 G4:8 G4:8 G4:8 G4:4 G#4:4 @48 E4:8 E4:8 E4:8 E4:8 E4:4 E4:4 @49 E4:8 E4:8 E4:8 E4:8 F4:2 @50 F4:8 F4:8 F4:8 F4:8 F4:4 F4:4 @51 E4:8 E4:8 E4:8 E4:8 E4:4 D4:4
+1: @52 E4:8 E4:8 E4:8 E4:8 E4:4 E4:4 @53 F4:8 F4:8 F4:8 F4:8 F4:2 @54 G#4:8 G#4:8 G#4:8 G#4:8 G#4:4 G#4:4
+1: @55 E4:8 E4:8 E4:8 Eb4:8 E4:2 @56 C4:4 C4:8 C4:8 D4:4 D4:4 @57 E4:4 F4:4 E4:4 D4:4 @58 D4:4 D4:8 D4:8 E4:4 E4:4 @59 F4:4 G4:4 F4:4 E4:4 @60 D4:8 D4:8 C4:8 B3:8 D4:2 @61 D4:2. r:4 @62 D4:8 D4:8 C4:8 B3:8 D4:2 @63 C4:2. r:4
+1: @64 E4:8 E4:8 E4:8 E4:8 E4:4 E4:4 @65 G#4:8 G#4:8 G#4:8 G#4:8 G#4:2 @66 G#4:8 G#4:8 G#4:8 G#4:8 G#4:4 G#4:4 @67 A4:8 A4:8 A4:8 A4:8 A4:2 @68 E4:8 E4:8 E4:8 G#4:8 A4:4 E4:4 @69 F4:8 F4:8 F4:8 F4:8 F4:2 @70 G4:8 G4:8 G4:8 G4:8 G4:4 G4:4 @71 G4:8 G4:8 G4:8 G4:8 G4:4 G#4:4
+1: @72 A4:2~ A4:8 G4:8 F4:8 E4:8 @73 G4:2 G4:2 @74 G4:2~ G4:8 F4:8 E4:8 D4:8 @75 C4:2. r:4
+1: @76 E4:2~ E4:8 D4:8 C4:8 B3:8 @77 D4:2 F4:2 @78 E4:2~ E4:8 D4:8 B3:8 C4:8 @79 A3:2. r:4 @80 E4:8 E4:8 E4:8 E4:8 G#4:4 G#4:4 @81 G#4:8 G#4:8 G#4:8 G#4:8 E4:4 E4:4
+1: @82 E4:8 E4:8 E4:8 E4:8 F4:4 F4:4 @83 F4:8 F4:8 F4:8 F4:8 G4:4 G4:4 @84 F4:4. F4:8 F4:4 F4:4 @85 E4:4. E4:8 E4:4 E4:4 @86 F4:4. F4:8 G#4:4 G#4:4 @87 E4:2 E4:2
+
+[Tenor notes]
+1: @1 r:1 @2 C4:4 D4:4 E4:4 E4:4 @3 E4:4 E4:4 C4:2~ @4 C4:4 B3:4 E4:2
+1: @5 F4:4 E4:4 D4:4 E4:4 @6 E4:8 D4:8 C4:8 B3:8 B3:2 @7 E4:2 r:4 r:4 @8 C4:4 D4:4 E4:4 E4:4
+1: @9 E4:4 E4:4 C4:2~ @10 C4:4 B3:4 E4:2 @11 F4:4 E4:4 D4:4 E4:4 @12 E4:8 D4:8 C4:8 B3:8 B3:2
+1: @13 E4:2. r:4 @14 C4:4 D4:4 E4:4 E4:4 @15 E4:4 E4:4 C4:2~ @16 C4:4 B3:4 E4:2
+1: @17 F4:4 E4:4 D4:4 E4:4 @18 C4:8 D4:8 E4:8 D4:8 E4:4 D4:4 @19 C4:2. G3:8. G3:16 @20 G3:2 C4:4. C4:8
+1: @21 B3:2 B3:4. B3:16 B3:16 @22 C4:2 B3:2 @23 G3:2. G3:8. G3:16 @24 B3:2 B3:4. B3:8
+1: @25 B3:2 B3:4. C4:16 D4:16 @26 C4:2 B3:2 @27 G3:2. r:4 @28 C4:8 C4:8 r:8 C4:16 C4:16 C4:4 r:4
+1: @29 B3:8 B3:8 B3:8 B3:8 C4:4 B3:4 @30 B3:2 G3:2 @31 C4:8 C4:8 r:8 C4:16 C4:16 C4:4 r:4 @32 B3:8 B3:8 B3:8 B3:8 C4:4 B3:4
+1: @33 B3:4. G3:8 G3:2 @34 D4:2 C4:4 B3:4 @35 C4:2. r:4 @36 x:1
+1: @37 x:1 @38 x:1 @39 x:1 @40 C4:8 C4:8 C4:8 D4:8 E4:4 C4:4
+1: @41 D4:8 D4:8 D4:8 D4:8 D4:2 @42 D4:8 D4:8 D4:8 E4:8 F4:4 D4:4 @43 E4:8 E4:8 E4:8 E4:8 E4:2 @44 A3:8 A3:8 A3:8 B3:8 C4:4 A3:4
+1: @45 A3:8 A3:8 A3:8 A3:8 A3:2 @46 B3:8 B3:8 B3:8 C4:8 D4:4 B3:4 @47 C4:8 C4:8 C4:8 C4:8 C4:4 B3:4 @48 A3:8 A3:8 A3:8 A3:8 A3:4 A3:4
+1: @49 C#4:8 C#4:8 C#4:8 C#4:8 D4:2 @50 B3:8 B3:8 B3:8 B3:8 B3:4 B3:4 @51 C4:8 C4:8 C4:8 C4:8 C4:4 B3:4 @52 A3:8 A3:8 A3:8 A3:8 C4:4 C4:4
+1: @53 B3:8 B3:8 B3:8 B3:8 A3:2 @54 B3:8 B3:8 B3:8 B3:8 B3:4 D4:4 @55 C4:8 C4:8 C4:8 C4:8 C4:2 @56 A3:4 A3:8 A3:8 B3:4 B3:4
+1: @57 C4:4 D4:4 C4:4 B3:4 @58 B3:4 B3:8 B3:8 C4:4 C4:4 @59 D4:4 E4:4 D4:4 C4:4 @60 B3:8 B3:8 A3:8 G#3:8 B3:2
+1: @61 B3:2. r:4 @62 B3:8 B3:8 A3:8 G#3:8 B3:2 @63 A3:2. r:4 @64 C4:8 C4:8 C4:8 D4:8 E4:4 C4:4
+1: @65 D4:8 D4:8 D4:8 D4:8 D4:2 @66 D4:8 D4:8 D4:8 E4:8 F4:4 D4:4 @67 E4:8 E4:8 E4:8 E4:8 E4:2 @68 A3:8 A3:8 A3:8 B3:8 C4:4 A3:4
+1: @69 A3:8 A3:8 A3:8 A3:8 A3:2 @70 B3:8 B3:8 B3:8 C4:8 D4:4 B3:4 @71 C4:8 C4:8 C4:8 C4:8 C4:4 B3:4 @72 C4:8 C4:8 C4:8 C4:8 C4:4 C4:4
+1: @73 C#4:8 C#4:8 C#4:8 C#4:8 D4:2 @74 B3:8 B3:8 B3:8 B3:8 B3:4 B3:4 @75 C4:8 C4:8 C4:8 C4:8 C4:4 B3:4 @76 C4:8 C4:8 C4:8 C4:8 C4:4 C4:4
+1: @77 B3:8 B3:8 B3:8 B3:8 A3:2 @78 B3:8 B3:8 B3:8 B3:8 B3:4 D4:4 @79 C4:8 C4:8 C4:8 C4:8 C4:2 @80 E4:4. E4:8 E4:4 E4:4
+1: @81 E4:4. E4:8 E4:4 E4:4 @82 E4:4. E4:8 B3:4 B3:4 @83 B3:4. B3:8 C4:4 C4:4 @84 D4:8 C4:8 B3:8 A3:8 B3:4 B3:4
+1: @85 C4:8 B3:8 A3:8 G#3:8 A3:4 A3:4 @86 F4:8 E4:8 D4:8 C4:8 D4:4 D4:4 @87 E4:8 D4:8 C4:8 B3:8 C4:2
+
+[Bass notes]
+1: @1 r:1 @2 C3:4 B2:4 A2:4 A2:4 @3 C3:4 E3:4 A3:2~ @4 A3:4 F3:4 E3:4 C3:4 @5 D3:4 C3:4 B2:4 A2:4
+1: @6 C3:8 D3:8 E3:8 F3:8 E3:2 @7 E3:2 r:4 r:4 @8 C3:4 B2:4 A2:4 A2:4 @9 C3:4 E3:4 A3:2~ @10 A3:4 F3:4 E3:4 C3:4 @11 D3:4 C3:4 B2:4 A2:4
+1: @12 C3:8 D3:8 E3:8 F3:8 E3:2 @13 E3:2. r:4 @14 C3:4 B2:4 A2:4 A2:4 @15 C3:4 E3:4 A3:2~ @16 A3:4 F3:4 E3:4 C3:4 @17 D3:4 C3:4 B2:4 A2:4
+1: @18 E3:8 D3:8 C3:8 B2:8 E3:2 @19 A2:2. C3:8. C3:16 @20 C3:2 C3:4. E3:8 @21 G3:2 G3:4. G3:16 G3:16 @22 E3:2 G3:2 @23 C3:2. C3:8. C3:16 @24 G3:2 G3:4. G3:8 @25 G3:2 G3:4. G3:16 F3:16
+1: @26 G3:2 G3:2 @27 C3:2. r:4 @28 F3:8 F3:8 r:8 F3:16 F3:16 C3:4 r:4 @29 G3:8 G3:8 G3:8 G3:8 G3:4 G3:4 @30 G3:2 C3:2
+1: @31 F3:8 F3:8 r:8 F3:16 F3:16 C3:4 r:4 @32 G3:8 G3:8 G3:8 G3:8 G3:4 G3:4 @33 G3:4. C3:8 C3:2 @34 E3:2 F3:4 E3:4 @35 A2:2. r:4
+1: @36 x:1 @37 r:2. F3:4 @38 E3:8 D3:8 C3:8 D3:8 C3:4 B2:4 @39 E3:2 A2:2 @40 A2:2 A2:8 C3:8 B2:8 A2:8
+1: @41 B2:2 B2:2 @42 B2:2 B2:8 D3:8 C3:8 B2:8 @43 C3:2. r:4 @44 A2:2 C3:8 E3:8 D3:8 C3:8 @45 D3:2 D3:2
+1: @46 D3:2 D3:8 F3:8 E3:8 D3:8 @47 E3:2. r:4 @48 A3:2 A3:8 G3:8 F3:8 E3:8 @49 G3:2 F3:2 @50 G3:2 G3:8 F3:8 E3:8 D3:8 @51 E3:2. r:4
+1: @52 A2:2 A2:8 D3:8 C3:8 B2:8 @53 D3:2 F3:2 @54 B2:2 B2:8 D3:8 C3:8 B2:8
+1: @55 A2:2. r:4 @56 x:1 @57 x:1 @58 x:1 @59 x:1 @60 x:1 @61 x:1 @62 x:1 @63 x:1
+1: @64 A2:8 A2:8 A2:8 A2:8 A2:4 G2:4 @65 D3:8 D3:8 D3:8 D3:8 D3:2 @66 D3:8 D3:8 D3:8 D3:8 D3:4 D3:4 @67 A2:8 A2:8 A2:8 A2:8 A2:2 @68 A2:8 A2:8 A2:8 A2:8 A2:4 A2:4 @69 D3:8 D3:8 D3:8 D3:8 D3:2 @70 G3:8 G3:8 G3:8 G3:8 G3:4 G3:4 @71 C3:8 C3:8 C3:8 C3:8 C3:4 B2:4
+1: @72 A2:8 A2:8 A2:8 A2:8 A2:4 A2:4 @73 A2:8 A2:8 A2:8 A2:8 D3:2 @74 G3:8 G3:8 G3:8 G3:8 G3:4 G3:4 @75 C3:8 C3:8 C3:8 C3:8 C3:4 B2:4
+1: @76 A2:8 A2:8 A2:8 A2:8 A2:4 A2:4 @77 D3:8 D3:8 D3:8 D3:8 F3:4 Eb3:4 @78 E3:8 E3:8 E3:8 E3:8 E3:4 E3:4 @79 A2:8 A2:8 A2:8 A2:8 A2:2 @80 A2:4. A2:8 E3:4 E3:4 @81 E3:4. E3:8 A3:4 A3:4
+1: @82 A3:4. A3:8 G3:4 G3:4 @83 G3:4. G3:8 C3:4 C3:4 @84 D3:4. D3:8 D3:4 D3:4 @85 E3:4. E3:8 A2:4 A2:4 @86 F3:4. F3:8 E3:4 E3:4 @87 E3:2 A2:2
+
+[Soprano above italic]
+1: @1 Îmi ri -- dic @7 * Îmi ri -- dic
+
+[Alto]
+1: @2 Îmi ri -- dic o -- chii spre munţi de un -- de'mi va ve -- ni a _ -- ju _ -- to -- rul,
+1: @8 Îmi ri -- dic o -- chii spre munţi de un -- de'mi va ve -- ni a _ -- ju _ -- to -- rul,
+
+[Soprano]
+1: @14 Îmi ri -- dic o -- chii spre munţi de un -- de'mi va ve -- ni
+1: a _ -- ju _ -- to -- rul. A -- ju -- to -- rul îmi vi -- ne de la Dom _ -- nul. A -- ju -- to -- rul îmi vi -- ne de la
+1: Dom _ _ _ -- nul, ca -- re a fă -- cut ce -- ru -- ri -- le şi pă -- mân -- tul, ca -- re a fă -- cut ce -- ru -- ri -- le şi pă --
+1: mân _ -- tul. O _ _ da! El nu va în -- gă _ -- du _ -- i
+1: @40 Cel ce te pă -- zeş -- te nu va dor -- mi -- ta, cel ce te pă -- zeş -- te nu va dor -- mi -- ta,
+1: ia -- tă că nu doar -- me pu -- ruri va ve -- ghea, ia -- tă că nu doar -- me pu -- ruri va ve -- ghea.
+1: Stân -- ca lui Is -- ra -- el pu -- ruri va ve -- ghea, stân -- ca lui Is -- ra -- el pu -- ruri va ve -- ghea _
+1: El e ve -- ghea -- to -- rul în noap -- tea cea grea, El e ve -- ghea -- to -- rul în noap -- tea cea grea.
+1: @80 Glo -- ri -- e lui I -- sus sla -- vă'n veci lui I -- sus, El e ve -- gea -- to -- rul, Glo -- ri -- e lui I -- sus
+1: A _ _ -- li -- lu -- ia, A _ _ -- li -- lu -- ia A _ _ -- li -- lu -- ia, A _ _ _ -- min.
+
+[Alto]
+1: @56 Cel ce pă -- zeş -- te pe Is -- ra -- el, cel ce pă -- zeş -- te pe Is -- ra -- el ia -- tă că nu doar -- me
+1: Stân -- ca lui Is -- ra -- el.
+1: Ce vezi Ie -- re -- mi -- a văd un ve -- ghea -- tor ce vezi Ie -- re -- mi -- a, văd un ve -- ghea -- tor,
+1: Bi -- ne ai vă -- zut tu al meu slu -- ji -- tor, bi -- ne ai vă -- zut tu al meu slu -- ji -- tor _
+
+[Alto italic]
+1: @72 Eu sunt Dom -- nul ca -- re pu -- ru -- rea ve -- ghez,
+1: Pen -- tru'a mea lu -- cra -- re să mi'o îm -- pli -- nesc.
+
+[Bass italic]
+1: @37 Să 'ţi se cla -- ti -- ne pi -- cio -- rul.
+1: @40 Cel ce te pă -- zeş _ -- te, nu _ va dor -- mi -- ta,
+1: @44 Ia _ -- tă că nu doar -- me pu _ -- ruri va ve -- ghea.
+1: @48 Stân _ -- ca lui Is -- ra -- el pu _ -- ruri va ve -- ghea
+1: @52 El _ e ve -- ghea -- to -- rul în _ noap -- tea cea grea.
+1: @80 A -- li -- lu -- ia, A -- li -- lu -- ia, A -- li -- lu -- ia, A -- li -- lu -- ia,
+
+[Soprano above]
+1: @64 Ce vezi Ie -- re -- mi -- a văd un ve -- ghea -- tor, Bi -- ne ai vă -- zut tu al meu slu -- ji -- tor.
+1: Eu sunt Dom -- nul ca -- re pu -- ru -- rea ve -- ghez Eu sunt Dom -- nul ca -- re pu -- ru -- rea ve -- ghez _
+1: pen -- tru'a mea lu -- cra -- re să -- mi'o îm -- pli -- nesc, pen -- tru'a mea lu -- cra -- re să mi'o îm -- pli -- nesc.

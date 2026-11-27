@@ -25,7 +25,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 59 | 5 | 1 | 21 | 20 | 1 | 0 |
+| Mixed choir | 107 | 60 | 4 | 1 | 21 | 20 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -48,7 +48,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 14 | Când Duhul Sfânt S-a coborât | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 15 | Cântați pe Isus cu iubire | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 16 | Te iubesc Isuse | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 17 | Îmi ridic ochii spre munți | To do: its file leaves whole voices out; write them in from the PDF | 2 | 2 staves, voices 1/1, 87 bars, `017. Îmi ridic ochii spre munți.mscz` | no | – | Tenor | 1 | 1 |  | piano |
+| 17 | Îmi ridic ochii spre munți | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 18 | Cineva se-ngrijește de mine | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 19 | Luceafărul Maranata (1 subfolders) | To do: its file leaves whole voices out; write them in from the PDF | 3 | 2 staves, voices 1/1, 136 bars, `19.Lucefarul-Sopran.mscz`, 102 chords | no | – | Soprano, Alto, Tenor | 1 | 1 |  | piano |
 | 20 | Dumnezeu e steagul meu | Single voices only, no full score | – | – | – | – | Tenor | 1 |  |  | – |

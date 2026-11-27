@@ -115,3 +115,10 @@ by hand.
   MuseScore 4 drops: it is the "poet" style (song 11).
 - **A dashed tie's syllable missing in a part.** Where one verse holds over a tie and another sings on (song 11, bar
   20: "în-chi-na"), the part's tied note takes the verse's syllable from the voice it moves with.
+- **A pitch read a step off a slanted page.** Labels drawn from staff lines measured at the page's middle drift by a
+  step at the line's ends when the scan tilts (song 17: bars 53-55, 80-83). Read each head against the staff lines
+  drawn in the crop itself, check it with `heads` (which measures each staff), and check the chord it makes.
+- **Words under the wrong voice where the sheet changes who leads.** Song 17 prints its first lines under the altos
+  (the sopranos' pickup "Îmi ri-dic" above), and its solos (bars 64-79) with the soloist's words above and the
+  accompaniment's below: the words go under the voice whose rhythm they fit, and a second voice's words above the
+  staff (`[Soprano above]`) so they never collide.
