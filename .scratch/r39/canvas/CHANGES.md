@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · {c} · the phone's Piano keys heads its two lists as its sibling Audio page heads Room and Volume (15 semibold at the card's edge), not in small capitals, a third head style; the ruling recorded in the score-editor spec · PlayerApp · v822
+- 2026-11-27 · 8a4c9fa0 · the phone's Piano keys heads its two lists as its sibling Audio page heads Room and Volume (15 semibold at the card's edge), not in small capitals, a third head style; the ruling recorded in the score-editor spec · PlayerApp · v822
 - 2026-11-27 · 039a15a6 · the phone's MIDI keyboard page drops Record's key "R", a phone having no keyboard to press it on (as its tooltips drop their keys); the laptop's popover keeps it · Editor, EditorDraft, PlayerApp · v821
 - 2026-11-27 · 899fa6f4 · the phone's Piano keys is one page: Piano (3D, 2D, Off) and Labels (None, C only, All notes) as two headed lists, as the laptop's popover shows them together, where two rows each opened a page of three choices over an empty screen (laws, Hick: a short list needs no page of its own; one model on both sizes) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · v820
 - 2026-11-27 · 35cdb614 · one menu box: the song's name menu, its Export submenu, the versions' ··· menu and the panels' pop-up lists (Voicing, inversion) drew a second box (paper, 14 round, its own shadow, width set twice); they take the kit's menu (ROWMENU's: 16 round as DESIGN.md's menu, 6 in, the floating glass, rows 10 round), and a menu anchored at its right grows from its top right · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · v819
