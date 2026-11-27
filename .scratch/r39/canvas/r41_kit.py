@@ -1036,16 +1036,17 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=Fals
         # settings"): a page of rows, each its glyph, name, value and arrow, each opening its own page of choices with ←
         # (iOS Settings, Flat's Audio playback, Metronome, Playback speed); a pick shows at once and stays on the page
         # Flat's three first, in its order (005; the R74 ruling "its first row as Flat's"), then Practice's own two
-        items = [('Aud', 'Audio playback', '{{hdRoomL}}', 'hdGoAud'), ('Met', 'Metronome', '{{selMetV}}', 'hdGoMet'), ('Speed', 'Playback speed', '{{hdSpeedL}}', 'hdGoSpeed')] + ([('Mode', 'Mode', '{{selModeV}}', 'hdGoMode'), ('Hands', 'Hands', '{{selHandsV}}', 'hdGoHands')] if practice else [])
+        items = [('Aud', 'Audio', '{{hdRoomL}}', 'hdGoAud'), ('Met', 'Metronome', '{{selMetV}}', 'hdGoMet'), ('Speed', 'Playback speed', '{{hdSpeedL}}', 'hdGoSpeed')] + ([('Mode', 'Mode', '{{selModeV}}', 'hdGoMode'), ('Hands', 'Hands', '{{selHandsV}}', 'hdGoHands')] if practice else [])
         out = FSHEET('hdOptsMain', 'Playback options', FROWS(items), close='hdClose')
         sp = speed.replace(f' border-top: 1px solid {LINE}', '').replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px').replace('padding: 0 4px 0 12px', 'padding: 0 6px 0 16px').replace('Playback speed', 'Speed')
         if practice:
             out += FSHEET('hdSubModeOn', 'Mode', FRADIO('selMode'), close='hdClose', back='hdSubBack')
             out += FSHEET('hdSubHandsOn', 'Hands', FRADIO('selHands'), close='hdClose', back='hdSubBack')
-        # Audio playback is the first of Flat's Playback options (005): the room and the levels, the laptop's Audio panel
+        # Audio is the first of Playback options, as Flat's Audio playback (005): the room and the levels, the laptop's Audio
+        # panel, under the panel's one name (laws, Information architecture 6)
         # (one implementation); never a row of ☰ (owner, 2026-11-26: "i dont like that we have the audio in the menu and
         # not in the playback options")
-        out += FSHEET('hdSubAudOn', 'Audio playback', AUDPANEL(phone=True), close='hdClose', back='hdSubBack')
+        out += FSHEET('hdSubAudOn', 'Audio', AUDPANEL(phone=True), close='hdClose', back='hdSubBack')
         out += FSHEET('hdSubMetOn', 'Metronome', FRADIO('selMet'), close='hdClose', back='hdSubBack')
         out += FSHEET('hdSubSpeedOn', 'Playback speed', f'<div style="display: flex; flex-direction: column; overflow: hidden; {_CARD}">{sp}</div>' + FRADIO('selSpeed'), close='hdClose', back='hdSubBack')
     else:
@@ -1361,10 +1362,11 @@ PE_FOCUS = ('<style data-focus>:focus-visible { outline: 3px solid #356890; outl
             # alone; the Player's old capsule scaled to .96, the editor's band did not)
             '@media (hover: hover) { [role=toolbar] button:not([aria-disabled="true"]):hover { filter: brightness(.96) } }</style>')
 
-# Esc closes the top layer alone, and a modal takes and gives back the focus (testing.md, keyboard only; the tooltips teach it: "Close history · Esc"), on every
+# Esc closes the top layer alone, and a modal takes and gives back the focus (testing.md, keyboard only; the tooltips teach it: "Close version history · Esc"), on every
 # Player and editor board: the layer's own way out is pressed, so Esc does exactly what a click outside or its Back
 # does. In order: the topmost scrim or click-catcher laid over the frame (a menu, popover, dialog, sheet), else a
-# control whose tooltip names Esc (Close history), else the open page's Back or Close.
+# control whose tooltip names Esc (Close version history), else the open page's Back or Close.
+# Focus moves with preventScroll: a page still sliding in from the right would otherwise scroll the screen sideways.
 PE_ESC = """<script data-esc>document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape' || e.defaultPrevented) return;
   const shown = (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== 'hidden'; };
@@ -1380,8 +1382,8 @@ PE_ESC = """<script data-esc>document.addEventListener('keydown', (e) => {
 (() => { let opener = null; const shown = (el) => el.getBoundingClientRect().width > 0;
   new MutationObserver(() => {
     const d = [...document.querySelectorAll('[role=dialog][aria-modal=true], [role=alertdialog]')].filter(shown).pop();
-    if (d && !d.contains(document.activeElement)) { opener = opener || document.activeElement; const f = d.querySelector('[autofocus]') || d.querySelector('input, textarea, select, button, [href], [tabindex]:not([tabindex="-1"])'); if (f) f.focus(); }
-    else if (!d && opener) { if (document.contains(opener)) opener.focus(); opener = null; }
+    if (d && !d.contains(document.activeElement)) { opener = opener || document.activeElement; const f = d.querySelector('[autofocus]') || d.querySelector('input, textarea, select, button, [href], [tabindex]:not([tabindex="-1"])'); if (f) f.focus({ preventScroll: true }); }
+    else if (!d && opener) { if (document.contains(opener)) opener.focus({ preventScroll: true }); opener = null; }
   }).observe(document.documentElement, { childList: true, subtree: true });
 })();</script>"""
 

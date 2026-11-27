@@ -19,8 +19,8 @@
 (() => { let opener = null; const shown = (el) => el.getBoundingClientRect().width > 0;
   new MutationObserver(() => {
     const d = [...document.querySelectorAll('[role=dialog][aria-modal=true], [role=alertdialog]')].filter(shown).pop();
-    if (d && !d.contains(document.activeElement)) { opener = opener || document.activeElement; const f = d.querySelector('[autofocus]') || d.querySelector('input, textarea, select, button, [href], [tabindex]:not([tabindex="-1"])'); if (f) f.focus(); }
-    else if (!d && opener) { if (document.contains(opener)) opener.focus(); opener = null; }
+    if (d && !d.contains(document.activeElement)) { opener = opener || document.activeElement; const f = d.querySelector('[autofocus]') || d.querySelector('input, textarea, select, button, [href], [tabindex]:not([tabindex="-1"])'); if (f) f.focus({ preventScroll: true }); }
+    else if (!d && opener) { if (document.contains(opener)) opener.focus({ preventScroll: true }); opener = null; }
   }).observe(document.documentElement, { childList: true, subtree: true });
 })();</script></head>
 <body>

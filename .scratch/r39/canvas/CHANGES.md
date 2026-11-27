@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · (this commit) · a page no longer slides the screen sideways; Audio one name: focusing a page's Back while the page still slid in from the right scrolled the phone screen 17 to the left, so every page off Playback options or ☰ on the editor's phone boards stood 17 off the screen's left, a sliver of the score at its right (the focus fix of v806); focus now moves with preventScroll, every page checked at the screen's edge; the phone's Playback options row "Audio playback" opened the panel the laptop rail calls Audio, so the row and its page are Audio (laws, Information architecture 6) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · **pending**
+
 ## Changes
 
 - 2026-11-27 · 45771505 · one name for the version history (laws, Information architecture 6: one thing, one label on every screen): the phone's ☰ said Version history (the owner's word) and the laptop's band, tooltip, view and list said History; all say Version history now, Close version history in the band; its page was drawn at zoom 1.2 where Practice and Edit draw it at 1.5, so its 24s fell to 19; it is 1.5, one page at one size in all three · EditorDraftLaptop, EditorLaptop, PlayerDesk · v812
