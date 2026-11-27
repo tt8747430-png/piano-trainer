@@ -5,6 +5,7 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
 
 ## The rulings as they stand
 
+- **The band under 1280** (the loop, every width, 2026-11-27). Why: at 1024 (a small laptop, an iPad on its side) the Player's band overflowed by about 70 and the Chord player's by about 30; every act stays, so what gives way is what can say less: Version history folds to its clock (its time in its tip), the song's or sheet's name shrinks first to 120 and truncates. Under 768 the phone's header takes over. A bar's last control names itself flush with the screen's edge, never centred past it (HIG, help tags). Built as a container query on the band (`BANDNARROW`, `r41_kit.py`; `r71_tips.py`).
 - **The Chord player in the Player's model** (owner, 2026-11-27: "now begin with the refactoring of the chords
   player the same way you did with the laptop and mobile layout and such things"). Canvas R77 (`r58_chordplayer.py`,
   `lm77`, `ph77`). This supersedes R76's "The layout is the learner's" below for its Edit layout, the floating
