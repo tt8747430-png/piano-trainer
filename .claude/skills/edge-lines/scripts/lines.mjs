@@ -34,9 +34,9 @@ const DEVICES = { phone: [402, 874], 'phone-small': [393, 852], 'phone-side': [8
 const argv = process.argv.slice(2)
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] })
 
-// Opens a target at a device and returns the page and the screen's rectangle in it.
 // problems found while opening the board (a page error, a scrolled screen), counted in the summary
 const EARLY = []
+// Opens a target at a device and returns the page and the screen's rectangle in it.
 async function open(target, device, steps) {
   const board = !target.startsWith('http')
   // a laptop board by the device it is shot at (PlayerDesk ends in no "Laptop" and was opened as a phone, its crop a 450 sliver)
