@@ -108,3 +108,10 @@ by hand.
 - **A hold missing after a held word.** In song 10, bars 20, 28 and 44, "vor" is held over two notes; written without
   its `_`, every later syllable fell one note early ("ța" held over "mea"). Count the syllables of each line against
   its notes before building.
+- **A part with no words at all.** A voice that never rests (song 11's altos) was one run from the first bar to the
+  last, and when no voice fitted the whole run the part was left bare; the run is now tried bar by bar, then note by
+  note. The parts check missed it: count each part's words against the score's (a part with none is a failure).
+- **The words' author missing.** A credit added for a file that lacked one was written as a "lyricist" text, which
+  MuseScore 4 drops: it is the "poet" style (song 11).
+- **A dashed tie's syllable missing in a part.** Where one verse holds over a tie and another sings on (song 11, bar
+  20: "în-chi-na"), the part's tied note takes the verse's syllable from the voice it moves with.

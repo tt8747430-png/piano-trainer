@@ -176,7 +176,8 @@ def layout_mscx(score, spec):
                 t.remove(a)
         else:
             t = ET.SubElement(vb, 'Text')
-            ET.SubElement(t, 'style').text = role
+            # MuseScore 4 names the words' author's style "poet" (a "lyricist" text is dropped on reading: song 11)
+            ET.SubElement(t, 'style').text = {'composer': 'composer', 'lyricist': 'poet'}[role]
             tx = ET.SubElement(t, 'text')
         tx.text = spec[role]
     staffs = staves(score)

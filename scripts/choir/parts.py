@@ -102,6 +102,21 @@ def part_words(main_staffs, part_staff, track):
                 sequence = (other, dict(zip(sorted(moments), (inside[t] for t in sorted(words)))))
         chosen = exact or (partial[:2] if partial else None) or sequence
         if not chosen:
+            # No voice fits the whole run (song 11: the altos' line runs unbroken from the first bar to the last):
+            # it is tried again bar by bar, and within a bar each note takes the syllable another voice sings at its
+            # moment, the nearest voice first.
+            bars = {}
+            for item in run:
+                bars.setdefault(item[2], []).append(item)
+            if len(bars) > 1:
+                queue += [(b, tried) for b in bars.values()]
+                continue
+            for el, t, k in run:
+                for other in nearest(track, voices):
+                    src = next((e for e, u, kk in voices[other] if u == t), None)
+                    if src is not None and src.find('Lyrics') is not None:
+                        take[t], take_from[t] = src, other
+                        break
             continue
         other, source = chosen
         covered, until = set(), Fraction(-1)
@@ -142,14 +157,20 @@ def part_words(main_staffs, part_staff, track):
             j -= 1
 
     copied = set()
+    last_from = None
     for el, t, k in part:
         if el.tag != 'Chord' or k not in worded_bars:
             continue  # the main score has no words here: the part keeps its own (from a voice's own file)
         for ly in el.findall('Lyrics'):
             el.remove(ly)
         src = mine.get(t) or take.get(t)
+        if src is None and tied_on(el) and last_from is not None:
+            # a tied note where the voice it moves with sings a verse on (a dashed tie: song 11, bar 20, "în-chi-na")
+            src = next((e for e, u, kk in voices[last_from] if u == t and e.find('Lyrics') is not None), None)
         if src is None:
             continue
+        if t in take_from:
+            last_from = take_from[t]
         if src is take.get(t):
             copied.add(id(el))
         at = next((i for i, c in enumerate(el) if c.tag == 'Note'), len(el))
