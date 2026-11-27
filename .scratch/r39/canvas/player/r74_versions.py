@@ -35,7 +35,7 @@ def _dock(t, label, head=None, name=None):
     if head: h = h.replace('>', '>' + head, 1)
     return t[:a] + h + t[b:]
 def player_rail(t):
-    head = lambda name: _PHEAD(name).replace('padding: 0 8px 0 16px', 'margin: 0 -16px; padding: 0 8px 0 16px')
+    head = lambda name: _PHEAD(name, 16)
     # Song: the Settings card docked; its header row's acts go to the name's menu; the version choice goes
     a, b = _sect(t, 'Settings'); h = t[a:b]
     acts = re.search(r'<sc-if value="\{\{songActsShow\}\}".*?</sc-if>', h, re.S).group(0)
@@ -96,7 +96,7 @@ def player_rail(t):
             f'<div role="tablist" aria-orientation="vertical" aria-label="Panels" onKeyDown="{{{{railKeys}}}}" style="display: flex; flex-direction: column; gap: 4px">' + _RAILBTN('Versions', LAYERSI, 'Song', 'Versions') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div>'
             # Flat's rail actions at its foot, the editor's too (FLAT_UI_SHELL_AND_MOTION §1.2): the Player's acts and keys
             + '<span style="flex: 1"></span>' + _RAILBTN('Search', SEARCHI, 'Srch', 'Search for an act · ⌘K', 'openSearch') + _RAILBTN('Shortcuts', KBDI, 'Keys', 'Shortcuts · ?', 'openKeys') + '</nav>')
-    rail = rail + SEARCHCARD_F(((PLAY.replace('width="22" height="22"', 'width="20" height="20"'), 'Play', 'Space'), (LOOP, 'Loop', 'L'), (FICONS['Tr'], 'Transpose', 'T'), (FICONS['Mode'], 'Mode', ''), (FICONS['Hands'], 'Hands', '')))
+    rail = rail + SEARCHCARD_F(((SZ(PLAY, 20), 'Play', 'Space'), (LOOP, 'Loop', 'L'), (FICONS['Tr'], 'Transpose', 'T'), (FICONS['Mode'], 'Mode', ''), (FICONS['Hands'], 'Hands', '')))
     rail = rail + KEYSCARD_F(((('Playback', (('Play or stop', 'Space'), ('Go to start', '⌃Space'), ('Loop', 'L'))),), (('View', (('Practice or Edit', 'P E'), ('Piano keys', 'K'), ('Transpose', 'T'))),), (('Panels', (('Search', '⌘K'), ('Shortcuts', '?'))),)), 840)
     # Audio, Flat's panel (the kit's AUDPANEL, the editor's too): the room and each part's level, the mixer's home
     # after the rail in the tree, as the Song and View panels sit beside it (before it, the band read as the group it closed)

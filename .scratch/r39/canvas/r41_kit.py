@@ -111,7 +111,8 @@ def _RAILBTN(label, icon, k, tip, act=None):
     return (f'<button type="button"{sel}{tipa} onClick="{{{{{act or "pick" + k}}}}}" style="width: 76px; min-height: 64px; border-radius: 12px; border: 0; padding: 6px 0; background: transparent; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer">'
             f'<span style="width: 40px; height: 32px; border-radius: 10px; background: {{{{rail{k}Bg}}}}; display: flex; align-items: center; justify-content: center">{icon}</span>'
             f'<span style="font-size: 12px; font-weight: {{{{rail{k}W}}}}; line-height: 1.2">{label}</span></button>')
-_PHEAD = lambda t: (f'<header style="flex: none; height: 64px; box-sizing: border-box; padding: 0 8px 0 16px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
+# a panel's head; bleed: how far it reaches past a padded panel body to the panel's edges (the Player's rail panel)
+_PHEAD = lambda t, bleed=0: (f'<header style="flex: none; height: 64px; box-sizing: border-box; {f"margin: 0 -{bleed}px; " if bleed else ""}padding: 0 8px 0 16px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
                     f'<h2 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">{t}</h2>'
                     f'<button type="button" aria-label="Fold the panel" data-tip="Fold" onClick="{{{{foldPanel}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: pointer">{FOLDI}</button></header>')
 # a phone's bar: Close, then the version-and-mode capsule at the start (it is wider than a centred column leaves), the screen's group at the end
