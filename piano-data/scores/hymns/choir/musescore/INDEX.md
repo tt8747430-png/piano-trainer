@@ -25,7 +25,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 57 | 5 | 1 | 22 | 21 | 1 | 0 |
+| Mixed choir | 107 | 58 | 5 | 1 | 21 | 21 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -45,7 +45,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 11 | Ce nume minunat | Done: as printed (matched to its PDF) | – | – | – | – | – | 2 | 1 |  | – |
 | 12 | Crucea-i ascultarea | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 13 | Trece Isus pe-aici | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 14 | Când Duhul Sfânt S-a coborât (1 subfolders) | Single voices only, no full score | – | – | – | – | Alto, Tenor | 1 |  |  | – |
+| 14 | Când Duhul Sfânt S-a coborât | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 15 | Cântați pe Isus cu iubire | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 16 | Te iubesc Isuse | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 1/2, 17 bars, `016. Te iubesc Isuse.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
 | 17 | Îmi ridic ochii spre munți | To do: its file leaves whole voices out; write them in from the PDF | 2 | 2 staves, voices 1/1, 87 bars, `017. Îmi ridic ochii spre munți.mscz` | no | – | Tenor | 1 | 1 |  | piano |
