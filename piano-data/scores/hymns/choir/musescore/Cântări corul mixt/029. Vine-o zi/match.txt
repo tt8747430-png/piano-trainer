@@ -1,0 +1,11 @@
+# From 029. Vine-o zi.pdf (1 page). The choir's four one-voice files hold the notes without words: the two verses
+# and the refrain are written in from the sheet. The sheet counts its pickup as bar 1.
+title: 29 Vine-o zi...
+composer: Jim Hill
+count-pickup
+systems: 1 7 13 20 24 29
+
+[Soprano]
+1: @1 1.Vi -- ne'o @2 zi, vi -- ne'o @3 zi când du -- @4 reri nu vor mai @5 fi, Nu vor @6 fi nori pe @7 cer, la -- crimi @8 o -- chii n'or um -- @9 bri.
+1: @9 * Va fi @10 pa -- ce'n veci de @11 veci, când în @12 ce -- ruri ai să @13 pleci, O, ce @14 zi, ce glo -- ri -- @15 oa -- să va @16 fi! Oa -- re'a @18 tunci cum va @19 fi Fa -- ţa @20 când Îi vom pri -- @21 vi, Pe I -- @22 sus când vom ve -- @23 dea, noi, mân -- tu -- @24 iţi prin jert -- fa @25 Sa? Când de @26 mâ -- nă ne va @27 lua şi ne va @28 du -- ce'n ţa -- ra @29 Sa, O, ce @30 zi, ce glo -- ri -- @31 oa -- să va @32 fi!
+2: @1 2.Nu vor @2 fi, nu vor @3 fi gre -- u -- @4 tăţi, du -- reri de @5 dus, Nici ne -- @6 caz de'ori -- ce @7 fel, boli şi @8 la -- cri -- mi'co -- lo @9 sus;
