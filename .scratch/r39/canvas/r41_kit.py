@@ -661,7 +661,7 @@ def THINGPAGE(on, close, title, body, lap):
 # Credits are not here: the editor edits them where they print (a tap on the printed title), the Player reads them.
 _SMROW = 'min-height: 40px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: transparent; color: #332921; font: inherit; font-size: 15px; text-align: left; text-decoration: none; cursor: pointer'
 _SMBOX = 'position: absolute; z-index: 70; width: 288px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px rgba(26,22,18,0.08), 0 2px 4px rgba(26,22,18,0.10), 0 18px 40px -12px rgba(26,22,18,0.35); padding: 6px 0'
-_SMSEP = '<div role="separator" style="height: 1px; margin: 6px 0; background: #EFE9E1"></div>'
+_SMSEP = f'<div role="separator" style="height: 1px; margin: 6px 0; background: {LINE}"></div>'
 _SMSLOT = lambda inner='': f'<span aria-hidden="true" style="flex: none; width: 20px; display: flex; justify-content: center; color: #332921">{inner}</span>'
 PLUSI_S = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="M12 5v14M5 12h14"></path></svg>'
 # Flat's header band (owner, 2026-11-26, Flat 26.11 screenshots: "the header and the sidebars should follow the new
