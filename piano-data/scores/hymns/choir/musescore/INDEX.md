@@ -68,7 +68,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 34 | Ascultați imnul slăvirii | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 35 | Doamne binecuvântă | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 36 | O, izvor al fericirii | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 37 | Nu te teme | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/1, 16 bars, `037. Nu te teme.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
+| 37 | Nu te teme | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 38 | Mărețul har (1 subfolders) | Single voices only, no full score | – | – | – | – | Soprano, Tenor | 1 |  |  | – |
 | 39 | Cânta-voi Domnului | Done: a part per voice (no words in any of its files) | 3 | 2 staves, voices 2/2, 17 bars, `039. Cânta-voi Domnului - toate vocile.mscz` | no | – | Soprano, Alto, Tenor, Bass, All voices | 1 | 1 |  | piano |
 | 40 | Cat mai aproape de Tine | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 24 bars, `Cât mai aproape de Tine - toate vocile.mscz` | no | – | Soprano, Alto, Tenor, Bass, All voices | 1 | 1 |  | piano |
