@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BackButton, PhoneMenuButton, Sheet, SheetContent, type MenuAction } from '@/shared/ui'
+import { PhoneMenuButton, PhonePage, type MenuAction } from '@/shared/ui'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 
 /** ☰'s pages, each with ← back to ☰. */
@@ -70,7 +70,7 @@ const FILE_ICONS: Readonly<Record<string, LucideIcon>> = {
 /**
  * ☰ on a phone (canvas R77, `PHNAV77`): a card under the header from its ☰, 22 round on the page's
  * paper, the sheet's name centred over it; the sheet's places as rows (Chords, Style, Key, Tempo,
- * Repeats, Audio, Chart, MIDI), each opening its page with ← back to ☰ (`PHPAGES77`); then the file's
+ * Repeats, Audio, Chart, MIDI), each opening its page with ← back to ☰ (`PHPAGES77`, a `PhonePage`); then the file's
  * acts (Share…, Export ›, Import chart…, Randomize chords) and the progressions' two.
  */
 export function PhoneMenu({
@@ -177,13 +177,16 @@ export function PhoneMenu({
           </div>
         </PopoverContent>
       </Popover>
-      <Sheet open={inPage !== null} onOpenChange={(open) => (open ? null : onPage(null))}>
-        {inPage ? (
-          <SheetContent title={titles[inPage]} full back={<BackButton onClick={back} />}>
-            {bodies[inPage]}
-          </SheetContent>
-        ) : null}
-      </Sheet>
+      {inPage ? (
+        <PhonePage
+          open
+          title={titles[inPage]}
+          onBack={back}
+          onOpenChange={(open) => (open ? null : onPage(null))}
+        >
+          {bodies[inPage]}
+        </PhonePage>
+      ) : null}
     </>
   )
 }

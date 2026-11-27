@@ -208,5 +208,6 @@ export {
   type MetronomeMode,
 } from './Band'
 export { PhoneBand, PhoneBandButton, PhoneMenuButton, PhoneTransport } from './PhoneBand'
+export { PhonePage } from './PhonePage'
 export { Rail, RailButton, RailPanel } from './Rail'
 export { MetronomeIcon } from './icons/MetronomeIcon'
