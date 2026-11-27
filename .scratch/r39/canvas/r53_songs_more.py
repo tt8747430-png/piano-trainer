@@ -480,7 +480,7 @@ def LAPIFY(s):
     for a, b in LSM.items(): s = s.replace(a, b)
     return s
 # a song's Settings in the one Settings shape (the 56 bar, the centred 1180 column 24 under it: YourLessonSettings); a section keeps its 88 head
-smlm = (IF('isSettings', LTOP('PlayerLaptop.dc.html', '', 'Settings'), 'true') + IF('isPublish', LTITLEBAR('{{pageT}}', backact='back')) + FULLW(LAPIFY(SMBODY_L)).replace('bottom: 40px', 'bottom: 32px') + TOASTL)
+smlm = (IF('isSettings', LTOP('PlayerLaptop.dc.html', '', 'Settings'), 'true') + IF('isPublish', LTITLEBAR('{{pageT}}', backact='back')) + FULLW(LAPIFY(SMBODY_L)) + TOASTL)
 SM_LAP = LAPSHEET(SMSHEETS, 400)
 # A thing's Settings opens over its page, never a page of its own (owner, 2026-11-20: "why dont we do such things like
 # the app settings in such popup window … the claude.ai doesn't make that"): on a laptop the app Settings' window
@@ -513,5 +513,4 @@ def _BACKDROP(f, lap):
 swph = _BACKDROP('player_bg_phone.jpg', False) + SETWIN_P(_SWBODY) + TOAST(40, z=70)  # the toast over the window it answers
 swlm = _BACKDROP('player_bg_laptop.jpg', True) + LAPIFY(SETWIN_L(_SWBODY)) + TOAST(28, z=70, laptop=True)
 detail('SongSettings', 'A song’s Settings, over the Player', SETWIN_JS, swph, swlm, '', SMSHEETS, SM_LAP, 'Songs')
-s = open(OUT + 'SongSettingsLaptop.dc.html').read().replace('href="Progression.dc.html"', 'href="ProgressionLaptop.dc.html"'); open(OUT + 'SongSettingsLaptop.dc.html', 'w').write(s)
 print('r53 songs places, song pages ok')

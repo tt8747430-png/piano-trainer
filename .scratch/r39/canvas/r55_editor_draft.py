@@ -47,17 +47,20 @@ _DUP = '<span style="flex: 1">Print</span></button>'
 _pit = lambda lab, act, fg='#332921': f'<button type="button" role="menuitem" onClick="{{{{{act}}}}}" style="{_SMROW}; color: {fg}">{_SMSLOT()}<span style="flex: 1">{lab}</span></button>'
 assert elm4.count(_DUP) == 1
 elm4 = CREDBTN(elm4).replace(_DUP, _DUP + _SMSEP + _pit('Publish…', 'askPub') + _pit('Publishing history', 'openVers') + _SMSEP + _pit('Discard changes', 'askDisc', RED), 1)
-elm4 = elm4.replace('href="EditorLaptop.dc.html" role="radio"', 'href="EditorDraftLaptop.dc.html" role="radio"', 1)
-elm4 = elm4.replace(f'<span role="status" data-save style="margin-right: 8px; font-size: 13px; color: {SOFT}; white-space: nowrap">Saved on this device</span>', '<span role="status" data-save style="margin-right: 8px; font-size: 13px; color: {{saveC}}; white-space: nowrap">{{saveT}}</span>', 1)
+assert elm4.count('href="EditorLaptop.dc.html" role="tab"') == 1
+elm4 = elm4.replace('href="EditorLaptop.dc.html" role="tab"', 'href="EditorDraftLaptop.dc.html" role="tab"', 1)
+# the draft's save state heads the song's menu, as the phone's menu says it under the song's name (one model)
+_SMOPEN = re.compile(r'(<div role="menu" aria-label="Amazing Grace" style="[^"]*">)')
+assert len(_SMOPEN.findall(elm4)) == 1
+elm4 = _SMOPEN.sub(lambda m: m.group(1) + f'<p role="status" style="margin: 0; padding: 4px 10px 8px 34px; font-size: 13px; line-height: 18px; color: {{{{saveC}}}}">{{{{saveT}}}}</p><div role="separator" style="height: 1px; margin: 0 6px 6px; background: {LINE}"></div>', elm4, count=1)
 DJS = DJS.replace("?? 'mine'; const VCID", "?? 'orig'; const VCID", 1)
 for k in ('askPub: () => {', 'askDisc: () => {'): DJS = DJS.replace(k, k + " set({ sm: false });", 1)
 DJS = DJS.replace("openVers: () => set({ sheet: 'vers' })", "openVers: () => set({ sm: false, sheet: 'vers' })", 1)
-DJS = DJS.replace("(st.pat ?? 'p1')", "(st.pat ?? 'none')", 1)
 edph = (IF('isLive', eph4, 'true')
         + IF('notLive', GHEAD('Songs.dc.html') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("Songs.dc.html")}</main>')
         + STRIP('dsDemo') + STRIP('states') + '<div style="height: 22px; flex: none"></div>' + TOASTS)
 DJS = DJS.replace("isLive: live,", "isLive: live, notLive: !live,", 1)
-edlm = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'PlayerLaptop.dc.html', label='Original'), elm4, count=1, flags=re.S), 'true')
+edlm = (IF('isLive', elm4, 'true')
         + IF('notLive', GHEAD('SongsLaptop.dc.html').replace('padding: 8px 16px', 'padding: 12px 24px') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("SongsLaptop.dc.html")}</main>')
         + f'<div style="position: absolute; right: 24px; bottom: 188px; z-index: 40; width: 760px; padding-top: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 4px 14px -6px rgba(51,41,33,.25)">{STRIP("dsDemo")}{STRIP("states")}</div>' + TOASTL)
 # the draft's acts in ☰ as Flat's: Publishing history (the Globe, as the app publishes) a row, Discard changes the loss,
