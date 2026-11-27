@@ -55,7 +55,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 21 | Fă viața mea | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 22 | Să-ngenunchezi | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 23 | O chemare vine din întunecimi | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 24 | Grație a lui Isus (1 subfolders) | Done: as printed (matched to its PDF) | 2 | 2 staves, voices 2/2, 32 bars, `Gratie a lui Isus.mscz` | yes | Alto, Bass, Soprano, Soprano, Alto, Tenor, Tenor, Bass | Soprano, Alto, Tenor, Bass | 1 | 1 |  | other |
+| 24 | Grație a lui Isus | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 25 | Isuse pentru mine | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 26 | Sub crucea Ta | Single voices only, no full score | – | – | – | – | Alto | 2 |  |  | – |
 | 27 | Tatăl nostru | Done: as printed (matched to its PDF) | 3 | 2 staves, voices 2/2, 40 bars, `027. Tatăl nostru.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
