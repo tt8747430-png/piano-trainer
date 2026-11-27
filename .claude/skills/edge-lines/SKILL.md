@@ -42,6 +42,8 @@ and writes the shot with:
 
 It judges those relations too (PROBLEM or NOTE):
 
+- the screen itself scrolled (its scrollLeft or scrollTop not 0): a focus or scrollIntoView moved a screen that hides its
+  overflow, so every layer stands off its edge while the shot, cut to the screen, looks whole;
 - a box's content off its centre (top and bottom insets differ by more than 4);
 - rows as far apart as the box's edge, or further: the box no longer reads as their group (the gap inside a group is
   smaller than the group's edge, proximity); a row holding a heading or a hairline starts a new group and is a break;

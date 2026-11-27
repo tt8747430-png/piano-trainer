@@ -35,6 +35,8 @@ const argv = process.argv.slice(2)
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] })
 
 // Opens a target at a device and returns the page and the screen's rectangle in it.
+// problems found while opening the board (a page error, a scrolled screen), counted in the summary
+const EARLY = []
 async function open(target, device, steps) {
   const board = !target.startsWith('http')
   // a laptop board by the device it is shot at (PlayerDesk ends in no "Laptop" and was opened as a phone, its crop a 450 sliver)
@@ -99,7 +101,7 @@ async function open(target, device, steps) {
     }, lap)
   }
   const banner = board ? await page.evaluate(() => [...document.querySelectorAll('body *:not(script):not(style)')].map((e) => e.childNodes.length === 1 && e.textContent).find((t) => t && /renderVals|is not defined|is not a function|Cannot read prop/.test(t)) || '') : ''
-  for (const e of new Set([...errs, banner].filter((x) => x && x.trim()))) console.log('PROBLEM the screen throws: ' + e.replace(/\s+/g, ' ').trim().slice(0, 160))
+  for (const e of new Set([...errs, banner].filter((x) => x && x.trim()))) EARLY.push(1), console.log('PROBLEM the screen throws: ' + e.replace(/\s+/g, ' ').trim().slice(0, 160))
   // The board's screen: the element of the device's size (402×874 or 1710×904).
   const scr = board
     ? await page.evaluate((lap) => {
@@ -109,6 +111,16 @@ async function open(target, device, steps) {
         return { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) }
       }, lap)
     : { x: 0, y: 0, w: dw, h: dh }
+  // A screen that hides its overflow can still be scrolled by a focus() or scrollIntoView: then every layer on it stands
+  // off its edge and the shot, cut to the screen, hides it (2026-11-27: a page focused while sliding in, 17 off).
+  if (board) {
+    const shifted = await page.evaluate((lap) => {
+      const want = lap ? [1710, 904] : [402, 874]
+      const el = [...document.querySelectorAll('div')].find((e) => { const r = e.getBoundingClientRect(); return Math.round(r.width) === want[0] && Math.round(r.height) === want[1] })
+      return el && (el.scrollLeft || el.scrollTop) ? `${el.scrollLeft},${el.scrollTop}` : ''
+    }, lap)
+    if (shifted) { EARLY.push(1); console.log('PROBLEM the screen is scrolled by ' + shifted + ': a layer stands off its edge (a focus without preventScroll?)') }
+  }
   return { page, scr, phone: scr.w < 600 }
 }
 
@@ -605,7 +617,7 @@ if (!flow) {
   for (const p of report.problems) console.log('PROBLEM', p)
   for (const n of report.notes) console.log('NOTE', n)
   await page.screenshot({ path: out, clip: { x: scr.x, y: scr.y, width: scr.w, height: scr.h } })
-  console.log(`${report.problems.length} problems, ${report.notes.length} notes; overlay in ${out} (${scr.w}×${scr.h})`)
+  console.log(`${report.problems.length + EARLY.length} problems, ${report.notes.length} notes; overlay in ${out} (${scr.w}×${scr.h})`)
 } else {
   const [, ta, sa, tb, sb, dev, fout] = argv
   const device = deviceOf(dev)
