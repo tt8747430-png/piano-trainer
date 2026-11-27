@@ -610,7 +610,7 @@ def PICKKEYS(S, SET):
 # History (owner, 2026-11-26: "make a proper version history also like the flat does and not only the undo and redo
 # actions"; Flat's "Last save about 2 hours ago" in its top bar, "Document History", opening the History view: the
 # band says "Close History View" and the saved moment, the page as it was, a Versions list at the right, each with its
-# time, who and what changed, +4 notes). Ours is named Version history, the owner's word, on both sizes: the band's
+# time, who and what changed, +4 notes; ours drops who, one learner writing their song). Ours is named Version history, the owner's word, on both sizes: the band's
 # clock opens it in both modes; a row shows that moment's page with the bars it changed in honey; Restore this version
 # brings it back with Undo in its toast (a loss that can be undone happens at once, CLAUDE.md), Close version history leaves;
 # its page at the Player's zoom (1.5), one page at one size in Practice, Edit and here.
@@ -620,7 +620,7 @@ HISTBTN = (f'<button type="button" aria-label="Version history: saved {{{{histAg
 def HISTVIEW():
     row = (f'<button type="button" role="option" aria-selected="{{{{h.on}}}}" onClick="{{{{h.pick}}}}" style="width: 100%; box-sizing: border-box; padding: 12px 16px; border: 0; border-bottom: 1px solid {LINE}; background: {{{{h.bg}}}}; color: {INK}; font: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px; cursor: pointer">'
            f'<span style="display: flex; align-items: baseline; gap: 8px"><span style="flex: 1; font-size: 15px; font-weight: 600">{{{{h.t}}}}</span><sc-if value="{{{{h.cur}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; color: {SOFT}">Current</span></sc-if></span>'
-           f'<span style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: {SOFT}"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 4px; background: #356890"></span>You</span>'
+           # no author line: a song has one author, so "You" on every moment would say nothing (the phone's rows the same)
            f'<span style="display: flex; flex-wrap: wrap; gap: 4px"><sc-for list="{{{{h.what}}}}" as="w" hint-placeholder-count="1"><span style="height: 24px; padding: 0 8px; border-radius: 12px; background: {FILL}; font-size: 13px; display: flex; align-items: center; font-variant-numeric: tabular-nums">{{{{w}}}}</span></sc-for></span></button>')
     band = (f'<header data-band style="flex: none; height: 64px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 12px; background: {BAND}; color: {ONB}">'
             f'<button type="button" onClick="{{{{closeHist}}}}" data-tip="Close version history · Esc" style="flex: none; height: 40px; padding: 0 16px 0 12px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>Close version history</button>'

@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · HASH · the laptop's Version history drops "You" under every saved moment, a song having one author (the line said nothing, and the phone's rows never had it): each moment is its time and what changed · EditorLaptop, EditorDraftLaptop, PlayerDesk · **pending**
 ## Changes
 
 - 2026-11-27 · 67403b29 · Layout loses "Measures · 4 a line", a second home for View's Bars per row (one home per setting); its fold is Note spacing (Spacing, Stretch last line: past half full, Dorico's rule); "Measure numbers" is Bar numbers, the app's word everywhere else · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · v826
