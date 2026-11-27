@@ -25,7 +25,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 67 | 3 | 1 | 17 | 18 | 1 | 0 |
+| Mixed choir | 107 | 68 | 3 | 1 | 16 | 18 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -61,7 +61,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 27 | Tatăl nostru | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 28 | Deșteptare, strigă glasul Domnului | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 29 | Vine-o zi | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 30 | Laudă astăzi pe Domnul | Single voices only, no full score | – | – | – | – | Alto, Tenor | 1 |  |  | – |
+| 30 | Laudă astăzi pe Domnul | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 31 | Stai pe loc și te gândește | Single voices only, no full score | – | – | – | – | – | 1 |  |  | – |
 | 32 | Purtam in suflet dor de vesnicii | Done: a part per voice | 3 | 2 staves, voices 2/2, 17 bars, `Purtăm_în_suflet_dor_de_veșnicii.mscz` | yes | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
 | 33 | Când vrei să vii | Single voices only, no full score | – | – | – | – | Soprano, Tenor, Bass | 1 |  |  | – |

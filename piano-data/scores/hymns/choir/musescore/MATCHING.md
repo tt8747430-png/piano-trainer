@@ -166,3 +166,6 @@ by hand.
   pitch they sound.
 - **Four one-voice files read as one voice.** A song whose files are one per voice and whose sheet corrects a few
   bars of one voice started from a single file (song 28); the files are assembled first when they hold every voice.
+- **A file of another arrangement.** Song 30's full file is not the sheet's setting (other notes, another bar count);
+  only the altos' file matches. Check each file against the sheet before building from it; when the full file
+  differs, every voice is written in from the sheet.

@@ -1,0 +1,41 @@
+# From 030. Laudă astăzi pe Domnul.pdf (1 page). The choir's files are another arrangement (only the altos' file
+# matches the sheet): every voice is written in from the sheet and the song is built from the template. Four verses,
+# then the refrain repeated (its first words are printed on the second verse's line; here under the first).
+lyricist: Benone Cătană
+composer: V.A.Jguliov
+key: F
+time: 6/8
+repeat: 9 16
+systems: 1 4 7 11
+marks: 1 mf, 9 <3/8, 9+3/8 f, 9+3/8 >3/8, 11 mf, 12+3/8 <3/8, 13+3/8 f, 13+3/8 >3/8, 15 mf, 15+3/8 >3/8
+
+[Soprano notes]
+1: @1 D4:8 D4:8 D4:8 D4:8 D4:8 D4:8 @2 G4:4. F4:4. @3 E4:8 D4:8 E4:8 F4:4 E4:8 @4 D4:4. D4:4.
+1: @5 D4:8 D4:8 D4:8 D4:8 D4:8 D4:8 @6 G4:4. F4:4. @7 E4:8 D4:8 E4:8 F4:4 E4:8 @8 D4:4. D4:4.
+1: @9 A4:4. D5:4. @10 C5:4. A4:4. @11 G4:8 F4:8 G4:8 A4:4 C5:8 @12 A4:4. A4:4.
+1: @13 A4:4. D5:4. @14 C5:4. A4:4. @15 G4:8 F4:8 G4:8 A4:4 A4:8 @16 D4:4. D4:4.
+
+[Alto notes]
+1: @1 A3:8 A3:8 A3:8 A3:8 A3:8 A3:8 @2 D4:4. D4:4. @3 D4:8 u:8 D4:8 C#4:4 C#4:8 @4 u:4. u:4.
+1: @5 A3:8 A3:8 A3:8 A3:8 A3:8 A3:8 @6 D4:4. D4:4. @7 D4:8 u:8 D4:8 C#4:4 C#4:8 @8 u:4. u:4.
+1: @9 D4:4. F4:4. @10 G4:4. F4:4. @11 D4:8 D4:8 D4:8 E4:4 E4:8 @12 F4:4. F4:4.
+1: @13 D4:4. F4:4. @14 G4:4. F4:4. @15 D4:8 D4:8 D4:8 C#4:4 E4:8 @16 u:4. u:4.
+
+[Tenor notes]
+1: @1 F3:8 F3:8 F3:8 F3:8 F3:8 F3:8 @2 G3:4. A3:4. @3 Bb3:8 Bb3:8 Bb3:8 A3:4 G3:8 @4 F3:4. F3:4.
+1: @5 F3:8 F3:8 F3:8 F3:8 F3:8 F3:8 @6 G3:4. A3:4. @7 Bb3:8 Bb3:8 Bb3:8 A3:4 G3:8 @8 F3:4. F3:4.
+1: @9 F3:4. A3:4. @10 C4:4. C4:4. @11 Bb3:8 Bb3:8 Bb3:8 A3:4 A3:8 @12 D4:4. D4:4.
+1: @13 F3:4. A3:4. @14 C4:4. C4:4. @15 Bb3:8 Bb3:8 Bb3:8 A3:4 G3:8 @16 F3:4. F3:4.
+
+[Bass notes]
+1: @1 D3:8 D3:8 D3:8 C3:8 C3:8 C3:8 @2 Bb2:4. A2:4. @3 G2:8 G2:8 G2:8 A2:4 A2:8 @4 D3:4. D3:4.
+1: @5 D3:8 D3:8 D3:8 C3:8 C3:8 C3:8 @6 Bb2:4. A2:4. @7 G2:8 G2:8 G2:8 A2:4 A2:8 @8 D3:4. D3:4.
+1: @9 D3:4. D3:4. @10 E3:4. F3:4. @11 G3:8 G3:8 G3:8 u:4 u:8 @12 D3:4. D3:4.
+1: @13 D3:4. D3:4. @14 E3:4. F3:4. @15 G3:8 G3:8 G3:8 u:4 A2:8 @16 D3:4. D3:4.
+
+[Soprano]
+1: @1 1.La -- u -- dă as -- tăzi pe @2 Dom -- nul, @3 Su -- flet zro -- bit de @4 sar -- cini, @5 La -- u -- dă'L prin -- tre sus -- @6 pi -- ne, @7 La -- u -- dă'L prin -- tre @8 la -- crimi!
+1: @9 Dru -- mul @10 sla -- vei, @11 tre -- ce şi pe la @12 cru -- ce, @13 Cre -- din -- @14 cio -- şii, @15 ştiu în ge -- nunchi să'l @16 ur -- ce.
+2: @1 2.Ma -- re să'ţi fi -- e cre -- @2 din -- ţa, @3 Roa -- gă -- te şi fii @4 ta -- re! @5 Nu o -- co -- li su -- fe -- @6 rin -- ţa, @7 El îţi va da răb -- @8 da -- re!
+3: @1 3.Dom -- nu'ţi în -- tin -- de a -- @2 proa -- pe @3 Mâi -- ni -- le Sa -- le @4 bu -- ne, @5 Scum -- pe's of -- tă -- ri -- le @6 toa -- te, @7 Spu -- se în ru -- gă -- @8 ciu -- ne.
+4: @1 4.Nu e spre cer al -- tă @2 ca -- le, @3 Mergi cu I -- sus în -- @4 tru -- na, @5 Nu -- mai pe ur -- me -- le @6 Sa -- le, @7 Poţi do -- bân -- di cu -- @8 nu -- na.
