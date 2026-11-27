@@ -62,7 +62,7 @@ edlm = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details
 # (flat-score-editor 083: "Publish Score" over its Publish button)
 # Publish… and Publishing history are rows of their own group, as the laptop's name menu lists them (a card at the
 # menu's foot fell under the fold, 164 below the screen at rest)
-DSH = PHLAYERS(DSAVED, (), '', 'EditorDraft.dc.html', pub=(('Pub', 'Publish…', '', 'askPub'), ('Hist', 'Publishing history', '', 'openVers')), loss=(('Disc', 'Discard changes', '', 'askDisc', RED),)) + FSHEET('versOn', 'Publishing history', VERSBODY, back='phToMenu') + DASKS
+DSH = PHLAYERS(DSAVED, (), '', 'EditorDraft.dc.html', pub=(('Pub', 'Publish…', '', 'askPub', INK, False), ('Hist', 'Publishing history', '', 'openVers')), loss=(('Disc', 'Discard changes', '', 'askDisc', RED, False),)) + FSHEET('versOn', 'Publishing history', VERSBODY, back='phToMenu') + DASKS
 DSL = LAPLAYERS('Laptop.dc.html') + LAPSHEET(BSHEET('versOn', 'Publishing history', VERSBODY), 480) + DASKS
 # the draft's views stay the draft's, in Edit (EditorDraftDiagrams, …), as the editor's
 phone('EditorDraft', 'Score editor, a built-in song’s draft (editors)', edph, PHJS(DJS).replace("href: 'Editor' + label + '.dc.html', pick", "href: 'EditorDraft' + label + '.dc.html', pick", 1), DSH, bar=SHEET)

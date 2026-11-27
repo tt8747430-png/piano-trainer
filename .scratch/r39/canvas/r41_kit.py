@@ -828,18 +828,20 @@ FICONS = {
     'Lab': _FI('<path d="M4 7V4h16v3M9 20h6M12 4v16"></path>'),
 }
 _ARROWR = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M5 12h14M12 5l7 7-7 7"></path></svg>'
-def FROW(icon, label, value, target, colour=INK, line=False, h=56):
-    """a settings row as Flat's: the glyph, the name, the value soft, the arrow; target a page (…html) or an act"""
+def FROW(icon, label, value, target, colour=INK, page=True, line=False, h=56):
+    """a settings row as Flat's: the glyph, the name, the value soft, the arrow; target a page (…html) or an act.
+    page=False for a row that acts where it stands (copies, prints, asks): no arrow, as Apple's menu items carry a
+    chevron only into a submenu (laws, Which component 14: a link never acts)"""
     inner = (f'<span aria-hidden="true" style="flex: none; display: flex; color: {colour}">{FICONS.get(icon, icon)}</span><span style="flex: 1; min-width: 0; font-size: 17px; color: {colour}">{label}</span>'
              + (f'<span style="flex: none; font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{value}</span>' if value else '')
-             + f'<span aria-hidden="true" style="flex: none; display: flex; color: {colour}">{_ARROWR}</span>')
+             + (f'<span aria-hidden="true" style="flex: none; display: flex; color: {colour}">{_ARROWR}</span>' if page else ''))
     st = f'min-height: {h}px; box-sizing: border-box; width: 100%; padding: 0 12px; border: 0;{" border-top: 1px solid " + LINE + ";" if line else ""} border-radius: 0; background: transparent; font: inherit; text-align: left; text-decoration: none; display: flex; align-items: center; gap: 16px; cursor: pointer'
     if target.endswith('.html'):
         return f'<a href="{target}" style="{st}">{inner}</a>'
     return f'<button type="button" onClick="{{{{{target}}}}}" style="{st}">{inner}</button>'
 def FROWS(items, lines=True, h=56):
     # a page's rows 56 (iOS Settings, Flat's pages); a menu's 48, so ☰ in Edit shows its last row on a phone (11 rows)
-    return '<div style="display: flex; flex-direction: column">' + ''.join(FROW(*it[:5], line=lines and i > 0, h=h) for i, it in enumerate(items)) + '</div>'
+    return '<div style="display: flex; flex-direction: column">' + ''.join(FROW(*it[:6], line=lines and i > 0, h=h) for i, it in enumerate(items)) + '</div>'
 def FSHEET(cond, title, body, close='closeSheet', back=None, **_):
     """a settings page on a phone (owner, 2026-11-26: "i don't like that all these options and settings have these
     drawers with x button and not back button. fix all such inconsistencies"): the whole screen under the status bar,
@@ -864,7 +866,7 @@ def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=Non
     # Song is the song's own page (owner, 2026-11-26: "the song option really has only the versions and no the other
     # things"): its versions (the laptop rail's Song panel), then the song's things as rows: the key it sounds in, its
     # credits, its recordings, and sharing, exporting and printing it (the laptop's name menu); ☰ keeps the places
-    acts = list(song) + [('Rec', 'Recordings', '3', takes_href), ('Share', 'Share link', '', 'phShare'), ('Exp', 'Export', '', 'phExp'), ('Print', 'Print', '', 'phPrint')]
+    acts = list(song) + [('Rec', 'Recordings', '3', takes_href), ('Share', 'Share link', '', 'phShare', INK, False), ('Exp', 'Export', '', 'phExp'), ('Print', 'Print', '', 'phPrint', INK, False)]
     places = [(pid, 'Versions' if pid == 'Song' else lab, val, (body + PARTSECTION(inst)) if pid == 'View' else body, act) for pid, lab, val, body, act in places]
     items = [(pid, lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places if pid not in hide] + acts[:-3] + list(rows)
     panel = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{phClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'

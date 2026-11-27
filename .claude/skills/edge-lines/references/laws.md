@@ -352,8 +352,9 @@ another component's job is a finding.
   15. The places' bar (phone tab bar, laptop sidebar) is identical on every board that shows it: same items, order,
       icons, words and current mark.
 - **Hamburger menu.** "A compact way to hide navigation links … particularly useful for mobile."
-  16. No ☰ in this app: the four places are always shown in the tab bar, and a laptop's sidebar folds with its own
-      button (the sidebar glyph), never behind a hamburger.
+  16. No ☰ for navigation: the four places are always shown in the tab bar, and a laptop's sidebar folds with its own
+      button (the sidebar glyph), never behind a hamburger. The one ☰ is the Player's and the editor's on a phone: the
+      song's own menu (its versions, credits, files), as Flat's phone editor (owner, 2026-11-26), never a place.
 - **Breadcrumbs.** "Display users' current location"; "the last item … should stand out … It should not be a link."
   17. Where a trail is shown (a lesson's "Foundations · Chapter 3 · Lesson 7", Settings' Place row), every step before
       the last opens its page and the last one, the page itself, is plain ink and not a link.
