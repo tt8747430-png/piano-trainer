@@ -25,7 +25,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 73 | 3 | 1 | 13 | 16 | 1 | 0 |
+| Mixed choir | 107 | 74 | 3 | 1 | 12 | 16 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -69,7 +69,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 35 | Doamne binecuvântă | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 36 | O, izvor al fericirii | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 37 | Nu te teme | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 38 | Mărețul har (1 subfolders) | Single voices only, no full score | – | – | – | – | Soprano, Tenor | 1 |  |  | – |
+| 38 | Mărețul har | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 39 | Cânta-voi Domnului | Done: a part per voice (no words in any of its files) | 3 | 2 staves, voices 2/2, 17 bars, `039. Cânta-voi Domnului - toate vocile.mscz` | no | – | Soprano, Alto, Tenor, Bass, All voices | 1 | 1 |  | piano |
 | 40 | Cat mai aproape de Tine | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 24 bars, `Cât mai aproape de Tine - toate vocile.mscz` | no | – | Soprano, Alto, Tenor, Bass, All voices | 1 | 1 |  | piano |
 | 41 | Psalmul 139 | No MuseScore | – | – | – | – | – | 1 |  |  | – |
