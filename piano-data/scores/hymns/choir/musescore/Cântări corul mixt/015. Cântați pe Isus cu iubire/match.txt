@@ -1,0 +1,50 @@
+# From 015. Cântați pe Isus cu iubire.pdf (1 page). The choir has no MuseScore file of it: every voice is written in
+# from the sheet, at the pitch it sounds, and the song is built from the template. In the refrain the men echo with
+# their own words (in italics); where the sheet prints one head for tenors and basses, the basses write `u:`.
+title: 15 Cântaţi pe Isus cu iubire
+composer: John Mac Granahan
+key: Bb
+time: 4/4
+systems: 1 5 9 13 15
+repeat: 9+3/4 17
+slur: Alto 7+3/4 +1/8, Alto 11+3/4 +1/8, Bass 10+1/2 +1/8, Bass 10+3/4 +1/8, Bass 14+1/2 +1/8, Bass 14+3/4 +1/8
+
+[Soprano notes]
+1: @1 F4:4 @2 F4:4 D4:8. Eb4:16 F4:4 Bb4:8. C5:16 @3 D5:2 Bb4:4 Bb4:4 @4 C5:4 C5:8. C5:16 C5:4 D5:8. C5:16
+1: @5 Bb4:2. F4:4 @6 F4:4 D4:8. Eb4:16 F4:4 Bb4:8. C5:16 @7 D5:2 D5:4 Eb5:8 D5:8 @8 C5:4 C5:8. C5:16 C5:4 D5:8. C5:16
+1: @9 Bb4:2. Bb4:4 @10 Eb5:2. Eb5:4 @11 D5:2. Eb5:8 D5:8 @12 C5:4 C5:8. C5:16 C5:4 Bb4:8. C5:16
+1: @13 D5:2. Bb4:4 @14 Eb5:2. Eb5:4 @15 D5:2. D5:4 @16 F5:4 Eb5:8. D5:16 C5:4 D5:8. C5:16 @17 Bb4:2. r:4
+
+[Alto notes]
+1: @1 D4:4 @2 D4:4 Bb3:8. C4:16 D4:4 F4:8. Eb4:16 @3 F4:2 F4:4 F4:4 @4 F4:4 F4:8. F4:16 Eb4:4 F4:8. Eb4:16
+1: @5 D4:2. D4:4 @6 D4:4 Bb3:8. C4:16 D4:4 D4:8. Eb4:16 @7 F4:2 F4:4 G4:8 F4:8 @8 Eb4:4 Eb4:8. Eb4:16 Eb4:4 F4:8. Eb4:16
+1: @9 D4:2. D4:4 @10 G4:2. G4:4 @11 F4:2. G4:8 F4:8 @12 Eb4:4 Eb4:8. Eb4:16 Eb4:4 D4:8. Eb4:16
+1: @13 F4:2. D4:4 @14 G4:2. G4:4 @15 F4:2. F4:4 @16 Bb4:4 A4:8. Bb4:16 A4:4 A4:8. A4:16 @17 F4:2. r:4
+
+[Tenor notes]
+1: @1 Bb3:4 @2 Bb3:4 F3:8. F3:16 Bb3:4 D4:8. C4:16 @3 Bb3:2 D4:4 Bb3:4 @4 A3:4 A3:8. A3:16 A3:4 A3:8. A3:16
+1: @5 Bb3:2. Bb3:4 @6 Bb3:4 F3:8. F3:16 F3:4 F3:8. F3:16 @7 Bb3:2 Bb3:4 Bb3:4 @8 A3:4 A3:8. A3:16 A3:4 G3:8. A3:16
+1: @9 Bb3:2. Bb3:4 @10 Bb3:4 Bb3:8. Bb3:16 Bb3:4 Bb3:4 @11 Bb3:8 F3:8 G3:8 A3:8 Bb3:4 Bb3:4 @12 A3:4 A3:8. A3:16 A3:4 Bb3:8. A3:16
+1: @13 Bb3:4 Bb3:8. Bb3:16 Bb3:4 Bb3:4 @14 Bb3:4 Bb3:8. Bb3:16 Bb3:4 Bb3:4 @15 Bb3:8 F3:8 G3:8 A3:8 Bb3:4 Bb3:4
+1: @16 D4:4 C4:8. D4:16 Eb4:4 F4:8. Eb4:16 @17 D4:2. r:4
+
+[Bass notes]
+1: @1 Bb2:4 @2 Bb2:4 Bb2:8. Bb2:16 Bb2:4 Bb2:8. A2:16 @3 Bb2:2 Bb2:4 D3:4 @4 F3:4 F3:8. F3:16 F3:4 F3:8. F3:16
+1: @5 Bb2:2. Bb2:4 @6 Bb2:4 Bb2:8. Bb2:16 Bb2:4 Bb2:8. Bb2:16 @7 Bb2:2 Bb2:4 Bb2:4 @8 F3:4 F3:8. F3:16 F3:4 F3:8. F3:16
+1: @9 Bb2:2. u:4 @10 Eb3:4 Eb3:8. Eb3:16 Eb3:8 F3:8 G3:8 A3:8 @11 u:8 u:8 Bb2:8 Bb2:8 Bb2:4 Bb2:4 @12 F3:4 F3:8. F3:16 F3:4 F3:8. F3:16
+1: @13 u:4 Bb2:8. Bb2:16 Bb2:4 u:4 @14 Eb3:4 Eb3:8. Eb3:16 Eb3:8 F3:8 G3:8 A3:8 @15 u:8 u:8 Bb2:8 Bb2:8 Bb2:4 u:4
+1: @16 F3:4 F3:8. F3:16 F3:4 F3:8. F3:16 @17 Bb3:2. r:4
+
+[Soprano]
+1: @1 1.Cân -- taţi pe I -- sus cu iu -- bi -- re, căci El pen -- tru noi a mu -- rit; Lău -- da -- ţi'L şi da -- ţi'l cin -- sti -- re,
+1: căci| _ El pen -- tru noi S'a jert -- fit. Eu vreau să cânt pe| _ Mie -- lul de Ta -- tăl sfin -- ţit, Să cânt, să cânt.
+1: Pe Cel ce nes -- pus m'a iu -- bit.
+2: @1 2.Cân -- taţi toţi şi ma -- rea'l pu -- te -- re, căci lan -- ţul cel greu El l'a frânt; Zdro -- bind moar -- tea prin în -- vi -- e -- re,
+2: in| _ -- tra -- t'a în lo -- cul Prea Sfânt.
+3: @1 3.Cân -- taţi fi -- ind plini de spe -- ran -- ţă, I -- sus e me -- reu prin -- tre noi; Ve -- ghind, să a -- vem si -- gu -- ran -- ţă:
+3: Păs| _ -- to -- ru'n -- gri -- jeş -- te de oi.
+4: @1 4.Cân -- taţi pe Răs -- cum -- pă -- ră -- to -- rul, pe Re -- ge -- le viu pu -- ru -- rea, Pe Dom -- nul şi Mân -- tu -- i -- to -- rul
+4: ce| _ veş -- nic ne va în -- dru -- ma.
+
+[Tenor above italic]
+1: @9 * Eu vreau, da eu vreau să cânt, _ vreau să cânt * * * * * * * * vreau să cânt; Să cânt, vreau să cânt, să cânt, _ vreau să cânt
