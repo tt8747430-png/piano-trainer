@@ -462,6 +462,8 @@ async function analyse(page, scr, phone) {
     if (!next || !vis(next)) continue
     const u = R(unit)
     const below = Math.round(R(next).top - u.bottom)
+    // What stands before it counts only inside the screen: the device's own chrome (Safari's address bar) is not the page's.
+    if (prev && R(prev).bottom <= scr.y + 1) prev = null
     const above = prev && vis(prev) ? Math.round(u.top - R(prev).bottom) : null
     // The same gaps as the eye takes them, ink to ink.
     const ui = inkBox(unit)
