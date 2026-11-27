@@ -1,0 +1,53 @@
+# From 033. Când vrei să vii.pdf (2 pages). The choir's files hold the sopranos, the tenors and the basses (the
+# men an octave high) and no altos: the files' voices are written in at their sounding pitch, the altos from the
+# sheet, and the song is built from the template. Three verses, the men's own words in italics, then the refrain.
+# The pickup is bar 0; bars 4 and 8 are printed two beats long, and bar 2 is broken across the
+# line's end (bars 2 and 3 here).
+title: 33 Când vrei să vii
+lyricist: T.Dorz
+composer: N.Moldoveanu
+key: C
+time: C
+bar-length: 0 3/8, 2 5/8, 3 3/8, 4 1/2, 8 1/2
+systems: 0 3 6 | 8 11 13 15
+marks: 9+1/2 fermata, 9+3/4 text:Refren
+
+[Soprano notes]
+1: @0 G3:8 C4:8. D4:16 @1 E4:2~ E4:8 G4:8 D4:8. C4:16 @2 E4:2~ E4:8 @3 G4:8 C5:8. A4:16 @4 F4:8. A4:16 G4:8. F4:16
+1: @5 E4:2~ E4:8 G4:8 C5:8. B4:16 @6 A4:2~ A4:8 G4:8 F4:8. E4:16 @7 D4:2~ D4:8 C4:8 D4:8. G4:16 @8 G3:8 E4:8 D4:8. B3:16
+1: @9 C4:2~ C4:4~ C4:8 G4:8 @10 C5:4 C5:2~ C5:8 G4:8 @11 D5:4 D5:2~ D5:8 G4:8 @12 E5:4 C5:8. C5:16 D5:8. D5:16 A4:8. B4:16
+1: @13 C5:4 G4:4. C5:8 C5:8. C5:16 @14 A4:2~ A4:8 A4:8 C5:8. A4:16 @15 G4:2~ G4:8 G4:8 C5:8 D5:8 @16 E5:8 C5:8 G4:8 E5:8 D5:2
+1: @17 C5:2~ C5:8 r:8 r:4
+
+[Alto notes]
+1: @0 u:8 B3:8. G3:16 @1 C4:2~ C4:8 E4:8 u:8. u:16 @2 C4:2~ C4:8 @3 E4:8 E4:8. F4:16 @4 C4:8. F4:16 E4:8. C4:16
+1: @5 C4:2~ C4:8 E4:8 E4:8. G4:16 @6 F4:2~ F4:8 E4:8 D4:8. C4:16 @7 B3:2~ B3:8 u:8 u:8. u:16 @8 u:8 u:8 u:8. u:16
+1: @9 u:2~ u:4~ u:8 E4:8 @10 E4:4 E4:2~ E4:8 F4:8 @11 F4:4 F4:2~ F4:8 F4:8 @12 G4:4 G4:8. G4:16 A4:8. A4:16 F4:8. F4:16
+1: @13 E4:4 E4:4. E4:8 E4:8. E4:16 @14 F4:2~ F4:8 F4:8 A4:8. F4:16 @15 E4:2~ E4:8 E4:8 F4:8 F4:8 @16 G4:8 E4:8 E4:8 G4:8 F4:2
+1: @17 E4:2~ E4:8 r:8 r:4
+
+[Tenor notes]
+1: @0 r:8 r:4 @1 r:8 G3:8 E3:8. G3:16 C4:8 r:8 r:4 @2 r:8 G3:8 E3:8. G3:16 C4:8 @3 r:8 r:4 @4 r:2
+1: @5 r:8 G3:8 E3:8. G3:16 C4:8 r:4 r:8 @6 r:8 C4:8 C4:8. C4:16 C4:8 r:4 r:8 @7 r:8 G3:8 G3:8. G3:16 G3:8 r:4 r:8 @8 G3:8 G3:8 F3:8 F3:8
+1: @9 E3:8 E3:8 F3:8 G3:8 Ab3:8 F3:8 E3:8 r:8 @10 r:4 r:8 G3:8 C4:4 G3:8 r:8 @11 r:4 r:8 G3:8 D4:4 B3:8 G3:8 @12 C4:4 C4:8. C4:16 C4:8. C4:16 C4:8. C4:16
+1: @13 C4:4 C4:4~ C4:8 r:4 r:8 @14 r:8 C4:8 C4:8. C4:16 C4:8 r:4 r:8 @15 r:8 C4:8 C4:8. C4:16 C4:8 B3:8 B3:8 B3:8 @16 C4:8 C4:8 C4:4~ C4:8 G3:8 A3:8 B3:8
+1: @17 C4:2~ C4:8 r:4 r:8
+
+[Bass notes]
+1: @0 r:8 r:4 @1 r:8 C3:8 C3:8. C3:16 C3:8 r:8 r:4 @2 r:8 C3:8 C3:8. C3:16 C3:8 @3 r:8 r:4 @4 r:2
+1: @5 r:8 C3:8 C3:8. C3:16 C3:8 r:8 r:4 @6 r:8 F3:8 F3:8. F3:16 F3:8 r:8 r:4 @7 r:8 G2:8 D3:8. B2:16 G2:8 r:8 r:4 @8 r:2
+1: @9 r:8 C3:8 C3:8 C3:8 C3:8 C3:8 C3:8 r:8 @10 r:4 r:8 G3:8 C3:4 C3:8 r:8 @11 r:4 r:8 G3:8 G3:4 G3:8 G3:8 @12 C3:4 E3:8. E3:16 F3:8. F3:16 F3:8. F3:16
+1: @13 C3:4 C3:4. r:8 r:4 @14 r:8 F3:8 F3:8. F3:16 F3:8 r:8 r:4 @15 r:8 C3:8 C3:8. C3:16 C3:8 B3:8 A3:8 Ab3:8 @16 G3:8 G3:8 C3:4~ C3:8 G3:8 A3:8 G3:8
+1: @17 C3:2~ C3:8 r:8 r:4
+
+[Soprano]
+1: @0 1.Când vrei să @1 vii, când vrei să'n -- @2 torci, Când vrei să @4 vii la Dum -- ne -- @5 zeu? Când vrei să'n -- @6 torci din ca -- lea @7 rea? De ce tot @8 vrei s'a -- mâi me -- @9 reu?
+1: @9 * O, @10 vi -- no, o, @11 vi -- no, În -- @12 toar -- ce să scapi de la pier -- @13 za -- re. Nu a -- mâ -- @14 na, nu a -- mâ -- @15 na, E poa -- te @16 ul -- ti -- ma che -- ma -- @17 re.
+2: @0 2.Când vrei s'as -- @1 culţi, când vrei să @2 spui: A -- cu -- ma @4 vreau să vin şi @5 eu. Când vrei să @6 spui: a -- cum mă'n -- @7 torc, Nu vreau să @8 mai a -- mân me -- @9 reu.
+3: @0 3.Mai es -- te @1 loc, mai es -- te @2 har; O, vin' a -- @4 cum la Dum -- ne -- @5 zeu, Căci s'ar pu -- @6 tea să pieri pe @7 veci. Da -- că şi @8 de'azi a -- mâi me -- @9 reu.
+
+[Tenor italic]
+1: @1 Când vrei să vii, @2 când vrei să'n torci, @5 la Dum -- ne -- zeu? @6 Când vrei să'n -- torci @7 din ca -- lea rea? @8 vrei s'a -- mâi me -- @9 reu? s'a -- mâi, s'a -- mâi me -- reu?
+1: @10 O, vi -- no, @11 O, vi -- no, În -- @12 toar -- ce să scapi de la pier -- @13 za -- re. @14 Nu a -- mâ -- na, @15 nu a -- mâ -- na, E poa -- te @16 ul -- ti -- ma _ che -- ma _ @17 re.
+2: @1 Când vrei s'as -- culţi, @2 când vrei să spui: @5 să vin şi eu. @6 Când vrei să spui: @7 a -- cum mă'n -- torc, @8 mai a -- mân me -- @9 reu. a -- mân, a -- mân me -- reu.
+3: @1 Mai es -- te loc, @2 mai es -- te har; @5 la Dum -- ne -- zeu, @6 Căci s'ar pu -- tea @7 să pieri pe veci, @8 de'azi a -- mâi me -- @9 reu. a -- mâi, a -- mâi me -- reu.

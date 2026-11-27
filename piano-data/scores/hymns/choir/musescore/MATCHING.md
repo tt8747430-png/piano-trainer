@@ -179,3 +179,6 @@ by hand.
 - **A held syllable's line running on.** Song 32's file drew verses 2 and 3's last syllables eight whole notes long,
   and in the parts the lines ran through every later bar; a line now ends at the voice's last note before its next
   sung note (songs 1 and 28 corrected the same way).
+- **A pickup's length miscounted.** Song 33's pickup (an eighth, a dotted eighth, a sixteenth) is three eighths, not
+  half a bar; written with half-bar rests for the men, every part's bar lines fell an eighth off and the parts lost
+  their words. Add each bar's lengths before writing it, the pickup above all.

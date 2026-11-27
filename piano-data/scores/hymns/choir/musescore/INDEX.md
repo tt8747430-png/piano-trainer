@@ -25,7 +25,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 69 | 3 | 1 | 15 | 18 | 1 | 0 |
+| Mixed choir | 107 | 70 | 3 | 1 | 14 | 18 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -64,7 +64,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 30 | Laudă astăzi pe Domnul | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 31 | Stai pe loc și te gândește | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 32 | Purtam in suflet dor de vesnicii | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 33 | Când vrei să vii | Single voices only, no full score | – | – | – | – | Soprano, Tenor, Bass | 1 |  |  | – |
+| 33 | Când vrei să vii | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 34 | Ascultați imnul slăvirii | Single voices only, no full score | – | – | – | – | Soprano, Tenor | 1 |  |  | – |
 | 35 | Doamne binecuvântă | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 36 | O, izvor al fericirii | No MuseScore | – | – | – | – | – | 1 |  |  | – |
