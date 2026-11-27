@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · (this commit) · the Player draws its playhead: one Deep Sky line (the keys' colour while they sound) at the beat that sounds, across its system's staves, moving with the beat while playing and left where a pause leaves it, none at rest; from the engraving's own bar boxes (kit PLAYHEAD, as PICKLAYER), the page's 1.5 on a laptop and its width on a phone · PlayerApp, PlayerDesk · pending
+
 ## Changes
 
 - 2026-11-27 · 2505bbb3 · the Player's two boards carry the States box beside the frame, as every other board (owner, 2026-11-15): Playing, Looping, Recording from the keyboard, Transposed up a semitone, Playback options open, and the menu (phone) or Version history (laptop) open, each one tap · PlayerApp, PlayerDesk · v834

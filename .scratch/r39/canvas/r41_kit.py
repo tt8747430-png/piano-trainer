@@ -535,13 +535,13 @@ LINKI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="cur
 # an engraver prints "Arr." at the right
 # the page: A4 at 96 dpi (794 × 1123), 17.2 mm margins (65), a 7 mm staff (26.5 px: the kit's 32 units × 0.828)
 PG_W, PG_H, PG_M, PG_K = 794, 1123, 65, 26.5 / 32
-def A4PAGE(credit='', sel=(3, 0), piano=True, pick=None):
+def A4PAGE(credit='', sel=(3, 0), piano=True, pick=None, head=False):
     cw = PG_W - 2 * PG_M
     return (f'<article aria-label="Page 1" style="flex: none; position: relative; width: {PG_W}px; height: {PG_H}px; box-sizing: border-box; padding: {PG_M}px {PG_M}px 0; background: {SHEET}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.06), 0 12px 32px -16px rgba(51,41,33,.28); display: flex; flex-direction: column">'
             f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: 30px; font-weight: 400; line-height: 1.1; color: {INK}">Amazing Grace</h2>'
             f'<div style="margin: 16px 0 0; display: flex; justify-content: space-between; gap: 24px; font-family: {SERIF}; font-size: 13px; color: {INK}"><span>Words: John Newton</span><span style="text-align: right">Music: New Britain (American folk tune)' + (f'<br><i style="color: {SOFT}">{credit}</i>' if credit else '') + f'</span></div>'
             f'<div style="margin: 16px 0 0; font-family: {SERIF}; font-size: 13px; font-weight: 700; color: {INK}">Verse <span style="font-weight: 400"><svg role="img" aria-label="quarter note" viewBox="0 0 8 16" width="7" height="14" style="vertical-align: -2px"><ellipse cx="3.4" cy="13" rx="3.3" ry="2.3" transform="rotate(-20 3.4 13)" fill="{INK}"/><rect x="5.8" y="0" width="1" height="12.6" fill="{INK}"/></svg> = 80</span></div>'
-            f'<div style="position: relative; margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=sel, size=1.0, piano=piano).replace(ACCENT, '#85B8DC') + (PICKLAYER(GEO['last'], pick) if pick else '') + '</div>'
+            f'<div style="position: relative; margin: -8px 0 0">' + score_grand(cw / PG_K, [[0, 1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], sel=sel, size=1.0, piano=piano).replace(ACCENT, '#85B8DC') + (PICKLAYER(GEO['last'], pick) if pick else '') + (PLAYHEAD(GEO['last']) if head else '') + '</div>'
             f'<p style="position: absolute; left: 0; right: 0; bottom: 32px; margin: 0; text-align: center; font-family: {SERIF}; font-size: 11px; color: {SOFT}">Public domain</p></article>')
 
 
@@ -558,6 +558,18 @@ ONB_RING = 'inset 0 0 0 1.5px rgba(254,253,251,.55)'
 # per bar range; Flat's selection then the panel). A chord or phrase with its own accompaniment carries a honey dot.
 # mode 'pick' (the Player), 'hist' (History: the bars a saved version changed, in honey, nothing to press)
 PHRASE = lambda b: max(1, (b - 1) // 4 + 1)
+# the playhead (ui-and-mockups, The score: one line across the staves in sight): a line at the beat that sounds,
+# from its system's top staff line to its bottom one, in the keys' Deep Sky (a key down, the score's selection), so
+# the keys and the page light the same colour; shown while playing and where a pause left it (Flat's cursor)
+def PLAYHEAD(geo):
+    W, H = geo['w'], geo['h']; pc = lambda v, d: f'{v / d * 100:.3f}%'; out = []
+    for b, x0, x1, y0, y1 in geo['bars']:
+        out.append(f'<span aria-hidden="true" data-ph style="position: absolute; display: {{{{phB{b}}}}}; left: calc({pc(x0, W)} + {pc(x1 - x0, W)} * {{{{phF}}}} - 1px); top: {pc(y0 + 18, H)}; height: {pc(y1 - y0 - 24, H)}; width: 2px; border-radius: 1px; background: #85B8DC; pointer-events: none"></span>')
+    return ''.join(out)
+# its state, for a board whose engine keeps bar, beat, playing and atStart (the Player's): the pickup's one beat on
+# its note (past the clef and time), a bar's beat at its onset; bars past the page (13–16, page 2) show none
+PLAYHEAD_KEYS = ("phF: atStart ? 0.3 : (beat - 1 + 0.3) / 3, ...Object.fromEntries(Array.from({ length: 13 }, (_, b) => ['phB' + b,"
+                 " (playing || !atStart) && (atStart ? b === 0 : bar === b) ? 'block' : 'none'])),")
 def PICKLAYER(geo, mode='pick'):
     W, H = geo['w'], geo['h']; pc = lambda v, d: f'{v / d * 100:.3f}%'; out = []
     for b, x0, x1, y0, y1 in geo['bars']:

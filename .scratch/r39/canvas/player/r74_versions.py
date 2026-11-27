@@ -199,7 +199,7 @@ def header_transport(t):
                    "loop ? 'Stop looping bars ' + loopA + '–' + loopB : 'Loop bars ' + (Math.floor((bar - 1) / 4) * 4 + 1) + '–' + Math.min(16, Math.floor((bar - 1) / 4) * 4 + 4)",
                    [('R', 'Right hand'), ('L', 'Left hand')])
     assert t.count('togglePlay: togglePlayNow,') >= 1
-    return t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + keys)
+    return t.replace('togglePlay: togglePlayNow,', 'togglePlay: togglePlayNow, ' + PLAYHEAD_KEYS + ' ' + keys)
 
 def phone_band(t):
     # the phone as the laptop and Flat's phone editor (owner, 2026-11-26: "refactor the mobile version the same way and
@@ -260,7 +260,7 @@ def phone_band(t):
     # Played through's Transpose opens the band's Transpose, the one implementation
     assert t.count("openKey: pick({ open: 'key' })") == 1; t = t.replace("openKey: pick({ open: 'key' })", "openKey: () => this.setState({ open: 'none', ph: 'Tr' })", 1)
     a = 'togglePlay: togglePlayNow,'; i = t.index(a)
-    return t[:i] + a + ' ' + keys + t[i + len(a):]
+    return t[:i] + a + ' ' + PLAYHEAD_KEYS + ' ' + keys + t[i + len(a):]
 
 def desk_edit(t):
     # the laptop's views in Edit (owner, 2026-11-26: "why from the view options in the edit mode i go to for example to
@@ -375,7 +375,7 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
             # the page as paper on the grey desk, as Flat's phone shows the page (flat-score-editor 021, 023): white,
             # its margins, its shadow; three bars a line so the staff stays a readable size
             # the open version's music: with its piano accompaniment, or the melody alone (a lead sheet)
-            sg = lambda pn: '<div style="margin: -4px 0 0">' + score_grand(470, [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11, 12]], sel=None, size=1.0, piano=pn) + '</div>'
+            sg = lambda pn: '<div style="position: relative; margin: -4px 0 0">' + score_grand(470, [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11, 12]], sel=None, size=1.0, piano=pn) + PLAYHEAD(GEO['last']) + '</div>'
             # the Parts sheet's Piano switch: hidden, the page prints the melody alone
             body = head + ('<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}"><sc-if value="{{pianoShown}}" hint-placeholder-val="{{true}}">' + sg(True) + '</sc-if><sc-if value="{{pianoHidden}}" hint-placeholder-val="{{false}}">' + sg(False) + '</sc-if></sc-if>'
                            + '<sc-if value="{{isLead}}" hint-placeholder-val="{{false}}">' + sg(False) + '</sc-if>')
@@ -385,7 +385,7 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         else:
             # the page at the editor's size (1.5, its fit beside the 352 panel is 1.52), so Practice and Edit print one page
             new = (f'<div data-r74 style="margin-top: {{{{sheetTop}}}}px; box-sizing: border-box; min-height: calc(100% - {{{{sheetTop}}}}px); padding: 24px 0 160px; background: {FILL}; display: flex; justify-content: center">'
-                   f'<div style="zoom: 1.5"><sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}">{A4PAGE("", None)}</sc-if><sc-if value="{{{{isLead}}}}" hint-placeholder-val="{{{{false}}}}">{A4PAGE("", None, piano=False)}</sc-if></div></div>' + PICKCSS)
+                   f'<div style="zoom: 1.5"><sc-if value="{{{{isPiano}}}}" hint-placeholder-val="{{{{true}}}}">{A4PAGE("", None, head=True)}</sc-if><sc-if value="{{{{isLead}}}}" hint-placeholder-val="{{{{false}}}}">{A4PAGE("", None, piano=False, head=True)}</sc-if></div></div>' + PICKCSS)
         t = t[:i] + new + t[j:]
     # the settings' Arrangement says it is not written for this song
     if 'data-r74y' not in t and 'aria-label="Score"' in t:
