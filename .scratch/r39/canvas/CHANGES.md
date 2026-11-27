@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · PENDING · the section's Genos sheet and Share in the Player's shape: sentence-case heads over segmented controls 24 apart, no grey groups, no MAIN caption in capitals, no explanation line (passes read Main, 1st time; Ending before the way into the next section on the last) · ChordPlayer, ChordPlayerLaptop · pending
+- 2026-11-27 · 5fd48353 · the section's Genos sheet and Share in the Player's shape: sentence-case heads over segmented controls 24 apart, no grey groups, no MAIN caption in capitals, no explanation line (passes read Main, 1st time; Ending before the way into the next section on the last) · ChordPlayer, ChordPlayerLaptop · pending
 
 
 ## Changes
