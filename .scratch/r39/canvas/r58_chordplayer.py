@@ -400,12 +400,11 @@ NAME77 = (f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{sheets
           f'<span style="min-width: 0; display: flex; flex-direction: column"><h1 style="margin: 0; font-size: 17px; font-weight: 600; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{sheetsL}}}}</h1>'
           f'<span style="font-size: 13px; line-height: 16px; color: {ONB_SOFT}; white-space: nowrap">{{{{cpSubL}}}}</span></span><span aria-hidden="true" style="flex: none; display: flex; color: {ONB_SOFT}">{CHEV_D}</span></button>')
 _bb = lambda lab, tip, svg, act, extra='': f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{_HB}; background: transparent; color: {ONB}">{svg}</button>'
-UNDOI20 = UNDO.replace('width="22" height="22"', 'width="20" height="20"', 1)
 BAND77 = (f'<header data-band style="flex: none; position: relative; z-index: 20; height: 64px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 12px; background: {BAND}; color: {ONB}">'
           f'<a href="Main.dc.html" aria-label="Close" data-tip="Close · Esc" style="flex: none; width: 40px; height: 40px; border-radius: 20px; color: {ONB}; display: flex; align-items: center; justify-content: center">'
           '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></a>'
           + NAME77 + TRANSPORT77 + '<span style="flex: 1"></span>'
-          + _bb('Undo', 'Undo · ⌘Z', UNDOI20, 'undo', ' class="ibd" disabled="{{undoOff}}"') + HDRKEYSBTN + '</header>')
+          + _bb('Undo', 'Undo · ⌘Z', UNDO, 'undo', ' class="ibd" disabled="{{undoOff}}"') + HDRKEYSBTN + '</header>')
 
 # the rail, as the Player's and the editor's (76, each place a glyph over its word; Search and Shortcuts at its foot)
 CHORDSI = _LI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>')
@@ -513,6 +512,6 @@ _r = "    return { ...common(st, set),"
 assert CP77.count(_r) == 1, CP77.count(_r)
 CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 # the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
-_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else 'left: 640px; top: 160px', 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 729px; top: 72px', 'keyOn': 'left: 505px; top: 72px', 'tempoOn': 'left: 616px; top: 72px', 'repOn': 'left: 380px; top: 72px'}[c], 320)).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')
+_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else 'left: 640px; top: 160px', 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 729px; top: 72px', 'keyOn': 'left: 505px; top: 72px', 'tempoOn': 'left: 616px; top: 72px', 'repOn': 'left: 380px; top: 72px'}[c], 320))
 phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('hdOptsOn', 'Playback options', _OPTS, close='closeSheet'), bar=SHEET)
 full_laptop('ChordPlayerLaptop', 'Chord player, laptop', lm77 + TOAST(296, z=56, laptop=True), CP77, _SHL + POPS77L + NAMEMENU77L)
