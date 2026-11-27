@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · (this commit) · the editor's Loop loops: with Loop on, Play turns back to the selection's first beat at the end of bar 3 instead of running on to the end of the song (the Player's engine already wraps inside its loop) · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · **pending**
+- 2026-11-27 · 112c9807 · the editor's Loop loops: with Loop on, Play turns back to the selection's first beat at the end of bar 3 instead of running on to the end of the song (the Player's engine already wraps inside its loop) · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · **pending**
 ## Changes
 
 - 2026-11-27 · 72609412 · the loop's ends dragged on the page: while Loop is on, a honey-deep grip stands at its first bar's left and its last bar's right; either is dragged onto any bar of the page (the ends never cross) or moved a bar by the arrow keys, its value said as Bar n, as Flat drags its loop's ends on the score · PlayerApp, PlayerDesk · v841
