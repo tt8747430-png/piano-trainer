@@ -44,7 +44,7 @@ r'''    const beatNow = st.playing ? ((st.pos ?? 4) % 2) * 2 : -1;
 CP58 = CP58.replace("    return { ...common(st, set),", r'''    return { ...common(st, set), draftOn: !!st.draft, addSec: () => { editSecs((c) => { const L = 'ABCDEFGH'[c.length] || 'X'; c.push([L, 'Section ' + L, 1, [['C'], ['F'], ['G'], ['C']]]); }); set({ tags: [...TAGS, JSON.parse(JSON.stringify(TAGS[TAGS.length - 1] || { mains: [] }))] }); }, copyL: st.copied ? 'Link copied' : 'Copy link', copyLink: () => set({ copied: true }), saveProg: () => set({ sheet: null, toast: 'Saved to My progressions' }), importChart: () => set({ sheet: null }), exportMidi: () => set({ sheet: null }), exportChart: () => set({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, saveDraft: () => set({ draft: false, sheet: null }), discardDraft: () => set({ draft: false, secs: null, len: null, tags: null, sheet: null }),
       tagOnSheet: st.sheet === 'tag', tagTitle: SECS[tagAt] ? SECS[tagAt][1] + ' on the Genos' : '', tagIsFirst: tagAt === 0, tagIsLast: tagAt === SECS.length - 1,
       introSeg: SEGT(['None', 'Intro I', 'Intro II', 'Intro III'], tg.intro || 'None', (l) => setTag({ intro: l })),
-      passes: (tg.mains.length ? tg.mains : ['None']).map((mv, pi) => ({ n: 'Pass ' + (pi + 1), seg: SEGT(['None', 'A', 'B', 'C', 'D'], mv === 'None' ? 'None' : mv.slice(-1), (l) => setTag({ mains: tg.mains.map((x, i) => (i === pi ? (l === 'None' ? 'None' : 'Main ' + l) : x)) })) })),
+      passes: (tg.mains.length ? tg.mains : ['None']).map((mv, pi) => ({ n: 'Main, ' + ['1st', '2nd', '3rd', '4th'][pi] + ' time', seg: SEGT(['None', 'A', 'B', 'C', 'D'], mv === 'None' ? 'None' : mv.slice(-1), (l) => setTag({ mains: tg.mains.map((x, i) => (i === pi ? (l === 'None' ? 'None' : 'Main ' + l) : x)) })) })),
       intoSeg: SEGT(['None', 'Fill in', 'Break'], tg.into || 'None', (l) => setTag({ into: l })),
       endingSeg: SEGT(['None', 'Ending I', 'Ending II', 'Ending III'], tg.ending || 'None', (l) => setTag({ ending: l })),
       chordOn58: st.sheet === 'chord', selSym, selTitle: 'Bar ' + ((st.sel ? st.sel[1] : 0) + 1) + ' · ' + selSym, selLen: selLen + (selLen === 1 ? ' beat' : ' beats'), lenDn: () => setLen(-1), lenUp: () => setLen(1),
@@ -74,17 +74,16 @@ TRASHI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M4 7h16M
 PLAYS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z"></path></svg>'
 
 # ── a section on the Genos: Intro (first section), Main per pass, into the next, Ending (last section) ──
-SEGROW = lambda label, lst: f'<div style="display: flex; flex-direction: column; gap: 8px; padding: 12px 12px 12px 16px"><span style="font-size: 16px">{label}</span>{SEGC(lst, 44, 14)}</div>'
-CP_TAG = (f'<sc-if value="{{{{tagIsFirst}}}}" hint-placeholder-val="{{{{true}}}}"><div style="border-radius: 12px; background: {FILL}">' + SEGROW('Intro', 'introSeg') + '</div></sc-if>'
-          + '<div style="display: flex; flex-direction: column; gap: 8px">' + CAPS('Main, each time through')
-          + f'<div style="border-radius: 12px; background: {FILL}"><sc-for list="{{{{passes}}}}" as="p" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px 12px 12px 16px; box-shadow: inset 0 -1px 0 {LINE}"><span style="font-size: 16px">{{{{p.n}}}}</span>{SEGC("p.seg", 44, 14)}</div></sc-for></div></div>'
-          + f'<sc-if value="{{{{tagIsLast}}}}" hint-placeholder-val="{{{{false}}}}"><div style="border-radius: 12px; background: {FILL}">' + SEGROW('Ending', 'endingSeg') + '</div></sc-if>'
-          + f'<div style="border-radius: 12px; background: {FILL}">' + SEGROW('Into the next section', 'intoSeg') + '</div>'
-          + f'<p style="margin: 0 4px; font-size: 14px; color: {SOFT}">None sends nothing: the Genos plays as its panel says.</p>')
+_SECTG = lambda t, body: f'<section aria-label="{t}" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">{t}</h3>{body}</section>'
+CP_TAG = ('<div style="display: flex; flex-direction: column; gap: 24px">'
+          + f'<sc-if value="{{{{tagIsFirst}}}}" hint-placeholder-val="{{{{true}}}}">' + _SECTG('Intro', SEGC('introSeg', 36, 14, True)) + '</sc-if>'
+          + f'<sc-for list="{{{{passes}}}}" as="p" hint-placeholder-count="2"><section style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">{{{{p.n}}}}</h3>{SEGC("p.seg", 36, 14, True)}</section></sc-for>'
+          + _SECTG('Into the next section', SEGC('intoSeg', 36, 14, True))
+          + f'<sc-if value="{{{{tagIsLast}}}}" hint-placeholder-val="{{{{false}}}}">' + _SECTG('Ending', SEGC('endingSeg', 36, 14, True)) + '</sc-if>'
+          + '</div>')
 
-CP_SHARE = (f'<p style="margin: 0 4px; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Everyone with the link sees each change as it is made, and the chord playing.</p>'
-            + f'<div style="border-radius: 12px; background: {FILL}">' + SEGROW('People with the link', 'shareSeg') + '</div>'
-            + BTN('{{copyL}}', 'copyLink', kind='primary', h=50))
+CP_SHARE = ('<div style="display: flex; flex-direction: column; gap: 24px">' + _SECTG('People with the link', SEGC('shareSeg', 36, 14, True))
+            + BTN('{{copyL}}', 'copyLink', kind='primary', h=50) + '</div>')
 
 
 # ── R59 (owner, 2026-11-14, Musicca's chord player beside it: "make the ui of the chords like the musicca does";
