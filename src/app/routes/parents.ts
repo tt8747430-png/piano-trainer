@@ -111,7 +111,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/account/email': () => up({ to: '/settings/account' }),
   '/shell/settings/privacy': () => up({ to: '/settings/account' }),
   '/shell/settings/general': settingsPage,
-  '/shell/settings/general/layouts': () => up({ to: '/settings/general' }),
   '/shell/settings/appearance': settingsPage,
   '/shell/settings/select-toolbar': settingsPage,
   '/shell/settings/swipe-actions': settingsPage,

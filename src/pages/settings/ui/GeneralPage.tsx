@@ -1,13 +1,11 @@
-import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { selectChangedCount, usePageLayouts } from '@/entities/page-layout'
 import { selectLocale, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { TypingSwitch } from '@/features/live-keyboard'
 import { setLocale } from '@/features/set-preference'
 import { ShortcutsButton } from '@/features/shortcuts-help'
 import { LOCALES } from '@/shared/i18n'
 import { hasFinePointer } from '@/shared/lib'
-import { GroupRow, GroupSegmented, RowLink, Segmented, SettingsGroup } from '@/shared/ui'
+import { GroupRow, GroupSegmented, Segmented, SettingsGroup } from '@/shared/ui'
 import { SettingsScreen, UpdateRows, useSettingsDialog } from '@/widgets/settings-screen'
 
 /**
@@ -15,15 +13,13 @@ import { SettingsScreen, UpdateRows, useSettingsDialog } from '@/widgets/setting
  * the settings"; the board's P_GENERAL): Language first, one segmented English | Русский, the shape
  * Touch and Pedal wear (under its name on a phone, at the App language row's end in the laptop's
  * dialog); on a computer, Computer keyboard, its switch and Shortcuts, what the letters do behind its
- * ⓘ (none on a phone, which has no letters to play); Layout, its Page layouts › with how many pages
- * the learner arranged (R76); Software update, the rarest, last. The theme is Appearance's own place.
+ * ⓘ (none on a phone, which has no letters to play); Software update, the rarest, last. The theme is Appearance's own place.
  */
 export function GeneralPage() {
   const { t } = useTranslation(['settings', 'common'])
   const settings = useSettingsStoreApi()
   const locale = useSettings(selectLocale)
   const inDialog = useSettingsDialog() !== null
-  const changedLayouts = usePageLayouts(selectChangedCount)
   const languages = LOCALES.map((value) => ({ value, label: t(`language.${value}`) }))
   return (
     <SettingsScreen title={t('pages.general')}>
@@ -61,17 +57,6 @@ export function GeneralPage() {
           <ShortcutsButton />
         </SettingsGroup>
       ) : null}
-      <SettingsGroup flush title={t('layouts.label')}>
-        <RowLink
-          title={t('pages.pageLayouts')}
-          value={
-            changedLayouts === 0
-              ? t('layouts.allAsCame')
-              : t('layouts.count', { count: changedLayouts })
-          }
-          render={<Link to="/settings/general/layouts" />}
-        />
-      </SettingsGroup>
       <SettingsGroup flush title={t('about.update.label')}>
         <UpdateRows />
       </SettingsGroup>

@@ -317,7 +317,6 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | Slice | What it is | Used by |
 | --- | --- | --- |
 | `annotate` | A song's typed mark set (R29 B8): | 1 |
-| `arrange-page-layout` | Moves, sizes, hides or shows one panel of a page (R76), saved at once. | 2 |
 | `backup-data` | No backup the app writes comes near this: | 2 |
 | `choose-diagram-inversion` | Draws a chord of a piece in an inversion wherever the piece shows its diagram (ADR 0108); the inversion its notes fold into (`folded`) forgets the choice, so nothing is kept for th | 12 |
 | `connect-midi` | The keys held down on the MIDI keyboard now, each for at least the shortest press. | 22 |
@@ -369,7 +368,6 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `library` | A folder the learner made: | 83 |
 | `notification` | What a notification tells of (B1): | 6 |
 | `own-lessons` | A lesson the learner wrote (R30-5): | 38 |
-| `page-layout` | Where a panel stands round a page's content (canvas R76): | 13 |
 | `pattern` | Groups use the glossary's words; their displayed names keep the source's wording. | 89 |
 | `piece` | A saved id may name a piece a later version removed, so it stays a plain name. | 215 |
 | `practice-library` | The libraries of Practice a learner keeps favourites in (R30-4): | 26 |

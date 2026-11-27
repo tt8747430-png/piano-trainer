@@ -39,7 +39,6 @@ describe('createStores', () => {
       'library',
       'notifications',
       'ownLessons',
-      'pageLayouts',
       'patterns',
       'pieces',
       'practiceLibrary',

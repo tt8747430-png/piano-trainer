@@ -13,7 +13,6 @@ type AdminScreens = Awaited<ReturnType<typeof adminScreens>>
 /** Each place the dialog opens, by its address: the same page its route shows on a phone. */
 const PAGES: Readonly<Record<string, (loaded: Screens) => ComponentType>> = {
   '/settings/general': (loaded) => loaded.GeneralPage,
-  '/settings/general/layouts': (loaded) => loaded.PageLayoutsPage,
   '/settings/appearance': (loaded) => loaded.AppearancePage,
   '/settings/storage': (loaded) => loaded.StoragePage,
   '/settings/connect-piano': (loaded) => loaded.MidiSettingsPage,
