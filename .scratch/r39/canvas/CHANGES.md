@@ -8,10 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · (this commit) · the editor's keys sound as the Player's: while Play runs, each beat's notes light in the hands' paints (coral right, lavender left) from the Player's own NOTES table, as Flat's keyboard shows what plays; at rest the chosen note keeps its sky · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · pending
-
 ## Changes
 
+- 2026-11-27 · 12b9ad26 · the editor's keys sound as the Player's: while Play runs, each beat's notes light in the hands' paints (coral right, lavender left) from the Player's own NOTES table, as Flat's keyboard shows what plays; at rest the chosen note keeps its sky · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · v839
 - 2026-11-27 · (see git log) · two more patches folded, nothing seen changes: the Player rail's panel head reaching past its padded body is `_PHEAD(name, bleed)`, the band's Play glyph `SZ(PLAY, 20)` · no board changed · —
 - 2026-11-27 · 800edcc6 · two drifts folded into helpers, nothing seen changes (laws, the design system as layers): the palette tool's three copies made by `.replace()` on its markup (the palette's 48, the toolbar's 44, the grid's cells) are one `TOOLB(mw, h, pad, r, paint)`; thirteen hand-written icon-size patches are the kit's `SZ(icon, n)`, which fails the build if a glyph has no size to set · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop (a `0` read `0px`) · v838
 - 2026-11-27 · 1f226268 · the recording's bar chips are 32 to see and 44 to touch, their reach a pseudo-element rather than transparent borders held in by a −6 margin (which the roll's sideways scroller could clip); they stand the column's 8 under the roll, the card 12 at top and foot · Take, TakeLaptop · v838
