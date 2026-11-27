@@ -2,6 +2,7 @@
 composer: Nicolae Moldoveanu
 systems: 1 5 9 13
 repeat: 9 16
+slur: Tenor 12 +3/8, Bass 12 +3/8, Bass 14 +1/4, Bass 16 +1/8
 
 [Soprano]
 1: @1 1.Fă via -- ța mea, I -- su -- se, o pâi -- ne'a tu -- tu -- ror, Să sa -- tu -- re în -- tru -- na pe toți a -- cei ce vor.
