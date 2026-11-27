@@ -22,10 +22,13 @@ import {
 } from './app/composition-root'
 import { applyKeptContent, startContentUpdates } from './app/content/content-updates'
 import { createAppRouter } from './app/router'
+import { reloadOnStaleCode } from './app/stale-code'
 import './styles/index.css'
 
 const rootElement = document.getElementById('root')
 if (!rootElement) throw new Error('index.html has no #root element')
+
+reloadOnStaleCode(window)
 
 const backend = createBackend()
 // What the device keeps of the database's newer content is read before the first screen reads the

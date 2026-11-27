@@ -9,11 +9,18 @@ function readThrown(thrown: unknown): { message: string; stack: string } {
   return { message: String(thrown), stack: '' }
 }
 
+/**
+ * The browser's notices that are no fault of the app: a ResizeObserver that settled over two frames (harmless,
+ * the spec's own words), and "Script error.", which is all a page learns of an error in another origin's script.
+ */
+const NOTICES = [/^ResizeObserver loop /, /^Script error\.?$/]
+
 /** Reports to `port` each thing thrown once a run (by its message), at most `REPORTS_A_RUN`. */
 export function reportOnce(port: ErrorReporter): (thrown: unknown, path: string) => void {
   const seen = new Set<string>()
   return (thrown, path) => {
     const { message, stack } = readThrown(thrown)
+    if (NOTICES.some((notice) => notice.test(message))) return
     if (seen.has(message) || seen.size >= REPORTS_A_RUN) return
     seen.add(message)
     port.report({ message, stack, path })

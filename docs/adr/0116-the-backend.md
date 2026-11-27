@@ -25,9 +25,19 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   with the device's against the copy both started from where both changed (a field at a time; a record key by key,
   a list of items with ids item by item), brings the result into the store as another tab's save is brought in,
   and pushes it naming that base; the server refuses a write over any other copy and the device merges again. A
-  save of a newer app version in the cloud is left be. Autosync, signed in only: at sign-in, on reconnect, when the
+  save of a newer app version in the cloud is left be; one of an older version is kept aside under
+  `<key>.v<version>` before the device writes over it (ADR 0038). Autosync, signed in only: at sign-in, on reconnect, when the
   app comes into view, 4 s after saving settles (`AccountProvider`). The keyboard's store stays on the device.
 - **Account deletion** has a 30-day grace and a daily purge.
+- **Error reports** (`error_reports`): what is thrown and never caught, once a run by its message, at most ten
+  (`reportOnce`); the browser's own notices are not sent (a ResizeObserver loop, "Script error." from another
+  origin). A tab left on the build before a deploy reloads itself once when a screen's code is gone
+  (`vite:preloadError`, `app/stale-code.ts`); a second failure within a minute is reported.
+- **The database advisor's findings, as decided (2026-11-27):** every foreign key has a covering index. The two
+  definer views (`public_authors`, `public_item_ratings`) and the definer functions (a shared sheet read and written
+  by its link, joining a group by its code, publishing) are definers on purpose: each gives a learner exactly one
+  thing their own rows' security would hide, and nothing else. `admin_bootstrap` has no policy so that no client
+  reads it. Leaked-password protection is a dashboard setting, the owner's.
 - **Content lives in the database** (`content_items`: kind, id, version, audience, status, meta, body; every
   published version kept in `content_versions`), read-only to learners; editors (`app_metadata.role` admin or
   editor) read drafts and write. The authored content is small (songs 82 KB as data, lessons about 1 MB, in lazy

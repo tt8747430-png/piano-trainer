@@ -24,4 +24,12 @@ describe('reporting what went wrong', () => {
     for (let i = 0; i < REPORTS_A_RUN + 5; i++) report(new Error(`E${i}`), '/')
     expect(port.sent).toHaveLength(REPORTS_A_RUN)
   })
+  it("sends nothing for the browser's notices that are no fault of the app", () => {
+    const port = createFakeErrorReporter()
+    const report = reportOnce(port)
+    report('ResizeObserver loop completed with undelivered notifications.', '/practice')
+    report('ResizeObserver loop limit exceeded', '/practice')
+    report('Script error.', '/')
+    expect(port.sent).toEqual([])
+  })
 })
