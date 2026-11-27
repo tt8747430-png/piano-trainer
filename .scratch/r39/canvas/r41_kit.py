@@ -1070,7 +1070,8 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=Fals
     none = (f'<div style="padding: 10px 12px 12px; border-top: 1px solid {LINE}; font-size: 15px; line-height: 1.4; color: {SOFT}">'
             'Plug in a keyboard by USB or pair it by Bluetooth, then press a key.</div>')
     rec = (f'<button type="button" aria-pressed="{{{{hdRecOn}}}}" onClick="{{{{hdRec}}}}" style="width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 8px 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 10px; text-align: left; cursor: pointer">'
-           f'<span aria-hidden="true" style="flex: none; width: 12px; height: 12px; border-radius: {{{{hdRecR}}}}; background: #D2483A"></span><span style="flex: 1">{{{{hdRecL}}}}</span><span style="font-size: 13px; color: {SOFT}">R</span></button>')
+           f'<span aria-hidden="true" style="flex: none; width: 12px; height: 12px; border-radius: {{{{hdRecR}}}}; background: #D2483A"></span><span style="flex: 1">{{{{hdRecL}}}}</span>' + ('' if phone else f'<span style="font-size: 13px; color: {SOFT}">R</span>') + '</button>')
+    # the key R is the laptop's alone: a phone has no keyboard to press it on (as the phone's tooltips drop their keys)
     # Transpose: the semitones with − and + (a stepper for a frequent, precise value), the key it lands in, and the way
     # back to the written key when it moved; it changes the playback and the page at once (no Apply)
     out += _HPOPOVER('hdTrOn', 'Transpose', TRROWS(), f'left: {tr_left}px; top: 65px', 300, phone)
