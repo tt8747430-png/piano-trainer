@@ -412,9 +412,13 @@ STYLEROWS = (f'<div role="radiogroup" aria-label="Style" style="display: flex; f
              f'<sc-for list="{{{{cpStyles}}}}" as="y" hint-placeholder-count="6"><button type="button" role="radio" aria-checked="{{{{y.on}}}}" onClick="{{{{y.pick}}}}" style="min-height: 48px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {{{{y.line}}}}; background: transparent; color: {INK}; font: inherit; font-size: 15px; text-align: left; display: flex; align-items: center; gap: 12px; cursor: pointer">'
              f'<span aria-hidden="true" style="flex: none; width: 20px; display: flex">{{{{y.check}}}}</span><span style="flex: 1; font-weight: {{{{y.fw}}}}">{{{{y.n}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{y.feel}}}}</span></button></sc-for></div>')
 # the page or panel is titled Audio or Chart, so its first group stands bare under that title (no caption repeating it)
-SOUND77 = (GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'), ('link', 'Volume', '80%', ''))
-           + LABELLED('Playing', GROUP(('seg', 'Voicing', 'cpVSeg', 200))))
-CHART77 = GROUP(('link', 'Time signature', '4/4', ''), ('seg', 'Written as', 'namesSeg', 200))
+_SECT77 = lambda t, body: f'<section aria-label="{t}" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">{t}</h3>{body}</section>'
+# the Player's Audio page shape on both sizes (AUDPANEL): the kit's white card, then a section's head over its segmented
+# control, 24 apart (it was the grey group with an uppercase PLAYING caption, a second shape for one kind of page)
+_COL77 = lambda *xs: '<div style="display: flex; flex-direction: column; gap: 24px">' + ''.join(xs) + '</div>'
+SOUND77 = _COL77(GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'), ('link', 'Volume', '80%', ''), bg=SHEET),
+                 _SECT77('Voicing', SEGC('cpVSeg', 36, 14, True)))
+CHART77 = _COL77(GROUP(('link', 'Time signature', '4/4', ''), bg=SHEET), _SECT77('Written as', SEGC('namesSeg', 36, 14, True)))
 FOLLOW77 = (GROUP(('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'))
             + f'<p style="margin: 0 4px; font-size: 14px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Play leads: a Genos gets its sections at their bars and plays to the app’s clock; with none connected the app’s band plays them.</p>')
 MIDI77 = GROUP(('link', 'MIDI keyboard', 'Not connected', 'Settings.dc.html'), ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'))
@@ -460,14 +464,14 @@ _sep = f'<div role="separator" style="flex: none; height: 1px; margin: 4px 12px;
 PHNAV77 = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
            f'<nav aria-label="{{{{sheetsL}}}}" class="nos" style="position: absolute; z-index: 61; top: 120px; right: 8px; left: 24px; max-height: calc(100% - 170px); overflow-y: auto; box-sizing: border-box; padding: 12px 8px; border-radius: 22px; background: {PAGE}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 18px 48px -12px rgba(51,41,33,.38); display: flex; flex-direction: column; gap: 8px">'
            f'<p style="margin: 0; padding: 4px 12px 0; text-align: center; font-size: 17px; font-weight: 600; line-height: 22px; color: {INK}">{{{{sheetsL}}}}</p>'
-           + FROWS([(_FI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>'), 'Chords', '', 'cpPhChords'), (_FI(DRUMP), 'Style', '{{styleL}}', 'openStyle'), ('Tr', 'Key', '{{keyL}} major', 'openKey'), ('Speed', 'Tempo', '{{bpmL}} BPM', 'openTempo'),
+           + FROWS([(_FI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>'), 'Chords', '', 'cpPhChords'), (_FI(DRUMP), 'Style', '{{styleL}}', 'cpPhStyle'), ('Tr', 'Key', '{{keyL}} major', 'openKey'), ('Speed', 'Tempo', '{{bpmL}} BPM', 'openTempo'),
                     (_FI('<path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path>'), 'Repeats', '{{repL}}', 'openRep'), ('Aud', 'Audio', '', 'cpPhSound'), (_FI(CHARTP), 'Chart', '{{namesL}}', 'cpPhChart'), ('Midi', 'MIDI', '{{cpMidiL}}', 'cpPhMidi')], lines=False, h=48)
            + _sep + FROWS([('Share', 'Share…', '', 'openShare', INK, False), ('Exp', 'Export', '', 'cpPhExp'), (FICONS['Exp'].replace('M12 3v12M7 10l5 5 5-5', 'M12 15V3M7 8l5-5 5 5'), 'Import chart…', '', 'importChart', INK, False)], lines=False, h=48)
            + _sep + FROWS([(_FI(LISTPLUSP), 'Save to my progressions', '', 'saveProg', INK, False), (_FI(LISTMUSP), 'Open in Progressions', '', 'Progressions.dc.html')], lines=False, h=48) + '</nav></sc-if>')
 # Export, the Player's shape: one row, its formats on a page with ← on a phone and a submenu on a laptop
 EXPROWS77 = GROUP(('action', 'MIDI', 'exportMidi', INK), ('action', 'Chart (.txt)', 'exportChart', INK), bg=SHEET)
 PHPAGES77 = (FSHEET('cpPhExpOn', 'Export', EXPROWS77, back='phToMenu') + FSHEET('cpPhSoundOn', 'Audio', SOUND77, back='phToMenu') + FSHEET('cpPhChartOn', 'Chart', CHART77, back='phToMenu') + FSHEET('cpPhMidiOn', 'MIDI', MIDI77, back='phToMenu')
-             + FSHEET('cpPhChordsOn', '{{keyHead}}', _DRAGB, back='phToMenu'))
+             + FSHEET('cpPhStyleOn', 'Style', STYLEROWS, back='phToMenu') + FSHEET('cpPhChordsOn', '{{keyHead}}', _DRAGB, back='phToMenu'))
 # the band's popovers on a laptop: Playback options (Repeats, Count-in) under ▾, MIDI under its cable; Key, Tempo and Style
 # open their wheels under their pills
 _OPTS = GROUP(('link', 'Repeats', '{{repL}}', ''), ('link', 'Count-in', '1 bar', ''))
@@ -506,7 +510,7 @@ _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'O
       hdMidi: () => set({ sheet: st.sheet === 'midi' ? null : 'midi' }), hdMidiOn: st.sheet === 'midi', hdMidiX: st.sheet === 'midi' ? 'true' : 'false', hdMidiBg: st.sheet === 'midi' ? 'rgba(254,253,251,.14)' : 'transparent',
       hdKeys: () => set({ cpKeys: !cpKeys }), hdKeysOn: cpKeys ? 'true' : 'false', hdKeysBg: cpKeys ? 'rgba(254,253,251,.14)' : 'transparent', cpKeysPh: cpKeys ? '#A8551F' : '#332921', cpKeysOn: cpKeys,
       phMenu: () => set({ sheet: st.sheet === 'menu77' ? null : 'menu77' }), phMenuOn: st.sheet === 'menu77', phMenuX: st.sheet === 'menu77' ? 'true' : 'false', phMenuFg: st.sheet === 'menu77' ? '#A8551F' : '#332921', phToMenu: () => set({ sheet: 'menu77' }), phClose: () => set({ sheet: null }),
-      cpPhExp: () => set({ sheet: 'phExp' }), cpPhExpOn: st.sheet === 'phExp', cpPhSound: () => set({ sheet: 'phSound' }), cpPhSoundOn: st.sheet === 'phSound', cpPhChart: () => set({ sheet: 'phChart' }), cpPhChartOn: st.sheet === 'phChart', cpPhMidi: () => set({ sheet: 'phMidi' }), cpPhMidiOn: st.sheet === 'phMidi', cpPhChords: () => set({ sheet: 'phChords' }), cpPhChordsOn: st.sheet === 'phChords' };
+      cpPhExp: () => set({ sheet: 'phExp' }), cpPhExpOn: st.sheet === 'phExp', cpPhSound: () => set({ sheet: 'phSound' }), cpPhSoundOn: st.sheet === 'phSound', cpPhChart: () => set({ sheet: 'phChart' }), cpPhStyle: () => set({ sheet: 'phStyle' }), cpPhStyleOn: st.sheet === 'phStyle', cpPhChartOn: st.sheet === 'phChart', cpPhMidi: () => set({ sheet: 'phMidi' }), cpPhMidiOn: st.sheet === 'phMidi', cpPhChords: () => set({ sheet: 'phChords' }), cpPhChordsOn: st.sheet === 'phChords' };
 """
 _r = "    return { ...common(st, set),"
 assert CP77.count(_r) == 1, CP77.count(_r)

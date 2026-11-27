@@ -11,6 +11,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-27 · (this commit) · the Chord player's Audio and Chart take the Player's page shape (white card, sentence-case head over its segmented control) on both sizes; ☰'s Style is a page of checked rows, not a wheel sheet · ChordPlayer, ChordPlayerLaptop · **pending**
 - 2026-11-27 · 697f22c1 · the Chord player's Chords panel loses its explanation line under the tiles (each tile's tooltip says it) · ChordPlayerLaptop · v854
 - 2026-11-27 · 581a6607 · no generator replaces a kit name any more (`checks/shadow.py`, run with the build): eleven local copies renamed after their file; the Chord player's band Undo is the editor's 22 (it took r47's 20), and Explore's + takes the kit's stroke 2 (it took r47's 2.2) · ChordPlayerLaptop, Explore, ExploreLaptop · v853
 - 2026-11-27 · 1d2ca855 · four hand copies of kit glyphs folded into the kit, which they had shadowed for every board built after them: the pill chevron is the kit's 16 everywhere (the Chord player's and the Practice pages' were r42's 20), the popup ⌃⌄ one soft shape (the live and draft editors drew two), the drag grip one, and the ··· is MORE (24) on the lesson and progression editors · 32 boards (ChordPlayer, Chords, Scales, Intervals, Pattern, Progression, ProgressionEdit, Settings, Course, Editor, EditorDraft, PlayerApp, PlayerDesk, Lesson, LearnYours, YourCourseSettings, YourLessonSettings, each with its laptop) · v853
