@@ -25,7 +25,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 66 | 3 | 1 | 18 | 18 | 1 | 0 |
+| Mixed choir | 107 | 67 | 3 | 1 | 17 | 18 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -57,7 +57,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 23 | O chemare vine din întunecimi | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 24 | Grație a lui Isus | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 25 | Isuse pentru mine | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 26 | Sub crucea Ta | Single voices only, no full score | – | – | – | – | Alto | 2 |  |  | – |
+| 26 | Sub crucea Ta | Done: as printed (matched to its PDF) | – | – | – | – | – | 2 | 1 |  | – |
 | 27 | Tatăl nostru | Done: as printed (matched to its PDF) | 3 | 2 staves, voices 2/2, 40 bars, `027. Tatăl nostru.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
 | 28 | Deșteptare, strigă glasul Domnului | Done: a part per voice (no words in any of its files) | – | – | – | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | – |
 | 29 | Vine-o zi | Done: a part per voice (no words in any of its files) | – | – | – | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | – |

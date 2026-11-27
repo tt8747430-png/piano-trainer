@@ -1,0 +1,43 @@
+# From 026. Sub crucea Ta.pdf (1 page). The choir's file holds only the altos (with verse 1's words); every voice is
+# written in from the sheet and the song is built from the template. Four verses, the refrain once.
+composer: Pavel Bobic
+key: G
+time: 3/4
+count-pickup
+systems: 1 4 7 10 14
+marks: 3+1/4 fermata, 7+1/4 fermata
+
+[Soprano notes]
+1: @1 B4:8 B4:8 A4:8 @2 G4:4. F#4:8 G4:8 A4:8 @3 G4:4 F#4:8 G4:8 G4:8 F#4:8
+1: @4 E4:4. F#4:8 G4:8 A4:8 @5 B4:4. B4:8 B4:8 A4:8 @6 G4:4. F#4:8 G4:8 A4:8
+1: @7 G4:4 F#4:8 A4:8 G4:8 F#4:8 @8 E4:4. B4:16 A4:16 G4:8 F#4:8 @9 E4:4. B4:8 E5:8 D#5:8
+1: @10 E5:4. C5:8 B4:8 A4:8 @11 B4:4. A4:8 G4:8 F#4:8 @12 E4:4. F#4:8 G4:8 A4:8 @13 B4:4. B4:8 E5:8 D#5:8
+1: @14 E5:4. C5:8 B4:8 A4:8 @15 B4:4. A4:8 G4:8 F#4:8 @16 E4:4. B4:16 A4:16 G4:8 F#4:8 @17 E4:2.
+
+[Alto notes]
+1: @1 G4:8 G4:8 F#4:8 @2 E4:4. D#4:8 E4:8 D#4:8 @3 E4:4 D#4:8 F#4:8 E4:8 D#4:8
+1: @4 u:4. D#4:8 E4:8 E4:8 @5 D#4:4. G4:8 G4:8 F#4:8 @6 E4:4. D#4:8 E4:8 D#4:8
+1: @7 E4:4 D#4:8 F#4:8 E4:8 D#4:8 @8 u:4. G4:16 F#4:16 E4:8 D#4:8 @9 u:4. u:8 G4:8 F#4:8
+1: @10 G4:4. A4:8 G4:8 F#4:8 @11 G4:4. F#4:8 E4:8 D#4:8 @12 u:4. D#4:8 E4:8 E4:8 @13 D#4:4. u:8 G4:8 F#4:8
+1: @14 G4:4. A4:8 G4:8 F#4:8 @15 G4:4. F#4:8 E4:8 D#4:8 @16 u:4. G4:16 F#4:16 E4:8 D#4:8 @17 u:2.
+
+[Tenor notes]
+1: @1 B3:8 B3:8 B3:8 @2 B3:4. B3:8 B3:8 B3:8 @3 B3:4 B3:8 B3:8 B3:8 B3:8
+1: @4 G3:4. B3:8 B3:8 C4:8 @5 F#3:4. B3:8 B3:8 B3:8 @6 B3:4. B3:8 B3:8 B3:8
+1: @7 B3:4 B3:8 B3:8 B3:8 B3:8 @8 G3:4. B3:8 B3:8 A3:8 @9 G3:4. B3:8 B3:8 B3:8
+1: @10 B3:4. D4:8 D4:8 D4:8 @11 D4:4. C4:8 B3:8 B3:8 @12 G3:4. B3:8 B3:8 C4:8 @13 B3:4. B3:8 B3:8 B3:8
+1: @14 B3:4. D4:8 D4:8 D4:8 @15 D4:4. C4:8 B3:8 B3:8 @16 G3:4. B3:8 B3:8 A3:8 @17 G3:2.
+
+[Bass notes]
+1: @1 E3:8 E3:8 B2:8 @2 E3:4. A3:8 G3:8 F#3:8 @3 E3:4 B2:8 B2:8 B2:8 B2:8
+1: @4 E3:4. B2:8 E3:8 C3:8 @5 B2:4. E3:8 E3:8 B2:8 @6 E3:4. A3:8 G3:8 F#3:8
+1: @7 E3:4 B2:8 B2:8 B2:8 B2:8 @8 E3:4. B2:8 B2:8 B2:8 @9 E3:4. u:8 E3:8 B2:8
+1: @10 E3:4. D3:8 D3:8 D3:8 @11 G3:4. B2:8 B2:8 B2:8 @12 E3:4. D#3:8 E3:8 C3:8 @13 B2:4. u:8 E3:8 B2:8
+1: @14 E3:4. D3:8 D3:8 D3:8 @15 G3:4. B2:8 B2:8 B2:8 @16 B2:4. B2:8 B2:8 B2:8 @17 E3+E2:2.
+
+[Soprano]
+1: @1 1.Sub cru -- cea @2 Ta Doam -- ne I -- @3 su -- se, vreau să ră -- @4 mân pe veci ple -- @5 cat; Să'mi plâng vi -- @6 a -- ţa mea tre -- @7 cu -- tă şi'a -- ma -- rul @8 gre -- u _ -- lui pă -- @9 cat.
+1: @9 * Sub cru -- cea @10 Ta, sub cru -- cea @11 Ta eu pa -- ce @12 dul -- ce voi a -- @13 vea! Sub cru -- cea @14 Ta, sub cru -- cea @15 ta eu pa -- ce @16 dul -- ce _ voi a -- @17 vea.
+2: @1 2.Sub cu -- cea @2 ta voi pu -- ne @3 to -- tul şi Ţi -- e'n @4 veci voi fi su -- @5 pus. Plân -- gând voi @6 spu -- ne tu -- tu -- @7 ro -- ra, c'a -- tât de @8 bun eşti _ Tu I -- @9 sus.
+3: @1 3.Cu Ti -- ne @2 vreau să port în @3 lu -- me ori -- ce ne -- @4 ca -- zuri şi ne -- @5 voi. În lup -- te @6 gre -- le şi'n pri -- @7 goa -- ne, să fim de'a -- @8 pu -- ruri _ a -- mân -- @9 doi.
+4: @1 4.În noap -- tea @2 grea şi fă -- ră @3 ur -- me, că -- ra -- rea @4 Tu'mi vei lu -- mi -- @5 na; Şi'or -- câ -- te @6 vân -- turi mă vor @7 ba -- te, voi sta me -- @8 reu sub _ cru -- cea @9 Ta.
