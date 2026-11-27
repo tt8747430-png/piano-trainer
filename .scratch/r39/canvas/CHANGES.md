@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · (this commit) · the editor's keys sound as the Player's: while Play runs, each beat's notes light in the hands' paints (coral right, lavender left) from the Player's own NOTES table, as Flat's keyboard shows what plays; at rest the chosen note keeps its sky · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · pending
+
 ## Changes
 
 - 2026-11-27 · (see git log) · two more patches folded, nothing seen changes: the Player rail's panel head reaching past its padded body is `_PHEAD(name, bleed)`, the band's Play glyph `SZ(PLAY, 20)` · no board changed · —
