@@ -39,7 +39,7 @@ r'''    const beatNow = st.playing ? ((st.pos ?? 4) % 2) * 2 : -1;
     const SEGT = (opts, cur, pick) => opts.map((l) => ({ l, on: l === cur, bg: l === cur ? '#FEFDFB' : 'transparent', sh: l === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: l === cur ? 600 : 500, pick: () => pick(l) }));
     // the Genos's panel, its lamps: on (chosen), flashing (next), available, off (no data)
     const ar = st.ar || { acmp: true, sync: false, syncStop: false, autoFill: true, ots: false, main: 'A', next: null, intro: null, ending: null, fade: false };
-    const lamp = (on, next) => ({ bg: on ? '#C2412D' : next ? '#E8A090' : '#FEFDFB', fg: on ? '#FEFDFB' : '#332921', ring: on ? 'none' : '0 0 0 1px #DAD1C8' });
+    const lamp = (on, next) => ({ bg: on ? '#EEE2CF' : '#FEFDFB', fg: '#332921', ring: on ? '0 0 0 1.5px #332921' : next ? '0 0 0 1.5px #B98A32' : '0 0 0 1px #DAD1C8' });
     const arSet = (o) => set({ ar: { ...ar, ...o } });''', 1)
 CP58 = CP58.replace("    return { ...common(st, set),", r'''    return { ...common(st, set), draftOn: !!st.draft, addSec: () => { editSecs((c) => { const L = 'ABCDEFGH'[c.length] || 'X'; c.push([L, 'Section ' + L, 1, [['C'], ['F'], ['G'], ['C']]]); }); set({ tags: [...TAGS, JSON.parse(JSON.stringify(TAGS[TAGS.length - 1] || { mains: [] }))] }); }, copyL: st.copied ? 'Link copied' : 'Copy link', copyLink: () => set({ copied: true }), saveProg: () => set({ sheet: null, toast: 'Saved to My progressions' }), importChart: () => set({ sheet: null }), exportMidi: () => set({ sheet: null }), exportChart: () => set({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, saveDraft: () => set({ draft: false, sheet: null }), discardDraft: () => set({ draft: false, secs: null, len: null, tags: null, sheet: null }),
       tagOnSheet: st.sheet === 'tag', tagTitle: SECS[tagAt] ? SECS[tagAt][1] + ' on the Genos' : '', tagIsFirst: tagAt === 0, tagIsLast: tagAt === SECS.length - 1,
@@ -419,9 +419,11 @@ _COL77 = lambda *xs: '<div style="display: flex; flex-direction: column; gap: 24
 SOUND77 = _COL77(GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'), ('link', 'Volume', '80%', ''), bg=SHEET),
                  _SECT77('Voicing', SEGC('cpVSeg', 36, 14, True)))
 CHART77 = _COL77(GROUP(('link', 'Time signature', '4/4', ''), bg=SHEET), _SECT77('Written as', SEGC('namesSeg', 36, 14, True)))
-FOLLOW77 = (GROUP(('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'))
-            + f'<p style="margin: 0 4px; font-size: 14px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Play leads: a Genos gets its sections at their bars and plays to the app’s clock; with none connected the app’s band plays them.</p>')
-MIDI77 = GROUP(('link', 'MIDI keyboard', 'Not connected', 'Settings.dc.html'), ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'))
+FOLLOW77 = GROUP(('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), bg=SHEET)
+# MIDI complete where it opens, as the Player's MIDI keyboard popover (R74: the keyboard in use and, with none, how to
+# connect one; nothing links away to Settings), then the Chord player's own Follow a MIDI arranger
+MIDI77 = GROUP(('val', 'Keyboard', 'None'), ('raw', f'<span style="display: block; padding: 0 16px; margin: 2px 0 10px; font-size: 15px; line-height: 1.4; color: {SOFT}">Plug in a keyboard by USB or pair it by Bluetooth, then press a key.</span>'),
+               ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), bg=SHEET)
 # a panel's head is the kit's (the Player's and the editor's: 64, the title, « Fold the panel 44 round); only its act is
 # the Chord player's
 _PHEAD77 = lambda title: _PHEAD(title).replace('{{foldPanel}}', '{{cpRailNone}}')
