@@ -10,6 +10,9 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from './primitives/dropdown-menu'
 
@@ -30,6 +33,11 @@ export interface MenuAction {
   readonly unnamed?: boolean
   /** One of a choice (the language written in): a checked item, ticked when it is the one. */
   readonly checked?: boolean
+  /**
+   * Its own commands, opening beside it with a › (the Player's Export: MIDI, Chart): the item then
+   * opens them and does nothing itself.
+   */
+  readonly items?: readonly MenuAction[]
 }
 
 /** A menu's item: 44px tall, its icon, its name. */
@@ -63,13 +71,24 @@ export function ActionMenu({
   const shown = actions.filter((action) => !action.hidden)
   const kept = shown.filter((action) => !action.destructive)
   const destructive = shown.filter((action) => action.destructive)
-  const item = (action: MenuAction) => {
+  const item = (action: MenuAction): ReactNode => {
     const face = (
       <>
         {action.icon ? <action.icon aria-hidden /> : null}
         <span className="min-w-0 flex-1 truncate">{action.label}</span>
       </>
     )
+    if (action.items)
+      return (
+        <DropdownMenuSub key={action.key}>
+          <DropdownMenuSubTrigger className="min-h-11 gap-3 rounded-thumb px-3 text-base [&_svg:not([class*=size-])]:size-5">
+            {face}
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent aria-label={action.label} className="min-w-50">
+            {action.items.filter((each) => !each.hidden).map(item)}
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+      )
     return action.checked === undefined ? (
       <DropdownMenuItem
         key={action.key}

@@ -23,7 +23,12 @@ import {
 } from '@/shared/lib/music'
 import { useSetSearch } from '@/shared/lib'
 import { confirm, say, sayUndo } from '@/shared/ui'
-import { useChordSheet, type ChordPlayerRoutes, type ChordPlayerView } from '@/widgets/chord-player'
+import {
+  useChordSheet,
+  type ChordPanel,
+  type ChordPlayerRoutes,
+  type ChordPlayerView,
+} from '@/widgets/chord-player'
 
 /**
  * The Chord player page's acts (R29 CP4, CP5): the sheet open (one of My chord sheets, or the sheet in
@@ -32,7 +37,7 @@ import { useChordSheet, type ChordPlayerRoutes, type ChordPlayerView } from '@/w
  */
 export function useChordPlayerPage() {
   const { t } = useTranslation('practice')
-  const view = useSearch({ from: '/shell/practice/chord-player' })
+  const view = useSearch({ from: '/full-screen/practice/chord-player' })
   const navigate = useNavigate()
   const setSearch = useSetSearch<ChordPlayerView>()
   const store = useChordSheetsStoreApi()
@@ -139,9 +144,12 @@ export function useChordPlayerPage() {
     name,
     sheetId: view.sheet,
     routes,
-    /** Edit layout, its URL's `layout=edit`, the entry replaced. */
-    editing: view.layout === 'edit',
-    setEditing: (on: boolean) => setSearch({ layout: on ? 'edit' : undefined }),
+    /** The rail's panel (Chords when the URL names none), its entry replaced. */
+    panel: view.panel ?? ('chords' as const),
+    setPanel: (panel: ChordPanel) => setSearch({ panel: panel === 'chords' ? undefined : panel }),
+    /** The keys docked under the chart, hidden by `keys=off`. */
+    keysShown: view.keys !== 'off',
+    setKeysShown: (shown: boolean) => setSearch({ keys: shown ? undefined : 'off' }),
     saving,
     setSaving,
     /** Save as my chord sheet, its name the sheet in hand's where it came named. */

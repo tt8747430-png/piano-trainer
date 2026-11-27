@@ -32,6 +32,12 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
+  --color-band: var(--band);
+  --color-on-band: var(--on-band);
+  --color-on-band-soft: var(--on-band-soft);
+  --color-on-band-ring: var(--on-band-ring);
+  --color-bar-on: var(--bar-on);
+  --color-rail-chosen: var(--rail-chosen);
   --color-card-foreground: var(--card-foreground);
   --color-chosen: var(--chosen);
   --color-chosen-honey: var(--chosen-honey);

@@ -1,5 +1,4 @@
 export { ChordPlayer, type ChordPlayerRoutes } from './ui/ChordPlayer'
 export { useChordSheet, type ChordSheetInHand } from './model/use-chord-sheet'
-export { useResetChordLayout } from './model/use-chord-layout'
 export { mixGain, styleBar } from './model/engine'
-export type { ChordPlayerView } from './model/view'
+export { CHORD_PANELS, type ChordPanel, type ChordPlayerView } from './model/view'

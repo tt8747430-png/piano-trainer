@@ -697,13 +697,14 @@ const chordFinderRoute = createRoute({
   component: lazyRouteComponent(toolScreens, 'ChordFinderPage'),
 })
 
-// The Chord player (R29 CP1): a chord sheet of sections played by a band in a style; its own Settings.
-// Opened plainly, the sheet last open (R76).
+// The Chord player (R29 CP1): a chord sheet of sections played by a band in a style, on a screen of
+// its own edge to edge (R77: the band, the rail, the keys). Opened plainly, the sheet last open (R76).
 const chordPlayerRoute = createRoute({
-  getParentRoute: () => shellRoute,
+  getParentRoute: () => fullScreenRoute,
   path: '/practice/chord-player',
   ...chordPlayerSearch,
-  ...remembered(readChordPlayerSearch, [], ['sheet']),
+  ...remembered(readChordPlayerSearch, [], ['sheet', 'panel', 'keys']),
+  staticData: { remembered: ['sheet', 'panel', 'keys'], edgeToEdge: true },
   component: lazyRouteComponent(chordPlayerScreens, 'ChordPlayerPage'),
 })
 
@@ -1063,7 +1064,6 @@ const routeTree = rootRoute.addChildren([
     metronomeRoute,
     circleOfFifthsRoute,
     tunerRoute,
-    chordPlayerRoute,
     trainerRoute,
     studyRoute,
     studySectionRoute,
@@ -1073,7 +1073,13 @@ const routeTree = rootRoute.addChildren([
     chromaticRoute,
     progressionPlayerRoute,
   ]),
-  fullScreenRoute.addChildren([playerRoute, exerciseRoute, editRoute, exampleEditRoute]),
+  fullScreenRoute.addChildren([
+    playerRoute,
+    exerciseRoute,
+    editRoute,
+    exampleEditRoute,
+    chordPlayerRoute,
+  ]),
 ])
 
 /**
@@ -1134,6 +1140,8 @@ declare module '@tanstack/react-router' {
   interface StaticDataRouteOption {
     /** A screen on its own (the Player, the Check), which nothing else is laid over. */
     fullScreen?: true
+    /** A full screen that draws its own edges (the Chord player's band and rail): no gutter, no scroll. */
+    edgeToEdge?: true
     /**
      * A screen that comes back the learner's way (ADR 0038): its view saved in `pt-views`; every
      * param it reads, or those listed alone.

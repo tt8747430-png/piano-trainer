@@ -78,6 +78,14 @@ export const common = {
     settings: 'Settings',
   },
   close: 'Close',
+  // A full screen's band and phone header (R77, Flat's).
+  transport: 'Transport',
+  goToStart: 'Go to start',
+  playbackOptions: 'Playback options',
+  menu: 'Menu',
+  pianoKeys: 'Piano keys',
+  panels: 'Panels',
+  foldPanel: 'Fold the panel',
   // A sheet's way out (R42): what it set is already applied.
   done: 'Done',
   // A picker's panel: the circle's Select, and the Keys sheet's (Chord Trainer's).

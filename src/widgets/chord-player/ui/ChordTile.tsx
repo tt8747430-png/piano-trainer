@@ -179,7 +179,7 @@ export const ChordTile = memo(function ChordTile({
         onClick={onTap}
         onKeyDown={onKeyDown}
         className={cn(
-          'relative flex h-[60px] min-w-0 flex-1 scroll-mt-[calc(env(safe-area-inset-top)+5rem)] scroll-mb-[calc(var(--nav-bar)+var(--docked,0px)+var(--over-foot,0px)+1.5rem)] cursor-grab touch-manipulation items-start overflow-hidden rounded-tile px-2 pt-1 select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing lg:h-[76px]',
+          'relative flex h-[60px] min-w-0 flex-1 scroll-mt-4 scroll-mb-6 cursor-grab touch-manipulation items-start overflow-hidden rounded-tile px-2 pt-1 select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing lg:h-[76px]',
           lit ? 'bg-primary/35' : 'bg-card',
           lit || selected
             ? 'shadow-[0_0_0_2px_var(--color-honey-ring)]'

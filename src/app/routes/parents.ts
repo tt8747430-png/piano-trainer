@@ -275,7 +275,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/metronome': toPractice,
   '/shell/practice/circle-of-fifths': toPractice,
   '/shell/practice/tuner': toPractice,
-  '/shell/practice/chord-player': toPractice,
+  '/full-screen/practice/chord-player': toPractice,
   '/shell/practice/trainer/$trainerId': toPractice,
   '/shell/practice/exercises': toPractice,
   // An exercise's page: up to its shelf, where it has one; a scale's or a chord's to Practice.

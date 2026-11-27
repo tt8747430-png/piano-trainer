@@ -1,8 +1,7 @@
 import { useDraggable } from '@dnd-kit/core'
 import { useTranslation } from 'react-i18next'
-import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { printedChord, type Chord, type Key } from '@/shared/lib/music'
+import { printedChord, type Chord } from '@/shared/lib/music'
 import { LeadSymbol } from '@/shared/ui'
 import { keyDragId } from '../model/sheet-dnd'
 
@@ -35,28 +34,22 @@ function KeyTile({ chord, at, onAdd }: { chord: Chord; at: number; onAdd(): void
   )
 }
 
-/** The key's chords beside the sheet on a laptop (canvas 171), its heading level with the sheet's title. */
+/**
+ * The key's chords (canvas R77, the Chords panel's `_DRAGB`): four across, each tapped into the chosen
+ * chord's place or dragged into a bar; the panel's or the page's head names the key.
+ */
 export function KeyChords({
-  musicKey,
   chords,
   onAdd,
 }: {
-  musicKey: Key
   chords: readonly Chord[]
   onAdd(chord: Chord): void
 }) {
-  const { t } = useTranslation('practice')
-  const keyName = useKeyName()
   return (
-    <section className="flex flex-col gap-4">
-      <h2 className="px-1 font-sans text-xl font-bold text-balance">
-        {t('chordPlayer.keyChords', { key: keyName(musicKey) })}
-      </h2>
-      <ul className="grid grid-cols-4 gap-2">
-        {chords.map((chord, at) => (
-          <KeyTile key={at} chord={chord} at={at} onAdd={() => onAdd(chord)} />
-        ))}
-      </ul>
-    </section>
+    <ul className="grid grid-cols-4 gap-2">
+      {chords.map((chord, at) => (
+        <KeyTile key={at} chord={chord} at={at} onAdd={() => onAdd(chord)} />
+      ))}
+    </ul>
   )
 }

@@ -196,3 +196,17 @@ export { Piano2DPicture, Piano3DPicture } from './PianoPictures'
 export { PageName } from './PageName'
 export { SelectAct, SelectDock } from './SelectDock'
 export { Toolbar } from './Toolbar'
+export {
+  Band,
+  BandButton,
+  BandClose,
+  BandOptions,
+  BandPill,
+  BandTransport,
+  GoToStartGlyph,
+  PlayGlyph,
+  type MetronomeMode,
+} from './Band'
+export { PhoneBand, PhoneBandButton, PhoneMenuButton, PhoneTransport } from './PhoneBand'
+export { Rail, RailButton, RailPanel } from './Rail'
+export { MetronomeIcon } from './icons/MetronomeIcon'

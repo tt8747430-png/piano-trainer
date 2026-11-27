@@ -1,9 +1,13 @@
 import type { KeyParam } from '@/shared/lib/music'
 
+/** The rail's places (R77): the panel open beside it, or none (`«` folded it). */
+export const CHORD_PANELS = ['chords', 'styles', 'genos', 'audio', 'chart', 'none'] as const
+export type ChordPanel = (typeof CHORD_PANELS)[number]
+
 /**
- * What the Chord player's URL holds (R29 CP1, CP5): one of My chord sheets open (`sheet`), else the
- * sheet in hand; on arrival, a progression to put in hand (`p` in `key`, as Progressions writes them)
- * or a shared sheet's text (`share`), each read once and dropped.
+ * What the Chord player shows, in its URL (R29 CP1, CP5; R77): the sheet open, on arrival a
+ * progression or a shared sheet's link, the rail's panel (Chords when none is named) and the keys
+ * hidden. The panel and the keys are remembered (`pt-views`).
  */
 export interface ChordPlayerView {
   readonly sheet?: string | undefined
@@ -11,6 +15,8 @@ export interface ChordPlayerView {
   readonly key?: KeyParam | undefined
   /** A shared sheet's link (R39-10): opened among My chord sheets on arrival. */
   readonly link?: string | undefined
-  /** Edit layout on (R76): each panel outlined with its tag, the bar's Reset and Done. */
-  readonly layout?: 'edit' | undefined
+  /** The rail's panel open on a laptop; Chords when absent. */
+  readonly panel?: Exclude<ChordPanel, 'chords'> | undefined
+  /** The keys docked under the chart hidden by the band's keys button. */
+  readonly keys?: 'off' | undefined
 }

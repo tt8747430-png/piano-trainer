@@ -118,6 +118,16 @@
   --slip-3: var(--p-honey-deep);
   /* Honey as ink: a mark that adds (the staff's +), the canvas's #7A5418. */
   --honey-ink: var(--p-honey-ink);
+  /* A full screen's band (R77, Flat's dark band): ink, its controls paper-white on it, their quiet
+     words at 72%, a ring at 55%. Only the Chord player's laptop band; never under a page's content. */
+  --band: var(--p-ink);
+  --on-band: var(--p-paper-card);
+  --on-band-soft: rgb(254 253 251 / 0.72);
+  --on-band-ring: rgb(254 253 251 / 0.55);
+  /* A bar's glyph while its act is on (Loop, the keys, ☰ open): the deep rust, the band's and the
+     phone header's one sign of on beside Play's honey. The rail's chosen place: a warm wash. */
+  --bar-on: var(--p-rust);
+  --rail-chosen: #eee2cf;
   /* A toast's action (Undo): honey on the ink toast; by night the toast is light, so the deep honey. */
   --toast-action: var(--p-honey);
   --eyebrow: var(--p-rust);
@@ -361,6 +371,12 @@
     --slip-3: var(--p-honey-night);
     --honey-ink: var(--p-honey-night);
     --toast-action: var(--p-honey-ink);
+    --band: var(--p-dusk-950);
+    --on-band: var(--p-dusk-ink);
+    --on-band-soft: rgb(237 233 225 / 0.72);
+    --on-band-ring: rgb(237 233 225 / 0.5);
+    --bar-on: var(--p-rust-night);
+    --rail-chosen: var(--p-dusk-sand);
     --eyebrow: var(--p-rust-night);
     --played: var(--p-copper-night);
     --practised-day: var(--p-ember-night);

@@ -4,46 +4,31 @@ import { ShareChordSheet } from '@/features/share-chord-sheet'
 import { NewSheet } from '@/shared/ui'
 import { ChordPlayer } from '@/widgets/chord-player'
 import { useChordPlayerPage } from '../model/use-chord-player-page'
-import { ChordPlayerSettings } from './ChordPlayerSettings'
 
 /**
- * The Chord player (`/practice/chord-player`, canvas R76): the widget's bar, chart and panels, given
- * the page's acts on the sheet's file (Save as my chord sheet… for the sheet in hand, Share…, New
- * sheet), Edit layout in the URL, and its gear.
+ * The Chord player (`/practice/chord-player`, canvas R77): a screen of its own, the widget's band, rail
+ * and chart, given the page's acts on the sheet's file (Save as my chord sheet… for the sheet in hand,
+ * Share…, New sheet) and its view in the URL (the rail's panel, the keys).
  */
 export function ChordPlayerPage() {
   const { t } = useTranslation('practice')
   const page = useChordPlayerPage()
   const { hand } = page
   return (
-    <div className="flex flex-col">
+    <>
       {hand ? (
         <ChordPlayer
           hand={hand}
           sheetId={page.sheetId}
           name={page.name}
           routes={page.routes}
-          editing={page.editing}
-          onEditing={page.setEditing}
+          panel={page.panel}
+          onPanel={page.setPanel}
+          keysShown={page.keysShown}
+          onKeys={page.setKeysShown}
           onNew={() => void page.startNew()}
-          more={[
-            {
-              key: 'save',
-              group: 'draft',
-              unnamed: true,
-              label: t('chordPlayer.saveAs'),
-              // The sheet in hand is kept by naming it; one of mine saves its draft.
-              hidden: page.sheetId !== undefined,
-              onSelect: page.startSaving,
-            },
-            { key: 'share', label: t('chordPlayer.shareMenu'), onSelect: page.share },
-          ]}
-          settings={
-            <ChordPlayerSettings
-              sheetId={page.sheetId}
-              onEditLayout={() => page.setEditing(true)}
-            />
-          }
+          onSaveAs={page.startSaving}
+          onShare={page.share}
         />
       ) : null}
       {page.saved ? (
@@ -60,6 +45,6 @@ export function ChordPlayerPage() {
         createLabel={t('chordPlayer.save.create')}
         onCreate={() => page.saveAs(page.saving ?? '')}
       />
-    </div>
+    </>
   )
 }
