@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · HASH · Layout loses "Measures · 4 a line", a second home for View's Bars per row (one home per setting); its fold is Note spacing (Spacing, Stretch last line: past half full, Dorico's rule); "Measure numbers" is Bar numbers, the app's word everywhere else · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · **pending**
 ## Changes
 
 - 2026-11-27 · 11f3f815 · the Instruments page gives each part its own glyph, as the Parts sheet does (the voice's microphone, the piano's keys, an added part a note), where every row wore the keys; New instrument's list reads in ink, a list to pick from, not blue action links · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · v825
