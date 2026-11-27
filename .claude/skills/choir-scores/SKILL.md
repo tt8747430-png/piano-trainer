@@ -31,6 +31,11 @@ made so far). Writing a song from a PDF or image: also [from the sheet](referenc
 5. **Fix, rebuild, look again** at everything changed, until a full pass finds nothing.
 6. **Only then** remove the song's old MuseScore files, regenerate `INDEX.md`, commit (one song, one commit) and
    push, and go straight on to the next song. A song is never left half done; difficulty is no reason to skip.
+7. **Never stop between songs** (owner, 2026-11-27: "continue in loop and dont stop … you have no reason to
+   stop"): a pushed song, a batch of songs, a builder fix or a long session is not an ending. After each push write
+   one line and make the next tool call on the next song, in the same turn; no summary, no closing report, no
+   question. The turn of 2026-11-27 ended with a report after song 34: that was wrong. Only the word "stop" ends
+   the work; when the mixed choir is done the men's choir follows, then a second pass from song 1.
 
 ## Rules that sent work back
 
