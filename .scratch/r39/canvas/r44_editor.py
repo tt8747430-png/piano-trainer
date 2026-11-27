@@ -386,7 +386,7 @@ ED4 = ED4.replace("moreOn: ['more', 'export'].includes(st.sheet),", "moreOn: ['m
 # the printed title and credits open Credits, where they print (Flat's and Dorico's: everything printed is edited there)
 _CREDRE = re.compile(r'(<h2 style="margin: 0; text-align: center; font-family: [^"]*; font-size: 30px[^>]*>Amazing Grace</h2><div style="margin: \d+px 0 0;.*?</span></div>)', re.S)
 def CREDBTN(h):
-    out, n = _CREDRE.subn(lambda m: '<button type="button" onClick="{{openCredits}}" aria-label="Title and credits" data-tip="Edit the title and credits" style="display: block; width: calc(100% + 16px); margin: -4px -8px; padding: 4px 8px; border: 0; border-radius: 8px; background: transparent; font: inherit; color: inherit; text-align: inherit; cursor: text">' + m.group(1) + '</button>', h)
+    out, n = _CREDRE.subn(lambda m: '<button type="button" onClick="{{openCredits}}" aria-label="Title and credits" data-tip="Edit the title and credits" style="display: block; width: calc(100% + 16px); margin: -4px -8px; padding: 4px 8px; border: 0; border-radius: 12px; background: transparent; font: inherit; color: inherit; text-align: inherit; cursor: text">' + m.group(1) + '</button>', h)
     if not n: raise SystemExit('CREDBTN: the printed title no longer matches; Credits would be unreachable')
     return out
 def full_laptop(fname, title, main, js_, pops=''):

@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · PENDING · Player and editor radii on DESIGN.md's scale (laws, the design system as layers, 1; craft-details, Corners): the rail's chosen tile 10 → 9, a pop-up value button inside a 12 card 8 → 9 (12 less its 4 inset, the nearest step), the printed title's Credits target 8 → 12 (control); measured: no 8, 10 or 11 left in the editor's own parts (the shared segmented control's 11 waits for its app-wide turn) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · pending
 ## Changes
 
 - 2026-11-26 · 888a009f · each field brings the right keyboard (laws, a phone is not a small laptop, 5): Credits' names capitalise words and step Next, the licence capitalises sentences, Search for an act is a search field (Search key, no capitals or autocorrect), Version name capitalises and ends Done; the two Rename version dialogs are one (RENAMEDLG, its foot DLGFOOT); the laptop editor's printed title opens Credits again (CREDBTN's pattern had drifted from the 16 credits margin and silently matched nothing; it now fails the build when it misses), and there Credits is Flat's Edit Score Credits dialog, 640 wide over the score with Cancel and Save, not a page hiding the editor · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v802
