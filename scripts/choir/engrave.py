@@ -225,7 +225,7 @@ def layout_mscx(score, spec):
         at = next((k for k, el in enumerate(v) if el.tag in ('Chord', 'Rest')), len(v))
         v.insert(at, st)
     if not spec.get('beams'):
-        unbeam(staffs)
+        unbeam(staffs, sung_bars(staffs, spec))
     # Ties and slurs the sheet draws dashed (one verse holds where another sings on), in every staff of those bars.
     for bar in spec.get('dashed', []):
         for st in staffs:
@@ -259,9 +259,14 @@ def layout_mscx(score, spec):
             hide(t)
 
 
-def sung_bars(staffs):
-    """The bars some staff sings in (a bar sung by one voice is sung by all)."""
-    return {k for st in staffs for k, m in enumerate(st.findall('Measure')) if m.find('.//Lyrics') is not None}
+def sung_bars(staffs, spec=None):
+    """The bars some staff sings in (a bar sung by one voice is sung by all), and the bars the sheet prints as sung
+    though it gives them no words (`flagged:`, a choir humming)."""
+    sung = {k for st in staffs for k, m in enumerate(st.findall('Measure')) if m.find('.//Lyrics') is not None}
+    if spec and spec.get('flagged'):
+        nums = bar_numbers(staffs[0].findall('Measure'), spec.get('count_pickup'))
+        sung |= {k for k, n in enumerate(nums) if n in spec['flagged']}
+    return sung
 
 
 def unbeam(staffs, sung=None):

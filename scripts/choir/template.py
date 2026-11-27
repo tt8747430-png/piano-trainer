@@ -101,6 +101,11 @@ def skeleton(kind, spec):
                 ET.SubElement(c, 'line').text = str(clef[1])
                 if clef[2]:
                     ET.SubElement(c, 'clef-octave-change').text = str(clef[2])
+        for bar, fifths in spec.get('key_changes', []):
+            # a new key signature from that bar, as printed
+            at = ET.Element('attributes')
+            ET.SubElement(ET.SubElement(at, 'key'), 'fifths').text = str(fifths)
+            part.findall('measure')[bar - 1].insert(0, at)
         for bar, (b, bt, sym) in spec.get('time_changes', []):
             # a new time signature from that bar, as printed
             at = ET.Element('attributes')

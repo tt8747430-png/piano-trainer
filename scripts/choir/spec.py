@@ -17,6 +17,7 @@ voice names before the staves, the tempo set but not printed, template/house.mss
     count-pickup                       the sheet numbers its pickup as bar 1 (bars here follow the sheet)
     dashed: 20 22                      ties and slurs in these bars drawn dashed, as printed
     beams                              eighths beamed together (by default each has its own flag, as sung lines are)
+    flagged: 1-9, 35-36                bars sung without words (a choir humming), flagged as the sung bars are
     bar-numbers: every                 a number over every bar (by default only at a line's start)
     repeat: 9+3/4 17, 63 70            a repeat from bar 9, 3/4 in (the bar is split there, as printed), to bar 17;
                                        several, by commas
@@ -25,6 +26,7 @@ voice names before the staves, the tempo set but not printed, template/house.mss
     bar-length: 17 7/8                 a bar printed shorter than its time (the last after a pickup), its trailing
                                        rests left out
     time-change: 91 6/8                a new time signature from that bar (as `time:`)
+    key-change: 64 C, 67 Bb            a new key signature from that bar (as `key:`)
     tempo: 105                         the tempo as printed
     footer: Corul ...                  a line of text at the foot of each page
     brace                              the staves joined by a brace, as a sheet exported from MuseScore draws them
@@ -147,6 +149,10 @@ def read(song_dir):
                 bars, number = item.split()
                 a, _, b = bars.partition('-')
                 spec.setdefault('endings', []).append((int(a), int(b or a), number))
+        elif key == 'key-change':
+            for item in value.split(','):
+                bar, k = item.split()
+                spec.setdefault('key_changes', []).append((int(bar), FIFTHS[k]))
         elif key == 'time-change':
             for item in value.split(','):
                 bar, sig = item.split()
@@ -183,6 +189,10 @@ def read(song_dir):
             spec['italic'] = value.split(',')
         elif key == 'beams':
             spec['beams'] = True
+        elif key == 'flagged':
+            for item in value.split(','):
+                a, _, b = item.strip().partition('-')
+                spec.setdefault('flagged', set()).update(range(int(a), int(b or a) + 1))
         elif key == 'dashed':
             spec['dashed'] = [int(b) for b in value.split()]
         elif key == 'segno':

@@ -364,7 +364,7 @@ def apply(files, spec):
         header(main_score, score, score.findtext('name') or n.split('/')[1].split('_', 1)[1].replace('_', ' '))
         marks(main, part, track)
         if not spec.get('beams'):
-            unbeam([part], sung_bars(main))
+            unbeam([part], sung_bars(main, spec))
         if spec['hide_tempo']:
             for tempo in score.iter('Tempo'):
                 hide(tempo)

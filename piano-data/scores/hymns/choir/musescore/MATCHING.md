@@ -122,3 +122,12 @@ by hand.
   (the sopranos' pickup "Îmi ri-dic" above), and its solos (bars 64-79) with the soloist's words above and the
   accompaniment's below: the words go under the voice whose rhythm they fit, and a second voice's words above the
   staff (`[Soprano above]`) so they never collide.
+- **A voice drafted, not read.** Song 19's basses (in no file) were read from the sheet to bar 97 and drafted from
+  the harmony after: bars 102-121 came out a third off, and bars 122-141, where the men double the women an octave
+  below, an octave low. Every bar of a voice is read from the sheet (`heads`, a gridded crop), never drafted.
+- **A key change read with the old key's flats.** Song 19 changes to C at bar 90; the files kept E♭ and B♭ there
+  (bars 90-95). After a `key-change:` each pitch is read against the new key.
+- **Hummed bars beamed.** Song 19's opening (bars 1-8, the choir humming on A) has no words, so the builder beamed it
+  as an instrumental bar; the sheet flags each note as sung. `flagged:` names such bars.
+- **A bar broken across two lines left whole.** Where the sheet breaks a bar over a line's end (song 19: bars 17-18,
+  48-49, 57-58, 80-81) each half is a printed bar, and each gets its `bar-length:`, as does a short last bar (141).

@@ -82,7 +82,7 @@ class Staff:
 
 def heads(name, page, staff, args, out=None):
     song_dir, _ = song(name)
-    im = pages(sheet_pdf(song_dir), dpi=260)[int(page) - 1]
+    im = pages(sheet_pdf(song_dir), dpi=260, only=int(page))[0]
     st = Staff(im, int(staff))
     if args and args[0] == 'ruler':
         path = os.path.join(out or '.', f'staff-{page}-{staff}.png')

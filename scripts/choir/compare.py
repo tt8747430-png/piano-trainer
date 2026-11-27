@@ -56,9 +56,11 @@ def straighten(im):
     return im.rotate(best, resample=Image.BILINEAR, fillcolor=255) if best else im
 
 
-def pages(pdf, dpi=170):
+def pages(pdf, dpi=170, only=None):
+    """The PDF's pages as straightened greyscale images (only: one page, by its number, the others left out)."""
     d = tempfile.mkdtemp()
-    subprocess.run(['pdftoppm', '-r', str(dpi), '-gray', '-png', pdf, d + '/p'], check=True)
+    span = ['-f', str(only), '-l', str(only)] if only else []
+    subprocess.run(['pdftoppm', '-r', str(dpi), '-gray', '-png', *span, pdf, d + '/p'], check=True)
     return [straighten(Image.open(p).convert('L')) for p in sorted(glob.glob(d + '/p-*.png'))]
 
 
