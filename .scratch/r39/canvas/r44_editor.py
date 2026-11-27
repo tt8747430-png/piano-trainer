@@ -193,7 +193,7 @@ SHEETP = (f'<section aria-label="Palette" data-strip style="flex: none; position
           f'<sc-if value="{{{{keysShown}}}}" hint-placeholder-val="{{{{true}}}}"><div style="padding: 0 0 26px">{PHKEYS}</div></sc-if>'
           f'<sc-if value="{{{{notKeys}}}}" hint-placeholder-val="{{{{false}}}}"><div style="height: 26px"></div></sc-if></section>')
 # the phone's bar has no room for the save status the laptop shows beside Close: it heads the ··· sheet (a status goes in the bar or its menu)
-ED_SAVED = f'<p role="status" style="margin: -8px 0 0; text-align: center; font-size: 13px; color: {SOFT}">Saved on this device</p>'
+ED_SAVED = f'<p role="status" style="margin: -6px 0 0; text-align: center; font-size: 13px; color: {SOFT}">Saved on this device</p>'
 ED4 = ED4.replace("keysOn: keys,", "keysOn: keys, keysShown: keys && !open, notKeys: !keys || open,", 1)
 # From 48rem (an iPad, a phone on its side) the palette docks at the right of the score, as the laptop's, never a sheet
 # over it (CLAUDE.md, the score editor; round 66: at 852×393 the sheet and keys left no score at all).

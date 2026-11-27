@@ -861,6 +861,7 @@ def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=Non
     """pub: a draft's publishing rows, a group of their own before the loss, as the laptop's name menu;
     song: the song's rows ☰ lists after its places (Transpose, Credits); hide: places ☰ lists through song, or the
     header's View button opens"""
+    # the song's name heads ☰ (Flat's ≡ menu, flat-score-editor 083), the phone's header carrying no title
     # ☰ lists every act in its own row (owner, 2026-11-26: "I dont like that the option is called songs … and I dont
     # like very much the all these options are now hidden just under this option"), as Flat's ☰ lists Credits, Manage
     # instruments, Version history, Layout, Export and Print each in its own row (flat-score-editor 083): the versions
@@ -874,8 +875,8 @@ def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=Non
     items = [(pid, lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places if pid not in hide] + acts[:-3] + list(rows)
     panel = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{phClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
              f'<nav aria-label="{title}" class="nos" style="position: absolute; z-index: 61; top: 120px; right: 8px; left: 24px; max-height: calc(100% - 170px); overflow-y: auto; box-sizing: border-box; padding: 12px 8px; border-radius: 22px; background: {PAGE}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 18px 48px -12px rgba(51,41,33,.38); display: flex; flex-direction: column; gap: 8px">'
-             + head + (f'<div style="padding: 0 4px 4px">{mode_html}</div>' if mode_html else '') + FROWS(items, lines=False, h=48) + f'<div role="separator" style="height: 1px; margin: 4px 12px; background: {LINE}"></div>' + FROWS(acts[-3:], lines=False, h=48)
-             + ''.join(f'<div role="separator" style="height: 1px; margin: 4px 12px; background: {LINE}"></div>' + FROWS(g, lines=False, h=48) for g in (pub, loss) if g) + foot + '</nav></sc-if>')
+             + f'<p style="margin: 0; padding: 4px 12px 0; text-align: center; font-size: 17px; font-weight: 600; line-height: 22px; color: {INK}">{title}</p>' + head + (f'<div style="padding: 0 4px 4px">{mode_html}</div>' if mode_html else '') + FROWS(items, lines=False, h=48) + f'<div role="separator" style="flex: none; height: 1px; margin: 4px 12px; background: {LINE}"></div>' + FROWS(acts[-3:], lines=False, h=48)
+             + ''.join(f'<div role="separator" style="flex: none; height: 1px; margin: 4px 12px; background: {LINE}"></div>' + FROWS(g, lines=False, h=48) for g in (pub, loss) if g) + foot + '</nav></sc-if>')
     out = panel
     for pid, lab, val, body, act in places:
         if not act:
