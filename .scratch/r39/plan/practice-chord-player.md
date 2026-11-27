@@ -257,6 +257,26 @@ only · Can edit, Copy link). Settings add Follow a MIDI arranger and Arranger �
 Genos's strip as its panel names it: Style (Start/Stop, ACMP, Sync Start, Sync Stop), Intro I II III, Main A B C D,
 Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale red when next, white when off.
 
+## Port to the app, R77 (in this order; waits for the Player's and editor's band in the app, tasks 157–159)
+
+The board is the source, value for value (`r58_chordplayer.py`: `BAND77`, `RAIL77`, `_PANEL`, `GDOCK77`, `PHHDR77`,
+`PHNAV77`, `PHPAGES77`, `NAMEMENU77L`, `NAMEMENU77P`, `POPS77L`, `_SHL`), with the kit helpers it calls
+(`r41_kit.py`: `HDRTRANSPORT`, `HDRKEYSBTN`, `PHTRANSPORT`, `PHKEYSBTN`, `_RAILBTN`, `FROWS`, `FSHEET`, `POPOVER`).
+
+| # | Board (R77) | App today | Port |
+| - | ----------- | --------- | ---- |
+| 1 | The full screen: no sidebar, the band 64 dark on a laptop; Flat's phone header (←, the transport capsule, the keys, ☰) | `pages/chord-player/ui/ChordPlayerPage.tsx` in the shell with its sidebar; a glass bar of Back, Undo, gear and ··· | the route leaves `shellRoute` as the Player's does; the band and the phone header from the Player's band once it is in the app (one implementation) |
+| 2 | The name with Live or Draft under it, its menu: recent sheets, New sheet, All chord sheets; Share…, Import chart…, Export MIDI, Export chart; Save to my progressions, Open in Progressions; Save and Discard draft | `SheetsMenu.tsx` (the sheets), the ··· menu (the file acts) | one menu under the name; the ··· goes |
+| 3 | The transport: Go to start, Play with Playback options (Repeats, Count-in) under ▾, the metronome, Loop for the section | the floating dock's Play, Repeats in the dock, Count-in in Settings, Loop in the section's sheet | the band's transport, the Player's own; the dock goes |
+| 4 | Key, Tempo and Style as the band's pills, each a popover under it (the wheels) | the dock's Key, Tempo, Style | pills in the band; the dock goes |
+| 5 | MIDI in the band: MIDI keyboard, Follow a MIDI arranger | Settings' MIDI rows | the band's MIDI popover, the Player's; Settings keeps a link row only |
+| 6 | The rail, 76: Chords, Styles, Genos, Sound, Chart; Search and Shortcuts at its foot; a panel 352 beside it, « closes it | `KeyChords.tsx` in a side column, `StyleSheet.tsx`, `ArrangerStrip.tsx` floating, `ChordPlayerSettings.tsx` | the editor's rail and tabpanel; Sound (Piano, Bass, Drums, Volume; Voicing) and Chart (Time signature, Written as) take what the gear held, which goes |
+| 7 | The Genos panel in full in the rail, docked compact over the keys while another panel is open (Start/Stop, Main A–D, ⌃) | `ArrangerStrip.tsx` Full · Compact · Minimized, placed by Edit layout | the strip's sizes kept; its place is the rail's or the dock over the keys |
+| 8 | The keys docked under the chart, the band's keys button showing or hiding them | the keys in Edit layout's places and sizes | docked, shown or hidden; Edit layout goes |
+| 9 | Edit layout, the floating dock, the gear and the Chords column gone | `use-chord-layout.ts`, `use-layout-edit.ts`, `LayoutZones.tsx`, `PanelTag.tsx`, `KeysGrab.tsx`, Settings › Page layouts | deleted, with the saved layout's store version bumped and the old save kept (ADR 0038) |
+| 10 | ☰ on a phone: Chords, Style, Key, Tempo, Repeats, Sound, Chart, MIDI as rows, each a page with ←; then Share…, Export MIDI, Export chart, Import chart…; Save to my progressions, Open in Progressions | the dock and the gear's sheets | the Player's ☰ and its pages, one implementation |
+| 11 | A chord's dialog on a laptop hangs under its chord (`ANCHOR`), above it where the screen ends first | `ChordDialog.tsx` centred | anchored to the chord as the board's `chordPos` |
+
 ## Port to the app, from canvas 171 (in this order)
 
 | # | Board | App today | Port |
