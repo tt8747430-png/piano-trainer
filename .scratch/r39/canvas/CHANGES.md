@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · (this commit) · the Chord player's Playback options one card as the app's: Repeats with its stepper at the row's end, Count-in under its name, and on a phone the Metronome switch (Flat's Playback options; the laptop's metronome is the band's); Randomize chords in the name menu and ☰, its toast naming the key · ChordPlayer, ChordPlayerLaptop · **pending**
 ## Changes
 
 - 2026-11-27 · 4cb5c0d9 · the Player's layers close clean and read as the area's: a layer board's Back no longer leaves the old R37 sheet's scrim; the phone's Bars per row offers 2 and 3 (its 2 was chosen from 4 and 8, so nothing read as chosen, and 4 cut G⁷ and Em); Played through's BARS caption is a sentence-case head, and its laptop card loses Done for a click outside · PlayerApp, PlayerDesk · v860
