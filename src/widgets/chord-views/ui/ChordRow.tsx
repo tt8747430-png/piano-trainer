@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import { DIAGRAM_KEYS, diagramChord } from '@/features/practice'
@@ -47,6 +47,9 @@ export function ChordRow({
   const row = useRef<HTMLDivElement>(null)
   const { width } = useElementSize(row)
   const following = useRef(false)
+  // A hand on the row holds it: the music's slide waits until the hand lets go and its scroll settles,
+  // even when the row is measured again meanwhile; let go, the row follows the music again.
+  const [held, setHeld] = useState(false)
   const placed = useRef(false)
   const settle = useRef(0)
   // The chord sounding, for a scroll that settles after the render that moved it.
@@ -58,7 +61,7 @@ export function ChordRow({
   useEffect(() => {
     const el = row.current
     const slot = el?.querySelector<HTMLElement>('[data-slot="chord-slot"]')?.offsetWidth ?? 0
-    if (!el || slot === 0) return
+    if (!el || slot === 0 || held) return
     following.current = true
     el.scrollTo({ left: current * slot, behavior: still || !placed.current ? 'auto' : 'smooth' })
     placed.current = true
@@ -66,14 +69,16 @@ export function ChordRow({
       following.current = false
     }, FOLLOW)
     return () => window.clearTimeout(done)
-  }, [current, still, width])
+  }, [current, still, width, held])
 
   useEffect(() => () => window.clearTimeout(settle.current), [])
 
-  const onScroll = () => {
-    if (following.current) return
+  // The hand's scroll settles (or a touch that never scrolled ends): the music goes to the chord the
+  // row rests on, and the row is the music's again.
+  const settleIn = () => {
     window.clearTimeout(settle.current)
     settle.current = window.setTimeout(() => {
+      setHeld(false)
       const el = row.current
       const slot = el?.querySelector<HTMLElement>('[data-slot="chord-slot"]')?.offsetWidth ?? 0
       if (!el || slot === 0) return
@@ -82,9 +87,14 @@ export function ChordRow({
       if (event && index !== sounding.current) onGo(event.at)
     }, SETTLE)
   }
+  const onScroll = () => {
+    if (!following.current) settleIn()
+  }
   // A hand on the row takes it from the music's slide.
   const takeOver = () => {
     following.current = false
+    setHeld(true)
+    settleIn()
   }
 
   return (

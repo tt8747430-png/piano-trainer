@@ -194,6 +194,49 @@ describe('Diagrams, its row of chords (ADR 0108, the Diagrams board)', () => {
     vi.advanceTimersByTime(140)
     expect(practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(3))
   })
+
+  it('keeps a hand’s swipe when the row is measured again under the hand', async () => {
+    vi.useFakeTimers()
+    onTestFinished(() => void vi.useRealTimers())
+    const measured: Array<() => void> = []
+    class LateObserver implements ResizeObserver {
+      constructor(private readonly callback: ResizeObserverCallback) {}
+      observe(target: Element) {
+        const report = (width: number) => {
+          const size = [{ blockSize: 120, inlineSize: width }]
+          this.callback(
+            [
+              {
+                target,
+                borderBoxSize: size,
+                contentBoxSize: size,
+                devicePixelContentBoxSize: size,
+                contentRect: target.getBoundingClientRect(),
+              },
+            ],
+            this,
+          )
+        }
+        queueMicrotask(() => report(300))
+        measured.push(() => report(320))
+      }
+      unobserve() {}
+      disconnect() {}
+    }
+    vi.stubGlobal('ResizeObserver', LateObserver)
+    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(150)
+    const { practice, row } = renderRow(0)
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(700)
+    })
+    fireEvent.pointerDown(row)
+    // The row's size arrives again while the hand is on it, as a slow device reports it late.
+    act(() => measured.forEach((report) => report()))
+    row.scrollLeft = 300
+    fireEvent.scroll(row)
+    act(() => vi.advanceTimersByTime(140))
+    expect(practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(3))
+  })
 })
 
 /** A sung line of C and G, then the same two bars twice with no words, then F. */
