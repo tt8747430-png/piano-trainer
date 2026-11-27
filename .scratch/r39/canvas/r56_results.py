@@ -24,7 +24,7 @@ RS_NAMES = ['Root position', '1st inversion', '2nd inversion', '3rd inversion']
 
 # The runs' foot is the Practice pages' bar of pieces (Chords, Scales, the Chord finder): glass pieces, an icon over its
 # caption, and the honey Play capsule at the centre (owner, 2026-11-18: "the floating actions guidelines are broken")
-SLIDERSI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M6 21v-7M6 10V3M12 21v-9M12 8V3M18 21v-5M18 12V3M3 14h6M9 8h6M15 16h6"></path></svg>'
+SLIDERSI56 = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M6 21v-7M6 10V3M12 21v-9M12 8V3M18 21v-5M18 12V3M3 14h6M9 8h6M15 16h6"></path></svg>'
 TEMPOI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>'
 RUNBAR = lambda pos, inner, label: (f'<div role="toolbar" aria-label="{label}" style="position: absolute; {pos}; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 12px; pointer-events: none">{inner}</div>')
 def RS_STEP(l, o):
@@ -235,7 +235,7 @@ def RS_RUNVIEW(lap):
     prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{chordT}}}}</span></div>')
     # Setup · Play · Tempo, as every run's (the run boards' RUNBAR)
-    transport = PIECE('Setup', 'Setup', SLIDERSI) + PLAYCAP() + PIECE('Tempo', '60 BPM', TEMPOI)
+    transport = PIECE('Setup', 'Setup', SLIDERSI56) + PLAYCAP() + PIECE('Tempo', '60 BPM', TEMPOI)
     # the music scrolls in what is left, the keys and Play stay at the foot (a phone on its side, round 66)
     inner = f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 80px; display: flex; flex-direction: column; gap: 16px">{staff}{prog}</div><div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>'
     if lap:
@@ -333,7 +333,7 @@ def PV_RUN(lap, v):
     prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{pvProg}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{pvT}}}}</span></div>')
     # floating 12 above the keys, reserving no space; Play at the centre, as the Player's and Flowkey's (flowkey 009)
-    transport = PIECE('Setup', 'Setup', SLIDERSI, 'onClick="{{openSetup}}"') + PLAYCAP() + PIECE('Tempo', '{{tempoC}}', TEMPOI, 'onClick="{{openSetup}}"')
+    transport = PIECE('Setup', 'Setup', SLIDERSI56, 'onClick="{{openSetup}}"') + PLAYCAP() + PIECE('Tempo', '{{tempoC}}', TEMPOI, 'onClick="{{openSetup}}"')
     if lap:
         return (LPAD(PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html'))
                 + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1177px; max-width: 100%; display: flex; flex-direction: column; gap: 8px"><div style="zoom: 1.35">{PV_LINE(4, 872, v) if v == 'exercise' else PV_LINE(8, 104, v)}</div>{prog}</div>'

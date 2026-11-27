@@ -41,3 +41,6 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r73_laptop_links.py').re
 exec(open("/home/user/piano-trainer/.scratch/r39/canvas/r71_tips.py").read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r70_scrim.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r76_motion.py').read())
+# a later generator never takes a kit name (checks/README.md, shadow.py)
+import subprocess as _sp; _sh = _sp.run(['python3', '/home/user/piano-trainer/.scratch/r39/canvas/checks/shadow.py'], capture_output=True, text=True)
+print(_sh.stdout.strip() or 'no kit name shadowed')

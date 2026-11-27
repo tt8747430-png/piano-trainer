@@ -3,10 +3,10 @@
 # both sizes, in the learned paint, no count beside it (the line says it). Run after r50_profile.py.
 import re
 
-OUT = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
-src = open('/home/user/piano-trainer/.scratch/r39/canvas/r50_profile.py').read()
+OUT74 = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
+src74 = open('/home/user/piano-trainer/.scratch/r39/canvas/r50_profile.py').read()
 ns = {}
-exec(re.search(r'^BADGES9 = \[.*?\n(?=[A-Z_0-9]+ = )', src, re.S | re.M).group(0), ns)
+exec(re.search(r'^BADGES9 = \[.*?\n(?=[A-Z_0-9]+ = )', src74, re.S | re.M).group(0), ns)
 BAR = ('<span aria-hidden="true" style="display: block; height: 6px; margin-top: 4px; border-radius: 9999px; background: #EEE9E2; overflow: hidden">'
        '<span style="display: block; height: 100%; width: WW; border-radius: 9999px; background: #44684A"></span></span>')
 
@@ -17,7 +17,7 @@ def pct(b):
 
 
 for f in ('Profile.dc.html', 'ProfileLaptop.dc.html'):
-    s = open(OUT + f).read()
+    s = open(OUT74 + f).read()
     if 'width: {{x.pct}}%' in s:
         continue
     a = 'font-size: 14px; color: #685E56">{{x.sub}}</span>'
@@ -32,5 +32,5 @@ for f in ('Profile.dc.html', 'ProfileLaptop.dc.html'):
             continue
         j = s.index('</span>', i + len(k)) + 7
         s = s[:j] + BAR.replace('WW', f'{p}%') + s[j:]
-    open(OUT + f, 'w').write(s)
+    open(OUT74 + f, 'w').write(s)
 print('badge bars ok')

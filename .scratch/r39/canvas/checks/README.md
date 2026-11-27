@@ -53,3 +53,5 @@ RT=<path to the Design type's dc-runtime.js> CSP=1 node run.mjs <Board> <width> 
 5191: every visible text's own box, size, weight and colour on the board and on the app's route, aligned at the first
 text both show; it prints only what differs (BOARD ONLY, APP ONLY, DIFF pos/font/color). Run it before any screenshot
 of a port; shoot only what it flags.
+
+`python3 checks/shadow.py` lists every kit name (`r41_kit.py`, `calm_kit.py`) that a later generator assigns again and exits 1 if there is one. All generators run in one namespace, so such a copy silently replaces the kit's for every board built after it (r42's 20 chevron drew the kit's 16 one everywhere; r47's 20 Undo stood in the Chord player's band beside the editor's 22). A generator's own glyph takes a name of its own (`UNDO47`, `COURSEI`); the check runs with the build, before `regress.py`.
