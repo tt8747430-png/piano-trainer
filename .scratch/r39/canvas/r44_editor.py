@@ -245,8 +245,9 @@ TOOLBAR_P = (f'<div role="toolbar" aria-label="Notation" style="flex: none; heig
 # the desk the page lies on, as Flat's and Dorico's: a grey ground; the page scaled by the zoom (fit to the width on a phone)
 DESK = lambda pad: (f'<sc-if value="{{{{pageOn}}}}" hint-placeholder-val="{{{{true}}}}"><div class="nos" aria-label="Page view" style="position: absolute; inset: 0; overflow: auto; background: {FILL}"><div style="min-width: min-content; box-sizing: border-box; padding: {pad}; display: flex; justify-content: center">'
                     f'<div style="zoom: {{{{zf}}}}; display: flex; flex-direction: column; gap: 24px">{A4PAGE(head=True)}</div></div></div></sc-if>')
-# Panorama (Dorico's galley, Flat's horizontal): one system as long as the song, its natural spacing, never justified
-PANO = lambda sc, pad: (f'<sc-if value="{{{{panoOn}}}}" hint-placeholder-val="{{{{false}}}}"><div class="nos" aria-label="Panorama" style="position: absolute; inset: 0; overflow-x: auto; overflow-y: hidden; background: {PAGE}; display: flex; align-items: center">'
+# Panorama (Dorico's galley, Flat's horizontal): one system as long as the song, its natural spacing, never justified; hung from
+# the top under the toolbar as theirs, never centred in the space (that left a bare band under the bar)
+PANO = lambda sc, pad: (f'<sc-if value="{{{{panoOn}}}}" hint-placeholder-val="{{{{false}}}}"><div class="nos" aria-label="Panorama" style="position: absolute; inset: 0; overflow-x: auto; overflow-y: hidden; background: {PAGE}; display: flex; align-items: flex-start">'
                         f'<div style="flex: none; padding: {pad}; zoom: {{{{zf}}}}">' + PANOSC(sc) + '</div></div></sc-if>')
 # Panorama's one system with the playhead over it (the kit's PLAYHEAD, the Player's line)
 def PANOSC(sc, piano=True):

@@ -11,6 +11,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-27 · (this commit) · Panorama hangs its one system from the top under the toolbar, as Dorico's galley and Flat's horizontal view (it stood centred in the space, a 68 bare band under the phone's toolbar) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop · **pending**
 - 2026-11-27 · 8633e86a · the band holds under 1280 (a 1024 laptop, an iPad on its side): Version history folds to its clock, the song's or sheet's name gives way first to 120, every act stays (the Player's band overflowed by about 70 at 1024, the Chord player's by about 30); and a bar's last control names itself flush with the screen's edge (its centred tip hung 9 past it), on every board · PlayerDesk, EditorLaptop, EditorDraftLaptop, ChordPlayerLaptop and every board with a bar's tips · v849
 - 2026-11-27 · a58f424d · the laptop draft's save state (Saved · not published, Saving…, Offline: not saved yet, Not saved) heads the song's menu as on the phone (it showed nowhere, its patch dead since the band), and the selected Edit tab links to the draft board, not the live editor · EditorDraftLaptop · v848
 - 2026-11-27 · 0774fd51 · on the laptop a panel's title stands on its cards' 16 edge (it stood 20 in, 4 off), and the Genos card is 12 in all round (its rows sat 8 apart and 8 from its top) · ChordPlayerLaptop · v847
