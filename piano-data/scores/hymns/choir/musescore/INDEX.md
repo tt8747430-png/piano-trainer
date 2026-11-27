@@ -59,7 +59,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 25 | Isuse pentru mine | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 26 | Sub crucea Ta | Done: as printed (matched to its PDF) | – | – | – | – | – | 2 | 1 |  | – |
 | 27 | Tatăl nostru | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 28 | Deșteptare, strigă glasul Domnului | Done: a part per voice (no words in any of its files) | – | – | – | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | – |
+| 28 | Deșteptare, strigă glasul Domnului | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 29 | Vine-o zi | Done: a part per voice (no words in any of its files) | – | – | – | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | – |
 | 30 | Laudă astăzi pe Domnul | Single voices only, no full score | – | – | – | – | Alto, Tenor | 1 |  |  | – |
 | 31 | Stai pe loc și te gândește | Single voices only, no full score | – | – | – | – | – | 1 |  |  | – |
