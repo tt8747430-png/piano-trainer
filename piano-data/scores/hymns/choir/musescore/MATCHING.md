@@ -172,3 +172,10 @@ by hand.
 - **Syllables moved by hand in a file.** Song 32's file had dragged its verse 2 and 3 pickup syllables ("2.E",
   "3.Du") with offsets, so in the house layout they stood two lines below their verses. The builder now drops every
   syllable's offset.
+- **The song's number printed twice.** Song 32's file set its number apart, in a credit's place, beside the house
+  title that already carries it; a title-frame text holding only a number is dropped.
+- **A pickup written as a whole bar.** Song 32's file wrote its pickup as a full bar with a hidden rest first, so each
+  part showed the rest; `bar-length:` now trims a short bar's rests before its notes as well as after.
+- **A held syllable's line running on.** Song 32's file drew verses 2 and 3's last syllables eight whole notes long,
+  and in the parts the lines ran through every later bar; a line now ends at the voice's last note before its next
+  sung note (songs 1 and 28 corrected the same way).

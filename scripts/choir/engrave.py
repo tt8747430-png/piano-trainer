@@ -158,6 +158,11 @@ def layout_mscx(score, spec):
                         b.tail = ' ' + name
                     else:
                         tx.text = spec['title']
+            # a text holding only the song's number (song 32's file printed it apart, in a credit's place) goes: the
+            # title carries it
+            for t in vb.findall('Text'):
+                if t.findtext('style') != 'title' and ''.join(t.find('text').itertext()).strip().isdigit():
+                    vb.remove(t)
             break
     for role in ('composer', 'lyricist'):
         if not spec.get(role):
@@ -186,6 +191,7 @@ def layout_mscx(score, spec):
         # others) stands on its verse's line.
         for off in ly.findall('offset'):
             ly.remove(off)
+    clamp_lines(staffs)
     first = staffs[0]
     measures = first.findall('Measure')
     nums = bar_numbers(measures, spec.get('count_pickup'))
@@ -262,6 +268,26 @@ def layout_mscx(score, spec):
     if spec['hide_tempo']:
         for t in score.iter('Tempo'):
             hide(t)
+
+
+def clamp_lines(staffs):
+    """A held syllable's line ends at the voice's last note before its next sung note: a file's line drawn longer
+    (song 32's verses 2 and 3, eight whole notes long) ran on through every later bar of a part."""
+    from slurs import staff_events
+    for st in staffs:
+        for v in range(4):
+            chords = [(el, t) for el, t, k in staff_events(st, v) if el.tag == 'Chord']
+            for i, (el, t) in enumerate(chords):
+                for ly in el.findall('Lyrics'):
+                    f = ly.find('ticks_f')
+                    if f is None:
+                        continue
+                    nxt = next((u for e, u in chords[i + 1:] if e.find('Lyrics') is not None), None)
+                    last = max((u for e, u in chords[i + 1:] if nxt is None or u < nxt), default=None)
+                    if last is None:
+                        ly.remove(f)
+                    elif t + Fraction(f.text) > last:
+                        f.text = str(last - t)
 
 
 def sung_bars(staffs, spec=None):

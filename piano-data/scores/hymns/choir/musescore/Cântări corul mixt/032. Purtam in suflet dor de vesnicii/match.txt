@@ -7,3 +7,4 @@ count-pickup
 systems: 1 4 7 10 14
 spatium: 1.3
 slur: Tenor 11 +1/8, Tenor 11+1/4 +1/8, Tenor 13 +1/8, Tenor 13+1/4 +1/8
+bar-length: 1 1/4, 17 3/4

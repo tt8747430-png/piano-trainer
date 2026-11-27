@@ -69,7 +69,7 @@ def structure_xml(score, spec):
 
 
 def cut_bar(score, spec, bar, length):
-    """A bar printed shorter than its time (the last bar after a pickup): the rests after `length` (in quarters)
+    """A bar printed shorter than its time (a pickup, the last bar after one): the rests past `length` (in quarters)
     dropped from every voice, each voice again from the bar's start, so MuseScore reads the bar as that long."""
     for part in score.findall('part'):
         measures = part.findall('measure')
@@ -84,14 +84,19 @@ def cut_bar(score, spec, bar, length):
             elif el.tag == 'forward':
                 t += Fraction(int(el.findtext('duration')), div)
             elif el.tag == 'note':
-                start = t
                 if el.find('chord') is None:
                     t += Fraction(int(el.findtext('duration') or 0), div)
-                if el.find('rest') is not None and start >= length:
-                    continue
                 voices.setdefault((el.findtext('staff') or '1', el.findtext('voice') or '1'), []).append(el)
             else:
                 keep.append(el)
+        # each voice to `length`: its rests after it dropped, and a pickup's rests before its notes (a file that
+        # writes its pickup as a whole bar with a hidden rest first: song 32)
+        size = lambda n: Fraction(int(n.findtext('duration') or 0), div) if n.find('chord') is None else 0
+        for key, ns in voices.items():
+            while sum(size(n) for n in ns) > length and ns[-1].find('rest') is not None:
+                ns.pop()
+            while sum(size(n) for n in ns) > length and ns[0].find('rest') is not None:
+                ns.pop(0)
         for el in keep:
             if el.tag != 'barline':
                 m.append(el)
