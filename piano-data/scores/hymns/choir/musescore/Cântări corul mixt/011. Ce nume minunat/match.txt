@@ -5,6 +5,10 @@ lyricist: Daniel Stăuceanu
 composer: A. Mieir
 systems: 1 6 13 21
 dashed: 20 22
+slur: Alto 8 +1/2, Alto 17 +1/2, Tenor 17 +3/4
+
+[Alto notes]
+1: @7 F4:4 E4:4 F4:4
 
 [Soprano]
 1: @1 1.Ce nu -- me mi -- nu -- nat, ce nu -- me mi -- nu -- nat, Ce nu -- me
