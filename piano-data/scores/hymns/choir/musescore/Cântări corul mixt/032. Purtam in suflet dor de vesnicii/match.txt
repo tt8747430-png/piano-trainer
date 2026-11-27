@@ -1,0 +1,9 @@
+# From 032. Purtăm în suflet dor de veșnicii.pdf (1 page). The words are the choir's full score's
+# (Purtăm_în_suflet_dor_de_veșnicii.mscz), checked against the sheet. The sheet counts its pickup as bar 1.
+title: 32 Purtăm în suflet dor de veșnicii
+composer: Nicolae Moldoveanu
+footer: Corul Bisericii Maranata Nürnberg / Fürth
+count-pickup
+systems: 1 4 7 10 14
+spatium: 1.3
+slur: Tenor 11 +1/8, Tenor 11+1/4 +1/8, Tenor 13 +1/8, Tenor 13+1/4 +1/8

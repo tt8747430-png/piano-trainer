@@ -181,6 +181,11 @@ def layout_mscx(score, spec):
             tx = ET.SubElement(t, 'text')
         tx.text = spec[role]
     staffs = staves(score)
+    for ly in score.iter('Lyrics'):
+        # The house places the words: a file's hand-moved syllable (song 32's verse numbers, dragged under the
+        # others) stands on its verse's line.
+        for off in ly.findall('offset'):
+            ly.remove(off)
     first = staffs[0]
     measures = first.findall('Measure')
     nums = bar_numbers(measures, spec.get('count_pickup'))

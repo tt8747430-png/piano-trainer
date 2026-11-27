@@ -169,3 +169,6 @@ by hand.
 - **A file of another arrangement.** Song 30's full file is not the sheet's setting (other notes, another bar count);
   only the altos' file matches. Check each file against the sheet before building from it; when the full file
   differs, every voice is written in from the sheet.
+- **Syllables moved by hand in a file.** Song 32's file had dragged its verse 2 and 3 pickup syllables ("2.E",
+  "3.Du") with offsets, so in the house layout they stood two lines below their verses. The builder now drops every
+  syllable's offset.
