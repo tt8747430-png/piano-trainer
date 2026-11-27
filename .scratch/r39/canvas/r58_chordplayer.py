@@ -144,11 +144,11 @@ ROW59 = lambda label, inner: ('raw', f'<div style="min-height: 56px; box-sizing:
 SUGG59 = f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{suggest59}}}}" as="s" hint-placeholder-count="8"><button type="button" onClick="{{{{s.pick}}}}" style="height: 44px; min-width: 0; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; font-size: 17px; font-weight: 500">{{{{s.r}}}}<sup style="font-size: max(12px, .6em); vertical-align: .55em">{{{{s.x}}}}</sup>{{{{s.b}}}}</button></sc-for></div>'
 QBTN = lambda svg, label, act: f'<button type="button" onClick="{{{{{act}}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: 12px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap">{svg}{label}</button>'
 CP_CHORD59 = (GROUP(ROW59('Chord', POP59('rootPopL', 'openRootPop', 72, 'Root') + POP59('qualPopL', 'openQualPop', 120, 'Quality')),
-                    ROW59('Bass note', POP59('bassPopL', 'openBassPop', 136, 'Bass note')), ('step', 'Duration', 'selLen', 'lenDn', 'lenUp'))
+                    ROW59('Bass note', POP59('bassPopL', 'openBassPop', 136, 'Bass note')), ('step', 'Duration', 'selLen', 'lenDn', 'lenUp'), bg=SHEET)
               + f'<sc-if value="{{{{rootPopOn}}}}" hint-placeholder-val="{{{{false}}}}">{ROOTGRID("chordRoots")}</sc-if>'
               + f'<sc-if value="{{{{qualPopOn}}}}" hint-placeholder-val="{{{{false}}}}">{CHIPROW("qualChips")}</sc-if>'
               + f'<sc-if value="{{{{bassPopOn}}}}" hint-placeholder-val="{{{{false}}}}">{CHIPROW("bassChips")}</sc-if>'
-              + LABELLED('Suggested chords', SUGG59)
+              + f'<section aria-label="Suggested chords" style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 15px; font-weight: 600">Suggested chords</h3>{SUGG59}</section>'
               + f'<div style="display: flex; gap: 8px"><button type="button" onClick="{{{{removeChord}}}}" aria-label="Delete chord" data-tip="Delete chord" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 12px; background: #F4DCD6; color: #B3261E; display: flex; align-items: center; justify-content: center">{TRASHI}</button>'
               + QBTN(DUPI, 'Duplicate', 'duplicate') + QBTN(PLAYS, 'Play from here', 'playFrom') + '</div>')
 
