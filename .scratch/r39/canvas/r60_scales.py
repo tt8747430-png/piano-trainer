@@ -85,7 +85,7 @@ def GRANDSTAFF(label, maxw=None):
     # the meter in Bravura's time digits, as the engine engraves it: each digit two spaces tall, centred on its half
     meter = lambda key, y0: ''.join(f'<path transform="translate({{{{{key}.mx}}}} {y0 - 7 + d}) scale(.028 -.028)" d="{BRAVURA["t4"][0]}" fill="{INK}"></path>' for d in (0, 14))
     beams = lambda key: f'<sc-for list="{{{{{key}.beams}}}}" as="b" hint-placeholder-count="2"><path d="{{{{b.d}}}}" fill="{INK}"></path></sc-for>'
-    return f'<svg viewBox="-17 -5.9 362.6 169.3" width="100%" role="img" aria-label="{label}" style="display: block; overflow: visible{f'; max-width: {maxw}px; margin: 0 auto' if maxw else ''}">{inner}{bass}{brace}{meter("ss", 44)}{meter("ssB", 114)}{beams("ss")}{beams("ssB")}</svg>'
+    return f'<svg viewBox="-17 -5.9 362.6 166.5" width="100%" role="img" aria-label="{label}" style="display: block; overflow: visible{f'; max-width: {maxw}px; margin: 0 auto' if maxw else ''}">{inner}{bass}{brace}{meter("ss", 44)}{meter("ssB", 114)}{beams("ss")}{beams("ssB")}</svg>'
 # the two hands' figures stand on their staves; only the honest note for a scale with no standard fingering stays under them
 FING60 = (f'<sc-if value="{{{{noFing}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 0; text-align: center; font-size: 15px; color: {SOFT}">No standard fingering for this scale</p></sc-if>')
 SCCARDS = lambda cols: (CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"')
