@@ -791,7 +791,6 @@ PIECE = lambda label, cap, icon, extra='': (f'<button type="button" aria-label="
                                               f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">{icon}<span style="font-size: 12px; font-weight: 600">{cap}</span></button>')
 PLAYCAP = lambda label='Play', w=176, act='togglePlay': (f'<button type="button" aria-pressed="{{{{playing}}}}" onClick="{{{{{act}}}}}" style="pointer-events: auto; flex: none; width: {w}px; border: 0; {TINTGRP}; color: #332921; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px">'
           f'<sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}</sc-if><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}</sc-if><span>{label}</span></button>')
-CHEV_D = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>'
 def PLAYASMENU(pos):
     return (f'<sc-if value="{{{{isPlayAs}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
       f'<div role="menu" aria-label="Play as" style="position: absolute; {pos}; z-index: 61; width: 248px; white-space: nowrap; box-sizing: border-box; display: flex; flex-direction: column; padding: 6px; border-radius: 16px; {GLASSFX}">'
@@ -860,7 +859,6 @@ def ch_js(D, W, KH, minOct, mini_w):
     return out.replace('class Component extends DCLogic {\n', 'class Component extends DCLogic {' + PT_LIFE, 1)
 
 # ══ The redesign, two concepts side by side (R42 v80; research: .scratch/r42/plan/chords-research.md) ══
-CHEV_UD = '<svg viewBox="0 0 12 18" width="10" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; align-self: center; opacity: .55"><path d="m2.500 6.500 3.500-3.500 3.500 3.500M2.500 11.500l3.500 3.500 3.500-3.500"></path></svg>'
 # each part is a pop-up button and looks like one: a filled pill with the up-down chevrons (Apple HIG, pop-up buttons)
 PART = f'border: 0; background: {FILL}; margin: 0; min-height: 54px; box-sizing: border-box; padding: 2px 8px 4px 12px; border-radius: 14px; color: {INK}; font: inherit; white-space: nowrap; display: inline-flex; align-items: baseline; gap: 8px'
 # A: the name is the control: three pop-up buttons read as one chord symbol (chord-trainer's row; Apple's pop-up button)

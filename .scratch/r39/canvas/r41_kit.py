@@ -1339,7 +1339,8 @@ def SELFROM(S, SET, name, expr):
 # a setting's row with its value and a pop-up of the values (Apple HIG, Pop-up buttons): the label at the left, the
 # value and ⌃⌄ at the right, the list of values under it with the current one checked; keys {name}V, {name}On,
 # {name}Tg and {name}Opts (each l, on, pick), from SELKEYS
-CHEV_UD = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m7 15 5 5 5-5M7 9l5-5 5 5"></path></svg>'
+# a value that opens a choice (a popup button's ⌃⌄, Apple's): small and soft beside its value, one on every board
+CHEV_UD = '<svg viewBox="0 0 12 18" width="10" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; align-self: center; opacity: .55"><path d="m2.500 6.500 3.500-3.500 3.500 3.500M2.500 11.500l3.500 3.500 3.500-3.500"></path></svg>'
 def SELROW(label, name, line=True):
     return (f'<div style="position: relative; min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 4px 0 12px;' + (f' border-top: 1px solid {LINE}' if line else '') + '">'
             f'<span style="flex: 1; min-width: 0; font-size: 15px">{label}</span>'

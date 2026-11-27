@@ -120,7 +120,7 @@ INPUT = lambda label, val, act='', kb='title': f'<label style="display: flex; fl
 # the draft's acts in the bar, as every editor's (loop round 60, EditorDraft: nothing hangs under the bar): its ···
 # (the language it is written in, Discard changes) and the honey Publish, the way to its Publish page
 PUBB = f'<button type="button" onClick="{{{{goPub}}}}" style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">Publish</button>'
-PEACTS = IB('Publishing', DOTS, 'openMore') + PUBB + IB('Settings', GEARI, 'goSet')
+PEACTS = IB('Publishing', MORE, 'openMore') + PUBB + IB('Settings', GEARI, 'goSet')
 PEMENU = ROWMENU('moreOn', 'Publishing', [('action', 'English ✓', 'closeSheet'), ('action', 'Русский', 'closeSheet'), ('action', 'Discard changes', 'discard', RED)])
 _PEN = INPUT('Name', '{{name}}', 'setName') + INPUT('How it sounds', 'Bright and singable, the sound of a thousand hits', kb='text')
 _PES = SEC(CAPS('Style'), WCHIPS('styles'))
