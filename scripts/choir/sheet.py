@@ -93,6 +93,18 @@ def cut_bar(score, spec, bar, length):
         # writes its pickup as a whole bar with a hidden rest first: song 32)
         size = lambda n: Fraction(int(n.findtext('duration') or 0), div) if n.find('chord') is None else 0
         for key, ns in voices.items():
+            if ns and all(n.find('rest') is not None for n in ns) and sum(size(n) for n in ns) > length:
+                # a voice silent through the bar (a whole-bar rest): one rest the bar's new length, so the bar is
+                # short on every staff (song 39's men in its pickup)
+                r = ns[0]
+                r.find('duration').text = str(int(length * div))
+                rest = r.find('rest')
+                rest.attrib.pop('measure', None)
+                for tag in ('type', 'dot'):
+                    for el in r.findall(tag):
+                        r.remove(el)
+                del ns[1:]
+                continue
             while sum(size(n) for n in ns) > length and ns[-1].find('rest') is not None:
                 ns.pop()
             while sum(size(n) for n in ns) > length and ns[0].find('rest') is not None:

@@ -188,3 +188,8 @@ by hand.
 - **Slurs the sheet does not draw.** Song 34's sheet shows its held syllables by beams and lines, no slurs; the
   builder slurred every held syllable. `unslurred:` names such bars: no slur is made there (in the score or a part),
   and a syllable held inside a word draws its line so the hold still shows and the parts still know it.
+- **A short pickup only on some staves.** Cutting song 39's pickup to three eighths dropped the men's whole-bar rest
+  and left their staff empty, so MuseScore kept the bar full in the score while the women's parts had it short: the
+  parts' words fell an eighth off. A silent voice in a short bar now keeps one rest of the bar's length.
+- **Triplets slurred in the sheet, tied in the file.** Where the men sing a syllable on each note of a slurred
+  triplet (song 39, bars 6, 10, 11), the file's tie is removed (`untie:`) and the slur drawn (`slur:`).
