@@ -24,9 +24,13 @@ def _sect(t, label):
     for m in re.finditer(r'<(/?)section\b', t[a:]):
         depth += -1 if m.group(1) else 1
         if depth == 0: return a, a + m.end()
-def _dock(t, label, head=None):
+_NAMES = {}
+def _dock(t, label, head=None, name=None):
+    # a docked panel is the editor's: an aside, a tabpanel named for the panel on show (one implementation)
     a, b = _sect(t, label); h = t[a:b]
-    h = re.sub(r'style="[^"]*"', f'style="{PANEL}"', h, count=1).replace('role="dialog"', 'role="region"', 1)
+    h = re.sub(r'style="[^"]*"', f'style="{PANEL}"', h, count=1).replace('role="dialog"', 'role="tabpanel"', 1)
+    _NAMES[label] = name
+    h = '<aside' + h[len('<section'):-len('</section')] + '</aside'
     h = re.sub(r'<div aria-hidden="true" style="display: \{\{sheetGrab\}\};[^"]*"></div>', '', h, count=1)
     if head: h = h.replace('>', '>' + head, 1)
     return t[:a] + h + t[b:]
@@ -44,7 +48,7 @@ def player_rail(t):
     g1 = h.index('</div>', h.index('<a href="SectionLaptop.dc.html"', g0)) + len('</div>')
     h = h[:g0] + h[g1:]
     t = t[:a] + h + t[b:]
-    t = _dock(t, 'Settings', head('Versions'))
+    t = _dock(t, 'Settings', head('Versions'), 'Versions')
     # the versions head the Song panel: the sidebar holds the switch and the new versions; the title, the song's acts
     i = t.index('</header>', t.index('>Versions</h2>')) + len('</header>')
     t = t[:i] + '<div style="padding-top: 12px">' + VERPANEL() + '</div>' + t[i:]
@@ -56,7 +60,7 @@ def player_rail(t):
     # View: the view's settings docked, headed by the view's name
     a, b = _sect(t, '{{viewName}} settings'); h = t[a:b]
     h = re.sub(r'<h2[^>]*>\{\{viewName\}\}</h2>', '', h, count=1); t = t[:a] + h + t[b:]
-    t = _dock(t, '{{viewName}} settings', head('View'))
+    t = _dock(t, '{{viewName}} settings', head('View'), 'View')
     # the view choice leaves the bar's end for the View panel's head, as Chordify's "Pick your view" (chordify 002): the
     # views as cards, the chosen one's settings under them (owner, 2026-11-26: "the switch between the view sheet or
     # diagramms … in the right … doesnt make so much sense"); the bar keeps the song and its version alone
@@ -69,7 +73,7 @@ def player_rail(t):
     i = t.index('aria-label="{{viewName}} settings"'); h = t.index('</header>', i) + len('</header>')
     # the whole View panel rebuilt from the kit (owner, 2026-11-26: "improve and refactor the song and view tabs
     # completely"): the views as picture cards, then the chosen view's options as rows, each section a fold
-    e = t.index('</section>', h); t = t[:h] + VIEWPANEL(links=True, inset=False) + t[e:]
+    e = t.index('</aside>', h); t = t[:h] + VIEWPANEL(links=True, inset=False) + t[e:]
     t = t.replace('aria-label="{{viewName}} settings"', 'aria-label="View"', 1)
     vk = ("viewCards: VIEWS.map(([id, name]) => { const on = id === view; return { label: name, on: on ? 'true' : 'false', ring: on ? 'inset 0 0 0 2px #332921' : 'inset 0 0 0 1px #DAD1C8', fw: on ? 600 : 500, "
           "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', ...viewPress(id) }; }), "
@@ -79,7 +83,7 @@ def player_rail(t):
           + SELFROM('s', '(o) => this.setState(o)', 'selText', "lopt('text', s.text ?? 'm', [['s', 'Small'], ['m', 'Medium'], ['l', 'Large']])") + ' ')
     assert t.count('views: VIEWS.map(') == 1
     t = t.replace('views: VIEWS.map(', vk + 'views: VIEWS.map(', 1)
-    i = t.index('<section role="region" aria-label="View"'); j = t.rindex('<sc-if value="{{isView}}"', 0, i)
+    i = t.index('<aside role="tabpanel" aria-label="View"'); j = t.rindex('<sc-if value="{{isView}}"', 0, i)
     t = t[:j] + '<sc-if value="{{panelView}}"' + t[j + len('<sc-if value="{{isView}}"'):]
     # the keys centred in the room beside the panel (their left was set for the whole window)
     assert t.count('kbLeft: 305,') == 1
@@ -96,7 +100,7 @@ def player_rail(t):
     rail = rail + KEYSCARD_F(((('Playback', (('Play or stop', 'Space'), ('Go to start', '⌃Space'), ('Loop', 'L'))),), (('View', (('Practice or Edit', 'P E'), ('Piano keys', 'K'), ('Transpose', 'T'))),), (('Panels', (('Search', '⌘K'), ('Shortcuts', '?'))),)), 840)
     # Audio, Flat's panel (the kit's AUDPANEL, the editor's too): the room and each part's level, the mixer's home
     # after the rail in the tree, as the Song and View panels sit beside it (before it, the band read as the group it closed)
-    rail = rail + (f'<sc-if value="{{{{panelAud}}}}" hint-placeholder-val="{{{{false}}}}"><section role="region" aria-label="Audio" style="{PANEL}">' + head('Audio') + AUDPANEL() + '</section></sc-if>')
+    rail = rail + (f'<sc-if value="{{{{panelAud}}}}" hint-placeholder-val="{{{{false}}}}"><aside role="tabpanel" aria-label="Audio" style="{PANEL}">' + head('Audio') + AUDPANEL() + '</aside></sc-if>')
     e = t.index('</header>', t.index('aria-label="Mode"')) + len('</header>')
     t = t[:e] + rail + t[e:]
     # the bar: the name is the song's menu (its acts), the gear goes
@@ -120,6 +124,7 @@ def player_rail(t):
             "railViewOn: (s.rail ?? 'song') === 'view' ? 'true' : 'false', railViewBg: (s.rail ?? 'song') === 'view' ? '#F6E7C8' : 'transparent', railViewW: (s.rail ?? 'song') === 'view' ? 600 : 500,")
     assert t.count("isMore: open === 'settings',") == 1
     t = t.replace("isMore: open === 'settings',", keys, 1)
+    for old, new in _NAMES.items(): t = t.replace(f'role="tabpanel" aria-label="{old}"', f'role="tabpanel" aria-label="{new}"', 1)
     return t
 
 # The transport in the header on a laptop (owner, 2026-11-26: "the floating actions there on the laptop doesnt make

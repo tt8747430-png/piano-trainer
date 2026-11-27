@@ -1325,7 +1325,8 @@ PE_MOTION = ('<style data-motion>@keyframes pe-pop { from { opacity: 0; scale: .
              f'section[role=dialog][style*="inset: 62px 0"], section[role=dialog][style*="inset: 0"] {{ animation: pe-push 300ms {_EO} }} '
              f'[style*="rgba(51,41,33,.32)"], [style*="rgba(51, 41, 33, 0.32)"] {{ animation: pe-fade 200ms ease-out }} '
              f'[role=status] {{ animation: pe-toast 220ms {_EO} }} '
-             '@media (prefers-reduced-motion: reduce) { [data-dc-tpl], [role] { animation: none !important } [style*="transition"] { transition: none !important } }</style>')
+             f'[role=tabpanel] > * {{ animation: pe-fade 200ms {_EO} }} '
+             '@media (prefers-reduced-motion: reduce) { [data-dc-tpl], [role], [role=tabpanel] > * { animation: none !important } [style*="transition"] { transition: none !important } }</style>')
 
 XI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M18 6 6 18M6 6l12 12"></path></svg>'
 # a layer shown only while its state key holds
