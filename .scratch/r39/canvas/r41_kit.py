@@ -1356,7 +1356,7 @@ KEYSCARD_F = lambda cols, w: (_PIF('keysOn2', f'<div onClick="{{{{closeSheet}}}}
 PE_FOCUS = ('<style data-focus>:focus-visible { outline: 3px solid #356890; outline-offset: 2px } '
             '[style*="width: 76px"]:focus-visible, [style*="width: 100%"]:focus-visible { outline-offset: -3px }</style>')
 
-# Esc closes the top layer alone (testing.md, keyboard only; the tooltips teach it: "Close history · Esc"), on every
+# Esc closes the top layer alone, and a modal takes and gives back the focus (testing.md, keyboard only; the tooltips teach it: "Close history · Esc"), on every
 # Player and editor board: the layer's own way out is pressed, so Esc does exactly what a click outside or its Back
 # does. In order: the topmost scrim or click-catcher laid over the frame (a menu, popover, dialog, sheet), else a
 # control whose tooltip names Esc (Close history), else the open page's Back or Close.
@@ -1369,4 +1369,13 @@ PE_ESC = """<script data-esc>document.addEventListener('keydown', (e) => {
     || [...document.querySelectorAll('[data-tip*="Esc"]')].filter(shown).pop()
     || [...document.querySelectorAll('[role=dialog] [aria-label="Back"], [role=dialog] [aria-label="Close"]')].filter(shown).pop();
   if (pick) { e.preventDefault(); pick.click(); }
-});</script>"""
+});
+// a modal layer takes the focus as it opens (its [autofocus] field, else its first control) and gives it back to the
+// control that opened it as it closes (WAI-ARIA APG, Dialog (Modal)); autofocus alone works only on a page's load
+(() => { let opener = null; const shown = (el) => el.getBoundingClientRect().width > 0;
+  new MutationObserver(() => {
+    const d = [...document.querySelectorAll('[role=dialog][aria-modal=true], [role=alertdialog]')].filter(shown).pop();
+    if (d && !d.contains(document.activeElement)) { opener = opener || document.activeElement; const f = d.querySelector('[autofocus]') || d.querySelector('input, textarea, select, button, [href], [tabindex]:not([tabindex="-1"])'); if (f) f.focus(); }
+    else if (!d && opener) { if (document.contains(opener)) opener.focus(); opener = null; }
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();</script>"""

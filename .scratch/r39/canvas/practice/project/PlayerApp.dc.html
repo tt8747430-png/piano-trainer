@@ -13,7 +13,16 @@
     || [...document.querySelectorAll('[data-tip*="Esc"]')].filter(shown).pop()
     || [...document.querySelectorAll('[role=dialog] [aria-label="Back"], [role=dialog] [aria-label="Close"]')].filter(shown).pop();
   if (pick) { e.preventDefault(); pick.click(); }
-});</script></head>
+});
+// a modal layer takes the focus as it opens (its [autofocus] field, else its first control) and gives it back to the
+// control that opened it as it closes (WAI-ARIA APG, Dialog (Modal)); autofocus alone works only on a page's load
+(() => { let opener = null; const shown = (el) => el.getBoundingClientRect().width > 0;
+  new MutationObserver(() => {
+    const d = [...document.querySelectorAll('[role=dialog][aria-modal=true], [role=alertdialog]')].filter(shown).pop();
+    if (d && !d.contains(document.activeElement)) { opener = opener || document.activeElement; const f = d.querySelector('[autofocus]') || d.querySelector('input, textarea, select, button, [href], [tabindex]:not([tabindex="-1"])'); if (f) f.focus(); }
+    else if (!d && opener) { if (document.contains(opener)) opener.focus(); opener = null; }
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();</script></head>
 <body>
 <x-dc>
 <helmet>
