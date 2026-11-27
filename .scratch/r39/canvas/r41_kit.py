@@ -1325,7 +1325,7 @@ PE_MOTION = ('<style data-motion>@keyframes pe-pop { from { opacity: 0; scale: .
              f'section[role=dialog][style*="inset: 62px 0"], section[role=dialog][style*="inset: 0"] {{ animation: pe-push 300ms {_EO} }} '
              f'[style*="rgba(51,41,33,.32)"], [style*="rgba(51, 41, 33, 0.32)"] {{ animation: pe-fade 200ms ease-out }} '
              f'[role=status] {{ animation: pe-toast 220ms {_EO} }} '
-             '@media (prefers-reduced-motion: reduce) { [data-dc-tpl], [role] { animation: none !important } }</style>')
+             '@media (prefers-reduced-motion: reduce) { [data-dc-tpl], [role] { animation: none !important } [style*="transition"] { transition: none !important } }</style>')
 
 XI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M18 6 6 18M6 6l12 12"></path></svg>'
 # a layer shown only while its state key holds
@@ -1354,7 +1354,10 @@ KEYSCARD_F = lambda cols, w: (_PIF('keysOn2', f'<div onClick="{{{{closeSheet}}}}
 # a control as wide as its column (a rail entry, a full-width row in a panel or menu) draws it inside, where the column's
 # edge would clip it
 PE_FOCUS = ('<style data-focus>:focus-visible { outline: 3px solid #356890; outline-offset: 2px } '
-            '[style*="width: 76px"]:focus-visible, [style*="width: 100%"]:focus-visible { outline-offset: -3px }</style>')
+            '[style*="width: 76px"]:focus-visible, [style*="width: 100%"]:focus-visible { outline-offset: -3px } '
+            # a transport button darkens under the pointer and never moves when pressed (DESIGN.md: buttons change colour
+            # alone; the Player's old capsule scaled to .96, the editor's band did not)
+            '@media (hover: hover) { [role=toolbar] button:hover { filter: brightness(.96) } }</style>')
 
 # Esc closes the top layer alone, and a modal takes and gives back the focus (testing.md, keyboard only; the tooltips teach it: "Close history · Esc"), on every
 # Player and editor board: the layer's own way out is pressed, so Esc does exactly what a click outside or its Back
@@ -1379,3 +1382,4 @@ PE_ESC = """<script data-esc>document.addEventListener('keydown', (e) => {
     else if (!d && opener) { if (document.contains(opener)) opener.focus(); opener = null; }
   }).observe(document.documentElement, { childList: true, subtree: true });
 })();</script>"""
+

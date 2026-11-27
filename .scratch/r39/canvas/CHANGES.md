@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · PENDING · one tooltip and one press on the Player and editor (one implementation; DESIGN.md, buttons never move; craft-details, reduced motion): the editor drew its own tooltip, shown at once at 6, over the app's one (r71: a 500ms wait, a fade, 8 away), and the Player's base carried a third copy; both copies went, the editor keeping only its palette's names above, a disabled tool's reason and no tip for an empty name; the Player's transport scaled to .96 on press where the editor's same band did not: no button moves now, the band's buttons darken under the pointer on both; under reduced motion every transition is instant (the folds' chevrons turned on), and the last transition off the one curve (a pattern fold's 150ms) is on it; the base's old 2px focus ring gave way to the one ring · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · pending
 ## Changes
 
 - 2026-11-27 · ecdc750e · a modal takes the focus as it opens and gives it back as it closes (WAI-ARIA APG, Dialog (Modal); testing.md, keyboard only): Search's field carried autofocus, which a layer opened after load ignores, so the caret stayed on the rail; now Search lands in its field and Credits in Title, and Esc or Cancel returns the focus to Search for an act or the printed title (driven on EditorLaptop; the phone's ☰ and its pages unchanged, no page errors on the four boards) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v807
