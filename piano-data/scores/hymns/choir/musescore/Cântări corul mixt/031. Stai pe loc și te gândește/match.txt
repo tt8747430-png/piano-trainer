@@ -1,0 +1,42 @@
+# From 031. Stai pe loc și te gândește.pdf (1 page). The choir's file holds only the tenors: every voice is written
+# in from the sheet and the song is built from the template. Five verses, then the refrain. The sheet breaks two
+# bars across the line's end (bars 8-9 and 13-14 here, each half a bar of its own); the pickup is bar 0.
+lyricist: J.C. Morgan/D-tru Cornilescu
+composer: G.C. Stebbins
+key: F
+time: 3/4
+bar-length: 8 1/2, 9 1/4, 13 1/2, 14 1/4, 18 1/2
+systems: 0 4 9 14
+marks: 0 mf, 9 mf, 13 fermata, 16 text:rall., 17 >1/2, 17+1/2 fermata, 18 fermata
+
+[Soprano notes]
+1: @0 C5:8. D5:16 @1 C5:4 A4:4 A4:8. Bb4:16 @2 A4:4 F4:4 E4:8 F4:8 @3 G4:4. A4:8 Bb4:8 C5:8
+1: @4 A4:2 C5:8. D5:16 @5 C5:4 A4:4 A4:8. Bb4:16 @6 A4:4 F4:4 F4:8 F4:8 @7 F4:8 Bb4:8 A4:4 G4:4 @8 F4:2
+1: @9 C5:8. C5:16 @10 D5:4 Bb4:4 D5:8. D5:16 @11 C5:4 A4:4 C5:8 A4:8 @12 G4:8 C5:8 E5:4 D5:4 @13 C5:2
+1: @14 C5:8. D5:16 @15 C5:4 A4:4 A4:8. Bb4:16 @16 A4:4 F4:4 F4:8 F4:8 @17 F4:8 Bb4:8 A4:4 G4:4 @18 F4:2
+
+[Alto notes]
+1: @0 F4:8. F4:16 @1 F4:4 F4:4 F4:8. F4:16 @2 F4:4 u:4 C4:8 E4:8 @3 E4:4. G4:8 G4:8 E4:8
+1: @4 F4:2 F4:8. F4:16 @5 F4:4 F4:4 F4:8. F4:16 @6 F4:4 C4:4 u:8 Eb4:8 @7 D4:8 G4:8 F4:4 E4:4 @8 u:2
+1: @9 F4:8. F4:16 @10 F4:4 D4:4 F4:8. F4:16 @11 F4:4 F4:4 F4:8 G4:8 @12 E4:8 G4:8 F4:4 G4:8 F4:8 @13 E4:2
+1: @14 F4:8. F4:16 @15 F4:4 F4:4 F4:8. F4:16 @16 F4:4 C4:4 u:8 Eb4:8 @17 D4:8 G4:8 F4:4 E4:4 @18 u:2
+
+[Tenor notes]
+1: @0 A3:8. Bb3:16 @1 A3:4 C4:4 C4:8. D4:16 @2 C4:4 C4:4 C4:8 C4:8 @3 C4:4. C4:8 C4:8 C4:8
+1: @4 C4:2 A3:8. Bb3:16 @5 A3:4 C4:4 C4:8. D4:16 @6 C4:4 A3:4 A3:8 A3:8 @7 Bb3:8 D4:8 C4:4 Bb3:4 @8 A3:2
+1: @9 A3:8. A3:16 @10 Bb3:4 F3:4 Bb3:8. Bb3:16 @11 A3:4 C4:4 A3:8 C4:8 @12 C4:8 E4:8 C4:4 B3:4 @13 C4:4 Bb3:4
+1: @14 A3:8. Bb3:16 @15 A3:4 C4:4 C4:8. D4:16 @16 C4:4 A3:4 A3:8 A3:8 @17 Bb3:8 D4:8 C4:4 Bb3:4 @18 A3:2
+
+[Bass notes]
+1: @0 F3:8. F3:16 @1 F3:4 F3:4 F3:8. F3:16 @2 F3:4 A3:4 Bb3:8 A3:8 @3 G3:4. F3:8 E3:8 C3:8
+1: @4 F3:2 F3:8. F3:16 @5 F3:4 F3:4 F3:8. F3:16 @6 F3:4 F3:4 D3:8 C3:8 @7 Bb2:8 G2:8 C3:4 C3:4 @8 F3:2
+1: @9 F3:8. F3:16 @10 Bb2:4 Bb2:4 Bb2:8. Bb2:16 @11 F3:4 F3:4 D3:8 E3:8 @12 G3:8 G3:8 A3:4 G2:4 @13 C3:2
+1: @14 F3:8. F3:16 @15 F3:4 F3:4 F3:8. F3:16 @16 F3:4 F3:4 D3:8 C3:8 @17 Bb2:8 G2:8 C3:4 C3:4 @18 F3:2
+
+[Soprano]
+1: @0 1.Stai pe @1 loc şi te gân -- @2 deş -- te, Un -- de'a -- @3 lergi a -- şa gră -- @4 bit? Da -- că @5 nu'l dai as -- cul -- @6 ta -- re, vei a -- @7 vea un trist sfâr -- @8 şit!
+1: @9 Vi -- no @10 as -- tăzi, vin' de -- @11 gra -- bă, Vi -- no @12 la I -- sus Cel @13 Sfânt! @14 Mâi -- ne @15 poa -- te, ci -- ne @16 şti -- e, nu mai @17 eşti pe'a -- cest pă -- @18 mânt!
+2: @0 2.Te'ai zbă -- @1 tut prea mul -- tă @2 vre -- me în ru -- @3 şi -- ne şi pă -- @4 cat. Scoa -- lă @5 azi şi pă -- ră -- @6 seş -- te tot tre -- @7 cu -- tu'n -- tu -- ne -- @8 cat!
+3: @0 3.În lu -- @1 mi -- nă, fra -- te @2 dra -- gă, Li -- ber @3 vei pu -- tea să @4 mergi, sub pri -- @5 vi -- rea u -- nui @6 Ta -- tă plin de @7 dra -- gos -- te, să'L @8 crezi!
+4: @0 4.Şi la @1 ca -- pă -- tul vi -- @2 e -- ţii moş -- te -- @3 ni -- rea vei pri -- @4 mi, pre -- gă -- @5 ti -- tă pen -- tru @6 ti -- ne 'na -- in -- @7 te de veş -- ni -- @8 cii.
+5: @0 5.Stai pe @1 loc şi te gân -- @2 deş -- te, că nu'i @3 vre -- me de pier -- @4 dut. Vi -- no @5 azi căci poa -- te @6 mâi -- ne nu mai @7 poţi ve -- ni nici -- @8 când.
