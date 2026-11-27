@@ -60,7 +60,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 26 | Sub crucea Ta | Done: as printed (matched to its PDF) | – | – | – | – | – | 2 | 1 |  | – |
 | 27 | Tatăl nostru | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 28 | Deșteptare, strigă glasul Domnului | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 29 | Vine-o zi | Done: a part per voice (no words in any of its files) | – | – | – | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | – |
+| 29 | Vine-o zi | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 30 | Laudă astăzi pe Domnul | Single voices only, no full score | – | – | – | – | Alto, Tenor | 1 |  |  | – |
 | 31 | Stai pe loc și te gândește | Single voices only, no full score | – | – | – | – | – | 1 |  |  | – |
 | 32 | Purtam in suflet dor de vesnicii | Done: a part per voice | 3 | 2 staves, voices 2/2, 17 bars, `Purtăm_în_suflet_dor_de_veșnicii.mscz` | yes | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
