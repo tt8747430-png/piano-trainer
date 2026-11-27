@@ -5,6 +5,7 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
 
 ## The rulings as they stand
 
+- **Audio, the Player's word; the chart its own glyph** (the loop, 2026-11-27). Why: one word per thing (ux-writing, Harmonize): the Player and the editor call their sound panel Audio, the Chord player called it Sound; it is Audio on the rail, in ☰ and on its page. The Chart panel wore the editor's Layout table; it wears a page of text (Lucide file-text), the chart being how the chords are written.
 - **One icon, one meaning** (the loop, 2026-11-27). Why: layers is the Player's Versions; the Chord player wore it for Style and both progressions acts. Style is Lucide's drum on the rail and in ☰, Save to my progressions list-plus, Open in Progressions list-music (ux-principles, One thing, one icon).
 - **Export, the Player's shape** (the loop, one shape per thing, 2026-11-27). Why: the Player and the editor export through one Export row whose formats open beside it (a submenu on a laptop, a page with ← on a phone); the Chord player listed Export MIDI and Export chart as two rows of their own. Its Export row now holds MIDI and Chart (.txt); its file acts read Share…, Export ›, Import chart… on both sizes. Share… keeps its own word: it opens live sharing with its options, not a copied link.
 - **The band under 1280** (the loop, every width, 2026-11-27). Why: at 1024 (a small laptop, an iPad on its side) the Player's band overflowed by about 70 and the Chord player's by about 30; every act stays, so what gives way is what can say less: Version history folds to its clock (its time in its tip), the song's or sheet's name shrinks first to 120 and truncates. Under 768 the phone's header takes over. A bar's last control names itself flush with the screen's edge, never centred past it (HIG, help tags). Built as a container query on the band (`BANDNARROW`, `r41_kit.py`; `r71_tips.py`).
@@ -24,14 +25,14 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     at the band's end. Under it a rail, 76: Chords (the key's chords, tapped or dragged into a bar), Styles (the
     styles as rows, the chosen one checked, its feel beside it), Genos (the arranger's panel in full: who plays and
     whether it plays, the connection under it with Try again, Main A–D and Break, Intro I–III, Ending/rit. I–III;
-    Follow a MIDI arranger under it), Sound (Piano, Bass, Drums, Volume; Voicing), Chart (Time signature, Written
+    Follow a MIDI arranger under it), Audio (Piano, Bass, Drums, Volume; Voicing), Chart (Time signature, Written
     as); Search and Shortcuts at its foot. A panel, 352, opens beside the rail, « closes it. The chart takes the
     rest, its name in the band; the keys dock under it, the band's keys button showing or hiding them. While
     following and another panel is open, the Genos docks over the keys in its compact row (Start/Stop, Main A–D, ⌃ to
     its panel).
   - **Phone:** Flat's phone header: ←, the transport capsule (Go to start, Play, Loop, Playback options), the keys,
     ☰. The chart keeps its name over it (the name's menu: the sheets). ☰ drops the sheet's places as rows (Chords,
-    Style, Key, Tempo, Repeats, Sound, Chart, MIDI), then Share…, Export MIDI, Export chart, Import chart…, then Save
+    Style, Key, Tempo, Repeats, Audio, Chart, MIDI), then Share…, Export MIDI, Export chart, Import chart…, then Save
     to my progressions and Open in Progressions; each place a page with ← back to ☰. The Genos sits compact over the
     keys, Start/Stop as its glyph (Main A–D hold 44 each only so), Full and Minimize at its end.
 - **The layout is the learner's** *(Edit layout, the dock, the gear and the Chords column superseded 2026-11-27 by R77, above.)* (owner, 2026-11-18: "i want more user customizable ui like draggable resizable,

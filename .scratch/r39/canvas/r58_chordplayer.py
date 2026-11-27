@@ -1,8 +1,10 @@
 # R58: the Chord player redrawn to its brief (.scratch/r39/plan/practice-chord-player.md, rulings of 2026-11-13):
 # one icon, one meaning (ux-principles): layers is Versions' alone; a style is the drum (Lucide), saving to the
-# learner's progressions list-plus, the Progressions place list-music
+# learner's progressions list-plus, the Progressions place list-music; the chart (how it is written) a page of text,
+# never the editor's Layout table; the sound panel is Audio, the Player's and the editor's word
 DRUMP = '<path d="m2 2 8 8"></path><path d="m22 2-8 8"></path><ellipse cx="12" cy="9" rx="10" ry="5"></ellipse><path d="M7 13.4v7.9"></path><path d="M12 14v8"></path><path d="M17 13.4v7.9"></path><path d="M2 9v8a10 5 0 0 0 20 0V9"></path>'
 LISTPLUSP = '<path d="M11 12H3"></path><path d="M16 6H3"></path><path d="M16 18H3"></path><path d="M18 9v6"></path><path d="M21 12h-6"></path>'
+CHARTP = '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path>'
 LISTMUSP = '<path d="M21 15V6"></path><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M12 12H3"></path><path d="M16 6H3"></path><path d="M12 18H3"></path>'
 DOTSB = IB('More', MORE, 'openMore')
 # Musicca's chord sheet (Root, Chord, Bass note, Duration − n beats +, Suggested chords, Play from here, Duplicate,
@@ -355,7 +357,7 @@ TOAST76 = TOAST(256, z=56)
 # screen (Flat's score page: its dark band, its rail of panels, its keyboard docked at the foot). Laptop: the band
 # (✕, the sheet's name and its menu, the transport Go to start · Play ▾ · Metronome · Loop, the sheet's Key, Tempo and
 # Style as the band's pills, MIDI; Undo and the keys at its end), a rail of panels at the left (Chords, Styles, Genos,
-# Sound, Chart; Search and Shortcuts at its foot), the chart in the middle, the keys docked under it. Phone: Flat's
+# Audio, Chart; Search and Shortcuts at its foot), the chart in the middle, the keys docked under it. Phone: Flat's
 # phone header (←, the transport capsule, the keys, ☰), ☰ the rail's places and the sheet's file acts as rows. This
 # supersedes R76's Edit layout: the floating dock, the gear and the layout's tags, zones and tray go (one place for each
 # panel, as the Player's; the Genos keeps its own Full, Compact and Minimized).
@@ -403,13 +405,13 @@ GENOSI = _LI('<rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6
 RAIL77 = (f'<nav aria-label="Panels" style="flex: none; width: 76px; padding: 12px 0; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
           f'<div role="tablist" aria-orientation="vertical" aria-label="Panels" style="display: flex; flex-direction: column; gap: 4px">'
           + _RAILBTN('Chords', CHORDSI, 'Ch', 'Chords') + _RAILBTN('Styles', f'<svg viewBox="0 0 24 24" width="22" height="22" {I}>{DRUMP}</svg>', 'St', 'Styles') + _RAILBTN('Genos', GENOSI, 'Ge', 'Genos')
-          + _RAILBTN('Sound', AUDIOI, 'So', 'Sound') + _RAILBTN('Chart', LAYOUTI, 'Ca', 'Chart') + '</div>'
+          + _RAILBTN('Audio', AUDIOI, 'So', 'Audio') + _RAILBTN('Chart', f'<svg viewBox="0 0 24 24" width="22" height="22" {I}>{CHARTP}</svg>', 'Ca', 'Chart') + '</div>'
           + '<span style="flex: 1"></span>' + _RAILBTN('Search', SEARCHI, 'Srch', 'Search · ⌘K', 'cpSearch') + _RAILBTN('Shortcuts', KBDI, 'Keys', 'Shortcuts · ?', 'cpKeysHelp') + '</nav>')
 _DRAGB = DRAG[DRAG.index('<div style="display: grid'):]
 STYLEROWS = (f'<div role="radiogroup" aria-label="Style" style="display: flex; flex-direction: column; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
              f'<sc-for list="{{{{cpStyles}}}}" as="y" hint-placeholder-count="6"><button type="button" role="radio" aria-checked="{{{{y.on}}}}" onClick="{{{{y.pick}}}}" style="min-height: 48px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {{{{y.line}}}}; background: transparent; color: {INK}; font: inherit; font-size: 15px; text-align: left; display: flex; align-items: center; gap: 12px; cursor: pointer">'
              f'<span aria-hidden="true" style="flex: none; width: 20px; display: flex">{{{{y.check}}}}</span><span style="flex: 1; font-weight: {{{{y.fw}}}}">{{{{y.n}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{y.feel}}}}</span></button></sc-for></div>')
-# the page or panel is titled Sound or Chart, so its first group stands bare under that title (no caption repeating it)
+# the page or panel is titled Audio or Chart, so its first group stands bare under that title (no caption repeating it)
 SOUND77 = (GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'), ('link', 'Volume', '80%', ''))
            + LABELLED('Playing', GROUP(('seg', 'Voicing', 'cpVSeg', 200))))
 CHART77 = GROUP(('link', 'Time signature', '4/4', ''), ('seg', 'Written as', 'namesSeg', 200))
@@ -424,7 +426,7 @@ _PANEL = lambda k, title, inner: f'<sc-if value="{{{{rail{k}On}}}}" hint-placeho
 GENOSPANEL = (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">'
               + HEAD77 + ARLINE77 + f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div></div></sc-if>' + FOLLOW77)
 PANELS77 = (_PANEL('Ch', '{{keyHead}}', _DRAGB + f'<p style="margin: 0; font-size: 14px; color: {SOFT}">Tap a chord to put it in the chosen place, or drag it into a bar.</p>')
-            + _PANEL('St', 'Styles', STYLEROWS) + _PANEL('Ge', 'Genos', GENOSPANEL) + _PANEL('So', 'Sound', SOUND77) + _PANEL('Ca', 'Chart', CHART77))
+            + _PANEL('St', 'Styles', STYLEROWS) + _PANEL('Ge', 'Genos', GENOSPANEL) + _PANEL('So', 'Audio', SOUND77) + _PANEL('Ca', 'Chart', CHART77))
 
 # the chart, its name in the band on a laptop (the chart starts on its first section); the phone keeps it over the chart
 _c = CHART59('{{chartCols}}', 6, 76, 28, 1)
@@ -457,12 +459,12 @@ PHNAV77 = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}
            f'<nav aria-label="{{{{sheetsL}}}}" class="nos" style="position: absolute; z-index: 61; top: 120px; right: 8px; left: 24px; max-height: calc(100% - 170px); overflow-y: auto; box-sizing: border-box; padding: 12px 8px; border-radius: 22px; background: {PAGE}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 18px 48px -12px rgba(51,41,33,.38); display: flex; flex-direction: column; gap: 8px">'
            f'<p style="margin: 0; padding: 4px 12px 0; text-align: center; font-size: 17px; font-weight: 600; line-height: 22px; color: {INK}">{{{{sheetsL}}}}</p>'
            + FROWS([(_FI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>'), 'Chords', '', 'cpPhChords'), (_FI(DRUMP), 'Style', '{{styleL}}', 'openStyle'), ('Tr', 'Key', '{{keyL}} major', 'openKey'), ('Speed', 'Tempo', '{{bpmL}} BPM', 'openTempo'),
-                    (_FI('<path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path>'), 'Repeats', '{{repL}}', 'openRep'), ('Aud', 'Sound', '', 'cpPhSound'), ('Lay', 'Chart', '{{namesL}}', 'cpPhChart'), ('Midi', 'MIDI', '{{cpMidiL}}', 'cpPhMidi')], lines=False, h=48)
+                    (_FI('<path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path>'), 'Repeats', '{{repL}}', 'openRep'), ('Aud', 'Audio', '', 'cpPhSound'), (_FI(CHARTP), 'Chart', '{{namesL}}', 'cpPhChart'), ('Midi', 'MIDI', '{{cpMidiL}}', 'cpPhMidi')], lines=False, h=48)
            + _sep + FROWS([('Share', 'Share…', '', 'openShare', INK, False), ('Exp', 'Export', '', 'cpPhExp'), (FICONS['Exp'].replace('M12 3v12M7 10l5 5 5-5', 'M12 15V3M7 8l5-5 5 5'), 'Import chart…', '', 'importChart', INK, False)], lines=False, h=48)
            + _sep + FROWS([(_FI(LISTPLUSP), 'Save to my progressions', '', 'saveProg', INK, False), (_FI(LISTMUSP), 'Open in Progressions', '', 'Progressions.dc.html')], lines=False, h=48) + '</nav></sc-if>')
 # Export, the Player's shape: one row, its formats on a page with ← on a phone and a submenu on a laptop
 EXPROWS77 = GROUP(('action', 'MIDI', 'exportMidi', INK), ('action', 'Chart (.txt)', 'exportChart', INK), bg=SHEET)
-PHPAGES77 = (FSHEET('cpPhExpOn', 'Export', EXPROWS77, back='phToMenu') + FSHEET('cpPhSoundOn', 'Sound', SOUND77, back='phToMenu') + FSHEET('cpPhChartOn', 'Chart', CHART77, back='phToMenu') + FSHEET('cpPhMidiOn', 'MIDI', MIDI77, back='phToMenu')
+PHPAGES77 = (FSHEET('cpPhExpOn', 'Export', EXPROWS77, back='phToMenu') + FSHEET('cpPhSoundOn', 'Audio', SOUND77, back='phToMenu') + FSHEET('cpPhChartOn', 'Chart', CHART77, back='phToMenu') + FSHEET('cpPhMidiOn', 'MIDI', MIDI77, back='phToMenu')
              + FSHEET('cpPhChordsOn', '{{keyHead}}', _DRAGB, back='phToMenu'))
 # the band's popovers on a laptop: Playback options (Repeats, Count-in) under ▾, MIDI under its cable; Key, Tempo and Style
 # open their wheels under their pills
