@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · a54f43fb · a chord's dialog on the laptop hangs under the chord it edits (it stood over the chart and covered that chord), below it or above where the screen ends first · ChordPlayer, ChordPlayerLaptop · **pending**
 
 ## Changes
 
