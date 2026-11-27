@@ -117,6 +117,29 @@ function windowsOf(bars: readonly PlayedBar[]): Window[] {
   )
 }
 
+/** The metronome's clicks in a window, from its start: each beat of its bar inside it, the bar's first accented. */
+function windowClicks(
+  barStart: Tick,
+  window: Window,
+  meter: ChordSheet['meter'],
+  seconds: (ticks: Tick) => number,
+): Sound[] {
+  const beats = beatsPerBar(meter)
+  const step = barTicks(meter) / beats
+  const clicks: Sound[] = []
+  for (
+    let beat = Math.ceil((window.from - barStart) / step);
+    barStart + beat * step < window.to;
+    beat++
+  )
+    clicks.push({
+      kind: 'click',
+      at: seconds(barStart + beat * step - window.from),
+      accent: beat % beats === 0,
+    })
+  return clicks
+}
+
 /**
  * The sounds of a window, from its start: the piano's notes struck in it, the bass's and the drums'.
  * The bass and the drums are swung by the style already (their triplet grid); the piano is swung here.
@@ -458,6 +481,15 @@ export function createChordEngine({
       const ended = marks?.[window.bar]?.ending === true && following?.bar !== window.bar
       const ringing = ended || (isLast && plays > 0 && pass >= plays - 1)
       const sounds = windowSounds(band, window, seconds, current.style.swing, ringing ? TAIL : 0)
+      if (current.settings.click)
+        sounds.push(
+          ...windowClicks(
+            band.bars[window.bar]?.startTick ?? 0,
+            window,
+            current.sheet.meter,
+            seconds,
+          ),
+        )
       const handle = audio.play(sounds, nextAt, gain)
       if (window.from === band.bars[window.bar]?.startTick) onBar(window.bar, nextAt)
       queued = [

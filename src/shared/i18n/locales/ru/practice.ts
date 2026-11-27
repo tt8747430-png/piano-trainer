@@ -978,6 +978,7 @@ export const practice: LocaleResources['practice'] = {
     },
     exportMenu: { label: 'Экспорт', midi: 'MIDI', chart: 'Схема (.txt)' },
     metronome: {
+      label: 'Метроном',
       'count-in': 'Метроном: отсчёт',
       on: 'Метроном: включён',
       off: 'Метроном: выключен',

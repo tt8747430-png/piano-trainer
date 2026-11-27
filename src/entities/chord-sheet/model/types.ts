@@ -20,6 +20,8 @@ export interface ChordSheetSettings {
   readonly drums: PartLevel
   /** Bars counted in before the music: none, one or two. */
   readonly countIn: CountIn
+  /** The metronome on: a click on every beat while the sheet plays (the band's metronome, On). */
+  readonly click: boolean
   /** How many times the sheet plays through, 1 to 8; 0 again and again until Stop. */
   readonly plays: number
   /** 0 to 100 %. */
@@ -33,6 +35,7 @@ export const DEFAULT_SHEET_SETTINGS: ChordSheetSettings = {
   bass: { on: true, level: 70 },
   drums: { on: true, level: 70 },
   countIn: 0,
+  click: false,
   plays: 0,
   volume: 80,
   transpose: 0,

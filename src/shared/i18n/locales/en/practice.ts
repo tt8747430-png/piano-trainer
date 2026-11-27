@@ -998,6 +998,7 @@ export const practice = {
     },
     exportMenu: { label: 'Export', midi: 'MIDI', chart: 'Chart (.txt)' },
     metronome: {
+      label: 'Metronome',
       'count-in': 'Metronome: count-in',
       on: 'Metronome: on',
       off: 'Metronome: off',

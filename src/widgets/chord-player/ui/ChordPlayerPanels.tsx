@@ -23,6 +23,10 @@ import { cn } from '@/shared/lib'
 import { relayMeter, SHEET_METERS, type SheetMeter } from '@/shared/lib/arrangement'
 import {
   BackButton,
+  GroupRow,
+  GroupRows,
+  GroupSegmented,
+  GroupSwitch,
   RowButton,
   sayUndo,
   Segmented,
@@ -295,12 +299,21 @@ export function StyleRows({
 }
 
 /** Playback options (the board's `_OPTS`): Repeats and Count-in. */
-export function PlaybackBody({ hand }: { hand: ChordSheetInHand }) {
+export function PlaybackBody({
+  hand,
+  metronome = false,
+}: {
+  hand: ChordSheetInHand
+  /** The metronome's row (a phone's, Flat's Playback options): a laptop has it in the band. */
+  metronome?: boolean
+}) {
   const { t } = useTranslation('practice')
   const { settings } = hand.entry
+  // One card of rows, the board's `_OPTS`: Repeats with its stepper at the row's end, Count-in under its
+  // name, the metronome's switch on a phone.
   return (
-    <div className="flex flex-col gap-6">
-      <PanelSection title={t('chordPlayer.dock.plays')}>
+    <GroupRows surface="sheet" label={t('common:playbackOptions')}>
+      <GroupRow label={t('chordPlayer.dock.plays')}>
         <Stepper
           label={t('chordPlayer.dock.plays')}
           value={settings.plays}
@@ -313,19 +326,24 @@ export function PlaybackBody({ hand }: { hand: ChordSheetInHand }) {
           increase={t('chordPlayer.moreTimes')}
           onChange={(plays) => hand.setSettings({ plays })}
         />
-      </PanelSection>
-      <PanelSection title={t('chordPlayer.settings.countIn')}>
-        <Segmented
-          label={t('chordPlayer.settings.countIn')}
-          value={settings.countIn}
-          options={COUNT_INS.map((bars) => ({
-            value: bars,
-            label: t(`chordPlayer.settings.countIns.${bars}`),
-          }))}
-          onChange={(countIn) => hand.setSettings({ countIn })}
+      </GroupRow>
+      <GroupSegmented
+        label={t('chordPlayer.settings.countIn')}
+        value={settings.countIn}
+        options={COUNT_INS.map((bars) => ({
+          value: bars,
+          label: t(`chordPlayer.settings.countIns.${bars}`),
+        }))}
+        onChange={(countIn) => hand.setSettings({ countIn })}
+      />
+      {metronome ? (
+        <GroupSwitch
+          label={t('chordPlayer.metronome.label')}
+          checked={settings.click}
+          onCheckedChange={(click) => hand.setSettings({ click })}
         />
-      </PanelSection>
-    </div>
+      ) : null}
+    </GroupRows>
   )
 }
 

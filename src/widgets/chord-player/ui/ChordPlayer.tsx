@@ -342,9 +342,24 @@ export function ChordPlayer({
   const toggleLoop = () => band.setLoop(band.looped === null ? loopSection : null)
   const loopName = (index: number) =>
     t(`chordPlayer.sections.${shown.sections[index]?.kind ?? 'verse'}`)
-  const metronome: MetronomeMode = entry.settings.countIn > 0 ? 'count-in' : 'off'
-  /** The metronome's next mode: a bar counted in, or none. */
-  const nextMetronome = () => hand.setSettings({ countIn: entry.settings.countIn > 0 ? 0 : 1 })
+  const metronome: MetronomeMode = entry.settings.click
+    ? 'on'
+    : entry.settings.countIn > 0
+      ? 'count-in'
+      : 'off'
+  /** The metronome's next mode, one press each (Flat's): Count-in, then On (a click every beat), then Off. */
+  const nextMetronome = () => {
+    const next: MetronomeMode =
+      metronome === 'off' ? 'count-in' : metronome === 'count-in' ? 'on' : 'off'
+    hand.setSettings(
+      next === 'count-in'
+        ? { countIn: 1 }
+        : next === 'on'
+          ? { click: true }
+          : { countIn: 0, click: false },
+    )
+    say(t(`chordPlayer.metronome.${next}`))
+  }
 
   useShortcuts(t('chordPlayer.shortcuts.group'), [
     { label: t('chordPlayer.shortcuts.playStop'), combo: { key: ' ' }, run: toggle },
@@ -1010,7 +1025,7 @@ export function ChordPlayer({
               ),
               key: <KeyBody hand={hand} />,
               tempo: <TempoBody hand={hand} />,
-              repeats: <PlaybackBody hand={hand} />,
+              repeats: <PlaybackBody hand={hand} metronome />,
               audio: <AudioBody hand={hand} style={style} />,
               chart: <ChartBody hand={hand} />,
               midi: <MidiBody />,
