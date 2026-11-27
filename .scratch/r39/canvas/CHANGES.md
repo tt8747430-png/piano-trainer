@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · a58f424d · the laptop draft's save state (Saved · not published, Saving…, Offline: not saved yet, Not saved) heads the song's menu as on the phone (it showed nowhere, its patch dead since the band), and the selected Edit tab links to the draft board, not the live editor · EditorDraftLaptop · **pending**
 
 ## Changes
 
