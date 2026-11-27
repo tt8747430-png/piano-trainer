@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · PENDING · the laptop band on the 4/8 scale (spacing-audit; seven-questions 2): its pills (the History clock, Transpose, Practice | Edit) were 10 and 14 inset with a 6 gap, the song's name 10, the transport's circles 10 apart; now 12 on the glyph's side and 16 on the word's (still optical), 8 between glyph and word, the name's chevron 8 in, the circles 8 apart, and a pop-up value's 10 inset 12; measured with spacing_measure: no 6, 10 or 14 left in the band or the panels (the palette's fixed tiles and the A4 page's margins are their own measures) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · pending
 ## Changes
 
 - 2026-11-27 · 511f2a61 · Player and editor radii on DESIGN.md's scale (laws, the design system as layers, 1; craft-details, Corners): the rail's chosen tile 10 → 9, a pop-up value button inside a 12 card 8 → 9 (12 less its 4 inset, the nearest step), the printed title's Credits target 8 → 12 (control); measured: no 8, 10 or 11 left in the editor's own parts (the shared segmented control's 11 waits for its app-wide turn) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v803

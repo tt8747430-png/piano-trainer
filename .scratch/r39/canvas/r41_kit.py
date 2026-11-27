@@ -614,7 +614,7 @@ def PICKKEYS(S, SET):
 # clock opens it in both modes; a row shows that moment's page with the bars it changed in honey; Restore this version
 # brings it back with Undo in its toast (a loss that can be undone happens at once, CLAUDE.md), Close history leaves.
 CLOCKI = _LI('<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>')
-HISTBTN = (f'<button type="button" aria-label="History: saved {{{{histAgo}}}}" data-tip="History" onClick="{{{{openHist}}}}" style="flex: none; height: 40px; box-sizing: border-box; padding: 0 14px 0 10px; border: 0; border-radius: 20px; background: transparent; box-shadow: {ONB_RING}; color: {ONB}; font: inherit; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; white-space: nowrap; cursor: pointer">'
+HISTBTN = (f'<button type="button" aria-label="History: saved {{{{histAgo}}}}" data-tip="History" onClick="{{{{openHist}}}}" style="flex: none; height: 40px; box-sizing: border-box; padding: 0 16px 0 12px; border: 0; border-radius: 20px; background: transparent; box-shadow: {ONB_RING}; color: {ONB}; font: inherit; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; white-space: nowrap; cursor: pointer">'
            f'{CLOCKI.replace("width=\"20\" height=\"20\"", "width=\"18\" height=\"18\"")}<span>Saved {{{{histAgo}}}}</span></button>')
 def HISTVIEW():
     row = (f'<button type="button" role="option" aria-selected="{{{{h.on}}}}" onClick="{{{{h.pick}}}}" style="width: 100%; box-sizing: border-box; padding: 12px 16px; border: 0; border-bottom: 1px solid {LINE}; background: {{{{h.bg}}}}; color: {INK}; font: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px; cursor: pointer">'
@@ -681,7 +681,7 @@ def SONGMENU(takes_href, extra=(), phone=False):
             + _SMSEP + it('Share link', 'actShare') + it('Export', 'toggleExp', '#332921; background: {{expBg}}', f'<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_R}</span>') + it('Print', 'actPrint')
             + ''.join(_SMSEP + ''.join(it(*r) for r in grp) for grp in extra))
     return (f'<div style="position: relative; flex: none; min-width: 0; pointer-events: auto">'
-            f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{smOn}}}}" onClick="{{{{toggleSm}}}}" data-tip="The song’s menu" style="height: 48px; max-width: {"100%" if phone else "320px"}; padding: 0 10px 0 12px; border: 0; border-radius: 12px; background: {{{{smBg}}}}; color: {ONB}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
+            f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{smOn}}}}" onClick="{{{{toggleSm}}}}" data-tip="The song’s menu" style="height: 48px; max-width: {"100%" if phone else "320px"}; padding: 0 8px 0 12px; border: 0; border-radius: 12px; background: {{{{smBg}}}}; color: {ONB}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
             f'<span style="min-width: 0; display: flex; flex-direction: column"><h1 style="margin: 0; font-size: 17px; font-weight: 600; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</h1>'
             f'<span style="font-size: 13px; line-height: 16px; color: {ONB_SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{verName}}}}</span></span>'
             f'<span aria-hidden="true" style="flex: none; display: flex; color: {ONB_SOFT}">{CHEV_D}</span></button>'
@@ -906,7 +906,7 @@ def RENAMEDLG():
 # but practice"): a two-segment switch right after the title, as Flat's mode beside its name (the owner's Flat
 # screenshots) and Apple's segmented control for two exclusive modes; Practice first and the default, the chosen one
 # filled; the same place in both modes so nothing moves; the toolbars and panels are what Edit adds
-_MSEG = 'height: 40px; box-sizing: border-box; padding: 0 14px 0 10px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap'
+_MSEG = 'height: 40px; box-sizing: border-box; padding: 0 16px 0 12px; border-radius: 20px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap'
 MUSICI = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'
 def MODESW(on, practice_href, edit_href, compact=False):
     # Practice | Edit, two tabs side by side (owner, 2026-11-26: "make the switch between the player and the editor a tab
@@ -916,8 +916,8 @@ def MODESW(on, practice_href, edit_href, compact=False):
     # full 40 height, a dense laptop bar's least target (craft-details, Hit area), the ring round both
     # compact (a phone's band, no room for the words beside the song's name): the two glyphs, each a 44 tab named by its
     # word (aria-label and tip), as Flat's phone band carries its modes as glyphs
-    seg = lambda lab, ic, href, sel, key: (f'<a href="{href}" role="tab" aria-selected="{"true" if sel else "false"}"' + (f' aria-label="{lab}"' if compact else '') + f' data-tip="{lab} · {key}" style="flex: none; height: {44 if compact else 40}px; box-sizing: border-box; padding: 0 {13 if compact else 14}px; border-radius: {22 if compact else 20}px; '
-                                          f'background: {ONB if sel else "transparent"}; color: {BAND if sel else ONB}; text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600">{ic}' + ('' if compact else f'<span>{lab}</span>') + '</a>')
+    seg = lambda lab, ic, href, sel, key: (f'<a href="{href}" role="tab" aria-selected="{"true" if sel else "false"}"' + (f' aria-label="{lab}"' if compact else '') + f' data-tip="{lab} · {key}" style="flex: none; height: {44 if compact else 40}px; box-sizing: border-box; padding: 0 {12 if compact else 16}px; border-radius: {22 if compact else 20}px; '
+                                          f'background: {ONB if sel else "transparent"}; color: {BAND if sel else ONB}; text-decoration: none; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600">{ic}' + ('' if compact else f'<span>{lab}</span>') + '</a>')
     return (f'<div role="tablist" aria-label="Mode" style="flex: none; height: {44 if compact else 40}px; box-sizing: border-box; padding: 0; border-radius: {22 if compact else 20}px; box-shadow: {ONB_RING}; display: flex; align-items: center; gap: 2px; pointer-events: auto">'
             + seg('Practice', MUSICI, practice_href, on == 'play', 'P') + seg('Edit', PENI, edit_href, on == 'edit', 'E') + '</div>')
 
@@ -959,7 +959,7 @@ def HDRTRANSPORT(phone=False):
     # (owner, 2026-11-26: "it doesnt make sense with these midi button goes to the settings popup"). Volume left the band
     # for the Audio panel, Record for this popover: Flat's band has neither
     # Transpose after Loop: what the whole song sounds in, named on the pill (the key), its popover under it
-    tr = (f'<button type="button" aria-label="Transpose: {{{{hdKeyL}}}}" data-tip="Transpose · T" aria-haspopup="dialog" aria-expanded="{{{{hdTrX}}}}" onClick="{{{{hdTr}}}}" style="flex: none; height: 40px; padding: 0 10px 0 14px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer">'
+    tr = (f'<button type="button" aria-label="Transpose: {{{{hdKeyL}}}}" data-tip="Transpose · T" aria-haspopup="dialog" aria-expanded="{{{{hdTrX}}}}" onClick="{{{{hdTr}}}}" style="flex: none; height: 40px; padding: 0 12px 0 16px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer">'
           f'{{{{hdKeyL}}}}<span aria-hidden="true" style="display: flex">{CHEV_D}</span></button>')
     midi = b('MIDI keyboard', 'MIDI keyboard', CABLEI, 'hdMidi', f'background: {{{{hdMidiBg}}}}; color: {ONB}', ' aria-haspopup="dialog" aria-expanded="{{hdMidiX}}"')
     if phone:
@@ -968,7 +968,7 @@ def HDRTRANSPORT(phone=False):
         # "MIDI input"), the row having no room for a ▾ beside a finger's 44
         play1 = b('{{hdPlayTip}}', '{{hdPlayTip}} · Space', '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="{{hdPlayD}}"></path></svg>', 'hdPlay', f'background: #EDC684; color: {BAND}')
         return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 2px">{start}{play1}{met}{loop}</div>'
-    return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 10px">{start}{play}{met}{loop}{tr}{midi}</div>'
+    return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 8px">{start}{play}{met}{loop}{tr}{midi}</div>'
 
 def BANDHDR(close_href, mode, practice_href, edit_href, right='', over=False):
     """The one header of the Player's screen, Practice and Edit alike: ✕, the song's menu, the transport, the mode.
@@ -1260,7 +1260,7 @@ CHEV_UD = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m7 15 5
 def SELROW(label, name, line=True):
     return (f'<div style="position: relative; min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 4px 0 12px;' + (f' border-top: 1px solid {LINE}' if line else '') + '">'
             f'<span style="flex: 1; min-width: 0; font-size: 15px">{label}</span>'
-            f'<button type="button" aria-haspopup="listbox" aria-expanded="{{{{{name}X}}}}" aria-label="{label}: {{{{{name}V}}}}" onClick="{{{{{name}Tg}}}}" style="flex: none; height: 40px; padding: 0 8px 0 10px; border: 0; border-radius: 9px; background: {{{{{name}Bg}}}}; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 4px; cursor: pointer">{{{{{name}V}}}}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_UD}</span></button>'
+            f'<button type="button" aria-haspopup="listbox" aria-expanded="{{{{{name}X}}}}" aria-label="{label}: {{{{{name}V}}}}" onClick="{{{{{name}Tg}}}}" style="flex: none; height: 40px; padding: 0 8px 0 12px; border: 0; border-radius: 9px; background: {{{{{name}Bg}}}}; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 4px; cursor: pointer">{{{{{name}V}}}}<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_UD}</span></button>'
             f'<sc-if value="{{{{{name}On}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{name}Tg}}}}" style="position: fixed; inset: 0; z-index: 69"></div><div role="listbox" aria-label="{label}" style="{_SMBOX}; right: 4px; top: 42px; width: 200px">'
             f'<sc-for list="{{{{{name}Opts}}}}" as="o" hint-placeholder-count="3"><button type="button" role="option" aria-selected="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="{_SMROW}">{_SMSLOT(f"<sc-if value=\"{{{{o.cur}}}}\" hint-placeholder-val=\"{{{{false}}}}\">{CHECK}</sc-if>")}<span style="flex: 1">{{{{o.l}}}}</span></button></sc-for></div></sc-if></div>')
 def SELKEYS(S, SET, specs):
