@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · PENDING · Esc closes the top layer alone on every Player and editor board (testing.md, keyboard only; the tooltips already taught "Close history · Esc" and Search's foot "Esc to close", and nothing answered): the kit's PE_ESC presses the layer's own way out, the topmost scrim or click-catcher, else the control whose tooltip names Esc, else the open page's Back; driven: Credits, Search, Shortcuts, Transpose and the song's menu each close with one Esc on the laptop, and on the phone a page off ☰ goes back to ☰, then ☰ closes · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · pending
 ## Changes
 
 - 2026-11-27 · 9cdab76c · one focus ring on every Player and editor board (craft-details, owner's articles 6; review_measure): the editor's boards had no focus-visible rule (the browser's thin black auto ring); the kit's PE_FOCUS, 3px of Deep Sky 2px out as theme.css, goes on each Player and editor board with PE_MOTION, drawn inside on a control as wide as its column so the rail or a panel never clips it; the rail's entries round 12 so the ring follows a shape; the phone palette's category tabs round 9 (their 12 pill less 2) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp, PlayerDesk · v805

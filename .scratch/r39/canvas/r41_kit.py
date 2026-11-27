@@ -1355,3 +1355,18 @@ KEYSCARD_F = lambda cols, w: (_PIF('keysOn2', f'<div onClick="{{{{closeSheet}}}}
 # edge would clip it
 PE_FOCUS = ('<style data-focus>:focus-visible { outline: 3px solid #356890; outline-offset: 2px } '
             '[style*="width: 76px"]:focus-visible, [style*="width: 100%"]:focus-visible { outline-offset: -3px }</style>')
+
+# Esc closes the top layer alone (testing.md, keyboard only; the tooltips teach it: "Close history · Esc"), on every
+# Player and editor board: the layer's own way out is pressed, so Esc does exactly what a click outside or its Back
+# does. In order: the topmost scrim or click-catcher laid over the frame (a menu, popover, dialog, sheet), else a
+# control whose tooltip names Esc (Close history), else the open page's Back or Close.
+PE_ESC = """<script data-esc>document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' || e.defaultPrevented) return;
+  const shown = (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== 'hidden'; };
+  const z = (el) => { for (let n = el; n && n !== document.body; n = n.parentElement) { const v = parseInt(getComputedStyle(n).zIndex, 10); if (v > 0) return v; } return 0; };
+  const covers = [...document.querySelectorAll('div:empty')].filter((d) => { const s = getComputedStyle(d); const r = d.getBoundingClientRect(); return /fixed|absolute/.test(s.position) && s.pointerEvents !== 'none' && r.width >= 320 && r.height >= 320 && z(d) >= 20 && shown(d); });
+  const pick = covers.sort((a, b) => z(b) - z(a))[0]
+    || [...document.querySelectorAll('[data-tip*="Esc"]')].filter(shown).pop()
+    || [...document.querySelectorAll('[role=dialog] [aria-label="Back"], [role=dialog] [aria-label="Close"]')].filter(shown).pop();
+  if (pick) { e.preventDefault(); pick.click(); }
+});</script>"""
