@@ -8,8 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · PENDING · the phone Player's keys docked at the foot as the laptop's and the editor's (the whole width, square, a hairline above, over the page, the music ending 16 above them); the floating keyboard's frame (Move the piano, its resize corners), which floated its grips over the music with the keys hidden under the page, is gone on both sizes · PlayerApp, PlayerDesk · pending
-- 2026-11-27 · PENDING · the printed bar numbers at 12, never under the type floor (they were 11 on a phone's page and on the run boards' staves) · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayChord, PlayExercise · pending
+- 2026-11-27 · c60ac471 · the phone Player's keys docked at the foot as the laptop's and the editor's (the whole width, square, a hairline above, over the page, the music ending 16 above them); the floating keyboard's frame (Move the piano, its resize corners), which floated its grips over the music with the keys hidden under the page, is gone on both sizes · PlayerApp, PlayerDesk · pending
+- 2026-11-27 · c60ac471 · the printed bar numbers at 12, never under the type floor (they were 11 on a phone's page and on the run boards' staves) · PlayerApp, PlayerDesk, Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayChord, PlayExercise · pending
 
 ## Changes
 
