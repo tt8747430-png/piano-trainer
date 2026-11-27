@@ -107,7 +107,7 @@ def _RAILBTN(label, icon, k, tip, act=None):
     # a tooltip only where it says more than the label under the glyph (a shortcut), as Flat's rail shows one only for a
     # label cut short (FLAT_UI_SHELL_AND_MOTION §1.2): "View" over View is said twice
     tipa = f' data-tip="{tip}"' if tip != label else ''
-    return (f'<button type="button"{sel}{tipa} onClick="{{{{{act or "pick" + k}}}}}" style="width: 76px; min-height: 64px; border: 0; padding: 6px 0; background: transparent; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer">'
+    return (f'<button type="button"{sel}{tipa} onClick="{{{{{act or "pick" + k}}}}}" style="width: 76px; min-height: 64px; border-radius: 12px; border: 0; padding: 6px 0; background: transparent; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer">'
             f'<span style="width: 40px; height: 32px; border-radius: 9px; background: {{{{rail{k}Bg}}}}; display: flex; align-items: center; justify-content: center">{icon}</span>'
             f'<span style="font-size: 12px; font-weight: {{{{rail{k}W}}}}; line-height: 1.2">{label}</span></button>')
 _PHEAD = lambda t: (f'<header style="flex: none; height: 64px; box-sizing: border-box; padding: 0 8px 0 16px; display: flex; align-items: center; gap: 8px; box-shadow: inset 0 -1px 0 {LINE}">'
@@ -1347,3 +1347,11 @@ KEYSCARD_F = lambda cols, w: (_PIF('keysOn2', f'<div onClick="{{{{closeSheet}}}}
             f'<header style="height: 64px; padding: 0 8px 0 24px; display: flex; align-items: center; box-shadow: inset 0 -1px 0 {LINE}"><h2 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">Shortcuts</h2><button type="button" aria-label="Close" data-tip="Close · Esc" onClick="{{{{closeSheet}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{XI}</button></header>'
             f'<div style="padding: 4px 24px 24px; display: grid; grid-template-columns: repeat({len(cols)}, 1fr); gap: 0 32px">' + ''.join('<div>' + ''.join(_KGRP(h, *rows) for h, rows in col) + '</div>' for col in cols)
             + '</div></section>'))
+
+# The one focus ring (theme.css: 3px of ring, 2px out; DESIGN.md, Deep Sky is focus), on every Player and editor
+# board: the editor's boards drew none, the browser's thin black auto ring in its place (craft-details, owner's
+# articles 6: focus-visible, never restated per part)
+# a control as wide as its column (a rail entry, a full-width row in a panel or menu) draws it inside, where the column's
+# edge would clip it
+PE_FOCUS = ('<style data-focus>:focus-visible { outline: 3px solid #356890; outline-offset: 2px } '
+            '[style*="width: 76px"]:focus-visible, [style*="width: 100%"]:focus-visible { outline-offset: -3px }</style>')
