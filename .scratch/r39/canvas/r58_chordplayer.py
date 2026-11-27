@@ -62,7 +62,6 @@ BANG = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circ
 
 # ── the chord's sheet, as Musicca's: Root, Chord, Bass note, Duration − n beats +, Suggested chords, the acts ──
 CHIPROW = lambda lst: f'<div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="6"><button type="button" onClick="{{{{p.pick}}}}" style="height: 40px; min-width: 52px; padding: 0 12px; border: 0; border-radius: 10px; background: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 15px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>'
-ACTROW = lambda svg, label, act, color=INK: f'<button type="button" onClick="{{{{{act}}}}}" style="min-height: 48px; width: 100%; display: flex; align-items: center; gap: 12px; padding: 0 16px; border: 0; background: transparent; color: {color}; font: inherit; font-size: 16px; font-weight: 600; text-align: left">{svg}{label}</button>'
 DUPI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>'
 TRASHI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg>'
 PLAYS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z"></path></svg>'
@@ -177,8 +176,6 @@ HEAD59 = (f'<div style="display: flex; align-items: center; gap: 8px; min-height
 MAINS59 = GRP59('Main', 5, LAMPS59('arMains', 'Main') + LAMP59('arBreak', 'Break', 'tBreak'), '5')
 INTRO59 = GRP59('Intro', 3, LAMPS59('arIntros', 'Intro'), '3')
 END59 = GRP59('Ending/rit.', 3, LAMPS59('arEndings', 'Ending'), '3')
-STRIP59 = lambda pos, wide: (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div role="toolbar" aria-label="Genos style controls" style="{pos} z-index: 40; box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; padding: 8px 12px 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}">'
-    + HEAD59 + (f'<div style="display: flex; gap: 16px">{INTRO59}{MAINS59}{END59}</div>' if wide else f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div>') + '</div></sc-if>')
 CP58 = CP58.replace("arTitle: st.playing ?", "arDot: st.playing ? '#44684A' : '#9C9086', arTitle: st.playing ?", 1)
 CP58 = CP58.replace("const lamp = (on, next) => ({", "const lamp = (on, next) => ({ on: !!on,", 1)
 # the arranger's panel is a state (Follow a MIDI arranger, off by default): at rest the chart is the page (loop round 58,
@@ -257,7 +254,6 @@ TITLE76 = (f'<button type="button" data-menuroot-anchor onClick="{{{{openSheets}
 _t0 = '<span style="font-size: 22px; font-weight: 600">My verse and chorus</span>'
 assert _t0 in CHART59(8, 4, 60, 21, 2)
 CHART76 = lambda *a: CHART59(*a).replace(_t0, TITLE76, 1)
-SHEETS76 = ROWMENU('sheetsOn', 'Chord sheets', [('action', 'My verse and chorus<span style="margin-left: auto; font-weight: 700">{{mk1}}</span>', 'openS1'), ('action', 'Blues in F<span style="margin-left: auto; font-weight: 700">{{mk2}}</span>', 'openS2'), ('action', 'Autumn Leaves sketch<span style="margin-left: auto; font-weight: 700">{{mk3}}</span>', 'openS3'), ('action', 'New sheet', 'newSheet'), ('link', 'All chord sheets', '', 'Progressions.dc.html')], 'menuPos', 260)
 
 # a panel's tag in Edit layout: the grip (drag it, or tap it and tap a place) and its name, opening its menu
 GRIPB = lambda pick, name: f'<button type="button" onClick="{{{{{pick}}}}}" aria-label="Move {name}" data-tip="Drag, or tap then tap a place" style="flex: none; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: grab">{GRIP}</button>'
@@ -265,13 +261,6 @@ def PTAG(pick, menu, name, pos='left: 8px; top: 8px'):
     return (f'<sc-if value="{{{{layEdit}}}}" hint-placeholder-val="{{{{false}}}}"><div aria-hidden="true" style="position: absolute; inset: 2px; z-index: 44; border-radius: 12px; outline: 2px dashed #B98A32; outline-offset: -2px; pointer-events: none"></div>'
             f'<div data-menuroot-anchor style="position: absolute; {pos}; z-index: 45; height: 44px; box-sizing: border-box; padding: 0 4px 0 0; border-radius: 22px; {GLASSFX}; display: flex; align-items: center">'
             + GRIPB(pick, name) + f'<button type="button" onClick="{{{{{menu}}}}}" aria-label="{name}: place, size or hide" style="height: 44px; padding: 0 8px 0 0; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px">{name}{CHEV_D}</button></div></sc-if>')
-LAYMENU = MENUSHELL('layMenuOn', '{{layMenuT}}',
-    f'<div style="padding: 6px 8px 2px; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: {SOFT}">Place</div><div style="display: grid; padding: 0 4px">{{PLACE}}</div>'
-    f'<div style="padding: 10px 8px 2px; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: {SOFT}">Size</div><div style="display: grid; padding: 0 4px 6px">{SEGC("sizeSeg", 44, 14)}</div>'
-    f'<div role="separator" style="height: 1px; margin: 4px 12px; background: {LINE}"></div><button type="button" role="menuitem" onClick="{{{{hideP}}}}" style="width: 100%; height: 44px; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; text-align: left; color: {INK}; font: inherit; font-size: 16px">Hide</button>',
-    'layMenuPos', 300)
-LAYMENU_P = LAYMENU.replace('{PLACE}', SEGC('placeSegP', 44, 14))
-LAYMENU_L = LAYMENU.replace('{PLACE}', SEGC('placeSeg', 44, 14))
 # while a panel is picked, the places it may go light up as honey zones; a tap there puts it there
 ZONE = lambda cond, act, label, pos: f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{{act}}}}}" aria-label="Put it {label}" style="position: absolute; {pos}; z-index: 46; border: 2px dashed #B98A32; border-radius: 14px; background: rgba(237,198,132,.28); color: {INK}; font: inherit; font-size: 15px; font-weight: 700">{label}</button></sc-if>'
 DRAGHINT = f'<sc-if value="{{{{dragOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 50%; top: 100px; transform: translateX(-50%); z-index: 47; height: 36px; padding: 0 14px; border-radius: 18px; background: {INK}; color: {SHEET}; display: flex; align-items: center; font-size: 14px; font-weight: 600; white-space: nowrap">{{{{dragT}}}}</div></sc-if>'
@@ -354,9 +343,6 @@ lm58 = (LTOP('Laptop.dc.html', BARR) + TRAY.replace('padding: 0 16px 8px', 'padd
         + ZONE('zBot', 'toBot', 'At the bottom', 'left: 400px; right: 380px; bottom: 150px; height: 100px') + DRAGHINT)
 SH58 = lambda B, P, D=None: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + (D or B)('styleOn', 'Style', WHEEL([('wStyle', 1)])) + (D or B)('keyOn', 'Key', WHEEL([('wKey', 1)])) + (D or B)('tempoOn', 'Tempo', WHEEL([('wTempo', 1)])) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + P + '')
 _MI = lambda l, a, col=INK: f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left">{l}</button>'
-MORE76 = MENUSHELL('moreOn', 'Chord sheet', f'<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}">' + _MI('Save', 'saveDraft') + _MI('Discard draft', 'discardDraft', RED) + f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div></sc-if>'
-                   + _MI('Share…', 'openShare') + _MI('Import chart…', 'importChart') + _MI('Export MIDI', 'exportMidi') + _MI('Export chart', 'exportChart') + _MI('Edit layout', 'openLay') + _MI('Save to my progressions', 'saveProg')
-                   + '<a role="menuitem" href="Progressions.dc.html" style="width: 100%; height: 44px; box-sizing: border-box; border-radius: 10px; padding: 0 12px; display: flex; align-items: center; color: ' + INK + '; font-size: 16px; text-decoration: none">Open in Progressions</a>', 'menuPos', 260)
 TOAST76 = TOAST(256, z=56)
 
 # ── R77 (owner, 2026-11-27: "now begin with the refactoring of the chords player the same way you did with the laptop
