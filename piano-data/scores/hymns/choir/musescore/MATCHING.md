@@ -147,3 +147,7 @@ by hand.
   the builder found no sources and only restyled the earlier made file, which kept its old slurs and part ids. A song
   whose score comes from files is rebuilt from history after the removal is committed, and that build is compared
   again.
+- **A part's own staff-mate's words passed over.** Where no voice moves with a part's whole run, the voice with the
+  most words in it was taken, though the part's staff-mate sang its own words in the run's last bar (song 22, bar 9:
+  the tenors took the sopranos' held "La" and lost the basses' "Lui,"; song 1, bar 16: the altos took the basses'
+  echo "dat." and the tenors the sopranos'). Such a run is now matched bar by bar.

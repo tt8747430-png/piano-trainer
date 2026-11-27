@@ -1,0 +1,50 @@
+# From 022. Să-ngenunchezi.pdf (1 page). The choir's file holds only the tenors (an octave high); every voice is
+# written in from the sheet and the song is built from the template. Three verses, the refrain repeated, the men's
+# own words in the refrain (italics, under their staff), the altos' and tenors' echo "va pri-mi" at the end.
+title: 22 Să'n-genunchezi
+key: Bb
+time: 4/4
+repeat: 9 16
+systems: 1 5 9 12 14
+marks: 1 text:Allegro, 16+1/2 fermata/Soprano
+slur: Alto 2+1/2 +1/4, Bass 2+1/2 +1/4, Alto 8 +1/2, Tenor 8 +1/2, Bass 8 +1/2, Alto 12 +1/2, Alto 14 +1/2
+
+[Soprano notes]
+1: @1 F4:4 G4:8 G4:8 F4:2 @2 D5:8 C#5:8 D5:8 Eb5:8 D5:2 @3 Bb4:4 Bb4:8 C5:8 Bb4:4 G4:4 @4 F4:2. r:4
+1: @5 F4:4 G4:8 G4:8 F4:2 @6 D5:8 C#5:8 D5:8 Eb5:8 D5:2 @7 C5:4 G4:8 G4:8 D5:4 Bb4:4 @8 C5:2 D5:2
+1: @9 D5:2~ D5:4 Bb4:8 G4:8 @10 F4:2~ F4:4 r:4 @11 C5:2~ C5:4 Eb5:8 Eb5:8
+1: @12 D5:2 Bb4:4 r:4 @13 D5:2~ D5:4 C5:8 Bb4:8
+1: @14 G4:2 Eb5:4 r:4 @15 D5:8 D5:4 Bb4:8 D5:4 C5:4 @16 Bb4:2~ Bb4:4 r:4
+
+[Alto notes]
+1: @1 D4:4 Eb4:8 Eb4:8 D4:2 @2 F4:8 E4:8 F4:8 G4:8 F4:4 Ab4:4 @3 G4:4 G4:8 G4:8 G4:4 Eb4:4 @4 D4:2. r:4
+1: @5 D4:4 Eb4:8 Eb4:8 D4:2 @6 F4:8 E4:8 F4:8 G4:8 F4:2 @7 E4:4 E4:8 E4:8 E4:4 E4:4 @8 F4:4 E4:4 F4:2
+1: @9 F4:2~ F4:4 D4:8 Eb4:8 @10 D4:2~ D4:4 r:4 @11 Eb4:2~ Eb4:4 G4:8 G4:8
+1: @12 F4:2 D4:4 r:4 @13 F4:2~ F4:4 Eb4:8 D4:8
+1: @14 Eb4:2 G4:4 r:4 @15 F4:8 F4:4 D4:8 F4:4 Eb4:4 @16 D4:4 Eb4:8 Eb4:8 D4:4 r:4
+
+[Tenor notes]
+1: @1 Bb3:4 Bb3:8 Bb3:8 Bb3:2 @2 Bb3:8 Bb3:8 Bb3:8 Bb3:8 Bb3:2 @3 Eb4:4 Eb4:8 Eb4:8 Eb4:4 Bb3:4 @4 Bb3:2. r:4
+1: @5 Bb3:4 Bb3:8 Bb3:8 Bb3:2 @6 Bb3:8 Bb3:8 Bb3:8 Bb3:8 Bb3:2 @7 G3:4 C4:8 C4:8 G3:4 Bb3:4 @8 A3:4 Bb3:4 A3:2
+1: @9 Bb3:4 Bb3:8 Bb3:8 Bb3:4 r:4 @10 Bb3:4 Bb3:8 Bb3:8 Bb3:4 r:4 @11 A3:4 A3:8 A3:8 A3:4 r:4
+1: @12 Bb3:4 Bb3:8 Bb3:8 F3:4 r:4 @13 Bb3:4 Bb3:8 Bb3:8 Bb3:4 r:4
+1: @14 Bb3:4 Bb3:8 Bb3:8 C4:4 r:4 @15 Bb3:8 Bb3:4 Bb3:8 Bb3:4 A3:4 @16 F3:4 G3:8 G3:8 F3:4 r:4
+
+[Bass notes]
+1: @1 Bb2:4 Bb2:8 Bb2:8 Bb2:2 @2 Bb2:8 Bb2:8 Bb2:8 Bb2:8 Bb2:4 D3:4 @3 Eb3:4 Eb3:8 Eb3:8 Eb3:4 Eb3:4 @4 Bb2:2. r:4
+1: @5 Bb2:4 Bb2:8 Bb2:8 Bb2:2 @6 Bb2:8 Bb2:8 Bb2:8 Bb2:8 Bb2:2 @7 C3:4 C3:8 C3:8 C3:4 C3:4 @8 F3:4 G3:4 F3:2
+1: @9 Bb2:4 Bb2:8 Bb2:8 Bb2:4 r:4 @10 Bb2:4 Bb2:8 Bb2:8 Bb2:4 r:4 @11 F3:4 F3:8 F3:8 F3:4 r:4
+1: @12 Bb2:4 Bb2:8 Bb2:8 Bb2:4 r:4 @13 Bb2:4 Bb2:8 Bb2:8 Bb2:4 r:4
+1: @14 Eb3:4 Eb3:8 Eb3:8 C3:4 r:4 @15 F3:8 F3:4 G3:8 F3:4 F3:4 @16 Bb2:2~ Bb2:4 r:4
+
+[Soprano]
+1: @1 1.Să'n -- ge -- nun -- chezi Hrist' te va pri -- mi, As -- tăzi la El să vii; Vo -- cea'i s'as -- culţi, via -- ţa să ţi'o schimbi, Să n'ai a -- tâ -- tea griji. _
+1: @9 La cru -- cea Lui gri -- ja să'ţi laşi _ Să'n -- ge -- nun -- chezi _ I -- sus te va pri -- mi.|
+2: @1 2.Să'n -- ge -- nun -- chezi mai e -- xis -- tă loc, Vrea sla -- va să ţi'o dea; Şi fe -- ri -- ciri sunt în a -- cel loc, Dă'i doar i -- ni -- ma ta. _
+3: @1 3.Să'n -- ge -- nun -- chezi să în -- de -- păr -- tezi, i -- do -- lii i -- ni -- mii; No -- ul tă -- râm prin cre -- din -- ţă'L vezi, Vi -- no chiar azi să vii. _
+
+[Alto italic]
+1: @16 * va pri -- mi
+
+[Bass italic]
+1: @9 La cru -- cea Lui, la cru -- cea Lui gri -- ja să'ţi laşi, gri -- ja să'ţi laşi Să'n -- ge -- nun -- chezi, săn -- ge -- nun -- chezi

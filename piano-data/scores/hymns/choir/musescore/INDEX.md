@@ -25,7 +25,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 
 | Choir | Songs | Done | To do | To check | Single voices only, no full score | No MuseScore | No folder (in the book only) | Unreadable |
 | --- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Mixed choir | 107 | 63 | 3 | 1 | 20 | 19 | 1 | 0 |
+| Mixed choir | 107 | 64 | 3 | 1 | 19 | 19 | 1 | 0 |
 | Men's choir | 41 | 21 | 0 | 0 | 3 | 17 | 0 | 0 |
 
 ## Mixed choir (`Cântări corul mixt/`)
@@ -53,7 +53,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 19 | Luceafărul Maranata | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 20 | Dumnezeu e steagul meu | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 21 | Fă viața mea | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 22 | Să-ngenunchezi | Single voices only, no full score | – | – | – | – | – | 1 |  |  | – |
+| 22 | Să-ngenunchezi | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 23 | O chemare vine din întunecimi | Single voices only, no full score | – | – | – | – | Alto | 1 |  |  | – |
 | 24 | Grație a lui Isus (1 subfolders) | Done: as printed (matched to its PDF) | 2 | 2 staves, voices 2/2, 32 bars, `Gratie a lui Isus.mscz` | yes | Alto, Bass, Soprano, Soprano, Alto, Tenor, Tenor, Bass | Soprano, Alto, Tenor, Bass | 1 | 1 |  | other |
 | 25 | Isuse pentru mine | No MuseScore | – | – | – | – | – | 1 |  |  | – |

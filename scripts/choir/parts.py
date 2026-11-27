@@ -100,14 +100,21 @@ def part_words(main_staffs, part_staff, track):
             if len(words) == len(moments) and sequence is None:
                 # the same words in its own rhythm: one syllable to each of its notes, in order
                 sequence = (other, dict(zip(sorted(moments), (inside[t] for t in sorted(words)))))
+        bars = {}
+        for item in run:
+            bars.setdefault(item[2], []).append(item)
+        mate = nearest(track, voices)[0]
+        mate_words = any(el.find('Lyrics') is not None for el, t, k in voices.get(mate, []) if lo <= t <= hi)
+        if not exact and len(bars) > 1 and mate_words and mate not in tried and (partial is None or partial[0] != mate):
+            # no voice moves with the whole run and the staff's other voice sings words in it: each bar finds its own
+            # (song 22, bar 9: the basses' own words after bars the tenors sang with the sopranos)
+            queue += [(b, tried) for b in bars.values()]
+            continue
         chosen = exact or (partial[:2] if partial else None) or sequence
         if not chosen:
             # No voice fits the whole run (song 11: the altos' line runs unbroken from the first bar to the last):
             # it is tried again bar by bar, and within a bar each note takes the syllable another voice sings at its
             # moment, the nearest voice first.
-            bars = {}
-            for item in run:
-                bars.setdefault(item[2], []).append(item)
             if len(bars) > 1:
                 queue += [(b, tried) for b in bars.values()]
                 continue
