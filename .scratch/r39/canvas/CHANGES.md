@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · (this commit) · the recording's bar chips are 32 to see and 44 to touch, their reach a pseudo-element rather than transparent borders held in by a −6 margin (which the roll's sideways scroller could clip); they stand the column's 8 under the roll, the card 12 at top and foot · Take, TakeLaptop · pending
+
 ## Changes
 
 - 2026-11-27 · 469beddf · a recording plays with the playhead: the Take's piano roll carries the Player's line, beat by beat from the bar chosen, the roll following it sideways on a phone; the bar strip is a working slider (arrow keys, Home and End, its value said); the "Playing from bar 4" line under it, which the line now shows, is gone · Take, TakeLaptop · v837
