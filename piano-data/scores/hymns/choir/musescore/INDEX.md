@@ -71,7 +71,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 37 | Nu te teme | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 38 | Mărețul har | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 39 | Cânta-voi Domnului | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 40 | Cat mai aproape de Tine | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 24 bars, `Cât mai aproape de Tine - toate vocile.mscz` | no | – | Soprano, Alto, Tenor, Bass, All voices | 1 | 1 |  | piano |
+| 40 | Cat mai aproape de Tine | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 41 | Psalmul 139 | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 42 | Zace-n rece mormânt | Done: a part per voice (no words in any of its files) | 1 | 2 staves, voices 2/2, 20 bars, `042. Zace-n rece mormânt.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
 | 43 | A înviat Hristos (1 subfolders) | To do: unfinished, a staff has no notes | 7 | 4 staves, voices 2/0/2/2, 27 bars, `043. A înviat Hristos.mscz` | no | – | Soprano, Tenor, Bass | 1 |  |  | piano |
