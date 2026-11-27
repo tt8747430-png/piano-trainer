@@ -370,5 +370,162 @@ MORE76 = MENUSHELL('moreOn', 'Chord sheet', f'<sc-if value="{{{{draftOn}}}}" hin
                    + _MI('Share…', 'openShare') + _MI('Import chart…', 'importChart') + _MI('Export MIDI', 'exportMidi') + _MI('Export chart', 'exportChart') + _MI('Edit layout', 'openLay') + _MI('Save to my progressions', 'saveProg')
                    + '<a role="menuitem" href="Progressions.dc.html" style="width: 100%; height: 44px; box-sizing: border-box; border-radius: 10px; padding: 0 12px; display: flex; align-items: center; color: ' + INK + '; font-size: 16px; text-decoration: none">Open in Progressions</a>', 'menuPos', 260)
 TOAST76 = TOAST(256, z=56)
-detail('ChordPlayer', 'Chord player', CP58, ph58 + TOAST76, lm58 + TOAST(296, z=56, laptop=True), '', SH58(BSHEET, CP_PSHEET) + MORE76 + SHEETS76 + LAYMENU_P,
-       (SH58(lambda c, t, b: POPOVER(c, t, b, 'left: 140px; top: 160px', 460), CP_PPOP, lambda c, t, b: POPOVER(c, t, b, 'left: 580px; bottom: 300px', 320)) + MORE76 + SHEETS76 + LAYMENU_L).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html'))
+
+# ── R77 (owner, 2026-11-27: "now begin with the refactoring of the chords player the same way you did with the laptop
+# and mobile layout and such things"): the Chord player in the Player's model, the one shape of a full-screen music
+# screen (Flat's score page: its dark band, its rail of panels, its keyboard docked at the foot). Laptop: the band
+# (✕, the sheet's name and its menu, the transport Go to start · Play ▾ · Metronome · Loop, the sheet's Key, Tempo and
+# Style as the band's pills, MIDI; Undo and the keys at its end), a rail of panels at the left (Chords, Styles, Genos,
+# Sound, Chart; Search and Shortcuts at its foot), the chart in the middle, the keys docked under it. Phone: Flat's
+# phone header (←, the transport capsule, the keys, ☰), ☰ the rail's places and the sheet's file acts as rows. This
+# supersedes R76's Edit layout: the floating dock, the gear and the layout's tags, zones and tray go (one place for each
+# panel, as the Player's; the Genos keeps its own Full, Compact and Minimized).
+_PTAG0 = PTAG
+PTAG = lambda *a, **k: ''
+
+# the Genos panel's head as the app says it (ArrangerStrip): who plays and whether it plays, then the connection as the
+# MIDI keyboard's popover says it, Try again where no Genos answered
+HEAD77 = HEAD59.replace('{{arTitle}}', '{{cpArTitle}}', 1)
+ARLINE77 = (f'<div style="display: flex; align-items: center; gap: 12px; min-height: 44px; margin-top: -4px"><p aria-live="polite" style="flex: 1; min-width: 0; margin: 0; font-size: 14px; line-height: 1.35; color: {SOFT}; text-wrap: pretty">{{{{cpArLine}}}}</p>'
+            f'<sc-if value="{{{{cpAlone}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{cpRetry}}}}" style="flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Try again</button></sc-if></div>')
+START_G = LAMP59('arStart', '<span style="display: flex; justify-content: center"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="{{cpStartD}}"></path></svg></span>', 'togglePlay', 'Start/Stop').replace('min-width: 44px', 'flex: none; width: 44px; min-width: 44px', 1)
+def GENOS77(pos, wide, flat=False):
+    g = GENOS76(pos, wide).replace('{{arTitle}}', '{{cpArTitle}}')
+    if not wide:
+        _c0 = g.index('{{gCompact}}'); _s0 = g.index(START59, _c0)
+        g = g[:_s0] + START_G + g[_s0 + len(START59):]
+    # the connection line under the full panel's head
+    j = g.index(HEAD76.replace('{{arTitle}}', '{{cpArTitle}}')) + len(HEAD76.replace('{{arTitle}}', '{{cpArTitle}}'))
+    g = g[:j] + ARLINE77 + g[j:]
+    return g.replace(', ' + SHADOW, '', 3) if flat else g
+
+# the band's pills after the transport: what the sheet plays in (Key, from the transport's own pill), at (Tempo) and
+# how (Style), each opening its popover under it; MIDI last, as the Player's band
+BPILL = lambda lab, val, act, x: (f'<button type="button" aria-label="{lab}: {val}" data-tip="{lab}" aria-haspopup="dialog" aria-expanded="{{{{{x}}}}}" onClick="{{{{{act}}}}}" style="flex: none; height: 40px; padding: 0 12px 0 16px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer">'
+                                  f'{val}<span aria-hidden="true" style="display: flex">{CHEV_D}</span></button>')
+_tr = HDRTRANSPORT()
+_mi = _tr.index('<button type="button" aria-label="MIDI keyboard"')
+TRANSPORT77 = (_tr[:_mi].replace('aria-label="Transpose: {{hdKeyL}}" data-tip="Transpose · T"', 'aria-label="Key: {{hdKeyL}}" data-tip="Key · T"', 1)
+               + BPILL('Tempo', '{{bpmL}} BPM', 'openTempo', 'tempoX') + BPILL('Style', '{{styleL}}', 'openStyle', 'styleX') + _tr[_mi:])
+assert 'Key: {{hdKeyL}}' in TRANSPORT77
+NAME77 = (f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{sheetsX}}}}" onClick="{{{{openSheets}}}}" data-tip="Chord sheets" style="flex: none; height: 48px; max-width: 280px; padding: 0 8px 0 12px; border: 0; border-radius: 12px; background: {{{{sheetsBg}}}}; color: {ONB}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
+          f'<span style="min-width: 0; display: flex; flex-direction: column"><h1 style="margin: 0; font-size: 17px; font-weight: 600; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{sheetsL}}}}</h1>'
+          f'<span style="font-size: 13px; line-height: 16px; color: {ONB_SOFT}; white-space: nowrap">{{{{cpSubL}}}}</span></span><span aria-hidden="true" style="flex: none; display: flex; color: {ONB_SOFT}">{CHEV_D}</span></button>')
+_bb = lambda lab, tip, svg, act, extra='': f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{_HB}; background: transparent; color: {ONB}">{svg}</button>'
+UNDOI20 = UNDO.replace('width="22" height="22"', 'width="20" height="20"', 1)
+BAND77 = (f'<header data-band style="flex: none; position: relative; z-index: 20; height: 64px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 12px; background: {BAND}; color: {ONB}">'
+          f'<a href="Main.dc.html" aria-label="Close" data-tip="Close · Esc" style="flex: none; width: 40px; height: 40px; border-radius: 20px; color: {ONB}; display: flex; align-items: center; justify-content: center">'
+          '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></a>'
+          + NAME77 + TRANSPORT77 + '<span style="flex: 1"></span>'
+          + _bb('Undo', 'Undo · ⌘Z', UNDOI20, 'undo', ' class="ibd" disabled="{{undoOff}}"') + HDRKEYSBTN + '</header>')
+
+# the rail, as the Player's and the editor's (76, each place a glyph over its word; Search and Shortcuts at its foot)
+CHORDSI = _LI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>')
+GENOSI = _LI('<rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 10h2M10 10h2M16 10h2M6 14h12"></path>')
+RAIL77 = (f'<nav aria-label="Panels" style="flex: none; width: 76px; padding: 12px 0; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
+          f'<div role="tablist" aria-orientation="vertical" aria-label="Panels" style="display: flex; flex-direction: column; gap: 4px">'
+          + _RAILBTN('Chords', CHORDSI, 'Ch', 'Chords') + _RAILBTN('Styles', LAYERSI.replace('width="20" height="20"', 'width="22" height="22"'), 'St', 'Styles') + _RAILBTN('Genos', GENOSI, 'Ge', 'Genos')
+          + _RAILBTN('Sound', AUDIOI, 'So', 'Sound') + _RAILBTN('Chart', LAYOUTI, 'Ca', 'Chart') + '</div>'
+          + '<span style="flex: 1"></span>' + _RAILBTN('Search', SEARCHI, 'Srch', 'Search · ⌘K', 'cpSearch') + _RAILBTN('Shortcuts', KBDI, 'Keys', 'Shortcuts · ?', 'cpKeysHelp') + '</nav>')
+_DRAGB = DRAG[DRAG.index('<div style="display: grid'):]
+STYLEROWS = (f'<div role="radiogroup" aria-label="Style" style="display: flex; flex-direction: column; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
+             f'<sc-for list="{{{{cpStyles}}}}" as="y" hint-placeholder-count="6"><button type="button" role="radio" aria-checked="{{{{y.on}}}}" onClick="{{{{y.pick}}}}" style="min-height: 48px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {{{{y.line}}}}; background: transparent; color: {INK}; font: inherit; font-size: 15px; text-align: left; display: flex; align-items: center; gap: 12px; cursor: pointer">'
+             f'<span aria-hidden="true" style="flex: none; width: 20px; display: flex">{{{{y.check}}}}</span><span style="flex: 1; font-weight: {{{{y.fw}}}}">{{{{y.n}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{y.feel}}}}</span></button></sc-for></div>')
+# the page or panel is titled Sound or Chart, so its first group stands bare under that title (no caption repeating it)
+SOUND77 = (GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'), ('link', 'Volume', '80%', ''))
+           + LABELLED('Playing', GROUP(('seg', 'Voicing', 'cpVSeg', 200))))
+CHART77 = GROUP(('link', 'Time signature', '4/4', ''), ('seg', 'Written as', 'namesSeg', 200))
+FOLLOW77 = (GROUP(('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'))
+            + f'<p style="margin: 0 4px; font-size: 14px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Play leads: a Genos gets its sections at their bars and plays to the app’s clock; with none connected the app’s band plays them.</p>')
+MIDI77 = GROUP(('link', 'MIDI keyboard', 'Not connected', 'Settings.dc.html'), ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'))
+_PHEAD = lambda title: (f'<div style="flex: none; display: flex; align-items: center; min-height: 56px; padding: 0 8px 0 20px; box-shadow: inset 0 -1px 0 {LINE}"><h2 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">{title}</h2>'
+                        f'<button type="button" aria-label="Close the panel" data-tip="Close the panel" onClick="{{{{cpRailNone}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: pointer">{CHEVSL}</button></div>')
+CHEVSL = _LI('<path d="m11 17-5-5 5-5M18 17l-5-5 5-5"></path>')
+_PBODY77 = lambda inner: f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 16px">{inner}</div>'
+_PANEL = lambda k, title, inner: f'<sc-if value="{{{{rail{k}On}}}}" hint-placeholder-val="{{{{{"true" if k == "Ch" else "false"}}}}}"><section aria-label="{title}" style="flex: none; width: 352px; min-height: 0; display: flex; flex-direction: column; box-shadow: inset -1px 0 0 {LINE}">{_PHEAD(title)}{_PBODY77(inner)}</section></sc-if>'
+GENOSPANEL = (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px; padding: 8px 12px 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">'
+              + HEAD77 + ARLINE77 + f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div></div></sc-if>' + FOLLOW77)
+PANELS77 = (_PANEL('Ch', '{{keyHead}}', _DRAGB + f'<p style="margin: 0; font-size: 14px; color: {SOFT}">Tap a chord to put it in the chosen place, or drag it into a bar.</p>')
+            + _PANEL('St', 'Styles', STYLEROWS) + _PANEL('Ge', 'Genos', GENOSPANEL) + _PANEL('So', 'Sound', SOUND77) + _PANEL('Ca', 'Chart', CHART77))
+
+# the chart, its name in the band on a laptop (the chart starts on its first section); the phone keeps it over the chart
+_c = CHART59('{{chartCols}}', 6, 76, 28, 1)
+_a = _c.index('<div style="display: flex; align-items: baseline; gap: 8px">'); _b = _c.index('<sc-for list="{{sec59}}"')
+CHARTL77 = _c[:_a] + _c[_b:]
+# the Genos docked over the keys while another panel is open: Start/Stop and Main A–D in its compact row, Full opens its panel
+GDOCK77 = (f'<sc-if value="{{{{cpGDock}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: none; display: flex; justify-content: center; padding: 0 0 12px">'
+           f'<div role="toolbar" aria-label="Genos style controls" style="width: 560px; height: 64px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 12px; {CARDST}">'
+           f'<span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>' + START59
+           + f'<div role="group" aria-label="Main" style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">{LAMPS59("arMains", "Main")}</div>'
+           + ICB('pickGe', 'The Genos panel', EXPI).replace('margin: -2px -6px -2px 0', 'margin: 0', 1) + '</div></div></sc-if>')
+lm77 = (f'<div data-menuroot style="position: absolute; inset: 0; display: flex; flex-direction: column">' + BAND77
+        + '<div style="flex: 1; min-height: 0; display: flex">' + RAIL77 + PANELS77
+        + '<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">'
+        + '<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 40px 24px">' + SHOWSTATES() + CHARTL77 + '</div>'
+        + GDOCK77 + f'<sc-if value="{{{{cpKeysOn}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS76((110, 170, 240), False, True)}</sc-if>'
+        + '</div></div></div>')
+
+# the phone: Flat's phone header (←, the transport, the keys, ☰), the chart under it with its name, the Genos over the keys
+PHHDR77 = (f'<header data-band style="flex: none; position: relative; z-index: 20; box-sizing: border-box; padding: 0 8px; background: linear-gradient({LINE}, {LINE}) 8px 100% / calc(100% - 16px) 1px no-repeat, {SHEET}; color: {INK}">'
+           f'<div style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 4px"><a href="Main.dc.html" aria-label="Back" data-tip="Back" style="{_PB}; text-decoration: none">{ARROWLI}</a>'
+           + PHTRANSPORT() + PHKEYSBTN.replace('{{hdKeysPh}}', '{{cpKeysPh}}')
+           + f'<button type="button" aria-label="Menu" data-tip="Menu" aria-haspopup="dialog" aria-expanded="{{{{phMenuX}}}}" onClick="{{{{phMenu}}}}" style="{_PB}; color: {{{{phMenuFg}}}}">{MENUI}</button></div></header>')
+ph77 = (PHHDR77
+        + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px {{{{chartPad}}}}; display: flex; flex-direction: column; gap: 16px">{SHOWSTATES()}{CHART76(8, 8, 60, 21, 2)}</main>'
+        + f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}">{GENOS77("position: relative; flex: none; margin: 8px 16px", False)}</sc-if>'
+        + f'<sc-if value="{{{{cpKeysOn}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS76((72, 112, 168), False)}</sc-if>')
+_sep = f'<div role="separator" style="flex: none; height: 1px; margin: 4px 12px; background: {LINE}"></div>'
+PHNAV77 = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
+           f'<nav aria-label="{{{{sheetsL}}}}" class="nos" style="position: absolute; z-index: 61; top: 120px; right: 8px; left: 24px; max-height: calc(100% - 170px); overflow-y: auto; box-sizing: border-box; padding: 12px 8px; border-radius: 22px; background: {PAGE}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 18px 48px -12px rgba(51,41,33,.38); display: flex; flex-direction: column; gap: 8px">'
+           f'<p style="margin: 0; padding: 4px 12px 0; text-align: center; font-size: 17px; font-weight: 600; line-height: 22px; color: {INK}">{{{{sheetsL}}}}</p>'
+           + FROWS([(_FI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>'), 'Chords', '', 'cpPhChords'), ('Song', 'Style', '{{styleL}}', 'openStyle'), ('Tr', 'Key', '{{keyL}} major', 'openKey'), ('Speed', 'Tempo', '{{bpmL}} BPM', 'openTempo'),
+                    (_FI('<path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path>'), 'Repeats', '{{repL}}', 'openRep'), ('Aud', 'Sound', '', 'cpPhSound'), ('Lay', 'Chart', '{{namesL}}', 'cpPhChart'), ('Midi', 'MIDI', '{{cpMidiL}}', 'cpPhMidi')], lines=False, h=48)
+           + _sep + FROWS([('Share', 'Share…', '', 'openShare', INK, False), ('Exp', 'Export MIDI', '', 'exportMidi', INK, False), ('Exp', 'Export chart', '', 'exportChart', INK, False), (FICONS['Exp'].replace('M12 3v12M7 10l5 5 5-5', 'M12 15V3M7 8l5-5 5 5'), 'Import chart…', '', 'importChart', INK, False)], lines=False, h=48)
+           + _sep + FROWS([('Song', 'Save to my progressions', '', 'saveProg', INK, False), ('Song', 'Open in Progressions', '', 'Progressions.dc.html')], lines=False, h=48) + '</nav></sc-if>')
+PHPAGES77 = (FSHEET('cpPhSoundOn', 'Sound', SOUND77, back='phToMenu') + FSHEET('cpPhChartOn', 'Chart', CHART77, back='phToMenu') + FSHEET('cpPhMidiOn', 'MIDI', MIDI77, back='phToMenu')
+             + FSHEET('cpPhChordsOn', '{{keyHead}}', _DRAGB, back='phToMenu'))
+# the band's popovers on a laptop: Playback options (Repeats, Count-in) under ▾, MIDI under its cable; Key, Tempo and Style
+# open their wheels under their pills
+_OPTS = GROUP(('link', 'Repeats', '{{repL}}', ''), ('link', 'Count-in', '1 bar', ''))
+POPS77L = (POPOVER('hdOptsOn', 'Playback options', _OPTS, 'left: 380px; top: 72px', 320) + POPOVER('hdMidiOn', 'MIDI', MIDI77, 'left: 820px; top: 72px', 360))
+NAMEMENU77 = ROWMENU('sheetsOn', 'Chord sheets', [('action', 'My verse and chorus<span style="margin-left: auto; font-weight: 700">{{mk1}}</span>', 'openS1'), ('action', 'Blues in F<span style="margin-left: auto; font-weight: 700">{{mk2}}</span>', 'openS2'), ('action', 'Autumn Leaves sketch<span style="margin-left: auto; font-weight: 700">{{mk3}}</span>', 'openS3'), ('action', 'New sheet', 'newSheet'), ('link', 'All chord sheets', '', 'Progressions.dc.html')], 'menuPos', 280)
+_fileacts = (_sep.replace('margin: 4px 12px', 'margin: 6px 12px') + ''.join(_MI(l, a) for l, a in (('Share…', 'openShare'), ('Import chart…', 'importChart'), ('Export MIDI', 'exportMidi'), ('Export chart', 'exportChart'), ('Save to my progressions', 'saveProg')))
+             + '<a role="menuitem" href="ProgressionsLaptop.dc.html" style="width: 100%; height: 44px; box-sizing: border-box; border-radius: 10px; padding: 0 12px; display: flex; align-items: center; color: ' + INK + '; font-size: 16px; text-decoration: none">Open in Progressions</a>')
+_draftacts = f'<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}">{_sep.replace("margin: 4px 12px", "margin: 6px 12px")}' + _MI('Save', 'saveDraft') + _MI('Discard draft', 'discardDraft', RED) + '</sc-if>'
+NAMEMENU77L = NAMEMENU77.replace('</div></sc-if>', _fileacts + _draftacts + '</div></sc-if>', 1).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')
+NAMEMENU77P = NAMEMENU77.replace('</div></sc-if>', _draftacts + '</div></sc-if>', 1)
+PTAG = _PTAG0
+
+# the state the new boards read, spread first into the board's state (no key of the old board is overridden)
+CP77 = CP58.replace("states: [{ l: 'Following the Genos'", "states: [{ l: 'No Genos found', bg: st.alone ? '#332921' : '#EEE9E2', pick: () => set({ follow: true, alone: !st.alone }) }, { l: 'Following the Genos'", 1)
+_el = "{ l: 'Edit layout', bg: st.editLay ? '#332921' : '#EEE9E2', pick: () => set({ editLay: !st.editLay, dragP: null }) }, "
+assert CP77.count(_el) == 1; CP77 = CP77.replace(_el, '', 1)
+# Playing: the band lit, the chord sounding, the Genos's head saying it plays
+CP77 = CP77.replace("states: [{ l: 'No Genos found'", "states: [{ l: 'Playing', bg: st.playing ? '#332921' : '#EEE9E2', pick: () => set({ playing: !st.playing }) }, { l: 'No Genos found'", 1)
+_j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'On']: RAIL77 === k, ['rail' + k + 'Bg']: RAIL77 === k ? '#EEE2CF' : 'transparent', ['pick' + k]: () => set({ rail77: RAIL77 === k ? 'none' : k, ...(k === 'Ge' ? { follow: true } : {}) }) });
+    const FEEL = ['8 beat', 'slow 8 beat', 'straight 8ths', '6/8 or 4/4', 'swing 8ths', 'Latin'], dev = st.alone ? STY[s] : 'Genos', MAINL = ['A', 'B', 'C', 'D'][(st.arMain ?? 0)] || 'A';
+    const cpKeys = st.cpKeys ?? true;
+    const CP77K = { ...['Ch', 'St', 'Ge', 'So', 'Ca'].reduce((o, k) => ({ ...o, ...rp(k) }), {}), cpRailNone: () => set({ rail77: 'none' }), cpSearch: () => set({ toastT: 'Search: type a chord, a style or an act' }), cpKeysHelp: () => set({ toastT: 'Space plays · L loops · K the keys' }),
+      cpStyles: STY.map((n, i) => ({ n, feel: FEEL[i], on: i === s ? 'true' : 'false', fw: i === s ? 600 : 400, line: i ? '#E5DED6' : 'transparent', check: i === s ? '✓' : '', pick: () => set({ style: i, toastT: 'Style: ' + n }) })),
+      cpStartD: st.playing ? 'M7 5h10v14H7z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z', cpArTitle: st.playing ? dev + ' · playing Main ' + MAINL : dev + ' · stopped', cpAlone: !!st.alone, cpArLine: st.alone ? 'No Genos found. The app’s band plays the style’s sections.' : 'Connected: Genos', cpRetry: () => set({ alone: false, toastT: 'Connected: Genos' }),
+      cpMidiL: (st.follow ?? false) ? (st.alone ? 'No Genos found' : 'Genos') : 'Not connected', cpGDock: !!(st.follow ?? false) && RAIL77 !== 'Ge',
+      cpSubL: st.draft ? 'Draft' : st.fresh ? 'New' : 'Live', sheetsX: st.sheet === 'sheets' ? 'true' : 'false', sheetsBg: st.sheet === 'sheets' ? 'rgba(254,253,251,.14)' : 'transparent',
+      tempoX: st.sheet === 'tempo' ? 'true' : 'false', styleX: st.sheet === 'style' ? 'true' : 'false', namesL: st.names ?? 'Chords',
+      hdStart: () => set({ playing: false, at: [0, 0], toastT: 'From the top' }), hdPlay: () => set(st.playing ? { playing: false } : { playing: true }), hdPlayTip: st.playing ? 'Stop' : 'Play', hdPlayD: st.playing ? 'M7 5h10v14H7z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z',
+      hdOpts: () => set({ sheet: st.sheet === 'opts' ? null : 'opts' }), hdOptsOn: st.sheet === 'opts', hdOptsX: st.sheet === 'opts' ? 'true' : 'false', hdOptsBg: st.sheet === 'opts' ? 'rgba(254,253,251,.14)' : 'transparent',
+      hdMet: () => { const n = { count: 'on', on: 'off', off: 'count' }[st.met77 ?? 'count']; set({ met77: n, toastT: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[n] }); }, hdMetTip: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[st.met77 ?? 'count'], hdMetOff: (st.met77 ?? 'count') === 'off',
+      hdLoop: () => set({ loop77: !st.loop77, toastT: st.loop77 ? 'Loop off' : 'Looping the Verse' }), hdLoopOn: st.loop77 ? 'true' : 'false', hdLoopPh: st.loop77 ? '#A8551F' : '#332921', hdLoopTip: st.loop77 ? 'Stop looping the Verse' : 'Loop the Verse',
+      hdTr: () => set({ sheet: st.sheet === 'key' ? null : 'key' }), hdTrX: st.sheet === 'key' ? 'true' : 'false', hdKeyL: KEYS[k] + ' major',
+      hdMidi: () => set({ sheet: st.sheet === 'midi' ? null : 'midi' }), hdMidiOn: st.sheet === 'midi', hdMidiX: st.sheet === 'midi' ? 'true' : 'false', hdMidiBg: st.sheet === 'midi' ? 'rgba(254,253,251,.14)' : 'transparent',
+      hdKeys: () => set({ cpKeys: !cpKeys }), hdKeysOn: cpKeys ? 'true' : 'false', hdKeysBg: cpKeys ? 'rgba(254,253,251,.14)' : 'transparent', cpKeysPh: cpKeys ? '#A8551F' : '#332921', cpKeysOn: cpKeys,
+      phMenu: () => set({ sheet: st.sheet === 'menu77' ? null : 'menu77' }), phMenuOn: st.sheet === 'menu77', phMenuX: st.sheet === 'menu77' ? 'true' : 'false', phMenuFg: st.sheet === 'menu77' ? '#A8551F' : '#332921', phToMenu: () => set({ sheet: 'menu77' }), phClose: () => set({ sheet: null }),
+      cpPhSound: () => set({ sheet: 'phSound' }), cpPhSoundOn: st.sheet === 'phSound', cpPhChart: () => set({ sheet: 'phChart' }), cpPhChartOn: st.sheet === 'phChart', cpPhMidi: () => set({ sheet: 'phMidi' }), cpPhMidiOn: st.sheet === 'phMidi', cpPhChords: () => set({ sheet: 'phChords' }), cpPhChordsOn: st.sheet === 'phChords' };
+"""
+_r = "    return { ...common(st, set),"
+assert CP77.count(_r) == 1, CP77.count(_r)
+CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
+# the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
+_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, 'left: 640px; top: 160px', 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 729px; top: 72px', 'keyOn': 'left: 505px; top: 72px', 'tempoOn': 'left: 616px; top: 72px', 'repOn': 'left: 380px; top: 72px'}[c], 320)).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')
+_SHL = _SHL.replace(BSHEET('setOn', 'Chord player settings', CP_SET58), '') if BSHEET('setOn', 'Chord player settings', CP_SET58) in _SHL else _SHL
+phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('hdOptsOn', 'Playback options', _OPTS, close='closeSheet'), bar=SHEET)
+full_laptop('ChordPlayerLaptop', 'Chord player, laptop', lm77 + TOAST(296, z=56, laptop=True), CP77, _SHL + POPS77L + NAMEMENU77L)
