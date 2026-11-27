@@ -270,7 +270,7 @@ def phone_band(t):
           "isSheet: id === 'sheet', isDia: id === 'diagrams', isGrid: id === 'grid', isLyr: id === 'lyrics', isHere: !(editing && id === 'sheet'), isAway: editing && id === 'sheet', href: p.editor ?? 'Editor.dc.html', ...viewPress(id) }; }), " + mk
           + FOLDKEYS('s', st_, ['Ver', 'View', 'Opts', 'Parts']) + ' '
           + SELFROM('s', st_, 'selLayout', "lopt('layout', layout, [['page', 'Page'], ['panorama', 'Panorama']])") + ' '
-          + SELFROM('s', st_, 'selPerRow', "lopt('perRow', perRow, [4, 8].map((n) => [n, n + ' bars']))") + ' '
+          + SELFROM('s', st_, 'selPerRow', "lopt('perRow', perRow, [2, 3].map((n) => [n, n + ' bars']))") + ' '
           + SELFROM('s', st_, 'selText', "lopt('text', s.text ?? 'm', [['s', 'Small'], ['m', 'Medium'], ['l', 'Large']])") + ' ')
     assert t.count('views: VIEWS.map(') == 1; t = t.replace('views: VIEWS.map(', vk + 'views: VIEWS.map(', 1)
     loop = "() => { if (loop) { this.setState({ loop: false, hdPop: null }); return; } const a = Math.floor((bar - 1) / 4) * 4 + 1; this.setState({ loop: true, loopA: a, loopB: Math.min(16, a + 3), hdPop: null }); }"
@@ -332,7 +332,12 @@ def open_layers(t, phone):
     m = ("{ pace: { hdPop: 'opts' }, settings: { ph: 'menu' }, key: { ph: 'Tr' }, hands: { ph: 'View' }, view: { ph: 'View' } }" if phone
          else "{ hands: { rail: 'audio' }, view: { rail: 'view' } }")
     assert t.count('const s = this.state || {};') == 1
-    return t.replace('const s = this.state || {};', f"const s = {{ ...({m}[(this.props || {{}}).open] || {{}}), ...(this.state || {{}}) }};", 1)
+    t = t.replace('const s = this.state || {};', f"const s = {{ ...({m}[(this.props || {{}}).open] || {{}}), ...(this.state || {{}}) }};", 1)
+    # the open= that names a layer no longer opens the R37 sheet it named (its body is gone, so only its scrim stayed
+    # after Back)
+    o = "const open = s.open !== undefined ? s.open : (p.open ?? 'none');"
+    assert t.count(o) == 1
+    return t.replace(o, f"const open = s.open !== undefined ? s.open : ({m}[p.open] ? 'none' : (p.open ?? 'none'));", 1)
 
 # where each popover hangs (left of Playback options, left of Volume, right of Piano keys), measured from the header
 POPX = {'play': (294, 470, 576, 24), 'edit': (294, 470, 576)}
@@ -453,6 +458,18 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
     sts = (('playing', 'hdPlay'), ('looping', 'hdLoop'), ('recording from the keyboard', 'hdRec'), ('transposed up a semitone', 'hdTrUp'), ('Playback options open', 'hdOpts'))
     sts += (('the menu open', 'phMenu'),) if name == 'PlayerApp' else (('Version history open', 'openHist'),)
     t = t.replace('</main>', '</main>' + ''.join(f'<button type="button" onClick="{{{{{a}}}}}" style="display: none">CANVAS · {l}</button>' for l, a in sts), 1)
+    # Played through's Bars heads its tiles as the area's sheets do, sentence case at 15/600 (it was a 13 caption in
+    # capitals, the shape the chord's and the section's sheets lost)
+    cap = '<p style="margin: 8px 4px -4px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #685E56">Bars</p>'
+    assert t.count(cap) == 1; t = t.replace(cap, '<h3 style="margin: 8px 0 -4px; font-size: 15px; font-weight: 600">Bars</h3>', 1)
+    if name == 'PlayerDesk':
+        # a laptop's card has no Done: a click outside closes it, as every POPOVER (feedback-log, Score editor: a
+        # laptop's card heads as the kit's POPOVER)
+        dn = '<button type="button" onClick="{{doneClose}}" style="flex: none; height: 44px; margin: -6px -4px 0 0; padding: 0 4px; border: 0; background: transparent; color: #356890; font: inherit; font-size: 17px; font-weight: 600">Done</button>'
+        assert t.count(dn) == 1; t = t.replace(dn, '', 1)
+        op = '<sc-if value="{{isDone}}" hint-placeholder-val="{{false}}">'
+        assert t.count(op) == 1
+        t = t.replace(op, op + '<button type="button" aria-label="Close" onClick="{{doneClose}}" style="position: absolute; inset: 0; z-index: 49; border: 0; padding: 0; background: transparent; cursor: default"></button>', 1)
     t = open_layers(desk_views(desk_edit(header_transport(player_rail(t)))), False) if name == 'PlayerDesk' else open_layers(phone_band(t), True)
     p.write_text(t)
 print('r74 versions ok')

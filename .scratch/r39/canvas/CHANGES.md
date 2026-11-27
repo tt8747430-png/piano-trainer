@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · PENDING · the Player's layers close clean and read as the area's: a layer board's Back no longer leaves the old R37 sheet's scrim; the phone's Bars per row offers 2 and 3 (its 2 was chosen from 4 and 8, so nothing read as chosen, and 4 cut G⁷ and Em); Played through's BARS caption is a sentence-case head, and its laptop card loses Done for a click outside · PlayerApp, PlayerDesk · pending
+
 ## Changes
 
 - 2026-11-27 · c60ac471 · the phone Player's keys docked at the foot as the laptop's and the editor's (the whole width, square, a hairline above, over the page, the music ending 16 above them); the floating keyboard's frame (Move the piano, its resize corners), which floated its grips over the music with the keys hidden under the page, is gone on both sizes · PlayerApp, PlayerDesk · v859
