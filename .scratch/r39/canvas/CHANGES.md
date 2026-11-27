@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · b8e0b685 · the Chord player in the Player's model: on a laptop the dark band (✕, the sheet's name and its menu of sheets and file acts, Go to start · Play ▾ · Metronome · Loop, Key · Tempo · Style pills, MIDI, Undo, the keys), a rail of panels (Chords, Styles, Genos, Sound, Chart; Search, Shortcuts) and the keys docked under the chart, the Genos docked compact over the keys while another panel is open; on a phone Flat's header (←, the transport, the keys, ☰) and ☰'s rows (Chords, Style, Key, Tempo, Repeats, Sound, Chart, MIDI; Share, Export, Import; Save to my progressions, Open in Progressions); the Genos head says who plays and whether it plays, its connection under it with Try again; Edit layout, the floating dock and the gear gone · ChordPlayer, ChordPlayerLaptop · **pending**
 - 2026-11-27 · eb0ceb5d · the loop's grips reach into the loop: each grip's 44 reach lies inward from its barline (6 out, 34 in) rather than centred on it, so a loop ending on a system's last bar never reaches past the page's margin, and the two ends' reaches never meet across a barline · PlayerApp, PlayerDesk · **pending**
 - 2026-11-27 · 112c9807 · the editor's Loop loops: with Loop on, Play turns back to the selection's first beat at the end of bar 3 instead of running on to the end of the song (the Player's engine already wraps inside its loop) · Editor, EditorLaptop, EditorDraft, EditorDraftLaptop · **pending**
 ## Changes

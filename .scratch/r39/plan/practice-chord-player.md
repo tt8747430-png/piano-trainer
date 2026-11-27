@@ -5,7 +5,33 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
 
 ## The rulings as they stand
 
-- **The layout is the learner's** (owner, 2026-11-18: "i want more user customizable ui like draggable resizable,
+- **The Chord player in the Player's model** (owner, 2026-11-27: "now begin with the refactoring of the chords
+  player the same way you did with the laptop and mobile layout and such things"). Canvas R77 (`r58_chordplayer.py`,
+  `lm77`, `ph77`). This supersedes R76's "The layout is the learner's" below for its Edit layout, the floating
+  Controls dock, the gear and the Chords column: one place for each panel, as the Player's and the editor's; the Genos
+  keeps its Full, Compact and Minimized. Sources: the Player's and the editor's boards (`player/r74_versions.py`,
+  `r44_editor.py`); Flat's score page (its dark band, the rail of panels, the keyboard docked at the foot); Apple HIG,
+  Toolbars and Sidebars.
+  - **Laptop:** the full screen, the app's sidebar gone. The band, 64, dark: ✕ (back to Practice); the sheet's name
+    with Live or Draft under it, a menu of the recent sheets, New sheet, All chord sheets, then Share…, Import chart…,
+    Export MIDI, Export chart, Save to my progressions, Open in Progressions, and Save and Discard draft when there is
+    one; the transport as the Player's (Go to start, Play with Playback options under ▾: Repeats and Count-in, the
+    metronome pressed through Count-in, On and Off, Loop for the section); the sheet's Key, Tempo and Style as the
+    band's pills, each opening its popover under it; MIDI (the keyboard, Follow a MIDI arranger); Undo and the keys
+    at the band's end. Under it a rail, 76: Chords (the key's chords, tapped or dragged into a bar), Styles (the
+    styles as rows, the chosen one checked, its feel beside it), Genos (the arranger's panel in full: who plays and
+    whether it plays, the connection under it with Try again, Main A–D and Break, Intro I–III, Ending/rit. I–III;
+    Follow a MIDI arranger under it), Sound (Piano, Bass, Drums, Volume; Voicing), Chart (Time signature, Written
+    as); Search and Shortcuts at its foot. A panel, 352, opens beside the rail, « closes it. The chart takes the
+    rest, its name in the band; the keys dock under it, the band's keys button showing or hiding them. While
+    following and another panel is open, the Genos docks over the keys in its compact row (Start/Stop, Main A–D, ⌃ to
+    its panel).
+  - **Phone:** Flat's phone header: ←, the transport capsule (Go to start, Play, Loop, Playback options), the keys,
+    ☰. The chart keeps its name over it (the name's menu: the sheets). ☰ drops the sheet's places as rows (Chords,
+    Style, Key, Tempo, Repeats, Sound, Chart, MIDI), then Share…, Export MIDI, Export chart, Import chart…, then Save
+    to my progressions and Open in Progressions; each place a page with ← back to ☰. The Genos sits compact over the
+    keys, Start/Stop as its glyph (Main A–D hold 44 each only so), Full and Minimize at its end.
+- **The layout is the learner's** *(Edit layout, the dock, the gear and the Chords column superseded 2026-11-27 by R77, above.)* (owner, 2026-11-18: "i want more user customizable ui like draggable resizable,
   hidible, minimizable toolbars dragging to the left and putting it there or draggind to the top … genos controls on
   phone or on laptop are bad designed as on phone it occupies too much space and is not hidable, resizable,
   minimizable, draggable … the layout should be saved and resetable in the app setitngs for teh individual page or for
