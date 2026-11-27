@@ -7,7 +7,7 @@ hide-chords
 
 [Soprano]
 1: @1 1.Gra -- ți -- e a lui I -- sus, cum pot să te des -- criu, Am fost mort în pă -- ca -- te dar azi prin har sunt viu.
-1: @9 Tu mi'ai lu -- at po -- va -- ra și m'ai e -- li -- be -- rat, _ Mi -- nu -- nă iu -- bi -- re I -- sus mi'a -- ră -- tat.
+1: @9 Tu mi'ai lu -- at po -- va -- ra și m'ai e -- li -- be -- rat, _ Mi -- nu -- na -- tă iu -- bi -- re I -- sus mi'a -- ră -- tat.
 1: @17 Mi -- nu -- na -- tă'i gra -- ți -- a Lui, gra -- ți -- a lui I -- sus, Mai a -- dân -- că de -- cât ma -- rea
 1: @20 de -- cât ma -- rea ești. Gra -- ți -- e, tu ai ve -- nit din cer pen -- tru'a mă sal -- va.
 1: @25 Mai cu -- prin -- ză -- toa -- re de -- cât min -- tea, Ești mai ma -- re ca pă -- ca -- tul meu O,
