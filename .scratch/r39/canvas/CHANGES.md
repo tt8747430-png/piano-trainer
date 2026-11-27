@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · 8723bcc8 · the Chord player's old settings sheet (R76's Sound, Playing, Chart, MIDI, Layout), still built but opened by nothing since R77 took the gear, deleted; nothing looks different · ChordPlayer, ChordPlayerLaptop · **pending**
 
 ## Changes
 
