@@ -418,11 +418,12 @@ CHART77 = GROUP(('link', 'Time signature', '4/4', ''), ('seg', 'Written as', 'na
 FOLLOW77 = (GROUP(('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'))
             + f'<p style="margin: 0 4px; font-size: 14px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Play leads: a Genos gets its sections at their bars and plays to the app’s clock; with none connected the app’s band plays them.</p>')
 MIDI77 = GROUP(('link', 'MIDI keyboard', 'Not connected', 'Settings.dc.html'), ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'))
-_PHEAD = lambda title: (f'<div style="flex: none; display: flex; align-items: center; min-height: 56px; padding: 0 8px 0 16px; box-shadow: inset 0 -1px 0 {LINE}"><h2 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">{title}</h2>'
-                        f'<button type="button" aria-label="Close the panel" data-tip="Close the panel" onClick="{{{{cpRailNone}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: pointer">{CHEVSL}</button></div>')
+# a panel's head is the kit's (the Player's and the editor's: 64, the title, « Fold the panel 44 round); only its act is
+# the Chord player's
+_PHEAD77 = lambda title: _PHEAD(title).replace('{{foldPanel}}', '{{cpRailNone}}')
 CHEVSL = _LI('<path d="m11 17-5-5 5-5M18 17l-5-5 5-5"></path>')
 _PBODY77 = lambda inner: f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 16px">{inner}</div>'
-_PANEL = lambda k, title, inner: f'<sc-if value="{{{{rail{k}On}}}}" hint-placeholder-val="{{{{{"true" if k == "Ch" else "false"}}}}}"><section aria-label="{title}" style="flex: none; width: 352px; min-height: 0; display: flex; flex-direction: column; box-shadow: inset -1px 0 0 {LINE}">{_PHEAD(title)}{_PBODY77(inner)}</section></sc-if>'
+_PANEL = lambda k, title, inner: f'<sc-if value="{{{{rail{k}On}}}}" hint-placeholder-val="{{{{{"true" if k == "Ch" else "false"}}}}}"><section aria-label="{title}" style="flex: none; width: 352px; min-height: 0; display: flex; flex-direction: column; box-shadow: inset -1px 0 0 {LINE}">{_PHEAD77(title)}{_PBODY77(inner)}</section></sc-if>'
 GENOSPANEL = (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">'
               + HEAD77 + ARLINE77 + f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div></div></sc-if>' + FOLLOW77)
 PANELS77 = (_PANEL('Ch', '{{keyHead}}', _DRAGB + f'<p style="margin: 0; font-size: 14px; color: {SOFT}">Tap a chord to put it in the chosen place, or drag it into a bar.</p>')
@@ -441,7 +442,7 @@ GDOCK77 = (f'<sc-if value="{{{{cpGDock}}}}" hint-placeholder-val="{{{{false}}}}"
 lm77 = (f'<div data-menuroot style="position: absolute; inset: 0; display: flex; flex-direction: column">' + BAND77
         + '<div style="flex: 1; min-height: 0; display: flex">' + RAIL77 + PANELS77
         + '<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">'
-        + '<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 18px 40px 24px">' + SHOWSTATES() + CHARTL77 + '</div>'
+        + '<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 40px 24px">' + SHOWSTATES() + CHARTL77 + '</div>'
         + GDOCK77 + f'<sc-if value="{{{{cpKeysOn}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS76((110, 170, 240), False, True)}</sc-if>'
         + '</div></div></div>')
 
