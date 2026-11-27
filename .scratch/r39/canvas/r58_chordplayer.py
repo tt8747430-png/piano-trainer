@@ -174,7 +174,8 @@ LAMP59 = lambda key, label, act, spoken='': f'<button type="button" onClick="{{{
 # Start/Stop one width in the full and the compact strip (it was 96 in one and 88 in the other)
 START59 = LAMP59('arStart', 'Start/Stop', 'togglePlay').replace('min-width: 44px', 'flex: none; min-width: 88px', 1)
 LAMPS59 = lambda lst, spoken: f'<sc-for list="{{{{{lst}}}}}" as="l" hint-placeholder-count="3"><button type="button" onClick="{{{{l.pick}}}}" aria-pressed="{{{{l.on}}}}" aria-label="{spoken} {{{{l.n}}}}" style="min-width: 44px; height: 40px; padding: 0 6px; border: 0; border-radius: 9px; background: {{{{l.bg}}}}; color: {{{{l.fg}}}}; box-shadow: {{{{l.ring}}}}; font: inherit; font-size: 14px; font-weight: 700">{{{{l.n}}}}</button></sc-for>'
-CAP59 = lambda t: f'<span style="font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: {SOFT}">{t}</span>'
+# a lamp group's name in sentence case, as every head of the area (no caption in capitals: the section sheet's ruling)
+CAP59 = lambda t: f'<span style="font-size: 12px; font-weight: 600; color: {SOFT}">{t}</span>'
 GRP59 = lambda label, cols, inner, grow='1': f'<div role="group" aria-label="{label}" style="flex: {grow} 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px">{CAP59(label)}<div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: 4px">{inner}</div></div>'
 HEAD59 = (f'<div style="display: flex; align-items: center; gap: 8px; min-height: 40px"><span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>'
           f'<span aria-live="polite" style="flex: 1; min-width: 0; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{arTitle}}}}</span>'

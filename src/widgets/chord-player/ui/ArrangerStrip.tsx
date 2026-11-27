@@ -73,10 +73,7 @@ function Group({
       className="flex min-w-0 flex-col gap-1"
       style={{ flex: `${grow} 1 0` }}
     >
-      <span
-        aria-hidden
-        className="text-xs font-semibold tracking-caps text-muted-foreground uppercase"
-      >
+      <span aria-hidden className="text-xs font-semibold text-muted-foreground">
         {label}
       </span>
       <div
@@ -276,14 +273,17 @@ export function ArrangerStrip({
     >
       <div className="flex min-h-10 items-center gap-2">
         {dot}
-        <span className="line-clamp-2 min-w-0 flex-1 text-sm font-semibold text-pretty">
-          {title}
-        </span>
+        <span className="min-w-0 flex-1 truncate text-sm font-semibold">{title}</span>
         {startStop}
-        <HeadButton label={t('chordPlayer.arranger.compact')} onClick={() => onSize('compact')}>
-          <ChevronDown aria-hidden />
-        </HeadButton>
-        {minimize}
+        {/* In the rail's Genos panel the strip is in its place: no size to change there. */}
+        {flat ? null : (
+          <>
+            <HeadButton label={t('chordPlayer.arranger.compact')} onClick={() => onSize('compact')}>
+              <ChevronDown aria-hidden />
+            </HeadButton>
+            {minimize}
+          </>
+        )}
       </div>
       <div className="-mt-1 flex min-h-11 items-center gap-3">
         <p aria-live="polite" className="min-w-0 flex-1 text-sm text-pretty text-muted-foreground">

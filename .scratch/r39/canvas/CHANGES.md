@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-
+- 2026-11-27 · pending-commit · the Genos panel's lamp groups named in sentence case (Main, Intro, Ending/rit.), as every head of the area since the section sheet lost its MAIN caption; in the app the rail's Genos panel no longer draws the strip's Compact and Minimize (the panel is its place) and its title keeps one line · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
 - 2026-11-27 · 89a6e543 · the Chord player's Key a grid of the twelve keys as the app's (the kit's ROOTGRID, a key one of the pickers) in place of a wheel, a key taken moving the chart; the key's chords palette spells a flat key's chords whole (A♭, B♭m, E♭: its ♭ was raised as an extension) · ChordPlayer, ChordPlayerLaptop · v862
