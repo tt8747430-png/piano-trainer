@@ -1290,12 +1290,17 @@ def SELKEYS(S, SET, specs):
 # card: Pattern › with the pattern's name (its library docks in the panel's place with Back, as Flat's panel pages),
 # First chord's inversion and Voicing as pop-ups, and, once the scope has its own, the way back to the wider one's.
 # Keys: isPiano, accScopes, patternName, openPattern, selInv, selVoice, accOwn, accResetL, accReset, the fold's (Acc)
-def ACCPANEL(first=True):
+def ACCPANEL():
     link = (f'<button type="button" onClick="{{{{openPattern}}}}" style="min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 15px; display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; cursor: pointer">'
             f'<span style="flex: 1">Pattern</span><span style="display: flex; align-items: center; gap: 4px; min-width: 0; color: {SOFT}"><span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{patternName}}}}</span><span style="display: flex">{CHEV_R}</span></span></button>')
     reset = (f'<sc-if value="{{{{accOwn}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{accReset}}}}" style="min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 0; border-top: 1px solid {LINE}; background: transparent; color: #356890; font: inherit; font-size: 15px; width: 100%; text-align: left; cursor: pointer">{{{{accResetL}}}}</button></sc-if>')
     body = SEGC('accScopes', 36, 14, True) + f'<div style="{_CARD}">' + link + SELROW('First chord’s inversion', 'selInv') + SELROW('Voicing', 'selVoice') + reset + '</div>'
-    return '<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}">' + FOLD('Acc', PIANOI, 'Accompaniment', body, first=first) + '</sc-if>'
+    # headed as the palette's sections it sits above (Recent, Note, …): one head in one panel, 15 semibold, its chevron at
+    # the right edge, no icon (the FOLD with its icon was the Player's Song panel's, and drew a second head in Notation)
+    head = (f'<h3 style="margin: 0"><button type="button" aria-expanded="{{{{fAccX}}}}" onClick="{{{{fAccTg}}}}" style="width: 100%; min-height: 44px; margin: -6px 0; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; cursor: pointer">Accompaniment'
+            f'<span style="color: {SOFT}; display: flex; transform: rotate({{{{fAccR}}}}); transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1)">{CHEV_D}</span></button></h3>')
+    return ('<sc-if value="{{isPiano}}" hint-placeholder-val="{{true}}"><section aria-label="Accompaniment" style="display: flex; flex-direction: column; gap: 8px">' + head
+            + '<sc-if value="{{fAccOn}}" hint-placeholder-val="{{true}}"><div style="display: flex; flex-direction: column; gap: 8px">' + body + '</div></sc-if></section></sc-if>')
 
 # the editor's Edit row on a phone (Flat's second row, 018): Delete, Undo, Redo, Copy, Cut, Paste as soft-ink glyphs spread
 # across the width, a soft shadow under it; one implementation for the editor and the Player's views in Edit

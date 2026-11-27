@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · {c} · one section head in Notation: Accompaniment wore the Player's fold (an icon, 16 semibold in a 56 row, its chevron 8 in from the edge) above the palette's sections (Recent, Note, …, 15 semibold, the chevron at the edge); it is headed as they are now, on the phone's palette and the laptop's panel · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop · **pending**
 - 2026-11-27 · {c} · ☰ rows 48 tall as a menu's, so the editor's ☰ fits the phone without scrolling; Version history's value is when it was saved (Today at 13:42); a draft's Publish… and Publishing history are rows of their own group (the Globe and the history clock), as the laptop's name menu lists them, where a Publish card at the menu's foot lay 164 below the screen at rest; Discard changes last, alone after a gap, in crimson, on the phone and in the laptop draft's name menu · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · v814
 ## Changes
 
