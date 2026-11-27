@@ -44,7 +44,7 @@ saved in it; **Voice files** separate MuseScore files per voice; **PDF**, **XML*
 | 10 | Rătăceam în păcat și pierzare | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 11 | Ce nume minunat | Done: as printed (matched to its PDF) | – | – | – | – | – | 2 | 1 |  | – |
 | 12 | Crucea-i ascultarea | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
-| 13 | Trece Isus pe-aici | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 2/2, 16 bars, `013. Trece Isus pe-aici.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
+| 13 | Trece Isus pe-aici | Done: as printed (matched to its PDF) | – | – | – | – | – | 1 | 1 |  | – |
 | 14 | Când Duhul Sfânt S-a coborât (1 subfolders) | Single voices only, no full score | – | – | – | – | Alto, Tenor | 1 |  |  | – |
 | 15 | Cântați pe Isus cu iubire | No MuseScore | – | – | – | – | – | 1 |  |  | – |
 | 16 | Te iubesc Isuse | Done: as printed (matched to its PDF) | 1 | 2 staves, voices 1/2, 17 bars, `016. Te iubesc Isuse.mscz` | no | – | Soprano, Alto, Tenor, Bass | 1 | 1 |  | piano |
