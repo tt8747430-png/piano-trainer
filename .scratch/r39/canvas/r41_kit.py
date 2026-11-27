@@ -14,6 +14,9 @@ CHECK = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m5 12 5 5
 CLOSE = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="M6 6l12 12M18 6 6 18"></path></svg>'
 CHEV_D = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m6 9 6 6 6-6"></path></svg>'
 KEYSI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M8 5v8M12 5v14M16 5v8"></path></svg>'
+# a score's instruments wear the piano (Lucide), never the keys, which are the Piano keys toggle's alone (one icon, one meaning)
+INSTP = '<path d="M18.5 8c-1.4 0-2.6-.8-3.2-2A6.87 6.87 0 0 0 2 9v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-8.5C22 9.6 20.4 8 18.5 8"></path><path d="M2 14h20"></path><path d="M6 14v4"></path><path d="M10 14v4"></path><path d="M14 14v4"></path><path d="M18 14v4"></path>'
+INSTI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}>{INSTP}</svg>'
 SPEAKER = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"></path><path d="M16 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>'
 GRIP = f'<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">' + ''.join(f'<circle cx="{x}" cy="{y}" r="1.5"></circle>' for x in (9, 15) for y in (6, 12, 18)) + '</svg>'
 SERIF = "'Iowan Old Style', 'Palatino', Georgia, serif"
@@ -816,7 +819,7 @@ def PARTSECTION(inst=None):
     # the editor's rail); each part a filled card on the paper, as Flat's instruments sheet (004, 084)
     body = (f'{allrow}<div style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{{{phPartRows}}}}" as="c" hint-placeholder-count="2">{card}</sc-for></div>'
             + (f'<div style="{_CARD}; overflow: hidden">{foot}</div>' if foot else ''))
-    return FOLD('Parts', SZ(KEYSI, 20), 'Parts', body)
+    return FOLD('Parts', SZ(INSTI, 20), 'Parts', body)
 def PARTKEYS(S, SET, parts, solo='solo'):
     """the Parts sheet's rows over the board's hidden parts (S.hide, the Instruments panel's own) and its solo (S[solo],
     the Audio panel's own); parts: [(id, name)]; whether the Piano prints"""
@@ -861,7 +864,7 @@ FICONS = {
     'Song': _FI('<path d="m12 2 10 5-10 5L2 7l10-5Z"></path><path d="m2 12 10 5 10-5"></path><path d="m2 17 10 5 10-5"></path>'),
     'View': _FI('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle>'),
     'Tr': _FI('<path d="m21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16"></path>'),
-    'Inst': _FI('<rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M8 5v8M12 5v14M16 5v8"></path>'),
+    'Inst': _FI(INSTP),
     'Lay': _FI('<rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 21V9"></path>'),  # the rail's Layout glyph; the pen is Edit's
     'Aud': _FI('<path d="M11 5 6 9H2v6h4l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"></path>'),
     'Cred': _FI('<circle cx="12" cy="12" r="10"></circle><path d="m12 7 1.5 3 3.3.5-2.4 2.3.6 3.3L12 14.5l-3 1.6.6-3.3-2.4-2.3 3.3-.5z"></path>'),

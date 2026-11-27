@@ -11,6 +11,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-27 · (this commit) · one icon, one meaning: a score's Instruments (the editor's rail and ☰, the Player's Parts fold) wear Lucide's piano; the keys glyph is the Piano keys toggle's alone (both wore it) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp · **pending**
 - 2026-11-27 · 98267d7e · one icon, one meaning: the layers glyph is the Player's Versions alone; the Chord player's Style wears the drum (rail and ☰), Save to my progressions list-plus, Open in Progressions list-music (all three wore layers) · ChordPlayer, ChordPlayerLaptop · **pending**
 - 2026-11-27 · 39ea8da1 · the Chord player's Export takes the Player's shape: one Export row whose formats (MIDI, Chart (.txt)) open as a page with ← on the phone and a submenu at its side on the laptop (it was two rows, Export MIDI and Export chart); the laptop menu's file acts in the phone's order, Share…, Export ›, Import chart… · ChordPlayer, ChordPlayerLaptop · **pending**
 - 2026-11-27 · d72dac91 · Panorama hangs its one system from the top under the toolbar, as Dorico's galley and Flat's horizontal view (it stood centred in the space, a 68 bare band under the phone's toolbar) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop · v850

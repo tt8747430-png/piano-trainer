@@ -323,7 +323,7 @@ _LROW = lambda k, v: f'<div style="min-height: 48px; display: flex; align-items:
 PANEL_SONG = _PHEAD('Versions') + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 12px 16px 24px; display: flex; flex-direction: column">{VERPANEL()}</div>'
 RAIL = (f'<nav aria-label="Panels" style="flex: none; width: 76px; padding: 0 0 12px; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
         f'<div role="tablist" aria-orientation="vertical" aria-label="Panels" onKeyDown="{{{{railKeys}}}}" style="display: flex; flex-direction: column; gap: 4px">'
-        + _RAILBTN('Versions', LAYERSI, 'Song', 'Versions') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Notation', NOTATIONI, 'Not', 'Notation') + _RAILBTN('Instruments', KEYSI, 'Inst', 'Instruments') + _RAILBTN('Layout', LAYOUTI, 'Lay', 'Layout') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div>'
+        + _RAILBTN('Versions', LAYERSI, 'Song', 'Versions') + _RAILBTN('View', VIEWI, 'View', 'View') + _RAILBTN('Notation', NOTATIONI, 'Not', 'Notation') + _RAILBTN('Instruments', INSTI, 'Inst', 'Instruments') + _RAILBTN('Layout', LAYOUTI, 'Lay', 'Layout') + _RAILBTN('Audio', AUDIOI, 'Aud', 'Audio') + '</div>'
         + '<span style="flex: 1"></span>' + _RAILBTN('Search', SEARCHI, 'Srch', 'Search for an act · ⌘K', 'openSearch') + _RAILBTN('Shortcuts', KBDI, 'Keys', 'Shortcuts · ?', 'openKeys') + '</nav>')
 _PBODY = lambda inner, gap=16: f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: {gap}px">{inner}</div>'
 # Instruments, as Flat's panel: All, then each instrument's row (its handle, name, Solo, Show, ···), New instrument
