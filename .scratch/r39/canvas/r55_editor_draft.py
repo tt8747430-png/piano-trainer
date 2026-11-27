@@ -43,7 +43,7 @@ GHEAD = lambda back: f'<header style="flex: none; height: 60px; display: flex; a
 _DUP = '<span style="flex: 1">Print</span></button>'
 _pit = lambda lab, act, fg='#332921': f'<button type="button" role="menuitem" onClick="{{{{{act}}}}}" style="{_SMROW}; color: {fg}">{_SMSLOT()}<span style="flex: 1">{lab}</span></button>'
 assert elm4.count(_DUP) == 1
-elm4 = CREDBTN(elm4).replace(_DUP, _DUP + _SMSEP + _pit('Publish…', 'askPub') + _pit('Publishing history', 'openVers') + _pit('Discard changes', 'askDisc', RED), 1)
+elm4 = CREDBTN(elm4).replace(_DUP, _DUP + _SMSEP + _pit('Publish…', 'askPub') + _pit('Publishing history', 'openVers') + _SMSEP + _pit('Discard changes', 'askDisc', RED), 1)
 elm4 = elm4.replace('href="EditorLaptop.dc.html" role="radio"', 'href="EditorDraftLaptop.dc.html" role="radio"', 1)
 elm4 = elm4.replace(f'<span role="status" data-save style="margin-right: 8px; font-size: 13px; color: {SOFT}; white-space: nowrap">Saved on this device</span>', '<span role="status" data-save style="margin-right: 8px; font-size: 13px; color: {{saveC}}; white-space: nowrap">{{saveT}}</span>', 1)
 DJS = DJS.replace("?? 'mine'; const VCID", "?? 'orig'; const VCID", 1)
@@ -57,11 +57,12 @@ DJS = DJS.replace("isLive: live,", "isLive: live, notLive: !live,", 1)
 edlm = (IF('isLive', re.sub(r'<div role="group" aria-label="Version".*?</details></div>', lambda m: VERSW('edit', 'PlayerLaptop.dc.html', label='Original'), elm4, count=1, flags=re.S), 'true')
         + IF('notLive', GHEAD('SongsLaptop.dc.html').replace('padding: 8px 16px', 'padding: 12px 24px') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("SongsLaptop.dc.html")}</main>')
         + f'<div style="position: absolute; right: 24px; bottom: 188px; z-index: 40; width: 760px; padding-top: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 4px 14px -6px rgba(51,41,33,.25)">{STRIP("dsDemo")}{STRIP("states")}</div>' + TOASTL)
-# the draft's acts in ☰ as Flat's: Publishing history and Discard changes as rows, Publish as its card at the foot
+# the draft's acts in ☰ as Flat's: Publishing history (the Globe, as the app publishes) a row, Discard changes the loss,
+# last after its own hairline (ROWMENU's rule), Publish as its card at the foot
 # (flat-score-editor 083: "Publish Score" over its Publish button)
-DPUB = (f'<div style="margin: 4px 4px 0; padding: 16px; border-radius: 16px; box-shadow: inset 0 0 0 1px {LINE}; display: flex; flex-direction: column; gap: 12px">'
-        f'<h3 style="margin: 0; font-size: 17px; font-weight: 600">Publish song</h3><button type="button" onClick="{{{{askPub}}}}" style="height: 48px; border: 0; border-radius: 24px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">Publish…</button></div>')
-DSH = PHLAYERS(DSAVED, (('Hist', 'Publishing history', '', 'openVers'), ('Disc', 'Discard changes', '', 'askDisc', RED)), DPUB, 'EditorDraft.dc.html') + FSHEET('versOn', 'Publishing history', VERSBODY, back='phToMenu') + DASKS
+# Publish… and Publishing history are rows of their own group, as the laptop's name menu lists them (a card at the
+# menu's foot fell under the fold, 164 below the screen at rest)
+DSH = PHLAYERS(DSAVED, (), '', 'EditorDraft.dc.html', pub=(('Pub', 'Publish…', '', 'askPub'), ('Hist', 'Publishing history', '', 'openVers')), loss=(('Disc', 'Discard changes', '', 'askDisc', RED),)) + FSHEET('versOn', 'Publishing history', VERSBODY, back='phToMenu') + DASKS
 DSL = LAPLAYERS('Laptop.dc.html') + LAPSHEET(BSHEET('versOn', 'Publishing history', VERSBODY), 480) + DASKS
 # the draft's views stay the draft's, in Edit (EditorDraftDiagrams, …), as the editor's
 phone('EditorDraft', 'Score editor, a built-in song’s draft (editors)', edph, PHJS(DJS).replace("href: 'Editor' + label + '.dc.html', pick", "href: 'EditorDraft' + label + '.dc.html', pick", 1), DSH, bar=SHEET)

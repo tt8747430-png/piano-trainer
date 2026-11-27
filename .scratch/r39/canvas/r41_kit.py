@@ -638,7 +638,7 @@ def HISTKEYS(S, SET, TOAST, HIST='HIST', restore='{}'):
     """HIST: the board's list of saved moments, newest first ({id, t, what, bars, ov}); restore(h): what Restore sets."""
     hb = ' '.join(f"hb{b}: HSEL.bars.includes({b}) ? 'rgba(237,198,132,.38)' : 'transparent'," for b in range(13))
     return ("...(() => { const H = " + HIST + "; const HSEL = H.find((h) => h.id === " + S + ".histSel) ?? H[0]; return { histOn: !!" + S + ".hist_on, openHist: () => " + SET + "({ hist_on: true, histSel: H[0].id, hdPop: null }), closeHist: () => " + SET + "({ hist_on: false }), "
-            "histAgo: H[0].t === 'Just now' ? 'just now' : 'today at 13:42', histT: HSEL.t, histOld: HSEL.id !== H[0].id, "
+            "histAgo: H[0].t === 'Just now' ? 'just now' : 'today at 13:42', histAgoV: H[0].t === 'Just now' ? 'Just now' : 'Today at 13:42', histT: HSEL.t, histOld: HSEL.id !== H[0].id, "
             "histRows: H.map((h, i) => ({ t: h.t, what: h.what, cur: i === 0, on: h.id === HSEL.id ? 'true' : 'false', bg: h.id === HSEL.id ? '#F6E7C8' : 'transparent', pick: () => " + SET + "({ histSel: h.id }) })), "
             + hb + " histRestore: () => " + SET + "({ ...(" + restore + ")(HSEL), hist_on: false, undoHist: H, hist: [{ id: 'h' + Date.now(), t: 'Just now', what: ['Restored ' + HSEL.t], bars: HSEL.bars, ov: HSEL.ov }, ...H], " + TOAST("'Restored the version of ' + HSEL.t") + " }) }; })(),")
 # A page over a full-screen screen (the editor's Credits; owner, 2026-11-26: "it should open properly on a proper page
@@ -818,6 +818,7 @@ FICONS = {
     'Exp': _FI('<path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path>'),
     'Print': _FI('<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect>'),
     'Hist': _FI('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5M12 7v5l4 2"></path>'),
+    'Pub': _FI('<circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"></path>'),
     'Disc': _FI('<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"></path>'),
     'Mode': _FI('<path d="M5 22h14M5 2h14M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2"></path>'),
     'Hands': _FI('<path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8"></path><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path>'),
@@ -827,17 +828,18 @@ FICONS = {
     'Lab': _FI('<path d="M4 7V4h16v3M9 20h6M12 4v16"></path>'),
 }
 _ARROWR = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M5 12h14M12 5l7 7-7 7"></path></svg>'
-def FROW(icon, label, value, target, colour=INK, line=False):
+def FROW(icon, label, value, target, colour=INK, line=False, h=56):
     """a settings row as Flat's: the glyph, the name, the value soft, the arrow; target a page (…html) or an act"""
     inner = (f'<span aria-hidden="true" style="flex: none; display: flex; color: {colour}">{FICONS.get(icon, icon)}</span><span style="flex: 1; min-width: 0; font-size: 17px; color: {colour}">{label}</span>'
              + (f'<span style="flex: none; font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{value}</span>' if value else '')
              + f'<span aria-hidden="true" style="flex: none; display: flex; color: {colour}">{_ARROWR}</span>')
-    st = f'min-height: 56px; box-sizing: border-box; width: 100%; padding: 0 12px; border: 0;{" border-top: 1px solid " + LINE + ";" if line else ""} border-radius: 0; background: transparent; font: inherit; text-align: left; text-decoration: none; display: flex; align-items: center; gap: 16px; cursor: pointer'
+    st = f'min-height: {h}px; box-sizing: border-box; width: 100%; padding: 0 12px; border: 0;{" border-top: 1px solid " + LINE + ";" if line else ""} border-radius: 0; background: transparent; font: inherit; text-align: left; text-decoration: none; display: flex; align-items: center; gap: 16px; cursor: pointer'
     if target.endswith('.html'):
         return f'<a href="{target}" style="{st}">{inner}</a>'
     return f'<button type="button" onClick="{{{{{target}}}}}" style="{st}">{inner}</button>'
-def FROWS(items, lines=True):
-    return '<div style="display: flex; flex-direction: column">' + ''.join(FROW(*it[:5], line=lines and i > 0) for i, it in enumerate(items)) + '</div>'
+def FROWS(items, lines=True, h=56):
+    # a page's rows 56 (iOS Settings, Flat's pages); a menu's 48, so ☰ in Edit shows its last row on a phone (11 rows)
+    return '<div style="display: flex; flex-direction: column">' + ''.join(FROW(*it[:5], line=lines and i > 0, h=h) for i, it in enumerate(items)) + '</div>'
 def FSHEET(cond, title, body, close='closeSheet', back=None, **_):
     """a settings page on a phone (owner, 2026-11-26: "i don't like that all these options and settings have these
     drawers with x button and not back button. fix all such inconsistencies"): the whole screen under the status bar,
@@ -850,8 +852,9 @@ def FRADIO(name):
             f'<button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 52px; box-sizing: border-box; width: 100%; padding: 0 16px; border: 0; box-shadow: inset 0 1px 0 {LINE}; background: transparent; color: {INK}; font: inherit; font-size: 17px; text-align: left; display: flex; align-items: center; gap: 12px; cursor: pointer">'
             f'<span style="flex: 1">{{{{o.l}}}}</span><span aria-hidden="true" style="display: flex; color: {INK}"><sc-if value="{{{{o.cur}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK.replace("width=\"16\" height=\"16\"", "width=\"22\" height=\"22\"")}</sc-if></span></button></sc-for></div>')
 EXPROWS = lambda: GROUP(*(('action', l, a, INK) for l, a in (('MusicXML', 'expXml'), ('Compressed MusicXML (.mxl)', 'expMxl'), ('MIDI', 'expMidi'))), bg=SHEET)
-def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=None, title='Amazing Grace', song=(), hide=('Tr', 'Cred', 'View')):
-    """song: the song's rows ☰ lists after its places (Transpose, Credits); hide: places ☰ lists through song, or the
+def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=None, title='Amazing Grace', song=(), hide=('Tr', 'Cred', 'View'), loss=(), pub=()):
+    """pub: a draft's publishing rows, a group of their own before the loss, as the laptop's name menu;
+    song: the song's rows ☰ lists after its places (Transpose, Credits); hide: places ☰ lists through song, or the
     header's View button opens"""
     # ☰ lists every act in its own row (owner, 2026-11-26: "I dont like that the option is called songs … and I dont
     # like very much the all these options are now hidden just under this option"), as Flat's ☰ lists Credits, Manage
@@ -866,7 +869,8 @@ def PHMENU(places, takes_href, mode_html='', head='', rows=(), foot='', inst=Non
     items = [(pid, lab, val, act or f'ph{pid}') for pid, lab, val, body, act in places if pid not in hide] + acts[:-3] + list(rows)
     panel = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{phClose}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
              f'<nav aria-label="{title}" class="nos" style="position: absolute; z-index: 61; top: 120px; right: 8px; left: 24px; max-height: calc(100% - 170px); overflow-y: auto; box-sizing: border-box; padding: 12px 8px; border-radius: 22px; background: {PAGE}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 18px 48px -12px rgba(51,41,33,.38); display: flex; flex-direction: column; gap: 8px">'
-             + head + (f'<div style="padding: 0 4px 4px">{mode_html}</div>' if mode_html else '') + FROWS(items, lines=False) + f'<div role="separator" style="height: 1px; margin: 0 12px; background: {LINE}"></div>' + FROWS(acts[-3:], lines=False) + foot + '</nav></sc-if>')
+             + head + (f'<div style="padding: 0 4px 4px">{mode_html}</div>' if mode_html else '') + FROWS(items, lines=False, h=48) + f'<div role="separator" style="height: 1px; margin: 4px 12px; background: {LINE}"></div>' + FROWS(acts[-3:], lines=False, h=48)
+             + ''.join(f'<div role="separator" style="height: 1px; margin: 4px 12px; background: {LINE}"></div>' + FROWS(g, lines=False, h=48) for g in (pub, loss) if g) + foot + '</nav></sc-if>')
     out = panel
     for pid, lab, val, body, act in places:
         if not act:

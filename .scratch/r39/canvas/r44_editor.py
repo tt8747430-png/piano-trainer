@@ -420,7 +420,7 @@ PH_PLACES = (('Song', 'Song', '{{verName}}', f'<div style="display: flex; flex-d
              ('Tr', 'Transpose', '{{hdKeyL}}', '', 'openTr'), ('Inst', 'Instruments', '2', '', 'openInst'),
              ('Lay', 'Layout', 'A4', '', 'openLayout'), ('Cred', 'Credits', '', '', 'openCredits'),
              ('Midi', 'MIDI keyboard', '', '', 'phMidiGo'))
-PHLAYERS = lambda saved, rows=(), foot='', edit_href='Editor.dc.html': (PHMENU(PH_PLACES, 'Takes.dc.html', PHMODE('edit', 'Player.dc.html', edit_href), head=saved, rows=(('Hist', 'Version history', '{{histAgo}}', 'phHist'),) + tuple(rows), foot=foot, inst='openInst', song=(('Tr', 'Transpose', '{{hdKeyL}}', 'openTr'), ('Cred', 'Credits', '', 'openCredits'))) + PHHIST() + HDRPOPS(False, 0, 0, 0, phone=True) + THINGPAGE('creditsOn', 'phToMenu', 'Credits', ED_CREDITS, False)
+PHLAYERS = lambda saved, rows=(), foot='', edit_href='Editor.dc.html', loss=(), pub=(): (PHMENU(PH_PLACES, 'Takes.dc.html', PHMODE('edit', 'Player.dc.html', edit_href), head=saved, rows=(('Hist', 'Version history', '{{histAgoV}}', 'phHist'),) + tuple(rows), foot=foot, loss=loss, pub=pub, inst='openInst', song=(('Tr', 'Transpose', '{{hdKeyL}}', 'openTr'), ('Cred', 'Credits', '', 'openCredits'))) + PHHIST() + HDRPOPS(False, 0, 0, 0, phone=True) + THINGPAGE('creditsOn', 'phToMenu', 'Credits', ED_CREDITS, False)
                           + FSHEET('instOn', 'Instruments', _P44(INST_BODY), back='phToMenu') + FSHEET('pickInstOn', 'New instrument', ED_PICK, back='openInst')
                           + FSHEET('layoutOn', 'Layout', LAY_BODY, back='phToMenu') + FSHEET('trSheetOn', 'Transpose', TRROWS(True), back='phToMenu'))
 # the ☰'s keys on the editor's own sheet state: the menu is the 'more' sheet, Song and View two more
