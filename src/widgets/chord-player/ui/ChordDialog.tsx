@@ -120,8 +120,8 @@ export function ChordDialog({
               }}
             />
           ) : null}
-          {/* Musicca's rows (canvas 173): Chord root ⌄ quality ⌄, Bass note ⌄, Duration − n beats +. */}
-          <div className="flex flex-col overflow-hidden rounded-control bg-muted">
+          {/* Musicca's rows (R77, `CP_CHORD59`): one white card, Chord root ⌄ quality ⌄, Bass note ⌄, Duration − n beats +. */}
+          <div className="flex flex-col overflow-hidden rounded-card bg-card shadow-[0_0_0_1px_var(--color-border)]">
             <DialogRow label={t('chordPlayer.chord.quality')}>
               <NotePicker
                 label={t('chordPlayer.chord.root')}
@@ -194,7 +194,7 @@ export function ChordDialog({
             </DialogRow>
           </div>
           <section className="flex flex-col gap-2">
-            <h3 className="px-1 font-sans text-footnote font-semibold tracking-caps text-muted-foreground uppercase">
+            <h3 className="font-sans text-subhead font-semibold">
               {t('chordPlayer.chord.suggested')}
             </h3>
             <ul className="grid grid-cols-4 gap-2">
@@ -244,7 +244,7 @@ const POP =
 /** One of the sheet's rows (canvas 173): its name, its controls at its end. */
 function DialogRow({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex min-h-14 items-center gap-2 py-1.5 pr-3 pl-4 not-last:shadow-[inset_0_-1px_0_var(--color-border)]">
+    <div className="flex min-h-14 items-center gap-2 py-1.5 pr-3 pl-4 not-last:shadow-[inset_0_-1px_0_var(--color-muted)]">
       <span className="min-w-0 flex-1 text-base">{label}</span>
       {children}
     </div>
@@ -265,7 +265,7 @@ function SheetAct({
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 min-w-0 flex-[1_1_auto] items-center justify-center gap-2 rounded-control bg-muted px-3 text-subhead font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:brightness-95"
+      className="flex h-11 min-w-0 flex-1 items-center justify-center gap-2 rounded-control bg-muted px-3 text-subhead font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:brightness-95"
     >
       {icon}
       <span className="truncate">{children}</span>
