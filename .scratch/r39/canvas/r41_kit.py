@@ -1357,7 +1357,7 @@ PE_FOCUS = ('<style data-focus>:focus-visible { outline: 3px solid #356890; outl
             '[style*="width: 76px"]:focus-visible, [style*="width: 100%"]:focus-visible { outline-offset: -3px } '
             # a transport button darkens under the pointer and never moves when pressed (DESIGN.md: buttons change colour
             # alone; the Player's old capsule scaled to .96, the editor's band did not)
-            '@media (hover: hover) { [role=toolbar] button:hover { filter: brightness(.96) } }</style>')
+            '@media (hover: hover) { [role=toolbar] button:not([aria-disabled="true"]):hover { filter: brightness(.96) } }</style>')
 
 # Esc closes the top layer alone, and a modal takes and gives back the focus (testing.md, keyboard only; the tooltips teach it: "Close history · Esc"), on every
 # Player and editor board: the layer's own way out is pressed, so Esc does exactly what a click outside or its Back
