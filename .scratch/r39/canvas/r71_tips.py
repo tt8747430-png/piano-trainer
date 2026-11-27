@@ -36,6 +36,12 @@ for _f in sorted(os.listdir(_d)):
     if 'data-tip=' in _n and 'data-tipopen' not in _n:
         _rule = '<style data-tipopen>[data-tip][aria-expanded="true"]::after { display: none !important }</style>'
         _n = _n.replace('</head>', _rule + '</head>', 1) if '</head>' in _n else _rule + _n
+    # a bar's last control stands on the screen's edge: its name ends flush with it, never centred past the edge
+    # (HIG, help tags stay on screen; the Player's band ended 9 past 1710 by its Piano keys tip)
+    if 'data-tip=' in _n and 'data-tipedge' not in _n:
+        _rule = ('<style data-tipedge>header > [data-tip]:last-child::after { left: auto; right: 0; translate: 0 4px }'
+                 ' body:not(:has([role=dialog])) header > [data-tip]:last-child:hover::after { translate: 0 0 }</style>')
+        _n = _n.replace('</head>', _rule + '</head>', 1) if '</head>' in _n else _rule + _n
     if _n != _h:
         _n_ctl += _n.count('data-tip=') - _h.count('data-tip=')
         open(_d + _f, 'w').write(_n)

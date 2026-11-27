@@ -666,8 +666,8 @@ def PICKKEYS(S, SET):
 # brings it back with Undo in its toast (a loss that can be undone happens at once, CLAUDE.md), Close version history leaves;
 # its page at the Player's zoom (1.5), one page at one size in Practice, Edit and here.
 CLOCKI = _LI('<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>')
-HISTBTN = (f'<button type="button" aria-label="Version history: saved {{{{histAgo}}}}" data-tip="Version history" onClick="{{{{openHist}}}}" style="flex: none; height: 40px; box-sizing: border-box; padding: 0 16px 0 12px; border: 0; border-radius: 20px; background: transparent; box-shadow: {ONB_RING}; color: {ONB}; font: inherit; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; white-space: nowrap; cursor: pointer">'
-           f'{CLOCKI.replace("width=\"20\" height=\"20\"", "width=\"18\" height=\"18\"")}<span>Saved {{{{histAgo}}}}</span></button>')
+HISTBTN = (f'<button type="button" data-hist aria-label="Version history: saved {{{{histAgo}}}}" data-tip="Version history" onClick="{{{{openHist}}}}" style="flex: none; height: 40px; box-sizing: border-box; padding: 0 16px 0 12px; border: 0; border-radius: 20px; background: transparent; box-shadow: {ONB_RING}; color: {ONB}; font: inherit; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; white-space: nowrap; cursor: pointer">'
+           f'{CLOCKI.replace("width=\"20\" height=\"20\"", "width=\"18\" height=\"18\"")}<span data-wide>Saved {{{{histAgo}}}}</span></button>')
 def HISTVIEW():
     row = (f'<button type="button" role="option" aria-selected="{{{{h.on}}}}" onClick="{{{{h.pick}}}}" style="width: 100%; box-sizing: border-box; padding: 12px 16px; border: 0; border-bottom: 1px solid {LINE}; background: {{{{h.bg}}}}; color: {INK}; font: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px; cursor: pointer">'
            f'<span style="display: flex; align-items: baseline; gap: 8px"><span style="flex: 1; font-size: 15px; font-weight: 600">{{{{h.t}}}}</span><sc-if value="{{{{h.cur}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; color: {SOFT}">Current</span></sc-if></span>'
@@ -733,8 +733,8 @@ def SONGMENU(takes_href, extra=(), phone=False):
             # the file's acts apart after a hairline, as the phone's ☰ draws them (Flat's Export and Print stand apart)
             + _SMSEP + it('Share link', 'actShare') + it('Export', 'toggleExp', '#332921; background: {{expBg}}', f'<span aria-hidden="true" style="display: flex; color: {SOFT}">{CHEV_R}</span>') + it('Print', 'actPrint')
             + ''.join(_SMSEP + ''.join(it(*r) for r in grp) for grp in extra))
-    return (f'<div style="position: relative; flex: none; min-width: 0; pointer-events: auto">'
-            f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{smOn}}}}" onClick="{{{{toggleSm}}}}" data-tip="The song’s menu" style="height: 48px; max-width: {"100%" if phone else "320px"}; padding: 0 8px 0 12px; border: 0; border-radius: 12px; background: {{{{smBg}}}}; color: {ONB}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
+    return (f'<div style="position: relative; {"flex: none; min-width: 0" if phone else "flex: 0 1 auto; min-width: 120px; max-width: 320px"}; pointer-events: auto">'
+            f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{smOn}}}}" onClick="{{{{toggleSm}}}}" data-tip="The song’s menu" style="height: 48px; max-width: 100%; padding: 0 8px 0 12px; border: 0; border-radius: 12px; background: {{{{smBg}}}}; color: {ONB}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
             f'<span style="min-width: 0; display: flex; flex-direction: column"><h1 style="margin: 0; font-size: 17px; font-weight: 600; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</h1>'
             f'<span style="font-size: 13px; line-height: 16px; color: {ONB_SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{verName}}}}</span></span>'
             f'<span aria-hidden="true" style="flex: none; display: flex; color: {ONB_SOFT}">{CHEV_D}</span></button>'
@@ -1042,13 +1042,16 @@ def HDRTRANSPORT(phone=False):
         return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 2px">{start}{play1}{met}{loop}</div>'
     return f'<div role="toolbar" aria-label="Transport" style="flex: none; display: flex; align-items: center; gap: 8px">{start}{play}{met}{loop}{tr}{midi}</div>'
 
+# The band under 1280 (a 1024 laptop, an iPad on its side): every act stays; Version history folds to its clock (its words
+# in the tooltip and the label), and the name gives way first, to 120 with its ellipsis. Under 768 the phone's header.
+BANDNARROW = '<style>@container band (max-width: 1279px) { [data-band] [data-wide] { display: none } [data-band] [data-hist] { width: 40px; padding: 0; justify-content: center } }</style>'
 def BANDHDR(close_href, mode, practice_href, edit_href, right='', over=False):
     """The one header of the Player's screen, Practice and Edit alike: ✕, the song's menu, the transport, the mode.
     over: laid over the screen at its top (the Player's absolute layers), else in the column's flow (the editor)."""
     x = (f'<a href="{close_href}" aria-label="Close" data-tip="Close · Esc" style="flex: none; width: 40px; height: 40px; border-radius: 20px; color: {ONB}; display: flex; align-items: center; justify-content: center">'
          '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></a>')
-    return (f'<header data-band style="{"position: absolute; z-index: 48; left: 0; right: 0; top: 0" if over else "flex: none; position: relative; z-index: 20"}; height: 64px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 12px; background: {BAND}; color: {ONB}">'
-            f'{x}{SONGMENU("TakesLaptop.dc.html")}{HDRTRANSPORT()}{MODESW(mode, practice_href, edit_href)}<span style="flex: 1"></span>{right}</header>')
+    return (f'<header data-band style="{"position: absolute; z-index: 48; left: 0; right: 0; top: 0" if over else "flex: none; position: relative; z-index: 20"}; container: band / inline-size; height: 64px; box-sizing: border-box; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 12px; background: {BAND}; color: {ONB}">'
+            f'{BANDNARROW}{x}{SONGMENU("TakesLaptop.dc.html")}{HDRTRANSPORT()}{MODESW(mode, practice_href, edit_href)}<span style="flex: 1"></span>{right}</header>')
 
 # The header's popovers, new and the same in both modes: each a card hung 8 under its button, a tap outside closing it
 # (the kit's popover card: 16 round, the page's paper, the hairline and the float shadow). Playback options holds what
