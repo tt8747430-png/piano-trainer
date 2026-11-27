@@ -1,4 +1,9 @@
 # R58: the Chord player redrawn to its brief (.scratch/r39/plan/practice-chord-player.md, rulings of 2026-11-13):
+# one icon, one meaning (ux-principles): layers is Versions' alone; a style is the drum (Lucide), saving to the
+# learner's progressions list-plus, the Progressions place list-music
+DRUMP = '<path d="m2 2 8 8"></path><path d="m22 2-8 8"></path><ellipse cx="12" cy="9" rx="10" ry="5"></ellipse><path d="M7 13.4v7.9"></path><path d="M12 14v8"></path><path d="M17 13.4v7.9"></path><path d="M2 9v8a10 5 0 0 0 20 0V9"></path>'
+LISTPLUSP = '<path d="M11 12H3"></path><path d="M16 6H3"></path><path d="M16 18H3"></path><path d="M18 9v6"></path><path d="M21 12h-6"></path>'
+LISTMUSP = '<path d="M21 15V6"></path><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M12 12H3"></path><path d="M16 6H3"></path><path d="M12 18H3"></path>'
 DOTSB = IB('More', MORE, 'openMore')
 # Musicca's chord sheet (Root, Chord, Bass note, Duration − n beats +, Suggested chords, Play from here, Duplicate,
 # Delete, Done); each bar's beats as ticks, the sounding beat lit; a bar whose beats do not add up kept as it is and
@@ -397,7 +402,7 @@ CHORDSI = _LI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></c
 GENOSI = _LI('<rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 10h2M10 10h2M16 10h2M6 14h12"></path>')
 RAIL77 = (f'<nav aria-label="Panels" style="flex: none; width: 76px; padding: 12px 0; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
           f'<div role="tablist" aria-orientation="vertical" aria-label="Panels" style="display: flex; flex-direction: column; gap: 4px">'
-          + _RAILBTN('Chords', CHORDSI, 'Ch', 'Chords') + _RAILBTN('Styles', LAYERSI.replace('width="20" height="20"', 'width="22" height="22"'), 'St', 'Styles') + _RAILBTN('Genos', GENOSI, 'Ge', 'Genos')
+          + _RAILBTN('Chords', CHORDSI, 'Ch', 'Chords') + _RAILBTN('Styles', f'<svg viewBox="0 0 24 24" width="22" height="22" {I}>{DRUMP}</svg>', 'St', 'Styles') + _RAILBTN('Genos', GENOSI, 'Ge', 'Genos')
           + _RAILBTN('Sound', AUDIOI, 'So', 'Sound') + _RAILBTN('Chart', LAYOUTI, 'Ca', 'Chart') + '</div>'
           + '<span style="flex: 1"></span>' + _RAILBTN('Search', SEARCHI, 'Srch', 'Search · ⌘K', 'cpSearch') + _RAILBTN('Shortcuts', KBDI, 'Keys', 'Shortcuts · ?', 'cpKeysHelp') + '</nav>')
 _DRAGB = DRAG[DRAG.index('<div style="display: grid'):]
@@ -451,10 +456,10 @@ _sep = f'<div role="separator" style="flex: none; height: 1px; margin: 4px 12px;
 PHNAV77 = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
            f'<nav aria-label="{{{{sheetsL}}}}" class="nos" style="position: absolute; z-index: 61; top: 120px; right: 8px; left: 24px; max-height: calc(100% - 170px); overflow-y: auto; box-sizing: border-box; padding: 12px 8px; border-radius: 22px; background: {PAGE}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 18px 48px -12px rgba(51,41,33,.38); display: flex; flex-direction: column; gap: 8px">'
            f'<p style="margin: 0; padding: 4px 12px 0; text-align: center; font-size: 17px; font-weight: 600; line-height: 22px; color: {INK}">{{{{sheetsL}}}}</p>'
-           + FROWS([(_FI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>'), 'Chords', '', 'cpPhChords'), ('Song', 'Style', '{{styleL}}', 'openStyle'), ('Tr', 'Key', '{{keyL}} major', 'openKey'), ('Speed', 'Tempo', '{{bpmL}} BPM', 'openTempo'),
+           + FROWS([(_FI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>'), 'Chords', '', 'cpPhChords'), (_FI(DRUMP), 'Style', '{{styleL}}', 'openStyle'), ('Tr', 'Key', '{{keyL}} major', 'openKey'), ('Speed', 'Tempo', '{{bpmL}} BPM', 'openTempo'),
                     (_FI('<path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path>'), 'Repeats', '{{repL}}', 'openRep'), ('Aud', 'Sound', '', 'cpPhSound'), ('Lay', 'Chart', '{{namesL}}', 'cpPhChart'), ('Midi', 'MIDI', '{{cpMidiL}}', 'cpPhMidi')], lines=False, h=48)
            + _sep + FROWS([('Share', 'Share…', '', 'openShare', INK, False), ('Exp', 'Export', '', 'cpPhExp'), (FICONS['Exp'].replace('M12 3v12M7 10l5 5 5-5', 'M12 15V3M7 8l5-5 5 5'), 'Import chart…', '', 'importChart', INK, False)], lines=False, h=48)
-           + _sep + FROWS([('Song', 'Save to my progressions', '', 'saveProg', INK, False), ('Song', 'Open in Progressions', '', 'Progressions.dc.html')], lines=False, h=48) + '</nav></sc-if>')
+           + _sep + FROWS([(_FI(LISTPLUSP), 'Save to my progressions', '', 'saveProg', INK, False), (_FI(LISTMUSP), 'Open in Progressions', '', 'Progressions.dc.html')], lines=False, h=48) + '</nav></sc-if>')
 # Export, the Player's shape: one row, its formats on a page with ← on a phone and a submenu on a laptop
 EXPROWS77 = GROUP(('action', 'MIDI', 'exportMidi', INK), ('action', 'Chart (.txt)', 'exportChart', INK), bg=SHEET)
 PHPAGES77 = (FSHEET('cpPhExpOn', 'Export', EXPROWS77, back='phToMenu') + FSHEET('cpPhSoundOn', 'Sound', SOUND77, back='phToMenu') + FSHEET('cpPhChartOn', 'Chart', CHART77, back='phToMenu') + FSHEET('cpPhMidiOn', 'MIDI', MIDI77, back='phToMenu')
