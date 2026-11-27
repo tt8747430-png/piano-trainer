@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-27 · 0774fd51 · on the laptop a panel's title stands on its cards' 16 edge (it stood 20 in, 4 off), and the Genos card is 12 in all round (its rows sat 8 apart and 8 from its top) · ChordPlayerLaptop · **pending**
 
 ## Changes
 
+- 2026-11-27 · 0774fd51 · on the laptop a panel's title stands on its cards' 16 edge (it stood 20 in, 4 off), and the Genos card is 12 in all round (its rows sat 8 apart and 8 from its top) · ChordPlayerLaptop · v847
 - 2026-11-27 · 8723bcc8 · the Chord player's old settings sheet (R76's Sound, Playing, Chart, MIDI, Layout), still built but opened by nothing since R77 took the gear, deleted; nothing looks different · ChordPlayer, ChordPlayerLaptop · v846
 - 2026-11-27 · 5ae28f8c · Scales' laptop staff card stands as deep under the music as over it (33 and 33; it was 33 and 38, the view running 2.8 units under the lowest finger) · Scales, ScalesLaptop · v845
 - 2026-11-27 · 8fad5f2e · the laptop chart's first section stands level with the open panel's title (it stood 6 lower: columns side by side share a top) · ChordPlayerLaptop · v844
