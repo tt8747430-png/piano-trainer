@@ -4,6 +4,9 @@ lyricist: Valentin Popovici
 composer: John W. Peterson - Alfred B. Smith
 count-pickup
 systems: 1 7 14 20 | 26 32 38 44 49
+slur: Alto 20 +3/8, Alto 44 +3/8, Alto 24 +3/4, Tenor 18 +3/16, Tenor 19 +3/16, Tenor 24 +3/4, Tenor 26 +3/16, Tenor 27 +3/16, Tenor 40 +3/4, Tenor 42 +3/16, Tenor 43 +3/16, Bass 40 +3/4
+double: 33
+bar-length: 53 1/2
 
 [Alto notes]
 1: @1 Bb3:8. Bb3:16 @2 Bb3:4 Bb3:4 Bb3:4 @3 Eb4:4 Bb3:4 Bb3:4 @4 Ab3:4 C4:2~ @5 C4:2 C4:8. Bb3:16 @6 D4:4 D4:4 D4:4
@@ -19,10 +22,10 @@ systems: 1 7 14 20 | 26 32 38 44 49
 [Soprano]
 1: @1 1.Ră -- tă -- ceam în pă -- cat și pier -- za -- re, E -- ram sin -- gur în noap -- te stră -- in,
 1: @9 Dar Bu -- nul Păs -- tor cu'n -- du -- ra -- re M'a gă -- sit și mi'a dat har din plin.
-1: @20 vor în -- so -- ți zi de zi, zi de zi'n via -- ța _ mea, _ _ _ _ Bu -- nă --
-1: @26 ta _ -- tea,'n -- du -- ra _ -- rea mă vor în -- so -- ți zi de zi, zi de zi'n via -- ța _ mea.
+1: @20 vor _ în -- so -- ți zi de zi, zi de zi'n via -- ța mea, _ _ _ _ Bu -- nă --
+1: @26 ta _ -- tea,'n -- du -- ra _ -- rea mă vor _ în -- so -- ți zi de zi, zi de zi'n via -- ța mea.
 1: @33 Și voi tră -- i veș -- nic în ca -- sa Dom -- nu -- lui meu, La ma -- sa Lui în mă -- ri -- re voi ci -- na. _ _ Bu -- nă --
-1: @42 ta _ -- tea,'n -- du -- ra _ -- rea mă vor în -- so -- ți zi de zi, zi de zi'n via -- ța _ mea;
+1: @42 ta _ -- tea,'n -- du -- ra _ -- rea mă vor _ în -- so -- ți zi de zi, zi de zi'n via -- ța mea;
 1: @49 Zi de zi, zi de zi'n via -- ța mea.
 2: @1 2.Cu blân -- de -- țe El mă'n -- vi -- o -- rea -- ză, Și pu -- te -- re îmi dă zi de zi,
 2: @9 La a -- pe tot El mă con -- du -- ce Mă pă -- zeș -- te de ori -- ce'ar ve -- ni.
