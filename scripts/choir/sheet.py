@@ -1,6 +1,7 @@
 """The song's full score in MusicXML, corrected before its voices are split, so every part carries it: the notes
 entered from the sheet, its repeats and tempo, and its words."""
 
+import copy
 import xml.etree.ElementTree as ET
 from fractions import Fraction
 
@@ -42,7 +43,7 @@ def numbered(measures, count_pickup):
 
 
 def structure_xml(score, spec):
-    """The tempo and repeats as printed, in every part."""
+    """The tempo, repeats, endings and double barlines as printed, in every part."""
     if spec.get('tempo'):
         for d in score.iter('direction'):
             for pm in d.iter('per-minute'):
@@ -50,10 +51,47 @@ def structure_xml(score, spec):
             for snd in d.findall('sound'):
                 if snd.get('tempo'):
                     snd.set('tempo', str(spec['tempo']))
-    if not spec.get('repeat'):
-        return
-    start, at, end = spec['repeat']
-    at = at * 4  # from a fraction of a whole note to beats (quarters), the unit of MusicXML durations here
+    for start, at, end in spec.get('repeats', []):
+        repeat_xml(score, spec, start, at * 4, end)  # at: from a fraction of a whole note to beats (quarters)
+    for first, last, number in spec.get('endings', []):
+        ending_xml(score, spec, first, last, number, closed=(first, last, number) != spec['endings'][-1])
+    for bar in spec.get('doubles', []):
+        for part in score.findall('part'):
+            measures = part.findall('measure')
+            nums = numbered(measures, spec.get('count_pickup'))
+            bl = right_barline([m for m, n in zip(measures, nums) if n == bar][-1])
+            if bl.find('bar-style') is None:
+                bl.insert(0, ET.Element('bar-style'))
+                bl[0].text = 'light-light'
+
+
+def right_barline(m):
+    """A measure's right barline, made once and shared by a repeat and an ending that end there."""
+    bl = m.find("barline[@location='right']")
+    if bl is None:
+        bl = ET.SubElement(m, 'barline', location='right')
+    return bl
+
+
+def ending_xml(score, spec, first, last, number, closed):
+    """A first or second ending's bracket over its bars; the last is left open at its end, as printed."""
+    for part in score.findall('part'):
+        measures = part.findall('measure')
+        nums = numbered(measures, spec.get('count_pickup'))
+        a = measures[nums.index(first)]
+        b = [m for m, n in zip(measures, nums) if n == last][-1]
+        left = a.find("barline[@location='left']")
+        if left is None:
+            left = ET.Element('barline', location='left')
+            a.insert(0, left)
+        ET.SubElement(left, 'ending', number=number, type='start')
+        right = right_barline(b)
+        rep = right.find('repeat')
+        stop = ET.Element('ending', number=number, type='stop' if closed else 'discontinue')
+        right.insert(list(right).index(rep) if rep is not None else len(right), stop)
+
+
+def repeat_xml(score, spec, start, at, end):
     for part in score.findall('part'):
         measures = part.findall('measure')
         nums = numbered(measures, spec.get('count_pickup'))
@@ -116,9 +154,23 @@ def structure_xml(score, spec):
         measures = part.findall('measure')
         nums = numbered(measures, spec.get('count_pickup'))
         last = [m for m, n in zip(measures, nums) if n == end][-1]
-        bl = ET.SubElement(last, 'barline', location='right')
-        ET.SubElement(bl, 'bar-style').text = 'light-heavy'
+        bl = right_barline(last)
+        for x in bl.findall('bar-style'):
+            bl.remove(x)
+        bl.insert(0, ET.Element('bar-style'))
+        bl[0].text = 'light-heavy'
         ET.SubElement(bl, 'repeat', direction='backward')
+
+
+def pitch_xml(el, name, at=None):
+    """A note's pitch (`C#5`, `Bb4`) into a MusicXML note, first or at a given place among its children."""
+    p = ET.Element('pitch')
+    ET.SubElement(p, 'step').text = name[0]
+    acc = name[1:-1]
+    if acc:
+        ET.SubElement(p, 'alter').text = '1' if acc == '#' else '-1'
+    ET.SubElement(p, 'octave').text = name[-1]
+    el.insert(len(el) if at is None else at, p)
 
 
 def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=False):
@@ -148,16 +200,14 @@ def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=
             el = ET.SubElement(m, 'note')
             if nd['pitch'] is None:
                 ET.SubElement(el, 'rest')
-                if nd.get('unison'):
-                    # sung with the staff's other voice on its note: hidden here, the part takes that note
+                if nd.get('unison') or nd.get('hidden'):
+                    # sung with the staff's other voice on its note (the part takes that note), or a rest the sheet
+                    # leaves out where the other voice sings alone: not printed here
                     el.set('print-object', 'no')
+                    if nd.get('hidden'):
+                        el.set('rest-kept', 'yes')  # the voice's part keeps its rest (read by voices.voice_events)
             else:
-                p = ET.SubElement(el, 'pitch')
-                ET.SubElement(p, 'step').text = nd['pitch'][0]
-                acc = nd['pitch'][1:-1]
-                if acc:
-                    ET.SubElement(p, 'alter').text = '1' if acc == '#' else '-1'
-                ET.SubElement(p, 'octave').text = nd['pitch'][-1]
+                pitch_xml(el, nd['pitch'])
             ET.SubElement(el, 'duration').text = str(int(duration(nd) * div))
             if tied and nd['pitch']:
                 ET.SubElement(el, 'tie', type='stop')
@@ -180,6 +230,15 @@ def notes_xml(score, part_index, staff, voice, block, multi_staff, count_pickup=
                 ET.SubElement(notations, 'tied', type='start')
             if not len(notations):
                 el.remove(notations)
+            for other in nd.get('more', []):
+                # the voice divided: the other notes of its chord, after the first
+                ch = copy.deepcopy(el)
+                for x in list(ch):
+                    if x.tag in ('pitch', 'lyric'):
+                        ch.remove(x)
+                ch.insert(0, ET.Element('chord'))
+                pitch_xml(ch, other, at=1)
+                m.append(ch)
             tied = nd['tie']
 
 

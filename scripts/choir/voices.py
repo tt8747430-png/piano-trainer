@@ -69,11 +69,23 @@ def read_voices(part):
 
 
 def lines_of(score):
-    """The voices of the score, top to bottom: a list of (part index, staff, voice, which note of a chord)."""
+    """The voices of the score, top to bottom: a list of (part index, staff, voice, which note of a chord). A staff
+    that writes its two voices as voices keeps each whole, its chords a voice divided (which note: None, all of
+    them); a staff that writes them as one voice's chords gives each chord note a line of its own."""
     found = []
     for pi, part in enumerate(score.findall('part')):
-        for m, head, events, div in read_voices(part):
+        measures = read_voices(part)
+        sung = {}
+        for m, head, events, div in measures:
             for (staff, voice), evs in events.items():
+                if any(not e.rest for e in evs):
+                    sung.setdefault(staff, set()).add(voice)
+        for m, head, events, div in measures:
+            for (staff, voice), evs in events.items():
+                if len(sung.get(staff, ())) > 1:
+                    if any(not e.rest for e in evs) and (pi, staff, voice, None) not in found:
+                        found.append((pi, staff, voice, None))
+                    continue
                 width = max(len(e.notes) for e in evs if not e.rest) if any(not e.rest for e in evs) else 0
                 for k in range(width):
                     if (pi, staff, voice, k) not in found:
@@ -86,8 +98,8 @@ def pitch_mean(score, line):
     ps = []
     for m, head, events, div in read_voices(score.findall('part')[pi]):
         for ev in events.get((staff, voice), []):
-            if not ev.rest and len(ev.notes) > k:
-                ps.append(midi(ev.notes[k]))
+            if not ev.rest and len(ev.notes) > (k or 0):
+                ps.append(midi(ev.notes[k or 0]))
     return sum(ps) / len(ps) if ps else 0
 
 
@@ -144,7 +156,9 @@ def voice_events(events, line, fallback):
     """One part's events in a measure, each with the chord note it sings: the line's own, and where it has none (a bar
     or the part of a bar its staff writes as one line) its staff's other voice."""
     pi, staff, voice, k = line
-    own = [e for e in events.get((staff, voice), []) if not (e.rest and e.notes[0].get('print-object') == 'no')]
+    # a rest not printed is the other voice's note sung in unison, unless the rest is kept (a rest the sheet leaves out)
+    own = [e for e in events.get((staff, voice), [])
+           if not (e.rest and e.notes[0].get('print-object') == 'no' and e.notes[0].get('rest-kept') != 'yes')]
     out = [(e, k) for e in own]
     if fallback is not None:
         covered = [(e.start, e.start + e.dur) for e in own]
@@ -199,7 +213,7 @@ def build(score, kind, sources):
     def mean_of(line, other):
         ps = []
         for m, head, events, div in read[line[0]]:
-            ps += [midi(e.notes[min(k, len(e.notes) - 1)]) for e, k in voice_events(events, line, other) if not e.rest]
+            ps += [midi(e.notes[min(k or 0, len(e.notes) - 1)]) for e, k in voice_events(events, line, other) if not e.rest]
         return sum(ps) / len(ps) if ps else None
 
     # Two voices of a staff that come out upside down (the lower above the upper) change places.
@@ -296,21 +310,27 @@ def build(score, kind, sources):
                     continue
                 t = advance(ev.start, t)
                 t = ev.start + ev.dur
-                src_note = ev.notes[min(k, len(ev.notes) - 1)]
-                n = copy.deepcopy(src_note)
-                for tag in ('chord', 'staff', 'stem'):
-                    for c in n.findall(tag):
-                        n.remove(c)
-                for tag in ('default-x', 'default-y', 'print-object', 'relative-y', 'relative-x'):
-                    n.attrib.pop(tag, None)
-                n.find('voice').text = '1'
-                if shifts[i] and n.find('pitch/octave') is not None:
-                    n.find('pitch/octave').text = str(int(n.findtext('pitch/octave')) + shifts[i])
-                if ev.rest and n.find('rest') is not None:
-                    n.find('rest').attrib.clear()
-                for d in n.findall('rest/display-step') + n.findall('rest/display-octave'):
-                    n.find('rest').remove(d)
-                nm.append(n)
+                # a voice kept whole (k None) sings every note of its chord: divided, both in its part
+                srcs = ev.notes if k is None and not ev.rest else [ev.notes[min(k or 0, len(ev.notes) - 1)]]
+                for ci, src_note in enumerate(srcs):
+                    n = copy.deepcopy(src_note)
+                    for tag in ('chord', 'staff', 'stem'):
+                        for c in n.findall(tag):
+                            n.remove(c)
+                    for tag in ('default-x', 'default-y', 'print-object', 'relative-y', 'relative-x', 'rest-kept'):
+                        n.attrib.pop(tag, None)
+                    if ci:
+                        n.insert(0, ET.Element('chord'))
+                        for l in n.findall('lyric'):
+                            n.remove(l)
+                    n.find('voice').text = '1'
+                    if shifts[i] and n.find('pitch/octave') is not None:
+                        n.find('pitch/octave').text = str(int(n.findtext('pitch/octave')) + shifts[i])
+                    if ev.rest and n.find('rest') is not None:
+                        n.find('rest').attrib.clear()
+                    for d in n.findall('rest/display-step') + n.findall('rest/display-octave'):
+                        n.find('rest').remove(d)
+                    nm.append(n)
             if marks:
                 advance(marks[-1][1], t)
         fill_words_from(part, sources, i)

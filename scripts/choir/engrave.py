@@ -4,7 +4,7 @@ title and names, the line and page breaks, the marks, ties and hidden staves. Th
 import xml.etree.ElementTree as ET
 from fractions import Fraction
 
-from common import DURATIONS, find_voice, hide, main_name, read_mscz, staves, voice_of
+from common import DURATIONS, ORDER, find_voice, hide, main_name, read_mscz, staves, voice_of
 from words import Tied, place
 
 DYNAMICS = ('ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff', 'sf', 'sfz')
@@ -352,13 +352,22 @@ def marks_mscx(score, spec, nums):
             loc = ET.SubElement(pv, 'location')
             ET.SubElement(loc, 'fractions').text = f'-{length.numerator}/{length.denominator}'
             ev.insert(list(ev).index(et) if et is not None else len(ev), end_sp)
-        elif what == 'fermata':
-            # On every staff of the bar, over the top voice and under the lower, as printed.
-            for st_ in staffs:
+        elif what.split('/')[0] == 'fermata':
+            # On every staff of the bar, over the top voice and under the lower, as printed; or over one voice
+            # (fermata/Bass: the voice's place on the two staves, its staff's upper or lower voice).
+            only = None
+            if '/' in what:
+                k = next(names.index(what.split('/')[1]) for names in ORDER.values() if what.split('/')[1] in names)
+                only = (k // 2, k % 2)
+            for si, st_ in enumerate(staffs):
+                if only is not None and si != only[0]:
+                    continue
                 for m2, n2 in zip(st_.findall('Measure'), nums):
                     if n2 != mk['bar']:
                         continue
                     for vi, v2 in enumerate(m2.findall('voice')[:2]):
+                        if only is not None and vi != only[1]:
+                            continue
                         t2 = chord_at(m2, mk['at'], vi)
                         if t2 is None:
                             continue

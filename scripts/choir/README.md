@@ -55,9 +55,11 @@ Every made score and each of its parts takes the house template, so no song need
 6. A song whose old files are removed is final: a build makes it again from them as git keeps them, so a rule
    fixed in the builder reaches every finished song.
 
-A song that exists only as a PDF is written in whole from its sheet: its `match.txt` gives `key:`, `time:` and a
-`[Voice notes]` block for every voice, and the build starts from the template's two empty staves
-(`template.skeleton`), then runs as above. `heads` reads the sheet's noteheads for it: `ruler` saves a staff with
+A song that exists only as a PDF, or whose files lack voices, is written in whole from its sheet: its `match.txt`
+gives `key:`, `time:` and a `[Voice notes]` block for every voice, and the build starts from the template's two empty
+staves (`template.skeleton`), then runs as above (any files of the song were only read to write it). The sheet's
+structure is a line each: `repeat:` (several), `ending:`, `time-change:`, `double:`; a voice divided is a chord
+(`C#4+E4:2.`), a rest left unprinted `x:`. `heads` reads the sheet's noteheads for it: `ruler` saves a staff with
 an x ruler, `scan` lists every column of heads between the barlines, and x values name the heads there.
 
 | Module      | Holds                                                                         |

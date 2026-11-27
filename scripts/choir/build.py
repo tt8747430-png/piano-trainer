@@ -38,8 +38,9 @@ def build(wanted=()):
         final = made_name(song_dir, tag)
         files = [f for f in song_files(song_dir) if f != final]
         spec = specs.read(song_dir)
-        if not files and {b['voice'] for b in spec['notes']} == set(ORDER[kind]):
-            # Every voice written in from the sheet: the song starts from the house template.
+        if {b['voice'] for b in spec['notes']} == set(ORDER[kind]):
+            # Every voice written in from the sheet: the song starts from the house template (its files, if any,
+            # were only read to write it).
             todo.append(dict(d=d, sub=sub, kind=kind, tag=tag, dir=song_dir, xmls=[], why=None, spec=spec,
                              from_template=True))
             continue
@@ -113,7 +114,7 @@ def split(s, done, work, n, second):
     if entering:
         enter_notes(score, s['kind'], spec, lyric_srcs)
         corrected = True
-    if spec.get('repeat') or spec.get('tempo'):
+    if spec.get('repeat') or spec.get('endings') or spec.get('doubles') or spec.get('tempo'):
         # Repeats and tempo as printed, after any notes are entered (a repeat may split a bar).
         sheet.structure_xml(score, spec)
         corrected = True

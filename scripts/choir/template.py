@@ -101,6 +101,13 @@ def skeleton(kind, spec):
                 ET.SubElement(c, 'line').text = str(clef[1])
                 if clef[2]:
                     ET.SubElement(c, 'clef-octave-change').text = str(clef[2])
+        for bar, (b, bt, sym) in spec.get('time_changes', []):
+            # a new time signature from that bar, as printed
+            at = ET.Element('attributes')
+            tm = ET.SubElement(at, 'time', **({'symbol': sym} if sym else {}))
+            ET.SubElement(tm, 'beats').text = str(b)
+            ET.SubElement(tm, 'beat-type').text = str(bt)
+            part.findall('measure')[bar - 1].insert(0, at)
         # The final barline (a repeat in match.txt may add its own).
         bl = ET.SubElement(part.findall('measure')[-1], 'barline', location='right')
         ET.SubElement(bl, 'bar-style').text = 'light-heavy'

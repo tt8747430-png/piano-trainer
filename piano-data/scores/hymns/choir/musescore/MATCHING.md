@@ -74,3 +74,18 @@ by hand.
   Without them MuseScore added the whole men's staff to song 1's Bass part when it was opened. Check a part by
   letting MuseScore open and save the file (`mscore made.mscz -o check.mscz`) and reading the parts' `Tracklist`:
   the Tenor and Bass parts must come back as `sTrack` 4 and 5.
+- **A staff's two voices split into chord notes.** Where a voice divides (song 7: the tenors on C♯4 and E4, the basses
+  on A3 and A2), the builder once read every chord note as a voice of its own and gave the men's words to the wrong
+  bars of their parts. A staff written as two voices now keeps each voice whole, its chords a voice divided
+  (`C#4+E4:2.` in `[Voice notes]`), both notes in its part.
+- **A line drawn after a syllable inside a word.** The sheet sometimes draws a hold line after a syllable in the middle
+  of a word (song 7, bar 30: "Is-ra____ e-le"). Written `Is -- ra -- e`, the tool takes it for a hyphen and draws no
+  line: where the sheet prints a line and no hyphen, the syllable is written as a word's end (`Is -- ra e -- le`).
+- **Rests printed or left out.** A voice silent while its staff's other voice sings is printed with its rests where
+  the sheet prints them (song 7, bars 15-16, 82-85) and left blank (`x:`) where the sheet leaves the staff blank
+  (bars 95-97). Read the sheet's rests, never assume.
+- **A fermata over one voice.** Where only some voices hold (song 7, bars 45 and 61), each fermata names its voice
+  (`45 fermata/Soprano`), never one over every voice.
+- **What the sheet prints and the builder lacked.** Song 7 needed first and second endings, two repeats, a change of
+  time (6/8 and back), double barlines and divided voices; each is now a `match.txt` line (`spec.py`), never a hand
+  edit.

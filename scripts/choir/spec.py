@@ -18,7 +18,11 @@ voice names before the staves, the tempo set but not printed, template/house.mss
     dashed: 20 22                      ties and slurs in these bars drawn dashed, as printed
     beams                              eighths beamed together (by default each has its own flag, as sung lines are)
     bar-numbers: every                 a number over every bar (by default only at a line's start)
-    repeat: 9+3/4 17                   a repeat from bar 9, 3/4 in (the bar is split there, as printed), to bar 17
+    repeat: 9+3/4 17, 63 70            a repeat from bar 9, 3/4 in (the bar is split there, as printed), to bar 17;
+                                       several, by commas
+    ending: 69-70 1, 71-72 2           first and second endings over those bars (the last left open, as printed)
+    double: 28 45                      a double barline at the end of these bars, as printed
+    time-change: 91 6/8                a new time signature from that bar (as `time:`)
     tempo: 105                         the tempo as printed
     footer: Corul ...                  a line of text at the foot of each page
     brace                              the staves joined by a brace, as a sheet exported from MuseScore draws them
@@ -27,7 +31,7 @@ voice names before the staves, the tempo set but not printed, template/house.mss
     marks: 1 pp, 2+1/4 <3/4, 14 fermata, 1 text:Moderato religioso
                                        marks as printed: a dynamic (pp p mp mf f ff), a hairpin (< or > with its
                                        length in whole notes) at a bar (+ where in the bar), a fermata over every
-                                       voice at that point, a bold italic text
+                                       voice at that point (fermata/Bass: over that voice alone), a bold italic text
     hide-staff: Tenor 25-32            a voice's staff left out in those bars (an empty staff, as the sheet has it)
     untie: Bass 38                     a tie the file has and the sheet does not, in that voice's bars (commas)
     slur: Alto 13+1/2 +1/8, ...        a slur the sheet prints for a voice that sings words printed elsewhere
@@ -51,9 +55,12 @@ syllable ending in `|` draws no line over the notes it holds (where the sheet pr
 note of bar N (as the bar is numbered on the page). `python3 scripts/choir notes <score.mscz> <staff> <voice>` lists
 a voice's notes bar by bar, for writing the words against them.
 
-Notes: `Eb4:8.` is a pitch and octave, its length (1 2 4 8 16 32) and dots; `r:4` a rest; `u:4` the note the
-staff's other voice sings, in unison (one notehead, as printed; the voice's part takes that note); `~` after a
-length ties to the next note; `t` after a length makes it a triplet's third.
+Notes: `Eb4:8.` is a pitch and octave, its length (1 2 4 8 16 32) and dots; `r:4` a rest; `x:4` a rest not
+printed (the staff's other voice sings alone there, as the sheet prints it); `u:4` the note the staff's other voice
+sings, in unison (one notehead, as printed; the voice's part takes that note); `~` after a
+length ties to the next note; `t` after a length makes it a triplet's third; `C#5+E4:8` is a chord (a voice divided,
+both notes in its part). A bar holds only the notes written in it: one the sheet prints short (a pickup, a bar cut
+before a repeat) is short.
 """
 
 import os
@@ -61,6 +68,15 @@ import re
 from fractions import Fraction
 
 from common import VOICE_NAMES
+
+
+def time_of(value):
+    """A time signature as printed (C, C|, 6/8) to (beats, beat type, symbol)."""
+    v = value.strip()
+    if v in ('C', 'C|'):
+        return (4, 4, 'common') if v == 'C' else (2, 2, 'cut')
+    beats, _, beat_type = v.partition('/')
+    return (int(beats), int(beat_type), None)
 
 
 def read(song_dir):
@@ -101,12 +117,7 @@ def read(song_dir):
         elif key == 'key':
             spec['key'] = FIFTHS[value.strip()]
         elif key == 'time':
-            v = value.strip()
-            if v in ('C', 'C|'):
-                spec['time'] = (4, 4, 'common') if v == 'C' else (2, 2, 'cut')
-            else:
-                beats, _, beat_type = v.partition('/')
-                spec['time'] = (int(beats), int(beat_type), None)
+            spec['time'] = time_of(value)
         elif key == 'spatium':
             spec['spatium'] = value.strip()
         elif key == 'lyrics-size':
@@ -118,9 +129,22 @@ def read(song_dir):
         elif key == 'show-tempo':
             spec['hide_tempo'] = False
         elif key == 'repeat':
-            a, b = value.split()
-            bar, _, at = a.partition('+')
-            spec['repeat'] = (int(bar), Fraction(at) if at else Fraction(0), int(b))
+            for item in value.split(','):
+                a, b = item.split()
+                bar, _, at = a.partition('+')
+                spec.setdefault('repeats', []).append((int(bar), Fraction(at) if at else Fraction(0), int(b)))
+            spec['repeat'] = spec['repeats'][0]
+        elif key == 'double':
+            spec['doubles'] = [int(b) for b in value.split()]
+        elif key == 'ending':
+            for item in value.split(','):
+                bars, number = item.split()
+                a, _, b = bars.partition('-')
+                spec.setdefault('endings', []).append((int(a), int(b or a), number))
+        elif key == 'time-change':
+            for item in value.split(','):
+                bar, sig = item.split()
+                spec.setdefault('time_changes', []).append((int(bar), time_of(sig)))
         elif key == 'tempo':
             spec['tempo'] = int(value)
         elif key == 'bar-numbers':
@@ -230,10 +254,12 @@ def note_tokens(tokens):
             cur = (int(t[1:]), [])
             bars.append(cur)
             continue
-        m = re.match(r'(r|u|[A-G](?:#|b)?\d):(\d+)(\.*)(t?)(~?)$', t)
+        m = re.match(r'(r|u|x|[A-G](?:#|b)?\d(?:\+[A-G](?:#|b)?\d)*):(\d+)(\.*)(t?)(~?)$', t)
         if not m or cur is None:
             raise SystemExit(f'cannot read note {t}')
         pitch, length, dots, trip, tie = m.groups()
-        cur[1].append(dict(pitch=None if pitch in ('r', 'u') else pitch, unison=pitch == 'u', length=int(length),
-                           dots=len(dots), triplet=bool(trip), tie=bool(tie)))
+        pitches = pitch.split('+')
+        rest = pitch in ('r', 'u', 'x')
+        cur[1].append(dict(pitch=None if rest else pitches[0], more=[] if rest else pitches[1:], unison=pitch == 'u',
+                           hidden=pitch == 'x', length=int(length), dots=len(dots), triplet=bool(trip), tie=bool(tie)))
     return bars
