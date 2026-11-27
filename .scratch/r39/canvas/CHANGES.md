@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-27 · 0774fd51 · on the laptop a panel's title stands on its cards' 16 edge (it stood 20 in, 4 off), and the Genos card is 12 in all round (its rows sat 8 apart and 8 from its top) · ChordPlayerLaptop · **pending**
 
 ## Changes
 
