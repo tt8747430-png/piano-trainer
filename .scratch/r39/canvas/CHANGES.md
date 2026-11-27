@@ -11,7 +11,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
-- 2026-11-27 · (this commit) · the Chord player's panel head is the kit's, as the Player's and the editor's (64, « Fold the panel 44 round; it was a copy, 56 with a 40 « named Close the panel), the chart's top back on 24; and a course's library glyph no longer takes the kit's « name (FOLDI → COURSEI), which had shadowed it · ChordPlayerLaptop · **pending**
+- 2026-11-27 · 474d2ae8 · the Chord player's panel head is the kit's, as the Player's and the editor's (64, « Fold the panel 44 round; it was a copy, 56 with a 40 « named Close the panel), the chart's top back on 24; and a course's library glyph no longer takes the kit's « name (FOLDI → COURSEI), which had shadowed it · ChordPlayerLaptop · **pending**
 - 2026-11-27 · 19d1e43e · one word per thing: the Chord player's sound panel is Audio, as the Player's and the editor's (it said Sound on the rail, in ☰ and on its page); its Chart wears a page of text, not the editor's Layout table · ChordPlayer, ChordPlayerLaptop · **pending**
 - 2026-11-27 · 2824f09d · one icon, one meaning: a score's Instruments (the editor's rail and ☰, the Player's Parts fold) wear Lucide's piano; the keys glyph is the Piano keys toggle's alone (both wore it) · Editor, EditorDraft, EditorLaptop, EditorDraftLaptop, PlayerApp · v851
 - 2026-11-27 · 98267d7e · one icon, one meaning: the layers glyph is the Player's Versions alone; the Chord player's Style wears the drum (rail and ☰), Save to my progressions list-plus, Open in Progressions list-music (all three wore layers) · ChordPlayer, ChordPlayerLaptop · v851
