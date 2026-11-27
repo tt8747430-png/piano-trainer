@@ -1079,8 +1079,10 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=Fals
         f'<sc-if value="{{{{hdMidiNone}}}}" hint-placeholder-val="{{{{false}}}}">' + none + '</sc-if>'), f'left: {midi_left}px; top: 65px', 320, phone, back='hdMidiBack')
     if keys_right is not None:
         if phone:
-            out += FSHEET('hdKeysMain', 'Piano keys', FROWS([('Kb', 'Piano', '{{selKbV}}', 'hdGoKb'), ('Lab', 'Labels', '{{selLabV}}', 'hdGoLab')]), close='hdClose')
-            out += FSHEET('hdSubKbOn', 'Piano', FRADIO('selKb'), close='hdClose', back='hdSubBack') + FSHEET('hdSubLabOn', 'Labels', FRADIO('selLab'), close='hdClose', back='hdSubBack')
+            # both choices on one page, as the laptop's popover shows them together: a short list each, no page under a
+            # page (laws, Hick: three options need no page of their own), the screen not left empty under two rows
+            out += FSHEET('hdKeysMain', 'Piano keys', '<div style="display: flex; flex-direction: column; gap: 24px">'
+                          + LABELLED('Piano', FRADIO('selKb')) + LABELLED('Labels', FRADIO('selLab')) + '</div>', close='hdClose')
         else:
             out += _HPOPOVER('hdKeysOn', 'Piano keys', rows(SELROW('Piano', 'selKb', False), SELROW('Labels', 'selLab')), f'right: {keys_right}px; top: 65px', 320, phone)
     return out
@@ -1119,7 +1121,7 @@ def HDRKEYS(S, SET, TOAST, play, playing, loop, loop_on, loop_tip, parts):
     play, loop: the board's own acts; playing, loop_on, loop_tip: its expressions; parts: [(id, name)]."""
     P = repr([list(x) for x in parts])
     return ('...(() => { const S = ' + S + ', SET = ' + SET + '; const pop = S.hdPop ?? null; const sub = pop ? (S.hdSub ?? null) : null; const shut = { hdPop: null, hdSub: null };'
-            " const tg = (k) => () => SET({ hdPop: pop === k ? null : k, hdSub: null }); const SUBS = {}; for (const k of ['Mode', 'Hands', 'Aud', 'Met', 'Speed', 'Kb', 'Lab']) { SUBS['hdSub' + k + 'On'] = sub === k; SUBS['hdGo' + k] = () => SET({ hdSub: k }); }"
+            " const tg = (k) => () => SET({ hdPop: pop === k ? null : k, hdSub: null }); const SUBS = {}; for (const k of ['Mode', 'Hands', 'Aud', 'Met', 'Speed']) { SUBS['hdSub' + k + 'On'] = sub === k; SUBS['hdGo' + k] = () => SET({ hdSub: k }); }"
             " const sg = (list, cur, pick) => list.map(([id, l]) => ({ l, on: id === cur ? 'true' : 'false', bg: id === cur ? '#FEFDFB' : 'transparent', sh: id === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: id === cur ? 600 : 500, pick: () => pick(id) }));"
             " const sp = S.speed ?? 100; const met = S.metro ? 'on' : (S.countBars ?? 1) ? 'count' : 'off'; const NEXT = { count: 'on', on: 'off', off: 'count' }; const MN = { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' };"
             " const hands = (S.showR ?? 'show') === 'hide' ? 'lh' : (S.showL ?? 'show') === 'hide' ? 'rh' : 'both'; const rec = !!S.rec; const solo = S.solo ?? null; const mute = S.mute ?? [];"
