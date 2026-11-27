@@ -424,6 +424,11 @@ for name, sfx in (('PlayerApp', '.dc.html'), ('PlayerDesk', 'Laptop.dc.html')):
         t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', " + SONGMENU_KEYS('s', 'this.setState', lambda m, u: f"sTo: {m}, sUndo: {'true' if u else 'false'}") + (' ' + SELKEYS('s', '((o) => this.setState(o))', [('selInv', [('Root', 'Root position'), ('1st', '1st inversion'), ('2nd', '2nd inversion'), ('3rd', '3rd inversion')], "acc('inv', 'Root')", "(id) => setAcc('inv', id, id === 'Root' ? 'root position' : id + ' inversion')"), ('selVoice', [('Voice-led', 'Voice-led'), ('Block', 'Block')], "acc('voice', 'Voice-led')", "(id) => setAcc('voice', id, id + ' voicing')")]) if name == 'PlayerDesk' else ''), 1)
 
     t = t.replace('</main>', '</main>' + RENAMEDLG(), 1)
+    # the States box beside the frame, as every board's (owner, 2026-11-15): the Player's own moments, each one tap
+    # (states_tool lifts these out of the screen into the dashed States menu)
+    sts = (('playing', 'hdPlay'), ('looping', 'hdLoop'), ('recording from the keyboard', 'hdRec'), ('transposed up a semitone', 'hdTrUp'), ('Playback options open', 'hdOpts'))
+    sts += (('the menu open', 'phMenu'),) if name == 'PlayerApp' else (('Version history open', 'openHist'),)
+    t = t.replace('</main>', '</main>' + ''.join(f'<button type="button" onClick="{{{{{a}}}}}" style="display: none">CANVAS · {l}</button>' for l, a in sts), 1)
     t = open_layers(desk_views(desk_edit(header_transport(player_rail(t)))), False) if name == 'PlayerDesk' else open_layers(phone_band(t), True)
     p.write_text(t)
 print('r74 versions ok')
