@@ -10,6 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-27 · {c} · the phone's Playback options holds its rows in one card, as every other settings page of the two screens (MIDI keyboard, Versions, Transpose, Audio), where it alone laid bare hairline rows on the page (one shape per thing) · Editor, EditorDraft, PlayerApp · v830
 - 2026-11-27 · 418c1e45 · the phone's ☰ is headed by the song's name again, its save state under it (Flat's ≡ menu, 083; the phone's header carries no title, as ruled), where it opened on "Saved on this device" alone; the draft's ☰, taller than the screen, had its hairlines squeezed to nothing by the scrolling column, so Share link ran on from Version history; each hairline keeps its 1px · Editor, EditorDraft, PlayerApp · v829
 - 2026-11-27 · f109ec64 · Solo wears one glyph: the Audio panel and its phone page soloed a part with headphones while the Parts sheet and the Instruments page used the ruled S; the kit's SOLOS is now the one Solo everywhere (one icon, one meaning) · Editor, EditorDraft, EditorDraftLaptop, EditorLaptop, PlayerApp, PlayerDesk · v828
 - 2026-11-27 · bfdca2a9 · the laptop's Version history drops "You" under every saved moment, a song having one author (the line said nothing, and the phone's rows never had it): each moment is its time and what changed · EditorLaptop, EditorDraftLaptop, PlayerDesk · v827

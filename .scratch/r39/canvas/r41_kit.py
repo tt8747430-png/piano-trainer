@@ -1047,7 +1047,8 @@ def HDRPOPS(practice, opts_left, tr_left, midi_left, keys_right=None, phone=Fals
         # (iOS Settings, Flat's Audio playback, Metronome, Playback speed); a pick shows at once and stays on the page
         # Flat's three first, in its order (005; the R74 ruling "its first row as Flat's"), then Practice's own two
         items = [('Aud', 'Audio', '{{hdRoomL}}', 'hdGoAud'), ('Met', 'Metronome', '{{selMetV}}', 'hdGoMet'), ('Speed', 'Playback speed', '{{hdSpeedL}}', 'hdGoSpeed')] + ([('Mode', 'Mode', '{{selModeV}}', 'hdGoMode'), ('Hands', 'Hands', '{{selHandsV}}', 'hdGoHands')] if practice else [])
-        out = FSHEET('hdOptsMain', 'Playback options', FROWS(items), close='hdClose')
+        # its rows in one card, as every other phone settings page (MIDI keyboard, Versions, Transpose, Audio): one shape
+        out = FSHEET('hdOptsMain', 'Playback options', f'<div style="overflow: hidden; {_CARD}">' + FROWS(items) + '</div>', close='hdClose')
         sp = speed.replace(f' border-top: 1px solid {LINE}', '').replace('width: 40px; height: 40px; border: 0; border-radius: 20px', 'width: 44px; height: 44px; border: 0; border-radius: 22px').replace('padding: 0 4px 0 12px', 'padding: 0 6px 0 16px').replace('Playback speed', 'Speed')
         if practice:
             out += FSHEET('hdSubModeOn', 'Mode', FRADIO('selMode'), close='hdClose', back='hdSubBack')
