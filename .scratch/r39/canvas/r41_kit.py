@@ -791,10 +791,11 @@ def SONGMENU_KEYS(S, SET, TOAST, DEF='mine', close_others=''):
 MENUI = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="M4 7h16M4 12h16M4 17h16"></path></svg>'
 ARROWLI = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>'
 _PB = 'flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px; background: transparent; color: ' + INK + '; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer'
-def PHTRANSPORT():
+def PHTRANSPORT(play_off=''):
+    # play_off: the key that rests Play at half strength while there is nothing to play (a new sheet's empty Verse)
     b = lambda lab, tip, inner, act, extra='', look='': f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{_PB}{look}">{inner}</button>'
     start = b('Go to start', 'Go to start', '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="2.5" height="14" rx="1"></rect><path d="M19 6.3v11.4a1 1 0 0 1-1.5.86L9.4 13.3a1.5 1.5 0 0 1 0-2.6l8.1-5.26A1 1 0 0 1 19 6.3z"></path></svg>', 'hdStart')
-    play = b('{{hdPlayTip}}', '{{hdPlayTip}}', '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="{{hdPlayD}}"></path></svg>', 'hdPlay')
+    play = b('{{hdPlayTip}}', '{{hdPlayTip}}', '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="{{hdPlayD}}"></path></svg>', 'hdPlay', f' class="ibd" disabled="{{{{{play_off}}}}}"' if play_off else '')
     loop = b('Loop', '{{hdLoopTip}}', '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>', 'hdLoop', '', '; color: {{hdLoopPh}}')
     # Flat's fourth glyph is the speaker: Playback options (its sheet: Audio playback, Metronome, Playback speed); the
     # metronome is a row there, as Flat's
@@ -1024,7 +1025,7 @@ METI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M9 3h6l4 1
 _HB = 'flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer'
 CABLEI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1"></path><path d="M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9"></path><path d="M21 21v-2h-4"></path><path d="M3 5h4V3"></path><path d="M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3"></path></svg>'
 MIXI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg>'
-def HDRTRANSPORT(phone=False):
+def HDRTRANSPORT(phone=False, play_off=''):
     hb = _HB.replace('width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px', 'width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px') if phone else _HB
     b = lambda lab, tip, inner, act, look, extra='': f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{hb}; {look}">{inner}</button>'
     filled = f'background: {ONB}; color: {BAND}'
@@ -1033,7 +1034,7 @@ def HDRTRANSPORT(phone=False):
     lit = lambda k: f'background: {ONB}; color: {{{{{k}Ph}}}}'
     start = b('Go to start', 'Go to start · ⌃Space', '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="2.5" height="14" rx="1"></rect><path d="M19 6.3v11.4a1 1 0 0 1-1.5.86L9.4 13.3a1.5 1.5 0 0 1 0-2.6l8.1-5.26A1 1 0 0 1 19 6.3z"></path></svg>', 'hdStart', filled)
     play = (f'<div role="group" aria-label="Play" style="flex: none; display: flex; align-items: center; gap: 2px">'
-            + b('{{hdPlayTip}}', '{{hdPlayTip}} · Space', '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="{{hdPlayD}}"></path></svg>', 'hdPlay', f'background: #EDC684; color: {BAND}')
+            + b('{{hdPlayTip}}', '{{hdPlayTip}} · Space', '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="{{hdPlayD}}"></path></svg>', 'hdPlay', f'background: #EDC684; color: {BAND}', f' class="ibd" disabled="{{{{{play_off}}}}}"' if play_off else '')
             + f'<button type="button" aria-label="Playback options" data-tip="Playback options" aria-haspopup="dialog" aria-expanded="{{{{hdOptsX}}}}" onClick="{{{{hdOpts}}}}" style="flex: none; width: 24px; height: 40px; padding: 0; border: 0; border-radius: 12px; background: {{{{hdOptsBg}}}}; color: {ONB}; display: flex; align-items: center; justify-content: center; cursor: pointer">{CHEV_D}</button></div>')
     met = b('{{hdMetTip}}', '{{hdMetTip}} · press to change', SZ(METI, 18) + '<sc-if value="{{hdMetOff}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="position: absolute; width: 22px; height: 1.5px; border-radius: 1px; background: currentColor; transform: rotate(-45deg)"></span></sc-if>', 'hdMet', filled)
     loop = b('Loop', '{{hdLoopTip}} · L', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>', 'hdLoop', lit('hdLoop'), ' aria-pressed="{{hdLoopOn}}"')

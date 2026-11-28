@@ -138,7 +138,7 @@ def CHART59(cols, gap, bh, bf, plus):
             + f'<span style="flex: 1"></span><span aria-label="Move {{{{x.name}}}}" style="flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: {SOFT}; cursor: grab">{GRIP}</span></div>')
     tag = f'<sc-if value="{{{{x.tagOn}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{x.openTag}}}}" aria-label="On the Genos: {{{{x.tag}}}}" style="align-self: flex-start; max-width: 100%; height: 44px; margin: -6px 0 -2px; padding: 0; border: 0; background: transparent; font: inherit; color: {INK}"><span style="height: 30px; padding: 0 12px; border-radius: 8px; box-shadow: inset 0 0 0 1px {LINE}; display: flex; align-items: center; font-size: 13px; font-weight: 600; color: {{{{x.tagFg}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.tag}}}}</span></button></sc-if>'
     return (f'<div style="display: flex; flex-direction: column; gap: 16px">'
-            f'<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-size: 22px; font-weight: 600">My verse and chorus</span><sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; font-weight: 600; color: #7A5418">Draft</span></sc-if><sc-if value="{{{{liveOn}}}}" hint-placeholder-val="{{{{true}}}}"><span style="display: inline-flex; align-items: center; gap: 8px; align-self: center; font-size: 13px; font-weight: 600; color: {SOFT}"><span style="width: 8px; height: 8px; border-radius: 4px; background: #3F7A4A"></span>Live</span></sc-if></div>'
+            f'<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-size: 22px; font-weight: 600">My verse and chorus</span><sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; font-weight: 600; color: #7A5418">Draft</span></sc-if><sc-if value="{{{{freshOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; font-weight: 600; color: {SOFT}">Not saved</span></sc-if><sc-if value="{{{{liveOn}}}}" hint-placeholder-val="{{{{true}}}}"><span style="display: inline-flex; align-items: center; gap: 8px; align-self: center; font-size: 13px; font-weight: 600; color: {SOFT}"><span style="width: 8px; height: 8px; border-radius: 4px; background: #3F7A4A"></span>Live</span></sc-if></div>'
             f'<sc-for list="{{{{sec59}}}}" as="x" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px">{head}{tag}'
             f'<div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: {gap}px">{box}{plusb}</div></section></sc-for>'
             + ADDCARD('Add section', 'addSec') + '</div>')
@@ -402,7 +402,7 @@ def GENOS77(pos, wide, flat=False):
 # how (Style), each opening its popover under it; MIDI last, as the Player's band
 BPILL = lambda lab, val, act, x: (f'<button type="button" aria-label="{lab}: {val}" data-tip="{lab}" aria-haspopup="dialog" aria-expanded="{{{{{x}}}}}" onClick="{{{{{act}}}}}" style="flex: none; height: 40px; padding: 0 12px 0 16px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer">'
                                   f'{val}<span aria-hidden="true" style="display: flex">{CHEV_D}</span></button>')
-_tr = HDRTRANSPORT()
+_tr = HDRTRANSPORT(play_off='playOff')
 _mi = _tr.index('<button type="button" aria-label="MIDI keyboard"')
 TRANSPORT77 = (_tr[:_mi].replace('aria-label="Transpose: {{hdKeyL}}" data-tip="Transpose · T"', 'aria-label="Key: {{hdKeyL}}" data-tip="Key · T"', 1)
                + BPILL('Tempo', '{{bpmL}} BPM', 'openTempo', 'tempoX') + BPILL('Style', '{{styleL}}', 'openStyle', 'styleX') + _tr[_mi:])
@@ -482,7 +482,7 @@ lm77 = (f'<div data-menuroot style="position: absolute; inset: 0; display: flex;
 # the phone: Flat's phone header (←, the transport, the keys, ☰), the chart under it with its name, the Genos over the keys
 PHHDR77 = (f'<header data-band style="flex: none; position: relative; z-index: 20; box-sizing: border-box; padding: 0 8px; background: linear-gradient({LINE}, {LINE}) 8px 100% / calc(100% - 16px) 1px no-repeat, {SHEET}; color: {INK}">'
            f'<div style="height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 4px"><a href="Main.dc.html" aria-label="Back" data-tip="Back" style="{_PB}; text-decoration: none">{ARROWLI}</a>'
-           + PHTRANSPORT() + PHKEYSBTN.replace('{{hdKeysPh}}', '{{cpKeysPh}}')
+           + PHTRANSPORT('playOff') + PHKEYSBTN.replace('{{hdKeysPh}}', '{{cpKeysPh}}')
            + f'<button type="button" aria-label="Menu" data-tip="Menu" aria-haspopup="dialog" aria-expanded="{{{{phMenuX}}}}" onClick="{{{{phMenu}}}}" style="{_PB}; color: {{{{phMenuFg}}}}">{MENUI}</button></div></header>')
 ph77 = (PHHDR77
         + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px {{{{chartPad}}}}; display: flex; flex-direction: column; gap: 16px">{SHOWSTATES()}{CHART76(8, 8, 60, 21, 2)}</main>'

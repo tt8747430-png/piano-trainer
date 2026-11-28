@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · a new sheet reads Not saved beside its name on the phone, and Play rests at half strength in both bands while it holds no chord, as the app's (the board kept Play ink and the phone showed no state); the kit's PHTRANSPORT and HDRTRANSPORT take the key that rests Play (`play_off`) · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
 - 2026-11-28 · 2f5de4ba · a phone's toast steps aside when a sheet rises over it, as the app's bottom sheet closes it ("From the top" lay on the chord sheet's acts); a toast raised from the sheet still shows; the kit's state remembers the sheet a toast was raised over (`toastS`), and `TOAST` takes the key it shows on · ChordPlayer · v870
