@@ -130,7 +130,7 @@ export function PhoneMenu({
           align="end"
           sideOffset={8}
           aria-label={name}
-          className="flex max-h-(--available-height) w-[calc(100vw-2rem)] max-w-sm flex-col gap-2 overflow-y-auto rounded-sheet bg-background px-2 py-3 shadow-[0_0_0_1px_rgb(51_41_33/0.06),0_18px_48px_-12px_rgb(51_41_33/0.38)]"
+          className="flex max-h-(--available-height) w-[calc(100vw-2rem)] max-w-sm flex-col gap-2 overflow-y-auto rounded-sheet bg-background px-2 py-3 shadow-(--elevation-menu)!"
         >
           <p className="px-3 pt-1 text-center font-sans text-[1.0625rem]/[22px] font-semibold">
             {name}

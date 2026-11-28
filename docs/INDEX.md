@@ -596,6 +596,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--elevation-2` | `src/styles/tokens.css` | 4 |
 | `--elevation-3` | `src/styles/tokens.css` | 4 |
 | `--elevation-float` | `src/styles/tokens.css` | 1 |
+| `--elevation-menu` | `src/styles/tokens.css` | 1 |
 | `--elevation-thumb` | `src/styles/tokens.css` | 2 |
 | `--elevation-window` | `src/styles/tokens.css` | 1 |
 | `--eyebrow` | `src/styles/tokens.css` | 1 |

@@ -890,6 +890,9 @@
 @utility elevation-thumb {
   box-shadow: var(--elevation-thumb);
 }
+@utility elevation-menu {
+  box-shadow: var(--elevation-menu);
+}
 @utility elevation-1 {
   box-shadow: var(--elevation-1);
 }

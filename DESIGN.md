@@ -404,6 +404,8 @@ with sand, as the boards' `CARD` and `GROUP` draw them (a 1px ring that takes no
   actions"; the canvas's `FLOAT`). It does not deepen under a pointer; a press shows by colour.
 - **Thumb** (`elevation-thumb`): a control's moving part over its track: a segmented control's thumb, a switch's knob, a
   slider's handle, a loop grip, the chosen root.
+- **Menu** (`elevation-menu`): a phone's ☰ card over the page (the Chord player's, the board's `FMENU`): a 1px ring of ink
+  at 6% and a long shade under it (0 18px 48px -12px, ink at 38%).
 - **Elevation 1** (`elevation-1`): a row lifted while it is dragged, a resting second action inside content.
 - **Elevation 2** (`elevation-2`): dialogs and sheets that stand above the page (the canvas's `SHADOW`).
 - **Elevation 3** (`elevation-3`): a dragged card, an open dial.

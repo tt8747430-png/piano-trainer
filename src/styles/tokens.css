@@ -257,6 +257,11 @@
   --elevation-thumb:
     0 1px 3px color-mix(in oklab, var(--shade) 20%, transparent),
     0 0 0 0.5px color-mix(in oklab, var(--shade) 10%, transparent);
+  /* A phone's ☰ card over the page (the Chord player's menu, the board's FMENU): a faint ring and a long
+     shade dropped under it, so the card reads lifted off the page it covers. Not for a bar or a popover. */
+  --elevation-menu:
+    0 0 0 1px color-mix(in oklab, var(--shade) 6%, transparent),
+    0 18px 48px -12px color-mix(in oklab, var(--shade) 38%, transparent);
   /* A window over the page (the app Settings, a thing's Settings): a deep, soft shade, the board's
      SETDLG and THINGWIN. */
   --elevation-window: 0 24px 64px color-mix(in oklab, var(--shade) 28%, transparent);
