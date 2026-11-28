@@ -171,8 +171,11 @@
    * card, so it follows the theme.
    */
   --chosen-honey: color-mix(in oklab, var(--primary) 25%, var(--card));
-  /* A switch, the canvas's SWITCH: the sage track when on, the knob in the cards' paper over it. */
-  --switch-on: #7fb685;
+  /*
+   * A switch, the canvas's TOGGLE: the grass-deep track when on (every board's #44684A), the knob in
+   * the cards' paper over it; by Night the lighter sage, grass-deep being too dark on dark paper.
+   */
+  --switch-on: var(--p-grass-deep);
   --switch-knob: var(--p-paper-card);
   --accent: var(--p-sand-100);
   --accent-foreground: var(--p-ink);
@@ -392,6 +395,7 @@
     --muted-foreground: var(--p-dusk-muted);
     /* By night the chosen takes the lighter line, a step over the hover's dusk. */
     --chosen: var(--p-dusk-line);
+    --switch-on: #7fb685;
     --switch-knob: #ede9e1;
     --accent: var(--p-dusk-850);
     --accent-foreground: var(--p-dusk-ink);

@@ -1112,6 +1112,8 @@ export const practice: LocaleResources['practice'] = {
       voicingInfo:
         'Плавное голосоведение ведёт каждый аккорд к ближайшим звукам предыдущего. Блоками — каждый аккорд в основном виде.',
       relaid: 'Переписано в размере {{meter}}',
+      // MIDI's page and popover: how to connect a keyboard while none is (the board's MIDI77).
+      connectHow: 'Подключите клавиатуру по USB или Bluetooth и нажмите любую клавишу.',
       follow: 'Следовать за MIDI-аранжировщиком',
       followInfo:
         'Ведёт Play: Genos вступает с первым аккордом листа и играет по его клоку, а выбранные вами разделы получает в их тактах; аккордов он не получает, а следует тем, что играете вы. Без Genos разделы стиля играет оркестр приложения. На Genos: Menu › MIDI › System: Clock USB, Start/Stop Style, System Exclusive Message Receive On. Chrome или Edge на Mac или ПК, подключение по USB.',

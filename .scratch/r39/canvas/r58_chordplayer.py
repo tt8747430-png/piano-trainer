@@ -418,7 +418,9 @@ _SECT77 = lambda t, body: f'<section aria-label="{t}" style="display: flex; flex
 _COL77 = lambda *xs: '<div style="display: flex; flex-direction: column; gap: 24px">' + ''.join(xs) + '</div>'
 SOUND77 = _COL77(GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'), ('link', 'Volume', '80%', ''), bg=SHEET),
                  _SECT77('Voicing', SEGC('cpVSeg', 36, 14, True)))
-CHART77 = _COL77(GROUP(('link', 'Time signature', '4/4', ''), bg=SHEET), _SECT77('Written as', SEGC('namesSeg', 36, 14, True)))
+# the chart's two settings, one shape: a sentence-case head over its segmented control (the Time signature row opened
+# nothing; the app's five meters are one tap each, as Written as)
+CHART77 = _COL77(_SECT77('Time signature', SEGC('cpMeterSeg', 36, 14, True)), _SECT77('Written as', SEGC('namesSeg', 36, 14, True)))
 FOLLOW77 = GROUP(('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), bg=SHEET)
 # MIDI complete where it opens, as the Player's MIDI keyboard popover (R74: the keyboard in use and, with none, how to
 # connect one; nothing links away to Settings), then the Chord player's own Follow a MIDI arranger
@@ -503,7 +505,7 @@ CP77 = CP77.replace("states: [{ l: 'No Genos found'", "states: [{ l: 'Playing', 
 _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'On']: RAIL77 === k, ['rail' + k + 'Bg']: RAIL77 === k ? '#EEE2CF' : 'transparent', ['pick' + k]: () => set({ rail77: RAIL77 === k ? 'none' : k, ...(k === 'Ge' ? { follow: true } : {}) }) });
     const FEEL = ['8 beat', 'slow 8 beat', 'straight 8ths', '6/8 or 4/4', 'swing 8ths', 'Latin'], dev = st.alone ? STY[s] : 'Genos', MAINL = ['A', 'B', 'C', 'D'][(st.arMain ?? 0)] || 'A';
     const cpKeys = st.cpKeys ?? true;
-    const CP77K = { ...['Ch', 'St', 'Ge', 'So', 'Ca'].reduce((o, k) => ({ ...o, ...rp(k) }), {}), cpRailNone: () => set({ rail77: 'none' }), cpSearch: () => set({ toastT: 'Search: type a chord, a style or an act' }), cpKeysHelp: () => set({ toastT: 'Space plays · L loops · K the keys' }),
+    const CP77K = { ...['Ch', 'St', 'Ge', 'So', 'Ca'].reduce((o, k) => ({ ...o, ...rp(k) }), {}), cpRailNone: () => set({ rail77: 'none' }), cpMeterSeg: seg(['2/4', '3/4', '4/4', '6/8', '12/8'], st.meter ?? '4/4', (l) => set({ meter: l, toastT: 'Laid out in ' + l })), cpSearch: () => set({ toastT: 'Search: type a chord, a style or an act' }), cpKeysHelp: () => set({ toastT: 'Space plays · L loops · K the keys' }),
       cpStyles: STY.map((n, i) => ({ n, feel: FEEL[i], on: i === s ? 'true' : 'false', fw: i === s ? 600 : 400, line: i ? '#E5DED6' : 'transparent', check: i === s ? '✓' : '', pick: () => set({ style: i, toastT: 'Style: ' + n }) })),
       cpStartD: st.playing ? 'M7 5h10v14H7z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z', cpArTitle: st.playing ? dev + ' · playing Main ' + MAINL : dev + ' · stopped', cpAlone: !!st.alone, cpArLine: st.alone ? 'No Genos found. The app’s band plays the style’s sections.' : 'Connected: Genos', cpRetry: () => set({ alone: false, toastT: 'Connected: Genos' }),
       cpMidiL: (st.follow ?? false) ? (st.alone ? 'No Genos found' : 'Genos') : 'Not connected', cpGDock: !!(st.follow ?? false) && RAIL77 !== 'Ge',

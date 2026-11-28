@@ -1121,6 +1121,8 @@ export const practice = {
       voicingInfo:
         'Voice-led, each chord moves to the nearest notes of the one before. Block, every chord stands in root position.',
       relaid: 'Laid out in {{meter}}',
+      // MIDI's page and popover: how to connect a keyboard while none is (the board's MIDI77).
+      connectHow: 'Plug in a keyboard by USB or pair it by Bluetooth, then press a key.',
       follow: 'Follow a MIDI arranger',
       followInfo:
         'Play leads: the Genos starts on the sheet’s first chord and plays to its clock, taking the sections you set at their bars; it never gets a chord, it follows the chords you play. With no Genos connected, the app’s band plays the style’s sections. On the Genos, Menu › MIDI › System: Clock USB, Start/Stop Style, System Exclusive Message Receive On. Chrome or Edge on a Mac or PC, connected by USB.',

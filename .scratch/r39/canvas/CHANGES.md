@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · pending-commit · the Chord player's Chart: Time signature a sentence-case head over its five meters (2/4 3/4 4/4 6/8 12/8), as Written as under it and the app's; it was a row with a value that opened nothing · ChordPlayer, ChordPlayerLaptop · pending
 - 2026-11-28 · 959920b2 · a section's Genos tag with nothing set reads Genos in soft ink, as the app's (it was an empty chip); the app's tag takes the board's 12 inset · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 

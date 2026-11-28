@@ -16,7 +16,7 @@ import {
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
-import { useMidiSummary } from '@/features/connect-midi'
+import { isMidiConnected, useMidiConnection, useMidiSummary } from '@/features/connect-midi'
 import { setChordPlayer } from '@/features/set-preference'
 import { formatPercent, localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
@@ -206,16 +206,23 @@ export function ChartBody({ hand }: { hand: ChordSheetInHand }) {
 export function MidiBody() {
   const { t } = useTranslation(['practice', 'common'])
   const midi = useMidiSummary()
+  const { connection } = useMidiConnection()
   const prefs = useSettings(selectChordPlayer)
   const settingsStore = useSettingsStoreApi()
+  // The board's `MIDI77`: Keyboard and its state, how to connect one while none is, then Follow.
   return (
     <SettingsGroup flush>
       <div className="flex min-h-12 items-center gap-3 px-4">
-        <span className="flex-1 text-base">{t('common:midi.label')}</span>
+        <span className="flex-1 text-base">{t('common:keyboard')}</span>
         <span className="truncate text-muted-foreground" aria-live="polite">
           {midi}
         </span>
       </div>
+      {isMidiConnected(connection) ? null : (
+        <p className="-mt-1 mb-2.5 px-4 text-[0.9375rem]/[1.4] text-pretty text-muted-foreground">
+          {t('chordPlayer.settings.connectHow')}
+        </p>
+      )}
       <SwitchRow
         label={t('chordPlayer.settings.follow')}
         setting="chordPlayer.follow"
