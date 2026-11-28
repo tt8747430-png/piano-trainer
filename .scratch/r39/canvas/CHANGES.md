@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · the keys' resize grip from R76's Edit layout, which nothing opens since R77, goes from the markup (no visible change) · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 

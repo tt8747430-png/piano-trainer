@@ -328,9 +328,8 @@ def KEYS76(h3, top, lap=False):
     # a phone shows F2 to A4 at the kit's 26 a white key, the 17 whites 40 wider than the screen, centred (the app's
     # fitInView over CHORD_PLAYER_KEYS): a part of F2 and of A4 at the edges
     keys = lambda h: CP_KEYS(h).replace('{{kbw}}', '{{kbwL}}').replace('{{kbb}}', '{{kbbL}}') if lap else CP_KEYS(h).replace('style="position: relative; height:', 'style="position: relative; margin-inline: calc(50% - 221px); height:')
-    grab = f'<sc-if value="{{{{layEdit}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{kGrow}}}}" aria-label="Resize the keys: {{{{kSizeL}}}}" data-tip="Drag to resize" style="position: absolute; left: 50%; {"bottom: -22px" if top else "top: -22px"}; transform: translateX(-50%); z-index: 46; width: 88px; height: 44px; padding: 0; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: ns-resize"><span style="width: 44px; height: 6px; border-radius: 3px; background: {INK}"></span></button></sc-if>'
     sized = ''.join(f'<sc-if value="{{{{k{z}}}}}" hint-placeholder-val="{{{{{"true" if z == "M" else "false"}}}}}">{keys(h)}</sc-if>' for z, h in zip('SML', h3))
-    return f'<div style="position: relative; flex: none; {"margin-bottom: 34px; " if not top and not lap else ""}box-shadow: 0 {"1" if top else "-1"}px 0 {LINE}">{sized}{grab}{PTAG("pickK", "openLayK", "Keys", "left: 8px; " + ("bottom: 8px" if top else "top: 8px"))}</div>'
+    return f'<div style="position: relative; flex: none; {"margin-bottom: 34px; " if not top and not lap else ""}box-shadow: 0 {"1" if top else "-1"}px 0 {LINE}">{sized}{PTAG("pickK", "openLayK", "Keys", "left: 8px; " + ("bottom: 8px" if top else "top: 8px"))}</div>'
 
 ph58 = (TOP('Main.dc.html', '', BARR) + TRAY
         + f'<sc-if value="{{{{kTop}}}}" hint-placeholder-val="{{{{false}}}}">{KEYS76((72, 112, 168), True)}</sc-if>'
