@@ -20,7 +20,7 @@ import {
   Undo2,
   Volume2,
 } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   selectSaved,
@@ -192,6 +192,9 @@ function sheetNumerals(sheet: ChordSheet): Numeral[] | null {
 
 /** A band popover open on a laptop. */
 type Popped = 'options' | 'key' | 'tempo' | 'style' | 'midi'
+
+/** A band's popover never leaves the band's foot: on a short screen it scrolls in the room below. */
+const UNDER_THE_BAND: ComponentProps<typeof PanelPopover>['collisionAvoidance'] = { side: 'none' }
 
 /** The rail's places, in its order, with their glyphs. */
 const RAIL: readonly {
@@ -884,6 +887,7 @@ export function ChordPlayer({
     open: popped === which,
     onOpenChange: (open: boolean) => setPopped(open ? which : null),
     sideOffset: 20,
+    collisionAvoidance: UNDER_THE_BAND,
   })
   const keysLabel = t('common:pianoKeys')
 

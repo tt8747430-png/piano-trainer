@@ -28,17 +28,18 @@ export function PanelPopover({
   children: ReactNode
 } & Pick<
   ComponentProps<typeof PopoverContent>,
-  'side' | 'align' | 'sideOffset' | 'anchor' | 'initialFocus'
+  'side' | 'align' | 'sideOffset' | 'anchor' | 'initialFocus' | 'collisionAvoidance'
 >) {
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       {trigger ? <PopoverTrigger render={trigger} /> : null}
+      {/* No taller than 760 nor the room below less 16, as the board's POPOVER: Base UI keeps 5 of it, the cap 11. */}
       <PopoverContent
         sideOffset={8}
         {...place}
         aria-label={title}
         className={cn(
-          'max-h-[min(47.5rem,var(--available-height))] gap-3 overflow-y-auto rounded-menu p-4',
+          'max-h-[min(47.5rem,calc(var(--available-height)-11px))] gap-3 overflow-y-auto rounded-menu p-4',
           className,
         )}
       >
