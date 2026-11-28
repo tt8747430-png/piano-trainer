@@ -1555,6 +1555,7 @@ owner's, typos fixed.
 - **A ruling reaches every face (the loop, 2026-11-28):** "Styles by family" was drawn on the Chord player's rail panel and ☰ page, while the band's Style popover kept the wheel it replaced; every place a setting shows is opened and checked when its ruling lands.
 - **A panel's title on the chart's line (the loop, 2026-11-28):** the lines tool found the app's rail panel title 2 above the Chord player's first section; the rail's head now sets its title at the font's own leading, as the board's head and the app's popovers, in every rail panel.
 - **A spread bar strands its parts when wide (the loop, 2026-11-28):** the Chord player's phone header spaced its four parts evenly, right at 402 but leaving the keys button alone mid-bar at 744 and 852; from 440 the transport follows ← and the keys sit beside ☰. A bar drawn at one width is checked at the others for what drifts apart.
+- **A phone sheet clears the toast (the loop, 2026-11-28):** the Chord player's Save as my chord sheet… rose under the toast of the sheet just opened, which covered its title and Cancel; the kit's bottom sheet closes any toast as it opens, on every sheet in the app.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
