@@ -35,6 +35,11 @@ colors:
   lilac-deep: '#6A5988'
   sand-deep: '#7D5B40'
   brick-deep: '#9A4B3A'
+  tile-sand: '#B08A5B'
+  tile-yellow: '#A8842F'
+  tile-grass: '#5F8F62'
+  tile-sky: '#5B8DB8'
+  tile-lilac: '#8C7AB8'
   key-bed: '#CBC2B9'
   key-black: '#332C28'
   dusk-ground: '#191512'
@@ -272,7 +277,9 @@ Warm neutrals and seven quiet paints. Each role has a day value, a night value a
 
 ### The paints
 
-Brick, yellow, grass, sky, lilac, sand and teal, each with a pale wash; five have a deep shade for an icon on the wash.
+Brick, yellow, grass, sky, lilac, sand and teal, each with a pale wash; five have a deep shade for an icon on the wash,
+and five a tile shade (`tile-*`, the role `paint-tile-*`): the paint solid under a white glyph, 3:1 against it in
+both themes, for a row's tile and a small mark of state. Not for text, and never under ink.
 
 - **Chord tones only** (keys, the legend, a chord's chips): root brick, 3rd sky, 5th grass, 7th yellow, 9th lilac, 11th
   sand, 13th teal.

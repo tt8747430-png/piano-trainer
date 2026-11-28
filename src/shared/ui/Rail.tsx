@@ -87,7 +87,7 @@ export function RailButton({
       {...(tab ? { role: 'tab', 'aria-selected': selected } : {})}
       title={tip}
       onClick={onClick}
-      className="flex min-h-16 w-19 cursor-pointer flex-col items-center gap-1 rounded-xl py-1.5 text-foreground"
+      className="flex min-h-16 w-19 cursor-pointer flex-col items-center gap-1 rounded-control py-1.5 text-foreground"
     >
       <span
         className={cn(

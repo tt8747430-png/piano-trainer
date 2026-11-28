@@ -34,6 +34,12 @@
   --p-sky-mist: #e0effa;
   --p-sky-mist-ink: #2a597f;
   --p-lilac: #b8a8d8;
+  /* Each paint solid under a white glyph, 3:1 against it (a row's tile, canvas 128). */
+  --p-sand-tile: #b08a5b;
+  --p-yellow-tile: #a8842f;
+  --p-grass-tile: #5f8f62;
+  --p-sky-tile: #5b8db8;
+  --p-lilac-tile: #8c7ab8;
   --p-lilac-wash: #e4dcf1;
   --p-lilac-deep: #6a5988;
   --p-sand: #d3ac8a;
@@ -201,11 +207,11 @@
   --paint-full-sky: var(--p-sky);
   --paint-full-lilac: var(--p-lilac);
   /* A row's tile (canvas 128): the paint solid under a white glyph, 3:1 against it, both themes. */
-  --paint-tile-sand: #b08a5b;
-  --paint-tile-yellow: #a8842f;
-  --paint-tile-grass: #5f8f62;
-  --paint-tile-sky: #5b8db8;
-  --paint-tile-lilac: #8c7ab8;
+  --paint-tile-sand: var(--p-sand-tile);
+  --paint-tile-yellow: var(--p-yellow-tile);
+  --paint-tile-grass: var(--p-grass-tile);
+  --paint-tile-sky: var(--p-sky-tile);
+  --paint-tile-lilac: var(--p-lilac-tile);
   /* Learned, known, on, connected: the book's grass. */
   --learned: var(--p-grass-deep);
   --learned-foreground: var(--p-white);

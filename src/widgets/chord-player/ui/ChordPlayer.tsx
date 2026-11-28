@@ -900,7 +900,7 @@ export function ChordPlayer({
               <button
                 type="button"
                 aria-label={t('chordPlayer.sheets.open', { name })}
-                className="flex h-12 max-w-80 min-w-30 shrink cursor-pointer items-center gap-2 rounded-xl pr-2 pl-3 text-left text-on-band hover:bg-on-band/10 data-popup-open:bg-on-band/14"
+                className="flex h-12 max-w-80 min-w-30 shrink cursor-pointer items-center gap-2 rounded-control pr-2 pl-3 text-left text-on-band hover:bg-on-band/10 data-popup-open:bg-on-band/14"
               />
             }
             trigger={

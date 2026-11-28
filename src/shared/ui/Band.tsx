@@ -232,7 +232,7 @@ export function BandOptions({
       {...props}
       className={cn(
         // On a touch screen its glyph, on the band's own ground, stands in a finger's 44.
-        'relative grid h-10 w-6 shrink-0 cursor-pointer place-items-center rounded-xl text-on-band pointer-coarse:w-11',
+        'relative grid h-10 w-6 shrink-0 cursor-pointer place-items-center rounded-control text-on-band pointer-coarse:w-11',
         "pointer-coarse:before:absolute pointer-coarse:before:inset-x-0 pointer-coarse:before:-inset-y-0.5 pointer-coarse:before:content-['']",
         open ? 'bg-on-band/14' : 'hover:bg-on-band/10',
       )}
