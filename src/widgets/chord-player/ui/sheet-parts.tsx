@@ -23,7 +23,7 @@ export function SheetRow({ label, children }: { label: string; children: ReactNo
   )
 }
 
-/** One of a sheet's acts at its foot (canvas 173, `QBTN`): its icon and name on the quiet fill, sharing the row. */
+/** One of a sheet's acts at its foot (canvas 173, `QBTN`): its icon and name on the quiet fill, as wide as its words, sharing the rest. */
 export function SheetAct({
   icon,
   onClick,
@@ -37,7 +37,7 @@ export function SheetAct({
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 min-w-0 flex-1 items-center justify-center gap-2 rounded-control bg-muted px-3 text-subhead font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:brightness-95"
+      className="flex h-11 min-w-0 flex-auto items-center justify-center gap-2 rounded-control bg-muted px-3 text-subhead font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:brightness-95"
     >
       {icon}
       <span className="truncate">{children}</span>

@@ -1566,6 +1566,7 @@ owner's, typos fixed.
 - **MIDI's words at the board's sizes (the loop, 2026-11-28):** the Chord player's MIDI set Not connected smaller than Keyboard beside it, and its how-to-connect line at the popover's 15 on a phone's page; the value is 16 as the label, the line 16 on a phone and 15 in the band's popover, as the board.
 - **A phone's pages at a finger's size (the loop, 2026-11-28):** the Chord player's phone pages (Style, Chart, Audio) drew the laptop panel's 15 heads and 15 rows 12 in; on a phone they are 16 and 16 in, as the board's every ☰ page.
 - **Repeats' bounds rest (the loop, 2026-11-28):** the Chord player board's Repeats − looked live at Until Stop, where it does nothing; it rests at half strength there, and + at 8 times, as the app.
+- **A sheet's acts as wide as their words (the loop, 2026-11-28):** the Chord player's chord sheet cut Play from here at 393, the row split evenly with Duplicate; each act now starts at its words' width and shares the rest, board and app.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
