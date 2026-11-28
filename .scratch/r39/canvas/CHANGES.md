@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the rail's Search opens the app's search palette at rest (the field, Suggestions: Continue, Chords, Metronome; the keys under a hairline; 640×488 at 96), where it toasted "Search: type a chord, a style or an act" · ChordPlayerLaptop · **pending**
+- 2026-11-28 · 39f8ab09 · the rail's Search opens the app's search palette at rest (the field, Suggestions: Continue, Chords, Metronome; the keys under a hairline; 640×488 at 96), where it toasted "Search: type a chord, a style or an act" · ChordPlayerLaptop · **pending**
 ## Changes
 
 - 2026-11-28 · 9d316def · the rail's Shortcuts opens the Player's and editor's Shortcuts card with the Chord player's own keys (Play or stop, Undo, Redo; Play the keys, An octave down, up; Show the shortcuts), where it toasted "Space plays · L loops · K the keys", two keys the app does not have · ChordPlayerLaptop · v879
