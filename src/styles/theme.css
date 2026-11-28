@@ -1045,6 +1045,16 @@
     bottom: calc(--spacing(29) + var(--docked, 0px));
   }
 }
+/* A full-screen tool with a rail (the Chord player) has no sidebar: its toast centres on what the
+   rail leaves, the rail's 76, or the rail and its open panel's 428 (`data-toast-over`). */
+@media (width >= 64rem) {
+  :root:has([data-toast-over='rail']) [data-slot='toast-viewport'] {
+    left: --spacing(19);
+  }
+  :root:has([data-toast-over='panel']) [data-slot='toast-viewport'] {
+    left: --spacing(107);
+  }
+}
 /* The keys shown or hidden from the bar's Keyboard (R34) leave and come as one, fading, while the
    page under them takes or gives their room at once; the screen's floating actions ride with them.
    Named only while the change runs (`morph`): a named element is a backdrop root, and the glass over

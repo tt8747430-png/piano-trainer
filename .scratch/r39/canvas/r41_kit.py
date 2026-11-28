@@ -509,8 +509,9 @@ def EMPTY(cond, icon, t, b, btns=''):
 # One toast, every board (owner-way, Undo instead of asking): ink capsule 52 tall, the text, then Undo at its end.
 # A phone toast spans the 16 gutters; a laptop's is 460 wide, centred. `undo` names the handler; `always` shows Undo
 # with no toastUndo condition; `hint` is the placeholder the condition shows while drawing.
-def TOAST(bottom, undo='undo', z=50, laptop=False, always=False, hint='false', on='toastOn'):
-    pos = (f'left: 50%; transform: translateX(-50%); width: 460px; bottom: {bottom}px' if laptop
+def TOAST(bottom, undo='undo', z=50, laptop=False, always=False, hint='false', on='toastOn', left='50%'):
+    # left: where a laptop's toast centres (a screen with a rail centres it on what the rail and its panel leave)
+    pos = (f'left: {left}; transform: translateX(-50%); width: 460px; bottom: {bottom}px' if laptop
            else f'left: 16px; right: 16px; bottom: {bottom}px')
     btn = (f'<button type="button" onClick="{{{{{undo}}}}}" style="height: 44px; padding: 0 12px; border: 0; '
            f'background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button>')

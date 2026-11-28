@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · the laptop's toast centres on the chart (beside the rail, or the rail and its open panel), where it centred on the window; the kit's `TOAST` takes where it centres (`left`) · ChordPlayerLaptop · **pending**
 - 2026-11-28 · 1a84a473 · the chord sheet's Duplicate and Play from here each start at their words' width and share the rest (split evenly, Play from here ran past its button on a phone; cut at 393 in the app) · ChordPlayer, ChordPlayerLaptop · **pending**
 ## Changes
 

@@ -658,7 +658,11 @@ export function ChordPlayer({
       onDragEnd={onDrop}
       onDragCancel={() => setInHand(null)}
     >
-      <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
+      {/* A toast centres on the chart (`toast-over`): beside the rail alone, or the rail and its panel. */}
+      <div
+        data-toast-over={laptop ? (panel === 'none' ? 'rail' : 'panel') : undefined}
+        className="flex min-h-0 flex-1 flex-col lg:flex-row"
+      >
         {laptop ? (
           <>
             <Rail
