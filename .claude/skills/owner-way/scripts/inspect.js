@@ -86,7 +86,9 @@
     const floats = p === 'fixed' || p === 'sticky' || (p === 'absolute' && Number(cs.zIndex) >= 10)
     // A popover, a menu, a select's list or a tooltip a step opened covers the page on purpose.
     const asked = el.closest(OPENED) || el.querySelector(OPENED)
-    return floats && !asked && visible(el) && !hidden(el)
+    // A toast passes on its own and is swiped away: it lies over the page a moment, by design.
+    const passing = el.closest('[aria-live]')
+    return floats && !asked && !passing && visible(el) && !hidden(el)
   })
   for (const layer of layers) {
     const r = layer.getBoundingClientRect()
@@ -114,8 +116,9 @@
   // 4. A backdrop that leaves a band of the page uncovered while a dialog is open.
   // A panel from the side, beside the page (a laptop's Settings, the music in sight by design), asks
   // no backdrop.
-  // A popover is a dialog to a screen reader but holds nothing back: it asks no backdrop.
-  const dialog = document.querySelector('[role="dialog"]:not([data-slot="popover-content"]), [role="alertdialog"]')
+  // A popover is a dialog to a screen reader but holds nothing back: it asks no backdrop; nor does a
+  // non-modal one (a toast with its Undo, which Base UI names a dialog).
+  const dialog = document.querySelector('[role="dialog"]:not([data-slot="popover-content"]):not([aria-modal="false"]), [role="alertdialog"]')
   const beside = dialog?.closest('[data-swipe-axis="x"]') ?? dialog?.querySelector('[data-swipe-axis="x"]')
   if (dialog && visible(dialog) && !beside) {
     for (const y of [2, innerHeight * 0.25, innerHeight * 0.5]) {

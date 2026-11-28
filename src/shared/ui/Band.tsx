@@ -5,8 +5,13 @@ import { cn, useUp } from '@/shared/lib'
 import { MetronomeIcon } from './icons/MetronomeIcon'
 
 /** A band's round button (the canvas's `_HB`): 40, its glyph centred. */
-const ROUND =
-  'relative grid size-10 shrink-0 cursor-pointer place-items-center rounded-pill transition-colors duration-150 ease-out disabled:cursor-default disabled:opacity-50'
+/** On a touch screen a band's 40 reaches a finger's 44, 2 out on every side (the next stands 8 off). */
+const REACH =
+  "pointer-coarse:before:absolute pointer-coarse:before:-inset-0.5 pointer-coarse:before:content-['']"
+const ROUND = cn(
+  'relative grid size-10 shrink-0 cursor-pointer place-items-center rounded-pill transition-colors duration-150 ease-out disabled:cursor-default disabled:opacity-50',
+  REACH,
+)
 
 /**
  * A full screen's band on a laptop (canvas R77, `BAND77`; Flat's dark band): 64 high, ink, 12 in at its
@@ -80,7 +85,8 @@ export function BandPill({
       title={label}
       {...props}
       className={cn(
-        'flex h-10 shrink-0 cursor-pointer items-center gap-1 rounded-pill bg-on-band pr-3 pl-4 text-sm font-semibold whitespace-nowrap text-band',
+        'relative flex h-10 shrink-0 cursor-pointer items-center gap-1 rounded-pill bg-on-band pr-3 pl-4 text-sm font-semibold whitespace-nowrap text-band',
+        REACH,
         className,
       )}
     >
@@ -226,7 +232,9 @@ export function BandOptions({
       aria-haspopup="dialog"
       {...props}
       className={cn(
-        'grid h-10 w-6 shrink-0 cursor-pointer place-items-center rounded-xl text-on-band',
+        // On a touch screen its glyph, on the band's own ground, stands in a finger's 44.
+        'relative grid h-10 w-6 shrink-0 cursor-pointer place-items-center rounded-xl text-on-band pointer-coarse:w-11',
+        "pointer-coarse:before:absolute pointer-coarse:before:inset-x-0 pointer-coarse:before:-inset-y-0.5 pointer-coarse:before:content-['']",
         open ? 'bg-on-band/14' : 'hover:bg-on-band/10',
       )}
     >

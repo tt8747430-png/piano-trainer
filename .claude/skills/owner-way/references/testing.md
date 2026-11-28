@@ -63,7 +63,8 @@ as the installed app: the status bar and the home indicator are emulated as safe
 - text cut with no ellipsis (`CUT`);
 - two controls or texts drawn over each other (`OVERLAP`);
 - a fixed or sticky layer over text that isn't its own (`COVERED`), never a popover, menu or tooltip a step opened;
-- a band of the page left bare beside an open dialog (`UNCOVERED`), never beside a popover, which keeps no backdrop;
+- a band of the page left bare beside an open dialog (`UNCOVERED`), never beside a popover or a toast (a non-modal
+  dialog), which keep no backdrop; a toast, passing, is not `COVERED`'s layer either;
 - a target under 44px on a touch screen (`SMALL`), measured to its reach (an ⓘ drawn 20px reaches 44px by its `::before`);
 - a page wider than its screen, or a page error.
 
