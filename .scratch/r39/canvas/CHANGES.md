@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the laptop's toast stands 28 over the keys docked at the foot, as every laptop toast stands 28 up and as the app's (198 from the foot), where it stood 296, 126 over the keys, a height left from R76's floating dock · ChordPlayerLaptop · pending
+- 2026-11-28 · 1d26f48a · the laptop's toast stands 28 over the keys docked at the foot, as every laptop toast stands 28 up and as the app's (198 from the foot), where it stood 296, 126 over the keys, a height left from R76's floating dock · ChordPlayerLaptop · pending
 
 ## Changes
 
