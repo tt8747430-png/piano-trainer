@@ -310,7 +310,7 @@ HEAD77 = HEAD59.replace('{{arTitle}}', '{{cpArTitle}}', 1)
 ARLINE77 = (f'<div style="display: flex; align-items: center; gap: 12px; min-height: 44px; margin-top: -4px"><p aria-live="polite" style="flex: 1; min-width: 0; margin: 0; font-size: 14px; line-height: 1.35; color: {SOFT}; text-wrap: pretty">{{{{cpArLine}}}}</p>'
             f'<sc-if value="{{{{cpAlone}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{cpRetry}}}}" style="flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Try again</button></sc-if></div>')
 START_G = LAMP59('arStart', '<span style="display: flex; justify-content: center"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="{{cpStartD}}"></path></svg></span>', 'togglePlay', 'Start/Stop', size='flex: none; width: 44px; min-width: 44px')
-def GENOS77(pos, wide, flat=False):
+def GENOS77(pos, wide):
     g = GENOS76(pos, wide).replace('{{arTitle}}', '{{cpArTitle}}')
     if not wide:
         _c0 = g.index('{{gCompact}}'); _s0 = g.index(START59, _c0)
@@ -318,7 +318,7 @@ def GENOS77(pos, wide, flat=False):
     # the connection line under the full panel's head
     j = g.index(HEAD76.replace('{{arTitle}}', '{{cpArTitle}}')) + len(HEAD76.replace('{{arTitle}}', '{{cpArTitle}}'))
     g = g[:j] + ARLINE77 + g[j:]
-    return g.replace(', ' + SHADOW, '', 3) if flat else g
+    return g
 
 # the band's pills after the transport: what the sheet plays in (Key, from the transport's own pill), at (Tempo) and
 # how (Style), each opening its popover under it; MIDI last, as the Player's band
