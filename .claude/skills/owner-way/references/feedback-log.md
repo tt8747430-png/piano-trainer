@@ -1600,6 +1600,7 @@ owner's, typos fixed.
 - **The band at a finger's size on a tablet (the loop, 2026-11-28):** the Chord player's band kept a mouse's 40 targets on a 1024 touch tablet; on touch each reaches 44. Never again: a laptop band that a finger on a tablet cannot reliably hit.
 - **A menu's hairline from the kit (the loop, 2026-11-28):** the Chord player board patched the ☰ menu's hairline into the menu's three times with `.replace()`; the kit's `MENUSEP` is the menu hairline now, ROWMENU's too. Never again: a helper's output patched to reach a value another helper already holds.
 - **A dead layout's reserve (the loop, 2026-11-28):** the Chord player's phone board still padded its chart for R76's floating dock and docked keys, so at the scroll's end its last section stood 330 over a bare page; it ends 24 under it, as the app's, and the dead layout's values are gone. Never again: a value computed from a layout a later ruling removed.
+- **A title that names what plays (the loop, 2026-11-28):** the Chord player board's Genos title said Main A whatever was lit, from a state key nothing set; it names the Main the arranger plays, or none, as the app's. Never again: a label read from a state nothing writes.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
