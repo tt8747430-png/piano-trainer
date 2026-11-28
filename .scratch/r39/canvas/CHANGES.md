@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · pending-commit · a section's Genos tag with nothing set reads Genos in soft ink, as the app's (it was an empty chip); the app's tag takes the board's 12 inset · ChordPlayer, ChordPlayerLaptop · pending
+- 2026-11-28 · 959920b2 · a section's Genos tag with nothing set reads Genos in soft ink, as the app's (it was an empty chip); the app's tag takes the board's 12 inset · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
 - 2026-11-27 · 55fc0d19 · the Genos panel's lamp groups named in sentence case (Main, Intro, Ending/rit.), as every head of the area since the section sheet lost its MAIN caption; in the app the rail's Genos panel no longer draws the strip's Compact and Minimize (the panel is its place) and its title keeps one line · ChordPlayer, ChordPlayerLaptop · v863
