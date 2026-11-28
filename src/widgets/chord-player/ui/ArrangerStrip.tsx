@@ -44,7 +44,7 @@ function Lamp({
       className={cn(
         'h-11 min-w-11 rounded-thumb px-1.5 text-sm font-bold whitespace-nowrap transition-colors duration-150 ease-out disabled:opacity-50',
         on
-          ? 'bg-destructive text-destructive-foreground'
+          ? 'bg-rail-chosen text-foreground shadow-[0_0_0_1.5px_var(--color-foreground)]'
           : 'bg-card text-foreground shadow-[0_0_0_1px_var(--color-border)] enabled:hover:bg-muted',
         className,
       )}

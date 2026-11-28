@@ -8,7 +8,7 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useNavigate } from '@tanstack/react-router'
-import { Cable, Drum, FileText, Keyboard, Music2, Plus, Search, Undo2, Volume2 } from 'lucide-react'
+import { Cable, Drum, FileText, Keyboard, Music, Plus, Search, Undo2, Volume2 } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -178,9 +178,9 @@ type Popped = 'options' | 'key' | 'tempo' | 'style' | 'midi'
 /** The rail's places, in its order, with their glyphs. */
 const RAIL: readonly {
   readonly panel: Exclude<ChordPanel, 'none'>
-  readonly icon: typeof Music2
+  readonly icon: typeof Music
 }[] = [
-  { panel: 'chords', icon: Music2 },
+  { panel: 'chords', icon: Music },
   { panel: 'styles', icon: Drum },
   { panel: 'genos', icon: Keyboard },
   { panel: 'audio', icon: Volume2 },
