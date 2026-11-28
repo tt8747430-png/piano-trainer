@@ -261,8 +261,8 @@ assert 'Genos minimized' in CP58
 
 # the sheet's name opens the sheets: the last opened first, as it opens on (a chart opens where it was left)
 CHEVD20 = CHEV_D
-TITLE76 = (f'<button type="button" data-menuroot-anchor onClick="{{{{openSheets}}}}" aria-label="Chord sheet: {{{{sheetsL}}}}. Open another" style="flex: 0 1 auto; min-width: 0; height: 44px; margin: -6px 0; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 4px">'
-           f'<span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 22px; font-weight: 600">{{{{sheetsL}}}}</span><span style="flex: none; color: {SOFT}; display: flex">{CHEVD20}</span></button>')
+TITLE76 = (f'<button type="button" data-menuroot-anchor onClick="{{{{openSheets}}}}" aria-label="Chord sheet: {{{{sheetsL}}}}. Open another" style="flex: 0 1 auto; min-width: 0; min-height: 44px; margin: -6px 0; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 4px">'
+           f'<span style="min-width: 0; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; text-align: left; text-wrap: balance; font-size: 22px; line-height: 28px; font-weight: 600">{{{{sheetsL}}}}</span><span style="flex: none; color: {SOFT}; display: flex">{CHEVD20}</span></button>')
 
 
 # the Genos, three sizes: Full (every control), Compact (Start/Stop and Main A–D in a row), Minimized (a pill)

@@ -746,12 +746,12 @@ export function ChordPlayer({
                     <button
                       type="button"
                       aria-label={t('chordPlayer.sheets.open', { name })}
-                      className="-my-1.5 flex h-11 min-w-0 items-center gap-1 rounded-control text-foreground"
+                      className="-my-1.5 flex min-h-11 min-w-0 items-center gap-1 rounded-control text-left text-foreground"
                     />
                   }
                   trigger={
                     <>
-                      <span className="min-w-0 truncate font-sans text-2xl font-semibold">
+                      <span className="line-clamp-2 min-w-0 font-sans text-[1.375rem]/7 font-semibold text-balance">
                         {name}
                       </span>
                       <ChevronGlyph />
