@@ -744,8 +744,8 @@ export function ChordPlayer({
             className={cn(
               // Its parts keep their height and the chart scrolls: a long chart squeezed Add section's card to nothing.
               'flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto *:shrink-0',
-              // The chart's first section level with the panel's title (22), 40 in, as the board's.
-              laptop ? 'px-10 pt-5.5 pb-6' : 'px-4 pt-4 pb-6',
+              // The chart's first head on the panel head's line (its row 74 to 118, the titles level), 40 in, as the board's.
+              laptop ? 'px-10 pt-2.5 pb-6' : 'px-4 pt-4 pb-6',
             )}
           >
             {laptop ? null : (

@@ -403,7 +403,7 @@ lm77 = (f'<div data-menuroot style="position: absolute; inset: 0; display: flex;
         + '<div style="flex: 1; min-height: 0; display: flex">' + RAIL77 + PANELS77
         + '<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">'
         # the chart's first section level with the panel's title: 22, the kit's head centring its 20 title in 64
-        + '<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 22px 40px 24px">' + SHOWSTATES() + CHARTL77 + '</div>'
+        + '<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 10px 40px 24px">' + SHOWSTATES() + CHARTL77 + '</div>'
         + GDOCK77 + f'<sc-if value="{{{{cpKeysOn}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS77(170, True)}</sc-if>'
         + '</div></div></div>')
 
