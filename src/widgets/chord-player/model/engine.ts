@@ -590,12 +590,14 @@ export function createChordEngine({
       queued = []
       state = { playing: true, lit: null, beat: null, lamp: null }
       queue()
-      set({
+      // Said at once, even while a count-in leaves nothing queued yet: Play turns to Stop as it is pressed.
+      state = {
         playing: true,
         lit: queued[0]?.box ?? null,
         beat: queued[0]?.beat ?? null,
         lamp: queued[0]?.lamp ?? null,
-      })
+      }
+      onChange()
       stopTicker = ticker(tick)
       return queued[0]?.at ?? nextAt
     },

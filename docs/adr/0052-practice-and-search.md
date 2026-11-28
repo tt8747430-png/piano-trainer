@@ -182,8 +182,10 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     chord sheets (the open one in link blue; each row's ··· Rename, Duplicate, Delete, which goes at once with Undo
     and leaves the sheet in hand Not saved when it was the open one; when none, "None saved yet. Save the sheet in
     hand from its name."), Songs, then Progressions by style as chips over two-line rows. Rename rises over it.
-  - **The keys** (`litKeys`) show the chord picked, else the first, as its hands' wash while stopped, and the
-    chord sounding in full while it plays: its root or slash bass in the left hand, its tones an octave above.
+  - **The keys** (`litKeys`) show the chord picked, else the first, as its hands' wash while stopped or counting
+    in, and the chord sounding in full where it is shown (`LiveKeyboard`'s `sound`, in place of the voicing's own
+    keys): its root or slash bass in the left hand, its tones an octave above; kept in sight (`inView`). Play turns
+    to Stop, a square, as it is pressed.
   - **The chord's sheet** hangs under its chord on a laptop (a 460 popover) and is a sheet on a phone: Chord,
     Bass note, Duration in a white card, Suggested chords under a sentence-case head, then Delete · Duplicate ·
     Play from here.

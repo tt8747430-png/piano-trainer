@@ -100,14 +100,17 @@ export function GoToStartGlyph({ className }: { className?: string }) {
   )
 }
 
-/** Play and Pause's glyphs, filled (the board's `hdPlayD`). */
+/**
+ * Play and Stop's glyphs, filled (the board's `hdPlayD`): Stop a square, for Play then starts again
+ * from the place chosen, never from mid-beat.
+ */
 export function PlayGlyph({ playing, className }: { playing: boolean; className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
       <path
         d={
           playing
-            ? 'M7 4.5h3.2a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1Zm6.8 0H17a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-3.2a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1Z'
+            ? 'M7 5h10v14H7z'
             : 'M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z'
         }
       />

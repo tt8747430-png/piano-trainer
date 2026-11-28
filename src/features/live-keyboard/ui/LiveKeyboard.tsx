@@ -36,6 +36,7 @@ export function LiveKeyboard({
   spacePedal = true,
   namesKeys = true,
   showsSound = true,
+  sound,
   typable = true,
   floating,
   height,
@@ -61,6 +62,11 @@ export function LiveKeyboard({
   namesKeys?: boolean
   /** The keys the app sounds go down: off where what sounds is the question (a round by ear). */
   showsSound?: boolean
+  /**
+   * The keys shown sounding in place of what the app sounds, where the screen draws its music where it
+   * reads best: the Chord player's chord within an octave, whatever its voicing sounds.
+   */
+  sound?: ReadonlySet<Midi> | undefined
   /** The computer's letters and Space play these keys: off for a page's many small keyboards (a lesson's). */
   typable?: boolean
 }) {
@@ -69,7 +75,7 @@ export function LiveKeyboard({
   // keys, and none where the learner named none.
   const settings = { namedKeys: namesKeys || namedKeys === 'none' ? namedKeys : ('c' as const) }
   const heard = useSoundingKeys(spotlight ? 'struck' : 'sounding')
-  const sounding = showsSound ? heard : NOTHING
+  const sounding = sound ?? (showsSound ? heard : NOTHING)
   const live = useSoundingKeys('live')
   const held = useHeldKeys()
   const voice = useLiveVoice()

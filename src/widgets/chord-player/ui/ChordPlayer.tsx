@@ -316,6 +316,9 @@ export function ChordPlayer({
   }
   /** The keys' chord: the one sounding, else the one picked, else the first, waiting. */
   const shownKeys = litKeys(chordAt(lit ?? picked ?? FIRST_CHORD)?.chord)
+  /** The chord sounding (here or in another copy) is in full; through a count-in and stopped it waits. */
+  const sounds = lit !== null
+  const shownSounding = useMemo(() => new Set(sounds ? shownKeys.keys : []), [sounds, shownKeys])
   /** A change made at once, said in its toast with Undo (a loss that can be undone, CLAUDE.md). */
   const undoable = (message: string) => sayUndo(message, hand.undo)
   const openAt = useLatestCallback((place: BoxPlace, typed?: string) => {
@@ -832,6 +835,7 @@ export function ChordPlayer({
                   marks={shownKeys.marks}
                   // The chord shown is kept in sight: on a narrower laptop the range is wider than the keys.
                   inView={rangeOf(shownKeys.keys)}
+                  sound={shownSounding}
                   spotlight
                   fitInView
                   height={KEYS_PX[laptop ? 'laptop' : 'phone']}

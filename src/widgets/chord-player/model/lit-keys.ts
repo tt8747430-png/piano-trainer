@@ -1,6 +1,7 @@
 import {
   midi,
   pitchClassOf,
+  printedChord,
   printedNote,
   spellChord,
   type Chord,
@@ -33,6 +34,19 @@ const inOctave = (note: SpelledNote, from: number): Midi =>
  */
 export function litKeys(chord: Chord | undefined): ShownKeys {
   if (!chord) return NO_KEYS
+  // One object per chord, so the keys, drawn again on every beat, redraw only as the chord changes.
+  const name = printedChord(chord)
+  const known = SHOWN.get(name)
+  if (known) return known
+  const shown = keysOf(chord)
+  SHOWN.set(name, shown)
+  return shown
+}
+
+/** The keys each chord named so far lights: a sheet's chords are few, a key's at most a few dozen. */
+const SHOWN = new Map<string, ShownKeys>()
+
+function keysOf(chord: Chord): ShownKeys {
   const bass = chord.bass ?? chord.root
   const low = inOctave(bass, LEFT_FROM)
   const marks = new Map<Midi, KeyMark>([[low, { tone: 'lh', label: printedNote(bass) }]])
