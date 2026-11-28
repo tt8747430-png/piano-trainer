@@ -215,7 +215,7 @@ export function MidiBody() {
     <SettingsGroup flush>
       <div className="flex min-h-12 items-center gap-3 px-4">
         <span className="flex-1 text-base">{t('common:keyboard')}</span>
-        <span className="truncate text-muted-foreground" aria-live="polite">
+        <span className="truncate text-[0.9375rem] text-muted-foreground" aria-live="polite">
           {midi}
         </span>
       </div>

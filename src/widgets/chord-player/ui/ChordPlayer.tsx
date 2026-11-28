@@ -873,6 +873,7 @@ export function ChordPlayer({
                 title={t('common:playbackOptions')}
                 {...pop('options')}
                 trigger={<BandOptions open={popped === 'options'} />}
+                align="start"
                 className="w-80"
               >
                 <PlaybackBody hand={hand} />
@@ -900,6 +901,7 @@ export function ChordPlayer({
                   aria-expanded={popped === 'key'}
                 />
               }
+              align="start"
               className="w-80"
             >
               <KeyBody hand={hand} />
@@ -915,6 +917,7 @@ export function ChordPlayer({
                   aria-expanded={popped === 'tempo'}
                 />
               }
+              align="start"
               className="w-80"
             >
               <TempoBody hand={hand} />
@@ -930,6 +933,7 @@ export function ChordPlayer({
                   aria-expanded={popped === 'style'}
                 />
               }
+              align="start"
               className="w-80"
             >
               <StyleRows
@@ -953,6 +957,7 @@ export function ChordPlayer({
                   <Cable aria-hidden className="size-5" strokeWidth={2} />
                 </BandButton>
               }
+              align="start"
               className="w-90"
             >
               <MidiBody />

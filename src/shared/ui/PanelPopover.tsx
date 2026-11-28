@@ -38,7 +38,7 @@ export function PanelPopover({
         {...place}
         aria-label={title}
         className={cn(
-          'max-h-(--available-height) gap-3 overflow-y-auto rounded-menu p-4',
+          'max-h-[min(47.5rem,var(--available-height))] gap-3 overflow-y-auto rounded-menu p-4',
           className,
         )}
       >
