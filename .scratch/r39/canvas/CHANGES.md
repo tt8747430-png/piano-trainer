@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · My chord sheets' empty line wraps pretty (no word alone on its last line), as the app's now · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
+- 2026-11-28 · 6fa76a30 · My chord sheets' empty line wraps pretty (no word alone on its last line), as the app's now · ChordPlayer, ChordPlayerLaptop · v891
 - 2026-11-28 · 64fc8b2e · deleting the sheet in hand from the library turns its name's state to Not saved (Live again on Undo), as the app's, where it kept saying Live · ChordPlayer, ChordPlayerLaptop · v890
 - 2026-11-28 · 55f32bfa · Rename chord sheet rises over the library, which stays under its scrim (the app's), where it closed the library and rose over the chart · ChordPlayer, ChordPlayerLaptop · v889
 - 2026-11-28 · 76717f84 · the library's My chord sheets says "None saved yet. Save the sheet in hand from its name." once its last sheet is deleted, as the app's, where it left a bare head · ChordPlayer, ChordPlayerLaptop · v888
