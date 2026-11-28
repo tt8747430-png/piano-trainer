@@ -72,7 +72,7 @@ CP58 = CP58.replace("    return { ...common(st, set),", r'''    return { ...comm
       arMains: ['A', 'B', 'C', 'D'].map((n) => ({ n, ...lamp(ar.main === n, ar.next === n), pick: () => arSet(ar.main === n ? { next: 'fill' } : { next: n, main: st.playing ? ar.main : n }) })),
       arEndings: ['I', 'II', 'III'].map((n) => ({ n, ...lamp(ar.ending === n), pick: () => arSet({ ending: ar.ending === n ? null : n }) })),
       tAcmp: () => arSet({ acmp: !ar.acmp }), tSync: () => arSet({ sync: !ar.sync }), tSyncStop: () => arSet({ syncStop: !ar.syncStop }), tAuto: () => arSet({ autoFill: !ar.autoFill }), tOts: () => arSet({ ots: !ar.ots }), tFade: () => arSet({ fade: !ar.fade }), tBreak: () => arSet({ next: 'Break' }),
-      arTitle: st.playing ? 'Genos · playing Main ' + ar.main : 'Genos · waiting for Start',''', 1)
+      arDot: st.playing ? '#44684A' : '#9C9086',''', 1)
 assert CP58.count('draftOn') == 1 and CP58.count('SECS0') == 2, 'CP58 patch missed'
 
 # ── the chart: beats under each bar, the ! on a bar that does not add up, the section's Genos tag ──
@@ -207,12 +207,11 @@ LAMPS59 = lambda lst, spoken: f'<sc-for list="{{{{{lst}}}}}" as="l" hint-placeho
 CAP59 = lambda t: f'<span style="font-size: 12px; font-weight: 600; color: {SOFT}">{t}</span>'
 GRP59 = lambda label, cols, inner, grow='1': f'<div role="group" aria-label="{label}" style="flex: {grow} 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px">{CAP59(label)}<div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: 4px">{inner}</div></div>'
 HEAD59 = (f'<div style="display: flex; align-items: center; gap: 8px; min-height: 40px"><span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>'
-          f'<span aria-live="polite" style="flex: 1; min-width: 0; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{arTitle}}}}</span>'
+          f'<span aria-live="polite" style="flex: 1; min-width: 0; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{cpArTitle}}}}</span>'
           + START59 + '</div>')
 MAINS59 = GRP59('Main', 5, LAMPS59('arMains', 'Main') + LAMP59('arBreak', 'Break', 'tBreak'), '5')
 INTRO59 = GRP59('Intro', 3, LAMPS59('arIntros', 'Intro'), '3')
 END59 = GRP59('Ending/rit.', 3, LAMPS59('arEndings', 'Ending'), '3')
-CP58 = CP58.replace("arTitle: st.playing ?", "arDot: st.playing ? '#44684A' : '#9C9086', arTitle: st.playing ?", 1)
 CP58 = CP58.replace("const lamp = (on, next) => ({", "const lamp = (on, next) => ({ on: !!on,", 1)
 # the arranger's panel is a state (Follow a MIDI arranger, off by default): at rest the chart is the page (loop round 58,
 # owner 2026-11-16: "the page has one focus")
@@ -306,17 +305,16 @@ TOAST76 = TOAST('{{toastB}}', z=56, on='toastPh')
 
 # the Genos panel's head as the app says it (ArrangerStrip): who plays and whether it plays, then the connection as the
 # MIDI keyboard's popover says it, Try again where no Genos answered
-HEAD77 = HEAD59.replace('{{arTitle}}', '{{cpArTitle}}', 1)
 ARLINE77 = (f'<div style="display: flex; align-items: center; gap: 12px; min-height: 44px; margin-top: -4px"><p aria-live="polite" style="flex: 1; min-width: 0; margin: 0; font-size: 14px; line-height: 1.35; color: {SOFT}; text-wrap: pretty">{{{{cpArLine}}}}</p>'
             f'<sc-if value="{{{{cpAlone}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{cpRetry}}}}" style="flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Try again</button></sc-if></div>')
 START_G = LAMP59('arStart', '<span style="display: flex; justify-content: center"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="{{cpStartD}}"></path></svg></span>', 'togglePlay', 'Start/Stop', size='flex: none; width: 44px; min-width: 44px')
 def GENOS77(pos, wide):
-    g = GENOS76(pos, wide).replace('{{arTitle}}', '{{cpArTitle}}')
+    g = GENOS76(pos, wide)
     if not wide:
         _c0 = g.index('{{gCompact}}'); _s0 = g.index(START59, _c0)
         g = g[:_s0] + START_G + g[_s0 + len(START59):]
     # the connection line under the full panel's head
-    j = g.index(HEAD76.replace('{{arTitle}}', '{{cpArTitle}}')) + len(HEAD76.replace('{{arTitle}}', '{{cpArTitle}}'))
+    j = g.index(HEAD76) + len(HEAD76)
     g = g[:j] + ARLINE77 + g[j:]
     return g
 
@@ -382,11 +380,11 @@ MIDI77 = GROUP(('val', 'Keyboard', 'Not connected'), ('raw', f'<span style="disp
                ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), bg=SHEET)
 # a panel's head is the kit's (the Player's and the editor's: 64, the title, « Fold the panel 44 round); only its act is
 # the Chord player's
-_PHEAD77 = lambda title: _PHEAD(title).replace('{{foldPanel}}', '{{cpRailNone}}')
+_PHEAD77 = lambda title: _PHEAD(title, fold='cpRailNone')
 _PBODY77 = lambda inner: f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 16px">{inner}</div>'
 _PANEL = lambda k, title, inner: f'<sc-if value="{{{{rail{k}On}}}}" hint-placeholder-val="{{{{{"true" if k == "Ch" else "false"}}}}}"><section aria-label="{title}" style="flex: none; width: 352px; min-height: 0; display: flex; flex-direction: column; box-shadow: inset -1px 0 0 {LINE}">{_PHEAD77(title)}{_PBODY77(inner)}</section></sc-if>'
 GENOSPANEL = (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">'
-              + HEAD77 + ARLINE77 + f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div></div></sc-if>' + FOLLOW77)
+              + HEAD59 + ARLINE77 + f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div></div></sc-if>' + FOLLOW77)
 PANELS77 = (_PANEL('Ch', '{{keyHead}}', _DRAGB)
             + _PANEL('St', 'Styles', STYLEROWS) + _PANEL('Ge', 'Genos', GENOSPANEL) + _PANEL('So', 'Audio', SOUND77) + _PANEL('Ca', 'Chart', CHART77))
 
