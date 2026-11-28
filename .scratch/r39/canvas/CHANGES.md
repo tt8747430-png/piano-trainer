@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · 68592271 · New sheet starts at once with "Started a new chord sheet · Undo" (the app asked "Start a new chord sheet?" for a loss Undo can take back), the new sheet says Not saved under its name as the app (the board said New), and the board's toasts show again: a later block redefined them on a second key, so Loop, Metronome, Layout reset and Opened… never appeared · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
+- 2026-11-28 · 68592271 · New sheet starts at once with "Started a new chord sheet · Undo" (the app asked "Start a new chord sheet?" for a loss Undo can take back), the new sheet says Not saved under its name as the app (the board said New), and the board's toasts show again: a later block redefined them on a second key, so Loop, Metronome, Layout reset and Opened… never appeared · ChordPlayer, ChordPlayerLaptop · v868
 - 2026-11-28 · 20246de6 · the rail's Genos wears Lucide's keyboard-music, where it and Shortcuts wore near-identical computer keyboards; the rail's words weigh 600 on the place shown and 500 elsewhere, as the editor's rail and the app's (they fell to 400, the weight never set) · ChordPlayer, ChordPlayerLaptop · v867
 - 2026-11-28 · c67d126c · a section's name opens its own sheet (Section ⇕ with its name, Loop this section, then Duplicate section), as the chord's sheet in shape; it opened the Genos marks, which keep their chip, so the board had nowhere to rename, loop or duplicate a section; in the app that sheet dropped Repeat, Variation and Delete (the head's) and its grey group for the white card · ChordPlayer, ChordPlayerLaptop · v866
 - 2026-11-28 · 796ad941 · the chord's sheet's pickers (Chord's root and quality, Bass note) wear the kit's up-down chevrons, as its select, the Progression and Chord finder boards and the app's Select (Apple's pop-up button); they wore a single chevron down, a menu's sign; in the app the sheet's name menu is 280 wide, as the board's · ChordPlayer, ChordPlayerLaptop · v865
