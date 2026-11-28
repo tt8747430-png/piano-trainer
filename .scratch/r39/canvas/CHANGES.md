@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · New sheet starts at once with "Started a new chord sheet · Undo" (the app asked "Start a new chord sheet?" for a loss Undo can take back), the new sheet says Not saved under its name as the app (the board said New), and the board's toasts show again: a later block redefined them on a second key, so Loop, Metronome, Layout reset and Opened… never appeared · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
 - 2026-11-28 · 20246de6 · the rail's Genos wears Lucide's keyboard-music, where it and Shortcuts wore near-identical computer keyboards; the rail's words weigh 600 on the place shown and 500 elsewhere, as the editor's rail and the app's (they fell to 400, the weight never set) · ChordPlayer, ChordPlayerLaptop · v867
