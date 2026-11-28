@@ -1123,7 +1123,9 @@ export function ChordPlayer({
       {dialog && dialogChord ? (
         <ChordDialog
           open
-          {...(standsOnKeys ? { foot: `${KEYS_PX[side ? 'side' : 'phone']}px` } : {})}
+          {...(standsOnKeys
+            ? { foot: `calc(${KEYS_PX[side ? 'side' : 'phone']}px + env(safe-area-inset-bottom))` }
+            : {})}
           onOpenChange={(open) => (open ? null : setDialog(null))}
           chord={dialogChord.chord}
           beats={dialogChord.beats}

@@ -303,6 +303,9 @@ def CHSHEET_PH(cond, title, body):
     a = 'position: absolute; inset: 0; z-index: 60;'
     b = 'position: absolute; left: 0; right: 0; bottom: 0; z-index: 61;'
     assert a in t and b in t and 'padding: 6px 16px 40px;' in t
+    # the home indicator's strip under the keys is scrimmed with the page, as the app's (its foot's inset is the layout's)
+    strip = '<div onClick="{{closeSheet}}" style="position: absolute; left: 0; right: 0; bottom: 0; height: {{cpChordStrip}}; z-index: 60; background: rgba(51,41,33,.32)"></div>'
+    t = t.replace('<section role="dialog"', strip + '<section role="dialog"', 1)
     return (t.replace(a, 'position: absolute; inset: 0 0 {{cpChordFoot}}; z-index: 60;', 1)
              .replace(b, 'position: absolute; left: 0; right: 0; bottom: {{cpChordFoot}}; z-index: 61;', 1)
              .replace('padding: 6px 16px 40px;', 'padding: 6px 16px {{cpChordPad}};', 1))
@@ -504,7 +507,7 @@ _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'O
       randomize: () => set({ sheet: null, toastT: 'New chords in ' + KEYS[k] + ' major' }),
       hdTr: () => set({ sheet: st.sheet === 'key' ? null : 'key' }), hdTrX: st.sheet === 'key' ? 'true' : 'false', hdKeyL: KEYS[k] + ' major',
       hdMidi: () => set({ sheet: st.sheet === 'midi' ? null : 'midi' }), hdMidiOn: st.sheet === 'midi', hdMidiX: st.sheet === 'midi' ? 'true' : 'false', hdMidiBg: st.sheet === 'midi' ? 'rgba(254,253,251,.14)' : 'transparent',
-      hdKeys: () => set({ cpKeys: !cpKeys }), hdKeysOn: cpKeys ? 'true' : 'false', hdKeysBg: cpKeys ? 'rgba(254,253,251,.14)' : 'transparent', hdKeysPh: cpKeys ? '#A8551F' : '#332921', cpKeysOn: cpKeys, cpChordFoot: cpKeys ? '146px' : '0px', cpChordPad: cpKeys ? '16px' : '40px',
+      hdKeys: () => set({ cpKeys: !cpKeys }), hdKeysOn: cpKeys ? 'true' : 'false', hdKeysBg: cpKeys ? 'rgba(254,253,251,.14)' : 'transparent', hdKeysPh: cpKeys ? '#A8551F' : '#332921', cpKeysOn: cpKeys, cpChordFoot: cpKeys ? '146px' : '0px', cpChordPad: cpKeys ? '16px' : '40px', cpChordStrip: cpKeys ? '34px' : '0px',
       phMenu: () => set({ sheet: st.sheet === 'menu77' ? null : 'menu77' }), phMenuOn: st.sheet === 'menu77', phMenuX: st.sheet === 'menu77' ? 'true' : 'false', phMenuFg: st.sheet === 'menu77' ? '#A8551F' : '#332921', phToMenu: () => set({ sheet: 'menu77' }), phClose: () => set({ sheet: null }),
       cpPhExp: () => set({ sheet: 'phExp' }), cpPhExpOn: st.sheet === 'phExp', cpPhChart: () => set({ sheet: 'phChart' }), cpPhStyle: () => set({ sheet: 'phStyle' }), cpPhKey: () => set({ sheet: 'phKey' }), cpPhKeyOn: st.sheet === 'phKey', cpPhTempo: () => set({ sheet: 'phTempo' }), cpPhTempoOn: st.sheet === 'phTempo', ...(() => { const b = st.bpm ?? 96, to = (n) => set({ bpm: Math.max(40, Math.min(240, n)) }), MK = [[60, 'Largo'], [76, 'Adagio'], [108, 'Andante'], [120, 'Moderato'], [168, 'Allegro'], [999, 'Presto']]; return { cpTbpm: b, cpTmark: MK.find(([m]) => b < m)[1], cpTpos: ((b - 40) / 2) + '%', cpTd10: () => to(b - 10), cpTd1: () => to(b - 1), cpTu1: () => to(b + 1), cpTu10: () => to(b + 10) }; })(),  cpPhStyleOn: st.sheet === 'phStyle', cpPhChartOn: st.sheet === 'phChart', cpPhMidi: () => set({ sheet: 'phMidi' }), cpPhMidiOn: st.sheet === 'phMidi' };
 """

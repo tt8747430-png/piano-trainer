@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · COMMIT · the chord sheet on the keys: the home indicator's strip under the keys scrimmed with the page, as the app's; the app's sheet foot adds the home indicator's inset under the keys · ChordPlayer · pending
+
 ## Changes
 
 - 2026-11-28 · 9358ee74 · a phone's chord sheet stands on the keys: its scrim and card end at their top, the keys lit with the chord and playable while it changes, its foot 16 (app too, on its side the body scrolling above the keys) · ChordPlayer · v906
