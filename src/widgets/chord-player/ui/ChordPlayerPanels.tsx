@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   BAND_PARTS,
@@ -23,13 +23,11 @@ import { cn } from '@/shared/lib'
 import { relayMeter, SHEET_METERS, type SheetMeter } from '@/shared/lib/arrangement'
 import { pitchClassOf, tempoWord } from '@/shared/lib/music'
 import {
-  BackButton,
   GroupRow,
   GroupRows,
   GroupSegmented,
   GroupSwitch,
   RootGrid,
-  RowButton,
   sayUndo,
   Segmented,
   SettingsGroup,
@@ -77,7 +75,7 @@ function Level({
       locale={locale}
       className="flex flex-col gap-2"
     >
-      <div className="flex justify-between gap-3 text-base">
+      <div className="flex justify-between gap-3 text-base/[normal] lg:text-[0.9375rem]/[normal]">
         <SliderLabel>{label}</SliderLabel>
         <span className="text-muted-foreground tabular-nums">{formatPercent(locale, value)}</span>
       </div>
@@ -87,46 +85,18 @@ function Level({
 
 /**
  * Audio (the board's `SOUND77`, the Player's Audio page shape): the card of Piano, Bass and Drums,
- * each a switch (at least one on; a part the style has none of not drawn) and Volume ›, its page the
- * volume and each instrument's level; then Voicing over its segmented control, 24 apart.
+ * each a switch (at least one on; a part the style has none of not drawn); then Volume, Master and
+ * each part that is on, its name and % over a slider, 16 apart; then Voicing, the sections 24 apart.
  */
 export function AudioBody({ hand, style }: { hand: ChordSheetInHand; style: Style }) {
   const { t } = useTranslation('practice')
-  const locale = useLocale()
   const prefs = useSettings(selectChordPlayer)
   const settingsStore = useSettingsStoreApi()
-  const [volume, setVolume] = useState(false)
   const { settings } = hand.entry
   const drawn = BAND_PARTS.filter(
     (part) => part === 'piano' || (part === 'bass' ? style.hasBass : style.hasDrums),
   )
   const onCount = drawn.filter((part) => settings[part].on).length
-  if (volume)
-    return (
-      <div className="flex flex-col gap-6">
-        <div className="-ms-3 -mt-2 flex items-center gap-1">
-          <BackButton onClick={() => setVolume(false)} />
-          <h3 className="font-sans text-[0.9375rem] font-semibold">
-            {t('chordPlayer.settings.volume')}
-          </h3>
-        </div>
-        <Level
-          label={t('chordPlayer.settings.volume')}
-          value={settings.volume}
-          onChange={(next) => hand.setSettings({ volume: next })}
-        />
-        {drawn
-          .filter((part) => settings[part].on)
-          .map((part) => (
-            <Level
-              key={part}
-              label={t(`chordPlayer.settings.${part}`)}
-              value={settings[part].level}
-              onChange={(level) => hand.setSettings({ [part]: { ...settings[part], level } })}
-            />
-          ))}
-      </div>
-    )
   return (
     <div className="flex flex-col gap-6">
       <SettingsGroup flush>
@@ -143,13 +113,26 @@ export function AudioBody({ hand, style }: { hand: ChordSheetInHand; style: Styl
             />
           )
         })}
-        <RowButton
-          title={t('chordPlayer.settings.volume')}
-          value={formatPercent(locale, settings.volume)}
-          opens
-          onClick={() => setVolume(true)}
-        />
       </SettingsGroup>
+      <PanelSection title={t('chordPlayer.settings.volume')}>
+        <div className="flex flex-col gap-4">
+          <Level
+            label={t('chordPlayer.settings.master')}
+            value={settings.volume}
+            onChange={(next) => hand.setSettings({ volume: next })}
+          />
+          {drawn
+            .filter((part) => settings[part].on)
+            .map((part) => (
+              <Level
+                key={part}
+                label={t(`chordPlayer.settings.${part}`)}
+                value={settings[part].level}
+                onChange={(level) => hand.setSettings({ [part]: { ...settings[part], level } })}
+              />
+            ))}
+        </div>
+      </PanelSection>
       <PanelSection title={t('chordPlayer.settings.voicing')}>
         <Segmented
           label={t('chordPlayer.settings.voicing')}

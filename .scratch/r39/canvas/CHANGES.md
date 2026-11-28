@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · Audio holds Volume in place, Master and each part's level under one Volume head (name and % over the slider, 16 apart), where its Volume row opened nothing (the app's sub-page stacked a second Back and said Volume twice) · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 

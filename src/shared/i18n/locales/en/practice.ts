@@ -1098,6 +1098,7 @@ export const practice = {
       countIns: { '0': 'Off', '1': '1 bar', '2': '2 bars' },
       levels: 'Each instrument',
       volume: 'Volume',
+      master: 'Master',
       chart: 'Chart',
       midi: 'MIDI',
       layout: 'Layout',

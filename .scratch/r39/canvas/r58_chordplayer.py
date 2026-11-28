@@ -446,8 +446,14 @@ _SECT77 = lambda t, body: f'<section aria-label="{t}" style="display: flex; flex
 # the Player's Audio page shape on both sizes (AUDPANEL): the kit's white card, then a section's head over its segmented
 # control, 24 apart (it was the grey group with an uppercase PLAYING caption, a second shape for one kind of page)
 _COL77 = lambda *xs: '<div style="display: flex; flex-direction: column; gap: 24px">' + ''.join(xs) + '</div>'
-SOUND77 = _COL77(GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'), ('link', 'Volume', '80%', ''), bg=SHEET),
-                 _SECT77('Voicing', SEGC('cpVSeg', 36, 14, True)))
+# Volume in place (the loop, 2026-11-28): its own page stacked a second Back under the panel's head and said Volume
+# twice, and the row opened nothing on the board; the levels stand under one Volume head, Master first, each its name
+# and % over the slider (the app's Level: a 4 track, a 28 thumb), 16 apart
+_LEV77 = lambda lab, v: (f'<div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; gap: 12px; font-size: 15px"><span>{lab}</span><span style="color: {SOFT}; font-variant-numeric: tabular-nums">{v}%</span></div>'
+                         f'<input type="range" min="0" max="100" step="5" value="{v}" aria-label="{lab}" style="width: 100%; height: 28px; margin: 0; accent-color: {INK}"></div>')
+VOL77 = '<div style="display: flex; flex-direction: column; gap: 16px">' + _LEV77('Master', 80) + _LEV77('Piano', 80) + _LEV77('Bass', 70) + _LEV77('Drums', 70) + '</div>'
+SOUND77 = _COL77(GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'), bg=SHEET),
+                 _SECT77('Volume', VOL77), _SECT77('Voicing', SEGC('cpVSeg', 36, 14, True)))
 # the chart's two settings, one shape: a sentence-case head over its segmented control (the Time signature row opened
 # nothing; the app's five meters are one tap each, as Written as)
 CHART77 = _COL77(_SECT77('Time signature', SEGC('cpMeterSeg', 36, 14, True)), _SECT77('Written as', SEGC('namesSeg', 36, 14, True)))

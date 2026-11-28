@@ -1089,6 +1089,7 @@ export const practice: LocaleResources['practice'] = {
       countIns: { '0': 'Выкл.', '1': '1 такт', '2': '2 такта' },
       levels: 'Каждый инструмент',
       volume: 'Громкость',
+      master: 'Общая',
       chart: 'Сетка',
       midi: 'MIDI',
       layout: 'Раскладка',
