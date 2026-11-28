@@ -262,8 +262,9 @@ CHART76 = lambda *a: CHART59(*a).replace(_t0, TITLE76, 1)
 # the Genos, three sizes: Full (every control), Compact (Start/Stop and Main A–D in a row), Minimized (a pill)
 MINI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M5 12h14"></path></svg>'
 EXPI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="m18 15-6-6-6 6"></path></svg>'
+COLI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="m6 9 6 6 6-6"></path></svg>'
 ICB = lambda act, label, svg, margin='-2px -6px -2px 0': f'<button type="button" onClick="{{{{{act}}}}}" aria-label="{label}" data-tip="{label}" style="flex: none; width: 44px; height: 44px; margin: {margin}; padding: 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{svg}</button>'
-HEAD76 = HEAD59[:-len('</div>')] + ICB('gCompactT', 'Compact', EXPI.replace('m18 15-6-6-6 6', 'm6 9 6 6 6-6')) + ICB('gMinT', 'Minimize', MINI) + '</div>'
+HEAD76 = HEAD59[:-len('</div>')] + ICB('gCompactT', 'Compact', COLI) + ICB('gMinT', 'Minimize', MINI) + '</div>'
 CARDST = f'box-sizing: border-box; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}'
 def GENOS76(pos, wide):
     full = (f'<sc-if value="{{{{gFull}}}}" hint-placeholder-val="{{{{true}}}}"><div role="toolbar" aria-label="Genos style controls" style="position: relative; display: flex; flex-direction: column; gap: 8px; padding: 8px 12px 12px; {CARDST}">'
@@ -424,7 +425,7 @@ PHNAV77 = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}
            f'<p style="margin: 0; padding: 4px 12px 0; text-align: center; font-size: 17px; font-weight: 600; line-height: 22px; color: {INK}">{{{{sheetsL}}}}</p>'
            + FROWS([(_FI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>'), 'Chords', '', 'cpPhChords'), (_FI(DRUMP), 'Style', '{{styleL}}', 'cpPhStyle'), ('Tr', 'Key', '{{keyL}} major', 'cpPhKey'), ('Speed', 'Tempo', '{{bpmL}} BPM', 'cpPhTempo'),
                     (_FI('<path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path>'), 'Repeats', '{{optRepL}}', 'cpPhRep'), ('Aud', 'Audio', '', 'cpPhSound'), (_FI(CHARTP), 'Chart', '{{namesL}}', 'cpPhChart'), ('Midi', 'MIDI', '{{cpMidiL}}', 'cpPhMidi')], lines=False, h=48)
-           + _sep + FROWS([('Share', 'Share…', '', 'openShare', INK, False), ('Exp', 'Export', '', 'cpPhExp'), (FICONS['Exp'].replace('M12 3v12M7 10l5 5 5-5', 'M12 15V3M7 8l5-5 5 5'), 'Import chart…', '', 'importChart', INK, False), (_FI(SHUFFLEP), 'Randomize chords', '', 'randomize', INK, False)], lines=False, h=48)
+           + _sep + FROWS([('Share', 'Share…', '', 'openShare', INK, False), ('Exp', 'Export', '', 'cpPhExp'), (FICONS['Imp'], 'Import chart…', '', 'importChart', INK, False), (_FI(SHUFFLEP), 'Randomize chords', '', 'randomize', INK, False)], lines=False, h=48)
            + _sep + FROWS([(_FI(LISTPLUSP), 'Save to my progressions', '', 'saveProg', INK, False), (_FI(LISTMUSP), 'Open in Progressions', '', 'Progressions.dc.html')], lines=False, h=48) + '</nav></sc-if>')
 # Export, the Player's shape: one row, its formats on a page with ← on a phone and a submenu on a laptop
 EXPROWS77 = GROUP(('action', 'MIDI', 'exportMidi', INK), ('action', 'Chart (.txt)', 'exportChart', INK), bg=SHEET)

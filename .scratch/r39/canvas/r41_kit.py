@@ -884,6 +884,7 @@ FICONS = {
     'Rec': _FI('<path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"></path><path d="M19 11a7 7 0 0 1-14 0M12 18v3"></path>'),
     'Share': _FI('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path>'),
     'Exp': _FI('<path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path>'),
+    'Imp': _FI('<path d="M12 15V3M7 8l5-5 5 5M5 21h14"></path>'),  # Import's arrow up from its line, Export's turned
     'Print': _FI('<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect>'),
     'Hist': _FI('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5M12 7v5l4 2"></path>'),
     'Pub': _FI('<circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"></path>'),
