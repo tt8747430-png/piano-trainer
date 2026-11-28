@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the chord's sheet's pickers (Chord's root and quality, Bass note) wear the kit's up-down chevrons, as its select, the Progression and Chord finder boards and the app's Select (Apple's pop-up button); they wore a single chevron down, a menu's sign; in the app the sheet's name menu is 280 wide, as the board's · ChordPlayer, ChordPlayerLaptop · pending
+- 2026-11-28 · 796ad941 · the chord's sheet's pickers (Chord's root and quality, Bass note) wear the kit's up-down chevrons, as its select, the Progression and Chord finder boards and the app's Select (Apple's pop-up button); they wore a single chevron down, a menu's sign; in the app the sheet's name menu is 280 wide, as the board's · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
 - 2026-11-28 · dec7da10 · the Chord player's MIDI says Keyboard Not connected, as Settings, ☰ and the Player say it (it read None on its own page); in the app the band's popovers start at their trigger as the board places them, a popover is capped at 760 and scrolls (Style flipped beside the band and over it), the Genos lamp chosen in the rail's wash with an ink ring (it was still crimson), the rail's Chords the board's beamed notes · ChordPlayer, ChordPlayerLaptop · v864
