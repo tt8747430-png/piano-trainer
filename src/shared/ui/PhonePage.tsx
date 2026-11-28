@@ -2,12 +2,14 @@ import { ChevronLeft } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dialog, DialogContent, DialogTitle } from './primitives/dialog'
+import { useClearsToast } from './use-clears-toast'
 
 /**
  * A page a phone's ☰ opens (the kit's `THINGPAGE`, the boards' `FSHEET`): the whole screen under the
  * status bar on the page's paper, its header 60 high (Back, the title centred at 17/600), its body
  * scrolling under it 16 in, 8 under the header and 48 at its foot. Back is its way out, a bare 44 with
  * the 24 chevron (the page is the layer; no glass on it): no Done, no handle, nothing behind showing.
+ * A toast left from the screen below goes as the page rises, so nothing lies over its rows.
  */
 export function PhonePage({
   open,
@@ -23,6 +25,7 @@ export function PhonePage({
   children: ReactNode
 }) {
   const { t } = useTranslation('common')
+  useClearsToast(open)
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent

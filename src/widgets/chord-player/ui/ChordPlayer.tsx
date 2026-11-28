@@ -1133,6 +1133,7 @@ export function ChordPlayer({
         />
       ) : null}
       <LibrarySheet
+        laptop={laptop}
         open={library}
         onOpenChange={setLibrary}
         current={sheetId}
