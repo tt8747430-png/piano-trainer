@@ -6,7 +6,6 @@ DRUMP = '<path d="m2 2 8 8"></path><path d="m22 2-8 8"></path><ellipse cx="12" c
 LISTPLUSP = '<path d="M11 12H3"></path><path d="M16 6H3"></path><path d="M16 18H3"></path><path d="M18 9v6"></path><path d="M21 12h-6"></path>'
 CHARTP = '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path>'
 LISTMUSP = '<path d="M21 15V6"></path><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M12 12H3"></path><path d="M16 6H3"></path><path d="M12 18H3"></path>'
-DOTSB = IB('More', MORE, 'openMore')
 # Musicca's chord sheet (Root, Chord, Bass note, Duration − n beats +, Suggested chords, Play from here, Duplicate,
 # Delete, Done); each bar's beats as ticks, the sounding beat lit; a bar whose beats do not add up kept as it is and
 # marked !; each section's Genos tag (Intro I–III, Main per pass, Fill in or Break into the next, Ending I–III) in its
@@ -315,13 +314,6 @@ def PTAG(pick, menu, name, pos='left: 8px; top: 8px'):
     return (f'<sc-if value="{{{{layEdit}}}}" hint-placeholder-val="{{{{false}}}}"><div aria-hidden="true" style="position: absolute; inset: 2px; z-index: 44; border-radius: 12px; outline: 2px dashed #B98A32; outline-offset: -2px; pointer-events: none"></div>'
             f'<div data-menuroot-anchor style="position: absolute; {pos}; z-index: 45; height: 44px; box-sizing: border-box; padding: 0 4px 0 0; border-radius: 22px; {GLASSFX}; display: flex; align-items: center">'
             + GRIPB(pick, name) + f'<button type="button" onClick="{{{{{menu}}}}}" aria-label="{name}: place, size or hide" style="height: 44px; padding: 0 8px 0 0; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px">{name}{CHEV_D}</button></div></sc-if>')
-# while a panel is picked, the places it may go light up as honey zones; a tap there puts it there
-ZONE = lambda cond, act, label, pos: f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{{act}}}}}" aria-label="Put it {label}" style="position: absolute; {pos}; z-index: 46; border: 2px dashed #B98A32; border-radius: 14px; background: rgba(237,198,132,.28); color: {INK}; font: inherit; font-size: 15px; font-weight: 700">{label}</button></sc-if>'
-DRAGHINT = f'<sc-if value="{{{{dragOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 50%; top: 100px; transform: translateX(-50%); z-index: 47; height: 36px; padding: 0 14px; border-radius: 18px; background: {INK}; color: {SHEET}; display: flex; align-items: center; font-size: 14px; font-weight: 600; white-space: nowrap">{{{{dragT}}}}</div></sc-if>'
-TRAY = (f'<sc-if value="{{{{anyHidden}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: none; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 0 16px 8px"><span style="font-size: 14px; color: {SOFT}">Hidden</span>'
-        f'<sc-for list="{{{{hiddenPanels}}}}" as="h" hint-placeholder-count="1"><button type="button" onClick="{{{{h.show}}}}" style="height: 44px; padding: 0 14px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600">+ {{{{h.l}}}}</button></sc-for></div></sc-if>')
-BARR = (f'<sc-if value="{{{{layNot}}}}" hint-placeholder-val="{{{{true}}}}">' + UNDOB.replace('<button type="button"', '<button type="button" class="ibd" disabled="{{undoOff}}"', 1) + GEAR() + DOTSB + '</sc-if>'
-        + f'<sc-if value="{{{{layEdit}}}}" hint-placeholder-val="{{{{false}}}}">' + TB('Reset', 'resetLay') + TB('Done', 'doneLay') + '</sc-if>')
 
 # the Genos, three sizes: Full (every control), Compact (Start/Stop and Main A–D in a row), Minimized (a pill)
 MINI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M5 12h14"></path></svg>'
@@ -348,8 +340,6 @@ assert CP_DOCK.count(_pb) == 1
 CP_DOCK = CP_DOCK.replace(_pb, _pb + ' class="ibd" disabled="{{playOff}}"', 1)
 DOCKFULL = DOCK(CP_DOCK, '{{dockPos}}')
 DOCKFULL = DOCKFULL[:-len('</div>')] + PTAG('pickD', 'openLayD', 'Controls', 'left: 8px; top: -26px') + '</div>'
-PLAYONLY = f'<div style="position: absolute; right: 16px; {{{{dockPos}}}}; z-index: 40; width: 68px; height: 68px; border-radius: 34px; {GLASSFX}; display: flex; align-items: center; justify-content: center">{PLAYBTN()}' + PTAG('pickD', 'openLayD', 'Controls', 'right: 0; top: -50px') + '</div>'
-DOCKTOP = f'<div role="toolbar" style="position: relative; flex: none; margin: 0 16px 8px; height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; {GLASSFX}; display: flex; align-items: center; gap: 8px">{CP_DOCK}' + PTAG('pickD', 'openLayD', 'Controls', 'left: 8px; top: 12px') + '</div>'
 
 def KEYS76(h3, top, lap=False):
     # a phone shows F2 to A4 at the kit's 26 a white key, the 17 whites 40 wider than the screen, centred (the app's
@@ -358,42 +348,6 @@ def KEYS76(h3, top, lap=False):
     sized = ''.join(f'<sc-if value="{{{{k{z}}}}}" hint-placeholder-val="{{{{{"true" if z == "M" else "false"}}}}}">{keys(h)}</sc-if>' for z, h in zip('SML', h3))
     return f'<div style="position: relative; flex: none; {"margin-bottom: 34px; " if not top and not lap else ""}box-shadow: 0 {"1" if top else "-1"}px 0 {LINE}">{sized}{PTAG("pickK", "openLayK", "Keys", "left: 8px; " + ("bottom: 8px" if top else "top: 8px"))}</div>'
 
-ph58 = (TOP('Main.dc.html', '', BARR) + TRAY
-        + f'<sc-if value="{{{{kTop}}}}" hint-placeholder-val="{{{{false}}}}">{KEYS76((72, 112, 168), True)}</sc-if>'
-        + f'<sc-if value="{{{{dTop}}}}" hint-placeholder-val="{{{{false}}}}">{DOCKTOP}</sc-if>'
-        + f'<sc-if value="{{{{gTop}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("position: relative; flex: none; margin: 0 16px 8px", False)}</sc-if>'
-        + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px {{{{chartPad}}}}; display: flex; flex-direction: column; gap: 16px">{SHOWSTATES()}{CHART76(8, 8, 60, 21, 2)}</main>'
-        + f'<sc-if value="{{{{gBot}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("position: relative; flex: none; margin: 8px 16px", False)}</sc-if>'
-        + f'<sc-if value="{{{{kBot}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS76((72, 112, 168), False)}</sc-if>'
-        + f'<sc-if value="{{{{gFloat}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("position: absolute; z-index: 41; {{gFloatPos}}", False)}</sc-if>'
-        + f'<sc-if value="{{{{dFloatFull}}}}" hint-placeholder-val="{{{{true}}}}">{DOCKFULL}</sc-if>'
-        + f'<sc-if value="{{{{dFloatMin}}}}" hint-placeholder-val="{{{{false}}}}">{PLAYONLY}</sc-if>'
-        + ZONE('zTop', 'toTop', 'At the top', 'left: 16px; right: 16px; top: 112px; height: 96px')
-        + ZONE('zFloat', 'toFloat', 'Floating', 'left: 16px; right: 16px; top: 380px; height: 96px')
-        + ZONE('zBot', 'toBot', 'At the bottom', 'left: 16px; right: 16px; bottom: 120px; height: 96px') + DRAGHINT)
-_sideCol = lambda side: (f'<sc-if value="{{{{side{side}}}}}" hint-placeholder-val="{{{{{"true" if side == "R" else "false"}}}}}"><div class="nos" style="position: relative; flex: none; width: {{{{sideW}}}}; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 4px 0 24px">'
-    + f'<sc-if value="{{{{c{"Right" if side == "R" else "Left"}}}}}" hint-placeholder-val="{{{{{"true" if side == "R" else "false"}}}}}"><div style="position: relative; display: flex; flex-direction: column; gap: 16px; padding-top: 4px">{DRAG.replace("margin: 16px 0 -4px", "margin: 0 0 -4px", 1)}{PTAG("pickC", "openLayC", "Chords", "right: 0; top: -8px")}</div></sc-if>'
-    + f'<sc-if value="{{{{g{"Right" if side == "R" else "Left"}}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("position: relative", False).replace(", " + SHADOW, "", 3)}</sc-if></div></sc-if>')
-lm58 = (LTOP('Laptop.dc.html', BARR) + TRAY.replace('padding: 0 16px 8px', 'padding: 0 56px 8px', 1)
-        + f'<sc-if value="{{{{kTop}}}}" hint-placeholder-val="{{{{false}}}}">{KEYS76((110, 170, 240), True, True)}</sc-if>'
-        + '<div style="position: relative; flex: 1; min-height: 0; display: flex; gap: 40px; padding: 0 40px 0 56px">' + _sideCol('L')
-        + '<div style="position: relative; flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">'
-        + f'<sc-if value="{{{{dTop}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; justify-content: center; padding: 0 0 8px">{DOCKTOP.replace("margin: 0 16px 8px", "width: 560px", 1)}</div></sc-if>'
-        + f'<sc-if value="{{{{gTopL}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("position: relative; flex: none; margin: 0 0 12px", True)}</sc-if>'
-        + '<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 4px 200px">' + SHOWSTATES() + CHART76('{{chartCols}}', 6, 76, 28, 1) + '</div>'
-        + f'<div style="position: absolute; left: 0; right: 0; bottom: 12px; z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 8px">'
-        + f'<sc-if value="{{{{gFloatL}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("width: 760px", True)}</sc-if>'
-        + f'<sc-if value="{{{{dFloatFull}}}}" hint-placeholder-val="{{{{true}}}}"><div style="position: relative">{DOCK_L(CP_DOCK)}{PTAG("pickD", "openLayD", "Controls", "left: 16px; top: -26px")}</div></sc-if>'
-        + f'<sc-if value="{{{{dFloatMin}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: relative; align-self: flex-end; margin-right: 16px; width: 68px; height: 68px; border-radius: 34px; {GLASSFX}; display: flex; align-items: center; justify-content: center">{PLAYBTN()}{PTAG("pickD", "openLayD", "Controls", "right: 0; top: -50px")}</div></sc-if>'
-        + '</div>'
-        + f'<sc-if value="{{{{gBotL}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("position: relative; flex: none; margin: 0 0 12px", True)}</sc-if>'
-        + '</div>' + _sideCol('R') + '</div>'
-        + f'<sc-if value="{{{{kBot}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS76((110, 170, 240), False, True)}</sc-if>'
-        + ZONE('zLeft', 'toLeft', 'On the left', 'left: 56px; top: 120px; bottom: 260px; width: 300px')
-        + ZONE('zRight', 'toRight', 'On the right', 'right: 40px; top: 120px; bottom: 260px; width: 300px')
-        + ZONE('zTop', 'toTop', 'At the top', 'left: 400px; right: 380px; top: 110px; height: 100px')
-        + ZONE('zFloat', 'toFloat', 'Floating', 'left: 400px; right: 380px; bottom: 270px; height: 100px')
-        + ZONE('zBot', 'toBot', 'At the bottom', 'left: 400px; right: 380px; bottom: 150px; height: 100px') + DRAGHINT)
 # Tempo, the Metronome's face (owner-way, one implementation): the tempo's word and BPM over its figures with −10 −1
 # and +1 +10 beside them, then the slider between the sheet's ends, 40 and 240; a wheel hid all but five tempos
 TEMPO77 = f'<div style="display: flex; flex-direction: column; gap: 12px; padding: 4px 0">{TEMPO(40, "cpT", 40, 240)}</div>'
@@ -495,7 +449,6 @@ MIDI77 = GROUP(('val', 'Keyboard', 'Not connected'), ('raw', f'<span style="disp
 # a panel's head is the kit's (the Player's and the editor's: 64, the title, « Fold the panel 44 round); only its act is
 # the Chord player's
 _PHEAD77 = lambda title: _PHEAD(title).replace('{{foldPanel}}', '{{cpRailNone}}')
-CHEVSL = _LI('<path d="m11 17-5-5 5-5M18 17l-5-5 5-5"></path>')
 _PBODY77 = lambda inner: f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 16px">{inner}</div>'
 _PANEL = lambda k, title, inner: f'<sc-if value="{{{{rail{k}On}}}}" hint-placeholder-val="{{{{{"true" if k == "Ch" else "false"}}}}}"><section aria-label="{title}" style="flex: none; width: 352px; min-height: 0; display: flex; flex-direction: column; box-shadow: inset -1px 0 0 {LINE}">{_PHEAD77(title)}{_PBODY77(inner)}</section></sc-if>'
 GENOSPANEL = (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">'
