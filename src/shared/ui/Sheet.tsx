@@ -332,7 +332,7 @@ export function SheetContent({
         {...(initialFocus ? { initialFocus } : {})}
         aria-label={title}
         className={cn(
-          'max-h-[min(var(--available-height),calc(var(--app-height,100dvh)-10rem))] gap-3 overflow-y-auto rounded-menu p-4 text-base',
+          'max-h-[min(calc(var(--available-height)-1rem),47.5rem)] gap-3 overflow-y-auto rounded-menu p-4 text-base',
           popped.width ?? 'w-95',
         )}
       >
