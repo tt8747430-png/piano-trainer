@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · the laptop's Share stands where the name menu stood, at the name (64, 60), where it stood fixed at 640, 160 · ChordPlayerLaptop · pending
 
 ## Changes
 

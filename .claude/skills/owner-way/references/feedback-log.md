@@ -1585,6 +1585,7 @@ owner's, typos fixed.
 - **The stepper's value as the board's (the loop, 2026-11-28):** the app's Stepper padded its value 4 a side, which the kit's STEPPER does not, and the Chord player's Repeats kept 15 on a phone's page; measured level with the board now (162 wide, 16 on a phone).
 - **Volume in place in the Chord player's Audio** (the loop, 2026-11-28). Why: a sub-page inside a panel stacked a second Back and the word Volume twice; the board's row was dead. One Volume head over Master and each part's level, the slider's box as tall as its thumb (the kit's `Slider`).
 - **The Chord player's Share as the board's** (the loop, 2026-11-28). Why: an explanation line opened the app's Share and its choice had no visible head; the board lacked the signed-out state. One form: the head over View only · Can edit, Copy link 24 under; signed out, Sharing needs an account with Sign in, on both.
+- **A sheet from a closing form stands at the form's opener** (the loop, 2026-11-28). Why: Share after Save as my chord sheet… stood at the screen's corner over the rail; it stands at the name, as its menu. Menus stand 4 under their button, board and app.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

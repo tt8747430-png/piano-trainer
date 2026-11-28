@@ -145,7 +145,12 @@ const justPressed = (): Anchor | null => {
   if (back === null) return control
   return {
     contextElement: control,
-    getBoundingClientRect: () => (control.isConnected ? control : back).getBoundingClientRect(),
+    getBoundingClientRect: () => {
+      // The dialog it was pressed in may be closing (Save, then the sheet it opens): stand at its opener.
+      const gone =
+        !control.isConnected || control.closest('[data-ending-style], [data-closed]') !== null
+      return (gone ? back : control).getBoundingClientRect()
+    },
   }
 }
 function notePress(target: EventTarget | null) {
