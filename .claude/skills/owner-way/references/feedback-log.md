@@ -1556,6 +1556,7 @@ owner's, typos fixed.
 - **A panel's title on the chart's line (the loop, 2026-11-28):** the lines tool found the app's rail panel title 2 above the Chord player's first section; the rail's head now sets its title at the font's own leading, as the board's head and the app's popovers, in every rail panel.
 - **A spread bar strands its parts when wide (the loop, 2026-11-28):** the Chord player's phone header spaced its four parts evenly, right at 402 but leaving the keys button alone mid-bar at 744 and 852; from 440 the transport follows ← and the keys sit beside ☰. A bar drawn at one width is checked at the others for what drifts apart.
 - **A phone sheet clears the toast (the loop, 2026-11-28):** the Chord player's Save as my chord sheet… rose under the toast of the sheet just opened, which covered its title and Cancel; the kit's bottom sheet closes any toast as it opens, on every sheet in the app.
+- **A form's Create is its last part (the loop, 2026-11-28):** the app's New forms (Save as my chord sheet… among them) stood Create in a footer under a hairline, which no board draws; it is the form's last part now, 16 under it, round, sticky with the paper round it, in the kit's `NewSheet`.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

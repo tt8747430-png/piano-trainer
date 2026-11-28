@@ -34,7 +34,7 @@ export function SheetPart({
 /**
  * Making anything new, one way across the app (round 25, after Flat's new score and Noji's): a
  * `MakeSheet` (the phone's bottom sheet, a laptop's centred dialog, as every form) titled for what is made; its name first, focused, above the phone's keyboard; its few properties as
- * parts (`children`); one Create at the foot named for the act, greyed until there is a name, saying
+ * parts (`children`); one Create closing the form, named for the act, greyed until there is a name, saying
  * so while it makes it and why it was not made.
  */
 export function NewSheet({
@@ -88,15 +88,6 @@ export function NewSheet({
       wide={children !== undefined}
       // Its name first, focused as it opens: the phone's keyboard comes up under it.
       initialFocus={() => document.getElementById(nameId) ?? true}
-      footer={
-        <div className="flex flex-col gap-2">
-          <Button size="lg" disabled={!named || creating} onClick={onCreate}>
-            {createIcon}
-            {creating && creatingLabel ? creatingLabel : createLabel}
-          </Button>
-          {failed ? <Problem>{failed}</Problem> : null}
-        </div>
-      }
     >
       <form
         className="flex flex-col gap-4"
@@ -115,6 +106,20 @@ export function NewSheet({
         />
         {hint ? <p className="-mt-2 text-sm text-muted-foreground">{hint}</p> : null}
         {children}
+        {/* Create closes the form, 16 under its last part, held at the sheet's foot while a long form
+            scrolls under it (the board's NEWNAME and New song: no hairline, the paper's 6 round it). */}
+        <div className="sticky bottom-0 flex flex-col gap-2">
+          <Button
+            type="submit"
+            size="lg"
+            disabled={!named || creating}
+            className="rounded-full font-bold shadow-[0_0_0_6px_var(--color-background)]"
+          >
+            {createIcon}
+            {creating && creatingLabel ? creatingLabel : createLabel}
+          </Button>
+          {failed ? <Problem>{failed}</Problem> : null}
+        </div>
       </form>
     </MakeSheet>
   )
