@@ -233,21 +233,10 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const pops = (k) => () => set({ pop: st.pop === k ? null : k });
     const ord = SLOTS.findIndex((x) => sb && x.si === sb[0] && x.bi === sb[1]);
     const LAY0 = { keys: { at: 'bottom', size: 'M', hid: false }, genos: { at: 'right', mode: 'compact', hid: false }, dock: { at: 'float', mode: 'full', hid: false }, chords: { at: 'right', size: 'Wide', hid: false } };
-    const LAY = st.lay || LAY0, layEd = !!st.editLay, custom = JSON.stringify(LAY) !== JSON.stringify(LAY0);
-    const setP = (k, o) => set({ lay: { ...LAY, [k]: { ...LAY[k], ...o } }, sheet: st.sheet === 'layMenu' ? 'layMenu' : st.sheet });
-    const kP = LAY.keys, gP = LAY.genos, dP = LAY.dock, cP = LAY.chords, KH = { S: 72, M: 112, L: 168 }, KHL = { S: 110, M: 170, L: 240 };
-    const cap1 = (w) => w.charAt(0).toUpperCase() + w.slice(1);
-    const kOn = !kP.hid, gOn = follow && !gP.hid, base = 34 + (kOn && kP.at === 'bottom' ? KH[kP.size] : 0);
-    const dFloat = !dP.hid && dP.at === 'float', dockB = base + 12, gFloatB = dockB + (dFloat && dP.mode === 'full' ? 76 : 0) + (layEd && dFloat ? 32 : 0);
-    const gH = gP.mode === 'full' ? 196 : gP.mode === 'compact' ? 64 : 52;
-    const NAMES = { keys: 'Keys', genos: 'Genos', dock: 'Controls', chords: 'Chords' };
-    const lp = st.layP || 'keys', lpP = LAY[lp];
-    const PLACES = { keys: ['Top', 'Bottom'], genos: ['Top', 'Float', 'Bottom', 'Left', 'Right'], dock: ['Top', 'Float'], chords: ['Left', 'Right'] };
-    const SIZES = { keys: [['S', 'Small'], ['M', 'Medium'], ['L', 'Large']], genos: [['full', 'Full'], ['compact', 'Compact'], ['min', 'Minimized']], dock: [['full', 'Full'], ['min', 'Play only']], chords: [['Narrow', 'Narrow'], ['Wide', 'Wide']] };
-    const sizeKey = { keys: 'size', genos: 'mode', dock: 'mode', chords: 'size' }[lp];
+    const LAY = st.lay || LAY0;
+    const setP = (k, o) => set({ lay: { ...LAY, [k]: { ...LAY[k], ...o } }, sheet: st.sheet });
+    const kP = LAY.keys, gP = LAY.genos, cP = LAY.chords, gOn = follow && !gP.hid;
     const sheetsL = st.sheetName || 'My verse and chorus';
-    const picked = st.dragP || null;
-    const zone = (at) => () => { if (picked) set({ lay: { ...LAY, [picked]: { ...LAY[picked], at } }, dragP: null, toastT: NAMES[picked] + ' moved to the ' + at }); };
     const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'On']: RAIL77 === k, ['rail' + k + 'Bg']: RAIL77 === k ? '#EEE2CF' : 'transparent', ['rail' + k + 'W']: RAIL77 === k ? 600 : 500, ['pick' + k]: () => set({ rail77: RAIL77 === k ? 'none' : k, ...(k === 'Ge' ? { follow: true } : {}) }) });
     const dev = st.alone ? STY[s] : 'Genos', MAINL = ['A', 'B', 'C', 'D'][(st.arMain ?? 0)] || 'A';
     const cpKeys = st.cpKeys ?? true;
@@ -273,15 +262,10 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       phMenu: () => set({ sheet: st.sheet === 'menu77' ? null : 'menu77' }), phMenuOn: st.sheet === 'menu77', phMenuX: st.sheet === 'menu77' ? 'true' : 'false', phMenuFg: st.sheet === 'menu77' ? '#A8551F' : '#332921', phToMenu: () => set({ sheet: 'menu77' }), phClose: () => set({ sheet: null }),
       cpPhExp: () => set({ sheet: 'phExp' }), cpPhExpOn: st.sheet === 'phExp', cpPhSound: () => set({ sheet: 'phSound' }), cpPhSoundOn: st.sheet === 'phSound', cpPhChart: () => set({ sheet: 'phChart' }), cpPhStyle: () => set({ sheet: 'phStyle' }), cpPhKey: () => set({ sheet: 'phKey' }), cpPhKeyOn: st.sheet === 'phKey', cpPhTempo: () => set({ sheet: 'phTempo' }), cpPhTempoOn: st.sheet === 'phTempo', cpPhRep: () => set({ sheet: 'phRep' }), cpPhRepOn: st.sheet === 'phRep', ...(() => { const b = st.bpm ?? 96, to = (n) => set({ bpm: Math.max(40, Math.min(240, n)) }), MK = [[60, 'Largo'], [76, 'Adagio'], [108, 'Andante'], [120, 'Moderato'], [168, 'Allegro'], [999, 'Presto']]; return { cpTbpm: b, cpTmark: MK.find(([m]) => b < m)[1], cpTpos: ((b - 40) / 2) + '%', cpTd10: () => to(b - 10), cpTd1: () => to(b - 1), cpTu1: () => to(b + 1), cpTu10: () => to(b + 10) }; })(),  cpPhStyleOn: st.sheet === 'phStyle', cpPhChartOn: st.sheet === 'phChart', cpPhMidi: () => set({ sheet: 'phMidi' }), cpPhMidiOn: st.sheet === 'phMidi', cpPhChords: () => set({ sheet: 'phChords' }), cpPhChordsOn: st.sheet === 'phChords' };
     return { ...common(st, set), ...CP77K, sec59,
-      layEdit: layEd,
       kS: kP.size === 'S', kM: kP.size === 'M', kL: kP.size === 'L',
       gFull: gP.mode === 'full', gCompact: gP.mode === 'compact', gMin: gP.mode === 'min', gMinT: () => setP('genos', { mode: 'min' }), gFullT: () => setP('genos', { mode: 'full' }), gCompactT: () => setP('genos', { mode: 'compact' }),
       arPillL: ar.main ? 'Genos · Main ' + ar.main : 'Genos',
-      dockPos: 'bottom: ' + dockB + 'px',
       chartCols: ((!cP.hid && cP.at === 'left') || (gOn && gP.at === 'left')) && ((!cP.hid && cP.at === 'right') || (gOn && gP.at === 'right')) ? 8 : 16,
-      openLayK: (e) => set({ sheet: 'layMenu', layP: 'keys', layPos: ANCHOR(e, 230) }), openLayG: (e) => set({ sheet: 'layMenu', layP: 'genos', layPos: ANCHOR(e, 230) }),
-      openLayD: (e) => set({ sheet: 'layMenu', layP: 'dock', layPos: ANCHOR(e, 230) }),
-      pickK: () => set({ dragP: picked === 'keys' ? null : 'keys' }), pickG: () => set({ dragP: picked === 'genos' ? null : 'genos' }), pickD: () => set({ dragP: picked === 'dock' ? null : 'dock' }),
       mk1: sheetsL === 'My verse and chorus', mk2: sheetsL === 'Blues in F', mk3: sheetsL === 'Autumn Leaves sketch',
       sheetsL, sheetsOn: st.sheet === 'sheets', openSheets: (e) => set({ sheet: 'sheets', menuPos: ANCHOR(e, 280), cpExp: false }), cpExpTog: () => set({ cpExp: !st.cpExp }), cpExpOn: st.sheet === 'sheets' && !!st.cpExp, cpExpX: st.cpExp ? 'true' : 'false', cpExpBg: st.cpExp ? 'rgba(51,41,33,.06)' : 'transparent',
       openS1: () => set({ sheet: null, hist: [], sheetName: 'My verse and chorus' }), openS2: () => set({ sheet: null, hist: [], sheetName: 'Blues in F', toastT: 'Opened Blues in F' }), openS3: () => set({ sheet: null, hist: [], sheetName: 'Autumn Leaves sketch', toastT: 'Opened Autumn Leaves sketch' }),

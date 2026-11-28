@@ -229,31 +229,15 @@ CP58 = CP58.replace("const lamp = (on, next) => ({", "const lamp = (on, next) =>
 # hidden panels wait in the tray under the bar. Every change is saved at once for this page; the gear's Reset layout
 # and Settings › General › Page layouts put it back. The Genos's own head minimizes it at any time, edit or not.
 CP58 = CP58.replace("    return { ...common(st, set), sec59,", r"""    const LAY0 = { keys: { at: 'bottom', size: 'M', hid: false }, genos: { at: 'right', mode: 'compact', hid: false }, dock: { at: 'float', mode: 'full', hid: false }, chords: { at: 'right', size: 'Wide', hid: false } };
-    const LAY = st.lay || LAY0, layEd = !!st.editLay, custom = JSON.stringify(LAY) !== JSON.stringify(LAY0);
-    const setP = (k, o) => set({ lay: { ...LAY, [k]: { ...LAY[k], ...o } }, sheet: st.sheet === 'layMenu' ? 'layMenu' : st.sheet });
-    const kP = LAY.keys, gP = LAY.genos, dP = LAY.dock, cP = LAY.chords, KH = { S: 72, M: 112, L: 168 }, KHL = { S: 110, M: 170, L: 240 };
-    const cap1 = (w) => w.charAt(0).toUpperCase() + w.slice(1);
-    const kOn = !kP.hid, gOn = follow && !gP.hid, base = 34 + (kOn && kP.at === 'bottom' ? KH[kP.size] : 0);
-    const dFloat = !dP.hid && dP.at === 'float', dockB = base + 12, gFloatB = dockB + (dFloat && dP.mode === 'full' ? 76 : 0) + (layEd && dFloat ? 32 : 0);
-    const gH = gP.mode === 'full' ? 196 : gP.mode === 'compact' ? 64 : 52;
-    const NAMES = { keys: 'Keys', genos: 'Genos', dock: 'Controls', chords: 'Chords' };
-    const lp = st.layP || 'keys', lpP = LAY[lp];
-    const PLACES = { keys: ['Top', 'Bottom'], genos: ['Top', 'Float', 'Bottom', 'Left', 'Right'], dock: ['Top', 'Float'], chords: ['Left', 'Right'] };
-    const SIZES = { keys: [['S', 'Small'], ['M', 'Medium'], ['L', 'Large']], genos: [['full', 'Full'], ['compact', 'Compact'], ['min', 'Minimized']], dock: [['full', 'Full'], ['min', 'Play only']], chords: [['Narrow', 'Narrow'], ['Wide', 'Wide']] };
-    const sizeKey = { keys: 'size', genos: 'mode', dock: 'mode', chords: 'size' }[lp];
+    const LAY = st.lay || LAY0;
+    const setP = (k, o) => set({ lay: { ...LAY, [k]: { ...LAY[k], ...o } }, sheet: st.sheet });
+    const kP = LAY.keys, gP = LAY.genos, cP = LAY.chords, gOn = follow && !gP.hid;
     const sheetsL = st.sheetName || 'My verse and chorus';
-    const picked = st.dragP || null;
-    const zone = (at) => () => { if (picked) set({ lay: { ...LAY, [picked]: { ...LAY[picked], at } }, dragP: null, toastT: NAMES[picked] + ' moved to the ' + at }); };
     return { ...common(st, set), sec59,
-      layEdit: layEd,
       kS: kP.size === 'S', kM: kP.size === 'M', kL: kP.size === 'L',
       gFull: gP.mode === 'full', gCompact: gP.mode === 'compact', gMin: gP.mode === 'min', gMinT: () => setP('genos', { mode: 'min' }), gFullT: () => setP('genos', { mode: 'full' }), gCompactT: () => setP('genos', { mode: 'compact' }),
       arPillL: ar.main ? 'Genos · Main ' + ar.main : 'Genos',
-      dockPos: 'bottom: ' + dockB + 'px',
       chartCols: ((!cP.hid && cP.at === 'left') || (gOn && gP.at === 'left')) && ((!cP.hid && cP.at === 'right') || (gOn && gP.at === 'right')) ? 8 : 16,
-      openLayK: (e) => set({ sheet: 'layMenu', layP: 'keys', layPos: ANCHOR(e, 230) }), openLayG: (e) => set({ sheet: 'layMenu', layP: 'genos', layPos: ANCHOR(e, 230) }),
-      openLayD: (e) => set({ sheet: 'layMenu', layP: 'dock', layPos: ANCHOR(e, 230) }),
-      pickK: () => set({ dragP: picked === 'keys' ? null : 'keys' }), pickG: () => set({ dragP: picked === 'genos' ? null : 'genos' }), pickD: () => set({ dragP: picked === 'dock' ? null : 'dock' }),
       mk1: sheetsL === 'My verse and chorus', mk2: sheetsL === 'Blues in F', mk3: sheetsL === 'Autumn Leaves sketch',
       sheetsL, sheetsOn: st.sheet === 'sheets', openSheets: (e) => set({ sheet: 'sheets', menuPos: ANCHOR(e, 280), cpExp: false }), cpExpTog: () => set({ cpExp: !st.cpExp }), cpExpOn: st.sheet === 'sheets' && !!st.cpExp, cpExpX: st.cpExp ? 'true' : 'false', cpExpBg: st.cpExp ? 'rgba(51,41,33,.06)' : 'transparent',
       openS1: () => set({ sheet: null, hist: [], sheetName: 'My verse and chorus' }), openS2: () => set({ sheet: null, hist: [], sheetName: 'Blues in F', toastT: 'Opened Blues in F' }), openS3: () => set({ sheet: null, hist: [], sheetName: 'Autumn Leaves sketch', toastT: 'Opened Autumn Leaves sketch' }),
@@ -263,7 +247,7 @@ CP58 = CP58.replace("    return { ...common(st, set), sec59,", r"""    const LAY
       newSheet: () => set({ sheet: null, hist: [], sheetName: 'New chord sheet', secs: [['A', 'Verse', 1, []]], len: {}, bpm: 100, reps: 0, vars: [1], fresh: true, draft: false, toastT: 'Started a new chord sheet', lastLay: null, prevS: { sheetName: st.sheetName, secs: st.secs, len: st.len, bpm: st.bpm, reps: st.reps, vars: st.vars, fresh: st.fresh, draft: st.draft } }),
       liveOn: !st.fresh, undoOff: !(st.hist || []).length, bandUndo: () => { const h = st.hist || []; if (!h.length) return; set({ ...h[h.length - 1], hist: h.slice(0, -1) }); }, playOff: !!st.fresh && !(st.secs || []).some((x) => x[3].length),
       toastOn: !!st.toastT, toastPh: !!st.toastT && (st.toastS ?? null) === (st.sheet ?? null), toastT: st.toastT ?? '', toastUndo: !!st.lastLay || (!!st.prevS && st.toastT === 'Started a new chord sheet') || (!!st.libWas && / deleted$/.test(st.toastT ?? '')), undo: () => set(st.libWas && / deleted$/.test(st.toastT ?? '') ? { libL: st.libWas, libWas: null, toastT: null, ...(st.libWasHand ? { fresh: false, libWasHand: false } : {}) } : st.prevS && st.toastT === 'Started a new chord sheet' ? { ...st.prevS, toastT: null, prevS: null } : { lay: st.lastLay || LAY0, toastT: null, lastLay: null }),""", 1)
-assert CP58.count('LAY0') >= 4, 'R76 JS patch missed'
+assert CP58.count('LAY0') >= 3, 'R76 JS patch missed'
 CP58 = CP58.replace("states: [{ l: 'Following the Genos', bg: follow ? '#332921' : '#EEE9E2', pick: () => set({ follow: !follow }) }],",
   "states: [{ l: 'Following the Genos', bg: follow ? '#332921' : '#EEE9E2', pick: () => set({ follow: !follow }) }, { l: 'Edit layout', bg: st.editLay ? '#332921' : '#EEE9E2', pick: () => set({ editLay: !st.editLay, dragP: null }) }, { l: 'Genos minimized', bg: (st.lay && st.lay.genos.mode === 'min') ? '#332921' : '#EEE9E2', pick: () => set({ follow: true, lay: { ...(st.lay || {}), keys: (st.lay || {}).keys || { at: 'bottom', size: 'M', hid: false }, dock: (st.lay || {}).dock || { at: 'float', mode: 'full', hid: false }, chords: (st.lay || {}).chords || { at: 'right', size: 'Wide', hid: false }, genos: { at: 'right', hid: false, mode: (st.lay && st.lay.genos.mode === 'min') ? 'full' : 'min' } } }) }, { l: 'New sheet (first run)', bg: st.fresh ? '#332921' : '#EEE9E2', pick: () => set(st.fresh ? { fresh: false, secs: null, len: null, bpm: null, reps: null, vars: null, sheetName: null } : { sheet: null, sheetName: 'New chord sheet', secs: [['A', 'Verse', 1, []]], len: {}, bpm: 100, reps: 0, vars: [1], fresh: true, draft: false }) }],", 1)
 assert 'Genos minimized' in CP58
@@ -276,12 +260,6 @@ _t0 = '<span style="font-size: 22px; font-weight: 600">My verse and chorus</span
 assert _t0 in CHART59(8, 4, 60, 21, 2)
 CHART76 = lambda *a: CHART59(*a).replace(_t0, TITLE76, 1)
 
-# a panel's tag in Edit layout: the grip (drag it, or tap it and tap a place) and its name, opening its menu
-GRIPB = lambda pick, name: f'<button type="button" onClick="{{{{{pick}}}}}" aria-label="Move {name}" data-tip="Drag, or tap then tap a place" style="flex: none; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; cursor: grab">{GRIP}</button>'
-def PTAG(pick, menu, name, pos='left: 8px; top: 8px'):
-    return (f'<sc-if value="{{{{layEdit}}}}" hint-placeholder-val="{{{{false}}}}"><div aria-hidden="true" style="position: absolute; inset: 2px; z-index: 44; border-radius: 12px; outline: 2px dashed #B98A32; outline-offset: -2px; pointer-events: none"></div>'
-            f'<div data-menuroot-anchor style="position: absolute; {pos}; z-index: 45; height: 44px; box-sizing: border-box; padding: 0 4px 0 0; border-radius: 22px; {GLASSFX}; display: flex; align-items: center">'
-            + GRIPB(pick, name) + f'<button type="button" onClick="{{{{{menu}}}}}" aria-label="{name}: place, size or hide" style="height: 44px; padding: 0 8px 0 0; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px">{name}{CHEV_D}</button></div></sc-if>')
 
 # the Genos, three sizes: Full (every control), Compact (Start/Stop and Main A–D in a row), Minimized (a pill)
 MINI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M5 12h14"></path></svg>'
@@ -291,30 +269,22 @@ HEAD76 = HEAD59[:-len('</div>')] + ICB('gCompactT', 'Compact', EXPI.replace('m18
 CARDST = f'box-sizing: border-box; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}'
 def GENOS76(pos, wide):
     full = (f'<sc-if value="{{{{gFull}}}}" hint-placeholder-val="{{{{true}}}}"><div role="toolbar" aria-label="Genos style controls" style="position: relative; display: flex; flex-direction: column; gap: 8px; padding: 8px 12px 12px; {CARDST}">'
-            + HEAD76 + (f'<div style="display: flex; gap: 16px">{INTRO59}{MAINS59}{END59}</div>' if wide else f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div>') + PTAG('pickG', 'openLayG', 'Genos', 'right: 8px; top: -22px') + '</div></sc-if>')
+            + HEAD76 + (f'<div style="display: flex; gap: 16px">{INTRO59}{MAINS59}{END59}</div>' if wide else f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div>') + '</div></sc-if>')
     comp = (f'<sc-if value="{{{{gCompact}}}}" hint-placeholder-val="{{{{false}}}}"><div role="toolbar" aria-label="Genos style controls" style="position: relative; height: 64px; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 12px; {CARDST}">'
             f'<span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>'
             + START59
             + f'<div role="group" aria-label="Main" style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">{LAMPS59("arMains", "Main")}</div>'
-            + ICB('gFullT', 'Full', EXPI) + ICB('gMinT', 'Minimize', MINI) + PTAG('pickG', 'openLayG', 'Genos', 'right: 8px; top: -22px') + '</div></sc-if>')
+            + ICB('gFullT', 'Full', EXPI) + ICB('gMinT', 'Minimize', MINI) + '</div></sc-if>')
     pill = (f'<sc-if value="{{{{gMin}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{gFullT}}}}" aria-label="{{{{arPillL}}}}: show its controls" style="position: relative; height: 44px; box-sizing: border-box; padding: 0 12px 0 14px; border: 0; border-radius: 22px; {GLASSFX}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">'
             f'<span style="width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span><span>{{{{arPillL}}}}</span>{ICON(EXPI, 18)}</button></sc-if>')
     return f'<div style="{pos}">{full}{comp}{pill}</div>'
-
-# the Controls: Full (Style · Key · Tempo · Repeats · Play) or Play only, floating or as a row under the bar
-# Play rests at half strength on a sheet with no chord yet, as the app's (a new sheet's empty Verse)
-_pb = 'aria-pressed="{{playing}}" onClick="{{togglePlay}}"'
-assert CP_DOCK.count(_pb) == 1
-CP_DOCK = CP_DOCK.replace(_pb, _pb + ' class="ibd" disabled="{{playOff}}"', 1)
-DOCKFULL = DOCK(CP_DOCK, '{{dockPos}}')
-DOCKFULL = DOCKFULL[:-len('</div>')] + PTAG('pickD', 'openLayD', 'Controls', 'left: 8px; top: -26px') + '</div>'
 
 def KEYS76(h3, top, lap=False):
     # a phone shows F2 to A4 at the kit's 26 a white key, the 17 whites 40 wider than the screen, centred (the app's
     # fitInView over CHORD_PLAYER_KEYS): a part of F2 and of A4 at the edges
     keys = lambda h: CP_KEYS(h).replace('{{kbw}}', '{{kbwL}}').replace('{{kbb}}', '{{kbbL}}') if lap else CP_KEYS(h).replace('style="position: relative; height:', 'style="position: relative; margin-inline: calc(50% - 221px); height:')
     sized = ''.join(f'<sc-if value="{{{{k{z}}}}}" hint-placeholder-val="{{{{{"true" if z == "M" else "false"}}}}}">{keys(h)}</sc-if>' for z, h in zip('SML', h3))
-    return f'<div style="position: relative; flex: none; {"margin-bottom: 34px; " if not top and not lap else ""}box-shadow: 0 {"1" if top else "-1"}px 0 {LINE}">{sized}{PTAG("pickK", "openLayK", "Keys", "left: 8px; " + ("bottom: 8px" if top else "top: 8px"))}</div>'
+    return f'<div style="position: relative; flex: none; {"margin-bottom: 34px; " if not top and not lap else ""}box-shadow: 0 {"1" if top else "-1"}px 0 {LINE}">{sized}</div>'
 
 # Tempo, the Metronome's face (owner-way, one implementation): the tempo's word and BPM over its figures with −10 −1
 # and +1 +10 beside them, then the slider between the sheet's ends, 40 and 240; a wheel hid all but five tempos
@@ -335,8 +305,6 @@ TOAST76 = TOAST('{{toastB}}', z=56, on='toastPh')
 # phone header (←, the transport capsule, the keys, ☰), ☰ the rail's places and the sheet's file acts as rows. This
 # supersedes R76's Edit layout: the floating dock, the gear and the layout's tags, zones and tray go (one place for each
 # panel, as the Player's; the Genos keeps its own Full, Compact and Minimized).
-_PTAG0 = PTAG
-PTAG = lambda *a, **k: ''
 
 # the Genos panel's head as the app says it (ArrangerStrip): who plays and whether it plays, then the connection as the
 # MIDI keyboard's popover says it, Try again where no Genos answered
@@ -487,7 +455,6 @@ NAMEMENU77P = NAMEMENU77.replace('</div></sc-if>', _saveasact + _draftacts + '</
 LIBROW = ROWMENU('libRowOn', '{{libRowT}}', [('action', 'Rename', 'libRename'), ('action', 'Duplicate', 'libDup'), ('action', 'Delete', 'libDel', RED)], 'libPos', 200).replace('{{closeSheet}}', '{{libRowOff}}', 1)
 RENAME77 = NEWNAME('renameOn', 'Rename chord sheet', 'Name', 'rnName', 'typeRn', 'doRename', 'rnBg', 'rnFg', 'Rename')
 SAVEAS77 = NEWNAME('saveAsOn', 'Save as my chord sheet', 'Name', 'saName', 'typeSa', 'saveAs', 'saBg', 'saFg', 'Save')
-PTAG = _PTAG0
 
 # the state the new boards read, spread first into the board's state (no key of the old board is overridden)
 CP77 = CP58.replace("states: [{ l: 'Following the Genos'", "states: [{ l: 'No Genos found', bg: st.alone ? '#332921' : '#EEE9E2', pick: () => set({ follow: true, alone: !st.alone }) }, { l: 'Following the Genos'", 1)

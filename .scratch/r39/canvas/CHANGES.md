@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · R76's Edit layout leaves the boards' code: the panel tags (PTAG, nulled by a patch), the floating Controls dock built and never drawn, eight more state keys and the layout's constants (no visible change) · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
