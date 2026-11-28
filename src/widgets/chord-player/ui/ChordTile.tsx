@@ -191,7 +191,9 @@ export const ChordTile = memo(function ChordTile({
             : 'shadow-[0_0_0_1px_var(--color-border)]',
         )}
       >
-        <span className="max-w-full chord-fit truncate leading-tight font-medium text-foreground">
+        {/* A small name's raised part stands no smaller than 12px, so it takes the room above it that its
+            smaller name leaves, never clipped at the tile's top. */}
+        <span className="max-w-full chord-fit truncate pt-[max(0px,calc(12px-0.6em))] leading-tight font-medium text-foreground">
           <LeadSymbol text={name} />
         </span>
         <span aria-hidden className="absolute inset-x-0 bottom-0 flex h-2.5">

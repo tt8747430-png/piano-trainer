@@ -1623,6 +1623,7 @@ owner's, typos fixed.
 - **The status bar in the header's colour; notices from the foot (the owner, 2026-11-28):** the installed app painted the status bar the page's beige over the Chord player's white header, and its notices (a new version ready) dropped from the top. The status bar takes the header's card while a full screen's phone header shows; notices stand at the foot with the toasts and rise from below. Never again: a status bar in another colour than the bar under it, or a notice from the top.
 
 - **A chord's name never cut (the owner, 2026-11-28):** the Chord player's short tiles read "C.." and "F.."; a name now shrinks to fit its tile, down to 12, and a beat's tile takes a 4 inset. Never again: an ellipsis on a chord's name where a smaller size would show it whole.
+- 2026-11-28, "fix first the croped cords" (after "but this is the problem with the chords player no with the grid"): in the Chord player no name is cut: a beat column is never narrower than its names at 12, a section takes fewer bars a row where it must, and the raised part is never clipped at the top. Read which screen the owner means before fixing: the Player's Grid was fixed first by mistake.
 
 ## Sounds
 

@@ -2,10 +2,10 @@ import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Plus, Trash2 } from 'lucide-react'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ProgressionNames } from '@/entities/settings'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn, useElementSize, useMediaQuery } from '@/shared/lib'
 import { DragHandle } from '@/shared/ui'
 import {
   sectionBars,
@@ -15,7 +15,9 @@ import {
   type SheetSection as Section,
 } from '@/shared/lib/arrangement'
 import { beatsPerBar, type Key } from '@/shared/lib/music'
+import { boxName } from '../model/box-name'
 import { WIDER_THAN_PHONE } from '../model/lit-keys'
+import { sheetLayout } from '../model/sheet-columns'
 import { chordDragId, endDragId, sectionDragId } from '../model/sheet-dnd'
 import { ChordTile, type TileActs } from './ChordTile'
 
@@ -84,10 +86,26 @@ export const SheetSection = memo(function SheetSection({
   const name = t(`chordPlayer.sections.${section.kind}`)
   const bars = useMemo(() => sectionBars(section, meter), [section, meter])
   const perBar = beatsPerBar(meter)
-  // Four bars a row once the chart holds them at least as wide as a 1024 laptop's (125 each).
+  // Four bars a row once the chart holds them at least as wide as a 1024 laptop's (125 each); fewer where its
+  // names need the room (`sheetLayout`).
   const wide = useMediaQuery(WIDER_THAN_PHONE)
-  const columns = perBar * (wide ? 4 : 2)
   const chords = useMemo(() => sectionChords(section), [section])
+  const list = useRef<HTMLOListElement>(null)
+  const { width } = useElementSize(list)
+  const { columns, template } = useMemo(
+    () =>
+      sheetLayout(
+        chords.map(({ chord, beats }) => ({
+          beats,
+          name: boxName(chord, musicKey, names),
+          inset: beats === 1 ? 4 : 8,
+        })),
+        perBar,
+        wide ? 4 : 2,
+        width,
+      ),
+    [chords, musicKey, names, perBar, wide, width],
+  )
   const {
     attributes,
     listeners,
@@ -189,9 +207,10 @@ export const SheetSection = memo(function SheetSection({
       ) : null}
       <SortableContext items={ids} strategy={STILL}>
         <ol
+          ref={list}
           aria-label={t('chordPlayer.chordsOf', { name })}
           className="grid gap-2"
-          style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
+          style={{ gridTemplateColumns: template }}
         >
           {bars.flatMap((bar, at) =>
             bar.pieces.map((piece, p) => {
