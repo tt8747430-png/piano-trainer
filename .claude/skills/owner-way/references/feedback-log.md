@@ -1552,6 +1552,7 @@ owner's, typos fixed.
 - **The docked Genos as its board (the loop, 2026-11-28):** docked over a laptop's keys the Chord player's Genos row showed the phone's ▶ (read as a second Play), Main A–D capped at 320 and a minimize the board does not draw; it is the board's now: Start/Stop in words at 88, Main A–D filling the 560 row, ⌃ alone.
 - **A pill's label one phrase (the loop, 2026-11-28):** the Chord player board's minimized Genos pill split "Genos · Main A" into two flex items around its binding (the dot tight to Genos, 8 before Main A); a label with a value in it is one string in the board's state. Never again: text and a binding as siblings in a flex row with a gap.
 - **A popover measured to its trigger (the loop, 2026-11-28):** the Chord player's band popovers looked placed but measured 4 to 13 right of their pills on the board and 4 into the band in the app (the 8 counted from the pill). A placement rule is checked by numbers on both: the popover's x is the trigger's, its y the band's foot plus 8.
+- **A ruling reaches every face (the loop, 2026-11-28):** "Styles by family" was drawn on the Chord player's rail panel and ☰ page, while the band's Style popover kept the wheel it replaced; every place a setting shows is opened and checked when its ruling lands.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
