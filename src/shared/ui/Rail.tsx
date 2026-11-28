@@ -1,5 +1,5 @@
 import { ChevronsLeft, type LucideIcon } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { useLayoutEffect, useRef, type KeyboardEvent, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 
@@ -17,15 +17,39 @@ export function Rail({
   children: ReactNode
   foot?: ReactNode
 }) {
+  const list = useRef<HTMLDivElement>(null)
+  const tabs = () => [...(list.current?.querySelectorAll<HTMLElement>('[role="tab"]') ?? [])]
+  // One stop in the Tab order, the chosen place (else the first), as a tab list is (WAI-ARIA, Tabs).
+  useLayoutEffect(() => {
+    const all = tabs()
+    const stop = all.find((each) => each.getAttribute('aria-selected') === 'true') ?? all[0]
+    for (const each of all) each.tabIndex = each === stop ? 0 : -1
+  })
+  // ↑ ↓ move between the places, Home and End to the first and last; Enter or Space opens one.
+  const move = (event: KeyboardEvent) => {
+    const all = tabs()
+    const at = all.findIndex((each) => each === document.activeElement)
+    const to = {
+      ArrowDown: (at + 1) % all.length,
+      ArrowUp: (at - 1 + all.length) % all.length,
+      Home: 0,
+      End: all.length - 1,
+    }[event.key]
+    if (at < 0 || to === undefined) return
+    event.preventDefault()
+    all[to]?.focus()
+  }
   return (
     <nav
       aria-label={label}
       className="flex w-19 shrink-0 flex-col gap-1 py-3 shadow-[inset_-1px_0_0_var(--color-border)]"
     >
       <div
+        ref={list}
         role="tablist"
         aria-orientation="vertical"
         aria-label={label}
+        onKeyDown={move}
         className="flex flex-col gap-1"
       >
         {children}

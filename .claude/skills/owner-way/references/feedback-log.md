@@ -1613,6 +1613,7 @@ owner's, typos fixed.
 - **A state the app has, drawn (loop, 2026-11-28):** the Chord player's Share offline says “You’re offline. Connect to share.” over Copy link in the app; the boards had no offline state. Both draw it now. Never again: a state the app shows that no board draws.
 - **Strings nothing reads (loop, 2026-11-28):** the Chord player's locale kept 18 strings from earlier designs that no code read (the arranger's states, the settings' explanation lines, a shared sheet's view-only note); they are deleted in en and ru. Never again: a string kept after the screen that said it is gone.
 - **A popover that climbs over its trigger (loop, 2026-11-28; the Chord player at 1024×768):** the Style popover was taller than the room under the band, and the positioner moved it up over the band and its own pill. A band's popover stays at its trigger and scrolls in the room below, 16 above the foot as the board's. Never again: a long popover checked only on a tall screen.
+- **A tab list is one Tab stop (loop, 2026-11-28; the Chord player's rail):** every rail place was its own stop; the kit's Rail is one stop with ↑ ↓ Home End between its places, in the Player and the editor too. Never again: a role="tablist" whose tabs all take Tab.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
