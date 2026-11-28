@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the phone's Live dot is the app's grass (#44684A, `learned`), where it was a one-off #3F7A4A; the app's phone state takes the board's: Draft in honey ink, Live after its 8 grass dot · ChordPlayer · pending
+- 2026-11-28 · 06f2837f · the phone's Live dot is the app's grass (#44684A, `learned`), where it was a one-off #3F7A4A; the app's phone state takes the board's: Draft in honey ink, Live after its 8 grass dot · ChordPlayer · pending
 ## Changes
 
 - 2026-11-28 · 852d942f · the Genos panel's title names the Main that is lit while it plays (Genos · playing Main C), or none (Genos · playing), as the app's, where it read Main A whatever was lit · ChordPlayer, ChordPlayerLaptop · v897
