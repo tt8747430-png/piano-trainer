@@ -220,7 +220,7 @@ export function MidiBody() {
         </span>
       </div>
       {isMidiConnected(connection) ? null : (
-        <p className="-mt-1 mb-2.5 px-4 text-[0.9375rem]/[1.4] text-pretty text-muted-foreground">
+        <p className="mt-0.5 mb-2.5 px-4 text-[0.9375rem]/[1.4] text-pretty text-muted-foreground">
           {t('chordPlayer.settings.connectHow')}
         </p>
       )}
