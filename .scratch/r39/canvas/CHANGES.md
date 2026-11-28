@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the chord sheet's Duplicate and Play from here each start at their words' width and share the rest (split evenly, Play from here ran past its button on a phone; cut at 393 in the app) · ChordPlayer, ChordPlayerLaptop · **pending**
+- 2026-11-28 · 1a84a473 · the chord sheet's Duplicate and Play from here each start at their words' width and share the rest (split evenly, Play from here ran past its button on a phone; cut at 393 in the app) · ChordPlayer, ChordPlayerLaptop · **pending**
 ## Changes
 
 - 2026-11-28 · 524c2295 · Repeats' − rests at half strength at Until Stop and + at 8 times, where each does nothing, as the app's stepper (both were live at their bound) · ChordPlayer, ChordPlayerLaptop · v873
