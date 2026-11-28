@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · bb3b029c · the Genos lamps (Start/Stop, Main A–D, Break, Intro and Ending/rit. I–III) are 44 tall and 10 round in the panel and the compact strip, as the app's (they were 40 and 9: under a finger's 44 on the phone, and off the corner scale) · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
+- 2026-11-28 · bb3b029c · the Genos lamps (Start/Stop, Main A–D, Break, Intro and Ending/rit. I–III) are 44 tall and 10 round in the panel and the compact strip, as the app's (they were 40 and 9: under a finger's 44 on the phone, and off the corner scale) · ChordPlayer, ChordPlayerLaptop · v872
 - 2026-11-28 · 3de8370e · a new sheet reads Not saved beside its name on the phone, and Play rests at half strength in both bands while it holds no chord, as the app's (the board kept Play ink and the phone showed no state); the kit's PHTRANSPORT and HDRTRANSPORT take the key that rests Play (`play_off`) · ChordPlayer, ChordPlayerLaptop · v871
 - 2026-11-28 · 2f5de4ba · a phone's toast steps aside when a sheet rises over it, as the app's bottom sheet closes it ("From the top" lay on the chord sheet's acts); a toast raised from the sheet still shows; the kit's state remembers the sheet a toast was raised over (`toastS`), and `TOAST` takes the key it shows on · ChordPlayer · v870
 - 2026-11-28 · 99907aa9 · the band's Style popover lists the styles by family, as the rail's Styles panel and the app (it still drew the old wheel, Pop 1 to Pop 4), and a choice closes it with "Style: Pop 4" (the panel stays open) · ChordPlayerLaptop · v870
