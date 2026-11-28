@@ -506,8 +506,8 @@ PHPAGES77 = (FSHEET('cpPhExpOn', 'Export', EXPROWS77, back='phToMenu') + FSHEET(
 # open their wheels under their pills
 # one card of rows: Repeats with its stepper at the row's end, Count-in under its name; on a phone the metronome's
 # switch too (Flat's Playback options: the laptop has the metronome in the band)
-_OPTS = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp'), ('seg', 'Count-in', 'cntSeg'), bg=SHEET)
-_OPTSP = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp'), ('seg', 'Count-in', 'cntSeg'), ('toggle', 'Metronome', 'metSw', 'metTog'), bg=SHEET)
+_OPTS = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp', None, True), ('seg', 'Count-in', 'cntSeg'), bg=SHEET)
+_OPTSP = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp', None, True), ('seg', 'Count-in', 'cntSeg'), ('toggle', 'Metronome', 'metSw', 'metTog'), bg=SHEET)
 POPS77L = (POPOVER('hdOptsOn', 'Playback options', _OPTS, 'left: 373px; top: 72px', 320) + POPOVER('hdMidiOn', 'MIDI', MIDI77, 'left: 807px; top: 72px', 360))
 # a new sheet (Not saved) is the sheet in hand: first in the list, checked, and saved from the menu's foot, as the app's
 _handrow = '<sc-if value="{{handOn}}" hint-placeholder-val="{{false}}">' + _MI('{{sheetsL}}<span style="margin-left: auto; font-weight: 700">✓</span>', 'closeSheet') + '</sc-if>'
@@ -541,7 +541,7 @@ _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'O
       tempoX: st.sheet === 'tempo' ? 'true' : 'false', styleX: st.sheet === 'style' ? 'true' : 'false', namesL: st.names ?? 'Chords', chordPos: st.chordPos ?? 'left: 640px; top: 160px',
       hdStart: () => set({ playing: false, at: [0, 0], toastT: 'From the top' }), hdPlay: () => set(st.playing ? { playing: false } : { playing: true }), hdPlayTip: st.playing ? 'Stop' : 'Play', hdPlayD: st.playing ? 'M7 5h10v14H7z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z',
       hdOpts: () => set({ sheet: st.sheet === 'opts' ? null : 'opts' }), hdOptsOn: st.sheet === 'opts', hdOptsX: st.sheet === 'opts' ? 'true' : 'false', hdOptsBg: st.sheet === 'opts' ? 'rgba(254,253,251,.14)' : 'transparent',
-      optRepL: (st.reps ?? 0) === 0 ? 'Until Stop' : (st.reps === 1 ? '1 time' : st.reps + ' times'), optRepDn: () => set({ reps: Math.max(0, (st.reps ?? 0) - 1) }), optRepUp: () => set({ reps: Math.min(8, (st.reps ?? 0) + 1) }),
+      optRepL: (st.reps ?? 0) === 0 ? 'Until Stop' : (st.reps === 1 ? '1 time' : st.reps + ' times'), optRepDn: () => set({ reps: Math.max(0, (st.reps ?? 0) - 1) }), optRepUp: () => set({ reps: Math.min(8, (st.reps ?? 0) + 1) }), optRepDnDis: (st.reps ?? 0) === 0, optRepUpDis: (st.reps ?? 0) === 8,
       cntSeg: seg(['Off', '1 bar', '2 bars'], st.met77 === 'off' ? 'Off' : (st.cnt77 ?? '1 bar'), (l) => set({ cnt77: l, met77: l === 'Off' ? (st.met77 === 'on' ? 'on' : 'off') : (st.met77 === 'off' ? 'count' : st.met77) })),
       metSw: st.met77 === 'on' ? 'true' : 'false', metSwBg: st.met77 === 'on' ? '#44684A' : '#DAD1C8', metSwX: st.met77 === 'on' ? 22 : 2, metTog: () => set({ met77: st.met77 === 'on' ? 'count' : 'on' }),
       hdMet: () => { const n = { count: 'on', on: 'off', off: 'count' }[st.met77 ?? 'count']; set({ met77: n, toastT: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[n] }); }, hdMetTip: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[st.met77 ?? 'count'], hdMetOff: (st.met77 ?? 'count') === 'off',

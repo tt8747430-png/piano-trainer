@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · Repeats' − rests at half strength at Until Stop and + at 8 times, where each does nothing, as the app's stepper (both were live at their bound) · ChordPlayer, ChordPlayerLaptop · **pending**
 ## Changes
 
 - 2026-11-28 · bb3b029c · the Genos lamps (Start/Stop, Main A–D, Break, Intro and Ending/rit. I–III) are 44 tall and 10 round in the panel and the compact strip, as the app's (they were 40 and 9: under a finger's 44 on the phone, and off the corner scale) · ChordPlayer, ChordPlayerLaptop · v872
