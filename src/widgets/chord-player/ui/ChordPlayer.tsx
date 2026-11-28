@@ -761,7 +761,16 @@ export function ChordPlayer({
                   }
                   actions={[...sheetActs, ...draftActs]}
                 />
-                <span className="shrink-0 text-footnote font-semibold text-muted-foreground">
+                {/* The board's state beside the name: a draft in honey ink, Live after a grass dot. */}
+                <span
+                  className={cn(
+                    'flex shrink-0 items-center gap-2 text-footnote font-semibold',
+                    hand.draft ? 'text-honey-ink' : 'text-muted-foreground',
+                  )}
+                >
+                  {!hand.draft && online.live ? (
+                    <span aria-hidden className="size-2 rounded-pill bg-learned" />
+                  ) : null}
                   {state}
                 </span>
               </div>
