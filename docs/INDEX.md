@@ -513,8 +513,6 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-key-shade` | `src/styles/theme.css` | 1 |
 | `--color-key-tonic` | `src/styles/theme.css` | 1 |
 | `--color-key-white` | `src/styles/theme.css` | 3 |
-| `--color-layout-edge` | `src/styles/theme.css` | **0** |
-| `--color-layout-zone` | `src/styles/theme.css` | **0** |
 | `--color-learned` | `src/styles/theme.css` | 24 |
 | `--color-learned-foreground` | `src/styles/theme.css` | 2 |
 | `--color-link` | `src/styles/theme.css` | 41 |
@@ -649,8 +647,6 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--key-tonic` | `src/styles/tokens.css` | 2 |
 | `--key-white` | `src/styles/tokens.css` | 4 |
 | `--keys-most` | `src/styles/theme.css` | 3 |
-| `--layout-edge` | `src/styles/tokens.css` | 1 |
-| `--layout-zone` | `src/styles/tokens.css` | 1 |
 | `--learned` | `src/styles/tokens.css` | 1 |
 | `--learned-foreground` | `src/styles/tokens.css` | 1 |
 | `--link` | `src/styles/tokens.css` | 1 |

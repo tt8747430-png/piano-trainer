@@ -265,9 +265,6 @@ Warm neutrals and seven quiet paints. Each role has a day value, a night value a
   Sort and filter chips, `ChoiceChips` `tone="honey"`, and Sort and filter while one is on), the chosen card of
   `RadioCards` (its rows parted by the honey ring at 30%), and Played through's bars picked to loop. A lesson's
   takeaway has its own quiet fill, `honey-wash`.
-- **Layout edge, Layout zone** (`layout-edge`, `layout-zone`): Edit layout on the Chord player alone (R76): a panel's
-  2px dashed outline in deep honey, and the honey wash of a place a panel may be put in. Never a focus ring, a
-  selection or a card's line; outside Edit layout nothing wears them.
 - **Control Line** (`input`): 1px round a control, firm enough to find it (3:1).
 - **Hairline** (`hairline`): a divider inside a card, the canvas's FILL (#EEE9E2 by day), as its GROUP parts rows.
 - **Ink, Soft Ink** (`foreground`, `muted-foreground`): text, secondary text, the navigation's icons.
@@ -417,8 +414,7 @@ with sand, as the boards' `CARD` and `GROUP` draw them (a 1px ring that takes no
 
 One scale, no value between its steps: `z-1` a part over its neighbours inside a component (a slim key's name), `z-10`
 a lift inside content (a black key, a chord's handles), `z-20` what sticks while its page scrolls, `z-30` what floats
-over the page (the floating actions and bars), `z-40` the bars and the Chord player's Edit layout (its zones, outlines,
-tags and the keys' grab, later in the page over earlier), `z-50` every layer (sheets, dialogs, popovers, menus, the
+over the page (the floating actions and bars), `z-40` the bars, `z-50` every layer (sheets, dialogs, popovers, menus, the
 search palette), `z-60` the toast alone, so an Undo said from a sheet is seen over it.
 
 Sheets rise over a page dimmed to 10% black and need no shadow.

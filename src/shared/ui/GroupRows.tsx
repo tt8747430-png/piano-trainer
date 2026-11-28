@@ -226,7 +226,7 @@ export function GroupAction({
   label: string
   onClick: () => void
   destructive?: boolean
-  /** Nothing to do yet (Reset layout on a page as it came). */
+  /** Nothing to do yet: shown at half strength, not pressed. */
   disabled?: boolean
 }) {
   return (
