@@ -81,8 +81,9 @@ function leastWidths(
 /**
  * A section's rows (owner, 2026-11-28: "the chords are cropped … because not enough space"): as many
  * bars a row as `bars` allows, fewer where the row's `width` cannot hold every name whole at `LEAST`;
- * a row's columns give a short beat's name the room for the chart's size (`AIM`) first, so a name on
- * one beat is not set at the floor beside full-size names, and the floor only where the row has no more;
+ * a row's columns give a short beat's name the room for the chart's size (`AIM`) first, in fewer bars a
+ * row where that needs it (down to two), so a name on one beat is not set at the floor beside full-size
+ * names; the floor only where two bars cannot hold them at the chart's size;
  * each beat its share of the row, a column never narrower than the names over it need, so a long name
  * on one beat (Cmaj⁷/E) is set whole and the beats beside it give it the room.
  */
@@ -92,18 +93,21 @@ export function sheetLayout(
   bars: number,
   width: number,
 ): SheetLayout {
-  for (let rowBars = bars; ; rowBars = Math.floor(rowBars / 2)) {
-    const columns = perBar * Math.max(1, rowBars)
-    const least =
-      width > 0
-        ? (leastWidths(tiles, columns, width, AIM) ?? leastWidths(tiles, columns, width, LEAST))
-        : null
-    if (least || rowBars <= 1)
-      return {
-        columns,
-        template: (least ?? Array.from({ length: columns }, () => 0))
-          .map((px) => `minmax(${px}px, 1fr)`)
-          .join(' '),
-      }
+  const counts: number[] = []
+  for (let rowBars = Math.max(1, bars); rowBars >= 1; rowBars = Math.floor(rowBars / 2))
+    counts.push(rowBars)
+  // Every name at the chart's size in rows of two bars or more, else at the floor, else a bar a row.
+  const tries = [
+    ...counts
+      .filter((rowBars) => rowBars >= 2 || counts.length === 1)
+      .map((rowBars) => [rowBars, AIM]),
+    ...counts.map((rowBars) => [rowBars, LEAST]),
+  ] as const
+  for (const [rowBars, size] of tries) {
+    const columns = perBar * rowBars
+    const least = width > 0 ? leastWidths(tiles, columns, width, size) : null
+    if (least) return { columns, template: least.map((px) => `minmax(${px}px, 1fr)`).join(' ') }
   }
+  const columns = perBar
+  return { columns, template: Array.from({ length: columns }, () => 'minmax(0px, 1fr)').join(' ') }
 }
