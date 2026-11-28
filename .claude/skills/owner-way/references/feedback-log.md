@@ -1543,6 +1543,7 @@ owner's, typos fixed.
 - **The Chord player's styles by family (loop, 2026-11-28):** the board listed six invented styles (Pop ballad, Rock 8ths, Worship…) each with a feel; the app listed its thirty-six in one card with no feel and its family names unused. Both now show the app's catalogue under family heads, the feel (swing, 3/4) only where a style departs from straight 4/4.
 
 - **The Chord player's MIDI word and its popovers (loop, the board against the app, 2026-11-28):** the board's MIDI page said Keyboard None where Settings, ☰ and the Player say Not connected; it says Not connected. In the app the band's popovers sat centred under their pill where the board starts them at its edge, the Style list grew past the screen and flipped beside the band, over it, and the Genos lamp still lit crimson for the chosen section; each is the board's now (start-aligned, capped at 760 and scrolled, the rail's wash with an ink ring).
+- **A picker's glyph, one on the canvas (loop, the board against the app, 2026-11-28):** the Chord player's chord sheet drew its Chord and Bass note pickers with a single chevron down, where the kit's select, two other boards and the app's Select draw the up-down pair of a pop-up button; it takes the pair. In the app the sheet's name menu was 254 wide where the board draws 280; the kit's ActionMenu takes `wide` for it.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
