@@ -47,7 +47,7 @@ const STEP = 5
 function PanelSection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section aria-label={title} className="flex flex-col gap-2">
-      <h3 className="font-sans text-[0.9375rem] font-semibold">{title}</h3>
+      <h3 className="font-sans text-[0.9375rem]/[normal] font-semibold">{title}</h3>
       {children}
     </section>
   )
