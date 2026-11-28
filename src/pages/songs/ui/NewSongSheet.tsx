@@ -134,7 +134,6 @@ export function NewSongSheet({
     <MakeSheet
       open={open}
       onOpenChange={onOpenChange}
-      wide
       title={t('making.title')}
       footer={
         <div className="flex flex-col gap-2">
