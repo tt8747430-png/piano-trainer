@@ -14,8 +14,8 @@ import { onlineSheetPath } from '../model/online-sheet-path'
 type Access = 'view' | 'edit'
 
 /**
- * Share (R39-10, canvas v173's CP_SHARE): one line on what sharing does, People with the link View only
- * or Can edit (set at once where it is shared already), and Copy link, which shares it. Signed out, it
+ * Share (the board's CP_SHARE): People with the link, View only or Can edit (set at once where it is
+ * shared already), its head over it, then Copy link 24 under it, which shares it. Signed out, it
  * says sharing needs an account; a sheet opened from someone's link copies that link.
  */
 export function ShareChordSheet({
@@ -71,24 +71,7 @@ function ShareForm({ sheet, onDone }: { sheet: SavedChordSheet; onDone: () => vo
   const guest = ready && !account && !theirs
 
   return (
-    <SheetContent
-      title={t('chordPlayer.online.share')}
-      footer={
-        guest ? null : (
-          <div className="flex flex-col gap-2">
-            {problem ? <Problem>{problem}</Problem> : null}
-            <Button
-              size="lg"
-              className="w-full"
-              disabled={busy || !ready}
-              onClick={() => void copy()}
-            >
-              {t('chordPlayer.online.copy')}
-            </Button>
-          </div>
-        )
-      }
-    >
+    <SheetContent title={t('chordPlayer.online.share')}>
       {guest ? (
         <Said
           icon={UserRound}
@@ -102,25 +85,38 @@ function ShareForm({ sheet, onDone }: { sheet: SavedChordSheet; onDone: () => vo
           }
         />
       ) : (
-        <div className="flex flex-col gap-4">
-          <p className="mx-1 text-pretty text-subhead text-muted-foreground">
-            {t('chordPlayer.online.line')}
-          </p>
+        <div className="flex flex-col gap-6">
           {theirs ? null : (
-            <Segmented<Access>
-              label={t('chordPlayer.online.people')}
-              value={access}
-              options={[
-                { value: 'view', label: t('chordPlayer.online.viewOnly') },
-                { value: 'edit', label: t('chordPlayer.online.canEdit') },
-              ]}
-              onChange={(next) => {
-                setAccess(next)
-                // Shared already: the new access holds at once.
-                if (sheet.online) void share(next)
-              }}
-            />
+            <section aria-label={t('chordPlayer.online.people')} className="flex flex-col gap-2">
+              <h3 className="font-sans text-[0.9375rem]/[normal] font-semibold">
+                {t('chordPlayer.online.people')}
+              </h3>
+              <Segmented<Access>
+                label={t('chordPlayer.online.people')}
+                value={access}
+                options={[
+                  { value: 'view', label: t('chordPlayer.online.viewOnly') },
+                  { value: 'edit', label: t('chordPlayer.online.canEdit') },
+                ]}
+                onChange={(next) => {
+                  setAccess(next)
+                  // Shared already: the new access holds at once.
+                  if (sheet.online) void share(next)
+                }}
+              />
+            </section>
           )}
+          <div className="flex flex-col gap-2">
+            {problem ? <Problem>{problem}</Problem> : null}
+            <Button
+              size="lg"
+              className="w-full"
+              disabled={busy || !ready}
+              onClick={() => void copy()}
+            >
+              {t('chordPlayer.online.copy')}
+            </Button>
+          </div>
         </div>
       )}
     </SheetContent>

@@ -858,7 +858,6 @@ export const practice: LocaleResources['practice'] = {
     shareFailed: 'Не удалось поделиться ссылкой',
     online: {
       share: 'Поделиться',
-      line: 'Все, у кого есть ссылка, сразу видят каждое изменение и аккорд, который звучит.',
       people: 'По ссылке можно',
       viewOnly: 'Только смотреть',
       canEdit: 'Изменять',

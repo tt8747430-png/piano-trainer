@@ -885,7 +885,6 @@ export const practice = {
     shareFailed: 'Couldn’t share the link',
     online: {
       share: 'Share',
-      line: 'Everyone with the link sees each change as it is made, and the chord playing.',
       people: 'People with the link',
       viewOnly: 'View only',
       canEdit: 'Can edit',

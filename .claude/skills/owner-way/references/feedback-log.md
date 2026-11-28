@@ -1584,6 +1584,7 @@ owner's, typos fixed.
 - **The chord sheet's pickers at the board's widths (the loop, 2026-11-28):** the Chord player's Root, Quality and Bass note pickers stood 8 to 12 narrower than the board's with the chevrons by the words; they take the board's 72, 120 and 136, the chevrons at the end.
 - **The stepper's value as the board's (the loop, 2026-11-28):** the app's Stepper padded its value 4 a side, which the kit's STEPPER does not, and the Chord player's Repeats kept 15 on a phone's page; measured level with the board now (162 wide, 16 on a phone).
 - **Volume in place in the Chord player's Audio** (the loop, 2026-11-28). Why: a sub-page inside a panel stacked a second Back and the word Volume twice; the board's row was dead. One Volume head over Master and each part's level, the slider's box as tall as its thumb (the kit's `Slider`).
+- **The Chord player's Share as the board's** (the loop, 2026-11-28). Why: an explanation line opened the app's Share and its choice had no visible head; the board lacked the signed-out state. One form: the head over View only · Can edit, Copy link 24 under; signed out, Sharing needs an account with Sign in, on both.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

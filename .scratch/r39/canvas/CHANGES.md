@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · Share draws its signed-out state (Sharing needs an account, Sign in to the sign-in board), a new state in the States box, as the app's · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 

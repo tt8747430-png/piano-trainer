@@ -58,7 +58,7 @@ CP58 = CP58.replace("    return { ...common(st, set),", r'''    return { ...comm
       duplicate: () => editSecs((s, l) => { const [si, bi] = st.sel || [0, 0]; s[si][3].splice(bi + 1, 0, s[si][3][bi].slice()); }),
       removeChord: () => editSecs((s) => { const [si, bi] = st.sel || [0, 0]; s[si][3].splice(bi, 1); }),
       playFrom: () => set({ sheet: null, playing: true, pos: 0 }),
-      shareOn: st.sheet === 'share', openShare: () => set({ sheet: 'share' }), shareSeg: SEGT(['View only', 'Can edit'], st.shareMode ?? 'View only', (l) => set({ shareMode: l })),
+      shareOn: st.sheet === 'share', openShare: () => set({ sheet: 'share' }), shareGuest: !!st.guest, shareFull: !st.guest, shareSeg: SEGT(['View only', 'Can edit'], st.shareMode ?? 'View only', (l) => set({ shareMode: l })),
       followSw: follow, followSwBg: follow ? '#44684A' : '#DAD1C8', followSwX: follow ? 22 : 2, followBg: follow ? '#44684A' : '#DAD1C8', followX: follow ? 22 : 2, toggleFollow: () => set({ follow: !follow }),
       states: [{ l: 'Following the Genos', bg: follow ? '#332921' : '#EEE9E2', pick: () => set({ follow: !follow }) }],
       arOn: follow, arStart: lamp(!!st.playing), arAcmp: lamp(ar.acmp), arSync: lamp(ar.sync), arSyncStop: lamp(ar.syncStop), arAuto: lamp(ar.autoFill), arOts: lamp(ar.ots), arFade: lamp(ar.fade), arBreak: lamp(false, ar.next === 'Break'),
@@ -87,8 +87,12 @@ CP_TAG = ('<div style="display: flex; flex-direction: column; gap: 24px">'
           + f'<sc-if value="{{{{tagIsLast}}}}" hint-placeholder-val="{{{{false}}}}">' + _SECTG('Ending', SEGC('endingSeg', 36, 14, True)) + '</sc-if>'
           + '</div>')
 
-CP_SHARE = ('<div style="display: flex; flex-direction: column; gap: 24px">' + _SECTG('People with the link', SEGC('shareSeg', 36, 14, True))
-            + BTN('{{copyL}}', 'copyLink', kind='primary', h=50) + '</div>')
+# signed out, Share says sharing needs an account and leads to Sign in (the app's `Said`, the kit's one empty state);
+# the sheet stays on the device either way
+_USERI = '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>'
+CP_SHARE = (f'<sc-if value="{{{{shareFull}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 24px">' + _SECTG('People with the link', SEGC('shareSeg', 36, 14, True))
+            + BTN('{{copyL}}', 'copyLink', kind='primary', h=50) + '</div></sc-if>'
+            + EMPTY('shareGuest', _USERI, 'Sharing needs an account', 'Sign in to share this sheet. It stays on this device too.', BTN('Sign in', href='SignIn.dc.html', kind='primary', h=50, grow=False)))
 
 
 # ── R59 (owner, 2026-11-14, Musicca's chord player beside it: "make the ui of the chords like the musicca does";
@@ -541,7 +545,7 @@ CP77 = CP58.replace("states: [{ l: 'Following the Genos'", "states: [{ l: 'No Ge
 _el = "{ l: 'Edit layout', bg: st.editLay ? '#332921' : '#EEE9E2', pick: () => set({ editLay: !st.editLay, dragP: null }) }, "
 assert CP77.count(_el) == 1; CP77 = CP77.replace(_el, '', 1)
 # Playing: the band lit, the chord sounding, the Genos's head saying it plays
-CP77 = CP77.replace("states: [{ l: 'No Genos found'", "states: [{ l: 'Playing', bg: st.playing ? '#332921' : '#EEE9E2', pick: () => set({ playing: !st.playing }) }, { l: 'No Genos found'", 1)
+CP77 = CP77.replace("states: [{ l: 'No Genos found'", "states: [{ l: 'Playing', bg: st.playing ? '#332921' : '#EEE9E2', pick: () => set({ playing: !st.playing }) }, { l: 'Signed out', bg: st.guest ? '#332921' : '#EEE9E2', pick: () => set({ guest: !st.guest, sheet: st.guest ? null : 'share' }) }, { l: 'No Genos found'", 1)
 _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'On']: RAIL77 === k, ['rail' + k + 'Bg']: RAIL77 === k ? '#EEE2CF' : 'transparent', ['rail' + k + 'W']: RAIL77 === k ? 600 : 500, ['pick' + k]: () => set({ rail77: RAIL77 === k ? 'none' : k, ...(k === 'Ge' ? { follow: true } : {}) }) });
     const dev = st.alone ? STY[s] : 'Genos', MAINL = ['A', 'B', 'C', 'D'][(st.arMain ?? 0)] || 'A';
     const cpKeys = st.cpKeys ?? true;
@@ -571,7 +575,7 @@ _r = "    return { ...common(st, set),"
 assert CP77.count(_r) == 1, CP77.count(_r)
 CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 # the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
-_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else '{{tagPos}}' if c == 'tagOnSheet' else 'left: 640px; top: 160px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 717px; top: 72px', 'keyOn': 'left: 501px; top: 72px', 'tempoOn': 'left: 608px; top: 72px', 'repOn': 'left: 373px; top: 72px'}[c], 320))
+_SHL = (lambda h: h.replace('href="SignIn.dc.html"', 'href="SignInLaptop.dc.html"'))(SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else '{{tagPos}}' if c == 'tagOnSheet' else 'left: 640px; top: 160px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 717px; top: 72px', 'keyOn': 'left: 501px; top: 72px', 'tempoOn': 'left: 608px; top: 72px', 'repOn': 'left: 373px; top: 72px'}[c], 320)))
 phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + SAVEAS77 + FSHEET('hdOptsOn', 'Playback options', _OPTSP, close='closeSheet') + FSHEET('cpPhRepOn', 'Playback options', _OPTSP, back='phToMenu'), bar=SHEET)
 # Shortcuts, the Player's and the editor's card (KEYSCARD_F) with the Chord player's own keys, as the app lists them
 CPKEYS = KEYSCARD_F(((('Chord player', (('Play or stop', 'Space'), ('Undo', '⌘ Z'), ('Redo', '⇧ ⌘ Z'))),),
