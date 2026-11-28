@@ -152,7 +152,7 @@ export function ArrangerStrip({
       disabled={!panel.playable}
       on={panel.running}
       label={t('chordPlayer.arranger.startStop')}
-      className="min-w-22 shrink-0 px-3"
+      className="min-w-22 shrink-0"
       onClick={panel.toggle}
     />
   )
@@ -202,27 +202,33 @@ export function ArrangerStrip({
           flat ? FLAT_CARD : CARD,
         )}
       >
-        {/* The board's compact strip: the connection's dot, then Start/Stop as its glyph, filled as the
-            transport's Play (a phone's 341 holds Main A–D only so); its lamp says it runs. */}
+        {/* The board's compact strip: the connection's dot, then Start/Stop. Docked over a laptop's keys
+            (`wide`, GDOCK77) it is the Genos's own word at 88, Main A–D sharing the rest and ⌃ alone to the
+            panel; on a phone it is the glyph, filled as the transport's Play (341 holds Main A–D only so),
+            with — to minimize. Its lamp says it runs. */}
         {dot}
-        <Lamp
-          disabled={!panel.playable}
-          on={panel.running}
-          label={
-            panel.running ? (
-              <Square aria-hidden className="fill-current" strokeWidth={0} />
-            ) : (
-              <PlayGlyph playing={false} />
-            )
-          }
-          spoken={t('chordPlayer.arranger.startStop')}
-          className="grid w-11 shrink-0 place-items-center [&_svg]:size-4.5"
-          onClick={panel.toggle}
-        />
+        {wide ? (
+          startStop
+        ) : (
+          <Lamp
+            disabled={!panel.playable}
+            on={panel.running}
+            label={
+              panel.running ? (
+                <Square aria-hidden className="fill-current" strokeWidth={0} />
+              ) : (
+                <PlayGlyph playing={false} />
+              )
+            }
+            spoken={t('chordPlayer.arranger.startStop')}
+            className="grid w-11 shrink-0 place-items-center [&_svg]:size-4.5"
+            onClick={panel.toggle}
+          />
+        )}
         <div
           role="group"
           aria-label={t('chordPlayer.arranger.mainLabel')}
-          className="grid min-w-0 flex-1 grid-cols-4 gap-1 sm:max-w-80"
+          className={cn('grid min-w-0 flex-1 grid-cols-4 gap-1', !wide && 'sm:max-w-80')}
         >
           {mainLamps}
         </div>
@@ -230,7 +236,7 @@ export function ArrangerStrip({
           <HeadButton label={t('chordPlayer.arranger.full')} onClick={() => onSize('full')}>
             <ChevronUp aria-hidden />
           </HeadButton>
-          {minimize}
+          {wide ? null : minimize}
         </div>
         {children}
       </Toolbar>
