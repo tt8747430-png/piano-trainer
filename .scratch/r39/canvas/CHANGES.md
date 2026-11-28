@@ -8,13 +8,13 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · 6f1e0a54 · the laptop chart's first section head stands on the panel head's line (its row 74 to 118, Verse level with G major chords), its scroller's top 10, where 22 set it 9.5 under the title it was meant to level with, board and app · ChordPlayerLaptop · pending
-- 2026-11-28 · 01caaab2 · Share on a sheet opened from someone's link is Copy link alone, as the app's (its access is its owner's); a States entry, From someone’s link, opens it · ChordPlayer, ChordPlayerLaptop · pending
-- 2026-11-28 · 0248cdc5 · Share offline drawn as the app draws it: Copy link says "You’re offline. Connect to share." 8 over it, 14 in crimson (the app's Problem); a States entry, Offline, opens it · ChordPlayer, ChordPlayerLaptop · pending
-- 2026-11-28 · 1d26f48a · the laptop's toast stands 28 over the keys docked at the foot, as every laptop toast stands 28 up and as the app's (198 from the foot), where it stood 296, 126 over the keys, a height left from R76's floating dock · ChordPlayerLaptop · pending
 
 ## Changes
 
+- 2026-11-28 · 6f1e0a54 · the laptop chart's first section head stands on the panel head's line (its row 74 to 118, Verse level with G major chords), its scroller's top 10, where 22 set it 9.5 under the title it was meant to level with, board and app · ChordPlayerLaptop · v899
+- 2026-11-28 · 01caaab2 · Share on a sheet opened from someone's link is Copy link alone, as the app's (its access is its owner's); a States entry, From someone’s link, opens it · ChordPlayer, ChordPlayerLaptop · v899
+- 2026-11-28 · 0248cdc5 · Share offline drawn as the app draws it: Copy link says "You’re offline. Connect to share." 8 over it, 14 in crimson (the app's Problem); a States entry, Offline, opens it · ChordPlayer, ChordPlayerLaptop · v899
+- 2026-11-28 · 1d26f48a · the laptop's toast stands 28 over the keys docked at the foot, as every laptop toast stands 28 up and as the app's (198 from the foot), where it stood 296, 126 over the keys, a height left from R76's floating dock · ChordPlayerLaptop · v899
 - 2026-11-28 · 3dd6884b · the laptop chart's bars stand 8 apart, as the phone's, where they stood 6, off the 4/8 scale (app too) · ChordPlayerLaptop · v898
 - 2026-11-28 · 0539c5f9 · a key hint (↑ ↓ ↵ Esc under Search, the Settings shortcuts) is the scale's smallest mark, 4 round, board and app, where the boards drew 6 (off the scale) and the app's `Kbd` 12, a circle on its 24 square · ChordPlayerLaptop, AppLayersLaptop, Settings, SettingsLaptop · v898
 - 2026-11-28 · 680719d4 · the chart's bars and their + are 8 round (the scale's tile, as the app's), where the board drew 6, a corner off DESIGN.md's scale · ChordPlayer, ChordPlayerLaptop · v898
