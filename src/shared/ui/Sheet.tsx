@@ -98,9 +98,12 @@ export interface SheetAt {
   readonly width?: string
 }
 
+/** What a popover stands at: the control itself, or a stand-in for one about to go (`justPressed`). */
+type Anchor = Element | { getBoundingClientRect(): DOMRect; readonly contextElement: Element }
+
 /** A sheet opened as a popover: where it stands, and the control it stands at. */
 interface Popped extends SheetAt {
-  readonly anchor: Element | null
+  readonly anchor: Anchor | null
 }
 
 const PoppedContext = createContext<Popped | null>(null)
@@ -113,8 +116,25 @@ const PRESSABLE = 'button, a[href], [role=button], [role=menuitem], [role=option
  */
 let pressed: Element | null = null
 let pressedAt = 0
-/** The control pressed just now, or none: a sheet a shortcut opens has no control to stand at. */
-const justPressed = () => (performance.now() - pressedAt < 1000 ? pressed : null)
+/** The last control pressed outside every dialog: what opened the dialog a press inside was in. */
+let opener: Element | null = null
+/** Behind a press inside a dialog, what opened that dialog: Save in a form that closes as it saves. */
+let behind: Element | null = null
+/**
+ * The control pressed just now, or none: a sheet a shortcut opens has no control to stand at. A press
+ * inside a dialog that then closes (Save in Save as my chord sheet, then Share) leaves the sheet it
+ * opens standing at what opened that dialog, not at the corner the vanished control leaves.
+ */
+const justPressed = (): Anchor | null => {
+  if (performance.now() - pressedAt >= 1000 || pressed === null) return null
+  const control = pressed
+  const back = behind
+  if (back === null) return control
+  return {
+    contextElement: control,
+    getBoundingClientRect: () => (control.isConnected ? control : back).getBoundingClientRect(),
+  }
+}
 function notePress(target: EventTarget | null) {
   if (!(target instanceof Element)) return
   const control = target.closest(PRESSABLE)
@@ -124,6 +144,9 @@ function notePress(target: EventTarget | null) {
     (menu === null
       ? null
       : document.querySelector('[aria-haspopup][aria-expanded=true], [data-popup-open]')) ?? control
+  const inDialog = control.closest('[role=dialog], [role=alertdialog]') !== null
+  behind = inDialog ? opener : null
+  if (!inDialog) opener = pressed
   pressedAt = performance.now()
 }
 if (typeof document !== 'undefined') {
@@ -183,7 +206,7 @@ export function Sheet({
 }) {
   const laptop = useMediaQuery(LAPTOP)
   // The control it opened from, taken as it opens (a sheet opened by its own trigger stands at that).
-  const [anchor, setAnchor] = useState<Element | null>(null)
+  const [anchor, setAnchor] = useState<Anchor | null>(null)
   const now = open === true && anchor === null ? justPressed() : null
   if (now !== null) setAnchor(now)
   if (open === false && anchor !== null) setAnchor(null)
