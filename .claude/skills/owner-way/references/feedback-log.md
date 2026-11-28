@@ -1575,6 +1575,7 @@ owner's, typos fixed.
 - **A toast in two lines (the loop, 2026-11-28):** opening a Chord player sheet with a long name ran its toast to four lines over the chart; every toast, app and boards, holds its words to two lines now, a long name ending in …. Never again: a toast that grows with the name it quotes.
 - **No Main lit at rest (the loop, 2026-11-28):** the Chord player's board lit Main A on a stopped Genos, against its own ruling and the app; it lights none until one is set or pressed, the pill reading Genos. Never again: a board's default that a ruling has already settled otherwise.
 - **The Genos card's padding and Try again (the loop, 2026-11-28):** the app's Genos card started 8 from its top and offered Try again as a 44 button louder than the line it answers; it is the board's 12 all round and its quiet 36 pill at 14/600. Never again: a recovery act shouting over the status it belongs to.
+- **The Genos row at 744 (the loop, 2026-11-28):** the Chord player's phone Genos row stretched across an upright iPad with its Main lamps capped, a bare stretch of card before ⌃; it keeps the dock's 560, centred. Never again: a phone row stretched across a tablet with a gap in its middle.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

@@ -208,7 +208,7 @@ export function ArrangerStrip({
       >
         {/* The board's compact strip: the connection's dot, then Start/Stop. Docked over a laptop's keys
             (`wide`, GDOCK77) it is the Genos's own word at 88, Main A–D sharing the rest and ⌃ alone to the
-            panel; on a phone it is the glyph, filled as the transport's Play (341 holds Main A–D only so),
+            panel; on a phone it is the glyph, filled as the transport's Play,
             with — to minimize. Its lamp says it runs. */}
         {dot}
         {wide ? (
@@ -232,7 +232,7 @@ export function ArrangerStrip({
         <div
           role="group"
           aria-label={t('chordPlayer.arranger.mainLabel')}
-          className={cn('grid min-w-0 flex-1 grid-cols-4 gap-1', !wide && 'sm:max-w-80')}
+          className="grid min-w-0 flex-1 grid-cols-4 gap-1"
         >
           {mainLamps}
         </div>

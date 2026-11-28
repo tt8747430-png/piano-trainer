@@ -807,7 +807,13 @@ export function ChordPlayer({
               </div>
             ) : null}
             {genosOn && !laptop ? (
-              <div className={cn('mx-4 my-2 shrink-0', phoneGenos === 'minimized' && 'flex')}>
+              // Wider than a phone (an iPad upright) the row keeps the dock's 560, centred, nothing stranded.
+              <div
+                className={cn(
+                  'mx-4 my-2 shrink-0 sm:mx-auto sm:w-full sm:max-w-140',
+                  phoneGenos === 'minimized' && 'flex',
+                )}
+              >
                 {genosStrip(phoneGenos, 'phone')}
               </div>
             ) : null}
