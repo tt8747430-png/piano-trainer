@@ -299,7 +299,7 @@ lm = lapbody(LTOP('ProgressionsLaptop.dc.html', GEAR() + DOTS()), SUBJECT('Axis 
 detail('Progression', 'A progression', PR, ph, lm, '', BSHEET('rootOn', 'Key', ROOTGRID()) + BSHEET('moreOn', 'Axis of Awesome', PR_MORE) + BSHEET('setOn', 'Progression settings', PR_SET),
        POPOVER('rootOn', 'Key', ROOTGRID()) + POPOVER('moreOn', 'Axis of Awesome', PR_MORE.replace('ProgressionEdit.dc.html', 'ProgressionEditLaptop.dc.html').replace('ChordPlayer.dc.html', 'ChordPlayerLaptop.dc.html').replace('Songs.dc.html', 'SongsLaptop.dc.html')) + POPOVER('setOn', 'Progression settings', PR_SET))
 
-# ═════ Chord player (iReal Pro: the chart fills the page, the player bar at the foot) ═════
+# ═════ Chord player: its logic, which r58_chordplayer.py builds R77's boards on (the boards are r58's alone) ═════
 CP = js(r'''
 // switches by key: k → kOn, kOnBg, kOnX, kT; segs by key: [key, options, default] → keySeg
 const SW = (st, set, keys) => Object.fromEntries(keys.flatMap(([k, d]) => { const on = st[k] ?? d; return [[k + 'On', on], [k + 'OnBg', on ? '#44684A' : '#DAD1C8'], [k + 'OnX', on ? 22 : 2], [k + 'T', () => set({ [k]: !on })]]; }));
@@ -317,15 +317,6 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       openKey: () => set({ sheet: 'key' }), keyOn: st.sheet === 'key', wKey: wheel(KEYS, k, (i) => set({ key: i, secs: SECS.map(([m, n, r, bars]) => [m, n, r, bars.map((cs) => cs.map((c) => trp(c, i - k)))]) })),
       openTempo: () => set({ sheet: 'tempo' }), tempoOn: st.sheet === 'tempo', wTempo: wheel(Array.from({ length: 43 }, (_, i) => String(40 + 4 * i)), Math.round((bpm - 40) / 4), (i) => set({ bpm: 40 + 4 * i })),
       openRep: () => set({ sheet: 'rep' }), repOn: st.sheet === 'rep', repL: reps === 0 ? '∞' : '× ' + reps, wRep: wheel(['∞', '× 1', '× 2', '× 3', '× 4', '× 5', '× 6', '× 7', '× 8'], reps, (i) => set({ reps: i })) };''')
-CHART = (f'<div style="border-radius: 6px; background: #FFFFFF; box-shadow: 0 0 0 1px {LINE}, 0 10px 24px -18px rgba(51,41,33,.45); padding: 16px 14px 18px; display: flex; flex-direction: column; gap: 16px">'
-         f'<div style="text-align: center; font-family: {SERIF}; font-size: 20px">My verse and chorus</div>'
-         f'<sc-for list="{{{{secs}}}}" as="x" hint-placeholder-count="2"><section style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 8px"><span style="width: 22px; height: 22px; box-sizing: border-box; border: 1.5px solid {INK}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">{{{{x.m}}}}</span><span style="font-size: 14px; font-weight: 600">{{{{x.name}}}}</span>{SPACER}<span style="font-size: 13px; color: {SOFT}">{{{{x.rep}}}}</span><span style="display: flex; color: {SOFT}">{GRIP}</span></div>'
-         f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-left: 2px solid {INK}; border-right: 2px solid {INK}"><sc-for list="{{{{x.bars}}}}" as="b" hint-placeholder-count="8"><button type="button" onClick="{{{{b.pick}}}}" style="height: {{{{CH}}}}px; border: 0; border-right: {{{{b.edge}}}} solid {INK}; background: {{{{b.bg}}}}; padding: 0 6px; display: flex; align-items: center; justify-content: space-around; color: {INK}; font-family: {SERIF}; font-size: {{{{CF}}}}px; font-weight: 700"><sc-for list="{{{{b.cs}}}}" as="c" hint-placeholder-count="1"><span>{{{{c.c}}}}</span></sc-for></button></sc-for></div></section></sc-for>'
-         + ADDCARD('Add section', 'addSec') + '</div>')
-def PBTN(label, val, act):
-    return f'<button type="button" onClick="{{{{{act}}}}}" style="flex: 1; min-width: 0; height: 52px; border: 0; border-radius: 14px; background: transparent; color: {INK}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; font: inherit"><span style="font-size: 12px; color: {SOFT}">{label}</span><span style="font-size: 16px; font-weight: 700; white-space: nowrap">{val}</span></button>'
-CP_DOCK = PBTN('Style', '{{styleL}}', 'openStyle') + PBTN('Key', '{{keyL}}', 'openKey') + PBTN('Tempo', '{{bpmL}}', 'openTempo') + PBTN('Repeats', '{{repL}}', 'openRep') + PLAYBTN()
-CP_CHORD = WHEEL([('wRoot', 1), ('wQual', 1), ('wLen', 1.4)]) + f'<button type="button" onClick="{{{{closeSheet}}}}" style="height: 48px; border: 0; border-radius: 12px; background: {SHEET}; color: #B3261E; font: inherit; font-size: 16px; font-weight: 600">Delete chord</button>'
 # ── The Chord player's piano (R43 canvas 122; owner: "1. yes", the Chord player gets a piano): the chord sounding
 # now, on the keys in its tones' paints, under the chart. 2D keys by default; the one Piano sheet (piano_sheet.py)
 # behind Settings › Piano, the same as on the Chords page and in the Player, its range a chart's: Fit the chords ·
@@ -400,26 +391,11 @@ def CP_KEYS(h, whites='kbw', blacks='kbb', inset=''):
     k3 = (f'<sc-if value="{{{{cpKb3}}}}" hint-placeholder-val="{{{{false}}}}"><figure aria-label="The hands at the keys, playing {{{{nowChord}}}}" style="position: relative; margin: 0; height: {h}px; overflow: hidden; background: #EDE6DC; {PS.STAGE_VARS}">'
           f'<canvas ref="{{{{handsRef}}}}" style="display: block; width: 100%; height: 100%"></canvas><div ref="{{{{labelsRef}}}}" aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none"></div></figure></sc-if>')
     return k2 + k3
-CP_SET = (LABELLED('Instruments', GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT')))
-          + LABELLED('Playing', GROUP(('link', 'Count-in', '1 bar', ''), ('link', 'Volume', '80%', '')))
-          + LABELLED('Music', GROUP(('link', 'Time signature', '4/4', ''), ('seg', 'Written as', 'namesSeg', 200), ('seg', 'Voicing', 'cpVSeg', 200)))
-          + GROUP(('link', 'MIDI keyboard', 'Not connected', 'Settings.dc.html')))
-_BACKP = f'<button type="button" aria-label="Back to Chord player settings" onClick="{{{{backSet}}}}" style="position: absolute; left: -8px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button>'
-_PBODY = PS.PIANO_SHEET(False, 3, 4)
-CP_PSHEET = BSHEET('pianoOn', 'Piano', _PBODY, back=_BACKP, maxh='calc(100% - 124px)')
-CP_PPOP = POPOVER('pianoOn', 'Piano', _PBODY, 'right: 40px; top: 64px', 400, back=_BACKP)
 
 CP = CP.replace("    const play = st.playing ? (st.at ?? [0, 2])", CP_PIANO_JS + "    const play = st.playing ? [(slot || {}).si, (slot || {}).bi]", 1).replace("styleOn: st.sheet === 'style',", "styleOn: st.sheet === 'style', ...cpPiano,", 1)
 CP = 'const PT_BUNDLE = ' + json.dumps(PT_BUNDLE_CP) + ';\n' + CP.replace('class Component extends DCLogic {\n', 'class Component extends DCLogic {' + CP_LIFE, 1)
 CP = CP.replace("keyTiles:", "namesSeg: seg(['Chords', 'Numerals', 'Nashville'], st.names ?? 'Chords', (l) => set({ names: l })), ...SW(st, set, [['cpPi', true], ['cpBa', true], ['cpDr', true], ['cpRep', true]]), ...SG(st, set, [['cpV', ['Voice-led', 'Block'], 'Voice-led']]), keyTiles:")
-UNDOB = IB('Undo', UNDO)
-ph = (body(TOP('Main.dc.html', 'Chord player', UNDOB + GEAR() + DOTS()), CHART.replace('{{CH}}', '50').replace('{{CF}}', '17'), CP_DOCK, 118).replace('padding: 4px 16px 118px', 'padding: 4px 16px {{cpPad}}px', 1)
-      .replace('</main>', '</main><sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; margin-bottom: 110px; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(112) + '</div></sc-if>', 1))
 DRAG = f'{H2("{{keyHead}}")}<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{keyTiles}}}}" as="k" hint-placeholder-count="8"><button type="button" draggable="true" onClick="{{{{k.put}}}}" aria-label="Put {{{{k.c}}}} in the chosen place" data-tip="Tap or drag into a bar" style="height: 56px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; cursor: grab"><span style="line-height: 1.25">{{{{k.r}}}}<sup style="font-size: max(12px, .6em); vertical-align: .6em; margin-left: 1px">{{{{k.x}}}}</sup></span></button></sc-for></div>'
-lm = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTS(), 'Chord player'), f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto">{CHART.replace("{{CH}}", "64").replace("{{CF}}", "22")}</div>' + '<sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px ' + LINE + '">' + CP_KEYS(160) + '</div></sc-if>', DRAG + H2('Style') + WHEEL([('wStyle', 1)]), CP_DOCK)
-CP_MORE = GROUP(('link', 'Chord sheets', '', ''), ('link', 'Save as my chord sheet', '', ''), ('link', 'Open in Progressions', '', 'Progressions.dc.html'), ('link', 'Share link', '', ''))
-detail('ChordPlayer', 'Chord player', CP, ph, lm, '', BSHEET('chordOn', 'Bar 3', CP_CHORD) + BSHEET('styleOn', 'Style', WHEEL([('wStyle', 1)])) + BSHEET('setOn', 'Chord player settings', CP_SET) + CP_PSHEET + BSHEET('moreOn', 'Chord sheet', CP_MORE),
-       POPOVER('chordOn', 'Bar 3', CP_CHORD, 'left: 140px; top: 220px', 440) + POPOVER('styleOn', 'Style', WHEEL([('wStyle', 1)]), 'left: 200px; bottom: 110px') + POPOVER('setOn', 'Chord player settings', CP_SET) + CP_PPOP + POPOVER('moreOn', 'Chord sheet', CP_MORE.replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')))
 
 # ═════ An exercise (Hanon Pro: the page, Listen, a metronome and a target tempo) ═════
 EX = js(r'''
