@@ -75,7 +75,6 @@ export function MetronomePage() {
       <TempoSteps
         bpm={metronome.tempoNow}
         mark={t(`music:tempoWord.${tempoWord(metronome.tempoNow)}.name`)}
-        large
         onStep={metronome.nudge}
       />
       {/* The slider between its ends, 20 and 300, in 12 soft ink, 20 from the tempo and the beats, as the board's TEMPO. */}

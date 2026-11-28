@@ -949,8 +949,6 @@ export const practice = {
       patterns: 'Piano patterns',
     },
     tempo: 'Tempo',
-    slower: 'Slower',
-    faster: 'Faster',
     bpm: '{{count}} BPM',
     sections: {
       intro: 'Intro',

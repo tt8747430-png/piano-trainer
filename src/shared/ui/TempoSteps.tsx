@@ -8,18 +8,20 @@ const STEPS = [-10, -1, 1, 10] as const
  * The tempo as the Metronome's board draws it (canvas 179): its mark and BPM over it in Soft Ink
  * ("Allegro · BPM"), the number large and bold in the middle, −10 and −1 before it and +1 and +10
  * after it as filled pills 44 high. The number keeps its width as it changes, so the steps never
- * move (its digits proportional, as the board sets them: a tabular 1 stands apart); on a laptop's page (`large`) it stands at 120px.
+ * move (its digits proportional, as the board sets them: a tabular 1 stands apart). `size`: the
+ * Metronome's page (`large`, 72, 120 on a laptop), or a tool's popover and page (`small`, 40: the
+ * Chord player's Tempo, the board's `TEMPO(40)`).
  */
 export function TempoSteps({
   bpm,
   mark,
-  large = false,
+  size = 'large',
   onStep,
 }: {
   bpm: number
   /** The tempo's word before BPM (Allegro), where the page names it. */
   mark?: string | undefined
-  large?: boolean
+  size?: 'large' | 'small'
   onStep: (step: number) => void
 }) {
   const { t } = useTranslation('practice')
@@ -50,7 +52,9 @@ export function TempoSteps({
           className={cn(
             'min-w-[1.75em] shrink-0 text-center font-bold tracking-figures tabular-nums',
             // The board's number keeps the font's own line height, 2 under its tempo's word.
-            large ? 'text-[4.5rem]/[normal] lg:text-[7.5rem]/[normal]' : 'text-[4.5rem]/[normal]',
+            size === 'large'
+              ? 'text-[4.5rem]/[normal] lg:text-[7.5rem]/[normal]'
+              : 'text-[2.5rem]/[normal]',
           )}
         >
           <span className="sr-only">{t('metronome.tempo', { bpm })}</span>

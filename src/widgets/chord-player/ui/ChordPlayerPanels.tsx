@@ -21,7 +21,7 @@ import { setChordPlayer } from '@/features/set-preference'
 import { formatPercent, localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { relayMeter, SHEET_METERS, type SheetMeter } from '@/shared/lib/arrangement'
-import { pitchClassOf } from '@/shared/lib/music'
+import { pitchClassOf, tempoWord } from '@/shared/lib/music'
 import {
   BackButton,
   GroupRow,
@@ -35,6 +35,7 @@ import {
   SettingsGroup,
   Stepper,
   SwitchRow,
+  TempoSteps,
 } from '@/shared/ui'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import type { ChordSheetInHand } from '../model/use-chord-sheet'
@@ -374,22 +375,36 @@ export function KeyBody({ hand }: { hand: ChordSheetInHand }) {
   )
 }
 
-/** The tempo, typed or stepped. */
+/**
+ * The tempo as the Metronome's face (the board's `TEMPO77`): its word and BPM over the figures, −10
+ * −1 before and +1 +10 after, then the slider between the sheet's ends, 40 and 240.
+ */
 export function TempoBody({ hand }: { hand: ChordSheetInHand }) {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'music'])
+  const tempo = hand.entry.tempo
+  const to = (next: number) =>
+    hand.setEntry({ tempo: Math.min(SHEET_TEMPO.max, Math.max(SHEET_TEMPO.min, next)) })
   return (
-    <div className="flex justify-center [&_input]:w-20 [&_input]:text-center">
-      <Stepper
-        label={t('chordPlayer.tempo')}
-        value={hand.entry.tempo}
-        min={SHEET_TEMPO.min}
-        max={SHEET_TEMPO.max}
-        typed
-        format={(count) => t('chordPlayer.bpm', { count })}
-        decrease={t('chordPlayer.slower')}
-        increase={t('chordPlayer.faster')}
-        onChange={(tempo) => hand.setEntry({ tempo })}
+    <div className="flex flex-col gap-3 py-1">
+      <TempoSteps
+        bpm={tempo}
+        mark={t(`music:tempoWord.${tempoWord(tempo)}.name`)}
+        size="small"
+        onStep={(by) => to(tempo + by)}
       />
+      <div className="flex h-7 w-full items-center gap-3 text-xs text-muted-foreground tabular-nums">
+        <span aria-hidden>{SHEET_TEMPO.min}</span>
+        <Slider
+          value={tempo}
+          min={SHEET_TEMPO.min}
+          max={SHEET_TEMPO.max}
+          onValueChange={to}
+          className="min-w-24 flex-1"
+        >
+          <SliderLabel className="sr-only">{t('chordPlayer.tempo')}</SliderLabel>
+        </Slider>
+        <span aria-hidden>{SHEET_TEMPO.max}</span>
+      </div>
     </div>
   )
 }

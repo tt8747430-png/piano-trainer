@@ -922,8 +922,6 @@ export const practice: LocaleResources['practice'] = {
       patterns: 'Фактуры фортепиано',
     },
     tempo: 'Темп',
-    slower: 'Медленнее',
-    faster: 'Быстрее',
     bpm: '{{count}} уд/мин',
     sections: {
       intro: 'Вступление',
