@@ -58,7 +58,7 @@ CP58 = CP58.replace("    return { ...common(st, set),", r'''    return { ...comm
       duplicate: () => editSecs((s, l) => { const [si, bi] = st.sel || [0, 0]; s[si][3].splice(bi + 1, 0, s[si][3][bi].slice()); }),
       removeChord: () => editSecs((s) => { const [si, bi] = st.sel || [0, 0]; s[si][3].splice(bi, 1); }),
       playFrom: () => set({ sheet: null, playing: true, pos: 0 }),
-      shareOn: st.sheet === 'share', openShare: () => set({ sheet: 'share' }), libOn: st.sheet === 'lib', openLib: () => set({ sheet: 'lib' }), libOpen: () => set({ sheet: null, toastT: 'Opened Axis of Awesome' }),
+      shareOn: st.sheet === 'share', openShare: () => set({ sheet: 'share' }), libOn: st.sheet === 'lib' || st.sheet === 'libRn', openLib: () => set({ sheet: 'lib' }), libOpen: () => set({ sheet: null, toastT: 'Opened Axis of Awesome' }),
       libMine: (st.libL ?? ['My verse and chorus', 'Blues in F', 'Autumn Leaves sketch']).map((n) => ({ n, cur: n === sheetsL ? 'true' : 'false', fg: n === sheetsL ? '#356890' : '#332921', open: () => set({ sheet: null, sheetName: n, toastT: n === sheetsL ? null : 'Opened ' + n }), more: (e) => set({ libRow: n, libPos: ANCHOR(e, 156) }) })),
       libNone: (st.libL ?? [1]).length === 0, libRowOn: st.sheet === 'lib' && !!st.libRow, libPos: st.libPos ?? '', libRowT: (st.libRow ?? '') + ': more', libRowOff: () => set({ libRow: null }),
       libRename: () => set({ sheet: 'libRn', rnName: st.libRow, rnWas: st.libRow, libRow: null }), renameOn: st.sheet === 'libRn', rnName: st.rnName ?? '', typeRn: (e) => set({ rnName: e.target.value }),
@@ -604,7 +604,7 @@ assert CP77.count(_r) == 1, CP77.count(_r)
 CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 # the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
 _SHL = (lambda h: h.replace('href="SignIn.dc.html"', 'href="SignInLaptop.dc.html"'))(SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else '{{tagPos}}' if c == 'tagOnSheet' else 'left: 64px; top: 60px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 717px; top: 72px', 'keyOn': 'left: 501px; top: 72px', 'tempoOn': 'left: 608px; top: 72px', 'repOn': 'left: 373px; top: 72px'}[c], 320)))
-phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('libOn', 'Chord sheets', CP_LIB, close='closeSheet') + LIBROW + RENAME77 + SAVEAS77 + FSHEET('hdOptsOn', 'Playback options', _OPTSP, close='closeSheet') + FSHEET('cpPhRepOn', 'Playback options', _OPTSP, back='phToMenu'), bar=SHEET)
+phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('libOn', 'Chord sheets', CP_LIB, close='closeSheet') + LIBROW + RENAME77.replace('z-index: 60', 'z-index: 72').replace('z-index: 61', 'z-index: 73') + SAVEAS77 + FSHEET('hdOptsOn', 'Playback options', _OPTSP, close='closeSheet') + FSHEET('cpPhRepOn', 'Playback options', _OPTSP, back='phToMenu'), bar=SHEET)
 # Shortcuts, the Player's and the editor's card (KEYSCARD_F) with the Chord player's own keys, as the app lists them
 CPKEYS = KEYSCARD_F(((('Chord player', (('Play or stop', 'Space'), ('Undo', '⌘ Z'), ('Redo', '⇧ ⌘ Z'))),),
                      (('Piano keys', (('Play the keys', 'A – ’'), ('An octave down, up', 'Z X'))), ('Anywhere', (('Show the shortcuts', '?'),)))), 640)

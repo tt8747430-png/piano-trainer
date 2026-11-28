@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · Rename chord sheet rises over the library, which stays under its scrim (the app's), where it closed the library and rose over the chart · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
