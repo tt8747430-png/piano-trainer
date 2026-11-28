@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · a phone's toast steps aside when a sheet rises over it, as the app's bottom sheet closes it ("From the top" lay on the chord sheet's acts); a toast raised from the sheet still shows; the kit's state remembers the sheet a toast was raised over (`toastS`), and `TOAST` takes the key it shows on · ChordPlayer · pending
 - 2026-11-28 · 99907aa9 · the band's Style popover lists the styles by family, as the rail's Styles panel and the app (it still drew the old wheel, Pop 1 to Pop 4), and a choice closes it with "Style: Pop 4" (the panel stays open) · ChordPlayerLaptop · pending
 - 2026-11-28 · 0bfd6280 · the band's five popovers (Playback options, Key, Tempo, Style, MIDI) start at their trigger's left edge, as the ruling says (they stood 4 to 13 right of it); in the app they stand 8 under the band (they stood 4 into it, 8 under the 40 pill) · ChordPlayerLaptop · pending
 ## Changes

@@ -363,7 +363,7 @@ def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380, back='', h='
 
 
 def js(body):
-    return 'class Component extends DCLogic {\n  renderVals() {\n    const st = this.state || {}; const set = (o) => this.setState(o);\n' + R41PRE + '\n' + body + '\n  }\n}\n'
+    return 'class Component extends DCLogic {\n  renderVals() {\n    const st = this.state || {}; const set = (o) => this.setState(o && "toastT" in o ? { ...o, toastS: "sheet" in o ? o.sheet : (st.sheet ?? null) } : o);\n' + R41PRE + '\n' + body + '\n  }\n}\n'
 
 def detail(stem, title, script, phone_body, laptop_main, laptop_aside, sheets_phone='', pops_laptop='', section='Practice'):
     phone(stem, title + ', phone', phone_body, script, sheets_phone)
@@ -509,14 +509,14 @@ def EMPTY(cond, icon, t, b, btns=''):
 # One toast, every board (owner-way, Undo instead of asking): ink capsule 52 tall, the text, then Undo at its end.
 # A phone toast spans the 16 gutters; a laptop's is 460 wide, centred. `undo` names the handler; `always` shows Undo
 # with no toastUndo condition; `hint` is the placeholder the condition shows while drawing.
-def TOAST(bottom, undo='undo', z=50, laptop=False, always=False, hint='false'):
+def TOAST(bottom, undo='undo', z=50, laptop=False, always=False, hint='false', on='toastOn'):
     pos = (f'left: 50%; transform: translateX(-50%); width: 460px; bottom: {bottom}px' if laptop
            else f'left: 16px; right: 16px; bottom: {bottom}px')
     btn = (f'<button type="button" onClick="{{{{{undo}}}}}" style="height: 44px; padding: 0 12px; border: 0; '
            f'background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button>')
     if not always:
         btn = f'<sc-if value="{{{{toastUndo}}}}" hint-placeholder-val="{{{{{hint}}}}}">{btn}</sc-if>'
-    return (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; '
+    return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; '
             f'{pos}; z-index: {z}; min-height: 52px; box-sizing: border-box; border-radius: 14px; background: {INK}; '
             f'color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px">'
             f'<span style="flex: 1">{{{{toastT}}}}</span>{btn}</div></sc-if>')

@@ -1558,6 +1558,7 @@ owner's, typos fixed.
 - **A phone sheet clears the toast (the loop, 2026-11-28):** the Chord player's Save as my chord sheet… rose under the toast of the sheet just opened, which covered its title and Cancel; the kit's bottom sheet closes any toast as it opens, on every sheet in the app.
 - **A form's Create is its last part (the loop, 2026-11-28):** the app's New forms (Save as my chord sheet… among them) stood Create in a footer under a hairline, which no board draws; it is the form's last part now, 16 under it, round, sticky with the paper round it, in the kit's `NewSheet`.
 - **A row's count set by its room, not by the layout (the loop, 2026-11-28):** the Chord player's chart kept the phone's two bars a row whenever the phone header showed, so at 744 a bar stood 353 wide; it takes four from 600, where four fit at a laptop's size. A grid's count follows the width it has.
+- **The board's toast steps aside too (the loop, 2026-11-28):** the app's phone sheet closed the toast while the Chord player's board still laid "From the top" over its chord sheet's acts; the kit's state now remembers the sheet a toast was raised over, and the phone's toast shows only over that one.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
