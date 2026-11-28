@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the phone's ☰ says Repeats Until Stop as its Playback options page and the app (it read × 3 from an old key); in the app a new sheet counts in one bar as the board draws (it started Off), the toast stands over the keys, not on them, and every drag's grip is the kit's 18 with light dots · ChordPlayer, ChordPlayerLaptop · pending
+- 2026-11-28 · 6eeb6bbc · the phone's ☰ says Repeats Until Stop as its Playback options page and the app (it read × 3 from an old key); in the app a new sheet counts in one bar as the board draws (it started Off), the toast stands over the keys, not on them, and every drag's grip is the kit's 18 with light dots · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
 - 2026-11-28 · 68592271 · New sheet starts at once with "Started a new chord sheet · Undo" (the app asked "Start a new chord sheet?" for a loss Undo can take back), the new sheet says Not saved under its name as the app (the board said New), and the board's toasts show again: a later block redefined them on a second key, so Loop, Metronome, Layout reset and Opened… never appeared · ChordPlayer, ChordPlayerLaptop · v868
