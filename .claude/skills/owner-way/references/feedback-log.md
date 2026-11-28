@@ -1560,6 +1560,7 @@ owner's, typos fixed.
 - **A row's count set by its room, not by the layout (the loop, 2026-11-28):** the Chord player's chart kept the phone's two bars a row whenever the phone header showed, so at 744 a bar stood 353 wide; it takes four from 600, where four fit at a laptop's size. A grid's count follows the width it has.
 - **The board's toast steps aside too (the loop, 2026-11-28):** the app's phone sheet closed the toast while the Chord player's board still laid "From the top" over its chord sheet's acts; the kit's state now remembers the sheet a toast was raised over, and the phone's toast shows only over that one.
 - **An empty sheet's Play rests, on the board too (the loop, 2026-11-28):** the Chord player's app dimmed Play and read Not saved on a new sheet; the board's transports kept Play in full and its phone named no state. The kit's transports take a key that rests Play.
+- **☰ clears the toast too (the loop, 2026-11-28):** the Chord player's phone ☰ opened under the toast, which hid Import chart…; one hook (`useClearsToast`) now clears it for every phone layer that rises, the sheets and ☰ alike.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

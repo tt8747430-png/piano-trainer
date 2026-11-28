@@ -19,7 +19,7 @@ import {
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMidiSummary } from '@/features/connect-midi'
-import { PhoneMenuButton, PhonePage, type MenuAction } from '@/shared/ui'
+import { PhoneMenuButton, PhonePage, useClearsToast, type MenuAction } from '@/shared/ui'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 
 /** ☰'s pages, each with ← back to ☰. */
@@ -106,6 +106,7 @@ export function PhoneMenu({
 }) {
   const { t } = useTranslation(['practice', 'common'])
   const midi = useMidiSummary()
+  useClearsToast(page === 'menu')
   const titles: Readonly<Record<Exclude<PhonePage, 'menu'>, string>> = {
     chords: bodies.chordsTitle,
     style: t('chordPlayer.style'),

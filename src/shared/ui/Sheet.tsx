@@ -1,5 +1,5 @@
 import { Drawer as DrawerPrimitive } from '@base-ui/react/drawer'
-import { createContext, use, useEffect, useState, type ReactNode } from 'react'
+import { createContext, use, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { InfoTip } from './InfoTip'
@@ -15,8 +15,8 @@ import {
   DrawerTitle,
 } from './primitives/drawer'
 import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
-import { toast } from './primitives/toast'
 import { holdTallestUnder } from './hold-tallest'
+import { useClearsToast } from './use-clears-toast'
 
 /**
  * A sheet from the right as the boards' laptop popover. Each class names the right edge as well as
@@ -211,11 +211,7 @@ export function Sheet({
   const now = open === true && anchor === null ? justPressed() : null
   if (now !== null) setAnchor(now)
   if (open === false && anchor !== null) setAnchor(null)
-  // A phone's sheet rises over the screen's foot, where a toast stands: the toast goes as it rises,
-  // its word said and its Undo now about a screen behind the sheet (the board's forms do the same).
-  useEffect(() => {
-    if (open === true && !laptop) toast.close()
-  }, [open, laptop])
+  useClearsToast(open === true && !laptop)
   if (at !== undefined && laptop)
     return (
       <Popover
