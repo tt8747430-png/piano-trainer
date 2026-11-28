@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the Genos panel's title names the Main that is lit while it plays (Genos · playing Main C), or none (Genos · playing), as the app's, where it read Main A whatever was lit · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
+- 2026-11-28 · 852d942f · the Genos panel's title names the Main that is lit while it plays (Genos · playing Main C), or none (Genos · playing), as the app's, where it read Main A whatever was lit · ChordPlayer, ChordPlayerLaptop · v897
 - 2026-11-28 · 2e555eb6 · R76's Reset layout Undo (lastLay) leaves the board's code; New sheet's Undo still brings the sheet back (no visible change, pixel for pixel) · ChordPlayer, ChordPlayerLaptop · v896
 - 2026-11-28 · 9907bae0 · the chart's laptop grid is its 16 beats outright, the layout's default holds the Genos alone, and the Edit layout state no longer comes and goes in the States box's code (no visible change, pixel for pixel) · ChordPlayer, ChordPlayerLaptop · v896
 - 2026-11-28 · c19afcb6 · the keys are drawn once, at the one height R77 shows (112 on a phone, 170 on a laptop), where R76's Small and Large copies waited behind a size switch nothing sets (no visible change, pixel for pixel) · ChordPlayer, ChordPlayerLaptop · v896
