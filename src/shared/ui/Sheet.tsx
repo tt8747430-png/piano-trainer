@@ -90,7 +90,8 @@ const RISING_CARD = [
 /**
  * On a laptop, a sheet opened from a control in the page (a row, a transport's button, a chord, a
  * menu's item): the boards' POPOVER at that control, 380 wide unless it says, nothing dimmed behind
- * it, the page's own scroll and clicks kept. Its side and alignment are the trigger's to say.
+ * it, the page's own scroll and clicks kept, 4 from it. Its side and alignment are the trigger's to
+ * say; unsaid, it lines up with the control's nearer edge (`alignBy`).
  */
 export interface SheetAt {
   readonly side?: 'top' | 'bottom' | 'left' | 'right'
@@ -108,6 +109,17 @@ interface Popped extends SheetAt {
 }
 
 const PoppedContext = createContext<Popped | null>(null)
+
+/**
+ * The edge of its control a popover lines up with when the control does not say (the boards'
+ * `ANCHOR`): the control's left edge left of the screen's middle, its right edge past it, so a
+ * chord in the chart's last column opens its sheet back over the chart, not off its edge.
+ */
+function alignBy(anchor: Anchor | null): 'start' | 'end' {
+  if (anchor === null) return 'start'
+  const { left, right } = anchor.getBoundingClientRect()
+  return left + right < window.innerWidth ? 'start' : 'end'
+}
 
 const PRESSABLE = 'button, a[href], [role=button], [role=menuitem], [role=option], [role=row]'
 
@@ -218,7 +230,13 @@ export function Sheet({
         {...(open === undefined ? {} : { open })}
         onOpenChange={(next) => onOpenChange?.(next)}
       >
-        <PoppedContext value={{ ...at, anchor: open === undefined ? null : anchor }}>
+        <PoppedContext
+          value={{
+            ...at,
+            align: at.align ?? alignBy(anchor),
+            anchor: open === undefined ? null : anchor,
+          }}
+        >
           {children}
         </PoppedContext>
       </Popover>
@@ -302,7 +320,7 @@ export function SheetContent({
         ref={holdTallest}
         side={popped.side ?? 'bottom'}
         align={popped.align ?? 'start'}
-        sideOffset={8}
+        sideOffset={4}
         // It keeps the side it was given and grows no taller than the room there, scrolling inside.
         collisionAvoidance={{ side: 'none', align: 'shift' }}
         {...(popped.anchor ? { anchor: popped.anchor } : {})}

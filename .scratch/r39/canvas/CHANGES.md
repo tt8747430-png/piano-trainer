@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · the laptop's Genos marks popover opens at its section's chip, 4 under it (it stood fixed at 640, 160 whatever chip opened it) · ChordPlayerLaptop · pending
 ## Changes
 
 - 2026-11-28 · d48d0904 · a phone's toast stands 12 over the foot (the keys, and the Genos row when shown), where it stood at 256 whatever stood under it (110 over the keys alone, 30 over the Genos row) · ChordPlayer · v875

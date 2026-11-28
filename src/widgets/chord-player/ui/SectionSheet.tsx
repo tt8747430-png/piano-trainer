@@ -34,7 +34,7 @@ export function SectionSheet({
   return (
     <Sheet at={{ width: 'w-95' }} open={open} onOpenChange={onOpenChange}>
       <SheetContent title={name}>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 lg:gap-3">
           <SheetCard>
             <SheetRow label={t('chordPlayer.section')}>
               <MenuPicker

@@ -7,8 +7,9 @@ import {
   type Main,
   type SectionMarks,
 } from '@/shared/lib/arrangement'
-import { GroupRows, GroupSegmented, SettingsGroup, Sheet, SheetContent } from '@/shared/ui'
+import { Segmented, Sheet, SheetContent } from '@/shared/ui'
 import { ROMAN } from './marks-line'
+import { SheetSection } from './sheet-parts'
 
 type Pick<V extends string> = V | 'none'
 const orNone = <V extends string>(value: V | null): Pick<V> => value ?? 'none'
@@ -16,9 +17,10 @@ const fromNone = <V extends string>(value: Pick<V>): V | null => (value === 'non
 const numbered = (value: ArrangerNumber | null) => (value === null ? 'none' : String(value))
 
 /**
- * A section on the arranger (canvas 171, the tag on its head): its Intro where it opens the sheet,
- * its Main for each time through, what leads into the next section (Fill in, Break), its Ending
- * where it closes the sheet. None sends nothing, so the arranger plays as its panel says.
+ * A section on the arranger (the board's `CP_TAG`, the tag on its head): its Intro where it opens the
+ * sheet, its Main for each time through (Main, 1st time), what leads into the next section (Fill in,
+ * Break), its Ending where it closes the sheet; each a head over its segmented control, 24 apart.
+ * None sends nothing, so the arranger plays as its panel says.
  */
 export function ArrangerSheet({
   open,
@@ -57,27 +59,23 @@ export function ArrangerSheet({
   return (
     <Sheet at={{ width: 'w-115' }} open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('chordPlayer.arranger.title', { name })}>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
           {first ? (
-            <GroupRows>
-              <GroupSegmented
+            <SheetSection title={t('chordPlayer.arranger.introLabel')}>
+              <Segmented
                 label={t('chordPlayer.arranger.introLabel')}
                 value={numbered(marks.intro)}
                 options={numberedOptions('intro')}
                 onChange={(value) => onChange({ ...marks, intro: readNumber(value) })}
               />
-            </GroupRows>
+            </SheetSection>
           ) : null}
-          <SettingsGroup
-            bare
-            title={t('chordPlayer.arranger.mains')}
-            info={t('chordPlayer.arranger.noneInfo')}
-          >
-            <GroupRows>
-              {Array.from({ length: repeats }, (_, pass) => (
-                <GroupSegmented
-                  key={pass}
-                  label={t('chordPlayer.arranger.pass', { count: pass + 1, ordinal: true })}
+          {Array.from({ length: repeats }, (_, pass) => {
+            const title = t('chordPlayer.arranger.pass', { count: pass + 1, ordinal: true })
+            return (
+              <SheetSection key={pass} title={title}>
+                <Segmented
+                  label={title}
                   value={orNone<Main>(marks.mains[pass] ?? null)}
                   options={[none, ...MAINS.map((main) => ({ value: main, label: main }))]}
                   onChange={(value) =>
@@ -89,21 +87,11 @@ export function ArrangerSheet({
                     })
                   }
                 />
-              ))}
-            </GroupRows>
-          </SettingsGroup>
-          {last ? (
-            <GroupRows>
-              <GroupSegmented
-                label={t('chordPlayer.arranger.endingLabel')}
-                value={numbered(marks.ending)}
-                options={numberedOptions('ending')}
-                onChange={(value) => onChange({ ...marks, ending: readNumber(value) })}
-              />
-            </GroupRows>
-          ) : null}
-          <GroupRows>
-            <GroupSegmented
+              </SheetSection>
+            )
+          })}
+          <SheetSection title={t('chordPlayer.arranger.intoLabel')}>
+            <Segmented
               label={t('chordPlayer.arranger.intoLabel')}
               value={orNone<Into>(marks.into)}
               options={[
@@ -113,7 +101,17 @@ export function ArrangerSheet({
               ]}
               onChange={(value) => onChange({ ...marks, into: fromNone<Into>(value) })}
             />
-          </GroupRows>
+          </SheetSection>
+          {last ? (
+            <SheetSection title={t('chordPlayer.arranger.endingLabel')}>
+              <Segmented
+                label={t('chordPlayer.arranger.endingLabel')}
+                value={numbered(marks.ending)}
+                options={numberedOptions('ending')}
+                onChange={(value) => onChange({ ...marks, ending: readNumber(value) })}
+              />
+            </SheetSection>
+          ) : null}
         </div>
       </SheetContent>
     </Sheet>

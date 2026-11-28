@@ -30,7 +30,7 @@ import {
   TypedField,
 } from '@/shared/ui'
 import { likeliestChords } from '../model/key-chords'
-import { POP, SheetAct, SheetCard, SheetRow } from './sheet-parts'
+import { POP, SheetAct, SheetCard, SheetRow, SheetSection } from './sheet-parts'
 
 /** The bass a chord's choices offer: its root, or one of its other tones under it. */
 const BASS_ROLES = ['root', '3rd', '5th', '7th'] as const
@@ -108,7 +108,8 @@ export function ChordDialog({
   return (
     <Sheet at={{ width: 'w-115' }} open={open} onOpenChange={onOpenChange}>
       <SheetContent title={printedChord(chord)}>
-        <div className="flex flex-col gap-4">
+        {/* 16 apart in a phone's sheet, 12 in a laptop's popover, as the board's BSHEET and POPOVER. */}
+        <div className="flex flex-col gap-4 lg:gap-3">
           {typed !== null ? (
             <TypedField
               label={t('chordPlayer.chord.symbol')}
@@ -194,10 +195,7 @@ export function ChordDialog({
               />
             </SheetRow>
           </SheetCard>
-          <section className="flex flex-col gap-2">
-            <h3 className="font-sans text-subhead font-semibold">
-              {t('chordPlayer.chord.suggested')}
-            </h3>
+          <SheetSection title={t('chordPlayer.chord.suggested')}>
             <ul className="grid grid-cols-4 gap-2">
               {suggested.map((each) => (
                 <li key={chordSymbol(each)} className="flex min-w-0">
@@ -211,7 +209,7 @@ export function ChordDialog({
                 </li>
               ))}
             </ul>
-          </section>
+          </SheetSection>
           <div className="flex gap-2">
             <button
               type="button"

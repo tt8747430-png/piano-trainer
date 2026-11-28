@@ -13,6 +13,16 @@ export function SheetCard({ children }: { children: ReactNode }) {
   )
 }
 
+/** A sheet's section (the board's `_SECTG`): its head at 15/600, over its control, 8 apart. */
+export function SheetSection({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section aria-label={title} className="flex flex-col gap-2">
+      <h3 className="font-sans text-subhead/[normal] font-semibold">{title}</h3>
+      {children}
+    </section>
+  )
+}
+
 /** One of a sheet's rows (canvas 173, `ROW59`): 56 high, its name, its controls at its end. */
 export function SheetRow({ label, children }: { label: string; children: ReactNode }) {
   return (
