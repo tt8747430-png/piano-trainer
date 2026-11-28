@@ -1,7 +1,7 @@
 import type { KeyParam } from '@/shared/lib/music'
 
-/** The rail's places (R77): the panel open beside it, or none (`«` folded it). */
-export const CHORD_PANELS = ['chords', 'styles', 'genos', 'audio', 'chart', 'none'] as const
+/** The rail's places (R77): the panel open beside it, or none (`«` folded it). The sound is Playback options'. */
+export const CHORD_PANELS = ['chords', 'styles', 'genos', 'chart', 'none'] as const
 export type ChordPanel = (typeof CHORD_PANELS)[number]
 
 /**

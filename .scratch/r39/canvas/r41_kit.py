@@ -302,7 +302,8 @@ def BSHEET(cond, title, body, done='Done', tall=False, back='', maxh='', close='
     # tall: a sheet that keeps its full height while its list changes (Search, a chord type's list)
     t = _BSHEET(cond, title, body, done or '', close)
     if back:
-        t = t.replace(f'<span style="font-size: 17px; font-weight: 600">{title}</span>', back + f'<span style="font-size: 17px; font-weight: 600">{title}</span>', 1)
+        # at the head's start, across from Done, the title staying centred (the app's SheetContent `back`)
+        t = t.replace(f'<span style="font-size: 17px; font-weight: 600">{title}</span>', f'<span style="position: absolute; left: 0; display: flex">{back}</span><span style="font-size: 17px; font-weight: 600">{title}</span>', 1)
     if maxh:
         t = t.replace('max-height: 86%', 'max-height: ' + maxh, 1)
     if tall:

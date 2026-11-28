@@ -910,7 +910,6 @@ export const practice: LocaleResources['practice'] = {
       chords: 'Аккорды',
       styles: 'Стили',
       genos: 'Genos',
-      audio: 'Звук',
       chart: 'Схема',
       search: 'Поиск',
       shortcuts: 'Клавиши',

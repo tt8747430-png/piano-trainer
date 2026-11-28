@@ -930,7 +930,6 @@ export const practice = {
       chords: 'Chords',
       styles: 'Styles',
       genos: 'Genos',
-      audio: 'Audio',
       chart: 'Chart',
       search: 'Search',
       shortcuts: 'Shortcuts',

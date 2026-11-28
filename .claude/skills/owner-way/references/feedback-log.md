@@ -1618,6 +1618,8 @@ owner's, typos fixed.
 - **A note that says level, measured (loop, 2026-11-28; the Chord player's laptop chart):** the chart's top padding carried a comment saying it levelled Verse with the panel's title; measured, it stood 9.5 low on board and app. Never again: an alignment claimed in a comment and not measured.
 - **A switch that moves when switched (loop, 2026-11-28; the Chord player's Genos panel):** the panel Follow a MIDI arranger opened appeared above it, pushing the switch down and putting Start/Stop under the pointer. What a switch reveals appears below it. Never again: content revealed above the control that revealed it.
 - **Duplicate actions (owner, 2026-11-28: "check whether we dont have duplicate actions"; the Chord player):** the section's sheet looped the section as the bar's Loop does, ☰ opened the transport's Playback options again, and the laptop's metronome button set the Count-in that Playback options sets. Each now has one home. Never again: a row or button whose act another control on the same screen already does; list every act on both sizes before a port is called done.
+- **☰ and its places, drawers with Back (the owner, 2026-11-28):** the Chord player's phone ☰ was a popover and its places whole pages; ☰ is a bottom drawer and each place opens in it with ‹ Back and Done. The phone's Chords place repeated + and Suggested chords and is gone; Audio sits in Playback options on both sizes. Never again: a phone menu's places as pages, or the parts' sound apart from Playback options.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

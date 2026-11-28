@@ -18,7 +18,6 @@ import {
   Plus,
   Search,
   Undo2,
-  Volume2,
 } from 'lucide-react'
 import { useMemo, useRef, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -203,7 +202,6 @@ const RAIL: readonly {
   { panel: 'chords', icon: Music },
   { panel: 'styles', icon: Drum },
   { panel: 'genos', icon: KeyboardMusic },
-  { panel: 'audio', icon: Volume2 },
   { panel: 'chart', icon: FileText },
 ]
 
@@ -718,8 +716,6 @@ export function ChordPlayer({
                     <FollowRow />
                     {genosOn ? genosStrip('full', 'panel') : null}
                   </>
-                ) : panel === 'audio' ? (
-                  <AudioBody hand={hand} style={style} />
                 ) : (
                   <ChartBody hand={hand} />
                 )}
@@ -934,7 +930,11 @@ export function ChordPlayer({
                 align="start"
                 className="w-80"
               >
-                <PlaybackBody hand={hand} />
+                {/* What plays and how it sounds, in one place: the sound is no rail place of its own. */}
+                <div className="flex flex-col gap-6">
+                  <PlaybackBody hand={hand} />
+                  <AudioBody hand={hand} style={style} />
+                </div>
               </PanelPopover>
             }
             metronome={metronome}
@@ -1069,8 +1069,6 @@ export function ChordPlayer({
             }}
             fileActs={fileActs.filter((act) => !act.hidden)}
             bodies={{
-              chords: <KeyChords chords={tiles} onAdd={addKeyChord} />,
-              chordsTitle: keyHead,
               style: (
                 <StyleRows
                   book={book}
@@ -1083,8 +1081,12 @@ export function ChordPlayer({
               ),
               key: <KeyBody hand={hand} />,
               tempo: <TempoBody hand={hand} />,
-              repeats: <PlaybackBody hand={hand} metronome />,
-              audio: <AudioBody hand={hand} style={style} />,
+              repeats: (
+                <div className="flex flex-col gap-6">
+                  <PlaybackBody hand={hand} metronome />
+                  <AudioBody hand={hand} style={style} />
+                </div>
+              ),
               chart: <ChartBody hand={hand} />,
               midi: <MidiBody follow />,
               export: (

@@ -346,7 +346,7 @@ GENOSI = _LI('<rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M6
 RAIL77 = (f'<nav aria-label="Panels" style="flex: none; width: 76px; padding: 12px 0; box-shadow: inset -1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 4px">'
           f'<div role="tablist" aria-orientation="vertical" aria-label="Panels" style="display: flex; flex-direction: column; gap: 4px">'
           + _RAILBTN('Chords', CHORDSI, 'Ch', 'Chords') + _RAILBTN('Styles', f'<svg viewBox="0 0 24 24" width="22" height="22" {I}>{DRUMP}</svg>', 'St', 'Styles') + _RAILBTN('Genos', GENOSI, 'Ge', 'Genos')
-          + _RAILBTN('Audio', AUDIOI, 'So', 'Audio') + _RAILBTN('Chart', f'<svg viewBox="0 0 24 24" width="22" height="22" {I}>{CHARTP}</svg>', 'Ca', 'Chart') + '</div>'
+          + _RAILBTN('Chart', f'<svg viewBox="0 0 24 24" width="22" height="22" {I}>{CHARTP}</svg>', 'Ca', 'Chart') + '</div>'
           + '<span style="flex: 1"></span>' + _RAILBTN('Search', SEARCHI, 'Srch', 'Search · ⌘K', 'cpSearch') + _RAILBTN('Shortcuts', KBDI, 'Keys', 'Shortcuts · ?', 'cpKeysHelp') + '</nav>')
 _DRAGB = DRAG[DRAG.index('<div style="display: grid'):]
 # the styles as the app's catalogue, by family (scan-first 2: thirty-six rows in one card were a wall): each family a
@@ -392,7 +392,7 @@ _PANEL = lambda k, title, inner: f'<sc-if value="{{{{rail{k}On}}}}" hint-placeho
 GENOSPANEL = (FOLLOW77 + f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">'
               + HEAD59 + ARLINE77 + f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div></div></sc-if>')
 PANELS77 = (_PANEL('Ch', '{{keyHead}}', _DRAGB)
-            + _PANEL('St', 'Styles', STYLEROWS) + _PANEL('Ge', 'Genos', GENOSPANEL) + _PANEL('So', 'Audio', SOUND77) + _PANEL('Ca', 'Chart', CHART77))
+            + _PANEL('St', 'Styles', STYLEROWS) + _PANEL('Ge', 'Genos', GENOSPANEL) + _PANEL('Ca', 'Chart', CHART77))
 
 # the chart, its name in the band on a laptop (the chart starts on its first section); the phone keeps it over the chart
 CHARTL77 = CHART59(16, 8, 76, 28, 1)
@@ -422,24 +422,30 @@ ph77 = (PHHDR77
 # Lucide's shuffle: Randomize chords (the app's file acts)
 SHUFFLEP = '<path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path>'
 _sep = f'<div role="separator" style="flex: none; height: 1px; margin: 4px 12px; background: {LINE}"></div>'
-PHNAV77 = (f'<sc-if value="{{{{phMenuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
-           f'<nav aria-label="{{{{sheetsL}}}}" class="nos" style="position: absolute; z-index: 61; top: 120px; right: 8px; left: 24px; max-height: calc(100% - 170px); overflow-y: auto; box-sizing: border-box; padding: 12px 8px; border-radius: 22px; background: {PAGE}; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 18px 48px -12px rgba(51,41,33,.38); display: flex; flex-direction: column; gap: 8px">'
-           f'<p style="margin: 0; padding: 4px 12px 0; text-align: center; font-size: 17px; font-weight: 600; line-height: 22px; color: {INK}">{{{{sheetsL}}}}</p>'
-           + FROWS([(_FI('<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>'), 'Chords', '', 'cpPhChords'), (_FI(DRUMP), 'Style', '{{styleL}}', 'cpPhStyle'), ('Tr', 'Key', '{{keyL}} major', 'cpPhKey'), ('Speed', 'Tempo', '{{bpmL}} BPM', 'cpPhTempo'),
-                    ('Aud', 'Audio', '', 'cpPhSound'), (_FI(CHARTP), 'Chart', '{{namesL}}', 'cpPhChart'), ('Midi', 'MIDI', '{{cpMidiL}}', 'cpPhMidi')], lines=False, h=48)
+# ☰ on a phone, a drawer from the foot (owner, 2026-11-28: "why the pages on phone doesnt open as drawers and the menu is
+# not a drawer"): a choice made over the chart keeps the chart in sight; its places open in the same drawer with ‹ back
+# to the list and Done, never ✕ (owner, 2026-11-26); no Chords page (the chart's + and a chord's Suggested chords add
+# chords) and no Audio row (the sound is Playback options')
+PHNAV77 = BSHEET('phMenuOn', '{{sheetsL}}', '<div style="display: flex; flex-direction: column; gap: 8px; margin: 0 -8px">' + FROWS([(_FI(DRUMP), 'Style', '{{styleL}}', 'cpPhStyle'), ('Tr', 'Key', '{{keyL}} major', 'cpPhKey'), ('Speed', 'Tempo', '{{bpmL}} BPM', 'cpPhTempo'),
+                    (_FI(CHARTP), 'Chart', '{{namesL}}', 'cpPhChart'), ('Midi', 'MIDI', '{{cpMidiL}}', 'cpPhMidi')], lines=False, h=48)
            + _sep + FROWS([('Share', 'Share…', '', 'openShare', INK, False), ('Exp', 'Export', '', 'cpPhExp'), (FICONS['Imp'], 'Import chart…', '', 'importChart', INK, False), (_FI(SHUFFLEP), 'Randomize chords', '', 'randomize', INK, False)], lines=False, h=48)
-           + _sep + FROWS([(_FI(LISTPLUSP), 'Save to my progressions', '', 'saveProg', INK, False), (_FI(LISTMUSP), 'Open in Progressions', '', 'Progressions.dc.html')], lines=False, h=48) + '</nav></sc-if>')
+           + _sep + FROWS([(_FI(LISTPLUSP), 'Save to my progressions', '', 'saveProg', INK, False), (_FI(LISTMUSP), 'Open in Progressions', '', 'Progressions.dc.html')], lines=False, h=48) + '</div>')
 # Export, the Player's shape: one row, its formats on a page with ← on a phone and a submenu on a laptop
+BACK77 = f'<button type="button" aria-label="Back" data-tip="Back" onClick="{{{{phToMenu}}}}" style="{GLASSST}">{CHEV_L}</button>'
+DRAWER77 = lambda cond, title, body: BSHEET(cond, title, body, back=BACK77)
 EXPROWS77 = GROUP(('action', 'MIDI', 'exportMidi', INK), ('action', 'Chart (.txt)', 'exportChart', INK), bg=SHEET)
-PHPAGES77 = (FSHEET('cpPhExpOn', 'Export', EXPROWS77, back='phToMenu') + FSHEET('cpPhSoundOn', 'Audio', SOUND77, back='phToMenu') + FSHEET('cpPhChartOn', 'Chart', CHART77, back='phToMenu') + FSHEET('cpPhMidiOn', 'MIDI', MIDI77, back='phToMenu')
-             + FSHEET('cpPhStyleOn', 'Style', STYLEROWS, back='phToMenu') + FSHEET('cpPhKeyOn', 'Key', ROOTGRID('keyRoots'), back='phToMenu') + FSHEET('cpPhTempoOn', 'Tempo', TEMPO77, back='phToMenu') + FSHEET('cpPhChordsOn', '{{keyHead}}', _DRAGB, back='phToMenu'))
+PHPAGES77 = (DRAWER77('cpPhExpOn', 'Export', EXPROWS77) + DRAWER77('cpPhChartOn', 'Chart', CHART77) + DRAWER77('cpPhMidiOn', 'MIDI', MIDI77)
+             + DRAWER77('cpPhStyleOn', 'Style', STYLEROWS) + DRAWER77('cpPhKeyOn', 'Key', ROOTGRID('keyRoots')) + DRAWER77('cpPhTempoOn', 'Tempo', TEMPO77))
 # the band's popovers on a laptop: Playback options (Repeats, Count-in) under ▾, MIDI under its cable; Key, Tempo and Style
 # open their wheels under their pills
 # one card of rows: Repeats with its stepper at the row's end, Count-in under its name; on a phone the metronome's
 # switch too (Flat's Playback options: the laptop has the metronome in the band)
 _OPTS = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp', None, True), ('seg', 'Count-in', 'cntSeg'), bg=SHEET)
 _OPTSP = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp', None, True), ('seg', 'Count-in', 'cntSeg'), ('toggle', 'Metronome', 'metSw', 'metTog'), bg=SHEET)
-POPS77L = (POPOVER('hdOptsOn', 'Playback options', _OPTS, 'left: 373px; top: 72px', 320) + POPOVER('hdMidiOn', 'MIDI', MIDI77L, 'left: 807px; top: 72px', 360))
+# Playback options hold the sound too (owner, 2026-11-28: "why audio is not under playback options"): what plays and
+# how it sounds in one place, the speaker opening it on a phone
+OPTSND = lambda opts: f'<div style="display: flex; flex-direction: column; gap: 24px">{opts}{SOUND77}</div>'
+POPS77L = (POPOVER('hdOptsOn', 'Playback options', OPTSND(_OPTS), 'left: 373px; top: 72px', 320) + POPOVER('hdMidiOn', 'MIDI', MIDI77L, 'left: 807px; top: 72px', 360))
 # a new sheet (Not saved) is the sheet in hand: first in the list, checked, and saved from the menu's foot, as the app's
 _handrow = '<sc-if value="{{handOn}}" hint-placeholder-val="{{false}}">' + _MI('{{sheetsL}}<span aria-hidden="true" style="margin-left: auto; display: flex">' + _CK20 + '</span>', 'closeSheet') + '</sc-if>'
 # the name's menu: the sheet in hand, the saved sheets, New and All; then what that size adds (`more`)
@@ -464,7 +470,7 @@ CP77 = CP77.replace("states: [{ l: 'No Genos found'", "states: [{ l: 'Playing', 
 _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'On']: RAIL77 === k, ['rail' + k + 'Bg']: RAIL77 === k ? '#EEE2CF' : 'transparent', ['rail' + k + 'W']: RAIL77 === k ? 600 : 500, ['pick' + k]: () => set({ rail77: RAIL77 === k ? 'none' : k, ...(k === 'Ge' ? { follow: true } : {}) }) });
     const dev = st.alone ? STY[s] : 'Genos', MAINL = (st.ar || {}).main;
     const cpKeys = st.cpKeys ?? true;
-    const CP77K = { ...['Ch', 'St', 'Ge', 'So', 'Ca'].reduce((o, k) => ({ ...o, ...rp(k) }), {}), cpRailNone: () => set({ rail77: 'none' }), railSrchW: 500, railKeysW: 500, railSrchBg: 'transparent', railKeysBg: 'transparent', cpMeterSeg: seg(['2/4', '3/4', '4/4', '6/8', '12/8'], st.meter ?? '4/4', (l) => set({ meter: l, toastT: 'Laid out in ' + l })), cpSearch: () => set({ sheet: 'search' }), searchOn: st.sheet === 'search', cpKeysHelp: () => set({ sheet: 'keys' }), keysOn2: st.sheet === 'keys',
+    const CP77K = { ...['Ch', 'St', 'Ge', 'Ca'].reduce((o, k) => ({ ...o, ...rp(k) }), {}), cpRailNone: () => set({ rail77: 'none' }), railSrchW: 500, railKeysW: 500, railSrchBg: 'transparent', railKeysBg: 'transparent', cpMeterSeg: seg(['2/4', '3/4', '4/4', '6/8', '12/8'], st.meter ?? '4/4', (l) => set({ meter: l, toastT: 'Laid out in ' + l })), cpSearch: () => set({ sheet: 'search' }), searchOn: st.sheet === 'search', cpKeysHelp: () => set({ sheet: 'keys' }), keysOn2: st.sheet === 'keys',
       cpFams: (() => { const CAT = [["Pop", [["Pop 1", ""], ["Pop 2", ""], ["Pop 3", ""], ["Pop 4", ""], ["Pop 5", ""]]], ["Rock", [["Rock 1", ""], ["Rock 2", ""]]], ["Ballad", [["Ballad 1", ""], ["Ballad 2", ""], ["Ballad 3", ""], ["Ballad 4", ""]]], ["Worship and gospel", [["Worship ballad 1", ""], ["Worship ballad 2", ""], ["Gospel 1", ""], ["Gospel 2", "swing"]]], ["Hymn", [["Hymn 1", ""], ["Hymn 2", ""]]], ["Hip hop", [["Hip hop 1", ""], ["Hip hop 2", "swing"]]], ["Disco", [["Disco 1", ""], ["Disco 2", ""]]], ["Funk", [["Funk 1", ""], ["Funk 2", ""]]], ["Reggae", [["Reggae 1", ""], ["Reggae 2", "swing"]]], ["Latin", [["Bossa nova", ""], ["Samba", ""]]], ["Jazz", [["Swing 1", "swing"], ["Swing 2", "swing"], ["Jazz ballad", "swing"], ["Jazz waltz", "3/4 swing"]]], ["Blues", [["Shuffle", "swing"], ["Slow blues", "swing"]]], ["Classical", [["Alberti", ""], ["Arpeggio", ""], ["Waltz", "3/4"]]]]; let at = 0; return CAT.map(([n, ss]) => ({ n, styles: ss.map(([y, feel], j) => { const i = at++; return { n: y, feel, on: i === s ? 'true' : 'false', fw: i === s ? 600 : 400, line: j ? '#E5DED6' : 'transparent', sel: i === s, pick: () => set({ style: i, toastT: 'Style: ' + y, ...(st.sheet === 'style' ? { sheet: null } : {}) }) }; }) })); })(),
       cpStartD: st.playing ? 'M7 5h10v14H7z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z', cpArTitle: st.playing ? dev + (MAINL ? ' · playing Main ' + MAINL : ' · playing') : dev + ' · stopped', cpAlone: !!st.alone, cpArLine: st.alone ? 'No Genos found. The app’s band plays the style’s sections.' : 'Connected: Genos', cpRetry: () => set({ alone: false, toastT: 'Connected: Genos' }),
       cpMidiL: (st.follow ?? false) ? (st.alone ? 'No Genos found' : 'Genos') : 'Not connected', cpGDock: !!(st.follow ?? false) && RAIL77 !== 'Ge',
@@ -484,14 +490,14 @@ _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'O
       hdMidi: () => set({ sheet: st.sheet === 'midi' ? null : 'midi' }), hdMidiOn: st.sheet === 'midi', hdMidiX: st.sheet === 'midi' ? 'true' : 'false', hdMidiBg: st.sheet === 'midi' ? 'rgba(254,253,251,.14)' : 'transparent',
       hdKeys: () => set({ cpKeys: !cpKeys }), hdKeysOn: cpKeys ? 'true' : 'false', hdKeysBg: cpKeys ? 'rgba(254,253,251,.14)' : 'transparent', hdKeysPh: cpKeys ? '#A8551F' : '#332921', cpKeysOn: cpKeys,
       phMenu: () => set({ sheet: st.sheet === 'menu77' ? null : 'menu77' }), phMenuOn: st.sheet === 'menu77', phMenuX: st.sheet === 'menu77' ? 'true' : 'false', phMenuFg: st.sheet === 'menu77' ? '#A8551F' : '#332921', phToMenu: () => set({ sheet: 'menu77' }), phClose: () => set({ sheet: null }),
-      cpPhExp: () => set({ sheet: 'phExp' }), cpPhExpOn: st.sheet === 'phExp', cpPhSound: () => set({ sheet: 'phSound' }), cpPhSoundOn: st.sheet === 'phSound', cpPhChart: () => set({ sheet: 'phChart' }), cpPhStyle: () => set({ sheet: 'phStyle' }), cpPhKey: () => set({ sheet: 'phKey' }), cpPhKeyOn: st.sheet === 'phKey', cpPhTempo: () => set({ sheet: 'phTempo' }), cpPhTempoOn: st.sheet === 'phTempo', ...(() => { const b = st.bpm ?? 96, to = (n) => set({ bpm: Math.max(40, Math.min(240, n)) }), MK = [[60, 'Largo'], [76, 'Adagio'], [108, 'Andante'], [120, 'Moderato'], [168, 'Allegro'], [999, 'Presto']]; return { cpTbpm: b, cpTmark: MK.find(([m]) => b < m)[1], cpTpos: ((b - 40) / 2) + '%', cpTd10: () => to(b - 10), cpTd1: () => to(b - 1), cpTu1: () => to(b + 1), cpTu10: () => to(b + 10) }; })(),  cpPhStyleOn: st.sheet === 'phStyle', cpPhChartOn: st.sheet === 'phChart', cpPhMidi: () => set({ sheet: 'phMidi' }), cpPhMidiOn: st.sheet === 'phMidi', cpPhChords: () => set({ sheet: 'phChords' }), cpPhChordsOn: st.sheet === 'phChords' };
+      cpPhExp: () => set({ sheet: 'phExp' }), cpPhExpOn: st.sheet === 'phExp', cpPhChart: () => set({ sheet: 'phChart' }), cpPhStyle: () => set({ sheet: 'phStyle' }), cpPhKey: () => set({ sheet: 'phKey' }), cpPhKeyOn: st.sheet === 'phKey', cpPhTempo: () => set({ sheet: 'phTempo' }), cpPhTempoOn: st.sheet === 'phTempo', ...(() => { const b = st.bpm ?? 96, to = (n) => set({ bpm: Math.max(40, Math.min(240, n)) }), MK = [[60, 'Largo'], [76, 'Adagio'], [108, 'Andante'], [120, 'Moderato'], [168, 'Allegro'], [999, 'Presto']]; return { cpTbpm: b, cpTmark: MK.find(([m]) => b < m)[1], cpTpos: ((b - 40) / 2) + '%', cpTd10: () => to(b - 10), cpTd1: () => to(b - 1), cpTu1: () => to(b + 1), cpTu10: () => to(b + 10) }; })(),  cpPhStyleOn: st.sheet === 'phStyle', cpPhChartOn: st.sheet === 'phChart', cpPhMidi: () => set({ sheet: 'phMidi' }), cpPhMidiOn: st.sheet === 'phMidi' };
 """
 _r = "    return { ...common(st, set),"
 assert CP77.count(_r) == 1, CP77.count(_r)
 CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 # the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
 _SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else '{{tagPos}}' if c == 'tagOnSheet' else 'left: 64px; top: 60px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 717px; top: 72px', 'keyOn': 'left: 501px; top: 72px', 'tempoOn': 'left: 608px; top: 72px'}[c], 320), 'SignInLaptop.dc.html')
-phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('libOn', 'Chord sheets', CP_LIB, close='closeSheet') + LIBROW + RENAME77.replace('z-index: 60', 'z-index: 72').replace('z-index: 61', 'z-index: 73') + SAVEAS77 + FSHEET('hdOptsOn', 'Playback options', _OPTSP, close='closeSheet'), bar=SHEET)
+phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('libOn', 'Chord sheets', CP_LIB, close='closeSheet') + LIBROW + RENAME77.replace('z-index: 60', 'z-index: 72').replace('z-index: 61', 'z-index: 73') + SAVEAS77 + BSHEET('hdOptsOn', 'Playback options', OPTSND(_OPTSP)), bar=SHEET)
 # Shortcuts, the Player's and the editor's card (KEYSCARD_F) with the Chord player's own keys, as the app lists them
 CPKEYS = KEYSCARD_F(((('Chord player', (('Play or stop', 'Space'), ('Undo', '⌘ Z'), ('Redo', '⇧ ⌘ Z'))),),
                      (('Piano keys', (('Play the keys', 'A – ’'), ('An octave down, up', 'Z X'))), ('Anywhere', (('Show the shortcuts', '?'),)))), 640)
