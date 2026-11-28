@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · a new sheet's name menu leads with the sheet in hand, checked, and closes on Save as my chord sheet… after a hairline, as the app's; it opens the kit's New form (Name, a honey Save: a bottom sheet on a phone, centred on a laptop), and the saved sheet keeps its place in the list, checked, with "Saved Sunday set" (the board had no way to keep a new sheet); the menu's conditional row is the kit's ROWMENU `html` kind, not a patch on its output · ChordPlayer, ChordPlayerLaptop · pending
+- 2026-11-28 · 00502dee · a new sheet's name menu leads with the sheet in hand, checked, and closes on Save as my chord sheet… after a hairline, as the app's; it opens the kit's New form (Name, a honey Save: a bottom sheet on a phone, centred on a laptop), and the saved sheet keeps its place in the list, checked, with "Saved Sunday set" (the board had no way to keep a new sheet); the menu's conditional row is the kit's ROWMENU `html` kind, not a patch on its output · ChordPlayer, ChordPlayerLaptop · pending
 - 2026-11-28 · 6eeb6bbc · the phone's ☰ says Repeats Until Stop as its Playback options page and the app (it read × 3 from an old key); in the app a new sheet counts in one bar as the board draws (it started Off), the toast stands over the keys, not on them, and every drag's grip is the kit's 18 with light dots · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
