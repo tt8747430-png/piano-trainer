@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · one way to each act: the section's sheet drops Loop this section (the bar's Loop loops the section picked), the phone's ☰ drops Repeats (Playback options opens from the transport's ▾ alone), and the laptop's metronome button turns the click on and off where it cycled Count-in · On · Off over Playback options' own Count-in (app too) · ChordPlayer, ChordPlayerLaptop · pending
+- 2026-11-28 · ea844a71 · one way to each act: the section's sheet drops Loop this section (the bar's Loop loops the section picked), the phone's ☰ drops Repeats (Playback options opens from the transport's ▾ alone), and the laptop's metronome button turns the click on and off where it cycled Count-in · On · Off over Playback options' own Count-in (app too) · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
