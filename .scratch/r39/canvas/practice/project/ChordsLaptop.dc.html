@@ -402,7 +402,7 @@ class Component extends DCLogic {
     } catch (e) { /* no sound where audio is blocked; the key still goes down */ }
   }
   renderVals() {
-    const st = this.state || {}; const set = (o) => this.setState(o);
+    const st = this.state || {}; const set = (o) => this.setState(o && "toastT" in o ? { ...o, toastS: "sheet" in o ? o.sheet : (st.sheet ?? null) } : o);
 
 // a segmented control's items
 const seg = (opts, cur, pick) => opts.map((l) => ({ l, on: l === cur, bg: l === cur ? '#FEFDFB' : 'transparent', sh: l === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: l === cur ? 600 : 500, pick: () => pick(l) }));
