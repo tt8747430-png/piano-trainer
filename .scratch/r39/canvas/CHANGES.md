@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the Volume levels draw the app's slider (a 4 track in sand filled in ink, a white 28 thumb on its soft shade) where they drew the browser's own (a thick bar, an ink thumb); index.py's `data-rangecss` for any range marked data-level · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
+- 2026-11-28 · 9c02d2ee · the Volume levels draw the app's slider (a 4 track in sand filled in ink, a white 28 thumb on its soft shade) where they drew the browser's own (a thick bar, an ink thumb); index.py's `data-rangecss` for any range marked data-level · ChordPlayer, ChordPlayerLaptop · v886
 - 2026-11-28 · fecce9f1 · the keys' resize grip from R76's Edit layout, which nothing opens since R77, goes from the markup (no visible change) · ChordPlayer, ChordPlayerLaptop · v885
 - 2026-11-28 · 9e703083 · the laptop's Share stands where the name menu stood, at the name (64, 60), where it stood fixed at 640, 160 · ChordPlayerLaptop · v884
 - 2026-11-28 · ed7301b5 · Share draws its signed-out state (Sharing needs an account, Sign in to the sign-in board), a new state in the States box, as the app's · ChordPlayer, ChordPlayerLaptop · v883
