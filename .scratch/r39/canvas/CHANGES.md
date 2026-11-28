@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · a stopped Genos lights no Main until one is set or pressed, the minimized pill reading Genos alone, as the app's (the board lit Main A at rest) · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
+- 2026-11-28 · 91abf0be · a stopped Genos lights no Main until one is set or pressed, the minimized pill reading Genos alone, as the app's (the board lit Main A at rest) · ChordPlayer, ChordPlayerLaptop · v878
 - 2026-11-28 · 68555266 · a toast holds its words to two lines, a long name ending in … (a Chord player sheet named by its numerals ran the toast to four lines); the kit's `TOAST`, every board with a toast · ChordPlayer, ChordPlayerLaptop and every board with a toast · v877
 - 2026-11-28 · 3dab466e · the laptop's Genos marks popover opens at its section's chip, 4 under it (it stood fixed at 640, 160 whatever chip opened it) · ChordPlayerLaptop · v876
 - 2026-11-28 · d48d0904 · a phone's toast stands 12 over the foot (the keys, and the Genos row when shown), where it stood at 256 whatever stood under it (110 over the keys alone, 30 over the Genos row) · ChordPlayer · v875
