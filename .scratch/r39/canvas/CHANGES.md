@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the band's five popovers (Playback options, Key, Tempo, Style, MIDI) start at their trigger's left edge, as the ruling says (they stood 4 to 13 right of it); in the app they stand 8 under the band (they stood 4 into it, 8 under the 40 pill) · ChordPlayerLaptop · pending
+- 2026-11-28 · 0bfd6280 · the band's five popovers (Playback options, Key, Tempo, Style, MIDI) start at their trigger's left edge, as the ruling says (they stood 4 to 13 right of it); in the app they stand 8 under the band (they stood 4 into it, 8 under the 40 pill) · ChordPlayerLaptop · pending
 ## Changes
 
 - 2026-11-28 · a3961b06 · the phone's minimized Genos pill reads "Genos · Main A" as one label (its text split around the binding in the flex row, the dot hugging Genos with an 8 gap after it) · ChordPlayer · v869
