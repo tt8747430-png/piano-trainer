@@ -210,17 +210,18 @@ export function MidiBody() {
   const { connection } = useMidiConnection()
   const prefs = useSettings(selectChordPlayer)
   const settingsStore = useSettingsStoreApi()
-  // The board's `MIDI77`: Keyboard and its state, how to connect one while none is, then Follow.
+  // The board's `MIDI77`: Keyboard and its state at 16, how to connect one while none is (15 in the band's
+  // popover, 16 on a phone's page, as PHROWS), then Follow.
   return (
     <SettingsGroup flush>
-      <div className="flex min-h-12 items-center gap-3 px-4">
+      <div className="flex min-h-12 items-center gap-3 py-1.5 pr-3 pl-4">
         <span className="flex-1 text-base">{t('common:keyboard')}</span>
-        <span className="truncate text-[0.9375rem] text-muted-foreground" aria-live="polite">
+        <span className="truncate text-base text-muted-foreground tabular-nums" aria-live="polite">
           {midi}
         </span>
       </div>
       {isMidiConnected(connection) ? null : (
-        <p className="mt-0.5 mb-2.5 px-4 text-[0.9375rem]/[1.4] text-pretty text-muted-foreground">
+        <p className="mt-0.5 mb-2.5 px-4 text-base/[1.4] text-pretty text-muted-foreground lg:text-[0.9375rem]/[1.4]">
           {t('chordPlayer.settings.connectHow')}
         </p>
       )}

@@ -1563,6 +1563,7 @@ owner's, typos fixed.
 - **☰ clears the toast too (the loop, 2026-11-28):** the Chord player's phone ☰ opened under the toast, which hid Import chart…; one hook (`useClearsToast`) now clears it for every phone layer that rises, the sheets and ☰ alike.
 - **A segmented control's track rounds round its segments (the loop, 2026-11-28):** measured against the board's SEGC, the app's `Segmented` drew its track at the segments' own 10, so their corners met it flat; it is 12 now, everywhere. The Chord player's panel heads took the font's leading, as the board's, lifting the controls under them 4.
 - **The Genos lamps a finger's size (the loop, 2026-11-28):** the Chord player board drew its Genos lamps 40 tall and 9 round, the app 44 and 10; measured side by side, the board took the app's, the 44 a phone needs.
+- **MIDI's words at the board's sizes (the loop, 2026-11-28):** the Chord player's MIDI set Not connected smaller than Keyboard beside it, and its how-to-connect line at the popover's 15 on a phone's page; the value is 16 as the label, the line 16 on a phone and 15 in the band's popover, as the board.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
