@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the keys' resize grip from R76's Edit layout, which nothing opens since R77, goes from the markup (no visible change) · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
+- 2026-11-28 · fecce9f1 · the keys' resize grip from R76's Edit layout, which nothing opens since R77, goes from the markup (no visible change) · ChordPlayer, ChordPlayerLaptop · v885
 - 2026-11-28 · 9e703083 · the laptop's Share stands where the name menu stood, at the name (64, 60), where it stood fixed at 640, 160 · ChordPlayerLaptop · v884
 - 2026-11-28 · ed7301b5 · Share draws its signed-out state (Sharing needs an account, Sign in to the sign-in board), a new state in the States box, as the app's · ChordPlayer, ChordPlayerLaptop · v883
 - 2026-11-28 · 45835328 · Audio holds Volume in place, Master and each part's level under one Volume head (name and % over the slider, 16 apart), where its Volume row opened nothing (the app's sub-page stacked a second Back and said Volume twice) · ChordPlayer, ChordPlayerLaptop · v882
