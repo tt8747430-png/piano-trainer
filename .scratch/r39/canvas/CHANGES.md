@@ -8,12 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · 63d1a631 · a chord's name sizes with its raised part held at its 12px floor (the smaller of two sizes: the raised scaled, or held at 12), so a small name fits its tile whole (app too, with the app's songs in the library) · ChordPlayer, ChordPlayerLaptop · pending
-- 2026-11-28 · cba44c3f · a chord's name is never cut in its tile: it sets as large as the chart sets it (21, a laptop's 30) and smaller in a narrow tile, down to the 12 floor (iReal Pro's cells), and a beat's tile takes a 4 inset where 8 left no room (app too) · ChordPlayer, ChordPlayerLaptop · pending
-- 2026-11-28 · 017e46ad · the app's notices (a new version, storage full, the learner view) stand at the foot where a toast stands, 112 up over the tab bar, never at the top under the status bar; a toast said meanwhile stands 8 over them (app too); the Chord player's status bar takes its header's card in the app, as the board's bar=SHEET drew it · AppLayers · pending
-
 ## Changes
 
+- 2026-11-28 · 63d1a631 · a chord's name sizes with its raised part held at its 12px floor (the smaller of two sizes: the raised scaled, or held at 12), so a small name fits its tile whole (app too, with the app's songs in the library) · ChordPlayer, ChordPlayerLaptop · v902
+- 2026-11-28 · cba44c3f · a chord's name is never cut in its tile: it sets as large as the chart sets it (21, a laptop's 30) and smaller in a narrow tile, down to the 12 floor (iReal Pro's cells), and a beat's tile takes a 4 inset where 8 left no room (app too) · ChordPlayer, ChordPlayerLaptop · v902
+- 2026-11-28 · 017e46ad · the app's notices (a new version, storage full, the learner view) stand at the foot where a toast stands, 112 up over the tab bar, never at the top under the status bar; a toast said meanwhile stands 8 over them (app too); the Chord player's status bar takes its header's card in the app, as the board's bar=SHEET drew it · AppLayers · v902
 - 2026-11-28 · 12acd8af · ☰ and every place it opens are bottom drawers, each place with ‹ back to the list and Done, never ✕; the phone's Chords page goes (+ and Suggested chords hold it); Audio joins Playback options on both sizes, the rail's Audio place gone (app too) · ChordPlayer, ChordPlayerLaptop · v901
 - 2026-11-28 · ac8f6661 · the laptop's MIDI popover is the keyboard alone: Follow a MIDI arranger has one home there, the Genos place, where it stood in both; the phone keeps it under ☰ › MIDI, its only place (app too) · ChordPlayerLaptop · v901
 - 2026-11-28 · ea844a71 · one way to each act: the section's sheet drops Loop this section (the bar's Loop loops the section picked), the phone's ☰ drops Repeats (Playback options opens from the transport's ▾ alone), and the laptop's metronome button turns the click on and off where it cycled Count-in · On · Off over Playback options' own Count-in (app too) · ChordPlayer, ChordPlayerLaptop · v901
