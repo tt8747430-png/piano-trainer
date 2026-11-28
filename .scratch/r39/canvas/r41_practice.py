@@ -316,7 +316,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       keyTiles: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°', 'G7'].map((c) => { const t = trp(c, k), m = t.match(/^([A-G][♭♯]?(?:m(?!aj))?)([^/]*)$/); return { c: t, r: m ? m[1] : t, x: m ? m[2] : '', put: () => { const [si, bi, ci] = st.selB59 || [0, 0, 0], c2 = JSON.parse(JSON.stringify(st.secs || SECS)); if (c2[si] && c2[si][3][bi]) c2[si][3][bi][ci] = t; set({ secs: c2, draft: true }); } }; }), keyL: KEYS[k], keyHead: KEYS[k] + ' major chords',
       keyOn: st.sheet === 'key',
       openTempo: () => set({ sheet: 'tempo' }), tempoOn: st.sheet === 'tempo',
-      repOn: st.sheet === 'rep', wRep: wheel(['∞', '× 1', '× 2', '× 3', '× 4', '× 5', '× 6', '× 7', '× 8'], reps, (i) => set({ reps: i })) };''')
+    };''')
 # ── The Chord player's piano (R43 canvas 122; owner: "1. yes", the Chord player gets a piano): the chord sounding
 # now, on the keys in its tones' paints, under the chart. 2D keys by default; the one Piano sheet (piano_sheet.py)
 # behind Settings › Piano, the same as on the Chords page and in the Player, its range a chart's: Fit the chords ·

@@ -285,7 +285,7 @@ def KEYS77(h, lap=False):
 # Tempo, the Metronome's face (owner-way, one implementation): the tempo's word and BPM over its figures with −10 −1
 # and +1 +10 beside them, then the slider between the sheet's ends, 40 and 240; a wheel hid all but five tempos
 TEMPO77 = f'<div style="display: flex; flex-direction: column; gap: 12px; padding: 4px 0">{TEMPO(40, "cpT", 40, 240)}</div>'
-SH58 = lambda B, P, D=None, signin='SignIn.dc.html': (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('secOn', '{{secTitle}}', CP_SEC) + B('shareOn', 'Share', CP_SHARE(signin)) + (D or B)('styleOn', 'Style', STYLEROWS) + (D or B)('keyOn', 'Key', ROOTGRID('keyRoots')) + (D or B)('tempoOn', 'Tempo', TEMPO77) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + P + '')
+SH58 = lambda B, P, D=None, signin='SignIn.dc.html': (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('secOn', '{{secTitle}}', CP_SEC) + B('shareOn', 'Share', CP_SHARE(signin)) + (D or B)('styleOn', 'Style', STYLEROWS) + (D or B)('keyOn', 'Key', ROOTGRID('keyRoots')) + (D or B)('tempoOn', 'Tempo', TEMPO77) + P + '')
 _MI = lambda l, a, col=INK: f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left">{l}</button>'
 # a phone's toast steps aside when a sheet rises over it (the app's Sheet closes it), and shows one raised from that sheet
 # a phone's toast stands 12 over the foot: the keys (112 over the 34 home indicator) and the Genos row (64 and its
@@ -483,7 +483,7 @@ _r = "    return { ...common(st, set),"
 assert CP77.count(_r) == 1, CP77.count(_r)
 CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 # the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
-_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else '{{tagPos}}' if c == 'tagOnSheet' else 'left: 64px; top: 60px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 717px; top: 72px', 'keyOn': 'left: 501px; top: 72px', 'tempoOn': 'left: 608px; top: 72px', 'repOn': 'left: 373px; top: 72px'}[c], 320), 'SignInLaptop.dc.html')
+_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else '{{tagPos}}' if c == 'tagOnSheet' else 'left: 64px; top: 60px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 717px; top: 72px', 'keyOn': 'left: 501px; top: 72px', 'tempoOn': 'left: 608px; top: 72px'}[c], 320), 'SignInLaptop.dc.html')
 phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('libOn', 'Chord sheets', CP_LIB, close='closeSheet') + LIBROW + RENAME77.replace('z-index: 60', 'z-index: 72').replace('z-index: 61', 'z-index: 73') + SAVEAS77 + FSHEET('hdOptsOn', 'Playback options', _OPTSP, close='closeSheet') + FSHEET('cpPhRepOn', 'Playback options', _OPTSP, back='phToMenu'), bar=SHEET)
 # Shortcuts, the Player's and the editor's card (KEYSCARD_F) with the Chord player's own keys, as the app lists them
 CPKEYS = KEYSCARD_F(((('Chord player', (('Play or stop', 'Space'), ('Undo', '⌘ Z'), ('Redo', '⇧ ⌘ Z'))),),
