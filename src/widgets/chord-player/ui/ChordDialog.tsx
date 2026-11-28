@@ -128,14 +128,14 @@ export function ChordDialog({
               <NotePicker
                 label={t('chordPlayer.chord.root')}
                 bare
-                className={POP}
+                className={cn(POP, 'min-w-18')}
                 value={chord.root}
                 onChange={(root) => take({ root, quality: chord.quality })}
               />
               <MenuPicker
                 label={t('chordPlayer.chord.quality')}
                 bare
-                className={cn(POP, 'min-w-28')}
+                className={cn(POP, 'min-w-30')}
                 value={qualitySuffix(chord.quality)}
                 options={kinds.map((quality) => ({
                   value: qualitySuffix(quality),
@@ -156,7 +156,7 @@ export function ChordDialog({
               <MenuPicker
                 label={t('chordPlayer.chord.bass')}
                 bare
-                className={cn(POP, 'min-w-32')}
+                className={cn(POP, 'min-w-34')}
                 value={bassRole}
                 options={BASS_ROLES.flatMap((role) => {
                   const tone = tones.find((each) => each.role === role)

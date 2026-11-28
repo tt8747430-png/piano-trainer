@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 /** A pop-up's look in a sheet's rows, Musicca's select: white, ringed, its value and the up-down chevrons. */
 export const POP =
-  'h-11 rounded-control border-0 bg-card px-3 font-normal shadow-[0_0_0_1px_var(--color-border)] [&_span]:font-normal'
+  'h-11 justify-between rounded-control border-0 bg-card px-3 font-normal shadow-[0_0_0_1px_var(--color-border)] [&_span]:font-normal'
 
 /** A sheet's white card of rows (`GROUP` with `bg=SHEET`): 14 round, the hairline ring, a line between rows. */
 export function SheetCard({ children }: { children: ReactNode }) {

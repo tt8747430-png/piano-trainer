@@ -1581,6 +1581,7 @@ owner's, typos fixed.
 - **The board's Search opens the palette (the loop, 2026-11-28):** the Chord player's laptop board answered its rail's Search with a toast; it opens the app's search palette at rest, as the app does, measured to 640×488. Never again: a rail place on a board that only toasts what it would do.
 - **☰'s glyphs at the board's 24 (the loop, 2026-11-28):** the Chord player's phone menu drew its row glyphs at 22 where the board's are 24, its words 2 left of the board's; measured level now.
 - **Lucide's check, not a ✓ (the loop, 2026-11-28):** the Chord player boards marked the chosen style and sheet with a typed ✓ beside Lucide's glyphs; they draw Lucide's check at 20, as the app. Never again: a font's symbol standing in for an icon on a board.
+- **The chord sheet's pickers at the board's widths (the loop, 2026-11-28):** the Chord player's Root, Quality and Bass note pickers stood 8 to 12 narrower than the board's with the chevrons by the words; they take the board's 72, 120 and 136, the chevrons at the end.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
