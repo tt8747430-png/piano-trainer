@@ -43,11 +43,13 @@ import type { ChordSheetInHand } from '../model/use-chord-sheet'
 const PERCENT = { style: 'unit', unit: 'percent' } as const
 const STEP = 5
 
-/** A section of a panel or page (the board's `_SECT77`): its head at 15/600 over its control, 8 apart. */
+/** A section of a panel or page (the board's `_SECT77`): its head at 15/600 in the rail's panel, 16 on a phone's page (PHROWS), over its control, 8 apart. */
 function PanelSection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section aria-label={title} className="flex flex-col gap-2">
-      <h3 className="font-sans text-[0.9375rem]/[normal] font-semibold">{title}</h3>
+      <h3 className="font-sans text-base/[normal] font-semibold lg:text-[0.9375rem]/[normal]">
+        {title}
+      </h3>
       {children}
     </section>
   )
@@ -255,7 +257,8 @@ export function FollowRow() {
 /**
  * The styles (the board's `STYLEROWS`), by family: each family's name, a sentence-case head over its
  * card of rows 48 high, the chosen checked and its name at 600; a style's feel quiet at the row's end
- * only where it departs from straight 4/4 (swing, 3/4), a piano pattern's shelf in its place.
+ * only where it departs from straight 4/4 (swing, 3/4), a piano pattern's shelf in its place. The rail's
+ * panel sets them at 15 and 12 in; a phone's page at 16 and 16 in (the board's PHROWS).
  */
 export function StyleRows({
   book,
@@ -283,7 +286,7 @@ export function StyleRows({
           aria-label={t(`chordPlayer.families.${family}`)}
           className="flex flex-col gap-2"
         >
-          <h3 className="font-sans text-subhead/[normal] font-semibold">
+          <h3 className="font-sans text-base/[normal] font-semibold lg:text-subhead/[normal]">
             {t(`chordPlayer.families.${family}`)}
           </h3>
           <div className="flex flex-col overflow-hidden card">
@@ -298,7 +301,7 @@ export function StyleRows({
                   aria-checked={chosen}
                   onClick={() => onChoose(style)}
                   className={cn(
-                    'flex min-h-12 cursor-pointer items-center gap-3 px-3 text-left text-[0.9375rem] hover:bg-muted/60 focus-visible:-outline-offset-3',
+                    'flex min-h-12 cursor-pointer items-center gap-3 px-4 text-left text-base hover:bg-muted/60 focus-visible:-outline-offset-3 lg:px-3 lg:text-[0.9375rem]',
                     at > 0 && 'border-t border-border',
                   )}
                 >
