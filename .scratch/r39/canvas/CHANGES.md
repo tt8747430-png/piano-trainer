@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · the band's Undo takes back the sheet's last edit (a section deleted comes back) and rests at half strength until there is one, as the app's, where it was ink on any saved sheet and did nothing · ChordPlayerLaptop · pending
 
 ## Changes
 
