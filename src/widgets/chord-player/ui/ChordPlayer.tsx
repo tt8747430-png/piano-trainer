@@ -48,6 +48,7 @@ import {
   useDragSensors,
   useLatestCallback,
   useMediaQuery,
+  useRootSize,
 } from '@/shared/lib'
 import {
   addSection,
@@ -211,6 +212,9 @@ const RAIL: readonly {
  * sections, their chords and the key's chords (memory-palaces' fix): a mouse moves a thing after 8px, a
  * finger after a quarter-second hold, the keys after Space.
  */
+
+/** The foot's height, which the toasts stand clear of. */
+const FOOT = { block: '--docked' }
 export function ChordPlayer({
   hand,
   sheetId,
@@ -275,6 +279,9 @@ export function ChordPlayer({
   const beat = theirs ? theirs.beat : ownBeat
   const link = useChordSheets(selectSaved(sheetId))?.online ?? null
   const chordShare = useChordShare()
+  /** The screen's foot (the Genos row and the keys): its height is `--docked`, so a toast stands over it. */
+  const [foot, setFoot] = useState<HTMLDivElement | null>(null)
+  useRootSize(foot, FOOT)
   /** The section whose arranger sheet is open. */
   const [tagged, setTagged] = useState<number | null>(null)
   const [dialog, setDialog] = useState<{ place: BoxPlace; typed?: string } | null>(null)
@@ -788,27 +795,29 @@ export function ChordPlayer({
           </main>
           {/* The Genos docked over the keys while another panel is open (the board's GDOCK77); on a
               phone its row stands over the keys always. */}
-          {genosOn && laptop && panel !== 'genos' ? (
-            <div className="flex shrink-0 justify-center px-4 pb-3">
-              <div className="w-full max-w-140">{genosStrip('compact', 'dock')}</div>
-            </div>
-          ) : null}
-          {genosOn && !laptop ? (
-            <div className={cn('mx-4 my-2 shrink-0', phoneGenos === 'minimized' && 'flex')}>
-              {genosStrip(phoneGenos, 'phone')}
-            </div>
-          ) : null}
-          {keysShown ? (
-            <div className="shrink-0 overflow-hidden shadow-[0_-1px_0_var(--color-border)]">
-              <LiveKeyboard
-                range={laptop ? CHORD_PLAYER_LAPTOP_KEYS : CHORD_PLAYER_KEYS}
-                marks={litKeys(lit ? chordAt(lit)?.chord : undefined).marks}
-                spotlight
-                fitInView
-                height={KEYS_PX[laptop ? 'laptop' : 'phone']}
-              />
-            </div>
-          ) : null}
+          <div ref={setFoot} className="shrink-0">
+            {genosOn && laptop && panel !== 'genos' ? (
+              <div className="flex shrink-0 justify-center px-4 pb-3">
+                <div className="w-full max-w-140">{genosStrip('compact', 'dock')}</div>
+              </div>
+            ) : null}
+            {genosOn && !laptop ? (
+              <div className={cn('mx-4 my-2 shrink-0', phoneGenos === 'minimized' && 'flex')}>
+                {genosStrip(phoneGenos, 'phone')}
+              </div>
+            ) : null}
+            {keysShown ? (
+              <div className="shrink-0 overflow-hidden shadow-[0_-1px_0_var(--color-border)]">
+                <LiveKeyboard
+                  range={laptop ? CHORD_PLAYER_LAPTOP_KEYS : CHORD_PLAYER_KEYS}
+                  marks={litKeys(lit ? chordAt(lit)?.chord : undefined).marks}
+                  spotlight
+                  fitInView
+                  height={KEYS_PX[laptop ? 'laptop' : 'phone']}
+                />
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
       <DragOverlay dropAnimation={reduced ? null : DROP_ANIMATION}>
