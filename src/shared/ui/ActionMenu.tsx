@@ -57,6 +57,7 @@ export function ActionMenu({
   render = <Button variant="outline" />,
   align = 'start',
   actions = [],
+  wide = false,
   ref,
 }: {
   label: string
@@ -65,6 +66,8 @@ export function ActionMenu({
   /** Which edge of its button the menu lines up with: the end for a button at a row's end. */
   align?: 'start' | 'end'
   actions?: readonly MenuAction[]
+  /** 280 at least where the kit's `ROWMENU` is drawn wider (a sheet's name menu), 240 otherwise. */
+  wide?: boolean
   ref?: Ref<HTMLButtonElement>
 }) {
   // Only what works here; the destructive commands last, set apart.
@@ -130,7 +133,10 @@ export function ActionMenu({
       <DropdownMenuContent
         aria-label={label}
         align={align}
-        className="w-auto max-w-[min(20rem,calc(100vw-2rem))] min-w-60 overscroll-contain"
+        className={cn(
+          'w-auto max-w-[min(20rem,calc(100vw-2rem))] overscroll-contain',
+          wide ? 'min-w-70' : 'min-w-60',
+        )}
       >
         {groups.map((group, at) => (
           <Fragment key={`${group.name ?? ''}-${at}`}>

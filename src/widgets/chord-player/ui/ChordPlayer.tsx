@@ -709,6 +709,7 @@ export function ChordPlayer({
               <div className="flex min-w-0 items-center gap-2">
                 <ActionMenu
                   label={t('chordPlayer.sheets.menu')}
+                  wide
                   render={
                     <button
                       type="button"
@@ -842,6 +843,7 @@ export function ChordPlayer({
           <BandClose />
           <ActionMenu
             label={t('chordPlayer.sheets.menu')}
+            wide
             render={
               <button
                 type="button"
