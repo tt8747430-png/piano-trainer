@@ -220,7 +220,7 @@ export function MidiBody() {
   )
 }
 
-/** Follow a MIDI arranger alone, its card under the Genos panel (the board's `FOLLOW77`). */
+/** Follow a MIDI arranger alone, its card over the Genos panel (the board's `FOLLOW77`). */
 export function FollowRow() {
   const { t } = useTranslation('practice')
   const prefs = useSettings(selectChordPlayer)

@@ -726,9 +726,10 @@ export function ChordPlayer({
                 ) : panel === 'styles' ? (
                   <StyleRows book={book} value={style.id} onChoose={chooseStyle} />
                 ) : panel === 'genos' ? (
+                  // Follow first: switched on, the panel appears under it and the switch stays put.
                   <>
-                    {genosOn ? genosStrip('full', 'panel') : null}
                     <FollowRow />
+                    {genosOn ? genosStrip('full', 'panel') : null}
                   </>
                 ) : panel === 'audio' ? (
                   <AudioBody hand={hand} style={style} />

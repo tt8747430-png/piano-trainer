@@ -1616,6 +1616,7 @@ owner's, typos fixed.
 - **A tab list is one Tab stop (loop, 2026-11-28; the Chord player's rail):** every rail place was its own stop; the kit's Rail is one stop with ↑ ↓ Home End between its places, in the Player and the editor too. Never again: a role="tablist" whose tabs all take Tab.
 - **Focus in sight and seen (loop, 2026-11-28; the Chord player's Tab walk):** the keys' Tab stop sat on a key scrolled off the screen, and the toast took focus with no ring; Tab now lands on a key shown, and the toast wears the app's outline. Never again: a Tab stop off screen, or a focusable layer whose `outline-none` hides the one ring.
 - **A note that says level, measured (loop, 2026-11-28; the Chord player's laptop chart):** the chart's top padding carried a comment saying it levelled Verse with the panel's title; measured, it stood 9.5 low on board and app. Never again: an alignment claimed in a comment and not measured.
+- **A switch that moves when switched (loop, 2026-11-28; the Chord player's Genos panel):** the panel Follow a MIDI arranger opened appeared above it, pushing the switch down and putting Start/Stop under the pointer. What a switch reveals appears below it. Never again: content revealed above the control that revealed it.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
