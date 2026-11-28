@@ -178,6 +178,10 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     The Genos sits compact over the keys; Full and Minimize at its end.
   - **Playback options** is one white card on both sizes: Repeats with its stepper, Count-in under its name, and
     on a phone the Metronome switch, the header having no metronome.
+  - **All chord sheets** (`LibrarySheet`) is a 320 popover at the name from 64rem and a `PhonePage` under it: My
+    chord sheets (the open one in link blue; each row's ··· Rename, Duplicate, Delete, which goes at once with Undo
+    and leaves the sheet in hand Not saved when it was the open one; when none, "None saved yet. Save the sheet in
+    hand from its name."), Songs, then Progressions by style as chips over two-line rows. Rename rises over it.
   - **The chord's sheet** hangs under its chord on a laptop (a 460 popover) and is a sheet on a phone: Chord,
     Bass note, Duration in a white card, Suggested chords under a sentence-case head, then Delete · Duplicate ·
     Play from here.
