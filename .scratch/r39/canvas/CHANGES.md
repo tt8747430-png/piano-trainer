@@ -8,12 +8,12 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · 12acd8af · ☰ and every place it opens are bottom drawers, each place with ‹ back to the list and Done, never ✕; the phone's Chords page goes (+ and Suggested chords hold it); Audio joins Playback options on both sizes, the rail's Audio place gone (app too) · ChordPlayer, ChordPlayerLaptop · pending
-- 2026-11-28 · ac8f6661 · the laptop's MIDI popover is the keyboard alone: Follow a MIDI arranger has one home there, the Genos place, where it stood in both; the phone keeps it under ☰ › MIDI, its only place (app too) · ChordPlayerLaptop · pending
-- 2026-11-28 · ea844a71 · one way to each act: the section's sheet drops Loop this section (the bar's Loop loops the section picked), the phone's ☰ drops Repeats (Playback options opens from the transport's ▾ alone), and the laptop's metronome button turns the click on and off where it cycled Count-in · On · Off over Playback options' own Count-in (app too) · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
+- 2026-11-28 · 12acd8af · ☰ and every place it opens are bottom drawers, each place with ‹ back to the list and Done, never ✕; the phone's Chords page goes (+ and Suggested chords hold it); Audio joins Playback options on both sizes, the rail's Audio place gone (app too) · ChordPlayer, ChordPlayerLaptop · v901
+- 2026-11-28 · ac8f6661 · the laptop's MIDI popover is the keyboard alone: Follow a MIDI arranger has one home there, the Genos place, where it stood in both; the phone keeps it under ☰ › MIDI, its only place (app too) · ChordPlayerLaptop · v901
+- 2026-11-28 · ea844a71 · one way to each act: the section's sheet drops Loop this section (the bar's Loop loops the section picked), the phone's ☰ drops Repeats (Playback options opens from the transport's ▾ alone), and the laptop's metronome button turns the click on and off where it cycled Count-in · On · Off over Playback options' own Count-in (app too) · ChordPlayer, ChordPlayerLaptop · v901
 - 2026-11-28 · 6b9e23b4 · the laptop's Genos panel leads with Follow a MIDI arranger and draws its card under it, so switched on the switch stays under the finger, where the card appeared above and pushed it 80 down, leaving the pointer on Start/Stop (app too) · ChordPlayerLaptop · v900
 - 2026-11-28 · 6f1e0a54 · the laptop chart's first section head stands on the panel head's line (its row 74 to 118, Verse level with G major chords), its scroller's top 10, where 22 set it 9.5 under the title it was meant to level with, board and app · ChordPlayerLaptop · v899
 - 2026-11-28 · 01caaab2 · Share on a sheet opened from someone's link is Copy link alone, as the app's (its access is its owner's); a States entry, From someone’s link, opens it · ChordPlayer, ChordPlayerLaptop · v899
