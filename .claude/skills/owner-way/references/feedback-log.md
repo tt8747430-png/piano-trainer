@@ -1577,6 +1577,7 @@ owner's, typos fixed.
 - **The Genos card's padding and Try again (the loop, 2026-11-28):** the app's Genos card started 8 from its top and offered Try again as a 44 button louder than the line it answers; it is the board's 12 all round and its quiet 36 pill at 14/600. Never again: a recovery act shouting over the status it belongs to.
 - **The Genos row at 744 (the loop, 2026-11-28):** the Chord player's phone Genos row stretched across an upright iPad with its Main lamps capped, a bare stretch of card before ⌃; it keeps the dock's 560, centred. Never again: a phone row stretched across a tablet with a gap in its middle.
 - **One key, one act (the loop, 2026-11-28):** in the Chord player Space both played and held the pedal, and its Shortcuts list showed it twice; Space plays now, as in the Player, and the board's Shortcuts opens the real list where it toasted two keys that do nothing. Never again: one key bound to two acts on one screen, or a board naming a shortcut the app does not have.
+- **Shortcuts, the boards' card on a laptop (the loop, 2026-11-28):** the app's Shortcuts hung from the bar as the phone's sheet of keycaps on every laptop screen, where the Player's, the editor's and the Chord player's boards draw a centred card of two columns; the app draws the card from the laptop width up, measured to the board's 640×284. Never again: a phone's sheet left on a laptop where the board draws a card.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
