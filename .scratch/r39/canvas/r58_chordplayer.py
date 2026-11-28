@@ -504,7 +504,7 @@ CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 _SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else '{{tagPos}}' if c == 'tagOnSheet' else 'left: 64px; top: 60px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 717px; top: 72px', 'keyOn': 'left: 501px; top: 72px', 'tempoOn': 'left: 608px; top: 72px'}[c], 320), 'SignInLaptop.dc.html')
 phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('libOn', 'Chord sheets', CP_LIB, close='closeSheet') + LIBROW + RENAME77.replace('z-index: 60', 'z-index: 72').replace('z-index: 61', 'z-index: 73') + SAVEAS77 + BSHEET('hdOptsOn', 'Playback options', OPTSND(_OPTSP)), bar=SHEET)
 # Shortcuts, the Player's and the editor's card (KEYSCARD_F) with the Chord player's own keys, as the app lists them
-CPKEYS = KEYSCARD_F(((('Chord player', (('Play or stop', 'Space'), ('Undo', '⌘ Z'), ('Redo', '⇧ ⌘ Z'))),),
+CPKEYS = KEYSCARD_F(((('Chord player', (('Play or stop', 'Space'), ('Undo', '⌘ Z'), ('Redo', '⇧ ⌘ Z'), ('Move between chords', '← → ↑ ↓'), ('Edit the chord', 'Enter'), ('Change its length', '⇧ ← →'), ('Pick up or drop the chord', 'Space'), ('Delete the chord', '⌫'))),),
                      (('Piano keys', (('Play the keys', 'A – ’'), ('An octave down, up', 'Z X'))), ('Anywhere', (('Show the shortcuts', '?'),)))), 640)
 # Search, the app's palette at rest (AppLayersLaptop's, as the rail's Search opens it in the app): the field, Suggestions
 # (Continue, then Chords and the Metronome, each over where it lives), the keys under a hairline; 640 by 488 at 96
