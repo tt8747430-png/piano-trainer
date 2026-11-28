@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · a key hint (↑ ↓ ↵ Esc under Search, the Settings shortcuts) is the scale's smallest mark, 4 round, board and app, where the boards drew 6 (off the scale) and the app's `Kbd` 12, a circle on its 24 square · ChordPlayerLaptop, AppLayersLaptop, Settings, SettingsLaptop · pending
+- 2026-11-28 · 0539c5f9 · a key hint (↑ ↓ ↵ Esc under Search, the Settings shortcuts) is the scale's smallest mark, 4 round, board and app, where the boards drew 6 (off the scale) and the app's `Kbd` 12, a circle on its 24 square · ChordPlayerLaptop, AppLayersLaptop, Settings, SettingsLaptop · pending
 - 2026-11-28 · 680719d4 · the chart's bars and their + are 8 round (the scale's tile, as the app's), where the board drew 6, a corner off DESIGN.md's scale · ChordPlayer, ChordPlayerLaptop · pending
 - 2026-11-28 · 06f2837f · the phone's Live dot is the app's grass (#44684A, `learned`), where it was a one-off #3F7A4A; the app's phone state takes the board's: Draft in honey ink, Live after its 8 grass dot · ChordPlayer · pending
 ## Changes
