@@ -8,14 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · e6647cab · a laptop's chord low in the chart comes up before its sheet opens under it, where the room under it is short of 448, as the app (it flipped above) · ChordPlayerLaptop · pending
-
-- 2026-11-28 · c3ec783d · a phone's chord comes up 16 under the chart's top before its sheet rises, as the app's reveal (the chord picked was hidden under its own sheet) · ChordPlayer · pending
-
-- 2026-11-28 · b335b44d · a chord's Suggested chords are the app's: the key's chords likeliest first (C F G Am Dm G7 Em) less the chord picked · ChordPlayer, ChordPlayerLaptop · pending
-
 ## Changes
 
+- 2026-11-28 · e6647cab · a laptop's chord low in the chart comes up before its sheet opens under it, where the room under it is short of 448, as the app (it flipped above) · ChordPlayerLaptop · v908
+- 2026-11-28 · c3ec783d · a phone's chord comes up 16 under the chart's top before its sheet rises, as the app's reveal (the chord picked was hidden under its own sheet) · ChordPlayer · v908
+- 2026-11-28 · b335b44d · a chord's Suggested chords are the app's: the key's chords likeliest first (C F G Am Dm G7 Em) less the chord picked · ChordPlayer, ChordPlayerLaptop · v908
 - 2026-11-28 · 9173eb89 · the chord sheet on the keys: the home indicator's strip under the keys scrimmed with the page, as the app's; the app's sheet foot adds the home indicator's inset under the keys · ChordPlayer · v907
 - 2026-11-28 · 9358ee74 · a phone's chord sheet stands on the keys: its scrim and card end at their top, the keys lit with the chord and playable while it changes, its foot 16 (app too, on its side the body scrolling above the keys) · ChordPlayer · v906
 - 2026-11-28 · 48fbc3f4 · Shortcuts lists a chord's keys under Chord player (Move between chords, Edit the chord, Change its length, Pick up or drop the chord, Delete the chord), arrows moving between chords in the app · ChordPlayerLaptop · v905
