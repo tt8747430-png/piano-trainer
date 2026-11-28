@@ -82,6 +82,7 @@ import {
   numeralsParam,
   parseNumerals,
   printedChord,
+  rangeOf,
   type Numeral,
 } from '@/shared/lib/music'
 import { useShortcuts } from '@/shared/lib/shortcuts'
@@ -313,6 +314,8 @@ export function ChordPlayer({
     const section = shown.sections[place.section]
     return section ? sectionChords(section)[place.index] : undefined
   }
+  /** The keys' chord: the one sounding, else the one picked, else the first, waiting. */
+  const shownKeys = litKeys(chordAt(lit ?? picked ?? FIRST_CHORD)?.chord)
   /** A change made at once, said in its toast with Undo (a loss that can be undone, CLAUDE.md). */
   const undoable = (message: string) => sayUndo(message, hand.undo)
   const openAt = useLatestCallback((place: BoxPlace, typed?: string) => {
@@ -826,7 +829,9 @@ export function ChordPlayer({
               <div className="shrink-0 overflow-hidden shadow-[0_-1px_0_var(--color-border)]">
                 <LiveKeyboard
                   range={laptop ? CHORD_PLAYER_LAPTOP_KEYS : CHORD_PLAYER_KEYS}
-                  marks={litKeys(chordAt(lit ?? picked ?? FIRST_CHORD)?.chord).marks}
+                  marks={shownKeys.marks}
+                  // The chord shown is kept in sight: on a narrower laptop the range is wider than the keys.
+                  inView={rangeOf(shownKeys.keys)}
                   spotlight
                   fitInView
                   height={KEYS_PX[laptop ? 'laptop' : 'phone']}

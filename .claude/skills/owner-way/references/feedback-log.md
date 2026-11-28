@@ -1595,6 +1595,7 @@ owner's, typos fixed.
 - **One width for a laptop's form (the loop, 2026-11-28):** the app's `MakeSheet` made a name-only form 40 narrower than a full one, where every board's form is 480; one width now. Never again: two widths for one kind of form.
 - **A tapped chord shows on the keys (the loop, 2026-11-28):** the Chord player's app kept its keys bare until Play, where the board shows the chord picked (else the first) as a wash while it waits; the app does the same now. Never again: a selection that shows nothing of what was selected.
 - **The board's Undo undoes (the loop, 2026-11-28):** the Chord player board's band Undo stood ink on any saved sheet and did nothing; it takes back the last edit and rests until there is one, as the app's. Never again: a live control on a board whose click changes nothing.
+- **The chord in sight at 1024 (the loop, 2026-11-28):** the Chord player's laptop keys opened centred on C2 to C7 and cut the waiting chord's left hand at their edge; they keep the chord shown in sight. Never again: keys that light a key out of view.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
