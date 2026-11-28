@@ -282,7 +282,7 @@ export function StyleRows({
           aria-label={t(`chordPlayer.families.${family}`)}
           className="flex flex-col gap-2"
         >
-          <h3 className="font-sans text-subhead font-semibold">
+          <h3 className="font-sans text-subhead/[normal] font-semibold">
             {t(`chordPlayer.families.${family}`)}
           </h3>
           <div className="flex flex-col overflow-hidden card">
