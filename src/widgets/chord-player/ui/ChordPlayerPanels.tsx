@@ -187,16 +187,17 @@ export function ChartBody({ hand }: { hand: ChordSheetInHand }) {
 
 /**
  * MIDI (the board's `MIDI77`, the Player's MIDI keyboard popover): the keyboard in use and, with none,
- * how to connect one; then Follow a MIDI arranger.
+ * how to connect one; then, on a phone's page (`follow`), Follow a MIDI arranger: a laptop's has its
+ * home in the Genos place, one way to it.
  */
-export function MidiBody() {
+export function MidiBody({ follow = false }: { follow?: boolean }) {
   const { t } = useTranslation(['practice', 'common'])
   const midi = useMidiSummary()
   const { connection } = useMidiConnection()
   const prefs = useSettings(selectChordPlayer)
   const settingsStore = useSettingsStoreApi()
   // The board's `MIDI77`: Keyboard and its state at 16, how to connect one while none is (15 in the band's
-  // popover, 16 on a phone's page, as PHROWS), then Follow.
+  // popover, 16 on a phone's page, as PHROWS), then Follow on a phone.
   return (
     <SettingsGroup flush>
       <div className="flex min-h-12 items-center gap-3 py-1.5 pr-3 pl-4">
@@ -210,12 +211,14 @@ export function MidiBody() {
           {t('chordPlayer.settings.connectHow')}
         </p>
       )}
-      <SwitchRow
-        label={t('chordPlayer.settings.follow')}
-        setting="chordPlayer.follow"
-        checked={prefs.follow}
-        onCheckedChange={(follow) => setChordPlayer(settingsStore, { follow })}
-      />
+      {follow ? (
+        <SwitchRow
+          label={t('chordPlayer.settings.follow')}
+          setting="chordPlayer.follow"
+          checked={prefs.follow}
+          onCheckedChange={(on) => setChordPlayer(settingsStore, { follow: on })}
+        />
+      ) : null}
     </SettingsGroup>
   )
 }

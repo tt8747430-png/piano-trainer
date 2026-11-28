@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · the laptop's MIDI popover is the keyboard alone: Follow a MIDI arranger has one home there, the Genos place, where it stood in both; the phone keeps it under ☰ › MIDI, its only place (app too) · ChordPlayerLaptop · pending
 - 2026-11-28 · ea844a71 · one way to each act: the section's sheet drops Loop this section (the bar's Loop loops the section picked), the phone's ☰ drops Repeats (Playback options opens from the transport's ▾ alone), and the laptop's metronome button turns the click on and off where it cycled Count-in · On · Off over Playback options' own Count-in (app too) · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes

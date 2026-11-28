@@ -378,8 +378,10 @@ CHART77 = _COL77(_SECT77('Time signature', SEGC('cpMeterSeg', 36, 14, True)), _S
 FOLLOW77 = GROUP(('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), bg=SHEET)
 # MIDI complete where it opens, as the Player's MIDI keyboard popover (R74: the keyboard in use and, with none, how to
 # connect one; nothing links away to Settings), then the Chord player's own Follow a MIDI arranger
-MIDI77 = GROUP(('val', 'Keyboard', 'Not connected'), ('raw', f'<span style="display: block; padding: 0 16px; margin: 2px 0 10px; font-size: 15px; line-height: 1.4; color: {SOFT}">Plug in a keyboard by USB or pair it by Bluetooth, then press a key.</span>'),
-               ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), bg=SHEET)
+_MIDIROWS = (('val', 'Keyboard', 'Not connected'), ('raw', f'<span style="display: block; padding: 0 16px; margin: 2px 0 10px; font-size: 15px; line-height: 1.4; color: {SOFT}">Plug in a keyboard by USB or pair it by Bluetooth, then press a key.</span>'))
+MIDI77 = GROUP(*_MIDIROWS, ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), bg=SHEET)
+# a laptop's MIDI popover: the keyboard alone, Follow's home there is the Genos place (one way to each act)
+MIDI77L = GROUP(*_MIDIROWS, bg=SHEET)
 # a panel's head is the kit's (the Player's and the editor's: 64, the title, « Fold the panel 44 round); only its act is
 # the Chord player's
 _PHEAD77 = lambda title: _PHEAD(title, fold='cpRailNone')
@@ -437,7 +439,7 @@ PHPAGES77 = (FSHEET('cpPhExpOn', 'Export', EXPROWS77, back='phToMenu') + FSHEET(
 # switch too (Flat's Playback options: the laptop has the metronome in the band)
 _OPTS = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp', None, True), ('seg', 'Count-in', 'cntSeg'), bg=SHEET)
 _OPTSP = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp', None, True), ('seg', 'Count-in', 'cntSeg'), ('toggle', 'Metronome', 'metSw', 'metTog'), bg=SHEET)
-POPS77L = (POPOVER('hdOptsOn', 'Playback options', _OPTS, 'left: 373px; top: 72px', 320) + POPOVER('hdMidiOn', 'MIDI', MIDI77, 'left: 807px; top: 72px', 360))
+POPS77L = (POPOVER('hdOptsOn', 'Playback options', _OPTS, 'left: 373px; top: 72px', 320) + POPOVER('hdMidiOn', 'MIDI', MIDI77L, 'left: 807px; top: 72px', 360))
 # a new sheet (Not saved) is the sheet in hand: first in the list, checked, and saved from the menu's foot, as the app's
 _handrow = '<sc-if value="{{handOn}}" hint-placeholder-val="{{false}}">' + _MI('{{sheetsL}}<span aria-hidden="true" style="margin-left: auto; display: flex">' + _CK20 + '</span>', 'closeSheet') + '</sc-if>'
 # the name's menu: the sheet in hand, the saved sheets, New and All; then what that size adds (`more`)

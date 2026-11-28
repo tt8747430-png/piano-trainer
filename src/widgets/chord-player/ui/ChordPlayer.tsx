@@ -1086,7 +1086,7 @@ export function ChordPlayer({
               repeats: <PlaybackBody hand={hand} metronome />,
               audio: <AudioBody hand={hand} style={style} />,
               chart: <ChartBody hand={hand} />,
-              midi: <MidiBody />,
+              midi: <MidiBody follow />,
               export: (
                 <SettingsGroup flush>
                   <RowButton title={t('chordPlayer.exportMenu.midi')} onClick={exportMidi} />
