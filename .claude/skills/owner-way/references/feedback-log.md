@@ -1622,6 +1622,8 @@ owner's, typos fixed.
 
 - **The status bar in the header's colour; notices from the foot (the owner, 2026-11-28):** the installed app painted the status bar the page's beige over the Chord player's white header, and its notices (a new version ready) dropped from the top. The status bar takes the header's card while a full screen's phone header shows; notices stand at the foot with the toasts and rise from below. Never again: a status bar in another colour than the bar under it, or a notice from the top.
 
+- **A chord's name never cut (the owner, 2026-11-28):** the Chord player's short tiles read "C.." and "F.."; a name now shrinks to fit its tile, down to 12, and a beat's tile takes a 4 inset. Never again: an ellipsis on a chord's name where a smaller size would show it whole.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

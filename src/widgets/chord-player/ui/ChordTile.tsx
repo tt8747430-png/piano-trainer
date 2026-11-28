@@ -6,7 +6,7 @@ import type { ProgressionNames } from '@/entities/settings'
 import { cn, motionReduced } from '@/shared/lib'
 import { CHORD_BEATS } from '@/shared/lib/arrangement'
 import { chordSymbol, printedSymbol, type Chord, type Key } from '@/shared/lib/music'
-import { LeadSymbol } from '@/shared/ui'
+import { LeadSymbol, symbolLetters } from '@/shared/ui'
 import { boxName } from '../model/box-name'
 import type { BoxPlace } from '../model/engine'
 
@@ -94,6 +94,7 @@ export const ChordTile = memo(function ChordTile({
     id,
   })
   const symbol = printedSymbol(chordSymbol(chord))
+  const name = boxName(chord, musicKey, names)
   // Auto-scroll: the chord sounding is kept in sight as the sheet plays, clear of the bar above and
   // of the keys and what floats over them below; instant under reduced motion.
   const box = useRef<HTMLDivElement>(null)
@@ -178,16 +179,20 @@ export const ChordTile = memo(function ChordTile({
         title={t('chordPlayer.boxHint')}
         onClick={onTap}
         onKeyDown={onKeyDown}
+        style={{ '--name': symbolLetters(name) }}
         className={cn(
-          'relative flex h-[60px] min-w-0 flex-1 scroll-mt-4 scroll-mb-6 cursor-grab touch-manipulation items-start overflow-hidden rounded-tile px-2 pt-1 select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing lg:h-[76px]',
+          '@container relative flex h-[60px] min-w-0 flex-1 scroll-mt-4 scroll-mb-6 cursor-grab touch-manipulation items-start overflow-hidden rounded-tile pt-1 select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing lg:h-[76px]',
+          // A beat's tile gives its name the room its 8 inset would take (owner, 2026-11-28: "the chords
+          // are cropped like that or hidden because not enough space").
+          shown === 1 ? 'px-1' : 'px-2',
           lit ? 'bg-primary/35' : 'bg-card',
           lit || selected
             ? 'shadow-[0_0_0_2px_var(--color-honey-ring)]'
             : 'shadow-[0_0_0_1px_var(--color-border)]',
         )}
       >
-        <span className="max-w-full truncate text-[21px] leading-tight font-medium text-foreground lg:text-3xl">
-          <LeadSymbol text={boxName(chord, musicKey, names)} />
+        <span className="max-w-full chord-fit truncate leading-tight font-medium text-foreground">
+          <LeadSymbol text={name} />
         </span>
         <span aria-hidden className="absolute inset-x-0 bottom-0 flex h-2.5">
           {Array.from({ length: shown }, (_, tick) => (

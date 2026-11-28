@@ -1043,6 +1043,16 @@
     bottom: calc(--spacing(7) + var(--docked, 0px));
   }
 }
+/* A chord's name in its tile, whole: as large as the chart sets it (21, a laptop's 30) and smaller
+   when its tile is narrow, never under the 12 floor (iReal Pro sets its cells so). The tile is the
+   container (its width inside its inset is 100cqi) and says its name's width in letters (`--name`,
+   `symbolLetters`); a letter is taken at 0.85 of the size (an m is wide). */
+@utility chord-fit {
+  font-size: min(21px, max(12px, calc(100cqi / (var(--name, 2) * 0.85))));
+  @variant lg {
+    font-size: min(30px, max(12px, calc(100cqi / (var(--name, 2) * 0.85))));
+  }
+}
 /* Where a toast and the app's notices stand: centred over the foot, a phone's width at most, 460 on a
    laptop, centred on its pane (the placements below move both as one). */
 @utility toast-column {
