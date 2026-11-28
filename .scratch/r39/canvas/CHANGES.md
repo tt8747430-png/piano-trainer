@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · Rename chord sheet rises over the library, which stays under its scrim (the app's), where it closed the library and rose over the chart · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
+- 2026-11-28 · 55f32bfa · Rename chord sheet rises over the library, which stays under its scrim (the app's), where it closed the library and rose over the chart · ChordPlayer, ChordPlayerLaptop · v889
 - 2026-11-28 · 76717f84 · the library's My chord sheets says "None saved yet. Save the sheet in hand from its name." once its last sheet is deleted, as the app's, where it left a bare head · ChordPlayer, ChordPlayerLaptop · v888
 - 2026-11-28 · da92769b · All chord sheets opens the Chord sheets library (My chord sheets with each row's ··· menu: Rename, Duplicate, Delete with Undo; Songs; Progressions by style with the app's Pop list and Theory chip), a page on a phone and a popover at the name on a laptop, where it linked to the Progressions board, which holds no chord sheets; the kit's ANCHOR places a menu opened from inside a popover · ChordPlayer, ChordPlayerLaptop · v887
 - 2026-11-28 · 9c02d2ee · the Volume levels draw the app's slider (a 4 track in sand filled in ink, a white 28 thumb on its soft shade) where they drew the browser's own (a thick bar, an ink thumb); index.py's `data-rangecss` for any range marked data-level · ChordPlayer, ChordPlayerLaptop · v886
