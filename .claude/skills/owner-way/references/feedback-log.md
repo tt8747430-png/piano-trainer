@@ -1602,6 +1602,7 @@ owner's, typos fixed.
 - **A dead layout's reserve (the loop, 2026-11-28):** the Chord player's phone board still padded its chart for R76's floating dock and docked keys, so at the scroll's end its last section stood 330 over a bare page; it ends 24 under it, as the app's, and the dead layout's values are gone. Never again: a value computed from a layout a later ruling removed.
 - **A title that names what plays (the loop, 2026-11-28):** the Chord player board's Genos title said Main A whatever was lit, from a state key nothing set; it names the Main the arranger plays, or none, as the app's. Never again: a label read from a state nothing writes.
 - **A state worn as drawn (the loop, 2026-11-28):** the Chord player app named its phone sheet's Draft and Live in soft ink alone where the board colours them (honey ink, a grass dot); the board's dot was an off-kit grass. Never again: a colour on a board that no token holds, or a token the app leaves off.
+- **A corner off the scale (the loop, 2026-11-28):** the Chord player board's bars were 6 round, a value DESIGN.md's scale lacks, where the app's are 8. Never again: a corner written outside the scale on a board.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
