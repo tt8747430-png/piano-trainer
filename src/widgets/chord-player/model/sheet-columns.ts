@@ -1,3 +1,5 @@
+import { symbolLetters } from '@/shared/ui'
+
 /** The least a chord's name is set in its tile, px: `chord-fit`'s floor, its raised part too. */
 const LEAST = 12
 /** The size a chart sets a name at where its tile has the room (`chord-fit`'s 21), px. */
@@ -18,6 +20,18 @@ export interface TileRoom {
 export interface SheetLayout {
   readonly columns: number
   readonly template: string
+}
+
+/**
+ * A name's width at `size`, as `chord-fit` sets it: the raised part at 0.6 of the line, never under
+ * the 12 floor.
+ */
+function nameWidth(name: string, size: number): number {
+  const { line, raised } = symbolLetters(name)
+  return Math.max(
+    (line + raised * 0.6) * LETTER * size,
+    line * LETTER * size + raised * LETTER * LEAST,
+  )
 }
 
 /** Where each tile stands in rows of `columns` beats, as the grid places them: its first column and span. */
@@ -66,7 +80,7 @@ function leastWidths(
     let grew = false
     for (const { tile, from, span } of places) {
       const has = widths.slice(from, from + span).reduce((sum, px) => sum + px, 0)
-      const need = tile.name.length * LETTER * size + 2 * tile.inset - (span - 1) * GAP
+      const need = nameWidth(tile.name, size) + 2 * tile.inset - (span - 1) * GAP
       if (need <= has + 0.5) continue
       for (let column = from; column < from + span; column++)
         least[column] = Math.max(least[column] ?? 0, Math.ceil(need / span))
