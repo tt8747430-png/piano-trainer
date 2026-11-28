@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · 6b9e23b4 · the laptop's Genos panel leads with Follow a MIDI arranger and draws its card under it, so switched on the switch stays under the finger, where the card appeared above and pushed it 80 down, leaving the pointer on Start/Stop (app too) · ChordPlayerLaptop · pending
 
 ## Changes
 
+- 2026-11-28 · 6b9e23b4 · the laptop's Genos panel leads with Follow a MIDI arranger and draws its card under it, so switched on the switch stays under the finger, where the card appeared above and pushed it 80 down, leaving the pointer on Start/Stop (app too) · ChordPlayerLaptop · v900
 - 2026-11-28 · 6f1e0a54 · the laptop chart's first section head stands on the panel head's line (its row 74 to 118, Verse level with G major chords), its scroller's top 10, where 22 set it 9.5 under the title it was meant to level with, board and app · ChordPlayerLaptop · v899
 - 2026-11-28 · 01caaab2 · Share on a sheet opened from someone's link is Copy link alone, as the app's (its access is its owner's); a States entry, From someone’s link, opens it · ChordPlayer, ChordPlayerLaptop · v899
 - 2026-11-28 · 0248cdc5 · Share offline drawn as the app draws it: Copy link says "You’re offline. Connect to share." 8 over it, 14 in crimson (the app's Problem); a States entry, Offline, opens it · ChordPlayer, ChordPlayerLaptop · v899
