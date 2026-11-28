@@ -186,8 +186,10 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     in, and the chord sounding in full where it is shown (`LiveKeyboard`'s `sound`, in place of the voicing's own
     keys): its root or slash bass in the left hand, its tones an octave above; kept in sight (`inView`). Play turns
     to Stop, a square, as it is pressed.
-  - **The chord's sheet** hangs under its chord on a laptop (a 460 popover) and is a sheet on a phone: Chord,
-    Bass note, Duration in a white card, Suggested chords under a sentence-case head, then Delete · Duplicate ·
+  - **The chord's sheet** hangs under its chord on a laptop (a 460 popover) and is a sheet on a phone that stands
+    on the keys (`SheetContent`'s `foot`: it and its scrim end at their top, the keys lit with the chord and
+    playable while it changes, 16 under its last row): Chord, Bass note, Duration in a white card, Suggested chords
+    (the key's, likeliest first, less the chord picked) under a sentence-case head, then Delete · Duplicate ·
     Play from here.
   - **The Genos** (`ArrangerStrip`) while Follow a MIDI arranger is on: in the rail's panel it is in its place (no
     size controls, its title on one line); over the keys it is Compact (a 64 row, Start/Stop as its glyph and Main
