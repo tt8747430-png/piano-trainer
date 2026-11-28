@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · a toast holds its words to two lines, a long name ending in … (a Chord player sheet named by its numerals ran the toast to four lines); the kit's `TOAST`, every board with a toast · ChordPlayer, ChordPlayerLaptop and every board with a toast · pending
 ## Changes
 
 - 2026-11-28 · 3dab466e · the laptop's Genos marks popover opens at its section's chip, 4 under it (it stood fixed at 640, 160 whatever chip opened it) · ChordPlayerLaptop · v876

@@ -520,7 +520,7 @@ def TOAST(bottom, undo='undo', z=50, laptop=False, always=False, hint='false', o
     return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; '
             f'{pos}; z-index: {z}; min-height: 52px; box-sizing: border-box; border-radius: 14px; background: {INK}; '
             f'color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px">'
-            f'<span style="flex: 1">{{{{toastT}}}}</span>{btn}</div></sc-if>')
+            f'<span style="flex: 1; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden">{{{{toastT}}}}</span>{btn}</div></sc-if>')
 
 # One centred form or note over a scrim (a laptop's New song, Report, the welcome): a 22-round card, 20 in, 12 between
 # its parts, at most 48 narrower than the screen. ASK is its question form.

@@ -25,7 +25,8 @@ function Toasts() {
       className="min-h-13 rounded-card border-0 bg-foreground text-background shadow-none"
     >
       <ToastContent className="gap-2 py-1 pr-1 pl-4">
-        <ToastTitle className="min-w-0 flex-1 font-sans text-subhead/5 font-normal" />
+        {/* One short sentence: a long name (a sheet named by its 40 numerals) ends in … on its second line. */}
+        <ToastTitle className="line-clamp-2 min-w-0 flex-1 font-sans text-subhead/5 font-normal" />
         {each.actionProps ? (
           <ToastAction
             render={
