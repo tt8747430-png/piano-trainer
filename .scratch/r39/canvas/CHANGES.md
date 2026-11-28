@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · deleting the sheet in hand from the library turns its name's state to Not saved (Live again on Undo), as the app's, where it kept saying Live · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
