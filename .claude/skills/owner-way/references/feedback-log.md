@@ -1548,6 +1548,7 @@ owner's, typos fixed.
 - **Two things, two glyphs, on the Chord player's rail (loop, one icon one meaning, 2026-11-28):** its Genos and Shortcuts both wore a computer keyboard; the Genos wears keyboard-music now, on board and app. The board's rail never set its words' weight, so they fell to 400; they are 600 chosen and 500 else, as the editor's.
 - **New sheet asked about a loss Undo could take back (loop, R38's rule, 2026-11-28):** the Chord player's New sheet opened "Start a new chord sheet?"; it now starts at once with "Started a new chord sheet · Undo", board and app. The board's toasts had never shown on the R77 boards: a second toast key defined later won; one key now.
 - **One value, every face (loop, consistency, 2026-11-28):** the Chord player board's ☰ said Repeats × 3 from an old key while its Playback options said Until Stop; one value now. The app took the board's one-bar count-in for a new sheet, lifted its toasts over the keys (they sat on them) and drew every drag's grip at the kit's 18.
+- **A new chord sheet saved from its name (the loop, 2026-11-28):** the Chord player's board had no way to keep a new sheet, where the app's name menu leads with it checked and ends on Save as my chord sheet… (the kit's New form, Name and Save); the board draws it now on both sizes. The kit's ROWMENU takes an `html` row for a row shown in one state, so no menu's output is patched.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

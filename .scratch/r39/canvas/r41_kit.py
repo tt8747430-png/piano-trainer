@@ -339,6 +339,10 @@ def ROWMENU(cond, label, items, posvar='menuPos', w=240):
         if kind == 'sep':
             out.append(f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div>')
             continue
+        # a row the menu shows only in one state (an sc-if around a menuitem), drawn by its caller
+        if kind == 'html':
+            out.append(l)
+            continue
         col = t[3] if kind == 'action' and len(t) > 3 and t[3] else INK
         if col == RED and not seen_red and out:
             out.append(f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div>')

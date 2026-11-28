@@ -257,6 +257,9 @@ CP58 = CP58.replace("    return { ...common(st, set), sec59,", r"""    const LAY
       mk1: sheetsL === 'My verse and chorus' ? '✓' : '', mk2: sheetsL === 'Blues in F' ? '✓' : '', mk3: sheetsL === 'Autumn Leaves sketch' ? '✓' : '',
       sheetsL, sheetsOn: st.sheet === 'sheets', openSheets: (e) => set({ sheet: 'sheets', menuPos: ANCHOR(e, 280), cpExp: false }), cpExpTog: () => set({ cpExp: !st.cpExp }), cpExpOn: st.sheet === 'sheets' && !!st.cpExp, cpExpX: st.cpExp ? 'true' : 'false', cpExpBg: st.cpExp ? 'rgba(51,41,33,.06)' : 'transparent',
       openS1: () => set({ sheet: null, sheetName: 'My verse and chorus' }), openS2: () => set({ sheet: null, sheetName: 'Blues in F', toastT: 'Opened Blues in F' }), openS3: () => set({ sheet: null, sheetName: 'Autumn Leaves sketch', toastT: 'Opened Autumn Leaves sketch' }),
+      freshOn: !!st.fresh, handOn: !['My verse and chorus', 'Blues in F', 'Autumn Leaves sketch'].includes(sheetsL), openSaveAs: () => set({ sheet: 'saveAs', saName: sheetsL, toastT: null }), saveAsOn: st.sheet === 'saveAs', saName: st.saName ?? '', typeSa: (e) => set({ saName: e.target.value }),
+      saBg: (st.saName || '').trim() ? '#EDC684' : '#EEE9E2', saFg: (st.saName || '').trim() ? '#332921' : '#9C9086', saDis: !(st.saName || '').trim(),
+      saveAs: () => { const n = (st.saName || '').trim(); if (!n) return; set({ sheet: null, sheetName: n, fresh: false, toastT: 'Saved ' + n }); },
       newSheet: () => set({ sheet: null, sheetName: 'New chord sheet', secs: [['A', 'Verse', 1, []]], len: {}, bpm: 100, reps: 0, vars: [1], fresh: true, draft: false, toastT: 'Started a new chord sheet', lastLay: null, prevS: { sheetName: st.sheetName, secs: st.secs, len: st.len, bpm: st.bpm, reps: st.reps, vars: st.vars, fresh: st.fresh, draft: st.draft } }),
       liveOn: !st.fresh, undoOff: !!st.fresh, playOff: !!st.fresh && !(st.secs || []).some((x) => x[3].length),
       toastOn: !!st.toastT, toastT: st.toastT ?? '', toastUndo: !!st.lastLay || (!!st.prevS && st.toastT === 'Started a new chord sheet'), undo: () => set(st.prevS && st.toastT === 'Started a new chord sheet' ? { ...st.prevS, toastT: null, prevS: null } : { lay: st.lastLay || LAY0, toastT: null, lastLay: null }),""", 1)
@@ -505,15 +508,19 @@ PHPAGES77 = (FSHEET('cpPhExpOn', 'Export', EXPROWS77, back='phToMenu') + FSHEET(
 _OPTS = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp'), ('seg', 'Count-in', 'cntSeg'), bg=SHEET)
 _OPTSP = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp'), ('seg', 'Count-in', 'cntSeg'), ('toggle', 'Metronome', 'metSw', 'metTog'), bg=SHEET)
 POPS77L = (POPOVER('hdOptsOn', 'Playback options', _OPTS, 'left: 380px; top: 72px', 320) + POPOVER('hdMidiOn', 'MIDI', MIDI77, 'left: 820px; top: 72px', 360))
-NAMEMENU77 = ROWMENU('sheetsOn', 'Chord sheets', [('action', 'My verse and chorus<span style="margin-left: auto; font-weight: 700">{{mk1}}</span>', 'openS1'), ('action', 'Blues in F<span style="margin-left: auto; font-weight: 700">{{mk2}}</span>', 'openS2'), ('action', 'Autumn Leaves sketch<span style="margin-left: auto; font-weight: 700">{{mk3}}</span>', 'openS3'), ('sep', ''), ('action', 'New sheet', 'newSheet'), ('link', 'All chord sheets', '', 'Progressions.dc.html')], 'menuPos', 280)
+# a new sheet (Not saved) is the sheet in hand: first in the list, checked, and saved from the menu's foot, as the app's
+_handrow = '<sc-if value="{{handOn}}" hint-placeholder-val="{{false}}">' + _MI('{{sheetsL}}<span style="margin-left: auto; font-weight: 700">✓</span>', 'closeSheet') + '</sc-if>'
+NAMEMENU77 = ROWMENU('sheetsOn', 'Chord sheets', [('html', _handrow), ('action', 'My verse and chorus<span style="margin-left: auto; font-weight: 700">{{mk1}}</span>', 'openS1'), ('action', 'Blues in F<span style="margin-left: auto; font-weight: 700">{{mk2}}</span>', 'openS2'), ('action', 'Autumn Leaves sketch<span style="margin-left: auto; font-weight: 700">{{mk3}}</span>', 'openS3'), ('sep', ''), ('action', 'New sheet', 'newSheet'), ('link', 'All chord sheets', '', 'Progressions.dc.html')], 'menuPos', 280)
 _fileacts = (_sep.replace('margin: 4px 12px', 'margin: 6px 12px') + _MI('Share…', 'openShare')
              + '<div style="position: relative"><button type="button" role="menuitem" aria-haspopup="menu" aria-expanded="{{cpExpX}}" onClick="{{cpExpTog}}" style="width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: {{cpExpBg}}; padding: 0 8px 0 12px; display: flex; align-items: center; color: ' + INK + '; font: inherit; font-size: 16px; text-align: left"><span style="flex: 1">Export</span><span aria-hidden="true" style="display: flex; color: ' + SOFT + '">' + CHEV_R + '</span></button>'
              + '<sc-if value="{{cpExpOn}}" hint-placeholder-val="{{false}}"><div role="menu" aria-label="Export" style="position: absolute; z-index: 71; left: calc(100% + 14px); top: -6px; width: 200px; box-sizing: border-box; padding: 6px; border-radius: 16px; ' + GLASSFX + '">' + _MI('MIDI', 'exportMidi') + _MI('Chart (.txt)', 'exportChart') + '</div></sc-if></div>'
              + _MI('Import chart…', 'importChart') + _MI('Randomize chords', 'randomize') + _MI('Save to my progressions', 'saveProg')
              + '<a role="menuitem" href="ProgressionsLaptop.dc.html" style="width: 100%; height: 44px; box-sizing: border-box; border-radius: 10px; padding: 0 12px; display: flex; align-items: center; color: ' + INK + '; font-size: 16px; text-decoration: none">Open in Progressions</a>')
 _draftacts = f'<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}">{_sep.replace("margin: 4px 12px", "margin: 6px 12px")}' + _MI('Save', 'saveDraft') + _MI('Discard draft', 'discardDraft', RED) + '</sc-if>'
-NAMEMENU77L = NAMEMENU77.replace('</div></sc-if>', _fileacts + _draftacts + '</div></sc-if>', 1).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')
-NAMEMENU77P = NAMEMENU77.replace('</div></sc-if>', _draftacts + '</div></sc-if>', 1)
+_saveasact = f'<sc-if value="{{{{freshOn}}}}" hint-placeholder-val="{{{{false}}}}">{_sep.replace("margin: 4px 12px", "margin: 6px 12px")}' + _MI('Save as my chord sheet…', 'openSaveAs') + '</sc-if>'
+NAMEMENU77L = NAMEMENU77.replace('</div></sc-if>', _saveasact + _fileacts + _draftacts + '</div></sc-if>', 1).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')
+NAMEMENU77P = NAMEMENU77.replace('</div></sc-if>', _saveasact + _draftacts + '</div></sc-if>', 1)
+SAVEAS77 = NEWNAME('saveAsOn', 'Save as my chord sheet', 'Name', 'saName', 'typeSa', 'saveAs', 'saBg', 'saFg', 'Save')
 PTAG = _PTAG0
 
 # the state the new boards read, spread first into the board's state (no key of the old board is overridden)
@@ -552,5 +559,5 @@ assert CP77.count(_r) == 1, CP77.count(_r)
 CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 # the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
 _SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else 'left: 640px; top: 160px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 729px; top: 72px', 'keyOn': 'left: 505px; top: 72px', 'tempoOn': 'left: 616px; top: 72px', 'repOn': 'left: 380px; top: 72px'}[c], 320))
-phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('hdOptsOn', 'Playback options', _OPTSP, close='closeSheet') + FSHEET('cpPhRepOn', 'Playback options', _OPTSP, back='phToMenu'), bar=SHEET)
-full_laptop('ChordPlayerLaptop', 'Chord player, laptop', lm77 + TOAST(296, z=56, laptop=True), CP77, _SHL + POPS77L + NAMEMENU77L)
+phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + SAVEAS77 + FSHEET('hdOptsOn', 'Playback options', _OPTSP, close='closeSheet') + FSHEET('cpPhRepOn', 'Playback options', _OPTSP, back='phToMenu'), bar=SHEET)
+full_laptop('ChordPlayerLaptop', 'Chord player, laptop', lm77 + TOAST(296, z=56, laptop=True), CP77, _SHL + POPS77L + NAMEMENU77L + LAPSHEET(SAVEAS77))
