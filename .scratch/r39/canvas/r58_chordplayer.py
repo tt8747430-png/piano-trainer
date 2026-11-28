@@ -199,9 +199,9 @@ CP_SEC = (GROUP(ROW59('Section', POP59('secPopL', 'openSecPop', 136, 'Section'))
 # shows every control at once, none scrolled out of sight: its state and Start/Stop on its head; Main A–D and Break,
 # then Intro I–III and Ending/rit. I–III (a phone's two rows; one row of groups on a laptop), each group named over it.
 # Only what the Genos takes over MIDI (the brief: ACMP, Sync, Auto Fill, Fade and OTS Link have no message).
-LAMP59 = lambda key, label, act, spoken='': f'<button type="button" onClick="{{{{{act}}}}}" aria-pressed="{{{{{key}.on}}}}" aria-label="{spoken or label}" style="min-width: 44px; height: 44px; padding: 0 6px; border: 0; border-radius: 10px; background: {{{{{key}.bg}}}}; color: {{{{{key}.fg}}}}; box-shadow: {{{{{key}.ring}}}}; font: inherit; font-size: 14px; font-weight: 700; white-space: nowrap">{label}</button>'
+LAMP59 = lambda key, label, act, spoken='', size='min-width: 44px': f'<button type="button" onClick="{{{{{act}}}}}" aria-pressed="{{{{{key}.on}}}}" aria-label="{spoken or label}" style="{size}; height: 44px; padding: 0 6px; border: 0; border-radius: 10px; background: {{{{{key}.bg}}}}; color: {{{{{key}.fg}}}}; box-shadow: {{{{{key}.ring}}}}; font: inherit; font-size: 14px; font-weight: 700; white-space: nowrap">{label}</button>'
 # Start/Stop one width in the full and the compact strip (it was 96 in one and 88 in the other)
-START59 = LAMP59('arStart', 'Start/Stop', 'togglePlay').replace('min-width: 44px', 'flex: none; min-width: 88px', 1)
+START59 = LAMP59('arStart', 'Start/Stop', 'togglePlay', size='flex: none; min-width: 88px')
 LAMPS59 = lambda lst, spoken: f'<sc-for list="{{{{{lst}}}}}" as="l" hint-placeholder-count="3"><button type="button" onClick="{{{{l.pick}}}}" aria-pressed="{{{{l.on}}}}" aria-label="{spoken} {{{{l.n}}}}" style="min-width: 44px; height: 44px; padding: 0 6px; border: 0; border-radius: 10px; background: {{{{l.bg}}}}; color: {{{{l.fg}}}}; box-shadow: {{{{l.ring}}}}; font: inherit; font-size: 14px; font-weight: 700">{{{{l.n}}}}</button></sc-for>'
 # a lamp group's name in sentence case, as every head of the area (no caption in capitals: the section sheet's ruling)
 CAP59 = lambda t: f'<span style="font-size: 12px; font-weight: 600; color: {SOFT}">{t}</span>'
@@ -262,7 +262,7 @@ CHART76 = lambda *a: CHART59(*a).replace(_t0, TITLE76, 1)
 # the Genos, three sizes: Full (every control), Compact (Start/Stop and Main A–D in a row), Minimized (a pill)
 MINI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M5 12h14"></path></svg>'
 EXPI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="m18 15-6-6-6 6"></path></svg>'
-ICB = lambda act, label, svg: f'<button type="button" onClick="{{{{{act}}}}}" aria-label="{label}" data-tip="{label}" style="flex: none; width: 44px; height: 44px; margin: -2px -6px -2px 0; padding: 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{svg}</button>'
+ICB = lambda act, label, svg, margin='-2px -6px -2px 0': f'<button type="button" onClick="{{{{{act}}}}}" aria-label="{label}" data-tip="{label}" style="flex: none; width: 44px; height: 44px; margin: {margin}; padding: 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{svg}</button>'
 HEAD76 = HEAD59[:-len('</div>')] + ICB('gCompactT', 'Compact', EXPI.replace('m18 15-6-6-6 6', 'm6 9 6 6 6-6')) + ICB('gMinT', 'Minimize', MINI) + '</div>'
 CARDST = f'box-sizing: border-box; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}'
 def GENOS76(pos, wide):
@@ -308,7 +308,7 @@ TOAST76 = TOAST('{{toastB}}', z=56, on='toastPh')
 HEAD77 = HEAD59.replace('{{arTitle}}', '{{cpArTitle}}', 1)
 ARLINE77 = (f'<div style="display: flex; align-items: center; gap: 12px; min-height: 44px; margin-top: -4px"><p aria-live="polite" style="flex: 1; min-width: 0; margin: 0; font-size: 14px; line-height: 1.35; color: {SOFT}; text-wrap: pretty">{{{{cpArLine}}}}</p>'
             f'<sc-if value="{{{{cpAlone}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{cpRetry}}}}" style="flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Try again</button></sc-if></div>')
-START_G = LAMP59('arStart', '<span style="display: flex; justify-content: center"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="{{cpStartD}}"></path></svg></span>', 'togglePlay', 'Start/Stop').replace('min-width: 44px', 'flex: none; width: 44px; min-width: 44px', 1)
+START_G = LAMP59('arStart', '<span style="display: flex; justify-content: center"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="{{cpStartD}}"></path></svg></span>', 'togglePlay', 'Start/Stop', size='flex: none; width: 44px; min-width: 44px')
 def GENOS77(pos, wide, flat=False):
     g = GENOS76(pos, wide).replace('{{arTitle}}', '{{cpArTitle}}')
     if not wide:
@@ -398,7 +398,7 @@ GDOCK77 = (f'<sc-if value="{{{{cpGDock}}}}" hint-placeholder-val="{{{{false}}}}"
            f'<div role="toolbar" aria-label="Genos style controls" style="width: 560px; height: 64px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 12px; {CARDST}">'
            f'<span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>' + START59
            + f'<div role="group" aria-label="Main" style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">{LAMPS59("arMains", "Main")}</div>'
-           + ICB('pickGe', 'The Genos panel', EXPI).replace('margin: -2px -6px -2px 0', 'margin: 0', 1) + '</div></div></sc-if>')
+           + ICB('pickGe', 'The Genos panel', EXPI, margin='0') + '</div></div></sc-if>')
 lm77 = (f'<div data-menuroot style="position: absolute; inset: 0; display: flex; flex-direction: column">' + BAND77
         + '<div style="flex: 1; min-height: 0; display: flex">' + RAIL77 + PANELS77
         + '<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">'
