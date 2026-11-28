@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · R76's Edit layout leaves the boards' code: the panel tags (PTAG, nulled by a patch), the floating Controls dock built and never drawn, eight more state keys and the layout's constants (no visible change) · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
+- 2026-11-28 · 13c36308 · R76's Edit layout leaves the boards' code: the panel tags (PTAG, nulled by a patch), the floating Controls dock built and never drawn, eight more state keys and the layout's constants (no visible change) · ChordPlayer, ChordPlayerLaptop · v895
 - 2026-11-28 · 0ba7b7a3 · the phone's chart ends 24 under its last part, as the app's, where it kept R76's 242 reserve for keys and a Controls dock that no longer float over it (a bare stretch at the scroll's end); R76's 55 layout values that nothing draws go from the board's code · ChordPlayer, ChordPlayerLaptop · v894
 - 2026-11-28 · f4acf7e6 · the name menu's hairlines are the kit's menu separator (`MENUSEP`, 6 over and under, 12 in, as the app's DropdownMenuSeparator), where the board patched the ☰ hairline from 4 to 6 three times (no visible change) · ChordPlayer, ChordPlayerLaptop · v894
 - 2026-11-28 · 363b01a6 · the band's Undo takes back the sheet's last edit (a section deleted comes back) and rests at half strength until there is one, as the app's, where it was ink on any saved sheet and did nothing · ChordPlayerLaptop · v893
