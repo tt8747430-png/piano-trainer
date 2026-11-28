@@ -1574,6 +1574,7 @@ owner's, typos fixed.
 - **A long chart lost Add section (the loop, 2026-11-28):** in a Chord player sheet of 40 chords the chart's scroller squeezed Add section's card to nothing, a hairline where the act stood; the chart's parts keep their height now. Never again: a scrolling flex column whose clipped card can shrink; check every screen with the longest real content.
 - **A toast in two lines (the loop, 2026-11-28):** opening a Chord player sheet with a long name ran its toast to four lines over the chart; every toast, app and boards, holds its words to two lines now, a long name ending in …. Never again: a toast that grows with the name it quotes.
 - **No Main lit at rest (the loop, 2026-11-28):** the Chord player's board lit Main A on a stopped Genos, against its own ruling and the app; it lights none until one is set or pressed, the pill reading Genos. Never again: a board's default that a ruling has already settled otherwise.
+- **The Genos card's padding and Try again (the loop, 2026-11-28):** the app's Genos card started 8 from its top and offered Try again as a 44 button louder than the line it answers; it is the board's 12 all round and its quiet 36 pill at 14/600. Never again: a recovery act shouting over the status it belongs to.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

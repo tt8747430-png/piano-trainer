@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { ARRANGER_NUMBERS, MAINS, mainOf, SECTION } from '@/shared/lib/arrangement'
 import { cn } from '@/shared/lib'
 import { PlayGlyph, Toolbar } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import type { ArrangerPanel } from '../model/use-arranger-play'
 
 const ROMAN = { 1: 'I', 2: 'II', 3: 'III' } as const
@@ -134,9 +133,14 @@ export function ArrangerStrip({
           )
   const retry =
     status?.state === 'no-device' || status?.state === 'denied' ? (
-      <Button variant="soft" onClick={panel.reconnect} className="shrink-0">
+      // The board's quiet pill (ARLINE77): 36 high on the fill, 14/600; its reach 44.
+      <button
+        type="button"
+        onClick={panel.reconnect}
+        className="relative h-9 shrink-0 rounded-pill bg-muted px-3.5 text-sm font-semibold transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-1 before:content-[''] hover:brightness-95"
+      >
         {t('common:midi.retry')}
-      </Button>
+      </button>
     ) : null
   const dot = (
     <span
@@ -280,10 +284,7 @@ export function ArrangerStrip({
   return (
     <Toolbar
       label={t('chordPlayer.arranger.strip', { device })}
-      className={cn(
-        'relative flex w-full min-w-0 flex-col gap-2 px-3 pt-2 pb-3',
-        flat ? FLAT_CARD : CARD,
-      )}
+      className={cn('relative flex w-full min-w-0 flex-col gap-2 p-3', flat ? FLAT_CARD : CARD)}
     >
       <div className="flex min-h-10 items-center gap-2">
         {dot}
@@ -300,7 +301,10 @@ export function ArrangerStrip({
         )}
       </div>
       <div className="-mt-1 flex min-h-11 items-center gap-3">
-        <p aria-live="polite" className="min-w-0 flex-1 text-sm text-pretty text-muted-foreground">
+        <p
+          aria-live="polite"
+          className="min-w-0 flex-1 text-sm/[1.35] text-pretty text-muted-foreground"
+        >
           {line}
         </p>
         {retry}
