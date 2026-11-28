@@ -281,7 +281,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       gTopL: gOn && gP.at === 'top', gLeft: gOn && gP.at === 'left', gRight: gOn && gP.at === 'right', gFloatL: gOn && gP.at === 'float', gBotL: gOn && gP.at === 'bottom',
       gFull: gP.mode === 'full', gCompact: gP.mode === 'compact', gMin: gP.mode === 'min', gMinT: () => setP('genos', { mode: 'min' }), gFullT: () => setP('genos', { mode: 'full' }), gCompactT: () => setP('genos', { mode: 'compact' }),
       gFloatPos: 'left: 16px; right: ' + (dP.mode === 'min' && dFloat ? '92px' : '16px') + '; bottom: ' + gFloatB + 'px', gMinPos: 'left: 16px; bottom: ' + gFloatB + 'px',
-      arMainL: 'Main ' + ar.main,
+      arMainL: 'Main ' + ar.main, arPillL: 'Genos · Main ' + ar.main,
       dFloatFull: dFloat && dP.mode === 'full', dFloatMin: dFloat && dP.mode === 'min', dTop: !dP.hid && dP.at === 'top', dockPos: 'bottom: ' + dockB + 'px',
       chartPad: (base + (dFloat ? 80 : 0) + (gOn && gP.at !== 'top' && gP.at !== 'bottom' ? gH + 8 : 0) + 16) + 'px',
       cOn: !cP.hid, cLeft: !cP.hid && cP.at === 'left', cRight: !cP.hid && cP.at === 'right',

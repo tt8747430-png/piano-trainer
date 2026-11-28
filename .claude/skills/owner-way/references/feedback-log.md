@@ -1550,6 +1550,7 @@ owner's, typos fixed.
 - **One value, every face (loop, consistency, 2026-11-28):** the Chord player board's ☰ said Repeats × 3 from an old key while its Playback options said Until Stop; one value now. The app took the board's one-bar count-in for a new sheet, lifted its toasts over the keys (they sat on them) and drew every drag's grip at the kit's 18.
 - **A new chord sheet saved from its name (the loop, 2026-11-28):** the Chord player's board had no way to keep a new sheet, where the app's name menu leads with it checked and ends on Save as my chord sheet… (the kit's New form, Name and Save); the board draws it now on both sizes. The kit's ROWMENU takes an `html` row for a row shown in one state, so no menu's output is patched.
 - **The docked Genos as its board (the loop, 2026-11-28):** docked over a laptop's keys the Chord player's Genos row showed the phone's ▶ (read as a second Play), Main A–D capped at 320 and a minimize the board does not draw; it is the board's now: Start/Stop in words at 88, Main A–D filling the 560 row, ⌃ alone.
+- **A pill's label one phrase (the loop, 2026-11-28):** the Chord player board's minimized Genos pill split "Genos · Main A" into two flex items around its binding (the dot tight to Genos, 8 before Main A); a label with a value in it is one string in the board's state. Never again: text and a binding as siblings in a flex row with a gap.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

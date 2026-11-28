@@ -235,7 +235,7 @@ CP58 = CP58.replace("    return { ...common(st, set), sec59,", r"""    const LAY
       gTopL: gOn && gP.at === 'top', gLeft: gOn && gP.at === 'left', gRight: gOn && gP.at === 'right', gFloatL: gOn && gP.at === 'float', gBotL: gOn && gP.at === 'bottom',
       gFull: gP.mode === 'full', gCompact: gP.mode === 'compact', gMin: gP.mode === 'min', gMinT: () => setP('genos', { mode: 'min' }), gFullT: () => setP('genos', { mode: 'full' }), gCompactT: () => setP('genos', { mode: 'compact' }),
       gFloatPos: 'left: 16px; right: ' + (dP.mode === 'min' && dFloat ? '92px' : '16px') + '; bottom: ' + gFloatB + 'px', gMinPos: 'left: 16px; bottom: ' + gFloatB + 'px',
-      arMainL: 'Main ' + ar.main,
+      arMainL: 'Main ' + ar.main, arPillL: 'Genos · Main ' + ar.main,
       dFloatFull: dFloat && dP.mode === 'full', dFloatMin: dFloat && dP.mode === 'min', dTop: !dP.hid && dP.at === 'top', dockPos: 'bottom: ' + dockB + 'px',
       chartPad: (base + (dFloat ? 80 : 0) + (gOn && gP.at !== 'top' && gP.at !== 'bottom' ? gH + 8 : 0) + 16) + 'px',
       cOn: !cP.hid, cLeft: !cP.hid && cP.at === 'left', cRight: !cP.hid && cP.at === 'right',
@@ -305,7 +305,7 @@ def GENOS76(pos, wide):
             + f'<div role="group" aria-label="Main" style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">{LAMPS59("arMains", "Main")}</div>'
             + ICB('gFullT', 'Full', EXPI) + ICB('gMinT', 'Minimize', MINI) + PTAG('pickG', 'openLayG', 'Genos', 'right: 8px; top: -22px') + '</div></sc-if>')
     pill = (f'<sc-if value="{{{{gMin}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{gFullT}}}}" aria-label="Genos, {{{{arMainL}}}}: show its controls" style="position: relative; height: 44px; box-sizing: border-box; padding: 0 12px 0 14px; border: 0; border-radius: 22px; {GLASSFX}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">'
-            f'<span style="width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>Genos · {{{{arMainL}}}}{ICON(EXPI, 18)}</button></sc-if>')
+            f'<span style="width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span><span>{{{{arPillL}}}}</span>{ICON(EXPI, 18)}</button></sc-if>')
     return f'<div style="{pos}">{full}{comp}{pill}</div>'
 
 # the Controls: Full (Style · Key · Tempo · Repeats · Play) or Play only, floating or as a row under the bar
