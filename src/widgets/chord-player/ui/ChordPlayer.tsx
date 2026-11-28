@@ -393,6 +393,12 @@ export function ChordPlayer({
       combo: { code: 'KeyZ', mod: true, shift: true },
       run: hand.redo,
     },
+    // A chord's own keys, bound on its tile (`ChordTile`), listed here.
+    { label: t('chordPlayer.shortcuts.chords'), shown: ['←', '→', '↑', '↓'] },
+    { label: t('chordPlayer.shortcuts.edit'), shown: ['Enter'] },
+    { label: t('chordPlayer.shortcuts.length'), shown: ['Shift', '← →'] },
+    { label: t('chordPlayer.shortcuts.move'), shown: ['Space'] },
+    { label: t('chordPlayer.shortcuts.remove'), shown: ['Backspace'] },
   ])
 
   const sensors = useDragSensors(SHEET_KEYS)

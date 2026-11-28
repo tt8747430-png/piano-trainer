@@ -1022,7 +1022,17 @@ export const practice = {
     play: 'Play',
     stop: 'Stop',
     inProgressions: 'Open in Progressions',
-    shortcuts: { group: 'Chord player', playStop: 'Play or stop', undo: 'Undo', redo: 'Redo' },
+    shortcuts: {
+      group: 'Chord player',
+      playStop: 'Play or stop',
+      undo: 'Undo',
+      redo: 'Redo',
+      chords: 'Move between chords',
+      edit: 'Edit the chord',
+      length: 'Change its length',
+      move: 'Pick up or drop the chord',
+      remove: 'Delete the chord',
+    },
     settings: {
       piano: 'Piano',
       bass: 'Bass',

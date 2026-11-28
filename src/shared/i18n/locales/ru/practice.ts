@@ -1013,6 +1013,11 @@ export const practice: LocaleResources['practice'] = {
       playStop: 'Играть или остановить',
       undo: 'Отменить',
       redo: 'Вернуть',
+      chords: 'Перейти между аккордами',
+      edit: 'Изменить аккорд',
+      length: 'Изменить длительность',
+      move: 'Взять или опустить аккорд',
+      remove: 'Удалить аккорд',
     },
     settings: {
       piano: 'Фортепиано',
