@@ -58,7 +58,7 @@ export function Toaster() {
         <BaseToast.Viewport
           data-slot="toast-viewport"
           aria-label={t('notifications')}
-          className="pointer-events-none fixed inset-x-0 toast-foot z-60 mx-auto w-[min(26rem,calc(100vw-2*var(--gutter)))] print:hidden lg:left-sidebar lg:w-115"
+          className="pointer-events-none toast-column toast-foot z-60 print:hidden"
         >
           <Toasts />
         </BaseToast.Viewport>

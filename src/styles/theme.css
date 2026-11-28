@@ -1043,22 +1043,37 @@
     bottom: calc(--spacing(7) + var(--docked, 0px));
   }
 }
-/* A toast said while a notice shows (a new version, the storage full) stands 8 over it. */
+/* Where a toast and the app's notices stand: centred over the foot, a phone's width at most, 460 on a
+   laptop, centred on its pane (the placements below move both as one). */
+@utility toast-column {
+  position: fixed;
+  inset-inline: 0;
+  margin-inline: auto;
+  width: min(26rem, calc(100vw - 2 * var(--gutter)));
+  @variant lg {
+    left: --spacing(62);
+    width: --spacing(115);
+  }
+}
+/* A toast said while a notice shows (a new version, the storage full) stands 8 over it, gliding up as
+   the notice comes and down as it goes. */
 [data-slot='toast-viewport'] {
   translate: 0 calc(-1 * var(--notices, 0px));
+  transition: translate 300ms var(--ease-out);
 }
 @media (width >= 64rem) {
-  :root:has([data-slot='floating-actions'] [role='toolbar']) [data-slot='toast-viewport'] {
+  :root:has([data-slot='floating-actions'] [role='toolbar'])
+    :is([data-slot='toast-viewport'], [data-slot='notices']) {
     bottom: calc(--spacing(29) + var(--docked, 0px));
   }
 }
 /* A full-screen tool with a rail (the Chord player) has no sidebar: its toast centres on what the
    rail leaves, the rail's 76, or the rail and its open panel's 428 (`data-toast-over`). */
 @media (width >= 64rem) {
-  :root:has([data-toast-over='rail']) [data-slot='toast-viewport'] {
+  :root:has([data-toast-over='rail']) :is([data-slot='toast-viewport'], [data-slot='notices']) {
     left: --spacing(19);
   }
-  :root:has([data-toast-over='panel']) [data-slot='toast-viewport'] {
+  :root:has([data-toast-over='panel']) :is([data-slot='toast-viewport'], [data-slot='notices']) {
     left: --spacing(107);
   }
 }

@@ -26,7 +26,8 @@ function Notices({ children }: { children: ReactNode }) {
   return (
     <div
       ref={setNotices}
-      className="pointer-events-none fixed inset-x-0 toast-foot z-40 mx-auto flex w-[min(26rem,calc(100vw-2*var(--gutter)))] flex-col gap-2 print:hidden *:transition-[translate,opacity] *:duration-300 *:ease-out *:starting:translate-y-4 *:starting:opacity-0 motion-reduce:*:transition-none lg:left-sidebar lg:w-115"
+      data-slot="notices"
+      className="pointer-events-none toast-column toast-foot z-40 flex flex-col gap-2 print:hidden *:transition-[translate,opacity] *:duration-300 *:ease-out *:starting:translate-y-4 *:starting:opacity-0"
     >
       {children}
     </div>
