@@ -153,7 +153,9 @@ CP58 = CP58.replace("    return { ...common(st, set), draftOn:", r"""    const S
       suggest59: ['C/E', 'Dm', 'F/C', 'B♭', 'C', 'C7', 'Am', 'Gm'].map((c) => ({ ...SUP(c), pick: () => editSecs((x) => { x[st.sel ? st.sel[0] : 0][3][st.sel ? st.sel[1] : 0][selCi] = c; }) })), draftOn:""", 1)
 assert CP58.count('sec59') == 2, 'R59 patch missed'
 
-def CHART59(cols, gap, bh, bf, plus):
+def CHART59(cols, gap, bh, bf, plus, title=''):
+    # title: the sheet's name over the chart with its state (a phone's); a laptop names it in the band, so none
+    name = (f'<div style="display: flex; align-items: baseline; gap: 8px">{title}<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; font-weight: 600; color: #7A5418">Draft</span></sc-if><sc-if value="{{{{freshOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; font-weight: 600; color: {SOFT}">Not saved</span></sc-if><sc-if value="{{{{liveOn}}}}" hint-placeholder-val="{{{{true}}}}"><span style="display: inline-flex; align-items: center; gap: 8px; align-self: center; font-size: 13px; font-weight: 600; color: {SOFT}"><span style="width: 8px; height: 8px; border-radius: 4px; background: #44684A"></span>Live</span></sc-if></div>') if title else ''
     sup = f'<sup style="font-size: max(12px, .6em); vertical-align: .6em; margin-left: 1px">{{{{b.x}}}}</sup>'
     box = (f'<sc-for list="{{{{x.boxes}}}}" as="b" hint-placeholder-count="8"><button type="button" onClick="{{{{b.tap}}}}" aria-label="{{{{b.label}}}}" style="grid-column: {{{{b.span}}}}; position: relative; min-width: 0; height: {bh}px; padding: 4px 8px 0; border: 0; border-radius: 8px; background: {{{{b.bg}}}}; box-shadow: {{{{b.ring}}}}; color: {INK}; font: inherit; text-align: left; display: flex; align-items: flex-start">'
            f'<span style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: {bf}px; font-weight: 500; line-height: 1.25">{{{{b.r}}}}{sup}{{{{b.b}}}}</span>'
@@ -167,8 +169,7 @@ def CHART59(cols, gap, bh, bf, plus):
             + f'<button type="button" onClick="{{{{x.del}}}}" aria-label="Delete {{{{x.name}}}}" data-tip="Delete section" style="flex: none; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{TRASHI}</button>'
             + f'<span style="flex: 1"></span><span aria-label="Move {{{{x.name}}}}" style="flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: {SOFT}; cursor: grab">{GRIP}</span></div>')
     tag = f'<sc-if value="{{{{x.tagOn}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{x.openTag}}}}" aria-label="On the Genos: {{{{x.tag}}}}" style="align-self: flex-start; max-width: 100%; height: 44px; margin: -6px 0 -2px; padding: 0; border: 0; background: transparent; font: inherit; color: {INK}"><span style="height: 30px; padding: 0 12px; border-radius: 8px; box-shadow: inset 0 0 0 1px {LINE}; display: flex; align-items: center; font-size: 13px; font-weight: 600; color: {{{{x.tagFg}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.tag}}}}</span></button></sc-if>'
-    return (f'<div style="display: flex; flex-direction: column; gap: 16px">'
-            f'<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-size: 22px; font-weight: 600">My verse and chorus</span><sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; font-weight: 600; color: #7A5418">Draft</span></sc-if><sc-if value="{{{{freshOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; font-weight: 600; color: {SOFT}">Not saved</span></sc-if><sc-if value="{{{{liveOn}}}}" hint-placeholder-val="{{{{true}}}}"><span style="display: inline-flex; align-items: center; gap: 8px; align-self: center; font-size: 13px; font-weight: 600; color: {SOFT}"><span style="width: 8px; height: 8px; border-radius: 4px; background: #44684A"></span>Live</span></sc-if></div>'
+    return (f'<div style="display: flex; flex-direction: column; gap: 16px">{name}'
             f'<sc-for list="{{{{sec59}}}}" as="x" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px">{head}{tag}'
             f'<div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: {gap}px">{box}{plusb}</div></section></sc-for>'
             + ADDCARD('Add section', 'addSec') + '</div>')
@@ -253,9 +254,6 @@ assert 'Genos minimized' in CP58
 CHEVD20 = CHEV_D
 TITLE76 = (f'<button type="button" data-menuroot-anchor onClick="{{{{openSheets}}}}" aria-label="Chord sheet: {{{{sheetsL}}}}. Open another" style="flex: 0 1 auto; min-width: 0; height: 44px; margin: -6px 0; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 4px">'
            f'<span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 22px; font-weight: 600">{{{{sheetsL}}}}</span><span style="flex: none; color: {SOFT}; display: flex">{CHEVD20}</span></button>')
-_t0 = '<span style="font-size: 22px; font-weight: 600">My verse and chorus</span>'
-assert _t0 in CHART59(8, 4, 60, 21, 2)
-CHART76 = lambda *a: CHART59(*a).replace(_t0, TITLE76, 1)
 
 
 # the Genos, three sizes: Full (every control), Compact (Start/Stop and Main A–D in a row), Minimized (a pill)
@@ -389,9 +387,7 @@ PANELS77 = (_PANEL('Ch', '{{keyHead}}', _DRAGB)
             + _PANEL('St', 'Styles', STYLEROWS) + _PANEL('Ge', 'Genos', GENOSPANEL) + _PANEL('So', 'Audio', SOUND77) + _PANEL('Ca', 'Chart', CHART77))
 
 # the chart, its name in the band on a laptop (the chart starts on its first section); the phone keeps it over the chart
-_c = CHART59(16, 8, 76, 28, 1)
-_a = _c.index('<div style="display: flex; align-items: baseline; gap: 8px">'); _b = _c.index('<sc-for list="{{sec59}}"')
-CHARTL77 = _c[:_a] + _c[_b:]
+CHARTL77 = CHART59(16, 8, 76, 28, 1)
 # the Genos docked over the keys while another panel is open: Start/Stop and Main A–D in its compact row, Full opens its panel
 GDOCK77 = (f'<sc-if value="{{{{cpGDock}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: none; display: flex; justify-content: center; padding: 0 0 12px">'
            f'<div role="toolbar" aria-label="Genos style controls" style="width: 560px; height: 64px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 12px; {CARDST}">'
@@ -412,7 +408,7 @@ PHHDR77 = (f'<header data-band style="flex: none; position: relative; z-index: 2
            + PHTRANSPORT('playOff') + PHKEYSBTN
            + f'<button type="button" aria-label="Menu" data-tip="Menu" aria-haspopup="dialog" aria-expanded="{{{{phMenuX}}}}" onClick="{{{{phMenu}}}}" style="{_PB}; color: {{{{phMenuFg}}}}">{MENUI}</button></div></header>')
 ph77 = (PHHDR77
-        + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 16px">{SHOWSTATES()}{CHART76(8, 8, 60, 21, 2)}</main>'
+        + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 16px">{SHOWSTATES()}{CHART59(8, 8, 60, 21, 2, TITLE76)}</main>'
         + f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}">{GENOS77("position: relative; flex: none; margin: 8px 16px", False)}</sc-if>'
         + f'<sc-if value="{{{{cpKeysOn}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS77(112)}</sc-if>')
 # Lucide's shuffle: Randomize chords (the app's file acts)
