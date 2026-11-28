@@ -1567,6 +1567,7 @@ owner's, typos fixed.
 - **A phone's pages at a finger's size (the loop, 2026-11-28):** the Chord player's phone pages (Style, Chart, Audio) drew the laptop panel's 15 heads and 15 rows 12 in; on a phone they are 16 and 16 in, as the board's every ☰ page.
 - **Repeats' bounds rest (the loop, 2026-11-28):** the Chord player board's Repeats − looked live at Until Stop, where it does nothing; it rests at half strength there, and + at 8 times, as the app.
 - **A sheet's acts as wide as their words (the loop, 2026-11-28):** the Chord player's chord sheet cut Play from here at 393, the row split evenly with Duplicate; each act now starts at its words' width and shares the rest, board and app.
+- **The section sheet's switch row 48 (the loop, 2026-11-28):** the Chord player's Loop this section stood 56 in the app; it is the kit's 48 switch row, as the board.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

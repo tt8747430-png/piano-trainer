@@ -53,7 +53,7 @@ export function SectionSheet({
               label={t('chordPlayer.loopSection')}
               checked={looped}
               onCheckedChange={onLoop}
-              className="min-h-14 pr-3 pl-4 text-base"
+              className="min-h-12 pr-3 pl-4 text-base"
             />
           </SheetCard>
           {canDuplicate ? (
