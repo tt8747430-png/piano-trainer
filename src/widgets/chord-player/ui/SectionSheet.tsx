@@ -1,51 +1,30 @@
-import { Copy, Trash2 } from 'lucide-react'
+import { Copy } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import {
-  SECTION_KINDS,
-  SECTION_REPEATS,
-  VARIATIONS,
-  type SheetSection as Section,
-  type Variation,
-} from '@/shared/lib/arrangement'
-import {
-  GroupLink,
-  GroupRow,
-  GroupRows,
-  GroupSegmented,
-  GroupSwitch,
-  MenuPicker,
-  Sheet,
-  SheetContent,
-  Stepper,
-} from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { SECTION_KINDS, type SheetSection as Section } from '@/shared/lib/arrangement'
+import { MenuPicker, Sheet, SheetContent, SwitchRow } from '@/shared/ui'
+import { POP, SheetAct, SheetCard, SheetRow } from './sheet-parts'
 
 /**
- * A section's sheet, opened from its head (canvas 171): its name, how many times it plays, Loop this
- * section, the style's variation where it has more than one; Duplicate and Delete at the foot (Delete at once,
- * with Undo in its toast).
+ * A section's sheet, opened from its name (canvas R77, `CP_SEC`): what its head cannot hold. One white
+ * card, Section ⇕ (its name) and Loop this section; Duplicate section under it. How often it plays, its
+ * variation and Delete stand on the head alone, the Genos marks on their own chip.
  */
 export function SectionSheet({
   open,
   onOpenChange,
   section,
-  variations,
   canDuplicate,
   onChange,
   onDuplicate,
-  onDelete,
   looped,
   onLoop,
 }: {
   open: boolean
   onOpenChange(open: boolean): void
   section: Section
-  /** The style's variations: none drawn but one. */
-  variations: readonly Variation[]
   canDuplicate: boolean
   onChange(change: Partial<Section>): void
   onDuplicate(): void
-  onDelete(): void
   /** Whether Play goes round this section alone. */
   looped: boolean
   onLoop(on: boolean): void
@@ -53,70 +32,38 @@ export function SectionSheet({
   const { t } = useTranslation('practice')
   const name = t(`chordPlayer.sections.${section.kind}`)
   return (
-    <Sheet at={{}} open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        title={name}
-        footer={
-          <div className="flex flex-col gap-2">
-            {canDuplicate ? (
-              <Button variant="outline" size="lg" onClick={onDuplicate}>
-                <Copy aria-hidden />
-                {t('chordPlayer.duplicateSection')}
-              </Button>
-            ) : null}
-            <Button variant="destructive" size="lg" onClick={onDelete}>
-              <Trash2 aria-hidden />
-              {t('chordPlayer.deleteSection')}
-            </Button>
-          </div>
-        }
-      >
-        <GroupRows label={name}>
-          <MenuPicker
-            label={t('chordPlayer.section')}
-            value={section.kind}
-            options={SECTION_KINDS.map((kind) => ({
-              value: kind,
-              label: t(`chordPlayer.sections.${kind}`),
-            }))}
-            onChange={(kind) => onChange({ kind })}
-            trigger={
-              <GroupLink
+    <Sheet at={{ width: 'w-95' }} open={open} onOpenChange={onOpenChange}>
+      <SheetContent title={name}>
+        <div className="flex flex-col gap-4">
+          <SheetCard>
+            <SheetRow label={t('chordPlayer.section')}>
+              <MenuPicker
                 label={t('chordPlayer.section')}
-                value={t(`chordPlayer.sections.${section.kind}`)}
+                bare
+                className={`${POP} min-w-34`}
+                value={section.kind}
+                options={SECTION_KINDS.map((kind) => ({
+                  value: kind,
+                  label: t(`chordPlayer.sections.${kind}`),
+                }))}
+                onChange={(kind) => onChange({ kind })}
               />
-            }
-          />
-          <GroupRow label={t('chordPlayer.repeat')}>
-            <Stepper
-              label={t('chordPlayer.repeat')}
-              value={section.repeats}
-              min={SECTION_REPEATS.min}
-              max={SECTION_REPEATS.max}
-              format={(count) => t('chordPlayer.times', { count })}
-              decrease={t('chordPlayer.fewer')}
-              increase={t('chordPlayer.moreTimes')}
-              onChange={(repeats) => onChange({ repeats })}
+            </SheetRow>
+            <SwitchRow
+              label={t('chordPlayer.loopSection')}
+              checked={looped}
+              onCheckedChange={onLoop}
+              className="min-h-14 pr-3 pl-4 text-base"
             />
-          </GroupRow>
-          <GroupSwitch
-            label={t('chordPlayer.loopSection')}
-            checked={looped}
-            onCheckedChange={onLoop}
-          />
-          {variations.length > 1 ? (
-            <GroupSegmented
-              label={t('chordPlayer.variation')}
-              value={
-                VARIATIONS.find(
-                  (each) => each === Math.min(section.variation, variations.length),
-                ) ?? section.variation
-              }
-              options={variations.map((value) => ({ value, label: String(value) }))}
-              onChange={(variation) => onChange({ variation })}
-            />
+          </SheetCard>
+          {canDuplicate ? (
+            <div className="flex">
+              <SheetAct icon={<Copy aria-hidden className="size-5" />} onClick={onDuplicate}>
+                {t('chordPlayer.duplicateSection')}
+              </SheetAct>
+            </div>
           ) : null}
-        </GroupRows>
+        </div>
       </SheetContent>
     </Sheet>
   )

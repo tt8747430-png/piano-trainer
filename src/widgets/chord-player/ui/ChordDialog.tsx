@@ -1,5 +1,5 @@
 import { Copy, Play, Trash2 } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { CHORD_BEATS } from '@/shared/lib/arrangement'
@@ -30,6 +30,7 @@ import {
   TypedField,
 } from '@/shared/ui'
 import { likeliestChords } from '../model/key-chords'
+import { POP, SheetAct, SheetCard, SheetRow } from './sheet-parts'
 
 /** The bass a chord's choices offer: its root, or one of its other tones under it. */
 const BASS_ROLES = ['root', '3rd', '5th', '7th'] as const
@@ -121,8 +122,8 @@ export function ChordDialog({
             />
           ) : null}
           {/* Musicca's rows (R77, `CP_CHORD59`): one white card, Chord root ⌄ quality ⌄, Bass note ⌄, Duration − n beats +. */}
-          <div className="flex flex-col overflow-hidden rounded-card bg-card shadow-[0_0_0_1px_var(--color-border)]">
-            <DialogRow label={t('chordPlayer.chord.quality')}>
+          <SheetCard>
+            <SheetRow label={t('chordPlayer.chord.quality')}>
               <NotePicker
                 label={t('chordPlayer.chord.root')}
                 bare
@@ -149,8 +150,8 @@ export function ChordDialog({
                   if (quality) take({ root: chord.root, quality })
                 }}
               />
-            </DialogRow>
-            <DialogRow label={t('chordPlayer.chord.bass')}>
+            </SheetRow>
+            <SheetRow label={t('chordPlayer.chord.bass')}>
               <MenuPicker
                 label={t('chordPlayer.chord.bass')}
                 bare
@@ -179,8 +180,8 @@ export function ChordDialog({
                   )
                 }}
               />
-            </DialogRow>
-            <DialogRow label={t('chordPlayer.chord.length')}>
+            </SheetRow>
+            <SheetRow label={t('chordPlayer.chord.length')}>
               <Stepper
                 label={t('chordPlayer.chord.length')}
                 value={beats}
@@ -191,8 +192,8 @@ export function ChordDialog({
                 increase={t('chordPlayer.chord.longer')}
                 onChange={onBeats}
               />
-            </DialogRow>
-          </div>
+            </SheetRow>
+          </SheetCard>
           <section className="flex flex-col gap-2">
             <h3 className="font-sans text-subhead font-semibold">
               {t('chordPlayer.chord.suggested')}
@@ -234,41 +235,5 @@ export function ChordDialog({
         </div>
       </SheetContent>
     </Sheet>
-  )
-}
-
-/** A pop-up's look in the sheet's rows, Musicca's select: white, ringed, its value and ⌄. */
-const POP =
-  'h-11 rounded-control border-0 bg-card px-3 font-normal shadow-[0_0_0_1px_var(--color-border)] [&_span]:font-normal'
-
-/** One of the sheet's rows (canvas 173): its name, its controls at its end. */
-function DialogRow({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="flex min-h-14 items-center gap-2 py-1.5 pr-3 pl-4 not-last:shadow-[inset_0_-1px_0_var(--color-muted)]">
-      <span className="min-w-0 flex-1 text-base">{label}</span>
-      {children}
-    </div>
-  )
-}
-
-/** One of the sheet's acts at its foot (canvas 173): its icon and name on the quiet fill, sharing the row. */
-function SheetAct({
-  icon,
-  onClick,
-  children,
-}: {
-  icon: ReactNode
-  onClick(): void
-  children: ReactNode
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex h-11 min-w-0 flex-1 items-center justify-center gap-2 rounded-control bg-muted px-3 text-subhead font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:brightness-95"
-    >
-      {icon}
-      <span className="truncate">{children}</span>
-    </button>
   )
 }

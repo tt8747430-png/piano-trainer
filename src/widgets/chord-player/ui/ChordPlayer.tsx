@@ -1074,14 +1074,12 @@ export function ChordPlayer({
           open
           onOpenChange={(open) => (open ? null : setOpened(null))}
           section={openedSection}
-          variations={variations}
           canDuplicate={shown.sections.length < MOST_SECTIONS}
           onChange={(change) => inSection(opened, (each) => ({ ...each, ...change }))}
           onDuplicate={() => {
             hand.edit((sheet) => duplicateSection(sheet, opened))
             setOpened(null)
           }}
-          onDelete={() => deleteSection(opened)}
           looped={band.looped === opened}
           onLoop={(on) => band.setLoop(on ? opened : null)}
         />
