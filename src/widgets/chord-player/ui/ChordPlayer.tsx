@@ -213,6 +213,11 @@ const RAIL: readonly {
  * finger after a quarter-second hold, the keys after Space.
  */
 
+/**
+ * The chord the keys show while stopped when none is picked: the first, as a wash, waiting (the board's
+ * keys: "a wash while it waits and full while it sounds").
+ */
+const FIRST_CHORD: BoxPlace = { section: 0, index: 0 }
 /** The foot's height, which the toasts stand clear of. */
 const FOOT = { block: '--docked' }
 export function ChordPlayer({
@@ -821,7 +826,7 @@ export function ChordPlayer({
               <div className="shrink-0 overflow-hidden shadow-[0_-1px_0_var(--color-border)]">
                 <LiveKeyboard
                   range={laptop ? CHORD_PLAYER_LAPTOP_KEYS : CHORD_PLAYER_KEYS}
-                  marks={litKeys(lit ? chordAt(lit)?.chord : undefined).marks}
+                  marks={litKeys(chordAt(lit ?? picked ?? FIRST_CHORD)?.chord).marks}
                   spotlight
                   fitInView
                   height={KEYS_PX[laptop ? 'laptop' : 'phone']}

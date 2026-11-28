@@ -28,7 +28,8 @@ const inOctave = (note: SpelledNote, from: number): Midi =>
 /**
  * The chord sounding, on the keys (the Chord player's brief: "the keys show the chord"): its root or
  * slash bass in the left hand, its tones in the right in the octave just above, each key named, so a
- * chord spans an octave and stays in one view on a phone; nothing while nothing sounds.
+ * chord spans an octave and stays in one view on a phone; nothing for no chord. While stopped the keys
+ * show the chord picked as these marks' wash, waiting; while it sounds, in full.
  */
 export function litKeys(chord: Chord | undefined): ShownKeys {
   if (!chord) return NO_KEYS
