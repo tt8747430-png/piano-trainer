@@ -1,23 +1,24 @@
 import {
+  ArrowDownToLine,
+  ArrowRight,
   ArrowUpDown,
-  ChevronRight,
-  Download,
+  ArrowUpFromLine,
+  Cable,
   Drum,
   FileText,
   Gauge,
+  Link,
   ListMusic,
   ListPlus,
-  Music2,
+  Music,
   Repeat,
-  Cable,
-  Share,
   Shuffle,
-  Upload,
   Volume2,
   type LucideIcon,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMidiSummary } from '@/features/connect-midi'
 import { PhoneMenuButton, PhonePage, type MenuAction } from '@/shared/ui'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 
@@ -25,7 +26,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/
 export type PhonePage =
   'menu' | 'chords' | 'style' | 'key' | 'tempo' | 'repeats' | 'audio' | 'chart' | 'midi' | 'export'
 
-/** A row of ☰ (the kit's `FROWS` in a menu: 48 high at 17): its glyph, its word, its value, ›. */
+/**
+ * A row of ☰ (the kit's `FROW` in a menu: 48 high at 17, 12 in, its parts 16 apart): its glyph, its word, its
+ * value at 15 in soft ink, and the ink → of a row that opens a page (none on a row that acts where it stands).
+ */
 function MenuRow({
   icon: Icon,
   label,
@@ -43,25 +47,30 @@ function MenuRow({
     <button
       type="button"
       onClick={onClick}
-      className="flex min-h-12 w-full cursor-pointer items-center gap-3 rounded-[10px] px-3 text-left text-[1.0625rem] text-foreground hover:bg-muted/60"
+      className="flex min-h-12 w-full cursor-pointer items-center gap-4 rounded-[10px] px-3 text-left text-[1.0625rem] text-foreground hover:bg-muted/60"
     >
       <Icon aria-hidden className="size-5.5 shrink-0" strokeWidth={2} />
       <span className="min-w-0 flex-1 truncate">{label}</span>
-      {value ? <span className="shrink-0 text-base text-muted-foreground">{value}</span> : null}
-      {opens ? (
-        <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+      {value ? (
+        <span className="shrink-0 text-[0.9375rem] text-muted-foreground tabular-nums">
+          {value}
+        </span>
       ) : null}
+      {opens ? <ArrowRight aria-hidden className="size-5.5 shrink-0" strokeWidth={2} /> : null}
     </button>
   )
 }
 
 const RULE = <div role="separator" className="mx-3 my-1 h-px shrink-0 bg-border" />
 
-/** The glyph each file act wears in ☰. */
+/** The progressions' two acts, after their own hairline as the board's third group. */
+const PROGRESSION_ACTS = new Set(['to-progressions', 'progressions'])
+
+/** The glyph each file act wears in ☰ (the board's: a link for Share…, a line under Export's arrow, over Import's). */
 const FILE_ICONS: Readonly<Record<string, LucideIcon>> = {
-  share: Share,
-  export: Download,
-  'import-chart': Upload,
+  share: Link,
+  export: ArrowDownToLine,
+  'import-chart': ArrowUpFromLine,
   randomize: Shuffle,
   'to-progressions': ListPlus,
   progressions: ListMusic,
@@ -96,6 +105,7 @@ export function PhoneMenu({
   bodies: Readonly<Record<Exclude<PhonePage, 'menu'>, ReactNode>> & { readonly chordsTitle: string }
 }) {
   const { t } = useTranslation(['practice', 'common'])
+  const midi = useMidiSummary()
   const titles: Readonly<Record<Exclude<PhonePage, 'menu'>, string>> = {
     chords: bodies.chordsTitle,
     style: t('chordPlayer.style'),
@@ -125,7 +135,7 @@ export function PhoneMenu({
             {name}
           </p>
           <div className="flex flex-col">
-            <MenuRow icon={Music2} label={t('chordPlayer.rail.chords')} onClick={go('chords')} />
+            <MenuRow icon={Music} label={t('chordPlayer.rail.chords')} onClick={go('chords')} />
             <MenuRow
               icon={Drum}
               label={t('chordPlayer.style')}
@@ -157,24 +167,39 @@ export function PhoneMenu({
               value={rows.chart}
               onClick={go('chart')}
             />
-            <MenuRow icon={Cable} label={t('chordPlayer.settings.midi')} onClick={go('midi')} />
+            <MenuRow
+              icon={Cable}
+              label={t('chordPlayer.settings.midi')}
+              value={midi}
+              onClick={go('midi')}
+            />
           </div>
-          {RULE}
-          <div className="flex flex-col">
-            {fileActs.map((act) => (
-              <MenuRow
-                key={act.key}
-                icon={FILE_ICONS[act.key] ?? FileText}
-                label={act.label}
-                opens={act.items !== undefined}
-                onClick={() => {
-                  if (act.items) return onPage('export')
-                  onPage(null)
-                  act.onSelect()
-                }}
-              />
-            ))}
-          </div>
+          {[
+            fileActs.filter((act) => !PROGRESSION_ACTS.has(act.key)),
+            fileActs.filter((act) => PROGRESSION_ACTS.has(act.key)),
+          ].map((group, at) =>
+            group.length === 0 ? null : (
+              <div key={at} className="contents">
+                {RULE}
+                <div className="flex flex-col">
+                  {group.map((act) => (
+                    <MenuRow
+                      key={act.key}
+                      icon={FILE_ICONS[act.key] ?? FileText}
+                      label={act.label}
+                      // Export opens its page; Open in Progressions goes to another place: both carry →.
+                      opens={act.items !== undefined || act.key === 'progressions'}
+                      onClick={() => {
+                        if (act.items) return onPage('export')
+                        onPage(null)
+                        act.onSelect()
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            ),
+          )}
         </PopoverContent>
       </Popover>
       {inPage ? (
