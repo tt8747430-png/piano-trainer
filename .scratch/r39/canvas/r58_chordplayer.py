@@ -29,6 +29,8 @@ r'''    const beatNow = st.playing ? ((st.pos ?? 4) % 2) * 2 : -1;
           ticks: Array.from({ length: Math.max(sum, 1) }, (_, k) => ({ bg: now && k === beatNow ? '#332921' : '#B9AEA3', w: k === 0 ? '10px' : '6px' })),
           wrong, wrongTip: 'Bar ' + (bi + 1) + ' holds ' + sum + ' beats, not 4: tap to set its chords’ lengths',
           bg: now ? '#EDC684' : !st.playing && (slot || {}).si === si && (slot || {}).bi === bi ? '#F6E7C8' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi], selC: 0 }) }; }) }));
+    // a phone's chord comes up under the bar before its sheet rises (the app's `reveal`), 16 under the chart's top
+    const REVEAL = (e) => { const t = e && e.currentTarget, m = t && t.closest && t.closest('main'); if (!m || m.clientWidth > 600) return; const k = (m.getBoundingClientRect().height / m.offsetHeight) || 1; m.scrollTop += (t.getBoundingClientRect().top - m.getBoundingClientRect().top) / k - 16; };
     const selB = (st.sel ? SECS[st.sel[0]][3][st.sel[1]] : SECS[0][3][0]) || ['C'], selCi = st.selC ?? 0, selSym = selB[selCi] || selB[0];
     const selLen = st.sel ? lens(st.sel[0], st.sel[1], selB)[selCi] : 4;
     const setLen = (d) => { if (!st.sel) return; const k = st.sel[0] + ':' + st.sel[1], cur = lens(st.sel[0], st.sel[1], selB).slice(); cur[selCi] = Math.max(1, Math.min(8, cur[selCi] + d)); set({ len: { ...LEN, [k]: cur } }); };
@@ -143,7 +145,7 @@ CP58 = CP58.replace("    return { ...common(st, set), draftOn:", r"""    const S
             ticks: Array.from({ length: L }, (_, k) => ({ bg: now && f0 + k === beatNow ? '#332921' : '#C9BFB5', h: now && f0 + k === beatNow ? '10px' : '6px' })),
             picked, bg: now ? '#F6E7C8' : '#FEFDFB', ring: now || picked ? '0 0 0 2px #B98A32' : '0 0 0 1px #DAD1C8',
             wrong: wrong && ci === cs.length - 1, wrongTip: 'Bar ' + (bi + 1) + ' holds ' + sum + ' beats, not 4',
-            tap: (e) => set(picked ? { sheet: 'chord', sel: [si, bi], selC: ci, selB59: [si, bi, ci], pop: null, chordPos: ANCHOR(e, 420) } : { sel: [si, bi], selC: ci, selB59: [si, bi, ci] }) });
+            tap: (e) => { if (picked) REVEAL(e); set(picked ? { sheet: 'chord', sel: [si, bi], selC: ci, selB59: [si, bi, ci], pop: null, chordPos: ANCHOR(e, 420) } : { sel: [si, bi], selC: ci, selB59: [si, bi, ci] }); } });
           from += L; }); });
       return { m, name, rep: '× ' + rep, vari: 'Variation ' + (VARS[si] ?? 1), tag: follow ? (tagLine(TAGS[si] || { mains: [] }) || 'Genos') : '', tagFg: tagLine(TAGS[si] || { mains: [] }) ? '#332921' : '#685E56', tagOn: follow, openTag: (e) => set({ sheet: 'tag', tagAt: si, tagPos: ANCHOR({ currentTarget: e.currentTarget.firstElementChild }, 460) }), openSec: (e) => set({ sheet: 'sec', secAt: si, pop: null, secPos: ANCHOR(e, 380) }), boxes,
         repUp: () => editSecs((x) => { x[si][2] = (x[si][2] % 4) + 1; }), varUp: () => set({ vars: SECS.map((_, i) => (i === si ? ((VARS[i] ?? 1) % 4) + 1 : VARS[i] ?? 1)), draft: true }),
