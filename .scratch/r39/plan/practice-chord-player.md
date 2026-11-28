@@ -268,8 +268,9 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     **Follow without an arranger plays the sheet** (owner, 2026-11-14: "the chords played is not shown while the
     follow a midi arranger is enabled but not connected to the midi and the buttons play are not working"): the Genos
     leads only while it is connected; with Follow on and none there, Play plays the sheet as usual and lights it, and
-    the strip says why ("Genos · Not connected. The sheet plays by itself"), its panel buttons dimmed and Start/Stop
-    gone until one is connected.
+    the strip says why. *Replaced 2026-11-28 by "The arranger's Start is Play" (above): with none there the app's band
+    stands in for the Genos, its panel's lamps live and Start/Stop starting from the chord picked; the strip says why
+    (No Genos found, MIDI access was blocked, or the browser cannot connect one) with Try again.*
   - **Saved, synced and migrated** (owner, 2026-11-13: "I want to be able to save the like this as chord sheets
     and sync to my account and also the older ones should be able to migrate to this new structure effortlessly"):
     a sheet of bars is saved as text in the `chord_sheets` store, synced to the account like every saved store; a
