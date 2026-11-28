@@ -5,6 +5,7 @@ import { cn } from '@/shared/lib'
 import { BAR, barWords } from '../model/bar-look'
 import type { BarWords, BeatWords } from '../model/bar-words'
 import { BarCells } from './BarCells'
+import { beatColumns } from './CellChords'
 
 /** No words under a bar. */
 const NO_WORDS: BarWords = []
@@ -88,7 +89,7 @@ export function BarButton({
         tap === 'go' ? 'relative grid min-w-0 auto-rows-min gap-px' : BAR,
         'group/bar text-left transition-colors duration-200 ease-out focus-visible:-outline-offset-3',
       )}
-      style={{ ...style, gridTemplateColumns: `repeat(${cells.length}, minmax(0, 1fr))` }}
+      style={{ ...style, gridTemplateColumns: beatColumns(cells) }}
     >
       <BarCells
         number={number}

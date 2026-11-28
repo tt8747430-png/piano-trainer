@@ -11,10 +11,16 @@ function roomAfter(cells: readonly (readonly string[])[], beat: number): number 
   return (next < 0 ? cells.length : next) - beat
 }
 
+/** The beat whose chord a beat holds: the last beat at or before it that starts chords, else its own. */
+function heldBy(cells: readonly (readonly string[])[], beat: number): number {
+  for (let at = beat; at >= 0; at--) if ((cells[at]?.length ?? 0) > 0) return at
+  return beat
+}
+
 /**
  * What a bar of a chart's line holds (ADR 0108), on the screen and in print: a cell a beat, the
  * chords starting in each, its number small in its first cell's corner, and under its cells its method
- * labels or a changed meter. The beat sounding is filled (`sounding`); the bar sounding (`playing`)
+ * labels or a changed meter. The chord sounding is filled over the beats it holds, its beat (`sounding`) marked; the bar sounding (`playing`)
  * and the loop's (`looped`) wear their washes; else a pointer over the bar washes it. Under its cells
  * the words sung in it (`words`, ADR 0108), small, each verse a row, a beat's from its cell to the next
  * sung beat's, wrapping there: never cut.
@@ -43,23 +49,28 @@ export function BarCells({
   /** Its chords' face: the Player's Grid or a song's chart. */
   face: ChordFace
 }) {
+  // The chord sounding is filled over all the beats it holds, so its name, run on over them, sits on
+  // one ground; the beat sounding is marked under it.
+  const held = sounding === null ? null : heldBy(cells, sounding)
   return (
     <>
-      {cells.map((chords, beat) => (
+      {cells.map((_, beat) => (
         <span
           key={beat}
           aria-hidden
           data-beat={beat}
           data-sounding={sounding === beat ? '' : undefined}
           data-looped={looped ? '' : undefined}
+          style={{ gridColumn: beat + 1 }}
           className={cn(
+            'relative row-start-1',
             face === 'grid'
-              ? '@container relative flex h-11 items-center overflow-visible rounded-mark ps-2 first:border-l-3 first:border-foreground sm:h-[66px] sm:ps-3.5'
-              : '@container relative flex h-12 items-end overflow-visible border-l border-hairline px-1 pb-1.5 first:border-l-0 sm:h-14 landscape-phone:h-11',
-            sounding === beat
-              ? 'bg-foreground text-background'
+              ? 'h-11 rounded-mark first:border-l-3 first:border-foreground sm:h-[66px]'
+              : 'h-12 border-l border-hairline first:border-l-0 sm:h-14 landscape-phone:h-11',
+            held !== null && heldBy(cells, beat) === held
+              ? 'bg-foreground'
               : playing
-                ? 'bg-secondary text-secondary-foreground'
+                ? 'bg-secondary'
                 : looped
                   ? 'bg-paint-yellow'
                   : face === 'grid'
@@ -67,19 +78,35 @@ export function BarCells({
                     : 'group-hover/bar:bg-muted/60',
           )}
         >
+          {sounding === beat ? (
+            <span className="absolute inset-x-1.5 bottom-1 h-0.5 rounded-full bg-background/70" />
+          ) : null}
           {beat === 0 && face === 'chart' ? (
             <span className="absolute top-1 left-1 text-xs leading-none tabular-nums opacity-60">
               {number}
             </span>
           ) : null}
-          <CellChords
-            symbols={chords}
-            span={roomAfter(cells, beat)}
-            face={face}
-            className="relative z-10"
-          />
         </span>
       ))}
+      {cells.map((chords, beat) =>
+        chords.length === 0 ? null : (
+          // A beat's chords over all the beats they hold, sized by that room, in the ink of its ground.
+          <span
+            key={`chords-${beat}`}
+            aria-hidden
+            className={cn(
+              '@container pointer-events-none relative z-10 row-start-1 flex min-w-0',
+              face === 'grid'
+                ? cn('items-center ps-2 sm:ps-3.5', beat === 0 && 'ms-[3px]')
+                : 'items-end px-1 pb-1.5',
+              held === beat ? 'text-background' : playing ? 'text-secondary-foreground' : undefined,
+            )}
+            style={{ gridColumn: `${beat + 1} / span ${roomAfter(cells, beat)}` }}
+          >
+            <CellChords symbols={chords} face={face} />
+          </span>
+        ),
+      )}
       {words.map((verse, index) =>
         verse.length === 0 ? null : (
           <span
