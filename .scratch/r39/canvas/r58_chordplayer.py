@@ -29,8 +29,9 @@ r'''    const beatNow = st.playing ? ((st.pos ?? 4) % 2) * 2 : -1;
           ticks: Array.from({ length: Math.max(sum, 1) }, (_, k) => ({ bg: now && k === beatNow ? '#332921' : '#B9AEA3', w: k === 0 ? '10px' : '6px' })),
           wrong, wrongTip: 'Bar ' + (bi + 1) + ' holds ' + sum + ' beats, not 4: tap to set its chords’ lengths',
           bg: now ? '#EDC684' : !st.playing && (slot || {}).si === si && (slot || {}).bi === bi ? '#F6E7C8' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi], selC: 0 }) }; }) }));
-    // a phone's chord comes up under the bar before its sheet rises (the app's `reveal`), 16 under the chart's top
-    const REVEAL = (e) => { const t = e && e.currentTarget, m = t && t.closest && t.closest('main'); if (!m || m.clientWidth > 600) return; const k = (m.getBoundingClientRect().height / m.offsetHeight) || 1; m.scrollTop += (t.getBoundingClientRect().top - m.getBoundingClientRect().top) / k - 16; };
+    // a chord comes up 16 under the chart's top before its sheet opens (the app's `reveal`): always on a phone, and
+    // on a laptop where the room under it is short of its sheet's 448
+    const REVEAL = (e) => { const t = e && e.currentTarget; let m = t && t.parentElement; while (m && !(m.scrollHeight > m.clientHeight && /auto|scroll/.test(getComputedStyle(m).overflowY))) m = m.parentElement; const f = t && t.closest && t.closest('[data-menuroot]'); if (!m) return; const k = (m.getBoundingClientRect().height / m.offsetHeight) || 1; if (m.clientWidth > 600 && (!f || (f.getBoundingClientRect().bottom - t.getBoundingClientRect().bottom) / k >= 448)) return; m.scrollTop += (t.getBoundingClientRect().top - m.getBoundingClientRect().top) / k - 16; };
     const selB = (st.sel ? SECS[st.sel[0]][3][st.sel[1]] : SECS[0][3][0]) || ['C'], selCi = st.selC ?? 0, selSym = selB[selCi] || selB[0];
     const selLen = st.sel ? lens(st.sel[0], st.sel[1], selB)[selCi] : 4;
     const setLen = (d) => { if (!st.sel) return; const k = st.sel[0] + ':' + st.sel[1], cur = lens(st.sel[0], st.sel[1], selB).slice(); cur[selCi] = Math.max(1, Math.min(8, cur[selCi] + d)); set({ len: { ...LEN, [k]: cur } }); };
