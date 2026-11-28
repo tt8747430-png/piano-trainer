@@ -1,9 +1,9 @@
-import { ChevronDown, ChevronUp, Minus, Play, Square } from 'lucide-react'
+import { ChevronDown, ChevronUp, Minus, Square } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ARRANGER_NUMBERS, MAINS, mainOf, SECTION } from '@/shared/lib/arrangement'
 import { cn } from '@/shared/lib'
-import { Toolbar } from '@/shared/ui'
+import { PlayGlyph, Toolbar } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { ArrangerPanel } from '../model/use-arranger-play'
 
@@ -202,13 +202,21 @@ export function ArrangerStrip({
           flat ? FLAT_CARD : CARD,
         )}
       >
-        {/* A phone's 341 holds Main A–D at 44 only with Start/Stop as its glyph; its lamp says it runs. */}
+        {/* The board's compact strip: the connection's dot, then Start/Stop as its glyph, filled as the
+            transport's Play (a phone's 341 holds Main A–D only so); its lamp says it runs. */}
+        {dot}
         <Lamp
           disabled={!panel.playable}
           on={panel.running}
-          label={panel.running ? <Square aria-hidden /> : <Play aria-hidden />}
+          label={
+            panel.running ? (
+              <Square aria-hidden className="fill-current" strokeWidth={0} />
+            ) : (
+              <PlayGlyph playing={false} />
+            )
+          }
           spoken={t('chordPlayer.arranger.startStop')}
-          className="grid w-11 shrink-0 place-items-center [&_svg]:size-5"
+          className="grid w-11 shrink-0 place-items-center [&_svg]:size-4.5"
           onClick={panel.toggle}
         />
         <div
