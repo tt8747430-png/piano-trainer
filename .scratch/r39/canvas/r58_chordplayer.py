@@ -42,6 +42,11 @@ r'''    const beatNow = st.playing ? ((st.pos ?? 4) % 2) * 2 : -1;
     const lamp = (on, next) => ({ bg: on ? '#EEE2CF' : '#FEFDFB', fg: '#332921', ring: on ? '0 0 0 1.5px #332921' : next ? '0 0 0 1.5px #B98A32' : '0 0 0 1px #DAD1C8' });
     const arSet = (o) => set({ ar: { ...ar, ...o } });''', 1)
 CP58 = CP58.replace("    return { ...common(st, set),", r'''    return { ...common(st, set), draftOn: !!st.draft, addSec: () => { editSecs((c) => { const L = 'ABCDEFGH'[c.length] || 'X'; c.push([L, 'Section ' + L, 1, [['C'], ['F'], ['G'], ['C']]]); }); set({ tags: [...TAGS, JSON.parse(JSON.stringify(TAGS[TAGS.length - 1] || { mains: [] }))] }); }, copyL: st.copied ? 'Link copied' : 'Copy link', copyLink: () => set({ copied: true }), saveProg: () => set({ sheet: null, toast: 'Saved to My progressions' }), importChart: () => set({ sheet: null }), exportMidi: () => set({ sheet: null }), exportChart: () => set({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, saveDraft: () => set({ draft: false, sheet: null }), discardDraft: () => set({ draft: false, secs: null, len: null, tags: null, sheet: null }),
+      secOn: st.sheet === 'sec', secTitle: SECS[st.secAt ?? 0] ? SECS[st.secAt ?? 0][1] : '', secPos: st.secPos ?? 'left: 640px; top: 160px', secPopL: (SECS[st.secAt ?? 0] || [])[1] || '', openSecPop: () => set({ pop: st.pop === 'sec' ? null : 'sec' }), secPopOn: st.pop === 'sec',
+      secChips: chipsOf(['Intro', 'Verse', 'Pre-chorus', 'Chorus', 'Bridge', 'Solo', 'Outro'], (SECS[st.secAt ?? 0] || [])[1], (l) => { editSecs((c) => { c[st.secAt ?? 0][1] = l; }); set({ pop: null }); }),
+      secLoopSw: !!st.loop77 && (st.loopAt ?? 0) === (st.secAt ?? 0), secLoopSwBg: !!st.loop77 && (st.loopAt ?? 0) === (st.secAt ?? 0) ? '#44684A' : '#DAD1C8', secLoopSwX: !!st.loop77 && (st.loopAt ?? 0) === (st.secAt ?? 0) ? 22 : 2,
+      toggleSecLoop: () => { const on = !!st.loop77 && (st.loopAt ?? 0) === (st.secAt ?? 0); set({ loop77: !on, loopAt: st.secAt ?? 0, toastT: on ? 'Loop off' : 'Looping the ' + ((SECS[st.secAt ?? 0] || [])[1] || 'section') }); },
+      dupSec: () => { editSecs((c) => { c.splice((st.secAt ?? 0) + 1, 0, JSON.parse(JSON.stringify(c[st.secAt ?? 0]))); }); set({ sheet: null, pop: null, toastT: 'Section duplicated' }); },
       tagOnSheet: st.sheet === 'tag', tagTitle: SECS[tagAt] ? SECS[tagAt][1] + ' on the Genos' : '', tagIsFirst: tagAt === 0, tagIsLast: tagAt === SECS.length - 1,
       introSeg: SEGT(['None', 'Intro I', 'Intro II', 'Intro III'], tg.intro || 'None', (l) => setTag({ intro: l })),
       passes: (tg.mains.length ? tg.mains : ['None']).map((mv, pi) => ({ n: 'Main, ' + ['1st', '2nd', '3rd', '4th'][pi] + ' time', seg: SEGT(['None', 'A', 'B', 'C', 'D'], mv === 'None' ? 'None' : mv.slice(-1), (l) => setTag({ mains: tg.mains.map((x, i) => (i === pi ? (l === 'None' ? 'None' : 'Main ' + l) : x)) })) })),
@@ -104,7 +109,7 @@ CP58 = CP58.replace("    return { ...common(st, set), draftOn:", r"""    const S
             wrong: wrong && ci === cs.length - 1, wrongTip: 'Bar ' + (bi + 1) + ' holds ' + sum + ' beats, not 4',
             tap: (e) => set(picked ? { sheet: 'chord', sel: [si, bi], selC: ci, selB59: [si, bi, ci], pop: null, chordPos: ANCHOR(e, 420) } : { sel: [si, bi], selC: ci, selB59: [si, bi, ci] }) });
           from += L; }); });
-      return { m, name, rep: '× ' + rep, vari: 'Variation ' + (VARS[si] ?? 1), tag: follow ? (tagLine(TAGS[si] || { mains: [] }) || 'Genos') : '', tagFg: tagLine(TAGS[si] || { mains: [] }) ? '#332921' : '#685E56', tagOn: follow, openTag: () => set({ sheet: 'tag', tagAt: si }), boxes,
+      return { m, name, rep: '× ' + rep, vari: 'Variation ' + (VARS[si] ?? 1), tag: follow ? (tagLine(TAGS[si] || { mains: [] }) || 'Genos') : '', tagFg: tagLine(TAGS[si] || { mains: [] }) ? '#332921' : '#685E56', tagOn: follow, openTag: () => set({ sheet: 'tag', tagAt: si }), openSec: (e) => set({ sheet: 'sec', secAt: si, pop: null, secPos: ANCHOR(e, 380) }), boxes,
         repUp: () => editSecs((x) => { x[si][2] = (x[si][2] % 4) + 1; }), varUp: () => set({ vars: SECS.map((_, i) => (i === si ? ((VARS[i] ?? 1) % 4) + 1 : VARS[i] ?? 1)), draft: true }),
         del: () => editSecs((x) => { x.splice(si, 1); }), add: () => set({ sheet: 'chord', sel: [si, bars.length - 1], selC: 0, pop: null }) }; });
     const QN = { '': 'major', m: 'minor', '7': '7', maj7: 'maj7', m7: 'm7', sus4: 'sus4', sus2: 'sus2', dim: 'dim', add9: 'add9', '6': '6', '°': 'dim' };
@@ -127,7 +132,7 @@ def CHART59(cols, gap, bh, bf, plus):
     plusb = f'<button type="button" onClick="{{{{x.add}}}}" aria-label="Add a chord to {{{{x.name}}}}" style="grid-column: span {plus}; min-width: 0; height: {bh}px; border: 0; border-radius: 6px; background: transparent; box-shadow: 0 0 0 1px {LINE}; color: {SOFT}; display: grid; place-items: center"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5v14"></path></svg></button>'
     pill = lambda inner, act, label, extra='': f'<button type="button" onClick="{{{{{act}}}}}" aria-label="{label}" style="flex: none; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; {extra}"><span style="height: 36px; box-sizing: border-box; padding: 0 12px; border-radius: 8px; background: {FILL}; display: flex; align-items: center; font-size: 15px; white-space: nowrap; font-variant-numeric: tabular-nums">{inner}</span></button>'
     head = (f'<div style="display: flex; align-items: center; gap: 8px; min-height: 44px">'
-            + pill('<span style="overflow: hidden; text-overflow: ellipsis; font-weight: 600">{{x.name}}</span>', 'x.openTag', 'Section: {{x.name}}', 'flex: 0 1 160px; min-width: 0').replace('height: 36px; box-sizing', 'width: 100%; height: 36px; box-sizing')
+            + pill('<span style="overflow: hidden; text-overflow: ellipsis; font-weight: 600">{{x.name}}</span>', 'x.openSec', 'Section: {{x.name}}', 'flex: 0 1 160px; min-width: 0').replace('height: 36px; box-sizing', 'width: 100%; height: 36px; box-sizing')
             + pill('{{x.rep}}', 'x.repUp', 'Plays {{x.rep}}') + pill('{{x.vari}}', 'x.varUp', '{{x.vari}}')
             + f'<button type="button" onClick="{{{{x.del}}}}" aria-label="Delete {{{{x.name}}}}" data-tip="Delete section" style="flex: none; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{TRASHI}</button>'
             + f'<span style="flex: 1"></span><span aria-label="Move {{{{x.name}}}}" style="flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: {SOFT}; cursor: grab">{GRIP}</span></div>')
@@ -152,6 +157,11 @@ CP_CHORD59 = (GROUP(ROW59('Chord', POP59('rootPopL', 'openRootPop', 72, 'Root') 
               + f'<div style="display: flex; gap: 8px"><button type="button" onClick="{{{{removeChord}}}}" aria-label="Delete chord" data-tip="Delete chord" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 12px; background: #F4DCD6; color: #B3261E; display: flex; align-items: center; justify-content: center">{TRASHI}</button>'
               + QBTN(DUPI, 'Duplicate', 'duplicate') + QBTN(PLAYS, 'Play from here', 'playFrom') + '</div>')
 
+# the section's sheet: what its head cannot hold (its name, Loop this section, Duplicate section); Repeat, Variation
+# and Delete stay on the head alone (one way to each act), the Genos marks on their chip
+CP_SEC = (GROUP(ROW59('Section', POP59('secPopL', 'openSecPop', 136, 'Section')), ('toggle', 'Loop this section', 'secLoopSw', 'toggleSecLoop'), bg=SHEET)
+          + f'<sc-if value="{{{{secPopOn}}}}" hint-placeholder-val="{{{{false}}}}">{CHIPROW("secChips")}</sc-if>'
+          + '<div style="display: flex">' + QBTN(DUPI, 'Duplicate section', 'dupSec') + '</div>')
 
 # ── the Genos's style strip, over the dock while Follow a MIDI arranger is on ──
 LAMP = lambda key, label, act, w='auto': f'<button type="button" onClick="{{{{{act}}}}}" style="flex: none; min-width: 44px; width: {w}; height: 36px; padding: 0 9px; border: 0; border-radius: 9px; background: {{{{{key}.bg}}}}; color: {{{{{key}.fg}}}}; box-shadow: {{{{{key}.ring}}}}; font: inherit; font-size: 13px; font-weight: 700; white-space: nowrap">{label}</button>'
@@ -352,7 +362,7 @@ lm58 = (LTOP('Laptop.dc.html', BARR) + TRAY.replace('padding: 0 16px 8px', 'padd
 # Tempo, the Metronome's face (owner-way, one implementation): the tempo's word and BPM over its figures with −10 −1
 # and +1 +10 beside them, then the slider between the sheet's ends, 40 and 240; a wheel hid all but five tempos
 TEMPO77 = f'<div style="display: flex; flex-direction: column; gap: 12px; padding: 4px 0">{TEMPO(40, "cpT", 40, 240)}</div>'
-SH58 = lambda B, P, D=None: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + (D or B)('styleOn', 'Style', WHEEL([('wStyle', 1)])) + (D or B)('keyOn', 'Key', ROOTGRID('keyRoots')) + (D or B)('tempoOn', 'Tempo', TEMPO77) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + P + '')
+SH58 = lambda B, P, D=None: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('secOn', '{{secTitle}}', CP_SEC) + B('shareOn', 'Share', CP_SHARE) + (D or B)('styleOn', 'Style', WHEEL([('wStyle', 1)])) + (D or B)('keyOn', 'Key', ROOTGRID('keyRoots')) + (D or B)('tempoOn', 'Tempo', TEMPO77) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + P + '')
 _MI = lambda l, a, col=INK: f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left">{l}</button>'
 TOAST76 = TOAST(256, z=56)
 
@@ -540,6 +550,6 @@ _r = "    return { ...common(st, set),"
 assert CP77.count(_r) == 1, CP77.count(_r)
 CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 # the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
-_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else 'left: 640px; top: 160px', 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 729px; top: 72px', 'keyOn': 'left: 505px; top: 72px', 'tempoOn': 'left: 616px; top: 72px', 'repOn': 'left: 380px; top: 72px'}[c], 320))
+_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else 'left: 640px; top: 160px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 729px; top: 72px', 'keyOn': 'left: 505px; top: 72px', 'tempoOn': 'left: 616px; top: 72px', 'repOn': 'left: 380px; top: 72px'}[c], 320))
 phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('hdOptsOn', 'Playback options', _OPTSP, close='closeSheet') + FSHEET('cpPhRepOn', 'Playback options', _OPTSP, back='phToMenu'), bar=SHEET)
 full_laptop('ChordPlayerLaptop', 'Chord player, laptop', lm77 + TOAST(296, z=56, laptop=True), CP77, _SHL + POPS77L + NAMEMENU77L)
