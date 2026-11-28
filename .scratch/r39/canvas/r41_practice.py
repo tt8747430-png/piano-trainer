@@ -311,12 +311,12 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const KEYS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'], k = st.key ?? 0, reps = st.reps ?? 3, PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
     const trp1 = (x, d) => { const m = /^([A-G])([♯♭]?)(.*)$/.exec(x); if (!m || !d) return x; return KEYS[((PC[m[1]] + (m[2] === '♯' ? 1 : m[2] === '♭' ? -1 : 0) + d) % 12 + 12) % 12] + m[3]; };
     const trp = (c, d) => c.split('/').map((x) => trp1(x, d)).join('/');
-    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), chordOn: st.sheet === 'chord', styleOn: st.sheet === 'style', openStyle: () => set({ sheet: 'style' }), secs,
-      styleL: STY[s], bpmL: String(bpm), wStyle: wheel(STY, s, (i) => set({ style: i })), wRoot: wheel(NN, 0, () => {}), wQual: wheel(['', 'm', '7', 'maj7', 'm7', 'sus4', 'dim'], 0, () => {}), wLen: wheel(['1 beat', '2 beats', '3 beats', '4 beats'], 3, () => {}),
+    return { ...common(st, set), styleOn: st.sheet === 'style', openStyle: () => set({ sheet: 'style' }),
+      styleL: STY[s], bpmL: String(bpm),
       keyTiles: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°', 'G7'].map((c) => { const t = trp(c, k), m = t.match(/^([A-G][♭♯]?(?:m(?!aj))?)([^/]*)$/); return { c: t, r: m ? m[1] : t, x: m ? m[2] : '', put: () => { const [si, bi, ci] = st.selB59 || [0, 0, 0], c2 = JSON.parse(JSON.stringify(st.secs || SECS)); if (c2[si] && c2[si][3][bi]) c2[si][3][bi][ci] = t; set({ secs: c2, draft: true }); } }; }), keyL: KEYS[k], keyHead: KEYS[k] + ' major chords',
-      openKey: () => set({ sheet: 'key' }), keyOn: st.sheet === 'key', wKey: wheel(KEYS, k, (i) => set({ key: i, secs: SECS.map(([m, n, r, bars]) => [m, n, r, bars.map((cs) => cs.map((c) => trp(c, i - k)))]) })),
-      openTempo: () => set({ sheet: 'tempo' }), tempoOn: st.sheet === 'tempo', wTempo: wheel(Array.from({ length: 43 }, (_, i) => String(40 + 4 * i)), Math.round((bpm - 40) / 4), (i) => set({ bpm: 40 + 4 * i })),
-      openRep: () => set({ sheet: 'rep' }), repOn: st.sheet === 'rep', repL: reps === 0 ? '∞' : '× ' + reps, wRep: wheel(['∞', '× 1', '× 2', '× 3', '× 4', '× 5', '× 6', '× 7', '× 8'], reps, (i) => set({ reps: i })) };''')
+      keyOn: st.sheet === 'key',
+      openTempo: () => set({ sheet: 'tempo' }), tempoOn: st.sheet === 'tempo',
+      repOn: st.sheet === 'rep', wRep: wheel(['∞', '× 1', '× 2', '× 3', '× 4', '× 5', '× 6', '× 7', '× 8'], reps, (i) => set({ reps: i })) };''')
 # ── The Chord player's piano (R43 canvas 122; owner: "1. yes", the Chord player gets a piano): the chord sounding
 # now, on the keys in its tones' paints, under the chart. 2D keys by default; the one Piano sheet (piano_sheet.py)
 # behind Settings › Piano, the same as on the Chords page and in the Player, its range a chart's: Fit the chords ·

@@ -307,12 +307,12 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       arMains: ['A', 'B', 'C', 'D'].map((n) => ({ n, ...lamp(ar.main === n, ar.next === n), pick: () => arSet(ar.main === n ? { next: 'fill' } : { next: n, main: st.playing ? ar.main : n }) })),
       arEndings: ['I', 'II', 'III'].map((n) => ({ n, ...lamp(ar.ending === n), pick: () => arSet({ ending: ar.ending === n ? null : n }) })),
       tAcmp: () => arSet({ acmp: !ar.acmp }), tSync: () => arSet({ sync: !ar.sync }), tSyncStop: () => arSet({ syncStop: !ar.syncStop }), tAuto: () => arSet({ autoFill: !ar.autoFill }), tOts: () => arSet({ ots: !ar.ots }), tFade: () => arSet({ fade: !ar.fade }), tBreak: () => arSet({ next: 'Break' }),
-      arDot: st.playing ? '#44684A' : '#9C9086', setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), chordOn: st.sheet === 'chord', styleOn: st.sheet === 'style', ...cpPiano, openStyle: () => set({ sheet: 'style' }), secs,
-      styleL: STY[s], bpmL: String(bpm), wStyle: wheel(STY, s, (i) => set({ style: i })), wRoot: wheel(NN, 0, () => {}), wQual: wheel(['', 'm', '7', 'maj7', 'm7', 'sus4', 'dim'], 0, () => {}), wLen: wheel(['1 beat', '2 beats', '3 beats', '4 beats'], 3, () => {}),
+      arDot: st.playing ? '#44684A' : '#9C9086', styleOn: st.sheet === 'style', ...cpPiano, openStyle: () => set({ sheet: 'style' }),
+      styleL: STY[s], bpmL: String(bpm),
       namesSeg: seg(['Chords', 'Numerals', 'Nashville'], st.names ?? 'Chords', (l) => set({ names: l })), ...SW(st, set, [['cpPi', true], ['cpBa', true], ['cpDr', true], ['cpRep', true]]), ...SG(st, set, [['cpV', ['Voice-led', 'Block'], 'Voice-led']]), keyTiles: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°', 'G7'].map((c) => { const t = trp(c, k), m = t.match(/^([A-G][♭♯]?(?:m(?!aj))?)([^/]*)$/); return { c: t, r: m ? m[1] : t, x: m ? m[2] : '', put: () => { const [si, bi, ci] = st.selB59 || [0, 0, 0], c2 = JSON.parse(JSON.stringify(st.secs || SECS)); if (c2[si] && c2[si][3][bi]) c2[si][3][bi][ci] = t; set({ secs: c2, draft: true }); } }; }), keyL: KEYS[k], keyHead: KEYS[k] + ' major chords',
-      openKey: () => set({ sheet: 'key' }), keyOn: st.sheet === 'key', wKey: wheel(KEYS, k, (i) => set({ key: i, secs: SECS.map(([m, n, r, bars]) => [m, n, r, bars.map((cs) => cs.map((c) => trp(c, i - k)))]) })),
-      openTempo: () => set({ sheet: 'tempo' }), tempoOn: st.sheet === 'tempo', wTempo: wheel(Array.from({ length: 43 }, (_, i) => String(40 + 4 * i)), Math.round((bpm - 40) / 4), (i) => set({ bpm: 40 + 4 * i })),
-      openRep: () => set({ sheet: 'rep' }), repOn: st.sheet === 'rep', repL: reps === 0 ? '∞' : '× ' + reps, wRep: wheel(['∞', '× 1', '× 2', '× 3', '× 4', '× 5', '× 6', '× 7', '× 8'], reps, (i) => set({ reps: i })) };
+      keyOn: st.sheet === 'key',
+      openTempo: () => set({ sheet: 'tempo' }), tempoOn: st.sheet === 'tempo',
+      repOn: st.sheet === 'rep', wRep: wheel(['∞', '× 1', '× 2', '× 3', '× 4', '× 5', '× 6', '× 7', '× 8'], reps, (i) => set({ reps: i })) };
   }
 }
 
