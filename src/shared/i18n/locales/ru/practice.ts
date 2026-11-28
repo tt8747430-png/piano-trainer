@@ -794,7 +794,6 @@ export const practice: LocaleResources['practice'] = {
     progressions: 'Последовательности',
     opened: 'Открыто: {{name}}',
     undo: 'Отменить',
-    more: 'Гармоническая сетка',
     saveAs: 'Сохранить в мои сетки…',
     sheets: {
       menu: 'Гармонические сетки',
@@ -888,7 +887,6 @@ export const practice: LocaleResources['practice'] = {
     duplicateSection: 'Дублировать раздел',
     deleteSection: 'Удалить раздел',
     sectionDeleted: 'Удалено: {{name}}',
-    bar: 'Такт {{count}}',
     wrongBar_one:
       'В такте {{bar}} {{count}} доля, а не {{beats}}: нажмите, чтобы задать длительности',
     wrongBar_few:
@@ -955,7 +953,6 @@ export const practice: LocaleResources['practice'] = {
       },
       playing: '{{device}} · играет',
       playingMain: '{{device}} · играет Main {{main}}',
-      style: 'Стиль',
       compact: 'Компактно',
       full: 'Полностью',
       minimize: 'Свернуть',

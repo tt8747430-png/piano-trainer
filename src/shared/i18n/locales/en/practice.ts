@@ -821,7 +821,6 @@ export const practice = {
     progressions: 'Progressions',
     opened: 'Opened {{name}}',
     undo: 'Undo',
-    more: 'Chord sheet',
     saveAs: 'Save as my chord sheet…',
     sheets: {
       menu: 'Chord sheets',
@@ -913,7 +912,6 @@ export const practice = {
     duplicateSection: 'Duplicate section',
     deleteSection: 'Delete section',
     sectionDeleted: 'Deleted {{name}}',
-    bar: 'Bar {{count}}',
     wrongBar_one: 'Bar {{bar}} holds {{count}} beat, not {{beats}}: tap to set its chords’ lengths',
     wrongBar_other:
       'Bar {{bar}} holds {{count}} beats, not {{beats}}: tap to set its chords’ lengths',
@@ -975,7 +973,6 @@ export const practice = {
       },
       playing: '{{device}} · playing',
       playingMain: '{{device}} · playing Main {{main}}',
-      style: 'Style',
       compact: 'Compact',
       full: 'Full',
       minimize: 'Minimize',
