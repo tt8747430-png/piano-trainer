@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the laptop's Genos panel leads with Follow a MIDI arranger and draws its card under it, so switched on the switch stays under the finger, where the card appeared above and pushed it 80 down, leaving the pointer on Start/Stop (app too) · ChordPlayerLaptop · pending
+- 2026-11-28 · 6b9e23b4 · the laptop's Genos panel leads with Follow a MIDI arranger and draws its card under it, so switched on the switch stays under the finger, where the card appeared above and pushed it 80 down, leaving the pointer on Start/Stop (app too) · ChordPlayerLaptop · pending
 
 ## Changes
 
