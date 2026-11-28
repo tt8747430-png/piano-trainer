@@ -1029,7 +1029,7 @@ METI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M9 3h6l4 1
 _HB = 'flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer'
 CABLEI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1"></path><path d="M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9"></path><path d="M21 21v-2h-4"></path><path d="M3 5h4V3"></path><path d="M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3"></path></svg>'
 MIXI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg>'
-def HDRTRANSPORT(phone=False, play_off=''):
+def HDRTRANSPORT(phone=False, play_off='', key_word='Transpose'):  # key_word: the key pill's name (the Chord player's Key)
     hb = _HB.replace('width: 40px; height: 40px; padding: 0; border: 0; border-radius: 20px', 'width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px') if phone else _HB
     b = lambda lab, tip, inner, act, look, extra='': f'<button type="button" aria-label="{lab}" data-tip="{tip}" onClick="{{{{{act}}}}}"{extra} style="{hb}; {look}">{inner}</button>'
     filled = f'background: {ONB}; color: {BAND}'
@@ -1047,7 +1047,7 @@ def HDRTRANSPORT(phone=False, play_off=''):
     # (owner, 2026-11-26: "it doesnt make sense with these midi button goes to the settings popup"). Volume left the band
     # for the Audio panel, Record for this popover: Flat's band has neither
     # Transpose after Loop: what the whole song sounds in, named on the pill (the key), its popover under it
-    tr = (f'<button type="button" aria-label="Transpose: {{{{hdKeyL}}}}" data-tip="Transpose · T" aria-haspopup="dialog" aria-expanded="{{{{hdTrX}}}}" onClick="{{{{hdTr}}}}" style="flex: none; height: 40px; padding: 0 12px 0 16px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer">'
+    tr = (f'<button type="button" aria-label="{key_word}: {{{{hdKeyL}}}}" data-tip="{key_word} · T" aria-haspopup="dialog" aria-expanded="{{{{hdTrX}}}}" onClick="{{{{hdTr}}}}" style="flex: none; height: 40px; padding: 0 12px 0 16px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer">'
           f'{{{{hdKeyL}}}}<span aria-hidden="true" style="display: flex">{CHEV_D}</span></button>')
     midi = b('MIDI keyboard', 'MIDI keyboard', CABLEI, 'hdMidi', f'background: {{{{hdMidiBg}}}}; color: {ONB}', ' aria-haspopup="dialog" aria-expanded="{{hdMidiX}}"')
     if phone:

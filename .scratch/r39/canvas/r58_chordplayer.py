@@ -322,9 +322,9 @@ def GENOS77(pos, wide):
 # how (Style), each opening its popover under it; MIDI last, as the Player's band
 BPILL = lambda lab, val, act, x: (f'<button type="button" aria-label="{lab}: {val}" data-tip="{lab}" aria-haspopup="dialog" aria-expanded="{{{{{x}}}}}" onClick="{{{{{act}}}}}" style="flex: none; height: 40px; padding: 0 12px 0 16px; border: 0; border-radius: 20px; background: {ONB}; color: {BAND}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer">'
                                   f'{val}<span aria-hidden="true" style="display: flex">{CHEV_D}</span></button>')
-_tr = HDRTRANSPORT(play_off='playOff')
+_tr = HDRTRANSPORT(play_off='playOff', key_word='Key')
 _mi = _tr.index('<button type="button" aria-label="MIDI keyboard"')
-TRANSPORT77 = (_tr[:_mi].replace('aria-label="Transpose: {{hdKeyL}}" data-tip="Transpose · T"', 'aria-label="Key: {{hdKeyL}}" data-tip="Key · T"', 1)
+TRANSPORT77 = (_tr[:_mi]
                + BPILL('Tempo', '{{bpmL}} BPM', 'openTempo', 'tempoX') + BPILL('Style', '{{styleL}}', 'openStyle', 'styleX') + _tr[_mi:])
 assert 'Key: {{hdKeyL}}' in TRANSPORT77
 NAME77 = (f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{sheetsX}}}}" onClick="{{{{openSheets}}}}" data-tip="Chord sheets" style="flex: 0 1 auto; min-width: 120px; height: 48px; max-width: 320px; padding: 0 8px 0 12px; border: 0; border-radius: 12px; background: {{{{sheetsBg}}}}; color: {ONB}; font: inherit; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer">'
