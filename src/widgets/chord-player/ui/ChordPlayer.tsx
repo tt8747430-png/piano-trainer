@@ -837,9 +837,11 @@ export function ChordPlayer({
     </DndContext>
   )
 
+  // A band's popover stands 8 under the band (the board's POPOVER at 72), its 40 trigger 12 above the band's foot.
   const pop = (which: Popped) => ({
     open: popped === which,
     onOpenChange: (open: boolean) => setPopped(open ? which : null),
+    sideOffset: 20,
   })
   const keysLabel = t('common:pianoKeys')
 

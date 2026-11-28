@@ -507,7 +507,7 @@ PHPAGES77 = (FSHEET('cpPhExpOn', 'Export', EXPROWS77, back='phToMenu') + FSHEET(
 # switch too (Flat's Playback options: the laptop has the metronome in the band)
 _OPTS = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp'), ('seg', 'Count-in', 'cntSeg'), bg=SHEET)
 _OPTSP = GROUP(('step', 'Repeats', 'optRepL', 'optRepDn', 'optRepUp'), ('seg', 'Count-in', 'cntSeg'), ('toggle', 'Metronome', 'metSw', 'metTog'), bg=SHEET)
-POPS77L = (POPOVER('hdOptsOn', 'Playback options', _OPTS, 'left: 380px; top: 72px', 320) + POPOVER('hdMidiOn', 'MIDI', MIDI77, 'left: 820px; top: 72px', 360))
+POPS77L = (POPOVER('hdOptsOn', 'Playback options', _OPTS, 'left: 373px; top: 72px', 320) + POPOVER('hdMidiOn', 'MIDI', MIDI77, 'left: 807px; top: 72px', 360))
 # a new sheet (Not saved) is the sheet in hand: first in the list, checked, and saved from the menu's foot, as the app's
 _handrow = '<sc-if value="{{handOn}}" hint-placeholder-val="{{false}}">' + _MI('{{sheetsL}}<span style="margin-left: auto; font-weight: 700">✓</span>', 'closeSheet') + '</sc-if>'
 NAMEMENU77 = ROWMENU('sheetsOn', 'Chord sheets', [('html', _handrow), ('action', 'My verse and chorus<span style="margin-left: auto; font-weight: 700">{{mk1}}</span>', 'openS1'), ('action', 'Blues in F<span style="margin-left: auto; font-weight: 700">{{mk2}}</span>', 'openS2'), ('action', 'Autumn Leaves sketch<span style="margin-left: auto; font-weight: 700">{{mk3}}</span>', 'openS3'), ('sep', ''), ('action', 'New sheet', 'newSheet'), ('link', 'All chord sheets', '', 'Progressions.dc.html')], 'menuPos', 280)
@@ -558,6 +558,6 @@ _r = "    return { ...common(st, set),"
 assert CP77.count(_r) == 1, CP77.count(_r)
 CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 # the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
-_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else 'left: 640px; top: 160px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 729px; top: 72px', 'keyOn': 'left: 505px; top: 72px', 'tempoOn': 'left: 616px; top: 72px', 'repOn': 'left: 380px; top: 72px'}[c], 320))
+_SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else 'left: 640px; top: 160px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 717px; top: 72px', 'keyOn': 'left: 501px; top: 72px', 'tempoOn': 'left: 608px; top: 72px', 'repOn': 'left: 373px; top: 72px'}[c], 320))
 phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + SAVEAS77 + FSHEET('hdOptsOn', 'Playback options', _OPTSP, close='closeSheet') + FSHEET('cpPhRepOn', 'Playback options', _OPTSP, back='phToMenu'), bar=SHEET)
 full_laptop('ChordPlayerLaptop', 'Chord player, laptop', lm77 + TOAST(296, z=56, laptop=True), CP77, _SHL + POPS77L + NAMEMENU77L + LAPSHEET(SAVEAS77))
