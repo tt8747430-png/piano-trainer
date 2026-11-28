@@ -115,7 +115,7 @@ _LIBTWO = lambda n, sub, act: (f'<li><button type="button" onClick="{{{{{act}}}}
                                f'<span style="font-weight: 600">{n}</span><span style="color: {SOFT}">{sub}</span></button></li>')
 _UL = lambda rows: '<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column">' + rows + '</ul>'
 CP_LIB = ('<div style="display: flex; flex-direction: column; gap: 24px">'
-          + _LIBSEC('My chord sheets', _UL(_LIBMINE) + f'<sc-if value="{{{{libNone}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 0; padding: 0 4px; font-size: 16px; line-height: 24px; color: {SOFT}">None saved yet. Save the sheet in hand from its name.</p></sc-if>')
+          + _LIBSEC('My chord sheets', _UL(_LIBMINE) + f'<sc-if value="{{{{libNone}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 0; padding: 0 4px; font-size: 16px; line-height: 24px; color: {SOFT}; text-wrap: pretty">None saved yet. Save the sheet in hand from its name.</p></sc-if>')
           + _LIBSEC('Songs', _UL(_LIBTWO('Isus s-a născut', 'David Preuteasa Band', 'libOpen')))
           + _LIBSEC('Progressions', CHIPS('libStyles', wrap=True) + _UL(_LIBTWO('Axis of Awesome', 'I – V – vi – IV', 'libOpen') + _LIBTWO('Let It Be', 'I – V – vi – IV – I – V – IV – I', 'libOpen')
                     + _LIBTWO('Yesterday', 'I – V/vi – vi – IV – V – I – vi – V/V – IV – I', 'libOpen') + _LIBTWO('Clocks', 'I – v – v – ii', 'libOpen') + _LIBTWO('50s doo-wop', 'I – vi – IV – V', 'libOpen') + _LIBTWO('Alternative pop', 'I – IV – vi – V', 'libOpen')), 12)

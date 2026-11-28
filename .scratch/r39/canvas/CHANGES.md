@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · My chord sheets' empty line wraps pretty (no word alone on its last line), as the app's now · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 

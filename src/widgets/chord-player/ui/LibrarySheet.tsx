@@ -75,7 +75,7 @@ export function LibrarySheet({
     <div className="flex flex-col gap-6">
       <MenuSection title={t('chordPlayer.mine')} inset className="gap-1">
         {mine.length === 0 ? (
-          <p className="px-1 text-muted-foreground">{t('chordPlayer.noneMine')}</p>
+          <p className="px-1 text-pretty text-muted-foreground">{t('chordPlayer.noneMine')}</p>
         ) : (
           <ul className="flex flex-col">
             {mine.map((sheet) => {
