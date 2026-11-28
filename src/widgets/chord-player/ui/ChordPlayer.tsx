@@ -41,6 +41,7 @@ import {
   cn,
   downloadFile,
   fileTitle,
+  LANDSCAPE_PHONE,
   LAPTOP,
   midiFileName,
   REDUCED_MOTION,
@@ -270,6 +271,7 @@ export function ChordPlayer({
   const prefs = useSettings(selectChordPlayer)
   const laptop = useMediaQuery(LAPTOP)
   const widerThanPhone = useMediaQuery(WIDER_THAN_PHONE)
+  const side = useMediaQuery(LANDSCAPE_PHONE)
   const { shown, entry } = hand
   const style = book.get(entry.style)
   const variations = styleVariations(style)
@@ -843,7 +845,7 @@ export function ChordPlayer({
                   sound={shownSounding}
                   spotlight
                   fitInView
-                  height={KEYS_PX[laptop ? 'laptop' : 'phone']}
+                  height={KEYS_PX[laptop ? 'laptop' : side ? 'side' : 'phone']}
                   // Space is Play here, as the Player's: the pedal is a MIDI keyboard's.
                   spacePedal={false}
                 />
