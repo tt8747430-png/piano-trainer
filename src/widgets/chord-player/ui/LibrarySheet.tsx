@@ -23,11 +23,11 @@ import { cn } from '@/shared/lib'
 import {
   ActionMenu,
   ChoiceChips,
-  confirm,
   MenuSection,
   NewSheet,
   Sheet,
   SheetContent,
+  sayUndo,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
@@ -63,14 +63,9 @@ export function LibrarySheet({
   const [style, setStyle] = useState<ProgressionStyle>(groups[0]?.style ?? 'pop')
   const [renaming, setRenaming] = useState<{ id: string; name: string } | null>(null)
   const shown = groups.find((group) => group.style === style)?.progressions ?? []
-  const ask = async (sheet: SavedChordSheet) => {
-    const yes = await confirm({
-      title: t('chordPlayer.row.deleteAsk.title', { name: sheet.name }),
-      body: t('chordPlayer.row.deleteAsk.body'),
-      action: t('chordPlayer.row.deleteAsk.action'),
-      destructive: true,
-    })
-    if (yes) deleteSheet(store, sheet.id)
+  const remove = (sheet: SavedChordSheet) => {
+    const undo = deleteSheet(store, sheet.id)
+    if (undo) sayUndo(t('chordPlayer.row.deleted', { name: sheet.name }), undo)
   }
   return (
     <>
@@ -130,7 +125,7 @@ export function LibrarySheet({
                               label: t('chordPlayer.row.delete'),
                               icon: Trash2,
                               destructive: true,
-                              onSelect: () => void ask(sheet),
+                              onSelect: () => remove(sheet),
                             },
                           ]}
                         />

@@ -60,9 +60,21 @@ export function duplicateSheet(store: ChordSheetsStore, id: string, name: string
   return copy.id
 }
 
-/** A sheet deleted (asked first, R17). */
-export function deleteSheet(store: ChordSheetsStore, id: string): void {
-  store.setState((state) => ({ mine: state.mine.filter((sheet) => sheet.id !== id) }))
+/**
+ * A sheet deleted at once (R38: Undo, not a question); what puts it back in its place, or null where
+ * there was no such sheet.
+ */
+export function deleteSheet(store: ChordSheetsStore, id: string): (() => void) | null {
+  const { mine } = store.getState()
+  const at = mine.findIndex((sheet) => sheet.id === id)
+  const gone = mine[at]
+  if (!gone) return null
+  store.setState({ mine: mine.filter((sheet) => sheet.id !== id) })
+  return () => {
+    const now = store.getState().mine
+    if (now.some((sheet) => sheet.id === id)) return
+    store.setState({ mine: [...now.slice(0, at), gone, ...now.slice(at)] })
+  }
 }
 
 /**
