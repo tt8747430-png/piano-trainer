@@ -8,12 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · 2e555eb6 · R76's Reset layout Undo (lastLay) leaves the board's code; New sheet's Undo still brings the sheet back (no visible change, pixel for pixel) · ChordPlayer, ChordPlayerLaptop · pending
-- 2026-11-28 · 9907bae0 · the chart's laptop grid is its 16 beats outright, the layout's default holds the Genos alone, and the Edit layout state no longer comes and goes in the States box's code (no visible change, pixel for pixel) · ChordPlayer, ChordPlayerLaptop · pending
-- 2026-11-28 · c19afcb6 · the keys are drawn once, at the one height R77 shows (112 on a phone, 170 on a laptop), where R76's Small and Large copies waited behind a size switch nothing sets (no visible change, pixel for pixel) · ChordPlayer, ChordPlayerLaptop · pending
-
 ## Changes
 
+- 2026-11-28 · 2e555eb6 · R76's Reset layout Undo (lastLay) leaves the board's code; New sheet's Undo still brings the sheet back (no visible change, pixel for pixel) · ChordPlayer, ChordPlayerLaptop · v896
+- 2026-11-28 · 9907bae0 · the chart's laptop grid is its 16 beats outright, the layout's default holds the Genos alone, and the Edit layout state no longer comes and goes in the States box's code (no visible change, pixel for pixel) · ChordPlayer, ChordPlayerLaptop · v896
+- 2026-11-28 · c19afcb6 · the keys are drawn once, at the one height R77 shows (112 on a phone, 170 on a laptop), where R76's Small and Large copies waited behind a size switch nothing sets (no visible change, pixel for pixel) · ChordPlayer, ChordPlayerLaptop · v896
 - 2026-11-28 · 13c36308 · R76's Edit layout leaves the boards' code: the panel tags (PTAG, nulled by a patch), the floating Controls dock built and never drawn, eight more state keys and the layout's constants (no visible change) · ChordPlayer, ChordPlayerLaptop · v895
 - 2026-11-28 · 0ba7b7a3 · the phone's chart ends 24 under its last part, as the app's, where it kept R76's 242 reserve for keys and a Controls dock that no longer float over it (a bare stretch at the scroll's end); R76's 55 layout values that nothing draws go from the board's code · ChordPlayer, ChordPlayerLaptop · v894
 - 2026-11-28 · f4acf7e6 · the name menu's hairlines are the kit's menu separator (`MENUSEP`, 6 over and under, 12 in, as the app's DropdownMenuSeparator), where the board patched the ☰ hairline from 4 to 6 three times (no visible change) · ChordPlayer, ChordPlayerLaptop · v894
