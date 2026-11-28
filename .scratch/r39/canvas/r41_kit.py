@@ -333,7 +333,7 @@ def THINGWIN(lap, on, close, title, body, back='', pad='32', shown='true', side=
 # tuples: ('link', label, '', href) or ('action', label, act[, colour]). The JS sets {posvar} from ANCHOR(e, h).
 # a menu's hairline, 6 above and below, 12 in from the rows' edge, as the app's DropdownMenuSeparator (mx-3 my-1.5)
 MENUSEP = f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div>'
-def ROWMENU(cond, label, items, posvar='menuPos', w=240):
+def ROWMENU(cond, label, items, posvar='menuPos', w=240, close='closeSheet'):
     out, seen_red = [], False
     for t in items:
         kind, l = t[0], t[1]
@@ -351,10 +351,10 @@ def ROWMENU(cond, label, items, posvar='menuPos', w=240):
             seen_red = seen_red or col == RED
         st = f'width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left; text-decoration: none'
         out.append(f'<a role="menuitem" href="{t[3]}" style="{st}">{l}</a>' if kind == 'link' else f'<button type="button" role="menuitem" onClick="{{{{{t[2]}}}}}" style="{st}">{l}</button>')
-    return MENUSHELL(cond, label, ''.join(out), posvar, w)
+    return MENUSHELL(cond, label, ''.join(out), posvar, w, close)
 # the menu's glass shell, for a menu whose items are drawn elsewhere (New's rows with their icons)
-def MENUSHELL(cond, label, body, posvar='menuPos', w=240):
-    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
+def MENUSHELL(cond, label, body, posvar='menuPos', w=240, close='closeSheet'):  # close: the act a tap outside runs
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
             f'<div role="menu" aria-label="{label}" style="position: absolute; {{{{{posvar}}}}}; z-index: 61; width: {w}px; box-sizing: border-box; padding: 6px; border-radius: 16px; {GLASSFX}; display: flex; flex-direction: column; transform-origin: top right">{body}</div></sc-if>')
 def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380, back='', h=''):  # back: a sub-page's Back, left of its centred title; h: a fixed height for a list that changes
     # never past the screen: its height is capped by the room left from its top or bottom on the 904-tall laptop screen
