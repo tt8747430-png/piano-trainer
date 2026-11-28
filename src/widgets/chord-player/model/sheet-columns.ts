@@ -111,12 +111,12 @@ export function sheetLayout(
   for (let rowBars = Math.max(1, bars); rowBars >= 1; rowBars = Math.floor(rowBars / 2))
     counts.push(rowBars)
   // Every name at the chart's size in rows of two bars or more, else at the floor, else a bar a row.
-  const tries = [
+  const tries: (readonly [rowBars: number, size: number])[] = [
     ...counts
       .filter((rowBars) => rowBars >= 2 || counts.length === 1)
-      .map((rowBars) => [rowBars, AIM]),
-    ...counts.map((rowBars) => [rowBars, LEAST]),
-  ] as const
+      .map((rowBars) => [rowBars, AIM] as const),
+    ...counts.map((rowBars) => [rowBars, LEAST] as const),
+  ]
   for (const [rowBars, size] of tries) {
     const columns = perBar * rowBars
     const least = width > 0 ? leastWidths(tiles, columns, width, size) : null
