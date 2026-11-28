@@ -995,7 +995,7 @@ export const practice = {
     box_one: '{{chord}}, {{count}} beat',
     box_other: '{{chord}}, {{count}} beats',
     boxHint:
-      'Tap to select, double-tap to edit, drag its right edge to change its length; hold or drag to move. Keys: Enter edits, a letter types a new chord, Shift+arrows change its length, Space moves it, Backspace deletes it.',
+      'Tap to select, tap again to edit, drag its right edge to change its length; hold or drag to move. Keys: arrows move between chords, Enter edits, a letter types a new chord, Shift+arrows change its length, Space moves it, Backspace deletes it.',
     unread: '“{{text}}” isn’t a chord',
     deleted: 'Deleted {{chord}}',
     chord: {

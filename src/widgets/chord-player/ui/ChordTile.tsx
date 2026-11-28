@@ -11,6 +11,41 @@ import { boxName } from '../model/box-name'
 import type { BoxPlace } from '../model/engine'
 
 /** What a chord's tile asks of the sheet. */
+
+/** The arrows that move between the sheet's chords. */
+const ARROWS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'])
+
+/**
+ * The chord an arrow moves to from `from`: the one before or after it in the sheet's order, or, up
+ * and down, the nearest in the row above or below (a grid's arrows, WAI-ARIA's). Null at an end.
+ */
+function tileToward(from: HTMLElement, key: string): HTMLElement | null {
+  const sheet = from.closest('main') ?? document
+  const tiles = [...sheet.querySelectorAll<HTMLElement>('ol [aria-roledescription]')]
+  const at = tiles.indexOf(from)
+  if (key === 'ArrowLeft') return tiles[at - 1] ?? null
+  if (key === 'ArrowRight') return tiles[at + 1] ?? null
+  const here = from.getBoundingClientRect()
+  const down = key === 'ArrowDown'
+  const rows = tiles
+    .map((tile) => ({ tile, box: tile.getBoundingClientRect() }))
+    .filter(({ box }) => (down ? box.top > here.bottom - 1 : box.bottom < here.top + 1))
+  if (rows.length === 0) return null
+  const row = down
+    ? Math.min(...rows.map(({ box }) => box.top))
+    : Math.max(...rows.map(({ box }) => box.top))
+  const middle = here.left + here.width / 2
+  return (
+    rows
+      .filter(({ box }) => box.top === row)
+      .sort(
+        (a, b) =>
+          Math.abs(a.box.left + a.box.width / 2 - middle) -
+          Math.abs(b.box.left + b.box.width / 2 - middle),
+      )[0]?.tile ?? null
+  )
+}
+
 export interface TileActs {
   /** Its chord sheet opened; with a letter typed on the tile, the symbol starts with it. */
   open(place: BoxPlace, typed?: string): void
@@ -123,6 +158,12 @@ export const ChordTile = memo(function ChordTile({
     } else if (event.shiftKey && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
       event.preventDefault()
       acts.resize(place, beats + (event.key === 'ArrowRight' ? 1 : -1))
+    } else if (ARROWS.has(event.key) && !event.metaKey && !event.ctrlKey && !event.altKey) {
+      const next = tileToward(event.currentTarget, event.key)
+      if (next) {
+        event.preventDefault()
+        next.focus()
+      }
     }
   }
   // A tap selects it, a tap on it chosen opens its sheet, at any pace (Numbers' and Keynote's).
