@@ -34,7 +34,8 @@ export const DEFAULT_SHEET_SETTINGS: ChordSheetSettings = {
   piano: { on: true, level: 80 },
   bass: { on: true, level: 70 },
   drums: { on: true, level: 70 },
-  countIn: 0,
+  // A bar counted in, as a play-along counts the player in (iReal Pro, Band-in-a-Box), the board's default.
+  countIn: 1,
   click: false,
   plays: 0,
   volume: 80,
