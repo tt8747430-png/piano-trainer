@@ -341,18 +341,21 @@ export function PlaybackBody({
   return (
     <GroupRows surface="sheet" label={t('common:playbackOptions')}>
       <GroupRow label={t('chordPlayer.dock.plays')}>
-        <Stepper
-          label={t('chordPlayer.dock.plays')}
-          value={settings.plays}
-          min={0}
-          max={SHEET_PLAYS}
-          format={(count) =>
-            count === 0 ? t('chordPlayer.dock.untilStop') : t('chordPlayer.times', { count })
-          }
-          decrease={t('chordPlayer.fewer')}
-          increase={t('chordPlayer.moreTimes')}
-          onChange={(plays) => hand.setSettings({ plays })}
-        />
+        {/* Its value 15 in the band's popover, 16 on a phone's page (the board's PHROWS). */}
+        <span className="contents [&_output]:text-base lg:[&_output]:text-subhead">
+          <Stepper
+            label={t('chordPlayer.dock.plays')}
+            value={settings.plays}
+            min={0}
+            max={SHEET_PLAYS}
+            format={(count) =>
+              count === 0 ? t('chordPlayer.dock.untilStop') : t('chordPlayer.times', { count })
+            }
+            decrease={t('chordPlayer.fewer')}
+            increase={t('chordPlayer.moreTimes')}
+            onChange={(plays) => hand.setSettings({ plays })}
+          />
+        </span>
       </GroupRow>
       <GroupSegmented
         label={t('chordPlayer.settings.countIn')}

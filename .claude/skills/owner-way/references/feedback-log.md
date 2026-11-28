@@ -1582,6 +1582,7 @@ owner's, typos fixed.
 - **☰'s glyphs at the board's 24 (the loop, 2026-11-28):** the Chord player's phone menu drew its row glyphs at 22 where the board's are 24, its words 2 left of the board's; measured level now.
 - **Lucide's check, not a ✓ (the loop, 2026-11-28):** the Chord player boards marked the chosen style and sheet with a typed ✓ beside Lucide's glyphs; they draw Lucide's check at 20, as the app. Never again: a font's symbol standing in for an icon on a board.
 - **The chord sheet's pickers at the board's widths (the loop, 2026-11-28):** the Chord player's Root, Quality and Bass note pickers stood 8 to 12 narrower than the board's with the chevrons by the words; they take the board's 72, 120 and 136, the chevrons at the end.
+- **The stepper's value as the board's (the loop, 2026-11-28):** the app's Stepper padded its value 4 a side, which the kit's STEPPER does not, and the Chord player's Repeats kept 15 on a phone's page; measured level with the board now (162 wide, 16 on a phone).
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

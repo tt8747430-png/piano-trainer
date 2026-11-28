@@ -90,7 +90,7 @@ export function Stepper({
       ) : (
         <output
           aria-live="polite"
-          className="min-w-16 px-1 text-center text-subhead font-semibold whitespace-nowrap tabular-nums"
+          className="min-w-16 text-center text-subhead font-semibold whitespace-nowrap tabular-nums"
         >
           {format(value)}
         </output>
