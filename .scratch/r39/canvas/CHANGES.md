@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · each library row says what it opened (Opened Clocks), where every song and progression said Opened Axis of Awesome · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 

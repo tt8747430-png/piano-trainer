@@ -58,7 +58,7 @@ CP58 = CP58.replace("    return { ...common(st, set),", r'''    return { ...comm
       duplicate: () => editSecs((s, l) => { const [si, bi] = st.sel || [0, 0]; s[si][3].splice(bi + 1, 0, s[si][3][bi].slice()); }),
       removeChord: () => editSecs((s) => { const [si, bi] = st.sel || [0, 0]; s[si][3].splice(bi, 1); }),
       playFrom: () => set({ sheet: null, playing: true, pos: 0 }),
-      shareOn: st.sheet === 'share', openShare: () => set({ sheet: 'share' }), libOn: st.sheet === 'lib' || st.sheet === 'libRn', openLib: () => set({ sheet: 'lib' }), libOpen: () => set({ sheet: null, toastT: 'Opened Axis of Awesome' }),
+      shareOn: st.sheet === 'share', openShare: () => set({ sheet: 'share' }), libOn: st.sheet === 'lib' || st.sheet === 'libRn', openLib: () => set({ sheet: 'lib' }), libOpen1: () => set({ sheet: null, toastT: 'Opened Isus s-a născut' }), libOpen2: () => set({ sheet: null, toastT: 'Opened Axis of Awesome' }), libOpen3: () => set({ sheet: null, toastT: 'Opened Let It Be' }), libOpen4: () => set({ sheet: null, toastT: 'Opened Yesterday' }), libOpen5: () => set({ sheet: null, toastT: 'Opened Clocks' }), libOpen6: () => set({ sheet: null, toastT: 'Opened 50s doo-wop' }), libOpen7: () => set({ sheet: null, toastT: 'Opened Alternative pop' }),
       libMine: (st.libL ?? ['My verse and chorus', 'Blues in F', 'Autumn Leaves sketch']).map((n) => ({ n, cur: n === sheetsL ? 'true' : 'false', fg: n === sheetsL ? '#356890' : '#332921', open: () => set({ sheet: null, sheetName: n, toastT: n === sheetsL ? null : 'Opened ' + n }), more: (e) => set({ libRow: n, libPos: ANCHOR(e, 156) }) })),
       libNone: (st.libL ?? [1]).length === 0, libRowOn: st.sheet === 'lib' && !!st.libRow, libPos: st.libPos ?? '', libRowT: (st.libRow ?? '') + ': more', libRowOff: () => set({ libRow: null }),
       libRename: () => set({ sheet: 'libRn', rnName: st.libRow, rnWas: st.libRow, libRow: null }), renameOn: st.sheet === 'libRn', rnName: st.rnName ?? '', typeRn: (e) => set({ rnName: e.target.value }),
@@ -116,9 +116,9 @@ _LIBTWO = lambda n, sub, act: (f'<li><button type="button" onClick="{{{{{act}}}}
 _UL = lambda rows: '<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column">' + rows + '</ul>'
 CP_LIB = ('<div style="display: flex; flex-direction: column; gap: 24px">'
           + _LIBSEC('My chord sheets', _UL(_LIBMINE) + f'<sc-if value="{{{{libNone}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 0; padding: 0 4px; font-size: 16px; line-height: 24px; color: {SOFT}; text-wrap: pretty">None saved yet. Save the sheet in hand from its name.</p></sc-if>')
-          + _LIBSEC('Songs', _UL(_LIBTWO('Isus s-a născut', 'David Preuteasa Band', 'libOpen')))
-          + _LIBSEC('Progressions', CHIPS('libStyles', wrap=True) + _UL(_LIBTWO('Axis of Awesome', 'I – V – vi – IV', 'libOpen') + _LIBTWO('Let It Be', 'I – V – vi – IV – I – V – IV – I', 'libOpen')
-                    + _LIBTWO('Yesterday', 'I – V/vi – vi – IV – V – I – vi – V/V – IV – I', 'libOpen') + _LIBTWO('Clocks', 'I – v – v – ii', 'libOpen') + _LIBTWO('50s doo-wop', 'I – vi – IV – V', 'libOpen') + _LIBTWO('Alternative pop', 'I – IV – vi – V', 'libOpen')), 12)
+          + _LIBSEC('Songs', _UL(_LIBTWO('Isus s-a născut', 'David Preuteasa Band', 'libOpen1')))
+          + _LIBSEC('Progressions', CHIPS('libStyles', wrap=True) + _UL(_LIBTWO('Axis of Awesome', 'I – V – vi – IV', 'libOpen2') + _LIBTWO('Let It Be', 'I – V – vi – IV – I – V – IV – I', 'libOpen3')
+                    + _LIBTWO('Yesterday', 'I – V/vi – vi – IV – V – I – vi – V/V – IV – I', 'libOpen4') + _LIBTWO('Clocks', 'I – v – v – ii', 'libOpen5') + _LIBTWO('50s doo-wop', 'I – vi – IV – V', 'libOpen6') + _LIBTWO('Alternative pop', 'I – IV – vi – V', 'libOpen7')), 12)
           + '</div>')
 
 
