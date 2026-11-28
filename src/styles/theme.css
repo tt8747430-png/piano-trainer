@@ -728,8 +728,9 @@
 }
 @media (max-width: 63.99rem) {
   :root:has([data-slot='app-nav'][data-away]),
-  :root:has([data-takes-tab-bar]) {
-    /* The foot is the home indicator's then: what floats stands on it, as the canvas's dock does (34
+  :root:has([data-takes-tab-bar]),
+  :root:has([data-full-screen]) {
+    /* A full screen (the Player, the Chord player) has no tab bar at all. The foot is the home indicator's then: what floats stands on it, as the canvas's dock does (34
        over a 34 indicator), or 12 from the screen's edge where there is none. */
     --nav-bar: env(safe-area-inset-bottom);
     --floating-gap: max(0px, calc(--spacing(3) - env(safe-area-inset-bottom)));
@@ -737,7 +738,8 @@
   /* The keyboard covers the foot: nothing to keep a gap above (it wins over the rule above). */
   :root[data-keyboard],
   :root[data-keyboard]:has([data-slot='app-nav'][data-away]),
-  :root[data-keyboard]:has([data-takes-tab-bar]) {
+  :root[data-keyboard]:has([data-takes-tab-bar]),
+  :root[data-keyboard]:has([data-full-screen]) {
     --nav-bar: 0px;
   }
   /* The tab bar comes and goes as memory-palaces' does: it fades and slides from the foot, never

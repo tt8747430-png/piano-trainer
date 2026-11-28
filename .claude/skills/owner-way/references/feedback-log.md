@@ -1569,6 +1569,7 @@ owner's, typos fixed.
 - **A sheet's acts as wide as their words (the loop, 2026-11-28):** the Chord player's chord sheet cut Play from here at 393, the row split evenly with Duplicate; each act now starts at its words' width and shares the rest, board and app.
 - **The section sheet's switch row 48 (the loop, 2026-11-28):** the Chord player's Loop this section stood 56 in the app; it is the kit's 48 switch row, as the board.
 - **A laptop's toast over the chart (the loop, 2026-11-28):** the Chord player's toast centred on the window on the board and on a sidebar it does not have in the app; both centre it on the chart, beside the rail or the rail and its panel.
+- **A phone's toast 12 over the foot (the loop, 2026-11-28):** the Chord player's toast floated 88 to 110 over its keys, the app reserving room for a tab bar a full screen never shows; it stands 12 over the keys or the Genos row, board and app, and every full screen drops the tab bar's reserve.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

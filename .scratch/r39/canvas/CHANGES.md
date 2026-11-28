@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · a phone's toast stands 12 over the foot (the keys, and the Genos row when shown), where it stood at 256 whatever stood under it (110 over the keys alone, 30 over the Genos row) · ChordPlayer · **pending**
 ## Changes
 
 - 2026-11-28 · 66ffc645 · the laptop's toast centres on the chart (beside the rail, or the rail and its open panel), where it centred on the window; the kit's `TOAST` takes where it centres (`left`) · ChordPlayerLaptop · v874

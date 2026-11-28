@@ -370,7 +370,9 @@ TEMPO77 = f'<div style="display: flex; flex-direction: column; gap: 12px; paddin
 SH58 = lambda B, P, D=None: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('secOn', '{{secTitle}}', CP_SEC) + B('shareOn', 'Share', CP_SHARE) + (D or B)('styleOn', 'Style', STYLEROWS) + (D or B)('keyOn', 'Key', ROOTGRID('keyRoots')) + (D or B)('tempoOn', 'Tempo', TEMPO77) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + P + '')
 _MI = lambda l, a, col=INK: f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left">{l}</button>'
 # a phone's toast steps aside when a sheet rises over it (the app's Sheet closes it), and shows one raised from that sheet
-TOAST76 = TOAST(256, z=56, on='toastPh')
+# a phone's toast stands 12 over the foot: the keys (112 over the 34 home indicator) and the Genos row (64 and its
+# 8) when shown, as the app's (`--docked`); it stood at 256 whatever stood under it
+TOAST76 = TOAST('{{toastB}}', z=56, on='toastPh')
 
 # ── R77 (owner, 2026-11-27: "now begin with the refactoring of the chords player the same way you did with the laptop
 # and mobile layout and such things"): the Chord player in the Player's model, the one shape of a full-screen music
@@ -543,7 +545,7 @@ _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'O
       tempoX: st.sheet === 'tempo' ? 'true' : 'false', styleX: st.sheet === 'style' ? 'true' : 'false', namesL: st.names ?? 'Chords', chordPos: st.chordPos ?? 'left: 640px; top: 160px',
       hdStart: () => set({ playing: false, at: [0, 0], toastT: 'From the top' }), hdPlay: () => set(st.playing ? { playing: false } : { playing: true }), hdPlayTip: st.playing ? 'Stop' : 'Play', hdPlayD: st.playing ? 'M7 5h10v14H7z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z',
       hdOpts: () => set({ sheet: st.sheet === 'opts' ? null : 'opts' }), hdOptsOn: st.sheet === 'opts', hdOptsX: st.sheet === 'opts' ? 'true' : 'false', hdOptsBg: st.sheet === 'opts' ? 'rgba(254,253,251,.14)' : 'transparent',
-      optRepL: (st.reps ?? 0) === 0 ? 'Until Stop' : (st.reps === 1 ? '1 time' : st.reps + ' times'), optRepDn: () => set({ reps: Math.max(0, (st.reps ?? 0) - 1) }), optRepUp: () => set({ reps: Math.min(8, (st.reps ?? 0) + 1) }), optRepDnDis: (st.reps ?? 0) === 0, toastX: (st.rail77 ?? 'Ch') === 'none' ? 'calc(50% + 38px)' : 'calc(50% + 214px)', optRepUpDis: (st.reps ?? 0) === 8,
+      optRepL: (st.reps ?? 0) === 0 ? 'Until Stop' : (st.reps === 1 ? '1 time' : st.reps + ' times'), optRepDn: () => set({ reps: Math.max(0, (st.reps ?? 0) - 1) }), optRepUp: () => set({ reps: Math.min(8, (st.reps ?? 0) + 1) }), optRepDnDis: (st.reps ?? 0) === 0, toastB: 46 + ((st.cpKeys ?? true) ? 112 : 0) + ((st.follow ?? false) ? 72 : 0), toastX: (st.rail77 ?? 'Ch') === 'none' ? 'calc(50% + 38px)' : 'calc(50% + 214px)', optRepUpDis: (st.reps ?? 0) === 8,
       cntSeg: seg(['Off', '1 bar', '2 bars'], st.met77 === 'off' ? 'Off' : (st.cnt77 ?? '1 bar'), (l) => set({ cnt77: l, met77: l === 'Off' ? (st.met77 === 'on' ? 'on' : 'off') : (st.met77 === 'off' ? 'count' : st.met77) })),
       metSw: st.met77 === 'on' ? 'true' : 'false', metSwBg: st.met77 === 'on' ? '#44684A' : '#DAD1C8', metSwX: st.met77 === 'on' ? 22 : 2, metTog: () => set({ met77: st.met77 === 'on' ? 'count' : 'on' }),
       hdMet: () => { const n = { count: 'on', on: 'off', off: 'count' }[st.met77 ?? 'count']; set({ met77: n, toastT: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[n] }); }, hdMetTip: { count: 'Metronome: count-in', on: 'Metronome: on', off: 'Metronome: off' }[st.met77 ?? 'count'], hdMetOff: (st.met77 ?? 'count') === 'off',

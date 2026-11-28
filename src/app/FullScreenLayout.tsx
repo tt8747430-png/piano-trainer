@@ -23,6 +23,7 @@ export function FullScreenLayout() {
   return (
     <main
       data-scroll-restoration-id={FULL_SCREEN_SCROLL}
+      data-full-screen=""
       className={cn(
         'flex h-dvh flex-col',
         edgeToEdge
