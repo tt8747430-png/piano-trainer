@@ -1562,6 +1562,7 @@ owner's, typos fixed.
 - **An empty sheet's Play rests, on the board too (the loop, 2026-11-28):** the Chord player's app dimmed Play and read Not saved on a new sheet; the board's transports kept Play in full and its phone named no state. The kit's transports take a key that rests Play.
 - **☰ clears the toast too (the loop, 2026-11-28):** the Chord player's phone ☰ opened under the toast, which hid Import chart…; one hook (`useClearsToast`) now clears it for every phone layer that rises, the sheets and ☰ alike.
 - **A segmented control's track rounds round its segments (the loop, 2026-11-28):** measured against the board's SEGC, the app's `Segmented` drew its track at the segments' own 10, so their corners met it flat; it is 12 now, everywhere. The Chord player's panel heads took the font's leading, as the board's, lifting the controls under them 4.
+- **The Genos lamps a finger's size (the loop, 2026-11-28):** the Chord player board drew its Genos lamps 40 tall and 9 round, the app 44 and 10; measured side by side, the board took the app's, the 44 a phone needs.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
