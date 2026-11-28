@@ -1592,6 +1592,7 @@ owner's, typos fixed.
 - **An empty list says so on the board too (the loop, 2026-11-28):** the Chord player's library left My chord sheets a bare head once its sheets were deleted; it carries the app's empty line. Never again: a list drawn with no empty state.
 - **The Chord player's phone library a page (the loop, 2026-11-28):** the app opened All chord sheets on a phone as a drawer with Done, where the board draws a page with ←; it is the page now, and no toast stays over a page that rises. Never again: a drawer with Done for a phone's page.
 - **A form opened from a list keeps the list under it (the loop, 2026-11-28):** the Chord player board's Rename closed the library it came from; the form rises over the library, as the app's. Never again: a form that drops the place it was opened from.
+- **One width for a laptop's form (the loop, 2026-11-28):** the app's `MakeSheet` made a name-only form 40 narrower than a full one, where every board's form is 480; one width now. Never again: two widths for one kind of form.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

@@ -85,7 +85,6 @@ export function NewSheet({
       open={open}
       onOpenChange={onOpenChange}
       title={title}
-      wide={children !== undefined}
       // Its name first, focused as it opens: the phone's keyboard comes up under it.
       initialFocus={() => document.getElementById(nameId) ?? true}
     >
