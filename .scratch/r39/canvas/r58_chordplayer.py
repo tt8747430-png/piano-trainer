@@ -432,7 +432,7 @@ CHART77 = _COL77(_SECT77('Time signature', SEGC('cpMeterSeg', 36, 14, True)), _S
 FOLLOW77 = GROUP(('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), bg=SHEET)
 # MIDI complete where it opens, as the Player's MIDI keyboard popover (R74: the keyboard in use and, with none, how to
 # connect one; nothing links away to Settings), then the Chord player's own Follow a MIDI arranger
-MIDI77 = GROUP(('val', 'Keyboard', 'None'), ('raw', f'<span style="display: block; padding: 0 16px; margin: 2px 0 10px; font-size: 15px; line-height: 1.4; color: {SOFT}">Plug in a keyboard by USB or pair it by Bluetooth, then press a key.</span>'),
+MIDI77 = GROUP(('val', 'Keyboard', 'Not connected'), ('raw', f'<span style="display: block; padding: 0 16px; margin: 2px 0 10px; font-size: 15px; line-height: 1.4; color: {SOFT}">Plug in a keyboard by USB or pair it by Bluetooth, then press a key.</span>'),
                ('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), bg=SHEET)
 # a panel's head is the kit's (the Player's and the editor's: 64, the title, « Fold the panel 44 round); only its act is
 # the Chord player's
