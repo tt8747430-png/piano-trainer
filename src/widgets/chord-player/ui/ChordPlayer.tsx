@@ -825,6 +825,8 @@ export function ChordPlayer({
                   spotlight
                   fitInView
                   height={KEYS_PX[laptop ? 'laptop' : 'phone']}
+                  // Space is Play here, as the Player's: the pedal is a MIDI keyboard's.
+                  spacePedal={false}
                 />
               </div>
             ) : null}

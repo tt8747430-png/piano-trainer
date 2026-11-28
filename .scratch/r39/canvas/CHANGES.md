@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · the rail's Shortcuts opens the Player's and editor's Shortcuts card with the Chord player's own keys (Play or stop, Undo, Redo; Play the keys, An octave down, up; Show the shortcuts), where it toasted "Space plays · L loops · K the keys", two keys the app does not have · ChordPlayerLaptop · pending
 ## Changes
 
 - 2026-11-28 · 91abf0be · a stopped Genos lights no Main until one is set or pressed, the minimized pill reading Genos alone, as the app's (the board lit Main A at rest) · ChordPlayer, ChordPlayerLaptop · v878
