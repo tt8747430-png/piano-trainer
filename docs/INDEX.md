@@ -12,6 +12,12 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `Asking` | `src/shared/ui/confirm.ts` | What `confirm` asks: | 2 |
 | `Avatar` | `src/shared/ui/Avatar.tsx` | The learner's picture: | 11 |
 | `BackButton` | `src/shared/ui/BackButton.tsx` | A screen's Back (R23's ‹): | 59 |
+| `Band` | `src/shared/ui/Band.tsx` | A full screen's band on a laptop (canvas R77, `BAND77`; Flat's dark band): | 6 |
+| `BandButton` | `src/shared/ui/Band.tsx` | A round button on the band, its glyph paper-white: | 1 |
+| `BandClose` | `src/shared/ui/Band.tsx` | The band's ✕: | 1 |
+| `BandOptions` | `src/shared/ui/Band.tsx` | Playback options' ▾ beside Play: | 1 |
+| `BandPill` | `src/shared/ui/Band.tsx` | A value of the thing in the band (the board's `BPILL`: | 1 |
+| `BandTransport` | `src/shared/ui/Band.tsx` | The band's transport (the kit's `HDRTRANSPORT`, Flat's band): | 1 |
 | `BUILT_IN_AVATARS` | `src/shared/ui/avatars.ts` | The built-in profile pictures (B1): | 2 |
 | `ButtonLink` | `src/shared/ui/ButtonLink.tsx` | A link that looks like a button: | 43 |
 | `CheckMark` | `src/shared/ui/CheckMark.tsx` | The one check a chosen thing wears (the boards' CHECKBOX, 24 round, a 2 ring): | 7 |
@@ -47,10 +53,10 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `FilterIcon` | `src/shared/ui/icons/FilterIcon.ts` | Sort and filter (the boards' `FILTERI`): | 2 |
 | `FilterSheet` | `src/shared/ui/FilterSheet.tsx` | A library's Filter button and its filters (ADR 0106, the owner's example): | 1 |
 | `FloatingActions` | `src/shared/ui/FloatingActions.tsx` | A screen's actions in the thumb's reach, floating at the foot of the screen over the page, at its bottom right as the canvas's New (Material 3's FAB, owner 2026-11-15): | 21 |
-| `FloatingBar` | `src/shared/ui/FloatingBar.tsx` | The screen's floating bar, the canvas's DOCK value for value: | 4 |
+| `FloatingBar` | `src/shared/ui/FloatingBar.tsx` | The screen's floating bar, the canvas's DOCK value for value: | 3 |
 | `FloatingBarButton` | `src/shared/ui/FloatingBar.tsx` | One of a bar's controls: | 5 |
-| `FloatingBarPlay` | `src/shared/ui/FloatingBar.tsx` | The bar's Play, its largest control: | 2 |
-| `FloatingBarValue` | `src/shared/ui/FloatingBar.tsx` | A setting the bar shows and opens, the canvas's PBTN: | 1 |
+| `FloatingBarPlay` | `src/shared/ui/FloatingBar.tsx` | The bar's Play, its largest control: | 1 |
+| `FloatingBarValue` | `src/shared/ui/FloatingBar.tsx` | A setting the bar shows and opens, the canvas's PBTN: | **0** |
 | `FloatingHost` | `src/shared/ui/FloatingActions.tsx` | The one row every screen's floating actions stand in, at the foot of the screen over the tab bar and the keys docked there, the width of the screen beside a rail or a sidebar, at i | 2 |
 | `FloatingPiece` | `src/shared/ui/FloatingPieces.tsx` | A glass piece with its picture over its word (Voicing's name, Hands), the kit's PIECE: | 10 |
 | `FloatingPieceLink` | `src/shared/ui/FloatingPieces.tsx` | A glass piece that goes somewhere (Practise opens the Player): | 4 |
@@ -58,19 +64,20 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `FloatingPlayLink` | `src/shared/ui/FloatingPieces.tsx` | The floating primary that opens where the playing happens (an exercise's Start, the Player), tinted honey glass, 176 wide as `FloatingPlayPiece`: | 1 |
 | `FloatingPlayPiece` | `src/shared/ui/FloatingPieces.tsx` | The floating primary of a tool with nothing to choose about how it plays (the Metronome's Start), tinted honey glass, 176 wide: | 2 |
 | `FloatingPlaySplit` | `src/shared/ui/FloatingPieces.tsx` | The floating primary that plays, tinted honey glass, 176 wide: | 5 |
-| `Fold` | `src/shared/ui/FoldSection.tsx` | Whether a section shows its body, and how its heading changes that. | 3 |
+| `Fold` | `src/shared/ui/FoldSection.tsx` | Whether a section shows its body, and how its heading changes that. | 5 |
 | `FoldSection` | `src/shared/ui/FoldSection.tsx` | A titled section of a page; given a `fold`, its heading is the button that folds its body away, a chevron saying which way it is, the heading itself staying in sight. | 12 |
 | `FormField` | `src/shared/ui/FormField.tsx` | A form's field (an email, a password, a name), the kit's one field: | 8 |
 | `Glyph` | `src/shared/ui/Glyph.tsx` | Text drawn for the eye alone (CSS `content`): | 3 |
-| `GroupAction` | `src/shared/ui/GroupRows.tsx` | A row that does something at once, in the link's colour, as the canvas's `GROUP` action rows; a loss (Unpublish, Delete) in crimson, in a group of its own. | 4 |
+| `GoToStartGlyph` | `src/shared/ui/Band.tsx` | Go to start's glyph, filled (the board's): | 1 |
+| `GroupAction` | `src/shared/ui/GroupRows.tsx` | A row that does something at once, in the link's colour, as the canvas's `GROUP` action rows; a loss (Unpublish, Delete) in crimson, in a group of its own. | 2 |
 | `GroupChips` | `src/shared/ui/GroupRows.tsx` | A row of values under a quiet heading (Also read as, Played), as the canvas's `GROUP` raw rows and its `CHIPL`: | 3 |
 | `GROUPED_LIST` | `src/shared/ui/library-row-class.ts` | A grouped list's card (canvas 133): | 6 |
 | `GroupField` | `src/shared/ui/GroupRows.tsx` | A row whose control stands under its name, across the group's width, as the canvas's `GROUP` seg rows draw it (canvas 127): | 4 |
 | `GroupLink` | `src/shared/ui/GroupRows.tsx` | A row that opens what it names, its value in Soft Ink and a chevron at its end: | 16 |
 | `GroupRow` | `src/shared/ui/GroupRows.tsx` | A row whose control stands at its end: | 25 |
-| `GroupRows` | `src/shared/ui/GroupRows.tsx` | A group of settings' rows on the muted fill, as the canvas's `GROUP` draws them (canvas 179): | 25 |
-| `GroupSegmented` | `src/shared/ui/GroupRows.tsx` | A row of two or three choices: | 8 |
-| `GroupSwitch` | `src/shared/ui/GroupRows.tsx` | On or off as a row of the group: | 8 |
+| `GroupRows` | `src/shared/ui/GroupRows.tsx` | A group of settings' rows on the muted fill, as the canvas's `GROUP` draws them (canvas 179): | 26 |
+| `GroupSegmented` | `src/shared/ui/GroupRows.tsx` | A row of two or three choices: | 9 |
+| `GroupSwitch` | `src/shared/ui/GroupRows.tsx` | On or off as a row of the group: | 9 |
 | `HandsPicture` | `src/shared/ui/HandsSegmented.tsx` | Hands as a picture, as the canvas draws them: | 3 |
 | `HandsSegmented` | `src/shared/ui/HandsSegmented.tsx` | The one choice of hands (R35, after Ivory's parts): | 3 |
 | `hasCredits` | `src/shared/ui/sheet-credits.ts` | Whether a score prints any credits under its title. | 4 |
@@ -86,7 +93,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `KeyMark` | `src/shared/ui/piano-keyboard/index.ts` |  | 20 |
 | `KeyPicker` | `src/shared/ui/pickers/KeyPicker.tsx` | A key (a progression's, an example's, the Chord finder's): | 9 |
 | `KeysChecklist` | `src/shared/ui/pickers/KeysChecklist.tsx` | Several keys (a drill's Custom keys, Chord Trainer's Keys sheet): | 1 |
-| `KeysIcon` | `src/shared/ui/icons/KeysIcon.ts` | The piano's keys (the canvas's `KEYSI`): | 12 |
+| `KeysIcon` | `src/shared/ui/icons/KeysIcon.ts` | The piano's keys (the canvas's `KEYSI`): | 13 |
 | `KeysWait` | `src/shared/ui/keys-wait.ts` | Why the keys inside cannot act now ("Select one or more notes first."), for a palette's section that waits on a choice: | 4 |
 | `KindTile` | `src/shared/ui/KindTile.tsx` | A kind's glyph on the quiet fill, at the head of a row that makes or adds it (the boards' INSROW and New's dial): | 2 |
 | `Labelled` | `src/shared/ui/Labelled.tsx` | A choice under its name on screen, one field of a page's `grid-fields`: | 18 |
@@ -99,13 +106,15 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `loadScoreView` | `src/shared/ui/score/load.ts` | The score view's module, loaded on its own the first time a staff is shown, its engraver warming as it loads. | 2 |
 | `LoopGrip` | `src/shared/ui/LoopGrip.tsx` | One end of the loop (ADR 0096, R37: | 3 |
 | `MakeSheet` | `src/shared/ui/MakeSheet.tsx` | What makes something new (the canvas's NEWNAME and its New song, Record and Import sheets): | 7 |
-| `MenuAction` | `src/shared/ui/ActionMenu.tsx` | One command of a menu: | 24 |
+| `MenuAction` | `src/shared/ui/ActionMenu.tsx` | One command of a menu: | 25 |
 | `menuOf` | `src/shared/ui/row-actions.ts` | A row's actions as its More lists them. | 5 |
 | `MenuPicker` | `src/shared/ui/pickers/MenuPicker.tsx` | One choice of many in a plain list (a chord's quality, its voicing, a scale's kind, a tempo's rung): | 9 |
-| `MenuSection` | `src/shared/ui/MenuSection.tsx` | One group of a menu or sheet under its heading (ADR 0115): | 8 |
+| `MenuSection` | `src/shared/ui/MenuSection.tsx` | One group of a menu or sheet under its heading (ADR 0115): | 7 |
+| `MetronomeIcon` | `src/shared/ui/icons/MetronomeIcon.ts` | The metronome (the canvas's `METI`): | 1 |
+| `MetronomeMode` | `src/shared/ui/Band.tsx` | The metronome's three modes, one press to the next (Flat's "Change metronome mode"). | 1 |
 | `MIN_KEYS_PX` | `src/shared/ui/piano-keyboard/index.ts` |  | 2 |
 | `MiniKeys` | `src/shared/ui/MiniKeys.tsx` | A chord as a picture of the keys (the boards' MINIKEYS, on Scales' chord cards and a song's chords): | 2 |
-| `MoreMenu` | `src/shared/ui/MoreMenu.tsx` | More (⋯), the one for every place: | 13 |
+| `MoreMenu` | `src/shared/ui/MoreMenu.tsx` | More (⋯), the one for every place: | 12 |
 | `MultiDropdown` | `src/shared/ui/MultiDropdown.tsx` | Several choices of many behind a pop-up button: | 1 |
 | `NameField` | `src/shared/ui/NameField.tsx` | A name the learner gives (a song's title, a pattern's or a take's name), the kit's NAMEFIELD: | 10 |
 | `NameHeart` | `src/shared/ui/NameHeart.tsx` | The ♡ beside a page's name (the boards' Favourite on a progression, a pattern, an exercise): | 2 |
@@ -124,7 +133,12 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `PageName` | `src/shared/ui/PageName.tsx` | A page's name as its serif heading (the LearnLevel, Lesson and Course boards' h1): | 4 |
 | `Paint` | `src/shared/ui/paint.ts` | The chrome's paints that name places and kinds of step (DESIGN.md, the paint set). | 23 |
 | `PAINT` | `src/shared/ui/paint.ts` | A paint as the book prints it on a place: | 28 |
-| `PanelPopover` | `src/shared/ui/PanelPopover.tsx` | A laptop's panel over what opened it, as the canvas's `POPOVER` draws every one (PlayerDesk's Practice and Piano, Go to bar, MIDI keyboard, a song's properties): | 6 |
+| `PanelPopover` | `src/shared/ui/PanelPopover.tsx` | A laptop's panel over what opened it, as the canvas's `POPOVER` draws every one (PlayerDesk's Practice and Piano, Go to bar, MIDI keyboard, a song's properties): | 7 |
+| `PhoneBand` | `src/shared/ui/PhoneBand.tsx` | A full screen's header on a phone (canvas R77, `PHHDR77`; Flat's phone header): | 1 |
+| `PhoneBandButton` | `src/shared/ui/PhoneBand.tsx` | A phone header's own button: | 1 |
+| `PhoneMenuButton` | `src/shared/ui/PhoneBand.tsx` | ☰, the phone header's last button: | 1 |
+| `PhonePage` | `src/shared/ui/PhonePage.tsx` | A page a phone's ☰ opens (the kit's `THINGPAGE`, the boards' `FSHEET`): | 2 |
+| `PhoneTransport` | `src/shared/ui/PhoneBand.tsx` | The phone's transport (the kit's `PHTRANSPORT`, Flat's phone header): | 1 |
 | `Piano2DPicture` | `src/shared/ui/PianoPictures.tsx` | The keys seen from above, flat. | 1 |
 | `Piano3DPicture` | `src/shared/ui/PianoPictures.tsx` | A piano seen from the seat, its keys running away from you. | 1 |
 | `PianoKeyboard` | `src/shared/ui/piano-keyboard/index.ts` |  | 2 |
@@ -133,6 +147,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `PitchPicker` | `src/shared/ui/pickers/PitchPicker.tsx` | A pitch, whatever its spelling (Intervals' root, the melody note, the Chord finder's bass): | 2 |
 | `PlaceRow` | `src/shared/ui/PlaceRow.tsx` | A row of a grouped list that leads to a place (canvas 133 and Practice's): | 2 |
 | `PlayButton` | `src/shared/ui/PlayButton.tsx` | An example's Play as a round icon (or the picture of what it plays), named by what it plays, and Stop behind its square while that sounds: | 7 |
+| `PlayGlyph` | `src/shared/ui/Band.tsx` | Play and Pause's glyphs, filled (the board's `hdPlayD`). | 1 |
 | `PlayLabel` | `src/shared/ui/PlayLabel.tsx` | A Play button's label: | 2 |
 | `PlayRow` | `src/shared/ui/PractiseRows.tsx` | The same row, its card's item without the list item: | 1 |
 | `PlayToggle` | `src/shared/ui/PlayToggle.tsx` | A chord or a note to tap: | 2 |
@@ -146,6 +161,9 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `ProgressMeter` | `src/shared/ui/ProgressMeter.tsx` | How much is done: | 2 |
 | `ProgressRing` | `src/shared/ui/ProgressRing.tsx` | A round mark with how much of it is done drawn as an arc round its edge, from the top clockwise (a lesson's sections read round its node): | 2 |
 | `RadioCards` | `src/shared/ui/RadioCards.tsx` | Two or three exclusive choices as cards, the boards' CARDV and the Practice sheet's mode tiles value for value: | 3 |
+| `Rail` | `src/shared/ui/Rail.tsx` | A full screen's rail on a laptop (canvas R77, `RAIL77`; the Player's and the editor's, Flat's): | 1 |
+| `RailButton` | `src/shared/ui/Rail.tsx` | A place on the rail (the kit's `_RAILBTN`): | 1 |
+| `RailPanel` | `src/shared/ui/Rail.tsx` | The panel a rail's place opens beside it (the board's `_PANEL`): | 1 |
 | `RaisedSymbol` | `src/shared/ui/RaisedSymbol.tsx` | A chord's symbol as printed (`C♯m⁷♭⁵`, `G/B`): | 3 |
 | `RankMark` | `src/shared/ui/RankMark.tsx` | A rank of four as rising pips, the first `rank` filled, named for a screen reader by `label`. | 1 |
 | `ROLE_BG` | `src/shared/ui/role-classes.ts` | Complete class strings per chord role, so Tailwind sees every one (CODE_STYLE §4). | 1 |
@@ -153,8 +171,8 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `RoleLegend` | `src/shared/ui/RoleTiles.tsx` | What the tiles' paints mean, in one line under them (Tonic, Predominant, Dominant), the terms theory books use, with no ⓘ, as the Progression board draws it. | 1 |
 | `RoleTile` | `src/shared/ui/RoleTiles.tsx` | One chord of the row: | 1 |
 | `RoleTiles` | `src/shared/ui/RoleTiles.tsx` | A progression with why it works drawn on its chords (canvas 177): | 1 |
-| `RootGrid` | `src/shared/ui/pickers/RootGrid.tsx` | A run's Root in its Setup (the kit's `ROOTGRID`): | 2 |
-| `RoundButton` | `src/shared/ui/RoundButton.tsx` | A 44px round icon button, named by its label, which it says when pointed at. | 24 |
+| `RootGrid` | `src/shared/ui/pickers/RootGrid.tsx` | A run's Root in its Setup (the kit's `ROOTGRID`): | 3 |
+| `RoundButton` | `src/shared/ui/RoundButton.tsx` | A 44px round icon button, named by its label, which it says when pointed at. | 23 |
 | `RoundLink` | `src/shared/ui/RoundLink.tsx` | A bar's 44px glass icon link, named by its label: | 2 |
 | `RouteShellContext` | `src/shared/ui/route-shell.ts` |  | 1 |
 | `RouteState` | `src/shared/ui/RouteState.tsx` | A screen that cannot show what it was opened for (the canvas's route states, `r52_global.py`): | 3 |
@@ -165,32 +183,32 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `ROW_FLAT` | `src/shared/ui/library-row-class.ts` | A row of a grouped list (canvas 133: | 5 |
 | `ROW_LIBRARY_FACE` | `src/shared/ui/library-row-class.ts` | A library row's face (canvas 133): | 5 |
 | `RowAction` | `src/shared/ui/row-actions.ts` | One of a row's actions: | 8 |
-| `RowButton` | `src/shared/ui/RowButton.tsx` | A list row that acts in place, over its page (a chord's sheet, a lesson played in the Player): | 21 |
+| `RowButton` | `src/shared/ui/RowButton.tsx` | A list row that acts in place, over its page (a chord's sheet, a lesson played in the Player): | 22 |
 | `RowCheck` | `src/shared/ui/RowCheck.tsx` | A list row that is on or off (a song ticked to move into a folder, Apple Music's Add Music): | 2 |
 | `RowFace` | `src/shared/ui/RowFace.tsx` | What a list row shows (`RowLink`, `RowButton`): | 11 |
 | `RowGroup` | `src/shared/ui/RowGroup.tsx` | A titled group of rows in one card (a grouped list, as Settings' and Practice's), in as many columns as the width holds: | 3 |
-| `RowLink` | `src/shared/ui/RowLink.tsx` | A list row that leads to a page: | 34 |
+| `RowLink` | `src/shared/ui/RowLink.tsx` | A list row that leads to a page: | 32 |
 | `RowsLoading` | `src/shared/ui/RowsLoading.tsx` | A list of rows being read, drawn as their outlines (one 64 card a row, 8 apart), pulsing where motion is allowed and named once for a screen reader. | 7 |
-| `Said` | `src/shared/ui/Said.tsx` | A state with nothing to list, the kit's one empty state (the canvas's EMPTY, r53): | 39 |
-| `say` | `src/shared/ui/say.ts` | Says what was just done in a toast (Mindscape's, ADR 0106: | 124 |
-| `sayUndo` | `src/shared/ui/say.ts` | Says what was just done, with Undo, the one word every such toast carries, taking it back. | 23 |
+| `Said` | `src/shared/ui/Said.tsx` | A state with nothing to list, the kit's one empty state (the canvas's EMPTY, r53): | 40 |
+| `say` | `src/shared/ui/say.ts` | Says what was just done in a toast (Mindscape's, ADR 0106: | 123 |
+| `sayUndo` | `src/shared/ui/say.ts` | Says what was just done, with Undo, the one word every such toast carries, taking it back. | 22 |
 | `ScaleIcon` | `src/shared/ui/icons/ScaleIcon.ts` | A scale, its notes climbing step by step (the canvas's `SCALESI`): | 4 |
 | `ScreenBarProvider` | `src/shared/ui/ScreenBarProvider.tsx` | A screen's bar: | 3 |
-| `ScreenHeader` | `src/shared/ui/ScreenHeader.tsx` | A screen's bar: | 51 |
+| `ScreenHeader` | `src/shared/ui/ScreenHeader.tsx` | A screen's bar: | 50 |
 | `ScreenHeaderProps` | `src/shared/ui/ScreenHeader.tsx` |  | 1 |
 | `SearchField` | `src/shared/ui/SearchField.tsx` | A screen's search box, with a clear button while it holds text and, joined to its end, what sorts what it finds (`end`); `/` puts the cursor in it (a sheet's box, of no `screen`, l | 10 |
 | `SectionHead` | `src/shared/ui/SectionHead.tsx` | A section's head (the boards' `H2`): | 7 |
 | `SeeAll` | `src/shared/ui/SectionHead.tsx` | A section head's See all: | 6 |
-| `Segmented` | `src/shared/ui/Segmented.tsx` | One choice of a few: | 41 |
+| `Segmented` | `src/shared/ui/Segmented.tsx` | One choice of a few: | 39 |
 | `SelectAct` | `src/shared/ui/SelectDock.tsx` | One act of a selection bar (the boards' SELACT; owner, 2026-11-17: | 4 |
 | `SelectDock` | `src/shared/ui/SelectDock.tsx` | The selection bar at the foot (the boards' SELBAR, a glass DOCK in New's place): | 4 |
 | `SelectionBarIcon` | `src/shared/ui/icons/SelectionBarIcon.ts` | The selection toolbar (the canvas's Settings picture): | 1 |
-| `SettingField` | `src/shared/ui/SettingField.tsx` | One choice in Settings: | 3 |
+| `SettingField` | `src/shared/ui/SettingField.tsx` | One choice in Settings: | 2 |
 | `SettingRows` | `src/shared/ui/SettingRows.tsx` | Settings' rows, one under the other as an app's settings list has them (ADR 0096): | 2 |
-| `SettingsGroup` | `src/shared/ui/SettingsGroup.tsx` | A group of settings, as an app's settings read (iOS's grouped list, memory-palaces' `SettingsSection`): | 65 |
+| `SettingsGroup` | `src/shared/ui/SettingsGroup.tsx` | A group of settings, as an app's settings read (iOS's grouped list, memory-palaces' `SettingsSection`): | 64 |
 | `SettingsWindow` | `src/shared/ui/SettingsWindow.tsx` | A thing's Settings over its page, never a page of its own (the SongSettings boards' SETWIN): | 8 |
-| `Sheet` | `src/shared/ui/Sheet.tsx` | The app's bottom sheet: | 50 |
-| `SheetContent` | `src/shared/ui/Sheet.tsx` | The sheet's panel (R42, the canvas's one sheet): | 45 |
+| `Sheet` | `src/shared/ui/Sheet.tsx` | The app's bottom sheet: | 47 |
+| `SheetContent` | `src/shared/ui/Sheet.tsx` | The sheet's panel (R42, the canvas's one sheet): | 42 |
 | `SheetCreditLines` | `src/shared/ui/sheet-credits.ts` | What a score prints under its title (Flat's credits), each line as the learner typed it. | 2 |
 | `SheetCredits` | `src/shared/ui/SheetCredits.tsx` | A score's credits printed under its title, as the canvas prints them (the Player's and the editor's title block): | 4 |
 | `SheetLayoutPicker` | `src/shared/ui/SheetLayoutPicker.tsx` | How a score is laid out (ADR 0096, 0108, 0115, R34), chosen in the sheet's pill (Songscription's Page · Infinite height · Infinite width): | 1 |
@@ -242,10 +260,10 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 
 | Primitive | Exports | Used by |
 | --- | --- | --- |
-| `alert-dialog` | AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger | 9 |
-| `button` | Button, buttonVariants | 153 |
+| `alert-dialog` | AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger | 8 |
+| `button` | Button, buttonVariants | 151 |
 | `checkbox` | Checkbox | 2 |
-| `dialog` | Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger | 5 |
+| `dialog` | Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger | 6 |
 | `drawer` | Drawer, DrawerPortal, DrawerOverlay, DrawerSwipeHandle, DrawerTrigger, DrawerClose, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerDescription | 1 |
 | `dropdown-menu` | DropdownMenu, DropdownMenuPortal, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent | 4 |
 | `input-group` | InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupInput, InputGroupTextarea | 4 |
@@ -272,7 +290,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `chord-diagrams` | A chord of the music drawn on the diagram's keys, F3 to B4 (ADR 0108), a bass it has not a ring; named for a screen reader by its symbol as printed and the notes it marks ("C♯m7: | 7 |
 | `chord-explorer` | What the Chords explorer shows: | 2 |
 | `chord-finder` | The chords played, oldest first, and the keys down now (ADR 0052). | 2 |
-| `chord-player` | The keys that lift and drop a chord or a section: | 4 |
+| `chord-player` | The keys that lift and drop a chord or a section: | 3 |
 | `chord-views` | The Player's music as one of its chord views (ADR 0108), shown only for music with chord symbols (ADR 0108): | 3 |
 | `content-editor` | Each reason the form is not open, its picture (the boards' EMPTYICON: | 19 |
 | `continue-action` | What to do next (ADR 0053), Learn's first card, the canvas's CONT: | 1 |
@@ -290,15 +308,15 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `player-setup` | The clefs a single staff may be read in besides its own (Display's Clef). | 16 |
 | `practice-days` | The month's arrows, the board's CAL: | 6 |
 | `practice-library` | How a practice library sorts: | 13 |
-| `practice-pages` | Practice's pages (ADR 0052), each where it is and the tile it wears: | 13 |
+| `practice-pages` | Practice's pages (ADR 0052), each where it is and the tile it wears: | 12 |
 | `practice-player` | What the Player plays (A35): | 24 |
 | `progression-explorer` | What a progression's page shows (A23, R30-4): | 8 |
 | `run-results` | The bars with a slip, to loop: | 2 |
 | `scale-explorer` | The key a major or minor scale is the scale of, as the circle of fifths spells it; null for any other scale. | 2 |
 | `score-sheet` | No staff hidden, and none written. | 17 |
 | `score-view-menu` | The score's layout, saved for every score: | 3 |
-| `search-palette` | Search as a tool over the screen (rule 27): | 6 |
-| `settings-screen` | What waits in Administration's sections, by section: | 24 |
+| `search-palette` | Search as a tool over the screen (rule 27): | 8 |
+| `settings-screen` | What waits in Administration's sections, by section: | 23 |
 | `sheet-music` | The width a page's line is spread to, inside its margins. | 3 |
 | `song-library` | A row's body in the hand: | 13 |
 | `song-preview` | Who published an item, as Explore names them: | 6 |
@@ -346,11 +364,11 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `remember-view` | A passage of one session, a path step's panel, and the click and keys a song lesson opens the Player with for its visit (ADR 0111): | 2 |
 | `reset-progress` | Forgets everything the learner has done on this device. | 6 |
 | `score-editor` | What a score's rows are read from: | 63 |
-| `set-preference` | Saves whether a trainer moves on by itself after a right answer. | 51 |
+| `set-preference` | Saves whether a trainer moves on by itself after a right answer. | 50 |
 | `share-chord-sheet` | A shared sheet's link, opened in the Chord player. | 4 |
-| `share-folder` | A song as a shared folder holds it: | 9 |
+| `share-folder` | A song as a shared folder holds it: | 10 |
 | `share-song` | How a piece is played, as its page shares it (ADR 0107): | 5 |
-| `shortcuts-help` | The shortcuts' sheet from a settings group: | 3 |
+| `shortcuts-help` | The shortcuts' sheet from a settings group: | 4 |
 | `song-files` | Makes a song read from a file the learner's own, under the next number, where the learner is (ADR 0106): | 8 |
 | `track-achievements` | What the Profile counts (B1), from the progress and the learner's takes, songs and folders. | 6 |
 | `trainer` | A chord a level asks: | 20 |
@@ -360,20 +378,20 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | Slice | What it is | Used by |
 | --- | --- | --- |
 | `book` | The printed songbooks and methods a Source cites. | 9 |
-| `chord-sheet` | The band's instruments, each turned on or off and up or down on a sheet (R29 CP6). | 16 |
+| `chord-sheet` | The band's instruments, each turned on or off and up or down on a sheet (R29 CP6). | 18 |
 | `course` | The shelves Courses lists, in order (ADR 0053): | 27 |
 | `diagram-inversion` | The inversion chosen for each chord of a piece, by its symbol as played (ADR 0108): | 7 |
 | `exercise` | The arpeggio types: | 20 |
 | `lesson` | A progression a lesson plays or opens on Progressions: | 154 |
-| `library` | A folder the learner made: | 83 |
+| `library` | A folder the learner made: | 84 |
 | `notification` | What a notification tells of (B1): | 6 |
 | `own-lessons` | A lesson the learner wrote (R30-5): | 38 |
 | `pattern` | Groups use the glossary's words; their displayed names keep the source's wording. | 89 |
-| `piece` | A saved id may name a piece a later version removed, so it stays a plain name. | 215 |
+| `piece` | A saved id may name a piece a later version removed, so it stays a plain name. | 216 |
 | `practice-library` | The libraries of Practice a learner keeps favourites in (R30-4): | 26 |
-| `progress` | One quiz answer on a skill. | 96 |
+| `progress` | One quiz answer on a skill. | 97 |
 | `progression-library` | The styles the Progressions library groups its progressions by. | 16 |
-| `settings` | The Player's saved switches: | 136 |
+| `settings` | The Player's saved switches: | 134 |
 | `step` | The four levels, beginner to professional: | 59 |
 | `take` | A take's id: | 40 |
 | `views` | What the learner searched for last, the latest first (rule 27): | 11 |
@@ -388,7 +406,7 @@ is (its doc comment) and how many files use it. **0** marks a part nothing uses.
 | `admin` | The sections, one group of Settings' rows; Content reports, Error log and Drafts carry what waits in them (the open reports, the week's errors, the unpublished drafts), as the Admi | 1 |
 | `check` | The check's questions, drawn once from the evidence as it opens: | 1 |
 | `chord-finder` | What the Chord finder shows, as its URL holds it (ADR 0052). | 2 |
-| `chord-player` | The Chord player (`/practice/chord-player`, canvas R76): | 1 |
+| `chord-player` | The Chord player (`/practice/chord-player`, canvas R77): | 1 |
 | `chords` | Chords, as its canvas board: | 1 |
 | `circle-of-fifths` | What the Circle of fifths shows: | 2 |
 | `course` | The course's one way in, the honey 50 under its meter (the canvas's BTN): | 1 |
@@ -437,6 +455,8 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--alert-foreground` | `src/styles/tokens.css` | 1 |
 | `--attention` | `src/styles/tokens.css` | 1 |
 | `--background` | `src/styles/tokens.css` | 3 |
+| `--band` | `src/styles/tokens.css` | 1 |
+| `--bar-on` | `src/styles/tokens.css` | 1 |
 | `--block-padding-compact` | `src/styles/theme.css` | 1 |
 | `--block-padding-normal` | `src/styles/theme.css` | 1 |
 | `--block-padding-roomy` | `src/styles/theme.css` | 1 |
@@ -459,15 +479,17 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-alert-foreground` | `src/styles/theme.css` | 2 |
 | `--color-attention` | `src/styles/theme.css` | 2 |
 | `--color-background` | `src/styles/theme.css` | 43 |
-| `--color-border` | `src/styles/theme.css` | 87 |
-| `--color-card` | `src/styles/theme.css` | 133 |
+| `--color-band` | `src/styles/theme.css` | 4 |
+| `--color-bar-on` | `src/styles/theme.css` | 2 |
+| `--color-border` | `src/styles/theme.css` | 91 |
+| `--color-card` | `src/styles/theme.css` | 132 |
 | `--color-card-foreground` | `src/styles/theme.css` | 4 |
-| `--color-chosen` | `src/styles/theme.css` | 20 |
-| `--color-chosen-honey` | `src/styles/theme.css` | 8 |
+| `--color-chosen` | `src/styles/theme.css` | 21 |
+| `--color-chosen-honey` | `src/styles/theme.css` | 6 |
 | `--color-destructive` | `src/styles/theme.css` | 47 |
 | `--color-destructive-foreground` | `src/styles/theme.css` | 5 |
 | `--color-eyebrow` | `src/styles/theme.css` | 4 |
-| `--color-foreground` | `src/styles/theme.css` | 357 |
+| `--color-foreground` | `src/styles/theme.css` | 355 |
 | `--color-glass` | `src/styles/theme.css` | 2 |
 | `--color-hairline` | `src/styles/theme.css` | 66 |
 | `--color-hand-lh` | `src/styles/theme.css` | 3 |
@@ -478,7 +500,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-hand-staff-wash` | `src/styles/theme.css` | 1 |
 | `--color-heart` | `src/styles/theme.css` | 4 |
 | `--color-heart-rest` | `src/styles/theme.css` | 1 |
-| `--color-honey-ink` | `src/styles/theme.css` | 4 |
+| `--color-honey-ink` | `src/styles/theme.css` | 3 |
 | `--color-honey-ring` | `src/styles/theme.css` | 9 |
 | `--color-honey-wash` | `src/styles/theme.css` | 1 |
 | `--color-input` | `src/styles/theme.css` | 22 |
@@ -491,21 +513,24 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-key-shade` | `src/styles/theme.css` | 1 |
 | `--color-key-tonic` | `src/styles/theme.css` | 1 |
 | `--color-key-white` | `src/styles/theme.css` | 3 |
-| `--color-layout-edge` | `src/styles/theme.css` | 2 |
-| `--color-layout-zone` | `src/styles/theme.css` | 1 |
-| `--color-learned` | `src/styles/theme.css` | 25 |
+| `--color-layout-edge` | `src/styles/theme.css` | **0** |
+| `--color-layout-zone` | `src/styles/theme.css` | **0** |
+| `--color-learned` | `src/styles/theme.css` | 24 |
 | `--color-learned-foreground` | `src/styles/theme.css` | 2 |
-| `--color-link` | `src/styles/theme.css` | 42 |
+| `--color-link` | `src/styles/theme.css` | 41 |
 | `--color-medal-bronze` | `src/styles/theme.css` | 1 |
 | `--color-medal-gold` | `src/styles/theme.css` | 1 |
 | `--color-medal-none` | `src/styles/theme.css` | 1 |
 | `--color-medal-platinum` | `src/styles/theme.css` | 1 |
 | `--color-medal-silver` | `src/styles/theme.css` | 1 |
-| `--color-muted` | `src/styles/theme.css` | 158 |
-| `--color-muted-foreground` | `src/styles/theme.css` | 299 |
+| `--color-muted` | `src/styles/theme.css` | 156 |
+| `--color-muted-foreground` | `src/styles/theme.css` | 297 |
 | `--color-nav-current` | `src/styles/theme.css` | 2 |
 | `--color-nav-current-foreground` | `src/styles/theme.css` | 3 |
 | `--color-nav-foreground` | `src/styles/theme.css` | 2 |
+| `--color-on-band` | `src/styles/theme.css` | 2 |
+| `--color-on-band-ring` | `src/styles/theme.css` | **0** |
+| `--color-on-band-soft` | `src/styles/theme.css` | 1 |
 | `--color-on-key-black` | `src/styles/theme.css` | 3 |
 | `--color-on-key-down` | `src/styles/theme.css` | 1 |
 | `--color-on-key-scale` | `src/styles/theme.css` | 1 |
@@ -536,10 +561,11 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-popover` | `src/styles/theme.css` | 5 |
 | `--color-popover-foreground` | `src/styles/theme.css` | 8 |
 | `--color-practised-day` | `src/styles/theme.css` | 2 |
-| `--color-primary` | `src/styles/theme.css` | 30 |
-| `--color-primary-foreground` | `src/styles/theme.css` | 9 |
+| `--color-primary` | `src/styles/theme.css` | 31 |
+| `--color-primary-foreground` | `src/styles/theme.css` | 10 |
+| `--color-rail-chosen` | `src/styles/theme.css` | 1 |
 | `--color-raised` | `src/styles/theme.css` | 6 |
-| `--color-ring` | `src/styles/theme.css` | 23 |
+| `--color-ring` | `src/styles/theme.css` | 20 |
 | `--color-role-11th` | `src/styles/theme.css` | 1 |
 | `--color-role-13th` | `src/styles/theme.css` | 1 |
 | `--color-role-3rd` | `src/styles/theme.css` | 1 |
@@ -550,7 +576,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-roll-lower` | `src/styles/theme.css` | 1 |
 | `--color-roll-upper` | `src/styles/theme.css` | 1 |
 | `--color-scrim` | `src/styles/theme.css` | 3 |
-| `--color-secondary` | `src/styles/theme.css` | 5 |
+| `--color-secondary` | `src/styles/theme.css` | 4 |
 | `--color-secondary-foreground` | `src/styles/theme.css` | 4 |
 | `--color-selected` | `src/styles/theme.css` | 11 |
 | `--color-selected-foreground` | `src/styles/theme.css` | 4 |
@@ -567,10 +593,10 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--color-wheel-relative` | `src/styles/theme.css` | 1 |
 | `--destructive` | `src/styles/tokens.css` | 3 |
 | `--destructive-foreground` | `src/styles/tokens.css` | 1 |
-| `--ease-out` | `src/styles/theme.css` | 112 |
+| `--ease-out` | `src/styles/theme.css` | 111 |
 | `--elevation-1` | `src/styles/tokens.css` | 1 |
 | `--elevation-2` | `src/styles/tokens.css` | 4 |
-| `--elevation-3` | `src/styles/tokens.css` | 5 |
+| `--elevation-3` | `src/styles/tokens.css` | 4 |
 | `--elevation-float` | `src/styles/tokens.css` | 1 |
 | `--elevation-thumb` | `src/styles/tokens.css` | 2 |
 | `--elevation-window` | `src/styles/tokens.css` | 1 |
@@ -582,7 +608,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--floating-right` | `src/styles/theme.css` | 1 |
 | `--font-display` | `src/styles/theme.css` | 56 |
 | `--font-music` | `src/styles/theme.css` | 8 |
-| `--font-sans` | `src/styles/theme.css` | 77 |
+| `--font-sans` | `src/styles/theme.css` | 79 |
 | `--foot-pad` | `src/styles/theme.css` | 1 |
 | `--foreground` | `src/styles/tokens.css` | 3 |
 | `--glass` | `src/styles/tokens.css` | 1 |
@@ -636,10 +662,13 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--medal-silver` | `src/styles/tokens.css` | 1 |
 | `--muted` | `src/styles/tokens.css` | 2 |
 | `--muted-foreground` | `src/styles/tokens.css` | 4 |
-| `--nav-bar` | `src/styles/theme.css` | 7 |
+| `--nav-bar` | `src/styles/theme.css` | 4 |
 | `--nav-current` | `src/styles/tokens.css` | 1 |
 | `--nav-current-foreground` | `src/styles/tokens.css` | 1 |
 | `--nav-foreground` | `src/styles/tokens.css` | 1 |
+| `--on-band` | `src/styles/tokens.css` | 1 |
+| `--on-band-ring` | `src/styles/tokens.css` | 1 |
+| `--on-band-soft` | `src/styles/tokens.css` | 1 |
 | `--on-key-black` | `src/styles/tokens.css` | 1 |
 | `--on-key-down` | `src/styles/tokens.css` | 1 |
 | `--on-key-scale` | `src/styles/tokens.css` | 1 |
@@ -752,25 +781,26 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--print-paper` | `src/styles/tokens.css` | 2 |
 | `--print-soft` | `src/styles/tokens.css` | 1 |
 | `--radius` | `src/styles/tokens.css` | 2 |
-| `--radius-2xl` | `src/styles/theme.css` | 5 |
+| `--radius-2xl` | `src/styles/theme.css` | 2 |
 | `--radius-3xl` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
 | `--radius-4xl` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
-| `--radius-card` | `src/styles/theme.css` | 47 |
-| `--radius-control` | `src/styles/theme.css` | 103 |
+| `--radius-card` | `src/styles/theme.css` | 46 |
+| `--radius-control` | `src/styles/theme.css` | 123 |
 | `--radius-key-black` | `src/styles/theme.css` | 2 |
 | `--radius-key-white` | `src/styles/theme.css` | 1 |
 | `--radius-keys` | `src/styles/theme.css` | 2 |
-| `--radius-lg` | `src/styles/theme.css` | 8 |
-| `--radius-mark` | `src/styles/theme.css` | 11 |
-| `--radius-md` | `src/styles/theme.css` | 7 |
+| `--radius-lg` | `src/styles/theme.css` | 4 |
+| `--radius-mark` | `src/styles/theme.css` | 10 |
+| `--radius-md` | `src/styles/theme.css` | 3 |
 | `--radius-menu` | `src/styles/theme.css` | 8 |
-| `--radius-pill` | `src/styles/theme.css` | 110 |
-| `--radius-sheet` | `src/styles/theme.css` | 16 |
-| `--radius-sm` | `src/styles/theme.css` | 1 |
+| `--radius-pill` | `src/styles/theme.css` | 130 |
+| `--radius-sheet` | `src/styles/theme.css` | 15 |
+| `--radius-sm` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
 | `--radius-thumb` | `src/styles/theme.css` | 35 |
 | `--radius-tile` | `src/styles/theme.css` | 10 |
-| `--radius-xl` | `src/styles/theme.css` | 23 |
+| `--radius-xl` | `src/styles/theme.css` | 6 |
 | `--radius-xs` | `src/styles/theme.css` | 0, kept: a primitive's size mapped onto the scale |
+| `--rail-chosen` | `src/styles/tokens.css` | 1 |
 | `--raised` | `src/styles/tokens.css` | 2 |
 | `--ring` | `src/styles/tokens.css` | 3 |
 | `--role-11th` | `src/styles/tokens.css` | 4 |
@@ -802,15 +832,15 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `--text-3xl` | `src/styles/theme.css` | 14 |
 | `--text-4xl` | `src/styles/theme.css` | 7 |
 | `--text-5xl` | `src/styles/theme.css` | 3 |
-| `--text-footnote` | `src/styles/theme.css` | 64 |
-| `--text-lg` | `src/styles/theme.css` | 70 |
+| `--text-footnote` | `src/styles/theme.css` | 63 |
+| `--text-lg` | `src/styles/theme.css` | 71 |
 | `--text-name` | `src/styles/theme.css` | 4 |
 | `--text-place` | `src/styles/theme.css` | 4 |
-| `--text-subhead` | `src/styles/theme.css` | 85 |
+| `--text-subhead` | `src/styles/theme.css` | 83 |
 | `--text-xl` | `src/styles/theme.css` | 39 |
 | `--thumb` | `src/styles/tokens.css` | 1 |
 | `--toast-action` | `src/styles/tokens.css` | 1 |
-| `--tracking-caps` | `src/styles/theme.css` | 11 |
+| `--tracking-caps` | `src/styles/theme.css` | 9 |
 | `--tracking-figures` | `src/styles/theme.css` | 2 |
 | `--tracking-title` | `src/styles/theme.css` | 13 |
 | `--wheel-near` | `src/styles/tokens.css` | 1 |
@@ -824,12 +854,12 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | Utility | What it is | Used by |
 | --- | --- | --- |
 | `bar-title` | `dark:` follows the app's theme attribute, not the OS, so shadcn primitives obey the setting. | 1 |
-| `caps` | The soft caps every field and group is captioned in (the kit's CAPS): | 30 |
+| `caps` | The soft caps every field and group is captioned in (the kit's CAPS): | 27 |
 | `subject-title` | A Practice page's subject (the interval, the progression, the pattern, the exercise): | 4 |
 | `section-head` | The head over a card of rows on a page (Practise, Options, How to play): | 2 |
 | `settings-pane` | DESIGN's card: | 1 |
 | `picture-edge` | The card's ring is a shadow: | 6 |
-| `card` |  | 218 |
+| `card` |  | 221 |
 | `rows-line` | * Rows parted by a line that takes no room, as the boards' GROUP draws them (an inset line under each * row but the last, not a border): | 3 |
 | `rows-hairline` |  | 26 |
 | `px-gutter` | * A block's or a place's look (R29 B9, `shared/lib/style`): | 15 |
@@ -866,7 +896,7 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `elevation-float` |  | 8 |
 | `elevation-thumb` |  | 6 |
 | `elevation-1` |  | 3 |
-| `glass` | What floats over the page (the canvas's docks): | 37 |
+| `glass` | What floats over the page (the canvas's docks): | 36 |
 | `glass-honey` |  | 2 |
 | `layer-shadow` | A layer over the page that is not glass (a dialog, a popover): | 6 |
 | `window-shadow` | A window over the page (the app Settings, a thing's Settings): | 2 |
@@ -882,8 +912,8 @@ Primitives (`--p-*`) are read by the roles only; a role is used through `var()` 
 | `toast-foot` | Where a toast stands (the canvas's one toast): | 1 |
 | `vt-keys` | The keys shown or hidden from the bar's Keyboard (R34) leave and come as one, fading, while the page under them takes or gives their room at once; the screen's  | 3 |
 | `vt-floating` | The screen's floating actions ride up and down with the keys under them, never jumping. | 1 |
-| `left-sidebar` | The actions keep their size, held from the column's top, so the button nearest the keys is the only one to come or go. | 6 |
-| `left-sidebar-collapsed` |  | 5 |
+| `left-sidebar` | The actions keep their size, held from the column's top, so the button nearest the keys is the only one to come or go. | 5 |
+| `left-sidebar-collapsed` |  | 4 |
 | `player-screen` | The Player's screen, and the score editor's (widgets/practice-player, ADR 0061, 0115): | 1 |
 | `score-bar` | The music's scroll room under the transport floating over its foot: | 5 |
 | `diagrams-view` | Over the music, whose area is positioned for what floats on it. | 2 |

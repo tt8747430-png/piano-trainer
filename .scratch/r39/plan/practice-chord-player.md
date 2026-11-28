@@ -269,7 +269,9 @@ only · Can edit, Copy link). Settings add Follow a MIDI arranger and Arranger �
 Genos's strip as its panel names it: Style (Start/Stop, ACMP, Sync Start, Sync Stop), Intro I II III, Main A B C D,
 Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale red when next, white when off.
 
-## Port to the app, R77 (in this order; waits for the Player's and editor's band in the app, tasks 157–159)
+## Port to the app, R77 (ported 2026-11-27 and 28, every item; the build clean)
+
+All eleven items are in the app (commits a26a59fd … 959920b2), measured against the board at 402 and 1710; ADR 0052 says what was built.
 
 The board is the source, value for value (`r58_chordplayer.py`: `BAND77`, `RAIL77`, `_PANEL`, `GDOCK77`, `PHHDR77`,
 `PHNAV77`, `PHPAGES77`, `NAMEMENU77L`, `NAMEMENU77P`, `POPS77L`, `_SHL`), with the kit helpers it calls

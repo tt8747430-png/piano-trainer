@@ -87,7 +87,7 @@ function Group({
 }
 
 /**
- * The arranger's style controls (canvas R76), a panel of the page while the Chord player follows
+ * The arranger's style controls (canvas R77), a panel of the page while the Chord player follows
  * an arranger, in one of three sizes changed from its own head at any time, edit or not: **Full**,
  * every control in view (the style playing and Start/Stop on its head, the connection under it as
  * the MIDI keyboard's popover says it, with Try again; Main A–D, pressed again while playing its
