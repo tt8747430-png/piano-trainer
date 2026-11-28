@@ -49,7 +49,7 @@ function MenuRow({
       onClick={onClick}
       className="flex min-h-12 w-full cursor-pointer items-center gap-4 rounded-[10px] px-3 text-left text-[1.0625rem] text-foreground hover:bg-muted/60"
     >
-      <Icon aria-hidden className="size-5.5 shrink-0" strokeWidth={2} />
+      <Icon aria-hidden className="size-6 shrink-0" strokeWidth={2} />
       <span className="min-w-0 flex-1 truncate">{label}</span>
       {value ? (
         <span className="shrink-0 text-[0.9375rem] text-muted-foreground tabular-nums">
