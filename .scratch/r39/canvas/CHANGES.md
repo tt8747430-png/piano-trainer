@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · the library's My chord sheets says "None saved yet. Save the sheet in hand from its name." once its last sheet is deleted, as the app's, where it left a bare head · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
