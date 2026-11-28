@@ -252,8 +252,9 @@ export function FollowRow() {
 }
 
 /**
- * The styles (the board's `STYLEROWS`): one card of rows 48 high, the chosen checked and its name at
- * 600, each style's feel after it, quiet.
+ * The styles (the board's `STYLEROWS`), by family: each family's name, a sentence-case head over its
+ * card of rows 48 high, the chosen checked and its name at 600; a style's feel quiet at the row's end
+ * only where it departs from straight 4/4 (swing, 3/4), a piano pattern's shelf in its place.
  */
 export function StyleRows({
   book,
@@ -267,43 +268,55 @@ export function StyleRows({
   const { t } = useTranslation('practice')
   const locale = useLocale()
   const shelfName = useShelfName()
+  const feel = (style: Style) =>
+    style.shelf
+      ? shelfName({ shelf: style.shelf })
+      : [style.meter === '4/4' ? '' : style.meter, style.swing ? t('chordPlayer.swing') : '']
+          .filter(Boolean)
+          .join(' ')
   return (
-    <div
-      role="radiogroup"
-      aria-label={t('chordPlayer.style')}
-      className="flex flex-col overflow-hidden card"
-    >
-      {book.families
-        .flatMap(({ styles }) => styles)
-        .map((style, at) => {
-          const chosen = style.id === value
-          return (
-            <button
-              key={style.id}
-              type="button"
-              role="radio"
-              aria-checked={chosen}
-              onClick={() => onChoose(style)}
-              className={cn(
-                'flex min-h-12 cursor-pointer items-center gap-3 px-3 text-left text-[0.9375rem] hover:bg-muted/60 focus-visible:-outline-offset-3',
-                at > 0 && 'border-t border-border',
-              )}
-            >
-              <Check
-                aria-hidden
-                className={cn('size-5 shrink-0', chosen ? 'opacity-100' : 'opacity-0')}
-              />
-              <span className={cn('min-w-0 flex-1 truncate', chosen && 'font-semibold')}>
-                {localText(style.name, locale)}
-              </span>
-              {style.shelf ? (
-                <span className="shrink-0 text-footnote text-muted-foreground">
-                  {shelfName({ shelf: style.shelf })}
-                </span>
-              ) : null}
-            </button>
-          )
-        })}
+    <div role="radiogroup" aria-label={t('chordPlayer.style')} className="flex flex-col gap-6">
+      {book.families.map(({ family, styles }) => (
+        <section
+          key={family}
+          aria-label={t(`chordPlayer.families.${family}`)}
+          className="flex flex-col gap-2"
+        >
+          <h3 className="font-sans text-subhead font-semibold">
+            {t(`chordPlayer.families.${family}`)}
+          </h3>
+          <div className="flex flex-col overflow-hidden card">
+            {styles.map((style, at) => {
+              const chosen = style.id === value
+              const said = feel(style)
+              return (
+                <button
+                  key={style.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={chosen}
+                  onClick={() => onChoose(style)}
+                  className={cn(
+                    'flex min-h-12 cursor-pointer items-center gap-3 px-3 text-left text-[0.9375rem] hover:bg-muted/60 focus-visible:-outline-offset-3',
+                    at > 0 && 'border-t border-border',
+                  )}
+                >
+                  <Check
+                    aria-hidden
+                    className={cn('size-5 shrink-0', chosen ? 'opacity-100' : 'opacity-0')}
+                  />
+                  <span className={cn('min-w-0 flex-1 truncate', chosen && 'font-semibold')}>
+                    {localText(style.name, locale)}
+                  </span>
+                  {said ? (
+                    <span className="shrink-0 text-footnote text-muted-foreground">{said}</span>
+                  ) : null}
+                </button>
+              )
+            })}
+          </div>
+        </section>
+      ))}
     </div>
   )
 }

@@ -932,6 +932,8 @@ export const practice = {
     style: 'Style',
     hear: 'Hear a bar of {{style}}',
     laidOut: 'Laid out in {{meter}}',
+    // A style's feel after its name where it swings (Gospel 2, Swing 1).
+    swing: 'swing',
     families: {
       pop: 'Pop',
       rock: 'Rock',

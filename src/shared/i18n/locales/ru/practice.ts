@@ -905,6 +905,8 @@ export const practice: LocaleResources['practice'] = {
     style: 'Стиль',
     hear: 'Послушать такт стиля «{{style}}»',
     laidOut: 'Переписано в размере {{meter}}',
+    // A style's feel after its name where it swings (Gospel 2, Swing 1).
+    swing: 'свинг',
     families: {
       pop: 'Поп',
       rock: 'Рок',
