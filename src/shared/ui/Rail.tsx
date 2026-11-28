@@ -67,7 +67,7 @@ export function RailButton({
     >
       <span
         className={cn(
-          'grid h-8 w-10 place-items-center rounded-[10px] transition-colors duration-150 ease-out',
+          'grid h-8 w-10 place-items-center rounded-thumb transition-colors duration-150 ease-out',
           selected ? 'bg-rail-chosen' : 'hover:bg-muted',
         )}
       >

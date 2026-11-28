@@ -47,7 +47,7 @@ function MenuRow({
     <button
       type="button"
       onClick={onClick}
-      className="flex min-h-12 w-full cursor-pointer items-center gap-4 rounded-[10px] px-3 text-left text-[1.0625rem] text-foreground hover:bg-muted/60"
+      className="flex min-h-12 w-full cursor-pointer items-center gap-4 rounded-thumb px-3 text-left text-[1.0625rem] text-foreground hover:bg-muted/60"
     >
       <Icon aria-hidden className="size-6 shrink-0" strokeWidth={2} />
       <span className="min-w-0 flex-1 truncate">{label}</span>
@@ -130,7 +130,7 @@ export function PhoneMenu({
           align="end"
           sideOffset={8}
           aria-label={name}
-          className="flex max-h-(--available-height) w-[calc(100vw-2rem)] max-w-sm flex-col gap-2 overflow-y-auto rounded-[22px] bg-background px-2 py-3 shadow-[0_0_0_1px_rgb(51_41_33/0.06),0_18px_48px_-12px_rgb(51_41_33/0.38)]"
+          className="flex max-h-(--available-height) w-[calc(100vw-2rem)] max-w-sm flex-col gap-2 overflow-y-auto rounded-sheet bg-background px-2 py-3 shadow-[0_0_0_1px_rgb(51_41_33/0.06),0_18px_48px_-12px_rgb(51_41_33/0.38)]"
         >
           <p className="px-3 pt-1 text-center font-sans text-[1.0625rem]/[22px] font-semibold">
             {name}
