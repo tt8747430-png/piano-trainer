@@ -640,9 +640,12 @@ export function ChordPlayer({
   }
 
   const genosOn = prefs.follow
+  // The arranger's Start/Stop is Play: from the chord picked, as Play starts (owner, 2026-11-28: "doesnt
+  // start from where i select but always start from the last two chords", the Intro played in first).
+  const arranger = { ...band.panel, toggle }
   const genosStrip = (size: GenosSize, where: 'panel' | 'dock' | 'phone') => (
     <ArrangerStrip
-      panel={band.panel}
+      panel={arranger}
       device={band.device}
       size={size}
       wide={where === 'dock'}

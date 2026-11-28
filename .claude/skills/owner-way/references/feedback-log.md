@@ -1624,6 +1624,7 @@ owner's, typos fixed.
 
 - **A chord's name never cut (the owner, 2026-11-28):** the Chord player's short tiles read "C.." and "F.."; a name now shrinks to fit its tile, down to 12, and a beat's tile takes a 4 inset. Never again: an ellipsis on a chord's name where a smaller size would show it whole.
 - 2026-11-28, "fix first the croped cords" (after "but this is the problem with the chords player no with the grid"): in the Chord player no name is cut: a beat column is never narrower than its names at 12, a section takes fewer bars a row where it must, and the raised part is never clipped at the top. Read which screen the owner means before fixing: the Player's Grid was fixed first by mistake.
+- 2026-11-28, "doesnt start from where i select but always start from the last two chords" (Chord player): the Genos row's Start ignored the chord picked and played the stand-in's Intro (the sheet's last two bars); one act, one implementation: Start is Play, from the chord picked.
 
 ## Sounds
 
