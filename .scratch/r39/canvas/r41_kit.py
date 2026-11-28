@@ -331,13 +331,15 @@ def THINGWIN(lap, on, close, title, body, back='', pad='32', shown='true', side=
 # on a laptop, never a sheet or a dialog centred on the screen, never a title over it and never Done in it. Glass, 6
 # in, items 44 tall in the menu's 16; what loses something last, after a hairline, in crimson. Items are GROUP's
 # tuples: ('link', label, '', href) or ('action', label, act[, colour]). The JS sets {posvar} from ANCHOR(e, h).
+# a menu's hairline, 6 above and below, 12 in from the rows' edge, as the app's DropdownMenuSeparator (mx-3 my-1.5)
+MENUSEP = f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div>'
 def ROWMENU(cond, label, items, posvar='menuPos', w=240):
     out, seen_red = [], False
     for t in items:
         kind, l = t[0], t[1]
         # a hairline between a list of things and the acts on them (ui-and-mockups, Actions: the acts after a hairline)
         if kind == 'sep':
-            out.append(f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div>')
+            out.append(MENUSEP)
             continue
         # a row the menu shows only in one state (an sc-if around a menuitem), drawn by its caller
         if kind == 'html':
@@ -345,7 +347,7 @@ def ROWMENU(cond, label, items, posvar='menuPos', w=240):
             continue
         col = t[3] if kind == 'action' and len(t) > 3 and t[3] else INK
         if col == RED and not seen_red and out:
-            out.append(f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div>')
+            out.append(MENUSEP)
             seen_red = seen_red or col == RED
         st = f'width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left; text-decoration: none'
         out.append(f'<a role="menuitem" href="{t[3]}" style="{st}">{l}</a>' if kind == 'link' else f'<button type="button" role="menuitem" onClick="{{{{{t[2]}}}}}" style="{st}">{l}</button>')

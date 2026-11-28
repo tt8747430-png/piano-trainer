@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · the name menu's hairlines are the kit's menu separator (`MENUSEP`, 6 over and under, 12 in, as the app's DropdownMenuSeparator), where the board patched the ☰ hairline from 4 to 6 three times (no visible change) · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 

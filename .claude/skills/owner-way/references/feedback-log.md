@@ -1598,6 +1598,7 @@ owner's, typos fixed.
 - **The chord in sight at 1024 (the loop, 2026-11-28):** the Chord player's laptop keys opened centred on C2 to C7 and cut the waiting chord's left hand at their edge; they keep the chord shown in sight. Never again: keys that light a key out of view.
 - **Stop as it is pressed (the loop, 2026-11-28):** the Chord player said Stop under Pause's glyph, read Play for a whole count-in bar after the press, and lit its chord twice (a wash where it is shown, sky blue where the voicing sounds); it draws the board's square at once and the chord in full where it is shown. Never again: a button whose glyph and name disagree, or a press that answers a bar later.
 - **The band at a finger's size on a tablet (the loop, 2026-11-28):** the Chord player's band kept a mouse's 40 targets on a 1024 touch tablet; on touch each reaches 44. Never again: a laptop band that a finger on a tablet cannot reliably hit.
+- **A menu's hairline from the kit (the loop, 2026-11-28):** the Chord player board patched the ☰ menu's hairline into the menu's three times with `.replace()`; the kit's `MENUSEP` is the menu hairline now, ROWMENU's too. Never again: a helper's output patched to reach a value another helper already holds.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
