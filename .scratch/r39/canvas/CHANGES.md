@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the laptop's Genos marks popover opens at its section's chip, 4 under it (it stood fixed at 640, 160 whatever chip opened it) · ChordPlayerLaptop · pending
 ## Changes
 
+- 2026-11-28 · 3dab466e · the laptop's Genos marks popover opens at its section's chip, 4 under it (it stood fixed at 640, 160 whatever chip opened it) · ChordPlayerLaptop · v876
 - 2026-11-28 · d48d0904 · a phone's toast stands 12 over the foot (the keys, and the Genos row when shown), where it stood at 256 whatever stood under it (110 over the keys alone, 30 over the Genos row) · ChordPlayer · v875
 - 2026-11-28 · 66ffc645 · the laptop's toast centres on the chart (beside the rail, or the rail and its open panel), where it centred on the window; the kit's `TOAST` takes where it centres (`left`) · ChordPlayerLaptop · v874
 - 2026-11-28 · 1a84a473 · the chord sheet's Duplicate and Play from here each start at their words' width and share the rest (split evenly, Play from here ran past its button on a phone; cut at 393 in the app) · ChordPlayer, ChordPlayerLaptop · v874
