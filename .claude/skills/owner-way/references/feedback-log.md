@@ -1580,6 +1580,7 @@ owner's, typos fixed.
 - **Shortcuts, the boards' card on a laptop (the loop, 2026-11-28):** the app's Shortcuts hung from the bar as the phone's sheet of keycaps on every laptop screen, where the Player's, the editor's and the Chord player's boards draw a centred card of two columns; the app draws the card from the laptop width up, measured to the board's 640×284. Never again: a phone's sheet left on a laptop where the board draws a card.
 - **The board's Search opens the palette (the loop, 2026-11-28):** the Chord player's laptop board answered its rail's Search with a toast; it opens the app's search palette at rest, as the app does, measured to 640×488. Never again: a rail place on a board that only toasts what it would do.
 - **☰'s glyphs at the board's 24 (the loop, 2026-11-28):** the Chord player's phone menu drew its row glyphs at 22 where the board's are 24, its words 2 left of the board's; measured level now.
+- **Lucide's check, not a ✓ (the loop, 2026-11-28):** the Chord player boards marked the chosen style and sheet with a typed ✓ beside Lucide's glyphs; they draw Lucide's check at 20, as the app. Never again: a font's symbol standing in for an icon on a board.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

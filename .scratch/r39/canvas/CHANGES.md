@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · a chosen style and the sheet in hand are marked by Lucide's check at 20, as the app's Styles list and name menu, where the board set a text ✓ at 15 · ChordPlayer, ChordPlayerLaptop · **pending**
 
 ## Changes
 
