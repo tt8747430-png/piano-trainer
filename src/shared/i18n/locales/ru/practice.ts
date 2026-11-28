@@ -877,11 +877,7 @@ export const practice: LocaleResources['practice'] = {
       live: 'В эфире',
       liveLabel: 'Общий лист: изменения и звучащий аккорд видны сразу',
     },
-    newAsk: {
-      title: 'Начать новую сетку?',
-      body: 'Изменения в этой будут потеряны.',
-      action: 'Начать новую',
-    },
+    started: 'Начата новая сетка',
     save: {
       title: 'Сохранить в мои сетки',
       name: 'Название',

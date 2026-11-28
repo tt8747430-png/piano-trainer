@@ -26,7 +26,7 @@ export function ChordPlayerPage() {
           onPanel={page.setPanel}
           keysShown={page.keysShown}
           onKeys={page.setKeysShown}
-          onNew={() => void page.startNew()}
+          onNew={page.startNew}
           onSaveAs={page.startSaving}
           onShare={page.share}
         />

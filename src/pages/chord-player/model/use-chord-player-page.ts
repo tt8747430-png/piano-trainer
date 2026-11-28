@@ -22,7 +22,7 @@ import {
   type Numeral,
 } from '@/shared/lib/music'
 import { useSetSearch } from '@/shared/lib'
-import { confirm, say, sayUndo } from '@/shared/ui'
+import { say, sayUndo } from '@/shared/ui'
 import {
   useChordSheet,
   type ChordPanel,
@@ -138,7 +138,6 @@ export function useChordPlayerPage() {
     },
   }
 
-  const hasChords = hand?.sheet.sections.some((section) => section.bars.length > 0) ?? false
   return {
     hand,
     name,
@@ -154,20 +153,19 @@ export function useChordPlayerPage() {
     setSaving,
     /** Save as my chord sheet, its name the sheet in hand's where it came named. */
     startSaving: () => setSaving(scratchName ?? ''),
-    async startNew() {
-      // A saved sheet keeps its edits; the sheet in hand's are lost, asked first.
-      const yes =
-        saved !== undefined ||
-        !hasChords ||
-        (await confirm({
-          title: t('chordPlayer.newAsk.title'),
-          body: t('chordPlayer.newAsk.body'),
-          action: t('chordPlayer.newAsk.action'),
-          destructive: true,
-        }))
-      if (!yes) return
+    /**
+     * New sheet, at once: the sheet in hand gives way to a new one, and Undo puts it back, with the sheet
+     * that was open (a loss that can be undone is never asked about).
+     */
+    startNew() {
+      const { scratch, scratchName } = store.getState()
+      const was = view.sheet
       startNew(store)
       openSheet(undefined)
+      sayUndo(t('chordPlayer.started'), () => {
+        holdSheet(store, { entry: scratch, name: scratchName })
+        openSheet(was)
+      })
     },
     saveAs(named: string) {
       if (!hand) return

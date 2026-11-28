@@ -904,11 +904,7 @@ export const practice = {
       live: 'Live',
       liveLabel: 'Shared live: changes and the chord playing appear as they happen',
     },
-    newAsk: {
-      title: 'Start a new chord sheet?',
-      body: 'Your changes to this one are lost.',
-      action: 'Start new',
-    },
+    started: 'Started a new chord sheet',
     save: {
       title: 'Save as my chord sheet',
       name: 'Name',
