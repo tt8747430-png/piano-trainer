@@ -231,10 +231,9 @@ CP58 = CP58.replace("const lamp = (on, next) => ({", "const lamp = (on, next) =>
 CP58 = CP58.replace("    return { ...common(st, set), sec59,", r"""    const LAY0 = { keys: { at: 'bottom', size: 'M', hid: false }, genos: { at: 'right', mode: 'compact', hid: false }, dock: { at: 'float', mode: 'full', hid: false }, chords: { at: 'right', size: 'Wide', hid: false } };
     const LAY = st.lay || LAY0;
     const setP = (k, o) => set({ lay: { ...LAY, [k]: { ...LAY[k], ...o } }, sheet: st.sheet });
-    const kP = LAY.keys, gP = LAY.genos, cP = LAY.chords, gOn = follow && !gP.hid;
+    const gP = LAY.genos, cP = LAY.chords, gOn = follow && !gP.hid;
     const sheetsL = st.sheetName || 'My verse and chorus';
     return { ...common(st, set), sec59,
-      kS: kP.size === 'S', kM: kP.size === 'M', kL: kP.size === 'L',
       gFull: gP.mode === 'full', gCompact: gP.mode === 'compact', gMin: gP.mode === 'min', gMinT: () => setP('genos', { mode: 'min' }), gFullT: () => setP('genos', { mode: 'full' }), gCompactT: () => setP('genos', { mode: 'compact' }),
       arPillL: ar.main ? 'Genos · Main ' + ar.main : 'Genos',
       chartCols: ((!cP.hid && cP.at === 'left') || (gOn && gP.at === 'left')) && ((!cP.hid && cP.at === 'right') || (gOn && gP.at === 'right')) ? 8 : 16,
@@ -279,12 +278,11 @@ def GENOS76(pos, wide):
             f'<span style="width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span><span>{{{{arPillL}}}}</span>{ICON(EXPI, 18)}</button></sc-if>')
     return f'<div style="{pos}">{full}{comp}{pill}</div>'
 
-def KEYS76(h3, top, lap=False):
+def KEYS77(h, lap=False):
     # a phone shows F2 to A4 at the kit's 26 a white key, the 17 whites 40 wider than the screen, centred (the app's
-    # fitInView over CHORD_PLAYER_KEYS): a part of F2 and of A4 at the edges
-    keys = lambda h: CP_KEYS(h).replace('{{kbw}}', '{{kbwL}}').replace('{{kbb}}', '{{kbbL}}') if lap else CP_KEYS(h).replace('style="position: relative; height:', 'style="position: relative; margin-inline: calc(50% - 221px); height:')
-    sized = ''.join(f'<sc-if value="{{{{k{z}}}}}" hint-placeholder-val="{{{{{"true" if z == "M" else "false"}}}}}">{keys(h)}</sc-if>' for z, h in zip('SML', h3))
-    return f'<div style="position: relative; flex: none; {"margin-bottom: 34px; " if not top and not lap else ""}box-shadow: 0 {"1" if top else "-1"}px 0 {LINE}">{sized}</div>'
+    # fitInView over CHORD_PLAYER_KEYS): a part of F2 and of A4 at the edges; 112 tall on a phone, 170 on a laptop
+    keys = CP_KEYS(h).replace('{{kbw}}', '{{kbwL}}').replace('{{kbb}}', '{{kbbL}}') if lap else CP_KEYS(h).replace('style="position: relative; height:', 'style="position: relative; margin-inline: calc(50% - 221px); height:')
+    return f'<div style="position: relative; flex: none; {"" if lap else "margin-bottom: 34px; "}box-shadow: 0 -1px 0 {LINE}">{keys}</div>'
 
 # Tempo, the Metronome's face (owner-way, one implementation): the tempo's word and BPM over its figures with −10 −1
 # and +1 +10 beside them, then the slider between the sheet's ends, 40 and 240; a wheel hid all but five tempos
@@ -407,7 +405,7 @@ lm77 = (f'<div data-menuroot style="position: absolute; inset: 0; display: flex;
         + '<div style="flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">'
         # the chart's first section level with the panel's title: 22, the kit's head centring its 20 title in 64
         + '<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 22px 40px 24px">' + SHOWSTATES() + CHARTL77 + '</div>'
-        + GDOCK77 + f'<sc-if value="{{{{cpKeysOn}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS76((110, 170, 240), False, True)}</sc-if>'
+        + GDOCK77 + f'<sc-if value="{{{{cpKeysOn}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS77(170, True)}</sc-if>'
         + '</div></div></div>')
 
 # the phone: Flat's phone header (←, the transport, the keys, ☰), the chart under it with its name, the Genos over the keys
@@ -418,7 +416,7 @@ PHHDR77 = (f'<header data-band style="flex: none; position: relative; z-index: 2
 ph77 = (PHHDR77
         + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 16px">{SHOWSTATES()}{CHART76(8, 8, 60, 21, 2)}</main>'
         + f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}">{GENOS77("position: relative; flex: none; margin: 8px 16px", False)}</sc-if>'
-        + f'<sc-if value="{{{{cpKeysOn}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS76((72, 112, 168), False)}</sc-if>')
+        + f'<sc-if value="{{{{cpKeysOn}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS77(112)}</sc-if>')
 # Lucide's shuffle: Randomize chords (the app's file acts)
 SHUFFLEP = '<path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path>'
 _sep = f'<div role="separator" style="flex: none; height: 1px; margin: 4px 12px; background: {LINE}"></div>'

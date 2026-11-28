@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · the keys are drawn once, at the one height R77 shows (112 on a phone, 170 on a laptop), where R76's Small and Large copies waited behind a size switch nothing sets (no visible change, pixel for pixel) · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
