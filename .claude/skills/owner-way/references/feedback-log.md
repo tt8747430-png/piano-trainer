@@ -1627,6 +1627,7 @@ owner's, typos fixed.
 - 2026-11-28, "doesnt start from where i select but always start from the last two chords" (Chord player): the Genos row's Start ignored the chord picked and played the stand-in's Intro (the sheet's last two bars); one act, one implementation: Start is Play, from the chord picked.
 - 2026-11-28, loop (Chord player): the library's Songs are the app's 85 songs with chords, by collection, each opened as a sheet from its chart; Voi cânta among them. Not asked in words: found because the owner plays it there.
 - **The Chord player's library on one edge; short beats at the chart's size (the loop, 2026-11-28):** the library's heads, chips and rows stood at three left edges; they share one now, a row's wash reaching past it. A one-beat chord on a laptop was set at the 12 floor beside 30px names; its columns take the room for 21 first. Never again: three left edges in one list, or a name at the floor where the row has room.
+- **The Chord player's rows before the floor, its keys on its side, its chart looking ahead (the loop, 2026-11-28):** at 744 a verse of one-beat chords set half its names at the 12 floor in rows of four bars; rows take two bars at the chart's 21 first. On a phone on its side the keys' 112 left the chart a row and a half; they dock 80 high there. Playing, the sounding chord was kept just above the keys, the coming bars never in sight; it keeps two rows of room under it. Never again: a name at the floor where fewer bars a row would hold it whole, or a chart that follows play with nothing ahead in sight.
 
 ## Sounds
 
