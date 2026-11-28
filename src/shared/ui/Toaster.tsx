@@ -22,7 +22,7 @@ function Toasts() {
     <Toast
       key={each.id}
       toast={each}
-      className="min-h-13 rounded-card border-0 bg-foreground text-background shadow-none"
+      className="min-h-13 rounded-card border-0 bg-foreground text-background shadow-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring focus-visible:outline-solid"
     >
       <ToastContent className="gap-2 py-1 pr-1 pl-4">
         {/* One short sentence: a long name (a sheet named by its 40 numerals) ends in … on its second line. */}

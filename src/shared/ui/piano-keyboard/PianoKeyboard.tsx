@@ -4,6 +4,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type FocusEvent,
   type KeyboardEvent,
   type PointerEvent,
 } from 'react'
@@ -237,6 +238,21 @@ export function PianoKeyboard({
     scroller.current?.querySelector<HTMLButtonElement>(`[data-midi="${next}"]`)?.focus()
   }
 
+  // Tab into the keys lands on a key in sight: the stop left scrolled away (the range's first key,
+  // a key played before the keys scrolled to the chord) gives way to the lowest key fully shown.
+  const onFocus = (event: FocusEvent<HTMLDivElement>) => {
+    if (event.currentTarget.contains(event.relatedTarget)) return
+    const view = scroller.current?.getBoundingClientRect()
+    if (!view || !(event.target instanceof HTMLElement)) return
+    const shown = (each: Element) => {
+      const box = each.getBoundingClientRect()
+      return box.left >= view.left && box.right <= view.right
+    }
+    if (shown(event.target)) return
+    const first = [...event.currentTarget.querySelectorAll<HTMLElement>('[data-midi]')].find(shown)
+    first?.focus()
+  }
+
   return (
     <div
       ref={scroller}
@@ -248,6 +264,7 @@ export function PianoKeyboard({
         role="group"
         aria-label={t('keyboard')}
         onKeyDown={onKeyDown}
+        onFocus={onFocus}
         {...pointers.group}
         className="relative shrink-0 touch-none bg-key-bed select-none"
         style={{
