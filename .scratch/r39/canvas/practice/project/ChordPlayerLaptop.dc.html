@@ -207,7 +207,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const setTag = (o) => set({ tags: TAGS.map((t, i) => (i === tagAt ? { ...t, ...o } : t)), draft: true });
     const SEGT = (opts, cur, pick) => opts.map((l) => ({ l, on: l === cur, bg: l === cur ? '#FEFDFB' : 'transparent', sh: l === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: l === cur ? 600 : 500, pick: () => pick(l) }));
     // the Genos's panel, its lamps: on (chosen), flashing (next), available, off (no data)
-    const ar = st.ar || { acmp: true, sync: false, syncStop: false, autoFill: true, ots: false, main: 'A', next: null, intro: null, ending: null, fade: false };
+    const ar = st.ar || { acmp: true, sync: false, syncStop: false, autoFill: true, ots: false, main: null, next: null, intro: null, ending: null, fade: false };
     const lamp = (on, next) => ({ on: !!on, bg: on ? '#EEE2CF' : '#FEFDFB', fg: '#332921', ring: on ? '0 0 0 1.5px #332921' : next ? '0 0 0 1.5px #B98A32' : '0 0 0 1px #DAD1C8' });
     const arSet = (o) => set({ ar: { ...ar, ...o } });
     // the dock's Key rewrites the chart in the new key (each chord's root and bass moved by the same step)
@@ -281,7 +281,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       gTopL: gOn && gP.at === 'top', gLeft: gOn && gP.at === 'left', gRight: gOn && gP.at === 'right', gFloatL: gOn && gP.at === 'float', gBotL: gOn && gP.at === 'bottom',
       gFull: gP.mode === 'full', gCompact: gP.mode === 'compact', gMin: gP.mode === 'min', gMinT: () => setP('genos', { mode: 'min' }), gFullT: () => setP('genos', { mode: 'full' }), gCompactT: () => setP('genos', { mode: 'compact' }),
       gFloatPos: 'left: 16px; right: ' + (dP.mode === 'min' && dFloat ? '92px' : '16px') + '; bottom: ' + gFloatB + 'px', gMinPos: 'left: 16px; bottom: ' + gFloatB + 'px',
-      arMainL: 'Main ' + ar.main, arPillL: 'Genos · Main ' + ar.main,
+      arPillL: ar.main ? 'Genos · Main ' + ar.main : 'Genos',
       dFloatFull: dFloat && dP.mode === 'full', dFloatMin: dFloat && dP.mode === 'min', dTop: !dP.hid && dP.at === 'top', dockPos: 'bottom: ' + dockB + 'px',
       chartPad: (base + (dFloat ? 80 : 0) + (gOn && gP.at !== 'top' && gP.at !== 'bottom' ? gH + 8 : 0) + 16) + 'px',
       cOn: !cP.hid, cLeft: !cP.hid && cP.at === 'left', cRight: !cP.hid && cP.at === 'right',

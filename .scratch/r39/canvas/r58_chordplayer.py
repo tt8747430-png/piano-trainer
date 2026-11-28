@@ -38,7 +38,7 @@ r'''    const beatNow = st.playing ? ((st.pos ?? 4) % 2) * 2 : -1;
     const setTag = (o) => set({ tags: TAGS.map((t, i) => (i === tagAt ? { ...t, ...o } : t)), draft: true });
     const SEGT = (opts, cur, pick) => opts.map((l) => ({ l, on: l === cur, bg: l === cur ? '#FEFDFB' : 'transparent', sh: l === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: l === cur ? 600 : 500, pick: () => pick(l) }));
     // the Genos's panel, its lamps: on (chosen), flashing (next), available, off (no data)
-    const ar = st.ar || { acmp: true, sync: false, syncStop: false, autoFill: true, ots: false, main: 'A', next: null, intro: null, ending: null, fade: false };
+    const ar = st.ar || { acmp: true, sync: false, syncStop: false, autoFill: true, ots: false, main: null, next: null, intro: null, ending: null, fade: false };
     const lamp = (on, next) => ({ bg: on ? '#EEE2CF' : '#FEFDFB', fg: '#332921', ring: on ? '0 0 0 1.5px #332921' : next ? '0 0 0 1.5px #B98A32' : '0 0 0 1px #DAD1C8' });
     const arSet = (o) => set({ ar: { ...ar, ...o } });''', 1)
 CP58 = CP58.replace("    return { ...common(st, set),", r'''    return { ...common(st, set), draftOn: !!st.draft, addSec: () => { editSecs((c) => { const L = 'ABCDEFGH'[c.length] || 'X'; c.push([L, 'Section ' + L, 1, [['C'], ['F'], ['G'], ['C']]]); }); set({ tags: [...TAGS, JSON.parse(JSON.stringify(TAGS[TAGS.length - 1] || { mains: [] }))] }); }, copyL: st.copied ? 'Link copied' : 'Copy link', copyLink: () => set({ copied: true }), saveProg: () => set({ sheet: null, toastT: 'Saved to My progressions' }), importChart: () => set({ sheet: null }), exportMidi: () => set({ sheet: null }), exportChart: () => set({ sheet: null }), saveDraft: () => set({ draft: false, sheet: null }), discardDraft: () => set({ draft: false, secs: null, len: null, tags: null, sheet: null }),
@@ -237,7 +237,7 @@ CP58 = CP58.replace("    return { ...common(st, set), sec59,", r"""    const LAY
       gTopL: gOn && gP.at === 'top', gLeft: gOn && gP.at === 'left', gRight: gOn && gP.at === 'right', gFloatL: gOn && gP.at === 'float', gBotL: gOn && gP.at === 'bottom',
       gFull: gP.mode === 'full', gCompact: gP.mode === 'compact', gMin: gP.mode === 'min', gMinT: () => setP('genos', { mode: 'min' }), gFullT: () => setP('genos', { mode: 'full' }), gCompactT: () => setP('genos', { mode: 'compact' }),
       gFloatPos: 'left: 16px; right: ' + (dP.mode === 'min' && dFloat ? '92px' : '16px') + '; bottom: ' + gFloatB + 'px', gMinPos: 'left: 16px; bottom: ' + gFloatB + 'px',
-      arMainL: 'Main ' + ar.main, arPillL: 'Genos · Main ' + ar.main,
+      arPillL: ar.main ? 'Genos · Main ' + ar.main : 'Genos',
       dFloatFull: dFloat && dP.mode === 'full', dFloatMin: dFloat && dP.mode === 'min', dTop: !dP.hid && dP.at === 'top', dockPos: 'bottom: ' + dockB + 'px',
       chartPad: (base + (dFloat ? 80 : 0) + (gOn && gP.at !== 'top' && gP.at !== 'bottom' ? gH + 8 : 0) + 16) + 'px',
       cOn: !cP.hid, cLeft: !cP.hid && cP.at === 'left', cRight: !cP.hid && cP.at === 'right',
@@ -306,7 +306,7 @@ def GENOS76(pos, wide):
             + START59
             + f'<div role="group" aria-label="Main" style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">{LAMPS59("arMains", "Main")}</div>'
             + ICB('gFullT', 'Full', EXPI) + ICB('gMinT', 'Minimize', MINI) + PTAG('pickG', 'openLayG', 'Genos', 'right: 8px; top: -22px') + '</div></sc-if>')
-    pill = (f'<sc-if value="{{{{gMin}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{gFullT}}}}" aria-label="Genos, {{{{arMainL}}}}: show its controls" style="position: relative; height: 44px; box-sizing: border-box; padding: 0 12px 0 14px; border: 0; border-radius: 22px; {GLASSFX}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">'
+    pill = (f'<sc-if value="{{{{gMin}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{gFullT}}}}" aria-label="{{{{arPillL}}}}: show its controls" style="position: relative; height: 44px; box-sizing: border-box; padding: 0 12px 0 14px; border: 0; border-radius: 22px; {GLASSFX}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">'
             f'<span style="width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span><span>{{{{arPillL}}}}</span>{ICON(EXPI, 18)}</button></sc-if>')
     return f'<div style="{pos}">{full}{comp}{pill}</div>'
 
