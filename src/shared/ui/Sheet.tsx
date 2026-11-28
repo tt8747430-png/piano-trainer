@@ -196,6 +196,8 @@ export function SheetTrigger(props: Parameters<typeof DrawerTrigger>[0]) {
 
 /** A sheet's held height, never past the room it may take. */
 const holdTallest = holdTallestUnder('var(--drawer-content-max-height, 100dvh)')
+/** A popover's held height, never past its room on its side of the control (its own `max-h`). */
+const holdTallestPopped = holdTallestUnder('min(calc(var(--available-height) - 1rem), 47.5rem)')
 
 /**
  * The app's bottom sheet: a drawer from the bottom that always shows its swipe handle. Every sheet
@@ -328,7 +330,7 @@ export function SheetContent({
   if (popped)
     return (
       <PopoverContent
-        ref={holdTallest}
+        ref={holdTallestPopped}
         side={popped.side ?? 'bottom'}
         align={popped.align ?? 'start'}
         sideOffset={4}
