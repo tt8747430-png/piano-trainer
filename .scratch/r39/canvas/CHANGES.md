@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · (this commit) · the library of chord sheets stands on one left edge (heads, chips, each row's words; a row's wash 8 past it) and its Songs are the app's by collection, chips over each shelf's songs (app too); a short beat's name takes the room for the chart's 21 before the floor (app) · ChordPlayer, ChordPlayerLaptop · pending
 ## Changes
 
 - 2026-11-28 · 63d1a631 · a chord's name sizes with its raised part held at its 12px floor (the smaller of two sizes: the raised scaled, or held at 12), so a small name fits its tile whole (app too, with the app's songs in the library) · ChordPlayer, ChordPlayerLaptop · v902

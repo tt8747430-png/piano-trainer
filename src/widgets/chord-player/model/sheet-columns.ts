@@ -1,5 +1,7 @@
 /** The least a chord's name is set in its tile, px: `chord-fit`'s floor, its raised part too. */
 const LEAST = 12
+/** The size a chart sets a name at where its tile has the room (`chord-fit`'s 21), px. */
+const AIM = 21
 /** A letter's width at a size of 1, the reckoning kept on the safe side. */
 const LETTER = 0.9
 /** The tiles' gap, px (`gap-2`). */
@@ -48,10 +50,15 @@ function resolved(least: readonly number[], width: number): number[] {
 
 /**
  * Each beat column's least width, px, in rows of `columns` beats across `width`, or null where the row
- * cannot hold every name whole at `LEAST`: a tile whose name does not fit the width the grid gives it
+ * cannot hold every name whole at `size`: a tile whose name does not fit the width the grid gives it
  * asks its columns for the room, again until every tile fits.
  */
-function leastWidths(tiles: readonly TileRoom[], columns: number, width: number): number[] | null {
+function leastWidths(
+  tiles: readonly TileRoom[],
+  columns: number,
+  width: number,
+  size: number,
+): number[] | null {
   const places = placed(tiles, columns)
   const least = Array.from({ length: columns }, () => 0)
   for (let round = 0; round <= tiles.length; round++) {
@@ -59,7 +66,7 @@ function leastWidths(tiles: readonly TileRoom[], columns: number, width: number)
     let grew = false
     for (const { tile, from, span } of places) {
       const has = widths.slice(from, from + span).reduce((sum, px) => sum + px, 0)
-      const need = tile.name.length * LETTER * LEAST + 2 * tile.inset - (span - 1) * GAP
+      const need = tile.name.length * LETTER * size + 2 * tile.inset - (span - 1) * GAP
       if (need <= has + 0.5) continue
       for (let column = from; column < from + span; column++)
         least[column] = Math.max(least[column] ?? 0, Math.ceil(need / span))
@@ -74,6 +81,8 @@ function leastWidths(tiles: readonly TileRoom[], columns: number, width: number)
 /**
  * A section's rows (owner, 2026-11-28: "the chords are cropped … because not enough space"): as many
  * bars a row as `bars` allows, fewer where the row's `width` cannot hold every name whole at `LEAST`;
+ * a row's columns give a short beat's name the room for the chart's size (`AIM`) first, so a name on
+ * one beat is not set at the floor beside full-size names, and the floor only where the row has no more;
  * each beat its share of the row, a column never narrower than the names over it need, so a long name
  * on one beat (Cmaj⁷/E) is set whole and the beats beside it give it the room.
  */
@@ -85,7 +94,10 @@ export function sheetLayout(
 ): SheetLayout {
   for (let rowBars = bars; ; rowBars = Math.floor(rowBars / 2)) {
     const columns = perBar * Math.max(1, rowBars)
-    const least = width > 0 ? leastWidths(tiles, columns, width) : null
+    const least =
+      width > 0
+        ? (leastWidths(tiles, columns, width, AIM) ?? leastWidths(tiles, columns, width, LEAST))
+        : null
     if (least || rowBars <= 1)
       return {
         columns,

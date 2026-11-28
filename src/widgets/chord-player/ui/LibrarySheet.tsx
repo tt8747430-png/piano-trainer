@@ -74,11 +74,12 @@ export function LibrarySheet({
     const undo = deleteSheet(store, sheet.id)
     if (undo) sayUndo(t('chordPlayer.row.deleted', { name: sheet.name }), undo)
   }
+  // Heads, chips and each row's words stand on one edge; a row's wash reaches 8 past it.
   const body = (
     <div className="flex flex-col gap-6">
-      <MenuSection title={t('chordPlayer.mine')} inset className="gap-1">
+      <MenuSection title={t('chordPlayer.mine')} className="gap-1">
         {mine.length === 0 ? (
-          <p className="px-1 text-pretty text-muted-foreground">{t('chordPlayer.noneMine')}</p>
+          <p className="text-pretty text-muted-foreground">{t('chordPlayer.noneMine')}</p>
         ) : (
           <ul className="flex flex-col">
             {mine.map((sheet) => {
@@ -90,7 +91,7 @@ export function LibrarySheet({
                     aria-current={sheet.id === current ? 'true' : undefined}
                     onClick={() => onOpenSaved(sheet)}
                     className={cn(
-                      'flex min-h-12 min-w-0 flex-1 items-center rounded-control px-2 text-left font-semibold text-pretty hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring',
+                      '-ms-2 flex min-h-12 min-w-0 flex-1 items-center rounded-control px-2 text-left font-semibold text-pretty hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring',
                       sheet.id === current && 'text-link',
                     )}
                   >
@@ -137,7 +138,7 @@ export function LibrarySheet({
           </ul>
         )}
       </MenuSection>
-      <MenuSection title={t('chordPlayer.songs')} inset className="gap-3">
+      <MenuSection title={t('chordPlayer.songs')} className="gap-3">
         <ChoiceChips
           label={t('chordPlayer.songs')}
           value={shelf}
@@ -150,7 +151,7 @@ export function LibrarySheet({
               <button
                 type="button"
                 onClick={() => onOpenSong(song)}
-                className="flex min-h-12 w-full min-w-0 flex-col justify-center rounded-control px-2 py-1 text-left hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
+                className="-mx-2 flex min-h-12 w-[calc(100%+1rem)] min-w-0 flex-col justify-center rounded-control px-2 py-1 text-left hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
               >
                 <span className="font-semibold text-pretty">{song.name}</span>
                 {song.by ? <span className="text-muted-foreground">{song.by}</span> : null}
@@ -159,7 +160,7 @@ export function LibrarySheet({
           ))}
         </ul>
       </MenuSection>
-      <MenuSection title={t('chordPlayer.progressions')} inset className="gap-3">
+      <MenuSection title={t('chordPlayer.progressions')} className="gap-3">
         <ChoiceChips
           label={t('chordPlayer.progressions')}
           value={style}
@@ -177,7 +178,7 @@ export function LibrarySheet({
                 <button
                   type="button"
                   onClick={() => onOpenProgression(progression)}
-                  className="flex min-h-12 w-full min-w-0 flex-col justify-center rounded-control px-2 py-1 text-left hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
+                  className="-mx-2 flex min-h-12 w-[calc(100%+1rem)] min-w-0 flex-col justify-center rounded-control px-2 py-1 text-left hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
                 >
                   <span className="font-semibold text-pretty">
                     {localText(progression.name, locale)}
