@@ -113,7 +113,12 @@ import {
 import { bandMidi, type BoxPlace } from '../model/engine'
 import { keyChords } from '../model/key-chords'
 import { KEYS_PX } from '../model/keys-px'
-import { CHORD_PLAYER_KEYS, CHORD_PLAYER_LAPTOP_KEYS, litKeys } from '../model/lit-keys'
+import {
+  CHORD_PLAYER_KEYS,
+  CHORD_PLAYER_LAPTOP_KEYS,
+  litKeys,
+  WIDER_THAN_PHONE,
+} from '../model/lit-keys'
 import { dropMove, landsOn, readDragId, sectionDragId } from '../model/sheet-dnd'
 import { useArrangerPlay } from '../model/use-arranger-play'
 import type { ChordSheetInHand } from '../model/use-chord-sheet'
@@ -264,6 +269,7 @@ export function ChordPlayer({
   const book = useMemo(() => styleBook(patterns), [patterns])
   const prefs = useSettings(selectChordPlayer)
   const laptop = useMediaQuery(LAPTOP)
+  const widerThanPhone = useMediaQuery(WIDER_THAN_PHONE)
   const { shown, entry } = hand
   const style = book.get(entry.style)
   const variations = styleVariations(style)
@@ -840,7 +846,7 @@ export function ChordPlayer({
             {keysShown ? (
               <div className="shrink-0 overflow-hidden shadow-[0_-1px_0_var(--color-border)]">
                 <LiveKeyboard
-                  range={laptop ? CHORD_PLAYER_LAPTOP_KEYS : CHORD_PLAYER_KEYS}
+                  range={widerThanPhone ? CHORD_PLAYER_LAPTOP_KEYS : CHORD_PLAYER_KEYS}
                   marks={shownKeys.marks}
                   // The chord shown is kept in sight: on a narrower laptop the range is wider than the keys.
                   inView={rangeOf(shownKeys.keys)}

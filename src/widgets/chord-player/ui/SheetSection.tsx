@@ -15,6 +15,7 @@ import {
   type SheetSection as Section,
 } from '@/shared/lib/arrangement'
 import { beatsPerBar, type Key } from '@/shared/lib/music'
+import { WIDER_THAN_PHONE } from '../model/lit-keys'
 import { chordDragId, endDragId, sectionDragId } from '../model/sheet-dnd'
 import { ChordTile, type TileActs } from './ChordTile'
 
@@ -27,9 +28,6 @@ const VARIATIONS = [1, 2, 3, 4] as const
 /** One of the head's values (canvas 173): its fill 36 tall in a 44 target. */
 const PILL =
   'relative flex h-9 min-w-0 shrink-0 items-center rounded-tile bg-muted px-3 text-subhead whitespace-nowrap tabular-nums transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-1 before:content-[""] hover:brightness-95 focus-visible:outline-3 focus-visible:outline-ring'
-
-/** Four bars a row once the chart holds them at least as wide as a 1024 laptop's (125 each). */
-const FOUR_BARS = '(min-width: 37.5rem)'
 
 /**
  * A section of the chord sheet as Musicca's (canvas 173): its head (its name, opening its sheet;
@@ -86,7 +84,8 @@ export const SheetSection = memo(function SheetSection({
   const name = t(`chordPlayer.sections.${section.kind}`)
   const bars = useMemo(() => sectionBars(section, meter), [section, meter])
   const perBar = beatsPerBar(meter)
-  const wide = useMediaQuery(FOUR_BARS)
+  // Four bars a row once the chart holds them at least as wide as a 1024 laptop's (125 each).
+  const wide = useMediaQuery(WIDER_THAN_PHONE)
   const columns = perBar * (wide ? 4 : 2)
   const chords = useMemo(() => sectionChords(section), [section])
   const {

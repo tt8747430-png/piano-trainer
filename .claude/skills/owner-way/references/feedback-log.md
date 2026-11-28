@@ -1606,6 +1606,7 @@ owner's, typos fixed.
 - **A key hint, not a coin (the loop, 2026-11-28):** the app's `Kbd` took the control's 12 on a 24 square, so ↑ and ↵ under Search stood in circles, and the boards drew 6, off the scale; both are the scale's mark, 4. Never again: a primitive's corner left to a shadcn class that maps onto a larger step.
 - **A corner by its name (the loop, 2026-11-28):** the Chord player's ☰ card and the rail's and ☰'s rows wrote 22 and 10 as `rounded-[22px]` and `rounded-[10px]`, the scale's sheet and thumb by number; they take the names, so a change to the scale reaches them. Never again: a scale value written by number in a class.
 - **A class that never applied (the loop, 2026-11-28):** the Chord player's ☰ carried the board's shadow as a class that the popover's own `layer-shadow` beat in the CSS order, so it drew the dialogs' shade; the computed style, not the class list, is what a port measures. Never again: a value called ported because the class is in the source.
+- **Keys that stretch (the loop, 2026-11-28):** the Chord player's keys at 744 stretched the phone's two and a half octaves to 44 a key; from 600 they keep a phone's 26 and show C2 to C7, scrolled to the chord. Never again: a fixed range filling a wider screen by growing its keys.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

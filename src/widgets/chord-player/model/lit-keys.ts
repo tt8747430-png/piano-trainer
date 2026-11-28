@@ -20,8 +20,14 @@ const LEFT_FROM = 43
  */
 export const CHORD_PLAYER_KEYS: KeyRange = { from: midi(41), to: midi(69) }
 
-/** On a laptop, C2 to C7 as the board draws them (the runs' and the Check's laptop keys), the chord lit where it falls. */
+/** From 600 wide (a tablet, a phone on its side, a laptop), C2 to C7 as the board draws them (the runs' and the Check's laptop keys), the chord lit where it falls. */
 export const CHORD_PLAYER_LAPTOP_KEYS: KeyRange = { from: midi(36), to: midi(96) }
+
+/**
+ * Wider than a phone: the chart's four bars a row and the keys' C2 to C7, so a tablet's keys keep a
+ * phone's width and show more of the range rather than stretch two and a half octaves across it.
+ */
+export const WIDER_THAN_PHONE = '(min-width: 37.5rem)'
 
 const inOctave = (note: SpelledNote, from: number): Midi =>
   midi(from + ((((pitchClassOf(note) - from) % 12) + 12) % 12))
