@@ -95,8 +95,8 @@ export const ChordTile = memo(function ChordTile({
   })
   const symbol = printedSymbol(chordSymbol(chord))
   const name = boxName(chord, musicKey, names)
-  // Auto-scroll: the chord sounding is kept in sight as the sheet plays, clear of the bar above and
-  // of the keys and what floats over them below; instant under reduced motion.
+  // Auto-scroll: the chord sounding is kept in sight as the sheet plays, clear of the bar above, with
+  // two rows of what comes next showing above the keys (a reader looks ahead); instant under reduced motion.
   const box = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (!lit) return
@@ -182,7 +182,7 @@ export const ChordTile = memo(function ChordTile({
         onKeyDown={onKeyDown}
         style={{ '--line': letters.line, '--raised': letters.raised }}
         className={cn(
-          '@container relative flex h-[60px] min-w-0 flex-1 scroll-mt-4 scroll-mb-6 cursor-grab touch-manipulation items-start overflow-hidden rounded-tile pt-1 select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing lg:h-[76px]',
+          '@container relative flex h-[60px] min-w-0 flex-1 scroll-mt-4 scroll-mb-38 cursor-grab touch-manipulation items-start overflow-hidden rounded-tile pt-1 select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing lg:h-[76px] lg:scroll-mb-46',
           // A beat's tile gives its name the room its 8 inset would take (owner, 2026-11-28: "the chords
           // are cropped like that or hidden because not enough space").
           shown === 1 ? 'px-1' : 'px-2',
