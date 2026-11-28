@@ -195,20 +195,6 @@ CP_SEC = (GROUP(ROW59('Section', POP59('secPopL', 'openSecPop', 136, 'Section'))
           + f'<sc-if value="{{{{secPopOn}}}}" hint-placeholder-val="{{{{false}}}}">{CHIPROW("secChips")}</sc-if>'
           + '<div style="display: flex">' + QBTN(DUPI, 'Duplicate section', 'dupSec') + '</div>')
 
-# ── the Genos's style strip, over the dock while Follow a MIDI arranger is on ──
-LAMP = lambda key, label, act, w='auto': f'<button type="button" onClick="{{{{{act}}}}}" style="flex: none; min-width: 44px; width: {w}; height: 36px; padding: 0 9px; border: 0; border-radius: 9px; background: {{{{{key}.bg}}}}; color: {{{{{key}.fg}}}}; box-shadow: {{{{{key}.ring}}}}; font: inherit; font-size: 13px; font-weight: 700; white-space: nowrap">{label}</button>'
-LAMPS = lambda lst, pre: f'<sc-for list="{{{{{lst}}}}}" as="l" hint-placeholder-count="3"><button type="button" onClick="{{{{l.pick}}}}" style="flex: none; min-width: 44px; height: 36px; padding: 0 9px; border: 0; border-radius: 9px; background: {{{{l.bg}}}}; color: {{{{l.fg}}}}; box-shadow: {{{{l.ring}}}}; font: inherit; font-size: 13px; font-weight: 700; white-space: nowrap">{pre}{{{{l.n}}}}</button></sc-for>'
-GRPL = lambda label, inner: f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: {SOFT}">{label}</span><div style="display: flex; gap: 4px">{inner}</div></div>'
-STRIP = (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div role="toolbar" aria-label="Genos style controls" style="flex: none; display: flex; flex-direction: column; gap: 8px; padding: 8px 0 10px">'
-         f'<div style="display: flex; align-items: center; gap: 8px; padding: 0 16px"><span style="width: 8px; height: 8px; border-radius: 4px; background: #44684A"></span><span style="font-size: 13px; font-weight: 600">{{{{arTitle}}}}</span></div>'
-         f'<div class="nos" style="display: flex; gap: 16px; overflow-x: auto; padding: 0 16px">'
-         + GRPL('Style', LAMP('arStart', 'Start/Stop', 'togglePlay') + LAMP('arAcmp', 'ACMP', 'tAcmp') + LAMP('arSync', 'Sync Start', 'tSync') + LAMP('arSyncStop', 'Sync Stop', 'tSyncStop'))
-         + GRPL('Intro', LAMPS('arIntros', ''))
-         + GRPL('Main', LAMPS('arMains', '') + LAMP('arAuto', 'Auto Fill', 'tAuto') + LAMP('arBreak', 'Break', 'tBreak'))
-         + GRPL('Ending/rit.', LAMPS('arEndings', ''))
-         + GRPL('More', LAMP('arFade', 'Fade', 'tFade') + LAMP('arOts', 'OTS Link', 'tOts'))
-         + '</div></div></sc-if>')
-
 # R59 (owner, 2026-11-14: "improve the genos actions bar and make better … better ui"): the strip as a card that
 # shows every control at once, none scrolled out of sight: its state and Start/Stop on its head; Main A–D and Break,
 # then Intro I–III and Ending/rit. I–III (a phone's two rows; one row of groups on a laptop), each group named over it.
