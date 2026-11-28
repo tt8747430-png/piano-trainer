@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · (this commit) · a phone's sheet name over the chart takes two lines, balanced, before its ellipsis, at 22 on a 28 line (app too, from 24) · ChordPlayer · pending
+- 2026-11-28 · bdea60b6 · a phone's sheet name over the chart takes two lines, balanced, before its ellipsis, at 22 on a 28 line (app too, from 24) · ChordPlayer · pending
 ## Changes
 
 - 2026-11-28 · bad6df67 · the library of chord sheets stands on one left edge (heads, chips, each row's words; a row's wash 8 past it) and its Songs are the app's by collection, chips over each shelf's songs (app too); a short beat's name takes the room for the chart's 21 before the floor (app) · ChordPlayer, ChordPlayerLaptop · v903
