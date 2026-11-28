@@ -23,12 +23,12 @@ export function LeadSymbol({ text }: { text: string }) {
 }
 
 /**
- * How many letters wide a name sets, its raised part at its 0.6 (Cm⁷ is 2.6): what a tile reads to
- * set the name small enough to fit whole (`chord-fit`).
+ * A name's letters as a tile sets them (`chord-fit`): those on the line (its root, minor's m and bass)
+ * and those raised (Cm⁷ is 2 and 1), the raised set at 0.6 of the name and never under 12px.
  */
-export function symbolLetters(text: string) {
+export function symbolLetters(text: string): { readonly line: number; readonly raised: number } {
   const parts = PARTS.exec(text)
-  if (!parts) return text.length
+  if (!parts) return { line: text.length, raised: 0 }
   const [, root = '', raised = '', bass = ''] = parts
-  return root.length + raised.length * 0.6 + bass.length
+  return { line: root.length + bass.length, raised: raised.length }
 }

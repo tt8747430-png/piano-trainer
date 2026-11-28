@@ -498,7 +498,10 @@ export function playOrder(sheet: ChordSheet): PlayedBar[] {
  * A chart of the bars as played (`arrange`'s input), the sheet's play order unless given: each
  * section's each time round a section of it, four bars a line.
  */
-export function sheetToChart(sheet: ChordSheet, bars: readonly PlayedBar[] = playOrder(sheet)): Chart {
+export function sheetToChart(
+  sheet: ChordSheet,
+  bars: readonly PlayedBar[] = playOrder(sheet),
+): Chart {
   // Each section's each time round, its bars in order.
   const rounds = new Map<string, ChartBar[]>()
   for (const bar of bars) {
@@ -514,4 +517,51 @@ export function sheetToChart(sheet: ChordSheet, bars: readonly PlayedBar[] = pla
     ),
   }))
   return { key: sheet.key, meter: sheet.meter, sections }
+}
+
+/**
+ * A written chart as a chord sheet, to be played and changed in the Chord player: each of its sections
+ * one of the sheet's, of the kind given (`kinds`, by section, a Verse where none is), its bars as
+ * written. A sheet counts whole beats, so each chord starts on the beat nearest where it is written
+ * and lasts to the next one's: a push or a passing chord shorter than a beat (Voi cânta's `F@.5`) falls
+ * to its neighbour, as a chord chart reads; a bar with no chord holds the chord before it. Null for a
+ * meter a sheet has not, or a chart with no chord.
+ */
+export function chartToSheet(chart: Chart, kinds: readonly SectionKind[]): ChordSheet | null {
+  const meter = SHEET_METERS.find((each) => each === chart.meter)
+  if (!meter) return null
+  let held: Chord | null = null
+  const sections = chart.sections.slice(0, MOST_SECTIONS).map((section, index): SheetSection => {
+    const bars = section.lines.flat().map((bar): WrittenBar => {
+      const length = Math.max(CHORD_BEATS.min, Math.round(bar.beats))
+      let from = 0
+      const starts = bar.chords.map((each) => {
+        const at = Math.min(length, Math.round(from))
+        from += each.beats
+        return at
+      })
+      const chords = bar.chords.flatMap((each, at): SheetChord[] => {
+        const start = at === 0 ? 0 : (starts[at] ?? 0)
+        const beats = (starts[at + 1] ?? length) - start
+        const chord: Chord = {
+          root: each.root,
+          quality: each.quality,
+          ...(each.bass ? { bass: each.bass } : {}),
+        }
+        held = chord
+        return beats > 0 ? [{ chord, beats: clampBeats(beats) }] : []
+      })
+      if (chords.length > 0) return { chords }
+      return held ? { chords: [{ chord: held, beats: clampBeats(length) }] } : { chords: [] }
+    })
+    return {
+      kind: kinds[index] ?? 'verse',
+      repeats: 1,
+      variation: 1,
+      marks: NO_MARKS,
+      bars: bars.filter((bar) => bar.chords.length > 0),
+    }
+  })
+  const sheet = { key: chart.key, meter, sections: sections.filter((each) => each.bars.length > 0) }
+  return sheet.sections.length > 0 ? sheet : null
 }

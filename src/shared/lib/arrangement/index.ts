@@ -33,6 +33,7 @@ export {
   setChord,
   SHEET_METERS,
   sheetToChart,
+  chartToSheet,
   transposeSheet,
   VARIATIONS,
   ARRANGER_NUMBERS,

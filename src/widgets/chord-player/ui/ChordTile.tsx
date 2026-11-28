@@ -156,6 +156,7 @@ export const ChordTile = memo(function ChordTile({
     handle.addEventListener('pointerup', up)
     handle.addEventListener('pointercancel', up)
   }
+  const letters = symbolLetters(name)
   return (
     <li
       ref={setNodeRef}
@@ -179,7 +180,7 @@ export const ChordTile = memo(function ChordTile({
         title={t('chordPlayer.boxHint')}
         onClick={onTap}
         onKeyDown={onKeyDown}
-        style={{ '--name': symbolLetters(name) }}
+        style={{ '--line': letters.line, '--raised': letters.raised }}
         className={cn(
           '@container relative flex h-[60px] min-w-0 flex-1 scroll-mt-4 scroll-mb-6 cursor-grab touch-manipulation items-start overflow-hidden rounded-tile pt-1 select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing lg:h-[76px]',
           // A beat's tile gives its name the room its 8 inset would take (owner, 2026-11-28: "the chords

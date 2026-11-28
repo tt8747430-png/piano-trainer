@@ -1,8 +1,7 @@
 import { Copy, Ellipsis, PencilLine, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  CHORD_SHEET_SONGS,
   selectMine,
   SHEET_NAME_MAX,
   useChordSheets,
@@ -31,10 +30,11 @@ import {
   sayUndo,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { songShelves } from '../model/app-songs'
 
 /**
  * The Library (R29 CP4, P13), opened from the sheet's name: My chord sheets first (each row's menu
- * Rename, Duplicate, Delete), then the songs the app holds as sheets, then its progressions by style; a tap opens one in place of the
+ * Rename, Duplicate, Delete), then the app's songs with chords by collection, then its progressions by style; a tap opens one in place of the
  * sheet in hand. A popover at the name on a laptop, a page with ← on a phone.
  */
 export function LibrarySheet({
@@ -67,6 +67,9 @@ export function LibrarySheet({
   const [style, setStyle] = useState<ProgressionStyle>(groups[0]?.style ?? 'pop')
   const [renaming, setRenaming] = useState<{ id: string; name: string } | null>(null)
   const shown = groups.find((group) => group.style === style)?.progressions ?? []
+  const songs = useMemo(songShelves, [])
+  const [shelf, setShelf] = useState(songs[0]?.id ?? '')
+  const shelfSongs = songs.find((each) => each.id === shelf)?.songs ?? []
   const remove = (sheet: SavedChordSheet) => {
     const undo = deleteSheet(store, sheet.id)
     if (undo) sayUndo(t('chordPlayer.row.deleted', { name: sheet.name }), undo)
@@ -134,9 +137,15 @@ export function LibrarySheet({
           </ul>
         )}
       </MenuSection>
-      <MenuSection title={t('chordPlayer.songs')} inset className="gap-1">
+      <MenuSection title={t('chordPlayer.songs')} inset className="gap-3">
+        <ChoiceChips
+          label={t('chordPlayer.songs')}
+          value={shelf}
+          options={songs.map((each) => ({ value: each.id, label: localText(each.name, locale) }))}
+          onChange={setShelf}
+        />
         <ul className="flex flex-col">
-          {CHORD_SHEET_SONGS.map((song) => (
+          {shelfSongs.map((song) => (
             <li key={song.id}>
               <button
                 type="button"
@@ -144,7 +153,7 @@ export function LibrarySheet({
                 className="flex min-h-12 w-full min-w-0 flex-col justify-center rounded-control px-2 py-1 text-left hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
               >
                 <span className="font-semibold text-pretty">{song.name}</span>
-                <span className="text-muted-foreground">{song.by}</span>
+                {song.by ? <span className="text-muted-foreground">{song.by}</span> : null}
               </button>
             </li>
           ))}
