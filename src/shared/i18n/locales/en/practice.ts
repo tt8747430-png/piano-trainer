@@ -928,7 +928,7 @@ export const practice = {
       saved: 'Saved {{name}}',
       discarded: 'Draft discarded',
     },
-    dock: { key: 'Key', plays: 'Repeats', untilStop: 'Until Stop' },
+    playback: { key: 'Key', plays: 'Repeats', untilStop: 'Until Stop' },
     // R77: the band, the rail and the phone's ☰ (Flat's, the Player's).
     rail: {
       chords: 'Chords',

@@ -323,16 +323,16 @@ export function PlaybackBody({
   // name, the metronome's switch on a phone.
   return (
     <GroupRows surface="sheet" label={t('common:playbackOptions')}>
-      <GroupRow label={t('chordPlayer.dock.plays')}>
+      <GroupRow label={t('chordPlayer.playback.plays')}>
         {/* Its value 15 in the band's popover, 16 on a phone's page (the board's PHROWS). */}
         <span className="contents [&_output]:text-base lg:[&_output]:text-subhead">
           <Stepper
-            label={t('chordPlayer.dock.plays')}
+            label={t('chordPlayer.playback.plays')}
             value={settings.plays}
             min={0}
             max={SHEET_PLAYS}
             format={(count) =>
-              count === 0 ? t('chordPlayer.dock.untilStop') : t('chordPlayer.times', { count })
+              count === 0 ? t('chordPlayer.playback.untilStop') : t('chordPlayer.times', { count })
             }
             decrease={t('chordPlayer.fewer')}
             increase={t('chordPlayer.moreTimes')}
@@ -368,7 +368,7 @@ export function KeyBody({ hand }: { hand: ChordSheetInHand }) {
   const { t } = useTranslation('practice')
   return (
     <RootGrid
-      label={t('chordPlayer.dock.key')}
+      label={t('chordPlayer.playback.key')}
       value={hand.shown.key.tonic}
       onChange={(root) => {
         const up = (pitchClassOf(root) - pitchClassOf(hand.sheet.key.tonic) + 12) % 12

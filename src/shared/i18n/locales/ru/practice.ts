@@ -908,7 +908,7 @@ export const practice: LocaleResources['practice'] = {
       saved: 'Сохранено: {{name}}',
       discarded: 'Черновик удалён',
     },
-    dock: { key: 'Тональность', plays: 'Повторы', untilStop: 'До остановки' },
+    playback: { key: 'Тональность', plays: 'Повторы', untilStop: 'До остановки' },
     // R77: полоса, панель и ☰ телефона (как во Flat и в плеере).
     rail: {
       chords: 'Аккорды',

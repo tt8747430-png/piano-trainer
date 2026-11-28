@@ -110,7 +110,7 @@ export function PhoneMenu({
   const titles: Readonly<Record<Exclude<PhonePage, 'menu'>, string>> = {
     chords: bodies.chordsTitle,
     style: t('chordPlayer.style'),
-    key: t('chordPlayer.dock.key'),
+    key: t('chordPlayer.playback.key'),
     tempo: t('chordPlayer.tempo'),
     repeats: t('common:playbackOptions'),
     audio: t('chordPlayer.rail.audio'),
@@ -145,7 +145,7 @@ export function PhoneMenu({
             />
             <MenuRow
               icon={ArrowUpDown}
-              label={t('chordPlayer.dock.key')}
+              label={t('chordPlayer.playback.key')}
               value={rows.keyName}
               onClick={go('key')}
             />
@@ -157,7 +157,7 @@ export function PhoneMenu({
             />
             <MenuRow
               icon={Repeat}
-              label={t('chordPlayer.dock.plays')}
+              label={t('chordPlayer.playback.plays')}
               value={rows.repeats}
               onClick={go('repeats')}
             />

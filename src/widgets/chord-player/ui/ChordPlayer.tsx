@@ -942,13 +942,13 @@ export function ChordPlayer({
             onLoop={toggleLoop}
           >
             <PanelPopover
-              title={t('chordPlayer.dock.key')}
+              title={t('chordPlayer.playback.key')}
               {...pop('key')}
               trigger={
                 <BandPill
-                  label={t('chordPlayer.dock.key')}
+                  label={t('chordPlayer.playback.key')}
                   value={keyName(shown.key)}
-                  aria-label={`${t('chordPlayer.dock.key')}: ${keyName(shown.key)}`}
+                  aria-label={`${t('chordPlayer.playback.key')}: ${keyName(shown.key)}`}
                   aria-expanded={popped === 'key'}
                 />
               }
@@ -1060,7 +1060,7 @@ export function ChordPlayer({
               tempo: t('chordPlayer.bpm', { count: entry.tempo }),
               repeats:
                 entry.settings.plays === 0
-                  ? t('chordPlayer.dock.untilStop')
+                  ? t('chordPlayer.playback.untilStop')
                   : t('chordPlayer.times', { count: entry.settings.plays }),
               chart: t(`chordPlayer.settings.names.${prefs.names}`),
             }}

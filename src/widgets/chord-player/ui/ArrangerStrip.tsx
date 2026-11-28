@@ -94,7 +94,7 @@ function Group({
  * laptop's wide strip, `wide`); **Compact**, Start/Stop and Main A–D in one 64 row; **Minimized**, a
  * glass pill ("Genos · Main A") that opens it in full. Each lamp lit as the panel's. `device` names
  * who plays: the Genos, or the style the app's band plays in its place. `flat` draws it without its
- * shadow, in a laptop's side column; `children` is what Edit layout draws over it.
+ * shadow, in a laptop's side column.
  */
 export function ArrangerStrip({
   panel,
@@ -103,7 +103,6 @@ export function ArrangerStrip({
   wide = false,
   flat = false,
   onSize,
-  children,
 }: {
   panel: ArrangerPanel
   device: string
@@ -111,7 +110,6 @@ export function ArrangerStrip({
   wide?: boolean
   flat?: boolean
   onSize(size: GenosSize): void
-  children?: ReactNode
 }) {
   const { t } = useTranslation(['practice', 'common'])
   const section = panel.section
@@ -193,7 +191,6 @@ export function ArrangerStrip({
           {named}
           <ChevronUp aria-hidden />
         </button>
-        {children}
       </div>
     )
   }
@@ -242,7 +239,6 @@ export function ArrangerStrip({
           </HeadButton>
           {wide ? null : minimize}
         </div>
-        {children}
       </Toolbar>
     )
   const intro = (
@@ -324,7 +320,6 @@ export function ArrangerStrip({
           </div>
         </>
       )}
-      {children}
     </Toolbar>
   )
 }
