@@ -95,6 +95,14 @@ for b in boards:
         if 'data-sheetcss' not in h1:
             h1 = h1.replace('</head>', '<style data-sheetcss>[role=dialog], [role=dialog] .nos { overscroll-behavior: contain }'
                             ' button, a, [role=switch], [role=radio], [role=slider] { touch-action: manipulation }</style></head>', 1)
+        # a level is the app's Slider (the kit's `Slider`): a 4 track in the line's sand, filled in ink to the value (--p),
+        # a white 28 thumb on its soft shade; a native range, so it still drags and keys (only ranges marked data-level)
+        if 'data-level' in h1:
+            RG = ('<style data-rangecss>input[data-level] { -webkit-appearance: none; appearance: none; background: transparent }'
+                  ' input[data-level]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: linear-gradient(#332921, #332921) 0 / var(--p) 100% no-repeat, #DAD1C8 }'
+                  ' input[data-level]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 28px; height: 28px; margin-top: -12px; border-radius: 14px; background: #FFFFFF;'
+                  ' box-shadow: 0 1px 3px rgb(51 41 33 / .2), 0 0 0 .5px rgb(51 41 33 / .1) }</style>')
+            h1 = re.sub(r'<style data-rangecss>.*?</style>', lambda m: RG, h1, count=1, flags=re.S) if 'data-rangecss' in h1 else h1.replace('</head>', RG + '</head>', 1)
         # icons side by side in a bar share one glass (Apple HIG, Toolbars: "Group toolbar items logically by function";
         # a text button keeps its own capsule): a run of 44 glass circles becomes one capsule, each keeping its 44 target
         h1 = _glassgroups(h1)

@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · {C} · the Volume levels draw the app's slider (a 4 track in sand filled in ink, a white 28 thumb on its soft shade) where they drew the browser's own (a thick bar, an ink thumb); index.py's `data-rangecss` for any range marked data-level · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 

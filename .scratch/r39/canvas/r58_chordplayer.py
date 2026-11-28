@@ -453,7 +453,7 @@ _COL77 = lambda *xs: '<div style="display: flex; flex-direction: column; gap: 24
 # twice, and the row opened nothing on the board; the levels stand under one Volume head, Master first, each its name
 # and % over the slider (the app's Level: a 4 track, a 28 thumb), 16 apart
 _LEV77 = lambda lab, v: (f'<div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; gap: 12px; font-size: 15px"><span>{lab}</span><span style="color: {SOFT}; font-variant-numeric: tabular-nums">{v}%</span></div>'
-                         f'<input type="range" min="0" max="100" step="5" value="{v}" aria-label="{lab}" style="width: 100%; height: 28px; margin: 0; accent-color: {INK}"></div>')
+                         f'<input type="range" data-level min="0" max="100" step="5" value="{v}" aria-label="{lab}" style="--p: {v}%; width: 100%; height: 28px; margin: 0"></div>')
 VOL77 = '<div style="display: flex; flex-direction: column; gap: 16px">' + _LEV77('Master', 80) + _LEV77('Piano', 80) + _LEV77('Bass', 70) + _LEV77('Drums', 70) + '</div>'
 SOUND77 = _COL77(GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'), bg=SHEET),
                  _SECT77('Volume', VOL77), _SECT77('Voicing', SEGC('cpVSeg', 36, 14, True)))

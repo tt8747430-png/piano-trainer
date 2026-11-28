@@ -1587,6 +1587,7 @@ owner's, typos fixed.
 - **The Chord player's Share as the board's** (the loop, 2026-11-28). Why: an explanation line opened the app's Share and its choice had no visible head; the board lacked the signed-out state. One form: the head over View only · Can edit, Copy link 24 under; signed out, Sharing needs an account with Sign in, on both.
 - **A sheet from a closing form stands at the form's opener** (the loop, 2026-11-28). Why: Share after Save as my chord sheet… stood at the screen's corner over the rail; it stands at the name, as its menu. Menus stand 4 under their button, board and app.
 - **What a ruling replaced leaves the code** (the loop, 2026-11-28). Why: R76's Edit layout strings and the keys' grip outlived R77 in the app and the boards; a replaced feature is deleted in both, not left unreachable.
+- **The board's sliders are the app's** (the loop, 2026-11-28). Why: a native range on the board drew a bar and thumb the app never shows; a level marked `data-level` takes the kit's 4 track and white 28 thumb.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
