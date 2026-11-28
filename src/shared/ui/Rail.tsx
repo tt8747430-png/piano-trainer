@@ -101,7 +101,7 @@ export function RailPanel({
       className="flex min-h-0 w-88 shrink-0 flex-col shadow-[inset_-1px_0_0_var(--color-border)]"
     >
       <header className="flex h-16 shrink-0 items-center gap-2 pr-2 pl-4 shadow-[inset_0_-1px_0_var(--color-border)]">
-        <h2 className="flex-1 truncate font-sans text-lg font-semibold">{title}</h2>
+        <h2 className="flex-1 truncate font-sans text-lg/[normal] font-semibold">{title}</h2>
         <button
           type="button"
           aria-label={t('foldPanel')}

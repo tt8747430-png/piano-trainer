@@ -5,6 +5,7 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
 
 ## The rulings as they stand
 
+- **A panel's title level with the chart** (the loop, 2026-11-28). Why: the lines (edge-lines, shared edges) found the app's rail panel title 2 above the chart's first section (84 against 86): the kit's head sets its 17 title at the font's own leading, as the board's `_PHEAD` and the app's `PanelPopover`; the rail's head took 1.375. One leading for a panel's title, in the Player's and the editor's panels too.
 - **The band's Style, the families' list** (the loop, 2026-11-28). Why: "Styles by family" holds for every face of Style (one implementation): the band's Style popover still drew the wheel the ruling removed; it is the Styles panel's list now, capped at 760 and scrolled, a choice closing it as the app's.
 - **A band's popover at its trigger, 8 under the band, measured** (the loop, 2026-11-28). Why: the earlier ruling (popovers from their trigger) held only by eye: measured, the board's five stood 4 to 13 right of their pills and the app's 4 into the band (its 8 counted from the 40 pill, not the 64 band). Both now: x the trigger's left, y 72.
 - **The Genos pill one label** (the loop, 2026-11-28). Why: a label is read as one phrase (ux-writing, Fit): the minimized pill's "Genos · Main A" split into two flex items around its binding, the dot tight to Genos and 8 before Main A; it is one label now, as the app's (`chordPlayer.arranger.pill`).
