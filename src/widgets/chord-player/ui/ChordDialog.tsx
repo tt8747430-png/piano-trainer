@@ -71,6 +71,7 @@ export function ChordDialog({
   onPlayFrom,
   onDuplicate,
   onRemove,
+  foot,
 }: {
   open: boolean
   onOpenChange(open: boolean): void
@@ -84,6 +85,8 @@ export function ChordDialog({
   onPlayFrom(): void
   onDuplicate(): void
   onRemove(): void
+  /** On a phone, the keys it stands on, as a length from the screen's foot. */
+  foot?: string
 }) {
   const { t } = useTranslation('practice')
   const [typed, setTyped] = useState<string | null>(started ?? null)
@@ -107,7 +110,7 @@ export function ChordDialog({
   }
   return (
     <Sheet at={{ width: 'w-115' }} open={open} onOpenChange={onOpenChange}>
-      <SheetContent title={printedChord(chord)}>
+      <SheetContent title={printedChord(chord)} {...(foot === undefined ? {} : { foot })}>
         {/* 16 apart in a phone's sheet, 12 in a laptop's popover, as the board's BSHEET and POPOVER. */}
         <div className="flex flex-col gap-4 lg:gap-3">
           {typed !== null ? (

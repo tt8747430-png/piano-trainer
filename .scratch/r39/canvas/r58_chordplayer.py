@@ -293,8 +293,19 @@ def KEYS77(h, lap=False):
 # Tempo, the Metronome's face (owner-way, one implementation): the tempo's word and BPM over its figures with −10 −1
 # and +1 +10 beside them, then the slider between the sheet's ends, 40 and 240; a wheel hid all but five tempos
 TEMPO77 = f'<div style="display: flex; flex-direction: column; gap: 12px; padding: 4px 0">{TEMPO(40, "cpT", 40, 240)}</div>'
-SH58 = lambda B, P, D=None, signin='SignIn.dc.html': (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('secOn', '{{secTitle}}', CP_SEC) + B('shareOn', 'Share', CP_SHARE(signin)) + (D or B)('styleOn', 'Style', STYLEROWS) + (D or B)('keyOn', 'Key', ROOTGRID('keyRoots')) + (D or B)('tempoOn', 'Tempo', TEMPO77) + P + '')
+SH58 = lambda B, P, D=None, signin='SignIn.dc.html', C=None: ((C or B)('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('secOn', '{{secTitle}}', CP_SEC) + B('shareOn', 'Share', CP_SHARE(signin)) + (D or B)('styleOn', 'Style', STYLEROWS) + (D or B)('keyOn', 'Key', ROOTGRID('keyRoots')) + (D or B)('tempoOn', 'Tempo', TEMPO77) + P + '')
 _MI = lambda l, a, col=INK: f'<button type="button" role="menuitem" onClick="{{{{{a}}}}}" style="width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left">{l}</button>'
+# a phone's chord sheet stands on the keys (the loop, 2026-11-28; Chordify's chord sheet leads with the chord on the
+# keys): its scrim and card end at the keys' top, so the keys stay lit and unscrimmed while the chord is changed; the
+# card's foot is 16 (the keys hold the home indicator), at the screen's foot when the keys are hidden
+def CHSHEET_PH(cond, title, body):
+    t = BSHEET(cond, title, body)
+    a = 'position: absolute; inset: 0; z-index: 60;'
+    b = 'position: absolute; left: 0; right: 0; bottom: 0; z-index: 61;'
+    assert a in t and b in t and 'padding: 6px 16px 40px;' in t
+    return (t.replace(a, 'position: absolute; inset: 0 0 {{cpChordFoot}}; z-index: 60;', 1)
+             .replace(b, 'position: absolute; left: 0; right: 0; bottom: {{cpChordFoot}}; z-index: 61;', 1)
+             .replace('padding: 6px 16px 40px;', 'padding: 6px 16px {{cpChordPad}};', 1))
 # a phone's toast steps aside when a sheet rises over it (the app's Sheet closes it), and shows one raised from that sheet
 # a phone's toast stands 12 over the foot: the keys (112 over the 34 home indicator) and the Genos row (64 and its
 # 8) when shown, as the app's (`--docked`); it stood at 256 whatever stood under it
@@ -493,7 +504,7 @@ _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'O
       randomize: () => set({ sheet: null, toastT: 'New chords in ' + KEYS[k] + ' major' }),
       hdTr: () => set({ sheet: st.sheet === 'key' ? null : 'key' }), hdTrX: st.sheet === 'key' ? 'true' : 'false', hdKeyL: KEYS[k] + ' major',
       hdMidi: () => set({ sheet: st.sheet === 'midi' ? null : 'midi' }), hdMidiOn: st.sheet === 'midi', hdMidiX: st.sheet === 'midi' ? 'true' : 'false', hdMidiBg: st.sheet === 'midi' ? 'rgba(254,253,251,.14)' : 'transparent',
-      hdKeys: () => set({ cpKeys: !cpKeys }), hdKeysOn: cpKeys ? 'true' : 'false', hdKeysBg: cpKeys ? 'rgba(254,253,251,.14)' : 'transparent', hdKeysPh: cpKeys ? '#A8551F' : '#332921', cpKeysOn: cpKeys,
+      hdKeys: () => set({ cpKeys: !cpKeys }), hdKeysOn: cpKeys ? 'true' : 'false', hdKeysBg: cpKeys ? 'rgba(254,253,251,.14)' : 'transparent', hdKeysPh: cpKeys ? '#A8551F' : '#332921', cpKeysOn: cpKeys, cpChordFoot: cpKeys ? '146px' : '0px', cpChordPad: cpKeys ? '16px' : '40px',
       phMenu: () => set({ sheet: st.sheet === 'menu77' ? null : 'menu77' }), phMenuOn: st.sheet === 'menu77', phMenuX: st.sheet === 'menu77' ? 'true' : 'false', phMenuFg: st.sheet === 'menu77' ? '#A8551F' : '#332921', phToMenu: () => set({ sheet: 'menu77' }), phClose: () => set({ sheet: null }),
       cpPhExp: () => set({ sheet: 'phExp' }), cpPhExpOn: st.sheet === 'phExp', cpPhChart: () => set({ sheet: 'phChart' }), cpPhStyle: () => set({ sheet: 'phStyle' }), cpPhKey: () => set({ sheet: 'phKey' }), cpPhKeyOn: st.sheet === 'phKey', cpPhTempo: () => set({ sheet: 'phTempo' }), cpPhTempoOn: st.sheet === 'phTempo', ...(() => { const b = st.bpm ?? 96, to = (n) => set({ bpm: Math.max(40, Math.min(240, n)) }), MK = [[60, 'Largo'], [76, 'Adagio'], [108, 'Andante'], [120, 'Moderato'], [168, 'Allegro'], [999, 'Presto']]; return { cpTbpm: b, cpTmark: MK.find(([m]) => b < m)[1], cpTpos: ((b - 40) / 2) + '%', cpTd10: () => to(b - 10), cpTd1: () => to(b - 1), cpTu1: () => to(b + 1), cpTu10: () => to(b + 10) }; })(),  cpPhStyleOn: st.sheet === 'phStyle', cpPhChartOn: st.sheet === 'phChart', cpPhMidi: () => set({ sheet: 'phMidi' }), cpPhMidiOn: st.sheet === 'phMidi' };
 """
@@ -502,7 +513,7 @@ assert CP77.count(_r) == 1, CP77.count(_r)
 CP77 = CP77.replace(_r, _j77 + "    return { ...common(st, set), ...CP77K,", 1)
 # the dock's place and the old bar's keys stay in the state, unread; the menus open at their buttons
 _SHL = SH58(lambda c, t, b: POPOVER(c, t, b, '{{chordPos}}' if c == 'chordOn58' else '{{secPos}}' if c == 'secOn' else '{{tagPos}}' if c == 'tagOnSheet' else 'left: 64px; top: 60px', 380 if c == 'secOn' else 460), '', lambda c, t, b: POPOVER(c, t, b, {'styleOn': 'left: 717px; top: 72px', 'keyOn': 'left: 501px; top: 72px', 'tempoOn': 'left: 608px; top: 72px'}[c], 320), 'SignInLaptop.dc.html')
-phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '') + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('libOn', 'Chord sheets', CP_LIB, close='closeSheet') + LIBROW + RENAME77.replace('z-index: 60', 'z-index: 72').replace('z-index: 61', 'z-index: 73') + SAVEAS77 + BSHEET('hdOptsOn', 'Playback options', OPTSND(_OPTSP)), bar=SHEET)
+phone('ChordPlayer', 'Chord player, phone', ph77 + TOAST76, CP77, SH58(BSHEET, '', C=CHSHEET_PH) + PHNAV77 + PHPAGES77 + NAMEMENU77P + FSHEET('libOn', 'Chord sheets', CP_LIB, close='closeSheet') + LIBROW + RENAME77.replace('z-index: 60', 'z-index: 72').replace('z-index: 61', 'z-index: 73') + SAVEAS77 + BSHEET('hdOptsOn', 'Playback options', OPTSND(_OPTSP)), bar=SHEET)
 # Shortcuts, the Player's and the editor's card (KEYSCARD_F) with the Chord player's own keys, as the app lists them
 CPKEYS = KEYSCARD_F(((('Chord player', (('Play or stop', 'Space'), ('Undo', '⌘ Z'), ('Redo', '⇧ ⌘ Z'), ('Move between chords', '← → ↑ ↓'), ('Edit the chord', 'Enter'), ('Change its length', '⇧ ← →'), ('Pick up or drop the chord', 'Space'), ('Delete the chord', '⌫'))),),
                      (('Piano keys', (('Play the keys', 'A – ’'), ('An octave down, up', 'Z X'))), ('Anywhere', (('Show the shortcuts', '?'),)))), 640)

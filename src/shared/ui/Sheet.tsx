@@ -285,6 +285,7 @@ export function SheetContent({
   floating = false,
   wide = false,
   rising = false,
+  foot,
   initialFocus,
   dismiss = 'done',
 }: {
@@ -311,6 +312,11 @@ export function SheetContent({
   wide?: boolean
   /** On a laptop, the card rising over the floating bar it opens from: a run's Setup. */
   rising?: boolean
+  /**
+   * On a phone, what the sheet stands on, as a length from the screen's foot: the Chord player's
+   * keys, which stay in sight above the scrim while the chord is changed (Chordify's chord sheet).
+   */
+  foot?: string
   /** What takes the focus as it opens, in place of the panel: a picker's value. */
   initialFocus?: () => HTMLElement | true
   /** Its header's way out: Done; Cancel on a sheet that makes something (the canvas's NEWNAME); Close once it reports what was made (Import). */
@@ -361,8 +367,12 @@ export function SheetContent({
     <DrawerContent
       ref={holdTallest}
       {...(initialFocus ? { initialFocus } : {})}
+      style={foot === undefined ? undefined : { '--sheet-foot': foot }}
       className={cn(
         'page-column rounded-t-sheet bg-background pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
+        // Standing on what is at the foot: no bleed under it, and its foot no longer the home indicator's.
+        foot !== undefined &&
+          'data-[swipe-direction=down]:bottom-(--sheet-foot) data-[swipe-direction=down]:after:hidden data-[swipe-direction=down]:[--drawer-content-max-height:calc((var(--app-height,100dvh)-var(--sheet-foot))*0.86)] landscape-phone:max-h-[calc(100dvh-1rem-var(--sheet-foot))]',
         // From the right, a laptop's settings (the boards' POPOVER, EditorLaptop's and PlayerDesk's
         // gear): a card hung under the bar's buttons, 380 wide (420 `wide`), as tall as it holds, 16
         // round with the hairline and the second shade; it fades in place.
@@ -432,7 +442,13 @@ export function SheetContent({
               : t('done')}
         </DrawerClose>
       </DrawerHeader>
-      <div className="flex min-h-0 flex-1 flex-col gap-4 scroll-pt-9 group-data-[swipe-axis=x]/drawer-popup:gap-3 overflow-y-auto px-4 pt-1 pb-6 group-data-[swipe-axis=y]/drawer-popup:pb-10 *:shrink-0">
+      <div
+        className={cn(
+          'flex min-h-0 flex-1 flex-col gap-4 scroll-pt-9 group-data-[swipe-axis=x]/drawer-popup:gap-3 overflow-y-auto px-4 pt-1 pb-6 group-data-[swipe-axis=y]/drawer-popup:pb-10 *:shrink-0',
+          // Standing on the keys, which hold the home indicator: 16 under its last row.
+          foot !== undefined && 'group-data-[swipe-axis=y]/drawer-popup:pb-4',
+        )}
+      >
         {children}
       </div>
       {footer ? (

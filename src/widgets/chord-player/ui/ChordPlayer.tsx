@@ -299,6 +299,8 @@ export function ChordPlayer({
   /** The section whose arranger sheet is open. */
   const [tagged, setTagged] = useState<number | null>(null)
   const [dialog, setDialog] = useState<{ place: BoxPlace; typed?: string } | null>(null)
+  // On a phone the chord's sheet stands on the keys, so its chord stays in sight as it changes.
+  const standsOnKeys = keysShown && !laptop && dialog !== null
   /** The chord selected by a tap: Play starts from it (Musicca's). */
   const [picked, setPicked] = useState<BoxPlace | null>(null)
   // The selection follows the chord this copy plays (Musicca's): the chord Play started from lets go
@@ -842,7 +844,13 @@ export function ChordPlayer({
               </div>
             ) : null}
             {keysShown ? (
-              <div className="shrink-0 overflow-hidden shadow-[0_-1px_0_var(--color-border)]">
+              <div
+                className={cn(
+                  'shrink-0 overflow-hidden shadow-[0_-1px_0_var(--color-border)]',
+                  // A phone's chord sheet stands on the keys: they stay over its scrim, lit with the chord.
+                  standsOnKeys && 'relative z-60',
+                )}
+              >
                 <LiveKeyboard
                   range={widerThanPhone ? CHORD_PLAYER_LAPTOP_KEYS : CHORD_PLAYER_KEYS}
                   marks={shownKeys.marks}
@@ -1115,6 +1123,7 @@ export function ChordPlayer({
       {dialog && dialogChord ? (
         <ChordDialog
           open
+          {...(standsOnKeys ? { foot: `${KEYS_PX[side ? 'side' : 'phone']}px` } : {})}
           onOpenChange={(open) => (open ? null : setDialog(null))}
           chord={dialogChord.chord}
           beats={dialogChord.beats}

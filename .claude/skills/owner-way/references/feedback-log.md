@@ -1629,6 +1629,8 @@ owner's, typos fixed.
 - **The Chord player's library on one edge; short beats at the chart's size (the loop, 2026-11-28):** the library's heads, chips and rows stood at three left edges; they share one now, a row's wash reaching past it. A one-beat chord on a laptop was set at the 12 floor beside 30px names; its columns take the room for 21 first. Never again: three left edges in one list, or a name at the floor where the row has room.
 - **The Chord player's rows before the floor, its keys on its side, its chart looking ahead (the loop, 2026-11-28):** at 744 a verse of one-beat chords set half its names at the 12 floor in rows of four bars; rows take two bars at the chart's 21 first. On a phone on its side the keys' 112 left the chart a row and a half; they dock 80 high there. Playing, the sounding chord was kept just above the keys, the coming bars never in sight; it keeps two rows of room under it. Never again: a name at the floor where fewer bars a row would hold it whole, or a chart that follows play with nothing ahead in sight.
 
+- **A phone's chord sheet stands on the keys** (the loop, 2026-11-28; Chordify's chord sheet): the sheet that changes a chord never hides the keys that show it; it ends at their top, they stay lit and playable over its scrim. Any sheet over a screen whose picture is at its foot does the same (`SheetContent`'s `foot`).
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
