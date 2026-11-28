@@ -344,7 +344,7 @@ The board is the source, value for value (`r58_chordplayer.py`: `BAND77`, `RAIL7
 | 10 | ☰ on a phone: Chords, Style, Key, Tempo, Repeats, Audio, Chart, MIDI as rows, each a page with ←; then Share…, Export › (MIDI, Chart (.txt)), Import chart…; Save to my progressions, Open in Progressions | the dock and the gear's sheets | the Player's ☰ and its pages, one implementation |
 | 11 | A chord's dialog on a laptop hangs under its chord (`ANCHOR`), above it where the screen ends first | `ChordDialog.tsx` centred | anchored to the chord as the board's `chordPos` |
 
-## Port to the app, from canvas 171 (in this order)
+## Port to the app, from canvas 171 (every item built: checked in the code 2026-11-28)
 
 | # | Board | App today | Port |
 | - | ----- | --------- | ---- |
