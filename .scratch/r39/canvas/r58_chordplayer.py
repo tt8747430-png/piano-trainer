@@ -228,15 +228,14 @@ CP58 = CP58.replace("const lamp = (on, next) => ({", "const lamp = (on, next) =>
 # outlines each panel with its tag: the grip drags it to a place, the tag's menu places, sizes and hides it by tap;
 # hidden panels wait in the tray under the bar. Every change is saved at once for this page; the gear's Reset layout
 # and Settings › General › Page layouts put it back. The Genos's own head minimizes it at any time, edit or not.
-CP58 = CP58.replace("    return { ...common(st, set), sec59,", r"""    const LAY0 = { keys: { at: 'bottom', size: 'M', hid: false }, genos: { at: 'right', mode: 'compact', hid: false }, dock: { at: 'float', mode: 'full', hid: false }, chords: { at: 'right', size: 'Wide', hid: false } };
+CP58 = CP58.replace("    return { ...common(st, set), sec59,", r"""    const LAY0 = { genos: { mode: 'compact' } };
     const LAY = st.lay || LAY0;
     const setP = (k, o) => set({ lay: { ...LAY, [k]: { ...LAY[k], ...o } }, sheet: st.sheet });
-    const gP = LAY.genos, cP = LAY.chords, gOn = follow && !gP.hid;
+    const gP = LAY.genos;
     const sheetsL = st.sheetName || 'My verse and chorus';
     return { ...common(st, set), sec59,
       gFull: gP.mode === 'full', gCompact: gP.mode === 'compact', gMin: gP.mode === 'min', gMinT: () => setP('genos', { mode: 'min' }), gFullT: () => setP('genos', { mode: 'full' }), gCompactT: () => setP('genos', { mode: 'compact' }),
       arPillL: ar.main ? 'Genos · Main ' + ar.main : 'Genos',
-      chartCols: ((!cP.hid && cP.at === 'left') || (gOn && gP.at === 'left')) && ((!cP.hid && cP.at === 'right') || (gOn && gP.at === 'right')) ? 8 : 16,
       mk1: sheetsL === 'My verse and chorus', mk2: sheetsL === 'Blues in F', mk3: sheetsL === 'Autumn Leaves sketch',
       sheetsL, sheetsOn: st.sheet === 'sheets', openSheets: (e) => set({ sheet: 'sheets', menuPos: ANCHOR(e, 280), cpExp: false }), cpExpTog: () => set({ cpExp: !st.cpExp }), cpExpOn: st.sheet === 'sheets' && !!st.cpExp, cpExpX: st.cpExp ? 'true' : 'false', cpExpBg: st.cpExp ? 'rgba(51,41,33,.06)' : 'transparent',
       openS1: () => set({ sheet: null, hist: [], sheetName: 'My verse and chorus' }), openS2: () => set({ sheet: null, hist: [], sheetName: 'Blues in F', toastT: 'Opened Blues in F' }), openS3: () => set({ sheet: null, hist: [], sheetName: 'Autumn Leaves sketch', toastT: 'Opened Autumn Leaves sketch' }),
@@ -248,7 +247,7 @@ CP58 = CP58.replace("    return { ...common(st, set), sec59,", r"""    const LAY
       toastOn: !!st.toastT, toastPh: !!st.toastT && (st.toastS ?? null) === (st.sheet ?? null), toastT: st.toastT ?? '', toastUndo: !!st.lastLay || (!!st.prevS && st.toastT === 'Started a new chord sheet') || (!!st.libWas && / deleted$/.test(st.toastT ?? '')), undo: () => set(st.libWas && / deleted$/.test(st.toastT ?? '') ? { libL: st.libWas, libWas: null, toastT: null, ...(st.libWasHand ? { fresh: false, libWasHand: false } : {}) } : st.prevS && st.toastT === 'Started a new chord sheet' ? { ...st.prevS, toastT: null, prevS: null } : { lay: st.lastLay || LAY0, toastT: null, lastLay: null }),""", 1)
 assert CP58.count('LAY0') >= 3, 'R76 JS patch missed'
 CP58 = CP58.replace("states: [{ l: 'Following the Genos', bg: follow ? '#332921' : '#EEE9E2', pick: () => set({ follow: !follow }) }],",
-  "states: [{ l: 'Following the Genos', bg: follow ? '#332921' : '#EEE9E2', pick: () => set({ follow: !follow }) }, { l: 'Edit layout', bg: st.editLay ? '#332921' : '#EEE9E2', pick: () => set({ editLay: !st.editLay, dragP: null }) }, { l: 'Genos minimized', bg: (st.lay && st.lay.genos.mode === 'min') ? '#332921' : '#EEE9E2', pick: () => set({ follow: true, lay: { ...(st.lay || {}), keys: (st.lay || {}).keys || { at: 'bottom', size: 'M', hid: false }, dock: (st.lay || {}).dock || { at: 'float', mode: 'full', hid: false }, chords: (st.lay || {}).chords || { at: 'right', size: 'Wide', hid: false }, genos: { at: 'right', hid: false, mode: (st.lay && st.lay.genos.mode === 'min') ? 'full' : 'min' } } }) }, { l: 'New sheet (first run)', bg: st.fresh ? '#332921' : '#EEE9E2', pick: () => set(st.fresh ? { fresh: false, secs: null, len: null, bpm: null, reps: null, vars: null, sheetName: null } : { sheet: null, sheetName: 'New chord sheet', secs: [['A', 'Verse', 1, []]], len: {}, bpm: 100, reps: 0, vars: [1], fresh: true, draft: false }) }],", 1)
+  "states: [{ l: 'Following the Genos', bg: follow ? '#332921' : '#EEE9E2', pick: () => set({ follow: !follow }) }, { l: 'Genos minimized', bg: (st.lay && st.lay.genos.mode === 'min') ? '#332921' : '#EEE9E2', pick: () => set({ follow: true, lay: { ...(st.lay || {}), keys: (st.lay || {}).keys || { at: 'bottom', size: 'M', hid: false }, dock: (st.lay || {}).dock || { at: 'float', mode: 'full', hid: false }, chords: (st.lay || {}).chords || { at: 'right', size: 'Wide', hid: false }, genos: { at: 'right', hid: false, mode: (st.lay && st.lay.genos.mode === 'min') ? 'full' : 'min' } } }) }, { l: 'New sheet (first run)', bg: st.fresh ? '#332921' : '#EEE9E2', pick: () => set(st.fresh ? { fresh: false, secs: null, len: null, bpm: null, reps: null, vars: null, sheetName: null } : { sheet: null, sheetName: 'New chord sheet', secs: [['A', 'Verse', 1, []]], len: {}, bpm: 100, reps: 0, vars: [1], fresh: true, draft: false }) }],", 1)
 assert 'Genos minimized' in CP58
 
 # the sheet's name opens the sheets: the last opened first, as it opens on (a chart opens where it was left)
@@ -391,7 +390,7 @@ PANELS77 = (_PANEL('Ch', '{{keyHead}}', _DRAGB)
             + _PANEL('St', 'Styles', STYLEROWS) + _PANEL('Ge', 'Genos', GENOSPANEL) + _PANEL('So', 'Audio', SOUND77) + _PANEL('Ca', 'Chart', CHART77))
 
 # the chart, its name in the band on a laptop (the chart starts on its first section); the phone keeps it over the chart
-_c = CHART59('{{chartCols}}', 6, 76, 28, 1)
+_c = CHART59(16, 6, 76, 28, 1)
 _a = _c.index('<div style="display: flex; align-items: baseline; gap: 8px">'); _b = _c.index('<sc-for list="{{sec59}}"')
 CHARTL77 = _c[:_a] + _c[_b:]
 # the Genos docked over the keys while another panel is open: Start/Stop and Main A–D in its compact row, Full opens its panel
@@ -456,8 +455,6 @@ SAVEAS77 = NEWNAME('saveAsOn', 'Save as my chord sheet', 'Name', 'saName', 'type
 
 # the state the new boards read, spread first into the board's state (no key of the old board is overridden)
 CP77 = CP58.replace("states: [{ l: 'Following the Genos'", "states: [{ l: 'No Genos found', bg: st.alone ? '#332921' : '#EEE9E2', pick: () => set({ follow: true, alone: !st.alone }) }, { l: 'Following the Genos'", 1)
-_el = "{ l: 'Edit layout', bg: st.editLay ? '#332921' : '#EEE9E2', pick: () => set({ editLay: !st.editLay, dragP: null }) }, "
-assert CP77.count(_el) == 1; CP77 = CP77.replace(_el, '', 1)
 # Playing: the band lit, the chord sounding, the Genos's head saying it plays
 CP77 = CP77.replace("states: [{ l: 'No Genos found'", "states: [{ l: 'Playing', bg: st.playing ? '#332921' : '#EEE9E2', pick: () => set({ playing: !st.playing }) }, { l: 'Signed out', bg: st.guest ? '#332921' : '#EEE9E2', pick: () => set({ guest: !st.guest, sheet: st.guest ? null : 'share' }) }, { l: 'No Genos found'", 1)
 _j77 = r"""    const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'On']: RAIL77 === k, ['rail' + k + 'Bg']: RAIL77 === k ? '#EEE2CF' : 'transparent', ['rail' + k + 'W']: RAIL77 === k ? 600 : 500, ['pick' + k]: () => set({ rail77: RAIL77 === k ? 'none' : k, ...(k === 'Ge' ? { follow: true } : {}) }) });

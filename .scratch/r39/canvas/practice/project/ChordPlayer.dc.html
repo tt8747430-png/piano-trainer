@@ -231,10 +231,10 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const selParts = SUP(selSym), selRoot = (selSym.match(/^[A-G][♭♯]?/) || ['C'])[0], selQ = selSym.split('/')[0].replace(/^[A-G][♭♯]?/, ''), selBass = selSym.includes('/') ? selSym.split('/')[1] : '';
     const pops = (k) => () => set({ pop: st.pop === k ? null : k });
     const ord = SLOTS.findIndex((x) => sb && x.si === sb[0] && x.bi === sb[1]);
-    const LAY0 = { keys: { at: 'bottom', size: 'M', hid: false }, genos: { at: 'right', mode: 'compact', hid: false }, dock: { at: 'float', mode: 'full', hid: false }, chords: { at: 'right', size: 'Wide', hid: false } };
+    const LAY0 = { genos: { mode: 'compact' } };
     const LAY = st.lay || LAY0;
     const setP = (k, o) => set({ lay: { ...LAY, [k]: { ...LAY[k], ...o } }, sheet: st.sheet });
-    const gP = LAY.genos, cP = LAY.chords, gOn = follow && !gP.hid;
+    const gP = LAY.genos;
     const sheetsL = st.sheetName || 'My verse and chorus';
     const RAIL77 = st.rail77 ?? 'Ch', rp = (k) => ({ ['rail' + k + 'On']: RAIL77 === k, ['rail' + k + 'Bg']: RAIL77 === k ? '#EEE2CF' : 'transparent', ['rail' + k + 'W']: RAIL77 === k ? 600 : 500, ['pick' + k]: () => set({ rail77: RAIL77 === k ? 'none' : k, ...(k === 'Ge' ? { follow: true } : {}) }) });
     const dev = st.alone ? STY[s] : 'Genos', MAINL = ['A', 'B', 'C', 'D'][(st.arMain ?? 0)] || 'A';
@@ -263,7 +263,6 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     return { ...common(st, set), ...CP77K, sec59,
       gFull: gP.mode === 'full', gCompact: gP.mode === 'compact', gMin: gP.mode === 'min', gMinT: () => setP('genos', { mode: 'min' }), gFullT: () => setP('genos', { mode: 'full' }), gCompactT: () => setP('genos', { mode: 'compact' }),
       arPillL: ar.main ? 'Genos · Main ' + ar.main : 'Genos',
-      chartCols: ((!cP.hid && cP.at === 'left') || (gOn && gP.at === 'left')) && ((!cP.hid && cP.at === 'right') || (gOn && gP.at === 'right')) ? 8 : 16,
       mk1: sheetsL === 'My verse and chorus', mk2: sheetsL === 'Blues in F', mk3: sheetsL === 'Autumn Leaves sketch',
       sheetsL, sheetsOn: st.sheet === 'sheets', openSheets: (e) => set({ sheet: 'sheets', menuPos: ANCHOR(e, 280), cpExp: false }), cpExpTog: () => set({ cpExp: !st.cpExp }), cpExpOn: st.sheet === 'sheets' && !!st.cpExp, cpExpX: st.cpExp ? 'true' : 'false', cpExpBg: st.cpExp ? 'rgba(51,41,33,.06)' : 'transparent',
       openS1: () => set({ sheet: null, hist: [], sheetName: 'My verse and chorus' }), openS2: () => set({ sheet: null, hist: [], sheetName: 'Blues in F', toastT: 'Opened Blues in F' }), openS3: () => set({ sheet: null, hist: [], sheetName: 'Autumn Leaves sketch', toastT: 'Opened Autumn Leaves sketch' }),
