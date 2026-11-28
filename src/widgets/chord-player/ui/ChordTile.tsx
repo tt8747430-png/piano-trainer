@@ -12,6 +12,9 @@ import type { BoxPlace } from '../model/engine'
 
 /** What a chord's tile asks of the sheet. */
 
+/** The room a laptop's chord sheet takes under its chord: its 423 and the gaps round it. */
+const SHEET_ROOM = 448
+
 /** The arrows that move between the sheet's chords. */
 const ARROWS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'])
 
@@ -146,8 +149,16 @@ export const ChordTile = memo(function ChordTile({
   // On a phone the chord's sheet rises over the lower part of the chart: the chord edited is brought to
   // the chart's top first, so each change shows above the sheet (a laptop's popover stands at it).
   const reveal = () => {
-    if (matchMedia(LAPTOP).matches) return
-    box.current?.scrollIntoView({
+    const tile = box.current
+    // A laptop's chord sheet hangs under its chord: the chord comes up only where the room under it
+    // is short of the sheet's, so Delete and Play from here are never past the screen's foot.
+    if (
+      !tile ||
+      (matchMedia(LAPTOP).matches &&
+        innerHeight - tile.getBoundingClientRect().bottom >= SHEET_ROOM)
+    )
+      return
+    tile.scrollIntoView({
       block: 'start',
       behavior: motionReduced() ? 'instant' : 'smooth',
     })
