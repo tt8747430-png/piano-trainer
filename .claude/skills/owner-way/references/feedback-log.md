@@ -1620,6 +1620,8 @@ owner's, typos fixed.
 - **Duplicate actions (owner, 2026-11-28: "check whether we dont have duplicate actions"; the Chord player):** the section's sheet looped the section as the bar's Loop does, ☰ opened the transport's Playback options again, and the laptop's metronome button set the Count-in that Playback options sets. Each now has one home. Never again: a row or button whose act another control on the same screen already does; list every act on both sizes before a port is called done.
 - **☰ and its places, drawers with Back (the owner, 2026-11-28):** the Chord player's phone ☰ was a popover and its places whole pages; ☰ is a bottom drawer and each place opens in it with ‹ Back and Done. The phone's Chords place repeated + and Suggested chords and is gone; Audio sits in Playback options on both sizes. Never again: a phone menu's places as pages, or the parts' sound apart from Playback options.
 
+- **The status bar in the header's colour; notices from the foot (the owner, 2026-11-28):** the installed app painted the status bar the page's beige over the Chord player's white header, and its notices (a new version ready) dropped from the top. The status bar takes the header's card while a full screen's phone header shows; notices stand at the foot with the toasts and rise from below. Never again: a status bar in another colour than the bar under it, or a notice from the top.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

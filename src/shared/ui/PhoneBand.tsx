@@ -1,5 +1,5 @@
 import { ArrowLeft, Menu, Repeat, Volume2 } from 'lucide-react'
-import type { ComponentProps, ReactNode } from 'react'
+import { type ComponentProps, type ReactNode, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, useUp } from '@/shared/lib'
 import { GoToStartGlyph, PlayGlyph } from './Band'
@@ -11,11 +11,19 @@ const ROUND =
 /**
  * A full screen's header on a phone (canvas R77, `PHHDR77`; Flat's phone header): one row 64 high on
  * the card's paper, 8 in, a hairline under it 8 short of each edge: ← up, the transport (`children`
- * first: `PhoneTransport`), then the screen's own buttons, ☰ last.
+ * first: `PhoneTransport`), then the screen's own buttons, ☰ last. The status bar over it takes the
+ * card's paper too (the board's `bar=SHEET`, as Flat's header), while it shows.
  */
 export function PhoneBand({ label, children }: { label: string; children: ReactNode }) {
   const { t } = useTranslation('common')
   const up = useUp()
+  useLayoutEffect(() => {
+    const root = document.documentElement
+    root.dataset.statusBar = 'card'
+    return () => {
+      delete root.dataset.statusBar
+    }
+  }, [])
   return (
     <header
       data-band

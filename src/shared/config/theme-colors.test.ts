@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { THEME_COLORS } from './theme-colors'
+import { BAR_COLORS, THEME_COLORS } from './theme-colors'
 
 const tokens = readFileSync('src/styles/tokens.css', 'utf8')
 
@@ -30,5 +30,12 @@ describe('THEME_COLORS', () => {
 
   it('is the dark theme’s page background', () => {
     expect(THEME_COLORS.dark).toBe(resolve(dark.get('--background')))
+  })
+})
+
+describe('BAR_COLORS', () => {
+  it('is each theme’s card', () => {
+    expect(BAR_COLORS.light).toBe(resolve(root.get('--card')))
+    expect(BAR_COLORS.dark).toBe(resolve(dark.get('--card')))
   })
 })

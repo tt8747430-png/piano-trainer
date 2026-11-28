@@ -5,3 +5,9 @@
  * src/styles/tokens.css.
  */
 export const THEME_COLORS = { light: '#f7f3ee', dark: '#191512' } as const
+
+/**
+ * The status bar's ground under a screen whose own bar continues it (the Chord player's phone header on
+ * the card's paper, the boards' `bar=SHEET`): each theme's `--card`, held by theme-colors.test.ts.
+ */
+export const BAR_COLORS = { light: '#fefdfb', dark: '#24201c' } as const

@@ -1043,6 +1043,10 @@
     bottom: calc(--spacing(7) + var(--docked, 0px));
   }
 }
+/* A toast said while a notice shows (a new version, the storage full) stands 8 over it. */
+[data-slot='toast-viewport'] {
+  translate: 0 calc(-1 * var(--notices, 0px));
+}
 @media (width >= 64rem) {
   :root:has([data-slot='floating-actions'] [role='toolbar']) [data-slot='toast-viewport'] {
     bottom: calc(--spacing(29) + var(--docked, 0px));
