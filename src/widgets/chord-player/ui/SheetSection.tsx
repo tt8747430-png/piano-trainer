@@ -5,7 +5,7 @@ import { Plus, Trash2 } from 'lucide-react'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ProgressionNames } from '@/entities/settings'
-import { cn, useMediaQuery, LAPTOP } from '@/shared/lib'
+import { cn, useMediaQuery } from '@/shared/lib'
 import { DragHandle } from '@/shared/ui'
 import {
   sectionBars,
@@ -28,11 +28,14 @@ const VARIATIONS = [1, 2, 3, 4] as const
 const PILL =
   'relative flex h-9 min-w-0 shrink-0 items-center rounded-tile bg-muted px-3 text-subhead whitespace-nowrap tabular-nums transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-1 before:content-[""] hover:brightness-95 focus-visible:outline-3 focus-visible:outline-ring'
 
+/** Four bars a row once the chart holds them at least as wide as a 1024 laptop's (125 each). */
+const FOUR_BARS = '(min-width: 37.5rem)'
+
 /**
  * A section of the chord sheet as Musicca's (canvas 173): its head (its name, opening its sheet;
  * × n and Variation n, each a tap to the next; Delete, at once with Undo; the grip at its end), its
  * Genos marks under it while an arranger is followed, then its chords as boxes as wide as their
- * beats, two bars a row on a phone and four on a laptop, a + box after the last that adds a chord
+ * beats, two bars a row on a phone and four from 600 wide (a tablet, a phone on its side, a laptop), a + box after the last that adds a chord
  * and takes one dropped at the end.
  */
 export const SheetSection = memo(function SheetSection({
@@ -83,7 +86,7 @@ export const SheetSection = memo(function SheetSection({
   const name = t(`chordPlayer.sections.${section.kind}`)
   const bars = useMemo(() => sectionBars(section, meter), [section, meter])
   const perBar = beatsPerBar(meter)
-  const wide = useMediaQuery(LAPTOP)
+  const wide = useMediaQuery(FOUR_BARS)
   const columns = perBar * (wide ? 4 : 2)
   const chords = useMemo(() => sectionChords(section), [section])
   const {
