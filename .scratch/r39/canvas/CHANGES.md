@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · Audio holds Volume in place, Master and each part's level under one Volume head (name and % over the slider, 16 apart), where its Volume row opened nothing (the app's sub-page stacked a second Back and said Volume twice) · ChordPlayer, ChordPlayerLaptop · pending
 
 ## Changes
 
+- 2026-11-28 · 45835328 · Audio holds Volume in place, Master and each part's level under one Volume head (name and % over the slider, 16 apart), where its Volume row opened nothing (the app's sub-page stacked a second Back and said Volume twice) · ChordPlayer, ChordPlayerLaptop · v882
 - 2026-11-28 · dcf48adc · a chosen style and the sheet in hand are marked by Lucide's check at 20, as the app's Styles list and name menu, where the board set a text ✓ at 15 · ChordPlayer, ChordPlayerLaptop · v881
 - 2026-11-28 · 39f8ab09 · the rail's Search opens the app's search palette at rest (the field, Suggestions: Continue, Chords, Metronome; the keys under a hairline; 640×488 at 96), where it toasted "Search: type a chord, a style or an act" · ChordPlayerLaptop · v880
 - 2026-11-28 · 9d316def · the rail's Shortcuts opens the Player's and editor's Shortcuts card with the Chord player's own keys (Play or stop, Undo, Redo; Play the keys, An octave down, up; Show the shortcuts), where it toasted "Space plays · L loops · K the keys", two keys the app does not have · ChordPlayerLaptop · v879
