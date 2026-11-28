@@ -8,9 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · 39f8ab09 · the rail's Search opens the app's search palette at rest (the field, Suggestions: Continue, Chords, Metronome; the keys under a hairline; 640×488 at 96), where it toasted "Search: type a chord, a style or an act" · ChordPlayerLaptop · **pending**
+
 ## Changes
 
+- 2026-11-28 · 39f8ab09 · the rail's Search opens the app's search palette at rest (the field, Suggestions: Continue, Chords, Metronome; the keys under a hairline; 640×488 at 96), where it toasted "Search: type a chord, a style or an act" · ChordPlayerLaptop · v880
 - 2026-11-28 · 9d316def · the rail's Shortcuts opens the Player's and editor's Shortcuts card with the Chord player's own keys (Play or stop, Undo, Redo; Play the keys, An octave down, up; Show the shortcuts), where it toasted "Space plays · L loops · K the keys", two keys the app does not have · ChordPlayerLaptop · v879
 - 2026-11-28 · 91abf0be · a stopped Genos lights no Main until one is set or pressed, the minimized pill reading Genos alone, as the app's (the board lit Main A at rest) · ChordPlayer, ChordPlayerLaptop · v878
 - 2026-11-28 · 68555266 · a toast holds its words to two lines, a long name ending in … (a Chord player sheet named by its numerals ran the toast to four lines); the kit's `TOAST`, every board with a toast · ChordPlayer, ChordPlayerLaptop and every board with a toast · v877
