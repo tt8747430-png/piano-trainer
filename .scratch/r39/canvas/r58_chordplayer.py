@@ -390,7 +390,7 @@ PANELS77 = (_PANEL('Ch', '{{keyHead}}', _DRAGB)
             + _PANEL('St', 'Styles', STYLEROWS) + _PANEL('Ge', 'Genos', GENOSPANEL) + _PANEL('So', 'Audio', SOUND77) + _PANEL('Ca', 'Chart', CHART77))
 
 # the chart, its name in the band on a laptop (the chart starts on its first section); the phone keeps it over the chart
-_c = CHART59(16, 6, 76, 28, 1)
+_c = CHART59(16, 8, 76, 28, 1)
 _a = _c.index('<div style="display: flex; align-items: baseline; gap: 8px">'); _b = _c.index('<sc-for list="{{sec59}}"')
 CHARTL77 = _c[:_a] + _c[_b:]
 # the Genos docked over the keys while another panel is open: Start/Stop and Main A–D in its compact row, Full opens its panel

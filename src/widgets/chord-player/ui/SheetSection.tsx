@@ -190,7 +190,7 @@ export const SheetSection = memo(function SheetSection({
       <SortableContext items={ids} strategy={STILL}>
         <ol
           aria-label={t('chordPlayer.chordsOf', { name })}
-          className="grid gap-2 lg:gap-1.5"
+          className="grid gap-2"
           style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
         >
           {bars.flatMap((bar, at) =>

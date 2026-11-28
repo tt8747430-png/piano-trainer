@@ -1607,6 +1607,7 @@ owner's, typos fixed.
 - **A corner by its name (the loop, 2026-11-28):** the Chord player's ☰ card and the rail's and ☰'s rows wrote 22 and 10 as `rounded-[22px]` and `rounded-[10px]`, the scale's sheet and thumb by number; they take the names, so a change to the scale reaches them. Never again: a scale value written by number in a class.
 - **A class that never applied (the loop, 2026-11-28):** the Chord player's ☰ carried the board's shadow as a class that the popover's own `layer-shadow` beat in the CSS order, so it drew the dialogs' shade; the computed style, not the class list, is what a port measures. Never again: a value called ported because the class is in the source.
 - **Keys that stretch (the loop, 2026-11-28):** the Chord player's keys at 744 stretched the phone's two and a half octaves to 44 a key; from 600 they keep a phone's 26 and show C2 to C7, scrolled to the chord. Never again: a fixed range filling a wider screen by growing its keys.
+- **A gap off the scale on one size (the loop, 2026-11-28):** the Chord player's laptop chart set its bars 6 apart where the phone's are 8, on board and app alike; one gap now. Never again: a size's gap that leaves the 4/8 scale because the other size's was not looked at.
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
