@@ -3,7 +3,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { memo, useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ProgressionNames } from '@/entities/settings'
-import { cn, motionReduced } from '@/shared/lib'
+import { cn, LAPTOP, motionReduced } from '@/shared/lib'
 import { CHORD_BEATS } from '@/shared/lib/arrangement'
 import { chordSymbol, printedSymbol, type Chord, type Key } from '@/shared/lib/music'
 import { LeadSymbol, symbolLetters } from '@/shared/ui'
@@ -143,14 +143,25 @@ export const ChordTile = memo(function ChordTile({
   /** Its length while its handle is dragged: shown at once, saved on letting go. */
   const [stretch, setStretch] = useState<number | null>(null)
   const shown = stretch ?? beats
+  // On a phone the chord's sheet rises over the lower part of the chart: the chord edited is brought to
+  // the chart's top first, so each change shows above the sheet (a laptop's popover stands at it).
+  const reveal = () => {
+    if (matchMedia(LAPTOP).matches) return
+    box.current?.scrollIntoView({
+      block: 'start',
+      behavior: motionReduced() ? 'instant' : 'smooth',
+    })
+  }
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     listeners?.onKeyDown?.(event)
     if (event.defaultPrevented) return
     if (/^[a-g]$/i.test(event.key) && !event.metaKey && !event.ctrlKey && !event.altKey) {
       event.preventDefault()
+      reveal()
       acts.open(place, event.key.toUpperCase())
     } else if (event.key === 'Enter') {
       event.preventDefault()
+      reveal()
       acts.open(place)
     } else if (event.key === 'Backspace' || event.key === 'Delete') {
       event.preventDefault()
@@ -167,7 +178,11 @@ export const ChordTile = memo(function ChordTile({
     }
   }
   // A tap selects it, a tap on it chosen opens its sheet, at any pace (Numbers' and Keynote's).
-  const onTap = () => (selected ? acts.open(place) : acts.select(place))
+  const onTap = () => {
+    if (!selected) return acts.select(place)
+    reveal()
+    acts.open(place)
+  }
   /** Musicca's handle: the pointer's travel in beat widths, from the box's own width. */
   const onStretch = (event: PointerEvent<HTMLSpanElement>) => {
     event.stopPropagation()
