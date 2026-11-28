@@ -11,7 +11,6 @@ import {
   ListMusic,
   ListPlus,
   Music,
-  Repeat,
   Shuffle,
   Volume2,
   type LucideIcon,
@@ -79,7 +78,8 @@ const FILE_ICONS: Readonly<Record<string, LucideIcon>> = {
 /**
  * ☰ on a phone (canvas R77, `PHNAV77`): a card under the header from its ☰, 22 round on the page's
  * paper, the sheet's name centred over it; the sheet's places as rows (Chords, Style, Key, Tempo,
- * Repeats, Audio, Chart, MIDI), each opening its page with ← back to ☰ (`PHPAGES77`, a `PhonePage`); then the file's
+ * Audio, Chart, MIDI), each opening its page with ← back to ☰ (`PHPAGES77`, a `PhonePage`; Playback options
+ * opens from the transport alone, one way to it); then the file's
  * acts (Share…, Export ›, Import chart…, Randomize chords) and the progressions' two.
  */
 export function PhoneMenu({
@@ -97,7 +97,6 @@ export function PhoneMenu({
     readonly styleName: string
     readonly keyName: string
     readonly tempo: string
-    readonly repeats: string
     readonly chart: string
   }
   /** The file's acts doable here (Export opens its page). */
@@ -154,12 +153,6 @@ export function PhoneMenu({
               label={t('chordPlayer.tempo')}
               value={rows.tempo}
               onClick={go('tempo')}
-            />
-            <MenuRow
-              icon={Repeat}
-              label={t('chordPlayer.playback.plays')}
-              value={rows.repeats}
-              onClick={go('repeats')}
             />
             <MenuRow icon={Volume2} label={t('chordPlayer.rail.audio')} onClick={go('audio')} />
             <MenuRow

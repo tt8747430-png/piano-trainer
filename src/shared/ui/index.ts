@@ -206,7 +206,6 @@ export {
   BandTransport,
   GoToStartGlyph,
   PlayGlyph,
-  type MetronomeMode,
 } from './Band'
 export { PhoneBand, PhoneBandButton, PhoneMenuButton, PhoneTransport } from './PhoneBand'
 export { PhonePage } from './PhonePage'

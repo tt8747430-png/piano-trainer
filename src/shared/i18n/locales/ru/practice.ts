@@ -918,7 +918,6 @@ export const practice: LocaleResources['practice'] = {
     exportMenu: { label: 'Экспорт', midi: 'MIDI', chart: 'Схема (.txt)' },
     metronome: {
       label: 'Метроном',
-      'count-in': 'Метроном: отсчёт',
       on: 'Метроном: включён',
       off: 'Метроном: выключен',
     },
@@ -927,7 +926,6 @@ export const practice: LocaleResources['practice'] = {
     live: 'В сети',
     unsaved: 'Не сохранено',
     saved: 'Сохранено',
-    loopSection: 'Повторять этот раздел',
     keyChords: 'Аккорды {{key}}',
     keyChord: '{{chord}}: нажмите или перетащите в такт',
     keyChordTip: 'Нажмите или перетащите в такт',

@@ -1,13 +1,13 @@
 import { Copy } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SECTION_KINDS, type SheetSection as Section } from '@/shared/lib/arrangement'
-import { MenuPicker, Sheet, SheetContent, SwitchRow } from '@/shared/ui'
+import { MenuPicker, Sheet, SheetContent } from '@/shared/ui'
 import { POP, SheetAct, SheetCard, SheetRow } from './sheet-parts'
 
 /**
  * A section's sheet, opened from its name (canvas R77, `CP_SEC`): what its head cannot hold. One white
- * card, Section ⇕ (its name) and Loop this section; Duplicate section under it. How often it plays, its
- * variation and Delete stand on the head alone, the Genos marks on their own chip.
+ * card, Section ⇕ (its name); Duplicate section under it. How often it plays, its variation and Delete
+ * stand on the head alone, Loop on the bar's transport (one way to each act), the Genos marks on their chip.
  */
 export function SectionSheet({
   open,
@@ -16,8 +16,6 @@ export function SectionSheet({
   canDuplicate,
   onChange,
   onDuplicate,
-  looped,
-  onLoop,
 }: {
   open: boolean
   onOpenChange(open: boolean): void
@@ -25,9 +23,6 @@ export function SectionSheet({
   canDuplicate: boolean
   onChange(change: Partial<Section>): void
   onDuplicate(): void
-  /** Whether Play goes round this section alone. */
-  looped: boolean
-  onLoop(on: boolean): void
 }) {
   const { t } = useTranslation('practice')
   const name = t(`chordPlayer.sections.${section.kind}`)
@@ -49,12 +44,6 @@ export function SectionSheet({
                 onChange={(kind) => onChange({ kind })}
               />
             </SheetRow>
-            <SwitchRow
-              label={t('chordPlayer.loopSection')}
-              checked={looped}
-              onCheckedChange={onLoop}
-              className="min-h-12 pr-3 pl-4 text-base"
-            />
           </SheetCard>
           {canDuplicate ? (
             <div className="flex">

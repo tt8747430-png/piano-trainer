@@ -124,13 +124,10 @@ export function PlayGlyph({ playing, className }: { playing: boolean; className?
   )
 }
 
-/** The metronome's three modes, one press to the next (Flat's "Change metronome mode"). */
-export type MetronomeMode = 'count-in' | 'on' | 'off'
-
 /**
  * The band's transport (the kit's `HDRTRANSPORT`, Flat's band): round buttons 8 apart, each one act:
  * Go to start, Play (the one honey circle) with its options under ▾ (`options`, a popover's trigger
- * drawn here), the metronome (one press to its next mode, crossed while off), Loop (its glyph rust
+ * drawn here), the metronome (a click every beat, on or off, crossed while off; the count-in is Playback options'), Loop (its glyph rust
  * while it loops); then the thing's own pills and buttons (`children`).
  */
 export function BandTransport({
@@ -155,7 +152,8 @@ export function BandTransport({
   onPlay(): void
   /** Playback options' ▾, drawn by `BandOptions` inside its popover's trigger. */
   options: ReactNode
-  metronome: MetronomeMode
+  /** A click every beat. */
+  metronome: boolean
   metronomeLabel: string
   onMetronome(): void
   loop: boolean
@@ -192,16 +190,17 @@ export function BandTransport({
         type="button"
         aria-label={metronomeLabel}
         title={metronomeLabel}
+        aria-pressed={metronome}
         onClick={onMetronome}
         className={cn(ROUND, 'bg-on-band text-band')}
       >
         <MetronomeIcon aria-hidden className="size-4.5" />
-        {metronome === 'off' ? (
+        {metronome ? null : (
           <span
             aria-hidden
             className="absolute h-[1.5px] w-5.5 -rotate-45 rounded-[1px] bg-current"
           />
-        ) : null}
+        )}
       </button>
       <button
         type="button"

@@ -108,7 +108,6 @@ import {
   sayUndo,
   SettingsGroup,
   type MenuAction,
-  type MetronomeMode,
 } from '@/shared/ui'
 import { bandMidi, type BoxPlace } from '../model/engine'
 import { keyChords } from '../model/key-chords'
@@ -379,23 +378,11 @@ export function ChordPlayer({
   const toggleLoop = () => band.setLoop(band.looped === null ? loopSection : null)
   const loopName = (index: number) =>
     t(`chordPlayer.sections.${shown.sections[index]?.kind ?? 'verse'}`)
-  const metronome: MetronomeMode = entry.settings.click
-    ? 'on'
-    : entry.settings.countIn > 0
-      ? 'count-in'
-      : 'off'
-  /** The metronome's next mode, one press each (Flat's): Count-in, then On (a click every beat), then Off. */
-  const nextMetronome = () => {
-    const next: MetronomeMode =
-      metronome === 'off' ? 'count-in' : metronome === 'count-in' ? 'on' : 'off'
-    hand.setSettings(
-      next === 'count-in'
-        ? { countIn: 1 }
-        : next === 'on'
-          ? { click: true }
-          : { countIn: 0, click: false },
-    )
-    say(t(`chordPlayer.metronome.${next}`))
+  const metronome = entry.settings.click
+  /** A click every beat, on or off (the count-in is Playback options' alone: one home each). */
+  const toggleMetronome = () => {
+    hand.setSettings({ click: !metronome })
+    say(t(`chordPlayer.metronome.${metronome ? 'off' : 'on'}`))
   }
 
   useShortcuts(t('chordPlayer.shortcuts.group'), [
@@ -951,8 +938,8 @@ export function ChordPlayer({
               </PanelPopover>
             }
             metronome={metronome}
-            metronomeLabel={t(`chordPlayer.metronome.${metronome}`)}
-            onMetronome={nextMetronome}
+            metronomeLabel={t(`chordPlayer.metronome.${metronome ? 'on' : 'off'}`)}
+            onMetronome={toggleMetronome}
             loop={band.looped !== null}
             loopLabel={
               band.looped !== null
@@ -1078,10 +1065,6 @@ export function ChordPlayer({
               styleName,
               keyName: keyName(shown.key),
               tempo: t('chordPlayer.bpm', { count: entry.tempo }),
-              repeats:
-                entry.settings.plays === 0
-                  ? t('chordPlayer.playback.untilStop')
-                  : t('chordPlayer.times', { count: entry.settings.plays }),
               chart: t(`chordPlayer.settings.names.${prefs.names}`),
             }}
             fileActs={fileActs.filter((act) => !act.hidden)}
@@ -1150,8 +1133,6 @@ export function ChordPlayer({
             hand.edit((sheet) => duplicateSection(sheet, opened))
             setOpened(null)
           }}
-          looped={band.looped === opened}
-          onLoop={(on) => band.setLoop(on ? opened : null)}
         />
       ) : null}
       {tagged !== null && shown.sections[tagged] ? (
