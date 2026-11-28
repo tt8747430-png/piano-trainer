@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-28 · COMMIT · a chord's Suggested chords are the app's: the key's chords likeliest first (C F G Am Dm G7 Em) less the chord picked · ChordPlayer, ChordPlayerLaptop · pending
+
 ## Changes
 
 - 2026-11-28 · 9173eb89 · the chord sheet on the keys: the home indicator's strip under the keys scrimmed with the page, as the app's; the app's sheet foot adds the home indicator's inset under the keys · ChordPlayer · v907

@@ -156,7 +156,7 @@ CP58 = CP58.replace("    return { ...common(st, set), draftOn:", r"""    const S
       rootPopL: selRoot, qualPopL: QN[selQ] ?? selQ, bassPopL: selBass ? selBass : selRoot + ' (root)', openRootPop: pops('root'), openQualPop: pops('qual'), openBassPop: pops('bass'),
       rootPopOn: st.pop === 'root', qualPopOn: st.pop === 'qual', bassPopOn: st.pop === 'bass',
       bassChips: chipsOf(['Root', 'C', 'D', 'E', 'F', 'G', 'A', 'B'], selBass || 'Root', () => {}),
-      suggest59: ['C/E', 'Dm', 'F/C', 'B♭', 'C', 'C7', 'Am', 'Gm'].map((c) => ({ ...SUP(c), pick: () => editSecs((x) => { x[st.sel ? st.sel[0] : 0][3][st.sel ? st.sel[1] : 0][selCi] = c; }) })), draftOn:""", 1)
+      suggest59: ['C', 'F', 'G', 'Am', 'Dm', 'G7', 'Em'].filter((c) => c !== selSym).map((c) => ({ ...SUP(c), pick: () => editSecs((x) => { x[st.sel ? st.sel[0] : 0][3][st.sel ? st.sel[1] : 0][selCi] = c; }) })), draftOn:""", 1)
 assert CP58.count('sec59') == 2, 'R59 patch missed'
 
 def CHART59(cols, gap, bh, bf, plus, title=''):
