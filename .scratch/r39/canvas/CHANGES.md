@@ -8,7 +8,6 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-
 ## Changes
 
 - 2026-11-28 · 524c2295 · Repeats' − rests at half strength at Until Stop and + at 8 times, where each does nothing, as the app's stepper (both were live at their bound) · ChordPlayer, ChordPlayerLaptop · v873
