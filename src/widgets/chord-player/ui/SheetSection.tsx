@@ -178,7 +178,7 @@ export const SheetSection = memo(function SheetSection({
             marks: tag || t('chordPlayer.arranger.unset'),
           })}
           className={cn(
-            'relative -mt-1.5 h-[30px] max-w-full self-start truncate rounded-tile px-2.5 text-footnote font-semibold shadow-[inset_0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-[7px] before:content-[""] hover:bg-muted',
+            'relative -mt-1.5 h-[30px] max-w-full self-start truncate rounded-tile px-3 text-footnote font-semibold shadow-[inset_0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-[7px] before:content-[""] hover:bg-muted',
             !tag && 'text-muted-foreground',
           )}
         >

@@ -309,7 +309,7 @@ export function PlaybackBody({
   /** The metronome's row (a phone's, Flat's Playback options): a laptop has it in the band. */
   metronome?: boolean
 }) {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'common'])
   const { settings } = hand.entry
   // One card of rows, the board's `_OPTS`: Repeats with its stepper at the row's end, Count-in under its
   // name, the metronome's switch on a phone.
