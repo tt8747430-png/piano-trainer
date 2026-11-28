@@ -8,7 +8,18 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useNavigate } from '@tanstack/react-router'
-import { Cable, Drum, FileText, Keyboard, Music, Plus, Search, Undo2, Volume2 } from 'lucide-react'
+import {
+  Cable,
+  Drum,
+  FileText,
+  Keyboard,
+  KeyboardMusic,
+  Music,
+  Plus,
+  Search,
+  Undo2,
+  Volume2,
+} from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -182,7 +193,7 @@ const RAIL: readonly {
 }[] = [
   { panel: 'chords', icon: Music },
   { panel: 'styles', icon: Drum },
-  { panel: 'genos', icon: Keyboard },
+  { panel: 'genos', icon: KeyboardMusic },
   { panel: 'audio', icon: Volume2 },
   { panel: 'chart', icon: FileText },
 ]
