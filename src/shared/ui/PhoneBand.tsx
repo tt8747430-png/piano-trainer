@@ -22,7 +22,9 @@ export function PhoneBand({ label, children }: { label: string; children: ReactN
       aria-label={label}
       className="relative z-20 shrink-0 bg-card bg-[linear-gradient(var(--color-border),var(--color-border))] bg-[length:calc(100%-16px)_1px] bg-[position:8px_100%] bg-no-repeat px-2 text-foreground"
     >
-      <div className="flex h-16 items-center justify-between gap-1">
+      {/* Spread on a phone, as the board at 402; wider (a phone on its side, a tablet upright) the
+          header's own acts keep together at its end and the rest follows Back 24 apart. */}
+      <div className="flex h-16 items-center justify-between gap-1 min-[440px]:justify-start min-[440px]:gap-6">
         <button
           type="button"
           aria-label={t('back')}

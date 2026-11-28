@@ -1017,6 +1017,7 @@ export function ChordPlayer({
           <PhoneBandButton
             label={keysLabel}
             on={keysShown}
+            className="min-[440px]:ml-auto"
             aria-pressed={keysShown}
             onClick={() => onKeys(!keysShown)}
           >
