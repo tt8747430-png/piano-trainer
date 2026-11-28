@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-28 · {C} · the app's notices (a new version, storage full, the learner view) stand at the foot where a toast stands, 112 up over the tab bar, never at the top under the status bar; a toast said meanwhile stands 8 over them (app too); the Chord player's status bar takes its header's card in the app, as the board's bar=SHEET drew it · AppLayers · pending
+- 2026-11-28 · 017e46ad · the app's notices (a new version, storage full, the learner view) stand at the foot where a toast stands, 112 up over the tab bar, never at the top under the status bar; a toast said meanwhile stands 8 over them (app too); the Chord player's status bar takes its header's card in the app, as the board's bar=SHEET drew it · AppLayers · pending
 
 ## Changes
 
