@@ -722,7 +722,8 @@ export function ChordPlayer({
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           <main
             className={cn(
-              'flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto',
+              // Its parts keep their height and the chart scrolls: a long chart squeezed Add section's card to nothing.
+              'flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto *:shrink-0',
               // The chart's first section level with the panel's title (22), 40 in, as the board's.
               laptop ? 'px-10 pt-5.5 pb-6' : 'px-4 pt-4 pb-6',
             )}
